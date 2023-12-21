@@ -144,6 +144,9 @@ void get_edge_offset_intersection(
     const float shadow_length,
     float* final_angle, float* final_length
 );
+unordered_set<size_t> get_edge_idxs_on_screen(
+    const point& cam_tl, const point& cam_br
+);
 string get_key_name(const int keycode, const bool condensed);
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
@@ -233,7 +236,7 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
 vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
-    const point &cam_tl, const point &cam_br,
+    const unordered_set<size_t> edges,
     const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
     const bool clear_first
 );

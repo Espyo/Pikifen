@@ -505,6 +505,60 @@ void get_edge_offset_intersection(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a set of edges that are on screen.
+ * cam_tl:
+ *   Top-left corner of the camera boundaries. The edges of any sector that is
+ *   beyond these boundaries will be ignored.
+ * cam_br:
+ *   Same as cam_tl, but for the bottom-right boundaries.
+ */
+unordered_set<size_t> get_edge_idxs_on_screen(const point& cam_tl, const point& cam_br) {
+    unordered_set<size_t> edges;
+    for (size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
+
+        if (
+            !rectangles_intersect(
+                s_ptr->bbox[0], s_ptr->bbox[1],
+                cam_tl, cam_br
+            )
+            ) {
+            //Off-camera.
+            continue;
+        }
+
+        if (s_ptr->bbox[0].x > cam_tl.x &&
+            s_ptr->bbox[1].x < cam_tl.x &&
+            s_ptr->bbox[0].y > cam_tl.y &&
+            s_ptr->bbox[1].y < cam_tl.y
+            ) {
+            //Fully on camera
+            edges.insert(s_ptr->edge_nrs.begin(), s_ptr->edge_nrs.end());
+        }
+        else {
+            for (size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                point ls1(
+                    s_ptr->edges[e]->vertexes[0]->x,
+                    s_ptr->edges[e]->vertexes[0]->y
+                );
+                point ls2(
+                    s_ptr->edges[e]->vertexes[1]->x,
+                    s_ptr->edges[e]->vertexes[1]->y
+                );
+
+                if(!line_seg_intersects_rectangle(cam_tl, cam_br, ls1, ls2)) {
+                    continue;
+                }
+
+                edges.insert(s_ptr->edge_nrs[e]);
+            }
+        }
+    }
+    return edges;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the next edge in a vertex's list of edges.
  * It checks in a given direction, starting from some pivot angle.
  * v_ptr:
@@ -656,11 +710,8 @@ void get_next_offset_effect_edge(
 /* ----------------------------------------------------------------------------
  * Draws edge offset effects for all edges on-screen onto a buffer image,
  * so that sectors may then sample from it to draw what effects they need.
- * cam_tl:
- *   Top-left corner of the camera boundaries. The edges of any sector that is
- *   beyond these boundaries will be ignored.
- * cam_br:
- *   Same as cam_tl, but for the bottom-right boundaries.
+ * edges:
+ *   A set of edges to draw
  * caches:
  *   List of caches to fetch edge info from.
  * buffer:
@@ -669,53 +720,10 @@ void get_next_offset_effect_edge(
  *   If true, the bitmap is cleared before any drawing is done.
  */
 void update_offset_effect_buffer(
-    const point &cam_tl, const point &cam_br,
+    const unordered_set<size_t> edges,
     const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
     const bool clear_first
 ) {
-    unordered_set<size_t> edges;
-    
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
-        
-        if(
-            !rectangles_intersect(
-                s_ptr->bbox[0], s_ptr->bbox[1],
-                cam_tl, cam_br
-            )
-        ) {
-            //Off-camera.
-            continue;
-        }
-
-        bool fully_on_camera = false;
-        if(s_ptr->bbox[0].x > cam_tl.x &&
-           s_ptr->bbox[1].x < cam_tl.x &&
-           s_ptr->bbox[0].y > cam_tl.y &&
-           s_ptr->bbox[1].y < cam_tl.y) {
-            fully_on_camera = true;
-        }
-        
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            if(!fully_on_camera) {
-                point ls1(
-                    s_ptr->edges[e]->vertexes[0]->x,
-                    s_ptr->edges[e]->vertexes[0]->y
-                );
-                point ls2(
-                    s_ptr->edges[e]->vertexes[1]->x,
-                    s_ptr->edges[e]->vertexes[1]->y
-                );
-
-                if(!line_seg_intersects_rectangle(cam_tl, cam_br, ls1, ls2)) {
-                    continue;
-                }
-            }
-
-            edges.insert(s_ptr->edge_nrs[e]);
-        }
-    }
-    
     //Save the current state of some things.
     ALLEGRO_BITMAP* target_bmp = al_get_target_bitmap();
     int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;

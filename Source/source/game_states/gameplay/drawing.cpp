@@ -1765,20 +1765,21 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = NULL;
     ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = NULL;
     if(!bmp_output) {
+        unordered_set<size_t> edges = get_edge_idxs_on_screen(game.cam.box[0], game.cam.box[1]);
         update_offset_effect_buffer(
-            game.cam.box[0], game.cam.box[1],
+            edges,
             game.liquid_limit_effect_caches,
             game.liquid_limit_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            game.cam.box[0], game.cam.box[1],
+            edges,
             game.wall_smoothing_effect_caches,
             game.wall_offset_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            game.cam.box[0], game.cam.box[1],
+            edges,
             game.wall_shadow_effect_caches,
             game.wall_offset_effect_buffer,
             false
@@ -1795,20 +1796,21 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                 al_get_bitmap_width(bmp_output),
                 al_get_bitmap_height(bmp_output)
             );
+        unordered_set<size_t> edges = get_edge_idxs_on_screen(point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX));
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            edges,
             game.liquid_limit_effect_caches,
             custom_liquid_limit_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            edges,
             game.wall_smoothing_effect_caches,
             custom_wall_offset_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            edges,
             game.wall_shadow_effect_caches,
             custom_wall_offset_effect_buffer,
             false
