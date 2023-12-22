@@ -683,40 +683,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             m_ptr->tick(delta_t);
         }
 
-        insertion_sort(mobs.all, 
-        [](mob* m) -> float {
-            return m->pos.x - m->max_interaction_radius;
-        }
-        );
-
-        n_mobs = mobs.all.size();
-        vector<size_t> range_idxs;
-        float max_range_interaction_x;
-        for(size_t m = 0; m < n_mobs; ++m) {
-            mob* m_ptr = mobs.all[m];
-            if(m_ptr->is_stored_inside_mob()) {
-                continue;
+        vector<vector<size_t>> interactions = get_potential_interactions();
+        for(size_t i = 0; i < interactions.size(); ++i) {
+            for(size_t m = 0; m < interactions[i].size(); ++m) {
+                process_mob_interactions(mobs.all[interactions[i][m]], interactions[i][m], interactions[i]);
             }
-            if(!range_idxs.empty()) {
-                int min_interaction_x = m_ptr->pos.x - m_ptr->max_interaction_radius;
-
-                //This mob can not interact with the current span, meaning we have reached the end of this range! Process interactions between these mobs.
-                if(min_interaction_x > max_range_interaction_x) {
-                    for (size_t i = 0; i < range_idxs.size(); ++i) {
-                        mob* m2_ptr = mobs.all[range_idxs[i]];
-                        process_mob_interactions(m2_ptr, range_idxs[i], range_idxs);
-                    }
-                    range_idxs.clear();
-                }
-            }
-            range_idxs.push_back(m);
-            max_range_interaction_x = std::max(max_range_interaction_x, m_ptr->pos.x + m_ptr->max_interaction_radius);
-        }
-
-        //Perform interactions for the last range
-        for (size_t i = 0; i < range_idxs.size(); ++i) {
-            mob* m2_ptr = mobs.all[range_idxs[i]];
-            process_mob_interactions(m2_ptr, range_idxs[i], range_idxs);
         }
         
         for(size_t m = 0; m < n_mobs;) {
@@ -1405,6 +1376,44 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
         }
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mobs that need to interact with one another
+ * Uses a sweep and prune algorithm 
+ * (https://en.wikipedia.org/wiki/Sweep_and_prune)
+ */
+vector<vector<size_t>> gameplay_state::get_potential_interactions() {
+    vector<vector<size_t>> ranges;
+    insertion_sort(mobs.all,
+        [](mob* m) -> float {
+            return m->pos.x - m->max_interaction_radius;
+        }
+    );
+
+    size_t n_mobs = mobs.all.size();
+    vector<size_t> range_idxs;
+    float max_range_interaction_x = FLT_MIN;
+    for (size_t m = 0; m < n_mobs; ++m) {
+        mob* m_ptr = mobs.all[m];
+        if (m_ptr->is_stored_inside_mob()) {
+            continue;
+        }
+        if (!range_idxs.empty()) {
+            int min_interaction_x = m_ptr->pos.x - m_ptr->max_interaction_radius;
+
+            //This mob can not interact with the current span, meaning we have reached the end of this range.
+            if (min_interaction_x > max_range_interaction_x) {
+                ranges.push_back(range_idxs);
+                range_idxs.clear();
+            }
+        }
+        range_idxs.push_back(m);
+        max_range_interaction_x = std::max(max_range_interaction_x, m_ptr->pos.x + m_ptr->max_interaction_radius);
+    }
+    ranges.push_back(range_idxs);
+    return ranges;
 }
 
 

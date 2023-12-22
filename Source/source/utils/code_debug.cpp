@@ -94,10 +94,6 @@ void* operator new[](size_t size, char* file, int line) {
 
 #endif //ifndef CODE_DEBUG_NEW
 
-double code_debug_benchmark_measure_start;
-double code_debug_benchmark_sum;
-unsigned int code_debug_benchmark_iterations;
-
 /* ----------------------------------------------------------------------------
  * Starts a time measurement for benchmarking.
  */
