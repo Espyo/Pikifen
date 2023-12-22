@@ -690,11 +690,33 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         );
 
         n_mobs = mobs.all.size();
-        for (size_t m = 0; m < n_mobs; ++m) {
+        vector<size_t> range_idxs;
+        float max_range_interaction_x;
+        for(size_t m = 0; m < n_mobs; ++m) {
             mob* m_ptr = mobs.all[m];
-            if (!m_ptr->is_stored_inside_mob()) {
-                process_mob_interactions(m_ptr, m);
+            if(m_ptr->is_stored_inside_mob()) {
+                continue;
             }
+            if(!range_idxs.empty()) {
+                int min_interaction_x = m_ptr->pos.x - m_ptr->max_interaction_radius;
+
+                //This mob can not interact with the current span, meaning we have reached the end of this range! Process interactions between these mobs.
+                if(min_interaction_x > max_range_interaction_x) {
+                    for (size_t i = 0; i < range_idxs.size(); ++i) {
+                        mob* m2_ptr = mobs.all[range_idxs[i]];
+                        process_mob_interactions(m2_ptr, range_idxs[i], range_idxs);
+                    }
+                    range_idxs.clear();
+                }
+            }
+            range_idxs.push_back(m);
+            max_range_interaction_x = std::max(max_range_interaction_x, m_ptr->pos.x + m_ptr->max_interaction_radius);
+        }
+
+        //Perform interactions for the last range
+        for (size_t i = 0; i < range_idxs.size(); ++i) {
+            mob* m2_ptr = mobs.all[range_idxs[i]];
+            process_mob_interactions(m2_ptr, range_idxs[i], range_idxs);
         }
         
         for(size_t m = 0; m < n_mobs;) {
@@ -1393,26 +1415,23 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
  *   Mob to process.
  * m:
  *   Index of the mob.
+ * against:
+ *   Indexes of mobs to process against
  */
-void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
+void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m, vector<size_t> against) {
     vector<pending_intermob_event> pending_intermob_events;
     mob_state* state_before = m_ptr->fsm.cur_state;
     
-    size_t n_mobs = mobs.all.size();
+    size_t n_mobs = against.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
-        if(m == m2) continue;
+        if(m == against[m2]) continue;
         
-        mob* m2_ptr = mobs.all[m2];
+        mob* m2_ptr = mobs.all[against[m2]];
         if(m2_ptr->to_delete) continue;
-        if(m2_ptr->is_stored_inside_mob()) continue;
-        
-        //This mob is out of reach, all follow up mobs are as well!
-        if(m2_ptr->pos.x - m2_ptr->max_interaction_radius > m_ptr->pos.x + m_ptr->max_interaction_radius)
-            break;
 
         dist d(m_ptr->pos, m2_ptr->pos);
 
-        if (d > m_ptr->max_interaction_radius + m2_ptr->max_span)
+        if(d > m_ptr->max_interaction_radius + m2_ptr->max_span)
             continue;
 
         if(game.perf_mon) {
