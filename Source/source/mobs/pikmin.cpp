@@ -23,12 +23,12 @@
 
 
 namespace PIKMIN {
+//How long a Pikmin should ignore leader bumps for.
+const float BUMP_LOCK_DURATION = 5.0f;
 //How long a Pikmin that got knocked down stays on the floor for, if left alone.
 const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
-//How long a Pikmin should ignore leader bumps after being dismissed.
-const float DISMISS_BUMP_LOCK_DURATION = 5.0f;
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
 //Timeout before a Pikmin gives up, when ordered to go to something.
@@ -81,6 +81,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     latched(false),
     is_tool_primed_for_whistle(false),
     must_follow_link_as_leader(false),
+    bump_lock(0.0f),
     temp_i(0) {
     
     invuln_period = timer(PIKMIN::INVULN_PERIOD);
@@ -510,8 +511,9 @@ void pikmin::tick_class_specifics(const float delta_t) {
         game.statistics.pikmin_deaths++;
     }
     
-    //Tick the timer for the "missed" attack animation.
+    //Tick some timers.
     missed_attack_timer.tick(delta_t);
+    bump_lock = std::max(bump_lock - delta_t, 0.0f);
     
     //Forcefully follow another mob as a leader.
     if(must_follow_link_as_leader) {

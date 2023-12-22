@@ -1195,16 +1195,11 @@ mob* create_mob(
     };
     
     for(size_t c = 0; c < type->children.size(); ++c) {
-        mob_type::child_struct* child_info = &type->children[c];
-        
-        mob_type::spawn_struct* spawn_info = NULL;
-        for(size_t s = 0; s < type->spawns.size(); ++s) {
-            if(type->spawns[s].name == child_info->spawn_name) {
-                spawn_info = &type->spawns[s];
-                break;
-            }
-        }
-        
+        mob_type::child_struct* child_info =
+            &type->children[c];
+        mob_type::spawn_struct* spawn_info =
+            get_spawn_info_from_child_info(m_ptr->type, &type->children[c]);
+            
         if(!spawn_info) {
             game.errors.report(
                 "Object \"" + type->name + "\" tried to spawn a child with the "
@@ -1380,6 +1375,26 @@ string get_error_message_mob_info(mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
         p2s(m->pos) + ", area \"" + game.cur_area_data.name + "\"";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Given a child info block, returns the spawn info block that matches.
+ * Returns NULL if not found.
+ * type:
+ *   Mob type that owns the children and spawn blocks.
+ * child_info:
+ *   Child info to check.
+ */
+mob_type::spawn_struct* get_spawn_info_from_child_info(
+    mob_type* type, mob_type::child_struct* child_info
+) {
+    for(size_t s = 0; s < type->spawns.size(); ++s) {
+        if(type->spawns[s].name == child_info->spawn_name) {
+            return &type->spawns[s];
+        }
+    }
+    return NULL;
 }
 
 

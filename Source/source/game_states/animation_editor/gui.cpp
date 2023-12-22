@@ -1233,7 +1233,11 @@ void animation_editor::process_gui_panel_body_part() {
         }
         
         //Body part list.
-        if(ImGui::BeginChild("partsList", ImVec2(0.0f, 80.0f), true)) {
+        if(
+            ImGui::BeginChild(
+                "partsList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
+            )
+        ) {
         
             for(size_t p = 0; p < anims.body_parts.size(); ++p) {
             

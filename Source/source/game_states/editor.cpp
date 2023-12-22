@@ -2357,7 +2357,11 @@ void editor::picker_info::process() {
     if(editor_ptr->popup("newItemCategory")) {
         ImGui::Text("%s", "What is the category of the new item?");
         
-        if(ImGui::BeginChild("categoryList", ImVec2(0.0f, 80.0f), true)) {
+        if(
+            ImGui::BeginChild(
+                "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
+            )
+        ) {
             for(size_t c = 0; c < new_item_category_choices.size(); ++c) {
                 if(ImGui::Selectable(new_item_category_choices[c].c_str())) {
                     new_item_category = new_item_category_choices[c];

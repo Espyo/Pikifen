@@ -55,7 +55,7 @@ struct game_state_list {
     //Area selection menu.
     area_menu_state* area_menu;
     //Controls menu.
-    controls_menu_state* controls_menu;
+    control_binds_menu_state* control_binds_menu;
     //Gameplay state.
     gameplay_state* gameplay;
     //GUI editor state.

@@ -457,8 +457,12 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
         } case MAKER_TOOL_MOB_INFO: {
             mob* m = get_closest_mob_to_cursor();
+            mob* prev_lock_mob = game.maker_tools.info_lock;
             game.maker_tools.info_lock =
                 (game.maker_tools.info_lock == m ? NULL : m);
+            if(prev_lock_mob != NULL && game.maker_tools.info_lock == NULL) {
+                print_info("Mob: None.", 2.0f, 2.0f);
+            }
             game.maker_tools.used_helping_tools = true;
             break;
             

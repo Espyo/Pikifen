@@ -486,7 +486,11 @@ void gui_editor::process_gui_panel_items() {
     ImGui::Text("Items:");
     
     //Item list.
-    if(ImGui::BeginChild("itemsList", ImVec2(0.0f, 300.0f), true)) {
+    if(
+        ImGui::BeginChild(
+            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Border
+        )
+    ) {
         for(size_t i = 0; i < items.size(); ++i) {
         
             //Item checkbox.

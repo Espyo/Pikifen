@@ -1007,8 +1007,31 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         case EDITOR_SUB_STATE_PATH_DRAWING: {
     
             //Drawing a path.
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
-            path_stop* clicked_stop = get_path_stop_under_point(hotspot);
+            point hotspot =
+                snap_point(game.mouse_cursor.w_pos);
+            path_stop* clicked_stop =
+                get_path_stop_under_point(game.mouse_cursor.w_pos);
+                
+            //Split a link, if one was clicked.
+            if(!clicked_stop) {
+                path_link* clicked_link_1;
+                path_link* clicked_link_2;
+                bool clicked_link =
+                    get_path_link_under_point(
+                        game.mouse_cursor.w_pos,
+                        &clicked_link_1, &clicked_link_2
+                    );
+                if(clicked_link) {
+                    register_change("path link split");
+                    clicked_stop =
+                        split_path_link(
+                            clicked_link_1, clicked_link_2,
+                            game.mouse_cursor.w_pos
+                        );
+                    clear_selection();
+                    selected_path_stops.insert(clicked_stop);
+                }
+            }
             
             if(path_drawing_stop_1) {
                 //A starting stop already exists, so now we create a link.
@@ -1022,6 +1045,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     register_change("path stop creation");
                     next_stop = new path_stop(hotspot);
+                    next_stop->flags = path_drawing_flags;
+                    next_stop->label = path_drawing_label;
                     game.cur_area_data.path_stops.push_back(next_stop);
                     set_status("Created path stop.");
                 }
@@ -1034,10 +1059,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     path_link* l1 = path_drawing_stop_1->get_link(next_stop);
                     path_link* l2 = next_stop->get_link(path_drawing_stop_1);
                     l1->type = path_drawing_type;
-                    l1->label = path_drawing_label;
                     if(l2) {
                         l2->type = path_drawing_type;
-                        l2->label = path_drawing_label;
                     }
                     game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
                     game.cur_area_data.fix_path_stop_nrs(next_stop);
@@ -1058,6 +1081,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     register_change("path stop creation");
                     path_drawing_stop_1 = new path_stop(hotspot);
+                    path_drawing_stop_1->flags = path_drawing_flags;
+                    path_drawing_stop_1->label = path_drawing_label;
                     game.cur_area_data.path_stops.push_back(
                         path_drawing_stop_1
                     );
@@ -1385,13 +1410,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     s_ptr->pos.x -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_x1 &&
+                    s_ptr->radius >= selection_x1 &&
                     s_ptr->pos.x +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_x2 &&
+                    s_ptr->radius <= selection_x2 &&
                     s_ptr->pos.y -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_y1 &&
+                    s_ptr->radius >= selection_y1 &&
                     s_ptr->pos.y +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_y2
+                    s_ptr->radius <= selection_y2
                 ) {
                     selected_path_stops.insert(s_ptr);
                 }

@@ -3,31 +3,19 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Audio system
-        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
-        [NEEDS BRAINSTORMING] If multiple Pikmin sources try to play a sound, like carrying, which one should play and when?
-        Problems that the system needs to address:
-            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
-            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
-            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
-            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
-            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
-            The ability to handle randomized volumes and pitches (and maybe panning)
-            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
-            When you cancel holding a Pikmin, its standby squeal sound should stop
-        Reorganize the backend
-            There should be multiple mixers, which can feed into other mixers, until eventually the "master" mixer connects to the Allegro voice
-        Playback FSM
-            Waiting: Waiting some time before starting to play. Can go to Playing
-            Playing: Can go to Waiting or Stopping
-            Stopping: Quickly fading out so it can then be destroyed
-            Destroyed: Unusable, and ready to be deleted
-        A way for sounds to repeat with an interval from the same source
-        Sounds that are being destroyed should fade out quickly
-        Ducking
         Load system sounds from System_asset_file_names.txt
         Resetting when an area is entered or exited
-        Make it so that only 6 or so sounds can play at once?
-        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
+        Options
+            Volume control for sound effects, music, and ambiance sound effects separately
+                The standard should be at 75%, so players have leeway if they want everything louder
+            Mono/stereo
+        It should be possible to play sounds both in specific frames of animation and in scripts as actions
+            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
+        Create a "Sounds" and a "Music" folder in the "Audio" folder
+        Recreate the following sounds, as per user feedback
+            Plucking -- sounds like crap
+        This might help
+            https://youtu.be/Vjm--AqG04Y?t=713
 
 
 Next tasks (roughly sorted most important first)
@@ -37,29 +25,17 @@ Next tasks (roughly sorted most important first)
 
     --- 0.25.0 ---
     Script improvements
-        Revamp get_info
-            Add get_info state
-            https://github.com/Helodity/Pikifen/tree/get_info-rework
         Make it so you can run an action on behalf of another mob
             Be careful with state switching, variables, and focus
             Don't allow actions like if, else, end_if, goto, label?
             Maybe have a "start_running_as" action and a "stop_running_as"
         Action groups (like functions)
-    Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
-        Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
     Use a screenshot for the title screen
-    Add faint icons to the title screen buttons?
-    Draw a gradient at the edges of "list" GUI items when there's more stuff below or above scrolled out of view
+    Idle Pikmin should prioritize checking for tasks instead of leaders. This way one can spawn a Pikmin nearby on a task and it'll do the task, instead of going to the leader
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-    Path things
-        [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
-            Check what P3 does, maybe P4
-        If you start drawing a path on top of a link, it should split the link and start drawing on that stop
-        The stops should get the properties, not the links
-        Path stops should have a radius
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
@@ -77,6 +53,7 @@ Next tasks (roughly sorted most important first)
                 Menu item selected
                 Menu backed out of
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
+                    Could change pitch when you're changing those multi-value options in the options menu
             HUD
                 Ready...
                 GO!
@@ -117,23 +94,7 @@ Next tasks (roughly sorted most important first)
                 Leaves rustling (vegetation)
                 Explosion
                 Ambiance sounds
-        Rename sound files to .oga, instead of .ogg
-        Options
-            Volume control for sound effects, music, and ambiance sound effects separately
-                The standard should be at 75%, so players have leeway if they want everything louder
-            Mono/stereo
-        Footsteps should be tied to the terrain texture
-        It should be possible to play sounds both in specific frames of animation and in scripts as actions
-            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
-        Create a "Sounds" and a "Music" folder in the "Audio" folder
-        Recreate the following sounds, as per user feedback
-            Plucking -- sounds like crap
-        This might help
-            https://www.allegro.cc/forums/thread/617315
-            https://youtu.be/Vjm--AqG04Y?t=713
-            https://www.allegro.cc/forums/thread/617707 ?
-            https://www.youtube.com/watch?v=PVA48I2n-qQ
-            https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
+        Rename sound files to .oga, instead of .ogg?
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -153,6 +114,7 @@ Next tasks (roughly sorted most important first)
             Editors
             A couple of gameplay songs
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
+    Mob types should be able to specify that they need a link to work properly, so the area editor can inform the player if there's no link
     Find some way of making content sharing easier
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
@@ -242,6 +204,7 @@ Next tasks (roughly sorted most important first)
         Controls manager
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
                 Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
+                Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
             Allow for button combinations
@@ -276,6 +239,7 @@ Next tasks (roughly sorted most important first)
     Demo content
         Ice Pikmin
         Glow Pikmin
+        A tall grass mob
         Add more treasures
             Ball of yarn treasure
             Shizakipiki Soda bottle cap
@@ -741,6 +705,11 @@ Misc things (so I don't forget)
             When a leader approaches, when a Pikmin approaches, when carrying, etc.
         Game config parameters:
             Nectars: Work like in the engine, or like in the classics?
+    Audio
+        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
+            However, I may want to play the same long sample multiple times with like a .5s interval between each one, which won't burst anyone's ears...
+        Ducking
+        Footsteps should be tied to the terrain texture
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.
@@ -829,6 +798,10 @@ Misc things (so I don't forget)
                 Change the cursor for when you're dragging, drawing, placing something new, etc.
                 Glow and grow the new sector, object, etc. when it is created
                 Slightly grow the current thing when you select it, or maybe when you drag it?
+                The snapped cursor position should interpolate smoothly (but if you finish your operation when it's interpolating, it should finish instantly)
+                When you're going to place something new:
+                    Show a dotted outline of the location the new thing will go to
+                    As the cursor moves, the icon for the thing wobbles around, as if fixed to an anchor at the mouse
             Cursors
                 Normal cursor
                 For when you're drawing something
@@ -993,6 +966,7 @@ Tasks for later on (I might never implement these)
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the main menu's highlighter move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
+        In message boxes, the "menu ok" input that makes it say the next message should oscillate in size
         Particles
             Splash particles for going in water
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?

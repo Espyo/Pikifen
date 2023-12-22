@@ -107,9 +107,12 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
 typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 
+bool are_walls_between(
+    const point &p1, const point &p2,
+    float ignore_walls_below_z = -FLT_MAX, bool* impassable_walls = NULL
+);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
-void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
 bool does_edge_have_ledge_smoothing(
@@ -217,7 +220,7 @@ vector<string> semicolon_list_to_vector(
 void set_string_token_widths(
     vector<string_token> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    const float max_control_bitmap_height = 0
+    const float max_control_bitmap_height = 0, bool control_condensed = false
 );
 int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,

@@ -8,7 +8,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = goal_reached
                 set_state moving
             end_if
@@ -22,7 +22,7 @@ script {
             start_particles cardboard_box_dust -104 0 0
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = goal_lost
                 set_state idling
             end_if

@@ -433,11 +433,10 @@ void load_area(
             
         path_stop* s_ptr = new path_stop();
         
-        vector<string> words =
-            split(path_stop_node->get_child_by_name("pos")->value);
-        s_ptr->pos.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->pos.y = (words.size() >= 2 ? s2f(words[1]) : 0);
-        
+        s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
+        s_ptr->radius = s2f(path_stop_node->get_child_by_name("radius")->value);
+        s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
+        s_ptr->label = path_stop_node->get_child_by_name("label")->value;
         data_node* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
         
@@ -453,13 +452,12 @@ void load_area(
             if(link_data_parts.size() >= 2) {
                 l_struct->type = (PATH_LINK_TYPES) s2i(link_data_parts[1]);
             }
-            if(link_data_parts.size() >= 3) {
-                l_struct->label = link_data_parts[2];
-            }
             
             s_ptr->links.push_back(l_struct);
             
         }
+        
+        s_ptr->radius = std::max(s_ptr->radius, PATHS::MIN_STOP_RADIUS);
         
         game.cur_area_data.path_stops.push_back(s_ptr);
     }

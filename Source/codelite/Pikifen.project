@@ -30,7 +30,7 @@
       <File Name="../source/game_states/gameplay/gameplay.cpp"/>
     </VirtualDirectory>
     <File Name="../source/game_states/area_menu.cpp"/>
-    <File Name="../source/game_states/controls_menu.cpp"/>
+    <File Name="../source/game_states/control_binds_menu.cpp"/>
     <File Name="../source/game_states/options_menu.cpp"/>
     <File Name="../source/game_states/main_menu.cpp"/>
     <File Name="../source/game_states/menus.h"/>

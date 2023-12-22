@@ -19,20 +19,20 @@
 #include "../utils/string_utils.h"
 
 
-namespace CONTROLS_MENU {
+namespace CONTROL_BINDS_MENU {
 //Height of each bind button.
 const float BIND_BUTTON_HEIGHT = 0.07f;
 //Padding between each bind button.
 const float BIND_BUTTON_PADDING = 0.01f;
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Controls_menu.txt";
+const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Control_binds_menu.txt";
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a "controls menu" state.
  */
-controls_menu_state::controls_menu_state() :
+control_binds_menu_state::control_binds_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
     list_box(nullptr),
@@ -53,7 +53,7 @@ controls_menu_state::controls_menu_state() :
  * bind_idx:
  *   Index of that action type's bind.
  */
-void controls_menu_state::choose_input(
+void control_binds_menu_state::choose_input(
     const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
 ) {
     capturing_input = true;
@@ -82,7 +82,7 @@ void controls_menu_state::choose_input(
  * bind_idx:
  *   Index number of the control.
  */
-void controls_menu_state::delete_bind(
+void control_binds_menu_state::delete_bind(
     const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
 ) {
     vector<control_bind> &all_binds = game.controls.binds();
@@ -105,7 +105,7 @@ void controls_menu_state::delete_bind(
 /* ----------------------------------------------------------------------------
  * Draws the controls menu.
  */
-void controls_menu_state::do_drawing() {
+void control_binds_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
@@ -142,7 +142,7 @@ void controls_menu_state::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Ticks time by one frame of logic.
  */
-void controls_menu_state::do_logic() {
+void control_binds_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     for(size_t a = 0; a < player_actions.size(); ++a) {
         gui.handle_player_action(player_actions[a]);
@@ -157,7 +157,7 @@ void controls_menu_state::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string controls_menu_state::get_name() const {
+string control_binds_menu_state::get_name() const {
     return "controls menu";
 }
 
@@ -167,7 +167,7 @@ string controls_menu_state::get_name() const {
  * ev:
  *   Event to handle.
  */
-void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(capturing_input) {
@@ -191,7 +191,6 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     } else {
     
         gui.handle_event(ev);
-        game.controls.handle_allegro_event(ev);
         
     }
     
@@ -201,8 +200,9 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Leaves the controls menu and goes to the options menu.
  */
-void controls_menu_state::leave() {
+void control_binds_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
+        game.states.options_menu->page_to_load = OPTIONS_MENU_PAGE_CONTROLS;
         game.change_state(game.states.options_menu);
     });
     save_options();
@@ -212,7 +212,7 @@ void controls_menu_state::leave() {
 /* ----------------------------------------------------------------------------
  * Loads the controls menu into memory.
  */
-void controls_menu_state::load() {
+void control_binds_menu_state::load() {
     bmp_menu_bg = NULL;
     capturing_input = false;
     showing_more = false;
@@ -224,11 +224,12 @@ void controls_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("header",      50,  5, 50,  6);
     gui.register_coords("list",        50, 51, 88, 82);
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        data_node(CONTROLS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(CONTROL_BINDS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Back button.
@@ -241,6 +242,14 @@ void controls_menu_state::load() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the options menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "CONTROL BINDS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    gui.add_item(header_text, "header");
     
     //Controls list box.
     list_box = new list_gui_item();
@@ -270,7 +279,7 @@ void controls_menu_state::load() {
 /* ----------------------------------------------------------------------------
  * Populates the list of binds.
  */
-void controls_menu_state::populate_binds() {
+void control_binds_menu_state::populate_binds() {
     list_box->delete_all_children();
     
     const vector<player_action_type> &all_player_action_types =
@@ -295,7 +304,7 @@ void controls_menu_state::populate_binds() {
         if(action_type.internal_name.empty()) continue;
         
         float action_y =
-            list_box->get_child_bottom() + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            list_box->get_child_bottom() + CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
             
         if(action_type.category != last_cat) {
         
@@ -320,28 +329,28 @@ void controls_menu_state::populate_binds() {
             section_text->center =
                 point(
                     0.50f,
-                    action_y + CONTROLS_MENU::BIND_BUTTON_HEIGHT / 2.0f
+                    action_y + CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT / 2.0f
                 );
             section_text->size =
-                point(0.50f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+                point(0.50f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             list_box->add_child(section_text);
             gui.add_item(section_text);
             
             action_y =
                 list_box->get_child_bottom() +
-                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
             last_cat = action_type.category;
             
         }
         
-        float cur_y = action_y + CONTROLS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
+        float cur_y = action_y + CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
         
         //Action type name bullet.
         bullet_point_gui_item* name_bullet =
             new bullet_point_gui_item(action_type.name, game.fonts.standard);
         name_bullet->center = point(0.25f, cur_y);
-        name_bullet->size = point(0.40f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+        name_bullet->size = point(0.40f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
         name_bullet->on_get_tooltip =
         [action_type] () { return action_type.description; };
         list_box->add_child(name_bullet);
@@ -361,7 +370,7 @@ void controls_menu_state::populate_binds() {
             populate_binds();
         };
         more_button->center = point(0.92f, cur_y);
-        more_button->size = point(0.05f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+        more_button->size = point(0.05f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
         string tooltip =
             (showing_more && a == cur_action_type) ?
             "Hide options." :
@@ -384,7 +393,7 @@ void controls_menu_state::populate_binds() {
             default_label_text->center =
                 point(0.70f, cur_y);
             default_label_text->size =
-                point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+                point(0.30f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             list_box->add_child(default_label_text);
             gui.add_item(default_label_text);
             default_label_text->start_juice_animation(
@@ -398,7 +407,7 @@ void controls_menu_state::populate_binds() {
             default_icon->center =
                 point(0.75f, cur_y);
             default_icon->size =
-                point(0.15f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+                point(0.15f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             default_icon->on_draw =
             [def_input] (const point & center, const point & size) {
                 draw_player_input_icon(
@@ -409,8 +418,8 @@ void controls_menu_state::populate_binds() {
             gui.add_item(default_icon);
             
             cur_y +=
-                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
-                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
             //Restore default button.
             button_gui_item* restore_button =
@@ -418,7 +427,7 @@ void controls_menu_state::populate_binds() {
             restore_button->center =
                 point(0.70f, cur_y);
             restore_button->size =
-                point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+                point(0.30f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             restore_button->on_activate =
             [this, a] (const point &) {
                 restore_defaults((PLAYER_ACTION_TYPES) a);
@@ -432,8 +441,8 @@ void controls_menu_state::populate_binds() {
             );
             
             cur_y +=
-                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
-                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
         }
         
@@ -487,7 +496,7 @@ void controls_menu_state::populate_binds() {
                 );
             };
             bind_button->center = point(0.70f, cur_y);
-            bind_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            bind_button->size = point(0.30f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             string bind_button_tooltip =
                 (showing_more && a == cur_action_type) ?
                 "Remove this control from this action." :
@@ -504,8 +513,8 @@ void controls_menu_state::populate_binds() {
             }
             
             cur_y +=
-                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
-                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
         }
         
@@ -515,7 +524,7 @@ void controls_menu_state::populate_binds() {
             button_gui_item* add_button =
                 new button_gui_item("Add control", game.fonts.standard);
             add_button->center = point(0.70f, cur_y);
-            add_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            add_button->size = point(0.30f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             add_button->on_activate =
             [this, a, a_binds] (const point &) {
                 choose_input((PLAYER_ACTION_TYPES) a, a_binds.size());
@@ -529,8 +538,8 @@ void controls_menu_state::populate_binds() {
             );
             
             cur_y +=
-                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
-                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
         } else if(a_binds.empty()) {
         
@@ -551,7 +560,7 @@ void controls_menu_state::populate_binds() {
                 );
             };
             bind_button->center = point(0.70f, cur_y);
-            bind_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            bind_button->size = point(0.30f, CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT);
             bind_button->on_get_tooltip =
             [] () { return "Choose an input for this action."; };
             list_box->add_child(bind_button);
@@ -574,7 +583,7 @@ void controls_menu_state::populate_binds() {
                     center.y,
                     center.x + size.x / 2.0f,
                     center.y,
-                    al_map_rgba(255, 255, 255, 128),
+                    COLOR_TRANSPARENT_WHITE,
                     1.0f
                 );
             };
@@ -590,7 +599,7 @@ void controls_menu_state::populate_binds() {
  * action_type_id:
  *   Action type ID of the action to restore.
  */
-void controls_menu_state::restore_defaults(
+void control_binds_menu_state::restore_defaults(
     const PLAYER_ACTION_TYPES action_type_id
 ) {
     const player_action_type &action_type =
@@ -628,7 +637,7 @@ void controls_menu_state::restore_defaults(
 /* ----------------------------------------------------------------------------
  * Unloads the controls menu from memory.
  */
-void controls_menu_state::unload() {
+void control_binds_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);

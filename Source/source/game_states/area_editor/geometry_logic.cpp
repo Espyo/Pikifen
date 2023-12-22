@@ -1030,7 +1030,7 @@ void area_editor::find_problems() {
                 
                 if(
                     circle_intersects_line_seg(
-                        s_ptr->pos, AREA_EDITOR::PATH_STOP_RADIUS,
+                        s_ptr->pos, s_ptr->radius,
                         link_start_ptr->pos, link_end_ptr->pos
                     )
                 ) {
@@ -1663,7 +1663,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        if(dist(s_ptr->pos, p) <= AREA_EDITOR::PATH_STOP_RADIUS) {
+        if(dist(s_ptr->pos, p) <= s_ptr->radius) {
             return s_ptr;
         }
     }
@@ -1759,6 +1759,26 @@ void area_editor::homogenize_selected_path_links() {
         if(l == selected_path_links.begin()) continue;
         
         base->clone(*l);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Homogenizes all selected path stops,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_path_stops() {
+    if(selected_path_stops.size() < 2) return;
+    
+    path_stop* base = *selected_path_stops.begin();
+    for(
+        auto s = selected_path_stops.begin();
+        s != selected_path_stops.end();
+        ++s
+    ) {
+        if(s == selected_path_stops.begin()) continue;
+        
+        base->clone(*s);
     }
 }
 
@@ -2462,7 +2482,6 @@ path_stop* area_editor::split_path_link(
     path_stop* old_start_ptr = l1->start_ptr;
     path_stop* old_end_ptr = l1->end_ptr;
     PATH_LINK_TYPES old_link_type = l1->type;
-    string old_link_label = l1->label;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
@@ -2478,14 +2497,10 @@ path_stop* area_editor::split_path_link(
     game.cur_area_data.fix_path_stop_nrs(new_stop_ptr);
     
     old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
-    old_start_ptr->get_link(new_stop_ptr)->label = old_link_label;
     new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;
-    new_stop_ptr->get_link(old_end_ptr)->label = old_link_label;
     if(normal_link) {
         new_stop_ptr->get_link(old_start_ptr)->type = old_link_type;
-        new_stop_ptr->get_link(old_start_ptr)->label = old_link_label;
         old_end_ptr->get_link(new_stop_ptr)->type = old_link_type;
-        old_end_ptr->get_link(new_stop_ptr)->label = old_link_label;
     }
     
     //Update the distances.

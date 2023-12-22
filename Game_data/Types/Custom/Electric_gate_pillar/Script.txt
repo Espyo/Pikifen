@@ -14,7 +14,7 @@ script {
             end_if
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = destroy
                 if $is_left = true
                     set_animation left_destroyed

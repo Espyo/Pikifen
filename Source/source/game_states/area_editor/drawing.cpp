@@ -649,12 +649,13 @@ void area_editor::draw_canvas() {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             mob_gen* m2_ptr = NULL;
             
+            if(!m_ptr->type) continue;
+            
             bool is_selected =
                 selected_mobs.find(m_ptr) != selected_mobs.end();
                 
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 m2_ptr = m_ptr->links[l];
-                if(!m_ptr->type) continue;
                 if(!m2_ptr->type) continue;
                 
                 bool show_link =
@@ -674,7 +675,8 @@ void area_editor::draw_canvas() {
             if(m_ptr->stored_inside != INVALID) {
                 m2_ptr =
                     game.cur_area_data.mob_generators[m_ptr->stored_inside];
-                    
+                if(!m2_ptr->type) continue;
+                
                 bool show_store =
                     is_selected ||
                     selected_mobs.find(m2_ptr) != selected_mobs.end();
@@ -695,9 +697,9 @@ void area_editor::draw_canvas() {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         float radius = get_mob_gen_radius(m_ptr);
-        ALLEGRO_COLOR c = al_map_rgb(255, 0, 0);
+        ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
         if(m_ptr->type && m_ptr != problem_mob_ptr) {
-            c =
+            color =
                 change_alpha(
                     m_ptr->type->category->editor_color, mob_opacity * 255
                 );
@@ -706,13 +708,42 @@ void area_editor::draw_canvas() {
         if(m_ptr->type && m_ptr->type->rectangular_dim.x != 0) {
             draw_rotated_rectangle(
                 m_ptr->pos, m_ptr->type->rectangular_dim,
-                m_ptr->angle, c, 1.0f / game.cam.zoom
+                m_ptr->angle, color, 1.0f / game.cam.zoom
             );
+        }
+        
+        //Draw children of this mob.
+        for(size_t c = 0; c < m_ptr->type->children.size(); ++c) {
+            mob_type::child_struct* child_info =
+                &m_ptr->type->children[c];
+            mob_type::spawn_struct* spawn_info =
+                get_spawn_info_from_child_info(m_ptr->type, child_info);
+            if(!spawn_info) continue;
+            
+            point c_pos =
+                m_ptr->pos + rotate_point(spawn_info->coords_xy, m_ptr->angle);
+            mob_type* c_type =
+                game.mob_categories.find_mob_type(spawn_info->mob_type_name);
+            if(!c_type) continue;
+            
+            if(c_type->rectangular_dim.x != 0) {
+                float c_rot = m_ptr->angle + spawn_info->angle;
+                draw_rotated_rectangle(
+                    c_pos, c_type->rectangular_dim,
+                    c_rot, color, 1.0f / game.cam.zoom
+                );
+            } else {
+                al_draw_circle(
+                    c_pos.x, c_pos.y, c_type->radius,
+                    color, 1.0f / game.cam.zoom
+                );
+            }
+            
         }
         
         al_draw_filled_circle(
             m_ptr->pos.x, m_ptr->pos.y,
-            radius, c
+            radius, color
         );
         
         float lrw = cos(m_ptr->angle) * radius;
@@ -807,10 +838,20 @@ void area_editor::draw_canvas() {
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             bool highlighted = highlighted_path_stop == s_ptr;
+            ALLEGRO_COLOR color;
+            if(has_flag(s_ptr->flags, PATH_STOP_SCRIPT_ONLY)) {
+                color = al_map_rgba(187, 102, 34, 224);
+            } else if(has_flag(s_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY)) {
+                color = al_map_rgba(102, 170, 34, 224);
+            } else if(has_flag(s_ptr->flags, PATH_STOP_AIRBORNE_ONLY)) {
+                color = al_map_rgba(187, 102, 153, 224);
+            } else {
+                color = al_map_rgb(88, 177, 177);
+            }
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
-                AREA_EDITOR::PATH_STOP_RADIUS,
-                al_map_rgb(88, 177, 177)
+                s_ptr->radius,
+                color
             );
             
             if(
@@ -818,7 +859,7 @@ void area_editor::draw_canvas() {
                 selected_path_stops.end()
             ) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
                     al_map_rgba(
                         AREA_EDITOR::SELECTION_COLOR[0],
                         AREA_EDITOR::SELECTION_COLOR[1],
@@ -828,7 +869,7 @@ void area_editor::draw_canvas() {
                 );
             } else if(highlighted) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
                     al_map_rgba(
                         highlight_color.r * 255,
                         highlight_color.g * 255,
@@ -879,14 +920,8 @@ void area_editor::draw_canvas() {
                     case PATH_LINK_TYPE_NORMAL: {
                         color = al_map_rgba(34, 136, 187, 224);
                         break;
-                    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-                        color = al_map_rgba(187, 102, 34, 224);
-                        break;
-                    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-                        color = al_map_rgba(102, 170, 34, 224);
-                        break;
-                    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-                        color = al_map_rgba(187, 102, 153, 224);
+                    } case PATH_LINK_TYPE_LEDGE: {
+                        color = al_map_rgba(180, 180, 64, 224);
                         break;
                     }
                     }
@@ -897,13 +932,15 @@ void area_editor::draw_canvas() {
                 
                 float angle =
                     get_angle(s_ptr->pos, s2_ptr->pos);
-                point offset =
-                    angle_to_coordinates(angle, AREA_EDITOR::PATH_STOP_RADIUS);
+                point offset1 =
+                    angle_to_coordinates(angle, s_ptr->radius);
+                point offset2 =
+                    angle_to_coordinates(angle, s2_ptr->radius);
                 al_draw_line(
-                    s_ptr->pos.x + offset.x,
-                    s_ptr->pos.y + offset.y,
-                    s2_ptr->pos.x - offset.x,
-                    s2_ptr->pos.y - offset.y,
+                    s_ptr->pos.x + offset1.x,
+                    s_ptr->pos.y + offset1.y,
+                    s2_ptr->pos.x - offset2.x,
+                    s2_ptr->pos.y - offset2.y,
                     color,
                     AREA_EDITOR::PATH_LINK_THICKNESS / game.cam.zoom
                 );
@@ -975,11 +1012,13 @@ void area_editor::draw_canvas() {
         //Closest stop line.
         if(show_closest_stop) {
             path_stop* closest = NULL;
-            dist closest_dist;
+            float closest_dist;
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
-                dist d(game.mouse_cursor.w_pos, s_ptr->pos);
-                
+                float d =
+                    dist(game.mouse_cursor.w_pos, s_ptr->pos).to_float() -
+                    s_ptr->radius;
+                    
                 if(!closest || d < closest_dist) {
                     closest = s_ptr;
                     closest_dist = d;
@@ -1572,7 +1611,7 @@ void area_editor::draw_canvas() {
                     ((central_sector->z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
                     game.sys_assets.bmp_leader_silhouette_side,
-                    al_map_rgba(255, 255, 255, 128),
+                    COLOR_TRANSPARENT_WHITE,
                     0, 0,
                     al_get_bitmap_width(
                         game.sys_assets.bmp_leader_silhouette_side

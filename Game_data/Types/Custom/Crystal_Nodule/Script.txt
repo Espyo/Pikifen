@@ -7,7 +7,7 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = be_carried
                 set_tangible false
             else

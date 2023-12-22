@@ -13,6 +13,11 @@
 #include "code_debug.h"
 
 
+double code_debug_benchmark_measure_start;
+double code_debug_benchmark_sum;
+unsigned int code_debug_benchmark_iterations;
+
+
 #ifdef CODE_DEBUG_NEW
 
 map<void*, string> code_debug_new_allocs;

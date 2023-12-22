@@ -34,12 +34,19 @@ struct path_link;
 enum PATH_LINK_TYPES {
     //Normal.
     PATH_LINK_TYPE_NORMAL,
-    //Only useable by mob scripts that reference it.
-    PATH_LINK_TYPE_SCRIPT_ONLY,
+    //One-way fall for normal mobs, two-way for airborne mobs.
+    PATH_LINK_TYPE_LEDGE,
+};
+
+
+//Flags for path stops.
+enum PATH_STOP_FLAGS {
+    //Only usable by mob scripts that reference it.
+    PATH_STOP_SCRIPT_ONLY = 0x01,
     //Only for mobs carrying nothing, or a 1-weight mob.
-    PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
-    //Only for objects that can fly.
-    PATH_LINK_TYPE_AIRBORNE_ONLY,
+    PATH_STOP_LIGHT_LOAD_ONLY = 0x02,
+    //Only for mobs that can fly.
+    PATH_STOP_AIRBORNE_ONLY = 0x04,
 };
 
 
@@ -102,6 +109,8 @@ enum PATH_BLOCK_REASONS {
     PATH_BLOCK_REASON_NOT_LIGHT_LOAD,
     //The link requires an airborne mob, but the object isn't.
     PATH_BLOCK_REASON_NOT_AIRBORNE,
+    //The link is through a ledge the mob can't climb up.
+    PATH_BLOCK_REASON_UP_LEDGE,
     //The link has a label that the object doesn't want.
     PATH_BLOCK_REASON_NOT_RIGHT_LABEL,
     //The next path stop is in the void.
@@ -109,6 +118,11 @@ enum PATH_BLOCK_REASONS {
     //The next path stop is in a sector with hazards the mob is vulnerable to.
     PATH_BLOCK_REASON_HAZARDOUS_STOP,
 };
+
+
+namespace PATHS {
+extern const float MIN_STOP_RADIUS;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -147,6 +161,12 @@ struct path_follow_settings {
 struct path_stop {
     //Coordinates.
     point pos;
+    //Radius.
+    float radius;
+    //Flags. Use PATH_STOP_FLAGS.
+    uint8_t flags;
+    //Its label, if any.
+    string label;
     //Links that go to other stops.
     vector<path_link*> links;
     //Sector it's on. Only applicable during gameplay. Cache for performance.
@@ -157,6 +177,7 @@ struct path_stop {
         const vector<path_link*> &links = vector<path_link*>()
     );
     ~path_stop();
+    void clone(path_stop* destination) const;
     void add_link(path_stop* other_stop, const bool normal);
     path_link* get_link(const path_stop* other_stop) const;
     void remove_link(const path_link* link_ptr);
@@ -180,8 +201,6 @@ struct path_link {
     
     //Type. Used for special restrictions and behaviors.
     PATH_LINK_TYPES type;
-    //Its label, if any.
-    string label;
     
     //Distance between the two stops.
     float distance;
@@ -219,6 +238,14 @@ struct path_manager {
 };
 
 
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason = NULL
+);
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    sector* sector_ptr, PATH_BLOCK_REASONS* reason = NULL
+);
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
     PATH_BLOCK_REASONS* reason = NULL

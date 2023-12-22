@@ -376,6 +376,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_LANDED); {
             efc.run(pikmin_fsm::land);
+            efc.run(pikmin_fsm::set_bump_lock);
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
@@ -441,27 +442,28 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     ); {
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::called);
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::going_to_dismiss_spot);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_timer);
+        }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
-            efc.run(pikmin_fsm::set_dismiss_bump_lock);
+            efc.run(pikmin_fsm::set_bump_lock);
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_TIMER); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
-            efc.run(pikmin_fsm::set_dismiss_bump_lock);
+            efc.run(pikmin_fsm::set_bump_lock);
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_OPPONENT_IN_REACH); {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EV_NEAR_CARRIABLE_OBJECT); {
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EV_NEAR_TOOL); {
@@ -474,7 +476,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -490,16 +491,13 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EV_TOUCHED_DROP); {
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("drinking");
         }
         efc.new_event(MOB_EV_TOUCHED_TRACK); {
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("riding_track");
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(pikmin_fsm::be_thrown_by_bouncer);
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("thrown");
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
@@ -1604,32 +1602,30 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     ); {
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::called);
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EV_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::going_to_dismiss_spot);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_timer);
+        }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
-            efc.run(pikmin_fsm::set_dismiss_bump_lock);
             efc.change_state("idling_h");
         }
         efc.new_event(MOB_EV_TIMER); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
-            efc.run(pikmin_fsm::set_dismiss_bump_lock);
             efc.change_state("idling_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::clear_timer);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -2045,7 +2041,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
     disable_flag(m->flags, MOB_FLAG_INTANGIBLE);
     pik_ptr->is_seed_or_sprout = false;
-    m->set_timer(0);
+    pikmin_fsm::clear_timer(m, info1, info2); //Clear sprout evolution timer.
     
     pik_ptr->set_animation(PIKMIN_ANIM_PLUCKING);
 }
@@ -2164,7 +2160,9 @@ void pikmin_fsm::check_incoming_attack(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
-    if(m->script_timer.time_left > 0.0f) {
+    pikmin* pik_ptr = (pikmin*) m;
+    if(pik_ptr->bump_lock > 0.0f) {
+        pik_ptr->bump_lock = PIKMIN::BUMP_LOCK_DURATION;
         return;
     }
     pikmin_fsm::called(m, info1, info2);
@@ -2628,7 +2626,6 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
         NULL;
         
     p->carrying_mob = NULL;
-    p->set_timer(0);
 }
 
 
@@ -2648,7 +2645,6 @@ void pikmin_fsm::forget_group_task(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     tas_ptr->free_up_spot(pik_ptr);
     m->unfocus_from_mob();
-    m->set_timer(0);
 }
 
 
@@ -2667,7 +2663,6 @@ void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) (m->focused_mob);
     too_ptr->reserved = NULL;
     m->unfocus_from_mob();
-    m->set_timer(0);
 }
 
 
@@ -3536,7 +3531,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is meant to set its timeout for the dismiss bump lock.
+ * When a Pikmin is meant to set its timer for the bump lock.
  * m:
  *   The mob.
  * info1:
@@ -3544,8 +3539,9 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::set_dismiss_bump_lock(mob* m, void* info1, void* info2) {
-    m->set_timer(PIKMIN::DISMISS_BUMP_LOCK_DURATION);
+void pikmin_fsm::set_bump_lock(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    pik_ptr->bump_lock = PIKMIN::BUMP_LOCK_DURATION;
 }
 
 
@@ -3944,7 +3940,8 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
-    pikmin_fsm::clear_timer(m, info1, info2);
+    pikmin* pik_ptr = (pikmin*) m;
+    pik_ptr->bump_lock = 0.0f;
 }
 
 

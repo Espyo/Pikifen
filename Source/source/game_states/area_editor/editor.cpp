@@ -66,8 +66,6 @@ const float PATH_LINK_THICKNESS = 3.0f;
 const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
 const float PATH_PREVIEW_TIMER_DUR = 0.1f;
-//Radius to use when drawing a path stop circle.
-const float PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
 const float POINT_LETTER_TEXT_SCALE = 1.5f;
 //Quick previewing lasts this long in total, including the fade out.
@@ -124,6 +122,7 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION),
     octee_mode(OCTEE_MODE_OFFSET),
+    path_drawing_flags(0),
     path_drawing_normals(true),
     path_drawing_type(PATH_LINK_TYPE_NORMAL),
     path_preview_result(PATH_RESULT_NOT_CALCULATED),
@@ -3269,6 +3268,21 @@ bool area_editor::save_area(const bool to_backup) {
         path_stop_node->add(
             new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
+        if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
+            path_stop_node->add(
+                new data_node("radius", f2s(s_ptr->radius))
+            );
+        }
+        if(s_ptr->flags != 0) {
+            path_stop_node->add(
+                new data_node("flags", i2s(s_ptr->flags))
+            );
+        }
+        if(!s_ptr->label.empty()) {
+            path_stop_node->add(
+                new data_node("label", s_ptr->label)
+            );
+        }
         
         data_node* links_node = new data_node("links", "");
         path_stop_node->add(links_node);
@@ -3276,11 +3290,8 @@ bool area_editor::save_area(const bool to_backup) {
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
             string link_data = i2s(l_ptr->end_nr);
-            if(l_ptr->type != PATH_LINK_TYPE_NORMAL || !l_ptr->label.empty()) {
+            if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
-            }
-            if(!l_ptr->label.empty()) {
-                link_data += " " + l_ptr->label;
             }
             data_node* link_node = new data_node("nr", link_data);
             links_node->add(link_node);
@@ -3826,21 +3837,16 @@ void area_editor::select_edge(edge* e) {
 
 
 /* ----------------------------------------------------------------------------
- * Selects all path links with the given label.
+ * Selects all path stops with the given label.
  * label:
  *   Label to search for.
  */
-void area_editor::select_path_links_with_label(const string &label) {
+void area_editor::select_path_stops_with_label(const string &label) {
     clear_selection();
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = s_ptr->links[l];
-            if(l_ptr->label == label) {
-                selected_path_links.insert(l_ptr);
-                selected_path_stops.insert(s_ptr);
-                selected_path_stops.insert(l_ptr->end_ptr);
-            }
+        if(s_ptr->label == label) {
+            selected_path_stops.insert(s_ptr);
         }
     }
     set_selection_status_text();

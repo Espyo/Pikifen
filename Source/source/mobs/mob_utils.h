@@ -535,6 +535,9 @@ mob* create_mob(
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);
+mob_type::spawn_struct* get_spawn_info_from_child_info(
+    mob_type* type, mob_type::child_struct* child_info
+);
 MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str);
 MOB_TEAMS string_to_team_nr(const string &team_str);
 

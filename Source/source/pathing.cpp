@@ -21,6 +21,12 @@ using std::unordered_set;
 using std::vector;
 
 
+namespace PATHS {
+//Minimum radius of a path stop.
+const float MIN_STOP_RADIUS = 16.0f;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates an instance of a structure with settings about how to follow a path.
  */
@@ -72,7 +78,6 @@ void path_link::calculate_dist(path_stop* start_ptr) {
  */
 void path_link::clone(path_link* destination) const {
     destination->type = type;
-    destination->label = label;
 }
 
 
@@ -244,6 +249,8 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
  */
 path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
+    radius(PATHS::MIN_STOP_RADIUS),
+    flags(0),
     links(links),
     sector_ptr(nullptr) {
     
@@ -280,7 +287,6 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
     }
     if(old_link_data) {
         link_type = old_link_data->type;
-        link_label = old_link_data->label;
     }
     
     remove_link(old_link_data);
@@ -288,13 +294,11 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
     
     path_link* new_link = new path_link(this, other_stop, INVALID);
     new_link->type = link_type;
-    new_link->label = link_label;
     links.push_back(new_link);
     
     if(normal) {
         new_link = new path_link(other_stop, this, INVALID);
         new_link->type = link_type;
-        new_link->label = link_label;
         other_stop->links.push_back(new_link);
     }
 }
@@ -328,6 +332,18 @@ void path_stop::calculate_dists_plus_neighbors() {
             l_ptr->calculate_dist(s_ptr);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clones a path stop's properties onto another, not counting the links.
+ * destination:
+ *   Path stop to clone the data into.
+ */
+void path_stop::clone(path_stop* destination) const {
+    destination->radius = radius;
+    destination->flags = flags;
+    destination->label = label;
 }
 
 
@@ -382,6 +398,114 @@ void path_stop::remove_link(const path_stop* other_stop) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a path stop can be taken given some contraints.
+ * stop_ptr:
+ *   Stop to check.
+ * settings:
+ *   Settings about how the path should be followed.
+ * reason:
+ *   If not NULL, the reason is returned here.
+ */
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason
+) {
+    sector* sector_ptr = stop_ptr->sector_ptr;
+    if(!sector_ptr) {
+        //We're probably in the area editor, where things change too often
+        //for us to cache the sector pointer and access said cache.
+        //Let's calculate now real quick.
+        sector_ptr = get_sector(stop_ptr->pos, NULL, false);
+        if(!sector_ptr) {
+            //It's really the void. Nothing that can be done here then.
+            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            return false;
+        }
+    }
+    
+    return can_take_path_stop(stop_ptr, settings, sector_ptr, reason);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a path stop can be taken given some contraints.
+ * stop_ptr:
+ *   Stop to check.
+ * settings:
+ *   Settings about how the path should be followed.
+ * sector_ptr:
+ *   Pointer to the sector this stop is on.
+ * reason:
+ *   If not NULL, the reason is returned here.
+ */
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    sector* sector_ptr, PATH_BLOCK_REASONS* reason
+) {
+    //Check if the end stop has limitations based on the stop flags.
+    if(
+        has_flag(stop_ptr->flags, PATH_STOP_SCRIPT_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
+        return false;
+    }
+    if(
+        has_flag(stop_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
+        return false;
+    }
+    if(
+        has_flag(stop_ptr->flags, PATH_STOP_AIRBORNE_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
+        return false;
+    }
+    
+    //Check if the travel is limited to stops with a certain label.
+    if(!settings.label.empty() && stop_ptr->label != settings.label) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
+        return false;
+    }
+    
+    //Check if the end stop is hazardous, by checking its sector.
+    bool touching_hazard =
+        !sector_ptr->hazard_floor ||
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+        
+    if(
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
+        touching_hazard &&
+        sector_ptr &&
+        !sector_ptr->hazards.empty()
+    ) {
+        for(size_t sh = 0; sh < sector_ptr->hazards.size(); ++sh) {
+            bool invulnerable = false;
+            for(size_t ih = 0; ih < settings.invulnerabilities.size(); ++ih) {
+                if(
+                    settings.invulnerabilities[ih] ==
+                    sector_ptr->hazards[sh]
+                ) {
+                    invulnerable = true;
+                    break;
+                }
+            }
+            if(!invulnerable) {
+                if(reason) *reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
+                return false;
+            }
+        }
+    }
+    
+    //All good!
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if a link can be traversed given some contraints.
  * link_ptr:
  *   Link to check.
@@ -405,79 +529,51 @@ bool can_traverse_path_link(
         return false;
     }
     
-    //Check if the link has limitations based on link type.
-    switch(link_ptr->type) {
-    case PATH_LINK_TYPE_NORMAL: {
-        break;
-    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
-            return false;
-        }
-        break;
-    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
-            return false;
-        }
-        break;
-    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
-            return false;
-        }
-        break;
-    }
-    }
-    
-    //Check if the travel is limited to links with a certain label.
-    if(!settings.label.empty() && link_ptr->label != settings.label) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
-        return false;
-    }
-    
-    //Check if the link's end path stop is hazardous, by checking its sector.
-    sector* end_sector = link_ptr->end_ptr->sector_ptr;
-    if(!end_sector) {
+    //Get the start and end sectors.
+    sector* start_sector = link_ptr->start_ptr->sector_ptr;
+    if(!start_sector) {
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
-        if(!end_sector) {
+        start_sector = get_sector(link_ptr->start_ptr->pos, NULL, false);
+        if(!start_sector) {
             //It's really the void. Nothing that can be done here then.
             if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
-    
-    bool touching_hazard =
-        !end_sector->hazard_floor ||
-        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
-        
-    if(
-        !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
-        link_ptr->end_ptr->sector_ptr &&
-        touching_hazard &&
-        !end_sector->hazards.empty()
-    ) {
-        for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
-            bool invulnerable = false;
-            for(size_t ih = 0; ih < settings.invulnerabilities.size(); ++ih) {
-                if(
-                    settings.invulnerabilities[ih] ==
-                    end_sector->hazards[sh]
-                ) {
-                    invulnerable = true;
-                    break;
-                }
-            }
-            if(!invulnerable) {
-                if(reason) *reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
-                return false;
-            }
+    sector* end_sector = link_ptr->end_ptr->sector_ptr;
+    if(!end_sector) {
+        //Same as above.
+        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
+        if(!end_sector) {
+            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            return false;
         }
     }
     
+    //Check if the link has limitations based on link type.
+    switch(link_ptr->type) {
+    case PATH_LINK_TYPE_NORMAL: {
+        break;
+    } case PATH_LINK_TYPE_LEDGE: {
+        if(
+            !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
+            (end_sector->z - start_sector->z) > GEOMETRY::STEP_HEIGHT
+        ) {
+            if(reason) *reason = PATH_BLOCK_REASON_UP_LEDGE;
+            return false;
+        }
+        break;
+    }
+    }
+    
+    //Check if there's any problem with the stop.
+    if(!can_take_path_stop(link_ptr->end_ptr, settings, end_sector, reason)) {
+        return false;
+    }
+    
+    //All good!
     return true;
 }
 
@@ -710,20 +806,41 @@ PATH_RESULTS get_path(
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;
     path_stop* closest_to_end = NULL;
-    dist closest_to_start_dist;
-    dist closest_to_end_dist;
+    float closest_to_start_dist;
+    float closest_to_end_dist;
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        dist dist_to_start(start_to_use, s_ptr->pos);
-        dist dist_to_end(end_to_use, s_ptr->pos);
+        float dist_to_start =
+            dist(start_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+        float dist_to_end =
+            dist(end_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+        dist_to_start = std::max(0.0f, dist_to_start);
+        dist_to_end = std::max(0.0f, dist_to_end);
         
-        if(!closest_to_start || dist_to_start < closest_to_start_dist) {
+        bool is_new_start =
+            !closest_to_start || dist_to_start < closest_to_start_dist;
+        bool is_new_end =
+            !closest_to_end || dist_to_end < closest_to_end_dist;
+            
+        if(is_new_start || is_new_end) {
+            //We actually want this stop. Check now if it can be used.
+            //We're not checking this earlier due to performance.
+            if(!can_take_path_stop(s_ptr, settings)) {
+                //Can't be taken. Skip.
+                continue;
+            }
+        } else {
+            //Not the closest so far. Skip.
+            continue;
+        }
+        
+        if(is_new_start) {
             closest_to_start_dist = dist_to_start;
             closest_to_start = s_ptr;
         }
-        if(!closest_to_end || dist_to_end < closest_to_end_dist) {
+        if(is_new_end) {
             closest_to_end_dist = dist_to_end;
             closest_to_end = s_ptr;
         }
@@ -748,8 +865,8 @@ PATH_RESULTS get_path(
     if(closest_to_start == closest_to_end) {
         full_path.push_back(closest_to_start);
         if(total_dist) {
-            *total_dist = closest_to_start_dist.to_float();
-            *total_dist += closest_to_end_dist.to_float();
+            *total_dist = closest_to_start_dist;
+            *total_dist += closest_to_end_dist;
         }
         return PATH_RESULT_PATH_WITH_SINGLE_STOP;
     }
@@ -802,6 +919,9 @@ string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
         break;
     } case PATH_BLOCK_REASON_NOT_AIRBORNE: {
         return "Mob should be airborne";
+        break;
+    } case PATH_BLOCK_REASON_UP_LEDGE: {
+        return "Mob cannot go up ledge";
         break;
     } case PATH_BLOCK_REASON_NOT_RIGHT_LABEL: {
         return "Mob's following links with a different label";

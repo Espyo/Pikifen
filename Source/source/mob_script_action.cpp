@@ -303,61 +303,109 @@ bool mob_action_loaders::focus(mob_action_call &call) {
  * call:
  *   Mob action call that called this.
  */
-bool mob_action_loaders::get_info(mob_action_call &call) {
-    if(call.args[1] == "angle") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_ANGLE);
-    } else if(call.args[1] == "body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
-    } else if(call.args[1] == "chomped_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
-    } else if(call.args[1] == "day_minutes") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
+bool mob_action_loaders::get_area_info(mob_action_call &call) {
+    if(call.args[1] == "day_minutes") {
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_DAY_MINUTES);
     } else if(call.args[1] == "field_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
-    } else if(call.args[1] == "focus_distance") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN);
+    } else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! "
+            "Try using \"get_mob_info\" or \"get_event_info\".";
+        return false;
+    }
+    
+    return true;
+}
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script actions.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::get_event_info(mob_action_call &call) {
+    if(call.args[1] == "body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_BODY_PART);
     } else if(call.args[1] == "frame_signal") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
-    } else if(call.args[1] == "group_task_power") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_GROUP_TASK_POWER);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL);
     } else if(call.args[1] == "hazard") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
-    } else if(call.args[1] == "health") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
-    } else if(call.args[1] == "health_ratio") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_HAZARD);
     } else if (call.args[1] == "input_name") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_NAME);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_INPUT_NAME);
     } else if (call.args[1] == "input_value") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_VALUE);
-    } else if(call.args[1] == "latched_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
-    } else if(call.args[1] == "latched_pikmin_weight") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_INPUT_VALUE);
     } else if(call.args[1] == "message") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
-    } else if(call.args[1] == "message_sender") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
-    } else if(call.args[1] == "message_sender_id") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER_ID);
-    } else if(call.args[1] == "mob_category") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
-    } else if(call.args[1] == "mob_type") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_MESSAGE);
     } else if(call.args[1] == "other_body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
-    } else if(call.args[1] == "x") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_X);
-    } else if(call.args[1] == "y") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_Y);
-    } else if(call.args[1] == "z") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_Z);
-    } else if(call.args[1] == "weight") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART);
+    } else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[1] + "\"! "
+            "Try using \"get_mob_info\" or \"get_area_info\".";
+        return false;
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script actions.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::get_mob_info(mob_action_call &call) {
+
+    if(call.args[1] == "self") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
+    } else if(call.args[1] == "focus") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
+    } else if (call.args[1] == "trigger") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_TRIGGER);
     } else {
         report_enum_error(call, 1);
         return false;
     }
+    
+    if(call.args[2] == "angle") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_ANGLE);
+    } else if(call.args[2] == "chomped_pikmin") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN);
+    } else if(call.args[2] == "focus_distance") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE);
+    } else if(call.args[2] == "group_task_power") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER);
+    } else if(call.args[2] == "health") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_HEALTH);
+    } else if(call.args[2] == "health_ratio") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO);
+    } else if(call.args[2] == "id") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_ID);
+    } else if(call.args[2] == "latched_pikmin") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN);
+    } else if(call.args[2] == "latched_pikmin_weight") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT);
+    } else if(call.args[2] == "mob_category") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY);
+    } else if(call.args[2] == "mob_type") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_MOB_TYPE);
+    } else if(call.args[2] == "state") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_STATE);
+    } else if(call.args[2] == "weight") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_WEIGHT);
+    } else if(call.args[2] == "x") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_X);
+    } else if(call.args[2] == "y") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_Y);
+    } else if(call.args[2] == "z") {
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_Z);
+    } else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! "
+            "Try using \"get_event_info\" or \"get_area_info\".";
+        return false;
+    }
+    
     return true;
 }
 
@@ -857,22 +905,9 @@ void mob_action_runners::focus(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_FOCUS_TRIGGER: {
-        if(
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT
-        ) {
-        
-            data.m->focus_on_mob((mob*) (data.custom_data_1));
-            
-        } else if(
-            data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
-        ) {
-        
-            data.m->focus_on_mob((mob*) (data.custom_data_2));
-            
+        mob* trigger = get_trigger_mob(data);
+        if(trigger) {
+            data.m->focus_on_mob(trigger);
         }
         break;
         
@@ -903,16 +938,11 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
             game.cur_area_data.path_stops.end()
         );
     } else {
-        //If there's a label, it'd be nice to only pick stops that have SOME
-        //connection to the label. Checking the stop's outgoing links is
-        //the best we can do, as to not overengineer or hurt performance.
+        //If there's a label, we should only pick stops that have the label.
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
-            for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                if(s_ptr->links[l]->label == label) {
-                    choices.push_back(s_ptr);
-                    break;
-                }
+            if(s_ptr->label == label) {
+                choices.push_back(s_ptr);
             }
         }
     }
@@ -988,6 +1018,31 @@ void mob_action_runners::get_angle(mob_action_run_data &data) {
 }
 
 
+
+/* ----------------------------------------------------------------------------
+ * Code for the area info obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_area_info(mob_action_run_data &data) {
+    string* var = &(data.m->vars[data.args[0]]);
+    MOB_ACTION_GET_AREA_INFO_TYPES t =
+        (MOB_ACTION_GET_AREA_INFO_TYPES) s2i(data.args[1]);
+        
+    switch (t) {
+    case MOB_ACTION_GET_AREA_INFO_DAY_MINUTES: {
+        *var = i2s(game.states.gameplay->day_minutes);
+        break;
+        
+    } case MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN: {
+        *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
+        break;
+        
+    }
+    }
+}
+
+
 /* ----------------------------------------------------------------------------
  * Code for the mob script action for getting chomped.
  * data:
@@ -1036,6 +1091,104 @@ void mob_action_runners::get_distance(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the event info obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_event_info(mob_action_run_data &data) {
+    string* var = &(data.m->vars[data.args[0]]);
+    MOB_ACTION_GET_EV_INFO_TYPES t =
+        (MOB_ACTION_GET_EV_INFO_TYPES) s2i(data.args[1]);
+        
+    switch (t) {
+    case MOB_ACTION_GET_EV_INFO_BODY_PART: {
+        if (
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parent_event == MOB_EV_DAMAGE
+        ) {
+            *var =
+                (
+                    (hitbox_interaction*)(data.custom_data_1)
+                )->h1->body_part_name;
+        } else if (
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+        ) {
+            *var =
+                data.m->get_closest_hitbox(
+                    ((mob*)(data.custom_data_1))->pos
+                )->body_part_name;
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL: {
+        if (data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
+            *var = i2s(*((size_t*)(data.custom_data_1)));
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_HAZARD: {
+        if (
+            data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
+            data.call->parent_event == MOB_EV_LEFT_HAZARD
+        ) {
+            *var = ((hazard*)data.custom_data_1)->name;
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_INPUT_NAME: {
+        if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
+            *var =
+                game.controls.get_player_action_type_internal_name(
+                    ((player_action*) (data.custom_data_1))->action_type_id
+                );
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_INPUT_VALUE: {
+        if (data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
+            *var = f2s(((player_action*) (data.custom_data_1))->value);
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_MESSAGE: {
+        if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
+            *var = *((string*)(data.custom_data_1));
+        }
+        break;
+        
+    } case MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART: {
+        if (
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parent_event == MOB_EV_DAMAGE
+        ) {
+            *var =
+                (
+                    (hitbox_interaction*)(data.custom_data_1)
+                )->h2->body_part_name;
+        } else if (
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+        ) {
+            *var =
+                ((mob*)(data.custom_data_1))->get_closest_hitbox(
+                    data.m->pos
+                )->body_part_name;
+        }
+        break;
+        
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the floor Z obtaining mob script action.
  * data:
  *   Data about the action call.
@@ -1045,16 +1198,6 @@ void mob_action_runners::get_floor_z(mob_action_run_data &data) {
     float y = s2f(data.args[2]);
     sector* s = get_sector(point(x, y), NULL, true);
     data.m->vars[data.args[0]] = f2s(s ? s->z : 0);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code for the info obtaining mob script action.
- * data:
- *   Data about the action call.
- */
-void mob_action_runners::get_focus_info(mob_action_run_data &data) {
-    get_info_runner(data, data.m->focused_mob);
 }
 
 
@@ -1071,12 +1214,109 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the info obtaining mob script action.
+ * Code for the mob info obtaining mob script action.
  * data:
  *   Data about the action call.
  */
-void mob_action_runners::get_info(mob_action_run_data &data) {
-    get_info_runner(data, data.m);
+void mob_action_runners::get_mob_info(mob_action_run_data &data) {
+    mob* target_mob = NULL;
+    MOB_ACTION_GET_INFO_TARGET_TYPES tt =
+        (MOB_ACTION_GET_INFO_TARGET_TYPES) s2i(data.args[1]);
+        
+    switch(tt) {
+    case MOB_ACTION_GET_INFO_TARGET_SELF: {
+        target_mob = data.m;
+        break;
+    } case MOB_ACTION_GET_INFO_TARGET_FOCUS: {
+        if(!data.m->focused_mob) return;
+        target_mob = data.m->focused_mob;
+        break;
+    } case MOB_ACTION_GET_INFO_TARGET_TRIGGER: {
+        target_mob = get_trigger_mob(data);
+    }
+    }
+    
+    if(!target_mob) return;
+    
+    string* var = &(data.m->vars[data.args[0]]);
+    MOB_ACTION_GET_MOB_INFO_TYPES t =
+        (MOB_ACTION_GET_MOB_INFO_TYPES) s2i(data.args[2]);
+        
+    switch (t) {
+    case MOB_ACTION_GET_MOB_INFO_ANGLE: {
+        *var = f2s(rad_to_deg(target_mob->angle));
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN: {
+        *var = i2s(target_mob->chomping_mobs.size());
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE: {
+        if (target_mob->focused_mob) {
+            float d =
+                dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
+            *var = f2s(d);
+        }
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER: {
+        if(target_mob->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
+            *var = f2s(((group_task*)target_mob)->get_power());
+        }
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_HEALTH: {
+        *var = i2s(target_mob->health);
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO: {
+        *var = f2s(target_mob->health / target_mob->max_health);
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_ID: {
+        *var = i2s(target_mob->id);
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN: {
+        *var = i2s(target_mob->get_latched_pikmin_amount());
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT: {
+        *var = i2s(target_mob->get_latched_pikmin_weight());
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY: {
+        *var = target_mob->type->category->name;
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_MOB_TYPE: {
+        *var = target_mob->type->name;
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_STATE: {
+        *var = target_mob->fsm.cur_state->name;
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_WEIGHT: {
+        if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
+            scale* s_ptr = (scale*)(target_mob);
+            *var = i2s(s_ptr->calculate_cur_weight());
+        }
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_X: {
+        *var = f2s(target_mob->pos.x);
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_Y: {
+        *var = f2s(target_mob->pos.y);
+        break;
+        
+    } case MOB_ACTION_GET_MOB_INFO_Z: {
+        *var = f2s(target_mob->z);
+        break;
+    }
+    }
 }
 
 
@@ -2157,212 +2397,40 @@ bool assert_actions(
 
 
 /* ----------------------------------------------------------------------------
- * A general function for get_info actions.
+ * Gets the mob that triggered an event.
  * data:
- *   The action's data.
- * target_mob:
- *   The mob to get the info from, if applicable.
+ *   Data about the action call.
  */
-void get_info_runner(mob_action_run_data &data, mob* target_mob) {
-
-    if(target_mob == NULL) {
-        return;
+mob* get_trigger_mob(mob_action_run_data &data) {
+    if (
+        data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
+        data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
+        data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
+        data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+        data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+        data.call->parent_event == MOB_EV_HELD ||
+        data.call->parent_event == MOB_EV_RELEASED ||
+        data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
+        data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
+    ) {
+        return (mob*)(data.custom_data_1);
+        
+    } else if (
+        data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
+    ) {
+        return(mob*)(data.custom_data_2);
+        
+    } else if (
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+        data.call->parent_event == MOB_EV_DAMAGE
+    ) {
+        return ((hitbox_interaction*)(data.custom_data_1))->mob2;
+        
     }
     
-    string* var = &(data.m->vars[data.args[0]]);
-    MOB_ACTION_GET_INFO_TYPES t = (MOB_ACTION_GET_INFO_TYPES) s2i(data.args[1]);
-    
-    switch(t) {
-    case MOB_ACTION_GET_INFO_ANGLE: {
-        *var = f2s(rad_to_deg(target_mob->angle));
-        break;
-        
-    } case MOB_ACTION_GET_INFO_BODY_PART: {
-        if(
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
-        ) {
-            *var =
-                (
-                    (hitbox_interaction*)(data.custom_data_1)
-                )->h1->body_part_name;
-        } else if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
-        ) {
-            *var =
-                target_mob->get_closest_hitbox(
-                    ((mob*)(data.custom_data_1))->pos,
-                    INVALID, NULL
-                )->body_part_name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_CHOMPED_PIKMIN: {
-        *var = i2s(target_mob->chomping_mobs.size());
-        break;
-        
-    } case MOB_ACTION_GET_INFO_DAY_MINUTES: {
-        *var = i2s(game.states.gameplay->day_minutes);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {
-        *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
-        break;
-        
-    } case MOB_ACTION_GET_INFO_FOCUS_DISTANCE: {
-        if(target_mob->focused_mob) {
-            float d =
-                dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
-            *var = f2s(d);
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
-        if(data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
-            *var = i2s(*((size_t*)(data.custom_data_1)));
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_GROUP_TASK_POWER: {
-        if(target_mob->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
-            *var = f2s(((group_task*) target_mob)->get_power());
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_HAZARD: {
-        if(
-            data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
-            data.call->parent_event == MOB_EV_LEFT_HAZARD
-        ) {
-            *var = ((hazard*) data.custom_data_1)->name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_HEALTH: {
-        *var = i2s(target_mob->health);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_HEALTH_RATIO: {
-        *var = f2s(target_mob->health / target_mob->max_health);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT_NAME: {
-        if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var =
-                game.controls.get_player_action_type_internal_name(
-                    ((player_action*) (data.custom_data_1))->action_type_id
-                );
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT_VALUE: {
-        if (data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var = f2s(((player_action*) (data.custom_data_1))->value);
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {
-        *var = i2s(target_mob->get_latched_pikmin_amount());
-        break;
-        
-    } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT: {
-        *var = i2s(target_mob->get_latched_pikmin_weight());
-        break;
-        
-    } case MOB_ACTION_GET_INFO_MESSAGE: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = *((string*)(data.custom_data_1));
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_MESSAGE_SENDER: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = ((mob*)(data.custom_data_2))->type->name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_MESSAGE_SENDER_ID: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = i2s(((mob*)(data.custom_data_2))->id);
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
-        if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_HELD ||
-            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
-        ) {
-            *var = ((mob*)(data.custom_data_1))->type->category->name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_MOB_TYPE: {
-        if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
-            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
-        ) {
-            *var = ((mob*)(data.custom_data_1))->type->name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_OTHER_BODY_PART: {
-        if(
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
-        ) {
-            *var =
-                (
-                    (hitbox_interaction*)(data.custom_data_1)
-                )->h2->body_part_name;
-        } else if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
-        ) {
-            *var =
-                ((mob*)(data.custom_data_1))->get_closest_hitbox(
-                    target_mob->pos, INVALID, NULL
-                )->body_part_name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_X: {
-        *var = f2s(target_mob->pos.x);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_Y: {
-        *var = f2s(target_mob->pos.y);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_Z: {
-        *var = f2s(target_mob->z);
-        break;
-        
-    } case MOB_ACTION_GET_INFO_WEIGHT: {
-        if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
-            scale* s_ptr = (scale*)(target_mob);
-            *var = i2s(s_ptr->calculate_cur_weight());
-        }
-        break;
-        
-    }
-    }
+    return NULL;
 }
 
 

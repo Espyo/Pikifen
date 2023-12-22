@@ -1240,7 +1240,9 @@ pikmin_type* mob::decide_carry_pikmin_type(
     
     //If we ended up with no candidates, pick a type at random,
     //out of all possible types.
+    bool force_random = false;
     if(majority_types.empty()) {
+        force_random = true;
         for(
             auto t = available_types.begin();
             t != available_types.end(); ++t
@@ -1257,49 +1259,19 @@ pikmin_type* mob::decide_carry_pikmin_type(
         decided_type = *majority_types.begin();
         
     } else {
-        //If there's a tie, let's take a careful look.
-        bool new_tie = false;
-        
-        //Is the Pikmin that just joined part of the majority types?
-        //If so, that means this Pikmin just created a NEW tie!
-        //So let's pick a random Onion again.
-        if(added) {
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(added->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //If a Pikmin left, check if it is related to the majority types.
-        //If not, then a new tie wasn't made, no worries.
-        //If it was related, a new tie was created.
-        if(removed) {
-            new_tie = false;
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(removed->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //Check if the previously decided type belongs to one of the majorities.
-        //If so, it can be chosen again, but if not, it cannot.
-        bool can_continue = false;
-        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-            if(majority_types[mt] == decided_type) {
-                can_continue = true;
-                break;
-            }
-        }
-        if(!can_continue) decided_type = NULL;
-        
-        //If the Pikmin that just joined is not a part of the majorities,
-        //then it had no impact on the existing ties.
-        //Go with the Onion that had been decided before.
-        if(new_tie || !decided_type) {
+        //If the current type is a majority, it takes priority.
+        //Otherwise, pick a majority at random.
+        if(
+            carry_info->intended_pik_type &&
+            !force_random &&
+            find(
+                majority_types.begin(),
+                majority_types.end(),
+                carry_info->intended_pik_type
+            ) != majority_types.end()
+        ) {
+            decided_type = carry_info->intended_pik_type;
+        } else {
             decided_type =
                 majority_types[
                     randomi(0, (int) majority_types.size() - 1)
@@ -2500,55 +2472,10 @@ bool mob::has_clear_line(mob* target_mob) const {
     }
     
     //Check against walls.
-    set<edge*> candidate_edges;
-    if(
-        !game.cur_area_data.bmap.get_edges_in_region(
-            bb_tl, bb_br,
-            candidate_edges
-        )
-    ) {
-        //Somehow out of bounds.
+    //We can ignore walls that are below both mobs, so use the lowest of the
+    //two Zs as a cut-off point.
+    if(are_walls_between(pos, target_mob->pos, std::min(z, target_mob->z))) {
         return false;
-    }
-    
-    for(auto &e_ptr : candidate_edges) {
-        if(
-            !line_segs_intersect(
-                pos, target_mob->pos,
-                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL
-            )
-        ) {
-            continue;
-        }
-        for(size_t s = 0; s < 2; ++s) {
-            if(!e_ptr->sectors[s]) {
-                //No sectors means there's out-of-bounds geometry in the way.
-                return false;
-            }
-            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
-                //If a blocking sector is in the way, no clear line.
-                return false;
-            }
-        }
-        if(
-            e_ptr->sectors[0]->z < z &&
-            e_ptr->sectors[0]->z < target_mob->z &&
-            e_ptr->sectors[1]->z < z &&
-            e_ptr->sectors[1]->z < target_mob->z
-        ) {
-            //If both mobs are above both sectors, it doesn't count.
-            continue;
-        }
-        if(
-            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            GEOMETRY::STEP_HEIGHT
-        ) {
-            //The walls are more than stepping height in difference.
-            //So it's a genuine wall in the way.
-            return false;
-        }
     }
     
     //Check for when they're (not) standing on different mobs.

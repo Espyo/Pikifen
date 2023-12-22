@@ -75,7 +75,9 @@ void main_menu_state::do_drawing() {
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
         
-        draw_bitmap_in_box(pik->top, pik->pos, pik_size, pik->angle, true);
+        draw_bitmap_in_box(
+            pik->top, pik->pos, pik_size, true, pik->angle
+        );
     }
     
     draw_scaled_text(
@@ -151,11 +153,13 @@ void main_menu_state::do_logic() {
     }
     
     vector<player_action> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); ++a) {
-        main_gui.handle_player_action(player_actions[a]);
-        play_gui.handle_player_action(player_actions[a]);
-        make_gui.handle_player_action(player_actions[a]);
-        tutorial_gui.handle_player_action(player_actions[a]);
+    if(!game.fade_mgr.is_fading()) {
+        for(size_t a = 0; a < player_actions.size(); ++a) {
+            main_gui.handle_player_action(player_actions[a]);
+            play_gui.handle_player_action(player_actions[a]);
+            make_gui.handle_player_action(player_actions[a]);
+            tutorial_gui.handle_player_action(player_actions[a]);
+        }
     }
     
     main_gui.tick(game.delta_t);
@@ -192,15 +196,13 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     play_gui.handle_event(ev);
     make_gui.handle_event(ev);
     tutorial_gui.handle_event(ev);
-    
-    game.controls.handle_allegro_event(ev);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's main page.
  */
-void main_menu_state::init_main_page() {
+void main_menu_state::init_gui_main_page() {
 
     data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
     
@@ -267,6 +269,7 @@ void main_menu_state::init_main_page() {
     options_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
+            game.states.options_menu->page_to_load = OPTIONS_MENU_PAGE_TOP;
             game.change_state(game.states.options_menu);
         });
     };
@@ -319,16 +322,16 @@ void main_menu_state::init_main_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's make page.
  */
-void main_menu_state::init_make_page() {
+void main_menu_state::init_gui_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
     
     //Menu items.
-    make_gui.register_coords("animation_editor", 50, 59, 60, 10);
-    make_gui.register_coords("area_editor",      50, 71, 60, 10);
-    make_gui.register_coords("gui_editor",       50, 83, 60, 10);
-    make_gui.register_coords("back",              9, 91, 14,  6);
-    make_gui.register_coords("more",             91, 91, 14,  6);
-    make_gui.register_coords("tooltip",          50, 96, 96,  4);
+    make_gui.register_coords("animation_editor", 50, 59,   60, 10);
+    make_gui.register_coords("area_editor",      50, 71,   60, 10);
+    make_gui.register_coords("gui_editor",       50, 81.5, 50,  7);
+    make_gui.register_coords("back",              9, 91,   14,  6);
+    make_gui.register_coords("more",             91, 91,   14,  6);
+    make_gui.register_coords("tooltip",          50, 96,   96,  4);
     make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Animation editor button.
@@ -418,7 +421,7 @@ void main_menu_state::init_make_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's play page.
  */
-void main_menu_state::init_play_page() {
+void main_menu_state::init_gui_play_page() {
     data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
     
     //Menu items.
@@ -497,7 +500,7 @@ void main_menu_state::init_play_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's tutorial question page.
  */
-void main_menu_state::init_tutorial_page() {
+void main_menu_state::init_gui_tutorial_page() {
     data_node gui_file(MAIN_MENU::TUTORIAL_GUI_FILE_PATH);
     
     //Menu items.
@@ -579,10 +582,10 @@ void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    init_main_page();
-    init_play_page();
-    init_make_page();
-    init_tutorial_page();
+    init_gui_main_page();
+    init_gui_play_page();
+    init_gui_make_page();
+    init_gui_tutorial_page();
     
     switch(page_to_load) {
     case MAIN_MENU_PAGE_MAIN: {

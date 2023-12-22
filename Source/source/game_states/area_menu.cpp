@@ -416,8 +416,10 @@ void area_menu_state::do_drawing() {
  */
 void area_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); ++a) {
-        gui.handle_player_action(player_actions[a]);
+    if(!game.fade_mgr.is_fading()) {
+        for(size_t a = 0; a < player_actions.size(); ++a) {
+            gui.handle_player_action(player_actions[a]);
+        }
     }
     
     gui.tick(game.delta_t);
@@ -443,7 +445,6 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     gui.handle_event(ev);
-    game.controls.handle_allegro_event(ev);
 }
 
 
@@ -500,7 +501,7 @@ void area_menu_state::init_gui_info_page() {
             }
             draw_rounded_rectangle(
                 final_center, final_size, 8.0f,
-                al_map_rgba(255, 255, 255, 128), 1.0f
+                COLOR_TRANSPARENT_WHITE, 1.0f
             );
         };
         info_box->add_child(thumb_item);
@@ -604,7 +605,7 @@ void area_menu_state::init_gui_info_page() {
  */
 void area_menu_state::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
-    gui.register_coords("pick_text",     40,  5, 32,  6);
+    gui.register_coords("header",        40,  5, 32,  6);
     gui.register_coords("list",          20, 51, 36, 82);
     gui.register_coords("list_scroll",   40, 51,  2, 82);
     gui.register_coords("view_toggle",   74,  5, 32,  6);
@@ -629,15 +630,13 @@ void area_menu_state::init_gui_main() {
     [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
     
-    //Instructions text.
-    text_gui_item* pick_text =
+    //Header text.
+    text_gui_item* header_text =
         new text_gui_item(
-        area_type == AREA_TYPE_SIMPLE ?
-        "Pick a simple area:" :
-        "Pick a mission:",
-        game.fonts.standard
+        "PICK AN AREA:",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.add_item(pick_text, "pick_text");
+    gui.add_item(header_text, "header");
     
     if(!areas_to_pick.empty()) {
     
@@ -757,7 +756,7 @@ void area_menu_state::init_gui_main() {
         info_box->on_draw =
         [] (const point & center, const point & size) {
             draw_rounded_rectangle(
-                center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+                center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
             );
         };
         gui.add_item(info_box, "info_box");
@@ -824,7 +823,7 @@ void area_menu_state::init_gui_main() {
             specs_box->on_draw =
             [] (const point & center, const point & size) {
                 draw_rounded_rectangle(
-                    center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+                    center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
                 );
             };
             gui.add_item(specs_box, "specs_box");

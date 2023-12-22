@@ -12,8 +12,8 @@ script {
             send_message_to_links 0
         }
         on_receive_message {
-            get_info msg message
-            get_info id message_sender_id
+            get_event_info msg message
+            get_mob_info id trigger id
             
             if $i1id = none
                 set_var i1id $id

@@ -11,7 +11,7 @@ script {
             set_hiding true
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $t = ambush
                 set_hiding false
                 start_height_effect
@@ -39,7 +39,7 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $id = fr
                 if $t = move_fr
                     move_to_target arachnorb_foot_logic
@@ -87,7 +87,7 @@ script {
             set_state floating
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $t = die
                 set_state dying
             end_if
@@ -107,7 +107,7 @@ script {
             set_state falling
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $t = die
                 set_state dying
             end_if
@@ -123,7 +123,7 @@ script {
             set_state landing
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $t = die
                 set_state dying
             end_if
@@ -141,7 +141,7 @@ script {
             set_state idling
         }
         on_receive_message {
-            get_info t message
+            get_event_info t message
             if $t = die
                 set_state dying
             end_if
