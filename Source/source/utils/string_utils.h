@@ -12,6 +12,7 @@
 #ifndef STRING_UTILS_INCLUDED
 #define STRING_UTILS_INCLUDED
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
