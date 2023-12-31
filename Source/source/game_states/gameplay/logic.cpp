@@ -1009,14 +1009,15 @@ void gameplay_state::do_menu_logic() {
             real_delta_t /= game.maker_tools.change_speed_mult;
         }
         
-        game.framerate_history.push_back(1.0f / real_delta_t);
+        game.framerate_history.push_back(game.cur_frame_process_time);
         if(game.framerate_history.size() > GAME::FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());
         }
         
         game.framerate_last_avg_point++;
         
-        float sample_avg;
+        double sample_avg;
+        double sample_avg_capped;
         
         if(game.framerate_last_avg_point >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
             //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
@@ -1032,7 +1033,8 @@ void gameplay_state::do_menu_logic() {
                 game.framerate_last_avg_point =
                     GAME::FRAMERATE_AVG_SAMPLE_SIZE;
             }
-            float sample_avg_sum = 0;
+            double sample_avg_sum = 0;
+            double sample_avg_capped_sum = 0;
             size_t sample_avg_point_count = 0;
             size_t sample_size =
                 std::min(
@@ -1045,25 +1047,54 @@ void gameplay_state::do_menu_logic() {
                     game.framerate_history.size() -
                     game.framerate_last_avg_point + f;
                 sample_avg_sum += game.framerate_history[idx];
+                sample_avg_capped_sum +=
+                    std::max(
+                        game.framerate_history[idx],
+                        (double) (1.0f / game.options.target_fps)
+                    );
                 sample_avg_point_count++;
             }
             
-            sample_avg = sample_avg_sum / (float) sample_avg_point_count;
-            
+            sample_avg =
+                sample_avg_sum / (float) sample_avg_point_count;
+            sample_avg_capped =
+                sample_avg_capped_sum / (float) sample_avg_point_count;
+                
         } else {
-            //If there are less than FRAMERATE_AVG_SAMPLE_SIZE frames in
+            //If there are fewer than FRAMERATE_AVG_SAMPLE_SIZE frames in
             //the history, the average will change every frame until we get
             //that. This defeats the purpose of a smoothly-updating number,
             //so until that requirement is filled, let's stick to the oldest
             //record.
             sample_avg = game.framerate_history[0];
-            
+            sample_avg_capped =
+                std::max(
+                    game.framerate_history[0],
+                    (double) (1.0f / game.options.target_fps)
+                );
+                
         }
         
+        string header_str =
+            box_string("", 12) +
+            box_string("Now", 12) +
+            box_string("Average", 12) +
+            box_string("Target", 12);
         string fps_str =
-            box_string(f2s(sample_avg), 12, " avg, ") +
-            box_string(f2s(1.0f / real_delta_t), 12, " now, ") +
-            i2s(game.options.target_fps) + " intended";
+            box_string("FPS:", 12) +
+            box_string(std::to_string(1.0f / real_delta_t), 12) +
+            box_string(std::to_string(1.0f / sample_avg_capped), 12) +
+            box_string(i2s(game.options.target_fps), 12);
+        string fps_uncapped_str =
+            box_string("FPS uncap.:", 12) +
+            box_string(std::to_string(1.0f / game.cur_frame_process_time), 12) +
+            box_string(std::to_string(1.0f / sample_avg), 12) +
+            box_string("-", 12);
+        string frame_time_str =
+            box_string("Frame time:", 12) +
+            box_string(std::to_string(game.cur_frame_process_time), 12) +
+            box_string(std::to_string(sample_avg), 12) +
+            box_string(std::to_string(1.0f / game.options.target_fps), 12);
         string n_mobs_str =
             box_string(i2s(mobs.all.size()), 7);
         string n_particles_str =
@@ -1082,7 +1113,14 @@ void gameplay_state::do_menu_logic() {
             game.config.version.empty() ? "-" : game.config.version;
             
         print_info(
-            "FPS: " + fps_str +
+            header_str +
+            "\n" +
+            fps_str +
+            "\n" +
+            fps_uncapped_str +
+            "\n" +
+            frame_time_str +
+            "\n"
             "\n"
             "Mobs: " + n_mobs_str + " Particles: " + n_particles_str +
             "\n"

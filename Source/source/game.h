@@ -95,6 +95,8 @@ public:
     game_config config;
     //Player controls mediator.
     controls_mediator controls;
+    //Total amount of time the current frame took to process, in seconds.
+    double cur_frame_process_time;
     //Info about the maker tools.
     maker_tools_info maker_tools;
     //Data about the area that's currently being used.
@@ -114,7 +116,7 @@ public:
     //List of fonts.
     font_list fonts;
     //Duration of the last few frames.
-    vector<float> framerate_history;
+    vector<double> framerate_history;
     //Last framerate average started at this point in the history.
     size_t framerate_last_avg_point;
     //List of hazards.

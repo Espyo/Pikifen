@@ -1401,24 +1401,43 @@ void gameplay_state::draw_system_stuff() {
         );
     }
     
-    if(game.show_system_info) {
+    if(game.show_system_info && !game.framerate_history.empty()) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
             game.win_w - GAME::FRAMERATE_HISTORY_SIZE, 0,
             game.win_w, 100,
             al_map_rgba(0, 0, 0, 192)
         );
+        double chart_min = 1.0f; //1 FPS.
+        double chart_max =
+            game.options.target_fps + game.options.target_fps * 0.05f;
         for(size_t f = 0; f < game.framerate_history.size(); ++f) {
+            float fps =
+                std::min(
+                    (float) (1.0f / game.framerate_history[f]),
+                    (float) game.options.target_fps
+                );
+            float fps_y =
+                interpolate_number(
+                    fps,
+                    chart_min, chart_max,
+                    0, 100
+                );
             al_draw_line(
                 game.win_w - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                game.win_w - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5,
-                round(game.framerate_history[f]),
+                game.win_w - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fps_y,
                 al_map_rgba(24, 96, 192, 192), 1
             );
         }
+        float target_fps_y =
+            interpolate_number(
+                game.options.target_fps,
+                chart_min, chart_max,
+                0, 100
+            );
         al_draw_line(
-            game.win_w - GAME::FRAMERATE_HISTORY_SIZE, game.options.target_fps,
-            game.win_w, game.options.target_fps,
+            game.win_w - GAME::FRAMERATE_HISTORY_SIZE, target_fps_y,
+            game.win_w, target_fps_y,
             al_map_rgba(128, 224, 128, 48), 1
         );
     }

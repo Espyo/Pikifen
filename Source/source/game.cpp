@@ -49,6 +49,7 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
 game_class::game_class() :
     bitmaps(""),
     bmp_error(nullptr),
+    cur_frame_process_time(0.0f),
     delta_t(0.0),
     display(nullptr),
     dummy_mob_state(nullptr),
@@ -217,7 +218,7 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
  */
 void game_class::main_loop() {
     //Used to calculate the time difference between the current and last frames.
-    double prev_frame_time = 0.0;
+    double prev_frame_start_time = 0.0;
     ALLEGRO_EVENT ev;
     
     //Main loop.
@@ -239,14 +240,17 @@ void game_class::main_loop() {
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
             if(al_is_event_queue_empty(logic_queue)) {
-                double cur_time = al_get_time();
+            
+                double cur_frame_start_time = al_get_time();
                 if(reset_delta_t) {
                     //Failsafe.
-                    prev_frame_time = cur_time - 1.0f / options.target_fps;
+                    prev_frame_start_time =
+                        cur_frame_start_time - 1.0f / options.target_fps;
                     reset_delta_t = false;
                 }
                 
-                float real_delta_t = cur_time - prev_frame_time;
+                float real_delta_t =
+                    cur_frame_start_time - prev_frame_start_time;
                 statistics.runtime += real_delta_t;
                 
                 //Anti speed-burst cap.
@@ -262,7 +266,12 @@ void game_class::main_loop() {
                     cur_state->do_drawing();
                 }
                 
-                prev_frame_time = cur_time;
+                double cur_frame_end_time = al_get_time();
+                cur_frame_process_time =
+                    cur_frame_end_time - cur_frame_start_time;
+                    
+                prev_frame_start_time = cur_frame_start_time;
+                
             }
             break;
             

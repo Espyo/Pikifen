@@ -20,7 +20,7 @@
     
     <p>Most of these tools are used while playing the engine, and are called by pressing the F keys (F2, F3, etc.), or the number keys (the ones above the letter keys). Their effects vary, but their purpose is to help content makers by making mundane tasks easier and providing helpful information, useful in debugging any problems. It is possible to set which tools run on which key, and it's also possible to change some of the tools's settings. There are also some other tools that are not run on demand.</p>
 
-    <p>You can hold down the key to repeat the effect over and over. This is useful, for instance, to spawn several Pikmin quickly. It might stop working if you press another key while holding that one down, though. Some tools print out information on the top of the screen, on top of a see-through black box. This info disappears after some seconds, unless you call it again. F1 and F12 cannot be set as tool keys since they toggle the system info and take a screenshot, respectively.</p>
+    <p>You can hold down the key to repeat the effect over and over. This is useful, for instance, to spawn several Pikmin quickly. It might stop working if you press another key while holding that one down, though. Some tools print out information on the top of the screen, on top of a see-through black box. This info disappears after some seconds, unless you call it again. F1 and F12 cannot be set as tool keys since they toggle the <a href="misc_features.html#system-info">system info</a> and take a screenshot, respectively.</p>
 
     <h2 id="config">Configuration file</h2>
     
@@ -28,7 +28,7 @@
 
     <p>The <code>enabled</code> property controls whether or not the toolkit is enabled.</p>
 
-    <p>Afterwards, there are the <code>f1</code>, <code>f2</code>, etc. properties, all the way up to <code>f11</code>, as well as the <code>0</code> to <code>9</code> properties. These properties specify what tool to run when that key is pressed, if any. The value of these properties should be the tool's ID; to know a tool's ID, check its section in this article.</p>
+    <p>Afterwards, there are the <code>f2</code>, <code>f3</code>, etc. properties, all the way up to <code>f11</code>, as well as the <code>0</code> to <code>9</code> properties. These properties specify what tool to run when that key is pressed, if any. The value of these properties should be the tool's ID; to know a tool's ID, check its section in this article.</p>
 
     <p>Finally, this file can also contain settings for some of the tools. Read a tool's section in this article to learn more about what settings it has.</p>
 
@@ -197,7 +197,7 @@
     
     <h3 id="perf-mon">Performance monitor</h3>
     
-    <p>When you enter an area, the engine loads a lot of content, and does a lot processing to get the gameplay state ready. This procedure takes a few seconds. If you suspect some of your content is causing the load times to be too high, you can use the performance monitor to find out how long the engine takes on each part of the area loading procedure. Likewise, while playing, the engine needs to process and draw several different things. If the framerate (press F1) is low or unstable, and you suspect some of your content is to blame, the performance monitor can help you here too.</p>
+    <p>When you enter an area, the engine loads a lot of content, and does a lot processing to get the gameplay state ready. This procedure takes a few seconds. If you suspect some of your content is causing the load times to be too high, you can use the performance monitor to find out how long the engine takes on each part of the area loading procedure. Likewise, while playing, the engine needs to process and draw several different things. If the framerate (press <a href="misc_features.html#system-info">F1</a>) is low or unstable, and you suspect some of your content is to blame, the performance monitor can help you here too.</p>
     
     <p>The <code>performance_monitor</code> property controls whether the monitor is on or off. If you don't need it, keep it off, since it can slow the game down! When you turn it on, any area you enter will be monitored. When you quit, the engine will generate a performance report about the area's loading procedure, and the frames of gameplay. The report can be found in <code>User_data/Performance_log.txt</code>.</p>
     
