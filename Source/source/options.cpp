@@ -19,6 +19,8 @@
 
 
 namespace OPTIONS {
+//Default value for the ambiance sound volume.
+const float DEF_AMBIANCE_VOLUME = 1.0f;
 //Default value for the area editor advanced mode setting.
 const bool DEF_AREA_EDITOR_ADVANCED_MODE = false;
 //Default value for the area editor backup interval.
@@ -80,12 +82,16 @@ const float DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
 //Default value for the pause menu leaving confirmation mode.
 const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE =
     LEAVING_CONFIRMATION_ALWAYS;
+//Default value for the master sound volume.
+const float DEF_MASTER_VOLUME = 0.8f;
 //Default value for the maximum amount of particles.
 const size_t DEF_MAX_PARTICLES = 200;
 //Default value for whether mipmaps are enabled.
 const bool DEF_MIPMAPS_ENABLED = true;
 //Default value for whether the mouse moves the cursor, for each player.
 const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+//Default value for the music volume.
+const float DEF_MUSIC_VOLUME = 1.0f;
 //Default value for whether to show player input icons on the HUD.
 const bool DEF_SHOW_HUD_INPUT_ICONS = true;
 //Default value for whether to use smooth scaling.
@@ -94,6 +100,8 @@ const bool DEF_SMOOTH_SCALING = true;
 const unsigned int DEF_TARGET_FPS = 60;
 //Default value for whether to use true fullscreen.
 const bool DEF_TRUE_FULLSCREEN = false;
+//Default value for UI sound effects volume.
+const float DEF_UI_SFX_VOLUME = 1.0f;
 //Default value for whether to use the window position hack.
 const bool DEF_WINDOW_POSITION_HACK = false;
 //Default value for whether to use fullscreen.
@@ -102,6 +110,8 @@ const bool DEF_WIN_FULLSCREEN = false;
 const unsigned int DEF_WIN_H = 768;
 //Default value for the window width.
 const unsigned int DEF_WIN_W = 1024;
+//Default value for world sound effects volume.
+const float DEF_WORLD_SFX_VOLUME = 1.0f;
 //Default value for the middle zoom level.
 const float DEF_ZOOM_MID_LEVEL = 1.4f;
 }
@@ -111,6 +121,7 @@ const float DEF_ZOOM_MID_LEVEL = 1.4f;
  * Creates an options struct.
  */
 options_struct::options_struct() :
+    ambiance_volume(OPTIONS::DEF_AMBIANCE_VOLUME),
     area_editor_advanced_mode(OPTIONS::DEF_AREA_EDITOR_ADVANCED_MODE),
     area_editor_backup_interval(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL),
     area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
@@ -145,13 +156,17 @@ options_struct::options_struct() :
     joystick_max_deadzone(OPTIONS::DEF_JOYSTICK_MAX_DEADZONE),
     joystick_min_deadzone(OPTIONS::DEF_JOYSTICK_MIN_DEADZONE),
     leaving_confirmation_mode(OPTIONS::DEF_LEAVING_CONFIRMATION_MODE),
+    master_volume(OPTIONS::DEF_MASTER_VOLUME),
     max_particles(OPTIONS::DEF_MAX_PARTICLES),
     mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
+    music_volume(OPTIONS::DEF_MUSIC_VOLUME),
     smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
     show_hud_input_icons(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS),
     target_fps(OPTIONS::DEF_TARGET_FPS),
     true_fullscreen(OPTIONS::DEF_TRUE_FULLSCREEN),
+    ui_sfx_volume(OPTIONS::DEF_UI_SFX_VOLUME),
     window_position_hack(OPTIONS::DEF_WINDOW_POSITION_HACK),
+    world_sfx_volume(OPTIONS::DEF_WORLD_SFX_VOLUME),
     zoom_mid_level(OPTIONS::DEF_ZOOM_MID_LEVEL) {
     
     mouse_moves_cursor[0] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[0];
@@ -231,6 +246,7 @@ void options_struct::load(data_node* file) {
     unsigned char auto_throw_mode_c;
     unsigned char leaving_confirmation_mode_c;
     
+    rs.set("ambiance_volume", ambiance_volume);
     rs.set("area_editor_advanced_mode", area_editor_advanced_mode);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
@@ -265,14 +281,18 @@ void options_struct::load(data_node* file) {
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
     rs.set("leaving_confirmation_mode", leaving_confirmation_mode_c);
+    rs.set("master_volume", master_volume);
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
+    rs.set("music_volume", music_volume);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
     rs.set("true_fullscreen", true_fullscreen);
+    rs.set("ui_sfx_volume", ui_sfx_volume);
     rs.set("window_position_hack", window_position_hack);
+    rs.set("world_sfx_volume", world_sfx_volume);
     
     auto_throw_mode =
         (AUTO_THROW_MODES)
@@ -315,6 +335,12 @@ void options_struct::load(data_node* file) {
         intended_win_w = std::max(1, s2i(resolution_parts[0]));
         intended_win_h = std::max(1, s2i(resolution_parts[1]));
     }
+    
+    ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
+    master_volume = clamp(master_volume, 0.0f, 1.0f);
+    music_volume = clamp(music_volume, 0.0f, 1.0f);
+    ui_sfx_volume = clamp(ui_sfx_volume, 0.0f, 1.0f);
+    world_sfx_volume = clamp(world_sfx_volume, 0.0f, 1.0f);
     
     //Force the editor styles to be opaque, otherwise there can be problems.
     editor_primary_color.a = 1.0f;
@@ -392,6 +418,12 @@ void options_struct::save(data_node* file) const {
     if(!open_nodes_str.empty()) open_nodes_str.pop_back();
     
     //Other options.
+    file->add(
+        new data_node(
+            "ambiance_volume",
+            f2s(ambiance_volume)
+        )
+    );
     file->add(
         new data_node(
             "area_editor_advanced_mode",
@@ -586,6 +618,12 @@ void options_struct::save(data_node* file) const {
     );
     file->add(
         new data_node(
+            "master_volume",
+            f2s(master_volume)
+        )
+    );
+    file->add(
+        new data_node(
             "max_particles",
             i2s(max_particles)
         )
@@ -600,6 +638,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "mipmaps",
             b2s(mipmaps_enabled)
+        )
+    );
+    file->add(
+        new data_node(
+            "music_volume",
+            f2s(music_volume)
         )
     );
     file->add(
@@ -629,8 +673,20 @@ void options_struct::save(data_node* file) const {
     );
     file->add(
         new data_node(
+            "ui_sfx_volume",
+            f2s(ui_sfx_volume)
+        )
+    );
+    file->add(
+        new data_node(
             "window_position_hack",
             b2s(window_position_hack)
+        )
+    );
+    file->add(
+        new data_node(
+            "world_sfx_volume",
+            f2s(world_sfx_volume)
         )
     );
 }

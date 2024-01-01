@@ -250,12 +250,19 @@ public:
     void handle_mob_deletion(mob* m_ptr);
     void handle_world_pause();
     void handle_world_unpause();
-    void init();
+    void init(
+        float master_volume, float world_sfx_volume, float music_volume,
+        float ambiance_volume, float ui_sfx_volume
+    );
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter);
     void tick(float delta_t);
+    void update_volumes(
+        float master_volume, float world_sfx_volume, float music_volume,
+        float ambiance_volume, float ui_sfx_volume
+    );
     audio_manager();
     
 private:

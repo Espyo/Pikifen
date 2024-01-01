@@ -334,6 +334,16 @@ private:
     //Leaving confirmation picker widget.
     options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>*
     leaving_confirmation_picker;
+    //Master volume picker widget.
+    options_menu_picker_gui_item<float>* master_vol_picker;
+    //World sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* world_sfx_vol_picker;
+    //Music volume picker widget.
+    options_menu_picker_gui_item<float>* music_vol_picker;
+    //Ambiance sound volume picker widget.
+    options_menu_picker_gui_item<float>* ambiance_vol_picker;
+    //UI sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* ui_sfx_vol_picker;
     //Restart warning text widget.
     text_gui_item* warning_text;
     

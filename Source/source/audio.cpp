@@ -447,36 +447,63 @@ void audio_manager::handle_world_unpause() {
 
 /* ----------------------------------------------------------------------------
  * Initializes the audio manager.
+ * master_volume:
+ *   Volume of the master mixer.
+ * world_sfx_volume:
+ *   Volume of the in-world sound effects mixer.
+ * music_volume:
+ *   Volume of the music mixer.
+ * ambiance_volume:
+ *   Volume of the ambiance sounds mixer.
+ * ui_sfx_volume:
+ *   Volume of the UI sound effects mixer.
  */
-void audio_manager::init() {
+void audio_manager::init(
+    float master_volume, float world_sfx_volume, float music_volume,
+    float ambiance_volume, float ui_sfx_volume
+) {
+    //Main voice.
     voice =
         al_create_voice(
-            44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
+            44100, ALLEGRO_AUDIO_DEPTH_INT16, ALLEGRO_CHANNEL_CONF_2
         );
         
+    //Master mixer.
     master_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
     al_attach_mixer_to_voice(master_mixer, voice);
     
+    //World sound effects mixer.
     world_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
     al_attach_mixer_to_mixer(world_sfx_mixer, master_mixer);
     
+    //World ambiance sounds mixer.
     world_ambiance_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
     al_attach_mixer_to_mixer(world_ambiance_sfx_mixer, master_mixer);
     
+    //UI sound effects mixer.
     ui_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
     al_attach_mixer_to_mixer(ui_sfx_mixer, master_mixer);
+    
+    //Set all of the mixer volumes.
+    update_volumes(
+        master_volume,
+        world_sfx_volume,
+        music_volume,
+        ambiance_volume,
+        ui_sfx_volume
+    );
 }
 
 
@@ -781,6 +808,36 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     playback_ptr->target_pan = pan;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Updates the volumes of all mixers.
+ * master_volume:
+ *   Volume of the master mixer.
+ * world_sfx_volume:
+ *   Volume of the in-world sound effects mixer.
+ * music_volume:
+ *   Volume of the music mixer.
+ * ambiance_volume:
+ *   Volume of the ambiance sounds mixer.
+ * ui_sfx_volume:
+ *   Volume of the UI sound effects mixer.
+ */
+void audio_manager::update_volumes(
+    float master_volume, float world_sfx_volume, float music_volume,
+    float ambiance_volume, float ui_sfx_volume
+) {
+    master_volume = clamp(master_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(master_mixer, master_volume);
+    
+    world_sfx_volume = clamp(world_sfx_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(world_sfx_mixer, world_sfx_volume);
+    
+    ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(world_ambiance_sfx_mixer, ambiance_volume);
+    
+    ui_sfx_volume = clamp(ui_sfx_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(ui_sfx_mixer, ui_sfx_volume);
+}
 
 
 /* ----------------------------------------------------------------------------

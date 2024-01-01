@@ -1289,7 +1289,13 @@ void load_misc_graphics() {
  * Loads miscellaneous fixed sound effects.
  */
 void load_misc_sounds() {
-    game.audio.init();
+    game.audio.init(
+        game.options.master_volume,
+        game.options.world_sfx_volume,
+        game.options.music_volume,
+        game.options.ambiance_volume,
+        game.options.ui_sfx_volume
+    );
     
     //Sound effects.
     game.sys_assets.sfx_attack =

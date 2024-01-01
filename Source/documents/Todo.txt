@@ -6,8 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Load system sounds from System_asset_file_names.txt
         Resetting when an area is entered or exited
         Options
-            Volume control for sound effects, music, and ambiance sound effects separately
-                The standard should be at 75%, so players have leeway if they want everything louder
             Mono/stereo
         It should be possible to play sounds both in specific frames of animation and in scripts as actions
             The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed

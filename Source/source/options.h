@@ -55,6 +55,7 @@ enum LEAVING_CONFIRMATION_MODES {
 
 
 namespace OPTIONS {
+extern const float DEF_AMBIANCE_VOLUME;
 extern const bool DEF_AREA_EDITOR_ADVANCED_MODE;
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
 extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
@@ -84,17 +85,21 @@ extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
 extern const float DEF_JOYSTICK_MAX_DEADZONE;
 extern const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE;
+extern const float DEF_MASTER_VOLUME;
 extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
 extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
+extern const float DEF_MUSIC_VOLUME;
 extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
 extern const bool DEF_TRUE_FULLSCREEN;
+extern const float DEF_UI_SFX_VOLUME;
 extern const bool DEF_WIN_FULLSCREEN;
 extern const unsigned int DEF_WIN_H;
 extern const bool DEF_WINDOW_POSITION_HACK;
 extern const unsigned int DEF_WIN_W;
+extern const float DEF_WORLD_SFX_VOLUME;
 extern const float DEF_ZOOM_MID_LEVEL;
 }
 
@@ -103,6 +108,8 @@ extern const float DEF_ZOOM_MID_LEVEL;
  * Game options.
  */
 struct options_struct {
+    //Ambiance sound volume (0 - 1).
+    float ambiance_volume;
     //Use the advanced interface mode in the area editor?
     bool area_editor_advanced_mode;
     //Backup the area in the area editor every X seconds.
@@ -169,12 +176,16 @@ struct options_struct {
     float joystick_min_deadzone;
     //Pause menu leaving confirmation question mode.
     LEAVING_CONFIRMATION_MODES leaving_confirmation_mode;
+    //Master sound volume (0 - 1).
+    float master_volume;
     //Maximum number of particles.
     size_t max_particles;
     //Enables or disables mipmaps.
     bool mipmaps_enabled;
     //For each player, does the mouse move their leader's cursor?
     bool mouse_moves_cursor[MAX_PLAYERS];
+    //Music volume (0 - 1).
+    float music_volume;
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
     //Show control bind icons on top of HUD elements?
@@ -183,9 +194,13 @@ struct options_struct {
     int target_fps;
     //When using fullscreen, is this true fullscreen, or borderless window?
     bool true_fullscreen;
+    //UI sound effects volume (0 - 1).
+    float ui_sfx_volume;
     //Should we force the window's positioning?
     //(on some machines it appears out-of-bounds by default)
     bool window_position_hack;
+    //World sound effects volume (0 - 1).
+    float world_sfx_volume;
     //Set the camera's middle zoom level to this amount.
     float zoom_mid_level;
     

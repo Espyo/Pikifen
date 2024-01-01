@@ -187,9 +187,14 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void options_menu_state::init_gui_audio_page() {
     //Menu items.
-    audio_gui.register_coords("back",    12,  5, 20, 6);
-    audio_gui.register_coords("header",  50, 10, 50, 6);
-    audio_gui.register_coords("tooltip", 50, 96, 96, 4);
+    audio_gui.register_coords("back",             12,  5,   20,  6);
+    audio_gui.register_coords("header",           50, 10,   50,  6);
+    audio_gui.register_coords("master_volume",    50, 25,   70, 10);
+    audio_gui.register_coords("world_sfx_volume", 50, 37.5, 65, 10);
+    audio_gui.register_coords("music_volume",     50, 50,   65, 10);
+    audio_gui.register_coords("ambiance_volume",  50, 62.5, 65, 10);
+    audio_gui.register_coords("ui_sfx_volume",    50, 75,   65, 10);
+    audio_gui.register_coords("tooltip",          50, 96,   96,  4);
     audio_gui.read_coords(
         data_node(OPTIONS_MENU::AUDIO_GUI_FILE_PATH).
         get_child_by_name("positions")
@@ -223,6 +228,96 @@ void options_menu_state::init_gui_audio_page() {
     );
     audio_gui.add_item(header_text, "header");
     
+    vector<float> preset_volume_values = {
+        0.00f, 0.05f, 0.10f, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f,
+        0.50f, 0.55f, 0.60f, 0.65f, 0.70f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f,
+        1.0f
+    };
+    vector<string> preset_volume_names = {
+        "Off", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%",
+        "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%",
+        "100%"
+    };
+    auto update_volumes = [this] () {
+        game.audio.update_volumes(
+            game.options.master_volume,
+            game.options.world_sfx_volume,
+            game.options.music_volume,
+            game.options.ambiance_volume,
+            game.options.ui_sfx_volume
+        );
+    };
+    
+    //Master volume picker.
+    master_vol_picker =
+        new options_menu_picker_gui_item<float>(
+        "Master volume: ",
+        &game.options.master_volume,
+        OPTIONS::DEF_MASTER_VOLUME,
+        preset_volume_values,
+        preset_volume_names,
+        "Volume of the final mix of all audio."
+    );
+    master_vol_picker->after_change = update_volumes;
+    master_vol_picker->init();
+    audio_gui.add_item(master_vol_picker, "master_volume");
+    
+    //World sound effects volume picker.
+    world_sfx_vol_picker =
+        new options_menu_picker_gui_item<float>(
+        "World sound effects volume: ",
+        &game.options.world_sfx_volume,
+        OPTIONS::DEF_WORLD_SFX_VOLUME,
+        preset_volume_values,
+        preset_volume_names,
+        "Volume for in-world sound effects specifically."
+    );
+    world_sfx_vol_picker->after_change = update_volumes;
+    world_sfx_vol_picker->init();
+    audio_gui.add_item(world_sfx_vol_picker, "world_sfx_volume");
+    
+    //Music volume picker.
+    music_vol_picker =
+        new options_menu_picker_gui_item<float>(
+        "Music volume: ",
+        &game.options.music_volume,
+        OPTIONS::DEF_MUSIC_VOLUME,
+        preset_volume_values,
+        preset_volume_names,
+        "Volume for music specifically."
+    );
+    music_vol_picker->after_change = update_volumes;
+    music_vol_picker->init();
+    audio_gui.add_item(music_vol_picker, "music_volume");
+    
+    //Ambiance sound volume picker.
+    ambiance_vol_picker =
+        new options_menu_picker_gui_item<float>(
+        "Ambiance volume: ",
+        &game.options.ambiance_volume,
+        OPTIONS::DEF_AMBIANCE_VOLUME,
+        preset_volume_values,
+        preset_volume_names,
+        "Volume for ambiance sound specifically."
+    );
+    ambiance_vol_picker->after_change = update_volumes;
+    ambiance_vol_picker->init();
+    audio_gui.add_item(ambiance_vol_picker, "ambiance_volume");
+    
+    //UI sound effects volume picker.
+    ui_sfx_vol_picker =
+        new options_menu_picker_gui_item<float>(
+        "UI sound effects volume: ",
+        &game.options.ui_sfx_volume,
+        OPTIONS::DEF_UI_SFX_VOLUME,
+        preset_volume_values,
+        preset_volume_names,
+        "Volume for interface sound effects specifically."
+    );
+    ui_sfx_vol_picker->after_change = update_volumes;
+    ui_sfx_vol_picker->init();
+    audio_gui.add_item(ui_sfx_vol_picker, "ui_sfx_volume");
+    
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&audio_gui);
@@ -242,9 +337,9 @@ void options_menu_state::init_gui_controls_page() {
     //Menu items.
     controls_gui.register_coords("back",          12,  5,   20,  6);
     controls_gui.register_coords("header",        50, 10,   50,  6);
-    controls_gui.register_coords("control_binds", 50, 27.5, 70, 15);
-    controls_gui.register_coords("cursor_speed",  50, 50,   70, 15);
-    controls_gui.register_coords("auto_throw",    50, 67.5, 70, 15);
+    controls_gui.register_coords("control_binds", 50, 25,   70, 10);
+    controls_gui.register_coords("cursor_speed",  50, 47.5, 70, 10);
+    controls_gui.register_coords("auto_throw",    50, 65,   70, 10);
     controls_gui.register_coords("tooltip",       50, 96,   96,  4);
     controls_gui.read_coords(
         data_node(OPTIONS_MENU::CONTROLS_GUI_FILE_PATH).
@@ -342,8 +437,8 @@ void options_menu_state::init_gui_graphics_page() {
     //Menu items.
     graphics_gui.register_coords("back",            12,  5,   20,  6);
     graphics_gui.register_coords("header",          50, 10,   50,  6);
-    graphics_gui.register_coords("fullscreen",      50, 27.5, 70, 15);
-    graphics_gui.register_coords("resolution",      50, 45,   70, 15);
+    graphics_gui.register_coords("fullscreen",      50, 25,   70, 10);
+    graphics_gui.register_coords("resolution",      50, 42.5, 70, 10);
     graphics_gui.register_coords("tooltip",         50, 96,   96,  4);
     graphics_gui.register_coords("restart_warning", 50, 85,   70,  6);
     graphics_gui.read_coords(
@@ -460,9 +555,9 @@ void options_menu_state::init_gui_misc_page() {
     //Menu items.
     misc_gui.register_coords("back",                 12,  5,   20,  6);
     misc_gui.register_coords("header",               50, 10,   50,  6);
-    misc_gui.register_coords("cursor_cam_weight",    50, 25,   70, 15);
-    misc_gui.register_coords("show_hud_input_icons", 50, 42.5, 70, 15);
-    misc_gui.register_coords("leaving_confirmation", 50, 60,   70, 15);
+    misc_gui.register_coords("cursor_cam_weight",    50, 22.5, 70, 10);
+    misc_gui.register_coords("show_hud_input_icons", 50, 40,   70, 10);
+    misc_gui.register_coords("leaving_confirmation", 50, 57.5, 70, 10);
     misc_gui.register_coords("tooltip",              50, 96,   96,  4);
     misc_gui.read_coords(
         data_node(OPTIONS_MENU::MISC_GUI_FILE_PATH).
@@ -570,7 +665,7 @@ void options_menu_state::init_gui_top_page() {
     top_gui.register_coords("controls", 50, 27.5, 65, 10);
     top_gui.register_coords("graphics", 50, 42.5, 65, 10);
     top_gui.register_coords("audio",    50, 57.5, 65, 10);
-    top_gui.register_coords("misc",     50, 72.5, 50, 10);
+    top_gui.register_coords("misc",     50, 72.5, 60, 10);
     top_gui.register_coords("advanced", 87, 86,   22,  8);
     top_gui.register_coords("tooltip",  50, 96,   96,  4);
     top_gui.read_coords(
