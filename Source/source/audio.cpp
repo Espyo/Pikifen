@@ -72,6 +72,24 @@ size_t audio_manager::create_mob_sfx_source(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an in-world ambiance sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world, and is just decorative ambiance.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_ambiance_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_AMBIANCE, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an in-world global sound effect source and returns its ID.
  * This is basically how you can get the engine to produce a sound that doesn't
  * involve a position in the game world.

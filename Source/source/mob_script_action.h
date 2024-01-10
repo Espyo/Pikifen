@@ -564,6 +564,7 @@ bool get_mob_info(mob_action_call &call);
 bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);
+bool play_sound(mob_action_call &call);
 bool receive_status(mob_action_call &call);
 bool remove_status(mob_action_call &call);
 bool set_animation(mob_action_call &call);

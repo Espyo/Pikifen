@@ -480,6 +480,24 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
 
 
 /* ----------------------------------------------------------------------------
+ * Loading code for the sound playing mob script action.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::play_sound(mob_action_call &call) {
+    for(size_t s = 0; s < call.mt->sounds.size(); ++s) {
+        if(call.mt->sounds[s].name == call.args[0]) {
+            call.args[0] = i2s(s);
+            return true;
+        }
+    }
+    call.custom_error =
+        "Unknown sound info block \"" + call.args[0] + "\"!";
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loading code for the status reception mob script action.
  * call:
  *   Mob action call that called this.
@@ -1551,7 +1569,30 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
-
+    mob_type::sfx_struct* sfx = &data.m->type->sounds[s2i(data.args[0])];
+    
+    switch(sfx->type) {
+    case SFX_TYPE_WORLD_GLOBAL: {
+        game.audio.create_world_global_sfx_source(
+            sfx->sample, sfx->config
+        );
+        break;
+    } case SFX_TYPE_WORLD_POS: {
+        game.audio.create_mob_sfx_source(
+            sfx->sample, data.m, sfx->config
+        );
+        break;
+    } case SFX_TYPE_WORLD_AMBIANCE: {
+        game.audio.create_world_ambiance_sfx_source(
+            sfx->sample, sfx->config
+        );
+        break;
+    } case SFX_TYPE_UI: {
+        game.audio.create_ui_sfx_source(
+            sfx->sample, sfx->config
+        );
+    }
+    }
 }
 
 

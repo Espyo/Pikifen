@@ -1043,11 +1043,12 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("sound data", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
         mob_action_runners::play_sound,
-        nullptr
+        mob_action_loaders::play_sound
     );
     
     reg_param("text", MOB_ACTION_PARAM_STRING, false, true);

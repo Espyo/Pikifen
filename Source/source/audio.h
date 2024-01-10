@@ -235,6 +235,10 @@ public:
         mob* m_ptr,
         const sfx_source_config_struct &config = sfx_source_config_struct()
     );
+    size_t create_world_ambiance_sfx_source(
+        ALLEGRO_SAMPLE* sample,
+        const sfx_source_config_struct &config = sfx_source_config_struct()
+    );
     size_t create_world_global_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const sfx_source_config_struct &config = sfx_source_config_struct()

@@ -17,6 +17,7 @@
 #include <allegro5/allegro.h>
 
 #include "../animation.h"
+#include "../audio.h"
 #include "../const.h"
 #include "../misc_structs.h"
 #include "../mob_categories/mob_category.h"
@@ -190,6 +191,18 @@ public:
         vulnerability_struct();
     };
     
+    //Info on a sound effect this mob can emit.
+    struct sfx_struct {
+        //Its name.
+        string name;
+        //The loaded sample.
+        ALLEGRO_SAMPLE* sample = nullptr;
+        //Type of sound.
+        SFX_TYPE type = SFX_TYPE_WORLD_POS;
+        //Configuration.
+        sfx_source_config_struct config;
+    };
+    
     
     //---Basic information---
     
@@ -216,6 +229,8 @@ public:
     bool casts_shadow;
     //How much light does it cast in a blackout? <0 to use the mob's radius.
     float blackout_radius;
+    //List of sounds it can play.
+    vector<sfx_struct> sounds;
     
     //---Movement---
     
