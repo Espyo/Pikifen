@@ -898,7 +898,7 @@ void editor::load() {
     game.mouse_cursor.show();
     
     bmp_editor_icons =
-        load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
+        load_bmp(game.asset_file_names.bmp_editor_icons, NULL, true, false);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
             editor_icons[i] =

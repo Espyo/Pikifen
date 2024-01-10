@@ -30,7 +30,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "mobs/mob.h"
 #include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 
@@ -40,6 +39,7 @@ using std::string;
 
 
 class audio_manager;
+class mob;
 
 
 namespace AUDIO {

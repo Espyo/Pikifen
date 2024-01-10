@@ -124,99 +124,134 @@ enum STRING_TOKEN_TYPES {
  * List of file names of system assets.
  */
 struct asset_file_names_struct {
+    //Graphics.
+
     //Area name font.
-    string area_name_font;
+    string bmp_area_name_font;
     //Bright circle.
-    string bright_circle;
+    string bmp_bright_circle;
     //Bright ring.
-    string bright_ring;
+    string bmp_bright_ring;
     //Bubble box.
-    string bubble_box;
+    string bmp_bubble_box;
     //Texture box for player input buttons.
-    string button_box;
+    string bmp_button_box;
     //Checkbox with a checkmark.
-    string checkbox_check;
+    string bmp_checkbox_check;
     //Checkbox without a checkmark.
-    string checkbox_no_check;
+    string bmp_checkbox_no_check;
     //Counter font.
-    string counter_font;
+    string bmp_counter_font;
     //Leader cursor.
-    string cursor;
+    string bmp_cursor;
     //Cursor counter font.
-    string cursor_counter_font;
+    string bmp_cursor_counter_font;
     //Editor icons.
-    string editor_icons;
+    string bmp_editor_icons;
     //Enemy spirit.
-    string enemy_spirit;
+    string bmp_enemy_spirit;
     //GUI focus box.
-    string focus_box;
+    string bmp_focus_box;
     //Pikifen icon.
-    string icon;
+    string bmp_icon;
     //Idle glow.
-    string idle_glow;
+    string bmp_idle_glow;
     //Texture box for player input keys.
-    string key_box;
+    string bmp_key_box;
     //Leader silhouette from the side.
-    string leader_silhouette_side;
+    string bmp_leader_silhouette_side;
     //Leader silhouette from the top.
-    string leader_silhouette_top;
+    string bmp_leader_silhouette_top;
     //Main font.
-    string main_font;
+    string bmp_main_font;
     //Main menu background.
-    string main_menu;
+    string bmp_main_menu;
     //Bronze medal.
-    string medal_bronze;
+    string bmp_medal_bronze;
     //Gold medal.
-    string medal_gold;
+    string bmp_medal_gold;
     //No medal.
-    string medal_none;
+    string bmp_medal_none;
     //Platinum medal.
-    string medal_platinum;
+    string bmp_medal_platinum;
     //Silver medal.
-    string medal_silver;
+    string bmp_medal_silver;
     //Mission clear stamp.
-    string mission_clear;
+    string bmp_mission_clear;
     //Mission fail stamp.
-    string mission_fail;
+    string bmp_mission_fail;
     //"More..." icon.
-    string more;
+    string bmp_more;
     //Mouse cursor.
-    string mouse_cursor;
+    string bmp_mouse_cursor;
     //Notification.
-    string notification;
+    string bmp_notification;
     //Pikmin spirit.
-    string pikmin_spirit;
+    string bmp_pikmin_spirit;
     //Misc. specific player input icons.
-    string player_input_icons;
+    string bmp_player_input_icons;
     //Randomness symbol.
-    string random;
+    string bmp_random;
     //A rock.
-    string rock;
+    string bmp_rock;
     //Slim font.
-    string slim_font;
+    string bmp_slim_font;
     //Mob shadow.
-    string shadow;
+    string bmp_shadow;
     //Smack effect.
-    string smack;
+    string bmp_smack;
     //Smoke.
-    string smoke;
+    string bmp_smoke;
     //Sparkle effect.
-    string sparkle;
+    string bmp_sparkle;
     //Spotlight for blackout.
-    string spotlight;
+    string bmp_spotlight;
     //Swarm arrow.
-    string swarm_arrow;
+    string bmp_swarm_arrow;
     //Invalid throw marker.
-    string throw_invalid;
+    string bmp_throw_invalid;
     //Throw preview texture.
-    string throw_preview;
+    string bmp_throw_preview;
     //Dashed throw preview texture.
-    string throw_preview_dashed;
+    string bmp_throw_preview_dashed;
     //Value font.
-    string value_font;
+    string bmp_value_font;
     //Wave ring.
-    string wave_ring;
-    
+    string bmp_wave_ring;
+
+    //Sound effects.
+
+    //Attack.
+    string sfx_attack;
+    //Camera zoom level.
+    string sfx_camera;
+    //Pikmin attacking.
+    string sfx_pikmin_attack;
+    //Pikmin called.
+    string sfx_pikmin_called;
+    //Pikmin carrying.
+    string sfx_pikmin_carrying;
+    //Pikmin grabbing on to carry.
+    string sfx_pikmin_carrying_grab;
+    //Pikmin caught.
+    string sfx_pikmin_caught;
+    //Pikmin dying.
+    string sfx_pikmin_dying;
+    //Pikmin held by leader.
+    string sfx_pikmin_held;
+    //Pikmin idling.
+    string sfx_pikmin_idle;
+    //Pluck sound effect.
+    string sfx_pluck;
+    //Pikmin being plucked.
+    string sfx_pikmin_plucked;
+    //Pikmin being thrown.
+    string sfx_pikmin_thrown;
+    //Switching standby Pikmin type.
+    string sfx_switch_pikmin;
+    //Throwing.
+    string sfx_throw;
+
     void load(data_node* file);
     
     asset_file_names_struct();
@@ -631,6 +666,8 @@ struct script_var_reader {
  * List of loaded system assets.
  */
 struct system_asset_list {
+    //Graphics.
+    
     //Bright circle.
     ALLEGRO_BITMAP* bmp_bright_circle;
     //Bright ring.
@@ -709,6 +746,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_wave_ring;
     
     //Sound effects.
+
     //Attack.
     ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
@@ -729,18 +767,19 @@ struct system_asset_list {
     ALLEGRO_SAMPLE* sfx_pikmin_held;
     //Pikmin idling.
     ALLEGRO_SAMPLE* sfx_pikmin_idle;
-    //Pluck sound effect.
-    ALLEGRO_SAMPLE* sfx_pluck;
     //Pikmin being plucked.
     ALLEGRO_SAMPLE* sfx_pikmin_plucked;
     //Pikmin being thrown.
     ALLEGRO_SAMPLE* sfx_pikmin_thrown;
+    //Pluck sound effect.
+    ALLEGRO_SAMPLE* sfx_pluck;
     //Switching standby Pikmin type.
     ALLEGRO_SAMPLE* sfx_switch_pikmin;
     //Throwing.
     ALLEGRO_SAMPLE* sfx_throw;
     
     //Animations.
+
     //Leader damage spark.
     single_animation_suite spark_animation;
     

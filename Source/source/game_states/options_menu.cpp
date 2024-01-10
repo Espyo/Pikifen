@@ -810,7 +810,7 @@ void options_menu_state::leave() {
  */
 void options_menu_state::load() {
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
     
     init_gui_top_page();
     init_gui_controls_page();

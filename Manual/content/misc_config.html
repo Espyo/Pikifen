@@ -119,47 +119,72 @@
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults <a href="https://github.com/Espyo/Pikifen/blob/master/Source/source/misc_structs.cpp">here</a>.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>Game_data/Graphics</code> and <code>Game_data/Audio</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults <a href="https://github.com/Espyo/Pikifen/blob/master/Source/source/misc_structs.cpp">here</a>.</p>
     
     <ul>
-      <li><b><code>area_name_font</code></b>: Font to use for area names.</li>
-      <li><b><code>bright_circle</code></b>: A bright circular shape. Used for the whistle's dots.</li>
-      <li><b><code>bright_ring</code></b>: A bright ring shape. Used for the control point in front of a ship.</li>
-      <li><b><code>bubble_box</code></b>: Bubble-like box. In-engine, it is split into three equal-sized rows and three equal-sized columns, and uses that split to texture the boxes.</li>
-      <li><b><code>button_box</code></b>: Texture box for player inputs that look like buttons.</li>
-      <li><b><code>checkbox_check</code></b>: A checkbox with a checkmark in it. Used in menus.</li>
-      <li><b><code>checkbox_no_check</code></b>: A checkbox without a checkmark in it. Used in menus.</li>
-      <li><b><code>counter_font</code></b>: Font to use for counters in the HUD.</li>
-      <li><b><code>cursor_counter_font</code></b>: Font to use for the standby Pikmin count near the cursor.</li>
-      <li><b><code>cursor</code></b>: Leader cursor.</li>
-      <li><b><code>editor_icons</code></b>: Spritesheet where all editor icons are.</li>
-      <li><b><code>enemy_spirit</code></b>: Enemy spirit.</li>
-      <li><b><code>focus_box</code></b>: Focus indicator that surrounds a selected GUI item.</li>
-      <li><b><code>icon</code></b>: The game's icon.</li>
-      <li><b><code>idle_glow</code></b>: Glowing effect on idle Pikmin.</li>
-      <li><b><code>key_box</code></b>: Texture box for player inputs that look like keyboard keys.</li>
-      <li><b><code>leader_silhouette_side</code></b>: Silhouette of a leader seen from the side. Used in the area editor's cross-section feature.</li>
-      <li><b><code>leader_silhouette_top</code></b>: Silhouette of a leader seen from the top. Used in the animation editor has a visual reference.</li>
-      <li><b><code>main_font</code></b>: The game's main text font.</li>
-      <li><b><code>main_menu</code></b>: Background for the main menu.</li>
-      <li><b><code>more</code></b>: Icon used in menus to indicate there is still more content beyond. This graphic faces the right, and gets flipped in-engine when needed.</li>
-      <li><b><code>mouse_cursor</code></b>: Mouse cursor.</li>
-      <li><b><code>notification</code></b>: Notification bubble.</li>
-      <li><b><code>player_input_icons</code></b>: A spritesheet of icons for specific player inputs, like mouse buttons, certain keys, etc.</li>
-      <li><b><code>pikmin_spirit</code></b>: Pikmin spirit.</li>
-      <li><b><code>random</code></b>: Randomness icon. Used in the area selection menu.</li>
-      <li><b><code>rock</code></b>: Rock particle.</li>
-      <li><b><code>shadow</code></b>: Object shadows.</li>
-      <li><b><code>smack</code></b>: Smack particle.</li>
-      <li><b><code>smoke</code></b>: Smoke particle.</li>
-      <li><b><code>sparkle</code></b>: Sparkle particle.</li>
-      <li><b><code>spotlight</code></b>: Spotlight texture to use for blackout weather.</li>
-      <li><b><code>swarm_arrow</code></b>: Arrow that comes out from the leader when swarming.</li>
-      <li><b><code>throw_invalid</code></b>: Used on the throw preview when a throw won't reach.</li>
-      <li><b><code>throw_preview</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
-      <li><b><code>throw_preview_dashed</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
-      <li><b><code>value_font</code></b>: Font to use for numeric values, like the carrying fraction numbers.</li>
-      <li><b><code>wave_ring</code></b>: Particle for waves in water, used when objects are standing in water.</li>
+      <li>
+        <code>graphics</code> block:
+        <ul>
+          <li><b><code>area_name_font</code></b>: Font to use for area names.</li>
+          <li><b><code>bright_circle</code></b>: A bright circular shape. Used for the whistle's dots.</li>
+          <li><b><code>bright_ring</code></b>: A bright ring shape. Used for the control point in front of a ship.</li>
+          <li><b><code>bubble_box</code></b>: Bubble-like box. In-engine, it is split into three equal-sized rows and three equal-sized columns, and uses that split to texture the boxes.</li>
+          <li><b><code>button_box</code></b>: Texture box for player inputs that look like buttons.</li>
+          <li><b><code>checkbox_check</code></b>: A checkbox with a checkmark in it. Used in menus.</li>
+          <li><b><code>checkbox_no_check</code></b>: A checkbox without a checkmark in it. Used in menus.</li>
+          <li><b><code>counter_font</code></b>: Font to use for counters in the HUD.</li>
+          <li><b><code>cursor_counter_font</code></b>: Font to use for the standby Pikmin count near the cursor.</li>
+          <li><b><code>cursor</code></b>: Leader cursor.</li>
+          <li><b><code>editor_icons</code></b>: Spritesheet where all editor icons are.</li>
+          <li><b><code>enemy_spirit</code></b>: Enemy spirit.</li>
+          <li><b><code>focus_box</code></b>: Focus indicator that surrounds a selected GUI item.</li>
+          <li><b><code>icon</code></b>: The game's icon.</li>
+          <li><b><code>idle_glow</code></b>: Glowing effect on idle Pikmin.</li>
+          <li><b><code>key_box</code></b>: Texture box for player inputs that look like keyboard keys.</li>
+          <li><b><code>leader_silhouette_side</code></b>: Silhouette of a leader seen from the side. Used in the area editor's cross-section feature.</li>
+          <li><b><code>leader_silhouette_top</code></b>: Silhouette of a leader seen from the top. Used in the animation editor has a visual reference.</li>
+          <li><b><code>main_font</code></b>: The game's main text font.</li>
+          <li><b><code>main_menu</code></b>: Background for the main menu.</li>
+          <li><b><code>more</code></b>: Icon used in menus to indicate there is still more content beyond. This graphic faces the right, and gets flipped in-engine when needed.</li>
+          <li><b><code>mouse_cursor</code></b>: Mouse cursor.</li>
+          <li><b><code>notification</code></b>: Notification bubble.</li>
+          <li><b><code>player_input_icons</code></b>: A spritesheet of icons for specific player inputs, like mouse buttons, certain keys, etc.</li>
+          <li><b><code>pikmin_spirit</code></b>: Pikmin spirit.</li>
+          <li><b><code>random</code></b>: Randomness icon. Used in the area selection menu.</li>
+          <li><b><code>rock</code></b>: Rock particle.</li>
+          <li><b><code>shadow</code></b>: Object shadows.</li>
+          <li><b><code>smack</code></b>: Smack particle.</li>
+          <li><b><code>smoke</code></b>: Smoke particle.</li>
+          <li><b><code>sparkle</code></b>: Sparkle particle.</li>
+          <li><b><code>spotlight</code></b>: Spotlight texture to use for blackout weather.</li>
+          <li><b><code>swarm_arrow</code></b>: Arrow that comes out from the leader when swarming.</li>
+          <li><b><code>throw_invalid</code></b>: Used on the throw preview when a throw won't reach.</li>
+          <li><b><code>throw_preview</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
+          <li><b><code>throw_preview_dashed</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
+          <li><b><code>value_font</code></b>: Font to use for numeric values, like the carrying fraction numbers.</li>
+          <li><b><code>wave_ring</code></b>: Particle for waves in water, used when objects are standing in water.</li>
+        </ul>
+      </li>
+      <li>
+        <code>audio</code> block:
+        <ul>
+          <li><b><code>attack</code></b>: Smack for when an attack lands.</li>
+          <li><b><code>camera</code></b>: Camera zoom level change click.</li>
+          <li><b><code>pikmin_attack</code></b>: A Pikmin barking when attacking.</li>
+          <li><b><code>pikmin_called</code></b>: A Pikmin being called to the group.</li>
+          <li><b><code>pikmin_carrying</code></b>: A Pikmin actively carrying something.</li>
+          <li><b><code>pikmin_carrying_grab</code></b>: A Pikmin grabs onto something to begin carrying it.</li>
+          <li><b><code>pikmin_caught</code></b>: A Pikmin gets caught by an enemy.</li>
+          <li><b><code>pikmin_dying</code></b>: A Pikmin's death squeal.</li>
+          <li><b><code>pikmin_held</code></b>: A Pikmin humming as it's getting ready to be thrown.</li>
+          <li><b><code>pikmin_idle</code></b>: A Pikmin that just became idle.</li>
+          <li><b><code>pikmin_plucked</code></b>: A Pikmin being plucked.</li>
+          <li><b><code>pikmin_thrown</code></b>: A Pikmin being thrown.</li>
+          <li><b><code>pluck</code></b>: Ground pop for when a Pikmin gets plucked.</li>
+          <li><b><code>switch_pikmin</code></b>: Plop for when the current standby Pikmin type is switched.</li>
+          <li><b><code>throw</code></b>: Swoosh for a Pikmin or leader being thrown.</li>
+        </ul>
+      </li>
     </ul>
     
   </div>

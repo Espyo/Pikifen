@@ -186,7 +186,7 @@ void stats_menu_state::leave() {
  */
 void stats_menu_state::load() {
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);

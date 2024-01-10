@@ -111,52 +111,67 @@ const string NAMES[N_MAKER_TOOLS] = {
  * Creates a new asset file name list struct.
  */
 asset_file_names_struct::asset_file_names_struct() :
-    area_name_font("Area_name_font.png"),
-    bright_circle("Bright_circle.png"),
-    bright_ring("Bright_ring.png"),
-    bubble_box("Bubble_box.png"),
-    button_box("Button_box.png"),
-    checkbox_check("Checkbox_check.png"),
-    checkbox_no_check("Checkbox_no_check.png"),
-    counter_font("Counter_font.png"),
-    cursor("Cursor.png"),
-    cursor_counter_font("Cursor_counter_font.png"),
-    editor_icons("Editor_icons.png"),
-    enemy_spirit("Enemy_spirit.png"),
-    focus_box("Focus_box.png"),
-    icon("Icon.png"),
-    idle_glow("Idle_glow.png"),
-    key_box("Key_box.png"),
-    leader_silhouette_side("Leader_silhouette_side.png"),
-    leader_silhouette_top("Leader_silhouette_top.png"),
-    main_font("Font.png"),
-    main_menu("Main_menu.jpg"),
-    medal_bronze("Medal_bronze.png"),
-    medal_gold("Medal_gold.png"),
-    medal_none("Medal_none.png"),
-    medal_platinum("Medal_platinum.png"),
-    medal_silver("Medal_silver.png"),
-    mission_clear("Mission_clear.png"),
-    mission_fail("Mission_fail.png"),
-    more("More.png"),
-    mouse_cursor("Mouse_cursor.png"),
-    notification("Notification.png"),
-    pikmin_spirit("Pikmin_spirit.png"),
-    player_input_icons("Player_input_icons.png"),
-    random("Random.png"),
-    rock("Rock.png"),
-    slim_font("Slim_font.otf"),
-    shadow("Shadow.png"),
-    smack("Smack.png"),
-    smoke("Smoke.png"),
-    sparkle("Sparkle.png"),
-    spotlight("Spotlight.png"),
-    swarm_arrow("Swarm_arrow.png"),
-    throw_invalid("Throw_invalid.png"),
-    throw_preview("Throw_preview.png"),
-    throw_preview_dashed("Throw_preview_dashed.png"),
-    value_font("Value_font.png"),
-    wave_ring("Wave_ring.png") {
+    bmp_area_name_font("Area_name_font.png"),
+    bmp_bright_circle("Bright_circle.png"),
+    bmp_bright_ring("Bright_ring.png"),
+    bmp_bubble_box("Bubble_box.png"),
+    bmp_button_box("Button_box.png"),
+    bmp_checkbox_check("Checkbox_check.png"),
+    bmp_checkbox_no_check("Checkbox_no_check.png"),
+    bmp_counter_font("Counter_font.png"),
+    bmp_cursor("Cursor.png"),
+    bmp_cursor_counter_font("Cursor_counter_font.png"),
+    bmp_editor_icons("Editor_icons.png"),
+    bmp_enemy_spirit("Enemy_spirit.png"),
+    bmp_focus_box("Focus_box.png"),
+    bmp_icon("Icon.png"),
+    bmp_idle_glow("Idle_glow.png"),
+    bmp_key_box("Key_box.png"),
+    bmp_leader_silhouette_side("Leader_silhouette_side.png"),
+    bmp_leader_silhouette_top("Leader_silhouette_top.png"),
+    bmp_main_font("Font.png"),
+    bmp_main_menu("Main_menu.jpg"),
+    bmp_medal_bronze("Medal_bronze.png"),
+    bmp_medal_gold("Medal_gold.png"),
+    bmp_medal_none("Medal_none.png"),
+    bmp_medal_platinum("Medal_platinum.png"),
+    bmp_medal_silver("Medal_silver.png"),
+    bmp_mission_clear("Mission_clear.png"),
+    bmp_mission_fail("Mission_fail.png"),
+    bmp_more("More.png"),
+    bmp_mouse_cursor("Mouse_cursor.png"),
+    bmp_notification("Notification.png"),
+    bmp_pikmin_spirit("Pikmin_spirit.png"),
+    bmp_player_input_icons("Player_input_icons.png"),
+    bmp_random("Random.png"),
+    bmp_rock("Rock.png"),
+    bmp_slim_font("Slim_font.otf"),
+    bmp_shadow("Shadow.png"),
+    bmp_smack("Smack.png"),
+    bmp_smoke("Smoke.png"),
+    bmp_sparkle("Sparkle.png"),
+    bmp_spotlight("Spotlight.png"),
+    bmp_swarm_arrow("Swarm_arrow.png"),
+    bmp_throw_invalid("Throw_invalid.png"),
+    bmp_throw_preview("Throw_preview.png"),
+    bmp_throw_preview_dashed("Throw_preview_dashed.png"),
+    bmp_value_font("Value_font.png"),
+    bmp_wave_ring("Wave_ring.png"),
+    sfx_attack("Attack.ogg"),
+    sfx_camera("Camera.ogg"),
+    sfx_pikmin_attack("Pikmin_attack.ogg"),
+    sfx_pikmin_called("Pikmin_called.ogg"),
+    sfx_pikmin_carrying("Pikmin_carrying.ogg"),
+    sfx_pikmin_carrying_grab("Pikmin_carrying_grab.ogg"),
+    sfx_pikmin_caught("Pikmin_caught.ogg"),
+    sfx_pikmin_dying("Pikmin_dying.ogg"),
+    sfx_pikmin_held("Pikmin_held.ogg"),
+    sfx_pikmin_idle("Pikmin_idle.ogg"),
+    sfx_pikmin_plucked("Pikmin_plucked.ogg"),
+    sfx_pikmin_thrown("Pikmin_thrown.ogg"),
+    sfx_pluck("Pluck.ogg"),
+    sfx_switch_pikmin("Switch_Pikmin.ogg"),
+    sfx_throw("Throw.ogg") {
     
 }
 
@@ -167,51 +182,69 @@ asset_file_names_struct::asset_file_names_struct() :
  *   File to load from.
  */
 void asset_file_names_struct::load(data_node* file) {
-    reader_setter rs(file);
+    reader_setter grs(file->get_child_by_name("graphics"));
     
-    rs.set("area_name_font", area_name_font);
-    rs.set("bright_circle", bright_circle);
-    rs.set("bright_ring", bright_ring);
-    rs.set("bubble_box", bubble_box);
-    rs.set("checkbox_check", checkbox_check);
-    rs.set("checkbox_no_check", checkbox_no_check);
-    rs.set("player_input_icons", player_input_icons);
-    rs.set("counter_font", counter_font);
-    rs.set("cursor", cursor);
-    rs.set("cursor_counter_font", cursor_counter_font);
-    rs.set("editor_icons", editor_icons);
-    rs.set("enemy_spirit", enemy_spirit);
-    rs.set("focus_box", focus_box);
-    rs.set("icon", icon);
-    rs.set("idle_glow", idle_glow);
-    rs.set("leader_silhouette_side", leader_silhouette_side);
-    rs.set("leader_silhouette_top", leader_silhouette_top);
-    rs.set("main_font", main_font);
-    rs.set("main_menu", main_menu);
-    rs.set("medal_bronze", medal_bronze);
-    rs.set("medal_gold", medal_gold);
-    rs.set("medal_none", medal_none);
-    rs.set("medal_platinum", medal_platinum);
-    rs.set("medal_silver", medal_silver);
-    rs.set("mission_clear", mission_clear);
-    rs.set("mission_fail", mission_fail);
-    rs.set("more", more);
-    rs.set("mouse_cursor", mouse_cursor);
-    rs.set("notification", notification);
-    rs.set("pikmin_spirit", pikmin_spirit);
-    rs.set("random", random);
-    rs.set("rock", rock);
-    rs.set("shadow", shadow);
-    rs.set("smack", smack);
-    rs.set("smoke", smoke);
-    rs.set("sparkle", sparkle);
-    rs.set("spotlight", spotlight);
-    rs.set("swarm_arrow", swarm_arrow);
-    rs.set("throw_invalid", throw_invalid);
-    rs.set("throw_preview", throw_preview);
-    rs.set("throw_preview_dashed", throw_preview_dashed);
-    rs.set("value_font", value_font);
-    rs.set("wave_ring", wave_ring);
+    grs.set("area_name_font", bmp_area_name_font);
+    grs.set("bright_circle", bmp_bright_circle);
+    grs.set("bright_ring", bmp_bright_ring);
+    grs.set("bubble_box", bmp_bubble_box);
+    grs.set("checkbox_check", bmp_checkbox_check);
+    grs.set("checkbox_no_check", bmp_checkbox_no_check);
+    grs.set("player_input_icons", bmp_player_input_icons);
+    grs.set("counter_font", bmp_counter_font);
+    grs.set("cursor", bmp_cursor);
+    grs.set("cursor_counter_font", bmp_cursor_counter_font);
+    grs.set("editor_icons", bmp_editor_icons);
+    grs.set("enemy_spirit", bmp_enemy_spirit);
+    grs.set("focus_box", bmp_focus_box);
+    grs.set("icon", bmp_icon);
+    grs.set("idle_glow", bmp_idle_glow);
+    grs.set("leader_silhouette_side", bmp_leader_silhouette_side);
+    grs.set("leader_silhouette_top", bmp_leader_silhouette_top);
+    grs.set("main_font", bmp_main_font);
+    grs.set("main_menu", bmp_main_menu);
+    grs.set("medal_bronze", bmp_medal_bronze);
+    grs.set("medal_gold", bmp_medal_gold);
+    grs.set("medal_none", bmp_medal_none);
+    grs.set("medal_platinum", bmp_medal_platinum);
+    grs.set("medal_silver", bmp_medal_silver);
+    grs.set("mission_clear", bmp_mission_clear);
+    grs.set("mission_fail", bmp_mission_fail);
+    grs.set("more", bmp_more);
+    grs.set("mouse_cursor", bmp_mouse_cursor);
+    grs.set("notification", bmp_notification);
+    grs.set("pikmin_spirit", bmp_pikmin_spirit);
+    grs.set("random", bmp_random);
+    grs.set("rock", bmp_rock);
+    grs.set("shadow", bmp_shadow);
+    grs.set("smack", bmp_smack);
+    grs.set("smoke", bmp_smoke);
+    grs.set("sparkle", bmp_sparkle);
+    grs.set("spotlight", bmp_spotlight);
+    grs.set("swarm_arrow", bmp_swarm_arrow);
+    grs.set("throw_invalid", bmp_throw_invalid);
+    grs.set("throw_preview", bmp_throw_preview);
+    grs.set("throw_preview_dashed", bmp_throw_preview_dashed);
+    grs.set("value_font", bmp_value_font);
+    grs.set("wave_ring", bmp_wave_ring);
+
+    reader_setter srs(file->get_child_by_name("sounds"));
+    
+    srs.set("attack", sfx_attack);
+    srs.set("camera", sfx_camera);
+    srs.set("pikmin_attack", sfx_pikmin_attack);
+    srs.set("pikmin_called", sfx_pikmin_called);
+    srs.set("pikmin_carrying", sfx_pikmin_carrying);
+    srs.set("pikmin_carrying_grab", sfx_pikmin_carrying_grab);
+    srs.set("pikmin_caught", sfx_pikmin_caught);
+    srs.set("pikmin_dying", sfx_pikmin_dying);
+    srs.set("pikmin_held", sfx_pikmin_held);
+    srs.set("pikmin_idle", sfx_pikmin_idle);
+    srs.set("pikmin_plucked", sfx_pikmin_plucked);
+    srs.set("pikmin_thrown", sfx_pikmin_thrown);
+    srs.set("pluck", sfx_pluck);
+    srs.set("switch_pikmin", sfx_switch_pikmin);
+    srs.set("throw", sfx_throw);
 }
 
 

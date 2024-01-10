@@ -1021,7 +1021,7 @@ void area_menu_state::load() {
         }
     }
     
-    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
     
     init_gui_main();
     init_gui_info_page();

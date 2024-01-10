@@ -943,7 +943,8 @@ void load_fonts() {
     //So we load them into bitmaps first.
     
     //Main font.
-    ALLEGRO_BITMAP* temp_font_bmp = load_bmp(game.asset_file_names.main_font);
+    ALLEGRO_BITMAP* temp_font_bmp =
+        load_bmp(game.asset_file_names.bmp_main_font);
     if(temp_font_bmp) {
         game.fonts.standard =
             al_grab_font_from_bitmap(
@@ -954,7 +955,8 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Area name font.
-    temp_font_bmp = load_bmp(game.asset_file_names.area_name_font);
+    temp_font_bmp =
+        load_bmp(game.asset_file_names.bmp_area_name_font);
     if(temp_font_bmp) {
         game.fonts.area_name =
             al_grab_font_from_bitmap(
@@ -965,7 +967,8 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Counter font.
-    temp_font_bmp = load_bmp(game.asset_file_names.counter_font);
+    temp_font_bmp =
+        load_bmp(game.asset_file_names.bmp_counter_font);
     if(temp_font_bmp) {
         game.fonts.counter =
             al_grab_font_from_bitmap(
@@ -976,7 +979,8 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Cursor counter font.
-    temp_font_bmp = load_bmp(game.asset_file_names.cursor_counter_font);
+    temp_font_bmp =
+        load_bmp(game.asset_file_names.bmp_cursor_counter_font);
     if(temp_font_bmp) {
         game.fonts.cursor_counter =
             al_grab_font_from_bitmap(
@@ -987,7 +991,8 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Value font.
-    temp_font_bmp = load_bmp(game.asset_file_names.value_font);
+    temp_font_bmp =
+        load_bmp(game.asset_file_names.bmp_value_font);
     if(temp_font_bmp) {
         game.fonts.value =
             al_grab_font_from_bitmap(
@@ -1002,7 +1007,7 @@ void load_fonts() {
         al_load_ttf_font(
             (
                 GRAPHICS_FOLDER_PATH + "/" +
-                game.asset_file_names.slim_font
+                game.asset_file_names.bmp_slim_font
             ).c_str(),
             22, ALLEGRO_TTF_NO_KERNING
         );
@@ -1204,84 +1209,84 @@ void load_maker_tools() {
  */
 void load_misc_graphics() {
     //Icon.
-    game.sys_assets.bmp_icon = game.bitmaps.get(game.asset_file_names.icon);
+    game.sys_assets.bmp_icon = game.bitmaps.get(game.asset_file_names.bmp_icon);
     al_set_display_icon(game.display, game.sys_assets.bmp_icon);
     
     //Graphics.
     game.sys_assets.bmp_bright_circle =
-        game.bitmaps.get(game.asset_file_names.bright_circle);
+        game.bitmaps.get(game.asset_file_names.bmp_bright_circle);
     game.sys_assets.bmp_bright_ring =
-        game.bitmaps.get(game.asset_file_names.bright_ring);
+        game.bitmaps.get(game.asset_file_names.bmp_bright_ring);
     game.sys_assets.bmp_bubble_box =
-        game.bitmaps.get(game.asset_file_names.bubble_box);
+        game.bitmaps.get(game.asset_file_names.bmp_bubble_box);
     game.sys_assets.bmp_button_box =
-        game.bitmaps.get(game.asset_file_names.button_box);
+        game.bitmaps.get(game.asset_file_names.bmp_button_box);
     game.sys_assets.bmp_checkbox_check =
-        game.bitmaps.get(game.asset_file_names.checkbox_check);
+        game.bitmaps.get(game.asset_file_names.bmp_checkbox_check);
     game.sys_assets.bmp_checkbox_no_check =
-        game.bitmaps.get(game.asset_file_names.checkbox_no_check);
+        game.bitmaps.get(game.asset_file_names.bmp_checkbox_no_check);
     game.sys_assets.bmp_cursor =
-        game.bitmaps.get(game.asset_file_names.cursor);
+        game.bitmaps.get(game.asset_file_names.bmp_cursor);
     game.sys_assets.bmp_enemy_spirit =
-        game.bitmaps.get(game.asset_file_names.enemy_spirit);
+        game.bitmaps.get(game.asset_file_names.bmp_enemy_spirit);
     game.sys_assets.bmp_focus_box =
-        game.bitmaps.get(game.asset_file_names.focus_box);
+        game.bitmaps.get(game.asset_file_names.bmp_focus_box);
     game.sys_assets.bmp_idle_glow =
-        game.bitmaps.get(game.asset_file_names.idle_glow);
+        game.bitmaps.get(game.asset_file_names.bmp_idle_glow);
     game.sys_assets.bmp_key_box =
-        game.bitmaps.get(game.asset_file_names.key_box);
+        game.bitmaps.get(game.asset_file_names.bmp_key_box);
     game.sys_assets.bmp_leader_silhouette_side =
-        game.bitmaps.get(game.asset_file_names.leader_silhouette_side);
+        game.bitmaps.get(game.asset_file_names.bmp_leader_silhouette_side);
     game.sys_assets.bmp_leader_silhouette_top =
-        game.bitmaps.get(game.asset_file_names.leader_silhouette_top);
+        game.bitmaps.get(game.asset_file_names.bmp_leader_silhouette_top);
     game.sys_assets.bmp_medal_bronze =
-        game.bitmaps.get(game.asset_file_names.medal_bronze);
+        game.bitmaps.get(game.asset_file_names.bmp_medal_bronze);
     game.sys_assets.bmp_medal_gold =
-        game.bitmaps.get(game.asset_file_names.medal_gold);
+        game.bitmaps.get(game.asset_file_names.bmp_medal_gold);
     game.sys_assets.bmp_medal_none =
-        game.bitmaps.get(game.asset_file_names.medal_none);
+        game.bitmaps.get(game.asset_file_names.bmp_medal_none);
     game.sys_assets.bmp_medal_platinum =
-        game.bitmaps.get(game.asset_file_names.medal_platinum);
+        game.bitmaps.get(game.asset_file_names.bmp_medal_platinum);
     game.sys_assets.bmp_medal_silver =
-        game.bitmaps.get(game.asset_file_names.medal_silver);
+        game.bitmaps.get(game.asset_file_names.bmp_medal_silver);
     game.sys_assets.bmp_mission_clear =
-        game.bitmaps.get(game.asset_file_names.mission_clear);
+        game.bitmaps.get(game.asset_file_names.bmp_mission_clear);
     game.sys_assets.bmp_mission_fail =
-        game.bitmaps.get(game.asset_file_names.mission_fail);
+        game.bitmaps.get(game.asset_file_names.bmp_mission_fail);
     game.sys_assets.bmp_more =
-        game.bitmaps.get(game.asset_file_names.more);
+        game.bitmaps.get(game.asset_file_names.bmp_more);
     game.sys_assets.bmp_mouse_cursor =
-        game.bitmaps.get(game.asset_file_names.mouse_cursor);
+        game.bitmaps.get(game.asset_file_names.bmp_mouse_cursor);
     game.sys_assets.bmp_notification =
-        game.bitmaps.get(game.asset_file_names.notification);
+        game.bitmaps.get(game.asset_file_names.bmp_notification);
     game.sys_assets.bmp_pikmin_spirit =
-        game.bitmaps.get(game.asset_file_names.pikmin_spirit);
+        game.bitmaps.get(game.asset_file_names.bmp_pikmin_spirit);
     game.sys_assets.bmp_player_input_icons =
-        game.bitmaps.get(game.asset_file_names.player_input_icons);
+        game.bitmaps.get(game.asset_file_names.bmp_player_input_icons);
     game.sys_assets.bmp_random =
-        game.bitmaps.get(game.asset_file_names.random);
+        game.bitmaps.get(game.asset_file_names.bmp_random);
     game.sys_assets.bmp_rock =
-        game.bitmaps.get(game.asset_file_names.rock);
+        game.bitmaps.get(game.asset_file_names.bmp_rock);
     game.sys_assets.bmp_shadow =
-        game.bitmaps.get(game.asset_file_names.shadow);
+        game.bitmaps.get(game.asset_file_names.bmp_shadow);
     game.sys_assets.bmp_smack =
-        game.bitmaps.get(game.asset_file_names.smack);
+        game.bitmaps.get(game.asset_file_names.bmp_smack);
     game.sys_assets.bmp_smoke =
-        game.bitmaps.get(game.asset_file_names.smoke);
+        game.bitmaps.get(game.asset_file_names.bmp_smoke);
     game.sys_assets.bmp_sparkle =
-        game.bitmaps.get(game.asset_file_names.sparkle);
+        game.bitmaps.get(game.asset_file_names.bmp_sparkle);
     game.sys_assets.bmp_spotlight =
-        game.bitmaps.get(game.asset_file_names.spotlight);
+        game.bitmaps.get(game.asset_file_names.bmp_spotlight);
     game.sys_assets.bmp_swarm_arrow =
-        game.bitmaps.get(game.asset_file_names.swarm_arrow);
+        game.bitmaps.get(game.asset_file_names.bmp_swarm_arrow);
     game.sys_assets.bmp_throw_invalid =
-        game.bitmaps.get(game.asset_file_names.throw_invalid);
+        game.bitmaps.get(game.asset_file_names.bmp_throw_invalid);
     game.sys_assets.bmp_throw_preview =
-        game.bitmaps.get(game.asset_file_names.throw_preview);
+        game.bitmaps.get(game.asset_file_names.bmp_throw_preview);
     game.sys_assets.bmp_throw_preview_dashed =
-        game.bitmaps.get(game.asset_file_names.throw_preview_dashed);
+        game.bitmaps.get(game.asset_file_names.bmp_throw_preview_dashed);
     game.sys_assets.bmp_wave_ring =
-        game.bitmaps.get(game.asset_file_names.wave_ring);
+        game.bitmaps.get(game.asset_file_names.bmp_wave_ring);
 }
 
 
@@ -1299,35 +1304,35 @@ void load_misc_sounds() {
     
     //Sound effects.
     game.sys_assets.sfx_attack =
-        load_sample("Attack.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_attack);
     game.sys_assets.sfx_pikmin_attack =
-        load_sample("Pikmin_attack.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_attack);
     game.sys_assets.sfx_pikmin_carrying =
-        load_sample("Pikmin_carrying.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_carrying);
     game.sys_assets.sfx_pikmin_carrying_grab =
-        load_sample("Pikmin_carrying_grab.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_carrying_grab);
     game.sys_assets.sfx_pikmin_caught =
-        load_sample("Pikmin_caught.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_caught);
     game.sys_assets.sfx_pikmin_dying =
-        load_sample("Pikmin_dying.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_dying);
     game.sys_assets.sfx_pikmin_held =
-        load_sample("Pikmin_held.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_held);
     game.sys_assets.sfx_pikmin_idle =
-        load_sample("Pikmin_idle.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_idle);
     game.sys_assets.sfx_pikmin_thrown =
-        load_sample("Pikmin_thrown.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_thrown);
     game.sys_assets.sfx_pikmin_plucked =
-        load_sample("Pikmin_plucked.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_plucked);
     game.sys_assets.sfx_pikmin_called =
-        load_sample("Pikmin_called.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pikmin_called);
     game.sys_assets.sfx_pluck =
-        load_sample("Pluck.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_pluck);
     game.sys_assets.sfx_throw =
-        load_sample("Throw.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_throw);
     game.sys_assets.sfx_switch_pikmin =
-        load_sample("Switch_Pikmin.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_switch_pikmin);
     game.sys_assets.sfx_camera =
-        load_sample("Camera.ogg");
+        game.audio.samples.get(game.asset_file_names.sfx_camera);
 }
 
 

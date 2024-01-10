@@ -607,7 +607,7 @@ void main_menu_state::load() {
     data_node settings_file(MAIN_MENU::GUI_FILE_PATH);
     
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
     
     //Logo pikmin.
     data_node* logo_node = settings_file.get_child_by_name("logo");
