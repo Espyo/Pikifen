@@ -3,15 +3,9 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Audio system
-        Load system sounds from System_asset_file_names.txt
+        Make use of the gain, pan, and random deviations on the gain, pan, and speed
         Resetting when an area is entered or exited
-        Options
-            Mono/stereo
-        It should be possible to play sounds both in specific frames of animation and in scripts as actions
-            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
         Create a "Sounds" and a "Music" folder in the "Audio" folder
-        Recreate the following sounds, as per user feedback
-            Plucking -- sounds like crap
         This might help
             https://youtu.be/Vjm--AqG04Y?t=713
 
@@ -48,6 +42,7 @@ Next tasks (roughly sorted most important first)
             Area's music
             Area's music, but with a low-pass filter
         The area editor should have a music preview button
+    Editor load button icon should be the classic folder being opened
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     Mob types should be able to specify that they need a link to work properly, so the area editor can inform the player if there's no link
     
@@ -107,6 +102,8 @@ Next tasks (roughly sorted most important first)
                 Explosion
                 Ambiance sounds
         Rename sound files to .oga, instead of .ogg?
+        Recreate the following sounds, as per user feedback
+            Plucking -- sounds like crap
     Compose and add songs
         Start with a leitmotif?
         Title screen
@@ -709,6 +706,7 @@ Misc things (so I don't forget)
         Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
             However, I may want to play the same long sample multiple times with like a .5s interval between each one, which won't burst anyone's ears...
         Ducking
+        Options for mono/stereo
         Footsteps should be tied to the terrain texture
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
@@ -1001,6 +999,7 @@ Tasks for later on (I might never implement these)
         Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
+        Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
     Possible cleanup
         If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
             Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.

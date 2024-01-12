@@ -302,6 +302,29 @@ size_t animation_database::find_sprite(const string &name) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Fills each frame's sound index cache variable, where applicable.
+ * mt_ptr:
+ *   Mob type with the sound data.
+ */
+void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            frame* f_ptr = &a_ptr->frames[f];
+            if(f_ptr->sound.empty()) continue;
+            f_ptr->sound_idx = INVALID;
+            
+            for(size_t s = 0; s < mt_ptr->sounds.size(); ++s) {
+                if(mt_ptr->sounds[s].name == f_ptr->sound) {
+                    f_ptr->sound_idx = s;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Fixes the pointers for body parts.
  */
 void animation_database::fix_body_part_pointers() {
@@ -442,8 +465,13 @@ void animation_instance::start() {
  *   How long the frame's tick is, in seconds.
  * signals:
  *   Any frame that sends a signal adds it here.
+ * sounds:
+ *   Any frame that should play a sound adds it here.
  */
-bool animation_instance::tick(const float delta_t, vector<size_t>* signals) {
+bool animation_instance::tick(
+    const float delta_t, vector<size_t>* signals,
+    vector<size_t>* sounds
+) {
     if(!cur_anim) return false;
     size_t n_frames = cur_anim->frames.size();
     if(n_frames == 0) return false;
@@ -471,6 +499,9 @@ bool animation_instance::tick(const float delta_t, vector<size_t>* signals) {
         if(cur_frame->signal != INVALID && signals) {
             signals->push_back(cur_frame->signal);
         }
+        if(cur_frame->sound_idx != INVALID && sounds) {
+            sounds->push_back(cur_frame->sound_idx);
+        }
     }
     
     return reached_end;
@@ -487,16 +518,21 @@ bool animation_instance::tick(const float delta_t, vector<size_t>* signals) {
  *   Pointer to the sprite.
  * d:
  *   Duration.
+ * snd:
+ *   Sound name.
  * s:
  *   Signal.
  */
 frame::frame(
-    const string &sn, const size_t si, sprite* sp, const float d, const size_t s
+    const string &sn, const size_t si, sprite* sp, const float d,
+    const string &snd, const size_t s
 ) :
     sprite_name(sn),
     sprite_index(si),
     sprite_ptr(sp),
     duration(d),
+    sound(snd),
+    sound_idx(INVALID),
     signal(s) {
     
 }
@@ -875,6 +911,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                     s_pos,
                     (s_pos == INVALID) ? NULL : adb.sprites[s_pos],
                     s2f(frame_node->get_child_by_name("duration")->value),
+                    frame_node->get_child_by_name("sound")->value,
                     (signal_str.empty() ? INVALID : s2i(signal_str))
                 )
             );

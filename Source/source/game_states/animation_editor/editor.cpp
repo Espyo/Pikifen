@@ -185,6 +185,9 @@ void animation_editor::do_logic() {
                         ) ? 0 : cur_anim->loop_frame;
                 }
                 f = &cur_anim->frames[cur_frame_nr];
+                if(f->sound_idx != INVALID) {
+                    play_sound(f->sound_idx);
+                }
             }
         } else {
             anim_playing = false;
@@ -528,6 +531,8 @@ void animation_editor::load_animation_database(
             load_bmp(data.get_child_by_name("top_flower")->value, &data);
     }
     
+    if(loaded_mob_type) anims.fill_sound_index_caches(loaded_mob_type);
+    
     if(should_update_history) {
         update_history(file_path);
         save_options(); //Save the history in the options.
@@ -807,6 +812,22 @@ void animation_editor::press_zoom_out_button() {
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Plays one of the mob's sounds.
+ * sound_idx:
+ *   Index of the sound data in the mob type's sound list.
+ */
+void animation_editor::play_sound(size_t sound_idx) {
+    if(!loaded_mob_type) return;
+    mob_type::sfx_struct* sfx_data = &loaded_mob_type->sounds[sound_idx];
+    if(!sfx_data->sample) return;
+    game.audio.create_ui_sfx_source(
+        sfx_data->sample,
+        sfx_data->config
+    );
 }
 
 
@@ -1101,6 +1122,11 @@ bool animation_editor::save_animation_database() {
             if(f_ptr->signal != INVALID) {
                 frame_node->add(
                     new data_node("signal", i2s(f_ptr->signal))
+                );
+            }
+            if(!f_ptr->sound.empty() && f_ptr->sound != NONE_OPTION) {
+                frame_node->add(
+                    new data_node("sound", f_ptr->sound)
                 );
             }
         }

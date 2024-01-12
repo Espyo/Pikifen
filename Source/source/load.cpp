@@ -789,7 +789,10 @@ ALLEGRO_BITMAP* load_bmp(
         
     if(!b) {
         if(report_error) {
-            game.errors.report("Could not open image " + file_name + "!", node);
+            game.errors.report(
+                "Could not open image \"" + file_name + "\"!",
+                node
+            );
         }
         if(error_bmp_on_error) {
             b = game.bmp_error;
@@ -902,7 +905,9 @@ void load_custom_particle_generators(const bool load_resources) {
 data_node load_data_file(const string &file_name) {
     data_node n = data_node(file_name);
     if(!n.file_was_opened) {
-        game.errors.report("Could not open data file " + file_name + "!");
+        game.errors.report(
+            "Could not open data file \"" + file_name + "\"!"
+        );
     }
     
     return n;
@@ -1414,7 +1419,10 @@ ALLEGRO_SAMPLE* load_sample(
         al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
         
     if(!sample && report_errors) {
-        game.errors.report("Could not open audio sample " + file_name + "!", node);
+        game.errors.report(
+            "Could not open audio file \"" + file_name + "\"!",
+            node
+        );
     }
     
     return sample;

@@ -176,6 +176,7 @@ private:
     void import_sprite_transformation_data(const string &name);
     bool is_cursor_in_timeline();
     void load_animation_database(const bool should_update_history);
+    void play_sound(size_t sound_idx);
     void rename_animation(animation* anim, const string &new_name);
     void rename_body_part(body_part* part, const string &new_name);
     void rename_sprite(sprite* spr, const string &new_name);

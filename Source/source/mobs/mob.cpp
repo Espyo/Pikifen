@@ -2649,6 +2649,41 @@ void mob::move_to_path_end(const float speed, const float acceleration) {
 
 
 /* ----------------------------------------------------------------------------
+ * Plays a sound from the list of sounds in the mob type's data.
+ * sfx_data_idx:
+ *   Index of the sound data in the list.
+ */
+void mob::play_sound(size_t sfx_data_idx) {
+    if(sfx_data_idx >= type->sounds.size()) return;
+    
+    mob_type::sfx_struct* sfx = &type->sounds[sfx_data_idx];
+    
+    switch(sfx->type) {
+    case SFX_TYPE_WORLD_GLOBAL: {
+        game.audio.create_world_global_sfx_source(
+            sfx->sample, sfx->config
+        );
+        break;
+    } case SFX_TYPE_WORLD_POS: {
+        game.audio.create_mob_sfx_source(
+            sfx->sample, this, sfx->config
+        );
+        break;
+    } case SFX_TYPE_WORLD_AMBIANCE: {
+        game.audio.create_world_ambiance_sfx_source(
+            sfx->sample, sfx->config
+        );
+        break;
+    } case SFX_TYPE_UI: {
+        game.audio.create_ui_sfx_source(
+            sfx->sample, sfx->config
+        );
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a string containing the FSM state history for this mob.
  * This is used for debugging crashes.
  */
@@ -3333,13 +3368,18 @@ void mob::tick_animation(const float delta_t) {
     }
     
     vector<size_t> frame_signals;
-    bool finished_anim = anim.tick(delta_t* mult, &frame_signals);
-    
+    vector<size_t> frame_sounds;
+    bool finished_anim =
+        anim.tick(delta_t* mult, &frame_signals, &frame_sounds);
+        
     if(finished_anim) {
         fsm.run_event(MOB_EV_ANIMATION_END);
     }
     for(size_t s = 0; s < frame_signals.size(); ++s) {
         fsm.run_event(MOB_EV_FRAME_SIGNAL, &frame_signals[s]);
+    }
+    for(size_t s = 0; s < frame_sounds.size(); ++s) {
+        play_sound(frame_sounds[s]);
     }
     
     for(size_t h = 0; h < hit_opponents.size();) {

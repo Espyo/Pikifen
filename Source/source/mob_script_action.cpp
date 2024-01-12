@@ -1569,30 +1569,7 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
-    mob_type::sfx_struct* sfx = &data.m->type->sounds[s2i(data.args[0])];
-    
-    switch(sfx->type) {
-    case SFX_TYPE_WORLD_GLOBAL: {
-        game.audio.create_world_global_sfx_source(
-            sfx->sample, sfx->config
-        );
-        break;
-    } case SFX_TYPE_WORLD_POS: {
-        game.audio.create_mob_sfx_source(
-            sfx->sample, data.m, sfx->config
-        );
-        break;
-    } case SFX_TYPE_WORLD_AMBIANCE: {
-        game.audio.create_world_ambiance_sfx_source(
-            sfx->sample, sfx->config
-        );
-        break;
-    } case SFX_TYPE_UI: {
-        game.audio.create_ui_sfx_source(
-            sfx->sample, sfx->config
-        );
-    }
-    }
+    data.m->play_sound(s2i(data.args[0]));
 }
 
 

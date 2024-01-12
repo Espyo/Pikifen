@@ -708,7 +708,7 @@ void load_mob_type_from_file(
         
         mt->children.push_back(new_child);
     }
-
+    
     data_node* sfxs_node = file.get_child_by_name("sounds");
     size_t n_sounds = sfxs_node->get_nr_of_children();
     for(size_t s = 0; s < n_sounds; ++s) {
@@ -716,19 +716,19 @@ void load_mob_type_from_file(
         data_node* sfx_node = sfxs_node->get_child(s);
         reader_setter sfx_rs(sfx_node);
         mob_type::sfx_struct new_sfx;
-
+        
         string file_str;
         data_node* file_node;
         string type_str;
         data_node* type_node;
         string stack_mode_str;
         data_node* stack_mode_node;
-        float volume_float;
-        float pan_float;
-        float speed_float;
-
+        float volume_float = 100.0f;
+        float pan_float = 0.0f;
+        float speed_float = 100.0f;
+        
         new_sfx.name = sfx_node->name;
-
+        
         sfx_rs.set("file", file_str, &file_node);
         sfx_rs.set("type", type_str, &type_node);
         sfx_rs.set("stack_mode", stack_mode_str, &stack_mode_node);
@@ -740,9 +740,9 @@ void load_mob_type_from_file(
         sfx_rs.set("pan_deviation", new_sfx.config.pan_deviation);
         sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
         sfx_rs.set("random_delay", new_sfx.config.random_delay);
-
+        
         new_sfx.sample = game.audio.samples.get(file_str, file_node);
-
+        
         if(type_node) {
             if(type_str == "world_global") {
                 new_sfx.type = SFX_TYPE_WORLD_GLOBAL;
@@ -759,7 +759,7 @@ void load_mob_type_from_file(
                 );
             }
         }
-
+        
         if(stack_mode_node) {
             if(stack_mode_str == "normal") {
                 new_sfx.config.stack_mode = SFX_STACK_NORMAL;
@@ -774,13 +774,13 @@ void load_mob_type_from_file(
                 );
             }
         }
-
+        
         new_sfx.config.gain = volume_float / 100.0f;
         new_sfx.config.gain = clamp(new_sfx.config.gain, 0.0f, 1.0f);
-
+        
         new_sfx.config.pan = pan_float / 100.0f;
         new_sfx.config.pan = clamp(new_sfx.config.pan, -1.0f, 1.0f);
-
+        
         new_sfx.config.speed = speed_float / 100.0f;
         new_sfx.config.speed = std::max(0.0f, new_sfx.config.speed);
         
@@ -906,6 +906,7 @@ void load_mob_type_from_file(
         data_node anim_file = load_data_file(folder + "/Animations.txt");
         mt->anims = load_animation_database_from_file(&anim_file);
         mt->anims.fix_body_part_pointers();
+        mt->anims.fill_sound_index_caches(mt);
         
         data_node script_file;
         script_file.load_file(folder + "/Script.txt", true, true);
@@ -1094,6 +1095,7 @@ void load_mob_types(bool load_resources) {
         }
     }
     
+    //Create the special mob types.
     create_special_mob_types();
 }
 

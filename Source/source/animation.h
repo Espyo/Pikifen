@@ -27,6 +27,7 @@ using std::string;
 using std::vector;
 
 class animation_database;
+class mob_type;
 
 
 /* ----------------------------------------------------------------------------
@@ -133,12 +134,17 @@ public:
     sprite* sprite_ptr;
     //How long this frame lasts for, in seconds.
     float duration;
+    //Sound to play, if any. This is a sound info block in the mob's data.
+    string sound;
+    //Index of the sound to play, or INVALID. Cache for performance.
+    size_t sound_idx;
     //Signal to send, if any. INVALID = none.
     size_t signal;
     
     frame(
         const string &sn = "", const size_t si = INVALID,
-        sprite* sp = NULL, const float d = 0.1, const size_t s = INVALID
+        sprite* sp = NULL, const float d = 0.1,
+        const string &snd = "", const size_t s = INVALID
     );
 };
 
@@ -207,6 +213,7 @@ public:
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, data_node* file
     );
+    void fill_sound_index_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
     void sort_alphabetically();
     
@@ -235,7 +242,11 @@ public:
     
     void start();
     void skip_ahead_randomly();
-    bool tick(const float delta_t, vector<size_t>* signals = NULL);
+    bool tick(
+        const float delta_t,
+        vector<size_t>* signals = NULL,
+        vector<size_t>* sounds = NULL
+    );
     sprite* get_cur_sprite() const;
 };
 

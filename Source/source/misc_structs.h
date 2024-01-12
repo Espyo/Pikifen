@@ -125,7 +125,7 @@ enum STRING_TOKEN_TYPES {
  */
 struct asset_file_names_struct {
     //Graphics.
-
+    
     //Area name font.
     string bmp_area_name_font;
     //Bright circle.
@@ -218,9 +218,9 @@ struct asset_file_names_struct {
     string bmp_value_font;
     //Wave ring.
     string bmp_wave_ring;
-
+    
     //Sound effects.
-
+    
     //Attack.
     string sfx_attack;
     //Camera zoom level.
@@ -241,17 +241,17 @@ struct asset_file_names_struct {
     string sfx_pikmin_held;
     //Pikmin idling.
     string sfx_pikmin_idle;
-    //Pluck sound effect.
-    string sfx_pluck;
     //Pikmin being plucked.
     string sfx_pikmin_plucked;
     //Pikmin being thrown.
     string sfx_pikmin_thrown;
+    //Pluck sound effect.
+    string sfx_pluck;
     //Switching standby Pikmin type.
     string sfx_switch_pikmin;
     //Throwing.
     string sfx_throw;
-
+    
     void load(data_node* file);
     
     asset_file_names_struct();
@@ -746,7 +746,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_wave_ring;
     
     //Sound effects.
-
+    
     //Attack.
     ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
@@ -779,7 +779,7 @@ struct system_asset_list {
     ALLEGRO_SAMPLE* sfx_throw;
     
     //Animations.
-
+    
     //Leader damage spark.
     single_animation_suite spark_animation;
     

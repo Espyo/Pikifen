@@ -1062,6 +1062,10 @@ void animation_editor::process_gui_panel_animation() {
                     }
                     changes_mgr.mark_as_changed();
                 }
+                set_tooltip(
+                    "Whether a signal event should be sent to the script\n"
+                    "when this frame starts."
+                );
                 
                 //Signal value.
                 if(use_signal) {
@@ -1077,6 +1081,53 @@ void animation_editor::process_gui_panel_animation() {
                         "Number of the signal.",
                         "", WIDGET_EXPLANATION_DRAG
                     );
+                }
+                
+                if(loaded_mob_type) {
+                
+                    //Sound checkbox.
+                    bool use_sound = (!frame_ptr->sound.empty());
+                    if(ImGui::Checkbox("Sound", &use_sound)) {
+                        if(use_sound) {
+                            frame_ptr->sound = NONE_OPTION;
+                        } else {
+                            frame_ptr->sound.clear();
+                        }
+                        changes_mgr.mark_as_changed();
+                        anims.fill_sound_index_caches(loaded_mob_type);
+                    }
+                    set_tooltip(
+                        "Whether a sound should play when this frame starts."
+                    );
+                    
+                    if(use_sound) {
+                    
+                        //Sound combobox.
+                        ImGui::SameLine();
+                        vector<string> sounds = { NONE_OPTION };
+                        for(
+                            size_t s = 0;
+                            s < loaded_mob_type->sounds.size();
+                            ++s
+                        ) {
+                            sounds.push_back(loaded_mob_type->sounds[s].name);
+                        }
+                        if(
+                            ImGui::Combo(
+                                "##sound",
+                                &frame_ptr->sound,
+                                sounds,
+                                15
+                            )
+                        ) {
+                            anims.fill_sound_index_caches(loaded_mob_type);
+                            changes_mgr.mark_as_changed();
+                        }
+                        set_tooltip(
+                            "Name of the sound in the object's data."
+                        );
+                    }
+                    
                 }
                 
                 //Spacer dummy widget.

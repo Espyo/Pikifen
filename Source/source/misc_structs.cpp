@@ -227,7 +227,7 @@ void asset_file_names_struct::load(data_node* file) {
     grs.set("throw_preview_dashed", bmp_throw_preview_dashed);
     grs.set("value_font", bmp_value_font);
     grs.set("wave_ring", bmp_wave_ring);
-
+    
     reader_setter srs(file->get_child_by_name("sounds"));
     
     srs.set("attack", sfx_attack);
@@ -2237,9 +2237,9 @@ system_asset_list::system_asset_list():
     sfx_pikmin_dying(nullptr),
     sfx_pikmin_held(nullptr),
     sfx_pikmin_idle(nullptr),
-    sfx_pluck(nullptr),
     sfx_pikmin_plucked(nullptr),
     sfx_pikmin_thrown(nullptr),
+    sfx_pluck(nullptr),
     sfx_switch_pikmin(nullptr),
     sfx_throw(nullptr) {
     
