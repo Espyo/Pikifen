@@ -115,15 +115,11 @@ struct sfx_source_config_struct {
     float stack_min_pos = AUDIO::DEF_STACK_MIN_POS;
     //Gain at which it plays. 0 to 1.
     float gain = 1.0f;
-    //Pan with which it plays. -1 (full left) to 0 (normal) to 1 (full right).
-    float pan = 0.0f;
     //Speed at which it plays. Also affects pitch.
     float speed = 1.0f;
     //Randomness to the gain every time it emits the sound. 0 for none.
     float gain_deviation = 0.0f;
-    //Randomness to the pitch every time it emits the sound. 0 for none.
-    float pan_deviation = 0.0f;
-    //Randomness to the pan every time it emits the sound. 0 for none.
+    //Randomness to the speed every time it emits the sound. 0 for none.
     float speed_deviation = 0.0f;
     //Randomly delay the emission between 0 and this amount. 0 for none.
     float random_delay = 0.0f;
@@ -168,6 +164,8 @@ struct sfx_playback_struct {
     float gain = 1.0f;
     //Gain that it wants to be at.
     float target_gain = 1.0f;
+    //Base gain, before any position or fade-based operations.
+    float base_gain = 1.0f;
     //Current pan.
     float pan = 0.0f;
     //Pan that it wants to be at.

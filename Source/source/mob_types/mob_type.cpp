@@ -737,7 +737,6 @@ void load_mob_type_from_file(
         sfx_rs.set("pan", pan_float);
         sfx_rs.set("speed", speed_float);
         sfx_rs.set("volume_deviation", new_sfx.config.gain_deviation);
-        sfx_rs.set("pan_deviation", new_sfx.config.pan_deviation);
         sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
         sfx_rs.set("random_delay", new_sfx.config.random_delay);
         
@@ -777,9 +776,6 @@ void load_mob_type_from_file(
         
         new_sfx.config.gain = volume_float / 100.0f;
         new_sfx.config.gain = clamp(new_sfx.config.gain, 0.0f, 1.0f);
-        
-        new_sfx.config.pan = pan_float / 100.0f;
-        new_sfx.config.pan = clamp(new_sfx.config.pan, -1.0f, 1.0f);
         
         new_sfx.config.speed = speed_float / 100.0f;
         new_sfx.config.speed = std::max(0.0f, new_sfx.config.speed);

@@ -3,7 +3,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Audio system
-        Make use of the gain, pan, and random deviations on the gain, pan, and speed
         Resetting when an area is entered or exited
         Create a "Sounds" and a "Music" folder in the "Audio" folder
         This might help

@@ -333,6 +333,14 @@ bool audio_manager::emit(size_t source_id) {
     playback_ptr->allegro_sample_instance = al_create_sample_instance(sample);
     if(!playback_ptr->allegro_sample_instance) return false;
     
+    playback_ptr->base_gain = source_ptr->config.gain;
+    if(source_ptr->config.gain_deviation != 0.0f) {
+        playback_ptr->base_gain +=
+            randomf(0.0f, source_ptr->config.gain_deviation);
+        playback_ptr->base_gain =
+            clamp(playback_ptr->base_gain, 0.0f, 1.0f);
+    }
+    
     //Play.
     update_playback_target_gain_and_pan(playbacks.size() - 1);
     playback_ptr->gain = playback_ptr->target_gain;
@@ -360,10 +368,12 @@ bool audio_manager::emit(size_t source_id) {
     al_set_sample_instance_playmode(
         playback_ptr->allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
     );
-    al_set_sample_instance_speed(
-        playback_ptr->allegro_sample_instance,
-        std::max(0.0f, source_ptr->config.speed)
-    );
+    float speed = source_ptr->config.speed;
+    if(source_ptr->config.speed_deviation != 0.0f) {
+        speed += randomf(0.0f, source_ptr->config.speed_deviation);
+    }
+    speed = std::max(0.0f, speed);
+    al_set_sample_instance_speed(playback_ptr->allegro_sample_instance, speed);
     update_playback_gain_and_pan(playbacks.size() - 1);
     
     al_set_sample_instance_position(
@@ -765,6 +775,7 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     
     playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
     float final_gain = playback_ptr->gain * playback_ptr->state_gain_mult;
+    final_gain *= playback_ptr->base_gain;
     final_gain = clamp(final_gain, 0.0f, 1.0f);
     al_set_sample_instance_gain(
         playback_ptr->allegro_sample_instance,
@@ -772,6 +783,7 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     );
     
     playback_ptr->pan = clamp(playback_ptr->pan, -1.0f, 1.0f);
+    
     al_set_sample_instance_pan(
         playback_ptr->allegro_sample_instance,
         playback_ptr->pan

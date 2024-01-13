@@ -343,10 +343,8 @@
       <li><b><code>stack_mode</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, what should happen? <code>normal</code> means the second sound plays too, like normal. <code>override</code> means the first sound stops and the second plays instead, overriding it. <code>never</code> means the second sound will never play so long as the first sound is still playing. Defaults to <code>normal</code>.</li>
       <li><b><code>stack_min_pos</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, the second sound is only allowed to stack if the first one is already these many seconds in. Avoid using 0, since doing so can allow for the same sound to play many times at the exact same time, which just results in a really loud sound. Defaults to 0.1</li>
       <li><b><code>volume</code></b>: Volume it should play at, from 0 to 100. Defaults to 100.</li>
-      <li><b><code>pan</code></b>: Panning, i.e., if it should play more on the left speaker, right speaker, or center. -100 is left speaker, 0 is center, 100 is right speaker. Defaults to 0.</li>
-      <li><b><code>Speed</code></b>: Speed to play the sound at. The faster it plays, the higher-pitched it sounds too. 100 plays at normal speed, 200 at double-speed, etc. Defaults to 100.</li>
+      <li><b><code>speed</code></b>: Speed to play the sound at. The faster it plays, the higher-pitched it sounds too. 100 plays at normal speed, 200 at double-speed, etc. Defaults to 100.</li>
       <li><b><code>volume_deviation</code></b>: Every time the sound plays, deviate the volume up or down by a random amount, between 0 and this number. Defaults to 0.</li>
-      <li><b><code>pan_deviation</code></b>: Same as above, but for the pan. Defaults to 0.</li>
       <li><b><code>speed_deviation</code></b>: Same as above, but for the speed. Defaults to 0.</li>
       <li><b><code>random_delay</code></b>: Every time the sound is meant to play, wait a random amount of time between 0 and this before actually starting.</li>
     </ul>
