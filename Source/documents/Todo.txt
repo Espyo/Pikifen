@@ -42,7 +42,6 @@ Next tasks (roughly sorted most important first)
             Area's music
             Area's music, but with a low-pass filter
         The area editor should have a music preview button
-    Editor load button icon should be the classic folder being opened
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     Mob types should be able to specify that they need a link to work properly, so the area editor can inform the player if there's no link
     

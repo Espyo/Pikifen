@@ -1530,11 +1530,7 @@ void editor::process_gui_unsaved_changes_dialog() {
     
     //Save and then perform the action.
     ImGui::SameLine(0.0f, 10);
-    string save_first_button_label =
-        "Save, then " +
-        changes_mgr.get_unsaved_warning_action_short() +
-        "##save";
-    if(ImGui::Button(save_first_button_label.c_str(), ImVec2(180, 30))) {
+    if(ImGui::Button("Save", ImVec2(180, 30))) {
         close_top_dialog();
         const std::function<bool()> save_callback =
             changes_mgr.get_unsaved_warning_save_callback();
@@ -1544,21 +1540,25 @@ void editor::process_gui_unsaved_changes_dialog() {
             action_callback();
         }
     }
-    set_tooltip("Save first and then proceed.", "Ctrl + S");
+    set_tooltip(
+        "Save first, then " +
+        changes_mgr.get_unsaved_warning_action_short() + ".",
+        "Ctrl + S"
+    );
     
     //Perform the action without saving button.
     ImGui::SameLine(0.0f, 10);
-    string dont_save_button_label =
-        changes_mgr.get_unsaved_warning_action_short() +
-        " without saving##noSave";
-    dont_save_button_label[0] = toupper(dont_save_button_label[0]);
-    if(ImGui::Button(dont_save_button_label.c_str(), ImVec2(180, 30))) {
+    if(ImGui::Button("Don't save", ImVec2(180, 30))) {
         close_top_dialog();
         const std::function<void()> action_callback =
             changes_mgr.get_unsaved_warning_action_callback();
         action_callback();
     }
-    set_tooltip("Proceed without saving.", "Ctrl + D");
+    string dont_save_tooltip =
+        changes_mgr.get_unsaved_warning_action_short() +
+        " without saving.";
+    dont_save_tooltip[0] = toupper(dont_save_tooltip[0]);
+    set_tooltip(dont_save_tooltip, "Ctrl + D");
 }
 
 
