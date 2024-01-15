@@ -97,6 +97,12 @@ const string AREA_GEOMETRY_BACKUP_FILE_NAME =
 //Relative path to the folder with the audio files.
 const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
+//Relative path to the folder with the music files.
+const string AUDIO_MUSIC_FOLDER_PATH =
+    AUDIO_FOLDER_PATH + "/Music";
+//Relative path to the folder with the sound files.
+const string AUDIO_SOUNDS_FOLDER_PATH =
+    AUDIO_FOLDER_PATH + "/Sounds";
 //Relative path to the folder with the graphics.
 const string GRAPHICS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Graphics";

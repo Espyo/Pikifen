@@ -259,7 +259,7 @@ public:
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
-    void stop_all_playbacks(ALLEGRO_SAMPLE* filter);
+    void stop_all_playbacks(ALLEGRO_SAMPLE* filter = NULL);
     void tick(float delta_t);
     void update_volumes(
         float master_volume, float world_sfx_volume, float music_volume,

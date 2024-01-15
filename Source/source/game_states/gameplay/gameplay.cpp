@@ -606,6 +606,7 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
         game.perf_mon->set_paused(true);
     }
     
+    game.audio.stop_all_playbacks();
     save_statistics();
     
     switch(target) {

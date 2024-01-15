@@ -1416,7 +1416,7 @@ ALLEGRO_SAMPLE* load_sample(
     const string &file_name, data_node* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample =
-        al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
+        al_load_sample((AUDIO_SOUNDS_FOLDER_PATH + "/" + file_name).c_str());
         
     if(!sample && report_errors) {
         game.errors.report(
