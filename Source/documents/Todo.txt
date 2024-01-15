@@ -2,19 +2,17 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Script improvements
-        Make it so you can run an action on behalf of another mob
-            Be careful with state switching, variables, and focus
-            Don't allow actions like if, else, end_if, goto, label?
-            Maybe have a "start_running_as" action and a "stop_running_as"
-        Action groups (like functions)
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    The icon for reading a sign shows a white "1" on a black background if the throw button is bound to jb_0_0
+        draw_textured_box, the function responsible for drawing the button circle, throws away the necessary transform (from notification_struct::draw) if al_hold_bitmap_drawing
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
     --- 0.25.0 ---
+    When you assign a control bind, discard the inputs that come after. e.g. if you bind the button for menu up, don't go to the option above when the bind is finished
     Idle Pikmin should prioritize checking for tasks instead of leaders. This way one can spawn a Pikmin nearby on a task and it'll do the task, instead of going to the leader
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
@@ -197,6 +195,7 @@ Next tasks (roughly sorted most important first)
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
+            If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
             Implement a screen stack system, with push&pop
@@ -1020,6 +1019,11 @@ Tasks for later on (I might never implement these)
             Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
         If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
             This is kinda correct? Either way not a big deal I guess
+        Allowing a mob to run an action on behalf of another mob
+            Not really workable since when the script is compiled at load, anything involving arguments can only be compiled from the runner's point of view, not the caster's, so it'll be impossible to compile the script actions of the caster
+            Plus, anything involving script variables, states, focuses, and so on will just lead to endless spaghetti for the engine and for the script maker
+        Action groups for mob scripts (like functions)
+            Not really necessary since you can just create an aux state to do those
     Possible solutions to known issues
         Regarding true fullscreen crashing when a message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

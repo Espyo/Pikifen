@@ -1570,6 +1570,7 @@ text_gui_item::text_gui_item(
             for(size_t l = 0; l < tokens_per_line.size(); ++l) {
                 draw_string_tokens(
                     tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+                    false,
                     point(
                         text_x,
                         text_y + l * line_height

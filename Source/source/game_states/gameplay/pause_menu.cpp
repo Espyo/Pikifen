@@ -247,6 +247,7 @@ void pause_menu_struct::draw_tidbit(
     for(size_t l = 0; l < tokens_per_line.size(); ++l) {
         draw_string_tokens(
             tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+            true,
             point(
                 where.x,
                 where.y + l * (line_height + 4) * y_scale -

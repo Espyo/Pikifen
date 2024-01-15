@@ -1593,6 +1593,8 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  *   Text font.
  * control_font:
  *   Font for control bind icons.
+ * controls_condensed:
+ *   Whether control binds should be condensed.
  * where:
  *   Top-left coordinates to draw at.
  * flags:
@@ -1604,8 +1606,9 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  */
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
-    const ALLEGRO_FONT* const control_font, const point &where,
-    const int flags, const point &max_size, const point &scale
+    const ALLEGRO_FONT* const control_font, bool controls_condensed,
+    const point &where, const int flags, const point &max_size,
+    const point &scale
 ) {
     unsigned int total_width = 0;
     float x_scale = 1.0f;
@@ -1646,7 +1649,7 @@ void draw_string_tokens(
             draw_player_input_icon(
                 control_font,
                 game.controls.find_bind(tokens[t].content).input,
-                false,
+                controls_condensed,
                 point(
                     caret + token_final_width / 2.0f,
                     where.y + max_size.y / 2.0f
