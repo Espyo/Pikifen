@@ -6,8 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The icon for reading a sign shows a white "1" on a black background if the throw button is bound to jb_0_0
-        draw_textured_box, the function responsible for drawing the button circle, throws away the necessary transform (from notification_struct::draw) if al_hold_bitmap_drawing
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
@@ -34,7 +32,7 @@ Next tasks (roughly sorted most important first)
             Area's music, but with a low-pass filter
         The area editor should have a music preview button
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
-    Mob types should be able to specify that they need a link to work properly, so the area editor can inform the player if there's no link
+    Mob types should be able to specify that they need a link to/from in order to work properly, so the area editor can inform the player if there's no link
     
     --- 0.26 ---
     Update to Dear ImGui 1.90.1

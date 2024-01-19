@@ -1733,7 +1733,9 @@ void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint
 ) {
-    al_hold_bitmap_drawing(true);
+    //While using al_hold_bitmap_drawing is an optimization, we can't use it
+    //since it stops using the transformation, meaning any textured boxes
+    //meant to be drawn with transformations wouldn't.
     
     //Some caches.
     //Vertex total. 9 sections * 2 tris * 3 vertexes.
@@ -1858,8 +1860,6 @@ void draw_textured_box(
     al_draw_prim(
         vert, NULL, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
-    
-    al_hold_bitmap_drawing(false);
 }
 
 
