@@ -1602,7 +1602,10 @@ void gameplay_state::process_mob_misc_interactions(
         m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE &&
         d <= game.config.idle_bump_range
     ) {
-        touch_le_ev->run(m_ptr, (void*) m2_ptr);
+        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
+        pending_intermob_events.push_back(
+            pending_intermob_event(d_between, touch_le_ev, m2_ptr)
+        );
     }
 }
 
