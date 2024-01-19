@@ -36,7 +36,7 @@ control_binds_menu_state::control_binds_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
     list_box(nullptr),
-    capturing_input(false),
+    capturing_input(0),
     showing_more(false),
     cur_action_type(PLAYER_ACTION_NONE),
     cur_bind_idx(0) {
@@ -56,7 +56,7 @@ control_binds_menu_state::control_binds_menu_state() :
 void control_binds_menu_state::choose_input(
     const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
 ) {
-    capturing_input = true;
+    capturing_input = 1;
     
     const vector<control_bind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
@@ -115,7 +115,7 @@ void control_binds_menu_state::do_drawing() {
     
     gui.draw();
     
-    if(capturing_input) {
+    if(capturing_input == 1) {
         al_draw_filled_rectangle(
             0, 0, game.win_w, game.win_h,
             al_map_rgba(24, 24, 32, 192)
@@ -144,11 +144,19 @@ void control_binds_menu_state::do_drawing() {
  */
 void control_binds_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); ++a) {
-        gui.handle_player_action(player_actions[a]);
+    
+    if(capturing_input == 0) {
+        for(size_t a = 0; a < player_actions.size(); ++a) {
+            gui.handle_player_action(player_actions[a]);
+        }
     }
     
     gui.tick(game.delta_t);
+    
+    if(capturing_input == 2) {
+        //A frame has passed in the post-capture cooldown. Finish the cooldown.
+        capturing_input = 0;
+    }
     
     game.fade_mgr.tick(game.delta_t);
 }
@@ -170,8 +178,14 @@ string control_binds_menu_state::get_name() const {
 void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    if(capturing_input) {
-    
+    switch(capturing_input) {
+    case 0: {
+        //Not capturing.
+        gui.handle_event(ev);
+        
+        break;
+    } case 1: {
+        //Actively capturing.
         player_input input = game.controls.allegro_event_to_input(ev);
         if(input.value >= 0.5f) {
             vector<control_bind> &all_binds = game.controls.binds();
@@ -184,14 +198,15 @@ void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
             } else {
                 game.controls.binds()[cur_bind_idx].input = input;
             }
-            capturing_input = false;
+            capturing_input = 2;
             populate_binds();
         }
-        
-    } else {
-    
-        gui.handle_event(ev);
-        
+        break;
+    } case 2: {
+        //One frame of cooldown, so that we don't accidentally feed the
+        //input meant for the capture to the GUI.
+        break;
+    }
     }
     
 }
@@ -214,7 +229,7 @@ void control_binds_menu_state::leave() {
  */
 void control_binds_menu_state::load() {
     bmp_menu_bg = NULL;
-    capturing_input = false;
+    capturing_input = 0;
     showing_more = false;
     cur_action_type = PLAYER_ACTION_NONE;
     cur_bind_idx = INVALID;

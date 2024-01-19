@@ -380,8 +380,8 @@ private:
     gui_manager more_gui;
     //Control list GUI item.
     list_gui_item* list_box;
-    //Is it currently capturing input?
-    bool capturing_input;
+    //Is it currently capturing input? 0: No. 1: Capturing. 2: Finishing.
+    unsigned char capturing_input;
     //Is it showing an action type's "more..." menu?
     bool showing_more;
     //List of binds per player action type.
