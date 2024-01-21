@@ -191,6 +191,8 @@ struct area_data {
     string engine_version;
     //String representing the starting amounts of each spray.
     string spray_amounts;
+    //Song to play.
+    string song_name;
     //Weather condition to use.
     weather weather_condition;
     //Name of the weather condition to use.

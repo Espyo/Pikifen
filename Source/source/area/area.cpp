@@ -158,6 +158,7 @@ void area_data::clear() {
     notes.clear();
     engine_version.clear();
     spray_amounts.clear();
+    song_name.clear();
     weather_name.clear();
     day_time_start = AREA::DEF_DAY_TIME_START;
     day_time_speed = AREA::DEF_DAY_TIME_SPEED;
@@ -370,6 +371,7 @@ void area_data::clone(area_data &other) {
     other.version = version;
     other.notes = notes;
     other.spray_amounts = spray_amounts;
+    other.song_name = song_name;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
     other.day_time_start = day_time_start;

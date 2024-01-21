@@ -1823,6 +1823,25 @@ void area_editor::process_gui_panel_info() {
     
     //Ambiance node.
     if(saveable_tree_node("info", "Ambiance")) {
+    
+        //Music combobox.
+        vector<string> song_names;
+        song_names.push_back(NONE_OPTION);
+        for(auto &s : game.audio.songs) {
+            song_names.push_back(s.first);
+        }
+        if(game.cur_area_data.song_name.empty()) {
+            game.cur_area_data.song_name = NONE_OPTION;
+        }
+        string song_name = game.cur_area_data.song_name;
+        if(ImGui::Combo("Song", &song_name, song_names, 15)) {
+            register_change("area song change");
+            game.cur_area_data.song_name = song_name;
+        }
+        set_tooltip(
+            "What song to play."
+        );
+        
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);

@@ -324,7 +324,7 @@ void options_menu_state::init_gui_audio_page() {
     audio_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    //TODO audio_gui.set_selected_item();
+    audio_gui.set_selected_item(master_vol_picker);
     audio_gui.responsive = false;
     audio_gui.hide_items();
 }

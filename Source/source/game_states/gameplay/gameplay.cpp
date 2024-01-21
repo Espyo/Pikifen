@@ -323,6 +323,10 @@ void gameplay_state::enter() {
     big_msg_time = 0.0f;
     delta_t_mult = 0.5f;
     
+    if(!game.cur_area_data.song_name.empty()) {
+        game.audio.play_song(game.cur_area_data.song_name);
+    }
+    
     if(!game.states.area_ed->quick_play_area_path.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.
         interlude_time = GAMEPLAY::BIG_MSG_READY_DUR;
@@ -607,6 +611,9 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     }
     
     game.audio.stop_all_playbacks();
+    if(!game.cur_area_data.song_name.empty()) {
+        game.audio.stop_song(game.cur_area_data.song_name);
+    }
     save_statistics();
     
     switch(target) {

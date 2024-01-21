@@ -83,6 +83,7 @@ void load_area(
     rs.set("engine_version", game.cur_area_data.engine_version);
     rs.set("notes", game.cur_area_data.notes);
     rs.set("spray_amounts", game.cur_area_data.spray_amounts);
+    rs.set("song", game.cur_area_data.song_name);
     rs.set("weather", game.cur_area_data.weather_name, &weather_node);
     rs.set("day_time_start", game.cur_area_data.day_time_start);
     rs.set("day_time_speed", game.cur_area_data.day_time_speed);

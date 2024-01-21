@@ -1832,6 +1832,7 @@ void area_editor::load() {
     load_hazards();
     load_mob_types(false);
     load_weather();
+    load_songs();
     
     load_custom_mob_cat_types(true);
     
@@ -3034,6 +3035,9 @@ bool area_editor::save_area(const bool to_backup) {
     }
     
     //And some other cleanup.
+    if(game.cur_area_data.song_name == NONE_OPTION) {
+        game.cur_area_data.song_name.clear();
+    }
     if(game.cur_area_data.weather_name == NONE_OPTION) {
         game.cur_area_data.weather_name.clear();
     }
@@ -3363,6 +3367,9 @@ bool area_editor::save_area(const bool to_backup) {
     );
     data_file.add(
         new data_node("bg_zoom", f2s(game.cur_area_data.bg_bmp_zoom))
+    );
+    data_file.add(
+        new data_node("song", game.cur_area_data.song_name)
     );
     data_file.add(
         new data_node("weather", game.cur_area_data.weather_name)
@@ -4364,6 +4371,7 @@ void area_editor::unload() {
     
     clear_current_area();
     
+    unload_songs();
     unload_weather();
     unload_mob_types(false);
     unload_hazards();
