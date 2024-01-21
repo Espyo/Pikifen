@@ -573,15 +573,29 @@ bool audio_manager::play_song(const string &name) {
         return false;
     }
     
-    al_attach_audio_stream_to_mixer(song_ptr->main_track, music_mixer);
-    al_seek_audio_stream_secs(song_ptr->main_track, 0.0f);
-    al_set_audio_stream_playing(song_ptr->main_track, true);
+    play_song_track(song_ptr, song_ptr->main_track);
     for(auto &m : song_ptr->mix_tracks) {
-        al_attach_audio_stream_to_mixer(m.second, music_mixer);
-        al_seek_audio_stream_secs(m.second, 0.0f);
-        al_set_audio_stream_playing(m.second, true);
+        play_song_track(song_ptr, m.second);
     }
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts playing a song's track.
+ * stream:
+ *   Audio stream of the track.
+ */
+void audio_manager::play_song_track(
+    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
+) {
+    al_attach_audio_stream_to_mixer(stream, music_mixer);
+    al_seek_audio_stream_secs(stream, 0.0f);
+    al_set_audio_stream_loop_secs(
+        stream, song_ptr->loop_start, song_ptr->loop_end
+    );
+    al_set_audio_stream_playmode(stream, ALLEGRO_PLAYMODE_LOOP);
+    al_set_audio_stream_playing(stream, true);
 }
 
 
