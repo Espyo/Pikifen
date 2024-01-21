@@ -104,8 +104,13 @@ enum SFX_PLAYBACK_STATES {
 
 
 //Ways for a music track to be a part of the mix.
-enum MUSIC_TRACK_TRIGGERS {
+enum MIX_TRACK_TYPES {
     //TODO
+    //Enemy nearby.
+    MIX_TRACK_TYPE_ENEMY,
+    
+    //Total number.
+    N_MIX_TRACK_TYPES,
 };
 
 
@@ -186,6 +191,10 @@ struct sfx_playback_struct {
 /* ----------------------------------------------------------------------------
  * Information about an entire piece of music, including all of the tracks
  * that go into mixing the final thing.
+ * Every frame, all of the mix tracks are initially set to a status of false,
+ * meaning they're not meant to play. Something in the game's tick logic is
+ * responsible for setting the right statuses to true. Then the audio manager
+ * is responsible for fading them in and out as necessary.
  */
 class song {
 public:
@@ -194,7 +203,7 @@ public:
     //The main track. Other tracks can be mixed on top of this if applicable.
     ALLEGRO_AUDIO_STREAM* main_track = nullptr;
     //Other tracks to mix in with the main track.
-    map<MUSIC_TRACK_TRIGGERS, ALLEGRO_AUDIO_STREAM*> mix_tracks;
+    map<MIX_TRACK_TYPES, ALLEGRO_AUDIO_STREAM*> mix_tracks;
     //Loop region start point, in seconds.
     double loop_start = 0;
     //Loop region end point, in seconds. 0 = end of song.
@@ -335,6 +344,7 @@ public:
     bool play_song(const string &name);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
+    void mark_mix_track_status(MIX_TRACK_TYPES track_type);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter = NULL);
     bool stop_song(const string &name);
@@ -366,6 +376,8 @@ private:
     map<size_t, sfx_source_struct> sources;
     //All sound effects being played right now.
     vector<sfx_playback_struct> playbacks;
+    //Status for things that affect mix tracks.
+    vector<bool> mix_statuses;
     //Top-left camera coordinates.
     point cam_tl;
     //Bottom-right camera coordinates.

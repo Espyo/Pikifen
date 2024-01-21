@@ -1488,11 +1488,34 @@ void load_songs() {
         rs.set("version", new_song.version);
         rs.set("notes", new_song.notes);
         
-        //TODO load the mix tracks.
+        new_song.main_track =
+            game.audio.streams.get(main_track_str, main_track_node);
+            
+        data_node* mix_tracks_node = file.get_child_by_name("mix_tracks");
+        size_t n_mix_tracks = mix_tracks_node->get_nr_of_children();
         
-        new_song.main_track = game.audio.streams.get(main_track_str);
+        for(size_t m = 0; m < n_mix_tracks; ++m) {
+            data_node* mix_track_node = mix_tracks_node->get_child(m);
+            MIX_TRACK_TYPES trigger = N_MIX_TRACK_TYPES;
+            
+            if(mix_track_node->name == "enemy") {
+                trigger = MIX_TRACK_TYPE_ENEMY;
+            } else {
+                game.errors.report(
+                    "Unknown mix track trigger \"" +
+                    mix_track_node->name +
+                    "\"!", mix_track_node
+                );
+                continue;
+            }
+            
+            new_song.mix_tracks[trigger] =
+                game.audio.streams.get(mix_track_node->value, mix_track_node);
+        }
         
-        if(new_song.display_name.empty()) new_song.display_name = new_song.name;
+        if(new_song.display_name.empty()) {
+            new_song.display_name = new_song.name;
+        }
         if(new_song.loop_end < new_song.loop_start) {
             new_song.loop_start = 0.0f;
         }

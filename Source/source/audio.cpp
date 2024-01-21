@@ -542,6 +542,19 @@ void audio_manager::init(
         ambiance_volume,
         ui_sfx_volume
     );
+    
+    //Status of every mix track type.
+    for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+        mix_statuses.push_back(false);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks a mix track type's status to true for this frame.
+ */
+void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
+    mix_statuses[track_type] = true;
 }
 
 
@@ -820,6 +833,29 @@ void audio_manager::tick(float delta_t) {
         } else {
             ++s;
         }
+    }
+    
+    //Update the status of mix track types.
+    for(auto &s : songs) {
+        song* song_ptr = &s.second;
+        if(!al_get_audio_stream_attached(song_ptr->main_track)) {
+            continue;
+        }
+        
+        for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+            auto track_it = song_ptr->mix_tracks.find((MIX_TRACK_TYPES) m);
+            if(track_it == song_ptr->mix_tracks.end()) continue;
+            
+            al_set_audio_stream_gain(
+                track_it->second, mix_statuses[m] ? 1.0f : 0.0f
+            );
+        }
+        
+    }
+    
+    //Prepare the statuses for the next frame.
+    for(size_t s = 0; s < N_MIX_TRACK_TYPES; ++s) {
+        mix_statuses[s] = false;
     }
 }
 
