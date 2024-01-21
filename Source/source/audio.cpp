@@ -21,14 +21,18 @@ namespace AUDIO {
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
+//Change speed for a mix track's gain, measured in amount per second.
+const float MIX_TRACK_GAIN_SPEED = 2.0f;
 //Change speed for a playback's gain, measured in amount per second.
-const float GAIN_CHANGE_SPEED = 3.0f;
+const float PLAYBACK_GAIN_SPEED = 3.0f;
 //Change speed for a playback's pan, measured in amount per second.
-const float PAN_CHANGE_SPEED = 8.0f;
+const float PLAYBACK_PAN_SPEED = 8.0f;
 //Change speed of playback gain when un/pausing, measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 //Change speed of playback gain when stopping, measured in amount per second.
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
+//Change speed for a song's gain, measured in amount per second.
+const float SONG_GAIN_SPEED = 3.0f;
 }
 
 
@@ -543,9 +547,10 @@ void audio_manager::init(
         ui_sfx_volume
     );
     
-    //Status of every mix track type.
+    //Initialization of every mix track type.
     for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
         mix_statuses.push_back(false);
+        mix_volumes.push_back(0.0f);
     }
 }
 
@@ -559,7 +564,9 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
 
 
 /* ----------------------------------------------------------------------------
- * Starts playing a song.
+ * Fades in a song that is stopped in order to start it.
+ * If it's fading out to stop, it'll revert the process and start fading in.
+ * If the song was stopped, this will make it play from the beginning.
  * Returns true on success, false on failure.
  * name:
  *   Name of the song in the list of loaded songs.
@@ -569,33 +576,20 @@ bool audio_manager::play_song(const string &name) {
     if(song_it == songs.end()) return false;
     
     song* song_ptr = &song_it->second;
-    if(al_get_audio_stream_attached(song_ptr->main_track)) {
+    if(song_ptr->state == SONG_STATE_PLAYING) {
         return false;
     }
     
-    play_song_track(song_ptr, song_ptr->main_track);
-    for(auto &m : song_ptr->mix_tracks) {
-        play_song_track(song_ptr, m.second);
+    if(song_ptr->state == SONG_STATE_STOPPED) {
+        start_song_track(song_ptr, song_ptr->main_track);
+        for(auto &m : song_ptr->mix_tracks) {
+            start_song_track(song_ptr, m.second);
+        }
     }
+    
+    song_ptr->state = SONG_STATE_STARTING;
+    
     return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts playing a song's track.
- * stream:
- *   Audio stream of the track.
- */
-void audio_manager::play_song_track(
-    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
-) {
-    al_attach_audio_stream_to_mixer(stream, music_mixer);
-    al_seek_audio_stream_secs(stream, 0.0f);
-    al_set_audio_stream_loop_secs(
-        stream, song_ptr->loop_start, song_ptr->loop_end
-    );
-    al_set_audio_stream_playmode(stream, ALLEGRO_PLAYMODE_LOOP);
-    al_set_audio_stream_playing(stream, true);
 }
 
 
@@ -651,6 +645,26 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts playing a song's track from scratch.
+ * stream:
+ *   Audio stream of the track.
+ */
+void audio_manager::start_song_track(
+    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
+) {
+    al_set_audio_stream_gain(stream, 0.0f);
+    al_seek_audio_stream_secs(stream, 0.0f);
+    al_set_audio_stream_loop_secs(
+        stream, song_ptr->loop_start, song_ptr->loop_end
+    );
+    al_set_audio_stream_playmode(stream, ALLEGRO_PLAYMODE_LOOP);
+    
+    al_attach_audio_stream_to_mixer(stream, music_mixer);
+    al_set_audio_stream_playing(stream, true);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Stops all playbacks. Alternatively, stops all playbacks of a given sound
  * sample.
  * filter:
@@ -694,7 +708,9 @@ bool audio_manager::stop_sfx_playback(size_t playback_idx) {
 
 
 /* ----------------------------------------------------------------------------
- * Stops a song that is being played.
+ * Fades out a song that is playing in order to stop it.
+ * If it's fading in to start, it'll revert the process and start fading out.
+ * Returns true on success, false on failure.
  * name:
  *   Name of the song in the list of loaded songs.
  */
@@ -703,16 +719,11 @@ bool audio_manager::stop_song(const string &name) {
     if(song_it == songs.end()) return false;
     song* song_ptr = &song_it->second;
     
-    if(!al_get_audio_stream_attached(song_ptr->main_track)) {
+    if(song_ptr->state == SONG_STATE_STOPPED) {
         return false;
     }
     
-    al_set_audio_stream_playing(song_ptr->main_track, false);
-    al_detach_audio_stream(song_ptr->main_track);
-    for(auto &m : song_ptr->mix_tracks) {
-        al_set_audio_stream_playing(m.second, false);
-        al_detach_audio_stream(m.second);
-    }
+    song_ptr->state = SONG_STATE_STOPPING;
     return true;
 }
 
@@ -779,13 +790,13 @@ void audio_manager::tick(float delta_t) {
                 inch_towards(
                     playback_ptr->gain,
                     playback_ptr->target_gain,
-                    AUDIO::GAIN_CHANGE_SPEED * delta_t
+                    AUDIO::PLAYBACK_GAIN_SPEED * delta_t
                 );
             playback_ptr->pan =
                 inch_towards(
                     playback_ptr->pan,
                     playback_ptr->target_pan,
-                    AUDIO::PAN_CHANGE_SPEED * delta_t
+                    AUDIO::PLAYBACK_PAN_SPEED * delta_t
                 );
                 
             //Pausing and unpausing.
@@ -849,19 +860,71 @@ void audio_manager::tick(float delta_t) {
         }
     }
     
-    //Update the status of mix track types.
+    //Update the volume of songs depending on their state.
     for(auto &s : songs) {
         song* song_ptr = &s.second;
-        if(!al_get_audio_stream_attached(song_ptr->main_track)) {
-            continue;
-        }
         
-        for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+        switch(song_ptr->state) {
+        case SONG_STATE_STARTING: {
+            song_ptr->gain =
+                inch_towards(
+                    song_ptr->gain,
+                    1.0f,
+                    AUDIO::SONG_GAIN_SPEED * delta_t
+                );
+            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            if(song_ptr->gain == 1.0f) {
+                song_ptr->state = SONG_STATE_PLAYING;
+            }
+            break;
+        } case SONG_STATE_PLAYING: {
+            //Nothing to do.
+            break;
+        } case SONG_STATE_STOPPING: {
+            song_ptr->gain =
+                inch_towards(
+                    song_ptr->gain,
+                    0.0f,
+                    AUDIO::SONG_GAIN_SPEED * delta_t
+                );
+            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            if(song_ptr->gain == 0.0f) {
+                al_set_audio_stream_playing(song_ptr->main_track, false);
+                al_detach_audio_stream(song_ptr->main_track);
+                for(auto &m : song_ptr->mix_tracks) {
+                    al_set_audio_stream_playing(m.second, false);
+                    al_detach_audio_stream(m.second);
+                }
+                song_ptr->state = SONG_STATE_STOPPED;
+            }
+            break;
+        } case SONG_STATE_STOPPED: {
+            //Nothing to do.
+            break;
+        }
+        }
+    }
+    
+    //Update the status of mix track types, and their volumes.
+    for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+        mix_volumes[m] =
+            inch_towards(
+                mix_volumes[m],
+                mix_statuses[m] ? 1.0f : 0.0f,
+                AUDIO::MIX_TRACK_GAIN_SPEED * delta_t
+            );
+            
+        for(auto &s : songs) {
+            song* song_ptr = &s.second;
+            if(song_ptr->state == SONG_STATE_STOPPED) {
+                continue;
+            }
+            
             auto track_it = song_ptr->mix_tracks.find((MIX_TRACK_TYPES) m);
             if(track_it == song_ptr->mix_tracks.end()) continue;
             
             al_set_audio_stream_gain(
-                track_it->second, mix_statuses[m] ? 1.0f : 0.0f
+                track_it->second, mix_volumes[m] * song_ptr->gain
             );
         }
         

@@ -44,8 +44,9 @@ class mob;
 
 namespace AUDIO {
 extern const float DEF_STACK_MIN_POS;
-extern const float GAIN_CHANGE_SPEED;
-extern const float PAN_CHANGE_SPEED;
+extern const float MIX_TRACK_GAIN_SPEED;
+extern const float PLAYBACK_GAIN_SPEED;
+extern const float PLAYBACK_PAN_SPEED;
 extern const float PLAYBACK_PAUSE_GAIN_SPEED;
 extern const float PLAYBACK_STOP_GAIN_SPEED;
 }
@@ -100,6 +101,19 @@ enum SFX_PLAYBACK_STATES {
     SFX_PLAYBACK_STOPPING,
     //Finished playing and needs to be destroyed.
     SFX_PLAYBACK_DESTROYED,
+};
+
+
+//Possible states for a song.
+enum SONG_STATES {
+    //In the process of fading in as it starts.
+    SONG_STATE_STARTING,
+    //Playing like normal.
+    SONG_STATE_PLAYING,
+    //In the process of fading out to stop.
+    SONG_STATE_STOPPING,
+    //Not playing.
+    SONG_STATE_STOPPED,
 };
 
 
@@ -196,14 +210,17 @@ struct sfx_playback_struct {
  * responsible for setting the right statuses to true. Then the audio manager
  * is responsible for fading them in and out as necessary.
  */
-class song {
-public:
+struct song {
     //Internal name.
     string name;
     //The main track. Other tracks can be mixed on top of this if applicable.
     ALLEGRO_AUDIO_STREAM* main_track = nullptr;
     //Other tracks to mix in with the main track.
     map<MIX_TRACK_TYPES, ALLEGRO_AUDIO_STREAM*> mix_tracks;
+    //Current gain.
+    float gain = 0.0f;
+    //State.
+    SONG_STATES state = SONG_STATE_STOPPED;
     //Loop region start point, in seconds.
     double loop_start = 0;
     //Loop region end point, in seconds. 0 = end of song.
@@ -376,8 +393,10 @@ private:
     map<size_t, sfx_source_struct> sources;
     //All sound effects being played right now.
     vector<sfx_playback_struct> playbacks;
-    //Status for things that affect mix tracks.
+    //Status for things that affect mix tracks this frame.
     vector<bool> mix_statuses;
+    //Current volume of each mix track type.
+    vector<float> mix_volumes;
     //Top-left camera coordinates.
     point cam_tl;
     //Bottom-right camera coordinates.
@@ -391,7 +410,7 @@ private:
     );
     bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
-    void play_song_track(
+    void start_song_track(
         song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
     );
     bool stop_sfx_playback(size_t playback_idx);
