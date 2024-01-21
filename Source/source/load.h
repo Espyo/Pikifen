@@ -36,6 +36,10 @@ void load_area_mission_record(
     mission_record &record
 );
 void load_asset_file_names();
+ALLEGRO_AUDIO_STREAM* load_audio_stream(
+    const string &file_name, data_node* node = NULL,
+    bool report_errors = true
+);
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL,
     const bool report_error = true, const bool error_bmp_on_error = true,
@@ -55,6 +59,7 @@ ALLEGRO_SAMPLE* load_sample(
     const string &file_name, data_node* node = NULL,
     bool report_errors = true
 );
+void load_songs();
 void load_spike_damage_types();
 void load_spray_types(const bool load_resources);
 void load_statistics();
@@ -67,6 +72,7 @@ void unload_custom_particle_generators();
 void unload_hazards();
 void unload_liquids();
 void unload_misc_resources();
+void unload_songs();
 void unload_spike_damage_types();
 void unload_spray_types();
 void unload_status_types(const bool unload_resources);

@@ -103,6 +103,12 @@ enum SFX_PLAYBACK_STATES {
 };
 
 
+//Ways for a music track to be a part of the mix.
+enum MUSIC_TRACK_TRIGGERS {
+    //TODO
+};
+
+
 /* ----------------------------------------------------------------------------
  * Configuration about a given sound effect source.
  */
@@ -178,7 +184,34 @@ struct sfx_playback_struct {
 
 
 /* ----------------------------------------------------------------------------
- * Sample manager.
+ * Information about an entire piece of music, including all of the tracks
+ * that go into mixing the final thing.
+ */
+class song {
+public:
+    //Internal name.
+    string name;
+    //The main track. Other tracks can be mixed on top of this if applicable.
+    ALLEGRO_AUDIO_STREAM* main_track = nullptr;
+    //Other tracks to mix in with the main track.
+    map<MUSIC_TRACK_TRIGGERS, ALLEGRO_AUDIO_STREAM*> mix_tracks;
+    //Loop region start point, in seconds.
+    double loop_start = 0;
+    //Loop region end point, in seconds. 0 = end of song.
+    double loop_end = 0;
+    //Display name.
+    string display_name;
+    //Pikifen maker who made the song content, not necessarily the audio.
+    string maker;
+    //Optional version number.
+    string version;
+    //Any notes, like origin, artist, etc.
+    string notes;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Audio sample manager.
  * See bitmap manager.
  */
 struct sfx_sample_manager {
@@ -217,12 +250,55 @@ struct sfx_sample_manager {
 
 
 /* ----------------------------------------------------------------------------
+ * Streamed audio manager.
+ * See bitmap manager.
+ */
+struct audio_stream_manager {
+    public:
+    explicit audio_stream_manager(const string &base_dir);
+    ALLEGRO_AUDIO_STREAM* get(
+        const string &name, data_node* node = NULL,
+        const bool report_errors = true
+    );
+    void detach(const ALLEGRO_AUDIO_STREAM* s);
+    void detach(const string &name);
+    void clear();
+    
+    long get_total_calls() const;
+    size_t get_list_size() const;
+    
+    private:
+    struct stream_info {
+        //Stream pointer.
+        ALLEGRO_AUDIO_STREAM* s;
+        //How many calls it has.
+        size_t calls;
+        
+        stream_info(ALLEGRO_AUDIO_STREAM* s = NULL);
+    };
+    //Base directory that this manager works on.
+    string base_dir;
+    //List of loaded samples.
+    map<string, stream_info> list;
+    //Total sum of calls. Useful for debugging.
+    long total_calls;
+    
+    void detach(map<string, stream_info>::iterator it);
+    
+};
+
+
+/* ----------------------------------------------------------------------------
  * Manages everything about the game's audio.
  */
 class audio_manager {
 public:
     //Manager of samples.
     sfx_sample_manager samples;
+    //Manager of streams.
+    audio_stream_manager streams;
+    //Loaded songs.
+    map<string, song> songs;
     
     size_t create_ui_sfx_source(
         ALLEGRO_SAMPLE* sample,
@@ -256,10 +332,12 @@ public:
         float master_volume, float world_sfx_volume, float music_volume,
         float ambiance_volume, float ui_sfx_volume
     );
+    bool play_song(const string &name);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter = NULL);
+    bool stop_song(const string &name);
     void tick(float delta_t);
     void update_volumes(
         float master_volume, float world_sfx_volume, float music_volume,
@@ -272,6 +350,8 @@ private:
     ALLEGRO_MIXER* master_mixer;
     //General in-world sound effect mixer.
     ALLEGRO_MIXER* world_sfx_mixer;
+    //Music mixer.
+    ALLEGRO_MIXER* music_mixer;
     //In-world ambiance sound effect mixer.
     ALLEGRO_MIXER* world_ambiance_sfx_mixer;
     //UI sound effect mixer.

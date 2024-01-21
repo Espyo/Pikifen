@@ -753,6 +753,35 @@ void load_asset_file_names() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads an audio stream from the game's content.
+ * file_name:
+ *   Name of the file to load.
+ * node:
+ *   If not NULL, blame this data node if the file doesn't exist.
+ * report_errors:
+ *   Only issues errors if this is true.
+ */
+ALLEGRO_AUDIO_STREAM* load_audio_stream(
+    const string &file_name, data_node* node, bool report_errors
+) {
+    ALLEGRO_AUDIO_STREAM* stream =
+        al_load_audio_stream(
+            (AUDIO_TRACK_FOLDER_PATH + "/" + file_name).c_str(),
+            4, 2048
+        );
+        
+    if(!stream && report_errors) {
+        game.errors.report(
+            "Could not open audio stream file \"" + file_name + "\"!",
+            node
+        );
+    }
+    
+    return stream;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
  * file_name:
  *   File name of the bitmap.
@@ -1430,6 +1459,49 @@ ALLEGRO_SAMPLE* load_sample(
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the songs.
+ */
+void load_songs() {
+    vector<string> song_files =
+        folder_to_vector(AUDIO_SONG_FOLDER_PATH, false);
+        
+    for(size_t s = 0; s < song_files.size(); ++s) {
+        data_node file =
+            load_data_file(
+                AUDIO_SONG_FOLDER_PATH + "/" + song_files[s]
+            );
+        if(!file.file_was_opened) continue;
+        
+        song new_song;
+        reader_setter rs(&file);
+        
+        string name_str;
+        string main_track_str;
+        data_node* main_track_node = NULL;
+        
+        rs.set("name", name_str);
+        rs.set("main_track", main_track_str, &main_track_node);
+        rs.set("loop_start", new_song.loop_start);
+        rs.set("loop_end", new_song.loop_end);
+        rs.set("display_name", new_song.display_name);
+        rs.set("maker", new_song.maker);
+        rs.set("version", new_song.version);
+        rs.set("notes", new_song.notes);
+        
+        //TODO load the mix tracks.
+        
+        new_song.main_track = game.audio.streams.get(main_track_str);
+        
+        if(new_song.display_name.empty()) new_song.display_name = new_song.name;
+        if(new_song.loop_end < new_song.loop_start) {
+            new_song.loop_start = 0.0f;
+        }
+        game.audio.songs[name_str] = new_song;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the spike damage types available.
  */
 void load_spike_damage_types() {
@@ -2049,6 +2121,20 @@ void unload_misc_resources() {
     game.audio.samples.detach(game.sys_assets.sfx_throw);
     game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
     game.audio.samples.detach(game.sys_assets.sfx_camera);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded songs from memory.
+ */
+void unload_songs() {
+    for(auto &s : game.audio.songs) {
+        game.audio.streams.detach(s.second.main_track);
+        for(auto &t : s.second.mix_tracks) {
+            game.audio.streams.detach(t.second);
+        }
+    }
+    game.audio.songs.clear();
 }
 
 

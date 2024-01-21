@@ -14,7 +14,6 @@ Next tasks (roughly sorted most important first)
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-    Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
@@ -634,10 +633,11 @@ Small tasks (for when I'm feeling lazy)
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
+        Some struct names end with struct, others don't
     
     
 Misc things (so I don't forget)
-    Bugs to fix
+    Minor bugs to fix
         Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
             Grounded mobs should consider Z in order to find an object and to reach an object, e.g. Blue Pikmin should ignore treasures above them when swarming, and should only consider themselves on the treasure if they're within a certain Z
             Flying mobs shouldn't consider Z in order to find an object, but they should to reach, e.g. Winged Pikmin should consider treasures below them when swarming, and should only consider themselves on the treasure if they're within a certain Z
@@ -727,6 +727,7 @@ Misc things (so I don't forget)
     Mob data
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
+        Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Pikmin behaviors
         Winged Pikmin that fall in the water should fly up when whistled
         Pikmin should want to go to nectar by themselves when idling

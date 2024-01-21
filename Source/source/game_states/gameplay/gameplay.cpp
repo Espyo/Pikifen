@@ -1018,6 +1018,7 @@ void gameplay_state::load_game_content() {
     load_hazards();
     load_weather();
     load_spike_damage_types();
+    load_songs();
     
     //Mob types.
     load_mob_types(true);
@@ -1139,6 +1140,7 @@ void gameplay_state::unload_game_content() {
     unload_status_types(true);
     unload_liquids();
     unload_custom_particle_generators();
+    unload_songs();
 }
 
 

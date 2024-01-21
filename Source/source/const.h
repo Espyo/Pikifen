@@ -103,6 +103,12 @@ const string AUDIO_MUSIC_FOLDER_PATH =
 //Relative path to the folder with the sound files.
 const string AUDIO_SOUNDS_FOLDER_PATH =
     AUDIO_FOLDER_PATH + "/Sounds";
+//Relative path to the folder with the song files.
+const string AUDIO_SONG_FOLDER_PATH =
+    AUDIO_MUSIC_FOLDER_PATH + "/Songs";
+//Relative path to the folder with the music track files.
+const string AUDIO_TRACK_FOLDER_PATH =
+    AUDIO_MUSIC_FOLDER_PATH + "/Tracks";
 //Relative path to the folder with the graphics.
 const string GRAPHICS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Graphics";

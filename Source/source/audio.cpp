@@ -37,8 +37,10 @@ const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
  */
 audio_manager::audio_manager() :
     samples(""),
+    streams(""),
     master_mixer(nullptr),
     world_sfx_mixer(nullptr),
+    music_mixer(nullptr),
     world_ambiance_sfx_mixer(nullptr),
     ui_sfx_mixer(nullptr),
     voice(nullptr),
@@ -191,6 +193,7 @@ size_t audio_manager::create_ui_sfx_source(
 void audio_manager::destroy() {
     al_detach_voice(voice);
     al_destroy_mixer(world_sfx_mixer);
+    al_destroy_mixer(music_mixer);
     al_destroy_mixer(world_ambiance_sfx_mixer);
     al_destroy_mixer(ui_sfx_mixer);
     al_destroy_mixer(master_mixer);
@@ -510,6 +513,13 @@ void audio_manager::init(
         );
     al_attach_mixer_to_mixer(world_sfx_mixer, master_mixer);
     
+    //Music mixer.
+    music_mixer =
+        al_create_mixer(
+            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
+        );
+    al_attach_mixer_to_mixer(music_mixer, master_mixer);
+    
     //World ambiance sounds mixer.
     world_ambiance_sfx_mixer =
         al_create_mixer(
@@ -532,6 +542,33 @@ void audio_manager::init(
         ambiance_volume,
         ui_sfx_volume
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts playing a song.
+ * Returns true on success, false on failure.
+ * name:
+ *   Name of the song in the list of loaded songs.
+ */
+bool audio_manager::play_song(const string &name) {
+    auto song_it = songs.find(name);
+    if(song_it == songs.end()) return false;
+    
+    song* song_ptr = &song_it->second;
+    if(al_get_audio_stream_attached(song_ptr->main_track)) {
+        return false;
+    }
+    
+    al_attach_audio_stream_to_mixer(song_ptr->main_track, music_mixer);
+    al_seek_audio_stream_secs(song_ptr->main_track, 0.0f);
+    al_set_audio_stream_playing(song_ptr->main_track, true);
+    for(auto &m : song_ptr->mix_tracks) {
+        al_attach_audio_stream_to_mixer(m.second, music_mixer);
+        al_seek_audio_stream_secs(m.second, 0.0f);
+        al_set_audio_stream_playing(m.second, true);
+    }
+    return true;
 }
 
 
@@ -625,6 +662,30 @@ bool audio_manager::stop_sfx_playback(size_t playback_idx) {
     if(playback_ptr->state == SFX_PLAYBACK_STOPPING) return false;
     if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
     playback_ptr->state = SFX_PLAYBACK_STOPPING;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stops a song that is being played.
+ * name:
+ *   Name of the song in the list of loaded songs.
+ */
+bool audio_manager::stop_song(const string &name) {
+    auto song_it = songs.find(name);
+    if(song_it == songs.end()) return false;
+    song* song_ptr = &song_it->second;
+    
+    if(!al_get_audio_stream_attached(song_ptr->main_track)) {
+        return false;
+    }
+    
+    al_set_audio_stream_playing(song_ptr->main_track, false);
+    al_detach_audio_stream(song_ptr->main_track);
+    for(auto &m : song_ptr->mix_tracks) {
+        al_set_audio_stream_playing(m.second, false);
+        al_detach_audio_stream(m.second);
+    }
     return true;
 }
 
@@ -862,11 +923,144 @@ void audio_manager::update_volumes(
     world_sfx_volume = clamp(world_sfx_volume, 0.0f, 1.0f);
     al_set_mixer_gain(world_sfx_mixer, world_sfx_volume);
     
+    music_volume = clamp(music_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(music_mixer, music_volume);
+    
     ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
     al_set_mixer_gain(world_ambiance_sfx_mixer, ambiance_volume);
     
     ui_sfx_volume = clamp(ui_sfx_volume, 0.0f, 1.0f);
     al_set_mixer_gain(ui_sfx_mixer, ui_sfx_volume);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an audio stream manager.
+ * base_dir:
+ *   Base directory its files belong to.
+ */
+audio_stream_manager::audio_stream_manager(const string &base_dir) :
+    base_dir(base_dir),
+    total_calls(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes all audio streams loaded and clears the list.
+ */
+void audio_stream_manager::clear() {
+    for(auto &s : list) {
+        al_destroy_audio_stream(s.second.s);
+    }
+    list.clear();
+    total_calls = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks an audio stream to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ * it:
+ *   Iterator from the map for the stream.
+ */
+void audio_stream_manager::detach(map<string, stream_info>::iterator it) {
+    if(it == list.end()) return;
+    
+    it->second.calls--;
+    total_calls--;
+    if(it->second.calls == 0) {
+        al_destroy_audio_stream(it->second.s);
+    }
+    list.erase(it);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks an audio stream to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ * name:
+ *   Audio stream's file name.
+ */
+void audio_stream_manager::detach(const string &name) {
+    if(name.empty()) return;
+    detach(list.find(name));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks an audio stream to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ * s:
+ *   Stream to detach.
+ */
+void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
+    if(!s) return;
+    
+    auto it = list.begin();
+    for(; it != list.end(); ++it) {
+        if(it->second.s == s) break;
+    }
+    
+    detach(it);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the specified audio stream, by name.
+ * name:
+ *   Name of the audio stream to get.
+ * node:
+ *   If not NULL, blame this data node if the file doesn't exist.
+ * report_errors:
+ *   Only issues errors if this is true.
+ */
+ALLEGRO_AUDIO_STREAM* audio_stream_manager::get(
+    const string &name, data_node* node,
+    const bool report_errors
+) {
+    if(name.empty()) return load_audio_stream("", node, report_errors);
+    
+    if(list.find(name) == list.end()) {
+        ALLEGRO_AUDIO_STREAM* s =
+            load_audio_stream(base_dir + "/" + name, node, report_errors);
+        list[name] = stream_info(s);
+        total_calls++;
+        return s;
+    } else {
+        list[name].calls++;
+        total_calls++;
+        return list[name].s;
+    }
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the size of the list. Used for debugging.
+ */
+size_t audio_stream_manager::get_list_size() const {
+    return list.size();
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total number of calls. Used for debugging.
+ */
+long audio_stream_manager::get_total_calls() const {
+    return total_calls;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a structure with information about an audio stream, for the manager.
+ * s:
+ *   The stream.
+ */
+audio_stream_manager::stream_info::stream_info(ALLEGRO_AUDIO_STREAM* s) :
+    s(s),
+    calls(1) {
+    
 }
 
 
