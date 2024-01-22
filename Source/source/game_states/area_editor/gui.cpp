@@ -1824,7 +1824,31 @@ void area_editor::process_gui_panel_info() {
     //Ambiance node.
     if(saveable_tree_node("info", "Ambiance")) {
     
+        //Preview song button.
+        if(
+            ImGui::ImageButton(
+                "previewSongButton",
+                editor_icons[ICON_PLAY],
+                ImVec2(ImGui::GetTextLineHeight(), ImGui::GetTextLineHeight())
+            )
+        ) {
+            if(!preview_song.empty()) {
+                game.audio.stop_song(preview_song);
+                preview_song.clear();
+            } else if(
+                !game.cur_area_data.song_name.empty() &&
+                game.cur_area_data.song_name != NONE_OPTION
+            ) {
+                preview_song = game.cur_area_data.song_name;
+                game.audio.play_song(preview_song);
+            }
+        }
+        set_tooltip(
+            "Preview this song, or stop if it's already playing."
+        );
+        
         //Music combobox.
+        ImGui::SameLine();
         vector<string> song_names;
         song_names.push_back(NONE_OPTION);
         for(auto &s : game.audio.songs) {

@@ -469,6 +469,8 @@ private:
     map<vertex*, point> pre_move_vertex_coords;
     //Is preview mode on?
     bool preview_mode;
+    //Name of the area song we're previewing, if any.
+    string preview_song;
     //Description of the current problem found.
     string problem_description;
     //Information about the problematic intersecting edges, if any.
