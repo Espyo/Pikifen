@@ -1484,7 +1484,7 @@ void load_songs() {
         rs.set("main_track", main_track_str, &main_track_node);
         rs.set("loop_start", new_song.loop_start);
         rs.set("loop_end", new_song.loop_end);
-        rs.set("display_name", new_song.display_name);
+        rs.set("title", new_song.title);
         rs.set("maker", new_song.maker);
         rs.set("version", new_song.version);
         rs.set("notes", new_song.notes);
@@ -1514,8 +1514,8 @@ void load_songs() {
                 game.audio.streams.get(mix_track_node->value, mix_track_node);
         }
         
-        if(new_song.display_name.empty()) {
-            new_song.display_name = new_song.name;
+        if(new_song.title.empty()) {
+            new_song.title = new_song.name;
         }
         if(new_song.loop_end < new_song.loop_start) {
             new_song.loop_start = 0.0f;

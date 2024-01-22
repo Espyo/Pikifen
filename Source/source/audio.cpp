@@ -33,6 +33,8 @@ const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
 //Change speed for a song's gain, measured in amount per second.
 const float SONG_GAIN_SPEED = 3.0f;
+//Gain for when a song is softened, due to a game pause.
+const float SONG_SOFTENED_GAIN = 0.4f;
 }
 
 
@@ -428,6 +430,7 @@ void audio_manager::handle_mob_deletion(mob* m_ptr) {
  * Handles the gameplay of the game world being paused.
  */
 void audio_manager::handle_world_pause() {
+    //Pause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback_ptr = &playbacks[p];
         if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
@@ -445,6 +448,17 @@ void audio_manager::handle_world_pause() {
             playback_ptr->state = SFX_PLAYBACK_PAUSING;
         }
     }
+    
+    //Soften songs.
+    for(auto &s : songs) {
+        if(
+            s.second.state == SONG_STATE_STOPPING ||
+            s.second.state == SONG_STATE_STOPPED
+        ) {
+            continue;
+        }
+        s.second.state = SONG_STATE_SOFTENING;
+    }
 }
 
 
@@ -452,6 +466,7 @@ void audio_manager::handle_world_pause() {
  * Handles the gameplay of the game world being unpaused.
  */
 void audio_manager::handle_world_unpause() {
+    //Unpause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback_ptr = &playbacks[p];
         if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
@@ -476,6 +491,17 @@ void audio_manager::handle_world_unpause() {
                 playback_ptr->pre_pause_pos
             );
         }
+    }
+    
+    //Unsoften songs.
+    for(auto &s : songs) {
+        if(
+            s.second.state == SONG_STATE_STOPPING ||
+            s.second.state == SONG_STATE_STOPPED
+        ) {
+            continue;
+        }
+        s.second.state = SONG_STATE_UNSOFTENING;
     }
 }
 
@@ -566,24 +592,31 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
 /* ----------------------------------------------------------------------------
  * Fades in a song that is stopped in order to start it.
  * If it's fading out to stop, it'll revert the process and start fading in.
- * If the song was stopped, this will make it play from the beginning.
  * Returns true on success, false on failure.
  * name:
  *   Name of the song in the list of loaded songs.
+ * from_start:
+ *   If true, the song starts from the beginning, otherwise it starts from where
+ *   it left off. This argument only applies if the song was stopped.
  */
-bool audio_manager::play_song(const string &name) {
+bool audio_manager::play_song(const string &name, bool from_start) {
     auto song_it = songs.find(name);
     if(song_it == songs.end()) return false;
     
     song* song_ptr = &song_it->second;
-    if(song_ptr->state == SONG_STATE_PLAYING) {
+    if(
+        song_ptr->state == SONG_STATE_PLAYING ||
+        song_ptr->state == SONG_STATE_SOFTENING ||
+        song_ptr->state == SONG_STATE_SOFTENED ||
+        song_ptr->state == SONG_STATE_UNSOFTENING
+    ) {
         return false;
     }
     
     if(song_ptr->state == SONG_STATE_STOPPED) {
-        start_song_track(song_ptr, song_ptr->main_track);
+        start_song_track(song_ptr, song_ptr->main_track, from_start);
         for(auto &m : song_ptr->mix_tracks) {
-            start_song_track(song_ptr, m.second);
+            start_song_track(song_ptr, m.second, from_start);
         }
     }
     
@@ -646,14 +679,19 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
 
 /* ----------------------------------------------------------------------------
  * Starts playing a song's track from scratch.
+ * song_ptr:
+ *   The song.
  * stream:
  *   Audio stream of the track.
+ * from_start:
+ *   If true, the song starts from the beginning, otherwise it starts from where
+ *   it left off.
  */
 void audio_manager::start_song_track(
-    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
+    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
 ) {
     al_set_audio_stream_gain(stream, 0.0f);
-    al_seek_audio_stream_secs(stream, 0.0f);
+    al_seek_audio_stream_secs(stream, from_start ? 0.0f : song_ptr->stop_point);
     al_set_audio_stream_loop_secs(
         stream, song_ptr->loop_start, song_ptr->loop_end
     );
@@ -880,6 +918,33 @@ void audio_manager::tick(float delta_t) {
         } case SONG_STATE_PLAYING: {
             //Nothing to do.
             break;
+        } case SONG_STATE_SOFTENING: {
+            song_ptr->gain =
+                inch_towards(
+                    song_ptr->gain,
+                    AUDIO::SONG_SOFTENED_GAIN,
+                    AUDIO::SONG_GAIN_SPEED * delta_t
+                );
+            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            if(song_ptr->gain == AUDIO::SONG_SOFTENED_GAIN) {
+                song_ptr->state = SONG_STATE_SOFTENED;
+            }
+            break;
+        } case SONG_STATE_SOFTENED: {
+            //Nothing to do.
+            break;
+        } case SONG_STATE_UNSOFTENING: {
+            song_ptr->gain =
+                inch_towards(
+                    song_ptr->gain,
+                    1.0f,
+                    AUDIO::SONG_GAIN_SPEED * delta_t
+                );
+            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            if(song_ptr->gain == 1.0f) {
+                song_ptr->state = SONG_STATE_PLAYING;
+            }
+            break;
         } case SONG_STATE_STOPPING: {
             song_ptr->gain =
                 inch_towards(
@@ -895,6 +960,8 @@ void audio_manager::tick(float delta_t) {
                     al_set_audio_stream_playing(m.second, false);
                     al_detach_audio_stream(m.second);
                 }
+                song_ptr->stop_point =
+                    al_get_audio_stream_position_secs(song_ptr->main_track);
                 song_ptr->state = SONG_STATE_STOPPED;
             }
             break;

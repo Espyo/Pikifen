@@ -49,6 +49,8 @@ extern const float PLAYBACK_GAIN_SPEED;
 extern const float PLAYBACK_PAN_SPEED;
 extern const float PLAYBACK_PAUSE_GAIN_SPEED;
 extern const float PLAYBACK_STOP_GAIN_SPEED;
+extern const float SONG_GAIN_SPEED;
+extern const float SONG_SOFTENED_GAIN;
 }
 
 
@@ -110,6 +112,12 @@ enum SONG_STATES {
     SONG_STATE_STARTING,
     //Playing like normal.
     SONG_STATE_PLAYING,
+    //In the process of lowering its volume due to a game pause.
+    SONG_STATE_SOFTENING,
+    //Volume lowered due to a game pause.
+    SONG_STATE_SOFTENED,
+    //In the process of raising its volume due to a game unpause.
+    SONG_STATE_UNSOFTENING,
     //In the process of fading out to stop.
     SONG_STATE_STOPPING,
     //Not playing.
@@ -219,6 +227,8 @@ struct song {
     map<MIX_TRACK_TYPES, ALLEGRO_AUDIO_STREAM*> mix_tracks;
     //Current gain.
     float gain = 0.0f;
+    //Point it was at when it stopped, if any.
+    float stop_point = 0.0f;
     //State.
     SONG_STATES state = SONG_STATE_STOPPED;
     //Loop region start point, in seconds.
@@ -226,7 +236,7 @@ struct song {
     //Loop region end point, in seconds. 0 = end of song.
     double loop_end = 0;
     //Display name.
-    string display_name;
+    string title;
     //Pikifen maker who made the song content, not necessarily the audio.
     string maker;
     //Optional version number.
@@ -358,7 +368,7 @@ public:
         float master_volume, float world_sfx_volume, float music_volume,
         float ambiance_volume, float ui_sfx_volume
     );
-    bool play_song(const string &name);
+    bool play_song(const string &name, bool from_start = true);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     void mark_mix_track_status(MIX_TRACK_TYPES track_type);
@@ -411,7 +421,7 @@ private:
     bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
     void start_song_track(
-        song* song_ptr, ALLEGRO_AUDIO_STREAM* stream
+        song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
     );
     bool stop_sfx_playback(size_t playback_idx);
     void update_playback_gain_and_pan(size_t playback_idx);
