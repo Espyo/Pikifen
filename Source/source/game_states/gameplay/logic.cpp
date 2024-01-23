@@ -513,6 +513,29 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         }
     }
     
+    
+    /*******************
+    *                  *
+    *   Others   o o o *
+    *                  *
+    ********************/
+    
+    //Closest enemy check for the music mix track.
+    if(game.states.gameplay->mobs.enemies.size() > 0) {
+        dist closest;
+        for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
+            mob* e_ptr = game.states.gameplay->mobs.enemies[e];
+            if(e_ptr->health <= 0.0f) continue;
+            dist d = cur_leader_ptr->get_distance_between(e_ptr);
+            if(e == 0 || d < closest) {
+                closest = d;
+            }
+        }
+        if(closest.to_float() <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
+            game.audio.mark_mix_track_status(MIX_TRACK_TYPE_ENEMY);
+        }
+    }
+    
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }

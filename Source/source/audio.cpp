@@ -22,7 +22,7 @@ namespace AUDIO {
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
 //Change speed for a mix track's gain, measured in amount per second.
-const float MIX_TRACK_GAIN_SPEED = 2.0f;
+const float MIX_TRACK_GAIN_SPEED = 1.0f;
 //Change speed for a playback's gain, measured in amount per second.
 const float PLAYBACK_GAIN_SPEED = 3.0f;
 //Change speed for a playback's pan, measured in amount per second.

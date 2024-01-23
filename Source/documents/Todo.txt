@@ -2,7 +2,19 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Music
+        Editor music
+            Continue from where it left off
+        Boss music
+        Error checking for when a song by that name doesn't exist
+        Keep songs loaded at all times?
+        Document it
+        Info
+            Planned variant compatibility: Day + fight, sunset + fight, boss
+            Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
+                If we can't get away with many variants, explain in the FAQ why that is
+                What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
+            The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -15,21 +27,9 @@ Next tasks (roughly sorted most important first)
         A cyclic lever? It automatically flips on and off over time
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Music
-        Planned variant compatibility: Day + fight, sunset + fight, boss
-        Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
-            If we can't get away with many variants, explain in the FAQ why that is
-            What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
-        The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
-        Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
-        Area editor music options?
-            Off
-            Standard editor music
-            Area's music
-            Area's music, but with a low-pass filter
-        The area editor should have a music preview button
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     Mob types should be able to specify that they need a link to/from in order to work properly, so the area editor can inform the player if there's no link
+    The manual's glossary should have an entry for "file name", which explains extensions and case sensitivity
     
     --- 0.26 ---
     Update to Dear ImGui 1.90.1
@@ -696,6 +696,7 @@ Misc things (so I don't forget)
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
+        Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.

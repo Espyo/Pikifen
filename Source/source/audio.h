@@ -127,7 +127,6 @@ enum SONG_STATES {
 
 //Ways for a music track to be a part of the mix.
 enum MIX_TRACK_TYPES {
-    //TODO
     //Enemy nearby.
     MIX_TRACK_TYPE_ENEMY,
     

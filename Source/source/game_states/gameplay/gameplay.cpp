@@ -54,6 +54,8 @@ const float CAMERA_BOX_MARGIN = 128.0f;
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 //Opacity of the collision bubbles in the maker tool.
 const unsigned char COLLISION_OPACITY = 192;
+//If an enemy is this close to the active leader, turn on the song's enemy mix.
+const float ENEMY_MIX_DISTANCE = 150.0f;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
 //How long the HUD moves for when a menu is entered.
