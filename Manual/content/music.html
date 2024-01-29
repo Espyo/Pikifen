@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="setup('Music', ['Making content'], ['making.html']);">
+  <div id="content">
+    
+    <p>This page will guide you on how to add music to <i>Pikifen</i>, as well as all of the details of the system.</p>
+
+    <h2 id="intro">Concepts</h2>
+
+    <dl>
+      <dt><b>A piece of music is a "song".</b></dt>
+      <dd>In <i>Pikifen</i>, a piece of music that you'll hear while playing is called a "song", whether it has any singing or not, and whether it plays on a menu, editor, or area.</dd>
+      <dt><b>Songs are composed of "tracks".</b></dt>
+      <dd>A typical piece of music is composed of many different layers, called "tracks" in <i>Pikifen</i>. Examples include the lead melody, bass, vocals, drums, etc. All of these get mixed to create the final piece. In the <i>Pikmin</i> games the same concept exists except tracks fade in or out in real time depending on what's going, like an extra percussion track playing when you're near an enemy.</dd>
+      <dt><b>Mix tracks play on top of the base track.</b></dt>
+      <dd>All songs have at least one track, which is the base track. Then, in-game, mix tracks play on top of this one like the aforementioned extra percussion when an enemy is nearby.</dd>
+      <dt><b>Tracks are your typical music files.</b></dt>
+      <dd>All tracks, be it the base track or any mix track, are just your average <code>.mp3</code>, <code>.ogg</code>, <code>.flac</code> or so on. This also means that, for instance, the extra percussion track from before should be a music file with <i>just</i> the drums.</dd>
+      <dt><b>During gameplay, all tracks play at the same time. Some are just muted.</b></dt>
+      <dd>This means that all of the tracks that make up a song need to be the same length, have the same tempo, and so on, otherwise things will fall out of sync!</dd>
+    </dl>
+
+    <h2 id="making">Making a new song</h2>
+
+    <h3 id="files">Files</h3>
+
+    <dl>
+      <dt><b>Place your tracks in <code>Game_data/Audio/Music/Tracks</code>.</b></dt>
+      <dd>The name of the files don't really matter, but try to make them descriptive, like <code>My_Song.ogg</code> for the base track, <code>My_Song_enemy.ogg</code> for the enemy mix, and so on.</dd>
+      <dt><b>In <code>Game_data/Audio/Music/Songs</code>, create a new <a href="making.html#data-file">data file</a>.</b></dt>
+      <dd>Again, its name doesn't really matter, but should be descriptive.</dd>
+      <dt><b>Fill your data file with information about the song.</b></dt>
+      <dd>This data file is what controls how the song works. You can find what properties exist and how to fill them in the next section.</dd>
+    </dl>
+
+    <h3 id="properties">Properties</h3>
+
+    <p>You can customize your song with the following properties:</p>
+
+    <ul>
+      <li><b><code>name</code></b>: The <i>internal</i> name of your song. This is the name by which you will refer to it in places like the <a href="area.html">area editor</a>. Keep it simple but descriptive.</li>
+      <li><b><code>main_track</code></b>: File name of the main track, including the <a href="glossary.html#E">extension</a>.</li>
+      <li><b><code>loop_start</code></b>: Starting point of the loop section, in seconds. 0 means it returns to the start of the song when it loops. In order to make sure the song loops cleanly, you should probably calculate the exact amount. If you know the song's BPM (beats per minute), you can just count how many beats from the start of the song is the beat you want to loop at and then just do the math.</li>
+      <li><b><code>loop_end</code></b>: Same as above, but for the ending point of the loop section. This means that when the song reaches this point it'll instantly go to the loop start point. 0 means this happens at the end of the song.</li>
+      <li><b><code>title</code></b>: The song's title. This is the actual title of the song, including any punctuation. If not specified, it'll just be the same as the internal name from the <code>name</code> property.</li>
+      <li><b><code>maker</code></b>: Person responsible for making this song. This refers to the actual <i>Pikifen</i> song as a piece of game content, not to the person who composed the song, recorded it, performed it, etc.!</li>
+      <li><b><code>version</code></b>: Optional version number(s). If you make changes to the settings or the track files, it's a good idea to increase this accordingly.</li>
+      <li><b><code>notes</code></b>: Optional notes about the song. This is also the place where you should write down where this song originates from, if it's the direct song, a remix, or an original creation by you, who the artist is, who composed it, and so on.</li>
+    </ul>
+
+    <p>On top of that, you can create a <b><code>mix_tracks</code></b> block if your song has any mix tracks. Each property inside of this block specifies how a mix track work, with the property's name being the type of mix track, and the value being the file name for that track. The following types exist:</p>
+
+    <ul>
+      <li><b><code>enemy</code></b>: Plays when an enemy is near the active leader.</li>
+    </ul>
+
+    <h3 id="other">Other information</h3>
+
+    <ul>
+      <li>The song that plays in menus has the internal name <code>menus</code>.</li>
+      <li>The song that plays in editors has the internal name <code>editors</code>.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

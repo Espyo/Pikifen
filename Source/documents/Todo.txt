@@ -3,12 +3,8 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Music
-        Editor music
-            Continue from where it left off
         Boss music
         Error checking for when a song by that name doesn't exist
-        Keep songs loaded at all times?
-        Document it
         Info
             Planned variant compatibility: Day + fight, sunset + fight, boss
             Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -24,12 +20,10 @@ Next tasks (roughly sorted most important first)
     --- 0.25.0 ---
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
-        A cyclic lever? It automatically flips on and off over time
-        A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     Mob types should be able to specify that they need a link to/from in order to work properly, so the area editor can inform the player if there's no link
     The manual's glossary should have an entry for "file name", which explains extensions and case sensitivity
+    Pressing the menu "back" button should skip message boxes
     
     --- 0.26 ---
     Update to Dear ImGui 1.90.1
@@ -95,6 +89,8 @@ Next tasks (roughly sorted most important first)
         Title screen
         Editors
         A couple of gameplay songs
+        Boss
+        Results screen
     Use a screenshot for the title screen
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
@@ -564,7 +560,7 @@ Next tasks (roughly sorted most important first)
             The save file should contain a checksum for the save file proper, and one for the game files/folder
             Save file management
         Cutscenes http://www.pikminwiki.com/Cutscenes
-            Make all cutscenes skippable
+            Make all cutscenes skippable and pausable
             Either make everything freeze during cutscenes, except for the actors that are part of it, or make everything continue, but health values be frozen (this way, leaders and Pikmin won't get hurt while the player can't react)
             A cutscene queue, in case multiple ones need to start at once
             Scripting for them
@@ -828,6 +824,9 @@ Misc things (so I don't forget)
         Areas
             A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
             Helodity's Turbulent Tundra?
+        More puzzle elements
+            A cyclic lever? It automatically flips on and off over time
+            A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent
@@ -858,6 +857,7 @@ Misc things (so I don't forget)
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
+        Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     Spray types, damage spike types, weather, etc. should all have a version, maker, and comments property, but it doesn't really make sense to add them. Nothing in the engine needs that info, and the pre-packaged content wouldn't really benefit from it (and from it being changed literally every release). Still, it's important to add this info for custom content...
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
