@@ -162,6 +162,34 @@ enum PIKMIN_ANIMATIONS {
 };
 
 
+//Pikmin object sounds.
+enum PIKMIN_SOUNDS {
+    //Attack.
+    PIKMIN_SOUND_ATTACK,
+    //Called by a leader.
+    PIKMIN_SOUND_CALLED,
+    //Carrying something.
+    PIKMIN_SOUND_CARRYING,
+    //Grabbing on to start carrying something.
+    PIKMIN_SOUND_CARRYING_GRAB,
+    //Caught by an enemy.
+    PIKMIN_SOUND_CAUGHT,
+    //Dying.
+    PIKMIN_SOUND_DYING,
+    //Held by a leader.
+    PIKMIN_SOUND_HELD,
+    //Becoming idle.
+    PIKMIN_SOUND_IDLE,
+    //Plucked.
+    PIKMIN_SOUND_PLUCKED,
+    //Thrown by a leader.
+    PIKMIN_SOUND_THROWN,
+
+    //Total amount.
+    N_PIKMIN_SOUNDS,
+};
+
+
 //Pikmin type attack methods.
 enum PIKMIN_ATTACK_METHODS {
     //Latches on and attacks.
@@ -205,6 +233,8 @@ public:
     ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES];
     //Icon for its Onion.
     ALLEGRO_BITMAP* bmp_onion_icon;
+    //Sound data index for each sound. Cache for performance.
+    size_t sfx_data_idxs[N_PIKMIN_SOUNDS];
     
     pikmin_type();
     void load_properties(data_node* file) override;

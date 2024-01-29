@@ -1319,9 +1319,16 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     ) {
         //Play the name call as a global sound, so that even leaders far away
         //can have their name call play clearly.
-        game.audio.create_world_global_sfx_source(
-            lea_ptr->lea_type->sfx_name_call
-        );
+        size_t name_call_sfx_idx =
+            lea_ptr->lea_type->sfx_data_idxs[LEADER_SOUND_NAME_CALL];
+        if(name_call_sfx_idx != INVALID) {
+            mob_type::sfx_struct* name_call_sfx =
+                &m->type->sounds[name_call_sfx_idx];
+            game.audio.create_world_global_sfx_source(
+                name_call_sfx->sample,
+                name_call_sfx->config
+            );
+        }
     }
 }
 

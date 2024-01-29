@@ -225,26 +225,6 @@ struct asset_file_names_struct {
     string sfx_attack;
     //Camera zoom level.
     string sfx_camera;
-    //Pikmin attacking.
-    string sfx_pikmin_attack;
-    //Pikmin called.
-    string sfx_pikmin_called;
-    //Pikmin carrying.
-    string sfx_pikmin_carrying;
-    //Pikmin grabbing on to carry.
-    string sfx_pikmin_carrying_grab;
-    //Pikmin caught.
-    string sfx_pikmin_caught;
-    //Pikmin dying.
-    string sfx_pikmin_dying;
-    //Pikmin held by leader.
-    string sfx_pikmin_held;
-    //Pikmin idling.
-    string sfx_pikmin_idle;
-    //Pikmin being plucked.
-    string sfx_pikmin_plucked;
-    //Pikmin being thrown.
-    string sfx_pikmin_thrown;
     //Pluck sound effect.
     string sfx_pluck;
     //Switching standby Pikmin type.
@@ -751,26 +731,6 @@ struct system_asset_list {
     ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
     ALLEGRO_SAMPLE* sfx_camera;
-    //Pikmin attacking.
-    ALLEGRO_SAMPLE* sfx_pikmin_attack;
-    //Pikmin called.
-    ALLEGRO_SAMPLE* sfx_pikmin_called;
-    //Pikmin carrying.
-    ALLEGRO_SAMPLE* sfx_pikmin_carrying;
-    //Pikmin grabbing on to carry.
-    ALLEGRO_SAMPLE* sfx_pikmin_carrying_grab;
-    //Pikmin caught.
-    ALLEGRO_SAMPLE* sfx_pikmin_caught;
-    //Pikmin dying.
-    ALLEGRO_SAMPLE* sfx_pikmin_dying;
-    //Pikmin held by leader.
-    ALLEGRO_SAMPLE* sfx_pikmin_held;
-    //Pikmin idling.
-    ALLEGRO_SAMPLE* sfx_pikmin_idle;
-    //Pikmin being plucked.
-    ALLEGRO_SAMPLE* sfx_pikmin_plucked;
-    //Pikmin being thrown.
-    ALLEGRO_SAMPLE* sfx_pikmin_thrown;
     //Pluck sound effect.
     ALLEGRO_SAMPLE* sfx_pluck;
     //Switching standby Pikmin type.

@@ -1340,26 +1340,6 @@ void load_misc_sounds() {
     //Sound effects.
     game.sys_assets.sfx_attack =
         game.audio.samples.get(game.asset_file_names.sfx_attack);
-    game.sys_assets.sfx_pikmin_attack =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_attack);
-    game.sys_assets.sfx_pikmin_carrying =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_carrying);
-    game.sys_assets.sfx_pikmin_carrying_grab =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_carrying_grab);
-    game.sys_assets.sfx_pikmin_caught =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_caught);
-    game.sys_assets.sfx_pikmin_dying =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_dying);
-    game.sys_assets.sfx_pikmin_held =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_held);
-    game.sys_assets.sfx_pikmin_idle =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_idle);
-    game.sys_assets.sfx_pikmin_thrown =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_thrown);
-    game.sys_assets.sfx_pikmin_plucked =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_plucked);
-    game.sys_assets.sfx_pikmin_called =
-        game.audio.samples.get(game.asset_file_names.sfx_pikmin_called);
     game.sys_assets.sfx_pluck =
         game.audio.samples.get(game.asset_file_names.sfx_pluck);
     game.sys_assets.sfx_throw =
@@ -2133,15 +2113,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
     
     game.audio.samples.detach(game.sys_assets.sfx_attack);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_carrying);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_carrying_grab);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_caught);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_dying);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_held);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_idle);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_thrown);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_plucked);
-    game.audio.samples.detach(game.sys_assets.sfx_pikmin_called);
     game.audio.samples.detach(game.sys_assets.sfx_throw);
     game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
     game.audio.samples.detach(game.sys_assets.sfx_camera);

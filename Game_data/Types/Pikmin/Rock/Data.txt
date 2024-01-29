@@ -29,3 +29,35 @@ vulnerabilities {
     crush = 1 rock_pressed true
     stab = 0
 }
+sounds {
+    attack {
+        file = Pikmin_attack.ogg
+    }
+    called {
+        file = Pikmin_called.ogg
+    }
+    carrying {
+        file = Pikmin_carrying.ogg
+    }
+    carrying_grab {
+        file = Pikmin_carrying_grab.ogg
+    }
+    caught {
+        file = Pikmin_caught.ogg
+    }
+    dying {
+        file = Pikmin_dying.ogg
+    }
+    held {
+        file = Pikmin_held.ogg
+    }
+    idle {
+        file = Pikmin_idle.ogg
+    }
+    plucked {
+        file = Pikmin_plucked.ogg
+    }
+    thrown {
+        file = Pikmin_thrown.ogg
+    }
+}

@@ -159,16 +159,6 @@ asset_file_names_struct::asset_file_names_struct() :
     bmp_wave_ring("Wave_ring.png"),
     sfx_attack("Attack.ogg"),
     sfx_camera("Camera.ogg"),
-    sfx_pikmin_attack("Pikmin_attack.ogg"),
-    sfx_pikmin_called("Pikmin_called.ogg"),
-    sfx_pikmin_carrying("Pikmin_carrying.ogg"),
-    sfx_pikmin_carrying_grab("Pikmin_carrying_grab.ogg"),
-    sfx_pikmin_caught("Pikmin_caught.ogg"),
-    sfx_pikmin_dying("Pikmin_dying.ogg"),
-    sfx_pikmin_held("Pikmin_held.ogg"),
-    sfx_pikmin_idle("Pikmin_idle.ogg"),
-    sfx_pikmin_plucked("Pikmin_plucked.ogg"),
-    sfx_pikmin_thrown("Pikmin_thrown.ogg"),
     sfx_pluck("Pluck.ogg"),
     sfx_switch_pikmin("Switch_Pikmin.ogg"),
     sfx_throw("Throw.ogg") {
@@ -232,16 +222,6 @@ void asset_file_names_struct::load(data_node* file) {
     
     srs.set("attack", sfx_attack);
     srs.set("camera", sfx_camera);
-    srs.set("pikmin_attack", sfx_pikmin_attack);
-    srs.set("pikmin_called", sfx_pikmin_called);
-    srs.set("pikmin_carrying", sfx_pikmin_carrying);
-    srs.set("pikmin_carrying_grab", sfx_pikmin_carrying_grab);
-    srs.set("pikmin_caught", sfx_pikmin_caught);
-    srs.set("pikmin_dying", sfx_pikmin_dying);
-    srs.set("pikmin_held", sfx_pikmin_held);
-    srs.set("pikmin_idle", sfx_pikmin_idle);
-    srs.set("pikmin_plucked", sfx_pikmin_plucked);
-    srs.set("pikmin_thrown", sfx_pikmin_thrown);
     srs.set("pluck", sfx_pluck);
     srs.set("switch_pikmin", sfx_switch_pikmin);
     srs.set("throw", sfx_throw);
@@ -2229,16 +2209,6 @@ system_asset_list::system_asset_list():
     bmp_wave_ring(nullptr),
     sfx_attack(nullptr),
     sfx_camera(nullptr),
-    sfx_pikmin_attack(nullptr),
-    sfx_pikmin_called(nullptr),
-    sfx_pikmin_carrying(nullptr),
-    sfx_pikmin_carrying_grab(nullptr),
-    sfx_pikmin_caught(nullptr),
-    sfx_pikmin_dying(nullptr),
-    sfx_pikmin_held(nullptr),
-    sfx_pikmin_idle(nullptr),
-    sfx_pikmin_plucked(nullptr),
-    sfx_pikmin_thrown(nullptr),
     sfx_pluck(nullptr),
     sfx_switch_pikmin(nullptr),
     sfx_throw(nullptr) {

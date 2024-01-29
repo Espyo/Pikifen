@@ -507,10 +507,7 @@ void leader::dismiss() {
     }
     
     //Final things.
-    game.audio.create_mob_sfx_source(
-        lea_type->sfx_dismiss,
-        this
-    );
+    play_sound(lea_type->sfx_data_idxs[LEADER_SOUND_DISMISSING]);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;
         const unsigned char* color_idx =
@@ -786,11 +783,18 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
-    whistle_sfx_source_id =
-        game.audio.create_world_pos_sfx_source(
-            lea_type->sfx_whistle,
-            game.states.gameplay->leader_cursor_w
-        );
+    size_t whistling_sfx_idx =
+        lea_type->sfx_data_idxs[LEADER_SOUND_WHISTLING];
+    if(whistling_sfx_idx != INVALID) {
+        mob_type::sfx_struct* whistling_sfx =
+            &type->sounds[whistling_sfx_idx];
+        whistle_sfx_source_id =
+            game.audio.create_world_pos_sfx_source(
+                whistling_sfx->sample,
+                game.states.gameplay->leader_cursor_w,
+                whistling_sfx->config
+            );
+    }
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
     game.statistics.whistle_uses++;

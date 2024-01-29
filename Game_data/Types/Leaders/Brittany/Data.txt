@@ -3,7 +3,6 @@ description = A professional botanist from Koppai. Loves fruit.
 
 acceleration = 800
 can_walk_on_others = true
-dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 238 85 221
 max_carriers = 5
@@ -15,10 +14,17 @@ pushable = true
 pushes = false
 rotation_speed = 360
 radius = 16
+sounds {
+    dismissing {
+        file = Olimar_dismiss.ogg
+    }
+    whistling {
+        file = Olimar_whistle.ogg
+    }
+}
 vulnerabilities {
     poison = 0
     water = 0
 }
 weight = 1
-whistle_sfx = Olimar_whistle.ogg
 icon = Brittany_icon.png

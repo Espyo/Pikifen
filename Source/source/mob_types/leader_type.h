@@ -124,6 +124,20 @@ enum LEADER_ANIMATIONS {
 };
 
 
+//Leader object sounds.
+enum LEADER_SOUNDS {
+    //Dismissing their group.
+    LEADER_SOUND_DISMISSING,
+    //Name call when they are swapped to.
+    LEADER_SOUND_NAME_CALL,
+    //Whistling.
+    LEADER_SOUND_WHISTLING,
+    
+    //Total amount of sounds.
+    N_LEADER_SOUNDS,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of leader. The "leader" class is a mob, so the walking Olimar,
  * walking Louie, etc. This leader type is actually the definition of
@@ -141,12 +155,8 @@ public:
     float max_throw_height;
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon;
-    //Sound effect for when it whistles.
-    ALLEGRO_SAMPLE* sfx_whistle;
-    //Sound effect for when it dismisses.
-    ALLEGRO_SAMPLE* sfx_dismiss;
-    //Sound effect for when it is swapped to.
-    ALLEGRO_SAMPLE* sfx_name_call;
+    //Sound data index for each sound. Cache for performance.
+    size_t sfx_data_idxs[N_LEADER_SOUNDS];
     
     leader_type();
     void load_properties(data_node* file) override;

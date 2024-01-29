@@ -1794,10 +1794,7 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(*((point*) info1), m->z);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_pikmin_idle,
-        m
-    );
+    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_IDLE]);
 }
 
 
@@ -1824,10 +1821,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pik_ptr->leave_group();
     
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_pikmin_caught,
-        pik_ptr
-    );
+    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_CAUGHT]);
     
 }
 
@@ -1842,12 +1836,10 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_pikmin_held,
-        m
-    );
+    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD]);
 }
 
 
@@ -1861,8 +1853,16 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
     ((pikmin*) m)->is_grabbed_by_enemy = false;
-    game.audio.stop_all_playbacks(game.sys_assets.sfx_pikmin_held);
+    
+    size_t held_sfx_idx =
+        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD];
+    if(held_sfx_idx != INVALID) {
+        game.audio.stop_all_playbacks(
+            pik_ptr->type->sounds[held_sfx_idx].sample
+        );
+    }
 }
 
 
@@ -1876,17 +1876,33 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    game.audio.stop_all_playbacks(game.sys_assets.sfx_pikmin_held);
-    sfx_source_config_struct throw_sfx_config;
-    throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_pikmin_thrown,
-        m,
-        throw_sfx_config
-    );
+    
+    size_t held_sfx_idx =
+        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD];
+    if(held_sfx_idx != INVALID) {
+        game.audio.stop_all_playbacks(
+            pik_ptr->type->sounds[held_sfx_idx].sample
+        );
+    }
+    
+    size_t throw_sfx_idx =
+        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_THROWN];
+    if(throw_sfx_idx != INVALID) {
+        mob_type::sfx_struct* throw_sfx =
+            &pik_ptr->type->sounds[throw_sfx_idx];
+        sfx_source_config_struct throw_sfx_config;
+        throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
+        game.audio.create_mob_sfx_source(
+            throw_sfx->sample,
+            m,
+            throw_sfx_config
+        );
+    }
+    
     ((pikmin*) m)->start_throw_trail();
 }
 
@@ -1901,16 +1917,14 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
     float throw_angle = get_angle(m->pos, m->focused_mob->pos);
     m->speed_z = PIKMIN::THROW_VER_SPEED;
     m->speed = angle_to_coordinates(throw_angle, PIKMIN::THROW_HOR_SPEED);
     m->face(throw_angle, NULL, true);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_pikmin_plucked,
-        m
-    );
+    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_PLUCKED]);
     game.audio.create_world_pos_sfx_source(
         game.sys_assets.sfx_pluck,
         m->pos
@@ -2070,10 +2084,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     caller->add_to_group(pik_ptr);
     
     if(info2 == NULL) {
-        game.audio.create_mob_sfx_source(
-            game.sys_assets.sfx_pikmin_called,
-            pik_ptr
-        );
+        m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_CALLED]);
     }
 }
 

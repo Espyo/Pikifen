@@ -43,6 +43,9 @@ pikmin_type::pikmin_type() :
         bmp_top[m] = NULL;
         bmp_maturity_icon[m] = NULL;
     }
+    for(size_t s = 0; s < N_PIKMIN_SOUNDS; ++s) {
+        sfx_data_idxs[s] = INVALID;
+    }
     
     weight = 1;
     show_health = false;
@@ -168,6 +171,30 @@ void pikmin_type::load_properties(data_node* file) {
                 "Unknown Pikmin attack type \"" + attack_method_str + "\"!",
                 attack_method_node
             );
+        }
+    }
+
+    for(size_t s = 0; s < sounds.size(); ++s) {
+        if(sounds[s].name == "attack") {
+            sfx_data_idxs[PIKMIN_SOUND_ATTACK] = s;
+        } else if(sounds[s].name == "called") {
+            sfx_data_idxs[PIKMIN_SOUND_CALLED] = s;
+        } else if(sounds[s].name == "carrying") {
+            sfx_data_idxs[PIKMIN_SOUND_CARRYING] = s;
+        } else if(sounds[s].name == "carrying_grab") {
+            sfx_data_idxs[PIKMIN_SOUND_CARRYING_GRAB] = s;
+        } else if(sounds[s].name == "caught") {
+            sfx_data_idxs[PIKMIN_SOUND_CAUGHT] = s;
+        } else if(sounds[s].name == "dying") {
+            sfx_data_idxs[PIKMIN_SOUND_DYING] = s;
+        } else if(sounds[s].name == "held") {
+            sfx_data_idxs[PIKMIN_SOUND_HELD] = s;
+        } else if(sounds[s].name == "idle") {
+            sfx_data_idxs[PIKMIN_SOUND_IDLE] = s;
+        } else if(sounds[s].name == "plucked") {
+            sfx_data_idxs[PIKMIN_SOUND_PLUCKED] = s;
+        } else if(sounds[s].name == "thrown") {
+            sfx_data_idxs[PIKMIN_SOUND_THROWN] = s;
         }
     }
 }
