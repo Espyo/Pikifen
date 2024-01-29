@@ -26,6 +26,8 @@ const float BIND_BUTTON_HEIGHT = 0.07f;
 const float BIND_BUTTON_PADDING = 0.01f;
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Control_binds_menu.txt";
+//Name of the song to play in this state.
+const string SONG_NAME = "menus";
 }
 
 
@@ -285,6 +287,7 @@ void control_binds_menu_state::load() {
     populate_binds();
     
     //Finishing touches.
+    game.audio.set_current_song(CONTROL_BINDS_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
     gui.set_selected_item(gui.back_item);
     

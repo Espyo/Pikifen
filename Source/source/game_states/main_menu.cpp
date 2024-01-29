@@ -31,6 +31,8 @@ const string MAKE_GUI_FILE_PATH =
 //Path to the play page GUI information file.
 const string PLAY_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_play.txt";
+//Name of the song to play in this state.
+const string SONG_NAME = "menus";
 //Path to the tutorial question page GUI information file.
 const string TUTORIAL_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_tutorial.txt";
@@ -711,6 +713,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
+    game.audio.set_current_song(MAIN_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
 }
 

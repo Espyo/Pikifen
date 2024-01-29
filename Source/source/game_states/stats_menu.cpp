@@ -22,6 +22,8 @@
 namespace STATS_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Statistics_menu.txt";
+//Name of the song to play in this state.
+const string SONG_NAME = "menus";
 }
 
 
@@ -234,6 +236,7 @@ void stats_menu_state::load() {
     populate_stats_list();
     
     //Finishing touches.
+    game.audio.set_current_song(STATS_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
     gui.set_selected_item(gui.back_item);
     

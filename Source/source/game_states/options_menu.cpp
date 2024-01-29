@@ -35,6 +35,8 @@ const float HUD_MOVE_TIME = 0.5f;
 //Path to the misc menu GUI information file.
 const string MISC_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_misc.txt";
+//Name of the song to play in this state.
+const string SONG_NAME = "menus";
 //Path to the top-level menu GUI information file.
 const string TOP_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_top.txt";
@@ -830,6 +832,9 @@ void options_menu_state::load() {
     }
     }
     page_to_load = OPTIONS_MENU_PAGE_TOP;
+    
+    //Finishing touches.
+    game.audio.set_current_song(OPTIONS_MENU::SONG_NAME);
 }
 
 

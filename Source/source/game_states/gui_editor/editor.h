@@ -20,6 +20,7 @@
 namespace GUI_EDITOR {
 extern const vector<float> GRID_INTERVALS;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
+extern const string SONG_NAME;
 extern const float ZOOM_MAX_LEVEL;
 extern const float ZOOM_MIN_LEVEL;
 }

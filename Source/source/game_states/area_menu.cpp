@@ -26,6 +26,8 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
 const string INFO_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_info.txt";
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
+//Name of the song to play in this state.
+const string SONG_NAME = "menus";
 //Path to the mission specs GUI information file.
 const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
 }
@@ -1034,6 +1036,8 @@ void area_menu_state::load() {
         gui.set_selected_item(first_area_button);
     }
     
+    //Finishing touches.
+    game.audio.set_current_song(AREA_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
     
 }

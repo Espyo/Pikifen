@@ -21,6 +21,8 @@ const vector<float> GRID_INTERVALS =
 {1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+//Name of the song to play in this state.
+const string SONG_NAME = "editors";
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 64.0f;
 //Minimum zoom level possible in the editor.
@@ -122,6 +124,7 @@ void gui_editor::load() {
     file_name.clear();
     loaded_content_yet = false;
     must_recenter_cam = true;
+    game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
     
     if(!auto_load_file.empty()) {
         file_name = auto_load_file;

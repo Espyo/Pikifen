@@ -1825,6 +1825,25 @@ void area_editor::process_gui_panel_info() {
     if(saveable_tree_node("info", "Ambiance")) {
     
         //Preview song button.
+        bool valid_song_selected =
+            !game.cur_area_data.song_name.empty() &&
+            game.cur_area_data.song_name != NONE_OPTION;
+        bool previewing =
+            !preview_song.empty();
+        bool can_preview_selected_song =
+            valid_song_selected &&
+            preview_song != game.cur_area_data.song_name;
+        bool can_stop_previewing =
+            previewing &&
+            (
+                !valid_song_selected ||
+                preview_song == game.cur_area_data.song_name
+            );
+        bool preview_button_valid =
+            can_preview_selected_song || can_stop_previewing;
+            
+        if(!preview_button_valid) ImGui::BeginDisabled();
+        
         if(
             ImGui::ImageButton(
                 "previewSongButton",
@@ -1832,20 +1851,34 @@ void area_editor::process_gui_panel_info() {
                 ImVec2(ImGui::GetTextLineHeight(), ImGui::GetTextLineHeight())
             )
         ) {
-            if(!preview_song.empty()) {
-                game.audio.stop_song(preview_song);
-                preview_song.clear();
-            } else if(
-                !game.cur_area_data.song_name.empty() &&
-                game.cur_area_data.song_name != NONE_OPTION
-            ) {
+            if(can_preview_selected_song) {
                 preview_song = game.cur_area_data.song_name;
-                game.audio.play_song(preview_song);
+                game.audio.set_current_song(preview_song);
+            } else if (can_stop_previewing) {
+                game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
+                preview_song.clear();
             }
         }
-        set_tooltip(
-            "Preview this song, or stop if it's already playing."
-        );
+        
+        if(!preview_button_valid) ImGui::EndDisabled();
+        
+        string preview_tooltip_str;
+        if(previewing) {
+            preview_tooltip_str +=
+                "Currently previewing the song \"" + preview_song + "\".\n";
+        }
+        if(can_preview_selected_song) {
+            preview_tooltip_str +=
+                "Click here to preview the song \"" +
+                game.cur_area_data.song_name + "\".";
+        } else if(can_stop_previewing) {
+            preview_tooltip_str +=
+                "Click here to stop.";
+        } else {
+            preview_tooltip_str +=
+                "If you select a song, you can click here to preview it.";
+        }
+        set_tooltip(preview_tooltip_str);
         
         //Music combobox.
         ImGui::SameLine();

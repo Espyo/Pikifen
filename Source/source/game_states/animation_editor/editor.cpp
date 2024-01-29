@@ -32,6 +32,8 @@ const float HITBOX_MIN_RADIUS = 1.0f;
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+//Name of the song to play in this state.
+const string SONG_NAME = "editors";
 //How tall the animation timeline header is.
 const size_t TIMELINE_HEADER_HEIGHT = 12;
 //How tall the animation timeline is, in total.
@@ -408,6 +410,7 @@ void animation_editor::load() {
     loaded_content_yet = false;
     side_view = false;
     change_state(EDITOR_STATE_MAIN);
+    game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
     
     if(!auto_load_anim.empty()) {
         loaded_mob_type = NULL;

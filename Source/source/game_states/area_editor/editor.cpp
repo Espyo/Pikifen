@@ -78,6 +78,8 @@ const unsigned char SELECTION_COLOR[3] = {255, 255, 0};
 const float SELECTION_EFFECT_SPEED = TAU * 2;
 //Padding for the transformation widget when manipulating the selection.
 const float SELECTION_TW_PADDING = 8.0f;
+//Name of the song to play in this state.
+const string SONG_NAME = "editors";
 //Wait this long before letting a new repeat undo operation be saved.
 const float UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
@@ -1832,9 +1834,10 @@ void area_editor::load() {
     load_hazards();
     load_mob_types(false);
     load_weather();
-    load_songs();
     
     load_custom_mob_cat_types(true);
+    
+    game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
     
     //Set up stuff to show the player.
     
@@ -4371,7 +4374,6 @@ void area_editor::unload() {
     
     clear_current_area();
     
-    unload_songs();
     unload_weather();
     unload_mob_types(false);
     unload_hazards();
