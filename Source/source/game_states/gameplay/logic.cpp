@@ -1385,6 +1385,7 @@ void gameplay_state::do_menu_logic() {
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
             );
+            game.audio.set_current_song(game.cur_area_data.song_name);
         }
         break;
     } case INTERLUDE_MISSION_END: {

@@ -19,6 +19,10 @@
  * The existence of a centralized audio manager helps ensure we don't have the
  * same sound effect play back too many times in a jarring way, helps makes
  * sounds fade out smoothly, helps make panning and volume simpler, and more.
+ * As for music, only one song can be the current song at a time, though
+ * multiple songs can be technically playing at once, and each song can have
+ * more than one audio file (known as tracks here). When the current song is
+ * set, all other songs that are currently playing are faded out to stop.
  */
 
 #ifndef AUDIO_INCLUDED
@@ -367,13 +371,12 @@ public:
         float master_volume, float world_sfx_volume, float music_volume,
         float ambiance_volume, float ui_sfx_volume
     );
-    bool play_song(const string &name, bool from_start = true);
+    void mark_mix_track_status(MIX_TRACK_TYPES track_type);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
-    void mark_mix_track_status(MIX_TRACK_TYPES track_type);
+    bool set_current_song(const string &name, bool from_start = true);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter = NULL);
-    bool stop_song(const string &name);
     void tick(float delta_t);
     void update_volumes(
         float master_volume, float world_sfx_volume, float music_volume,

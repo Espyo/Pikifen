@@ -590,43 +590,6 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
 
 
 /* ----------------------------------------------------------------------------
- * Fades in a song that is stopped in order to start it.
- * If it's fading out to stop, it'll revert the process and start fading in.
- * Returns true on success, false on failure.
- * name:
- *   Name of the song in the list of loaded songs.
- * from_start:
- *   If true, the song starts from the beginning, otherwise it starts from where
- *   it left off. This argument only applies if the song was stopped.
- */
-bool audio_manager::play_song(const string &name, bool from_start) {
-    auto song_it = songs.find(name);
-    if(song_it == songs.end()) return false;
-    
-    song* song_ptr = &song_it->second;
-    if(
-        song_ptr->state == SONG_STATE_PLAYING ||
-        song_ptr->state == SONG_STATE_SOFTENING ||
-        song_ptr->state == SONG_STATE_SOFTENED ||
-        song_ptr->state == SONG_STATE_UNSOFTENING
-    ) {
-        return false;
-    }
-    
-    if(song_ptr->state == SONG_STATE_STOPPED) {
-        start_song_track(song_ptr, song_ptr->main_track, from_start);
-        for(auto &m : song_ptr->mix_tracks) {
-            start_song_track(song_ptr, m.second, from_start);
-        }
-    }
-    
-    song_ptr->state = SONG_STATE_STARTING;
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Schedules a sound effect source's emission. This includes things
  * like randomly delaying it if configured to do so.
  * Returns whether it succeeded.
@@ -661,6 +624,83 @@ void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets what the current song should be. If it's different from the song
+ * that's currently playing, then that one fades out as this one fades in.
+ * To stop playing songs, send an empty string as the song name argument.
+ * Returns true on success, false on failure.
+ * name:
+ *   Name of the song in the list of loaded songs.
+ * from_start:
+ *   If true, the song starts from the beginning, otherwise it starts from where
+ *   it left off. This argument only applies if the song was stopped.
+ */
+bool audio_manager::set_current_song(const string &name, bool from_start) {
+
+    //Stop all other songs first.
+    for(auto &s : songs) {
+        song* song_ptr = &s.second;
+        if(song_ptr->name == name) {
+            //This is the song we want to play. Let's not handle it here.
+            continue;
+        }
+        switch(song_ptr->state) {
+        case SONG_STATE_STARTING:
+        case SONG_STATE_PLAYING:
+        case SONG_STATE_SOFTENING:
+        case SONG_STATE_SOFTENED:
+        case SONG_STATE_UNSOFTENING: {
+            song_ptr->state = SONG_STATE_STOPPING;
+            break;
+        } case SONG_STATE_STOPPING:
+        case SONG_STATE_STOPPED: {
+            //Already stopped, or stopping.
+            break;
+        }
+        }
+        //TODO
+    }
+    
+    //Get the new song to play, if applicable.
+    if(name.empty()) {
+        //If the name's empty, we just wanted to stop all songs.
+        //Meaning we're done here.
+        return true;
+    }
+    
+    auto song_it = songs.find(name);
+    if(song_it == songs.end()) return false;
+    song* song_ptr = &song_it->second;
+    
+    //Play it.
+    switch(song_ptr->state) {
+    case SONG_STATE_STARTING:
+    case SONG_STATE_PLAYING:
+    case SONG_STATE_SOFTENING:
+    case SONG_STATE_SOFTENED:
+    case SONG_STATE_UNSOFTENING: {
+        //Already playing.
+        break;
+    } case SONG_STATE_STOPPING: {
+        //We need it to go back, not stop.
+        song_ptr->state = SONG_STATE_STARTING;
+        break;
+    } case SONG_STATE_STOPPED: {
+        //Start it.
+        if(song_ptr->state == SONG_STATE_STOPPED) {
+            start_song_track(song_ptr, song_ptr->main_track, from_start);
+            for(auto &m : song_ptr->mix_tracks) {
+                start_song_track(song_ptr, m.second, from_start);
+            }
+        }
+        song_ptr->state = SONG_STATE_STARTING;
+    }
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the position of a positional sound effect source.
  * source_id:
  *   ID of the sound effect source.
@@ -690,6 +730,7 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
 void audio_manager::start_song_track(
     song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
 ) {
+    if(!stream) return;
     al_set_audio_stream_gain(stream, 0.0f);
     al_seek_audio_stream_secs(stream, from_start ? 0.0f : song_ptr->stop_point);
     al_set_audio_stream_loop_secs(
@@ -741,27 +782,6 @@ bool audio_manager::stop_sfx_playback(size_t playback_idx) {
     if(playback_ptr->state == SFX_PLAYBACK_STOPPING) return false;
     if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
     playback_ptr->state = SFX_PLAYBACK_STOPPING;
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fades out a song that is playing in order to stop it.
- * If it's fading in to start, it'll revert the process and start fading out.
- * Returns true on success, false on failure.
- * name:
- *   Name of the song in the list of loaded songs.
- */
-bool audio_manager::stop_song(const string &name) {
-    auto song_it = songs.find(name);
-    if(song_it == songs.end()) return false;
-    song* song_ptr = &song_it->second;
-    
-    if(song_ptr->state == SONG_STATE_STOPPED) {
-        return false;
-    }
-    
-    song_ptr->state = SONG_STATE_STOPPING;
     return true;
 }
 

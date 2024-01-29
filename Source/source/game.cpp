@@ -306,6 +306,7 @@ void game_class::shutdown() {
     if(cur_state) {
         cur_state->unload();
     }
+    unload_songs();
     unload_misc_resources();
     destroy_mob_categories();
     states.destroy();
@@ -361,6 +362,7 @@ int game_class::start() {
     load_misc_graphics();
     load_system_animations();
     load_misc_sounds();
+    load_songs();
     
     //Draw the basic loading screen.
     draw_loading_screen("", "", 1.0);

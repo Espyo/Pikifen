@@ -325,10 +325,6 @@ void gameplay_state::enter() {
     big_msg_time = 0.0f;
     delta_t_mult = 0.5f;
     
-    if(!game.cur_area_data.song_name.empty()) {
-        game.audio.play_song(game.cur_area_data.song_name);
-    }
-    
     if(!game.states.area_ed->quick_play_area_path.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.
         interlude_time = GAMEPLAY::BIG_MSG_READY_DUR;
@@ -613,9 +609,6 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     }
     
     game.audio.stop_all_playbacks();
-    if(!game.cur_area_data.song_name.empty()) {
-        game.audio.stop_song(game.cur_area_data.song_name);
-    }
     save_statistics();
     
     switch(target) {
@@ -699,6 +692,8 @@ void gameplay_state::load() {
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
+    
+    game.audio.set_current_song("");
     
     //Load the area.
     string area_folder_name;
@@ -810,7 +805,7 @@ void gameplay_state::load() {
     }
     
     //In case a leader is stored in another mob,
-    //update the availible list.
+    //update the available list.
     update_available_leaders();
     
     cur_leader_nr = INVALID;
@@ -1027,7 +1022,6 @@ void gameplay_state::load_game_content() {
     load_hazards();
     load_weather();
     load_spike_damage_types();
-    load_songs();
     
     //Mob types.
     load_mob_types(true);
@@ -1149,7 +1143,6 @@ void gameplay_state::unload_game_content() {
     unload_status_types(true);
     unload_liquids();
     unload_custom_particle_generators();
-    unload_songs();
 }
 
 

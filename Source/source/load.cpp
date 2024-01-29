@@ -1456,11 +1456,10 @@ void load_songs() {
         song new_song;
         reader_setter rs(&file);
         
-        string name_str;
         string main_track_str;
         data_node* main_track_node = NULL;
         
-        rs.set("name", name_str);
+        rs.set("name", new_song.name);
         rs.set("main_track", main_track_str, &main_track_node);
         rs.set("loop_start", new_song.loop_start);
         rs.set("loop_end", new_song.loop_end);
@@ -1500,7 +1499,7 @@ void load_songs() {
         if(new_song.loop_end < new_song.loop_start) {
             new_song.loop_start = 0.0f;
         }
-        game.audio.songs[name_str] = new_song;
+        game.audio.songs[new_song.name] = new_song;
     }
 }
 
