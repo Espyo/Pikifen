@@ -587,13 +587,10 @@ void gameplay_state::handle_player_action(const player_action &action) {
     } else if(msg_box) {
     
         //Displaying a message.
-        if(
-            (
-                action.action_type_id == PLAYER_ACTION_THROW ||
-                action.action_type_id == PLAYER_ACTION_PAUSE
-            ) && is_down
-        ) {
+        if(action.action_type_id == PLAYER_ACTION_THROW && is_down) {
             msg_box->advance();
+        } else if(action.action_type_id == PLAYER_ACTION_PAUSE && is_down) {
+            msg_box->close();
         }
         
     }

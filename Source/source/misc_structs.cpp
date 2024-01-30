@@ -1049,8 +1049,7 @@ void msg_box_info::advance() {
     if(cur_token >= last_token + 1) {
         if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
             //End of the message. Start closing the message box.
-            transition_in = false;
-            transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+            close();
         } else {
             //Start swiping to go to the next section.
             swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;
@@ -1060,6 +1059,16 @@ void msg_box_info::advance() {
         skipped_at_token = cur_token;
         cur_token = last_token + 1;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Closes the message box, even if it is still writing something.
+ */
+void msg_box_info::close() {
+    if(!transition_in && transition_timer > 0.0f) return;
+    transition_in = false;
+    transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
 }
 
 

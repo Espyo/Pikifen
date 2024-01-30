@@ -569,6 +569,7 @@ struct msg_box_info {
     bool to_delete;
     
     void advance();
+    void close();
     void tick(const float delta_t);
     
     msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);
