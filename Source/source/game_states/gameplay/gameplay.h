@@ -38,6 +38,8 @@ extern const float BIG_MSG_MISSION_FAILED_DUR;
 extern const string BIG_MSG_MISSION_FAILED_TEXT;
 extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
+extern const float BOSS_MUSIC_DISTANCE;
+extern const string BOSS_SONG_NAME;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
@@ -292,6 +294,8 @@ private:
     pause_menu_struct* pause_menu;
     //Is the gameplay paused?
     bool paused;
+    //Are we currently playing boss music?
+    bool playing_boss_music;
     //The first frame shouldn't allow for input just yet, because
     //some things are still being set up within the first logic loop.
     //So forbid input until the second frame.

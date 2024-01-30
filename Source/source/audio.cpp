@@ -32,7 +32,7 @@ const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 //Change speed of playback gain when stopping, measured in amount per second.
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
 //Change speed for a song's gain, measured in amount per second.
-const float SONG_GAIN_SPEED = 3.0f;
+const float SONG_GAIN_SPEED = 1.0f;
 //Gain for when a song is softened, due to a game pause.
 const float SONG_SOFTENED_GAIN = 0.4f;
 }

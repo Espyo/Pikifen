@@ -35,6 +35,8 @@ public:
     bool allow_ground_attacks;
     //Points worth for missions.
     size_t points;
+    //True if it's a boss.
+    bool is_boss;
     
     enemy_type();
     

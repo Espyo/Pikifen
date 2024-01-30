@@ -23,6 +23,8 @@
  * multiple songs can be technically playing at once, and each song can have
  * more than one audio file (known as tracks here). When the current song is
  * set, all other songs that are currently playing are faded out to stop.
+ * Most of the structures in this system are designed to be plain old data, with
+ * the manager being in charge of logic.
  */
 
 #ifndef AUDIO_INCLUDED

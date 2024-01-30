@@ -3,7 +3,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Music
-        Boss music
         Error checking for when a song by that name doesn't exist
         Info
             Planned variant compatibility: Day + fight, sunset + fight, boss
@@ -11,6 +10,7 @@ Current tasks (tasks being worked on, but not yet committed)
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
             The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -20,12 +20,9 @@ Next tasks (roughly sorted most important first)
     --- 0.25.0 ---
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
-    https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Mob types should be able to specify that they need a link to/from in order to work properly, so the area editor can inform the player if there's no link
-    The manual's glossary should have an entry for "file name", which explains extensions and case sensitivity
-    Pressing the menu "back" button should skip message boxes
     
     --- 0.26 ---
+    https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Update to Dear ImGui 1.90.1
     Revamp sounds
         Candidate list of all needed sounds, for now
@@ -81,7 +78,6 @@ Next tasks (roughly sorted most important first)
                 Leaves rustling (vegetation)
                 Explosion
                 Ambiance sounds
-        Rename sound files to .oga, instead of .ogg?
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
     Compose and add songs
@@ -245,6 +241,7 @@ Next tasks (roughly sorted most important first)
         There should be some petal particle effects when a Pikmin loses their maturity
         Bitter sprays should last for a short time
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+        Add some randomness to the pitch of mob sounds?
         Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Give sprites a "tint" property
@@ -671,6 +668,8 @@ Misc things (so I don't forget)
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
+        Animated loading screens
+            When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
             The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
@@ -835,9 +834,12 @@ Misc things (so I don't forget)
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
         The ability for particle generators to consist of multiple particle generators
+    GUI things
+        GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
+        The selector cursor should be a part of the GUI manager itself
+            It should smoothly jump from item to item as you choose which one is selected
+            It should fade out when nothing is selected, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
     Bridges and Dummies emit light during blackout (Darthvato)
-    HUD element for a digital clock?
-    GUI elements should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Missions
@@ -858,7 +860,7 @@ Misc things (so I don't forget)
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
-    Spray types, damage spike types, weather, etc. should all have a version, maker, and comments property, but it doesn't really make sense to add them. Nothing in the engine needs that info, and the pre-packaged content wouldn't really benefit from it (and from it being changed literally every release). Still, it's important to add this info for custom content...
+    Spray types, damage spike types, weather, etc. should all have a version, engine version, maker, and comments property, but it doesn't really make sense to add them. Nothing in the engine needs that info, and the pre-packaged content wouldn't really benefit from it (and from it being changed literally every release). Still, it's important to add this info for custom content...
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     Option to pause the game if the window is not focused
@@ -873,7 +875,8 @@ Misc things (so I don't forget)
     Loose thoughts
         If something is under construction, like a menu or something, add a small "WIP" blurb
         Next time there are file format changes, past version 0.22.0, make it so that every time an area/animation is loaded it checks the engine version, and if it's outdated port to a new format, save the file again, and try loading again
-    
+
+
 Tasks for later on (I might never implement these)
     ...An AI opponent in 2-player mode? It would help me test...
     Mechanics
@@ -944,6 +947,7 @@ Tasks for later on (I might never implement these)
                 b. Have the icon represent the next mode?
                 c. Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
     Blood (optional, of course)
+    HUD element for a digital clock?
     Resolution, window size, and zoom
         Players should be able to resize the window on-the-fly (GitHub issue #2)
         Resizing the window should stretch the resolution instead of showing more of the world (GitHub issue #7)

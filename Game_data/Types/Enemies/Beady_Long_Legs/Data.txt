@@ -11,6 +11,7 @@ can_walk_on_others = true
 custom_category_name = Enemy, large and aggressive
 health_regen = 0.4
 height = 140
+is_boss = true
 itch_damage = 50
 itch_time = 4
 max_health = 2000

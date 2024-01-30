@@ -48,6 +48,10 @@ const string BIG_MSG_MISSION_FAILED_TEXT = "MISSION FAILED...";
 const float BIG_MSG_READY_DUR = 2.5f;
 //What text to show in the "Ready?" big message.
 const string BIG_MSG_READY_TEXT = "READY?";
+//Distance between current leader and boss before the boss music kicks in.
+const float BOSS_MUSIC_DISTANCE = 300.0f;
+//Name of the boss theme song.
+const string BOSS_SONG_NAME = "boss";
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
 //Dampen the camera's movements by this much.
@@ -154,6 +158,7 @@ gameplay_state::gameplay_state() :
     onion_menu(nullptr),
     pause_menu(nullptr),
     paused(false),
+    playing_boss_music(false),
     ready_for_input(false),
     swarm_cursor(false) {
     
@@ -324,6 +329,7 @@ void gameplay_state::enter() {
     cur_big_msg = BIG_MESSAGE_READY;
     big_msg_time = 0.0f;
     delta_t_mult = 0.5f;
+    playing_boss_music = false;
     
     if(!game.states.area_ed->quick_play_area_path.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.

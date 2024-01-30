@@ -522,17 +522,37 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     
     //Closest enemy check for the music mix track.
     if(game.states.gameplay->mobs.enemies.size() > 0) {
-        dist closest;
+        bool near_enemy = false;
+        bool near_boss = false;
         for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
-            mob* e_ptr = game.states.gameplay->mobs.enemies[e];
+            enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
             if(e_ptr->health <= 0.0f) continue;
+            
             dist d = cur_leader_ptr->get_distance_between(e_ptr);
-            if(e == 0 || d < closest) {
-                closest = d;
+            
+            if(!e_ptr->ene_type->is_boss) {
+                if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
+                    near_enemy = true;
+                }
+            } else {
+                if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
+                    near_boss = true;
+                }
             }
+            
+            if(near_enemy && near_boss) break;
         }
-        if(closest.to_float() <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
+        
+        if(near_enemy) {
             game.audio.mark_mix_track_status(MIX_TRACK_TYPE_ENEMY);
+        }
+        
+        if(near_boss && !playing_boss_music) {
+            game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, false);
+            playing_boss_music = true;
+        } else if(!near_boss && playing_boss_music) {
+            game.audio.set_current_song(game.cur_area_data.song_name, false);
+            playing_boss_music = false;
         }
     }
     
