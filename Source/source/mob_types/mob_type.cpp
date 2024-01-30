@@ -87,6 +87,8 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     default_vulnerability(1.0f),
     spike_damage(nullptr),
     appears_in_area_editor(true),
+    area_editor_recommend_links_from(false),
+    area_editor_recommend_links_to(false),
     max_span(0.0f),
     draw_mob_callback(nullptr) {
     
@@ -350,8 +352,16 @@ void load_mob_type_from_file(
     data_node* team_node = NULL;
     
     rs.set("acceleration", mt->acceleration);
-    rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
+    rs.set(
+        "area_editor_recommend_links_from",
+        mt->area_editor_recommend_links_from
+    );
+    rs.set(
+        "area_editor_recommend_links_to",
+        mt->area_editor_recommend_links_to
+    );
+    rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("blackout_radius", mt->blackout_radius);
     rs.set("can_block_paths", mt->can_block_paths);
     rs.set("can_free_move", mt->can_free_move);

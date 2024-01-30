@@ -1,6 +1,7 @@
 name = Geyser
 description = A geyser of hot water that throws leaders elsewhere. Pikmin don't like the sensation, so they don't use it.
 
+area_editor_recommend_links_from = true
 custom_category_name = Useful
 height = 8
 pushable = false

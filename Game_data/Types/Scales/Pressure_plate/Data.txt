@@ -1,6 +1,7 @@
 name = Pressure plate
 description = A plate that can be pressed down to activate something else.
 
+area_editor_recommend_links_from = true
 area_editor_tips = Link this object to another to actually make it do something. It'll send linked power based on how much weight is keeping it pressed.
 casts_shadow = false
 custom_category_name = Puzzle

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -353,7 +353,9 @@
     
     <p>Some objects require certain things to be set up in certain ways in the area editor before they work as intended. e.g. bridge fragment piles need to know what bridge they belong to, seesaw blocks need to link to each other before they work together, etc. Users who are not very familiar with these tricks may take a while to realize what's wrong. To help with this, you can also specify a property that, when read by the area editor, will make it so users can place their mouse over a text widget, and they will see some helpful tips about how to make use of the object.</p>
     
-    <p>In <code>Data.txt</code>, add a property titled <code>area_editor_tips</code>. Then, simply write the tip(s) you want as the value. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>.
+    <p>In <code>Data.txt</code>, add a property titled <code>area_editor_tips</code>. Then, simply write the tip(s) you want as the value. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>.</p>
+
+    <p>You can also add the <code>area_editor_recommend_links_from</code> property and give it the value <code>true</code> so that the area editor warns whenever the maker places this object and it has no links going from it to another object. Likewise, the <code>area_editor_recommend_links_to</code> property makes the editor warn when there are no objects linking to it.</p>
     
     <h3 id="area-editor-props">Area editor properties</h3>
     

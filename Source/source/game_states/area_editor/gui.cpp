@@ -3974,6 +3974,51 @@ void area_editor::process_gui_panel_mob() {
         }
         set_tooltip(full_str);
         
+        if(m_ptr->type->area_editor_recommend_links_from) {
+            if(m_ptr->links.empty()) {
+                //No outgoing links warning.
+                ImGui::PushStyleColor(
+                    ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.05f, 1.0f)
+                );
+                ImGui::Text("Warning: no links from!");
+                ImGui::PopStyleColor();
+                set_tooltip(
+                    "Warning: you need to link this object to a different one\n"
+                    "in order for it to work as intended!"
+                );
+            }
+        }
+        
+        if(m_ptr->type->area_editor_recommend_links_to) {
+            bool has_links_to = false;
+            for(
+                size_t m = 0;
+                m < game.cur_area_data.mob_generators.size();
+                ++m
+            ) {
+                mob_gen* other_m_ptr = game.cur_area_data.mob_generators[m];
+                for(size_t l = 0; l < other_m_ptr->links.size(); ++l) {
+                    if(other_m_ptr->links[l] == m_ptr) {
+                        has_links_to = true;
+                        break;
+                    }
+                }
+                if(has_links_to) break;
+            }
+            if(!has_links_to) {
+                //No incoming links warning.
+                ImGui::PushStyleColor(
+                    ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.05f, 1.0f)
+                );
+                ImGui::Text("Warning: no links to!");
+                ImGui::PopStyleColor();
+                set_tooltip(
+                    "Warning: you need to link a different object to this one\n"
+                    "in order for it to work as intended!"
+                );
+            }
+        }
+        
         //If the mob type exists, obviously the missing mob type problem is
         //gone, if it was active.
         if(problem_type == EPT_TYPELESS_MOB) {

@@ -1,6 +1,7 @@
 name = Ceramic fragment red
 description = A red fragment of ceramic. Regardless of what it belonged to, it can be used to build a bridge.
 
+area_editor_recommend_links_from = true
 carrying_destination = linked_mob
 can_walk_on_others = true
 custom_category_name = Bridge

@@ -1,6 +1,7 @@
 name = Automatic gate
 description = A gate that lifts up on its own when it receives power from some source.
 
+area_editor_recommend_links_to = true
 can_block_paths = true
 casts_shadow = false
 custom_category_name = Gate

@@ -1,6 +1,7 @@
 name = Wood bridge
 description = A bridge made of wood. It starts as a pile of sticks, but Pikmin can work on it to give it shape.
 
+area_editor_recommend_links_from = true
 can_walk_on_others = true
 custom_category_name = Bridge
 main_texture = Wood_bridge.png

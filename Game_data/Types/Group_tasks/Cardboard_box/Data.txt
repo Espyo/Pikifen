@@ -2,6 +2,7 @@ name = Cardboard box
 description = A large box made of cardboard. It can be pushed out of the way if there are enough Pikmin to do so.
 
 acceleration = 15
+area_editor_recommend_links_from = true
 area_editor_tips = Link this object to another object, so that the box moves to that location when it's pushed. A "Dummy" object works perfectly for this.
 custom_category_name = Obstacle, harmless
 height = 64

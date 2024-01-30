@@ -346,6 +346,10 @@ public:
     vector<area_editor_prop_struct> area_editor_props;
     //Can the player choose to place one of these in the area editor?
     bool appears_in_area_editor;
+    //Should it have links going out of it?
+    bool area_editor_recommend_links_from;
+    //Should it have links going into it?
+    bool area_editor_recommend_links_to;
     
     //---Caches---
     
