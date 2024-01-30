@@ -31,7 +31,7 @@
     <p>The base particle has the following properties:</p>
     
     <ul>
-      <li><b><code>bitmap</code></b>: Image to use, on the </code>Game_data/Graphics</code> folder. This must include the <a href="glossary.html#E">extension</a>. If empty, the particle won't use an image, but will use a colored, solid circle instead. Defaults to empty.</li>
+      <li><b><code>bitmap</code></b>: <a href="glossary.html#F">File name</a> of the image to use, on the </code>Game_data/Graphics</code> folder. If empty, the particle won't use an image, but will use a colored, solid circle instead. Defaults to empty.</li>
       <li><b><code>duration</code></b>: How long the particle lives for, in seconds. The closer it is to dying, the more transparent it becomes. This means that it fades with time on its own. Defaults to 0.</li>
       <li><b><code>friction</code></b>: When a particle moves, it can slow down over time. The friction controls this. This property specifies the ratio of how much is lost by each second. 0 means no speed loss. Defaults to 1.</li>
       <li><b><code>gravity</code></b>: If set to something other than 0, the created particle is pulled downward each time more over time, like the effects of gravity. This isn't "down" in the game world, this is "down" on the screen, meaning the particles are pulled south, really. Negative values can make the particle rise up each time more. Don't use this to simulate actual gravity on particles, since having a subtle pull to a direction looks good, but a harsh pull southwards may make no sense. Defaults to 1.</li>

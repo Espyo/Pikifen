@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -338,7 +338,7 @@
     <p>In <code>Data.txt</code>, add a block titled <code>sounds</code>. Inside will be a list of blocks, where the name of a block is the name of the sound (which you will use later to refer to this sound). Each sound block can have the following properties, which are all optional except for the <code>file</code> property.</p>
 
     <ul>
-      <li><b><code>file</code></b>: File name of the sound to play. This must include the extension and be a file in the <code>Game_data/Audio/Sounds</code> folder. (e.g. <code>Smack.ogg</code>)</li>
+      <li><b><code>file</code></b>: <a href="glossary.html#F">File name</a> of the sound to play. This must be in the <code>Game_data/Audio/Sounds</code> folder.</li>
       <li><b><code>type</code></b>: Type of sound. <code>world_global</code> means it's an in-world sound but doesn't play from any specific spot in the area. <code>world_pos</code> means it's an in-world sound that does play from a specific spot, meaning it comes from the object itself. <code>world_ambiance</code> means it's in-world, but just a general background ambiance sound. <code>ui</code> means it's a UI sound, like a chime. Defaults to <code>world_pos</code>.</li>
       <li><b><code>stack_mode</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, what should happen? <code>normal</code> means the second sound plays too, like normal. <code>override</code> means the first sound stops and the second plays instead, overriding it. <code>never</code> means the second sound will never play so long as the first sound is still playing. Defaults to <code>normal</code>.</li>
       <li><b><code>stack_min_pos</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, the second sound is only allowed to stack if the first one is already these many seconds in. Avoid using 0, since doing so can allow for the same sound to play many times at the exact same time, which just results in a really loud sound. Defaults to 0.1</li>
