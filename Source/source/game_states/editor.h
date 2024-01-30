@@ -92,6 +92,8 @@ protected:
         ICON_RESIZE,
         //Play/pause.
         ICON_PLAY_PAUSE,
+        //Stop.
+        ICON_STOP,
         //Next.
         ICON_NEXT,
         //Previous.

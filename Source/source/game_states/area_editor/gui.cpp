@@ -1847,6 +1847,8 @@ void area_editor::process_gui_panel_info() {
         if(
             ImGui::ImageButton(
                 "previewSongButton",
+                can_stop_previewing ?
+                editor_icons[ICON_STOP] :
                 editor_icons[ICON_PLAY],
                 ImVec2(ImGui::GetTextLineHeight(), ImGui::GetTextLineHeight())
             )
