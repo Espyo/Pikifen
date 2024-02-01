@@ -33,6 +33,8 @@ extern const ALLEGRO_COLOR RADAR_HIGHEST_COLOR;
 extern const ALLEGRO_COLOR RADAR_LOWEST_COLOR;
 extern const float RADAR_MAX_ZOOM;
 extern const float RADAR_MIN_ZOOM;
+extern const float RADAR_ONION_COLOR_FADE_DUR;
+extern const float RADAR_ONION_COLOR_FADE_CYCLE_DUR;
 }
 
 

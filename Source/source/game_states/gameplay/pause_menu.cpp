@@ -45,6 +45,10 @@ const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
 const float RADAR_MAX_ZOOM = 4.0f;
 //Minimum radar zoom level.
 const float RADAR_MIN_ZOOM = 0.03f;
+//How long an onion fades between two colors.
+const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
+//How long an onion waits before fading to the next color.
+const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
 }
 
 
@@ -470,12 +474,32 @@ void pause_menu_struct::draw_radar(
         
         size_t nr_pik_types = o_ptr->nest->nest_type->pik_types.size();
         if(nr_pik_types > 0) {
-            size_t pik_type_idx = (int) (game.time_passed) % nr_pik_types;
+            float fade_cycle_pos = 
+                std::min(
+                    (float)fmod(
+                        game.time_passed, 
+                        PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
+                    ),
+                    PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR
+                );
+
+            size_t pik_type_idx_target = 
+                (int)(game.time_passed / PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR) 
+                % nr_pik_types;
+            size_t pik_type_idx_prev = 
+                (pik_type_idx_target + nr_pik_types - 1) % nr_pik_types;
+
+            ALLEGRO_COLOR target_color = interpolate_color(
+                fade_cycle_pos, 0,
+                PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR,
+                o_ptr->nest->nest_type->pik_types[pik_type_idx_prev]->main_color,
+                o_ptr->nest->nest_type->pik_types[pik_type_idx_target]->main_color);
+
             draw_bitmap(
                 bmp_radar_onion_bulb, o_ptr->pos,
                 point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
                 0.0f,
-                o_ptr->nest->nest_type->pik_types[pik_type_idx]->main_color
+                target_color
             );
         }
         draw_bitmap(
