@@ -233,6 +233,8 @@ public:
     size_t nr_living_leaders;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
+    //Number of Pikmin in the current leader's group. Cache for convenience.
+    size_t nr_group_pikmin;
     //Starting number of leader mobs.
     size_t starting_nr_of_leaders;
     //Ratio of the mission goal HUD item's indicator.

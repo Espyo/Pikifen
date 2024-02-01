@@ -621,29 +621,12 @@ hud_struct::hud_struct() :
     group_amount->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
-        size_t n_group_pikmin =
-            game.states.gameplay->cur_leader_ptr->group->members.size();
-        for(
-            size_t l = 0;
-            l < game.states.gameplay->mobs.leaders.size();
-            ++l
-        ) {
-            //If this leader is following the current one,
-            //then they're not a Pikmin.
-            //Subtract them from the group count total.
-            if(
-                game.states.gameplay->mobs.leaders[l]->following_group ==
-                game.states.gameplay->cur_leader_ptr
-            ) {
-                n_group_pikmin--;
-            }
-        }
         
-        if(n_group_pikmin != group_count_nr) {
+        if(game.states.gameplay->nr_group_pikmin != group_count_nr) {
             group_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
-            group_count_nr = n_group_pikmin;
+            group_count_nr = game.states.gameplay->nr_group_pikmin;
         }
         
         draw_compressed_scaled_text(
@@ -652,7 +635,7 @@ hud_struct::hud_struct() :
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
-            i2s(n_group_pikmin)
+            i2s(game.states.gameplay->nr_group_pikmin)
         );
     };
     gui.add_item(group_amount, "group_amount");

@@ -35,6 +35,8 @@ struct liquid {
     string name;
     //Color that best represents this liquid.
     ALLEGRO_COLOR main_color;
+    //Color used for this liquid in the radar.
+    ALLEGRO_COLOR radar_color;
     //Animation database containing its liquid surface animation.
     animation_database anim_db;
     //Animation instance for the liquid surface.

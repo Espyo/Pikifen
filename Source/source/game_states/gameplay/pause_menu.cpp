@@ -29,6 +29,22 @@ const string HELP_GUI_FILE_PATH =
 //Path to the mission page GUI information file.
 const string MISSION_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_mission.txt";
+//Background color of the radar.
+const ALLEGRO_COLOR RADAR_BG_COLOR =
+    al_map_rgb(32, 24, 0);
+//Path to the radar page GUI information file.
+const string RADAR_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_radar.txt";
+//Color of the highest sector in the radar.
+const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
+    al_map_rgb(200, 200, 180);
+//Color of the lowest sector in the radar.
+const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
+    al_map_rgb(80, 64, 0);
+//Maximum radar zoom level.
+const float RADAR_MAX_ZOOM = 4.0f;
+//Minimum radar zoom level.
+const float RADAR_MIN_ZOOM = 0.03f;
 }
 
 
@@ -44,12 +60,78 @@ pause_menu_struct::pause_menu_struct() :
     help_tidbit_list(nullptr),
     confirmation_explanation_text(nullptr),
     cur_tidbit(nullptr),
-    leave_target(LEAVE_TO_AREA_SELECT) {
+    leave_target(LEAVE_TO_AREA_SELECT),
+    lowest_sector_z(0.0f),
+    highest_sector_z(0.0f),
+    radar_mouse_down(false) {
     
     init_main_pause_menu();
+    init_radar_page();
     init_help_page();
     init_mission_page();
     init_confirmation_page();
+    
+    //Initialize some radar things.
+    bool found_valid_sector = false;
+    lowest_sector_z = FLT_MAX;
+    highest_sector_z = -FLT_MAX;
+    
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
+        if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
+        lowest_sector_z = std::min(lowest_sector_z, s_ptr->z);
+        highest_sector_z = std::max(highest_sector_z, s_ptr->z);
+        found_valid_sector = true;
+    }
+    
+    if(!found_valid_sector) {
+        lowest_sector_z = -32.0f;
+        highest_sector_z = 32.0f;
+    }
+    
+    bool found_valid_edge = false;
+    radar_min_coords = point(FLT_MAX, FLT_MAX);
+    radar_max_coords = point(-FLT_MAX, -FLT_MAX);
+    
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = game.cur_area_data.edges[e];
+        if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) continue;
+        if(
+            e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING &&
+            e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
+        ) {
+            continue;
+        }
+        radar_min_coords.x =
+            std::min(radar_min_coords.x, e_ptr->vertexes[0]->x);
+        radar_min_coords.x =
+            std::min(radar_min_coords.x, e_ptr->vertexes[1]->x);
+        radar_max_coords.x =
+            std::max(radar_max_coords.x, e_ptr->vertexes[0]->x);
+        radar_max_coords.x =
+            std::max(radar_max_coords.x, e_ptr->vertexes[1]->x);
+        radar_min_coords.y =
+            std::min(radar_min_coords.x, e_ptr->vertexes[0]->y);
+        radar_min_coords.y =
+            std::min(radar_min_coords.x, e_ptr->vertexes[1]->y);
+        radar_max_coords.y =
+            std::max(radar_max_coords.x, e_ptr->vertexes[0]->y);
+        radar_max_coords.y =
+            std::max(radar_max_coords.x, e_ptr->vertexes[1]->y);
+        found_valid_edge = true;
+    }
+    
+    if(!found_valid_edge) {
+        radar_min_coords = point();
+        radar_max_coords = point();
+    }
+    radar_min_coords = radar_min_coords + 64.0f;
+    radar_max_coords = radar_max_coords + 64.0f;
+    
+    if(game.states.gameplay->cur_leader_ptr) {
+        radar_cam.set_pos(game.states.gameplay->cur_leader_ptr->pos);
+    }
+    radar_cam.set_zoom(0.4f);
 }
 
 
@@ -68,6 +150,7 @@ pause_menu_struct::~pause_menu_struct() {
     tidbits.clear();
     
     gui.destroy();
+    radar_gui.destroy();
     help_gui.destroy();
     mission_gui.destroy();
     confirmation_gui.destroy();
@@ -193,13 +276,333 @@ void pause_menu_struct::confirm_or_leave() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a button meant for changing to a page either to the left or to the
+ * right of the current one.
+ * text:
+ *   Text to display on the button, sans arrow.
+ * tooltip_name:
+ *   Name of the page for displaying in the tooltip.
+ * left:
+ *   True if this page is to the left of the current, false if to the right.
+ * cur_gui:
+ *   Pointer to the current page's GUI manager.
+ * new_gui:
+ *   Pointer to the new page's GUI manager.
+ */
+button_gui_item* pause_menu_struct::create_page_button(
+    const string &text, const string &tooltip_name,
+    bool left,
+    gui_manager* cur_gui, gui_manager* new_gui
+) {
+    button_gui_item* new_button =
+        new button_gui_item(
+        left ?
+        "< " + text :
+        text + " >",
+        game.fonts.standard
+    );
+    new_button->on_activate =
+    [left, cur_gui, new_gui] (const point &) {
+        cur_gui->responsive = false;
+        cur_gui->start_animation(
+            left ?
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT :
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        new_gui->responsive = true;
+        new_gui->start_animation(
+            left ?
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER :
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+    };
+    new_button->on_get_tooltip =
+    [tooltip_name] () {
+        return "Go to the pause menu's " + tooltip_name + " page.";
+    };
+    
+    return new_button;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the pause menu.
  */
 void pause_menu_struct::draw() {
     gui.draw();
+    radar_gui.draw();
     help_gui.draw();
     mission_gui.draw();
     confirmation_gui.draw();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the radar itself.
+ * center:
+ *   Center coordinates of the radar on-screen.
+ * size:
+ *   Width and height of the radar on-screen.
+ */
+void pause_menu_struct::draw_radar(
+    const point &center, const point &size
+) {
+    //Setup.
+    ALLEGRO_TRANSFORM old_transform;
+    int old_cr_x = 0;
+    int old_cr_y = 0;
+    int old_cr_w = 0;
+    int old_cr_h = 0;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    
+    world_to_radar_screen_transform = game.identity_transform;
+    al_translate_transform(
+        &world_to_radar_screen_transform,
+        -radar_cam.pos.x + center.x / radar_cam.zoom,
+        -radar_cam.pos.y + center.y / radar_cam.zoom
+    );
+    al_scale_transform(
+        &world_to_radar_screen_transform, radar_cam.zoom, radar_cam.zoom
+    );
+    
+    radar_screen_to_world_transform = world_to_radar_screen_transform;
+    al_invert_transform(&radar_screen_to_world_transform);
+    
+    al_get_clipping_rectangle(&old_cr_x, &old_cr_y, &old_cr_w, &old_cr_h);
+    
+    al_use_transform(&world_to_radar_screen_transform);
+    al_set_clipping_rectangle(
+        center.x - size.x / 2.0f,
+        center.y - size.y / 2.0f,
+        size.x,
+        size.y
+    );
+    
+    //Background fill.
+    al_clear_to_color(PAUSE_MENU::RADAR_BG_COLOR);
+    
+    //Draw each sector.
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
+        
+        if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
+        ALLEGRO_COLOR color =
+            interpolate_color(
+                s_ptr->z, lowest_sector_z, highest_sector_z,
+                PAUSE_MENU::RADAR_LOWEST_COLOR,
+                PAUSE_MENU::RADAR_HIGHEST_COLOR
+            );
+            
+        for(size_t h = 0; h < s_ptr->hazards.size(); ++h) {
+            if(!s_ptr->hazards[h]->associated_liquid) continue;
+            color =
+                interpolate_color(
+                    0.80f, 0.0f, 1.0f,
+                    color, s_ptr->hazards[h]->associated_liquid->radar_color
+                );
+        }
+        
+        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+            ALLEGRO_VERTEX av[3];
+            for(size_t v = 0; v < 3; ++v) {
+                av[v].u = 0;
+                av[v].v = 0;
+                av[v].x = s_ptr->triangles[t].points[v]->x;
+                av[v].y = s_ptr->triangles[t].points[v]->y;
+                av[v].z = 0;
+                av[v].color = color;
+            }
+            
+            al_draw_prim(
+                av, NULL, NULL,
+                0, 3, ALLEGRO_PRIM_TRIANGLE_LIST
+            );
+        }
+    }
+    
+    //Draw each edge.
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = game.cur_area_data.edges[e];
+        
+        if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
+            //The other side is already the void, so no need for an edge.
+            continue;
+        }
+        
+        if(
+            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) <=
+            GEOMETRY::STEP_HEIGHT
+        ) {
+            //Step.
+            continue;
+        }
+        
+        al_draw_line(
+            e_ptr->vertexes[0]->x,
+            e_ptr->vertexes[0]->y,
+            e_ptr->vertexes[1]->x,
+            e_ptr->vertexes[1]->y,
+            PAUSE_MENU::RADAR_BG_COLOR,
+            1.5f / radar_cam.zoom
+        );
+    }
+    
+    //Onion icons.
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        
+        al_draw_filled_circle(
+            o_ptr->pos.x, o_ptr->pos.y, 10.0f / radar_cam.zoom,
+            al_map_rgb(200, 200, 32)
+        );
+    }
+    
+    //Ship icons.
+    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
+        ship* s_ptr = game.states.gameplay->mobs.ships[s];
+        
+        al_draw_filled_circle(
+            s_ptr->pos.x, s_ptr->pos.y, 10.0f / radar_cam.zoom,
+            al_map_rgb(32, 200, 200)
+        );
+    }
+    
+    //Enemy icons.
+    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
+        enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
+        
+        al_draw_filled_circle(
+            e_ptr->pos.x, e_ptr->pos.y, 10.0f / radar_cam.zoom,
+            al_map_rgb(32, 200, 32)
+        );
+    }
+    
+    //Leader icons.
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        leader* l_ptr = game.states.gameplay->mobs.leaders[l];
+        
+        al_draw_circle(
+            l_ptr->pos.x, l_ptr->pos.y,
+            24.0f / radar_cam.zoom,
+            COLOR_WHITE, 2.0f / radar_cam.zoom
+        );
+        draw_bitmap(
+            l_ptr->lea_type->bmp_icon, l_ptr->pos,
+            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom)
+        );
+    }
+    
+    //Treasure icons.
+    //TODO piles of nuggets?
+    for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); ++t) {
+        treasure* t_ptr = game.states.gameplay->mobs.treasures[t];
+        
+        draw_filled_diamond(
+            t_ptr->pos, 24.0f / radar_cam.zoom,
+            COLOR_GOLD
+        );
+    }
+    
+    //Pikmin icons.
+    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); ++p) {
+        pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
+        
+        al_draw_filled_circle(
+            p_ptr->pos.x, p_ptr->pos.y,
+            8.0f / radar_cam.zoom,
+            p_ptr->pik_type->main_color
+        );
+    }
+    
+    //Return to normal drawing.
+    al_use_transform(&old_transform);
+    al_set_clipping_rectangle(old_cr_x, old_cr_y, old_cr_w, old_cr_h);
+    
+    //North indicator.
+    point north_ind_center(
+        center.x - size.x / 2.0f + 20.0f,
+        center.y - size.y / 2.0f + 20.0f
+    );
+    al_draw_filled_circle(
+        north_ind_center.x, north_ind_center.y,
+        12.0f, PAUSE_MENU::RADAR_BG_COLOR
+    );
+    draw_compressed_text(
+        game.fonts.slim,
+        PAUSE_MENU::RADAR_HIGHEST_COLOR,
+        point(
+            north_ind_center.x,
+            north_ind_center.y + 4.0f
+        ),
+        ALLEGRO_ALIGN_CENTER,
+        TEXT_VALIGN_CENTER,
+        point(12.0f, 12.0f),
+        "N"
+    );
+    al_draw_filled_triangle(
+        north_ind_center.x,
+        north_ind_center.y - 12.0f,
+        north_ind_center.x - 6.0f,
+        north_ind_center.y - 6.0f,
+        north_ind_center.x + 6.0f,
+        north_ind_center.y - 6.0f,
+        PAUSE_MENU::RADAR_HIGHEST_COLOR
+    );
+    
+    //Area name.
+    point area_name_size(
+        size.x * 0.40f,
+        20.0f
+    );
+    point area_name_center(
+        center.x + size.x / 2.0f - area_name_size.x / 2.0f - 8.0f,
+        center.y - size.y / 2.0f + area_name_size.y / 2.0f + 8.0f
+    );
+    draw_filled_rounded_rectangle(
+        area_name_center, area_name_size,
+        12.0f, PAUSE_MENU::RADAR_BG_COLOR
+    );
+    draw_compressed_text(
+        game.fonts.standard, PAUSE_MENU::RADAR_HIGHEST_COLOR,
+        area_name_center, ALLEGRO_ALIGN_CENTER,
+        TEXT_VALIGN_CENTER, area_name_size,
+        game.cur_area_data.name
+    );
+    
+    //Draw some scan lines.
+    float scan_line_y = center.y - size.y / 2.0f;
+    while(scan_line_y < center.y + size.y / 2.0f) {
+        al_draw_line(
+            center.x - size.x / 2.0f,
+            scan_line_y,
+            center.x + size.x / 2.0f,
+            scan_line_y,
+            al_map_rgba(255, 255, 255, 8),
+            2.0f
+        );
+        scan_line_y += 16.0f;
+    }
+    float scan_line_x = center.x - size.x / 2.0f;
+    while(scan_line_x < center.x + size.x / 2.0f) {
+        al_draw_line(
+            scan_line_x,
+            center.y - size.y / 2.0f,
+            scan_line_x,
+            center.y + size.y / 2.0f,
+            al_map_rgba(255, 255, 255, 8),
+            2.0f
+        );
+        scan_line_x += 16.0f;
+    }
+    
+    //Draw a rectangle all around.
+    draw_rounded_rectangle(
+        center, size,
+        8.0f,
+        COLOR_TRANSPARENT_WHITE, 3.0f
+    );
 }
 
 
@@ -435,9 +838,34 @@ string pause_menu_struct::get_mission_goal_status() {
  */
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
+    radar_gui.handle_event(ev);
     help_gui.handle_event(ev);
     mission_gui.handle_event(ev);
     confirmation_gui.handle_event(ev);
+    
+    //Handle some radar logic.
+    point radar_center;
+    point radar_size;
+    radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+    bool mouse_in_radar =
+        is_point_in_rectangle(
+            game.mouse_cursor.s_pos,
+            radar_center, radar_size
+        );
+        
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+        if(radar_gui.responsive && mouse_in_radar) {
+            radar_mouse_down = true;
+        }
+    } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+        radar_mouse_down = false;
+    } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        if(radar_mouse_down && (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)) {
+            pan_radar(point(-ev.mouse.dx, -ev.mouse.dy));
+        } else if(mouse_in_radar && ev.mouse.dz != 0.0f) {
+            zoom_radar(ev.mouse.dz * 0.1f);
+        }
+    }
 }
 
 
@@ -448,6 +876,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  */
 void pause_menu_struct::handle_player_action(const player_action &action) {
     gui.handle_player_action(action);
+    radar_gui.handle_player_action(action);
     help_gui.handle_player_action(action);
     mission_gui.handle_player_action(action);
     confirmation_gui.handle_player_action(action);
@@ -771,51 +1200,33 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     gui.add_item(header_text, "header");
     
+    //Left page button.
+    button_gui_item* left_page_button;
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        //Left page button.
-        button_gui_item* left_page_button =
-            new button_gui_item(
-            "< Mission", game.fonts.standard
-        );
-        left_page_button->on_activate =
-        [this] (const point &) {
-            gui.responsive = false;
-            gui.start_animation(
-                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        left_page_button =
+            create_page_button(
+                "Mission", "mission",
+                true,
+                &gui, &mission_gui
             );
-            mission_gui.responsive = true;
-            mission_gui.start_animation(
-                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+    } else {
+        left_page_button =
+            create_page_button(
+                "Radar", "radar",
+                true,
+                &gui, &radar_gui
             );
-        };
-        left_page_button->on_get_tooltip =
-        [] () { return "Go to the pause menu's mission page."; };
-        gui.add_item(left_page_button, "left_page");
-        
-        //Right page button.
-        button_gui_item* right_page_button =
-            new button_gui_item(
-            "Mission >", game.fonts.standard
-        );
-        right_page_button->on_activate =
-        [this] (const point &) {
-            gui.responsive = false;
-            gui.start_animation(
-                GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-            );
-            mission_gui.responsive = true;
-            mission_gui.start_animation(
-                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-            );
-        };
-        right_page_button->on_get_tooltip =
-        [] () { return "Go to the pause menu's mission page."; };
-        gui.add_item(right_page_button, "right_page");
     }
+    gui.add_item(left_page_button, "left_page");
+    
+    //Right page button.
+    button_gui_item* right_page_button =
+        create_page_button(
+            "Radar", "radar",
+            false,
+            &gui, &radar_gui
+        );
+    gui.add_item(right_page_button, "right_page");
     
     //Line.
     gui_item* line = new gui_item();
@@ -1012,46 +1423,20 @@ void pause_menu_struct::init_mission_page() {
     
     //Left page button.
     button_gui_item* left_page_button =
-        new button_gui_item(
-        "< System", game.fonts.standard
-    );
-    left_page_button->on_activate =
-    [this] (const point &) {
-        mission_gui.responsive = false;
-        mission_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        create_page_button(
+            "Radar", "radar",
+            true,
+            &mission_gui, &radar_gui
         );
-        gui.responsive = true;
-        gui.start_animation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
-    left_page_button->on_get_tooltip =
-    [] () { return "Go to the pause menu's system page."; };
     mission_gui.add_item(left_page_button, "left_page");
     
     //Right page button.
     button_gui_item* right_page_button =
-        new button_gui_item(
-        "System >", game.fonts.standard
-    );
-    right_page_button->on_activate =
-    [this] (const point &) {
-        mission_gui.responsive = false;
-        mission_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        create_page_button(
+            "System", "system",
+            false,
+            &mission_gui, &gui
         );
-        gui.responsive = true;
-        gui.start_animation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
-    right_page_button->on_get_tooltip =
-    [] () { return "Go to the pause menu's system page."; };
     mission_gui.add_item(right_page_button, "right_page");
     
     //Line.
@@ -1152,6 +1537,204 @@ void pause_menu_struct::init_mission_page() {
 
 
 /* ----------------------------------------------------------------------------
+ * Initializes the radar page.
+ */
+void pause_menu_struct::init_radar_page() {
+    data_node gui_file(PAUSE_MENU::RADAR_GUI_FILE_PATH);
+    
+    //Menu items.
+    radar_gui.register_coords("header",              50,     5,    52,    6);
+    radar_gui.register_coords("left_page",           12,     5,    20,    6);
+    radar_gui.register_coords("right_page",          88,     5,    20,    6);
+    radar_gui.register_coords("line",                50,    11,    96,    2);
+    radar_gui.register_coords("continue",            10,    16,    16,    4);
+    radar_gui.register_coords("radar",               37.5,  56.25, 70,   72.5);
+    radar_gui.register_coords("field_pikmin_label",  86.25, 27.5,  22.5,  5);
+    radar_gui.register_coords("field_pikmin_number", 86.25, 35,    22.5,  5);
+    radar_gui.register_coords("idle_pikmin_label",   86.25, 42.5,  22.5,  5);
+    radar_gui.register_coords("idle_pikmin_number",  86.25, 50,    22.5,  5);
+    radar_gui.register_coords("group_pikmin_label",  86.25, 57.5,  22.5,  5);
+    radar_gui.register_coords("group_pikmin_number", 86.25, 65,    22.5,  5);
+    radar_gui.register_coords("cursor_info",         86.25, 80,    22.5, 20);
+    radar_gui.register_coords("instructions",        58.75, 16,    77.5,  4);
+    radar_gui.register_coords("tooltip",             50,    96,    96,    4);
+    radar_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Header.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "RADAR", game.fonts.area_name,
+        COLOR_TRANSPARENT_WHITE
+    );
+    radar_gui.add_item(header_text, "header");
+    
+    //Left page button.
+    button_gui_item* left_page_button =
+        create_page_button(
+            "System", "system",
+            true,
+            &radar_gui, &gui
+        );
+    radar_gui.add_item(left_page_button, "left_page");
+    
+    //Right page button.
+    button_gui_item* right_page_button;
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        right_page_button =
+            create_page_button(
+                "Mission", "mission",
+                false,
+                &radar_gui, &mission_gui
+            );
+    } else {
+        right_page_button =
+            create_page_button(
+                "System", "system",
+                false,
+                &radar_gui, &gui
+            );
+    }
+    radar_gui.add_item(right_page_button, "right_page");
+    
+    //Line.
+    gui_item* line = new gui_item();
+    line->on_draw =
+    [] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center,
+            point(size.x, 3.0f),
+            2.0f,
+            COLOR_TRANSPARENT_WHITE
+        );
+    };
+    radar_gui.add_item(line, "line");
+    
+    //Continue button.
+    radar_gui.back_item =
+        new button_gui_item("Continue", game.fonts.standard);
+    radar_gui.back_item->on_activate =
+    [this] (const point &) {
+        radar_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        game.states.gameplay->hud->gui.start_animation(
+            GUI_MANAGER_ANIM_OUT_TO_IN,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        start_closing();
+    };
+    radar_gui.back_item->on_get_tooltip =
+    [] () { return "Unpause and continue playing."; };
+    radar_gui.add_item(radar_gui.back_item, "continue");
+    
+    //Radar item.
+    radar_item = new gui_item();
+    radar_item->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_radar(center, size);
+    };
+    radar_gui.add_item(radar_item, "radar");
+    
+    //Field Pikmin label text.
+    text_gui_item* field_pik_label_text =
+        new text_gui_item(
+        "Field Pikmin:", game.fonts.standard,
+        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    radar_gui.add_item(field_pik_label_text, "field_pikmin_label");
+    
+    //Field Pikmin number text.
+    text_gui_item* field_pik_nr_text =
+        new text_gui_item(
+        i2s(game.states.gameplay->mobs.pikmin_list.size()),
+        game.fonts.counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    radar_gui.add_item(field_pik_nr_text, "field_pikmin_number");
+    
+    //Idle Pikmin label text.
+    text_gui_item* idle_pik_label_text =
+        new text_gui_item(
+        "Idle Pikmin:", game.fonts.standard,
+        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    radar_gui.add_item(idle_pik_label_text, "idle_pikmin_label");
+    
+    //Idle Pikmin number text.
+    size_t nr_idle_pikmin = 0;
+    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); ++p) {
+        pikmin* pik_ptr = game.states.gameplay->mobs.pikmin_list[p];
+        if(
+            pik_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING ||
+            pik_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
+        ) {
+            nr_idle_pikmin++;
+        }
+    }
+    text_gui_item* idle_pik_nr_text =
+        new text_gui_item(
+        i2s(nr_idle_pikmin), game.fonts.counter,
+        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    radar_gui.add_item(idle_pik_nr_text, "idle_pikmin_number");
+    
+    //Group Pikmin label text.
+    text_gui_item* group_pik_label_text =
+        new text_gui_item(
+        "Group Pikmin:", game.fonts.standard,
+        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    radar_gui.add_item(group_pik_label_text, "group_pikmin_label");
+    
+    //Group Pikmin number text.
+    text_gui_item* group_pik_nr_text =
+        new text_gui_item(
+        i2s(game.states.gameplay->nr_group_pikmin), game.fonts.counter,
+        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    radar_gui.add_item(group_pik_nr_text, "group_pikmin_number");
+    
+    //Cursor info text.
+    text_gui_item* cursor_info_text =
+        new text_gui_item("", game.fonts.area_name); //TODO
+    radar_gui.add_item(cursor_info_text, "cursor_info");
+    
+    //Instructions text.
+    text_gui_item* instructions_text =
+        new text_gui_item(
+        "", game.fonts.slim,
+        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    ); //TODO
+    radar_gui.add_item(instructions_text, "instructions");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&radar_gui);
+    radar_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    radar_gui.set_selected_item(radar_gui.back_item);
+    radar_gui.responsive = false;
+    radar_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pans the radar by an amount.
+ * amount:
+ *   How much to pan by.
+ */
+void pause_menu_struct::pan_radar(point amount) {
+    point delta = amount / radar_cam.zoom;
+    radar_cam.pos += delta;
+    radar_cam.pos.x =
+        clamp(radar_cam.pos.x, radar_min_coords.x, radar_max_coords.x);
+    radar_cam.pos.y =
+        clamp(radar_cam.pos.y, radar_min_coords.y, radar_max_coords.y);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Populates the help page's list of tidbits.
  * category:
  *   Category of tidbits to use.
@@ -1245,6 +1828,7 @@ void pause_menu_struct::start_leaving_gameplay() {
 void pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
+    radar_gui.tick(delta_t);
     help_gui.tick(delta_t);
     mission_gui.tick(delta_t);
     confirmation_gui.tick(delta_t);
@@ -1263,4 +1847,20 @@ void pause_menu_struct::tick(const float delta_t) {
             to_delete = true;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Zooms the radar by an amount.
+ * amount:
+ *   How much to zoom by.
+ */
+void pause_menu_struct::zoom_radar(float amount) {
+    float delta = amount * radar_cam.zoom;
+    radar_cam.zoom += delta;
+    radar_cam.zoom =
+        clamp(
+            radar_cam.zoom,
+            PAUSE_MENU::RADAR_MIN_ZOOM, PAUSE_MENU::RADAR_MAX_ZOOM
+        );
 }

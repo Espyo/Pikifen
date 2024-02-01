@@ -139,6 +139,7 @@ gameplay_state::gameplay_state() :
     cur_leaders_in_mission_exit(0),
     nr_living_leaders(0),
     leaders_kod(0),
+    nr_group_pikmin(0),
     starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
     fail_1_indicator_ratio(0.0f),

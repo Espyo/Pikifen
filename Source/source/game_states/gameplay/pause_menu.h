@@ -27,6 +27,12 @@ extern const string CONFIRMATION_GUI_FILE_PATH;
 extern const string GUI_FILE_PATH;
 extern const string HELP_GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
+extern const ALLEGRO_COLOR RADAR_BG_COLOR;
+extern const string RADAR_GUI_FILE_PATH;
+extern const ALLEGRO_COLOR RADAR_HIGHEST_COLOR;
+extern const ALLEGRO_COLOR RADAR_LOWEST_COLOR;
+extern const float RADAR_MAX_ZOOM;
+extern const float RADAR_MIN_ZOOM;
 }
 
 
@@ -66,6 +72,8 @@ public:
     
     //GUI manager for the main pause menu.
     gui_manager gui;
+    //GUI manager for the radar page.
+    gui_manager radar_gui;
     //GUI manager for the help page.
     gui_manager help_gui;
     //GUI manager for the mission page.
@@ -107,18 +115,42 @@ private:
     list_gui_item* help_tidbit_list;
     //Confirmation page explanation text.
     text_gui_item* confirmation_explanation_text;
+    //Radar GUI item.
+    gui_item* radar_item;
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<tidbit> > tidbits;
     //Currently shown help tidbit, if any.
     tidbit* cur_tidbit;
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leave_target;
+    //Z of the lowest sector.
+    float lowest_sector_z;
+    //Z of the highest sector.
+    float highest_sector_z;
+    //World coordinates to radar screen coordinates transformation.
+    ALLEGRO_TRANSFORM world_to_radar_screen_transform;
+    //Radar screen coordinates to world coordinates transformation.
+    ALLEGRO_TRANSFORM radar_screen_to_world_transform;
+    //Radar camera information.
+    camera_info radar_cam;
+    //Whether a mouse button is being held in the radar.
+    bool radar_mouse_down;
+    //Minimum coordinates the radar can pan to.
+    point radar_min_coords;
+    //Maximum coordinates the radar can pan to.
+    point radar_max_coords;
     
     void add_bullet(
         list_gui_item* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     void confirm_or_leave();
+    button_gui_item* create_page_button(
+        const string &text, const string &tooltip_name,
+        bool left,
+        gui_manager* cur_gui, gui_manager* new_gui
+    );
+    void draw_radar(const point &center, const point &size);
     void draw_tidbit(
         const ALLEGRO_FONT* const font, const point &where,
         const point &max_size, const string &text
@@ -126,12 +158,15 @@ private:
     void fill_mission_fail_list(list_gui_item* list);
     void fill_mission_grading_list(list_gui_item* list);
     string get_mission_goal_status();
+    void init_radar_page();
     void init_help_page();
     void init_main_pause_menu();
     void init_mission_page();
     void init_confirmation_page();
+    void pan_radar(point amount);
     void populate_help_tidbits(const HELP_CATEGORIES category);
     void start_leaving_gameplay();
+    void zoom_radar(float amount);
 };
 
 

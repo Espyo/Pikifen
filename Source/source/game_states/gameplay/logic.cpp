@@ -513,6 +513,16 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         }
     }
     
+    nr_group_pikmin = cur_leader_ptr->group->members.size();
+    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+        if(mobs.leaders[l]->following_group == cur_leader_ptr) {
+            //If this leader is following the current one,
+            //then they're not a Pikmin.
+            //Subtract them from the group count total.
+            nr_group_pikmin--;
+        }
+    }
+    
     
     /*******************
     *                  *
@@ -740,6 +750,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             m++;
         }
         
+        nr_group_pikmin = 0;
         do_gameplay_leader_logic(delta_t);
         
         if(

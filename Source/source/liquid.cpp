@@ -16,6 +16,7 @@
  */
 liquid::liquid() :
     main_color(COLOR_EMPTY),
+    radar_color(COLOR_EMPTY),
     surface_alpha(255) {
     
     surface_speed[0] = 10;
