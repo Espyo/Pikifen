@@ -154,6 +154,21 @@ pause_menu_struct::~pause_menu_struct() {
     help_gui.destroy();
     mission_gui.destroy();
     confirmation_gui.destroy();
+    
+    game.bitmaps.detach(bmp_radar_pikmin);
+    game.bitmaps.detach(bmp_radar_treasure);
+    game.bitmaps.detach(bmp_radar_enemy);
+    game.bitmaps.detach(bmp_radar_leader_bubble);
+    game.bitmaps.detach(bmp_radar_onion_skeleton);
+    game.bitmaps.detach(bmp_radar_onion_bulb);
+    game.bitmaps.detach(bmp_radar_ship);
+    bmp_radar_pikmin = NULL;
+    bmp_radar_treasure = NULL;
+    bmp_radar_enemy = NULL;
+    bmp_radar_leader_bubble = NULL;
+    bmp_radar_onion_skeleton = NULL;
+    bmp_radar_onion_bulb = NULL;
+    bmp_radar_ship = NULL;
 }
 
 
@@ -453,9 +468,19 @@ void pause_menu_struct::draw_radar(
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         
-        al_draw_filled_circle(
-            o_ptr->pos.x, o_ptr->pos.y, 10.0f / radar_cam.zoom,
-            al_map_rgb(200, 200, 32)
+        size_t nr_pik_types = o_ptr->nest->nest_type->pik_types.size();
+        if(nr_pik_types > 0) {
+            size_t pik_type_idx = (int) (game.time_passed) % nr_pik_types;
+            draw_bitmap(
+                bmp_radar_onion_bulb, o_ptr->pos,
+                point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
+                0.0f,
+                o_ptr->nest->nest_type->pik_types[pik_type_idx]->main_color
+            );
+        }
+        draw_bitmap(
+            bmp_radar_onion_skeleton, o_ptr->pos,
+            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom)
         );
     }
     
@@ -463,9 +488,9 @@ void pause_menu_struct::draw_radar(
     for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
         ship* s_ptr = game.states.gameplay->mobs.ships[s];
         
-        al_draw_filled_circle(
-            s_ptr->pos.x, s_ptr->pos.y, 10.0f / radar_cam.zoom,
-            al_map_rgb(32, 200, 200)
+        draw_bitmap(
+            bmp_radar_ship, s_ptr->pos,
+            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom)
         );
     }
     
@@ -473,9 +498,10 @@ void pause_menu_struct::draw_radar(
     for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
         enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
         
-        al_draw_filled_circle(
-            e_ptr->pos.x, e_ptr->pos.y, 10.0f / radar_cam.zoom,
-            al_map_rgb(32, 200, 32)
+        draw_bitmap(
+            bmp_radar_enemy, e_ptr->pos,
+            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
+            game.time_passed
         );
     }
     
@@ -483,13 +509,12 @@ void pause_menu_struct::draw_radar(
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         
-        al_draw_circle(
-            l_ptr->pos.x, l_ptr->pos.y,
-            24.0f / radar_cam.zoom,
-            COLOR_WHITE, 2.0f / radar_cam.zoom
-        );
         draw_bitmap(
             l_ptr->lea_type->bmp_icon, l_ptr->pos,
+            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom)
+        );
+        draw_bitmap(
+            bmp_radar_leader_bubble, l_ptr->pos,
             point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom)
         );
     }
@@ -499,9 +524,10 @@ void pause_menu_struct::draw_radar(
     for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); ++t) {
         treasure* t_ptr = game.states.gameplay->mobs.treasures[t];
         
-        draw_filled_diamond(
-            t_ptr->pos, 24.0f / radar_cam.zoom,
-            COLOR_GOLD
+        draw_bitmap(
+            bmp_radar_treasure, t_ptr->pos,
+            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
     
@@ -509,9 +535,10 @@ void pause_menu_struct::draw_radar(
     for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); ++p) {
         pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         
-        al_draw_filled_circle(
-            p_ptr->pos.x, p_ptr->pos.y,
-            8.0f / radar_cam.zoom,
+        draw_bitmap(
+            bmp_radar_pikmin, p_ptr->pos,
+            point(16.0f / radar_cam.zoom, 16.0f / radar_cam.zoom),
+            0.0f,
             p_ptr->pik_type->main_color
         );
     }
@@ -1541,6 +1568,26 @@ void pause_menu_struct::init_mission_page() {
  */
 void pause_menu_struct::init_radar_page() {
     data_node gui_file(PAUSE_MENU::RADAR_GUI_FILE_PATH);
+    
+    //Assets.
+    data_node* bitmaps_node = gui_file.get_child_by_name("files");
+    
+#define loader(var, name) \
+    var = \
+          game.bitmaps.get( \
+                            bitmaps_node->get_child_by_name(name)->value, \
+                            bitmaps_node->get_child_by_name(name) \
+                          );
+    
+    loader(bmp_radar_pikmin,         "pikmin");
+    loader(bmp_radar_treasure,       "treasure");
+    loader(bmp_radar_enemy,          "enemy");
+    loader(bmp_radar_leader_bubble,  "leader_bubble");
+    loader(bmp_radar_onion_skeleton, "onion_skeleton");
+    loader(bmp_radar_onion_bulb,     "onion_bulb");
+    loader(bmp_radar_ship,           "ship");
+    
+#undef loader
     
     //Menu items.
     radar_gui.register_coords("header",              50,     5,    52,    6);

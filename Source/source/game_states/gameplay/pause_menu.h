@@ -52,7 +52,7 @@ enum GAMEPLAY_LEAVE_TARGET {
  * the player.
  */
 struct pause_menu_struct {
-public:
+    public:
     //Categories of help page tidbits.
     enum HELP_CATEGORIES {
         //Gameplay basics tidbits.
@@ -139,6 +139,20 @@ private:
     point radar_min_coords;
     //Maximum coordinates the radar can pan to.
     point radar_max_coords;
+    //Icon for a Pikmin in the radar.
+    ALLEGRO_BITMAP* bmp_radar_pikmin;
+    //Icon for a treasure in the radar.
+    ALLEGRO_BITMAP* bmp_radar_treasure;
+    //Icon for an enemy in the radar.
+    ALLEGRO_BITMAP* bmp_radar_enemy;
+    //Bubble that surrounds a leader's icon in the radar.
+    ALLEGRO_BITMAP* bmp_radar_leader_bubble;
+    //Skeleton part of an Onion's icon in the radar.
+    ALLEGRO_BITMAP* bmp_radar_onion_skeleton;
+    //Bulb part of an Onion's icon in the radar.
+    ALLEGRO_BITMAP* bmp_radar_onion_bulb;
+    //Icon for a ship in the radar.
+    ALLEGRO_BITMAP* bmp_radar_ship;
     
     void add_bullet(
         list_gui_item* list, const string &text,

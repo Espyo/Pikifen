@@ -15,3 +15,13 @@ positions{
 	instructions=58.7500 16.0000 77.5000 4.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
 }
+
+files {
+	pikmin = Radar/Pikmin.png
+	treasure = Radar/Treasure.png
+	enemy = Radar/Enemy.png
+	leader_bubble = Bubble.png
+	onion_skeleton = Radar/Onion_skeleton.png
+	onion_bulb = Radar/Onion_bulb.png
+	ship = Radar/Ship.png
+}
