@@ -20,6 +20,8 @@ namespace PAUSE_MENU {
 //Path to the leaving confirmation page GUI information file.
 const string CONFIRMATION_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_confirmation.txt";
+//Interval between calculations of the Go Here path.
+const float GO_HERE_CALC_INTERVAL = 0.15f;
 //Path to the GUI information file.
 const string GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_menu.txt";
@@ -67,7 +69,19 @@ pause_menu_struct::pause_menu_struct() :
     leave_target(LEAVE_TO_AREA_SELECT),
     lowest_sector_z(0.0f),
     highest_sector_z(0.0f),
-    radar_mouse_down(false) {
+    radar_mouse_down(false),
+    bmp_radar_cursor(nullptr),
+    bmp_radar_pikmin(nullptr),
+    bmp_radar_treasure(nullptr),
+    bmp_radar_enemy(nullptr),
+    bmp_radar_leader_bubble(nullptr),
+    bmp_radar_onion_skeleton(nullptr),
+    bmp_radar_onion_bulb(nullptr),
+    bmp_radar_ship(nullptr),
+    bmp_radar_path(nullptr),
+    radar_selected_leader(nullptr),
+    go_here_calc_time(0.0f),
+    go_here_path_result(PATH_RESULT_NOT_CALCULATED) {
     
     init_main_pause_menu();
     init_radar_page();
@@ -132,10 +146,13 @@ pause_menu_struct::pause_menu_struct() :
     radar_min_coords = radar_min_coords + 64.0f;
     radar_max_coords = radar_max_coords + 64.0f;
     
-    if(game.states.gameplay->cur_leader_ptr) {
-        radar_cam.set_pos(game.states.gameplay->cur_leader_ptr->pos);
+    radar_selected_leader = game.states.gameplay->cur_leader_ptr;
+    
+    if(radar_selected_leader) {
+        radar_cam.set_pos(radar_selected_leader->pos);
     }
     radar_cam.set_zoom(0.4f);
+    
 }
 
 
@@ -167,6 +184,7 @@ pause_menu_struct::~pause_menu_struct() {
     game.bitmaps.detach(bmp_radar_onion_skeleton);
     game.bitmaps.detach(bmp_radar_onion_bulb);
     game.bitmaps.detach(bmp_radar_ship);
+    game.bitmaps.detach(bmp_radar_path);
     bmp_radar_cursor = NULL;
     bmp_radar_pikmin = NULL;
     bmp_radar_treasure = NULL;
@@ -175,6 +193,7 @@ pause_menu_struct::~pause_menu_struct() {
     bmp_radar_onion_skeleton = NULL;
     bmp_radar_onion_bulb = NULL;
     bmp_radar_ship = NULL;
+    bmp_radar_path = NULL;
 }
 
 
@@ -208,6 +227,43 @@ void pause_menu_struct::add_bullet(
     bullet->size = point(0.96f, BULLET_HEIGHT);
     list->add_child(bullet);
     mission_gui.add_item(bullet);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the Go Here path from the selected leader to the radar cursor,
+ * if applicable, and stores the results in go_here_path and
+ * go_here_path_result.
+ */
+void pause_menu_struct::calculate_go_here_path() {
+    if(
+        !radar_selected_leader ||
+        dist(radar_selected_leader->pos, radar_cursor) < 128.0f
+    ) {
+        go_here_path.clear();
+        go_here_path_result = PATH_RESULT_ERROR;
+        return;
+    }
+    
+    sector* cursor_sector = get_sector(radar_cursor, NULL, true);
+    
+    if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
+        go_here_path.clear();
+        go_here_path_result = PATH_RESULT_ERROR;
+        return;
+    }
+    
+    path_follow_settings settings;
+    //TODO settings.flags
+    //TODO settings.invulnerabilities
+    
+    go_here_path_result =
+        get_path(
+            radar_selected_leader->pos,
+            radar_cursor,
+            settings,
+            go_here_path, NULL, NULL, NULL
+        );
 }
 
 
@@ -357,6 +413,98 @@ void pause_menu_struct::draw() {
     help_gui.draw();
     mission_gui.draw();
     confirmation_gui.draw();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a segment of the Go Here path.
+ * start:
+ *   Type of starting spot.
+ * end:
+ *   Type of end spot.
+ * start_path_stop_ptr:
+ *   If the start spot is a path stop, this should point to it.
+ * end_path_stop_ptr:
+ *   If the end spot is a path stop, this should point to it.
+ * color:
+ *   Color of the segment.
+ * texture_point:
+ *   Pointer to a variable keeping track of what point of the texture we've
+ *   drawn so far for this path, so that the effect is seamless
+ *   between segments.
+ */
+void pause_menu_struct::draw_go_here_segment(
+    GO_HERE_SEGMENT_SPOTS start, GO_HERE_SEGMENT_SPOTS end,
+    path_stop* start_path_stop_ptr, path_stop* end_path_stop_ptr,
+    const ALLEGRO_COLOR &color, float* texture_point
+) {
+    const float PATH_SEGMENT_THICKNESS = 5.0f / radar_cam.zoom;
+    const float PATH_SEGMENT_TIME_MULT = 10.0f;
+    
+    point p1;
+    switch(start) {
+    case GO_HERE_SEGMENT_SPOT_LEADER: {
+        p1 = radar_selected_leader->pos;
+        break;
+    } case GO_HERE_SEGMENT_SPOT_CURSOR: {
+        p1 = radar_cursor;
+        break;
+    } case GO_HERE_SEGMENT_SPOT_STOP: {
+        p1 = start_path_stop_ptr->pos;
+        break;
+    }
+    }
+    point p2;
+    switch(end) {
+    case GO_HERE_SEGMENT_SPOT_LEADER: {
+        p2 = radar_selected_leader->pos;
+        break;
+    } case GO_HERE_SEGMENT_SPOT_CURSOR: {
+        p2 = radar_cursor;
+        break;
+    } case GO_HERE_SEGMENT_SPOT_STOP: {
+        p2 = end_path_stop_ptr->pos;
+        break;
+    }
+    }
+    
+    ALLEGRO_VERTEX av[4];
+    for(unsigned char a = 0; a < 4; ++a) {
+        av[a].color = color;
+        av[a].z = 0.0f;
+    }
+    int bmp_h = al_get_bitmap_height(bmp_radar_path);
+    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS;
+    float angle = get_angle(p1, p2);
+    float distance = dist(p1, p2).to_float() * radar_cam.zoom;
+    float texture_offset = game.time_passed * PATH_SEGMENT_TIME_MULT;
+    float texture_start = *texture_point;
+    float texture_end = texture_start + distance;
+    point rot_offset = rotate_point(point(0, PATH_SEGMENT_THICKNESS), angle);
+    
+    av[0].x = p1.x - rot_offset.x;
+    av[0].y = p1.y - rot_offset.y;
+    av[1].x = p1.x + rot_offset.x;
+    av[1].y = p1.y + rot_offset.y;
+    av[2].x = p2.x - rot_offset.x;
+    av[2].y = p2.y - rot_offset.y;
+    av[3].x = p2.x + rot_offset.x;
+    av[3].y = p2.y + rot_offset.y;
+    
+    av[0].u = (texture_start - texture_offset) * texture_scale;
+    av[0].v = 0.0f;
+    av[1].u = (texture_start - texture_offset) * texture_scale;
+    av[1].v = bmp_h;
+    av[2].u = (texture_end - texture_offset) * texture_scale;
+    av[2].v = 0.0f;
+    av[3].u = (texture_end - texture_offset) * texture_scale;
+    av[3].v = bmp_h;
+    
+    al_draw_prim(
+        av, NULL, bmp_radar_path, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+    );
+    
+    *texture_point = texture_end;
 }
 
 
@@ -548,7 +696,11 @@ void pause_menu_struct::draw_radar(
         );
         draw_bitmap(
             bmp_radar_leader_bubble, l_ptr->pos,
-            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom)
+            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
+            0.0f,
+            radar_selected_leader == l_ptr ?
+            al_map_rgb(0, 255, 255) :
+            COLOR_WHITE
         );
     }
     
@@ -574,6 +726,57 @@ void pause_menu_struct::draw_radar(
             0.0f,
             p_ptr->pik_type->main_color
         );
+    }
+    
+    //Go Here path.
+    float path_texture_point = 0.0f;
+    switch(go_here_path_result) {
+    case PATH_RESULT_DIRECT:
+    case PATH_RESULT_DIRECT_NO_STOPS: {
+        //Go directly from A to B.
+        
+        draw_go_here_segment(
+            GO_HERE_SEGMENT_SPOT_LEADER, GO_HERE_SEGMENT_SPOT_CURSOR,
+            NULL, NULL, al_map_rgb(64, 200, 240), &path_texture_point
+        );
+        
+        break;
+        
+    } case PATH_RESULT_NORMAL_PATH:
+    case PATH_RESULT_PATH_WITH_SINGLE_STOP:
+    case PATH_RESULT_PATH_WITH_OBSTACLES: {
+        //Regular path.
+        ALLEGRO_COLOR color;
+        if(go_here_path_result == PATH_RESULT_PATH_WITH_OBSTACLES) {
+            color = al_map_rgb(200, 64, 64);
+        } else {
+            color = al_map_rgb(64, 200, 240);
+        }
+        
+        if(!go_here_path.empty()) {
+            draw_go_here_segment(
+                GO_HERE_SEGMENT_SPOT_LEADER, GO_HERE_SEGMENT_SPOT_STOP,
+                NULL, go_here_path[0], color, &path_texture_point
+            );
+            for(size_t s = 1; s < go_here_path.size(); ++s) {
+                draw_go_here_segment(
+                    GO_HERE_SEGMENT_SPOT_STOP, GO_HERE_SEGMENT_SPOT_STOP,
+                    go_here_path[s - 1], go_here_path[s],
+                    color, &path_texture_point
+                );
+            }
+            draw_go_here_segment(
+                GO_HERE_SEGMENT_SPOT_STOP, GO_HERE_SEGMENT_SPOT_CURSOR,
+                go_here_path.back(), NULL, color, &path_texture_point
+            );
+        }
+        
+        break;
+        
+    } default: {
+
+        break;
+    }
     }
     
     //Radar cursor.
@@ -1627,6 +1830,7 @@ void pause_menu_struct::init_radar_page() {
     loader(bmp_radar_onion_skeleton, "onion_skeleton");
     loader(bmp_radar_onion_bulb,     "onion_bulb");
     loader(bmp_radar_ship,           "ship");
+    loader(bmp_radar_path,           "path");
     
 #undef loader
     
@@ -1784,7 +1988,91 @@ void pause_menu_struct::init_radar_page() {
     
     //Cursor info text.
     text_gui_item* cursor_info_text =
-        new text_gui_item("", game.fonts.area_name); //TODO
+        new text_gui_item("", game.fonts.standard);
+    cursor_info_text->line_wrap = true;
+    cursor_info_text->on_draw =
+    [this, cursor_info_text] (const point & center, const point & size) {
+        if(cursor_info_text->text.empty()) return;
+        
+        //Draw the text.
+        int line_height = al_get_font_line_height(cursor_info_text->font);
+        vector<string_token> tokens = tokenize_string(cursor_info_text->text);
+        set_string_token_widths(
+            tokens, game.fonts.standard, game.fonts.slim, line_height, false
+        );
+        vector<vector<string_token> > tokens_per_line =
+            split_long_string_with_tokens(tokens, size.x);
+        float text_h = tokens_per_line.size() * line_height;
+        
+        for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+            draw_string_tokens(
+                tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+                false,
+                point(
+                    center.x,
+                    center.y - text_h / 2.0f + l * line_height
+                ),
+                cursor_info_text->flags,
+                point(size.x, line_height)
+            );
+        }
+        
+        //Draw a box around it.
+        draw_rounded_rectangle(
+            center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 2.0f
+        );
+        
+        //Draw a connection from here to the radar cursor.
+        point line_anchor(center.x - size.x / 2.0f - 16.0f, center.y);
+        point cursor_screen_pos = radar_cursor;
+        al_transform_coordinates(
+            &world_to_radar_screen_transform,
+            &cursor_screen_pos.x, &cursor_screen_pos.y
+        );
+        
+        al_draw_line(
+            center.x - size.x / 2.0f, center.y,
+            line_anchor.x, line_anchor.y,
+            COLOR_TRANSPARENT_WHITE, 2.0f
+        );
+        
+        cursor_screen_pos =
+            cursor_screen_pos +
+            rotate_point(
+                point(24.0f, 0.0f),
+                get_angle(cursor_screen_pos, line_anchor)
+            );
+        al_draw_line(
+            line_anchor.x, line_anchor.y,
+            cursor_screen_pos.x, cursor_screen_pos.y,
+            COLOR_TRANSPARENT_WHITE, 2.0f
+        );
+    };
+    cursor_info_text->on_tick =
+    [this, cursor_info_text] (float delta_t) {
+        switch(go_here_path_result) {
+        case PATH_RESULT_DIRECT:
+        case PATH_RESULT_DIRECT_NO_STOPS:
+        case PATH_RESULT_NORMAL_PATH:
+        case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
+            cursor_info_text->text = "\\k menu_ok \\k Go here!";
+            cursor_info_text->color = COLOR_GOLD;
+            break;
+        } case PATH_RESULT_PATH_WITH_OBSTACLES: {
+            cursor_info_text->text = "Can't go here... Path blocked!";
+            cursor_info_text->color = COLOR_WHITE;
+            break;
+        } case PATH_RESULT_END_STOP_UNREACHABLE: {
+            cursor_info_text->text = "Can't go here...";
+            cursor_info_text->color = COLOR_WHITE;
+            break;
+        } default: {
+            cursor_info_text->text.clear();
+            cursor_info_text->color = COLOR_WHITE;
+            break;
+        }
+        }
+    };
     radar_gui.add_item(cursor_info_text, "cursor_info");
     
     //Instructions text.
@@ -1956,7 +2244,15 @@ void pause_menu_struct::tick(const float delta_t) {
         } else {
             radar_cursor = radar_cam.pos;
         }
+        
+        go_here_calc_time -= delta_t;
+        if(go_here_calc_time <= 0.0f) {
+            go_here_calc_time = PAUSE_MENU::GO_HERE_CALC_INTERVAL;
+            
+            calculate_go_here_path();
+        }
     }
+    
 }
 
 

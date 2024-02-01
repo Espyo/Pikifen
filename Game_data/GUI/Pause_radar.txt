@@ -25,4 +25,5 @@ files {
 	onion_skeleton = Radar/Onion_skeleton.png
 	onion_bulb = Radar/Onion_bulb.png
 	ship = Radar/Ship.png
+	path = Radar/Path.png
 }

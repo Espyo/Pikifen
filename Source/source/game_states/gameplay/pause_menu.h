@@ -24,6 +24,7 @@ class pikmin_type;
 
 namespace PAUSE_MENU {
 extern const string CONFIRMATION_GUI_FILE_PATH;
+extern const float GO_HERE_CALC_INTERVAL;
 extern const string GUI_FILE_PATH;
 extern const string HELP_GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
@@ -70,6 +71,15 @@ struct pause_menu_struct {
         
         //Total amount of help page tidbit categories.
         N_HELP_CATEGORIES
+    };
+    //Types of spots for each Go Here drawn path segment.
+    enum GO_HERE_SEGMENT_SPOTS {
+        //The selected leader.
+        GO_HERE_SEGMENT_SPOT_LEADER,
+        //The cursor position.
+        GO_HERE_SEGMENT_SPOT_CURSOR,
+        //A path stop.
+        GO_HERE_SEGMENT_SPOT_STOP,
     };
     
     //GUI manager for the main pause menu.
@@ -159,16 +169,32 @@ private:
     ALLEGRO_BITMAP* bmp_radar_onion_bulb;
     //Icon for a ship in the radar.
     ALLEGRO_BITMAP* bmp_radar_ship;
+    //Texture for a path in the radar.
+    ALLEGRO_BITMAP* bmp_radar_path;
+    //Selected leader in the radar.
+    mob* radar_selected_leader;
+    //Time left before another Go Here calculation.
+    float go_here_calc_time;
+    //Go Here path.
+    vector<path_stop*> go_here_path;
+    //Go Here path result.
+    PATH_RESULTS go_here_path_result;
     
     void add_bullet(
         list_gui_item* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+    void calculate_go_here_path();
     void confirm_or_leave();
     button_gui_item* create_page_button(
         const string &text, const string &tooltip_name,
         bool left,
         gui_manager* cur_gui, gui_manager* new_gui
+    );
+    void draw_go_here_segment(
+        GO_HERE_SEGMENT_SPOTS start, GO_HERE_SEGMENT_SPOTS end,
+        path_stop* start_path_stop_ptr, path_stop* end_path_stop_ptr,
+        const ALLEGRO_COLOR &color, float* texture_point
     );
     void draw_radar(const point &center, const point &size);
     void draw_tidbit(
