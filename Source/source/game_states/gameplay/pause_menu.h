@@ -135,12 +135,16 @@ private:
     ALLEGRO_TRANSFORM radar_screen_to_world_transform;
     //Radar camera information.
     camera_info radar_cam;
+    //Location of the radar cursor, in world coordinates.
+    point radar_cursor;
     //Whether a mouse button is being held in the radar.
     bool radar_mouse_down;
     //Minimum coordinates the radar can pan to.
     point radar_min_coords;
     //Maximum coordinates the radar can pan to.
     point radar_max_coords;
+    //Icon for the radar cursor.
+    ALLEGRO_BITMAP* bmp_radar_cursor;
     //Icon for a Pikmin in the radar.
     ALLEGRO_BITMAP* bmp_radar_pikmin;
     //Icon for a treasure in the radar.

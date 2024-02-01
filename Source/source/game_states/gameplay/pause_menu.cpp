@@ -45,9 +45,9 @@ const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
 const float RADAR_MAX_ZOOM = 4.0f;
 //Minimum radar zoom level.
 const float RADAR_MIN_ZOOM = 0.03f;
-//How long an onion fades between two colors.
+//How long an Onion fades between two colors.
 const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
-//How long an onion waits before fading to the next color.
+//How long an Onion waits before fading to the next color.
 const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
 }
 
@@ -159,6 +159,7 @@ pause_menu_struct::~pause_menu_struct() {
     mission_gui.destroy();
     confirmation_gui.destroy();
     
+    game.bitmaps.detach(bmp_radar_cursor);
     game.bitmaps.detach(bmp_radar_pikmin);
     game.bitmaps.detach(bmp_radar_treasure);
     game.bitmaps.detach(bmp_radar_enemy);
@@ -166,6 +167,7 @@ pause_menu_struct::~pause_menu_struct() {
     game.bitmaps.detach(bmp_radar_onion_skeleton);
     game.bitmaps.detach(bmp_radar_onion_bulb);
     game.bitmaps.detach(bmp_radar_ship);
+    bmp_radar_cursor = NULL;
     bmp_radar_pikmin = NULL;
     bmp_radar_treasure = NULL;
     bmp_radar_enemy = NULL;
@@ -470,31 +472,38 @@ void pause_menu_struct::draw_radar(
     
     //Onion icons.
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
-        
-        size_t nr_pik_types = o_ptr->nest->nest_type->pik_types.size();
+        onion* o_ptr =
+            game.states.gameplay->mobs.onions[o];
+        vector<pikmin_type*>* pik_types_ptr =
+            &o_ptr->nest->nest_type->pik_types;
+            
+        size_t nr_pik_types = pik_types_ptr->size();
         if(nr_pik_types > 0) {
-            float fade_cycle_pos = 
+            float fade_cycle_pos =
                 std::min(
-                    (float)fmod(
-                        game.time_passed, 
+                    (float) fmod(
+                        game.time_passed,
                         PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
                     ),
                     PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR
                 );
-
-            size_t pik_type_idx_target = 
-                (int)(game.time_passed / PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR) 
-                % nr_pik_types;
-            size_t pik_type_idx_prev = 
+                
+            size_t pik_type_idx_target =
+                (int) (
+                    game.time_passed /
+                    PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
+                ) % nr_pik_types;
+            size_t pik_type_idx_prev =
                 (pik_type_idx_target + nr_pik_types - 1) % nr_pik_types;
-
-            ALLEGRO_COLOR target_color = interpolate_color(
-                fade_cycle_pos, 0,
-                PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR,
-                o_ptr->nest->nest_type->pik_types[pik_type_idx_prev]->main_color,
-                o_ptr->nest->nest_type->pik_types[pik_type_idx_target]->main_color);
-
+                
+            ALLEGRO_COLOR target_color =
+                interpolate_color(
+                    fade_cycle_pos, 0.0f,
+                    PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR,
+                    pik_types_ptr->at(pik_type_idx_prev)->main_color,
+                    pik_types_ptr->at(pik_type_idx_target)->main_color
+                );
+                
             draw_bitmap(
                 bmp_radar_onion_bulb, o_ptr->pos,
                 point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
@@ -566,6 +575,13 @@ void pause_menu_struct::draw_radar(
             p_ptr->pik_type->main_color
         );
     }
+    
+    //Radar cursor.
+    draw_bitmap(
+        bmp_radar_cursor, radar_cursor,
+        point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
+        game.time_passed * TAU * 0.3f
+    );
     
     //Return to normal drawing.
     al_use_transform(&old_transform);
@@ -1603,6 +1619,7 @@ void pause_menu_struct::init_radar_page() {
                             bitmaps_node->get_child_by_name(name) \
                           );
     
+    loader(bmp_radar_cursor,         "cursor");
     loader(bmp_radar_pikmin,         "pikmin");
     loader(bmp_radar_treasure,       "treasure");
     loader(bmp_radar_enemy,          "enemy");
@@ -1916,6 +1933,28 @@ void pause_menu_struct::tick(const float delta_t) {
         closing_timer -= delta_t;
         if(closing_timer <= 0.0f) {
             to_delete = true;
+        }
+    }
+    
+    //Tick radar things.
+    if(radar_gui.responsive) {
+        point radar_center;
+        point radar_size;
+        radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+        bool mouse_in_radar =
+            is_point_in_rectangle(
+                game.mouse_cursor.s_pos,
+                radar_center, radar_size
+            );
+            
+        if(mouse_in_radar) {
+            radar_cursor = game.mouse_cursor.s_pos;
+            al_transform_coordinates(
+                &radar_screen_to_world_transform,
+                &radar_cursor.x, &radar_cursor.y
+            );
+        } else {
+            radar_cursor = radar_cam.pos;
         }
     }
 }

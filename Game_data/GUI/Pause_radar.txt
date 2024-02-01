@@ -17,6 +17,7 @@ positions{
 }
 
 files {
+	cursor = Radar/Cursor.png
 	pikmin = Radar/Pikmin.png
 	treasure = Radar/Treasure.png
 	enemy = Radar/Enemy.png
