@@ -149,6 +149,10 @@ private:
     point radar_cursor;
     //Whether a mouse button is being held in the radar.
     bool radar_mouse_down;
+    //Point where the mouse button was first held in the radar (screen coords).
+    point radar_mouse_down_point;
+    //Whether the player is dragging the mouse. False for just a (fuzzy) click.
+    bool radar_mouse_dragging;
     //Minimum coordinates the radar can pan to.
     point radar_min_coords;
     //Maximum coordinates the radar can pan to.
@@ -173,6 +177,8 @@ private:
     ALLEGRO_BITMAP* bmp_radar_path;
     //Selected leader in the radar.
     mob* radar_selected_leader;
+    //Leader under the cursor in the radar.
+    mob* radar_cursor_leader;
     //Time left before another Go Here calculation.
     float go_here_calc_time;
     //Go Here path.
@@ -192,8 +198,7 @@ private:
         gui_manager* cur_gui, gui_manager* new_gui
     );
     void draw_go_here_segment(
-        GO_HERE_SEGMENT_SPOTS start, GO_HERE_SEGMENT_SPOTS end,
-        path_stop* start_path_stop_ptr, path_stop* end_path_stop_ptr,
+        const point &start, const point &end,
         const ALLEGRO_COLOR &color, float* texture_point
     );
     void draw_radar(const point &center, const point &size);
@@ -211,6 +216,7 @@ private:
     void init_confirmation_page();
     void pan_radar(point amount);
     void populate_help_tidbits(const HELP_CATEGORIES category);
+    void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();
     void zoom_radar(float amount);
 };

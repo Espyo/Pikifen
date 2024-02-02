@@ -78,6 +78,8 @@ public:
     pikmin* pluck_target;
     //Has the player asked for the auto-plucking to stop?
     bool queued_pluck_cancel;
+    //Mid Go Here.
+    bool mid_go_here;
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim;
     //Time until the next arrow in the list of swarm arrows appears.

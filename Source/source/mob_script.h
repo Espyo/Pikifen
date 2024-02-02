@@ -209,6 +209,8 @@ enum MOB_EV_TYPES {
     LEADER_EV_GO_PLUCK,
     //When the leader has to go help pluck Pikmin, as an inactive leader.
     LEADER_EV_MUST_SEARCH_SEED,
+    //When the leader has to follow a path via Go Here.
+    LEADER_EV_GO_HERE,
     //When the leader's pluck is canceled.
     LEADER_EV_CANCEL,
     

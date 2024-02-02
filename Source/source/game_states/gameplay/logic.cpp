@@ -290,6 +290,23 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         notification_done = true;
     }
     
+    //Go Here stop notification.
+    if(
+        !notification_done &&
+        cur_leader_ptr->mid_go_here
+    ) {
+        notification.set_enabled(true);
+        notification.set_contents(
+            game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
+            "Stop",
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+            )
+        );
+        notification_done = true;
+    }
+    
     if(!cur_leader_ptr->auto_plucking) {
         dist closest_d = 0;
         dist d = 0;

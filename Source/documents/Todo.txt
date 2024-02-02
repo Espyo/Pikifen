@@ -4,35 +4,21 @@ Point I left on (so I can continue the next day without losing my train of thoug
 Current tasks (tasks being worked on, but not yet committed)
     Radar
         Radar page
-            Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
-                Icons of Pikmin souls indicating Pikmin died here in the past 10 seconds or so
-                Arrows on the leader icons indicating their facing direction
-                Animate important icons
+            Icons of Pikmin souls indicating Pikmin died here in the past 10 seconds or so
+            Arrows on the leader icons indicating their facing direction
             Controls instructions on the bottom
-            A section of the screen dedicated to info about what the cursor is currently on, like "A" to go here, "A" to select this leader, info about a cave, etc.?
             Player inputs to swap to the stats page
             Go Here!
                 Controls
-                    Moving the left mouse button:
-                        If you're not on a leader's icon, but still inside the radar, try showing a Go Here! path from the leader to that spot
-                    Releasing the left mouse button:
-                        If you panned the camera with this click, do nothing
-                        If you clicked on a leader's icon, choose that leader for giving Go Here! instructions
-                        Otherwise, start Go Here! to that destination
                     Moving the left analog stick:
                         Pan the radar's camera
                         If the camera center-point is not on a leader's icon, try showing a Go Here! path from the leader to that spot
                     Releasing the "menu confirm" player input:
                         If the camera center-point is on a leader's icon, choose that leader for giving Go Here! instructions
                         Otherwise, start Go Here! to the camera center-point
-                If a leader is currently going somewhere, the radar should show their path, whether they are the active leader or not
                 Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
                     Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
-                The leader should go slower if there are slow Pikmin in the group
-                The leader can't follow a path that goes through sectors that their Pikmin squad is vulnerable to
             When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
-            Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
-                Also, only pan if the mouse moved a certain amount of pixels
             Zooming should be done from the cursor position
         Survey drone? It'd just be a way for the player to view the area with free-cam (same as if there are no players)
             The ability to place beacons?
@@ -45,6 +31,7 @@ Current tasks (tasks being worked on, but not yet committed)
             It's just the pause menu
         Open it with Tab, and move leader swapping to X or Shift or middle mouse button or something
         Adjust the pre-packaged areas so that unimportant out-of-bounds things are blocking sectors and don't show up on the radar
+        Add help menu tidbits about it
     Music
         Error checking for when a song by that name doesn't exist
         Info

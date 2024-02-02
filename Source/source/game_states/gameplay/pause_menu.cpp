@@ -70,6 +70,7 @@ pause_menu_struct::pause_menu_struct() :
     lowest_sector_z(0.0f),
     highest_sector_z(0.0f),
     radar_mouse_down(false),
+    radar_mouse_dragging(false),
     bmp_radar_cursor(nullptr),
     bmp_radar_pikmin(nullptr),
     bmp_radar_treasure(nullptr),
@@ -80,6 +81,7 @@ pause_menu_struct::pause_menu_struct() :
     bmp_radar_ship(nullptr),
     bmp_radar_path(nullptr),
     radar_selected_leader(nullptr),
+    radar_cursor_leader(nullptr),
     go_here_calc_time(0.0f),
     go_here_path_result(PATH_RESULT_NOT_CALCULATED) {
     
@@ -102,7 +104,7 @@ pause_menu_struct::pause_menu_struct() :
         found_valid_sector = true;
     }
     
-    if(!found_valid_sector) {
+    if(!found_valid_sector || lowest_sector_z == highest_sector_z) {
         lowest_sector_z = -32.0f;
         highest_sector_z = 32.0f;
     }
@@ -236,10 +238,26 @@ void pause_menu_struct::add_bullet(
  * go_here_path_result.
  */
 void pause_menu_struct::calculate_go_here_path() {
+    radar_cursor_leader = NULL;
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        leader* l_ptr = game.states.gameplay->mobs.leaders[l];
+        if(dist(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom) {
+            radar_cursor_leader = l_ptr;
+            break;
+        }
+    }
+    
     if(
         !radar_selected_leader ||
+        radar_cursor_leader ||
         dist(radar_selected_leader->pos, radar_cursor) < 128.0f
     ) {
+        go_here_path.clear();
+        go_here_path_result = PATH_RESULT_ERROR;
+        return;
+    }
+    
+    if(!radar_selected_leader->fsm.get_event(LEADER_EV_GO_HERE)) {
         go_here_path.clear();
         go_here_path_result = PATH_RESULT_ERROR;
         return;
@@ -254,9 +272,13 @@ void pause_menu_struct::calculate_go_here_path() {
     }
     
     path_follow_settings settings;
-    //TODO settings.flags
-    //TODO settings.invulnerabilities
-    
+    settings.flags =
+        PATH_FOLLOW_FLAG_CAN_CONTINUE | PATH_FOLLOW_FLAG_LIGHT_LOAD;
+    settings.invulnerabilities =
+        radar_selected_leader->group->get_group_invulnerabilities(
+            radar_selected_leader
+        );
+        
     go_here_path_result =
         get_path(
             radar_selected_leader->pos,
@@ -419,13 +441,9 @@ void pause_menu_struct::draw() {
 /* ----------------------------------------------------------------------------
  * Draws a segment of the Go Here path.
  * start:
- *   Type of starting spot.
+ *   Starting point.
  * end:
- *   Type of end spot.
- * start_path_stop_ptr:
- *   If the start spot is a path stop, this should point to it.
- * end_path_stop_ptr:
- *   If the end spot is a path stop, this should point to it.
+ *   Ending point.
  * color:
  *   Color of the segment.
  * texture_point:
@@ -434,39 +452,11 @@ void pause_menu_struct::draw() {
  *   between segments.
  */
 void pause_menu_struct::draw_go_here_segment(
-    GO_HERE_SEGMENT_SPOTS start, GO_HERE_SEGMENT_SPOTS end,
-    path_stop* start_path_stop_ptr, path_stop* end_path_stop_ptr,
+    const point &start, const point &end,
     const ALLEGRO_COLOR &color, float* texture_point
 ) {
-    const float PATH_SEGMENT_THICKNESS = 5.0f / radar_cam.zoom;
+    const float PATH_SEGMENT_THICKNESS = 12.0f / radar_cam.zoom;
     const float PATH_SEGMENT_TIME_MULT = 10.0f;
-    
-    point p1;
-    switch(start) {
-    case GO_HERE_SEGMENT_SPOT_LEADER: {
-        p1 = radar_selected_leader->pos;
-        break;
-    } case GO_HERE_SEGMENT_SPOT_CURSOR: {
-        p1 = radar_cursor;
-        break;
-    } case GO_HERE_SEGMENT_SPOT_STOP: {
-        p1 = start_path_stop_ptr->pos;
-        break;
-    }
-    }
-    point p2;
-    switch(end) {
-    case GO_HERE_SEGMENT_SPOT_LEADER: {
-        p2 = radar_selected_leader->pos;
-        break;
-    } case GO_HERE_SEGMENT_SPOT_CURSOR: {
-        p2 = radar_cursor;
-        break;
-    } case GO_HERE_SEGMENT_SPOT_STOP: {
-        p2 = end_path_stop_ptr->pos;
-        break;
-    }
-    }
     
     ALLEGRO_VERTEX av[4];
     for(unsigned char a = 0; a < 4; ++a) {
@@ -474,22 +464,22 @@ void pause_menu_struct::draw_go_here_segment(
         av[a].z = 0.0f;
     }
     int bmp_h = al_get_bitmap_height(bmp_radar_path);
-    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS;
-    float angle = get_angle(p1, p2);
-    float distance = dist(p1, p2).to_float() * radar_cam.zoom;
+    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS / radar_cam.zoom;
+    float angle = get_angle(start, end);
+    float distance = dist(start, end).to_float() * radar_cam.zoom;
     float texture_offset = game.time_passed * PATH_SEGMENT_TIME_MULT;
     float texture_start = *texture_point;
     float texture_end = texture_start + distance;
     point rot_offset = rotate_point(point(0, PATH_SEGMENT_THICKNESS), angle);
     
-    av[0].x = p1.x - rot_offset.x;
-    av[0].y = p1.y - rot_offset.y;
-    av[1].x = p1.x + rot_offset.x;
-    av[1].y = p1.y + rot_offset.y;
-    av[2].x = p2.x - rot_offset.x;
-    av[2].y = p2.y - rot_offset.y;
-    av[3].x = p2.x + rot_offset.x;
-    av[3].y = p2.y + rot_offset.y;
+    av[0].x = start.x - rot_offset.x;
+    av[0].y = start.y - rot_offset.y;
+    av[1].x = start.x + rot_offset.x;
+    av[1].y = start.y + rot_offset.y;
+    av[2].x = end.x - rot_offset.x;
+    av[2].y = end.y - rot_offset.y;
+    av[3].x = end.x + rot_offset.x;
+    av[3].y = end.y + rot_offset.y;
     
     av[0].u = (texture_start - texture_offset) * texture_scale;
     av[0].v = 0.0f;
@@ -692,7 +682,7 @@ void pause_menu_struct::draw_radar(
         
         draw_bitmap(
             l_ptr->lea_type->bmp_icon, l_ptr->pos,
-            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom)
+            point(40.0f / radar_cam.zoom, 40.0f / radar_cam.zoom)
         );
         draw_bitmap(
             bmp_radar_leader_bubble, l_ptr->pos,
@@ -728,7 +718,35 @@ void pause_menu_struct::draw_radar(
         );
     }
     
-    //Go Here path.
+    //Currently-active Go Here paths.
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        leader* l_ptr = game.states.gameplay->mobs.leaders[l];
+        if(!l_ptr->mid_go_here) continue;
+        if(l_ptr->path_info->path.empty()) continue;
+        
+        float path_texture_point = 0.0f;
+        ALLEGRO_COLOR color = al_map_rgba(120, 140, 160, 192);
+        
+        draw_go_here_segment(
+            l_ptr->pos,
+            l_ptr->path_info->path[0]->pos,
+            color, &path_texture_point
+        );
+        for(size_t s = 1; s < l_ptr->path_info->path.size(); ++s) {
+            draw_go_here_segment(
+                l_ptr->path_info->path[s - 1]->pos,
+                l_ptr->path_info->path[s]->pos,
+                color, &path_texture_point
+            );
+        }
+        draw_go_here_segment(
+            l_ptr->path_info->path.back()->pos,
+            l_ptr->path_info->settings.target_point,
+            color, &path_texture_point
+        );
+    }
+    
+    //Go Here choice path.
     float path_texture_point = 0.0f;
     switch(go_here_path_result) {
     case PATH_RESULT_DIRECT:
@@ -736,8 +754,9 @@ void pause_menu_struct::draw_radar(
         //Go directly from A to B.
         
         draw_go_here_segment(
-            GO_HERE_SEGMENT_SPOT_LEADER, GO_HERE_SEGMENT_SPOT_CURSOR,
-            NULL, NULL, al_map_rgb(64, 200, 240), &path_texture_point
+            radar_selected_leader->pos,
+            radar_cursor,
+            al_map_rgb(64, 200, 240), &path_texture_point
         );
         
         break;
@@ -755,19 +774,21 @@ void pause_menu_struct::draw_radar(
         
         if(!go_here_path.empty()) {
             draw_go_here_segment(
-                GO_HERE_SEGMENT_SPOT_LEADER, GO_HERE_SEGMENT_SPOT_STOP,
-                NULL, go_here_path[0], color, &path_texture_point
+                radar_selected_leader->pos,
+                go_here_path[0]->pos,
+                color, &path_texture_point
             );
             for(size_t s = 1; s < go_here_path.size(); ++s) {
                 draw_go_here_segment(
-                    GO_HERE_SEGMENT_SPOT_STOP, GO_HERE_SEGMENT_SPOT_STOP,
-                    go_here_path[s - 1], go_here_path[s],
+                    go_here_path[s - 1]->pos,
+                    go_here_path[s]->pos,
                     color, &path_texture_point
                 );
             }
             draw_go_here_segment(
-                GO_HERE_SEGMENT_SPOT_STOP, GO_HERE_SEGMENT_SPOT_CURSOR,
-                go_here_path.back(), NULL, color, &path_texture_point
+                go_here_path.back()->pos,
+                radar_cursor,
+                color, &path_texture_point
             );
         }
         
@@ -1118,22 +1139,64 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     point radar_size;
     radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
     bool mouse_in_radar =
+        radar_gui.responsive &&
         is_point_in_rectangle(
             game.mouse_cursor.s_pos,
             radar_center, radar_size
         );
         
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-        if(radar_gui.responsive && mouse_in_radar) {
+        if(mouse_in_radar) {
             radar_mouse_down = true;
+            radar_mouse_down_point = game.mouse_cursor.s_pos;
         }
+        
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+        if(mouse_in_radar && !radar_mouse_dragging) {
+            //Clicked somewhere.
+            calculate_go_here_path();
+            if(radar_cursor_leader) {
+                radar_selected_leader = radar_cursor_leader;
+            } else if(
+                go_here_path_result == PATH_RESULT_DIRECT ||
+                go_here_path_result == PATH_RESULT_DIRECT_NO_STOPS ||
+                go_here_path_result == PATH_RESULT_NORMAL_PATH ||
+                go_here_path_result == PATH_RESULT_PATH_WITH_SINGLE_STOP
+            ) {
+                radar_selected_leader->fsm.run_event(
+                    LEADER_EV_GO_HERE, (void*) &radar_cursor
+                );
+                start_closing(&radar_gui);
+            }
+        }
+        
         radar_mouse_down = false;
+        radar_mouse_dragging = false;
+        
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-        if(radar_mouse_down && (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)) {
+        if(
+            radar_mouse_down &&
+            (
+                fabs(game.mouse_cursor.s_pos.x - radar_mouse_down_point.x) >
+                4.0f ||
+                fabs(game.mouse_cursor.s_pos.y - radar_mouse_down_point.y) >
+                4.0f
+            )
+        ) {
+            radar_mouse_dragging = true;
+        }
+        
+        if(
+            radar_mouse_dragging &&
+            (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)
+        ) {
             pan_radar(point(-ev.mouse.dx, -ev.mouse.dy));
-        } else if(mouse_in_radar && ev.mouse.dz != 0.0f) {
+            
+        } else if(
+            mouse_in_radar && ev.mouse.dz != 0.0f
+        ) {
             zoom_radar(ev.mouse.dz * 0.1f);
+            
         }
     }
 }
@@ -1536,15 +1599,7 @@ void pause_menu_struct::init_main_pause_menu() {
         new button_gui_item("Continue", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
-        gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        game.states.gameplay->hud->gui.start_animation(
-            GUI_MANAGER_ANIM_OUT_TO_IN,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        start_closing();
+        start_closing(&gui);
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
@@ -1727,15 +1782,7 @@ void pause_menu_struct::init_mission_page() {
         new button_gui_item("Continue", game.fonts.standard);
     mission_gui.back_item->on_activate =
     [this] (const point &) {
-        mission_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        game.states.gameplay->hud->gui.start_animation(
-            GUI_MANAGER_ANIM_OUT_TO_IN,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        start_closing();
+        start_closing(&mission_gui);
     };
     mission_gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
@@ -1906,15 +1953,7 @@ void pause_menu_struct::init_radar_page() {
         new button_gui_item("Continue", game.fonts.standard);
     radar_gui.back_item->on_activate =
     [this] (const point &) {
-        radar_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        game.states.gameplay->hud->gui.start_animation(
-            GUI_MANAGER_ANIM_OUT_TO_IN,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        start_closing();
+        start_closing(&radar_gui);
     };
     radar_gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
@@ -2050,27 +2089,43 @@ void pause_menu_struct::init_radar_page() {
     };
     cursor_info_text->on_tick =
     [this, cursor_info_text] (float delta_t) {
-        switch(go_here_path_result) {
-        case PATH_RESULT_DIRECT:
-        case PATH_RESULT_DIRECT_NO_STOPS:
-        case PATH_RESULT_NORMAL_PATH:
-        case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
-            cursor_info_text->text = "\\k menu_ok \\k Go here!";
-            cursor_info_text->color = COLOR_GOLD;
-            break;
-        } case PATH_RESULT_PATH_WITH_OBSTACLES: {
-            cursor_info_text->text = "Can't go here... Path blocked!";
+        if(radar_cursor_leader) {
+            cursor_info_text->text =
+                (
+                    radar_cursor_leader == radar_selected_leader ?
+                    "" :
+                    "\\k menu_ok \\k "
+                ) + radar_cursor_leader->type->name;
+        } else if(
+            radar_selected_leader &&
+            !radar_selected_leader->fsm.get_event(LEADER_EV_GO_HERE)
+        ) {
+            cursor_info_text->text =
+                "Can't go here... Leader is busy!";
             cursor_info_text->color = COLOR_WHITE;
-            break;
-        } case PATH_RESULT_END_STOP_UNREACHABLE: {
-            cursor_info_text->text = "Can't go here...";
-            cursor_info_text->color = COLOR_WHITE;
-            break;
-        } default: {
-            cursor_info_text->text.clear();
-            cursor_info_text->color = COLOR_WHITE;
-            break;
-        }
+        } else {
+            switch(go_here_path_result) {
+            case PATH_RESULT_DIRECT:
+            case PATH_RESULT_DIRECT_NO_STOPS:
+            case PATH_RESULT_NORMAL_PATH:
+            case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
+                cursor_info_text->text = "\\k menu_ok \\k Go here!";
+                cursor_info_text->color = COLOR_GOLD;
+                break;
+            } case PATH_RESULT_PATH_WITH_OBSTACLES: {
+                cursor_info_text->text = "Can't go here... Path blocked!";
+                cursor_info_text->color = COLOR_WHITE;
+                break;
+            } case PATH_RESULT_END_STOP_UNREACHABLE: {
+                cursor_info_text->text = "Can't go here...";
+                cursor_info_text->color = COLOR_WHITE;
+                break;
+            } default: {
+                cursor_info_text->text.clear();
+                cursor_info_text->color = COLOR_WHITE;
+                break;
+            }
+            }
         }
     };
     radar_gui.add_item(cursor_info_text, "cursor_info");
@@ -2171,8 +2226,18 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
 
 /* ----------------------------------------------------------------------------
  * Starts the closing process.
+ * cur_gui:
+ *   The currently active GUI manager.
  */
-void pause_menu_struct::start_closing() {
+void pause_menu_struct::start_closing(gui_manager* cur_gui) {
+    cur_gui->start_animation(
+        GUI_MANAGER_ANIM_CENTER_TO_UP,
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+    );
+    game.states.gameplay->hud->gui.start_animation(
+        GUI_MANAGER_ANIM_OUT_TO_IN,
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+    );
     closing = true;
     closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
 }

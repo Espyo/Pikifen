@@ -8460,6 +8460,7 @@ path_stops{
 		links{
 			nr=9
 			nr=15
+			nr=118
 		}
 	}
 	s{
@@ -9386,6 +9387,7 @@ path_stops{
 		pos=-272.0000 224.0000
 		links{
 			nr=91 1
+			nr=14
 		}
 	}
 	s{

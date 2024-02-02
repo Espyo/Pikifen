@@ -60,6 +60,10 @@ enum LEADER_STATES {
     LEADER_STATE_INACTIVE_PLUCKING,
     //Deciding what Pikmin to pluck next, inactive.
     LEADER_STATE_INACTIVE_PLUCK_DECIDING,
+    //Mid Go Here.
+    LEADER_STATE_MID_GO_HERE,
+    //Mid Go Here, inactive.
+    LEADER_STATE_INACTIVE_MID_GO_HERE,
     //Sleeping, waiting to move.
     LEADER_STATE_SLEEPING_WAITING,
     //Sleeping, moving.

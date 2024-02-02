@@ -1638,6 +1638,10 @@ bool mob::follow_path(
         //The object is only as invulnerable as the Pikmin carrying it.
         final_settings.invulnerabilities =
             carry_info->get_carrier_invulnerabilities();
+    } if(group) {
+        //The object is only as invulnerable as the members of its group.
+        final_settings.invulnerabilities =
+            group->get_group_invulnerabilities(this);
     } else {
         //Use the object's standard invulnerabilities.
         for(auto &v : type->hazard_vulnerabilities) {

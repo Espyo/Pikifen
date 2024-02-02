@@ -64,6 +64,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("inactive_mid_go_here");
+        }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -128,6 +132,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::go_pluck);
             efc.change_state("going_to_pluck");
         }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("mid_go_here");
+        }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -179,6 +187,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DEATH); {
             efc.change_state("dying");
         }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("mid_go_here");
+        }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -221,6 +233,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_DEATH); {
             efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -312,6 +328,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_MOVE_END); {
             efc.run(leader_fsm::stop);
+        }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
@@ -552,6 +572,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("mid_go_here");
+        }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -623,6 +648,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::become_active);
             efc.change_state("going_to_pluck");
         }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.run(leader_fsm::start_go_here);
+            efc.change_state("inactive_mid_go_here");
+        }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -670,6 +700,92 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_CANCEL); {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::idle_or_rejoin);
+        }
+    }
+    
+    efc.new_state("mid_go_here", LEADER_STATE_MID_GO_HERE); {
+        efc.new_event(LEADER_EV_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
+            efc.change_state("inactive_mid_go_here");
+        }
+        efc.new_event(MOB_EV_REACHED_DESTINATION); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_DEATH); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::start_go_here);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::fall_down_pit);
+        }
+        efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_mid_go_here", LEADER_STATE_INACTIVE_MID_GO_HERE); {
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::join_group);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EV_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
+            efc.change_state("mid_go_here");
+        }
+        efc.new_event(MOB_EV_REACHED_DESTINATION); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_DEATH); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::start_go_here);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::stop_go_here);
+            efc.run(leader_fsm::fall_down_pit);
         }
     }
     
@@ -2133,6 +2249,40 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader starts a Go Here walk.
+ * m:
+ *   The mob.
+ * info1:
+ *   Destination point.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    point destination = *((point*) info1);
+    
+    path_follow_settings settings;
+    settings.target_point = destination;
+    
+    float speed = lea_ptr->get_base_speed();
+    for(size_t m = 0; m < lea_ptr->group->members.size(); ++m) {
+        //It can only go as fast as its slowest member.
+        speed = std::min(speed, lea_ptr->group->members[m]->get_base_speed());
+    }
+    
+    bool success =
+        lea_ptr->follow_path(
+            settings, speed, lea_ptr->type->acceleration
+        );
+        
+    if(success) {
+        lea_ptr->mid_go_here = true;
+        lea_ptr->set_animation(LEADER_ANIM_WALKING);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader grabs on to a sprout and begins plucking it out.
  * m:
  *   The mob.
@@ -2259,6 +2409,22 @@ void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
 void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
     //Remove the throw particle generator.
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader stops a Go Here walk.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    lea_ptr->stop_following_path();
+    lea_ptr->mid_go_here = false;
 }
 
 

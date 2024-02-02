@@ -97,7 +97,7 @@ bool carry_info_struct::can_fly() const {
  * Returns a list of hazards to which all carrier Pikmin are invulnerable.
  */
 vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
-    //First, get all types to save on the amount of hazard checks.
+    //Get all types to save on the amount of hazard checks.
     unordered_set<mob_type*> carrier_types;
     for(size_t c = 0; c < spot_info.size(); ++c) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
@@ -105,25 +105,7 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
         carrier_types.insert(carrier_ptr->type);
     }
     
-    //Now, count how many types are invulnerable to each detected hazard.
-    map<hazard*, size_t> inv_instances;
-    for(auto &t : carrier_types) {
-        for(auto &h : t->hazard_vulnerabilities) {
-            if(h.second.damage_mult == 0.0f) {
-                inv_instances[h.first]++;
-            }
-        }
-    }
-    
-    //Finally, only accept those that ALL types are invulnerable to.
-    vector<hazard*> invulnerabilities;
-    for(auto &i : inv_instances) {
-        if(i.second == carrier_types.size()) {
-            invulnerabilities.push_back(i.first);
-        }
-    }
-    
-    return invulnerabilities;
+    return get_mob_type_list_invulnerabilities(carrier_types);
 }
 
 
@@ -325,6 +307,29 @@ point group_info_struct::get_average_member_pos() const {
         avg += members[m]->pos;
     }
     return avg / members.size();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a list of hazards to which all of a leader's group mobs
+ * are invulnerable.
+ * include_leader:
+ *   If not NULL, include the group leader mob.
+ */
+vector<hazard*> group_info_struct::get_group_invulnerabilities(
+    mob* include_leader
+) const {
+    //Get all types to save on the amount of hazard checks.
+    unordered_set<mob_type*> member_types;
+    for(size_t m = 0; m < members.size(); ++m) {
+        mob* member_ptr = members[m];
+        if(!member_ptr) continue;
+        member_types.insert(member_ptr->type);
+    }
+    
+    if(include_leader) member_types.insert(include_leader->type);
+    
+    return get_mob_type_list_invulnerabilities(member_types);
 }
 
 
@@ -1375,6 +1380,36 @@ string get_error_message_mob_info(mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
         p2s(m->pos) + ", area \"" + game.cur_area_data.name + "\"";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a list of hazards to which all mob types given are invulnerable.
+ * types:
+ *   Mob types to check.
+ */
+vector<hazard*> get_mob_type_list_invulnerabilities(
+    const unordered_set<mob_type*> types
+) {
+    //Count how many types are invulnerable to each detected hazard.
+    map<hazard*, size_t> inv_instances;
+    for(auto &t : types) {
+        for(auto &h : t->hazard_vulnerabilities) {
+            if(h.second.damage_mult == 0.0f) {
+                inv_instances[h.first]++;
+            }
+        }
+    }
+    
+    //Only accept those that ALL types are invulnerable to.
+    vector<hazard*> invulnerabilities;
+    for(auto &i : inv_instances) {
+        if(i.second == types.size()) {
+            invulnerabilities.push_back(i.first);
+        }
+    }
+    
+    return invulnerabilities;
 }
 
 

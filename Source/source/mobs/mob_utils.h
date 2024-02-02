@@ -226,6 +226,9 @@ struct group_info_struct {
     void change_standby_type_if_needed();
     size_t get_amount_by_type(const mob_type* type) const;
     point get_average_member_pos() const;
+    vector<hazard*> get_group_invulnerabilities(
+        mob* include_leader = NULL
+    ) const;
     bool get_next_standby_type(
         const bool move_backwards, subgroup_type** new_type
     );
@@ -535,6 +538,9 @@ mob* create_mob(
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);
+vector<hazard*> get_mob_type_list_invulnerabilities(
+    const unordered_set<mob_type*> types
+);
 mob_type::spawn_struct* get_spawn_info_from_child_info(
     mob_type* type, mob_type::child_struct* child_info
 );

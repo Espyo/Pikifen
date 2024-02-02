@@ -107,6 +107,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     auto_plucking(false),
     pluck_target(nullptr),
     queued_pluck_cancel(false),
+    mid_go_here(false),
     is_in_walking_anim(false),
     swarm_next_arrow_timer(LEADER::SWARM_ARROW_INTERVAL),
     throw_cooldown(0.0f),
