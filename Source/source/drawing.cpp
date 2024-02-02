@@ -451,6 +451,30 @@ void draw_compressed_text(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws an equilateral triangle made of three lines.
+ * center:
+ *   Center point of the triangle.
+ * radius:
+ *   Radius between the center and each vertex.
+ * angle:
+ *   Angle at which its first vertex points.
+ * color:
+ *   Its color.
+ * thickness:
+ *   Thickness of the lines.
+ */
+void draw_equilateral_triangle(
+    const point &center, float radius, float angle,
+    const ALLEGRO_COLOR &color, float thickness
+) {
+    point v1 = center + rotate_point(point(radius, 0.0f), angle);
+    point v2 = center + rotate_point(point(radius, 0.0f), angle + TAU / 3.0f);
+    point v3 = center + rotate_point(point(radius, 0.0f), angle - TAU / 3.0f);
+    al_draw_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color, thickness);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a filled diamond shape.
  * center:
  *   Center.
@@ -478,6 +502,28 @@ void draw_filled_diamond(
     vert[3].y = center.y;
     
     al_draw_prim(vert, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a filled equilateral triangle made.
+ * center:
+ *   Center point of the triangle.
+ * radius:
+ *   Radius between the center and each vertex.
+ * angle:
+ *   Angle at which its first vertex points.
+ * color:
+ *   Its color.
+ */
+void draw_filled_equilateral_triangle(
+    const point &center, float radius, float angle,
+    const ALLEGRO_COLOR &color
+) {
+    point v1 = center + rotate_point(point(radius, 0.0f), angle);
+    point v2 = center + rotate_point(point(radius, 0.0f), angle + TAU / 3.0f);
+    point v3 = center + rotate_point(point(radius, 0.0f), angle - TAU / 3.0f);
+    al_draw_filled_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color);
 }
 
 

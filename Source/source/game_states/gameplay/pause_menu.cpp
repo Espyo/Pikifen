@@ -515,20 +515,6 @@ void pause_menu_struct::draw_radar(
     int old_cr_w = 0;
     int old_cr_h = 0;
     al_copy_transform(&old_transform, al_get_current_transform());
-    
-    world_to_radar_screen_transform = game.identity_transform;
-    al_translate_transform(
-        &world_to_radar_screen_transform,
-        -radar_cam.pos.x + center.x / radar_cam.zoom,
-        -radar_cam.pos.y + center.y / radar_cam.zoom
-    );
-    al_scale_transform(
-        &world_to_radar_screen_transform, radar_cam.zoom, radar_cam.zoom
-    );
-    
-    radar_screen_to_world_transform = world_to_radar_screen_transform;
-    al_invert_transform(&radar_screen_to_world_transform);
-    
     al_get_clipping_rectangle(&old_cr_x, &old_cr_y, &old_cr_w, &old_cr_h);
     
     al_use_transform(&world_to_radar_screen_transform);
@@ -688,6 +674,15 @@ void pause_menu_struct::draw_radar(
             bmp_radar_leader_bubble, l_ptr->pos,
             point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
             0.0f,
+            radar_selected_leader == l_ptr ?
+            al_map_rgb(0, 255, 255) :
+            COLOR_WHITE
+        );
+        draw_filled_equilateral_triangle(
+            l_ptr->pos +
+            rotate_point(point(25.0f / radar_cam.zoom, 0.0f), l_ptr->angle),
+            6.0f / radar_cam.zoom,
+            l_ptr->angle,
             radar_selected_leader == l_ptr ?
             al_map_rgb(0, 255, 255) :
             COLOR_WHITE
@@ -1156,6 +1151,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
             //Clicked somewhere.
             calculate_go_here_path();
             if(radar_cursor_leader) {
+                //Select a leader.
                 radar_selected_leader = radar_cursor_leader;
             } else if(
                 go_here_path_result == PATH_RESULT_DIRECT ||
@@ -1163,6 +1159,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
                 go_here_path_result == PATH_RESULT_NORMAL_PATH ||
                 go_here_path_result == PATH_RESULT_PATH_WITH_SINGLE_STOP
             ) {
+                //Start Go Here.
                 radar_selected_leader->fsm.run_event(
                     LEADER_EV_GO_HERE, (void*) &radar_cursor
                 );
@@ -1183,6 +1180,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
                 4.0f
             )
         ) {
+            //Consider the mouse down as part of a mouse drag, not a click.
             radar_mouse_dragging = true;
         }
         
@@ -1190,12 +1188,14 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
             radar_mouse_dragging &&
             (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)
         ) {
+            //Pan the radar around.
             pan_radar(point(-ev.mouse.dx, -ev.mouse.dy));
             
         } else if(
             mouse_in_radar && ev.mouse.dz != 0.0f
         ) {
-            zoom_radar(ev.mouse.dz * 0.1f);
+            //Zoom in or out, using the radar/mouse cursor as the anchor.
+            zoom_radar_with_mouse(ev.mouse.dz * 0.1f, radar_center, radar_size);
             
         }
     }
@@ -2294,6 +2294,9 @@ void pause_menu_struct::tick(const float delta_t) {
         point radar_center;
         point radar_size;
         radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+        
+        update_radar_transformations(radar_center, radar_size);
+        
         bool mouse_in_radar =
             is_point_in_rectangle(
                 game.mouse_cursor.s_pos,
@@ -2322,6 +2325,31 @@ void pause_menu_struct::tick(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
+ * Updates the radar transformations.
+ * radar_center:
+ *   Coordinates of the radar's center.
+ * radar_size:
+ *   Dimensions of the radar.
+ */
+void pause_menu_struct::update_radar_transformations(
+    const point &radar_center, const point &radar_size
+) {
+    world_to_radar_screen_transform = game.identity_transform;
+    al_translate_transform(
+        &world_to_radar_screen_transform,
+        -radar_cam.pos.x + radar_center.x / radar_cam.zoom,
+        -radar_cam.pos.y + radar_center.y / radar_cam.zoom
+    );
+    al_scale_transform(
+        &world_to_radar_screen_transform, radar_cam.zoom, radar_cam.zoom
+    );
+    
+    radar_screen_to_world_transform = world_to_radar_screen_transform;
+    al_invert_transform(&radar_screen_to_world_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Zooms the radar by an amount.
  * amount:
  *   How much to zoom by.
@@ -2334,4 +2362,49 @@ void pause_menu_struct::zoom_radar(float amount) {
             radar_cam.zoom,
             PAUSE_MENU::RADAR_MIN_ZOOM, PAUSE_MENU::RADAR_MAX_ZOOM
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Zooms the radar by an amount, anchored on the radar cursor.
+ * amount:
+ *   How much to zoom by.
+ * radar_center:
+ *   Coordinates of the radar's center.
+ * radar_size:
+ *   Dimensions of the radar.
+ */
+void pause_menu_struct::zoom_radar_with_mouse(
+    float amount, const point &radar_center, const point &radar_size
+) {
+    //Keep a backup of the old cursor coordinates.
+    point old_cursor_pos = radar_cursor;
+    
+    //Do the zoom.
+    zoom_radar(amount);
+    update_radar_transformations(radar_center, radar_size);
+    
+    //Figure out where the cursor will be after the zoom.
+    radar_cursor = game.mouse_cursor.s_pos;
+    al_transform_coordinates(
+        &radar_screen_to_world_transform,
+        &radar_cursor.x, &radar_cursor.y
+    );
+    
+    //Readjust the transformation by shifting the camera
+    //so that the cursor ends up where it was before.
+    pan_radar(
+        point(
+            (old_cursor_pos.x - radar_cursor.x) * radar_cam.zoom,
+            (old_cursor_pos.y - radar_cursor.y) * radar_cam.zoom
+        )
+    );
+    
+    //Update the cursor coordinates again.
+    update_radar_transformations(radar_center, radar_size);
+    radar_cursor = game.mouse_cursor.s_pos;
+    al_transform_coordinates(
+        &radar_screen_to_world_transform,
+        &radar_cursor.x, &radar_cursor.y
+    );
 }

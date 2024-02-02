@@ -139,8 +139,16 @@ void draw_compressed_text(
     const point &where, const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const string &text
 );
+void draw_equilateral_triangle(
+    const point &center, float radius, float angle,
+    const ALLEGRO_COLOR &color, float thickness
+);
 void draw_filled_diamond(
     const point &center, const float radius, const ALLEGRO_COLOR &color
+);
+void draw_filled_equilateral_triangle(
+    const point &center, float radius, float angle,
+    const ALLEGRO_COLOR &color
 );
 void draw_filled_rounded_rectangle(
     const point &center, const point &size, const float radii,

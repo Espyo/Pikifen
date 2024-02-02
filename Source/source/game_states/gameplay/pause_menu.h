@@ -218,7 +218,13 @@ private:
     void populate_help_tidbits(const HELP_CATEGORIES category);
     void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();
+    void update_radar_transformations(
+        const point &radar_center, const point &radar_size
+    );
     void zoom_radar(float amount);
+    void zoom_radar_with_mouse(
+        float amount, const point &radar_center, const point &radar_size
+    );
 };
 
 
