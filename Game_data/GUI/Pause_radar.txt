@@ -5,25 +5,24 @@ positions{
 	line=50.0000 11.0000 96.0000 2.0000
 	continue=10.0000 16.0000 16.0000 4.0000
 	radar=37.5000 56.2500 70.0000 72.5000
-	field_pikmin_label=86.2500 27.5000 22.5000 5.0000
-	field_pikmin_number=86.2500 35.0000 22.5000 5.0000
-	idle_pikmin_label=86.2500 42.5000 22.5000 5.0000
-	idle_pikmin_number=86.2500 50.0000 22.5000 5.0000
-	group_pikmin_label=86.2500 57.5000 22.5000 5.0000
-	group_pikmin_number=86.2500 65.0000 22.5000 5.0000
-	cursor_info=86.2500 80.0000 22.5000 20.0000
+	field_pikmin_label=86.2500 47.5000 22.5000 5.0000
+	field_pikmin_number=86.2500 55.0000 22.5000 5.0000
+	idle_pikmin_label=86.2500 62.5000 22.5000 5.0000
+	idle_pikmin_number=86.2500 70.0000 22.5000 5.0000
+	group_pikmin_label=86.2500 77.5000 22.5000 5.0000
+	group_pikmin_number=86.2500 85.0000 22.5000 5.0000
+	cursor_info=86.2500 33.7500 22.5000 17.5000
 	instructions=58.7500 16.0000 77.5000 4.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
 }
-
-files {
-	cursor = Radar/Cursor.png
-	pikmin = Radar/Pikmin.png
-	treasure = Radar/Treasure.png
-	enemy = Radar/Enemy.png
-	leader_bubble = Bubble.png
-	onion_skeleton = Radar/Onion_skeleton.png
-	onion_bulb = Radar/Onion_bulb.png
-	ship = Radar/Ship.png
-	path = Radar/Path.png
+files{
+	cursor=Radar/Cursor.png
+	pikmin=Radar/Pikmin.png
+	treasure=Radar/Treasure.png
+	enemy=Radar/Enemy.png
+	leader_bubble=Bubble.png
+	onion_skeleton=Radar/Onion_skeleton.png
+	onion_bulb=Radar/Onion_bulb.png
+	ship=Radar/Ship.png
+	path=Radar/Path.png
 }

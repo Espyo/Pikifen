@@ -20,6 +20,8 @@ namespace PAUSE_MENU {
 //Path to the leaving confirmation page GUI information file.
 const string CONFIRMATION_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_confirmation.txt";
+//Control lockout time after entering the menu.
+const float ENTRY_LOCKOUT_TIME = 0.15f;
 //Interval between calculations of the Go Here path.
 const float GO_HERE_CALC_INTERVAL = 0.15f;
 //Path to the GUI information file.
@@ -51,14 +53,19 @@ const float RADAR_MIN_ZOOM = 0.03f;
 const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
 //How long an Onion waits before fading to the next color.
 const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
+//Max radar pan speed when not using mouse, in pixels per second.
+const float RADAR_PAN_SPEED = 600.0f;
+//Max radar zoom speed when not using mouse, in amount per second.
+const float RADAR_ZOOM_SPEED = 2.5f;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a pause menu struct.
  */
-pause_menu_struct::pause_menu_struct() :
+pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     bg_alpha_mult(0.0f),
+    opening_lockout_timer(0.0f),
     closing_timer(0.0f),
     to_delete(false),
     closing(false),
@@ -83,7 +90,9 @@ pause_menu_struct::pause_menu_struct() :
     radar_selected_leader(nullptr),
     radar_cursor_leader(nullptr),
     go_here_calc_time(0.0f),
-    go_here_path_result(PATH_RESULT_NOT_CALCULATED) {
+    go_here_path_result(PATH_RESULT_NOT_CALCULATED),
+    radar_zoom_in(false),
+    radar_zoom_out(false) {
     
     init_main_pause_menu();
     init_radar_page();
@@ -131,13 +140,13 @@ pause_menu_struct::pause_menu_struct() :
         radar_max_coords.x =
             std::max(radar_max_coords.x, e_ptr->vertexes[1]->x);
         radar_min_coords.y =
-            std::min(radar_min_coords.x, e_ptr->vertexes[0]->y);
+            std::min(radar_min_coords.y, e_ptr->vertexes[0]->y);
         radar_min_coords.y =
-            std::min(radar_min_coords.x, e_ptr->vertexes[1]->y);
+            std::min(radar_min_coords.y, e_ptr->vertexes[1]->y);
         radar_max_coords.y =
-            std::max(radar_max_coords.x, e_ptr->vertexes[0]->y);
+            std::max(radar_max_coords.y, e_ptr->vertexes[0]->y);
         radar_max_coords.y =
-            std::max(radar_max_coords.x, e_ptr->vertexes[1]->y);
+            std::max(radar_max_coords.y, e_ptr->vertexes[1]->y);
         found_valid_edge = true;
     }
     
@@ -145,8 +154,8 @@ pause_menu_struct::pause_menu_struct() :
         radar_min_coords = point();
         radar_max_coords = point();
     }
-    radar_min_coords = radar_min_coords + 64.0f;
-    radar_max_coords = radar_max_coords + 64.0f;
+    radar_min_coords = radar_min_coords - 16.0f;
+    radar_max_coords = radar_max_coords + 16.0f;
     
     radar_selected_leader = game.states.gameplay->cur_leader_ptr;
     
@@ -155,6 +164,13 @@ pause_menu_struct::pause_menu_struct() :
     }
     radar_cam.set_zoom(0.4f);
     
+    //Start the process.
+    opening_lockout_timer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
+    gui_manager* first_gui = start_on_radar ? &radar_gui : &gui;
+    first_gui->responsive = true;
+    first_gui->start_animation(
+        GUI_MANAGER_ANIM_UP_TO_CENTER, GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+    );
 }
 
 
@@ -1149,22 +1165,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         if(mouse_in_radar && !radar_mouse_dragging) {
             //Clicked somewhere.
-            calculate_go_here_path();
-            if(radar_cursor_leader) {
-                //Select a leader.
-                radar_selected_leader = radar_cursor_leader;
-            } else if(
-                go_here_path_result == PATH_RESULT_DIRECT ||
-                go_here_path_result == PATH_RESULT_DIRECT_NO_STOPS ||
-                go_here_path_result == PATH_RESULT_NORMAL_PATH ||
-                go_here_path_result == PATH_RESULT_PATH_WITH_SINGLE_STOP
-            ) {
-                //Start Go Here.
-                radar_selected_leader->fsm.run_event(
-                    LEADER_EV_GO_HERE, (void*) &radar_cursor
-                );
-                start_closing(&radar_gui);
-            }
+            radar_confirm();
         }
         
         radar_mouse_down = false;
@@ -1208,11 +1209,64 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  *   Data about the player action.
  */
 void pause_menu_struct::handle_player_action(const player_action &action) {
-    gui.handle_player_action(action);
-    radar_gui.handle_player_action(action);
-    help_gui.handle_player_action(action);
-    mission_gui.handle_player_action(action);
-    confirmation_gui.handle_player_action(action);
+    if(opening_lockout_timer > 0.0f) {
+        //Don't accept inputs shortly after the menu opens.
+        //This helps errant inputs from before the menu bleeding into the menu
+        //immediately after it opens, like the "radar toggle" action.
+        return;
+    }
+    if(closing) return;
+    
+    bool handled_by_radar = false;
+    
+    if(radar_gui.responsive) {
+        switch(action.action_type_id) {
+        case PLAYER_ACTION_RADAR: {
+            start_closing(&radar_gui);
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_RIGHT: {
+            radar_pan.right = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_UP: {
+            radar_pan.up = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_LEFT: {
+            radar_pan.left = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_DOWN: {
+            radar_pan.down = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_ZOOM_IN: {
+            radar_zoom_in = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_RADAR_ZOOM_OUT: {
+            radar_zoom_out = action.value;
+            handled_by_radar = true;
+            break;
+        } case PLAYER_ACTION_MENU_OK: {
+            radar_confirm();
+            handled_by_radar = true;
+            break;
+        }
+        }
+    }
+    
+    if(!handled_by_radar) {
+        //Only let the GUIs handle it if the radar didn't need it, otherwise
+        //we could see GUI item selections move around or such because
+        //radar and menus actions share binds.
+        gui.handle_player_action(action);
+        radar_gui.handle_player_action(action);
+        help_gui.handle_player_action(action);
+        mission_gui.handle_player_action(action);
+        confirmation_gui.handle_player_action(action);
+    }
 }
 
 
@@ -1708,9 +1762,8 @@ void pause_menu_struct::init_main_pause_menu() {
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item);
-    gui.start_animation(
-        GUI_MANAGER_ANIM_UP_TO_CENTER, GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-    );
+    gui.responsive = false;
+    gui.hide_items();
 }
 
 
@@ -1888,13 +1941,13 @@ void pause_menu_struct::init_radar_page() {
     radar_gui.register_coords("line",                50,    11,    96,    2);
     radar_gui.register_coords("continue",            10,    16,    16,    4);
     radar_gui.register_coords("radar",               37.5,  56.25, 70,   72.5);
-    radar_gui.register_coords("field_pikmin_label",  86.25, 27.5,  22.5,  5);
-    radar_gui.register_coords("field_pikmin_number", 86.25, 35,    22.5,  5);
-    radar_gui.register_coords("idle_pikmin_label",   86.25, 42.5,  22.5,  5);
-    radar_gui.register_coords("idle_pikmin_number",  86.25, 50,    22.5,  5);
-    radar_gui.register_coords("group_pikmin_label",  86.25, 57.5,  22.5,  5);
-    radar_gui.register_coords("group_pikmin_number", 86.25, 65,    22.5,  5);
-    radar_gui.register_coords("cursor_info",         86.25, 80,    22.5, 20);
+    radar_gui.register_coords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
+    radar_gui.register_coords("field_pikmin_number", 86.25, 55,    22.5,  5);
+    radar_gui.register_coords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
+    radar_gui.register_coords("idle_pikmin_number",  86.25, 70,    22.5,  5);
+    radar_gui.register_coords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
+    radar_gui.register_coords("group_pikmin_number", 86.25, 85,    22.5,  5);
+    radar_gui.register_coords("cursor_info",         86.25, 33.75, 22.5, 17.5);
     radar_gui.register_coords("instructions",        58.75, 16,    77.5,  4);
     radar_gui.register_coords("tooltip",             50,    96,    96,    4);
     radar_gui.read_coords(gui_file.get_child_by_name("positions"));
@@ -2133,9 +2186,16 @@ void pause_menu_struct::init_radar_page() {
     //Instructions text.
     text_gui_item* instructions_text =
         new text_gui_item(
-        "", game.fonts.slim,
-        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
-    ); //TODO
+        "\\k menu_radar_up \\k"
+        "\\k menu_radar_left \\k"
+        "\\k menu_radar_down \\k"
+        "\\k menu_radar_right \\k Pan   "
+        "\\k menu_radar_zoom_in \\k"
+        "\\k menu_radar_zoom_out \\k Zoom",
+        game.fonts.slim,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    instructions_text->line_wrap = true;
     radar_gui.add_item(instructions_text, "instructions");
     
     //Tooltip text.
@@ -2144,7 +2204,7 @@ void pause_menu_struct::init_radar_page() {
     radar_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    radar_gui.set_selected_item(radar_gui.back_item);
+    radar_gui.set_selected_item(NULL);
     radar_gui.responsive = false;
     radar_gui.hide_items();
 }
@@ -2225,6 +2285,32 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
 
 
 /* ----------------------------------------------------------------------------
+ * When the player confirms their action in the radar.
+ */
+void pause_menu_struct::radar_confirm() {
+    calculate_go_here_path();
+    
+    if(radar_cursor_leader) {
+        //Select a leader.
+        radar_selected_leader = radar_cursor_leader;
+        
+    } else if(
+        go_here_path_result == PATH_RESULT_DIRECT ||
+        go_here_path_result == PATH_RESULT_DIRECT_NO_STOPS ||
+        go_here_path_result == PATH_RESULT_NORMAL_PATH ||
+        go_here_path_result == PATH_RESULT_PATH_WITH_SINGLE_STOP
+    ) {
+        //Start Go Here.
+        radar_selected_leader->fsm.run_event(
+            LEADER_EV_GO_HERE, (void*) &radar_cursor
+        );
+        start_closing(&radar_gui);
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts the closing process.
  * cur_gui:
  *   The currently active GUI manager.
@@ -2281,7 +2367,10 @@ void pause_menu_struct::tick(const float delta_t) {
         closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
-    //Tick the menu closing.
+    //Tick the menu opening and closing.
+    if(opening_lockout_timer > 0.0f) {
+        opening_lockout_timer -= delta_t;
+    }
     if(closing) {
         closing_timer -= delta_t;
         if(closing_timer <= 0.0f) {
@@ -2291,6 +2380,21 @@ void pause_menu_struct::tick(const float delta_t) {
     
     //Tick radar things.
     if(radar_gui.responsive) {
+    
+        point radar_pan_coords;
+        float dummy_angle;
+        float dummy_magnitude;
+        radar_pan.get_info(&radar_pan_coords, &dummy_angle, &dummy_magnitude);
+        if(radar_pan_coords.x != 0.0f || radar_pan_coords.y != 0.0f) {
+            pan_radar(radar_pan_coords * PAUSE_MENU::RADAR_PAN_SPEED * delta_t);
+        }
+        
+        if(radar_zoom_in && !radar_zoom_out) {
+            zoom_radar(PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
+        } else if(radar_zoom_out && !radar_zoom_in) {
+            zoom_radar(-PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
+        }
+        
         point radar_center;
         point radar_size;
         radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
@@ -2319,6 +2423,7 @@ void pause_menu_struct::tick(const float delta_t) {
             
             calculate_go_here_path();
         }
+        
     }
     
 }

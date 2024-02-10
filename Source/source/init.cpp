@@ -166,13 +166,6 @@ void init_controls() {
     
     //MAIN.
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RIGHT,
-        PLAYER_ACTION_CAT_MAIN,
-        "Right",
-        "Move right.",
-        "move_right", "k_4"
-    );
-    game.controls.add_player_action_type(
         PLAYER_ACTION_UP,
         PLAYER_ACTION_CAT_MAIN,
         "Up",
@@ -192,6 +185,13 @@ void init_controls() {
         "Down",
         "Move down.",
         "move_down", "k_19"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RIGHT,
+        PLAYER_ACTION_CAT_MAIN,
+        "Right",
+        "Move right.",
+        "move_right", "k_4"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_THROW,
@@ -226,7 +226,7 @@ void init_controls() {
         PLAYER_ACTION_CAT_MAIN,
         "Next leader",
         "Change to the next leader.",
-        "next_leader", "k_64"
+        "next_leader", "k_215"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_GROUP_CURSOR,
@@ -287,13 +287,6 @@ void init_controls() {
     
     //Menus.
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_RIGHT,
-        PLAYER_ACTION_CAT_MENUS,
-        "Menu right",
-        "Navigate right in a menu.",
-        "menu_right", "k_83"
-    );
-    game.controls.add_player_action_type(
         PLAYER_ACTION_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
@@ -315,21 +308,63 @@ void init_controls() {
         "menu_down", "k_85"
     );
     game.controls.add_player_action_type(
+        PLAYER_ACTION_MENU_RIGHT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu right",
+        "Navigate right in a menu.",
+        "menu_right", "k_83"
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_MENU_OK,
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
         "menu_ok", "k_67"
     );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_RIGHT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar pan right",
+        "Pans the radar to the right.",
+        "menu_radar_right", "k_4"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_UP,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar pan up",
+        "Pans the radar upward.",
+        "menu_radar_up", "k_23"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_LEFT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar pan left",
+        "Pans the radar to the left.",
+        "menu_radar_left", "k_1"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_DOWN,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar pan down",
+        "Pans the radar downward.",
+        "menu_radar_down", "k_19"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_ZOOM_IN,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar zoom in",
+        "Zooms the radar in.",
+        "menu_radar_zoom_in", "k_18"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR_ZOOM_OUT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Radar zoom out",
+        "Zooms the radar out.",
+        "menu_radar_zoom_out", "k_6"
+    );
     
     //Advanced.
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_RIGHT,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Cursor right",
-        "Move the cursor right. Useful if it's not mouse-controlled.",
-        "cursor_right", ""
-    );
     game.controls.add_player_action_type(
         PLAYER_ACTION_CURSOR_UP,
         PLAYER_ACTION_CAT_ADVANCED,
@@ -352,11 +387,11 @@ void init_controls() {
         "cursor_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_RIGHT,
+        PLAYER_ACTION_CURSOR_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
-        "Swarm right",
-        "Swarm all Pikmin right.",
-        "swarm_right", ""
+        "Cursor right",
+        "Move the cursor right. Useful if it's not mouse-controlled.",
+        "cursor_right", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_GROUP_UP,
@@ -378,6 +413,13 @@ void init_controls() {
         "Swarm down",
         "Swarm all Pikmin down.",
         "swarm_down", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_GROUP_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Swarm right",
+        "Swarm all Pikmin right.",
+        "swarm_right", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_PREV_LEADER,
@@ -448,6 +490,13 @@ void init_controls() {
         "Custom C",
         "Custom action C, if the current leader supports it.",
         "custom_c", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RADAR,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Radar",
+        "Open or close the radar.",
+        "radar", "k_64"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_MENU_BACK,

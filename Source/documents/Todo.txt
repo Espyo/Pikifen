@@ -4,16 +4,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
 Current tasks (tasks being worked on, but not yet committed)
     Radar
         Radar page
-            Controls instructions on the bottom
             Player inputs to swap to the stats page
-            Keyboard/gamepad controls
-                Moving the left analog stick:
-                    Pan the radar's camera
-                    If the camera center-point is not on a leader's icon, try showing a Go Here! path from the leader to that spot
-                Releasing the "menu confirm" player input:
-                    If the camera center-point is on a leader's icon, choose that leader for giving Go Here! instructions
-                    Otherwise, start Go Here! to the camera center-point
-            Open it with Tab, and move leader swapping to X or Shift or middle mouse button or something
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
             Number of deaths today (careful not to count Candypop Buds as deaths)
@@ -43,7 +34,7 @@ Next tasks (roughly sorted most important first)
     
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.90.1
+    Update to Dear ImGui 1.90.1, 1.90.2
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -165,6 +156,7 @@ Next tasks (roughly sorted most important first)
                 If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+                Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
             Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
         Controls menu
@@ -670,6 +662,10 @@ Misc things (so I don't forget)
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
         Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
+    Radar
+        Details
+            Sparkles on treasures
+            If a leader is off-camera (radar's camera), their icon should be on the edge of the radar in a smaller size
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.

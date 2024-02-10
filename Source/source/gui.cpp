@@ -1558,18 +1558,18 @@ text_gui_item::text_gui_item(
         if(line_wrap) {
         
             text_y = center.y - size.y / 2.0f;
-            int line_height = al_get_font_line_height(game.fonts.standard);
+            int line_height = al_get_font_line_height(this->font);
             vector<string_token> tokens =
                 tokenize_string(this->text);
             set_string_token_widths(
-                tokens, game.fonts.standard, game.fonts.slim, line_height, false
+                tokens, this->font, game.fonts.slim, line_height, false
             );
             vector<vector<string_token> > tokens_per_line =
                 split_long_string_with_tokens(tokens, size.x);
                 
             for(size_t l = 0; l < tokens_per_line.size(); ++l) {
                 draw_string_tokens(
-                    tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+                    tokens_per_line[l], this->font, game.fonts.slim,
                     false,
                     point(
                         text_x,

@@ -242,7 +242,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             break;
             
-        } case PLAYER_ACTION_PAUSE: {
+        } case PLAYER_ACTION_PAUSE:
+        case PLAYER_ACTION_RADAR: {
     
             /********************
             *           +-+ +-+ *
@@ -252,7 +253,10 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             if(!is_down) return;
             
-            pause_menu = new pause_menu_struct();
+            pause_menu =
+                new pause_menu_struct(
+                action.action_type_id == PLAYER_ACTION_RADAR
+            );
             paused = true;
             game.audio.handle_world_pause();
             hud->gui.start_animation(

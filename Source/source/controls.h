@@ -79,6 +79,18 @@ enum PLAYER_ACTION_TYPES {
     PLAYER_ACTION_MENU_DOWN,
     //Menu navigation OK.
     PLAYER_ACTION_MENU_OK,
+    //Radar pan right.
+    PLAYER_ACTION_RADAR_RIGHT,
+    //Radar pan up.
+    PLAYER_ACTION_RADAR_UP,
+    //Radar pan left.
+    PLAYER_ACTION_RADAR_LEFT,
+    //Radar pan down.
+    PLAYER_ACTION_RADAR_DOWN,
+    //Radar zoom in.
+    PLAYER_ACTION_RADAR_ZOOM_IN,
+    //Radar zoom out.
+    PLAYER_ACTION_RADAR_ZOOM_OUT,
     
     //Advanced.
     //Move cursor right.
@@ -117,6 +129,8 @@ enum PLAYER_ACTION_TYPES {
     PLAYER_ACTION_CUSTOM_B,
     //Custom C.
     PLAYER_ACTION_CUSTOM_C,
+    //Toggle the radar.
+    PLAYER_ACTION_RADAR,
     //Menu navigation back.
     PLAYER_ACTION_MENU_BACK,
     

@@ -24,6 +24,7 @@ class pikmin_type;
 
 namespace PAUSE_MENU {
 extern const string CONFIRMATION_GUI_FILE_PATH;
+extern const float ENTRY_LOCKOUT_TIME;
 extern const float GO_HERE_CALC_INTERVAL;
 extern const string GUI_FILE_PATH;
 extern const string HELP_GUI_FILE_PATH;
@@ -36,6 +37,8 @@ extern const float RADAR_MAX_ZOOM;
 extern const float RADAR_MIN_ZOOM;
 extern const float RADAR_ONION_COLOR_FADE_DUR;
 extern const float RADAR_ONION_COLOR_FADE_CYCLE_DUR;
+extern const float RADAR_PAN_SPEED;
+extern const float RADAR_ZOOM_SPEED;
 }
 
 
@@ -94,17 +97,18 @@ struct pause_menu_struct {
     gui_manager confirmation_gui;
     //Multiply the background alpha by this much.
     float bg_alpha_mult;
+    //Control lockout time left for when the menu opens.
+    float opening_lockout_timer;
     //Time left until the menu finishes closing.
     float closing_timer;
     //Is the struct meant to be deleted?
     bool to_delete;
     
-    pause_menu_struct();
+    pause_menu_struct(bool start_on_radar);
     ~pause_menu_struct();
     void draw();
     void handle_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
-    void start_closing();
     void tick(const float delta_t);
     
 private:
@@ -185,6 +189,12 @@ private:
     vector<path_stop*> go_here_path;
     //Go Here path result.
     PATH_RESULTS go_here_path_result;
+    //Pan speed and amount.
+    movement_struct radar_pan;
+    //Whether the radar zoom-in input is pressed.
+    bool radar_zoom_in;
+    //Whether the radar zoom-out input is pressed.
+    bool radar_zoom_out;
     
     void add_bullet(
         list_gui_item* list, const string &text,
@@ -216,6 +226,7 @@ private:
     void init_confirmation_page();
     void pan_radar(point amount);
     void populate_help_tidbits(const HELP_CATEGORIES category);
+    void radar_confirm();
     void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();
     void update_radar_transformations(
