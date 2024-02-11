@@ -53,6 +53,17 @@ enum GAMEPLAY_LEAVE_TARGET {
 };
 
 
+//Pages.
+enum PAUSE_MENU_PAGES {
+    //System.
+    PAUSE_MENU_PAGE_SYSTEM,
+    //Radar.
+    PAUSE_MENU_PAGE_RADAR,
+    //Mission.
+    PAUSE_MENU_PAGE_MISSION
+};
+
+
 /* ----------------------------------------------------------------------------
  * Contains information about the pause menu currently being presented to
  * the player.
@@ -139,6 +150,8 @@ private:
     tidbit* cur_tidbit;
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leave_target;
+    //Pages available, in order.
+    vector<PAUSE_MENU_PAGES> pages;
     //Z of the lowest sector.
     float lowest_sector_z;
     //Z of the highest sector.
@@ -203,10 +216,9 @@ private:
     void calculate_go_here_path();
     void confirm_or_leave();
     button_gui_item* create_page_button(
-        const string &text, const string &tooltip_name,
-        bool left,
-        gui_manager* cur_gui, gui_manager* new_gui
+        PAUSE_MENU_PAGES target_page, bool left, gui_manager* cur_gui
     );
+    void create_page_buttons(PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui);
     void draw_go_here_segment(
         const point &start, const point &end,
         const ALLEGRO_COLOR &color, float* texture_point
@@ -229,6 +241,9 @@ private:
     void radar_confirm();
     void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();
+    void switch_page(
+        gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
+    );
     void update_radar_transformations(
         const point &radar_center, const point &radar_size
     );

@@ -305,7 +305,7 @@ public:
     ALLEGRO_COLOR color;
     //Allegro flags.
     int flags;
-    //Wrap long lines.
+    //Wrap long lines. Also enables markup.
     bool line_wrap;
     
     text_gui_item(

@@ -133,6 +133,10 @@ enum PLAYER_ACTION_TYPES {
     PLAYER_ACTION_RADAR,
     //Menu navigation back.
     PLAYER_ACTION_MENU_BACK,
+    //Menu navigation page to the left.
+    PLAYER_ACTION_MENU_PAGE_LEFT,
+    //Menu navigation page to the right.
+    PLAYER_ACTION_MENU_PAGE_RIGHT,
     
     //Total amount of player action types.
     N_PLAYER_ACTIONS,

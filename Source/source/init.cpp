@@ -505,6 +505,20 @@ void init_controls() {
         "Go back or cancel in a menu.",
         "menu_back", "k_59"
     );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_MENU_PAGE_LEFT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Menu shortcut - left page",
+        "Go to the page to the left in a menu.",
+        "menu_page_left", "k_17"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_MENU_PAGE_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Menu shortcut - right page",
+        "Go to the page to the right in a menu.",
+        "menu_page_right", "k_5"
+    );
     
     
     //Populate the control binds with some default control binds for player 1.

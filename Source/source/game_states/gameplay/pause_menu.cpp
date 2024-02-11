@@ -8,6 +8,8 @@
  * Pause menu classes and functions.
  */
 
+#include <algorithm>
+
 #include "gameplay.h"
 
 #include "../../drawing.h"
@@ -93,6 +95,12 @@ pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     go_here_path_result(PATH_RESULT_NOT_CALCULATED),
     radar_zoom_in(false),
     radar_zoom_out(false) {
+    
+    pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
+    pages.push_back(PAUSE_MENU_PAGE_RADAR);
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        pages.push_back(PAUSE_MENU_PAGE_MISSION);
+    }
     
     init_main_pause_menu();
     init_radar_page();
@@ -393,45 +401,45 @@ void pause_menu_struct::confirm_or_leave() {
 /* ----------------------------------------------------------------------------
  * Creates a button meant for changing to a page either to the left or to the
  * right of the current one.
- * text:
- *   Text to display on the button, sans arrow.
- * tooltip_name:
- *   Name of the page for displaying in the tooltip.
+ * target_page:
+ *   Which page this button leads to.
  * left:
  *   True if this page is to the left of the current, false if to the right.
  * cur_gui:
  *   Pointer to the current page's GUI manager.
- * new_gui:
- *   Pointer to the new page's GUI manager.
  */
 button_gui_item* pause_menu_struct::create_page_button(
-    const string &text, const string &tooltip_name,
-    bool left,
-    gui_manager* cur_gui, gui_manager* new_gui
+    PAUSE_MENU_PAGES target_page, bool left,
+    gui_manager* cur_gui
 ) {
+    string page_name;
+    string tooltip_name;
+    switch(target_page) {
+    case PAUSE_MENU_PAGE_SYSTEM: {
+        page_name = "System";
+        tooltip_name = "system";
+        break;
+    } case PAUSE_MENU_PAGE_RADAR: {
+        page_name = "Radar";
+        tooltip_name = "radar";
+        break;
+    } case PAUSE_MENU_PAGE_MISSION: {
+        page_name = "Mission";
+        tooltip_name = "mission";
+        break;
+    }
+    }
+    
     button_gui_item* new_button =
         new button_gui_item(
         left ?
-        "< " + text :
-        text + " >",
+        "< " + page_name :
+        page_name + " >",
         game.fonts.standard
     );
     new_button->on_activate =
-    [left, cur_gui, new_gui] (const point &) {
-        cur_gui->responsive = false;
-        cur_gui->start_animation(
-            left ?
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT :
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        new_gui->responsive = true;
-        new_gui->start_animation(
-            left ?
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER :
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
+    [this, cur_gui, target_page, left] (const point &) {
+        switch_page(cur_gui, target_page, left);
     };
     new_button->on_get_tooltip =
     [tooltip_name] () {
@@ -439,6 +447,60 @@ button_gui_item* pause_menu_struct::create_page_button(
     };
     
     return new_button;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates the buttons and input GUI items that allow switching pages.
+ * cur_page:
+ *   Page that these creations belong to.
+ * cur_gui:
+ *   Pointer to the current page's GUI manager.
+ */
+void pause_menu_struct::create_page_buttons(
+    PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui
+) {
+    size_t cur_page_idx =
+        std::distance(
+            pages.begin(),
+            std::find(pages.begin(), pages.end(), cur_page)
+        );
+    size_t left_page_idx = sum_and_wrap(cur_page_idx, -1, pages.size());
+    size_t right_page_idx = sum_and_wrap(cur_page_idx, 1, pages.size());
+    
+    //Left page button.
+    button_gui_item* left_page_button =
+        create_page_button(pages[left_page_idx], true, cur_gui);
+    cur_gui->add_item(left_page_button, "left_page");
+    
+    //Left page input icon.
+    gui_item* left_page_input = new gui_item();
+    left_page_input->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_MENU_PAGE_LEFT).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.fonts.slim, i, true, center, size);
+    };
+    cur_gui->add_item(left_page_input, "left_page_input");
+    
+    //Right page button.
+    button_gui_item* right_page_button =
+        create_page_button(pages[right_page_idx], false, cur_gui);
+    cur_gui->add_item(right_page_button, "right_page");
+    
+    //Right page input icon.
+    gui_item* right_page_input = new gui_item();
+    right_page_input->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_MENU_PAGE_RIGHT).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.fonts.slim, i, true, center, size);
+    };
+    cur_gui->add_item(right_page_input, "right_page_input");
 }
 
 
@@ -733,28 +795,59 @@ void pause_menu_struct::draw_radar(
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(!l_ptr->mid_go_here) continue;
-        if(l_ptr->path_info->path.empty()) continue;
         
         float path_texture_point = 0.0f;
-        ALLEGRO_COLOR color = al_map_rgba(120, 140, 160, 192);
+        ALLEGRO_COLOR color = al_map_rgba(120, 140, 170, 192);
         
-        draw_go_here_segment(
-            l_ptr->pos,
-            l_ptr->path_info->path[0]->pos,
-            color, &path_texture_point
-        );
-        for(size_t s = 1; s < l_ptr->path_info->path.size(); ++s) {
+        switch(l_ptr->path_info->result) {
+        case PATH_RESULT_DIRECT:
+        case PATH_RESULT_DIRECT_NO_STOPS: {
+            //Go directly from A to B.
+            
             draw_go_here_segment(
-                l_ptr->path_info->path[s - 1]->pos,
-                l_ptr->path_info->path[s]->pos,
+                l_ptr->pos,
+                l_ptr->path_info->settings.target_point,
                 color, &path_texture_point
             );
+            
+            break;
+            
+        } case PATH_RESULT_NORMAL_PATH:
+        case PATH_RESULT_PATH_WITH_SINGLE_STOP:
+        case PATH_RESULT_PATH_WITH_OBSTACLES: {
+    
+            size_t first_stop = l_ptr->path_info->cur_path_stop_nr;
+            if(first_stop >= l_ptr->path_info->path.size()) continue;
+            
+            draw_go_here_segment(
+                l_ptr->pos,
+                l_ptr->path_info->path[first_stop]->pos,
+                color, &path_texture_point
+            );
+            for(
+                size_t s = first_stop + 1;
+                s < l_ptr->path_info->path.size();
+                ++s
+            ) {
+                draw_go_here_segment(
+                    l_ptr->path_info->path[s - 1]->pos,
+                    l_ptr->path_info->path[s]->pos,
+                    color, &path_texture_point
+                );
+            }
+            draw_go_here_segment(
+                l_ptr->path_info->path.back()->pos,
+                l_ptr->path_info->settings.target_point,
+                color, &path_texture_point
+            );
+            
+            break;
+            
+        } default: {
+    
+            break;
         }
-        draw_go_here_segment(
-            l_ptr->path_info->path.back()->pos,
-            l_ptr->path_info->settings.target_point,
-            color, &path_texture_point
-        );
+        }
     }
     
     //Go Here choice path.
@@ -1222,8 +1315,10 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
     if(radar_gui.responsive) {
         switch(action.action_type_id) {
         case PLAYER_ACTION_RADAR: {
-            start_closing(&radar_gui);
-            handled_by_radar = true;
+            if(action.value >= 0.5f) {
+                start_closing(&radar_gui);
+                handled_by_radar = true;
+            }
             break;
         } case PLAYER_ACTION_RADAR_RIGHT: {
             radar_pan.right = action.value;
@@ -1266,6 +1361,43 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
         help_gui.handle_player_action(action);
         mission_gui.handle_player_action(action);
         confirmation_gui.handle_player_action(action);
+        
+        switch(action.action_type_id) {
+        case PLAYER_ACTION_MENU_PAGE_LEFT:
+        case PLAYER_ACTION_MENU_PAGE_RIGHT: {
+            if(action.value >= 0.5f) {
+                gui_manager* cur_gui = &gui;
+                PAUSE_MENU_PAGES cur_page = PAUSE_MENU_PAGE_SYSTEM;
+                if(radar_gui.responsive) {
+                    cur_gui = &radar_gui;
+                    cur_page = PAUSE_MENU_PAGE_RADAR;
+                } else if(mission_gui.responsive) {
+                    cur_gui = &mission_gui;
+                    cur_page = PAUSE_MENU_PAGE_MISSION;
+                }
+                size_t cur_page_idx =
+                    std::distance(
+                        pages.begin(),
+                        std::find(pages.begin(), pages.end(), cur_page)
+                    );
+                size_t new_page_idx =
+                    sum_and_wrap(
+                        cur_page_idx,
+                        action.action_type_id == PLAYER_ACTION_MENU_PAGE_LEFT ?
+                        -1 :
+                        1,
+                        pages.size()
+                    );
+                switch_page(
+                    cur_gui,
+                    pages[new_page_idx],
+                    action.action_type_id == PLAYER_ACTION_MENU_PAGE_LEFT
+                );
+            }
+            
+            break;
+        }
+        }
     }
 }
 
@@ -1563,18 +1695,20 @@ void pause_menu_struct::init_help_page() {
  */
 void pause_menu_struct::init_main_pause_menu() {
     //Menu items.
-    gui.register_coords("header",        50,  5, 52,  6);
-    gui.register_coords("left_page",     12,  5, 20,  6);
-    gui.register_coords("right_page",    88,  5, 20,  6);
-    gui.register_coords("line",          50, 11, 96,  2);
-    gui.register_coords("area_name",     50, 20, 96,  8);
-    gui.register_coords("area_subtitle", 50, 27, 88,  6);
-    gui.register_coords("continue",      13, 88, 22,  8);
-    gui.register_coords("retry",         50, 41, 52, 10);
-    gui.register_coords("end",           50, 53, 52, 10);
-    gui.register_coords("help",          50, 65, 52, 10);
-    gui.register_coords("quit",          87, 88, 22,  8);
-    gui.register_coords("tooltip",       50, 96, 96,  4);
+    gui.register_coords("header",           50,  5, 52,  6);
+    gui.register_coords("left_page",        12,  5, 20,  6);
+    gui.register_coords("left_page_input",  3,   7,  4,  4);
+    gui.register_coords("right_page",       88,  5, 20,  6);
+    gui.register_coords("right_page_input", 97,  7,  4,  4);
+    gui.register_coords("line",             50, 11, 96,  2);
+    gui.register_coords("area_name",        50, 20, 96,  8);
+    gui.register_coords("area_subtitle",    50, 27, 88,  6);
+    gui.register_coords("continue",         13, 88, 22,  8);
+    gui.register_coords("retry",            50, 41, 52, 10);
+    gui.register_coords("end",              50, 53, 52, 10);
+    gui.register_coords("help",             50, 65, 52, 10);
+    gui.register_coords("quit",             87, 88, 22,  8);
+    gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
         data_node(PAUSE_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -1587,33 +1721,8 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     gui.add_item(header_text, "header");
     
-    //Left page button.
-    button_gui_item* left_page_button;
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        left_page_button =
-            create_page_button(
-                "Mission", "mission",
-                true,
-                &gui, &mission_gui
-            );
-    } else {
-        left_page_button =
-            create_page_button(
-                "Radar", "radar",
-                true,
-                &gui, &radar_gui
-            );
-    }
-    gui.add_item(left_page_button, "left_page");
-    
-    //Right page button.
-    button_gui_item* right_page_button =
-        create_page_button(
-            "Radar", "radar",
-            false,
-            &gui, &radar_gui
-        );
-    gui.add_item(right_page_button, "right_page");
+    //Page buttons and inputs.
+    create_page_buttons(PAUSE_MENU_PAGE_SYSTEM, &gui);
     
     //Line.
     gui_item* line = new gui_item();
@@ -1774,21 +1883,23 @@ void pause_menu_struct::init_mission_page() {
     data_node gui_file(PAUSE_MENU::MISSION_GUI_FILE_PATH);
     
     //Menu items.
-    mission_gui.register_coords("header",         50,  5, 52,  6);
-    mission_gui.register_coords("left_page",      12,  5, 20,  6);
-    mission_gui.register_coords("right_page",     88,  5, 20,  6);
-    mission_gui.register_coords("line",           50, 11, 96,  2);
-    mission_gui.register_coords("continue",       10, 16, 16,  4);
-    mission_gui.register_coords("goal_header",    50, 16, 60,  4);
-    mission_gui.register_coords("goal",           50, 22, 96,  4);
-    mission_gui.register_coords("goal_status",    50, 26, 96,  4);
-    mission_gui.register_coords("fail_header",    50, 32, 96,  4);
-    mission_gui.register_coords("fail_list",      48, 48, 92, 24);
-    mission_gui.register_coords("fail_scroll",    97, 48,  2, 24);
-    mission_gui.register_coords("grading_header", 50, 64, 96,  4);
-    mission_gui.register_coords("grading_list",   48, 80, 92, 24);
-    mission_gui.register_coords("grading_scroll", 97, 80,  2, 24);
-    mission_gui.register_coords("tooltip",        50, 96, 96,  4);
+    mission_gui.register_coords("header",           50,  5, 52,  6);
+    mission_gui.register_coords("left_page",        12,  5, 20,  6);
+    mission_gui.register_coords("left_page_input",   3,  7,  4,  4);
+    mission_gui.register_coords("right_page",       88,  5, 20,  6);
+    mission_gui.register_coords("right_page_input", 97,  7,  4,  4);
+    mission_gui.register_coords("line",             50, 11, 96,  2);
+    mission_gui.register_coords("continue",         10, 16, 16,  4);
+    mission_gui.register_coords("goal_header",      50, 16, 60,  4);
+    mission_gui.register_coords("goal",             50, 22, 96,  4);
+    mission_gui.register_coords("goal_status",      50, 26, 96,  4);
+    mission_gui.register_coords("fail_header",      50, 32, 96,  4);
+    mission_gui.register_coords("fail_list",        48, 48, 92, 24);
+    mission_gui.register_coords("fail_scroll",      97, 48,  2, 24);
+    mission_gui.register_coords("grading_header",   50, 64, 96,  4);
+    mission_gui.register_coords("grading_list",     48, 80, 92, 24);
+    mission_gui.register_coords("grading_scroll",   97, 80,  2, 24);
+    mission_gui.register_coords("tooltip",          50, 96, 96,  4);
     mission_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Header.
@@ -1799,23 +1910,8 @@ void pause_menu_struct::init_mission_page() {
     );
     mission_gui.add_item(header_text, "header");
     
-    //Left page button.
-    button_gui_item* left_page_button =
-        create_page_button(
-            "Radar", "radar",
-            true,
-            &mission_gui, &radar_gui
-        );
-    mission_gui.add_item(left_page_button, "left_page");
-    
-    //Right page button.
-    button_gui_item* right_page_button =
-        create_page_button(
-            "System", "system",
-            false,
-            &mission_gui, &gui
-        );
-    mission_gui.add_item(right_page_button, "right_page");
+    //Page buttons and inputs.
+    create_page_buttons(PAUSE_MENU_PAGE_MISSION, &mission_gui);
     
     //Line.
     gui_item* line = new gui_item();
@@ -1937,7 +2033,9 @@ void pause_menu_struct::init_radar_page() {
     //Menu items.
     radar_gui.register_coords("header",              50,     5,    52,    6);
     radar_gui.register_coords("left_page",           12,     5,    20,    6);
+    radar_gui.register_coords("left_page_input",      3,     7,     4,    4);
     radar_gui.register_coords("right_page",          88,     5,    20,    6);
+    radar_gui.register_coords("right_page_input",    97,     7,     4,    4);
     radar_gui.register_coords("line",                50,    11,    96,    2);
     radar_gui.register_coords("continue",            10,    16,    16,    4);
     radar_gui.register_coords("radar",               37.5,  56.25, 70,   72.5);
@@ -1960,33 +2058,8 @@ void pause_menu_struct::init_radar_page() {
     );
     radar_gui.add_item(header_text, "header");
     
-    //Left page button.
-    button_gui_item* left_page_button =
-        create_page_button(
-            "System", "system",
-            true,
-            &radar_gui, &gui
-        );
-    radar_gui.add_item(left_page_button, "left_page");
-    
-    //Right page button.
-    button_gui_item* right_page_button;
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        right_page_button =
-            create_page_button(
-                "Mission", "mission",
-                false,
-                &radar_gui, &mission_gui
-            );
-    } else {
-        right_page_button =
-            create_page_button(
-                "System", "system",
-                false,
-                &radar_gui, &gui
-            );
-    }
-    radar_gui.add_item(right_page_button, "right_page");
+    //Page buttons and inputs.
+    create_page_buttons(PAUSE_MENU_PAGE_RADAR, &radar_gui);
     
     //Line.
     gui_item* line = new gui_item();
@@ -2348,6 +2421,49 @@ void pause_menu_struct::start_leaving_gameplay() {
 
 
 /* ----------------------------------------------------------------------------
+ * Switches pages in the pause menu.
+ * cur_gui:
+ *   Pointer to the current page's GUI manager.
+ * new_page:
+ *   The new page to switch to.
+ * left:
+ *   Is the new page to the left of the current one, or the right?
+ */
+void pause_menu_struct::switch_page(
+    gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
+) {
+    gui_manager* new_gui = NULL;
+    switch(new_page) {
+    case PAUSE_MENU_PAGE_SYSTEM: {
+        new_gui = &gui;
+        break;
+    } case PAUSE_MENU_PAGE_RADAR: {
+        new_gui = &radar_gui;
+        break;
+    } case PAUSE_MENU_PAGE_MISSION: {
+        new_gui = &mission_gui;
+        break;
+    }
+    }
+    
+    cur_gui->responsive = false;
+    cur_gui->start_animation(
+        left ?
+        GUI_MANAGER_ANIM_CENTER_TO_RIGHT :
+        GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+    );
+    new_gui->responsive = true;
+    new_gui->start_animation(
+        left ?
+        GUI_MANAGER_ANIM_LEFT_TO_CENTER :
+        GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks time by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
@@ -2379,6 +2495,12 @@ void pause_menu_struct::tick(const float delta_t) {
     }
     
     //Tick radar things.
+    point radar_center;
+    point radar_size;
+    radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+    
+    update_radar_transformations(radar_center, radar_size);
+    
     if(radar_gui.responsive) {
     
         point radar_pan_coords;
@@ -2394,12 +2516,6 @@ void pause_menu_struct::tick(const float delta_t) {
         } else if(radar_zoom_out && !radar_zoom_in) {
             zoom_radar(-PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
         }
-        
-        point radar_center;
-        point radar_size;
-        radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
-        
-        update_radar_transformations(radar_center, radar_size);
         
         bool mouse_in_radar =
             is_point_in_rectangle(
