@@ -253,6 +253,8 @@ public:
     BIG_MESSAGES cur_big_msg;
     //Time passed in the current big message.
     float big_msg_time;
+    //Zoom level to use on the radar.
+    float radar_zoom;
     
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);

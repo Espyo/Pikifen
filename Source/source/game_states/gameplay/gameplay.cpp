@@ -149,6 +149,7 @@ gameplay_state::gameplay_state() :
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
     big_msg_time(0.0f),
+    radar_zoom(PAUSE_MENU::RADAR_DEF_ZOOM),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
     close_to_pikmin_to_pluck(nullptr),

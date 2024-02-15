@@ -38,6 +38,8 @@ const string MISSION_GUI_FILE_PATH =
 //Background color of the radar.
 const ALLEGRO_COLOR RADAR_BG_COLOR =
     al_map_rgb(32, 24, 0);
+//Default radar zoom level.
+const float RADAR_DEF_ZOOM = 0.4f;
 //Path to the radar page GUI information file.
 const string RADAR_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_radar.txt";
@@ -170,7 +172,7 @@ pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     if(radar_selected_leader) {
         radar_cam.set_pos(radar_selected_leader->pos);
     }
-    radar_cam.set_zoom(0.4f);
+    radar_cam.set_zoom(game.states.gameplay->radar_zoom);
     
     //Start the process.
     opening_lockout_timer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
@@ -2399,6 +2401,8 @@ void pause_menu_struct::start_closing(gui_manager* cur_gui) {
     );
     closing = true;
     closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+    
+    game.states.gameplay->radar_zoom = radar_cam.zoom;
 }
 
 

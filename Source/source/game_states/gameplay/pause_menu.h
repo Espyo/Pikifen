@@ -30,6 +30,7 @@ extern const string GUI_FILE_PATH;
 extern const string HELP_GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
 extern const ALLEGRO_COLOR RADAR_BG_COLOR;
+extern const float RADAR_DEF_ZOOM;
 extern const string RADAR_GUI_FILE_PATH;
 extern const ALLEGRO_COLOR RADAR_HIGHEST_COLOR;
 extern const ALLEGRO_COLOR RADAR_LOWEST_COLOR;
