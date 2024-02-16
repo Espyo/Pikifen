@@ -307,6 +307,8 @@ public:
     int flags;
     //Wrap long lines. Also enables markup.
     bool line_wrap;
+    //Whether to show a selection box when selected.
+    bool show_selection_box;
     
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,

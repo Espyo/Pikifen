@@ -40,6 +40,7 @@ extern const float RADAR_ONION_COLOR_FADE_DUR;
 extern const float RADAR_ONION_COLOR_FADE_CYCLE_DUR;
 extern const float RADAR_PAN_SPEED;
 extern const float RADAR_ZOOM_SPEED;
+extern const string STATUS_GUI_FILE_PATH;
 }
 
 
@@ -60,6 +61,8 @@ enum PAUSE_MENU_PAGES {
     PAUSE_MENU_PAGE_SYSTEM,
     //Radar.
     PAUSE_MENU_PAGE_RADAR,
+    //Status.
+    PAUSE_MENU_PAGE_STATUS,
     //Mission.
     PAUSE_MENU_PAGE_MISSION
 };
@@ -101,10 +104,12 @@ struct pause_menu_struct {
     gui_manager gui;
     //GUI manager for the radar page.
     gui_manager radar_gui;
-    //GUI manager for the help page.
-    gui_manager help_gui;
+    //GUI manager for the status page.
+    gui_manager status_gui;
     //GUI manager for the mission page.
     gui_manager mission_gui;
+    //GUI manager for the help page.
+    gui_manager help_gui;
     //GUI manager for the leaving confirmation page.
     gui_manager confirmation_gui;
     //Multiply the background alpha by this much.
@@ -145,6 +150,8 @@ private:
     text_gui_item* confirmation_explanation_text;
     //Radar GUI item.
     gui_item* radar_item;
+    //Pikmin status list.
+    list_gui_item* pikmin_list;
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<tidbit> > tidbits;
     //Currently shown help tidbit, if any.
@@ -214,6 +221,18 @@ private:
         list_gui_item* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+    void add_pikmin_status_line(
+        list_gui_item* list,
+        pikmin_type* pik_type,
+        const string &total_text,
+        const string &group_text,
+        const string &field_text,
+        const string &idle_text,
+        const string &onion_text,
+        const string &new_text,
+        const string &lost_text,
+        bool is_single, bool is_totals
+    );
     void calculate_go_here_path();
     void confirm_or_leave();
     button_gui_item* create_page_button(
@@ -232,11 +251,12 @@ private:
     void fill_mission_fail_list(list_gui_item* list);
     void fill_mission_grading_list(list_gui_item* list);
     string get_mission_goal_status();
+    void init_confirmation_page();
     void init_radar_page();
     void init_help_page();
     void init_main_pause_menu();
     void init_mission_page();
-    void init_confirmation_page();
+    void init_status_page();
     void pan_radar(point amount);
     void populate_help_tidbits(const HELP_CATEGORIES category);
     void radar_confirm();

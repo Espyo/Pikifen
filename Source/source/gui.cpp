@@ -1536,7 +1536,8 @@ text_gui_item::text_gui_item(
     font(font),
     color(color),
     flags(flags),
-    line_wrap(false) {
+    line_wrap(false),
+    show_selection_box(false) {
     
     on_draw =
     [this] (const point & center, const point & size) {
@@ -1591,6 +1592,14 @@ text_gui_item::text_gui_item(
                 this->text
             );
             
+        }
+        
+        if(selected && show_selection_box) {
+            draw_textured_box(
+                center,
+                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+                game.sys_assets.bmp_focus_box
+            );
         }
     };
 }

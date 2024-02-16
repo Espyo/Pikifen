@@ -869,7 +869,7 @@ bool mission_fail_time_limit::is_met(
 int mission_fail_too_few_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_amount_of_total_pikmin();
 }
 
 
@@ -1005,7 +1005,7 @@ bool mission_fail_too_few_pikmin::is_met(
 int mission_fail_too_many_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_amount_of_total_pikmin();
 }
 
 
@@ -1739,7 +1739,7 @@ bool mission_goal_get_to_exit::is_mob_applicable(
 int mission_goal_grow_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_amount_of_total_pikmin();
 }
 
 

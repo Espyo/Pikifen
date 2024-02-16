@@ -183,7 +183,7 @@ public:
     unordered_set<size_t> mission_remaining_mob_ids;
     //How many mobs are required for the mission goal. Cache for convenience.
     size_t mission_required_mob_amount;
-    //How many Pikmin born so far.
+    //How many Pikmin were born so far.
     size_t pikmin_born;
     //How many Pikmin deaths so far.
     size_t pikmin_deaths;
@@ -233,8 +233,6 @@ public:
     size_t nr_living_leaders;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
-    //Number of Pikmin in the current leader's group. Cache for convenience.
-    size_t nr_group_pikmin;
     //Starting number of leader mobs.
     size_t starting_nr_of_leaders;
     //Ratio of the mission goal HUD item's indicator.
@@ -255,12 +253,20 @@ public:
     float big_msg_time;
     //Zoom level to use on the radar.
     float radar_zoom;
+    //Number of Pikmin born so far, per type.
+    map<pikmin_type*, long> pikmin_born_per_type;
+    //Number of Pikmin lost so far, per type.
+    map<pikmin_type*, long> pikmin_deaths_per_type;
     
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
-    size_t get_total_pikmin_amount();
+    size_t get_amount_of_field_pikmin(pikmin_type* filter = NULL);
+    size_t get_amount_of_group_pikmin(pikmin_type* filter = NULL);
+    size_t get_amount_of_idle_pikmin(pikmin_type* filter = NULL);
+    long get_amount_of_onion_pikmin(pikmin_type* filter = NULL);
+    long get_amount_of_total_pikmin(pikmin_type* filter = NULL);
     void update_available_leaders();
     void update_closest_group_members();
     

@@ -452,7 +452,7 @@
     
     <h3 id="pause-menu">Pause menu</h3>
 
-    <p>The menu that shows when the player pauses the game. This is only the main page, not the help page or the confirmation page.</p>
+    <p>The menu that shows when the player pauses the game. This is only the system page, not the help page or the confirmation page.</p>
     
     <ul>
       <li><b>File name:</b> <code>Pause_menu.txt</code></li>
@@ -460,7 +460,9 @@
       <ul>
         <li><code>header</code>: Header text saying "PAUSED".</li>
         <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
+        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
         <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
+        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
         <li><code>line</code>: Horizontal line separating the header and the menu.</li>
         <li><code>area_name</code>: Area name.</li>
         <li><code>area_subtitle</code>: Area subtitle or mission goal, if any.</li>
@@ -522,7 +524,9 @@
       <ul>
         <li><code>header</code>: Header text saying "MISSION".</li>
         <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
+        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
         <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
+        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
         <li><code>line</code>: Horizontal line separating the header and the menu.</li>
         <li><code>continue</code>: Continue button.</li>
         <li><code>goal_header</code>: Header text saying "Goal".</li>
@@ -548,17 +552,53 @@
       <ul>
         <li><code>header</code>: Header text saying "RADAR".</li>
         <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
+        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
         <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
+        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
         <li><code>line</code>: Horizontal line separating the header and the menu.</li>
         <li><code>continue</code>: Continue button.</li>
         <li><code>radar</code>: The actual radar itself.</li>
-        <li><code>field_pikmin_label</code>: Label for the field Pikmin counter.</li>
-        <li><code>field_pikmin_number</code>: Field Pikmin counter.</li>
-        <li><code>idle_pikmin_label</code>: Label for the idle Pikmin counter.</li>
-        <li><code>idle_pikmin_number</code>: Idle Pikmin counter.</li>
         <li><code>group_pikmin_label</code>: Label for the group Pikmin counter.</li>
         <li><code>group_pikmin_number</code>: Group Pikmin counter.</li>
+        <li><code>idle_pikmin_label</code>: Label for the idle Pikmin counter.</li>
+        <li><code>idle_pikmin_number</code>: Idle Pikmin counter.</li>
+        <li><code>field_pikmin_label</code>: Label for the field Pikmin counter.</li>
+        <li><code>field_pikmin_number</code>: Field Pikmin counter.</li>
         <li><code>cursor_info</code>: Information about whatever the radar cursor is on.</li>
+        <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
+        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
+      </ul>
+      <li><b>Files:</b> You can specify what bitmap files some of the radar icons should use in the <code>files</code> block.</li>
+      <ul>
+        <li><code>pikmin</code>: Icon representing a Pikmin.</li>
+        <li><code>treasure</code>: Icon representing a treasure.</li>
+        <li><code>enemy</code>: Icon representing an enemy.</li>
+        <li><code>leader_bubble</code>: Bubble to place around a leader's icon.</li>
+        <li><code>onion_skeleton</code>: Skeleton part of the icon that represents an Onion. This is the part of the icon that doesn't change color, i.e. the legs and other details.</li>
+        <li><code>onion_bulb</code>: Bulb part of the icon that represents an Onion. This is the part that changes color depending on the Pikmin it can manage.</li>
+        <li><code>ship</code>: Icon representing a ship.</li>
+      </ul>
+    </ul>
+
+    <h3 id="pause-menu-status">Pause menu &ndash; status page</h3>
+
+    <p>The Pikmin status page of the pause menu.</p>
+
+    <ul>
+      <li><b>File name:</b> <code>Pause_status.txt</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>header</code>: Header text saying "STATUS".</li>
+        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
+        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
+        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
+        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
+        <li><code>line</code>: Horizontal line separating the header and the menu.</li>
+        <li><code>continue</code>: Continue button.</li>
+        <li><code>list_header</code>: Row for the header of the table, which details what each column is.</li>
+        <li><code>list</code>: The table proper.</li>
+        <li><code>list_scroll</code>: Scrollbar for the list.</li>
+        <li><code>totals</code>: Row containing the grand totals.</li>
         <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>

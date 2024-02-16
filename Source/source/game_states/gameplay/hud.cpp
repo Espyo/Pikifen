@@ -620,13 +620,13 @@ hud_struct::hud_struct() :
     group_amount = new gui_item();
     group_amount->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        size_t cur_amount = game.states.gameplay->get_amount_of_group_pikmin();
         
-        if(game.states.gameplay->nr_group_pikmin != group_count_nr) {
+        if(cur_amount != group_count_nr) {
             group_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
-            group_count_nr = game.states.gameplay->nr_group_pikmin;
+            group_count_nr = cur_amount;
         }
         
         draw_compressed_scaled_text(
@@ -635,7 +635,7 @@ hud_struct::hud_struct() :
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
-            i2s(game.states.gameplay->nr_group_pikmin)
+            i2s(cur_amount)
         );
     };
     gui.add_item(group_amount, "group_amount");
@@ -658,12 +658,13 @@ hud_struct::hud_struct() :
     field_amount = new gui_item();
     field_amount->on_draw =
     [this] (const point & center, const point & size) {
-        size_t n_field_pikmin = game.states.gameplay->mobs.pikmin_list.size();
-        if(n_field_pikmin != field_count_nr) {
+        size_t cur_amount = game.states.gameplay->get_amount_of_field_pikmin();
+
+        if(cur_amount != field_count_nr) {
             field_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
-            field_count_nr = n_field_pikmin;
+            field_count_nr = cur_amount;
         }
         
         draw_compressed_scaled_text(
@@ -672,7 +673,7 @@ hud_struct::hud_struct() :
             point(1.0f, 1.0f) + field_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
-            i2s(n_field_pikmin)
+            i2s(cur_amount)
         );
     };
     gui.add_item(field_amount, "field_amount");
@@ -695,13 +696,13 @@ hud_struct::hud_struct() :
     total_amount = new gui_item();
     total_amount->on_draw =
     [this] (const point & center, const point & size) {
-        size_t n_total_pikmin = game.states.gameplay->get_total_pikmin_amount();
+        size_t cur_amount = game.states.gameplay->get_amount_of_total_pikmin();
         
-        if(n_total_pikmin != total_count_nr) {
+        if(cur_amount != total_count_nr) {
             total_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
-            total_count_nr = n_total_pikmin;
+            total_count_nr = cur_amount;
         }
         
         draw_compressed_scaled_text(
@@ -710,7 +711,7 @@ hud_struct::hud_struct() :
             point(1.0f, 1.0f) + total_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
-            i2s(n_total_pikmin)
+            i2s(cur_amount)
         );
     };
     gui.add_item(total_amount, "total_amount");

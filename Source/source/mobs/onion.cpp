@@ -152,6 +152,9 @@ void onion::spew() {
         
         game.statistics.pikmin_births++;
         game.states.gameplay->pikmin_born++;
+        game.states.gameplay->pikmin_born_per_type[
+            oni_type->nest->pik_types[t]
+        ]++;
         game.states.gameplay->last_pikmin_born_pos = pos;
         
         size_t total_after =

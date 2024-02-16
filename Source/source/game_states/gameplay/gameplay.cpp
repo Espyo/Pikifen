@@ -139,7 +139,6 @@ gameplay_state::gameplay_state() :
     cur_leaders_in_mission_exit(0),
     nr_living_leaders(0),
     leaders_kod(0),
-    nr_group_pikmin(0),
     starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
     fail_1_indicator_ratio(0.0f),
@@ -440,6 +439,145 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how many Pikmin are in the field in the current area.
+ * This also checks inside converters.
+ * filter:
+ *   If not NULL, only return Pikmin matching this type.
+ */
+size_t gameplay_state::get_amount_of_field_pikmin(pikmin_type* filter) {
+    size_t total = 0;
+    
+    //Check the Pikmin mobs.
+    for(size_t p = 0; p < mobs.pikmin_list.size(); ++p) {
+        pikmin* p_ptr = mobs.pikmin_list[p];
+        if(filter && p_ptr->pik_type != filter) continue;
+        total++;
+    }
+    
+    //Check Pikmin inside converters.
+    for(size_t c = 0; c < mobs.converters.size(); ++c) {
+        converter* c_ptr = mobs.converters[c];
+        if(filter && c_ptr->current_type != filter) continue;
+        total += c_ptr->amount_in_buffer;
+    }
+    
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many Pikmin are in the group.
+ * filter:
+ *   If not NULL, only return Pikmin matching this type.
+ */
+size_t gameplay_state::get_amount_of_group_pikmin(pikmin_type* filter) {
+    size_t total = 0;
+    
+    if(!cur_leader_ptr) return 0;
+    
+    for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+        mob* m_ptr = cur_leader_ptr->group->members[m];
+        if(m_ptr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
+        if(filter && m_ptr->type != filter) continue;
+        total++;
+    }
+    
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many Pikmin are idling in the area.
+ * filter:
+ *   If not NULL, only return Pikmin matching this type.
+ */
+size_t gameplay_state::get_amount_of_idle_pikmin(pikmin_type* filter) {
+    size_t total = 0;
+    
+    for(size_t p = 0; p < mobs.pikmin_list.size(); ++p) {
+        pikmin* p_ptr = mobs.pikmin_list[p];
+        if(filter && p_ptr->type != filter) continue;
+        if(
+            p_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING ||
+            p_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
+        ) {
+            total++;
+        }
+    }
+    
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many Pikmin are inside of Onions in the current area.
+ * This also checks ships.
+ * filter:
+ *   If not NULL, only return Pikmin matching this type.
+ */
+long gameplay_state::get_amount_of_onion_pikmin(pikmin_type* filter) {
+    long total = 0;
+    
+    //Check Onions proper.
+    for(size_t o = 0; o < mobs.onions.size(); ++o) {
+        onion* o_ptr = mobs.onions[o];
+        for(
+            size_t t = 0;
+            t < o_ptr->oni_type->nest->pik_types.size();
+            ++t
+        ) {
+            if(filter && o_ptr->oni_type->nest->pik_types[t] != filter) {
+                continue;
+            }
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                total += o_ptr->nest->pikmin_inside[t][m];
+            }
+        }
+    }
+    
+    //Check ships.
+    for(size_t s = 0; s < mobs.ships.size(); ++s) {
+        ship* s_ptr = mobs.ships[s];
+        if(!s_ptr->nest) continue;
+        for(
+            size_t t = 0;
+            t < s_ptr->shi_type->nest->pik_types.size();
+            ++t
+        ) {
+            if(filter && s_ptr->shi_type->nest->pik_types[t] != filter) {
+                continue;
+            }
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                total += s_ptr->nest->pikmin_inside[t][m];
+            }
+        }
+    }
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total amount of Pikmin the player has.
+ * This includes Pikmin in the field as well as the Onions, and also
+ * Pikmin inside converters.
+ * filter:
+ *   If not NULL, only return Pikmin matching this type.
+ */
+long gameplay_state::get_amount_of_total_pikmin(pikmin_type* filter) {
+    long total = 0;
+    
+    //Check Pikmin in the field and inside converters.
+    total += get_amount_of_field_pikmin(filter);
+    
+    //Check Pikmin inside Onions and ships.
+    total += get_amount_of_onion_pikmin(filter);
+    
+    //Return the final sum.
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the closest group member of a given standby subgroup.
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
@@ -514,55 +652,6 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
  */
 string gameplay_state::get_name() const {
     return "gameplay";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the total amount of Pikmin the player has.
- * This includes Pikmin in the field as well as the Onions, and also
- * Pikmin inside converters.
- */
-size_t gameplay_state::get_total_pikmin_amount() {
-    //Check Pikmin in the field.
-    size_t n_total_pikmin = mobs.pikmin_list.size();
-    
-    //Check Pikmin inside Onions.
-    for(size_t o = 0; o < mobs.onions.size(); ++o) {
-        onion* o_ptr = mobs.onions[o];
-        for(
-            size_t t = 0;
-            t < o_ptr->oni_type->nest->pik_types.size();
-            ++t
-        ) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
-                n_total_pikmin += o_ptr->nest->pikmin_inside[t][m];
-            }
-        }
-    }
-    
-    //Check Pikmin inside ships.
-    for(size_t s = 0; s < mobs.ships.size(); ++s) {
-        ship* s_ptr = mobs.ships[s];
-        if(!s_ptr->nest) continue;
-        for(
-            size_t t = 0;
-            t < s_ptr->shi_type->nest->pik_types.size();
-            ++t
-        ) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
-                n_total_pikmin += s_ptr->nest->pikmin_inside[t][m];
-            }
-        }
-    }
-    
-    //Check Pikmin inside converters.
-    for(size_t c = 0; c < mobs.converters.size(); ++c) {
-        converter* c_ptr = mobs.converters[c];
-        n_total_pikmin += c_ptr->amount_in_buffer;
-    }
-    
-    //Return the final sum.
-    return n_total_pikmin;
 }
 
 

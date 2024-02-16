@@ -61,6 +61,9 @@ const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
 const float RADAR_PAN_SPEED = 600.0f;
 //Max radar zoom speed when not using mouse, in amount per second.
 const float RADAR_ZOOM_SPEED = 2.5f;
+//Path to the status page GUI information file.
+const string STATUS_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_status.txt";
 }
 
 
@@ -100,14 +103,16 @@ pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
+    pages.push_back(PAUSE_MENU_PAGE_STATUS);
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         pages.push_back(PAUSE_MENU_PAGE_MISSION);
     }
     
     init_main_pause_menu();
     init_radar_page();
-    init_help_page();
+    init_status_page();
     init_mission_page();
+    init_help_page();
     init_confirmation_page();
     
     //Initialize some radar things.
@@ -200,8 +205,9 @@ pause_menu_struct::~pause_menu_struct() {
     
     gui.destroy();
     radar_gui.destroy();
-    help_gui.destroy();
+    status_gui.destroy();
     mission_gui.destroy();
+    help_gui.destroy();
     confirmation_gui.destroy();
     
     game.bitmaps.detach(bmp_radar_cursor);
@@ -255,6 +261,261 @@ void pause_menu_struct::add_bullet(
     bullet->size = point(0.96f, BULLET_HEIGHT);
     list->add_child(bullet);
     mission_gui.add_item(bullet);
+}
+
+/* ----------------------------------------------------------------------------
+ * Adds a new line to one of the Pikmin status boxes.
+ * list:
+ *   List to add to.
+ * pik_type:
+ *   Relevant Pikmin type, if applicable.
+ * group_text:
+ *   Text to display on the "group" cell.
+ * idle_text:
+ *   Text to display on the "idle" cell.
+ * field_text:
+ *   Text to display on the "field" cell.
+ * onion_text:
+ *   Text to display on the "Onion" cell.
+ * total_text:
+ *   Text to display on the "total" cell.
+ * new_text:
+ *   Text to display on the "new" cell.
+ * lost_text:
+ *   Text to display on the "lost" cell.
+ * is_single:
+ *   True if this is a box with a single row.
+ * is_totals:
+ *   True if this is the totals box.
+ */
+void pause_menu_struct::add_pikmin_status_line(
+    list_gui_item* list,
+    pikmin_type* pik_type,
+    const string &group_text,
+    const string &idle_text,
+    const string &field_text,
+    const string &onion_text,
+    const string &total_text,
+    const string &new_text,
+    const string &lost_text,
+    bool is_single, bool is_totals
+) {
+
+    const float x1 = 0.00f;
+    const float x2 = 1.00f;
+    const float working_width = x2 - x1;
+    const float item_x_interval = working_width / 8.0f;
+    const float first_x = x1 + item_x_interval / 2.0f;
+    const float item_width = item_x_interval - 0.01f;
+    
+    const float y1 = is_single ? 0.0f : list->get_child_bottom();
+    const float item_height = is_single ? 1.0f : 0.17f;
+    const float item_y_spacing = is_single ? 0.0f : 0.03f;
+    const float item_y = y1 + item_height / 2.0f + item_y_spacing;
+    
+    ALLEGRO_FONT* font =
+        (is_single && !is_totals) ? game.fonts.standard : game.fonts.counter;
+    string tooltip_start =
+        pik_type ?
+        "Number of " + pik_type->name + " " :
+        "Total number of Pikmin ";
+    bool can_select = pik_type || is_totals;
+    
+    if(pik_type) {
+    
+        //Pikmin type.
+        gui_item* type_item = new gui_item();
+        type_item->on_draw =
+        [pik_type] (const point & center, const point & size) {
+            draw_bitmap_in_box(
+                pik_type->bmp_icon, center, size, true
+            );
+        };
+        type_item->center =
+            point(
+                first_x + item_x_interval * 0,
+                item_y
+            );
+        type_item->size = point(item_width, item_height);
+        list->add_child(type_item);
+        status_gui.add_item(type_item);
+        
+    } else if(is_totals) {
+    
+        //Totals header.
+        text_gui_item* totals_header_item =
+            new text_gui_item("Total", game.fonts.area_name);
+        totals_header_item->center =
+            point(
+                first_x + item_x_interval * 0,
+                item_y
+            );
+        totals_header_item->size = point(item_width, item_height);
+        list->add_child(totals_header_item);
+        status_gui.add_item(totals_header_item);
+        
+    }
+    
+    //Group Pikmin.
+    text_gui_item* group_text_item =
+        new text_gui_item(group_text, font);
+    group_text_item->selectable = can_select;
+    group_text_item->show_selection_box = can_select;
+    group_text_item->center =
+        point(
+            first_x + item_x_interval * 1,
+            item_y
+        );
+    group_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        group_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "in your active leader's group.";
+        };
+    }
+    if(group_text == "0") {
+        group_text_item->color = change_alpha(group_text_item->color, 128);
+    }
+    list->add_child(group_text_item);
+    status_gui.add_item(group_text_item);
+    
+    //Idle Pikmin.
+    text_gui_item* idle_text_item =
+        new text_gui_item(idle_text, font);
+    idle_text_item->selectable = can_select;
+    idle_text_item->show_selection_box = can_select;
+    idle_text_item->center =
+        point(
+            first_x + item_x_interval * 2,
+            item_y
+        );
+    idle_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        idle_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "idling in the field.";
+        };
+    }
+    if(idle_text == "0") {
+        idle_text_item->color = change_alpha(idle_text_item->color, 128);
+    }
+    list->add_child(idle_text_item);
+    status_gui.add_item(idle_text_item);
+    
+    //Field Pikmin.
+    text_gui_item* field_text_item =
+        new text_gui_item(field_text, font);
+    field_text_item->selectable = can_select;
+    field_text_item->show_selection_box = can_select;
+    field_text_item->center =
+        point(
+            first_x + item_x_interval * 3,
+            item_y
+        );
+    field_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        field_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "out in the field.";
+        };
+    }
+    if(field_text == "0") {
+        field_text_item->color = change_alpha(field_text_item->color, 128);
+    }
+    list->add_child(field_text_item);
+    status_gui.add_item(field_text_item);
+    
+    //Onion Pikmin.
+    text_gui_item* onion_text_item =
+        new text_gui_item(onion_text, font);
+    onion_text_item->selectable = can_select;
+    onion_text_item->show_selection_box = can_select;
+    onion_text_item->center =
+        point(
+            first_x + item_x_interval * 4,
+            item_y
+        );
+    onion_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        onion_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "inside Onions.";
+        };
+    }
+    if(onion_text == "0") {
+        onion_text_item->color = change_alpha(onion_text_item->color, 128);
+    }
+    list->add_child(onion_text_item);
+    status_gui.add_item(onion_text_item);
+    
+    //Total Pikmin.
+    text_gui_item* total_text_item =
+        new text_gui_item(total_text, font, COLOR_GOLD);
+    total_text_item->selectable = can_select;
+    total_text_item->show_selection_box = can_select;
+    total_text_item->center =
+        point(
+            first_x + item_x_interval * 5,
+            item_y
+        );
+    total_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        total_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "you have.";
+        };
+    }
+    if(total_text == "0") {
+        total_text_item->color = change_alpha(total_text_item->color, 128);
+    }
+    list->add_child(total_text_item);
+    status_gui.add_item(total_text_item);
+    
+    //New Pikmin.
+    text_gui_item* new_text_item =
+        new text_gui_item(new_text, font, al_map_rgb(210, 255, 210));
+    new_text_item->selectable = can_select;
+    new_text_item->show_selection_box = can_select;
+    new_text_item->center =
+        point(
+            first_x + item_x_interval * 6,
+            item_y
+        );
+    new_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        new_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "born today.";
+        };
+    }
+    if(new_text == "0") {
+        new_text_item->color = change_alpha(new_text_item->color, 128);
+    }
+    list->add_child(new_text_item);
+    status_gui.add_item(new_text_item);
+    
+    //Lost Pikmin.
+    text_gui_item* lost_text_item =
+        new text_gui_item(lost_text, font, al_map_rgb(255, 210, 210));
+    lost_text_item->selectable = can_select;
+    lost_text_item->show_selection_box = can_select;
+    lost_text_item->center =
+        point(
+            first_x + item_x_interval * 7,
+            item_y
+        );
+    lost_text_item->size = point(item_width, item_height);
+    if(can_select) {
+        lost_text_item->on_get_tooltip =
+        [tooltip_start] () {
+            return tooltip_start + "lost today.";
+        };
+    }
+    if(lost_text == "0") {
+        lost_text_item->color = change_alpha(lost_text_item->color, 128);
+    }
+    list->add_child(lost_text_item);
+    status_gui.add_item(lost_text_item);
 }
 
 
@@ -425,6 +686,10 @@ button_gui_item* pause_menu_struct::create_page_button(
         page_name = "Radar";
         tooltip_name = "radar";
         break;
+    } case PAUSE_MENU_PAGE_STATUS: {
+        page_name = "Status";
+        tooltip_name = "status";
+        break;
     } case PAUSE_MENU_PAGE_MISSION: {
         page_name = "Mission";
         tooltip_name = "mission";
@@ -512,8 +777,9 @@ void pause_menu_struct::create_page_buttons(
 void pause_menu_struct::draw() {
     gui.draw();
     radar_gui.draw();
-    help_gui.draw();
+    status_gui.draw();
     mission_gui.draw();
+    help_gui.draw();
     confirmation_gui.draw();
 }
 
@@ -1236,8 +1502,9 @@ string pause_menu_struct::get_mission_goal_status() {
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
     radar_gui.handle_event(ev);
-    help_gui.handle_event(ev);
+    status_gui.handle_event(ev);
     mission_gui.handle_event(ev);
+    help_gui.handle_event(ev);
     confirmation_gui.handle_event(ev);
     
     //Handle some radar logic.
@@ -1360,8 +1627,9 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
         //radar and menus actions share binds.
         gui.handle_player_action(action);
         radar_gui.handle_player_action(action);
-        help_gui.handle_player_action(action);
+        status_gui.handle_player_action(action);
         mission_gui.handle_player_action(action);
+        help_gui.handle_player_action(action);
         confirmation_gui.handle_player_action(action);
         
         switch(action.action_type_id) {
@@ -1373,6 +1641,9 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
                 if(radar_gui.responsive) {
                     cur_gui = &radar_gui;
                     cur_page = PAUSE_MENU_PAGE_RADAR;
+                } else if(status_gui.responsive) {
+                    cur_gui = &status_gui;
+                    cur_page = PAUSE_MENU_PAGE_STATUS;
                 } else if(mission_gui.responsive) {
                     cur_gui = &mission_gui;
                     cur_page = PAUSE_MENU_PAGE_MISSION;
@@ -2041,12 +2312,12 @@ void pause_menu_struct::init_radar_page() {
     radar_gui.register_coords("line",                50,    11,    96,    2);
     radar_gui.register_coords("continue",            10,    16,    16,    4);
     radar_gui.register_coords("radar",               37.5,  56.25, 70,   72.5);
-    radar_gui.register_coords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
-    radar_gui.register_coords("field_pikmin_number", 86.25, 55,    22.5,  5);
-    radar_gui.register_coords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
-    radar_gui.register_coords("idle_pikmin_number",  86.25, 70,    22.5,  5);
     radar_gui.register_coords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
     radar_gui.register_coords("group_pikmin_number", 86.25, 85,    22.5,  5);
+    radar_gui.register_coords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
+    radar_gui.register_coords("idle_pikmin_number",  86.25, 70,    22.5,  5);
+    radar_gui.register_coords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
+    radar_gui.register_coords("field_pikmin_number", 86.25, 55,    22.5,  5);
     radar_gui.register_coords("cursor_info",         86.25, 33.75, 22.5, 17.5);
     radar_gui.register_coords("instructions",        58.75, 16,    77.5,  4);
     radar_gui.register_coords("tooltip",             50,    96,    96,    4);
@@ -2095,48 +2366,6 @@ void pause_menu_struct::init_radar_page() {
     };
     radar_gui.add_item(radar_item, "radar");
     
-    //Field Pikmin label text.
-    text_gui_item* field_pik_label_text =
-        new text_gui_item(
-        "Field Pikmin:", game.fonts.standard,
-        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-    );
-    radar_gui.add_item(field_pik_label_text, "field_pikmin_label");
-    
-    //Field Pikmin number text.
-    text_gui_item* field_pik_nr_text =
-        new text_gui_item(
-        i2s(game.states.gameplay->mobs.pikmin_list.size()),
-        game.fonts.counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
-    );
-    radar_gui.add_item(field_pik_nr_text, "field_pikmin_number");
-    
-    //Idle Pikmin label text.
-    text_gui_item* idle_pik_label_text =
-        new text_gui_item(
-        "Idle Pikmin:", game.fonts.standard,
-        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-    );
-    radar_gui.add_item(idle_pik_label_text, "idle_pikmin_label");
-    
-    //Idle Pikmin number text.
-    size_t nr_idle_pikmin = 0;
-    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); ++p) {
-        pikmin* pik_ptr = game.states.gameplay->mobs.pikmin_list[p];
-        if(
-            pik_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING ||
-            pik_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
-        ) {
-            nr_idle_pikmin++;
-        }
-    }
-    text_gui_item* idle_pik_nr_text =
-        new text_gui_item(
-        i2s(nr_idle_pikmin), game.fonts.counter,
-        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
-    );
-    radar_gui.add_item(idle_pik_nr_text, "idle_pikmin_number");
-    
     //Group Pikmin label text.
     text_gui_item* group_pik_label_text =
         new text_gui_item(
@@ -2148,10 +2377,44 @@ void pause_menu_struct::init_radar_page() {
     //Group Pikmin number text.
     text_gui_item* group_pik_nr_text =
         new text_gui_item(
-        i2s(game.states.gameplay->nr_group_pikmin), game.fonts.counter,
+        i2s(game.states.gameplay->get_amount_of_group_pikmin()),
+        game.fonts.counter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     radar_gui.add_item(group_pik_nr_text, "group_pikmin_number");
+    
+    //Idle Pikmin label text.
+    text_gui_item* idle_pik_label_text =
+        new text_gui_item(
+        "Idle Pikmin:", game.fonts.standard,
+        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    radar_gui.add_item(idle_pik_label_text, "idle_pikmin_label");
+    
+    //Idle Pikmin number text.
+    text_gui_item* idle_pik_nr_text =
+        new text_gui_item(
+        i2s(game.states.gameplay->get_amount_of_idle_pikmin()),
+        game.fonts.counter,
+        COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    radar_gui.add_item(idle_pik_nr_text, "idle_pikmin_number");
+    
+    //Field Pikmin label text.
+    text_gui_item* field_pik_label_text =
+        new text_gui_item(
+        "Field Pikmin:", game.fonts.standard,
+        COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    radar_gui.add_item(field_pik_label_text, "field_pikmin_label");
+    
+    //Field Pikmin number text.
+    text_gui_item* field_pik_nr_text =
+        new text_gui_item(
+        i2s(game.states.gameplay->get_amount_of_field_pikmin()),
+        game.fonts.counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+    );
+    radar_gui.add_item(field_pik_nr_text, "field_pikmin_number");
     
     //Cursor info text.
     text_gui_item* cursor_info_text =
@@ -2282,6 +2545,183 @@ void pause_menu_struct::init_radar_page() {
     radar_gui.set_selected_item(NULL);
     radar_gui.responsive = false;
     radar_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the status page.
+ */
+void pause_menu_struct::init_status_page() {
+    data_node gui_file(PAUSE_MENU::STATUS_GUI_FILE_PATH);
+    
+    //Menu items.
+    status_gui.register_coords("header",           50,     5,   52,    6);
+    status_gui.register_coords("left_page",        12,     5,   20,    6);
+    status_gui.register_coords("left_page_input",   3,     7,    4,    4);
+    status_gui.register_coords("right_page",       88,     5,   20,    6);
+    status_gui.register_coords("right_page_input", 97,     7,    4,    4);
+    status_gui.register_coords("line",             50,    11,   96,    2);
+    status_gui.register_coords("continue",         10,    16,   16,    4);
+    status_gui.register_coords("list_header",      50,    23,   88,    6);
+    status_gui.register_coords("list",             50,    56,   88,   56);
+    status_gui.register_coords("list_scroll",      97,    56,    2,   56);
+    status_gui.register_coords("totals",           50,    89,   88,    6);
+    status_gui.register_coords("instructions",     58.75, 16,   77.5,  4);
+    status_gui.register_coords("tooltip",          50,    96,   96,    4);
+    status_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Header.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "STATUS", game.fonts.area_name,
+        COLOR_TRANSPARENT_WHITE
+    );
+    status_gui.add_item(header_text, "header");
+    
+    //Page buttons and inputs.
+    create_page_buttons(PAUSE_MENU_PAGE_STATUS, &status_gui);
+    
+    //Line.
+    gui_item* line = new gui_item();
+    line->on_draw =
+    [] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center,
+            point(size.x, 3.0f),
+            2.0f,
+            COLOR_TRANSPARENT_WHITE
+        );
+    };
+    status_gui.add_item(line, "line");
+    
+    //Continue button.
+    status_gui.back_item =
+        new button_gui_item("Continue", game.fonts.standard);
+    status_gui.back_item->on_activate =
+    [this] (const point &) {
+        start_closing(&status_gui);
+    };
+    status_gui.back_item->on_get_tooltip =
+    [] () { return "Unpause and continue playing."; };
+    status_gui.add_item(status_gui.back_item, "continue");
+    
+    //Pikmin list header box.
+    list_gui_item* list_header = new list_gui_item();
+    list_header->on_draw =
+    [] (const point &, const point &) {};
+    status_gui.add_item(list_header, "list_header");
+    
+    //Pikmin list box.
+    pikmin_list = new list_gui_item();
+    status_gui.add_item(pikmin_list, "list");
+    
+    //Pikmin list scrollbar.
+    scroll_gui_item* list_scroll = new scroll_gui_item();
+    list_scroll->list_item = pikmin_list;
+    status_gui.add_item(list_scroll, "list_scroll");
+    
+    //Pikmin totals box.
+    list_gui_item* totals = new list_gui_item();
+    totals->on_draw =
+    [] (const point &, const point &) {};
+    status_gui.add_item(totals, "totals");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&status_gui);
+    status_gui.add_item(tooltip_text, "tooltip");
+    
+    //Setup the list header.
+    add_pikmin_status_line(
+        list_header,
+        NULL,
+        "Group",
+        "Idle",
+        "Field",
+        "Onion",
+        "Total",
+        "New",
+        "Lost",
+        true, false
+    );
+    
+    size_t total_in_group = 0;
+    size_t total_idling = 0;
+    size_t total_on_field = 0;
+    long total_in_onion = 0;
+    long grand_total = 0;
+    long total_new = 0;
+    long total_lost = 0;
+    
+    //Setup the list rows.
+    for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
+        pikmin_type* pt_ptr = game.config.pikmin_order[p];
+        
+        size_t in_group =
+            game.states.gameplay->get_amount_of_group_pikmin(pt_ptr);
+        size_t idling =
+            game.states.gameplay->get_amount_of_idle_pikmin(pt_ptr);
+        size_t on_field =
+            game.states.gameplay->get_amount_of_field_pikmin(pt_ptr);
+        long in_onion =
+            game.states.gameplay->get_amount_of_onion_pikmin(pt_ptr);
+        long total = on_field + in_onion;
+        
+        long new_piks = 0;
+        auto new_it =
+            game.states.gameplay->pikmin_born_per_type.find(pt_ptr);
+        if(new_it != game.states.gameplay->pikmin_born_per_type.end()) {
+            new_piks = new_it->second;
+        }
+        long lost = 0;
+        auto lost_it =
+            game.states.gameplay->pikmin_deaths_per_type.find(pt_ptr);
+        if(lost_it != game.states.gameplay->pikmin_deaths_per_type.end()) {
+            lost = lost_it->second;
+        }
+        
+        if(total + new_piks + lost > 0) {
+            add_pikmin_status_line(
+                pikmin_list,
+                pt_ptr,
+                i2s(in_group),
+                i2s(idling),
+                i2s(on_field),
+                i2s(in_onion),
+                i2s(total),
+                i2s(new_piks),
+                i2s(lost),
+                false, false
+            );
+        }
+        
+        total_in_group += in_group;
+        total_idling += idling;
+        total_on_field += on_field;
+        total_in_onion += in_onion;
+        grand_total += total;
+        total_new += new_piks;
+        total_lost += lost;
+    }
+    
+    //Setup the list totals.
+    add_pikmin_status_line(
+        totals,
+        NULL,
+        i2s(total_in_group),
+        i2s(total_idling),
+        i2s(total_on_field),
+        i2s(total_in_onion),
+        i2s(grand_total),
+        i2s(total_new),
+        i2s(total_lost),
+        true, true
+    );
+    
+    //Finishing touches.
+    status_gui.set_selected_item(status_gui.back_item);
+    status_gui.responsive = false;
+    status_gui.hide_items();
 }
 
 
@@ -2444,6 +2884,9 @@ void pause_menu_struct::switch_page(
     } case PAUSE_MENU_PAGE_RADAR: {
         new_gui = &radar_gui;
         break;
+    } case PAUSE_MENU_PAGE_STATUS: {
+        new_gui = &status_gui;
+        break;
     } case PAUSE_MENU_PAGE_MISSION: {
         new_gui = &mission_gui;
         break;
@@ -2476,8 +2919,9 @@ void pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
     radar_gui.tick(delta_t);
-    help_gui.tick(delta_t);
+    status_gui.tick(delta_t);
     mission_gui.tick(delta_t);
+    help_gui.tick(delta_t);
     confirmation_gui.tick(delta_t);
     
     //Tick the background.
