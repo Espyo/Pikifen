@@ -2647,12 +2647,14 @@ sectors{
 		texture=Metal_clean.jpg
 	}
 	s{
+		type=Blocking
 		z=250.0000
 		texture=Metal_clean.jpg
 		texture_rotate=1.5708
 		texture_tint=0 255 255
 	}
 	s{
+		type=Blocking
 		z=250.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 255 255
@@ -2870,47 +2872,56 @@ sectors{
 		texture_rotate=1.5708
 	}
 	s{
+		type=Blocking
 		z=25.0000
 		texture=Stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=White.png
 		texture_scale=0.2000 1.0000
 		texture_tint=74 74 22
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=White.png
 		texture_tint=75 75 22
 	}
 	s{
+		type=Blocking
 		z=25.0000
 		texture=Stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_rotate=4.7124
@@ -2923,40 +2934,47 @@ sectors{
 		texture_tint=100 100 100
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=30 255 255
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=0 255 255
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
+		type=Blocking
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_rotate=3.5954
@@ -2969,15 +2987,18 @@ sectors{
 		texture_rotate=1.0472
 	}
 	s{
+		type=Blocking
 		z=250.0000
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_rotate=4.5379
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_rotate=4.5379
@@ -3097,6 +3118,7 @@ sectors{
 		texture_rotate=4.1015
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_rotate=4.7124

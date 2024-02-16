@@ -6327,6 +6327,7 @@ sectors{
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=Stone.jpg
@@ -6397,11 +6398,13 @@ sectors{
 		texture_tint=246 184 159
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=Stone.jpg
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=Stone.jpg
@@ -6882,46 +6885,55 @@ sectors{
 		texture=Stone.jpg
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
@@ -6939,70 +6951,83 @@ sectors{
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=White.png
 		texture_tint=37 147 23
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=White.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=White.png
 	}
 	s{
-		z=0.0000
-		brightness=48
-		texture=White.png
-		texture_tint=37 147 23
-	}
-	s{
-		z=0.0000
-		fade=true
-		texture=Tile.jpg
-	}
-	s{
-		z=0.0000
-		fade=true
-		texture=Tile.jpg
-	}
-	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=White.png
 		texture_tint=37 147 23
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=White.png
 		texture_tint=37 147 23
 	}
 	s{
+		type=Blocking
+		z=0.0000
+		fade=true
+		texture=Tile.jpg
+	}
+	s{
+		type=Blocking
+		z=0.0000
+		fade=true
+		texture=Tile.jpg
+	}
+	s{
+		type=Blocking
+		z=0.0000
+		brightness=48
+		texture=White.png
+		texture_tint=37 147 23
+	}
+	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Stone.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Stone.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		hazards=water
@@ -7010,6 +7035,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7018,6 +7044,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7026,6 +7053,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7034,6 +7062,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7042,6 +7071,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7050,6 +7080,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7058,6 +7089,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7066,6 +7098,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7074,6 +7107,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7082,6 +7116,7 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		fade=true
@@ -7090,114 +7125,136 @@ sectors{
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-200.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-200.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-200.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-200.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7205,6 +7262,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7212,6 +7270,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7219,6 +7278,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7226,6 +7286,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7233,24 +7294,28 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7438,6 +7503,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7445,6 +7511,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Tile.jpg
@@ -7452,6 +7519,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		hazards=water
@@ -7581,46 +7649,55 @@ sectors{
 		texture_tint=139 113 101
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
 	}
 	s{
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=Metal_rusted.png
@@ -7848,7 +7925,7 @@ path_stops{
 		radius=44.0000
 		links{
 			nr=6
-			nr=14
+			nr=14 1
 			nr=18
 		}
 	}
@@ -7894,7 +7971,7 @@ path_stops{
 		radius=66.5000
 		links{
 			nr=7
-			nr=8
+			nr=8 1
 			nr=16
 			nr=17
 		}

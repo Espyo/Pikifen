@@ -30,6 +30,7 @@ tidbits{
 		Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!;Help/Combat.jpg
 		Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.;Help/Weak_spots.jpg
 		Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.;Help/Pikmin_counters.jpg
+		Radar;Keep an eye out on your Pikmin and objectives with the radar in the pause menu.;Help/Radar.jpg
 	}
 	advanced_gameplay{
 		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!;Help/Pikmin_balance.jpg
@@ -40,6 +41,7 @@ tidbits{
 		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;Help/Saving_Pikmin.jpg
 		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.;Help/Getting_up.jpg
 		Onion menu;Whether you're ordering Pikmin to go in the Onion or calling some out, try holding down the button on-screen to choose your numbers faster.;Help/Onion_menu.jpg
+		Go Here;Using the radar, command a leader to go somewhere and then change to a different leader. While they're busy walking, you're busy working!;Help/Radar.jpg
 	}
 	controls{
 		Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.;Help/Moving.jpg
@@ -54,6 +56,7 @@ tidbits{
 		Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.;Help/Lying_down.jpg
 		Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!;Help/Mouse_cursor.jpg
 		Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.;Help/Throwing_Pikmin.jpg
+		Radar with a mouse;When playing with a mouse, click somewhere on the radar and drag to pan around. Use the mouse wheel to zoom in and out. Click on a single spot to start Go Here or to pick a leader.;Help/Radar.jpg
 	}
 	objects{
 		Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching the receiving Pikmin type with their color!;Help/Pellet.jpg

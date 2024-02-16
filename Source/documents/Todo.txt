@@ -2,9 +2,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Radar
-        Adjust the pre-packaged areas so that unimportant out-of-bounds things are blocking sectors and don't show up on the radar
-        Add help menu tidbits about it
     Music
         Error checking for when a song by that name doesn't exist
         Info
@@ -631,6 +628,7 @@ Misc things (so I don't forget)
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
+        A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
             The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks

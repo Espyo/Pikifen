@@ -7186,12 +7186,14 @@ sectors{
 		texture_tint=198 147 121
 	}
 	s{
+		type=Blocking
 		z=202.0000
 		texture=Wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
+		type=Blocking
 		z=202.0000
 		texture=Wood_plank.jpg
 		texture_rotate=4.8660
@@ -7469,6 +7471,7 @@ sectors{
 		texture_tint=177 127 81
 	}
 	s{
+		type=Blocking
 		z=410.0000
 		texture=Wood_plank.jpg
 		texture_rotate=3.9099
@@ -7480,6 +7483,7 @@ sectors{
 		texture=Grass_dark.jpg
 	}
 	s{
+		type=Blocking
 		z=410.0000
 		texture=Wood_plank.jpg
 		texture_rotate=3.9099
