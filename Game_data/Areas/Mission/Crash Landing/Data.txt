@@ -11,8 +11,8 @@ weather=Red Alert
 day_time_start=0
 day_time_speed=600
 maker=Helodity
-version=1.2.2
-engine_version=0.24.0
+version=1.3.0
+engine_version=0.25.0
 notes
 spray_amounts
 mission_goal=Get to the exit

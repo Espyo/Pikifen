@@ -28,7 +28,7 @@ using std::string;
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resouce (.rc) file.
 constexpr unsigned char VERSION_MAJOR = 0;
-constexpr unsigned char VERSION_MINOR = 24;
+constexpr unsigned char VERSION_MINOR = 25;
 constexpr unsigned char VERSION_REV   = 0;
 
 //Cross-platform way of representing an invalid index.

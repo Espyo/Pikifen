@@ -143,6 +143,7 @@ void load_area(
         }
         
         if(
+            !game.cur_area_data.song_name.empty() &&
             game.audio.songs.find(game.cur_area_data.song_name) ==
             game.audio.songs.end()
         ) {
