@@ -1,0 +1,20 @@
+name = Timed lever
+description = A lever that can be flipped by a leader or a thrown Pikmin. Sends power when in the "on" position, but will turn back off after a while!
+
+custom_category_name = Puzzle
+max_health = 1
+height = 16
+prompt_text = Flip lever
+pushable = false
+pushes = false
+radius = 16
+trigger_range = 64
+
+area_editor_properties {
+    Duration {
+        var = duration
+        type = decimal
+        def_value = 5
+        tooltip = How long it lasts in the "on" position.
+    }
+}

@@ -1,0 +1,85 @@
+first_state = off
+
+init {
+    set_var duration 5
+    set_var time 0
+}
+
+script{
+    off {
+        on_enter {
+            set_animation off
+            set_var time $duration
+            set_health 100
+            send_message_to_links 0
+        }
+        on_receive_message {
+            get_event_info m message
+            if $m = interact
+                set_state flipping_on
+            else
+                if $m > 0
+                    set_state flipping_on
+                end_if
+            end_if
+        }
+        on_pikmin_land {
+            set_state flipping_on
+        }
+    }
+
+    flipping_on {
+        on_enter {
+            set_animation flipping_on
+            set_var time $duration
+            set_health 100
+        }
+        on_animation_end {
+            set_state on
+        }
+    }
+
+    on {
+        on_enter {
+            set_animation on
+            set_var time $duration
+            set_health 100
+            set_timer 0.1
+            send_message_to_links 1
+        }
+        on_receive_message {
+            get_event_info m message
+            if $m = interact
+                set_state flipping_off
+            else
+                if $m > 0
+                    set_state flipping_off
+                end_if
+            end_if
+        }
+        on_timer {
+            calculate time $time - 0.1
+            calculate h $time / $duration
+            set_health $h
+            if $time <= 0
+                set_state flipping_off
+            else
+                set_timer 0.1
+            end_if
+        }
+        on_pikmin_land {
+            set_state flipping_off
+        }
+    }
+
+    flipping_off {
+        on_enter {
+            set_animation flipping_off
+            set_var time $duration
+            set_health 100
+        }
+        on_animation_end {
+            set_state off
+        }
+    }
+}
