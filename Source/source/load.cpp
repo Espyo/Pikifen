@@ -72,6 +72,7 @@ void load_area(
     reader_setter rs(&data_file);
     
     data_node* weather_node = NULL;
+    data_node* song_node = NULL;
     
     rs.set("name", game.cur_area_data.name);
     rs.set("subtitle", game.cur_area_data.subtitle);
@@ -83,7 +84,7 @@ void load_area(
     rs.set("engine_version", game.cur_area_data.engine_version);
     rs.set("notes", game.cur_area_data.notes);
     rs.set("spray_amounts", game.cur_area_data.spray_amounts);
-    rs.set("song", game.cur_area_data.song_name);
+    rs.set("song", game.cur_area_data.song_name, &song_node);
     rs.set("weather", game.cur_area_data.weather_name, &weather_node);
     rs.set("day_time_start", game.cur_area_data.day_time_start);
     rs.set("day_time_speed", game.cur_area_data.day_time_speed);
@@ -139,6 +140,18 @@ void load_area(
             game.cur_area_data.weather_condition =
                 game.weather_conditions[game.cur_area_data.weather_name];
                 
+        }
+        
+        if(
+            game.audio.songs.find(game.cur_area_data.song_name) ==
+            game.audio.songs.end()
+        ) {
+            game.errors.report(
+                "Area \"" + requested_area_folder_name +
+                "\" refers to an unknown song, \"" +
+                game.cur_area_data.song_name + "\"!",
+                song_node
+            );
         }
     }
     

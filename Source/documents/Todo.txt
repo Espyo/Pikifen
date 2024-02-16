@@ -2,15 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Music
-        Error checking for when a song by that name doesn't exist
-        Info
-            Planned variant compatibility: Day + fight, sunset + fight, boss
-            Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
-                If we can't get away with many variants, explain in the FAQ why that is
-                What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
-            The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
-
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -625,6 +617,10 @@ Misc things (so I don't forget)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
+        More music mixes
+            Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
+                If we can't get away with many variants, explain in the FAQ why that is
+                What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
             The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
