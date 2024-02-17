@@ -615,7 +615,7 @@ void depth_first_search(
 
 
 /* ----------------------------------------------------------------------------
- * Uses Dijkstra's algorithm to get the shortest path between two nodes.
+ * Uses A* to get the shortest path between two nodes.
  * Returns the operation's result.
  * final_path:
  *   The stops to visit, in order, are returned here.
@@ -628,47 +628,47 @@ void depth_first_search(
  * total_dist:
  *   If not NULL, place the total path distance here.
  */
-PATH_RESULTS dijkstra(
+PATH_RESULTS a_star(
     vector<path_stop*> &final_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
     float* total_dist
 ) {
-    //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    //https://en.wikipedia.org/wiki/A*_search_algorithm
     
-    //All nodes that have never been visited.
-    unordered_set<path_stop*> unvisited;
-    //Distance from starting node + previous stop on the best solution.
-    map<path_stop*, std::pair<float, path_stop*> > data;
+    
+    //All nodes that we want to visit.
+    unordered_set<path_stop*> to_visit;
+    //All nodes that we have already visited
+    unordered_set<path_stop*> visited;
+
+    //Distance from starting node + Estimated distance + previous stop on the best solution.
+    map<path_stop*, std::tuple<float, float, path_stop*>> data;
     //Whether the end node is in the same graph as the start node or not.
     bool in_graph = true;
     
     //Initialize the algorithm.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        unvisited.insert(s_ptr);
-        data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
-    }
-    
-    //The distance between the start node and the start node is 0.
-    data[start_node].first = 0;
-    
+    std::get<0>(data[start_node]) = 0;
+    to_visit.insert(start_node);
+
     //Start iterating.
-    while(!unvisited.empty()) {
+    while(!to_visit.empty()) {
     
         //Figure out what node to work on in this iteration.
         path_stop* shortest_node = NULL;
         float shortest_node_dist = 0;
         std::unordered_set<path_stop*>::iterator shortest_node_it =
-            unvisited.end();
+            to_visit.end();
             
-        std::pair<float, path_stop*> shortest_node_data;
+        std::tuple<float, float, path_stop*> shortest_node_data;
         
-        for(auto u = unvisited.begin(); u != unvisited.end(); u++) {
-            std::pair<float, path_stop*> d = data[*u];
-            if(!shortest_node || d.first < shortest_node_dist) {
+        for(auto u = to_visit.begin(); u != to_visit.end(); u++) {
+            std::tuple<float, float, path_stop*> d = data[*u];
+            float dist = std::get<0>(d) + std::get<1>(d);
+
+            if(!shortest_node || dist < shortest_node_dist) {
                 shortest_node = *u;
-                shortest_node_dist = d.first;
+                shortest_node_dist = dist;
                 shortest_node_data = d;
                 shortest_node_it = u;
             }
@@ -679,13 +679,13 @@ PATH_RESULTS dijkstra(
         if(shortest_node == end_node) {
         
             //Construct the path.
-            float td = data[end_node].first;
+            float td = std::get<0>(data[end_node]);
             final_path.clear();
             final_path.push_back(end_node);
-            path_stop* next = data[end_node].second;
+            path_stop* next = std::get<2>(data[end_node]);
             while(next) {
                 final_path.insert(final_path.begin(), next);
-                next = data[next].second;
+                next = std::get<2>(data[next]);
             }
             
             if(final_path.size() < 2) {
@@ -701,29 +701,29 @@ PATH_RESULTS dijkstra(
             
         }
         
+        //Stop whining at me about dereferencing null pointers
+        if(!shortest_node) continue;
+
         //This node's been visited.
-        unvisited.erase(shortest_node_it);
+        visited.insert(shortest_node);
+        to_visit.erase(shortest_node);
         
         //Check the neighbors.
         for(size_t l = 0; l < shortest_node->links.size(); ++l) {
             path_link* l_ptr = shortest_node->links[l];
             
             //If this neighbor's been visited, forget it.
-            if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
-            
+            if(visited.find(l_ptr->end_ptr) != visited.end()) continue;
+
             //Can this link be traversed?
             if(!can_traverse_path_link(l_ptr, settings)) {
                 continue;
             }
-            
-            float dist_so_far = shortest_node_data.first + l_ptr->distance;
-            auto d = &data[l_ptr->end_ptr];
-            
-            if(dist_so_far < d->first) {
-                //Found a shorter path to this node.
-                d->first = dist_so_far;
-                d->second = shortest_node;
-            }
+
+            to_visit.insert(l_ptr->end_ptr);
+            float cur_dist = std::get<0>(shortest_node_data) + l_ptr->distance;
+            float est_dist = dist(l_ptr->end_ptr->pos, end_node->pos).to_float();
+            data[l_ptr->end_ptr] = std::make_tuple(cur_dist, est_dist, (path_stop*)shortest_node);
         }
     }
     
@@ -734,7 +734,7 @@ PATH_RESULTS dijkstra(
         path_follow_settings new_settings = settings;
         enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
         PATH_RESULTS new_result =
-            dijkstra(
+            a_star(
                 final_path,
                 start_node, end_node,
                 new_settings,
@@ -878,7 +878,7 @@ PATH_RESULTS get_path(
     
     //Calculate the path.
     PATH_RESULTS result =
-        dijkstra(
+        a_star(
             full_path,
             closest_to_start, closest_to_end,
             settings, total_dist

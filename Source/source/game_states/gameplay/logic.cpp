@@ -741,8 +741,12 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(delta_t);
-            if(!m_ptr->is_stored_inside_mob()) {
-                process_mob_interactions(m_ptr, m);
+        }
+
+        vector<vector<size_t>> interactions = get_potential_interactions();
+        for(size_t i = 0; i < interactions.size(); ++i) {
+            for(size_t m = 0; m < interactions[i].size(); ++m) {
+                process_mob_interactions(mobs.all[interactions[i][m]], interactions[i][m], interactions[i]);
             }
         }
         
@@ -1475,31 +1479,73 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the mobs that need to interact with one another
+ * Uses a sweep and prune algorithm 
+ * (https://en.wikipedia.org/wiki/Sweep_and_prune)
+ */
+vector<vector<size_t>> gameplay_state::get_potential_interactions() {
+    vector<vector<size_t>> ranges;
+    insertion_sort(mobs.all,
+        [](mob* m) -> float {
+            return m->pos.x - m->max_interaction_radius;
+        }
+    );
+
+    size_t n_mobs = mobs.all.size();
+    vector<size_t> range_idxs;
+    float max_range_interaction_x = FLT_MIN;
+    for (size_t m = 0; m < n_mobs; ++m) {
+        mob* m_ptr = mobs.all[m];
+        if (m_ptr->is_stored_inside_mob()) {
+            continue;
+        }
+        if (!range_idxs.empty()) {
+            int min_interaction_x = m_ptr->pos.x - m_ptr->max_interaction_radius;
+
+            //This mob can not interact with the current span, meaning we have reached the end of this range.
+            if (min_interaction_x > max_range_interaction_x) {
+                ranges.push_back(range_idxs);
+                range_idxs.clear();
+            }
+        }
+        range_idxs.push_back(m);
+        max_range_interaction_x = std::max(max_range_interaction_x, m_ptr->pos.x + m_ptr->max_interaction_radius);
+    }
+    ranges.push_back(range_idxs);
+    return ranges;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  * m_ptr:
  *   Mob to process.
  * m:
  *   Index of the mob.
+ * against:
+ *   Indexes of mobs to process against
  */
-void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
+void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m, vector<size_t> against) {
     vector<pending_intermob_event> pending_intermob_events;
     mob_state* state_before = m_ptr->fsm.cur_state;
     
-    size_t n_mobs = mobs.all.size();
+    size_t n_mobs = against.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
-        if(m == m2) continue;
+        if(m == against[m2]) continue;
         
-        mob* m2_ptr = mobs.all[m2];
+        mob* m2_ptr = mobs.all[against[m2]];
         if(m2_ptr->to_delete) continue;
-        if(m2_ptr->is_stored_inside_mob()) continue;
-        
+
         dist d(m_ptr->pos, m2_ptr->pos);
-        
+
+        if(d > m_ptr->max_interaction_radius + m2_ptr->max_span)
+            continue;
+
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }
-        
+
         if(d <= m_ptr->max_span + m2_ptr->max_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
