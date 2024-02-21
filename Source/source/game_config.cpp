@@ -39,6 +39,8 @@ const float DEF_DAY_MINUTES_PER_IRL_SEC = 2;
 const float DEF_DAY_MINUTES_START = 60 * 7;
 //Default value for the group member grab range.
 const float DEF_GROUP_MEMBER_GRAB_RANGE = 64.0f;
+//Default value for the idle Pikmin bump delay.
+const float DEF_IDLE_BUMP_DELAY = 5.0f;
 //Default value for the idle Pikmin bump range.
 const float DEF_IDLE_BUMP_RANGE = 50.0f;
 //Default value for the idle Pikmin task range.
@@ -99,6 +101,7 @@ game_config::game_config() :
     day_minutes_end(GAME_CONFIG::DEF_DAY_MINUTES_END),
     day_minutes_start(GAME_CONFIG::DEF_DAY_MINUTES_START),
     group_member_grab_range(GAME_CONFIG::DEF_GROUP_MEMBER_GRAB_RANGE),
+    idle_bump_delay(GAME_CONFIG::DEF_IDLE_BUMP_DELAY),
     idle_bump_range(GAME_CONFIG::DEF_IDLE_BUMP_RANGE),
     idle_task_range(GAME_CONFIG::DEF_IDLE_TASK_RANGE),
     maturity_power_mult(GAME_CONFIG::DEF_MATURITY_POWER_MULT),
@@ -156,6 +159,7 @@ void game_config::load(data_node* file) {
     rs.set("standard_leader_radius", standard_leader_radius);
     rs.set("spray_order", spray_order_str);
     
+    rs.set("idle_bump_delay", idle_bump_delay);
     rs.set("idle_bump_range", idle_bump_range);
     rs.set("idle_task_range", idle_task_range);
     rs.set("swarm_task_range", swarm_task_range);

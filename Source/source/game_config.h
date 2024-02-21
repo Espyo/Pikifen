@@ -37,6 +37,7 @@ extern const float DEF_CURSOR_SPIN_SPEED;
 extern const float DEF_DAY_MINUTES_END;
 extern const float DEF_DAY_MINUTES_START;
 extern const float DEF_GROUP_MEMBER_GRAB_RANGE;
+extern const float DEF_IDLE_BUMP_DELAY;
 extern const float DEF_IDLE_BUMP_RANGE;
 extern const float DEF_IDLE_TASK_RANGE;
 extern const float DEF_MATURITY_POWER_MULT;
@@ -87,6 +88,8 @@ struct game_config {
     float day_minutes_start;
     //A leader can grab a group member only within this range.
     float group_member_grab_range;
+    //Idle Pikmin are only bumped if away from a leader for these many seconds.
+    float idle_bump_delay;
     //Idle Pikmin will be bumped by a leader within this distance.
     float idle_bump_range;
     //Idle Pikmin will go for a task if they are within this distance of it.

@@ -23,8 +23,6 @@
 
 
 namespace PIKMIN {
-//How long a Pikmin should ignore leader bumps for.
-const float BUMP_LOCK_DURATION = 5.0f;
 //How long a Pikmin that got knocked down stays on the floor for, if left alone.
 const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.

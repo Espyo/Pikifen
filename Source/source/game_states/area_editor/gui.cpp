@@ -5845,7 +5845,7 @@ void area_editor::process_gui_toolbar() {
         press_quick_play_button();
     }
     set_tooltip(
-        "Save, quit, and start playing the area. Leaving will return"
+        "Save, quit, and start playing the area. Leaving will return "
         "to the editor.",
         "Ctrl + P"
     );

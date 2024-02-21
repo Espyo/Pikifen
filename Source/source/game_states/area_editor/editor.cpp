@@ -1815,6 +1815,7 @@ void area_editor::load() {
     show_path_preview = false;
     preview_mode = false;
     quick_preview_timer.stop();
+    preview_song.clear();
     state = EDITOR_STATE_MAIN;
     set_status();
     

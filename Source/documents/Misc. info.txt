@@ -254,6 +254,7 @@ Procedure for every version release
     Final preparations
         Change version number in the code
             Use the helper tool, or edit const.h and Pikifen.rc
+        Update all area version numbers and engine version numbers
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
                 git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'

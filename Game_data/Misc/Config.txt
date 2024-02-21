@@ -20,6 +20,7 @@ standard_leader_height = 46
 standard_leader_radius = 16
 spray_order = Ultra-Bitter Spray;Ultra-Spicy Spray
 
+idle_bump_delay = 5
 idle_bump_range = 90
 idle_task_range = 50
 swarm_task_range = 3

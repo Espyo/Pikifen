@@ -1481,6 +1481,7 @@ void load_songs() {
         rs.set("title", new_song.title);
         rs.set("maker", new_song.maker);
         rs.set("version", new_song.version);
+        rs.set("tags", new_song.tags);
         rs.set("notes", new_song.notes);
         
         new_song.main_track =

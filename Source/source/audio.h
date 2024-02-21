@@ -246,6 +246,8 @@ struct song {
     string maker;
     //Optional version number.
     string version;
+    //Tags, separated by semicolon, if any.
+    string tags;
     //Any notes, like origin, artist, etc.
     string notes;
 };

@@ -990,6 +990,7 @@ sprites{
 				value=0.0000
 				knockback_outward=true
 				knockback=2.0000
+				wither_chance=5
 			}
 			hide{
 				coords=-4.0000 0.0000 -32.0000
@@ -999,6 +1000,7 @@ sprites{
 				value=0.0000
 				knockback_outward=true
 				knockback=2.0000
+				wither_chance=5
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -1478,3 +1480,4 @@ body_parts{
 	mouth
 	mouth_kb
 }
+engine_version=0.25.0
