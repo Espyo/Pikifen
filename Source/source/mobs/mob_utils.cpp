@@ -1389,7 +1389,7 @@ string get_error_message_mob_info(mob* m) {
  *   Mob types to check.
  */
 vector<hazard*> get_mob_type_list_invulnerabilities(
-    const unordered_set<mob_type*> types
+    const unordered_set<mob_type*> &types
 ) {
     //Count how many types are invulnerable to each detected hazard.
     map<hazard*, size_t> inv_instances;

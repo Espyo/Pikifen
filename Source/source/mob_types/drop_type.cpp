@@ -79,7 +79,9 @@ void drop_type::load_properties(data_node* file) {
     } else if(consumer_str == "leaders") {
         consumer = DROP_CONSUMER_LEADERS;
     } else {
-        game.errors.report("Unknown consumer \"" + consumer_str + "\"!", consumer_node);
+        game.errors.report(
+            "Unknown consumer \"" + consumer_str + "\"!", consumer_node
+        );
     }
     
     if(effect_str == "maturate") {
@@ -89,7 +91,9 @@ void drop_type::load_properties(data_node* file) {
     } else if(effect_str == "give_status") {
         effect = DROP_EFFECT_GIVE_STATUS;
     } else {
-        game.errors.report("Unknown drop effect \"" + effect_str + "\"!", effect_node);
+        game.errors.report(
+            "Unknown drop effect \"" + effect_str + "\"!", effect_node
+        );
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {

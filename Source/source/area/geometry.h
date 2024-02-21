@@ -112,7 +112,7 @@ struct geometry_problems {
 
 
 void find_trace_edge(
-    vertex* v_ptr, vertex* prev_v_ptr, const sector* s_ptr,
+    vertex* v_ptr, const vertex* prev_v_ptr, const sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
     unordered_set<edge*>* excluded_edges
@@ -129,7 +129,7 @@ TRIANGULATION_ERRORS get_polys(
     sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
 );
 bool get_polys_is_outer(
-    vertex* v_ptr, sector* s_ptr, unordered_set<edge*> edges_left,
+    vertex* v_ptr, const sector* s_ptr, unordered_set<edge*> edges_left,
     bool doing_first_polygon
 );
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);

@@ -455,7 +455,6 @@ bool polygon::is_point_inside(const point &p) const {
     point p1 = point(vertexes[0]->x, vertexes[0]->y);
     point p2;
     size_t nr_crossings = 0;
-    float x_inters = 0.0f;
     
     for(size_t v = 1; v <= vertexes.size(); ++v) {
         p2.x = vertexes[v % vertexes.size()]->x;
@@ -467,7 +466,8 @@ bool polygon::is_point_inside(const point &p) const {
             p.x <= std::max(p1.x, p2.x) &&
             p1.y != p2.y
         ) {
-            x_inters = (p.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x;
+            float x_inters =
+                (p.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x;
             if(p1.x == p2.x || p.x <= x_inters) {
                 nr_crossings++;
             }
@@ -527,7 +527,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  *   List of edges that must not be checked, if any.
  */
 void find_trace_edge(
-    vertex* v_ptr, vertex* prev_v_ptr, const sector* s_ptr,
+    vertex* v_ptr, const vertex* prev_v_ptr, const sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
     unordered_set<edge*>* excluded_edges
@@ -733,7 +733,7 @@ TRIANGULATION_ERRORS get_polys(
  *   True if we're doing the first polygon of the sector, false otherwise.
  */
 bool get_polys_is_outer(
-    vertex* v_ptr, sector* s_ptr, unordered_set<edge*> edges_left,
+    vertex* v_ptr, const sector* s_ptr, unordered_set<edge*> edges_left,
     bool doing_first_polygon
 ) {
     if(doing_first_polygon) {
@@ -777,6 +777,8 @@ bool get_polys_is_outer(
         }
         
     }
+    
+    if(!closest_edge_cw) return false;
     
     //With the closest clockwise edge, we just need to check to which side our
     //sector is. If we stand on our vertex and face the edge's other vertex,
@@ -936,6 +938,8 @@ bool is_vertex_ear(
  * unvisited_edges:
  *   List of edges that have not been visited, so the algorithm can
  *   remove them from the list as it visits them.
+ * polygon_edges_so_far:
+ *   List of edges that have already been added to the polygon so far.
  */
 TRIANGULATION_ERRORS trace_edges(
     vertex* start_v_ptr, sector* s_ptr, bool going_cw,

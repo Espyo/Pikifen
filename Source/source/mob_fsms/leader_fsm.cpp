@@ -2265,9 +2265,9 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
     settings.target_point = destination;
     
     float speed = lea_ptr->get_base_speed();
-    for(size_t m = 0; m < lea_ptr->group->members.size(); ++m) {
+    for(size_t gm = 0; gm < lea_ptr->group->members.size(); ++gm) {
         //It can only go as fast as its slowest member.
-        speed = std::min(speed, lea_ptr->group->members[m]->get_base_speed());
+        speed = std::min(speed, lea_ptr->group->members[gm]->get_base_speed());
     }
     
     bool success =

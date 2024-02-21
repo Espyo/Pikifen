@@ -279,7 +279,6 @@ path_stop::~path_stop() {
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
     PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
-    string link_label;
     
     path_link* old_link_data = get_link(other_stop);
     if(!old_link_data) {
@@ -473,8 +472,10 @@ bool can_take_path_stop(
     
     //Check if the end stop is hazardous, by checking its sector.
     bool touching_hazard =
-        !sector_ptr->hazard_floor ||
-        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+        sector_ptr && (
+            !sector_ptr->hazard_floor ||
+            !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
+        );
         
     if(
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
@@ -806,8 +807,8 @@ PATH_RESULTS get_path(
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;
     path_stop* closest_to_end = NULL;
-    float closest_to_start_dist;
-    float closest_to_end_dist;
+    float closest_to_start_dist = 0.0f;
+    float closest_to_end_dist = 0.0f;
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];

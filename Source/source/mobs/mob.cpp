@@ -3710,7 +3710,9 @@ void mob::tick_misc_logic(const float delta_t) {
             group->anchor = pos + new_anchor_rel_pos;
             
             al_identity_transform(&group->transform);
-            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            al_rotate_transform(
+                &group->transform, group->anchor_angle + TAU / 2.0f
+            );
             break;
             
         } case group_info_struct::MODE_SHUFFLE: {
@@ -3734,7 +3736,9 @@ void mob::tick_misc_logic(const float delta_t) {
             group->anchor += mov * delta_t;
             
             al_identity_transform(&group->transform);
-            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            al_rotate_transform(
+                &group->transform, group->anchor_angle + TAU / 2.0f
+            );
             break;
             
         } case group_info_struct::MODE_SWARM: {
@@ -3764,7 +3768,9 @@ void mob::tick_misc_logic(const float delta_t) {
                     game.states.gameplay->swarm_magnitude
                 )
             );
-            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            al_rotate_transform(
+                &group->transform, group->anchor_angle + TAU / 2.0f
+            );
             break;
         }
         }

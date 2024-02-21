@@ -318,6 +318,7 @@ bool mob_action_loaders::get_area_info(mob_action_call &call) {
     return true;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loading code for the info getting script actions.
  * call:

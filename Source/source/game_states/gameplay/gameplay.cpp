@@ -444,7 +444,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * filter:
  *   If not NULL, only return Pikmin matching this type.
  */
-size_t gameplay_state::get_amount_of_field_pikmin(pikmin_type* filter) {
+size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
     size_t total = 0;
     
     //Check the Pikmin mobs.
@@ -470,7 +470,7 @@ size_t gameplay_state::get_amount_of_field_pikmin(pikmin_type* filter) {
  * filter:
  *   If not NULL, only return Pikmin matching this type.
  */
-size_t gameplay_state::get_amount_of_group_pikmin(pikmin_type* filter) {
+size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
     size_t total = 0;
     
     if(!cur_leader_ptr) return 0;
@@ -491,7 +491,7 @@ size_t gameplay_state::get_amount_of_group_pikmin(pikmin_type* filter) {
  * filter:
  *   If not NULL, only return Pikmin matching this type.
  */
-size_t gameplay_state::get_amount_of_idle_pikmin(pikmin_type* filter) {
+size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
     size_t total = 0;
     
     for(size_t p = 0; p < mobs.pikmin_list.size(); ++p) {
@@ -515,7 +515,7 @@ size_t gameplay_state::get_amount_of_idle_pikmin(pikmin_type* filter) {
  * filter:
  *   If not NULL, only return Pikmin matching this type.
  */
-long gameplay_state::get_amount_of_onion_pikmin(pikmin_type* filter) {
+long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
     long total = 0;
     
     //Check Onions proper.
@@ -563,7 +563,7 @@ long gameplay_state::get_amount_of_onion_pikmin(pikmin_type* filter) {
  * filter:
  *   If not NULL, only return Pikmin matching this type.
  */
-long gameplay_state::get_amount_of_total_pikmin(pikmin_type* filter) {
+long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
     long total = 0;
     
     //Check Pikmin in the field and inside converters.

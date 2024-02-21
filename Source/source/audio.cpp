@@ -80,63 +80,6 @@ size_t audio_manager::create_mob_sfx_source(
 
 
 /* ----------------------------------------------------------------------------
- * Creates an in-world ambiance sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world, and is just decorative ambiance.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
- */
-size_t audio_manager::create_world_ambiance_sfx_source(
-    ALLEGRO_SAMPLE* sample,
-    const sfx_source_config_struct &config
-) {
-    return create_sfx_source(sample, SFX_TYPE_WORLD_AMBIANCE, config, point());
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an in-world global sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
- */
-size_t audio_manager::create_world_global_sfx_source(
-    ALLEGRO_SAMPLE* sample,
-    const sfx_source_config_struct &config
-) {
-    return create_sfx_source(sample, SFX_TYPE_WORLD_GLOBAL, config, point());
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an in-world positional sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a sound that
- * involves a position in the game world.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * pos:
- *   Starting position in the game world.
- * config:
- *   Configuration.
- */
-size_t audio_manager::create_world_pos_sfx_source(
-    ALLEGRO_SAMPLE* sample,
-    const point &pos,
-    const sfx_source_config_struct &config
-) {
-    return create_sfx_source(sample, SFX_TYPE_WORLD_POS, config, pos);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a sound effect source and returns its ID.
  * Returns 0 on failure.
  * sample:
@@ -190,6 +133,63 @@ size_t audio_manager::create_ui_sfx_source(
     const sfx_source_config_struct &config
 ) {
     return create_sfx_source(sample, SFX_TYPE_UI, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an in-world ambiance sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world, and is just decorative ambiance.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_ambiance_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_AMBIANCE, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an in-world global sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_global_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_GLOBAL, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an in-world positional sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that
+ * involves a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * pos:
+ *   Starting position in the game world.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_pos_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const point &pos,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_POS, config, pos);
 }
 
 
@@ -583,6 +583,8 @@ void audio_manager::init(
 
 /* ----------------------------------------------------------------------------
  * Marks a mix track type's status to true for this frame.
+ * track_type:
+ *   Track type to mark.
  */
 void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
     mix_statuses[track_type] = true;
@@ -595,6 +597,8 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
  * Returns whether it succeeded.
  * source_id:
  *   ID of the sound source.
+ * first:
+ *   True if this is the first emission of the source.
  */
 bool audio_manager::schedule_emission(size_t source_id, bool first) {
     sfx_source_struct* source_ptr = get_source(source_id);
@@ -749,7 +753,7 @@ void audio_manager::start_song_track(
  * filter:
  *   Sound sample to filter by, or NULL to stop all playbacks.
  */
-void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
+void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
     for(size_t p = 0; p < playbacks.size(); ++p) {
         bool to_stop = false;
         

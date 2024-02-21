@@ -383,7 +383,8 @@ bool animation_editor::is_cursor_in_timeline() {
         state == EDITOR_STATE_ANIMATION &&
         game.mouse_cursor.s_pos.x >= canvas_tl.x &&
         game.mouse_cursor.s_pos.x <= canvas_br.x &&
-        game.mouse_cursor.s_pos.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
+        game.mouse_cursor.s_pos.y >= canvas_br.y -
+        ANIM_EDITOR::TIMELINE_HEIGHT &&
         game.mouse_cursor.s_pos.y <= canvas_br.y;
 }
 
@@ -623,6 +624,22 @@ void animation_editor::pick_sprite(
 
 
 /* ----------------------------------------------------------------------------
+ * Plays one of the mob's sounds.
+ * sound_idx:
+ *   Index of the sound data in the mob type's sound list.
+ */
+void animation_editor::play_sound(size_t sound_idx) {
+    if(!loaded_mob_type) return;
+    mob_type::sfx_struct* sfx_data = &loaded_mob_type->sounds[sound_idx];
+    if(!sfx_data->sample) return;
+    game.audio.create_ui_sfx_source(
+        sfx_data->sample,
+        sfx_data->config
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the grid button widget is pressed.
  */
 void animation_editor::press_grid_button() {
@@ -815,22 +832,6 @@ void animation_editor::press_zoom_out_button() {
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
         );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Plays one of the mob's sounds.
- * sound_idx:
- *   Index of the sound data in the mob type's sound list.
- */
-void animation_editor::play_sound(size_t sound_idx) {
-    if(!loaded_mob_type) return;
-    mob_type::sfx_struct* sfx_data = &loaded_mob_type->sounds[sound_idx];
-    if(!sfx_data->sample) return;
-    game.audio.create_ui_sfx_source(
-        sfx_data->sample,
-        sfx_data->config
-    );
 }
 
 

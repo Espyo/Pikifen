@@ -36,8 +36,8 @@ extern const ALLEGRO_COLOR RADAR_HIGHEST_COLOR;
 extern const ALLEGRO_COLOR RADAR_LOWEST_COLOR;
 extern const float RADAR_MAX_ZOOM;
 extern const float RADAR_MIN_ZOOM;
-extern const float RADAR_ONION_COLOR_FADE_DUR;
 extern const float RADAR_ONION_COLOR_FADE_CYCLE_DUR;
+extern const float RADAR_ONION_COLOR_FADE_DUR;
 extern const float RADAR_PAN_SPEED;
 extern const float RADAR_ZOOM_SPEED;
 extern const string STATUS_GUI_FILE_PATH;
@@ -121,7 +121,7 @@ struct pause_menu_struct {
     //Is the struct meant to be deleted?
     bool to_delete;
     
-    pause_menu_struct(bool start_on_radar);
+    explicit pause_menu_struct(bool start_on_radar);
     ~pause_menu_struct();
     void draw();
     void handle_event(const ALLEGRO_EVENT &ev);
@@ -224,11 +224,11 @@ private:
     void add_pikmin_status_line(
         list_gui_item* list,
         pikmin_type* pik_type,
-        const string &total_text,
         const string &group_text,
-        const string &field_text,
         const string &idle_text,
+        const string &field_text,
         const string &onion_text,
+        const string &total_text,
         const string &new_text,
         const string &lost_text,
         bool is_single, bool is_totals

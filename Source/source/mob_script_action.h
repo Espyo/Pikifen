@@ -243,6 +243,7 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
     MOB_ACTION_IF_OP_MORE_E,
 };
 
+
 //Get info action target types.
 enum MOB_ACTION_GET_INFO_TARGET_TYPES {
     //Gets info about itself.

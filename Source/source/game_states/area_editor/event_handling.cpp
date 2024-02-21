@@ -804,7 +804,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 get_mob_under_point(game.mouse_cursor.w_pos, &target_idx);
             if(!target) return;
             
-            for(const auto &m : selected_mobs) {
+            for(auto const &m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't store to an object inside itself!",
@@ -839,7 +839,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             mob_gen* target = get_mob_under_point(game.mouse_cursor.w_pos);
             if(!target) return;
             
-            for(const auto &m : selected_mobs) {
+            for(auto const &m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't link to an object to itself!",
@@ -1530,7 +1530,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_vertex_move();
                 }
                 
-                point mouse_offset = game.mouse_cursor.w_pos - move_mouse_start_pos;
+                point mouse_offset =
+                    game.mouse_cursor.w_pos - move_mouse_start_pos;
                 point closest_vertex_new_p =
                     snap_point(
                         move_start_pos + mouse_offset, true
@@ -1594,7 +1595,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_mob_move();
                 }
                 
-                point mouse_offset = game.mouse_cursor.w_pos - move_mouse_start_pos;
+                point mouse_offset =
+                    game.mouse_cursor.w_pos - move_mouse_start_pos;
                 point closest_mob_new_p =
                     snap_point(move_start_pos + mouse_offset);
                 point offset = closest_mob_new_p - move_start_pos;
@@ -1620,7 +1622,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_path_stop_move();
                 }
                 
-                point mouse_offset = game.mouse_cursor.w_pos - move_mouse_start_pos;
+                point mouse_offset =
+                    game.mouse_cursor.w_pos - move_mouse_start_pos;
                 point closest_stop_new_p =
                     snap_point(move_start_pos + mouse_offset);
                 point offset = closest_stop_new_p - move_start_pos;

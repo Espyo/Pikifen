@@ -53,10 +53,10 @@ const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
 const float RADAR_MAX_ZOOM = 4.0f;
 //Minimum radar zoom level.
 const float RADAR_MIN_ZOOM = 0.03f;
-//How long an Onion fades between two colors.
-const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
 //How long an Onion waits before fading to the next color.
 const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
+//How long an Onion fades between two colors.
+const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
 //Max radar pan speed when not using mouse, in pixels per second.
 const float RADAR_PAN_SPEED = 600.0f;
 //Max radar zoom speed when not using mouse, in amount per second.
@@ -69,6 +69,9 @@ const string STATUS_GUI_FILE_PATH =
 
 /* ----------------------------------------------------------------------------
  * Creates a pause menu struct.
+ * start_on_radar:
+ *   True if the page to start on should be the radar, false if it should
+ *   be the system page.
  */
 pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     bg_alpha_mult(0.0f),
@@ -262,6 +265,7 @@ void pause_menu_struct::add_bullet(
     list->add_child(bullet);
     mission_gui.add_item(bullet);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Adds a new line to one of the Pikmin status boxes.

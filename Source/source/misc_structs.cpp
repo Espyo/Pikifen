@@ -861,55 +861,6 @@ void maker_tools_info::reset_for_gameplay() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes a movement struct with all movements set to 0.
- */
-movement_struct::movement_struct() :
-    right(0),
-    up(0),
-    left(0),
-    down(0) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the values of the coordinates, magnitude, and angle,
- * but "cleaned" up.
- * All parameters are mandatory.
- * coords:
- *   Final X and Y coordinates.
- * angle:
- *   Angle compared to the center.
- * magnitude:
- *   Magnitude from the center.
- */
-void movement_struct::get_info(
-    point* coords, float* angle, float* magnitude
-) const {
-    *coords = point(right - left, down - up);
-    coordinates_to_angle(*coords, angle, magnitude);
-    
-    //While analog sticks are already correctly clamped between 0 and 1 for
-    //magnitude, via the controls manager, digital inputs aren't, e.g. pressing
-    //W and D on the keyboard.
-    *magnitude = std::max(*magnitude, 0.0f);
-    *magnitude = std::min(*magnitude, 1.0f);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the information.
- */
-void movement_struct::reset() {
-    right = 0.0f;
-    up = 0.0f;
-    left = 0.0f;
-    down = 0.0f;
-}
-
-
-
-/* ----------------------------------------------------------------------------
  * Hides the OS mouse in the game window.
  */
 void mouse_cursor_struct::hide() const {
@@ -978,6 +929,54 @@ void mouse_cursor_struct::update_pos(
         &screen_to_world_transform,
         &w_pos.x, &w_pos.y
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a movement struct with all movements set to 0.
+ */
+movement_struct::movement_struct() :
+    right(0),
+    up(0),
+    left(0),
+    down(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the values of the coordinates, magnitude, and angle,
+ * but "cleaned" up.
+ * All parameters are mandatory.
+ * coords:
+ *   Final X and Y coordinates.
+ * angle:
+ *   Angle compared to the center.
+ * magnitude:
+ *   Magnitude from the center.
+ */
+void movement_struct::get_info(
+    point* coords, float* angle, float* magnitude
+) const {
+    *coords = point(right - left, down - up);
+    coordinates_to_angle(*coords, angle, magnitude);
+    
+    //While analog sticks are already correctly clamped between 0 and 1 for
+    //magnitude, via the controls manager, digital inputs aren't, e.g. pressing
+    //W and D on the keyboard.
+    *magnitude = std::max(*magnitude, 0.0f);
+    *magnitude = std::min(*magnitude, 1.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the information.
+ */
+void movement_struct::reset() {
+    right = 0.0f;
+    up = 0.0f;
+    left = 0.0f;
+    down = 0.0f;
 }
 
 

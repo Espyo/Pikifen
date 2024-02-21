@@ -380,7 +380,7 @@ public:
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(const string &name, bool from_start = true);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
-    void stop_all_playbacks(ALLEGRO_SAMPLE* filter = NULL);
+    void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = NULL);
     void tick(float delta_t);
     void update_volumes(
         float master_volume, float world_sfx_volume, float music_volume,

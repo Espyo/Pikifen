@@ -493,12 +493,10 @@ hud_struct::hud_struct() :
     standby_maturity_icon->on_draw =
     [this, standby_maturity_icon] (const point & center, const point & size) {
         //Standby group member preparations.
-        if(!game.states.gameplay->cur_leader_ptr) return;
-        
-        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         if(!l_ptr || !l_ptr->group) return;
         
+        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         mob* closest =
             game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
             
@@ -659,7 +657,7 @@ hud_struct::hud_struct() :
     field_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t cur_amount = game.states.gameplay->get_amount_of_field_pikmin();
-
+        
         if(cur_amount != field_count_nr) {
             field_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH

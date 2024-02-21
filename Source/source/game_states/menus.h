@@ -86,6 +86,7 @@ enum MAIN_MENU_PAGES {
     MAIN_MENU_PAGE_MAKE,
 };
 
+
 //Pages of the options menu.
 enum OPTIONS_MENU_PAGES {
     //Top-level page.

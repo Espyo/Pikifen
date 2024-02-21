@@ -31,6 +31,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+
 typedef vector<std::pair<size_t, string> > anim_conversion_vector;
 
 namespace MOB_TYPE {

@@ -260,6 +260,29 @@ void animation_database::destroy() {
 
 
 /* ----------------------------------------------------------------------------
+ * Fills each frame's sound index cache variable, where applicable.
+ * mt_ptr:
+ *   Mob type with the sound data.
+ */
+void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            frame* f_ptr = &a_ptr->frames[f];
+            if(f_ptr->sound.empty()) continue;
+            f_ptr->sound_idx = INVALID;
+            
+            for(size_t s = 0; s < mt_ptr->sounds.size(); ++s) {
+                if(mt_ptr->sounds[s].name == f_ptr->sound) {
+                    f_ptr->sound_idx = s;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the index of the specified animation.
  * Returns INVALID if not found.
  * name:
@@ -298,29 +321,6 @@ size_t animation_database::find_sprite(const string &name) const {
         if(sprites[s]->name == name) return s;
     }
     return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fills each frame's sound index cache variable, where applicable.
- * mt_ptr:
- *   Mob type with the sound data.
- */
-void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
-    for(size_t a = 0; a < animations.size(); ++a) {
-        animation* a_ptr = animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
-            frame* f_ptr = &a_ptr->frames[f];
-            if(f_ptr->sound.empty()) continue;
-            f_ptr->sound_idx = INVALID;
-            
-            for(size_t s = 0; s < mt_ptr->sounds.size(); ++s) {
-                if(mt_ptr->sounds[s].name == f_ptr->sound) {
-                    f_ptr->sound_idx = s;
-                }
-            }
-        }
-    }
 }
 
 
