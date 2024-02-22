@@ -124,7 +124,7 @@ public:
     void register_category(MOB_CATEGORIES nr, mob_category* category);
     mob_type* find_mob_type(const string &name) const;
     mob_type* find_mob_type_from_folder_name(
-        mob_category* cat, const string &name
+        const mob_category* cat, const string &name
     ) const;
     mob_category* get(const MOB_CATEGORIES id) const;
     mob_category* get_from_folder_name(const string &name) const;

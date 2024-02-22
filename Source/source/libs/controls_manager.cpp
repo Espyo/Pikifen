@@ -31,7 +31,7 @@ control_bind::control_bind() :
  * input:
  *   Input to clean.
  */
-void controls_manager::clean_stick(player_input input) {
+void controls_manager::clean_stick(const player_input& input) {
     //https://www.gamedeveloper.com/
     //  disciplines/doing-thumbstick-dead-zones-right
     //https://www.gamedeveloper.com/

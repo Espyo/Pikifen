@@ -112,7 +112,7 @@ struct particle {
     //this particle if it can replace a lower-priority one.
     PARTICLE_PRIORITIES priority;
     
-    particle(
+    explicit particle(
         const PARTICLE_TYPES type = PARTICLE_TYPE_BITMAP,
         const point &pos = point(), const float z = 0.0f,
         const float size = 0.0f,
@@ -128,8 +128,8 @@ struct particle {
  * Manages a list of particles, allows the addition of new ones, etc.
  */
 struct particle_manager {
-public:
-    void add(particle p);
+    public:
+    void add(const particle &p);
     void clear();
     void fill_component_list(
         vector<world_component> &list,
@@ -138,12 +138,12 @@ public:
     size_t get_count() const;
     void tick_all(const float delta_t);
     
-    particle_manager(const size_t &max_nr = 0);
+    explicit particle_manager(const size_t &max_nr = 0);
     particle_manager(const particle_manager &pm2);
     particle_manager &operator=(const particle_manager &pm2);
     ~particle_manager();
     
-private:
+    private:
     //This list works as follows:
     //The first "count" particles are alive.
     //The next particle is the beginning of the dead ones.
@@ -167,7 +167,7 @@ private:
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
 struct particle_generator {
-public:
+    public:
     //Optional ID, if you need to identify it later on.
     MOB_PARTICLE_GENERATOR_IDS id;
     //All particles created are based on this one.
@@ -210,7 +210,7 @@ public:
     //Maximum random deviation of total speed.
     float total_speed_deviation;
     
-    particle_generator(
+    explicit particle_generator(
         const float emission_interval = 0.0f,
         const particle &base_particle = particle(), const size_t number = 1
     );
@@ -218,7 +218,7 @@ public:
     void emit(particle_manager &manager);
     void reset();
     
-private:
+    private:
     //Time left before the next emission.
     float emission_timer;
     

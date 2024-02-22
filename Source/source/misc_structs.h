@@ -266,12 +266,12 @@ struct camera_info {
  * Manages any errors that occur with the engine's content or logic.
  */
 struct error_manager {
-    void report(const string &s, data_node* d = NULL);
+    void report(const string &s, const data_node* d = NULL);
     void report_area_load_errors();
     void prepare_area_load();
     bool session_has_errors();
-
-private:
+    
+    private:
     //How many errors have been reported this application session.
     size_t nr_session_errors = 0;
     //Errors reported by the time the area load started.
@@ -328,7 +328,7 @@ struct timer {
     //Code to run when the timer ends, if any.
     std::function<void()> on_end;
     
-    timer(
+    explicit timer(
         const float duration = 0,
         const std::function<void()> &on_end = nullptr
     );
@@ -460,7 +460,7 @@ struct bmp_manager {
     public:
     explicit bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
-        const string &name, data_node* node = NULL,
+        const string &name, const data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_BITMAP* bmp);
@@ -477,7 +477,7 @@ struct bmp_manager {
         //How many calls it has.
         size_t calls;
         
-        bmp_info(ALLEGRO_BITMAP* b = NULL);
+        explicit bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
     //Base directory that this manager works on.
     string base_dir;
@@ -617,7 +617,7 @@ struct reader_setter {
     void set(
         const string &child, point &var, data_node** child_node = NULL
     );
-    reader_setter(data_node* dn = NULL);
+    explicit reader_setter(data_node* dn = NULL);
 };
 
 

@@ -465,7 +465,7 @@ struct mob_action_call {
     bool load_from_data_node(data_node* dn, mob_type* mt);
     bool run(mob* m, void* custom_data_1, void* custom_data_2);
     
-    mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
+    explicit mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
     explicit mob_action_call(custom_action_code code);
 };
 
@@ -584,7 +584,7 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 
 
 bool assert_actions(
-    const vector<mob_action_call*> &actions, data_node* dn
+    const vector<mob_action_call*> &actions, const data_node* dn
 );
 mob* get_trigger_mob(mob_action_run_data &data);
 void load_init_actions(

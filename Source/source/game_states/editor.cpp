@@ -2028,7 +2028,7 @@ bool editor::changes_manager::ask_if_unsaved(
         ed->dialogs.back()->custom_pos = game.mouse_cursor.s_pos;
         ed->dialogs.back()->custom_size = point(580, 100);
         ed->dialogs.back()->event_callback =
-        [this] (ALLEGRO_EVENT * ev) {
+        [this] (const ALLEGRO_EVENT * ev) {
             if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
                 if(
                     ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_S, true)

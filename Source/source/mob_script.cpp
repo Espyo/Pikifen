@@ -77,7 +77,7 @@ vector<mob_state*> easy_fsm_creator::finish() {
     commit_state();
     sort(
         states.begin(), states.end(),
-    [] (mob_state * ms1, mob_state * ms2) -> bool {
+    [] (const mob_state * ms1, const mob_state * ms2) -> bool {
         return ms1->id < ms2->id;
     }
     );
@@ -149,7 +149,9 @@ hitbox_interaction::hitbox_interaction(
  * actions:
  *   Its actions.
  */
-mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
+mob_event::mob_event(
+    const data_node* node, const vector<mob_action_call*> &actions
+) :
     actions(actions) {
     
 #define r(name, number) \
@@ -498,7 +500,7 @@ mob_event* mob_state::get_event(const MOB_EV_TYPES type) const {
  *   Mob type these states belong to.
  */
 size_t fix_states(
-    vector<mob_state*> &states, const string &starting_state, mob_type* mt
+    vector<mob_state*> &states, const string &starting_state, const mob_type* mt
 ) {
     size_t starting_state_nr = INVALID;
     

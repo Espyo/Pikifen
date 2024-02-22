@@ -213,7 +213,7 @@ void animation_database::calculate_max_span() {
  *   report errors.
  */
 void animation_database::create_conversions(
-    vector<std::pair<size_t, string> > conversions, data_node* file
+    vector<std::pair<size_t, string> > conversions, const data_node* file
 ) {
     pre_named_conversions.clear();
     
@@ -352,13 +352,13 @@ void animation_database::fix_body_part_pointers() {
 void animation_database::sort_alphabetically() {
     sort(
         animations.begin(), animations.end(),
-    [] (animation * a1, animation * a2) {
+    [] (const animation * a1, const animation * a2) {
         return a1->name < a2->name;
     }
     );
     sort(
         sprites.begin(), sprites.end(),
-    [] (sprite * s1, sprite * s2) {
+    [] (const sprite * s1, const sprite * s2) {
         return s1->name < s2->name;
     }
     );
@@ -702,7 +702,7 @@ sprite &sprite::operator=(const sprite &s2) {
 void sprite::set_bitmap(
     const string &new_file_name,
     const point &new_file_pos, const point &new_file_size,
-    data_node* node
+    const data_node* node
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);

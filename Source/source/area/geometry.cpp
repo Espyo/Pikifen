@@ -942,7 +942,7 @@ bool is_vertex_ear(
  *   List of edges that have already been added to the polygon so far.
  */
 TRIANGULATION_ERRORS trace_edges(
-    vertex* start_v_ptr, sector* s_ptr, bool going_cw,
+    vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
     vector<vertex*>* vertexes,
     unordered_set<edge*>* unvisited_edges,
     unordered_set<edge*>* polygon_edges_so_far

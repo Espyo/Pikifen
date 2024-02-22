@@ -436,7 +436,7 @@ void animation_editor::draw_side_view_leader_silhouette(const float x_offset) {
  * s:
  *   Sprite to draw.
  */
-void animation_editor::draw_side_view_sprite(sprite* s) {
+void animation_editor::draw_side_view_sprite(const sprite* s) {
     point min, max;
     ALLEGRO_COLOR color = COLOR_EMPTY;
     

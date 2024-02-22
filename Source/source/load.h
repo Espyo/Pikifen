@@ -37,11 +37,11 @@ void load_area_mission_record(
 );
 void load_asset_file_names();
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
-    const string &file_name, data_node* node = NULL,
+    const string &file_name, const data_node* node = NULL,
     bool report_errors = true
 );
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node = NULL,
+    const string &file_name, const data_node* node = NULL,
     const bool report_error = true, const bool error_bmp_on_error = true,
     const bool error_bmp_on_empty = true, const bool path_from_root = false
 );
@@ -56,7 +56,7 @@ void load_misc_graphics();
 void load_misc_sounds();
 void load_options();
 ALLEGRO_SAMPLE* load_sample(
-    const string &file_name, data_node* node = NULL,
+    const string &file_name, const data_node* node = NULL,
     bool report_errors = true
 );
 void load_songs();

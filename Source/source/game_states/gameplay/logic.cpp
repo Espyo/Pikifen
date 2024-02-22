@@ -44,7 +44,7 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
             
         dist max_dist =
             (swarm_magnitude > 0) ?
-            game.config.cursor_max_dist * swarm_magnitude :
+            dist(game.config.cursor_max_dist * swarm_magnitude) :
             leader_to_cursor_dist;
             
         if(max_dist < cur_leader_ptr->swarm_arrows[a]) {
@@ -208,7 +208,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         point group_center = cur_leader_ptr->pos;
         if(!cur_leader_ptr->group->members.empty()) {
             point tl = cur_leader_ptr->group->members[0]->pos;
-            point br = cur_leader_ptr->group->members[0]->pos;
+            point br = tl;
             for(size_t m = 1; m < cur_leader_ptr->group->members.size(); ++m) {
                 mob* member = cur_leader_ptr->group->members[m];
                 tl.x = std::min(tl.x, member->pos.x);
@@ -308,8 +308,8 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     }
     
     if(!cur_leader_ptr->auto_plucking) {
-        dist closest_d = 0;
-        dist d = 0;
+        dist closest_d;
+        dist d;
         
         //Ship healing notification.
         close_to_ship_to_heal = NULL;
@@ -1589,7 +1589,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
  *   Vector of events to be processed.
  */
 void gameplay_state::process_mob_misc_interactions(
-    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Find a carriable mob to grab.
@@ -1688,7 +1688,7 @@ void gameplay_state::process_mob_misc_interactions(
  *   Vector of events to be processed.
  */
 void gameplay_state::process_mob_reaches(
-    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Check reaches.

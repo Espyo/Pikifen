@@ -65,7 +65,7 @@ path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
  * start_ptr:
  *   The path stop at the start of this link.
  */
-void path_link::calculate_dist(path_stop* start_ptr) {
+void path_link::calculate_dist(const path_stop* start_ptr) {
     distance = dist(start_ptr->pos, end_ptr->pos).to_float();
 }
 
@@ -438,7 +438,7 @@ bool can_take_path_stop(
  *   If not NULL, the reason is returned here.
  */
 bool can_take_path_stop(
-    path_stop* stop_ptr, const path_follow_settings &settings,
+    const path_stop* stop_ptr, const path_follow_settings &settings,
     sector* sector_ptr, PATH_BLOCK_REASONS* reason
 ) {
     //Check if the end stop has limitations based on the stop flags.

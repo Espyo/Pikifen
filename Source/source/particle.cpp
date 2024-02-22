@@ -421,7 +421,7 @@ particle_manager::~particle_manager() {
  * p:
  *   Particle to add.
  */
-void particle_manager::add(particle p) {
+void particle_manager::add(const particle &p) {
     if(max_nr == 0) return;
     
     //The first "count" particles are alive. Add the new one after.

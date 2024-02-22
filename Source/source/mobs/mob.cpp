@@ -820,7 +820,7 @@ bool mob::calculate_carrying_destination(
  *   Return the calculated damage here.
  */
 bool mob::calculate_damage(
-    mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
+    mob* victim, hitbox* attack_h, const hitbox* victim_h, float* damage
 ) const {
     float attacker_offense = 0;
     float defense_multiplier = 1;
@@ -908,7 +908,7 @@ bool mob::calculate_damage(
  *   The variable to return the angle of the knockback to.
  */
 void mob::calculate_knockback(
-    mob* victim, hitbox* attack_h,
+    const mob* victim, const hitbox* attack_h,
     hitbox* victim_h, float* kb_strength, float* kb_angle
 ) const {
     if(attack_h) {
@@ -1132,7 +1132,7 @@ void mob::chase(
  * hitbox_info:
  *   Information about the hitbox that caused the chomp.
  */
-void mob::chomp(mob* m, hitbox* hitbox_info) {
+void mob::chomp(mob* m, const hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
         tool* too_ptr = (tool*) m;
         if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)) {
@@ -1359,7 +1359,7 @@ void mob::delete_old_status_effects() {
  *   Total knockback strength.
  */
 void mob::do_attack_effects(
-    mob* attacker, hitbox* attack_h, hitbox* victim_h,
+    const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
     const float damage, const float knockback
 ) {
     if(attack_h->value == 0.0f) {
@@ -1800,7 +1800,7 @@ sprite* mob::get_cur_sprite() const {
  *   This should help with performance. Otherwise, use NULL.
  */
 dist mob::get_distance_between(
-    mob* m2_ptr, const dist* regular_distance_cache
+    const mob* m2_ptr, const dist* regular_distance_cache
 ) const {
     dist mob_to_hotspot_dist;
     float dist_padding;
@@ -1944,7 +1944,7 @@ hitbox* mob::get_hitbox(const size_t nr) const {
  *   Ratio of distance from the hitbox/body's bottom. 1 is the very top.
  */
 void mob::get_hitbox_hold_point(
-    mob* mob_to_hold, hitbox* h_ptr,
+    const mob* mob_to_hold, const hitbox* h_ptr,
     float* offset_dist, float* offset_angle, float* vertical_dist
 ) const {
     point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
@@ -2380,7 +2380,7 @@ void mob::handle_status_effect_loss(status_type* sta_type) {
  * target_mob:
  *   The mob to check against.
  */
-bool mob::has_clear_line(mob* target_mob) const {
+bool mob::has_clear_line(const mob* target_mob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
     point bb_tl(
@@ -3024,7 +3024,7 @@ void mob::set_var(const string &name, const string &value) {
  *   If NULL, the pointer to the mob type is obtained given its
  *   name in the information structure. If not NULL, uses this instead.
  */
-mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
+mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
     //First, find the mob.
     if(!type_ptr) {
         type_ptr = game.mob_categories.find_mob_type(info->mob_type_name);

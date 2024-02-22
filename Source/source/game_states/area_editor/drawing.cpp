@@ -1533,7 +1533,7 @@ void area_editor::draw_canvas() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (split_info i1, split_info i2) -> bool {
+            [] (const split_info & i1, const split_info & i2) -> bool {
                 return i1.l2r < i2.l2r;
             }
             );
@@ -1729,7 +1729,7 @@ void area_editor::draw_canvas() {
  */
 void area_editor::draw_cross_section_sector(
     const float start_ratio, const float end_ratio, const float proportion,
-    const float lowest_z, sector* sector_ptr
+    const float lowest_z, const sector* sector_ptr
 ) {
     float rectangle_x1 =
         cross_section_window_start.x +

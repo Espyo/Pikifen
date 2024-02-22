@@ -2307,7 +2307,7 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
  *   Data node from where these actions came.
  */
 bool assert_actions(
-    const vector<mob_action_call*> &actions, data_node* dn
+    const vector<mob_action_call*> &actions, const data_node* dn
 ) {
     //Check if the "if"-related actions are okay.
     int if_level = 0;

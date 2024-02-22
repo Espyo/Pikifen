@@ -84,7 +84,7 @@ bool are_walls_between(
         return true;
     }
     
-    for(auto &e_ptr : candidate_edges) {
+    for(auto const &e_ptr : candidate_edges) {
         if(
             !line_segs_intersect(
                 p1, p2,
@@ -264,7 +264,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
             game.states.gameplay->mobs.pikmin_list;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
-        [] (pikmin * p1, pikmin * p2) -> bool {
+        [] (const pikmin * p1, const pikmin * p2) -> bool {
             return
             dist(
                 game.states.gameplay->cur_leader_ptr->pos,
@@ -519,7 +519,7 @@ vector<string> folder_to_vector(
  * Returns the mob that is closest to the mouse cursor.
  */
 mob* get_closest_mob_to_cursor() {
-    dist closest_mob_to_cursor_dist = 0;
+    dist closest_mob_to_cursor_dist;
     mob* closest_mob_to_cursor = NULL;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
@@ -1093,9 +1093,9 @@ ALLEGRO_COLOR interpolate_color(
  * p:
  *   Point to convert.
  * z:
- *   If not NULL, the third word is placed here.
+ *   If not NULL, add a third word which is this Z coordinate.
  */
-string p2s(const point &p, float* z) {
+string p2s(const point &p, const float* z) {
     return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
 }
 
@@ -1230,7 +1230,7 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
  * dn:
  *   File to log the error into, if any.
  */
-void report_fatal_error(const string &s, data_node* dn) {
+void report_fatal_error(const string &s, const data_node* dn) {
     game.errors.report(s, dn);
     
     show_message_box(
@@ -2012,7 +2012,7 @@ vector<string_token> tokenize_string(const string &s) {
         if(str_peek(s, c, "\\\\")) {
             cur_token.content.push_back('\\');
             if(cur_token.type == STRING_TOKEN_CHAR) {
-                if(!cur_token.content.empty()) tokens.push_back(cur_token);
+                tokens.push_back(cur_token);
                 cur_token.content.clear();
             }
             c++;
@@ -2038,7 +2038,7 @@ vector<string_token> tokenize_string(const string &s) {
         } else {
             cur_token.content.push_back(s[c]);
             if(cur_token.type == STRING_TOKEN_CHAR) {
-                if(!cur_token.content.empty()) tokens.push_back(cur_token);
+                tokens.push_back(cur_token);
                 cur_token.content.clear();
             }
             

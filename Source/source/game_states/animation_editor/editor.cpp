@@ -1609,7 +1609,7 @@ void animation_editor::update_hitboxes() {
         std::sort(
             s_ptr->hitboxes.begin(),
             s_ptr->hitboxes.end(),
-        [this] (hitbox h1, hitbox h2) -> bool {
+        [this] (const hitbox & h1, const hitbox & h2) -> bool {
             size_t pos1 = 0, pos2 = 1;
             for(size_t b = 0; b < anims.body_parts.size(); ++b) {
                 if(anims.body_parts[b]->name == h1.body_part_name) pos1 = b;

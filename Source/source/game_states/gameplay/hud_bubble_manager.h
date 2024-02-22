@@ -40,7 +40,7 @@ enum HUD_BUBBLE_MOVE_METHODS {
  */
 template<typename t>
 struct hud_bubble_manager {
-public:
+    public:
     //Represents a bubble GUI item.
     struct bubble_info {
         //GUI item.
@@ -57,7 +57,7 @@ public:
         /* ---------------------------------------------------------------------
         * Creates a HUD bubble manager bubble info instance.
         */
-        bubble_info(gui_item* bubble = NULL) :
+        explicit bubble_info(gui_item* bubble = NULL) :
             bubble(bubble),
             ref(NULL),
             content(),

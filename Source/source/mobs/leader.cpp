@@ -686,8 +686,8 @@ bool leader::order_pikmin_to_onion(
         candidates.begin(),
         candidates.end(),
         [] (
-            std::pair<dist, pikmin*> &p1,
-            std::pair<dist, pikmin*> &p2
+            const std::pair<dist, pikmin*> &p1,
+            const std::pair<dist, pikmin*> &p2
     ) -> bool {
         if(p1.second->maturity != p2.second->maturity) {
             return p1.second->maturity < p2.second->maturity;

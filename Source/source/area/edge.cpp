@@ -94,7 +94,7 @@ size_t edge::get_side_with_sector(const sector* s_ptr) const {
  * other:
  *   Edge to check as a neighbor.
  */
-vertex* edge::has_neighbor(edge* other) const {
+vertex* edge::has_neighbor(const edge* other) const {
     for(size_t v1 = 0; v1 < 2; ++v1) {
         for(size_t v2 = 0; v2 < 2; ++v2) {
             if(vertexes[v1] == other->vertexes[v2]) {

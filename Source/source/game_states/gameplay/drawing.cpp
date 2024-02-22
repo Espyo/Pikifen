@@ -1965,7 +1965,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     
     sort(
         components.begin(), components.end(),
-    [] (world_component c1, world_component c2) -> bool {
+    [] (const world_component &c1, const world_component &c2) -> bool {
         if(c1.z == c2.z) {
             return c1.nr < c2.nr;
         }

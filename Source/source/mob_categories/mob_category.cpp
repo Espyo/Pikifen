@@ -83,7 +83,7 @@ mob_type* mob_category_manager::find_mob_type(const string &name) const {
  *   Name of the folder.
  */
 mob_type* mob_category_manager::find_mob_type_from_folder_name(
-    mob_category* cat, const string &name
+    const mob_category* cat, const string &name
 ) const {
     vector<string> types;
     cat->get_type_names(types);

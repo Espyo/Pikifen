@@ -172,7 +172,7 @@ struct path_stop {
     //Sector it's on. Only applicable during gameplay. Cache for performance.
     sector* sector_ptr;
     
-    path_stop(
+    explicit path_stop(
         const point &pos = point(),
         const vector<path_link*> &links = vector<path_link*>()
     );
@@ -208,7 +208,7 @@ struct path_link {
     bool blocked_by_obstacle;
     
     path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr);
-    void calculate_dist(path_stop* start_ptr);
+    void calculate_dist(const path_stop* start_ptr);
     void clone(path_link* destination) const;
     bool is_one_way() const;
 };
@@ -243,7 +243,7 @@ bool can_take_path_stop(
     PATH_BLOCK_REASONS* reason = NULL
 );
 bool can_take_path_stop(
-    path_stop* stop_ptr, const path_follow_settings &settings,
+    const path_stop* stop_ptr, const path_follow_settings &settings,
     sector* sector_ptr, PATH_BLOCK_REASONS* reason = NULL
 );
 bool can_traverse_path_link(

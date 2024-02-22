@@ -862,14 +862,14 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     }
     
     string other_vars_str;
-    for(auto &v : vars_map) {
+    for(auto const &v : vars_map) {
         if(!vars_in_widgets[v.first]) {
             other_vars_str += v.first + "=" + v.second + ";";
         }
     }
     
     m_ptr->vars.clear();
-    for(auto &v : new_vars_map) {
+    for(auto const &v : new_vars_map) {
         m_ptr->vars += v.first + "=" + v.second + ";";
     }
     m_ptr->vars += other_vars_str;
@@ -1626,7 +1626,7 @@ void area_editor::process_gui_panel_gameplay() {
                     register_change("area spray amounts change");
                     spray_strs[game.spray_types[s].name] = i2s(amount);
                     game.cur_area_data.spray_amounts.clear();
-                    for(auto &v : spray_strs) {
+                    for(auto const &v : spray_strs) {
                         game.cur_area_data.spray_amounts +=
                             v.first + "=" + v.second + ";";
                     }

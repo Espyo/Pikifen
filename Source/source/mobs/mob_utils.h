@@ -200,7 +200,7 @@ struct group_info_struct {
         //Mob in this spot.
         mob* mob_ptr;
         
-        group_spot(const point &p = point(), mob* m = NULL) :
+        explicit group_spot(const point &p = point(), mob* m = NULL) :
             pos(p), mob_ptr(m) {}
     };
     
@@ -542,7 +542,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
     const unordered_set<mob_type*> &types
 );
 mob_type::spawn_struct* get_spawn_info_from_child_info(
-    mob_type* type, mob_type::child_struct* child_info
+    mob_type* type, const mob_type::child_struct* child_info
 );
 MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str);
 MOB_TEAMS string_to_team_nr(const string &team_str);

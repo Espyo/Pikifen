@@ -732,7 +732,6 @@ void animation_editor::process_gui_panel_animation() {
             size_t nr = anims.find_animation(cur_anim_name);
             anims.animations.erase(anims.animations.begin() + nr);
             if(anims.animations.empty()) {
-                nr = INVALID;
                 cur_anim = NULL;
                 cur_frame_nr = INVALID;
             } else {
@@ -1582,7 +1581,6 @@ void animation_editor::process_gui_panel_sprite() {
             size_t nr = anims.find_sprite(deleted_sprite_name);
             anims.sprites.erase(anims.sprites.begin() + nr);
             if(anims.sprites.empty()) {
-                nr = INVALID;
                 cur_sprite = NULL;
                 cur_hitbox = NULL;
                 cur_hitbox_nr = INVALID;

@@ -151,7 +151,9 @@ private:
         size_t on_sector_nr;
         //Is on_vertex a new vertex, created during the sector creation?
         bool is_new_vertex;
-        layout_drawing_node(area_editor* ae_ptr, const point &mouse_click);
+        layout_drawing_node(
+            const area_editor* ae_ptr, const point &mouse_click
+        );
         layout_drawing_node();
     };
     
@@ -622,7 +624,7 @@ private:
     );
     void create_drawing_vertexes();
     void create_mob_under_cursor();
-    sector* create_sector_for_layout_drawing(sector* copy_from);
+    sector* create_sector_for_layout_drawing(const sector* copy_from);
     void delete_current_area();
     void delete_edge(edge* e_ptr);
     bool delete_edges(const set<edge*> &which);
@@ -658,7 +660,7 @@ private:
         vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
     ) const;
     edge* get_correct_post_split_edge(
-        vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
+        const vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
     ) const;
     bool get_drawing_outer_sector(sector** result) const;
     edge* get_edge_under_point(
@@ -698,7 +700,7 @@ private:
     void load_reference();
     bool merge_sectors(sector* s1, sector* s2);
     void merge_vertex(
-        vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+        const vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
     void paste_edge_properties();
     void paste_mob_properties();
@@ -737,7 +739,7 @@ private:
     void start_path_stop_move();
     void start_vertex_move();
     void traverse_sector_for_split(
-        const sector* s_ptr, vertex* begin, vertex* checkpoint,
+        const sector* s_ptr, vertex* begin, const vertex* checkpoint,
         vector<edge*>* edges, vector<vertex*>* vertexes,
         bool* working_sector_left
     );
@@ -769,7 +771,7 @@ private:
     );
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,
-        const float lowest_z, sector* sector_ptr
+        const float lowest_z, const sector* sector_ptr
     );
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,

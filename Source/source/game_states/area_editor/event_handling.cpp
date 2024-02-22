@@ -776,12 +776,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selection_br.y = (*m)->pos.y;
                 }
             }
-            point selection_center = (selection_br + selection_tl) / 2.0;
+            point new_selection_center = (selection_br + selection_tl) / 2.0;
             set<mob_gen*> mobs_to_select;
             
-            for(auto &m : selected_mobs) {
+            for(auto const &m : selected_mobs) {
                 mob_gen* new_mg = new mob_gen(*m);
-                new_mg->pos = point(hotspot + (m->pos) - selection_center);
+                new_mg->pos = point(hotspot + (m->pos) - new_selection_center);
                 game.cur_area_data.mob_generators.push_back(new_mg);
                 mobs_to_select.insert(new_mg);
             }

@@ -220,7 +220,7 @@ void area_editor::cancel_layout_drawing() {
  * Cancels the vertex moving operation.
  */
 void area_editor::cancel_layout_moving() {
-    for(auto &v : selected_vertexes) {
+    for(auto const &v : selected_vertexes) {
         v->x = pre_move_vertex_coords[v].x;
         v->y = pre_move_vertex_coords[v].y;
     }
@@ -699,7 +699,7 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    for(auto &l : game.liquids) {
+    for(auto const &l : game.liquids) {
         l.second->anim_instance.tick(game.delta_t);
     }
     
@@ -1099,7 +1099,7 @@ void area_editor::finish_layout_moving() {
             continue;
         }
         bool is_merge_target = false;
-        for(auto &m : merges) {
+        for(auto const &m : merges) {
             if(m.second == v_ptr) {
                 //This vertex will have some other vertex merge into it; skip.
                 is_merge_target = true;
@@ -1180,7 +1180,7 @@ void area_editor::finish_layout_moving() {
         vertex* crushed_vertex = NULL;
         if(m.first->is_2nd_degree_neighbor(m.second, &crushed_vertex)) {
         
-            for(auto &m2 : merges) {
+            for(auto const &m2 : merges) {
                 if(m2.second == crushed_vertex) {
                     cancel_layout_moving();
                     forget_prepared_state(pre_move_area_data);
@@ -1210,7 +1210,7 @@ void area_editor::finish_layout_moving() {
                 get_correct_post_split_edge(v2->first, v2->second, new_edge);
         }
     }
-    for(auto &m : merges) {
+    for(auto const &m : merges) {
         merge_vertex(m.first, m.second, &merge_affected_sectors);
     }
     
@@ -4136,7 +4136,7 @@ void area_editor::start_mob_move() {
     
     move_closest_mob = NULL;
     dist move_closest_mob_dist;
-    for(auto &m : selected_mobs) {
+    for(auto const &m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
         
         dist d(game.mouse_cursor.w_pos, m->pos);
@@ -4187,7 +4187,7 @@ void area_editor::start_vertex_move() {
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
-    for(auto &v : selected_vertexes) {
+    for(auto const &v : selected_vertexes) {
         point p(v->x, v->y);
         pre_move_vertex_coords[v] = p;
         
@@ -4235,7 +4235,7 @@ void area_editor::start_vertex_move() {
  *   working sector is to the left, and false if to the right.
  */
 void area_editor::traverse_sector_for_split(
-    const sector* s_ptr, vertex* begin, vertex* checkpoint,
+    const sector* s_ptr, vertex* begin, const vertex* checkpoint,
     vector<edge*>* edges, vector<vertex*>* vertexes,
     bool* working_sector_left
 ) {
@@ -4582,7 +4582,7 @@ void area_editor::update_vertex_selection() {
  *   Coordinates of the mouse click.
  */
 area_editor::layout_drawing_node::layout_drawing_node(
-    area_editor* ae_ptr, const point &mouse_click
+    const area_editor* ae_ptr, const point &mouse_click
 ) :
     raw_spot(mouse_click),
     snapped_spot(mouse_click),

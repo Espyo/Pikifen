@@ -172,7 +172,7 @@ public:
     //Starts some juice animation.
     void start_juice_animation(JUICE_TYPES type);
     
-    gui_item(const bool selectable = false);
+    explicit gui_item(const bool selectable = false);
 };
 
 

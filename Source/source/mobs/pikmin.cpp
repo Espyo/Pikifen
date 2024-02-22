@@ -371,7 +371,7 @@ void pikmin::increase_maturity(const int amount) {
  * h:
  *   Hitbox to latch on to.
  */
-void pikmin::latch(mob* m, hitbox* h) {
+void pikmin::latch(mob* m, const hitbox* h) {
     speed.x = speed.y = speed_z = 0;
     
     float h_offset_dist;
@@ -552,7 +552,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
 pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved
 ) {
-    dist closest_distance = 0;
+    dist closest_distance;
     pikmin* closest_pikmin = NULL;
     
     size_t n_pikmin = game.states.gameplay->mobs.pikmin_list.size();

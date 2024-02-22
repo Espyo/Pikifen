@@ -441,7 +441,7 @@ void get_edge_offset_edge_info(
  *   The length from the common vertex to the intersection point.
  */
 void get_edge_offset_intersection(
-    edge* e1, edge* e2, vertex* common_vertex,
+    const edge* e1, const edge* e2, const vertex* common_vertex,
     const float base_effect_angle1, const float base_effect_angle2,
     const float effect_length,
     float* final_angle, float* final_length

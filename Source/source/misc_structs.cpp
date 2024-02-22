@@ -328,7 +328,7 @@ void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
  *   Only issues errors if this is true.
  */
 ALLEGRO_BITMAP* bmp_manager::get(
-    const string &name, data_node* node,
+    const string &name, const data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_bmp("", node, report_errors);
@@ -548,11 +548,11 @@ void error_manager::log_to_file(const string &s) {
     string output = "";
     
     //Get the previous contents of the log file, if any.
-    string line;
     ALLEGRO_FILE* file_i =
         al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
     if(file_i) {
         while(!al_feof(file_i)) {
+            string line;
             getline(file_i, line);
             prev_error_log += line + "\n";
         }
@@ -609,7 +609,7 @@ void error_manager::prepare_area_load() {
  *   If not null, this will be used to obtain the file name
  *   and line that caused the error.
  */
-void error_manager::report(const string &s, data_node* d) {
+void error_manager::report(const string &s, const data_node* d) {
     string full_error = s;
     if(d) {
         full_error += " (" + d->file_name;

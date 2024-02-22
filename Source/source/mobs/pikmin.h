@@ -82,7 +82,7 @@ public:
     //Increases the Pikmin's maturity by an amount.
     void increase_maturity(const int amount);
     //Latches on to the specified mob.
-    void latch(mob* m, hitbox* h);
+    void latch(mob* m, const hitbox* h);
     //Starts the trail behind a thrown Pikmin.
     void start_throw_trail();
     

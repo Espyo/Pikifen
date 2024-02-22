@@ -147,7 +147,7 @@ private:
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > clean_sticks;
     
-    void clean_stick(player_input input);
+    void clean_stick(const player_input& input);
     vector<int> get_action_types_from_input(
         const player_input &input
     );

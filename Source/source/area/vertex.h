@@ -35,7 +35,7 @@ struct vertex {
     //Edges around it.
     vector<edge*> edges;
     
-    vertex(float x = 0.0f, float y = 0.0f);
+    explicit vertex(float x = 0.0f, float y = 0.0f);
     void add_edge(edge* e_ptr, const size_t e_nr);
     edge* get_edge_by_neighbor(const vertex* neighbor) const;
     bool has_edge(const edge* e_ptr) const;

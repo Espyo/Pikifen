@@ -203,7 +203,7 @@ private:
         const ALLEGRO_COLOR &outline_color, const float outline_thickness
     );
     void draw_side_view_leader_silhouette(const float x_offset);
-    void draw_side_view_sprite(sprite* s);
+    void draw_side_view_sprite(const sprite* s);
     void draw_timeline();
     void draw_top_down_view_hitbox(
         hitbox* h_ptr, const ALLEGRO_COLOR &color,

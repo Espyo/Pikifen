@@ -142,7 +142,7 @@ void get_edge_offset_edge_info(
     float* final_elbow_angle, float* final_elbow_length
 );
 void get_edge_offset_intersection(
-    edge* e1, edge* e2, vertex* common_vertex,
+    const edge* e1, const edge* e2, const vertex* common_vertex,
     const float base_shadow_angle1, const float base_shadow_angle2,
     const float shadow_length,
     float* final_angle, float* final_length
@@ -201,7 +201,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
     const string &patterns, const int mode, FILE_DIALOG_RESULTS* result
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
-void report_fatal_error(const string &s, data_node* dn = NULL);
+void report_fatal_error(const string &s, const data_node* dn = NULL);
 string sanitize_file_name(const string &s);
 void save_maker_tools();
 void save_options();
@@ -256,7 +256,7 @@ string word_wrap(const string &s, const size_t n_chars_per_line);
 void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR s2c(const string &s);
-string p2s(const point &p, float* z = NULL);
+string p2s(const point &p, const float* z = NULL);
 point s2p(const string &s, float* z = NULL);
 
 

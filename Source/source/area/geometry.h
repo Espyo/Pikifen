@@ -140,7 +140,7 @@ bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
 );
 TRIANGULATION_ERRORS trace_edges(
-    vertex* start_v_ptr, sector* s_ptr, bool going_cw,
+    vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
     vector<vertex*>* vertexes,
     unordered_set<edge*>* unvisited_edges,
     unordered_set<edge*>* polygon_edges_so_far

@@ -353,11 +353,11 @@ private:
     void load_game_content();
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(
-        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
         vector<pending_intermob_event> &pending_intermob_events
     );
     void process_mob_reaches(
-        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
         vector<pending_intermob_event> &pending_intermob_events
     );
     void process_mob_touches(

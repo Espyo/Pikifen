@@ -1265,7 +1265,7 @@ void gameplay_state::update_available_leaders() {
     //mob ID number come first.
     std::sort(
         available_leaders.begin(), available_leaders.end(),
-    [] (leader * l1, leader * l2) -> bool {
+    [] (const leader * l1, const leader * l2) -> bool {
         size_t l1_order_idx = INVALID;
         size_t l2_order_idx = INVALID;
         for(size_t t = 0; t < game.config.leader_order.size(); t++) {

@@ -234,7 +234,7 @@ void ship::heal_leader(leader* l) const {
  * l:
  *   Leader to check.
  */
-bool ship::is_leader_on_cp(leader* l) const {
+bool ship::is_leader_on_cp(const leader* l) const {
     return
         dist(l->pos, control_point_final_pos) <=
         shi_type->control_point_radius;

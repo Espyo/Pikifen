@@ -439,7 +439,7 @@ void area_editor::copy_sector_properties() {
  * copy_from:
  *   Sector to copy from.
  */
-sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
+sector* area_editor::create_sector_for_layout_drawing(const sector* copy_from) {
     sector* new_sector = game.cur_area_data.new_sector();
     
     if(copy_from) {
@@ -520,7 +520,7 @@ bool area_editor::delete_edges(const set<edge*> &which) {
  *   Mobs to delete.
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
-    for(auto &sm : which) {
+    for(auto const &sm : which) {
         //Get its index.
         size_t m_idx = 0;
         for(; m_idx < game.cur_area_data.mob_generators.size(); ++m_idx) {
@@ -1396,7 +1396,7 @@ bool area_editor::get_common_sector(
  *   Second edge resulting of the split.
  */
 edge* area_editor::get_correct_post_split_edge(
-    vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
+    const vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
 ) const {
     float score1 = 0;
     float score2 = 0;
@@ -1892,7 +1892,7 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
  *   List of sectors that will be affected by this merge.
  */
 void area_editor::merge_vertex(
-    vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+    const vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
 ) {
     vector<edge*> edges = v1->edges;
     //Find out what to do with every edge of the dragged vertex.
@@ -2244,7 +2244,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
     
     register_change("object rotation");
     selection_homogenized = false;
-    for(auto &m : selected_mobs) {
+    for(auto const &m : selected_mobs) {
         m->angle = get_angle(m->pos, pos);
     }
     set_status("Rotated objects to face " + p2s(pos) + ".");

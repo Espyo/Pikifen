@@ -537,7 +537,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     
     std::sort(
         alpha_spots.begin(), alpha_spots.end(),
-    [] (alpha_spot a1, alpha_spot a2) -> bool {
+    [] (const alpha_spot &a1, const alpha_spot &a2) -> bool {
         return a1.distance_to_rightmost < a2.distance_to_rightmost;
     }
     );
@@ -1422,7 +1422,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
  *   Child info to check.
  */
 mob_type::spawn_struct* get_spawn_info_from_child_info(
-    mob_type* type, mob_type::child_struct* child_info
+    mob_type* type, const mob_type::child_struct* child_info
 ) {
     for(size_t s = 0; s < type->spawns.size(); ++s) {
         if(type->spawns[s].name == child_info->spawn_name) {

@@ -43,7 +43,7 @@ public:
     //The body part's name.
     string name;
     
-    body_part(const string &name = "");
+    explicit body_part(const string &name = "");
 };
 
 
@@ -87,7 +87,7 @@ public:
     //Example of a non-latchable hitbox: Goolix' larger core.
     bool can_pikmin_latch;
     
-    hitbox(
+    explicit hitbox(
         const string &bpn = "", size_t bpi = INVALID, body_part* bpp = NULL,
         const point &pos = point(), const float z = 0,
         const float height = 128, const float radius = 32

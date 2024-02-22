@@ -415,7 +415,7 @@ sfx_source_struct* audio_manager::get_source(size_t source_id) {
  * m_ptr:
  *   Mob that got deleted.
  */
-void audio_manager::handle_mob_deletion(mob* m_ptr) {
+void audio_manager::handle_mob_deletion(const mob* m_ptr) {
     for(auto s = mob_sources.begin(); s != mob_sources.end();) {
         if(s->second == m_ptr) {
             s = mob_sources.erase(s);
@@ -433,7 +433,7 @@ void audio_manager::handle_world_pause() {
     //Pause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback_ptr = &playbacks[p];
-        if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
             continue;
         }
         
@@ -469,7 +469,7 @@ void audio_manager::handle_world_unpause() {
     //Unpause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback_ptr = &playbacks[p];
-        if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
             continue;
         }
         
@@ -692,7 +692,7 @@ bool audio_manager::set_current_song(const string &name, bool from_start) {
         //Start it.
         if(song_ptr->state == SONG_STATE_STOPPED) {
             start_song_track(song_ptr, song_ptr->main_track, from_start);
-            for(auto &m : song_ptr->mix_tracks) {
+            for(auto const &m : song_ptr->mix_tracks) {
                 start_song_track(song_ptr, m.second, from_start);
             }
         }
@@ -1220,7 +1220,7 @@ void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
  *   Only issues errors if this is true.
  */
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::get(
-    const string &name, data_node* node,
+    const string &name, const data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_audio_stream("", node, report_errors);
@@ -1350,7 +1350,7 @@ void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
  *   Only issues errors if this is true.
  */
 ALLEGRO_SAMPLE* sfx_sample_manager::get(
-    const string &name, data_node* node,
+    const string &name, const data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_sample("", node, report_errors);

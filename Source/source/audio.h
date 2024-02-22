@@ -261,7 +261,7 @@ struct sfx_sample_manager {
     public:
     explicit sfx_sample_manager(const string &base_dir);
     ALLEGRO_SAMPLE* get(
-        const string &name, data_node* node = NULL,
+        const string &name, const data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_SAMPLE* s);
@@ -278,7 +278,7 @@ struct sfx_sample_manager {
         //How many calls it has.
         size_t calls;
         
-        sample_info(ALLEGRO_SAMPLE* s = NULL);
+        explicit sample_info(ALLEGRO_SAMPLE* s = NULL);
     };
     //Base directory that this manager works on.
     string base_dir;
@@ -300,7 +300,7 @@ struct audio_stream_manager {
     public:
     explicit audio_stream_manager(const string &base_dir);
     ALLEGRO_AUDIO_STREAM* get(
-        const string &name, data_node* node = NULL,
+        const string &name, const data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_AUDIO_STREAM* s);
@@ -317,7 +317,7 @@ struct audio_stream_manager {
         //How many calls it has.
         size_t calls;
         
-        stream_info(ALLEGRO_AUDIO_STREAM* s = NULL);
+        explicit stream_info(ALLEGRO_AUDIO_STREAM* s = NULL);
     };
     //Base directory that this manager works on.
     string base_dir;
@@ -368,7 +368,7 @@ public:
     bool destroy_sfx_source(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
-    void handle_mob_deletion(mob* m_ptr);
+    void handle_mob_deletion(const mob* m_ptr);
     void handle_world_pause();
     void handle_world_unpause();
     void init(

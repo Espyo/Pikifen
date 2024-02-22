@@ -55,7 +55,7 @@ public:
     //Heal up a leader.
     void heal_leader(leader* l) const;
     //Checks if a leader is on the control point.
-    bool is_leader_on_cp(leader* l) const;
+    bool is_leader_on_cp(const leader* l) const;
     
     //Constructor.
     ship(const point &pos, ship_type* type, float angle);

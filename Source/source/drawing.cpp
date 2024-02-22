@@ -268,7 +268,7 @@ void draw_bitmap_with_effects(
  */
 void draw_button(
     const point &center, const point &size, const string &text,
-    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     const bool selected, const float juicy_grow_amount
 ) {
     draw_compressed_scaled_text(
@@ -1524,16 +1524,14 @@ void draw_sector_texture(
             
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
-        if(texture_sector[t]) {
-            al_build_transform(
-                &tra,
-                -texture_info_to_use->translation.x,
-                -texture_info_to_use->translation.y,
-                1.0f / texture_info_to_use->scale.x,
-                1.0f / texture_info_to_use->scale.y,
-                -texture_info_to_use->rot
-            );
-        }
+        al_build_transform(
+            &tra,
+            -texture_info_to_use->translation.x,
+            -texture_info_to_use->translation.y,
+            1.0f / texture_info_to_use->scale.x,
+            1.0f / texture_info_to_use->scale.y,
+            -texture_info_to_use->rot
+        );
         
         for(size_t v = 0; v < n_vertexes; ++v) {
         
@@ -1617,7 +1615,7 @@ void draw_sector_texture(
  * effects:
  *   List of bitmap effects to use.
  */
-void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
+void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     

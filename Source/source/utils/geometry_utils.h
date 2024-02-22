@@ -64,7 +64,7 @@ struct point {
 struct dist {
     public:
     dist(const point &p1, const point &p2);
-    dist(const float d = 0.0f);
+    explicit dist(const float d = 0.0f);
     dist &operator =(const float d);
     bool operator <(const float d2) const;
     bool operator <(const dist &d2) const;

@@ -95,7 +95,7 @@ public:
     //List of hitboxes on this frame.
     vector<hitbox> hitboxes;
     
-    sprite(
+    explicit sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
         const vector<hitbox> &h = vector<hitbox>()
     );
@@ -112,7 +112,7 @@ public:
     void set_bitmap(
         const string &new_file_name,
         const point &new_file_pos, const point &new_file_size,
-        data_node* node = NULL
+        const data_node* node = NULL
     );
     
     ~sprite();
@@ -141,7 +141,7 @@ public:
     //Signal to send, if any. INVALID = none.
     size_t signal;
     
-    frame(
+    explicit frame(
         const string &sn = "", const size_t si = INVALID,
         sprite* sp = NULL, const float d = 0.1,
         const string &snd = "", const size_t s = INVALID
@@ -165,7 +165,7 @@ public:
     //100 means it cannot miss and/or is a normal animation.
     unsigned char hit_rate;
     
-    animation(
+    explicit animation(
         const string &name = "",
         const vector<frame> &frames = vector<frame>(),
         const size_t loop_frame = 0, const unsigned char hit_rate = 100
@@ -199,7 +199,7 @@ public:
     //Maximum span of the hitboxes. Cache for performance.
     float max_span;
     
-    animation_database(
+    explicit animation_database(
         const vector<animation*> &a = vector<animation*>(),
         const vector<sprite*>    &s = vector<sprite*>(),
         const vector<body_part*> &b = vector<body_part*>()
@@ -211,7 +211,7 @@ public:
     
     void calculate_max_span();
     void create_conversions(
-        vector<std::pair<size_t, string> > conversions, data_node* file
+        vector<std::pair<size_t, string> > conversions, const data_node* file
     );
     void fill_sound_index_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
@@ -236,7 +236,7 @@ public:
     //Index of the current frame of animation.
     size_t cur_frame_index;
     
-    animation_instance(animation_database* anim_db = NULL);
+    explicit animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);
     animation_instance &operator=(const animation_instance &ai2);
     

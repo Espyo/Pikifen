@@ -94,7 +94,7 @@ struct mob_gen {
     //Linked objects. Cache for performance.
     vector<mob_gen*> links;
     
-    mob_gen(
+    explicit mob_gen(
         const point &pos = point(),
         mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
@@ -124,7 +124,7 @@ struct tree_shadow {
     //Swaying is multiplied by this.
     point sway;
     
-    tree_shadow(
+    explicit tree_shadow(
         const point &center = point(), const point &size = point(100, 100),
         const float angle = 0, const unsigned char alpha = 255,
         const string &file_name = "", const point &sway = point(1, 1)

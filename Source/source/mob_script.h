@@ -233,7 +233,9 @@ public:
     vector<mob_action_call*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    mob_event(data_node* node, const vector<mob_action_call*> &actions);
+    mob_event(
+        const data_node* node, const vector<mob_action_call*> &actions
+    );
     explicit mob_event(
         const MOB_EV_TYPES t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()
@@ -289,7 +291,7 @@ public:
     bool set_state(
         const size_t new_state, void* info1 = NULL, void* info2 = NULL
     );
-    mob_fsm(mob* m = NULL);
+    explicit mob_fsm(mob* m = NULL);
 };
 
 
@@ -338,7 +340,7 @@ struct hitbox_interaction {
     hitbox* h1;
     //Hitbox of the other mob.
     hitbox* h2;
-    hitbox_interaction(
+    explicit hitbox_interaction(
         mob* mob2 = NULL,
         hitbox* h1 = NULL, hitbox* h2 = NULL
     );
@@ -346,7 +348,7 @@ struct hitbox_interaction {
 
 
 size_t fix_states(
-    vector<mob_state*> &states, const string &starting_state, mob_type* mt
+    vector<mob_state*> &states, const string &starting_state, const mob_type* mt
 );
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 void unload_script(mob_type* mt);

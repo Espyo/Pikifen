@@ -277,7 +277,6 @@ void results_state::load() {
     //Record loading and saving logic.
     bool old_record_clear = false;
     int old_record_score = 0;
-    string old_record_date = "";
     
     data_node mission_records;
     mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
@@ -306,7 +305,6 @@ void results_state::load() {
     if(old_record_parts.size() == 3) {
         old_record_clear = old_record_parts[0] == "1";
         old_record_score = s2i(old_record_parts[1]);
-        old_record_date = old_record_parts[2];
     }
     
     bool is_new_record = false;

@@ -777,7 +777,7 @@ void load_asset_file_names() {
  *   Only issues errors if this is true.
  */
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
-    const string &file_name, data_node* node, bool report_errors
+    const string &file_name, const data_node* node, bool report_errors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
         al_load_audio_stream(
@@ -815,7 +815,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  *   If this parameter is true, the path starts from the game's root.
  */
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node,
+    const string &file_name, const data_node* node,
     const bool report_error, const bool error_bmp_on_error,
     const bool error_bmp_on_empty, const bool path_from_root
 ) {
@@ -1438,7 +1438,7 @@ void load_options() {
  *   Only issues errors if this is true.
  */
 ALLEGRO_SAMPLE* load_sample(
-    const string &file_name, data_node* node, bool report_errors
+    const string &file_name, const data_node* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample =
         al_load_sample((AUDIO_SOUNDS_FOLDER_PATH + "/" + file_name).c_str());

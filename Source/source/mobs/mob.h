@@ -306,23 +306,23 @@ public:
         pikmin_type** target_type, mob** target_mob, point* target_point
     ) const;
     bool calculate_damage(
-        mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
+        mob* victim, hitbox* attack_h, const hitbox* victim_h, float* damage
     ) const;
     void calculate_knockback(
-        mob* victim, hitbox* attack_h,
+        const mob* victim, const hitbox* attack_h,
         hitbox* victim_h, float* knockback, float* angle
     ) const;
     void cause_spike_damage(mob* victim, const bool is_ingestion);
-    void chomp(mob* m, hitbox* hitbox_info);
+    void chomp(mob* m, const hitbox* hitbox_info);
     sprite* get_cur_sprite() const;
     void get_hitbox_hold_point(
-        mob* mob_to_hold, hitbox* h_ptr,
+        const mob* mob_to_hold, const hitbox* h_ptr,
         float* offset_dist, float* offset_angle, float* vertical_dist
     ) const;
     size_t get_latched_pikmin_amount() const;
     float get_latched_pikmin_weight() const;
     void do_attack_effects(
-        mob* attacker, hitbox* attack_h, hitbox* victim_h,
+        const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
         const float damage, const float knockback
     );
     bool is_stored_inside_mob() const;
@@ -352,18 +352,18 @@ public:
     void release_chomped_pikmin();
     void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;
-    mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
+    mob* spawn(const mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
     void start_dying();
     void finish_dying();
     void respawn();
     dist get_distance_between(
-        mob* m2_ptr, const dist* regular_distance_cache = NULL
+        const mob* m2_ptr, const dist* regular_distance_cache = NULL
     ) const;
     hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(
         const point &p, const size_t h_type = INVALID, dist* d = NULL
     ) const;
-    bool has_clear_line(mob* target_mob) const;
+    bool has_clear_line(const mob* target_mob) const;
     
     void chase(
         point* orig_coords, float* orig_z,
@@ -456,7 +456,7 @@ protected:
     );
     //Returns the angle at which the mob should slide against a wall.
     H_MOVE_RESULTS get_wall_slide_angle(
-        edge* e_ptr, unsigned char wall_sector, const float move_angle,
+        const edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
     ) const;
     //Goes to the path's final destination.

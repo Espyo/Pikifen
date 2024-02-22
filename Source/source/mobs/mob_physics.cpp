@@ -337,7 +337,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
  *   Holds the calculated slide angle.
  */
 H_MOVE_RESULTS mob::get_wall_slide_angle(
-    edge* e_ptr, unsigned char wall_sector, const float move_angle,
+    const edge* e_ptr, unsigned char wall_sector, const float move_angle,
     float* slide_angle
 ) const {
     //The wall's normal is the direction the wall is facing.
@@ -406,8 +406,6 @@ void mob::tick_horizontal_movement_physics(
     bool doing_slide = false;
     
     point new_pos = pos;
-    sector* new_ground_sector = ground_sector;
-    
     point move_speed = attempted_move_speed;
     
     //Try placing it in the place it should be at, judging
@@ -425,7 +423,7 @@ void mob::tick_horizontal_movement_physics(
         new_pos.x = pos.x + delta_t* move_speed.x;
         new_pos.y = pos.y + delta_t* move_speed.y;
         float new_z = z;
-        new_ground_sector = ground_sector;
+        sector* new_ground_sector = ground_sector;
         
         //Get the sector the mob will be on.
         sector* new_center_sector = get_sector(new_pos, NULL, true);

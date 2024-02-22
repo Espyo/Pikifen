@@ -124,7 +124,7 @@ void draw_bitmap_with_effects(
 );
 void draw_button(
     const point &center, const point &size, const string &text,
-    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     const bool selected,
     const float juicy_grow_amount = 0.0f
 );
@@ -201,7 +201,7 @@ void draw_scaled_text(
     const point &where, const point &scale,
     const int flags, const TEXT_VALIGN_MODES valign, const string &text
 );
-void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects);
+void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects);
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,

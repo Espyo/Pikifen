@@ -1630,7 +1630,7 @@ bool mission_goal_get_to_exit::get_end_zoom_data(
                 break;
             }
         }
-        avg_pos += leader_ptr->pos;
+        if(leader_ptr) avg_pos += leader_ptr->pos;
     }
     avg_pos.x /= gameplay->mission_remaining_mob_ids.size();
     avg_pos.y /= gameplay->mission_remaining_mob_ids.size();
