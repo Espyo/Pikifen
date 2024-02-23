@@ -62,6 +62,7 @@ animations{
 			}
 			puffing1{
 				duration=0.1000
+				signal=0
 			}
 			attacking1{
 				duration=0.1000
@@ -92,6 +93,7 @@ animations{
 			}
 			attacking6{
 				duration=0.1000
+				signal=1
 			}
 			idling{
 				duration=0.3000
@@ -174,8 +176,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -183,8 +183,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -192,8 +190,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -201,8 +197,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -219,8 +213,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 8.0000 0.0000
@@ -228,8 +220,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 8.0000 0.0000
@@ -237,8 +227,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 8.0000 0.0000
@@ -246,8 +234,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -264,8 +250,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=68.9500 10.8700 0.0000
@@ -273,8 +257,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=68.9500 10.8700 0.0000
@@ -282,8 +264,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=68.9500 9.8100 0.0000
@@ -291,8 +271,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -309,8 +287,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=69.3200 12.4700 0.0000
@@ -318,8 +294,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=69.3000 12.9700 0.0000
@@ -327,8 +301,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=68.9500 13.3200 0.0000
@@ -336,8 +308,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -354,8 +324,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=67.9000 16.4700 0.0000
@@ -363,8 +331,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=67.9000 15.4200 0.0000
@@ -372,8 +338,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=67.9000 14.7200 0.0000
@@ -381,8 +345,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -400,8 +362,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 -8.7600 0.0000
@@ -409,8 +369,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.7000 -8.4100 0.0000
@@ -418,8 +376,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.3500 -8.7600 0.0000
@@ -427,8 +383,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -446,8 +400,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.1100 -10.9900 0.0000
@@ -455,8 +407,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=69.3000 -12.9700 0.0000
@@ -464,8 +414,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=69.3000 -12.2700 0.0000
@@ -473,8 +421,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -492,8 +438,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=68.9500 -15.0700 0.0000
@@ -501,8 +445,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=68.2500 -16.4700 0.0000
@@ -510,8 +452,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=68.9500 -16.4700 0.0000
@@ -519,8 +459,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -538,8 +476,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=68.2500 -14.7200 0.0000
@@ -547,8 +483,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=67.5500 -14.3700 0.0000
@@ -556,8 +490,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=67.9000 -14.7200 0.0000
@@ -565,8 +497,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -583,8 +513,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=72.1000 -3.1500 0.0000
@@ -592,8 +520,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=72.1100 -2.8100 0.0000
@@ -601,8 +527,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=72.8000 -2.8000 0.0000
@@ -610,8 +534,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -628,8 +550,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=72.1000 2.4600 0.0000
@@ -637,8 +557,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=71.7700 2.7400 0.0000
@@ -646,8 +564,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=71.7500 2.8000 0.0000
@@ -655,8 +571,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -673,8 +587,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -682,8 +594,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -691,8 +601,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -700,8 +608,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -718,8 +624,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -727,8 +631,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -736,8 +638,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -745,8 +645,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -763,8 +661,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=88.0000 0.0000 -32.0000
@@ -805,8 +701,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -847,8 +741,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -889,8 +781,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -931,8 +821,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -973,8 +861,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=180.0000 0.0000 -32.0000
@@ -1015,8 +901,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1024,8 +908,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1033,8 +915,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1042,8 +922,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1060,8 +938,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=52.5600 0.0000 0.0000
@@ -1069,8 +945,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=51.1700 0.0000 0.0000
@@ -1078,8 +952,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=52.0000 -0.8300 0.0000
@@ -1087,8 +959,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1105,8 +975,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=6.8700 0.8300 0.0000
@@ -1114,8 +982,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=6.0400 0.8300 0.0000
@@ -1123,8 +989,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=6.8700 0.5500 0.0000
@@ -1132,8 +996,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1158,8 +1020,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1167,8 +1027,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1176,8 +1034,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1202,8 +1058,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=60.0300 -1.1100 0.0000
@@ -1211,8 +1065,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=60.0300 -0.8300 0.0000
@@ -1220,8 +1072,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1237,8 +1087,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1246,8 +1094,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1255,8 +1101,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1264,8 +1108,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1281,8 +1123,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1290,8 +1130,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1299,8 +1137,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1308,8 +1144,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1325,8 +1159,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=52.5600 0.0000 0.0000
@@ -1334,8 +1166,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=51.1700 0.0000 0.0000
@@ -1343,8 +1173,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=52.0000 -0.8300 0.0000
@@ -1352,8 +1180,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1369,8 +1195,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1378,8 +1202,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1387,8 +1209,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1396,8 +1216,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1413,8 +1231,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1422,8 +1238,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1431,8 +1245,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1440,8 +1252,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1457,8 +1267,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1466,8 +1274,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1475,8 +1281,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1484,8 +1288,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1501,8 +1303,6 @@ sprites{
 				radius=35.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1510,8 +1310,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire2{
 				coords=70.0000 0.0000 0.0000
@@ -1519,8 +1317,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			fire3{
 				coords=70.0000 0.0000 0.0000
@@ -1528,8 +1324,6 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1540,3 +1334,4 @@ body_parts{
 	fire2
 	fire3
 }
+engine_version=0.25.0

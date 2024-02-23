@@ -154,6 +154,7 @@ animations{
 			}
 			idling{
 				duration=0.1500
+				signal=0
 			}
 			shaking3{
 				duration=0.1500
@@ -275,8 +276,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -285,8 +284,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -294,8 +291,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -312,8 +307,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -322,8 +315,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 4.0000 0.0000
@@ -331,8 +322,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -349,8 +338,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 10.0000 0.0000
@@ -359,8 +346,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 10.0000 0.0000
@@ -368,8 +353,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -387,8 +370,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 -4.0000 0.0000
@@ -397,8 +378,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 -4.0000 0.0000
@@ -406,8 +385,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -425,8 +402,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 -10.0000 0.0000
@@ -435,8 +410,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 -10.0000 0.0000
@@ -444,8 +417,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -462,8 +433,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -472,8 +441,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 -8.0000 0.0000
@@ -481,8 +448,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -499,8 +464,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -509,8 +472,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=104.0000 -10.0000 0.0000
@@ -518,8 +479,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -536,8 +495,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -546,8 +503,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=102.0000 0.0000 -40.0000
@@ -571,8 +526,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -581,8 +534,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=95.0000 4.0000 -40.0000
@@ -606,8 +557,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=12.0000 -13.0000 0.0000
@@ -616,8 +565,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=97.0000 33.0000 0.0000
@@ -625,8 +572,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -642,8 +587,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -652,8 +595,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=55.0000 0.0000 0.0000
@@ -661,8 +602,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -678,8 +617,6 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-44.0000 0.0000 0.0000
@@ -687,8 +624,6 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=28.0000 0.0000 0.0000
@@ -712,8 +647,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-14.0000 0.0000 0.0000
@@ -722,8 +655,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=32.0000 0.0000 0.0000
@@ -731,8 +662,6 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -748,8 +677,6 @@ sprites{
 				radius=45.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -757,8 +684,6 @@ sprites{
 				radius=50.0000
 				type=2
 				value=0.8000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=80.0000 0.0000 0.0000
@@ -766,8 +691,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -806,8 +729,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -843,8 +764,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -861,8 +780,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -871,8 +788,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=94.0000 12.0000 0.0000
@@ -880,8 +795,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -896,8 +809,6 @@ sprites{
 				radius=48.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -905,8 +816,6 @@ sprites{
 				radius=50.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=55.0000 0.0000 0.0000
@@ -914,8 +823,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -931,8 +838,6 @@ sprites{
 				radius=50.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-44.0000 0.0000 0.0000
@@ -940,8 +845,6 @@ sprites{
 				radius=32.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=28.0000 0.0000 0.0000
@@ -964,8 +867,6 @@ sprites{
 				radius=52.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-14.0000 0.0000 0.0000
@@ -973,8 +874,6 @@ sprites{
 				radius=48.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=32.0000 0.0000 0.0000
@@ -982,8 +881,6 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -999,8 +896,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1008,8 +903,6 @@ sprites{
 				radius=50.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1017,8 +910,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1035,8 +926,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1045,8 +934,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1054,8 +941,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1072,8 +957,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1082,8 +965,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1091,8 +972,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1109,8 +988,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-12.0000 2.0000 0.0000
@@ -1119,8 +996,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=90.0000 2.0000 0.0000
@@ -1128,8 +1003,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1146,8 +1019,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-9.0000 3.0000 0.0000
@@ -1156,8 +1027,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=85.0000 28.0000 0.0000
@@ -1165,8 +1034,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1183,8 +1050,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-10.0000 1.0000 0.0000
@@ -1193,8 +1058,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=52.0000 66.0000 0.0000
@@ -1202,8 +1065,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1221,8 +1082,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-9.0000 -3.0000 0.0000
@@ -1231,8 +1090,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=85.0000 -28.0000 0.0000
@@ -1240,8 +1097,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1259,8 +1114,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back{
 				coords=-10.0000 -1.0000 0.0000
@@ -1269,8 +1122,6 @@ sprites{
 				type=0
 				value=0.8000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=52.0000 -66.0000 0.0000
@@ -1278,8 +1129,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1289,3 +1138,4 @@ body_parts{
 	back
 	mouth
 }
+engine_version=0.25.0

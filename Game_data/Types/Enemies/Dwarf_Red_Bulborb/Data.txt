@@ -25,6 +25,12 @@ reaches {
     attack = 15 30
 }
 rotation_speed = 114
+sounds {
+    shaking {
+        file = Shaking.ogg
+        volume = 40
+    }
+}
 target_type = enemy
 terrain_radius = 28
 territory_radius = 300

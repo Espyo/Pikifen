@@ -1762,7 +1762,7 @@ void pause_menu_struct::init_confirmation_page() {
     confirmation_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    confirmation_gui.set_selected_item(confirmation_gui.back_item);
+    confirmation_gui.set_selected_item(confirmation_gui.back_item, true);
     confirmation_gui.responsive = false;
     confirmation_gui.hide_items();
 }
@@ -1957,7 +1957,7 @@ void pause_menu_struct::init_help_page() {
     help_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    help_gui.set_selected_item(help_gui.back_item);
+    help_gui.set_selected_item(help_gui.back_item, true);
     help_gui.responsive = false;
     help_gui.hide_items();
     help_gui.on_selection_changed =
@@ -2147,7 +2147,7 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    gui.set_selected_item(gui.back_item);
+    gui.set_selected_item(gui.back_item, true);
     gui.responsive = false;
     gui.hide_items();
 }
@@ -2273,7 +2273,7 @@ void pause_menu_struct::init_mission_page() {
     mission_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    mission_gui.set_selected_item(mission_gui.back_item);
+    mission_gui.set_selected_item(mission_gui.back_item, true);
     mission_gui.responsive = false;
     mission_gui.hide_items();
 }
@@ -2723,7 +2723,7 @@ void pause_menu_struct::init_status_page() {
     );
     
     //Finishing touches.
-    status_gui.set_selected_item(status_gui.back_item);
+    status_gui.set_selected_item(status_gui.back_item, true);
     status_gui.responsive = false;
     status_gui.hide_items();
 }

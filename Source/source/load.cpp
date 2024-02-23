@@ -1355,14 +1355,22 @@ void load_misc_sounds() {
     //Sound effects.
     game.sys_assets.sfx_attack =
         game.audio.samples.get(game.asset_file_names.sfx_attack);
+    game.sys_assets.sfx_camera =
+        game.audio.samples.get(game.asset_file_names.sfx_camera);
+    game.sys_assets.sfx_menu_activate =
+        game.audio.samples.get(game.asset_file_names.sfx_menu_activate);
+    game.sys_assets.sfx_menu_back =
+        game.audio.samples.get(game.asset_file_names.sfx_menu_back);
+    game.sys_assets.sfx_menu_select =
+        game.audio.samples.get(game.asset_file_names.sfx_menu_select);
     game.sys_assets.sfx_pluck =
         game.audio.samples.get(game.asset_file_names.sfx_pluck);
     game.sys_assets.sfx_throw =
         game.audio.samples.get(game.asset_file_names.sfx_throw);
+    game.sys_assets.sfx_spray =
+        game.audio.samples.get(game.asset_file_names.sfx_spray);
     game.sys_assets.sfx_switch_pikmin =
         game.audio.samples.get(game.asset_file_names.sfx_switch_pikmin);
-    game.sys_assets.sfx_camera =
-        game.audio.samples.get(game.asset_file_names.sfx_camera);
 }
 
 
@@ -2128,9 +2136,13 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
     
     game.audio.samples.detach(game.sys_assets.sfx_attack);
-    game.audio.samples.detach(game.sys_assets.sfx_throw);
-    game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
     game.audio.samples.detach(game.sys_assets.sfx_camera);
+    game.audio.samples.detach(game.sys_assets.sfx_menu_activate);
+    game.audio.samples.detach(game.sys_assets.sfx_menu_back);
+    game.audio.samples.detach(game.sys_assets.sfx_menu_select);
+    game.audio.samples.detach(game.sys_assets.sfx_spray);
+    game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
+    game.audio.samples.detach(game.sys_assets.sfx_throw);
 }
 
 

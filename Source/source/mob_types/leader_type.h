@@ -136,6 +136,10 @@ enum LEADER_SOUNDS {
     LEADER_SOUND_NAME_CALL,
     //Whistling.
     LEADER_SOUND_WHISTLING,
+    //Footstep #1.
+    LEADER_SOUND_FOOTSTEP_1,
+    //Footstep #2.
+    LEADER_SOUND_FOOTSTEP_2,
     
     //Total amount of sounds.
     N_LEADER_SOUNDS,

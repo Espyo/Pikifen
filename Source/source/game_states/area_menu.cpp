@@ -1033,7 +1033,7 @@ void area_menu_state::load() {
         specs_box->responsive = false;
     }
     if(first_area_button) {
-        gui.set_selected_item(first_area_button);
+        gui.set_selected_item(first_area_button, true);
     }
     
     //Finishing touches.

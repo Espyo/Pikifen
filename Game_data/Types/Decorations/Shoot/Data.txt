@@ -7,3 +7,13 @@ random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
 tint_random_maximum = 192 255 192
+
+sounds {
+    bumped {
+        file = Foliage.ogg
+        volume = 40
+        speed_deviation = 40
+        volume_deviation = 10
+        random_delay = 0.2
+    }
+}

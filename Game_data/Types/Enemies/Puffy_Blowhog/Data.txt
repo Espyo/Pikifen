@@ -25,6 +25,16 @@ reaches {
     chase = 500 360
 }
 rotation_speed = 70
+sounds {
+    inhaling {
+        file = Inhaling.ogg
+        volume = 35
+    }
+    exhaling {
+        file = Exhaling.ogg
+        volume = 50
+    }
+}
 target_type = enemy
 terrain_radius = 150
 territory_radius = 500

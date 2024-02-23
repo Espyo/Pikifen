@@ -332,7 +332,7 @@ void options_menu_state::init_gui_audio_page() {
     audio_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    audio_gui.set_selected_item(master_vol_picker);
+    audio_gui.set_selected_item(master_vol_picker, true);
     audio_gui.responsive = false;
     audio_gui.hide_items();
 }
@@ -432,7 +432,7 @@ void options_menu_state::init_gui_controls_page() {
     controls_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    controls_gui.set_selected_item(control_binds_button);
+    controls_gui.set_selected_item(control_binds_button, true);
     controls_gui.responsive = false;
     controls_gui.hide_items();
 }
@@ -550,7 +550,7 @@ void options_menu_state::init_gui_graphics_page() {
     graphics_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    graphics_gui.set_selected_item(fullscreen_check);
+    graphics_gui.set_selected_item(fullscreen_check, true);
     graphics_gui.responsive = false;
     graphics_gui.hide_items();
 }
@@ -657,7 +657,7 @@ void options_menu_state::init_gui_misc_page() {
     misc_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    misc_gui.set_selected_item(cursor_cam_weight_picker);
+    misc_gui.set_selected_item(cursor_cam_weight_picker, true);
     misc_gui.responsive = false;
     misc_gui.hide_items();
 }
@@ -798,7 +798,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    top_gui.set_selected_item(controls_button);
+    top_gui.set_selected_item(controls_button, true);
 }
 
 

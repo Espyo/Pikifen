@@ -345,7 +345,10 @@ bool audio_manager::emit(size_t source_id) {
     playback_ptr->base_gain = source_ptr->config.gain;
     if(source_ptr->config.gain_deviation != 0.0f) {
         playback_ptr->base_gain +=
-            randomf(0.0f, source_ptr->config.gain_deviation);
+            randomf(
+                -source_ptr->config.gain_deviation,
+                source_ptr->config.gain_deviation
+            );
         playback_ptr->base_gain =
             clamp(playback_ptr->base_gain, 0.0f, 1.0f);
     }
@@ -379,7 +382,11 @@ bool audio_manager::emit(size_t source_id) {
     );
     float speed = source_ptr->config.speed;
     if(source_ptr->config.speed_deviation != 0.0f) {
-        speed += randomf(0.0f, source_ptr->config.speed_deviation);
+        speed +=
+            randomf(
+                -source_ptr->config.speed_deviation,
+                source_ptr->config.speed_deviation
+            );
     }
     speed = std::max(0.0f, speed);
     al_set_sample_instance_speed(playback_ptr->allegro_sample_instance, speed);

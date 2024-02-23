@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If a leader gets knocked back while the player holds a movement direction, the leader won't change to the knocked back animation (or state?)
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -19,9 +19,9 @@ Next tasks (roughly sorted most important first)
                 Knocked back
                 Seed landing
             Menus
-                Menu item highlight
-                Menu item selected
-                Menu backed out of
+                x Menu item selected
+                x Menu item activated
+                x Menu backed out of
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
                     Could change pitch when you're changing those multi-value options in the options menu
             HUD
@@ -29,15 +29,16 @@ Next tasks (roughly sorted most important first)
                 GO!
                 TODO Mission stuff
             Leader
-                Footsteps
+                x Footsteps
                 Alph, Brittany, and Charlie
-                Spray
+                x Spray
                 Swarming
             Enemies
-                Generic sucking in air
-                Generic spitting
-                Generic big stomp
-                Generic shaking
+                x Generic sucking in air
+                x Generic spitting
+                x Generic big stomp
+                x Generic exhaling (Puffy Blowhog)
+                ? Generic shaking
                 Generic whisk (Burrow-nit stabbing)
                 Generic biting
                 Generic eletric attack
@@ -45,11 +46,12 @@ Next tasks (roughly sorted most important first)
                 Generic water attack
                 Generic bubble attack
                 Generic gulping
-                Bould rolling
+                Boulder rolling
                 Burrowing sound
                 Enemy spirit floating
             Other mobs
                 Onion/ship beam
+                    Two sine-wave tracks, different frequencies, with tremolo
                 Onion/ship object entered
                 Onion/Candypop spitting
                 Gate moving
@@ -61,7 +63,7 @@ Next tasks (roughly sorted most important first)
                 Sticks clacking (climbing stick growing)
                 Rocks crumbling (clog being destroyed)
                 Crystal shattering
-                Leaves rustling (vegetation)
+                x Leaves rustling (vegetation)
                 Explosion
                 Ambiance sounds
         Recreate the following sounds, as per user feedback
@@ -737,8 +739,8 @@ Misc things (so I don't forget)
         Aesthetic
             A better font than just the built-in one
             Juice
-                Pop line particles when something gets created
-                Puffs of smoke when something gets deleted
+                Pop sound and pop line particles when something gets created
+                Poof sound and puff of smoke particles when something gets deleted
                 Change the cursor for when you're dragging, drawing, placing something new, etc.
                 Glow and grow the new sector, object, etc. when it is created
                 Slightly grow the current thing when you select it, or maybe when you drag it?

@@ -149,6 +149,8 @@ public:
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> on_get_tooltip;
     
+    //Activates it.
+    bool activate(const point &cursor_pos);
     //Adds a child item.
     void add_child(gui_item* item);
     //Removes and deletes all children items.
@@ -385,7 +387,7 @@ public:
     //Removes an item from the list.
     void remove_item(gui_item* item);
     //Sets the currently selected item.
-    void set_selected_item(gui_item* item);
+    void set_selected_item(gui_item* item, bool silent = false);
     //Shows items, if they were hidden.
     void show_items();
     //Starts an animation tha affects all items.

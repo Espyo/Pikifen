@@ -82,6 +82,17 @@ script {
         on_enter {
             stop
             set_animation attacking
+            play_sound inhaling sfx_id
+        }
+        on_frame_signal {
+            get_event_info signal frame_signal
+            stop_sound $sfx_id
+            if $signal = 0
+                play_sound exhaling sfx_id
+            end_if
+        }
+        on_leave {
+            stop_sound $sfx_id
         }
         on_animation_end {
             set_state examining

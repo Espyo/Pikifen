@@ -315,7 +315,7 @@ void main_menu_state::init_gui_main_page() {
     main_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    main_gui.set_selected_item(play_button);
+    main_gui.set_selected_item(play_button, true);
     main_gui.responsive = false;
     main_gui.hide_items();
 }
@@ -414,7 +414,7 @@ void main_menu_state::init_gui_make_page() {
     make_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    make_gui.set_selected_item(anim_ed_button);
+    make_gui.set_selected_item(anim_ed_button, true);
     make_gui.responsive = false;
     make_gui.hide_items();
 }
@@ -493,7 +493,7 @@ void main_menu_state::init_gui_play_page() {
     play_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    play_gui.set_selected_item(simple_button);
+    play_gui.set_selected_item(simple_button, true);
     play_gui.responsive = false;
     play_gui.hide_items();
 }
@@ -571,7 +571,7 @@ void main_menu_state::init_gui_tutorial_page() {
     tutorial_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    tutorial_gui.set_selected_item(yes_button);
+    tutorial_gui.set_selected_item(yes_button, true);
     tutorial_gui.responsive = false;
     tutorial_gui.hide_items();
 }

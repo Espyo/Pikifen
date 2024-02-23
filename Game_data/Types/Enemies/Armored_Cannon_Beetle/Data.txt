@@ -32,6 +32,20 @@ spawns {
         angle = 0
     }
 }
+sounds {
+    inhaling {
+        file = Inhaling.ogg
+        volume = 50
+    }
+    spit {
+        file = Spit.ogg
+        volume = 60
+    }
+    stomp {
+        file = Stomp.ogg
+        speed_deviation = 20
+    }
+}
 rotation_speed = 40
 target_type = enemy
 terrain_radius = 200

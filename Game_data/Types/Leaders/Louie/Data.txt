@@ -23,6 +23,18 @@ sounds {
     whistling {
         file = Louie_whistle.ogg
     }
+    footstep_1 {
+        file = Footstep_1.ogg
+        volume = 5
+        volume_deviation = 3
+        speed_deviation = 30
+    }
+    footstep_2 {
+        file = Footstep_2.ogg
+        volume = 5
+        volume_deviation = 3
+        speed_deviation = 30
+    }
 }
 vulnerabilities {
     poison = 0

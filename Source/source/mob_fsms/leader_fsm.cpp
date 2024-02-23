@@ -86,6 +86,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(leader_fsm::enter_active);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(leader_fsm::set_stop_anim);
+        }
         efc.new_event(MOB_EV_ON_TICK); {
             efc.run(leader_fsm::tick_active_state);
         }
@@ -2203,6 +2206,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.total_speed_deviation = spray_type_ref.distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
+    
+    game.audio.create_mob_sfx_source(game.sys_assets.sfx_spray, m);
     
     game.states.gameplay->change_spray_count(spray_nr, -1);
     

@@ -799,7 +799,7 @@ void results_state::load() {
     //Finishing touches.
     game.audio.set_current_song(RESULTS::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
-    gui.set_selected_item(gui.back_item);
+    gui.set_selected_item(gui.back_item, true);
     gui_time_spent = 0.0f;
 }
 

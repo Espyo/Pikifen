@@ -289,7 +289,7 @@ void control_binds_menu_state::load() {
     //Finishing touches.
     game.audio.set_current_song(CONTROL_BINDS_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
-    gui.set_selected_item(gui.back_item);
+    gui.set_selected_item(gui.back_item, true);
     
     al_reconfigure_joysticks();
 }
@@ -404,7 +404,7 @@ void control_binds_menu_state::populate_binds() {
         list_box->add_child(more_button);
         gui.add_item(more_button);
         if(a == cur_action_type) {
-            gui.set_selected_item(more_button);
+            gui.set_selected_item(more_button, true);
         }
         
         vector<control_bind> a_binds = binds_per_action_type[a];

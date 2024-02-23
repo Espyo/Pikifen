@@ -30,6 +30,7 @@ script {
             stop
             stop_height_effect
             start_particles dust_explosion 0 0
+            play_sound stomp
             set_state idling
         }
     }
@@ -136,6 +137,7 @@ script {
             set_animation landing
             send_message_to_links landed
             start_particles dust_explosion 0 0
+            play_sound stomp
         }
         on_animation_end {
             set_state idling

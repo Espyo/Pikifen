@@ -105,7 +105,11 @@ script {
         on_enter {
             stop
             set_animation inhaling
+            play_sound inhaling sfx_id
             start_chomping 1 blowhole
+        }
+        on_leave {
+            stop_sound $sfx_id
         }
         on_tick {
             get_mob_info t self chomped_pikmin
@@ -125,6 +129,7 @@ script {
         on_enter {
             stop
             set_animation spitting
+            play_sound spit
         }
         on_frame_signal {
             start_particles dust_spit 180 0

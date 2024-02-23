@@ -223,6 +223,27 @@ gui_item::gui_item(const bool selectable) :
 
 
 /* ----------------------------------------------------------------------------
+ * Activates the item. Returns whether it could activate it.
+ * cursor_pos:
+ *   Cursor coordinates, if applicable.
+ */
+bool gui_item::activate(const point &cursor_pos) {
+    if(!on_activate) return false;
+    on_activate(cursor_pos);
+    
+    ALLEGRO_SAMPLE* sample =
+        this == manager->back_item ?
+        game.sys_assets.sfx_menu_back :
+        game.sys_assets.sfx_menu_activate;
+    sfx_source_config_struct activate_sfx_config;
+    activate_sfx_config.gain = 0.75f;
+    game.audio.create_ui_sfx_source(sample, activate_sfx_config);
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds a child item.
  * item:
  *   Item to add as a child item.
@@ -766,7 +787,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             selected_item->is_responsive() &&
             selected_item->on_activate
         ) {
-            selected_item->on_activate(point(ev.mouse.x, ev.mouse.y));
+            selected_item->activate(point(ev.mouse.x, ev.mouse.y));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
@@ -946,7 +967,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
             selected_item->on_activate &&
             selected_item->is_responsive()
         ) {
-            selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            selected_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
@@ -957,7 +978,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         
     } case PLAYER_ACTION_MENU_BACK: {
         if(is_down && back_item && back_item->is_responsive()) {
-            back_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            back_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
         }
         break;
         
@@ -1054,8 +1075,12 @@ void gui_manager::remove_item(gui_item* item) {
  * Sets the given item as the one that is selected, or none.
  * item:
  *   Item to select, or NULL for none.
+ * silent:
+ *   If true, no sound effect will play. Useful if you want the item to be
+ *   selected not because of user input, but because it's the default selected
+ *   item when the GUI loads.
  */
-void gui_manager::set_selected_item(gui_item* item) {
+void gui_manager::set_selected_item(gui_item* item, bool silent) {
     if(selected_item == item) {
         return;
     }
@@ -1075,6 +1100,17 @@ void gui_manager::set_selected_item(gui_item* item) {
         if(selected_item->on_selected) {
             selected_item->on_selected();
         }
+    }
+    
+    if(selected_item && !silent) {
+        sfx_source_config_struct select_sfx_config;
+        select_sfx_config.gain = 0.5f;
+        select_sfx_config.speed_deviation = 0.1f;
+        select_sfx_config.stack_min_pos = 0.01f;
+        game.audio.create_ui_sfx_source(
+            game.sys_assets.sfx_menu_select,
+            select_sfx_config
+        );
     }
 }
 
@@ -1137,7 +1173,7 @@ void gui_manager::tick(const float delta_t) {
         auto_repeat_next_activation -= delta_t;
         
         while(auto_repeat_next_activation <= 0.0f) {
-            selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            selected_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
             auto_repeat_next_activation +=
                 clamp(
                     interpolate_number(

@@ -159,7 +159,11 @@ asset_file_names_struct::asset_file_names_struct() :
     bmp_wave_ring("Wave_ring.png"),
     sfx_attack("Attack.ogg"),
     sfx_camera("Camera.ogg"),
+    sfx_menu_activate("Menu_activate.ogg"),
+    sfx_menu_back("Menu_back.ogg"),
+    sfx_menu_select("Menu_select.ogg"),
     sfx_pluck("Pluck.ogg"),
+    sfx_spray("Spray.ogg"),
     sfx_switch_pikmin("Switch_Pikmin.ogg"),
     sfx_throw("Throw.ogg") {
     
@@ -222,7 +226,11 @@ void asset_file_names_struct::load(data_node* file) {
     
     srs.set("attack", sfx_attack);
     srs.set("camera", sfx_camera);
+    srs.set("menu_activate", sfx_menu_activate);
+    srs.set("menu_back", sfx_menu_back);
+    srs.set("menu_select", sfx_menu_select);
     srs.set("pluck", sfx_pluck);
+    srs.set("spray", sfx_spray);
     srs.set("switch_pikmin", sfx_switch_pikmin);
     srs.set("throw", sfx_throw);
 }
@@ -2217,7 +2225,11 @@ system_asset_list::system_asset_list():
     bmp_wave_ring(nullptr),
     sfx_attack(nullptr),
     sfx_camera(nullptr),
+    sfx_menu_activate(nullptr),
+    sfx_menu_back(nullptr),
+    sfx_menu_select(nullptr),
     sfx_pluck(nullptr),
+    sfx_spray(nullptr),
     sfx_switch_pikmin(nullptr),
     sfx_throw(nullptr) {
     

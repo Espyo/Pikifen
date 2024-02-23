@@ -48,6 +48,8 @@ const float DISMISS_PARTICLE_MIN_SPEED = 170.0f;
 const float DISMISS_PARTICLE_SIZE = 8.0f;
 //Dismissed groups must have this much distance between them/the leader.
 const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
+//Time between each footstep sound.
+const float FOOTSTEP_INTERVAL = 0.20f;
 //Ratio of health at which a leader's health wheel starts giving a warning.
 const float HEALTH_CAUTION_RATIO = 0.3f;
 //How long the low health caution ring lasts for.
@@ -109,6 +111,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     queued_pluck_cancel(false),
     mid_go_here(false),
     is_in_walking_anim(false),
+    footstep_timer(LEADER::FOOTSTEP_INTERVAL),
+    footstep_number(false),
     swarm_next_arrow_timer(LEADER::SWARM_ARROW_INTERVAL),
     throw_cooldown(0.0f),
     throw_queued(false),
@@ -917,6 +921,22 @@ void leader::tick_class_specifics(const float delta_t) {
         health_wheel_caution_timer += delta_t;
         if(health_wheel_caution_timer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
             health_wheel_caution_timer = 0.0f;
+        }
+    }
+    
+    //Footsteps.
+    if(is_in_walking_anim) {
+        footstep_timer -= delta_t;
+        if(footstep_timer <= 0.0f) {
+            footstep_timer = LEADER::FOOTSTEP_INTERVAL;
+            footstep_number = !footstep_number;
+            play_sound(
+                lea_type->sfx_data_idxs[
+                    footstep_number ?
+                    LEADER_SOUND_FOOTSTEP_2 :
+                    LEADER_SOUND_FOOTSTEP_1
+                ]
+            );
         }
     }
 }

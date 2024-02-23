@@ -238,7 +238,7 @@ void stats_menu_state::load() {
     //Finishing touches.
     game.audio.set_current_song(STATS_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
-    gui.set_selected_item(gui.back_item);
+    gui.set_selected_item(gui.back_item, true);
     
 }
 

@@ -225,8 +225,16 @@ struct asset_file_names_struct {
     string sfx_attack;
     //Camera zoom level.
     string sfx_camera;
+    //Menu item activation.
+    string sfx_menu_activate;
+    //Menu item back.
+    string sfx_menu_back;
+    //Menu item selection.
+    string sfx_menu_select;
     //Pluck sound effect.
     string sfx_pluck;
+    //Using a spray.
+    string sfx_spray;
     //Switching standby Pikmin type.
     string sfx_switch_pikmin;
     //Throwing.
@@ -732,8 +740,16 @@ struct system_asset_list {
     ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
     ALLEGRO_SAMPLE* sfx_camera;
+    //Menu item activation.
+    ALLEGRO_SAMPLE* sfx_menu_activate;
+    //Menu item back.
+    ALLEGRO_SAMPLE* sfx_menu_back;
+    //Menu item selection.
+    ALLEGRO_SAMPLE* sfx_menu_select;
     //Pluck sound effect.
     ALLEGRO_SAMPLE* sfx_pluck;
+    //Using a spray.
+    ALLEGRO_SAMPLE* sfx_spray;
     //Switching standby Pikmin type.
     ALLEGRO_SAMPLE* sfx_switch_pikmin;
     //Throwing.

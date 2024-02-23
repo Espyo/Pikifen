@@ -40,11 +40,11 @@ leader_type::leader_type() :
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
         MOB_TARGET_TYPE_FRAGILE;
-
+        
     for(size_t s = 0; s < N_LEADER_SOUNDS; ++s) {
         sfx_data_idxs[s] = INVALID;
     }
-
+    
     leader_fsm::create_fsm(this);
 }
 
@@ -81,7 +81,7 @@ void leader_type::load_properties(data_node* file) {
     
     rs.set("max_throw_height", max_throw_height);
     rs.set("whistle_range", whistle_range);
-
+    
     for(size_t s = 0; s < sounds.size(); ++s) {
         if(sounds[s].name == "whistling") {
             sfx_data_idxs[LEADER_SOUND_WHISTLING] = s;
@@ -89,6 +89,10 @@ void leader_type::load_properties(data_node* file) {
             sfx_data_idxs[LEADER_SOUND_DISMISSING] = s;
         } else if(sounds[s].name == "name_call") {
             sfx_data_idxs[LEADER_SOUND_NAME_CALL] = s;
+        } else if(sounds[s].name == "footstep_1") {
+            sfx_data_idxs[LEADER_SOUND_FOOTSTEP_1] = s;
+        } else if(sounds[s].name == "footstep_2") {
+            sfx_data_idxs[LEADER_SOUND_FOOTSTEP_2] = s;
         }
     }
 }
