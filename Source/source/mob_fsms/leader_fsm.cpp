@@ -370,6 +370,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("pain", LEADER_STATE_PAIN); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::set_pain_anim);
+        }
         efc.new_event(LEADER_EV_INACTIVATED); {
             efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_pain");
@@ -380,6 +383,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::set_pain_anim);
+        }
         efc.new_event(LEADER_EV_ACTIVATED); {
             efc.run(leader_fsm::become_active);
             efc.change_state("pain");
@@ -391,6 +397,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("knocked_back", LEADER_STATE_KNOCKED_BACK); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::set_knocked_back_anim);
+        }
         efc.new_event(LEADER_EV_INACTIVATED); {
             efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_knocked_back");
@@ -419,6 +428,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     efc.new_state(
         "inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK
     ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::set_knocked_back_anim);
+        }
         efc.new_event(LEADER_EV_ACTIVATED); {
             efc.run(leader_fsm::become_active);
             efc.change_state("knocked_back");
@@ -1294,17 +1306,11 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
     
     if(knockback > 0) {
-        m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
-        
         if(lea_ptr->active) m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
         else m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
-        
     } else {
-        m->set_animation(LEADER_ANIM_PAIN);
-        
         if(lea_ptr->active) m->fsm.set_state(LEADER_STATE_PAIN);
         else m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
-        
     }
     
     game.states.gameplay->last_hurt_leader_pos = m->pos;
@@ -2054,6 +2060,34 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     if(new_pikmin && d <= game.config.next_pluck_range) {
         lea_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader needs to change to the knocked back animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::set_knocked_back_anim(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader needs to change to the knocked back animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::set_pain_anim(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_PAIN);
 }
 
 

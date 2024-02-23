@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If a leader gets knocked back while the player holds a movement direction, the leader won't change to the knocked back animation (or state?)
+    
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements

@@ -53,6 +53,8 @@ void punch(                  mob* m, void* info1, void* info2);
 void queue_stop_auto_pluck(  mob* m, void* info1, void* info2);
 void release(                mob* m, void* info1, void* info2);
 void search_seed(            mob* m, void* info1, void* info2);
+void set_knocked_back_anim(  mob* m, void* info1, void* info2);
+void set_pain_anim(          mob* m, void* info1, void* info2);
 void set_stop_anim(          mob* m, void* info1, void* info2);
 void set_walk_anim(          mob* m, void* info1, void* info2);
 void signal_stop_auto_pluck( mob* m, void* info1, void* info2);

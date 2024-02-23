@@ -3542,35 +3542,35 @@ mobs{
 		vars=max_health=500.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-482.8266 -461.8304
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-1048.0000 -320.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-301.2041 -577.4619
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-46.9528 -598.8373
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=66.0943 -601.1934
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-853.7748 -436.9164
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-895.3961 -145.5098
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-596.0000 -388.0000
 	}
 	Custom{
@@ -3579,31 +3579,31 @@ mobs{
 		vars=health=0.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-1160.0000 -312.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-1248.0000 -328.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-912.0000 -416.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-877.3874 -4.8918
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-851.6923 114.4617
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-384.0000 -480.0000
 	}
 	Custom{
-		type=Smoke Generator
+		type=Smoke generator
 		p=-192.0000 -592.0000
 	}
 }
