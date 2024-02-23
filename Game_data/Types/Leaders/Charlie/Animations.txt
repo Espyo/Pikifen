@@ -76,12 +76,14 @@ animations{
 			}
 			walking2{
 				duration=0.1000
+				sound=footstep_2
 			}
 			idling{
 				duration=0.1000
 			}
 			walking1{
 				duration=0.1000
+				sound=footstep_1
 			}
 		}
 	}

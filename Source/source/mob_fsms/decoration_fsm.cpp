@@ -63,9 +63,7 @@ void decoration_fsm::create_fsm(mob_type* typ) {
  *   Unused.
  */
 void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
-    decoration* dec_ptr = (decoration*) m;
     m->set_animation(DECORATION_ANIM_BUMPED);
-    m->play_sound(dec_ptr->dec_type->sfx_data_idx);
 }
 
 

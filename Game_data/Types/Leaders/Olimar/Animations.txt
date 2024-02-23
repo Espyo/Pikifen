@@ -76,12 +76,14 @@ animations{
 			}
 			walking2{
 				duration=0.1000
+				sound=footstep_2
 			}
 			idling{
 				duration=0.1000
 			}
 			walking1{
 				duration=0.1000
+				sound=footstep_1
 			}
 		}
 	}
@@ -417,3 +419,4 @@ body_parts{
 	fist
 	body
 }
+engine_version=0.25.0

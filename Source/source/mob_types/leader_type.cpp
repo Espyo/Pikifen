@@ -89,10 +89,6 @@ void leader_type::load_properties(data_node* file) {
             sfx_data_idxs[LEADER_SOUND_DISMISSING] = s;
         } else if(sounds[s].name == "name_call") {
             sfx_data_idxs[LEADER_SOUND_NAME_CALL] = s;
-        } else if(sounds[s].name == "footstep_1") {
-            sfx_data_idxs[LEADER_SOUND_FOOTSTEP_1] = s;
-        } else if(sounds[s].name == "footstep_2") {
-            sfx_data_idxs[LEADER_SOUND_FOOTSTEP_2] = s;
         }
     }
 }

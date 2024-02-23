@@ -51,8 +51,6 @@ public:
     float rotation_random_variation;
     //Should it skip to a random point of the animation when it starts?
     bool random_animation_delay;
-    //Sound data index for the rustling sound. Cache for performance.
-    size_t sfx_data_idx;
     
     decoration_type();
     void load_properties(data_node* file) override;

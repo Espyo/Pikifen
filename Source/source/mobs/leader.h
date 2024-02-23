@@ -38,7 +38,6 @@ extern const float DISMISS_PARTICLE_MAX_DURATION;
 extern const float DISMISS_PARTICLE_MAX_SPEED;
 extern const float DISMISS_PARTICLE_SIZE;
 extern const float DISMISS_SUBGROUP_DISTANCE;
-extern const float FOOTSTEP_INTERVAL;
 extern const float HEALTH_CAUTION_RATIO;
 extern const float HEALTH_CAUTION_RING_DURATION;
 extern const float HELD_GROUP_MEMBER_ANGLE;
@@ -83,10 +82,6 @@ public:
     bool mid_go_here;
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim;
-    //Time left until the next footstep sound.
-    float footstep_timer;
-    //What is the next footstep sound? False = #1, true = #2.
-    bool footstep_number;
     //Time until the next arrow in the list of swarm arrows appears.
     timer swarm_next_arrow_timer;
     //List of swarm mode arrows.

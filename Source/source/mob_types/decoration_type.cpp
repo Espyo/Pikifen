@@ -23,8 +23,7 @@ decoration_type::decoration_type() :
     tint_random_maximum(COLOR_EMPTY),
     scale_random_variation(0.0f),
     rotation_random_variation(0.0f),
-    random_animation_delay(false),
-    sfx_data_idx(INVALID) {
+    random_animation_delay(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     
@@ -99,10 +98,4 @@ void decoration_type::load_properties(data_node* file) {
     rs.set("tint_random_maximum", tint_random_maximum);
     
     rotation_random_variation = deg_to_rad(rotation_random_variation);
-    
-    for(size_t s = 0; s < sounds.size(); ++s) {
-        if(sounds[s].name == "bumped") {
-            sfx_data_idx = s;
-        }
-    }
 }

@@ -791,9 +791,6 @@ void load_mob_type_from_file(
         new_sfx.config.speed = std::max(0.0f, new_sfx.config.speed);
         
         new_sfx.config.gain_deviation /= 100.0f;
-        if(new_sfx.config.speed_deviation == 123) {
-            float qweqwe = 2;
-        }
         new_sfx.config.speed_deviation /= 100.0f;
         
         mt->sounds.push_back(new_sfx);

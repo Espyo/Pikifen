@@ -6,6 +6,7 @@ animations{
 			}
 			bumped2{
 				duration=0.1000
+				sound=bumped
 			}
 			bumped1{
 				duration=0.1000
@@ -82,3 +83,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0
