@@ -166,6 +166,8 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_STOP_HEIGHT_EFFECT,
     //Stop some particle generator.
     MOB_ACTION_STOP_PARTICLES,
+    //Stop a playing sound.
+    MOB_ACTION_STOP_SOUND,
     //Stop vertical movement.
     MOB_ACTION_STOP_VERTICALLY,
     //Store the focused mob inside.
@@ -542,6 +544,7 @@ void stop(mob_action_run_data &data);
 void stop_chomping(mob_action_run_data &data);
 void stop_height_effect(mob_action_run_data &data);
 void stop_particles(mob_action_run_data &data);
+void stop_sound(mob_action_run_data &data);
 void stop_vertically(mob_action_run_data &data);
 void store_focus_inside(mob_action_run_data &data);
 void swallow(mob_action_run_data &data);

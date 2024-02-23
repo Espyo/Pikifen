@@ -184,7 +184,7 @@
     
     <h2 id="actions">Actions</h2>
 
-    <p>In this list, any argument surrounded by square brackets is optional.</p>
+    <p>In this list, any parameter surrounded by square brackets is optional.</p>
 
     <h3 id="actions-script-control">Script control</h3>
     
@@ -716,7 +716,7 @@
         <th><code>set_can_block_paths</code></th>
         <td><dl>
           <dt><code><b>set_can_block_paths</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a false argument, when the object's health drops to 0.</dd>
+          <dd>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a false parameter, when the object's health drops to 0.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -751,8 +751,8 @@
       <tr>
         <th><code>play_sound</code></th>
         <td><dl>
-          <dt><code><b>play_sound</b> &lt;sound data&gt;</code></dt>
-          <dd>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>.</dd>
+          <dt><code><b>play_sound</b> &lt;sound_data&gt; [&lt;sound_ID_destination_variable_name&gt;]</code></dt>
+          <dd>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>. You can obtain the ID of the resulting sound (technically the ID of the sound <i>source</i>) by specifying the name of the variable that will receive it in the second parameter. You can then use that ID to stop the sound prematurely with the <code>stop_sound</code> action. The ID will be 0 if the sound couldn't be played.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -787,6 +787,13 @@
       <tr>
         <th><code>stop_particles</code></th>
         <td>Removes any currently attached particle generator.</td>
+      </tr>
+      <tr>
+        <th><code>stop_sound</code></th>
+        <td><dl>
+          <dt><code><b>stop_sound</b> &lt;sound_ID&gt;</code></dt>
+          <dd>If the object is currently playing a sound, this stops it. You can obtain the ID of a sound when you start it by the second parameter in the <code>play_sound</code> action. It's safe to use this action even if the ID is 0 (meaning the sound didn't play) or it's a sound that has already stopped.</dd>
+        </dl></td>
       </tr>
     </table>
     

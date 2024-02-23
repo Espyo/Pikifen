@@ -2654,36 +2654,43 @@ void mob::move_to_path_end(const float speed, const float acceleration) {
 
 /* ----------------------------------------------------------------------------
  * Plays a sound from the list of sounds in the mob type's data.
+ * Returns the sound source ID.
  * sfx_data_idx:
  *   Index of the sound data in the list.
  */
-void mob::play_sound(size_t sfx_data_idx) {
-    if(sfx_data_idx >= type->sounds.size()) return;
+size_t mob::play_sound(size_t sfx_data_idx) {
+    if(sfx_data_idx >= type->sounds.size()) return 0;
     
     mob_type::sfx_struct* sfx = &type->sounds[sfx_data_idx];
     
     switch(sfx->type) {
     case SFX_TYPE_WORLD_GLOBAL: {
-        game.audio.create_world_global_sfx_source(
-            sfx->sample, sfx->config
-        );
+        return
+            game.audio.create_world_global_sfx_source(
+                sfx->sample, sfx->config
+            );
         break;
     } case SFX_TYPE_WORLD_POS: {
-        game.audio.create_mob_sfx_source(
-            sfx->sample, this, sfx->config
-        );
+        return
+            game.audio.create_mob_sfx_source(
+                sfx->sample, this, sfx->config
+            );
         break;
     } case SFX_TYPE_WORLD_AMBIANCE: {
-        game.audio.create_world_ambiance_sfx_source(
-            sfx->sample, sfx->config
-        );
+        return
+            game.audio.create_world_ambiance_sfx_source(
+                sfx->sample, sfx->config
+            );
         break;
     } case SFX_TYPE_UI: {
-        game.audio.create_ui_sfx_source(
-            sfx->sample, sfx->config
-        );
+        return
+            game.audio.create_ui_sfx_source(
+                sfx->sample, sfx->config
+            );
     }
     }
+    
+    return 0;
 }
 
 

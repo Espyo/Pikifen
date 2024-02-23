@@ -1107,6 +1107,9 @@ void init_mob_actions() {
     );
     
     reg_param("sound data", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param(
+        "sound ID destination var name", MOB_ACTION_PARAM_STRING, true, true
+    );
     reg_action(
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
@@ -1431,6 +1434,14 @@ void init_mob_actions() {
         MOB_ACTION_STOP_PARTICLES,
         "stop_particles",
         mob_action_runners::stop_particles,
+        nullptr
+    );
+    
+    reg_param("sound ID", MOB_ACTION_PARAM_INT, false, false);
+    reg_action(
+        MOB_ACTION_STOP_SOUND,
+        "stop_sound",
+        mob_action_runners::stop_sound,
         nullptr
     );
     

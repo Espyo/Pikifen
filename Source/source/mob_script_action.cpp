@@ -156,7 +156,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
         if(is_var) {
             if(action->parameters[param_nr].force_const) {
                 game.errors.report(
-                    "Argument #" + i2s(w) + " (\"" + words[w] + "\") is a "
+                    "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
                     action->parameters[param_nr].name + "\" can only be "
                     "constant!",
@@ -1570,7 +1570,10 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
-    data.m->play_sound(s2i(data.args[0]));
+    size_t sfx_id = data.m->play_sound(s2i(data.args[0]));
+    if(data.args.size() >= 2) {
+        data.m->set_var(data.args[1], i2s(sfx_id));
+    }
 }
 
 
@@ -2116,6 +2119,16 @@ void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
  */
 void mob_action_runners::stop_particles(mob_action_run_data &data) {
     data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the sound stopping mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::stop_sound(mob_action_run_data &data) {
+    game.audio.destroy_sfx_source(s2i(data.args[0]));
 }
 
 

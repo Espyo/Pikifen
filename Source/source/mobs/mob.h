@@ -344,7 +344,7 @@ public:
         hazard* h_ptr
     ) const;
     bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
-    void play_sound(size_t sfx_data_idx);
+    size_t play_sound(size_t sfx_data_idx);
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
     void stop_height_effect();
