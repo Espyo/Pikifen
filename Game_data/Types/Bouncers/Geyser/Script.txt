@@ -1,3 +1,16 @@
 init {
     start_particles geyser 0 0 16
 }
+
+script {
+    bouncing {
+        on_enter {
+            play_sound steam sfx_id
+            play_sound fountain sfx_id2
+        }
+        on_leave {
+            stop_sound $sfx_id
+            stop_sound $sfx_id2
+        }
+    }
+}

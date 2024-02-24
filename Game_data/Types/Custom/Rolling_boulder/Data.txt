@@ -7,7 +7,7 @@ can_walk_on_others = true
 custom_category_name = Obstacle, dangerous
 height = 64
 max_health = 100
-move_speed = 125
+move_speed = 1
 pushable = false
 pushes = false
 radius = 32
@@ -15,5 +15,12 @@ reaches {
     homing = 200 360
 }
 rotation_speed = 50
+sounds {
+    rolling {
+        file = Rolling_boulder.ogg
+        volume = 30
+        loop = true
+    }
+}
 target_type = none
 can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; fragile

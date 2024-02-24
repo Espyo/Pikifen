@@ -137,9 +137,6 @@ script {
             stop
             set_animation shaking
         }
-        on_frame_signal {
-            play_sound shaking
-        }
         on_animation_end {
             set_state examining
         }

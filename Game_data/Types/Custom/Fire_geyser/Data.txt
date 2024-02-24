@@ -10,3 +10,8 @@ radius = 24
 target_type = strong_plain_obstacle
 can_hurt = player; fragile
 team = obstacle
+sounds {
+    flamethrower {
+        file = Flamethrower.ogg
+    }
+}

@@ -14,6 +14,7 @@ script {
             start_particles dust 0 0
             set_near_reach homing
             set_far_reach homing
+            play_sound rolling sfx_id
         }
         on_touch_wall {
             set_state destroying
@@ -67,6 +68,7 @@ script {
     destroying {
         on_enter {
             start_particles rock_explosion 0 0
+            stop_sound $sfx_id
             set_animation destroyed
         }
         on_animation_end {

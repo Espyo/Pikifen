@@ -43,6 +43,7 @@ animations{
 			}
 			attacking4{
 				duration=0.0500
+				sound=swish
 			}
 			attacking5{
 				duration=0.1000
@@ -176,6 +177,7 @@ animations{
 			}
 			shaking4{
 				duration=0.0800
+				sound=shaking
 			}
 			shaking5{
 				duration=0.0800

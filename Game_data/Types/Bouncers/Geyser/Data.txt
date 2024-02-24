@@ -9,3 +9,13 @@ pushes = true
 pushes_softly = true
 riders = leaders
 radius = 24
+
+sounds {
+    steam {
+        file = Steam.ogg
+        volume = 40
+    }
+    fountain {
+        file = Fountain.ogg
+    }
+}

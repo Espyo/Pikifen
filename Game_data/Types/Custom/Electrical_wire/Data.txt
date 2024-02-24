@@ -32,3 +32,14 @@ children {
         relay_statuses = true
     }
 }
+
+sounds {
+    electricity {
+        file = Electricity.ogg
+        volume = 80
+    }
+    sparks {
+        file = Electric_sparks.ogg
+        volume = 80
+    }
+}

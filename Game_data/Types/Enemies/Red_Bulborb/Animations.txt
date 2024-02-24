@@ -45,6 +45,7 @@ animations{
 			}
 			attacking3{
 				duration=0.2000
+				sound=bite
 			}
 			attacking4{
 				duration=0.2000
@@ -81,6 +82,7 @@ animations{
 			}
 			chomping2{
 				duration=0.1500
+				sound=chew
 			}
 			chomping1{
 				duration=0.2000
@@ -93,6 +95,7 @@ animations{
 			}
 			chomping2{
 				duration=0.1500
+				sound=chew
 			}
 			chomping1{
 				duration=0.1500
@@ -154,7 +157,7 @@ animations{
 			}
 			idling{
 				duration=0.1500
-				signal=0
+				sound=shaking
 			}
 			shaking3{
 				duration=0.1500

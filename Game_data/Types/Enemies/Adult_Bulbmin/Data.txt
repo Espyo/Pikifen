@@ -27,6 +27,21 @@ reaches {
     attack = 30 30
 }
 rotation_speed = 114
+sounds {
+    bite {
+        file = Bite.ogg
+        volume = 70
+    }
+    chew {
+        file = Bite.ogg
+        volume = 40
+        speed = 90
+    }
+    shaking {
+        file = Shaking.ogg
+        volume = 60
+    }
+}
 target_type = enemy
 terrain_radius = 64
 territory_radius = 600

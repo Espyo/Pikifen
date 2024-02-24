@@ -125,6 +125,7 @@ animations{
 			}
 			chomping1{
 				duration=0.2000
+				sound=chew
 			}
 			chomping2{
 				duration=0.2000
@@ -137,6 +138,7 @@ animations{
 			}
 			chomping1{
 				duration=0.2000
+				sound=chew
 			}
 		}
 	}
@@ -175,6 +177,7 @@ animations{
 			}
 			shaking3{
 				duration=0.3000
+				sound=shaking
 			}
 			shaking2{
 				duration=0.1000
@@ -1507,3 +1510,4 @@ body_parts{
 	tongue1
 	tongue2
 }
+engine_version=0.25.0

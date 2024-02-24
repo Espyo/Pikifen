@@ -19,9 +19,10 @@ Next tasks (roughly sorted most important first)
                 Knocked back
                 Seed landing
             Menus
-                x Menu item selected
-                x Menu item activated
-                x Menu backed out of
+                ? Menu item selected
+                ? Menu item activated
+                ? Menu backed out of
+                Boing for when you're trying to do something wrong (like going past the limit in the Onion menu)
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
                     Could change pitch when you're changing those multi-value options in the options menu
             HUD
@@ -35,18 +36,18 @@ Next tasks (roughly sorted most important first)
                 Swarming
             Enemies
                 x Generic sucking in air
-                x Generic spitting
+                ? Generic spitting
                 x Generic big stomp
-                x Generic exhaling (Puffy Blowhog)
+                ? Generic exhaling (Puffy Blowhog)
                 ? Generic shaking
-                Generic whisk (Burrow-nit stabbing)
-                Generic biting
-                Generic eletric attack
-                Generic fire attack
-                Generic water attack
-                Generic bubble attack
+                x Generic whisk (Burrow-nit stabbing)
+                x Generic biting
                 Generic gulping
-                Boulder rolling
+                x Generic eletric attack
+                x Generic electric sparks
+                x Generic fire attack
+                x Water fountain
+                x Boulder rolling
                 Burrowing sound
                 Enemy spirit floating
             Other mobs

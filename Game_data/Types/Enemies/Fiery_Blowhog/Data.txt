@@ -33,6 +33,9 @@ sounds {
         file = Exhaling.ogg
         volume = 20
     }
+    flamethrower {
+        file = Flamethrower.ogg
+    }
 }
 target_type = enemy
 terrain_radius = 70

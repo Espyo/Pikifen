@@ -26,6 +26,16 @@ reaches {
 }
 rotation_speed = 114
 sounds {
+    bite {
+        file = Bite.ogg
+        volume = 40
+        speed = 120
+    }
+    chew {
+        file = Bite.ogg
+        volume = 20
+        speed = 110
+    }
     shaking {
         file = Shaking.ogg
         volume = 40
