@@ -92,6 +92,8 @@ enum SFX_FLAGS {
     SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY = 0x02,
     //Normally, creating a sound source emits a playback. This prevents that.
     SFX_FLAG_DONT_EMIT_ON_CREATION = 0x04,
+    //Loops. You probably want one of the other "keep" flags too.
+    SFX_FLAG_LOOP = 0x08,
 };
 
 

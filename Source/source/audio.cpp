@@ -107,10 +107,12 @@ size_t audio_manager::create_sfx_source(
     sources[id].config = config;
     sources[id].pos = pos;
     
-    schedule_emission(id, true);
-    if(sources[id].emit_time_left <= 0.0f) {
-        emit(id);
-        schedule_emission(id, false);
+    if(!has_flag(config.flags, SFX_FLAG_DONT_EMIT_ON_CREATION)) {
+        schedule_emission(id, true);
+        if(sources[id].emit_time_left <= 0.0f) {
+            emit(id);
+            schedule_emission(id, false);
+        }
     }
     
     next_sfx_source_id++; //Hopefully there will be no collisions.
@@ -378,7 +380,10 @@ bool audio_manager::emit(size_t source_id) {
     );
     
     al_set_sample_instance_playmode(
-        playback_ptr->allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
+        playback_ptr->allegro_sample_instance,
+        has_flag(source_ptr->config.flags, SFX_FLAG_LOOP) ?
+        ALLEGRO_PLAYMODE_LOOP :
+        ALLEGRO_PLAYMODE_ONCE
     );
     float speed = source_ptr->config.speed;
     if(source_ptr->config.speed_deviation != 0.0f) {

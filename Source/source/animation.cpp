@@ -269,8 +269,8 @@ void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
         animation* a_ptr = animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
             frame* f_ptr = &a_ptr->frames[f];
-            if(f_ptr->sound.empty()) continue;
             f_ptr->sound_idx = INVALID;
+            if(f_ptr->sound.empty()) continue;
             
             for(size_t s = 0; s < mt_ptr->sounds.size(); ++s) {
                 if(mt_ptr->sounds[s].name == f_ptr->sound) {

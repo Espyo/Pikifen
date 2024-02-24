@@ -734,8 +734,8 @@ void load_mob_type_from_file(
         string stack_mode_str;
         data_node* stack_mode_node;
         float volume_float = 100.0f;
-        float pan_float = 0.0f;
         float speed_float = 100.0f;
+        bool loop_bool = false;
         
         new_sfx.name = sfx_node->name;
         
@@ -743,8 +743,8 @@ void load_mob_type_from_file(
         sfx_rs.set("type", type_str, &type_node);
         sfx_rs.set("stack_mode", stack_mode_str, &stack_mode_node);
         sfx_rs.set("stack_min_pos", new_sfx.config.stack_min_pos);
+        sfx_rs.set("loop", loop_bool);
         sfx_rs.set("volume", volume_float);
-        sfx_rs.set("pan", pan_float);
         sfx_rs.set("speed", speed_float);
         sfx_rs.set("volume_deviation", new_sfx.config.gain_deviation);
         sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
@@ -782,6 +782,10 @@ void load_mob_type_from_file(
                     stack_mode_str + "\"!", stack_mode_node
                 );
             }
+        }
+        
+        if(loop_bool) {
+            enable_flag(new_sfx.config.flags, SFX_FLAG_LOOP);
         }
         
         new_sfx.config.gain = volume_float / 100.0f;
