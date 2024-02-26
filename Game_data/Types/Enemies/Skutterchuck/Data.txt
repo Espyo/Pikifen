@@ -18,13 +18,14 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 30
-reaches {
-    nodule_search = 150 360
-    nodule_pick_up = 5 360
-    target_search = 100 180 20 360
-}
 rotation_speed = 114
 target_type = enemy
 terrain_radius = 42
 territory_radius = 300
 weight = 3
+
+reaches {
+    nodule_search = 150 360
+    nodule_pick_up = 5 360
+    target_search = 100 180 20 360
+}

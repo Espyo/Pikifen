@@ -2,6 +2,7 @@ name = Electrical wire
 description = An exposed wire. It'll occasionally create an arc of electricity with a nearby wire.
 
 area_editor_tips = The object in the area editor represents the center between the two wires, which appear to the relative left and right.
+can_hurt = player; fragile
 custom_category_name = Obstacle, dangerous
 height = 24
 max_health = 150
@@ -10,18 +11,6 @@ pushes = false
 radius = 16
 target_type = strong_plain_obstacle
 team = obstacle
-can_hurt = player; fragile
-
-spawns {
-    second {
-        object = Electrical wire 2
-        relative = true
-        coordinates = 0 80
-        angle = 0
-        link_object_to_spawn = true
-        link_spawn_to_object = true
-    }
-}
 
 children {
     second {
@@ -41,5 +30,16 @@ sounds {
     sparks {
         file = Electric_sparks.ogg
         volume = 80
+    }
+}
+
+spawns {
+    second {
+        object = Electrical wire 2
+        relative = true
+        coordinates = 0 80
+        angle = 0
+        link_object_to_spawn = true
+        link_spawn_to_object = true
     }
 }

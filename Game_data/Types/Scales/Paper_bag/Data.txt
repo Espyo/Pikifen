@@ -1,29 +1,14 @@
 name = Paper bag
 description = A large overturned paper bag. It can be squashed down if enough weight is applied on top.
 
+can_block_paths = true
 custom_category_name = Obstacle, harmless
 goal_number = 20
-can_block_paths = true
 height = 200
 pushes = true
 radius = 41
 rectangular_dimensions = 82 192
 
-spawns {
-    handle {
-        object = Paper bag handle
-        relative = true
-        coordinates = 0 0
-        angle = 0
-    }
-    barrier {
-        object = Paper bag barrier
-        relative = true
-        coordinates = 0 0
-        angle = 0
-        link_object_to_spawn = true
-    }
-}
 children {
     lhandle {
         spawn = handle
@@ -48,5 +33,21 @@ children {
         hold_offset_vertical_distance = 1
         hold_offset_angle = 0
         hold_rotation_method = copy_parent
+    }
+}
+
+spawns {
+    handle {
+        object = Paper bag handle
+        relative = true
+        coordinates = 0 0
+        angle = 0
+    }
+    barrier {
+        object = Paper bag barrier
+        relative = true
+        coordinates = 0 0
+        angle = 0
+        link_object_to_spawn = true
     }
 }

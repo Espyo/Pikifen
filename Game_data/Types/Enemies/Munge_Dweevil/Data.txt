@@ -1,11 +1,11 @@
 name = Munge Dweevil
 description = This spider-like creature is afraid of Pikmin, and loves carrying treasures. When threatened, it spits out a cloud of poisonous gas.
 
+allow_ground_attacks = false
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
 custom_category_name = Enemy, small and aggressive
-allow_ground_attacks = false
 drops_corpse = true
 height = 48
 itch_damage = 120
@@ -18,12 +18,13 @@ points = 25
 pushable = true
 pushes = false
 radius = 24
-reaches {
-    fear = 80 360
-    treasure = 8 360
-}
 rotation_speed = 160
 target_type = enemy
 terrain_radius = 60
 territory_radius = 600
 weight = 3
+
+reaches {
+    fear = 80 360
+    treasure = 8 360
+}

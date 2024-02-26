@@ -20,18 +20,17 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 95
+rotation_speed = 40
+target_type = enemy
+terrain_radius = 200
+territory_radius = 300
+weight = 30
+
 reaches {
     search = 300 180
     attack = 300 5
 }
-spawns {
-    boulder {
-        object = Rolling boulder
-        relative = true
-        coordinates = 140 0 0
-        angle = 0
-    }
-}
+
 sounds {
     inhaling {
         file = Inhaling.ogg
@@ -46,8 +45,12 @@ sounds {
         speed_deviation = 20
     }
 }
-rotation_speed = 40
-target_type = enemy
-terrain_radius = 200
-territory_radius = 300
-weight = 30
+
+spawns {
+    boulder {
+        object = Rolling boulder
+        relative = true
+        coordinates = 140 0 0
+        angle = 0
+    }
+}

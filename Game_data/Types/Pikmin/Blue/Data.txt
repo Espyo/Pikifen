@@ -21,13 +21,10 @@ radius = 5
 sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
-top_leaf = Leaf_top.png
 top_bud = White_bud_top.png
 top_flower = White_flower_top.png
-vulnerabilities {
-    water = 0
-    water_bubble = 0
-}
+top_leaf = Leaf_top.png
+
 sounds {
     attack {
         file = Pikmin_attack.ogg
@@ -59,4 +56,9 @@ sounds {
     thrown {
         file = Pikmin_thrown.ogg
     }
+}
+
+vulnerabilities {
+    water = 0
+    water_bubble = 0
 }

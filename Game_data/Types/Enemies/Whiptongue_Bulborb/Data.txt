@@ -19,6 +19,12 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 60
+rotation_speed = 96
+target_type = enemy
+terrain_radius = 110
+territory_radius = 500
+weight = 12
+
 reaches {
     wake_up = 10 360
     search = 250 180 30 360
@@ -26,7 +32,7 @@ reaches {
     close = 250 360
     attack = 130 30
 }
-rotation_speed = 96
+
 sounds {
     chew {
         file = Bite.ogg
@@ -38,7 +44,3 @@ sounds {
         volume = 60
     }
 }
-target_type = enemy
-terrain_radius = 110
-territory_radius = 500
-weight = 12

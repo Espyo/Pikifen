@@ -1,11 +1,11 @@
 name = Ultra-Bitter Spray
 description = Spray one of these in front of you, and any enemy in range will be instantly petrified! While harmless, it is a bit more resistant to attacks, and will eventually break free.
 
-effects = petrified
-group = false
 angle = 0
-distance_range = 128
 angle_range = 135
 color = 128 0 255
+distance_range = 128
+effects = petrified
+group = false
 icon = Ultra-bitter_spray.png
 ingredients = 10

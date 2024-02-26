@@ -2,8 +2,8 @@ name = Beady Long Legs
 description = A massive spider-like beast that stomps around. Every time it takes a step, it can crush Pikmin under its foot. Only its bulbous head is vulnerable.
 
 acceleration = 1000
-area_editor_tips = Make sure there is enough room for it to spawn its feet too!
 allow_ground_attacks = false
+area_editor_tips = Make sure there is enough room for it to spawn its feet too!
 can_free_move = true
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
@@ -18,44 +18,10 @@ max_health = 2000
 move_speed = 1000
 points = 100
 radius = 71
-spawns {
-    foot_fr {
-        object = Beady Long Legs foot
-        relative = true
-        coordinates = 120 120
-        angle = 225
-        vars = id=fr
-        link_object_to_spawn = true
-        link_spawn_to_object = true
-    }
-    foot_fl {
-        object = Beady Long Legs foot
-        relative = true
-        coordinates = 120 -120
-        angle = 135
-        vars = id=fl
-        link_object_to_spawn = true
-        link_spawn_to_object = true
-    }
-    foot_br {
-        object = Beady Long Legs foot
-        relative = true
-        coordinates = -120 120
-        angle = 315
-        vars = id=br
-        link_object_to_spawn = true
-        link_spawn_to_object = true
-    }
-    foot_bl {
-        object = Beady Long Legs foot
-        relative = true
-        coordinates = -120 -120
-        angle = 45
-        vars = id=bl
-        link_object_to_spawn = true
-        link_spawn_to_object = true
-    }
-}
+rotation_speed = 30
+target_type = enemy
+territory_radius = 300
+
 children {
     foot_fr {
         spawn = foot_fr
@@ -110,9 +76,46 @@ children {
         limb_draw_method = above_both
     }
 }
+
 reaches {
     ambush = 300 360
 }
-rotation_speed = 30
-target_type = enemy
-territory_radius = 300
+
+spawns {
+    foot_fr {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = 120 120
+        angle = 225
+        vars = id=fr
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_fl {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = 120 -120
+        angle = 135
+        vars = id=fl
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_br {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = -120 120
+        angle = 315
+        vars = id=br
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_bl {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = -120 -120
+        angle = 45
+        vars = id=bl
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+}

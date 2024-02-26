@@ -11,43 +11,6 @@ radius = 10
 target_type = weak_plain_obstacle
 team = obstacle
 
-spawns {
-    red {
-        object = Red 10 pellet
-        relative = true
-        coordinates = 100 0 96
-        angle = 270
-        momentum = 10
-    }
-    yellow {
-        object = Yellow 10 pellet
-        relative = true
-        coordinates = 100 0 96
-        angle = 270
-        momentum = 10
-    }
-    blue {
-        object = Blue 10 pellet
-        relative = true
-        coordinates = 100 0 96
-        angle = 270
-        momentum = 10
-    }
-    rock {
-        object = Rock 10 pellet
-        relative = true
-        coordinates = 100 0 96
-        angle = 270
-        momentum = 10
-    }
-    winged {
-        object = Winged 10 pellet
-        relative = true
-        coordinates = 100 0 96
-        angle = 270
-        momentum = 10
-    }
-}
 area_editor_properties {
     Bloom time {
         var = bloom_time
@@ -85,5 +48,43 @@ area_editor_properties {
         type = bool
         def_value = false
         tooltip = Does it have a winged pellet?
+    }
+}
+
+spawns {
+    red {
+        object = Red 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    yellow {
+        object = Yellow 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    blue {
+        object = Blue 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    rock {
+        object = Rock 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    winged {
+        object = Winged 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
     }
 }

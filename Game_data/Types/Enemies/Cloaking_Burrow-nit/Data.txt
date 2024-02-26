@@ -19,13 +19,18 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 30
+rotation_speed = 170
+target_type = enemy
+territory_radius = 300
+weight = 8
+
 reaches {
     wake_up = 20 360
     search = 150 90 30 360
     attack = 40 20
     chase = 150 360
 }
-rotation_speed = 170
+
 sounds {
     swish {
         file = Swish.ogg
@@ -36,6 +41,3 @@ sounds {
         volume = 60
     }
 }
-target_type = enemy
-territory_radius = 300
-weight = 8

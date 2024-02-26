@@ -7,5 +7,5 @@ height = 64
 pushable = false
 pushes = true
 pushes_softly = true
-riders = pikmin leaders
 radius = 64
+riders = pikmin leaders

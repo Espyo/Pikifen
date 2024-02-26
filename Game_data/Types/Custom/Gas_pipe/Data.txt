@@ -1,6 +1,7 @@
 name = Gas pipe
 description = Some exposed pipe leaking out toxic gases.
 
+can_hurt = player
 custom_category_name = Obstacle, dangerous
 height = 23
 max_health = 150
@@ -9,5 +10,4 @@ pushes = true
 pushes_softly = true
 radius = 24
 target_type = strong_plain_obstacle
-can_hurt = player
 team = obstacle

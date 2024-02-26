@@ -10,6 +10,6 @@ disables_attack = true
 freezes_animation = true
 reapply_rule = keep_time
 replacement_on_timeout = petrified_cracked
-speed_multiplier = 0
 shaking_effect = 1.5
+speed_multiplier = 0
 tint = 64 64 64

@@ -1,8 +1,8 @@
 name = Carriable rock
 description = A rock that can be carried around by the Pikmin. Useful for puzzles.
 
-carrying_destination = linked_mob_matching_type
 can_walk_on_others = true
+carrying_destination = linked_mob_matching_type
 custom_category_name = Puzzle
 delivery_result = stay
 height = 32

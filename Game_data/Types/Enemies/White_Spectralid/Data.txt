@@ -14,10 +14,11 @@ points = 5
 pushable = false
 pushes = false
 radius = 16
-reaches {
-    fear = 40 360
-}
 rotation_speed = 170
 target_type = enemy
 territory_radius = 600
 weight = 1
+
+reaches {
+    fear = 40 360
+}

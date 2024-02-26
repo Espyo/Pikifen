@@ -2,13 +2,13 @@ name = Electrical wire 2
 description = An exposed wire. It'll occasionally create an arc of electricity with a nearby wire.
 
 appears_in_area_editor = false
+can_hurt = player; fragile
 custom_category_name = Aux
 height = 24
 max_health = 150
 pushable = false
 pushes = false
 radius = 16
-target_type = strong_plain_obstacle
-can_hurt = player; fragile
 show_health = false
+target_type = strong_plain_obstacle
 team = obstacle

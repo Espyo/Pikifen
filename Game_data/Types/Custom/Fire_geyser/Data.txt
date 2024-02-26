@@ -1,6 +1,7 @@
 name = Fire geyser
 description = A hole that occasionally spits out a column of fire, like a geyser.
 
+can_hurt = player; fragile
 custom_category_name = Obstacle, dangerous
 height = 23
 max_health = 150
@@ -8,8 +9,8 @@ pushable = false
 pushes = false
 radius = 24
 target_type = strong_plain_obstacle
-can_hurt = player; fragile
 team = obstacle
+
 sounds {
     flamethrower {
         file = Flamethrower.ogg

@@ -17,21 +17,14 @@ max_throw_height = 260
 move_speed = 110
 pushable = true
 pushes = false
+radius = 7
 sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
-radius = 7
-top_leaf = Leaf_top.png
 top_bud = White_bud_top.png
 top_flower = White_flower_top.png
-vulnerabilities {
-    fire = 0
-    stunning_electricity = 0
-    fatal_electricity = 0
-    water = 0
-    water_bubble = 0
-    poison = 0
-}
+top_leaf = Leaf_top.png
+
 sounds {
     attack {
         file = Pikmin_attack.ogg
@@ -63,4 +56,13 @@ sounds {
     thrown {
         file = Pikmin_thrown.ogg
     }
+}
+
+vulnerabilities {
+    fire = 0
+    stunning_electricity = 0
+    fatal_electricity = 0
+    water = 0
+    water_bubble = 0
+    poison = 0
 }

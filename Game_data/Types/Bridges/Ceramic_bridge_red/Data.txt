@@ -4,14 +4,21 @@ description = A red ceramic bridge. Pikmin can piece red fragments together to f
 area_editor_recommend_links_from = true
 can_walk_on_others = true
 custom_category_name = Bridge
-main_texture = Ceramic_bridge_red.png
 left_rail_texture = Ceramic_bridge_rail_red_left.png
-right_rail_texture = Ceramic_bridge_rail_red_right.png
-rail_width = 40
+main_texture = Ceramic_bridge_red.png
 max_health = 30
 radius = 32
+rail_width = 40
+right_rail_texture = Ceramic_bridge_rail_red_right.png
 show_health = false
 target_type = none
+
+children {
+    base {
+        spawn = base
+        parent_holds = false
+    }
+}
 
 spawns {
     base {
@@ -19,12 +26,5 @@ spawns {
         relative = true
         coordinates = 0 0
         angle = 0
-    }
-}
-
-children {
-    base {
-        spawn = base
-        parent_holds = false
     }
 }

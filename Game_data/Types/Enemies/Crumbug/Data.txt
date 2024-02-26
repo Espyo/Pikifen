@@ -16,12 +16,17 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 16
+rotation_speed = 200
+target_type = enemy
+territory_radius = 300
+weight = 2
+
 reaches {
     search = 50 360
     attack = 2 40
     chase = 60 360
 }
-rotation_speed = 200
+
 sounds {
     bite {
         file = Bite.ogg
@@ -34,6 +39,3 @@ sounds {
         speed = 140
     }
 }
-target_type = enemy
-territory_radius = 300
-weight = 2

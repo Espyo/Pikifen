@@ -10,14 +10,15 @@ radius = 90
 rectangular_dimensions = 220 180
 walkable = true
 
-spawns {
-    ropes {
-        object = Seesaw block ropes
-        relative = true
-        coordinates = 0 0
-        angle = 0
+area_editor_properties {
+    Start down {
+        var = start_down
+        type = bool
+        def_value = false
+        tooltip = True if this block starts in the down position, false if it starts up.
     }
 }
+
 children {
     ropes {
         spawn = ropes
@@ -29,11 +30,12 @@ children {
         hold_offset_angle = 0
     }
 }
-area_editor_properties {
-    Start down {
-        var = start_down
-        type = bool
-        def_value = false
-        tooltip = True if this block starts in the down position, false if it starts up.
+
+spawns {
+    ropes {
+        object = Seesaw block ropes
+        relative = true
+        coordinates = 0 0
+        angle = 0
     }
 }

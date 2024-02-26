@@ -2,10 +2,10 @@ name = inked
 description = Pikmin that are inked will have a harmless glob of ink on their top, and will run around in a panic temporarily. It can be saved faster by being whistled.
 
 affects_pikmin = true
-overlay_animation = Ink.txt
-overlay_anim_mob_scale = 1.5
 auto_remove_time = 5
 color = 64 64 64
+overlay_anim_mob_scale = 1.5
+overlay_animation = Ink.txt
 reapply_rule = keep_time
 removable_with_whistle = true
 speed_multiplier = 2.0

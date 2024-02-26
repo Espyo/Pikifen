@@ -1,8 +1,8 @@
 name = Egg
 description = Contains nectar, though it can also contain a spray drop.
 
-custom_category_name = Useful
 can_walk_on_others = true
+custom_category_name = Useful
 height = 40
 max_health = 50
 pushable = true
@@ -12,6 +12,15 @@ radius = 15
 show_health = false
 target_type = weak_plain_obstacle
 team = obstacle
+
+area_editor_properties {
+    Contents {
+        var = contents
+        type = list
+        list = random;nectar;nectar_2;spicy_drop;bitter_drop
+        tooltip = What contents this egg contains.
+    }
+}
 
 spawns {
     nectar {
@@ -31,13 +40,5 @@ spawns {
         relative = true
         coordinates = 0
         momentum = 100
-    }
-}
-area_editor_properties {
-    Contents {
-        var = contents
-        type = list
-        list = random;nectar;nectar_2;spicy_drop;bitter_drop
-        tooltip = What contents this egg contains.
     }
 }

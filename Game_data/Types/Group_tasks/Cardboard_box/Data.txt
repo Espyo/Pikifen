@@ -4,36 +4,28 @@ description = A large box made of cardboard. It can be pushed out of the way if 
 acceleration = 15
 area_editor_recommend_links_from = true
 area_editor_tips = Link this object to another object, so that the box moves to that location when it's pushed. A "Dummy" object works perfectly for this.
+contribution_method = push_strength
 custom_category_name = Obstacle, harmless
+first_row_p1 = -104 -90
+first_row_p2 = -104 90
 height = 64
+interval_between_rows = 8
 max_health = 50
+max_pikmin = 40
 move_speed = 10
+pikmin_per_row = 20
+power_goal = 10
 pushable = false
 pushes = true
 radius = 96
 rectangular_dimensions = 192 192
-show_health = false
-power_goal = 10
-max_pikmin = 40
-first_row_p1 = -104 -90
-first_row_p2 = -104 90
-interval_between_rows = 8
-pikmin_per_row = 20
-speed_bonus = 2
 rotation_speed = 30
+show_health = false
+speed_bonus = 2
+team = obstacle
 walkable = true
 worker_pikmin_pose = pushing
-contribution_method = push_strength
-team = obstacle
 
-spawns {
-    flap {
-        object = Cardboard box flap
-        relative = true
-        coordinates = 140 0
-        angle = 0
-    }
-}
 children {
     flap {
         spawn = flap
@@ -43,5 +35,14 @@ children {
         hold_offset_angle = 0
         hold_faces_parent = false
         hold_rotation_method = copy_parent
+    }
+}
+
+spawns {
+    flap {
+        object = Cardboard box flap
+        relative = true
+        coordinates = 140 0
+        angle = 0
     }
 }

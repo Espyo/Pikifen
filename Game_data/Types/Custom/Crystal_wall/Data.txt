@@ -15,9 +15,15 @@ show_health = false
 target_type = explodable_pikmin_obstacle
 team = obstacle
 
-vulnerabilities {
-    explosion = 1000
-    rock = 100
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
 }
 
 spawns {
@@ -35,13 +41,7 @@ spawns {
     }
 }
 
-children {
-    left_pillar {
-        spawn = left_pillar
-        parent_holds = false
-    }
-    right_pillar {
-        spawn = right_pillar
-        parent_holds = false
-    }
+vulnerabilities {
+    explosion = 1000
+    rock = 100
 }

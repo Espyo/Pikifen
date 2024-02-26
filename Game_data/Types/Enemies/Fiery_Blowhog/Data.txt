@@ -18,12 +18,18 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 35
+rotation_speed = 114
+target_type = enemy
+terrain_radius = 70
+territory_radius = 300
+weight = 7
+
 reaches {
     search = 250 90 30 360
     attack = 150 10
     chase = 250 360
 }
-rotation_speed = 114
+
 sounds {
     inhaling {
         file = Inhaling.ogg
@@ -37,7 +43,3 @@ sounds {
         file = Flamethrower.ogg
     }
 }
-target_type = enemy
-terrain_radius = 70
-territory_radius = 300
-weight = 7

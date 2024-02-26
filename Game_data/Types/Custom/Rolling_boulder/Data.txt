@@ -3,6 +3,7 @@ description = A boulder that rolls forward until it hits a wall, crushing things
 
 acceleration = 800
 appears_in_area_editor = false
+can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; fragile
 can_walk_on_others = true
 custom_category_name = Obstacle, dangerous
 height = 64
@@ -11,10 +12,13 @@ move_speed = 1
 pushable = false
 pushes = false
 radius = 32
+rotation_speed = 50
+target_type = none
+
 reaches {
     homing = 200 360
 }
-rotation_speed = 50
+
 sounds {
     rolling {
         file = Rolling_boulder.ogg
@@ -22,5 +26,3 @@ sounds {
         loop = true
     }
 }
-target_type = none
-can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; fragile

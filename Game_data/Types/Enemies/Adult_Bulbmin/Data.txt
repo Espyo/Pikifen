@@ -20,13 +20,31 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 42
+rotation_speed = 114
+target_type = enemy
+terrain_radius = 64
+territory_radius = 600
+weight = 7
+
+children {
+    stem {
+        spawn = stem
+        parent_holds = true
+        hold_body_part = stem
+        hold_rotation_method = face_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+}
+
 reaches {
     search = 175 180 20 360
     chase = 175 2
     close = 175 360
     attack = 30 30
 }
-rotation_speed = 114
+
 sounds {
     bite {
         file = Bite.ogg
@@ -41,19 +59,6 @@ sounds {
         file = Shaking.ogg
         volume = 60
     }
-}
-target_type = enemy
-terrain_radius = 64
-territory_radius = 600
-weight = 7
-
-vulnerabilities {
-    fire = 0
-    stunning_electricity = 0
-    fatal_electricity = 0
-    water = 0
-    water_bubble = 0
-    poison = 0
 }
 
 spawns {
@@ -74,14 +79,11 @@ spawns {
     }
 }
 
-children {
-    stem {
-        spawn = stem
-        parent_holds = true
-        hold_body_part = stem
-        hold_rotation_method = face_parent
-        handle_damage = false
-        handle_events = false
-        handle_statuses = false
-    }
+vulnerabilities {
+    fire = 0
+    stunning_electricity = 0
+    fatal_electricity = 0
+    water = 0
+    water_bubble = 0
+    poison = 0
 }

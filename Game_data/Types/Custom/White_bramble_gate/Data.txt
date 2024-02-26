@@ -14,8 +14,15 @@ show_health = false
 target_type = strong_plain_obstacle
 team = obstacle
 
-vulnerabilities {
-    explosion = 300
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
 }
 
 spawns {
@@ -33,13 +40,6 @@ spawns {
     }
 }
 
-children {
-    left_pillar {
-        spawn = left_pillar
-        parent_holds = false
-    }
-    right_pillar {
-        spawn = right_pillar
-        parent_holds = false
-    }
+vulnerabilities {
+    explosion = 300
 }

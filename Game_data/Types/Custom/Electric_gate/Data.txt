@@ -2,6 +2,7 @@ name = Electric gate
 description = A gate with electricity running through it. Only Yellow Pikmin can get near it.
 
 can_block_paths = true
+can_hurt = player
 casts_shadow = false
 custom_category_name = Gate
 height = 0
@@ -10,10 +11,20 @@ pushable = false
 pushes = true
 radius = 32
 rectangular_dimensions = 40 192
-target_type = pikmin_obstacle
-can_hurt = player
 show_health = false
+target_type = pikmin_obstacle
 team = obstacle
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
+}
 
 spawns {
     left_pillar {
@@ -30,16 +41,5 @@ spawns {
         coordinates = 0 119
         angle = 180
         link_object_to_spawn = true
-    }
-}
-
-children {
-    left_pillar {
-        spawn = left_pillar
-        parent_holds = false
-    }
-    right_pillar {
-        spawn = right_pillar
-        parent_holds = false
     }
 }

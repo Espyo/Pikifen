@@ -8,13 +8,13 @@ custom_category_name = Gate
 first_row_p1 = 0 -86
 first_row_p2 = 0 86
 flying_pikmin_only = true
+height = 170
 interval_between_rows = 8
 max_health = 100
 max_pikmin = 10
 move_speed = 150
-height = 170
-power_goal = 10
 pikmin_per_row = 10
+power_goal = 10
 pushable = false
 pushes = true
 radius = 24
@@ -24,6 +24,17 @@ spots_z = 180
 team = obstacle
 walkable = true
 worker_pikmin_pose = carrying
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
+}
 
 spawns {
     left_pillar {
@@ -37,16 +48,5 @@ spawns {
         relative = true
         coordinates = 0 119
         angle = 180
-    }
-}
-
-children {
-    left_pillar {
-        spawn = left_pillar
-        parent_holds = false
-    }
-    right_pillar {
-        spawn = right_pillar
-        parent_holds = false
     }
 }

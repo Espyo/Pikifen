@@ -4,6 +4,7 @@ description = A sturdy captain from Koppai. Has a hardy exterior, but a soft hea
 acceleration = 800
 can_walk_on_others = true
 height = 46
+icon = Charlie_icon.png
 main_color = 119 238 102
 max_carriers = 5
 max_health = 2000
@@ -12,8 +13,10 @@ move_speed = 130
 name_call_sfx = 
 pushable = true
 pushes = false
-rotation_speed = 360
 radius = 16
+rotation_speed = 360
+weight = 1
+
 sounds {
     dismissing {
         file = Olimar_dismiss.ogg
@@ -34,9 +37,8 @@ sounds {
         speed_deviation = 30
     }
 }
+
 vulnerabilities {
     poison = 0
     water = 0
 }
-weight = 1
-icon = Charlie_icon.png

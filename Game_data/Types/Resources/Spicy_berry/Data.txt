@@ -1,8 +1,8 @@
 name = Spicy berry
 description = Ultra-spicy berries can be gathered, and 10 of them are used to concoct a new dosage of ultra-spicy spray.
 
-carrying_destination = ship
 can_walk_on_others = true
+carrying_destination = ship
 custom_category_name = Useful
 delivery_result = increase_ingredients
 height = 28
@@ -12,6 +12,6 @@ pushes = false
 radius = 14
 return_to_pile_on_vanish = false
 spray_to_concoct = Ultra-Spicy Spray
-vanish_on_drop = true
 vanish_delay = 10
+vanish_on_drop = true
 weight = 1

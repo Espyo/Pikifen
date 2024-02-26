@@ -15,10 +15,11 @@ pushes = true
 pushes_softly = true
 radius = 37.5
 rotation_speed = 200
+target_type = enemy
+
 sounds {
     stomp {
         file = Stomp.ogg
         speed_deviation = 20
     }
 }
-target_type = enemy
