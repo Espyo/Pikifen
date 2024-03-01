@@ -21,53 +21,75 @@
 
 //Pile object animations.
 enum PILE_ANIMATIONS {
+
     //Idling.
     PILE_ANIM_IDLING,
     
     //Total amount of pile object animations.
     N_PILE_ANIMS,
+
 };
 
 
 //Pile object states.
 enum PILE_STATES {
+    
     //Idling.
     PILE_STATE_IDLING,
     
     //Total amount of pile object states.
     N_PILE_STATES,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A type of resource pile (gold nugget pile, Burgeoning Spiderwort, etc.).
+/**
+ * @brief A type of resource pile (gold nugget pile,
+ * Burgeoning Spiderwort, etc.).
  */
 class pile_type : public mob_type, public mob_type_with_anim_groups {
+
 public:
+    
+    //--- Members ---
+
     //Contents of the pile.
     resource_type* contents;
+
     //How often the pile recharges its contents, if it at all does.
     float recharge_interval;
+
     //When recharging its contents, it adds these many to the pile.
     int recharge_amount;
+
     //Maximum amount of contents it can hold.
     size_t max_amount;
+
     //How much health must it lose before it drops a resource.
     float health_per_resource;
+
     //If true, it can drop multiple resources at once if the health checks out.
     bool can_drop_multiple;
+
     //Should it show the amount above it?
     bool show_amount;
+
     //Should the mob be hidden when it is empty?
     bool hide_when_empty;
+
     //Auto-radius-shrinking's radius when there's only 1 resource. 0 = off.
     float auto_shrink_smallest_radius;
+
     //Should the mob be deleted when it is no longer needed?
     bool delete_when_finished;
+    
+
+    //--- Function declarations ---
     
     pile_type();
     void load_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
+    
 };
 
 

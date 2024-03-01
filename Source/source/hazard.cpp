@@ -13,8 +13,8 @@
 #include "const.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a hazard.
+/**
+ * @brief Constructs a new hazard object.
  */
 hazard::hazard() :
     main_color(COLOR_EMPTY),

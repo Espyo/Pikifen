@@ -14,8 +14,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of scale.
+/**
+ * @brief Constructs a new scale type object.
  */
 scale_type::scale_type() :
     mob_type(MOB_CATEGORY_SCALES),
@@ -34,10 +34,10 @@ scale_type::scale_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void scale_type::load_properties(data_node* file) {
     reader_setter rs(file);

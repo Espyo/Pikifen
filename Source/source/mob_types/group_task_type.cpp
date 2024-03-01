@@ -16,8 +16,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new type of group task mob.
+/**
+ * @brief Constructs a new group task type object.
  */
 group_task_type::group_task_type() :
     mob_type(MOB_CATEGORY_GROUP_TASKS),
@@ -44,10 +44,10 @@ group_task_type::group_task_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void group_task_type::load_properties(data_node* file) {
     reader_setter rs(file);

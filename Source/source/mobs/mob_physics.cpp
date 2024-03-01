@@ -19,9 +19,11 @@
 using std::set;
 
 
-/* ----------------------------------------------------------------------------
- * Returns which walkable mob this mob should be considered to be on top of.
- * Returns NULL if none is found.
+/**
+ * @brief Returns which walkable mob this mob should be considered to be on
+ * top of.
+ *
+ * @return The mob to walk on, or NULL if none is found.
  */
 mob* mob::get_mob_to_walk_on() const {
     //Can't walk on anything if it's moving upwards.
@@ -94,15 +96,14 @@ mob* mob::get_mob_to_walk_on() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates which edges the mob is intersecting with for horizontal movement
- * physics logic.
- * Returns H_MOVE_OK if everything is okay, H_MOVE_FAIL if movement is
+/**
+ * @brief Calculates which edges the mob is intersecting with for
+ * horizontal movement physics logic.
+ *
+ * @param new_pos Position to check.
+ * @param intersecting_edges List of edges it is intersecting with.
+ * @return H_MOVE_OK if everything is okay, H_MOVE_FAIL if movement is
  * impossible.
- * new_pos:
- *   Position to check.
- * intersecting_edges:
- *   List of edges it is intersecting with.
  */
 H_MOVE_RESULTS mob::get_movement_edge_intersections(
     const point &new_pos, vector<edge*>* intersecting_edges
@@ -204,18 +205,16 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates how much the mob is going to move horizontally, for the purposes
- * of movement physics calculation.
- * Returns H_MOVE_OK on normal movement, H_MOVE_TELEPORTED if the mob's X
+/**
+ * @brief Calculates how much the mob is going to move horizontally,
+ * for the purposes of movement physics calculation.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param move_speed_mult Movement speed is multiplied by this.
+ * @param move_speed The calculated move speed is placed in this struct.
+ * @return H_MOVE_OK on normal movement, H_MOVE_TELEPORTED if the mob's X
  * and Y have been set and movement logic can be skipped, and H_MOVE_FAIL if
  * movement is entirely impossible this frame.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * move_speed_mult:
- *   Movement speed is multiplied by this.
- * move_speed:
- *   The calculated move speed is placed in this struct.
  */
 H_MOVE_RESULTS mob::get_physics_horizontal_movement(
     const float delta_t, const float move_speed_mult, point* move_speed
@@ -322,19 +321,17 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the angle at which the mob should slide against this wall,
+/**
+ * @brief Calculates the angle at which the mob should slide against this wall,
  * for the purposes of movement physics calculations.
- * Returns H_MOVE_OK on success, H_MOVE_FAIL if the mob can't
+ *
+ * @param e_ptr Pointer to the edge in question.
+ * @param wall_sector Number of the sector that actually makes a wall
+ * (i.e. the highest).
+ * @param move_angle Angle at which the mob is going to move.
+ * @param slide_angle Holds the calculated slide angle.
+ * @return H_MOVE_OK on success, H_MOVE_FAIL if the mob can't
  * slide against this wall.
- * e_ptr:
- *   Pointer to the edge in question.
- * wall_sector:
- *   Number of the sector that actually makes a wall (i.e. the highest).
- * move_angle:
- *   Angle at which the mob is going to move.
- * slide_angle:
- *   Holds the calculated slide angle.
  */
 H_MOVE_RESULTS mob::get_wall_slide_angle(
     const edge* e_ptr, unsigned char wall_sector, const float move_angle,
@@ -383,14 +380,12 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks physics logic regarding the mob's horizontal movement.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * attempted_move_speed:
- *   Movement speed to calculate with.
- * touched_wall:
- *   Holds whether or not the mob touched a wall in this move.
+/**
+ * @brief Ticks physics logic regarding the mob's horizontal movement.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param attempted_move_speed Movement speed to calculate with.
+ * @param touched_wall Holds whether or not the mob touched a wall in this move.
  */
 void mob::tick_horizontal_movement_physics(
     const float delta_t, const point &attempted_move_speed,
@@ -602,11 +597,11 @@ void mob::tick_horizontal_movement_physics(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the mob's actual physics procedures:
+/**
+ * @brief Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void mob::tick_physics(const float delta_t) {
     if(!ground_sector) {
@@ -664,12 +659,11 @@ void mob::tick_physics(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks physics logic regarding the mob rotating.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * move_speed_mult:
- *   Movement speed is multiplied by this.
+/**
+ * @brief Ticks physics logic regarding the mob rotating.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param move_speed_mult Movement speed is multiplied by this.
  */
 void mob::tick_rotation_physics(
     const float delta_t, const float move_speed_mult
@@ -716,14 +710,13 @@ void mob::tick_rotation_physics(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks physics logic regarding the mob's vertical movement.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * pre_move_ground_z:
- *   Z of the floor before horizontal movement started.
- * was_teleport:
- *   Did the mob just teleport previously in the movement logic?
+/**
+ * @brief Ticks physics logic regarding the mob's vertical movement.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param pre_move_ground_z Z of the floor before horizontal movement started.
+ * @param was_teleport Did the mob just teleport previously in the
+ * movement logic?
  */
 void mob::tick_vertical_movement_physics(
     const float delta_t, const float pre_move_ground_z,
@@ -846,10 +839,10 @@ void mob::tick_vertical_movement_physics(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks physics logic regarding landing on top of a walkable mob.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks physics logic regarding landing on top of a walkable mob.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void mob::tick_walkable_riding_physics(const float delta_t) {
     mob* rider_added_ev_mob = NULL;

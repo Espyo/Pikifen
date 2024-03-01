@@ -22,25 +22,27 @@ extern const float SPIRIT_MIN_SIZE;
 }
 
 
-/* ----------------------------------------------------------------------------
- * I don't need to explain what an enemy is.
+/**
+ * @brief I don't need to explain what an enemy is.
  */
 class enemy : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of enemy it is.
     enemy_type* ene_type;
     
-    //Constructor.
-    enemy(const point &pos, enemy_type* type, const float angle);
+
+    //--- Function declarations ---
     
-    //Can the mob currently receive the specified status effect?
+    enemy(const point &pos, enemy_type* type, const float angle);
     bool can_receive_status(status_type* s) const override;
-    //Mob drawing routine.
     void draw_mob() override;
-    //Death finish class-specific logic.
     void finish_dying_class_specifics() override;
-    //Death start class-specific logic.
     void start_dying_class_specifics() override;
+    
 };
 
 

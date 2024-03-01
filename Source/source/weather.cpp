@@ -15,8 +15,8 @@
 #include "utils/math_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a weather type.
+/**
+ * @brief Constructs a new weather object.
  */
 weather::weather() :
     fog_near(0.0f),
@@ -25,18 +25,14 @@ weather::weather() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a weather type.
- * n:
- *   Its name.
- * dl:
- *   Daylight information table.
- * ss:
- *   Sun strength information table.
- * bs:
- *   Blackout strength information table.
- * pt:
- *   Precipitation type.
+/**
+ * @brief Constructs a new weather object.
+ * 
+ * @param n Its name.
+ * @param dl Daylight information table.
+ * @param ss Sun strength information table.
+ * @param bs Blackout strength information table.
+ * @param pt Precipitation type.
  */
 weather::weather(
     const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
@@ -55,8 +51,10 @@ weather::weather(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the blackout effect's strength for the current time.
+/**
+ * @brief Returns the blackout effect's strength for the current time.
+ * 
+ * @return The blackout strength.
  */
 unsigned char weather::get_blackout_strength() {
     float ratio;
@@ -76,9 +74,10 @@ unsigned char weather::get_blackout_strength() {
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Returns the daylight color for the current time.
+/**
+ * @brief Returns the daylight color for the current time.
+ * 
+ * @return The daylight color.
  */
 ALLEGRO_COLOR weather::get_daylight_color() {
     float ratio;
@@ -98,8 +97,10 @@ ALLEGRO_COLOR weather::get_daylight_color() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the fog color for the current time.
+/**
+ * @brief Returns the fog color for the current time.
+ * 
+ * @return The fog color.
  */
 ALLEGRO_COLOR weather::get_fog_color() {
     float ratio;
@@ -119,8 +120,10 @@ ALLEGRO_COLOR weather::get_fog_color() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the sun strength for the current time, in the range 0 - 1.
+/**
+ * @brief Returns the sun strength for the current time, in the range 0 - 1.
+ * 
+ * @return The sun strength.
  */
 float weather::get_sun_strength() {
     float ratio;

@@ -18,12 +18,11 @@
 #include "sector.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an edge.
- * v1:
- *   Its first vertex.
- * v2:
- *   Its second vertex.
+/**
+ * @brief Constructs a new edge object.
+ *
+ * @param v1 Its first vertex.
+ * @param v2 Its second vertex.
  */
 edge::edge(size_t v1, size_t v2) :
     wall_shadow_length(LARGE_FLOAT),
@@ -39,11 +38,11 @@ edge::edge(size_t v1, size_t v2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones an edge's properties onto another,
+/**
+ * @brief Clones an edge's properties onto another,
  * not counting the sectors or vertexes.
- * destination:
- *   Edge to clone the data into.
+ *
+ * @param destination Edge to clone the data into.
  */
 void edge::clone(edge* destination) const {
     destination->wall_shadow_length = wall_shadow_length;
@@ -53,10 +52,11 @@ void edge::clone(edge* destination) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the sector that ISN'T the specified one.
- * s_ptr:
- *   The sector that ISN'T the one to return.
+/**
+ * @brief Returns the sector that ISN'T the specified one.
+ *
+ * @param s_ptr The sector that ISN'T the one to return.
+ * @return The other sector.
  */
 sector* edge::get_other_sector(const sector* s_ptr) const {
     if(sectors[0] == s_ptr) return sectors[1];
@@ -64,10 +64,11 @@ sector* edge::get_other_sector(const sector* s_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vertex that ISN'T the specified one.
- * v_ptr:
- *   The vertex that ISN'T the one to return.
+/**
+ * @brief Returns the vertex that ISN'T the specified one.
+ *
+ * @param v_ptr The vertex that ISN'T the one to return.
+ * @return The other vertex.
  */
 vertex* edge::get_other_vertex(const vertex* v_ptr) const {
     if(vertexes[0] == v_ptr) return vertexes[1];
@@ -75,10 +76,11 @@ vertex* edge::get_other_vertex(const vertex* v_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns which side has the specified sector, or INVALID if neither.
- * s_ptr:
- *   Sector to check.
+/**
+ * @brief Returns which side has the specified sector, if any.
+ *
+ * @param s_ptr Sector to check.
+ * @return The side index, or INVALID if neither.
  */
 size_t edge::get_side_with_sector(const sector* s_ptr) const {
     for(unsigned char s = 0; s < 2; ++s) {
@@ -88,11 +90,12 @@ size_t edge::get_side_with_sector(const sector* s_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * If the specified edge and this one are not neighbors, returns NULL.
+/**
+ * @brief If the specified edge and this one are not neighbors, returns NULL.
  * Otherwise, returns the vertex that binds them.
- * other:
- *   Edge to check as a neighbor.
+ *
+ * @param other Edge to check as a neighbor.
+ * @return The binding vertex, or NULL if they are not neighbors.
  */
 vertex* edge::has_neighbor(const edge* other) const {
     for(size_t v1 = 0; v1 < 2; ++v1) {
@@ -106,9 +109,11 @@ vertex* edge::has_neighbor(const edge* other) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not an edge is valid.
+/**
+ * @brief Returns whether or not an edge is valid.
  * An edge is valid if it has non-NULL vertexes.
+ *
+ * @return Whether it is valid.
  */
 bool edge::is_valid() const {
     if(!vertexes[0]) return false;
@@ -117,10 +122,11 @@ bool edge::is_valid() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes the edge from its sectors, but doesn't mark
+/**
+ * @brief Removes the edge from its sectors, but doesn't mark
  * the sectors as "none".
- * Returns the edge number.
+ *
+ * @return The edge number.
  */
 size_t edge::remove_from_sectors() {
     size_t e_nr = INVALID;
@@ -144,10 +150,11 @@ size_t edge::remove_from_sectors() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes the edge from its vertexes, but doesn't mark
+/**
+ * @brief Removes the edge from its vertexes, but doesn't mark
  * the vertexes as "none".
- * Returns the edge number.
+ *
+ * @return The edge number.
  */
 size_t edge::remove_from_vertexes() {
     size_t e_nr = INVALID;
@@ -171,8 +178,8 @@ size_t edge::remove_from_vertexes() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Swaps the two vertexes of the edge around. It also swaps the sectors,
+/**
+ * @brief Swaps the two vertexes of the edge around. It also swaps the sectors,
  * so that they still point in the right direction.
  */
 void edge::swap_vertexes() {
@@ -183,16 +190,13 @@ void edge::swap_vertexes() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Transfers this edge from one sector to a different one.
- * from:
- *   Sector to transfer from.
- * to:
- *   Sector to transfer to.
- * to_nr:
- *   Number of the sector to transfer to.
- * edge_nr:
- *   Number of the current edge.
+/**
+ * @brief Transfers this edge from one sector to a different one.
+ *
+ * @param from Sector to transfer from.
+ * @param to Sector to transfer to.
+ * @param to_nr Number of the sector to transfer to.
+ * @param edge_nr Number of the current edge.
  */
 void edge::transfer_sector(
     sector* from, sector* to, const size_t to_nr, const size_t edge_nr
@@ -211,12 +215,11 @@ void edge::transfer_sector(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an edge intersection info structure.
- * e1:
- *   First edge in the intersection.
- * e2:
- *   Second edge in the intersection.
+/**
+ * @brief Constructs a new edge intersection object.
+ *
+ * @param e1 First edge in the intersection.
+ * @param e2 Second edge in the intersection.
  */
 edge_intersection::edge_intersection(edge* e1, edge* e2) :
     e1(e1),
@@ -225,10 +228,11 @@ edge_intersection::edge_intersection(edge* e1, edge* e2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether the edge intersection contains the specified edge.
- * e:
- *   Edge to check.
+/**
+ * @brief Checks whether the edge intersection contains the specified edge.
+ *
+ * @param e Edge to check.
+ * @return Whether it contains the edge.
  */
 bool edge_intersection::contains(const edge* e) {
     return e1 == e || e2 == e;

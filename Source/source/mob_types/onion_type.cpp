@@ -16,8 +16,8 @@
 #include "../mobs/onion.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of Onion.
+/**
+ * @brief Constructs a new Onion type object.
  */
 onion_type::onion_type() :
     mob_type(MOB_CATEGORY_ONIONS) {
@@ -42,16 +42,18 @@ onion_type::onion_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a type of Onion.
+/**
+ * @brief Destroys the Onion type object.
  */
 onion_type::~onion_type() {
     delete nest;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector onion_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -60,20 +62,20 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void onion_type::load_properties(data_node* file) {
     nest->load_properties(file);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void onion_type::load_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function

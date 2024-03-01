@@ -23,46 +23,59 @@
 
 
 namespace PIKMIN {
+
 //How long a Pikmin that got knocked down stays on the floor for, if left alone.
 const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
+
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
+
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
+
 //Timeout before a Pikmin gives up, when ordered to go to something.
 const float GOTO_TIMEOUT = 5.0f;
+
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
+
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
+
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
+
 //Interval for when a Pikmin decides a new chase spot, when panicking.
 const float PANIC_CHASE_INTERVAL = 0.2f;
+
 //A plucked Pikmin is thrown behind the leader at this speed, horizontally.
 const float THROW_HOR_SPEED = 80.0f;
+
 //A plucked Pikmin is thrown behind the leader at this speed, vertically.
 const float THROW_VER_SPEED = 900.0f;
+
 }
 
 
 //Height above the floor that a flying Pikmin prefers to stay at.
 const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 55.0f;
+
 //How long to remember a missed incoming attack for.
 const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
+
 //Chance of circling the opponent instead of striking, when grounded.
 const float pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED = 0.2f;
+
 //Chance of circling the opponent instead of latching, if it can latch.
 const float pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH = 0.5f;
 
-/* ----------------------------------------------------------------------------
- * Creates a Pikmin mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Pikmin type this mob belongs to.
- * angle:
- *   Starting angle.
+
+/**
+ * @brief Constructs a new Pikmin object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Pikmin type this mob belongs to.
+ * @param angle Starting angle.
  */
 pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     mob(pos, type, angle),
@@ -103,18 +116,19 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not a Pikmin can receive a given status effect.
- * s:
- *   Status type to check.
+/**
+ * @brief Returns whether or not a Pikmin can receive a given status effect.
+ *
+ * @param s Status type to check.
+ * @return Whether it can receive it.
  */
 bool pikmin::can_receive_status(status_type* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_PIKMIN);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
+/**
+ * @brief Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
 void pikmin::draw_mob() {
     sprite* s_ptr = get_cur_sprite();
@@ -194,13 +208,13 @@ void pikmin::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Forces the Pikmin to start carrying the given mob.
+/**
+ * @brief Forces the Pikmin to start carrying the given mob.
  * This quickly runs over several steps in the usual FSM logic, just to
  * instantly get to the end result.
  * As such, be careful when using it.
- * m:
- *   The mob to carry.
+ *
+ * @param m The mob to carry.
  */
 void pikmin::force_carry(mob* m) {
     fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, NULL);
@@ -208,9 +222,11 @@ void pikmin::force_carry(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a Pikmin's base speed, without status effects and the like.
+/**
+ * @brief Returns a Pikmin's base speed, without status effects and the like.
  * This depends on the maturity.
+ *
+ * @return The base speed.
  */
 float pikmin::get_base_speed() const {
     float base = mob::get_base_speed();
@@ -218,14 +234,13 @@ float pikmin::get_base_speed() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns its group spot information.
+/**
+ * @brief Returns its group spot information.
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
- * final_spot:
- *   The final coordinates are returned here.
- * final_dist:
- *   The final distance to those coordinates is returned here.
+ *
+ * @param final_spot The final coordinates are returned here.
+ * @param final_dist The final distance to those coordinates is returned here.
  */
 void pikmin::get_group_spot_info(
     point* final_spot, float* final_dist
@@ -245,10 +260,10 @@ void pikmin::get_group_spot_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a status effect being applied.
- * sta_type:
- *   Status effect to handle.
+/**
+ * @brief Handles a status effect being applied.
+ *
+ * @param sta_type Status effect to handle.
  */
 void pikmin::handle_status_effect_gain(status_type* sta_type) {
     mob::handle_status_effect_gain(sta_type);
@@ -280,10 +295,10 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a status effect being removed.
- * sta_type:
- *   Status effect to handle.
+/**
+ * @brief Handles a status effect being removed.
+ *
+ * @param sta_type Status effect to handle.
  */
 void pikmin::handle_status_effect_loss(status_type* sta_type) {
     bool still_has_flailing = false;
@@ -348,11 +363,11 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Increases (or decreases) the Pikmin's maturity by the given amount.
+/**
+ * @brief Increases (or decreases) the Pikmin's maturity by the given amount.
  * This makes sure that the maturity doesn't overflow.
- * amount:
- *   Amount to increase by.
+ *
+ * @param amount Amount to increase by.
  */
 void pikmin::increase_maturity(const int amount) {
     int old_maturity = maturity;
@@ -364,12 +379,11 @@ void pikmin::increase_maturity(const int amount) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Latches on to the specified mob.
- * m:
- *   Mob to latch on to.
- * h:
- *   Hitbox to latch on to.
+/**
+ * @brief Latches on to the specified mob.
+ *
+ * @param m Mob to latch on to.
+ * @param h Hitbox to latch on to.
  */
 void pikmin::latch(mob* m, const hitbox* h) {
     speed.x = speed.y = speed_z = 0;
@@ -390,14 +404,16 @@ void pikmin::latch(mob* m, const hitbox* h) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if an incoming attack should miss, and returns the result.
+/**
+ * @brief Checks if an incoming attack should miss, and returns the result.
+ *
  * If it was already decided that it missed in a previous frame, that's a
  * straight no. If not, it will roll with the hit rate to check.
  * If the attack is a miss, it also registers the miss, so that we can keep
  * memory of it for the next frames.
- * info:
- *   Info about the hitboxes involved.
+ *
+ * @param info Info about the hitboxes involved.
+ * @return Whether it hit.
  */
 bool pikmin::process_attack_miss(hitbox_interaction* info) {
     if(info->mob2->anim.cur_anim == missed_attack_ptr) {
@@ -421,10 +437,10 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void pikmin::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -449,8 +465,9 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the particle generator that leaves a trail behind a thrown Pikmin.
+/**
+ * @brief Starts the particle generator that leaves a trail behind
+ * a thrown Pikmin.
  */
 void pikmin::start_throw_trail() {
     particle throw_p(
@@ -466,10 +483,10 @@ void pikmin::start_throw_trail() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void pikmin::tick_class_specifics(const float delta_t) {
     //Carrying object.
@@ -539,15 +556,14 @@ void pikmin::tick_class_specifics(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the sprout closest to a leader. Used when auto-plucking.
- * pos:
- *   Coordinates of the leader.
- * d:
- *   Variable to return the distance to. NULL for none.
- * ignore_reserved:
- *   If true, ignore any sprouts that are "reserved"
- *   (i.e. already chosen to be plucked by another leader).
+/**
+ * @brief Returns the sprout closest to a leader. Used when auto-plucking.
+ *
+ * @param pos Coordinates of the leader.
+ * @param d Variable to return the distance to. NULL for none.
+ * @param ignore_reserved If true, ignore any sprouts that are "reserved"
+ * (i.e. already chosen to be plucked by another leader).
+ * @return The sprout.
  */
 pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved

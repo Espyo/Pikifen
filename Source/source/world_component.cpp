@@ -11,8 +11,8 @@
 #include "world_component.h"
 
 
-/* ----------------------------------------------------------------------------
- * Initializes a world component struct.
+/**
+ * @brief Constructs a new world component object.
  */
 world_component::world_component() :
     sector_ptr(nullptr),

@@ -21,10 +21,10 @@
 using std::set;
 
 
-/* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed anywhere.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles a key being "char"-typed anywhere.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
@@ -77,10 +77,10 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles a key being "char"-typed in the canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
@@ -135,10 +135,10 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a key being pressed down anywhere.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles a key being pressed down anywhere.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
@@ -217,10 +217,10 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a key being pressed down in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles a key being pressed down in the canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_1)) {
@@ -373,10 +373,10 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a keyboard key being released anywhere.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles a keyboard key being released anywhere.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_H) {
@@ -391,10 +391,11 @@ void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the left mouse button being double-clicked in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the left mouse button being double-clicked in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     if(is_ctrl_pressed) {
@@ -475,10 +476,11 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the left mouse button being pressed down in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the left mouse button being pressed down in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     switch(state) {
@@ -1286,10 +1288,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the left mouse button being dragged in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the left mouse button being dragged in the canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(selecting) {
@@ -1721,10 +1723,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the left mouse button being released.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the left mouse button being released.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
@@ -1745,11 +1747,11 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the middle mouse button being double-clicked in the
+/**
+ * @brief Handles the middle mouse button being double-clicked in the
  * canvas exclusively.
- * ev:
- *   Event to handle.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
@@ -1758,10 +1760,11 @@ void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the middle mouse button being pressed down in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the middle mouse button being pressed down in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
@@ -1770,10 +1773,11 @@ void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the middle mouse button being dragged in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the middle mouse button being dragged in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -1782,10 +1786,10 @@ void area_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the mouse coordinates being updated.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the mouse coordinates being updated.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     game.mouse_cursor.s_pos.x = ev.mouse.x;
@@ -1857,21 +1861,21 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the mouse wheel being moved in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the mouse wheel being moved in the canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the right mouse button being double-clicked in the
+/**
+ * @brief Handles the right mouse button being double-clicked in the
  * canvas exclusively.
- * ev:
- *   Event to handle.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -1880,10 +1884,11 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the right mouse button being pressed down in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the right mouse button being pressed down in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -1892,10 +1897,11 @@ void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the right mouse button being dragged in the canvas exclusively.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles the right mouse button being dragged in the
+ * canvas exclusively.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {

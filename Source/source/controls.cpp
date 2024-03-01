@@ -25,20 +25,16 @@
 #include "utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new player action to the list.
- * id:
- *   Its ID.
- * category:
- *   Its category.
- * name:
- *   Its name.
- * description:
- *   Its descripton.
- * internal_name:
- *   The name of its property in the options file.
- * default_bind_str:
- *   String representing of this action's default control bind.
+/**
+ * @brief Adds a new player action to the list.
+ *
+ * @param id Its ID.
+ * @param category Its category.
+ * @param name Its name.
+ * @param description Its descripton.
+ * @param internal_name The name of its property in the options file.
+ * @param default_bind_str String representing of this action's default
+ * control bind.
  */
 void controls_mediator::add_player_action_type(
     const PLAYER_ACTION_TYPES id,
@@ -58,12 +54,13 @@ void controls_mediator::add_player_action_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the parsed input from an Allegro event.
- * If this even does not pertain to any valid input, an input of type
+/**
+ * @brief Returns the parsed input from an Allegro event.
+ *
+ * @param ev The Allegro event.
+ * @return The input.
+ * If this event does not pertain to any valid input, an input of type
  * INPUT_TYPE_NONE is returned.
- * ev:
- *   The Allegro event.
  */
 player_input controls_mediator::allegro_event_to_input(
     const ALLEGRO_EVENT &ev
@@ -128,19 +125,22 @@ player_input controls_mediator::allegro_event_to_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the array of registered bind.
+/**
+ * @brief Returns the array of registered bind.
+ *
+ * @return The binds.
  */
 vector<control_bind> &controls_mediator::binds() {
     return mgr.binds;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finds a registered control bind for player 1 that matches
+/**
+ * @brief Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
- * action_type_id:
- *   ID of the action type.
+ *
+ * @param action_type_id ID of the action type.
+ * @return The bind.
  */
 control_bind controls_mediator::find_bind(
     const PLAYER_ACTION_TYPES action_type_id
@@ -154,11 +154,12 @@ control_bind controls_mediator::find_bind(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finds a registered control bind for player 1 that matches
+/**
+ * @brief Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
- * action_name:
- *   Name of the action.
+ *
+ * @param action_name Name of the action.
+ * @return The bind.
  */
 control_bind controls_mediator::find_bind(
     const string &action_name
@@ -172,8 +173,10 @@ control_bind controls_mediator::find_bind(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current list of registered player action types.
+/**
+ * @brief Returns the current list of registered player action types.
+ *
+ * @return The types.
  */
 const vector<player_action_type>
 &controls_mediator::get_all_player_action_types() const {
@@ -181,11 +184,12 @@ const vector<player_action_type>
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the internal name from an input id,
- * used in the on_input_recieved event. Returns an empty string on failure.
- * action_id:
- *   ID of the player action.
+/**
+ * @brief Returns the internal name from an input ID,
+ * used in the on_input_recieved event.
+ *
+ * @param action_id ID of the player action.
+ * @return The name, or an empty string on failure.
  */
 string controls_mediator::get_player_action_type_internal_name(
     const int &action_id
@@ -199,10 +203,11 @@ string controls_mediator::get_player_action_type_internal_name(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current input value of a given action type.
- * player_action_type_id:
- *   Action type to use.
+/**
+ * @brief Returns the current input value of a given action type.
+ *
+ * @param player_action_type_id Action type to use.
+ * @return The value.
  */
 float controls_mediator::get_player_action_type_value(
     PLAYER_ACTION_TYPES player_action_type_id
@@ -211,11 +216,11 @@ float controls_mediator::get_player_action_type_value(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * Returns true if the event was handled, false otherwise.
- * ev:
- *   The Allegro event.
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev The Allegro event.
+ * @return Whether the event was handled.
  */
 bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     player_input input = allegro_event_to_input(ev);
@@ -229,12 +234,12 @@ bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a string that represents an input.
+/**
+ * @brief Creates a string that represents an input.
  * Ignores the player number.
- * Returns an empty string on error.
- * i:
- *   Input to read from.
+ *
+ * @param i Input to read from.
+ * @return The string, or an empty string on error.
  */
 string controls_mediator::input_to_str(
     const player_input &i
@@ -269,17 +274,19 @@ string controls_mediator::input_to_str(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player actions that occurred during the last frame of gameplay,
- * and begins a new frame.
+/**
+ * @brief Returns the player actions that occurred during the last frame
+ * of gameplay, and begins a new frame.
+ *
+ * @return The player actions.
  */
 vector<player_action> controls_mediator::new_frame() {
     return mgr.new_frame();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Releases all player inputs. Basically, set all of their values to 0.
+/**
+ * @brief Releases all player inputs. Basically, set all of their values to 0.
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void controls_mediator::release_all() {
@@ -289,22 +296,22 @@ void controls_mediator::release_all() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the options for the controls manager.
- * options:
- *   Options.
+/**
+ * @brief Sets the options for the controls manager.
+ *
+ * @param options Options.
  */
 void controls_mediator::set_options(const controls_manager_options &options) {
     mgr.options = options;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an input from a string representation.
+/**
+ * @brief Creates an input from a string representation.
  * Ignores the player number.
- * Returns a default input instance on error.
- * s:
- *   String to read from.
+ *
+ * @param s String to read from.
+ * @return The input, or a default input instance on error.
  */
 player_input controls_mediator::str_to_input(
     const string &s
@@ -372,11 +379,11 @@ player_input controls_mediator::str_to_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes a key press to check if it should do some "system" action,
+/**
+ * @brief Processes a key press to check if it should do some "system" action,
  * like toggle the framerate, or activate a maker tool.
- * keycode:
- *   Allegro keycode of the pressed key.
+ *
+ * @param keycode Allegro keycode of the pressed key.
  */
 void gameplay_state::process_system_key_press(const int keycode) {
     if(keycode == ALLEGRO_KEY_F1) {
@@ -517,8 +524,8 @@ void gameplay_state::process_system_key_press(const int keycode) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new player action type.
+/**
+ * @brief Constructs a new player action type object.
  */
 player_action_type::player_action_type() :
     id(PLAYER_ACTION_NONE),

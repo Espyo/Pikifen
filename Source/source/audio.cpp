@@ -17,29 +17,38 @@
 
 
 namespace AUDIO {
+    
 //Default min stack pos. Let's use a value higher than 0, since if for any
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
+
 //Change speed for a mix track's gain, measured in amount per second.
 const float MIX_TRACK_GAIN_SPEED = 1.0f;
+
 //Change speed for a playback's gain, measured in amount per second.
 const float PLAYBACK_GAIN_SPEED = 3.0f;
+
 //Change speed for a playback's pan, measured in amount per second.
 const float PLAYBACK_PAN_SPEED = 8.0f;
+
 //Change speed of playback gain when un/pausing, measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
+
 //Change speed of playback gain when stopping, measured in amount per second.
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
+
 //Change speed for a song's gain, measured in amount per second.
 const float SONG_GAIN_SPEED = 1.0f;
+
 //Gain for when a song is softened, due to a game pause.
 const float SONG_SOFTENED_GAIN = 0.4f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs the audio manager.
+/**
+ * @brief Constructs a new audio manager object.
  */
 audio_manager::audio_manager() :
     samples(""),
@@ -54,18 +63,17 @@ audio_manager::audio_manager() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a mob sound effect source and returns its ID.
+/**
+ * @brief Creates a mob sound effect source and returns its ID.
+ *
  * This is like create_world_pos_sfx_source, but ties the source to the mob,
  * meaning the audio manager is responsible for updating the source's position
  * every frame to match the mob's.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * m_ptr:
- *   Pointer to the mob.
- * config:
- *   Configuration.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param m_ptr Pointer to the mob.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_mob_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -79,17 +87,14 @@ size_t audio_manager::create_mob_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sound effect source and returns its ID.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * type:
- *   Sound type.
- * config:
- *   Configuration.
- * pos:
- *   Position in the game world, if applicable.
+/**
+ * @brief Creates a sound effect source and returns its ID.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param type Sound type.
+ * @param config Configuration.
+ * @param pos Position in the game world, if applicable.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -121,14 +126,14 @@ size_t audio_manager::create_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a global UI sound effect source and returns its ID.
+/**
+ * @brief Creates a global UI sound effect source and returns its ID.
+ *
  * This is basically how you can get the engine to produce a UI sound.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_ui_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -138,15 +143,15 @@ size_t audio_manager::create_ui_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world ambiance sound effect source and returns its ID.
+/**
+ * @brief Creates an in-world ambiance sound effect source and returns its ID.
+ *
  * This is basically how you can get the engine to produce a sound that doesn't
  * involve a position in the game world, and is just decorative ambiance.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_world_ambiance_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -156,15 +161,15 @@ size_t audio_manager::create_world_ambiance_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world global sound effect source and returns its ID.
+/**
+ * @brief Creates an in-world global sound effect source and returns its ID.
+ *
  * This is basically how you can get the engine to produce a sound that doesn't
  * involve a position in the game world.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_world_global_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -174,17 +179,16 @@ size_t audio_manager::create_world_global_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world positional sound effect source and returns its ID.
+/**
+ * @brief Creates an in-world positional sound effect source and returns its ID.
+ *
  * This is basically how you can get the engine to produce a sound that
  * involves a position in the game world.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * pos:
- *   Starting position in the game world.
- * config:
- *   Configuration.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param pos Starting position in the game world.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_world_pos_sfx_source(
     ALLEGRO_SAMPLE* sample,
@@ -195,8 +199,8 @@ size_t audio_manager::create_world_pos_sfx_source(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys the audio manager.
+/**
+ * @brief Destroys the audio manager.
  */
 void audio_manager::destroy() {
     al_detach_voice(voice);
@@ -209,12 +213,12 @@ void audio_manager::destroy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a playback object directly.
+/**
+ * @brief Destroys a playback object directly.
  * The "stopping" state is not relevant here.
- * Returns whether it succeeded.
- * playback_idx:
- *   Index of the playback in the list of playbacks.
+ *
+ * @param playback_idx Index of the playback in the list of playbacks.
+ * @return Whether it succeeded.
  */
 bool audio_manager::destroy_sfx_playback(size_t playback_idx) {
     sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
@@ -243,11 +247,11 @@ bool audio_manager::destroy_sfx_playback(size_t playback_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a sound source.
- * Returns whether it succeeded.
- * source_id:
- *   ID of the sound source to destroy.
+/**
+ * @brief Destroys a sound source.
+ *
+ * @param source_id ID of the sound source to destroy.
+ * @return Whether it succeeded.
  */
 bool audio_manager::destroy_sfx_source(size_t source_id) {
     sfx_source_struct* source_ptr = get_source(source_id);
@@ -274,11 +278,11 @@ bool audio_manager::destroy_sfx_source(size_t source_id) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Emits a sound from a sound source now, if possible.
- * Returns whether it succeeded.
- * source_id:
- *   ID of the source to emit sound from.
+/**
+ * @brief Emits a sound from a sound source now, if possible.
+ *
+ * @param source_id ID of the source to emit sound from.
+ * @return Whether it succeeded.
  */
 bool audio_manager::emit(size_t source_id) {
     //Setup.
@@ -410,10 +414,11 @@ bool audio_manager::emit(size_t source_id) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a source's pointer from a source in the list, or NULL if invalid.
- * source_id:
- *   ID of the sound source.
+/**
+ * @brief Returns a source's pointer from a source in the list.
+ *
+ * @param source_id ID of the sound source.
+ * @return The source, or NULL if invalid.
  */
 sfx_source_struct* audio_manager::get_source(size_t source_id) {
     auto source_it = sources.find(source_id);
@@ -422,10 +427,10 @@ sfx_source_struct* audio_manager::get_source(size_t source_id) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a mob being deleted.
- * m_ptr:
- *   Mob that got deleted.
+/**
+ * @brief Handles a mob being deleted.
+ *
+ * @param m_ptr Mob that got deleted.
  */
 void audio_manager::handle_mob_deletion(const mob* m_ptr) {
     for(auto s = mob_sources.begin(); s != mob_sources.end();) {
@@ -438,8 +443,8 @@ void audio_manager::handle_mob_deletion(const mob* m_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the gameplay of the game world being paused.
+/**
+ * @brief Handles the gameplay of the game world being paused.
  */
 void audio_manager::handle_world_pause() {
     //Pause playbacks.
@@ -474,8 +479,8 @@ void audio_manager::handle_world_pause() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the gameplay of the game world being unpaused.
+/**
+ * @brief Handles the gameplay of the game world being unpaused.
  */
 void audio_manager::handle_world_unpause() {
     //Unpause playbacks.
@@ -518,18 +523,14 @@ void audio_manager::handle_world_unpause() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the audio manager.
- * master_volume:
- *   Volume of the master mixer.
- * world_sfx_volume:
- *   Volume of the in-world sound effects mixer.
- * music_volume:
- *   Volume of the music mixer.
- * ambiance_volume:
- *   Volume of the ambiance sounds mixer.
- * ui_sfx_volume:
- *   Volume of the UI sound effects mixer.
+/**
+ * @brief Initializes the audio manager.
+ *
+ * @param master_volume Volume of the master mixer.
+ * @param world_sfx_volume Volume of the in-world sound effects mixer.
+ * @param music_volume Volume of the music mixer.
+ * @param ambiance_volume Volume of the ambiance sounds mixer.
+ * @param ui_sfx_volume Volume of the UI sound effects mixer.
  */
 void audio_manager::init(
     float master_volume, float world_sfx_volume, float music_volume,
@@ -593,24 +594,23 @@ void audio_manager::init(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a mix track type's status to true for this frame.
- * track_type:
- *   Track type to mark.
+/**
+ * @brief Marks a mix track type's status to true for this frame.
+ *
+ * @param track_type Track type to mark.
  */
 void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
     mix_statuses[track_type] = true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Schedules a sound effect source's emission. This includes things
+/**
+ * @brief Schedules a sound effect source's emission. This includes things
  * like randomly delaying it if configured to do so.
- * Returns whether it succeeded.
- * source_id:
- *   ID of the sound source.
- * first:
- *   True if this is the first emission of the source.
+ *
+ * @param source_id ID of the sound source.
+ * @param first True if this is the first emission of the source.
+ * @return Whether it succeeded.
  */
 bool audio_manager::schedule_emission(size_t source_id, bool first) {
     sfx_source_struct* source_ptr = get_source(source_id);
@@ -626,12 +626,11 @@ bool audio_manager::schedule_emission(size_t source_id, bool first) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the camera's position.
- * cam_tl:
- *   Current coordinates of the camera's top-left corner.
- * cam_br:
- *   Current coordinates of the camera's bottom-right corner.
+/**
+ * @brief Sets the camera's position.
+ *
+ * @param cam_tl Current coordinates of the camera's top-left corner.
+ * @param cam_br Current coordinates of the camera's bottom-right corner.
  */
 void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
     this->cam_tl = cam_tl;
@@ -639,16 +638,18 @@ void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets what the current song should be. If it's different from the song
- * that's currently playing, then that one fades out as this one fades in.
+/**
+ * @brief Sets what the current song should be.
+ *
+ * If it's different from the song that's currently playing,
+ * then that one fades out as this one fades in.
  * To stop playing songs, send an empty string as the song name argument.
- * Returns true on success, false on failure.
- * name:
- *   Name of the song in the list of loaded songs.
- * from_start:
- *   If true, the song starts from the beginning, otherwise it starts from where
- *   it left off. This argument only applies if the song was stopped.
+ *
+ * @param name Name of the song in the list of loaded songs.
+ * @param from_start If true, the song starts from the beginning,
+ * otherwise it starts from where it left off.
+ * This argument only applies if the song was stopped.
+ * @return Whether it succeeded.
  */
 bool audio_manager::set_current_song(const string &name, bool from_start) {
 
@@ -716,12 +717,12 @@ bool audio_manager::set_current_song(const string &name, bool from_start) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the position of a positional sound effect source.
- * source_id:
- *   ID of the sound effect source.
- * pos:
- *   New position.
+/**
+ * @brief Sets the position of a positional sound effect source.
+ *
+ * @param source_id ID of the sound effect source.
+ * @param pos New position.
+ * @return Whether it succeeded.
  */
 bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
     sfx_source_struct* source_ptr = get_source(source_id);
@@ -733,15 +734,13 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts playing a song's track from scratch.
- * song_ptr:
- *   The song.
- * stream:
- *   Audio stream of the track.
- * from_start:
- *   If true, the song starts from the beginning, otherwise it starts from where
- *   it left off.
+/**
+ * @brief Starts playing a song's track from scratch.
+ *
+ * @param song_ptr The song.
+ * @param stream Audio stream of the track.
+ * @param from_start If true, the song starts from the beginning,
+ * otherwise it starts from where it left off.
  */
 void audio_manager::start_song_track(
     song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
@@ -759,11 +758,11 @@ void audio_manager::start_song_track(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stops all playbacks. Alternatively, stops all playbacks of a given sound
- * sample.
- * filter:
- *   Sound sample to filter by, or NULL to stop all playbacks.
+/**
+ * @brief Stops all playbacks. Alternatively, stops all playbacks of
+ * a given sound sample.
+ *
+ * @param filter Sound sample to filter by, or NULL to stop all playbacks.
  */
 void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
     for(size_t p = 0; p < playbacks.size(); ++p) {
@@ -787,11 +786,11 @@ void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stops a playback, putting it in the "stopping" state.
- * Returns whether it succeeded.
- * playback_idx:
- *   Index of the playback in the list of playbacks.
+/**
+ * @brief Stops a playback, putting it in the "stopping" state.
+ *
+ * @param playback_idx Index of the playback in the list of playbacks.
+ * @return Whether it succeeded.
  */
 bool audio_manager::stop_sfx_playback(size_t playback_idx) {
     sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
@@ -802,10 +801,10 @@ bool audio_manager::stop_sfx_playback(size_t playback_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the audio manager by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks the audio manager by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void audio_manager::tick(float delta_t) {
     //Clear deleted mob sources.
@@ -1040,11 +1039,11 @@ void audio_manager::tick(float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Instantly updates a playback's current gain and pan, using its member
+/**
+ * @brief Instantly updates a playback's current gain and pan, using its member
  * variables. This also clamps the variables if needed.
- * playback_idx:
- *   Index of the playback in the list.
+ *
+ * @param playback_idx Index of the playback in the list.
  */
 void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     if(playback_idx >= playbacks.size()) return;
@@ -1068,13 +1067,15 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates a playback's target gain and target pan, based on distance
- * from the camera. This won't update the gain and pan yet, but each audio
+/**
+ * @brief Updates a playback's target gain and target pan, based on distance
+ * from the camera.
+ *
+ * This won't update the gain and pan yet, but each audio
  * manager tick will be responsible for bringing the gain and pan to these
  * values smoothly over time.
- * playback_idx:
- *   Index of the playback in the list.
+ *
+ * @param playback_idx Index of the playback in the list.
  */
 void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     if(playback_idx >= playbacks.size()) return;
@@ -1116,18 +1117,14 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the volumes of all mixers.
- * master_volume:
- *   Volume of the master mixer.
- * world_sfx_volume:
- *   Volume of the in-world sound effects mixer.
- * music_volume:
- *   Volume of the music mixer.
- * ambiance_volume:
- *   Volume of the ambiance sounds mixer.
- * ui_sfx_volume:
- *   Volume of the UI sound effects mixer.
+/**
+ * @brief Updates the volumes of all mixers.
+ *
+ * @param master_volume Volume of the master mixer.
+ * @param world_sfx_volume Volume of the in-world sound effects mixer.
+ * @param music_volume Volume of the music mixer.
+ * @param ambiance_volume Volume of the ambiance sounds mixer.
+ * @param ui_sfx_volume Volume of the UI sound effects mixer.
  */
 void audio_manager::update_volumes(
     float master_volume, float world_sfx_volume, float music_volume,
@@ -1150,10 +1147,10 @@ void audio_manager::update_volumes(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an audio stream manager.
- * base_dir:
- *   Base directory its files belong to.
+/**
+ * @brief Constructs a new audio stream manager object.
+ *
+ * @param base_dir Base directory its files belong to.
  */
 audio_stream_manager::audio_stream_manager(const string &base_dir) :
     base_dir(base_dir),
@@ -1162,8 +1159,8 @@ audio_stream_manager::audio_stream_manager(const string &base_dir) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes all audio streams loaded and clears the list.
+/**
+ * @brief Deletes all audio streams loaded and clears the list.
  */
 void audio_stream_manager::clear() {
     for(auto &s : list) {
@@ -1174,11 +1171,11 @@ void audio_stream_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks an audio stream to have one less call.
+/**
+ * @brief Marks an audio stream to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * it:
- *   Iterator from the map for the stream.
+ *
+ * @param it Iterator from the map for the stream.
  */
 void audio_stream_manager::detach(map<string, stream_info>::iterator it) {
     if(it == list.end()) return;
@@ -1192,11 +1189,11 @@ void audio_stream_manager::detach(map<string, stream_info>::iterator it) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks an audio stream to have one less call.
+/**
+ * @brief Marks an audio stream to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * name:
- *   Audio stream's file name.
+ *
+ * @param name Audio stream's file name.
  */
 void audio_stream_manager::detach(const string &name) {
     if(name.empty()) return;
@@ -1204,11 +1201,11 @@ void audio_stream_manager::detach(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks an audio stream to have one less call.
+/**
+ * @brief Marks an audio stream to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * s:
- *   Stream to detach.
+ *
+ * @param s Stream to detach.
  */
 void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
     if(!s) return;
@@ -1222,14 +1219,13 @@ void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the specified audio stream, by name.
- * name:
- *   Name of the audio stream to get.
- * node:
- *   If not NULL, blame this data node if the file doesn't exist.
- * report_errors:
- *   Only issues errors if this is true.
+/**
+ * @brief Returns the specified audio stream, by name.
+ *
+ * @param name Name of the audio stream to get.
+ * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::get(
     const string &name, const data_node* node,
@@ -1251,8 +1247,10 @@ ALLEGRO_AUDIO_STREAM* audio_stream_manager::get(
 };
 
 
-/* ----------------------------------------------------------------------------
- * Returns the size of the list. Used for debugging.
+/**
+ * @brief Returns the size of the list. Used for debugging.
+ *
+ * @return The size.
  */
 size_t audio_stream_manager::get_list_size() const {
     return list.size();
@@ -1260,18 +1258,20 @@ size_t audio_stream_manager::get_list_size() const {
 
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total number of calls. Used for debugging.
+/**
+ * @brief Returns the total number of calls. Used for debugging.
+ *
+ * @return The amount.
  */
 long audio_stream_manager::get_total_calls() const {
     return total_calls;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with information about an audio stream, for the manager.
- * s:
- *   The stream.
+/**
+ * @brief Constructs a new stream info object.
+ *
+ * @param s The stream.
  */
 audio_stream_manager::stream_info::stream_info(ALLEGRO_AUDIO_STREAM* s) :
     s(s),
@@ -1280,10 +1280,10 @@ audio_stream_manager::stream_info::stream_info(ALLEGRO_AUDIO_STREAM* s) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sound sample manager.
- * base_dir:
- *   Base directory its files belong to.
+/**
+ * @brief Constructs a new sfx sample manager object.
+ *
+ * @param base_dir Base directory its files belong to.
  */
 sfx_sample_manager::sfx_sample_manager(const string &base_dir) :
     base_dir(base_dir),
@@ -1292,8 +1292,8 @@ sfx_sample_manager::sfx_sample_manager(const string &base_dir) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes all samples loaded and clears the list.
+/**
+ * @brief Deletes all samples loaded and clears the list.
  */
 void sfx_sample_manager::clear() {
     for(auto &s : list) {
@@ -1304,11 +1304,11 @@ void sfx_sample_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a sound sample to have one less call.
+/**
+ * @brief Marks a sound sample to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * it:
- *   Iterator from the map for the sample.
+ *
+ * @param it Iterator from the map for the sample.
  */
 void sfx_sample_manager::detach(map<string, sample_info>::iterator it) {
     if(it == list.end()) return;
@@ -1322,11 +1322,11 @@ void sfx_sample_manager::detach(map<string, sample_info>::iterator it) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a sound sample to have one less call.
+/**
+ * @brief Marks a sound sample to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * name:
- *   Sound sample's file name.
+ *
+ * @param name Sound sample's file name.
  */
 void sfx_sample_manager::detach(const string &name) {
     if(name.empty()) return;
@@ -1334,11 +1334,11 @@ void sfx_sample_manager::detach(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a sound sample to have one less call.
+/**
+ * @brief Marks a sound sample to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * s:
- *   Sample to detach.
+ *
+ * @param s Sample to detach.
  */
 void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
     if(!s) return;
@@ -1352,14 +1352,13 @@ void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the specified sound sample, by name.
- * name:
- *   Name of the sound sample to get.
- * node:
- *   If not NULL, blame this data node if the file doesn't exist.
- * report_errors:
- *   Only issues errors if this is true.
+/**
+ * @brief Returns the specified sound sample, by name.
+ *
+ * @param name Name of the sound sample to get.
+ * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The sample.
  */
 ALLEGRO_SAMPLE* sfx_sample_manager::get(
     const string &name, const data_node* node,
@@ -1381,8 +1380,10 @@ ALLEGRO_SAMPLE* sfx_sample_manager::get(
 };
 
 
-/* ----------------------------------------------------------------------------
- * Returns the size of the list. Used for debugging.
+/**
+ * @brief Returns the size of the list. Used for debugging.
+ *
+ * @return The size.
  */
 size_t sfx_sample_manager::get_list_size() const {
     return list.size();
@@ -1390,18 +1391,20 @@ size_t sfx_sample_manager::get_list_size() const {
 
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total number of calls. Used for debugging.
+/**
+ * @brief Returns the total number of calls. Used for debugging.
+ *
+ * @return The amount.
  */
 long sfx_sample_manager::get_total_calls() const {
     return total_calls;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with information about a sound sample, for the manager.
- * s:
- *   The sample.
+/**
+ * @brief Constructs a new sample info object.
+ *
+ * @param s The sample.
  */
 sfx_sample_manager::sample_info::sample_info(ALLEGRO_SAMPLE* s) :
     s(s),

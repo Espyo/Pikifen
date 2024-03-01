@@ -16,8 +16,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new type of bouncer mob.
+/**
+ * @brief Constructs a new bouncer type object.
  */
 bouncer_type::bouncer_type() :
     mob_type(MOB_CATEGORY_BOUNCERS),
@@ -36,8 +36,8 @@ bouncer_type::bouncer_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector bouncer_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -47,10 +47,10 @@ anim_conversion_vector bouncer_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void bouncer_type::load_properties(data_node* file) {
     reader_setter rs(file);

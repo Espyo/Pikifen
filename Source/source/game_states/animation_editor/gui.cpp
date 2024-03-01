@@ -20,8 +20,8 @@
 #include "../../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Opens the "load" dialog.
+/**
+ * @brief Opens the "load" dialog.
  */
 void animation_editor::open_load_dialog() {
     global_anim_files_cache =
@@ -41,8 +41,9 @@ void animation_editor::open_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens the options dialog.
+/**
+ * @brief Opens the options dialog.
+ *
  */
 void animation_editor::open_options_dialog() {
     open_dialog(
@@ -54,8 +55,8 @@ void animation_editor::open_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes ImGui for this frame.
+/**
+ * @brief Processes Dear ImGui for this frame.
  */
 void animation_editor::process_gui() {
     //Initial setup.
@@ -124,8 +125,8 @@ void animation_editor::process_gui() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui control panel for this frame.
  */
 void animation_editor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
@@ -166,8 +167,8 @@ void animation_editor::process_gui_control_panel() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the list of the current hitbox's hazards,
+/**
+ * @brief Processes the list of the current hitbox's hazards,
  * as well as the widgets necessary to control it, for this frame.
  */
 void animation_editor::process_gui_hitbox_hazards() {
@@ -275,8 +276,8 @@ void animation_editor::process_gui_hitbox_hazards() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the "load" dialog for this frame.
+/**
+ * @brief Processes the "load" dialog for this frame.
  */
 void animation_editor::process_gui_load_dialog() {
     //History node.
@@ -396,8 +397,8 @@ void animation_editor::process_gui_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui menu bar for this frame.
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
  */
 void animation_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
@@ -554,8 +555,8 @@ void animation_editor::process_gui_menu_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the options dialog for this frame.
+/**
+ * @brief Processes the options dialog for this frame.
  */
 void animation_editor::process_gui_options_dialog() {
     //Controls node.
@@ -596,8 +597,9 @@ void animation_editor::process_gui_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui animation control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui animation control panel for this frame.
+ *
  */
 void animation_editor::process_gui_panel_animation() {
     ImGui::BeginChild("animation");
@@ -1153,8 +1155,8 @@ void animation_editor::process_gui_panel_animation() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui body part control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui body part control panel for this frame.
  */
 void animation_editor::process_gui_panel_body_part() {
     ImGui::BeginChild("bodyPart");
@@ -1340,8 +1342,8 @@ void animation_editor::process_gui_panel_body_part() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui main control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void animation_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
@@ -1452,8 +1454,8 @@ void animation_editor::process_gui_panel_main() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sprite control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sprite control panel for this frame.
  */
 void animation_editor::process_gui_panel_sprite() {
     ImGui::BeginChild("sprite");
@@ -1737,8 +1739,8 @@ void animation_editor::process_gui_panel_sprite() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sprite bitmap control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sprite bitmap control panel for this frame.
  */
 void animation_editor::process_gui_panel_sprite_bitmap() {
     ImGui::BeginChild("spriteBitmap");
@@ -1923,8 +1925,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sprite hitboxes control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sprite hitboxes control panel for this frame.
  */
 void animation_editor::process_gui_panel_sprite_hitboxes() {
     ImGui::BeginChild("spriteHitboxes");
@@ -2250,8 +2252,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sprite top control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sprite top control panel for this frame.
  */
 void animation_editor::process_gui_panel_sprite_top() {
     ImGui::BeginChild("spriteTop");
@@ -2376,8 +2378,9 @@ void animation_editor::process_gui_panel_sprite_top() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sprite transform control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sprite transform control panel for
+ * this frame.
  */
 void animation_editor::process_gui_panel_sprite_transform() {
     ImGui::BeginChild("spriteTransform");
@@ -2562,8 +2565,8 @@ void animation_editor::process_gui_panel_sprite_transform() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui tools control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui tools control panel for this frame.
  */
 void animation_editor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
@@ -2618,8 +2621,8 @@ void animation_editor::process_gui_panel_tools() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui status bar for this frame.
+/**
+ * @brief Processes the Dear ImGui status bar for this frame.
  */
 void animation_editor::process_gui_status_bar() {
     //Status bar text.
@@ -2675,8 +2678,8 @@ void animation_editor::process_gui_status_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui toolbar for this frame.
+/**
+ * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void animation_editor::process_gui_toolbar() {
     //Quit button.

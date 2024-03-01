@@ -62,94 +62,139 @@ extern const float DEF_ZOOM_MIN_LEVEL;
 }
 
 
-/* ----------------------------------------------------------------------------
- * The game's configuration. It controls some rules about the game.
+/**
+ * @brief The game's configuration. It controls some rules about the game.
  */
 struct game_config {
+
+    //--- Members ---
+
     //Can a leader throw other leaders?
     bool can_throw_leaders;
+    
     //Color that represents a non-Onion carriable object when moving.
     ALLEGRO_COLOR carrying_color_move;
+    
     //Color that represents a non-Onion carriable object when stopped.
     ALLEGRO_COLOR carrying_color_stop;
+    
     //Used for the slowest carrying speed an object can go.
     float carrying_speed_base_mult;
+    
     //Used for the fastest carrying speed an object can go.
     float carrying_speed_max_mult;
+    
     //Decreases carry speed by this much per unit of weight.
     float carrying_speed_weight_mult;
+    
     //Maximum distance from the leader the cursor can go.
     float cursor_max_dist;
+    
     //How much the cursor spins per second.
     float cursor_spin_speed;
+    
     //The day ends when the in-game minutes reach this value.
     float day_minutes_end;
+    
     //The in-game minutes start with this value every day.
     float day_minutes_start;
+    
     //A leader can grab a group member only within this range.
     float group_member_grab_range;
+    
     //Idle Pikmin are only bumped if away from a leader for these many seconds.
     float idle_bump_delay;
+    
     //Idle Pikmin will be bumped by a leader within this distance.
     float idle_bump_range;
+    
     //Idle Pikmin will go for a task if they are within this distance of it.
     float idle_task_range;
+    
     //Standard leader order.
     vector<leader_type*> leader_order;
+    
     //Loaded strings representing the standard leader order. Used for later.
     vector<string> leader_order_strings;
+    
     //Every level of maturity, multiply the attack power by 1 + this much.
     float maturity_power_mult;
+    
     //Every level of maturity, multiply the speed by 1 + this much.
     float maturity_speed_mult;
+    
     //Maximum number of Pikmin that can be out in the field at once.
     size_t max_pikmin_in_field;
+    
     //These many seconds until a new character of the message is drawn.
     float message_char_interval;
+    
     //Name of the game.
     string name;
+    
     //How far a leader can go to auto-pluck the next Pikmin.
     float next_pluck_range;
+    
     //Color that represents the absence of Pikmin.
     ALLEGRO_COLOR no_pikmin_color;
+    
     //Onions can be opened if the leader is within this distance.
     float onion_open_range;
+    
     //Pikmin will only chase enemies in this range.
     float pikmin_chase_range;
+    
     //Standard Pikmin order.
     vector<pikmin_type*> pikmin_order;
+    
     //Loaded strings representing the standard Pikmin order. Used for later.
     vector<string> pikmin_order_strings;
+    
     //A leader can start the plucking mode if they're this close.
     float pluck_range;
+    
     //Loaded strings representing the standard spray order. Used for later.
     vector<string> spray_order_strings;
+    
     //A standard leader is this tall.
     float standard_leader_height;
+    
     //A standard leader has this radius.
     float standard_leader_radius;
+    
     //A standard Pikmin is this tall.
     float standard_pikmin_height;
+    
     //A standard Pikmin has this radius.
     float standard_pikmin_radius;
+    
     //Pikmin that are swarming can go for tasks within this range.
     float swarm_task_range;
+    
     //Maximum distance from the leader that a throw can be aimed to.
     float throw_max_dist;
+    
     //Version of the game.
     string version;
+    
     //Speed at which the whistle grows.
     float whistle_growth_speed;
+    
     //Maximum distance from the leader that the whistle can start from.
     float whistle_max_dist;
+    
     //The closest zoom level the player can get.
     float zoom_max_level;
+    
     //The farthest zoom level the player can get.
     float zoom_min_level;
     
+
+    //--- Function declarations ---
+
+    game_config();
     void load(data_node* file);
     
-    game_config();
 };
 
 

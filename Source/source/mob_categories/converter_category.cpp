@@ -16,8 +16,9 @@
 #include "../mobs/converter.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the converter category.
+/**
+ * @brief Constructs a new converter category object.
+ *
  */
 converter_category::converter_category() :
     mob_category(
@@ -28,8 +29,8 @@ converter_category::converter_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of converters.
+/**
+ * @brief Clears the list of registered types of converters.
  */
 void converter_category::clear_types() {
     for(auto &t : game.mob_types.converter) {
@@ -39,14 +40,13 @@ void converter_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a converter and adds it to the list of converters.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a converter and adds it to the list of converters.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* converter_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,18 +57,20 @@ mob* converter_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of converter.
+/**
+ * @brief Creates a new, empty type of converter.
+ *
+ * @return The type.
  */
 mob_type* converter_category::create_type() {
     return new converter_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a converter from the list of converters.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a converter from the list of converters.
+ *
+ * @param m The mob to erase.
  */
 void converter_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.converters.erase(
@@ -81,10 +83,11 @@ void converter_category::erase_mob(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of converter given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of converter given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* converter_category::get_type(const string &name) const {
     auto it = game.mob_types.converter.find(name);
@@ -93,10 +96,10 @@ mob_type* converter_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of converter by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of converter by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void converter_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.converter) {
@@ -105,10 +108,10 @@ void converter_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of converter.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of converter.
+ *
+ * @param type Mob type to register.
  */
 void converter_category::register_type(mob_type* type) {
     game.mob_types.converter[type->name] = (converter_type*) type;

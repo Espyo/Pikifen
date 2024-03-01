@@ -15,8 +15,8 @@
 #include "../mob_fsms/drop_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of drop.
+/**
+ * @brief Constructs a new drop type object.
  */
 drop_type::drop_type() :
     mob_type(MOB_CATEGORY_DROPS),
@@ -35,8 +35,8 @@ drop_type::drop_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector drop_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -48,10 +48,10 @@ anim_conversion_vector drop_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void drop_type::load_properties(data_node* file) {
     reader_setter rs(file);

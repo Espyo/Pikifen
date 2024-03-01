@@ -17,8 +17,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of resource.
+/**
+ * @brief Constructs a new resource type object.
  */
 resource_type::resource_type() :
     mob_type(MOB_CATEGORY_RESOURCES),
@@ -37,8 +37,10 @@ resource_type::resource_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector resource_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -47,10 +49,10 @@ anim_conversion_vector resource_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void resource_type::load_properties(data_node* file) {
     reader_setter rs(file);

@@ -14,12 +14,12 @@
 #include "allegro_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Checks if two colors are the same.
- * c1:
- *   First color.
- * c2:
- *   Second color.
+/**
+ * @brief Checks if two colors are the same.
+ *
+ * @param c1 First color.
+ * @param c2 Second color.
+ * @return Whether they are the same.
  */
 bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
     if(c1.r != c2.r) return false;
@@ -29,24 +29,23 @@ bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if two colors are different.
- * c1:
- *   First color.
- * c2:
- *   Second color.
+/**
+ * @brief Checks if two colors are different.
+ *
+ * @param c1 First color.
+ * @param c2 Second color.
+ * @return Whether they are the same.
  */
 bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
     return !operator==(c1, c2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Like an std::getline(), but for ALLEGRO_FILE*.
- * file:
- *   Allegro file handle.
- * line:
- *   String to save the line into.
+/**
+ * @brief Like an std::getline(), but for ALLEGRO_FILE*.
+ *
+ * @param file Allegro file handle.
+ * @param line String to save the line into.
  */
 void getline(ALLEGRO_FILE* file, string &line) {
     line.clear();
@@ -94,27 +93,20 @@ void getline(ALLEGRO_FILE* file, string &line) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calls al_set_clipping_rectangle, but makes sure that the new clipping
+/**
+ * @brief Calls al_set_clipping_rectangle, but makes sure that the new clipping
  * rectangle is inside of an older one, as to not suddenly start drawing
  * in places that the older rectangle said not to.
  * The order doesn't really matter.
- * x1:
- *   First rectangle's top-left X coordinate.
- * y1:
- *   First rectangle's top-left Y coordinate.
- * w1:
- *   First rectangle's width.
- * h1:
- *   First rectangle's width.
- * x2:
- *   Second rectangle's top-left X coordinate.
- * y2:
- *   Second rectangle's top-left Y coordinate.
- * w2:
- *   Second rectangle's width.
- * h2:
- *   Second rectangle's width.
+ *
+ * @param x1 First rectangle's top-left X coordinate.
+ * @param y1 First rectangle's top-left Y coordinate.
+ * @param w1 First rectangle's width.
+ * @param h1 First rectangle's width.
+ * @param x2 Second rectangle's top-left X coordinate.
+ * @param y2 Second rectangle's top-left Y coordinate.
+ * @param w2 Second rectangle's width.
+ * @param h2 Second rectangle's width.
  */
 void set_combined_clipping_rectangles(
     float x1, float y1, float w1, float h1,

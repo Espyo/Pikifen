@@ -14,13 +14,13 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a game state.
+/**
+ * @brief Constructs a new game state object.
  */
 game_state::game_state() { }
 
 
-/* ----------------------------------------------------------------------------
- * Updates any transformations. Unused.
+/**
+ * @brief Updates any transformations. Unused.
  */
 void game_state::update_transformations() { }

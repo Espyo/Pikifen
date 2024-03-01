@@ -59,205 +59,302 @@ extern const float SWARM_ARROW_SPEED;
 
 //Types of interludes -- stuff before or after gameplay proper in the area.
 enum INTERLUDES {
+
     //None.
     INTERLUDE_NONE,
+    
     //Ready?
     INTERLUDE_READY,
+    
     //Mission end, be it due to a clear or a fail.
     INTERLUDE_MISSION_END,
+
 };
 
 
 //Types of big messages -- text that appears in large letters on-screen.
 enum BIG_MESSAGES {
+    
     //None.
     BIG_MESSAGE_NONE,
+    
     //Ready?
     BIG_MESSAGE_READY,
+    
     //Go!
     BIG_MESSAGE_GO,
+    
     //Mission clear!
     BIG_MESSAGE_MISSION_CLEAR,
+    
     //Mission failed...
     BIG_MESSAGE_MISSION_FAILED,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * Standard gameplay state. This is where the action happens.
+/**
+ * @brief Standard gameplay state. This is where the action happens.
  */
 class gameplay_state : public game_state {
+
 public:
 
-    gameplay_state();
+    //--- Members ---
     
     //Is the player playing after hours?
     bool after_hours;
+
     //How many seconds since area load. Doesn't count when things are paused.
     float area_time_passed;
+
     //Timer used to fade out the area's title when the area is entered.
     timer area_title_fade_timer;
+
     //Leaders available to control.
     vector<leader*> available_leaders;
+
     //Fog effect buffer.
     ALLEGRO_BITMAP* bmp_fog;
+
     //Closest to player 1's leader, for the previous, current, next type.
     mob* closest_group_member[3];
+
     //Is the group member closest to player 1's leader distant?
     bool closest_group_member_distant;
+
     //Index of player 1's current leader, in the array of available leaders.
     size_t cur_leader_nr;
+
     //Pointer to player 1's leader. Cache for convenience.
     leader* cur_leader_ptr;
+
     //What day it is, in-game.
     size_t day;
+
     //What time of the day is it in-game? In minutes.
     float day_minutes;
+
     //Multiply the delta_t by this much. Only affects gameplay stuff, not menus.
     float delta_t_mult;
+
     //Replay of the gameplay.
     replay gameplay_replay;
+
     //How many seconds of actual playtime. Only counts on player control.
     float gameplay_time_passed;
+
     //Information about the in-game HUD.
     hud_struct* hud;
+
     //Position of the last enemy killed. LARGE_FLOAT for none.
     point last_enemy_killed_pos;
+
     //Position of the last leader to get hurt. LARGE_FLOAT for none.
     point last_hurt_leader_pos;
+
     //Position of the last Pikmin born. LARGE_FLOAT for none.
     point last_pikmin_born_pos;
+
     //Position of the last Pikmin that died. LARGE_FLOAT for none.
     point last_pikmin_death_pos;
+
     //Position of the last ship that got a treasure. LARGE_FLOAT for none.
     point last_ship_that_got_treasure_pos;
+
     //Player 1's leader cursor, in screen coordinates.
     point leader_cursor_s;
+
     //Sector that player 1's leader cursor is on, if any.
     sector* leader_cursor_sector;
+
     //Player 1's leader cursor, in world coordinates.
     point leader_cursor_w;
+
     //List of all mobs in the area.
     mob_lists mobs;
+
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+
     //ID of the next mob to be created.
     size_t next_mob_id;
+
     //Current notification.
     notification_struct notification;
+
     //Manager of all particles.
     particle_manager particles;
+
     //Path manager.
     path_manager path_mgr;
+
     //Path of the folder of the area to be loaded.
     string path_of_area_to_load;
+
     //All droplets of precipitation.
     vector<point> precipitation;
+
     //Time until the next drop of precipitation.
     timer precipitation_timer;
+
     //Spray that player 1 has currently selected.
     size_t selected_spray;
+
     //How many of each spray/ingredients player 1 has.
     vector<spray_stats_struct> spray_stats;
+
     //All types of subgroups.
     subgroup_type_manager subgroup_types;
+
     //Angle at which player 1 is swarming.
     float swarm_angle;
+
     //General intensity of player 1's swarm in the specified angle.
     float swarm_magnitude;
+
     //Destination of player 1's throw.
     point throw_dest;
+
     //Mob that player 1's throw will land on, if any.
     mob* throw_dest_mob;
+
     //Sector that player 1's throw will land on, if any.
     sector* throw_dest_sector;
+
     //Are we currently loading the gameplay state?
     bool loading;
+
     //Are we currently unloading the gameplay state?
     bool unloading;
+
     //Have we went to the results screen yet?
     bool went_to_results;
+
     //Information about player 1's whistle.
     whistle_struct whistle;
+
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_remaining_mob_ids;
+
     //How many mobs are required for the mission goal. Cache for convenience.
     size_t mission_required_mob_amount;
+
     //How many Pikmin were born so far.
     size_t pikmin_born;
+
     //How many Pikmin deaths so far.
     size_t pikmin_deaths;
+
     //How many treasures collected so far.
     size_t treasures_collected;
+
     //How many treasures exist in total.
     size_t treasures_total;
+
     //How many mission goal treasures were collected so far.
     size_t goal_treasures_collected;
+
     //How many mission goal treasures exist in total.
     size_t goal_treasures_total;
+
     //How many treasure points collected so far.
     size_t treasure_points_collected;
+
     //How many treasure points exist in total.
     size_t treasure_points_total;
+
     //How many enemy deaths so far.
     size_t enemy_deaths;
+
     //How many enemies exist in total.
     size_t enemy_total;
+
     //How many enemy points collected so far.
     size_t enemy_points_collected;
+
     //How many enemy points exist in total.
     size_t enemy_points_total;
+
     //Reason for mission fail, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
+
     //Current mission score, for use in the HUD.
     int mission_score;
+
     //Mission score in the previous frame.
     int old_mission_score;
+
     //GUI item with the mission score's text.
     gui_item* mission_score_cur_text;
+
     //Mission goal current count in the previous frame.
     int old_mission_goal_cur;
+
     //GUI item with the mission goal current count's text.
     gui_item* mission_goal_cur_text;
+
     //Mission goal primary fail condition count in the previous frame.
     int old_mission_fail_1_cur;
+
     //GUI item with the mission primary fail condition current count's text.
     gui_item* mission_fail_1_cur_text;
+
     //Mission goal secondary fail condition count in the previous frame.
     int old_mission_fail_2_cur;
+
     //GUI item with the mission secondary fail condition current count's text.
     gui_item* mission_fail_2_cur_text;
+
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
+
     //Current number of living leaders. Cache for convenience.
     size_t nr_living_leaders;
+
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
+
     //Starting number of leader mobs.
     size_t starting_nr_of_leaders;
+
     //Ratio of the mission goal HUD item's indicator.
     float goal_indicator_ratio;
+
     //Ratio of the mission primary fail condition HUD item's indicator.
     float fail_1_indicator_ratio;
+
     //Ratio of the mission secondary fail condition HUD item's indicator.
     float fail_2_indicator_ratio;
+
     //Position of the mission score HUD item's indicator.
     float score_indicator;
+
     //Current interlude, if any.
     INTERLUDES cur_interlude;
+
     //Time passed in the current interlude.
     float interlude_time;
+
     //Current big message, if any.
     BIG_MESSAGES cur_big_msg;
+
     //Time passed in the current big message.
     float big_msg_time;
+
     //Zoom level to use on the radar.
     float radar_zoom;
+
     //Number of Pikmin born so far, per type.
     map<pikmin_type*, long> pikmin_born_per_type;
+
     //Number of Pikmin lost so far, per type.
     map<pikmin_type*, long> pikmin_deaths_per_type;
     
+
+    //--- Function declarations ---
+
+    gameplay_state();
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
@@ -269,7 +366,6 @@ public:
     long get_amount_of_total_pikmin(const pikmin_type* filter = NULL);
     void update_available_leaders();
     void update_closest_group_members();
-    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -280,42 +376,63 @@ public:
     
 private:
 
+    //--- Members ---
+
     //Points to an interactable close enough for player 1 to use, if any.
     interactable* close_to_interactable_to_use;
+
     //Points to a nest-like object close enough for player 1 to open, if any.
     pikmin_nest_struct* close_to_nest_to_open;
+    
     //Points to a Pikmin close enough for player 1 to pluck, if any.
     pikmin* close_to_pikmin_to_pluck;
+
     //Points to a ship close enough for player 1 to heal in, if any.
     ship* close_to_ship_to_heal;
+
     //Ligthten player 1's cursor by this due to leader/cursor height difference.
     float cursor_height_diff_light;
+
     //Movement of player 1's cursor via non-mouse means.
     movement_struct cursor_movement;
+
     //Is input enabled, for reasons outside the ready_for_input variable?
     bool is_input_allowed;
+
     //Bitmap that lights up the area when in blackout mode.
     ALLEGRO_BITMAP* lightmap_bmp;
+
     //Movement of player 1's leader.
     movement_struct leader_movement;
+
     //Information about the current Onion menu, if any.
     onion_menu_struct* onion_menu;
+
     //Information about the current pause menu, if any.
     pause_menu_struct* pause_menu;
+
     //Is the gameplay paused?
     bool paused;
+
     //Are we currently playing boss music?
     bool playing_boss_music;
+
     //The first frame shouldn't allow for input just yet, because
     //some things are still being set up within the first logic loop.
     //So forbid input until the second frame.
     bool ready_for_input;
+
     //Timer for the next replay state save.
     timer replay_timer;
+
     //Is player 1 holding the "swarm to cursor" button?
     bool swarm_cursor;
+
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
+    
+
+    //--- Function declarations ---
     
     void do_aesthetic_leader_logic(const float delta_t);
     void do_aesthetic_logic(const float delta_t);
@@ -365,6 +482,7 @@ private:
     );
     void process_system_key_press(const int keycode);
     void unload_game_content();
+    
 };
 
 

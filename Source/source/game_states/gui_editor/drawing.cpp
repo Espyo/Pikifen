@@ -14,8 +14,8 @@
 #include "../../utils/allegro_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Handles the drawing part of the main loop of the GUI editor.
+/**
+ * @brief Handles the drawing part of the main loop of the GUI editor.
  */
 void gui_editor::do_drawing() {
     //Render what is needed for the (Dear ImGui) GUI.
@@ -36,9 +36,9 @@ void gui_editor::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draw the canvas. This is called as a callback inside the
- * ImGui rendering process.
+/**
+ * @brief Draw the canvas. This is called as a callback inside the
+ * Dear ImGui rendering process.
  */
 void gui_editor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);

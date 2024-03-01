@@ -22,29 +22,39 @@
 
 
 namespace GAME {
+
 //Standard color of the mouse cursor.
 const ALLEGRO_COLOR CURSOR_STANDARD_COLOR = al_map_rgb(188, 230, 230);
+
 //Maximum alpha of the cursor's trail -- the alpha value near the cursor.
 const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
+
 //Maximum width of the cursor's trail -- the width value near the cursor.
 const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
+
 //How far the cursor must move from its current spot before the next spot.
 const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
+
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
+
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
+
 //Duration of full-screen fades.
 const float FADE_DURATION = 0.15f;
+
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
+
 //Only save the latest N FPS samples.
 const size_t FRAMERATE_HISTORY_SIZE = 300;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructor for the game class.
+/**
+ * @brief Constructs a new game class object.
  */
 game_class::game_class() :
     bitmaps(""),
@@ -97,15 +107,14 @@ game_class::game_class() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to a different game state.
- * new_state:
- *   State to change to.
- * unload_current:
- *   If true, the current state is unloaded from memory.
- * load_new:
- *   If true, the new state is loaded to memory. If you try to change to
- *   that state when it is not loaded, things will go wrong.
+/**
+ * @brief Changes to a different game state.
+ *
+ * @param new_state State to change to.
+ * @param unload_current If true, the current state is unloaded from memory.
+ * @param load_new If true, the new state is loaded to memory.
+ * If you try to change to that state when it is not loaded,
+ * things will go wrong.
  */
 void game_class::change_state(
     game_state* new_state, const bool unload_current, const bool load_new
@@ -121,7 +130,7 @@ void game_class::change_state(
         cur_state->load();
     }
     
-    //Because during the loading screens, there is no activity, on the
+    //Because during the loading screens there is no activity, on the
     //next frame, the game will assume the time between that and the last
     //non-loading frame is normal. This could be something like 2 seconds.
     //Let's reset the delta_t, then.
@@ -129,11 +138,11 @@ void game_class::change_state(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether the player has pressed some system-related key combination,
- * and acts accordingly.
- * ev:
- *   The Allegro event behind the key press.
+/**
+ * @brief Checks whether the player has pressed some system-related
+ * key combination, and acts accordingly.
+ *
+ * @param ev The Allegro event behind the key press.
  */
 void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
     switch(ev.keyboard.keycode) {
@@ -170,8 +179,8 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Performs some global logic to run every frame.
+/**
+ * @brief Performs some global logic to run every frame.
  */
 void game_class::do_global_logic() {
     //Cursor trail.
@@ -184,8 +193,10 @@ void game_class::do_global_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of the current state.
+/**
+ * @brief Returns the name of the current state.
+ *
+ * @return The name.
  */
 string game_class::get_cur_state_name() const {
     if(cur_state) {
@@ -195,10 +206,10 @@ string game_class::get_cur_state_name() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev Event to handle.
  */
 void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(
@@ -212,9 +223,9 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * The main loop of the program. Processes events, ticks frames of gameplay,
- * etc.
+/**
+ * @brief The main loop of the program. Processes events,
+ * ticks frames of gameplay, etc.
  */
 void game_class::main_loop() {
     //Used to calculate the time difference between the current and last frames.
@@ -295,8 +306,8 @@ void game_class::main_loop() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Shuts down the program, cleanly freeing everything.
+/**
+ * @brief Shuts down the program, cleanly freeing everything.
  */
 void game_class::shutdown() {
     if(perf_mon) {
@@ -316,9 +327,10 @@ void game_class::shutdown() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts up the program, setting up everything that's necessary.
- * Returns 0 if everything is okay, otherwise a return code to quit the
+/**
+ * @brief Starts up the program, setting up everything that's necessary.
+ *
+ * @return 0 if everything is okay, otherwise a return code to quit the
  * program with.
  */
 int game_class::start() {
@@ -426,20 +438,20 @@ int game_class::start() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads a loaded state that never got to be unloaded. This should only
+/**
+ * @brief Unloads a loaded state that never got to be unloaded. This should only
  * be the case if change_state was called with instructions to not
  * unload the previous one.
- * loaded_state:
- *   Loaded state to unload.
+ *
+ * @param loaded_state Loaded state to unload.
  */
 void game_class::unload_loaded_state(game_state* loaded_state) {
     loaded_state->unload();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a game state list struct.
+/**
+ * @brief Constructs a new game state list object.
  */
 game_state_list::game_state_list() :
     animation_ed(nullptr),
@@ -456,8 +468,8 @@ game_state_list::game_state_list() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys the states in the list.
+/**
+ * @brief Destroys the states in the list.
  */
 void game_state_list::destroy() {
     delete animation_ed;
@@ -483,8 +495,8 @@ void game_state_list::destroy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the states in the list.
+/**
+ * @brief Initializes the states in the list.
  */
 void game_state_list::init() {
     animation_ed = new animation_editor();

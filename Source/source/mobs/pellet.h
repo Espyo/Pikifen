@@ -16,22 +16,27 @@
 #include "mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * A pellet can be delivered to an Onion in
+/**
+ * @brief A pellet can be delivered to an Onion in
  * order to generate more Pikmin.
  * Delivering a pellet to the matching Onion
  * results in more Pikmin being created.
  */
 class pellet : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of pellet it is.
     pellet_type* pel_type;
     
-    //Constructor.
-    pellet(const point &pos, pellet_type* type, const float angle);
     
-    //Mob drawing routine.
+    //--- Function declarations ---
+    
+    pellet(const point &pos, pellet_type* type, const float angle);
     void draw_mob() override;
+    
 };
 
 

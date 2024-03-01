@@ -18,16 +18,15 @@
 #include "string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string representing an amount, and the unit, though the unit
+/**
+ * @brief Returns a string representing an amount, and the unit, though the unit
  * is in either plural form or singular form, depending on the amount.
- * amount:
- *   Amount to compare against.
- * singular_text:
- *   Text to write if the amount is singular.
- * plural_text:
- *   Text to write if the amount is plural. If empty, it'll use the singular
- *   text plus an 's'.
+ *
+ * @param amount Amount to compare against.
+ * @param singular_text Text to write if the amount is singular.
+ * @param plural_text Text to write if the amount is plural.
+ * If empty, it'll use the singular text plus an 's'.
+ * @return The string.
  */
 string amount_str(
     const int amount, const string &singular_text, const string &plural_text
@@ -44,26 +43,27 @@ string amount_str(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a boolean to a string, returning either "true" or "false".
- * b:
- *   Boolean to convert.
+/**
+ * @brief Converts a boolean to a string, returning either "true" or "false".
+ *
+ * @param b Boolean to convert.
+ * @return The string.
  */
 string b2s(const bool b) {
     return b ? "true" : "false";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Boxes a string so that it becomes a specific size.
+/**
+ * @brief Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
- * s:
- *   String to box.
- * size:
- *   Maximum size of the return string.
- * finisher:
- *   This comes after s and before the padding (if any). This must
- *   always be present, even if that means that s needs to get truncated.
+ *
+ * @param s String to box.
+ * @param size Maximum size of the return string.
+ * @param finisher This comes after s and before the padding (if any).
+ * This must always be present, even if that means that s needs to
+ * get truncated.
+ * @return The boxed string.
  */
 string box_string(const string &s, const size_t size, const string &finisher) {
     assert(size > finisher.size());
@@ -75,27 +75,28 @@ string box_string(const string &s, const size_t size, const string &finisher) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Duplicates a string.
+/**
+ * @brief Duplicates a string.
+ *
  * This is necessary because under C++11, with _GLIBCXX_USE_CXX11_ABI=0,
  * assigning a string to another string (e.g. "str_a = str_b") will cause it
  * to use the same C-string pointer. This could be undesirable in some cases.
  * This function creates a copy of a string while ensuring the underlying
  * C-string pointer is different.
- * orig_str:
- *   Original string.
- * new_str:
- *   Reference to the new string.
+ *
+ * @param orig_str Original string.
+ * @param new_str Reference to the new string.
  */
 void duplicate_string(const string &orig_str, string &new_str) {
     new_str = string(orig_str.c_str());
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a float to a string, with 4 decimal places.
- * f:
- *   Float to convert.
+/**
+ * @brief Converts a float to a string, with 4 decimal places.
+ *
+ * @param f Float to convert.
+ * @return The string.
  */
 string f2s(const float f) {
     std::stringstream s;
@@ -104,15 +105,14 @@ string f2s(const float f) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a substring representing the start of one string, up until it
+/**
+ * @brief Returns a substring representing the start of one string, up until it
  * no longer matches with the other string.
  * This check is case-sensitive.
- * Returns an empty string if there's no match.
- * s1:
- *   First string.
- * s2:
- *   Second string.
+ *
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @return The match, or an empty string if there's no match.
  */
 string get_matching_string_starts(const string &s1, const string &s2) {
     size_t chars_to_check = std::min(s1.size(), s2.size());
@@ -132,10 +132,11 @@ string get_matching_string_starts(const string &s1, const string &s2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if the contents of a string are a number or not.
- * s:
- *   String to check.
+/**
+ * @brief Checks if the contents of a string are a number or not.
+ *
+ * @param s String to check.
+ * @return Whether it is a number.
  */
 bool is_number(const string &s) {
     for(size_t c = 0; c < s.size(); ++c) {
@@ -148,16 +149,16 @@ bool is_number(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string that contains an amount, then a space, then a word in
+/**
+ * @brief Returns a string that contains an amount, then a space, then a word in
  * either singular form or plural form, depending on the amount.
- * amount:
- *   The amount to use.
- * singular_form:
- *   The string in singular form.
- * plural_form:
- *   The string in plural form. If empty, then the function uses the singular
- *   form, but with an added "s" at the end.
+ *
+ * @param amount The amount to use.
+ * @param singular_form The string in singular form.
+ * @param plural_form The string in plural form.
+ * If empty, then the function uses the singular form, but with an added
+ * "s" at the end.
+ * @return The string.
  */
 string nr_and_plural(
     const size_t amount, const string &singular_form, const string &plural_form
@@ -176,16 +177,15 @@ string nr_and_plural(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Pads a given string such that it is at least the given size.
+/**
+ * @brief Pads a given string such that it is at least the given size.
  * It uses the provided character to pad out the remaining space.
  * This only pads the left side of the string.
- * s:
- *   String to pad.
- * size:
- *   Final minimum string size.
- * padding:
- *   What character to pad with.
+ *
+ * @param s String to pad.
+ * @param size Final minimum string size.
+ * @param padding What character to pad with.
+ * @return The padded string.
  */
 string pad_string(const string &s, const size_t size, const char padding) {
     string result = s;
@@ -196,11 +196,12 @@ string pad_string(const string &s, const size_t size, const char padding) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a file name as a string, it removes the extension.
- * Returns the string as it is if there is no extension.
- * s:
- *   String to remove the extension from.
+/**
+ * @brief Given a file name as a string, it removes the extension.
+ *
+ * @param s String to remove the extension from.
+ * @return The file name without an extension, or the original string if there
+ * was no extension.
  */
 string remove_extension(const string &s) {
     size_t pos = s.find_last_of('.');
@@ -211,14 +212,13 @@ string remove_extension(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Replaces all instances of x with y.
- * s:
- *   String with the text to change.
- * search:
- *   Search term that will be replaced.
- * replacement:
- *   What to replace found search terms with.
+/**
+ * @brief Replaces all instances of x with y.
+ *
+ * @param s String with the text to change.
+ * @param search Search term that will be replaced.
+ * @param replacement What to replace found search terms with.
+ * @return The string with the instances replaced.
  */
 string replace_all(string s, const string &search, const string &replacement) {
     size_t pos = s.find(search);
@@ -231,11 +231,12 @@ string replace_all(string s, const string &search, const string &replacement) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to a boolean, judging by
+/**
+ * @brief Converts a string to a boolean, judging by
  * the English language words that represent true and false.
- * s:
- *   String to convert.
+ *
+ * @param s String to convert.
+ * @return The boolean.
  */
 bool s2b(const string &s) {
     string s2 = s;
@@ -246,11 +247,12 @@ bool s2b(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to a float,
+/**
+ * @brief Converts a string to a float,
  * trimming the spaces and accepting commas or points.
- * s:
- *   String to convert.
+ *
+ * @param s String to convert.
+ * @return The float.
  */
 double s2f(const string &s) {
     string s2 = trim_spaces(s);
@@ -259,28 +261,27 @@ double s2f(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to an integer.
- * s:
- *   String to convert.
+/**
+ * @brief Converts a string to an integer.
+ *
+ * @param s String to convert.
+ * @return The integer.
  */
 int s2i(const string &s) {
     return (int) s2f(s);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Splits a string into several substrings, by the specified delimiter.
- * text:
- *   The string to split.
- * del:
- *   The delimiter. Default is space.
- * inc_empty:
- *   If true, include empty substrings on the vector.
- *   i.e. if two delimiters come together in a row,
- *   keep an empty substring between.
- * inc_del:
- *   If true, include the delimiters on the vector as a substring.
+/**
+ * @brief Splits a string into several substrings, by the specified delimiter.
+ *
+ * @param text The string to split.
+ * @param del The delimiter. Default is space.
+ * @param inc_empty If true, include empty substrings on the vector.
+ * i.e. if two delimiters come together in a row,
+ * keep an empty substring between.
+ * @param inc_del If true, include the delimiters on the vector as a substring.
+ * @return The substrings.
  */
 vector<string> split(
     string text, const string &del, const bool inc_empty, const bool inc_del
@@ -322,15 +323,14 @@ vector<string> split(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Peeks the next characters in a string, and returns whether they match
+/**
+ * @brief Peeks the next characters in a string, and returns whether they match
  * the specified filter.
- * s:
- *   String to parse.
- * where:
- *   What character index to start peeking at.
- * match:
- *   What string to match with.
+ *
+ * @param s String to parse.
+ * @param where What character index to start peeking at.
+ * @param match What string to match with.
+ * @return Whether it matches.
  */
 bool str_peek(const string &s, const size_t where, const string &match) {
     if(where + match.size() > s.size()) return false;
@@ -338,10 +338,11 @@ bool str_peek(const string &s, const size_t where, const string &match) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts an entire string into lowercase.
- * s:
- *   String to convert.
+/**
+ * @brief Converts an entire string into lowercase.
+ *
+ * @param s String to convert.
+ * @return The string in lowercase.
  */
 string str_to_lower(string s) {
     size_t n_characters = s.size();
@@ -352,10 +353,11 @@ string str_to_lower(string s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts an entire string into titlecase.
- * s:
- *   String to convert.
+/**
+ * @brief Converts an entire string into title case.
+ *
+ * @param s String to convert.
+ * @return The string in title case.
  */
 string str_to_title(string s) {
     size_t letter_streak = 0;
@@ -376,10 +378,11 @@ string str_to_title(string s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts an entire string into uppercase.
- * s:
- *   String to convert.
+/**
+ * @brief Converts an entire string into uppercase.
+ *
+ * @param s String to convert.
+ * @return The string in uppercase.
  */
 string str_to_upper(string s) {
     size_t n_characters = s.size();
@@ -390,17 +393,16 @@ string str_to_upper(string s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Represents units of time in a more human-readable format, by dividing the
- * units by 60 so that you end up with two portions.
- * units:
- *   How many units of time in total.
- * suffix1:
- *   Suffix for the first portion. Can be empty.
- * suffix2:
- *   Suffix for the second portion. Can be empty.
- * flags:
- *   Flags to change behavior with. Use the TIME_TO_STR_FLAGS bitmask.
+/**
+ * @brief Represents units of time in a more human-readable format,
+ * by dividing the units by 60 so that you end up with two portions.
+ *
+ * @param units How many units of time in total.
+ * @param suffix1 Suffix for the first portion. Can be empty.
+ * @param suffix2 Suffix for the second portion. Can be empty.
+ * @param flags Flags to change behavior with.
+ * Use the TIME_TO_STR_FLAGS bitmask.
+ * @return The time string.
  */
 string time_to_str2(
     const size_t units,
@@ -433,19 +435,17 @@ string time_to_str2(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Represents units of time in a more human-readable format, by dividing the
- * units by 60 so that you end up with three portions.
- * units:
- *   How many units of time in total.
- * suffix1:
- *   Suffix for the first portion. Can be empty.
- * suffix2:
- *   Suffix for the second portion. Can be empty.
- * suffix3:
- *   Suffix for the third portion. Can be empty.
- * flags:
- *   Flags to change behavior with. Use the TIME_TO_STR_FLAGS bitmask.
+/**
+ * @brief Represents units of time in a more human-readable format,
+ * by dividing the units by 60 so that you end up with three portions.
+ *
+ * @param units How many units of time in total.
+ * @param suffix1 Suffix for the first portion. Can be empty.
+ * @param suffix2 Suffix for the second portion. Can be empty.
+ * @param suffix3 Suffix for the third portion. Can be empty.
+ * @param flags Flags to change behavior with.
+ * Use the TIME_TO_STR_FLAGS bitmask.
+ * @return The time string.
  */
 string time_to_str3(
     const size_t units,
@@ -492,13 +492,13 @@ string time_to_str3(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes all trailing and preceding spaces.
+/**
+ * @brief Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
- * s:
- *   The original string.
- * left_only:
- *   If true, only trim the spaces at the left.
+ *
+ * @param s The original string.
+ * @param left_only If true, only trim the spaces at the left.
+ * @return The trimmed string.
  */
 string trim_spaces(const string &s, const bool left_only) {
     string orig = s;

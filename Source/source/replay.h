@@ -31,77 +31,111 @@ using std::vector;
 
 //Types of elements in a replay.
 enum REPLAY_ELEMENT_TYPES {
+
     //A leader.
     REPLAY_ELEMENT_LEADER,
+
     //A Pikmin.
     REPLAY_ELEMENT_PIKMIN,
+
     //An enemy.
     REPLAY_ELEMENT_ENEMY,
+
     //A treasure.
     REPLAY_ELEMENT_TREASURE,
+
     //An Onion.
     REPLAY_ELEMENT_ONION,
+
     //An obstacle.
     REPLAY_ELEMENT_OBSTACLE,
+
 };
 
 
 //Types of events that can happen in a replay.
 enum REPLAY_EVENT_TYPES {
+    
     //A replay element was added.
     REPLAY_EVENT_ADDED,
+    
     //A replay element was removed.
     REPLAY_EVENT_REMOVED,
+
     //The player switched to a different leader.
     REPLAY_EVENT_LEADER_SWITCHED,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * Represents a Pikmin, a leader, or any other object we want to keep in
+/**
+ * @brief Represents a Pikmin, a leader, or any other object we want to keep in
  * the replay.
  */
 struct replay_element {
+
+    //--- Members ---
+
     //Type of element this represents.
     REPLAY_ELEMENT_TYPES type;
+    
     //Its current position.
     point pos;
     
+
+    //--- Function declarations ---
+
     replay_element(const REPLAY_ELEMENT_TYPES type, const point &pos);
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * Represents some event in the playthrough that is important to save in
+/**
+ * @brief Represents some event in the playthrough that is important to save in
  * the replay, like a new element getting added, one getting removed,
  * the player switching leaders, etc.
  */
 struct replay_event {
+
+    //--- Members ---
+
     //Type of event.
     REPLAY_EVENT_TYPES type;
+    
     //Informational data about the event.
     size_t data;
     
+
+    //--- Function declarations ---
+
     replay_event(
         const REPLAY_EVENT_TYPES type, const size_t data
     );
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * Represents a point in time of the replay. This has a collection of
+/**
+ * @brief Represents a point in time of the replay. This has a collection of
  * elements, as well as their state at this point in time.
  */
 struct replay_state {
+
+    //--- Members ---
+
     //List of elements.
     vector<replay_element> elements;
+    
     //List of events that happened here.
     vector<replay_event> events;
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A replay contains data about a playthrough of an area. It contains very
+/**
+ * @brief A replay contains data about a playthrough of an area.
+ * 
+ * It contains very
  * minimal and abstract data about what happened, such as what Pikmin
  * have moved where and when, considering the replay is only meant for the
  * player to review their strategy, not to actually watch the action again.
@@ -110,12 +144,18 @@ struct replay_state {
  * relevant data of every moment.
  */
 class replay {
+
 public:
+    
+    //--- Members ---
+
     //States.
     vector<replay_state> states;
     
+
+    //--- Function declarations ---
+
     replay();
-    
     void add_state(
         const vector<leader*> &leader_list,
         const vector<pikmin*> &pikmin_list,
@@ -131,8 +171,12 @@ public:
     void save_to_file(const string &file_name) const;
     
 private:
+
+    //--- Members ---
+
     //List of mobs in the previous state.
     vector<mob*> prev_state_mobs;
+    
     //Number of the previous leader.
     size_t prev_leader_nr;
     

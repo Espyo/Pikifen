@@ -15,14 +15,12 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a resource.
- * pos:
- *   Starting coordinates.
- * type:
- *   Resource type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new resource object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Resource type this mob belongs to.
+ * @param angle Starting angle.
  */
 resource::resource(const point &pos, resource_type* type, const float angle) :
     mob(pos, type, angle),

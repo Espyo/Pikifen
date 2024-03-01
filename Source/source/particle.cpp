@@ -19,20 +19,16 @@
 #include "utils/geometry_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a particle.
- * type:
- *   The type of particle.
- * pos:
- *   Starting coordinates.
- * z:
- *   Starting Z coordinate.
- * size:
- *   Diameter.
- * duration:
- *   Total lifespan.
- * priority:
- *   Lower priority particles will be removed in favor of higher ones.
+/**
+ * @brief Constructs a new particle object.
+ *
+ * @param type The type of particle.
+ * @param pos Starting coordinates.
+ * @param z Starting Z coordinate.
+ * @param size Diameter.
+ * @param duration Total lifespan.
+ * @param priority Lower priority particles will be removed in favor
+ * of higher ones.
  */
 particle::particle(
     const PARTICLE_TYPES type, const point &pos, const float z,
@@ -54,8 +50,8 @@ particle::particle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws this particle onto the world.
+/**
+ * @brief Draws this particle onto the world.
  */
 void particle::draw() {
     switch(type) {
@@ -150,11 +146,11 @@ void particle::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks a particle's time by one frame of logic.
- * Returns false if its lifespan is over and it should be deleted.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks a particle's time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @return Whether its lifespan is over (meaning it should be deleted).
  */
 void particle::tick(const float delta_t) {
     time -= delta_t;
@@ -175,18 +171,16 @@ void particle::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a particle generator.
- * emission_interval:
- *   Interval to spawn a new set of particles in,
- *   in seconds. 0 means it spawns only one set and that's it.
- * base_particle:
- *   All particles created will be based on this one.
- *   Their properties will deviate randomly based on the
- *   deviation members of the particle generator object.
- * number:
- *   Number of particles to spawn.
- *   This number is also deviated by number_deviation.
+/**
+ * @brief Constructs a new particle generator object.
+ *
+ * @param emission_interval Interval to spawn a new set of particles in,
+ * in seconds. 0 means it spawns only one set and that's it.
+ * @param base_particle All particles created will be based on this one.
+ * Their properties will deviate randomly based on the
+ * deviation members of the particle generator object.
+ * @param number Number of particles to spawn.
+ * This number is also deviated by number_deviation.
  */
 particle_generator::particle_generator(
     const float emission_interval,
@@ -214,10 +208,10 @@ particle_generator::particle_generator(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Emits the particles, regardless of the timer.
- * manager:
- *   The particle manager to place these particles on.
+/**
+ * @brief Emits the particles, regardless of the timer.
+ *
+ * @param manager The particle manager to place these particles on.
  */
 void particle_generator::emit(particle_manager &manager) {
     point base_p_pos = base_particle.pos;
@@ -303,8 +297,8 @@ void particle_generator::emit(particle_manager &manager) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets data about the particle generator, to make it ready to
+/**
+ * @brief Resets data about the particle generator, to make it ready to
  * be used. Call this when copying from another generator.
  */
 void particle_generator::reset() {
@@ -320,12 +314,11 @@ void particle_generator::reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * manager:
- *   The manager of all particles.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param manager The manager of all particles.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
     if(follow_mob) {
@@ -348,10 +341,10 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a particle manager.
- * max_nr:
- *   Maximum number of particles it can manage.
+/**
+ * @brief Constructs a new particle manager object.
+ *
+ * @param max_nr Maximum number of particles it can manage.
  */
 particle_manager::particle_manager(const size_t &max_nr) :
     particles(nullptr),
@@ -363,10 +356,10 @@ particle_manager::particle_manager(const size_t &max_nr) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a particle manager by copying data from another.
- * pm2:
- *   Particle manager to copy from.
+/**
+ * @brief Constructs a new particle manager object by copying data from another.
+ *
+ * @param pm2 Particle manager to copy from.
  */
 particle_manager::particle_manager(const particle_manager &pm2) :
     particles(NULL),
@@ -380,10 +373,11 @@ particle_manager::particle_manager(const particle_manager &pm2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Copies a particle manager from another one.
- * pm2:
- *   Particle manager to copy from.
+/**
+ * @brief Copies a particle manager from another one.
+ *
+ * @param pm2 Particle manager to copy from.
+ * @return The current object.
  */
 particle_manager &particle_manager::operator =(
     const particle_manager &pm2
@@ -407,19 +401,19 @@ particle_manager &particle_manager::operator =(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a particle manager.
+/**
+ * @brief Destroys the particle manager object.
  */
 particle_manager::~particle_manager() {
     if(particles) delete[] particles;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new particle to the list. It will fail if there is no slot
+/**
+ * @brief Adds a new particle to the list. It will fail if there is no slot
  * where it can be added to.
- * p:
- *   Particle to add.
+ *
+ * @param p Particle to add.
  */
 void particle_manager::add(const particle &p) {
     if(max_nr == 0) return;
@@ -449,8 +443,8 @@ void particle_manager::add(const particle &p) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list.
+/**
+ * @brief Clears the list.
  */
 void particle_manager::clear() {
     for(size_t p = 0; p < max_nr; ++p) {
@@ -460,15 +454,13 @@ void particle_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds the particle pointers to the provided list of world component,
+/**
+ * @brief Adds the particle pointers to the provided list of world components,
  * so that the particles can be drawn, after being Z-sorted.
- * list:
- *   The list to populate.
- * cam_tl:
- *   Only draw particles below and to the right of this coordinate.
- * cam_br:
- *   Only draw particles above and to the left of this coordinate.
+ *
+ * @param list The list to populate.
+ * @param cam_tl Only draw particles below and to the right of this coordinate.
+ * @param cam_br Only draw particles above and to the left of this coordinate.
  */
 void particle_manager::fill_component_list(
     vector<world_component> &list,
@@ -497,18 +489,20 @@ void particle_manager::fill_component_list(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many are in the list.
+/**
+ * @brief Returns how many are in the list.
+ *
+ * @return The amount.
  */
 size_t particle_manager::get_count() const {
     return count;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes a particle from the list.
- * pos:
- *   Position in the list.
+/**
+ * @brief Removes a particle from the list.
+ *
+ * @param pos Position in the list.
  */
 void particle_manager::remove(const size_t pos) {
     if(pos > count) return;
@@ -536,10 +530,10 @@ void particle_manager::remove(const size_t pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time of all particles in the list by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time of all particles in the list by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void particle_manager::tick_all(const float delta_t) {
     for(size_t c = 0; c < count;) {

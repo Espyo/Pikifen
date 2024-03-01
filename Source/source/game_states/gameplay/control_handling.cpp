@@ -13,10 +13,10 @@
 #include "../../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Handles a player action.
- * action:
- *   Data about the action.
+/**
+ * @brief Handles a player action.
+ *
+ * @param action Data about the action.
  */
 void gameplay_state::handle_player_action(const player_action &action) {
 

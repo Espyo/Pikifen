@@ -26,56 +26,65 @@
 
 
 namespace CONTROL_BIND_ICON {
+
 //Base rectangle outline color.
 const ALLEGRO_COLOR BASE_OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, 1.0f};
+
 //Base rectangle body color.
 const ALLEGRO_COLOR BASE_RECT_COLOR = {0.45f, 0.45f, 0.45f, 1.0f};
+
 //Base text color.
 const ALLEGRO_COLOR BASE_TEXT_COLOR = {0.95f, 0.95f, 0.95f, 1.0f};
+
 //Rectangle outline thickness.
 const float OUTLINE_THICKNESS = 2.0f;
+
 //Padding between text and rectangle limit.
 const float PADDING = 4.0f;
+
 }
 
 
 namespace DRAWING {
+
 //Default healt wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
+
 //Liquid surfaces wobble by offsetting X by this much, at most.
 const float LIQUID_WOBBLE_DELTA_X = 3.0f;
+
 //Liquid surfaces wobble using this time scale.
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
+
 //Loading screen subtitle text padding.
 const int LOADING_SCREEN_PADDING = 64;
+
 //Loading screen subtitle text scale.
 const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
+
 //Notification opacity.
 const unsigned char NOTIFICATION_ALPHA = 160;
+
 //Size of a control bind icon in a notification.
 const float NOTIFICATION_CONTROL_SIZE = 24.0f;
+
 //Padding between a notification's text and its limit.
 const float NOTIFICATION_PADDING = 8.0f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a series of logos, to serve as a background.
+/**
+ * @brief Draws a series of logos, to serve as a background.
  * They move along individually, and wrap around when they reach a screen edge.
- * time_spent:
- *   How much time has passed.
- * rows:
- *   Rows of logos to draw.
- * cols:
- *   Columns of logos to draw.
- * logo_size:
- *   Width and height of the logos.
- * tint:
- *   Tint the logos with this color.
- * speed:
- *   Horizontal and vertical movement speed of each logo.
- * rotation_speed:
- *   Rotation speed of each logo.
+ *
+ * @param time_spent How much time has passed.
+ * @param rows Rows of logos to draw.
+ * @param cols Columns of logos to draw.
+ * @param logo_size Width and height of the logos.
+ * @param tint Tint the logos with this color.
+ * @param speed Horizontal and vertical movement speed of each logo.
+ * @param rotation_speed Rotation speed of each logo.
  */
 void draw_background_logos(
     const float time_spent, const size_t rows, const size_t cols,
@@ -119,19 +128,15 @@ void draw_background_logos(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a bitmap.
- * bmp:
- *   The bitmap.
- * center:
- *   Center coordinates.
- * size:
- *   Final width and height.
- *   Make this -1 on one of them to keep the aspect ratio from the other.
- * angle:
- *   Angle to rotate the bitmap by.
- * tint:
- *   Tint the bitmap with this color.
+/**
+ * @brief Draws a bitmap.
+ *
+ * @param bmp The bitmap.
+ * @param center Center coordinates.
+ * @param size Final width and height.
+ * Make this -1 on one of them to keep the aspect ratio from the other.
+ * @param angle Angle to rotate the bitmap by.
+ * @param tint Tint the bitmap with this color.
  */
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
@@ -159,23 +164,18 @@ void draw_bitmap(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a bitmap, but keeps its aspect ratio,
+/**
+ * @brief Draws a bitmap, but keeps its aspect ratio,
  * and scales it to fit in an imaginary box.
- * bmp:
- *   The bitmap.
- * center:
- *   Center coordinates.
- * box_size:
- *   Width and height of the box.
- * scale_up:
- *   If true, the bitmap is scaled up to fit the box. If false, it stays
- *   at its original size (unless it needs to be scaled down).
- * angle:
- *   Angle to rotate the bitmap by.
- *   The box does not take angling into account.
- * tint:
- *   Tint the bitmap with this color.
+ *
+ * @param bmp The bitmap.
+ * @param center Center coordinates.
+ * @param box_size Width and height of the box.
+ * @param scale_up If true, the bitmap is scaled up to fit the box.
+ * If false, it stays at its original size (unless it needs to be scaled down).
+ * @param angle Angle to rotate the bitmap by.
+ * The box does not take angling into account.
+ * @param tint Tint the bitmap with this color.
  */
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center, const point &box_size,
@@ -197,12 +197,11 @@ void draw_bitmap_in_box(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a bitmap, applying bitmap effects.
- * bmp:
- *   The bitmap.
- * effects:
- *   Effects to use.
+/**
+ * @brief Draws a bitmap, applying bitmap effects.
+ *
+ * @param bmp The bitmap.
+ * @param effects Effects to use.
  */
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
@@ -249,22 +248,17 @@ void draw_bitmap_with_effects(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a button on the screen.
- * center:
- *   Center coordinates.
- * size:
- *   Width and height.
- * text:
- *   Text inside the button.
- * font:
- *   What font to write the text in.
- * color:
- *   Color to draw the text with.
- * selected:
- *   Is the button currently selected?
- * juicy_grow_amount:
- *   If it's in the middle of a juicy grow animation, specify the amount here.
+/**
+ * @brief Draws a button on the screen.
+ *
+ * @param center Center coordinates.
+ * @param size Width and height.
+ * @param text Text inside the button.
+ * @param font What font to write the text in.
+ * @param color Color to draw the text with.
+ * @param selected Is the button currently selected?
+ * @param juicy_grow_amount If it's in the middle of a juicy grow animation,
+ * specify the amount here.
  */
 void draw_button(
     const point &center, const point &size, const string &text,
@@ -296,28 +290,21 @@ void draw_button(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws text, scaled, but also compresses (scales) it
+/**
+ * @brief Draws text, scaled, but also compresses (scales) it
  * to fit within the specified range.
- * font:
- *   Font to use.
- * color:
- *   Tint the text by this color.
- * where:
- *   Coordinates to draw it at.
- * scale:
- *   Scale to use.
- * flags:
- *   Allegro text render function flags.
- * valign:
- *   Vertical alignment.
- * max_size:
- *   The maximum width and height. Use <= 0 to have no limit.
- * scale_past_max:
- *   If true, the max size will only be taken into account when the scale is 1.
- *   If it is any bigger, it will overflow past the max size.
- * text:
- *   Text to draw.
+ *
+ * @param font Font to use.
+ * @param color Tint the text by this color.
+ * @param where Coordinates to draw it at.
+ * @param scale Scale to use.
+ * @param flags Allegro text render function flags.
+ * @param valign Vertical alignment.
+ * @param max_size The maximum width and height. Use <= 0 to have no limit.
+ * @param scale_past_max If true, the max size will only be taken into
+ * account when the scale is 1. If it is any bigger, it will overflow
+ * past the max size.
+ * @param text Text to draw.
  */
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -382,23 +369,17 @@ void draw_compressed_scaled_text(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws text on the screen, but compresses (scales) it
+/**
+ * @brief Draws text on the screen, but compresses (scales) it
  * to fit within the specified range.
- * font:
- *   Font to use.
- * color:
- *   Tint the text by this color.
- * where:
- *   Coordinates to draw it at.
- * flags:
- *   Allegro text render function flags.
- * valign:
- *   Vertical alignment.
- * max_size:
- *   The maximum width and height. Use <= 0 to have no limit.
- * text:
- *   Text to draw.
+ *
+ * @param font Font to use.
+ * @param color Tint the text by this color.
+ * @param where Coordinates to draw it at.
+ * @param flags Allegro text render function flags.
+ * @param valign Vertical alignment.
+ * @param max_size The maximum width and height. Use <= 0 to have no limit.
+ * @param text Text to draw.
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -450,18 +431,14 @@ void draw_compressed_text(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an equilateral triangle made of three lines.
- * center:
- *   Center point of the triangle.
- * radius:
- *   Radius between the center and each vertex.
- * angle:
- *   Angle at which its first vertex points.
- * color:
- *   Its color.
- * thickness:
- *   Thickness of the lines.
+/**
+ * @brief Draws an equilateral triangle made of three lines.
+ *
+ * @param center Center point of the triangle.
+ * @param radius Radius between the center and each vertex.
+ * @param angle Angle at which its first vertex points.
+ * @param color Its color.
+ * @param thickness Thickness of the lines.
  */
 void draw_equilateral_triangle(
     const point &center, float radius, float angle,
@@ -474,14 +451,12 @@ void draw_equilateral_triangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a filled diamond shape.
- * center:
- *   Center.
- * radius:
- *   How far each point of the diamond reaches from the center.
- * color:
- *   Color the diamond with this color.
+/**
+ * @brief Draws a filled diamond shape.
+ *
+ * @param center Center.
+ * @param radius How far each point of the diamond reaches from the center.
+ * @param color Color the diamond with this color.
  */
 void draw_filled_diamond(
     const point &center, const float radius, const ALLEGRO_COLOR &color
@@ -505,16 +480,13 @@ void draw_filled_diamond(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a filled equilateral triangle made.
- * center:
- *   Center point of the triangle.
- * radius:
- *   Radius between the center and each vertex.
- * angle:
- *   Angle at which its first vertex points.
- * color:
- *   Its color.
+/**
+ * @brief Draws a filled equilateral triangle made.
+ *
+ * @param center Center point of the triangle.
+ * @param radius Radius between the center and each vertex.
+ * @param angle Angle at which its first vertex points.
+ * @param color Its color.
  */
 void draw_filled_equilateral_triangle(
     const point &center, float radius, float angle,
@@ -527,17 +499,15 @@ void draw_filled_equilateral_triangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a filled rounded rectangle.
+/**
+ * @brief Draws a filled rounded rectangle.
  * This is basically Allegro's function, but safer and simpler.
- * center:
- *   Center.
- * size:
- *   Width and height.
- * radii:
- *   Radii of the corners. Will be smaller if the rectangle is too small.
- * color:
- *   Color the rectangle with this color.
+ *
+ * @param center Center.
+ * @param size Width and height.
+ * @param radii Radii of the corners. Will be smaller if the rectangle is
+ * too small.
+ * @param color Color the rectangle with this color.
  */
 void draw_filled_rounded_rectangle(
     const point &center, const point &size, const float radii,
@@ -555,20 +525,16 @@ void draw_filled_rounded_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a fraction, so one number above another, divided by a bar.
+/**
+ * @brief Draws a fraction, so one number above another, divided by a bar.
  * The top number usually represents the current value of some attribute,
  * and the bottom number usually represents the required value for some goal.
- * bottom:
- *   Bottom center point of the text.
- * value_nr:
- *   Number that represents the current value.
- * requirement_nr:
- *   Number that represents the requirement.
- * color:
- *   Color of the fraction's text.
- * scale:
- *   Scale the fraction by this much.
+ *
+ * @param bottom Bottom center point of the text.
+ * @param value_nr Number that represents the current value.
+ * @param requirement_nr Number that represents the requirement.
+ * @param color Color of the fraction's text.
+ * @param scale Scale the fraction by this much.
  */
 void draw_fraction(
     const point &bottom, const size_t value_nr,
@@ -603,19 +569,16 @@ void draw_fraction(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a health wheel, with a pieslice that's fuller the more HP is full.
- * center:
- *   Center of the wheel.
- * ratio:
- *   Ratio of health that is filled. 0 is empty, 1 is full.
- * alpha:
- *   Total opacity of the health wheel.
- * radius:
- *   Radius of the wheel (the whole wheel, not just the pieslice).
- * just_chart:
- *   If true, only draw the actual pieslice (pie-chart).
- *   Used for leader HP on the HUD.
+/**
+ * @brief Draws a health wheel, with a pieslice that's fuller the more
+ * HP is full.
+ *
+ * @param center Center of the wheel.
+ * @param ratio Ratio of health that is filled. 0 is empty, 1 is full.
+ * @param alpha Total opacity of the health wheel.
+ * @param radius Radius of the wheel (the whole wheel, not just the pieslice).
+ * @param just_chart If true, only draw the actual pieslice (pie-chart).
+ * Used for leader HP on the HUD.
  */
 void draw_health(
     const point &center,
@@ -645,18 +608,14 @@ void draw_health(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a liquid sector.
- * s_ptr:
- *   Pointer to the sector.
- * l_ptr:
- *   Pointer to the liquid.
- * where:
- *   X and Y offset.
- * scale:
- *   Scale the sector by this much.
- * time:
- *   How much time has passed. Used to animate.
+/**
+ * @brief Draws a liquid sector.
+ *
+ * @param s_ptr Pointer to the sector.
+ * @param l_ptr Pointer to the liquid.
+ * @param where X and Y offset.
+ * @param scale Scale the sector by this much.
+ * @param time How much time has passed. Used to animate.
  */
 void draw_liquid(
     sector* s_ptr, liquid* l_ptr, const point &where, const float scale,
@@ -812,14 +771,13 @@ void draw_liquid(
 
 
 
-/* ----------------------------------------------------------------------------
- * Draws the loading screen for an area (or anything else, really).
- * text:
- *   The main text to show, optional.
- * subtext:
- *   Subtext to show under the main text, optional.
- * opacity:
- *   0 to 1. The background blackness lowers in opacity much faster.
+/**
+ * @brief Draws the loading screen for an area (or anything else, really).
+ *
+ * @param text The main text to show, optional.
+ * @param subtext Subtext to show under the main text, optional.
+ * @param opacity 0 to 1. The background blackness lowers in opacity
+ * much faster.
  */
 void draw_loading_screen(
     const string &text, const string &subtext, const float opacity
@@ -1077,17 +1035,14 @@ void draw_loading_screen(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a mob's shadow.
- * center:
- *   Center of the mob.
- * diameter:
- *   Diameter of the mob.
- * delta_z:
- *   The mob is these many units above the floor directly below it.
- * shadow_stretch:
- *   How much to stretch the shadow by
- *   (used to simulate sun shadow direction casting).
+/**
+ * @brief Draws a mob's shadow.
+ *
+ * @param center Center of the mob.
+ * @param diameter Diameter of the mob.
+ * @param delta_z The mob is these many units above the floor directly below it.
+ * @param shadow_stretch How much to stretch the shadow by
+ * (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
     const point &center, const float diameter,
@@ -1121,10 +1076,10 @@ void draw_mob_shadow(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the mouse cursor.
- * color:
- *   Color to tint it with.
+/**
+ * @brief Draws the mouse cursor.
+ *
+ * @param color Color to tint it with.
  */
 void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     al_use_transform(&game.identity_transform);
@@ -1248,23 +1203,20 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an icon representing some control bind.
- * font:
- *   Font to use for the name, if necessary.
- * i:
- *   Info on the player input. If invalid, a "NONE" icon will be used.
- * condensed:
- *   If true, only the icon's fundamental information is presented. If false,
- *   disambiguation information is included too. For instance, keyboard keys
- *   that come in pairs specify whether they are the left or right key,
- *   controller inputs specify what controller number it is, etc.
- * where:
- *   Center of the place to draw at.
- * max_size:
- *   Max width or height. Used to compress it if needed. 0 = unlimited.
- * alpha:
- *   Opacity.
+/**
+ * @brief Draws an icon representing some control bind.
+ *
+ * @param font Font to use for the name, if necessary.
+ * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param condensed If true, only the icon's fundamental information is
+ * presented. If false, disambiguation information is included too.
+ * For instance, keyboard keys that come in pairs specify whether they are
+ * the left or right key, controller inputs specify what controller number
+ * it is, etc.
+ * @param where Center of the place to draw at.
+ * @param max_size Max width or height. Used to compress it if needed.
+ * 0 = unlimited.
+ * @param alpha Opacity.
  */
 void draw_player_input_icon(
     const ALLEGRO_FONT* const font, const player_input &i,
@@ -1364,18 +1316,14 @@ void draw_player_input_icon(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a rotated rectangle.
- * center:
- *   Center of the rectangle.
- * dimensions:
- *   Width and height of the rectangle.
- * angle:
- *   Angle the rectangle is facing.
- * color:
- *   Color to use.
- * thickness:
- *   Thickness to use.
+/**
+ * @brief Draws a rotated rectangle.
+ *
+ * @param center Center of the rectangle.
+ * @param dimensions Width and height of the rectangle.
+ * @param angle Angle the rectangle is facing.
+ * @param color Color to use.
+ * @param thickness Thickness to use.
  */
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,
@@ -1398,19 +1346,16 @@ void draw_rotated_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a rounded rectangle.
+/**
+ * @brief Draws a rounded rectangle.
  * This is basically Allegro's function, but safer and simpler.
- * center:
- *   Center.
- * size:
- *   Width and height.
- * radii:
- *   Radii of the corners. Will be smaller if the rectangle is too small.
- * color:
- *   Color the diamond with this color.
- * thickness:
- *   Line thickness.
+ *
+ * @param center Center.
+ * @param size Width and height.
+ * @param radii Radii of the corners. Will be smaller if the rectangle is
+ * too small.
+ * @param color Color the diamond with this color.
+ * @param thickness Line thickness.
  */
 void draw_rounded_rectangle(
     const point &center, const point &size, const float radii,
@@ -1428,22 +1373,16 @@ void draw_rounded_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws text, scaled.
- * font:
- *   Font to use.
- * color:
- *   Tint the text with this color.
- * where:
- *   Coordinates to draw in.
- * scale:
- *   Horizontal or vertical scale.
- * flags:
- *   Same flags you'd use for al_draw_text.
- * valign:
- *   Vertical alignment.
- * text:
- *   Text to draw.
+/**
+ * @brief Draws text, scaled.
+ *
+ * @param font Font to use.
+ * @param color Tint the text with this color.
+ * @param where Coordinates to draw in.
+ * @param scale Horizontal or vertical scale.
+ * @param flags Same flags you'd use for al_draw_text.
+ * @param valign Vertical alignment.
+ * @param text Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -1464,16 +1403,13 @@ void draw_scaled_text(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a sector, but only the texture (no wall shadows).
- * s_ptr:
- *   Pointer to the sector.
- * where:
- *   X and Y offset.
- * scale:
- *   Scale the sector by this much.
- * opacity:
- *   Draw the textures at this opacity, 0 - 1.
+/**
+ * @brief Draws a sector, but only the texture (no wall shadows).
+ *
+ * @param s_ptr Pointer to the sector.
+ * @param where X and Y offset.
+ * @param scale Scale the sector by this much.
+ * @param opacity Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
@@ -1608,12 +1544,11 @@ void draw_sector_texture(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a status effect's bitmap.
- * m:
- *   Mob that has this status effect.
- * effects:
- *   List of bitmap effects to use.
+/**
+ * @brief Draws a status effect's bitmap.
+ *
+ * @param m Mob that has this status effect.
+ * @param effects List of bitmap effects to use.
  */
 void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects) {
     float status_bmp_scale;
@@ -1629,24 +1564,17 @@ void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws string tokens.
- * tokens:
- *   Vector of tokens to draw.
- * text_font:
- *   Text font.
- * control_font:
- *   Font for control bind icons.
- * controls_condensed:
- *   Whether control binds should be condensed.
- * where:
- *   Top-left coordinates to draw at.
- * flags:
- *   Allegro text flags.
- * max_size:
- *   Maximum width and height of the whole thing.
- * scale:
- *   Scale each token by this amount.
+/**
+ * @brief Draws string tokens.
+ *
+ * @param tokens Vector of tokens to draw.
+ * @param text_font Text font.
+ * @param control_font Font for control bind icons.
+ * @param controls_condensed Whether control binds should be condensed.
+ * @param where Top-left coordinates to draw at.
+ * @param flags Allegro text flags.
+ * @param max_size Maximum width and height of the whole thing.
+ * @param scale Scale each token by this amount.
  */
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
@@ -1711,22 +1639,17 @@ void draw_string_tokens(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws text, but if there are line breaks,
+/**
+ * @brief Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
- * font:
- *   Font to use.
- * color:
- *   Color.
- * where:
- *   Coordinates of the text.
- * flags:
- *   Flags, just like the ones you'd pass to al_draw_text.
- * valign:
- *   Vertical alignment.
- * text:
- *   Text to write, line breaks included ('\n').
+ *
+ * @param font Font to use.
+ * @param color Color.
+ * @param where Coordinates of the text.
+ * @param flags Flags, just like the ones you'd pass to al_draw_text.
+ * @param valign Vertical alignment.
+ * @param text Text to write, line breaks included ('\n').
  */
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -1757,21 +1680,20 @@ void draw_text_lines(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a box, using a texture. The texture is split into three-by-three.
+/**
+ * @brief Draws a box, using a texture.
+ *
+ * The texture is split into three-by-three.
  * The corners of the box will use the corners of the texture as they are.
  * The remaining sections of the texture will be stretched to fill the
  * box's center and sides.
  * If the box's width or height is smaller than the two relevant corners
  * combined, then the corner graphics will be shrunk down, though.
- * center:
- *   Center of the box.
- * size:
- *   Width and height of the box.
- * texture:
- *   Texture to use.
- * tint:
- *   Tint the texture with this color.
+ *
+ * @param center Center of the box.
+ * @param size Width and height of the box.
+ * @param texture Texture to use.
+ * @param tint Tint the texture with this color.
  */
 void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
@@ -1907,23 +1829,20 @@ void draw_textured_box(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information about how a control bind icon should be drawn.
- * i:
- *   Info on the player input. If invalid, a "NONE" icon will be used.
- * condensed:
- *   If true, only the icon's fundamental information is presented. If false,
- *   disambiguation information is included too. For instance, keyboard keys
- *   that come in pairs specify whether they are the left or right key,
- *   controller inputs specify what controller number it is, etc.
- * shape:
- *   The shape is returned here.
- * bitmap_sprite:
- *   If it's one of the icons in the control bind icon spritesheet, the index
- *   of the sprite is returned here.
- * text:
- *   The text to be written inside is returned here, or an empty string is
- *   returned if there's nothing to write.
+/**
+ * @brief Returns information about how a control bind icon should be drawn.
+ *
+ * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param condensed If true, only the icon's fundamental information is
+ * presented. If false, disambiguation information is included too.
+ * For instance, keyboard keys that come in pairs specify whether they are
+ * the left or right key, controller inputs specify what controller number
+ * it is, etc.
+ * @param shape The shape is returned here.
+ * @param bitmap_sprite If it's one of the icons in the control bind
+ * icon spritesheet, the index of the sprite is returned here.
+ * @param text The text to be written inside is returned here, or an
+ * empty string is returned if there's nothing to write.
  */
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
@@ -2118,21 +2037,20 @@ void get_player_input_icon_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the width of a control bind icon, for drawing purposes.
- * font:
- *   Font to use for the name, if necessary.
- * i:
- *   Info on the player input. If invalid, a "NONE" icon will be used.
- * condensed:
- *   If true, only the icon's fundamental information is presented. If false,
- *   disambiguation information is included too. For instance, keyboard keys
- *   that come in pairs specify whether they are the left or right key,
- *   controller inputs specify what controller number it is, etc.
- * max_bitmap_height:
- *   If bitmap icons need to be condensed vertically to fit a certain space,
- *   then their width will be affected too. Specify the maximum height here.
- *   Use 0 to indicate no maximum height.
+/**
+ * @brief Returns the width of a control bind icon, for drawing purposes.
+ *
+ * @param font Font to use for the name, if necessary.
+ * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param condensed If true, only the icon's fundamental information is
+ * presented. If false, disambiguation information is included too.
+ * For instance, keyboard keys that come in pairs specify whether they are
+ * the left or right key, controller inputs specify what controller number
+ * it is, etc.
+ * @param max_bitmap_height If bitmap icons need to be condensed vertically
+ * to fit a certain space, then their width will be affected too.
+ * Specify the maximum height here. Use 0 to indicate no maximum height.
+ * @return The width.
  */
 float get_player_input_icon_width(
     const ALLEGRO_FONT* font, const player_input &i, const bool condensed,

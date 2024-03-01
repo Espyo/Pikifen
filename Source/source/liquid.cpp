@@ -11,8 +11,8 @@
 #include "liquid.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a liquid type.
+/**
+ * @brief Constructs a new liquid object.
  */
 liquid::liquid() :
     main_color(COLOR_EMPTY),

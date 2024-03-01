@@ -16,8 +16,8 @@
 #include "../mobs/decoration.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the decoration category.
+/**
+ * @brief Constructs a new decoration category object.
  */
 decoration_category::decoration_category() :
     mob_category(
@@ -28,8 +28,8 @@ decoration_category::decoration_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of decorations.
+/**
+ * @brief Clears the list of registered types of decorations.
  */
 void decoration_category::clear_types() {
     for(auto &t : game.mob_types.decoration) {
@@ -39,14 +39,13 @@ void decoration_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a decoration and adds it to the list of decorations.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a decoration and adds it to the list of decorations.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* decoration_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,18 +56,20 @@ mob* decoration_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of decoration.
+/**
+ * @brief Creates a new, empty type of decoration.
+ *
+ * @return The type.
  */
 mob_type* decoration_category::create_type() {
     return new decoration_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a decoration from the list of decorations.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a decoration from the list of decorations.
+ *
+ * @param m The mob to erase.
  */
 void decoration_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.decorations.erase(
@@ -81,10 +82,11 @@ void decoration_category::erase_mob(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of decoration given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of decoration given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* decoration_category::get_type(const string &name) const {
     auto it = game.mob_types.decoration.find(name);
@@ -93,10 +95,10 @@ mob_type* decoration_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of decoration by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of decoration by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void decoration_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.decoration) {
@@ -105,10 +107,10 @@ void decoration_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of decoration.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of decoration.
+ *
+ * @param type Mob type to register.
  */
 void decoration_category::register_type(mob_type* type) {
     game.mob_types.decoration[type->name] = (decoration_type*) type;

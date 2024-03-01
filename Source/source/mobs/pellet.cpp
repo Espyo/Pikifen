@@ -14,14 +14,12 @@
 #include "../functions.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a pellet mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Pellet type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new pellet object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Pellet type this mob belongs to.
+ * @param angle Starting angle.
  */
 pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     mob(pos, type, angle),
@@ -35,8 +33,8 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a pellet, with the number and all.
+/**
+ * @brief Draws a pellet, with the number and all.
  */
 void pellet::draw_mob() {
     sprite* s_ptr = get_cur_sprite();

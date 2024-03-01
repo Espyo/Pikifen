@@ -19,8 +19,8 @@
 #include "../../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Handles the drawing part of the main loop of the area editor.
+/**
+ * @brief Handles the drawing part of the main loop of the area editor.
  */
 void area_editor::do_drawing() {
     if(hack_skip_drawing) {
@@ -50,22 +50,17 @@ void area_editor::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an arrow, usually used for one mob to point to another.
- * start:
- *   Starting point of the arrow.
- * end:
- *   Ending point of the arrow, where the arrow points to.
- * start_offset:
- *   When considering where to place the triangle in the line, pretend that
- *   the starting point is actually this distance away from start.
- *   Useful for when mobs of different radii are involved.
- * end_offset:
- *   Same as start_offset, but for the end point.
- * thickness:
- *   Thickness of the arrow's line.
- * color:
- *   Arrow color.
+/**
+ * @brief Draws an arrow, usually used for one mob to point to another.
+ *
+ * @param start Starting point of the arrow.
+ * @param end Ending point of the arrow, where the arrow points to.
+ * @param start_offset When considering where to place the triangle
+ * in the line, pretend that the starting point is actually this distance
+ * away from start. Useful for when mobs of different radii are involved.
+ * @param end_offset Same as start_offset, but for the end point.
+ * @param thickness Thickness of the arrow's line.
+ * @param color Arrow color.
  */
 void area_editor::draw_arrow(
     const point &start, const point &end,
@@ -107,9 +102,10 @@ void area_editor::draw_arrow(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draw the canvas. This is called as a callback inside the
- * ImGui rendering process.
+/**
+ * @brief Draw the canvas.
+ *
+ * This is called as a callback inside the Dear ImGui rendering process.
  */
 void area_editor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
@@ -1487,10 +1483,33 @@ void area_editor::draw_canvas() {
             get_sector(cross_section_checkpoints[0], NULL, false);
         sector* cs_right_sector =
             get_sector(cross_section_checkpoints[1], NULL, false);
+        
+        /**
+         * @brief Info about a split.
+         */
         struct split_info {
+
+            //--- Members ---
+
+            //Sector pointers.
             sector* sector_ptrs[2];
+
+            //Line 1 intersection point.
             float l1r;
+
+            //Line 2 intersection point.
             float l2r;
+
+            //--- Function definitions ---
+
+            /**
+             * @brief Constructs a new split info object.
+             * 
+             * @param s1 Sector 1.
+             * @param s2 Sector 2.
+             * @param l1r Line 1 intersection point.
+             * @param l2r Line 2 intersection point.
+             */
             split_info(
                 sector* s1, sector* s2, const float l1r, const float l2r
             ) {
@@ -1499,6 +1518,7 @@ void area_editor::draw_canvas() {
                 this->l1r = l1r;
                 this->l2r = l2r;
             }
+            
         };
         vector<split_info> splits;
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -1714,18 +1734,14 @@ void area_editor::draw_canvas() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a sector on the cross-section view.
- * start_ratio:
- *   Where the sector starts on the graph ([0, 1]).
- * end_ratio:
- *   Where the sector end on the graph ([0, 1]).
- * proportion:
- *   Ratio of how much to resize the heights.
- * lowest_z:
- *   What z coordinate represents the bottom of the graph.
- * sector_ptr:
- *   Pointer to the sector to draw.
+/**
+ * @brief Draws a sector on the cross-section view.
+ *
+ * @param start_ratio Where the sector starts on the graph ([0, 1]).
+ * @param end_ratio Where the sector end on the graph ([0, 1]).
+ * @param proportion Ratio of how much to resize the heights by.
+ * @param lowest_z What z coordinate represents the bottom of the graph.
+ * @param sector_ptr Pointer to the sector to draw.
  */
 void area_editor::draw_cross_section_sector(
     const float start_ratio, const float end_ratio, const float proportion,
@@ -1772,16 +1788,13 @@ void area_editor::draw_cross_section_sector(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws debug text, used to identify edges, sectors, or vertexes.
- * color:
- *   Text color.
- * where:
- *   Where to draw, in world coordinates.
- * text:
- *   Text to show.
- * dots:
- *   How many dots to draw above the text. 0, 1, or 2.
+/**
+ * @brief Draws debug text, used to identify edges, sectors, or vertexes.
+ *
+ * @param color Text color.
+ * @param where Where to draw, in world coordinates.
+ * @param text Text to show.
+ * @param dots How many dots to draw above the text. 0, 1, or 2.
  */
 void area_editor::draw_debug_text(
     const ALLEGRO_COLOR color, const point &where, const string &text,
@@ -1853,15 +1866,13 @@ void area_editor::draw_debug_text(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a number signifying the distance between two points.
+/**
+ * @brief Draws a number signifying the distance between two points.
  * The number is drawn next to the main point.
- * focus:
- *   The main point.
- * other:
- *   The point to measure against.
- * prefix:
- *   Text to show before the measurement, if any.
+ *
+ * @param focus The main point.
+ * @param other The point to measure against.
+ * @param prefix Text to show before the measurement, if any.
  */
 void area_editor::draw_line_dist(
     const point &focus, const point &other, const string &prefix

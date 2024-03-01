@@ -21,10 +21,13 @@
 
 //Types of areas that can be played.
 enum AREA_TYPES {
+
     //A simple area with no goal.
     AREA_TYPE_SIMPLE,
+    
     //An area that likely has a goal, constraints, and/or scoring.
     AREA_TYPE_MISSION,
+    
 };
 
 
@@ -40,7 +43,9 @@ extern const size_t DEF_MISSION_TIME_LIMIT;
 };
 
 
-/* ----------------------------------------------------------------------------
+/**
+ * @brief Info about dividing the area in a grid.
+ *
  * The blockmap divides the entire area
  * in a grid, so that collision detections only
  * happen between stuff in the same grid cell.
@@ -50,17 +55,27 @@ extern const size_t DEF_MISSION_TIME_LIMIT;
  * It's also used when checking sectors in a certain spot.
  */
 struct blockmap {
+
+    //--- Members ---
+
     //Top-left corner of the blockmap.
     point top_left_corner;
+
     //Specifies a list of edges in each block.
     vector<vector<vector<edge*> > > edges;
+
     //Specifies a list of sectors in each block.
     vector<vector<unordered_set<sector*> > >  sectors;
+
     //Number of columns.
     size_t n_cols;
+
     //Number of rows.
     size_t n_rows;
     
+
+    //--- Function declarations ---
+
     blockmap();
     size_t get_col(const float x) const;
     size_t get_row(const float y) const;
@@ -69,142 +84,204 @@ struct blockmap {
     ) const;
     point get_top_left_corner(const size_t col, const size_t row) const;
     void clear();
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * This structure holds the information for a mob's generation.
+/**
+ * @brief Info for a mob's generation.
+ *
  * It is a mob's representation on the editor and in the area file,
  * but it doesn't have the data of a LIVING mob. This only holds its
  * position and type data, plus some other tiny things.
  */
 struct mob_gen {
+
+    //--- Members ---
+
     //Mob type.
     mob_type* type;
+
     //Position.
     point pos;
+
     //Angle.
     float angle;
+
     //Script vars.
     string vars;
+
     //Indexes of linked objects.
     vector<size_t> link_nrs;
+
     //Index to the mob storing this one inside, if any.
     size_t stored_inside;
+
     //Linked objects. Cache for performance.
     vector<mob_gen*> links;
     
+
+    //--- Function declarations ---
+
     explicit mob_gen(
         const point &pos = point(),
         mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
-    
     void clone(mob_gen* destination, const bool include_position = true) const;
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A structure holding info on the shadows
- * cast onto the area by a tree (or
- * whatever the game maker desires).
+/**
+ * @brief Info about the shadows cast onto the area by a tree
+ * (or whatever the game maker desires).
  */
 struct tree_shadow {
+
+    //--- Members ---
+
     //File name of the tree shadow texture.
     string file_name;
+
     //Tree shadow texture.
     ALLEGRO_BITMAP* bitmap;
+
     //Center coordinates.
     point center;
+
     //Width and height.
     point size;
+
     //Angle.
     float angle;
+
     //Opacity.
     unsigned char alpha;
+
     //Swaying is multiplied by this.
     point sway;
     
+
+    //--- Function declarations ---
+
     explicit tree_shadow(
         const point &center = point(), const point &size = point(100, 100),
         const float angle = 0, const unsigned char alpha = 255,
         const string &file_name = "", const point &sway = point(1, 1)
     );
     ~tree_shadow();
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A structure that holds all of the
- * info about the current area, so that
- * the sectors know how to communicate with
- * the edges, the edges with the
- * vertexes, etc.
+/**
+ * @brief Info about an area.
+ *
+ * This structure is so that the sectors know how to communicate with
+ * the edges, the edges with the vertexes, etc.
  */
 struct area_data {
+
+    //--- Members ---
+
     //Type of area.
     AREA_TYPES type;
+    
     //Name of the folder with this area's data.
     string folder_name;
+
     //Blockmap.
     blockmap bmap;
+
     //List of vertexes.
     vector<vertex*> vertexes;
+
     //List of edges.
     vector<edge*> edges;
+
     //List of sectors.
     vector<sector*> sectors;
+
     //List of mob generators.
     vector<mob_gen*> mob_generators;
+
     //List of path stops.
     vector<path_stop*> path_stops;
+
     //List of tree shadows.
     vector<tree_shadow*> tree_shadows;
+
     //Bitmap of the background.
     ALLEGRO_BITMAP* bg_bmp;
+
     //File name of the background bitmap.
     string bg_bmp_file_name;
+
     //Zoom the background by this much.
     float bg_bmp_zoom;
+
     //How far away the background is.
     float bg_dist;
+
     //Tint the background with this color.
     ALLEGRO_COLOR bg_color;
+
     //Name of the area. This is not the internal name.
     string name;
+
     //Area subtitle, if any.
     string subtitle;
+
     //Area description, if any.
     string description;
+
     //Area tags, separated by semicolon, if any.
     std::shared_ptr<ALLEGRO_BITMAP> thumbnail;
+
     //Thumbnail, if any.
     string tags;
+
     //Area difficulty, if applicable. Goes from 1 to 5.
     unsigned char difficulty;
+
     //Who made this area.
     string maker;
+
     //Optional version number.
     string version;
+
     //Any notes from the person who made it, for other makers to see.
     string notes;
+
     //Version of the engine this area was built in.
     string engine_version;
+
     //String representing the starting amounts of each spray.
     string spray_amounts;
+
     //Song to play.
     string song_name;
+
     //Weather condition to use.
     weather weather_condition;
+
     //Name of the weather condition to use.
     string weather_name;
+
     //Area day time at the start of gameplay. This is in minutes.
     size_t day_time_start;
+
     //Area day time speed, in game-minutes per real-minutes.
     float day_time_speed;
+
     //Known geometry problems.
     geometry_problems problems;
+
     //Mission data.
     mission_data mission;
+    
+
+    //--- Function declarations ---
     
     area_data();
     void check_stability();
@@ -239,6 +316,7 @@ struct area_data {
     void remove_sector(const size_t s_nr);
     void remove_sector(const sector* s_ptr);
     void clear();
+    
 };
 
 

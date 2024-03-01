@@ -17,57 +17,78 @@
 
 //Flags for what sorts of mobs can ride on a bouncer.
 enum BOUNCER_RIDERS {
+
     //Pikmin.
     BOUNCER_RIDER_PIKMIN = 1,
+    
     //Leaders.
     BOUNCER_RIDER_LEADERS = 2,
+    
 };
 
 
 //Poses for riders to take.
 enum BOUNCER_RIDING_POSES {
+
     //Stopped. Basically the idling pose.
     BOUNCER_RIDING_POSE_STOPPED,
+    
     //Somersaulting.
     BOUNCER_RIDING_POSE_SOMERSAULT,
+
 };
 
 
 //Bouncer object animations.
 enum BOUNCER_ANIMATIONS {
+
     //Idling.
     BOUNCER_ANIM_IDLING,
+    
     //Bouncing something.
     BOUNCER_ANIM_BOUNCING,
+
 };
 
 
 //Bouncer object states.
 enum BOUNCER_STATES {
+    
     //Idling.
     BOUNCER_STATE_IDLING,
+    
     //Bouncing something.
     BOUNCER_STATE_BOUNCING,
     
     //Total amount of bouncer object states.
     N_BOUNCER_STATES,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A type of bouncer. Something that grabs another mob and bounces it away
- * to a specific location, making that mob do a specific animation.
+/**
+ * @brief A type of bouncer. Something that grabs another mob and bounces it
+ * away to a specific location, making that mob do a specific animation.
  */
 class bouncer_type : public mob_type {
+
 public:
+    
+    //--- Members ---
+
     //Flags representing which mobs can ride on it.
     unsigned char riders;
+    
     //Pose that riders should take.
     BOUNCER_RIDING_POSES riding_pose;
+    
+
+    //--- Function declarations ---
     
     bouncer_type();
     void load_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
+    
 };
 
 

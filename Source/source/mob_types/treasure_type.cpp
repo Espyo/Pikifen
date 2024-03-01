@@ -18,8 +18,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of treasure.
+/**
+ * @brief Constructs a new treasure type object.
  */
 treasure_type::treasure_type() :
     mob_type(MOB_CATEGORY_TREASURES),
@@ -31,8 +31,10 @@ treasure_type::treasure_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector treasure_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -41,10 +43,10 @@ anim_conversion_vector treasure_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void treasure_type::load_properties(data_node* file) {
     reader_setter rs(file);

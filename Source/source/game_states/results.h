@@ -21,11 +21,15 @@ extern const string GUI_FILE_PATH;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Information about the area results menu.
+/**
+ * @brief Info about the area results menu.
  */
 class results_state : public game_state {
+
 public:
+    
+    //--- Function declarations ---
+
     results_state();
     void load() override;
     void unload() override;
@@ -35,16 +39,26 @@ public:
     string get_name() const override;
     
 private:
+    
+    //--- Members ---
+
     //GUI manager.
     gui_manager gui;
+
     //Time spent on this state.
     float gui_time_spent;
+
     //GUI items that need to grow during the periodic text animation.
     vector<gui_item*> text_to_animate;
+
     //Stats box GUI item.
     list_gui_item* stats_list;
+    
     //Final mission score. Cache for convenience.
     int final_mission_score;
+    
+
+    //--- Function declarations ---
     
     void add_score_stat(const MISSION_SCORE_CRITERIA criterion);
     void add_stat(
@@ -54,6 +68,7 @@ private:
     void continue_playing();
     void leave();
     void retry_area();
+    
 };
 
 

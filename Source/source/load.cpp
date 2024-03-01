@@ -25,16 +25,16 @@
 using std::set;
 
 
-/* ----------------------------------------------------------------------------
- * Loads an area into memory.
- * requested_area_folder_name:
- *   Name of the folder where the area's data is.
- * requested_area_type:
- *   Type of area this is. What folder it loads from depends on this value.
- * load_for_editor:
- *   If true, skips loading some things that the area editor won't need.
- * from_backup:
- *   If true, load from a backup, if any.
+/**
+ * @brief Loads an area into memory.
+ *
+ * @param requested_area_folder_name Name of the folder where the
+ * area's data is.
+ * @param requested_area_type Type of area this is.
+ * What folder it loads from depends on this value.
+ * @param load_for_editor If true, skips loading some things that the
+ * area editor won't need.
+ * @param from_backup If true, load from a backup, if any.
  */
 void load_area(
     const string &requested_area_folder_name,
@@ -616,12 +616,11 @@ void load_area(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads an area's mission data.
- * node:
- *   Data node to load from.
- * data:
- *   Data object to fill.
+/**
+ * @brief Loads an area's mission data.
+ *
+ * @param node Data node to load from.
+ * @param data Data object to fill.
  */
 void load_area_mission_data(data_node* node, mission_data &data) {
     data.fail_hud_primary_cond = INVALID;
@@ -714,20 +713,15 @@ void load_area_mission_data(data_node* node, mission_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a mission's record.
- * file:
- *   File data node to load from.
- * area_name:
- *   Name of the area.
- * area_subtitle:
- *   Area subtitle, or mission goal if none.
- * area_maker:
- *   Area maker.
- * area_version:
- *   Area version.
- * record:
- *   Record object to fill.
+/**
+ * @brief Loads a mission's record.
+ *
+ * @param file File data node to load from.
+ * @param area_name Name of the area.
+ * @param area_subtitle Area subtitle, or mission goal if none.
+ * @param area_maker Area maker.
+ * @param area_version Area version.
+ * @param record Record object to fill.
  */
 void load_area_mission_record(
     data_node* file,
@@ -757,8 +751,8 @@ void load_area_mission_record(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads asset file names.
+/**
+ * @brief Loads asset file names.
  */
 void load_asset_file_names() {
     data_node file(SYSTEM_ASSET_FILE_NAMES_FILE_PATH);
@@ -767,14 +761,13 @@ void load_asset_file_names() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads an audio stream from the game's content.
- * file_name:
- *   Name of the file to load.
- * node:
- *   If not NULL, blame this data node if the file doesn't exist.
- * report_errors:
- *   Only issues errors if this is true.
+/**
+ * @brief Loads an audio stream from the game's content.
+ *
+ * @param file_name Name of the file to load.
+ * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
     const string &file_name, const data_node* node, bool report_errors
@@ -796,23 +789,19 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a bitmap from the game's content.
- * file_name:
- *   File name of the bitmap.
- * node:
- *   If present, it will be used to report errors, if any.
- * report_error:
- *   If false, omits error reporting.
- * error_bmp_on_error:
- *   If true, returns the error bitmap in the case of an
- *   error. Otherwise, returns NULL.
- * error_bmp_on_empty:
- *   If true, returns the error bitmap in the case of an
- *   empty file name. Otherwise, returns NULL.
- * path_from_root:
- *   Normally, files are fetched from the images folder.
- *   If this parameter is true, the path starts from the game's root.
+/**
+ * @brief Loads a bitmap from the game's content.
+ *
+ * @param file_name File name of the bitmap.
+ * @param node If present, it will be used to report errors, if any.
+ * @param report_error If false, omits error reporting.
+ * @param error_bmp_on_error If true, returns the error bitmap in the case of an
+ * error. Otherwise, returns NULL.
+ * @param error_bmp_on_empty If true, returns the error bitmap in the case of an
+ * empty file name. Otherwise, returns NULL.
+ * @param path_from_root Normally, files are fetched from the images folder.
+ * If this parameter is true, the path starts from the game's root.
+ * @return The bitmap.
  */
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, const data_node* node,
@@ -847,11 +836,12 @@ ALLEGRO_BITMAP* load_bmp(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the user-made particle generators.
- * load_resources:
- *   If true, things like bitmaps and the like will be loaded as well.
- *   If you don't need those, set this to false to make it load faster.
+/**
+ * @brief Loads the user-made particle generators.
+ *
+ * @param load_resources If true, things like bitmaps and the like will
+ * be loaded as well. If you don't need those, set this to false to make
+ * it load faster.
  */
 void load_custom_particle_generators(const bool load_resources) {
     if(game.perf_mon) {
@@ -941,10 +931,10 @@ void load_custom_particle_generators(const bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a data file from the game's content.
- * file_name:
- *   Name of the file.
+/**
+ * @brief Loads a data file from the game's content.
+ *
+ * @param file_name Name of the file.
  */
 data_node load_data_file(const string &file_name) {
     data_node n = data_node(file_name);
@@ -958,8 +948,8 @@ data_node load_data_file(const string &file_name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the game's fonts.
+/**
+ * @brief Loads the game's fonts.
  */
 void load_fonts() {
     const int STANDARD_FONT_RANGES_SIZE = 2;
@@ -1065,8 +1055,8 @@ void load_fonts() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the game's configuration file.
+/**
+ * @brief Loads the game's configuration file.
  */
 void load_game_config() {
     data_node file = load_data_file(CONFIG_FILE);
@@ -1080,8 +1070,8 @@ void load_game_config() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the hazards from the game data.
+/**
+ * @brief Loads the hazards from the game data.
  */
 void load_hazards() {
     if(game.perf_mon) {
@@ -1149,11 +1139,12 @@ void load_hazards() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the liquids from the game data.
- * load_resources:
- *   If true, things like bitmaps and the like will be loaded as well.
- *   If you don't need those, set this to false to make it load faster.
+/**
+ * @brief Loads the liquids from the game data.
+ *
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
  */
 void load_liquids(const bool load_resources) {
     if(game.perf_mon) {
@@ -1204,8 +1195,8 @@ void load_liquids(const bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the maker tools from the tool config file.
+/**
+ * @brief Loads the maker tools from the tool config file.
  */
 void load_maker_tools() {
     data_node file(MAKER_TOOLS_FILE_PATH);
@@ -1254,8 +1245,8 @@ void load_maker_tools() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads miscellaneous fixed graphics.
+/**
+ * @brief Loads miscellaneous fixed graphics.
  */
 void load_misc_graphics() {
     //Icon.
@@ -1340,8 +1331,8 @@ void load_misc_graphics() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads miscellaneous fixed sound effects.
+/**
+ * @brief Loads miscellaneous fixed sound effects.
  */
 void load_misc_sounds() {
     game.audio.init(
@@ -1374,8 +1365,8 @@ void load_misc_sounds() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the player's options.
+/**
+ * @brief Loads the player's options.
  */
 void load_options() {
     data_node file = data_node(OPTIONS_FILE_PATH);
@@ -1436,14 +1427,13 @@ void load_options() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads an audio sample from the game's content.
- * file_name:
- *   Name of the file to load.
- * node:
- *   If not NULL, blame this data node if the file doesn't exist.
- * report_errors:
- *   Only issues errors if this is true.
+/**
+ * @brief Loads an audio sample from the game's content.
+ *
+ * @param file_name Name of the file to load.
+ * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The sample.
  */
 ALLEGRO_SAMPLE* load_sample(
     const string &file_name, const data_node* node, bool report_errors
@@ -1462,8 +1452,8 @@ ALLEGRO_SAMPLE* load_sample(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the songs.
+/**
+ * @brief Loads the songs.
  */
 void load_songs() {
     vector<string> song_files =
@@ -1528,8 +1518,8 @@ void load_songs() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the spike damage types available.
+/**
+ * @brief Loads the spike damage types available.
  */
 void load_spike_damage_types() {
     if(game.perf_mon) {
@@ -1604,11 +1594,12 @@ void load_spike_damage_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads spray types from the game data.
- * load_resources:
- *   If true, things like bitmaps and the like will be loaded as well.
- *   If you don't need those, set this to false to make it load faster.
+/**
+ * @brief Loads spray types from the game data.
+ *
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make it
+ * load faster.
  */
 void load_spray_types(const bool load_resources) {
     if(game.perf_mon) {
@@ -1724,8 +1715,8 @@ void load_spray_types(const bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the engine's lifetime statistics.
+/**
+ * @brief Loads the engine's lifetime statistics.
  */
 void load_statistics() {
     data_node stats_file;
@@ -1756,11 +1747,12 @@ void load_statistics() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads status effect types from the game data.
- * load_resources:
- *   If true, things like bitmaps and the like will be loaded as well.
- *   If you don't need those, set this to false to make it load faster.
+/**
+ * @brief Loads status effect types from the game data.
+ *
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make it
+ * load faster.
  */
 void load_status_types(const bool load_resources) {
     if(game.perf_mon) {
@@ -1943,8 +1935,8 @@ void load_status_types(const bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the animations that are used system-wide.
+/**
+ * @brief Loads the animations that are used system-wide.
  */
 void load_system_animations() {
     data_node system_animations_file =
@@ -1957,8 +1949,8 @@ void load_system_animations() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the weather conditions available.
+/**
+ * @brief Loads the weather conditions available.
  */
 void load_weather() {
     if(game.perf_mon) {
@@ -2049,16 +2041,16 @@ void load_weather() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the loaded area from memory.
+/**
+ * @brief Unloads the loaded area from memory.
  */
 void unload_area() {
     game.cur_area_data.clear();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads custom particle generators loaded from memory.
+/**
+ * @brief Unloads custom particle generators loaded from memory.
  */
 void unload_custom_particle_generators() {
     for(
@@ -2072,16 +2064,16 @@ void unload_custom_particle_generators() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads hazards loaded in memory.
+/**
+ * @brief Unloads hazards loaded in memory.
  */
 void unload_hazards() {
     game.hazards.clear();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded liquids from memory.
+/**
+ * @brief Unloads loaded liquids from memory.
  */
 void unload_liquids() {
     for(auto &l : game.liquids) {
@@ -2092,8 +2084,8 @@ void unload_liquids() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads miscellaneous graphics, sounds, and other resources.
+/**
+ * @brief Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_bright_circle);
@@ -2146,8 +2138,8 @@ void unload_misc_resources() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded songs from memory.
+/**
+ * @brief Unloads loaded songs from memory.
  */
 void unload_songs() {
     for(auto &s : game.audio.songs) {
@@ -2160,16 +2152,16 @@ void unload_songs() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads spike damage types loaded in memory.
+/**
+ * @brief Unloads spike damage types loaded in memory.
  */
 void unload_spike_damage_types() {
     game.spike_damage_types.clear();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded spray types from memory.
+/**
+ * @brief Unloads loaded spray types from memory.
  */
 void unload_spray_types() {
     for(size_t s = 0; s < game.spray_types.size(); ++s) {
@@ -2179,10 +2171,11 @@ void unload_spray_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded status effect types from memory.
- * unload_resources:
- *   If resources got loaded, set this to true to unload them.
+/**
+ * @brief Unloads loaded status effect types from memory.
+ *
+ * @param unload_resources If resources got loaded, set this to true to
+ * unload them.
  */
 void unload_status_types(const bool unload_resources) {
 
@@ -2196,8 +2189,8 @@ void unload_status_types(const bool unload_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded weather conditions.
+/**
+ * @brief Unloads loaded weather conditions.
  */
 void unload_weather() {
     game.weather_conditions.clear();

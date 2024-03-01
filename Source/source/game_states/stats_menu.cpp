@@ -20,15 +20,18 @@
 
 
 namespace STATS_MENU {
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Statistics_menu.txt";
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "statistics menu" state.
+/**
+ * @brief Constructs a new stats menu state object.
  */
 stats_menu_state::stats_menu_state() :
     game_state(),
@@ -39,10 +42,9 @@ stats_menu_state::stats_menu_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new header to the stats list GUI item.
- * label:
- *   Name of the header.
+/**
+ * @brief Adds a new header to the stats list GUI item.
+ * @param label Name of the header.
  */
 void stats_menu_state::add_header(const string &label) {
     float list_bottom_y = stats_list->get_child_bottom();
@@ -64,15 +66,13 @@ void stats_menu_state::add_header(const string &label) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new stat to the stats list GUI item.
- * Returns the text GUI item for the value.
- * label:
- *   Name of the statistic.
- * value:
- *   Its value.
- * description:
- *   Tooltip description.
+/**
+ * @brief Adds a new stat to the stats list GUI item.
+ *
+ * @param label Name of the statistic.
+ * @param value Its value.
+ * @param description Tooltip description.
+ * @return The text GUI item for the value.
  */
 text_gui_item* stats_menu_state::add_stat(
     const string &label, const string &value, const string &description
@@ -112,8 +112,8 @@ text_gui_item* stats_menu_state::add_stat(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the statistics menu.
+/**
+ * @brief Draws the statistics menu.
  */
 void stats_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
@@ -133,8 +133,8 @@ void stats_menu_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks one frame's worth of logic.
+/**
+ * @brief Ticks one frame's worth of logic.
  */
 void stats_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
@@ -152,18 +152,20 @@ void stats_menu_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string stats_menu_state::get_name() const {
     return "statistics menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -172,8 +174,8 @@ void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the statistics menu and goes to the main menu.
+/**
+ * @brief Leaves the statistics menu and goes to the main menu.
  */
 void stats_menu_state::leave() {
     save_statistics();
@@ -183,8 +185,8 @@ void stats_menu_state::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the statistics menu into memory.
+/**
+ * @brief Loads the statistics menu into memory.
  */
 void stats_menu_state::load() {
     //Resources.
@@ -243,8 +245,8 @@ void stats_menu_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Populates the stats menu with bullet points.
+/**
+ * @brief Populates the stats menu with bullet points.
  */
 void stats_menu_state::populate_stats_list() {
     add_header(
@@ -410,8 +412,8 @@ void stats_menu_state::populate_stats_list() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the statistics menu from memory.
+/**
+ * @brief Unloads the statistics menu from memory.
  */
 void stats_menu_state::unload() {
 
@@ -423,8 +425,8 @@ void stats_menu_state::unload() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the GUI text item for the runtime stat value.
+/**
+ * @brief Updates the GUI text item for the runtime stat value.
  */
 void stats_menu_state::update_runtime_value_text() {
     runtime_value_text->text =

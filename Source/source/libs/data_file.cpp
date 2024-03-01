@@ -12,17 +12,21 @@ using std::vector;
 
 
 namespace DATA_FILE {
+
 //When encrypting, this is the lowest ASCII value that can be affected.
 const unsigned char ENCRYPTION_MIN_VALUE = 32; //Space character.
+
 //When encrypting, rotate the character values forward by this amount.
 const unsigned char ENCRYPTION_ROT_AMOUNT = 111;
+
 //If a file starts with these bytes, then it's UTF-8.
 const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an empty data node.
+/**
+ * @brief Constructs a new empty data node object.
  */
 data_node::data_node() :
     file_was_opened(false),
@@ -31,11 +35,11 @@ data_node::data_node() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a data node, using the data and creating a copy
+/**
+ * @brief Constructs a new data node object, using the data and creating a copy
  * of the children from another node.
- * dn2:
- *   The node to copy data from.
+ *
+ * @param dn2 The node to copy data from.
  */
 data_node::data_node(const data_node &dn2) :
     name(dn2.name),
@@ -53,10 +57,10 @@ data_node::data_node(const data_node &dn2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a data node from a file, given the file name.
- * file_name:
- *   Name of the file to load.
+/**
+ * @brief Constructs a new data node object from a file, given the file name.
+ *
+ * @param file_name Name of the file to load.
  */
 data_node::data_node(const string &file_name) :
     file_was_opened(false),
@@ -67,12 +71,11 @@ data_node::data_node(const string &file_name) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a data node by filling its name and value.
- * name:
- *   The node's name.
- * value:
- *   Its value.
+/**
+ * @brief Constructs a new data node object by filling its name and value.
+ *
+ * @param name The node's name.
+ * @param value Its value.
  */
 data_node::data_node(const string &name, const string &value) :
     name(name),
@@ -83,8 +86,9 @@ data_node::data_node(const string &name, const string &value) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a data node and all the children within.
+/**
+ * @brief Destroys the data node object and all the children within.
+ *
  */
 data_node::~data_node() {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -97,10 +101,11 @@ data_node::~data_node() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new child to the list.
- * new_node:
- *   The node to add.
+/**
+ * @brief Adds a new child to the list.
+ *
+ * @param new_node The node to add.
+ * @return The new child's index.
  */
 size_t data_node::add(data_node* new_node) {
     children.push_back(new_node);
@@ -108,9 +113,11 @@ size_t data_node::add(data_node* new_node) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a dummy node. If the programmer
- * requests an invalid node, a dummy is returned.
+/**
+ * @brief Creates a dummy node. If the programmer requests an invalid node,
+ * a dummy is returned.
+ *
+ * @return The dummy node.
  */
 data_node* data_node::create_dummy() {
     data_node* new_dummy_child = new data_node();
@@ -122,11 +129,13 @@ data_node* data_node::create_dummy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * "Decrypts" a character for loading an encrypted data file.
+/**
+ * @brief "Decrypts" a character for loading an encrypted data file.
+ *
  * See encrypt_char for more info.
- * c:
- *   Character to decrypt.
+ *
+ * @param c Character to decrypt.
+ * @return The decrypted character.
  */
 unsigned char data_node::decrypt_char(unsigned char c) {
     if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
@@ -143,13 +152,15 @@ unsigned char data_node::decrypt_char(unsigned char c) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * "Encrypts" a character for saving in an encrypted data file.
+/**
+ * @brief "Encrypts" a character for saving in an encrypted data file.
+ *
  * It does this by rotating each character's ASCII value backwards by 111,
  * but only if it's a printable character, as other characters that tend
  * to be reserved for important things, like \0 or EOF.
- * c:
- *   Character to encrypt.
+ *
+ * @param c Character to encrypt.
+ * @return The encrypted character.
  */
 unsigned char data_node::encrypt_char(unsigned char c) {
     if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
@@ -165,11 +176,12 @@ unsigned char data_node::encrypt_char(unsigned char c) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * "Encrypts" an entire string for saving in an encrypted data file.
+/**
+ * @brief "Encrypts" an entire string for saving in an encrypted data file.
+ *
  * See encrypt_char for more info.
- * s:
- *   String to encrypt.
+ *
+ * @param s String to encrypt.
  */
 void data_node::encrypt_string(string &s) {
     for(size_t c = 0; c < s.size(); ++c) {
@@ -178,14 +190,12 @@ void data_node::encrypt_string(string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Like an std::getline(), but for ALLEGRO_FILE*.
- * file:
- *   Allegro file handle.
- * line:
- *   String to save the line into.
- * encrypted:
- *   If true, the document is encrypted and needs decrypting.
+/**
+ * @brief Like an std::getline(), but for ALLEGRO_FILE*.
+ *
+ * @param file Allegro file handle.
+ * @param line String to save the line into.
+ * @param encrypted If true, the document is encrypted and needs decrypting.
  */
 void data_node::getline(
     ALLEGRO_FILE* file, string &line, const bool encrypted
@@ -242,23 +252,27 @@ void data_node::getline(
 }
 
 
-/* ----------------------------------------------------------------------------
-* Returns a child node given its number on the list (direct children only).
-* number:
-*   The index number of the child.
-*/
+/**
+ * @brief Returns a child node given its number on the list
+ * (direct children only).
+ *
+ * @param number The index number of the child.
+ * @return The node.
+ */
 data_node* data_node::get_child(const size_t number) {
     if(number >= children.size()) return create_dummy();
     return children[number];
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the nth child with this name on the list (direct children only).
- * name:
- *   The name the child must have.
- * occurrence_number:
- *   This function will return the nth child with the specified name.
+/**
+ * @brief Returns the nth child with this name on the list
+ * (direct children only).
+ *
+ * @param name The name the child must have.
+ * @param occurrence_number This function will return the nth child with
+ * the specified name.
+ * @return The node.
  */
 data_node* data_node::get_child_by_name(
     const string &name, const size_t occurrence_number
@@ -280,18 +294,22 @@ data_node* data_node::get_child_by_name(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the number of children nodes (direct children only).
+/**
+ * @brief Returns the number of children nodes (direct children only).
+ *
+ * @return The number.
  */
 size_t data_node::get_nr_of_children() const {
     return children.size();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the number of occurences of a child name (direct children only).
- * name:
- *   Name the children must have.
+/**
+ * @brief Returns the number of occurences of a child name
+ * (direct children only).
+ *
+ * @param name Name the children must have.
+ * @return The number.
  */
 size_t data_node::get_nr_of_children_by_name(const string &name) const {
     size_t number = 0;
@@ -304,28 +322,28 @@ size_t data_node::get_nr_of_children_by_name(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the value of a node, or def if it has no value.
- * def:
- *   Default value.
+/**
+ * @brief Returns the value of a node, or def if it has no value.
+ *
+ * @param def Default value.
+ * @return The value.
  */
 string data_node::get_value_or_default(const string &def) const {
     return (value.empty() ? def : value);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads data from a file.
- * file_name:
- *   Name of the file to load.
- * trim_values:
- *   If true, spaces before and after the value will be trimmed off.
- * names_only_after_root:
- *   If true, any nodes that are not in the root node (i.e. they are children
- *   of some node inside the file) will only have a name and no value; the
- *   entire contents of their line will be their name.
- * encrypted:
- *   If true, the file is encrypted, and needs decrypting.
+/**
+ * @brief Loads data from a file.
+ *
+ * @param file_name Name of the file to load.
+ * @param trim_values If true, spaces before and after the value will
+ * be trimmed off.
+ * @param names_only_after_root If true, any nodes that are not in the
+ * root node (i.e. they are children of some node inside the file)
+ * will only have a name and no value; the entire contents of their
+ * line will be their name.
+ * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
 void data_node::load_file(
     const string &file_name, const bool trim_values,
@@ -363,22 +381,20 @@ void data_node::load_file(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads data from a list of text lines.
- * Returns the number of the line this node ended on, judging by start_line.
- * This is used for the recursion.
- * lines:
- *   Text lines that make up the node.
- * trim_values:
- *   If true, spaces before and after the value will be trimmed off.
- * start_line:
- *   This node starts at this line of the document.
- * depth:
- *   Depth of this node. 0 means root.
- * names_only_after_root:
- *   If true, any nodes that are not in the root node (i.e. they are children
- *   of some node inside the file) will only have a name and no value; the
- *   entire contents of their line will be their name.
+/**
+ * @brief Loads data from a list of text lines.
+ *
+ * @param lines Text lines that make up the node.
+ * @param trim_values If true, spaces before and after the value will
+ * be trimmed off.
+ * @param start_line This node starts at this line of the document.
+ * @param depth Depth of this node. 0 means root.
+ * @param names_only_after_root If true, any nodes that are not in the
+ * root node (i.e. they are children of some node inside the file)
+ * will only have a name and no value; the entire contents of their
+ * line will be their name.
+ * @return Returns the number of the line this node ended on,
+ * judging by start_line. This is used for the recursion.
  */
 size_t data_node::load_node(
     const vector<string> &lines, const bool trim_values,
@@ -470,10 +486,11 @@ size_t data_node::load_node(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Copies data from another data node.
- * dn2:
- *   Node to copy from.
+/**
+ * @brief Copies data from another data node.
+ *
+ * @param dn2 Node to copy from.
+ * @return The current node.
  */
 data_node &data_node::operator=(const data_node &dn2) {
     if(this != &dn2) {
@@ -497,10 +514,11 @@ data_node &data_node::operator=(const data_node &dn2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes and destroys a child from the list.
- * node_to_remove:
- *   The node to be removed.
+/**
+ * @brief Removes and destroys a child from the list.
+ *
+ * @param node_to_remove The node to be removed.
+ * @return Whether the node existed.
  */
 bool data_node::remove(data_node* node_to_remove) {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -514,18 +532,16 @@ bool data_node::remove(data_node* node_to_remove) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves a node into a new text file. Line numbers are ignored.
+/**
+ * @brief Saves a node into a new text file. Line numbers are ignored.
  * If you don't provide a file name, it'll use the node's file name.
- * Returns true on success.
- * file_name:
- *   Name of the file to save.
- * children_only:
- *   If true, only save the nodes inside this node.
- * include_empty_values:
- *   If true, even nodes with an empty value will be saved.
- * encrypted:
- *   If true, the file must be encrypted.
+ *
+ * @param file_name Name of the file to save.
+ * @param children_only If true, only save the nodes inside this node.
+ * @param include_empty_values If true, even nodes with an empty value
+ * will be saved.
+ * @param encrypted If true, the file must be encrypted.
+ * @return Whether it succeded.
  */
 bool data_node::save_file(
     string file_name, const bool children_only,
@@ -564,16 +580,14 @@ bool data_node::save_file(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saved a node into a text file.
- * file:
- *   Allegro file handle.
- * level:
- *   Current level of depth.
- * include_empty_values:
- *   If true, even nodes with an empty value will be saved.
- * encrypted:
- *   If true, the file must be encrypted.
+/**
+ * @brief Save a node into a text file.
+ *
+ * @param file Allegro file handle.
+ * @param level Current level of depth.
+ * @param include_empty_values If true, even nodes with an empty value
+ * will be saved.
+ * @param encrypted If true, the file must be encrypted.
  */
 void data_node::save_node(
     ALLEGRO_FILE* file, const size_t level,
@@ -614,13 +628,13 @@ void data_node::save_node(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes all trailing and preceding spaces.
+/**
+ * @brief Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
- * s:
- *   The original string.
- * left_only:
- *   If true, only trim the spaces at the left.
+ *
+ * @param s The original string.
+ * @param left_only If true, only trim the spaces at the left.
+ * @return The trimmed string.
  */
 string data_node::trim_spaces(const string &s, const bool left_only) {
     string orig = s;

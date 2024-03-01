@@ -22,37 +22,51 @@
 using std::queue;
 
 namespace ANIM_EDITOR {
+
 //Threshold for the flood-fill algorithm when picking sprite bitmap parts.
 const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
+
 //Grid interval in the animation editor.
 const float GRID_INTERVAL = 16.0f;
+
 //Minimum radius that a hitbox can have.
 const float HITBOX_MIN_RADIUS = 1.0f;
+
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
+
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
+
 //How tall the animation timeline header is.
 const size_t TIMELINE_HEADER_HEIGHT = 12;
+
 //How tall the animation timeline is, in total.
 const size_t TIMELINE_HEIGHT = 48;
+
 //Size of each side of the triangle that marks the loop frame.
 const size_t TIMELINE_LOOP_TRI_SIZE = 8;
+
 //Pad the left, right, and bottom of the timeline by this much.
 const size_t TIMELINE_PADDING = 6;
+
 //Minimum width or height a Pikmin top can have.
 const float TOP_MIN_SIZE = 1.0f;
+
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 32.0f;
+
 //Minimum zoom level possible in the editor.
 const float ZOOM_MIN_LEVEL = 0.05f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes animation editor class stuff.
+/**
+ * @brief Constructs a new animation editor object.
  */
 animation_editor::animation_editor() :
     anim_playing(false),
@@ -100,11 +114,11 @@ animation_editor::animation_editor() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Centers the camera on the sprite's parent bitmap, so the user can choose
- * what part of the bitmap they want to use for the sprite.
- * instant:
- *   If true, change the camera instantly.
+/**
+ * @brief Centers the camera on the sprite's parent bitmap, so the user
+ * can choose what part of the bitmap they want to use for the sprite.
+ *
+ * @param instant If true, change the camera instantly.
  */
 void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
     if(cur_sprite && cur_sprite->parent_bmp) {
@@ -127,10 +141,10 @@ void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to a new state, cleaning up whatever is needed.
- * new_state:
- *   The new state.
+/**
+ * @brief Changes to a new state, cleaning up whatever is needed.
+ *
+ * @param new_state The new state.
  */
 void animation_editor::change_state(const EDITOR_STATES new_state) {
     comparison = false;
@@ -140,8 +154,8 @@ void animation_editor::change_state(const EDITOR_STATES new_state) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the load dialog is closed.
+/**
+ * @brief Code to run when the load dialog is closed.
  */
 void animation_editor::close_load_dialog() {
     if(!loaded_content_yet && file_path.empty()) {
@@ -152,16 +166,16 @@ void animation_editor::close_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the options dialog is closed.
+/**
+ * @brief Code to run when the options dialog is closed.
  */
 void animation_editor::close_options_dialog() {
     save_options();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the animation editor.
+/**
+ * @brief Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
     editor::do_logic_pre();
@@ -208,12 +222,11 @@ void animation_editor::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Dear ImGui callback for when the canvas needs to be drawn on-screen.
- * parent_list:
- *   Unused.
- * cmd:
- *   Unused.
+/**
+ * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ *
+ * @param parent_list Unused.
+ * @param cmd Unused.
  */
 void animation_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -222,9 +235,11 @@ void animation_editor::draw_canvas_imgui_callback(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the time in the animation in which the mouse cursor is currently
- * located, if the mouse cursor is within the timeline.
+/**
+ * @brief Returns the time in the animation in which the mouse cursor is
+ * currently located, if the mouse cursor is within the timeline.
+ *
+ * @return The time.
  */
 float animation_editor::get_cursor_timeline_time() {
     if(!cur_anim || cur_anim->frames.empty()) {
@@ -238,38 +253,45 @@ float animation_editor::get_cursor_timeline_time() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * In the options data file, options pertaining to an editor's history
+/**
+ * @brief In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
+ *
+ * @return The prefix.
  */
 string animation_editor::get_history_option_prefix() const {
     return "animation_editor_history_";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string animation_editor::get_name() const {
     return "animation editor";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of the currently opened file, or an empty string if none.
+/**
+ * @brief Returns the name of the currently opened file.
+ *
+ * @return The name, or an empty string if none.
  */
 string animation_editor::get_opened_file_name() const {
     return file_path;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a file path, but shortened in such a way that only the text file's
- * name and brief context about its folder remain. If that's not possible, it
- * is returned as is, though its beginning may be cropped off with ellipsis
- * if it's too big.
- * p:
- *   The long path name.
+/**
+ * @brief  Returns a file path, but shortened in such a way that only the text
+ * file's name and brief context about its folder remain. If that's not
+ * possible, it is returned as is, though its beginning may be cropped off
+ * with ellipsis if it's too big.
+ *
+ * @param p The long path name.
+ * @return The name.
  */
 string animation_editor::get_path_short_name(const string &p) const {
     if(p.find(MOB_TYPES_FOLDER_PATH) != string::npos) {
@@ -297,10 +319,10 @@ string animation_editor::get_path_short_name(const string &p) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Imports the animation data from a different animation to the current.
- * name:
- *   Name of the animation to import.
+/**
+ * @brief Imports the animation data from a different animation to the current.
+ *
+ * @param name Name of the animation to import.
  */
 void animation_editor::import_animation_data(const string &name) {
     animation* a = anims.animations[anims.find_animation(name)];
@@ -313,10 +335,10 @@ void animation_editor::import_animation_data(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Imports the sprite file data from a different sprite to the current.
- * name:
- *   Name of the animation to import.
+/**
+ * @brief Imports the sprite file data from a different sprite to the current.
+ *
+ * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_file_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -327,10 +349,10 @@ void animation_editor::import_sprite_file_data(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Imports the sprite hitbox data from a different sprite to the current.
- * name:
- *   Name of the animation to import.
+/**
+ * @brief Imports the sprite hitbox data from a different sprite to the current.
+ *
+ * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_hitbox_data(const string &name) {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
@@ -345,10 +367,10 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Imports the sprite top data from a different sprite to the current.
- * name:
- *   Name of the animation to import.
+/**
+ * @brief Imports the sprite top data from a different sprite to the current.
+ *
+ * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_top_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -361,11 +383,11 @@ void animation_editor::import_sprite_top_data(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Imports the sprite transformation data from
+/**
+ * @brief Imports the sprite transformation data from
  * a different sprite to the current.
- * name:
- *   Name of the animation to import.
+ *
+ * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -375,8 +397,11 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the mouse cursor is inside the animation timeline or not.
+/**
+ * @brief Returns whether the mouse cursor is inside the animation
+ * timeline or not.
+ *
+ * @return Whether the cursor is inside.
  */
 bool animation_editor::is_cursor_in_timeline() {
     return
@@ -389,8 +414,8 @@ bool animation_editor::is_cursor_in_timeline() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the animation editor.
+/**
+ * @brief Loads the animation editor.
  */
 void animation_editor::load() {
     editor::load();
@@ -423,10 +448,11 @@ void animation_editor::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the animation database for the current object.
- * should_update_history:
- *   If true, this loading process should update the user's file open history.
+/**
+ * @brief Loads the animation database for the current object.
+ *
+ * @param should_update_history If true, this loading process should update
+ * the user's file open history.
  */
 void animation_editor::load_animation_database(
     const bool should_update_history
@@ -549,10 +575,10 @@ void animation_editor::load_animation_database(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- * ev:
- *   Event to handle.
+/**
+ * @brief Pans the camera around.
+ *
+ * @param ev Event to handle.
  */
 void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
@@ -564,14 +590,12 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks an animation from the picker.
- * name:
- *   Name of the animation.
- * category:
- *   Unused.
- * is_new:
- *   Is this a new animation or an existing one?
+/**
+ * @brief Callback for when the user picks an animation from the picker.
+ *
+ * @param name Name of the animation.
+ * @param category Unused.
+ * @param is_new Is this a new animation or an existing one?
  */
 void animation_editor::pick_animation(
     const string &name, const string &category, const bool is_new
@@ -588,14 +612,12 @@ void animation_editor::pick_animation(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks a sprite from the picker.
- * name:
- *   Name of the sprite.
- * category:
- *   Unused.
- * is_new:
- *   Is this a new sprite or an existing one?
+/**
+ * @brief Callback for when the user picks a sprite from the picker.
+ *
+ * @param name Name of the sprite.
+ * @param category Unused.
+ * @param is_new Is this a new sprite or an existing one?
  */
 void animation_editor::pick_sprite(
     const string &name, const string &category, const bool is_new
@@ -623,10 +645,10 @@ void animation_editor::pick_sprite(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Plays one of the mob's sounds.
- * sound_idx:
- *   Index of the sound data in the mob type's sound list.
+/**
+ * @brief Plays one of the mob's sounds.
+ *
+ * @param sound_idx Index of the sound data in the mob type's sound list.
  */
 void animation_editor::play_sound(size_t sound_idx) {
     if(!loaded_mob_type) return;
@@ -639,8 +661,8 @@ void animation_editor::play_sound(size_t sound_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the grid button widget is pressed.
+/**
+ * @brief Code to run when the grid button widget is pressed.
  */
 void animation_editor::press_grid_button() {
     grid_visible = !grid_visible;
@@ -649,8 +671,8 @@ void animation_editor::press_grid_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the hitboxes button widget is pressed.
+/**
+ * @brief Code to run when the hitboxes button widget is pressed.
  */
 void animation_editor::press_hitboxes_button() {
     hitboxes_visible = !hitboxes_visible;
@@ -659,8 +681,8 @@ void animation_editor::press_hitboxes_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the leader silhouette button widget is pressed.
+/**
+ * @brief Code to run when the leader silhouette button widget is pressed.
  */
 void animation_editor::press_leader_silhouette_button() {
     leader_silhouette_visible = !leader_silhouette_visible;
@@ -669,8 +691,8 @@ void animation_editor::press_leader_silhouette_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the load file button widget is pressed.
+/**
+ * @brief Code to run when the load file button widget is pressed.
  */
 void animation_editor::press_load_button() {
     changes_mgr.ask_if_unsaved(
@@ -682,8 +704,8 @@ void animation_editor::press_load_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the mob radius button widget is pressed.
+/**
+ * @brief Code to run when the mob radius button widget is pressed.
  */
 void animation_editor::press_mob_radius_button() {
     mob_radius_visible = !mob_radius_visible;
@@ -692,8 +714,8 @@ void animation_editor::press_mob_radius_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the play animation button widget is pressed.
+/**
+ * @brief Code to run when the play animation button widget is pressed.
  */
 void animation_editor::press_play_animation_button() {
     if(cur_anim->frames.empty()) {
@@ -716,8 +738,8 @@ void animation_editor::press_play_animation_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the quit button widget is pressed.
+/**
+ * @brief Code to run when the quit button widget is pressed.
  */
 void animation_editor::press_quit_button() {
     changes_mgr.ask_if_unsaved(
@@ -729,8 +751,8 @@ void animation_editor::press_quit_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the reload button widget is pressed.
+/**
+ * @brief Code to run when the reload button widget is pressed.
  */
 void animation_editor::press_reload_button() {
     if(!animation_exists_on_disk) return;
@@ -743,8 +765,8 @@ void animation_editor::press_reload_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the save button widget is pressed.
+/**
+ * @brief Code to run when the save button widget is pressed.
  */
 void animation_editor::press_save_button() {
     if(!can_save) return;
@@ -752,8 +774,8 @@ void animation_editor::press_save_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom and position reset button widget is pressed.
+/**
+ * @brief Code to run when the zoom and position reset button widget is pressed.
  */
 void animation_editor::press_zoom_and_pos_reset_button() {
     if(game.cam.target_zoom == 1.0f) {
@@ -764,8 +786,8 @@ void animation_editor::press_zoom_and_pos_reset_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom everything button widget is pressed.
+/**
+ * @brief Code to run when the zoom everything button widget is pressed.
  */
 void animation_editor::press_zoom_everything_button() {
 
@@ -809,8 +831,8 @@ void animation_editor::press_zoom_everything_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom in button widget is pressed.
+/**
+ * @brief Code to run when the zoom in button widget is pressed.
  */
 void animation_editor::press_zoom_in_button() {
     game.cam.target_zoom =
@@ -822,8 +844,8 @@ void animation_editor::press_zoom_in_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom out button widget is pressed.
+/**
+ * @brief Code to run when the zoom out button widget is pressed.
  */
 void animation_editor::press_zoom_out_button() {
     game.cam.target_zoom =
@@ -835,12 +857,11 @@ void animation_editor::press_zoom_out_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Renames an animation to the given name.
- * anim:
- *   Animation to rename.
- * new_name:
- *   Its new name.
+/**
+ * @brief Renames an animation to the given name.
+ *
+ * @param anim Animation to rename.
+ * @param new_name Its new name.
  */
 void animation_editor::rename_animation(
     animation* anim, const string &new_name
@@ -886,12 +907,11 @@ void animation_editor::rename_animation(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Renames a body part to the given name.
- * part:
- *   Body part to rename.
- * new_name:
- *   Its new name.
+/**
+ * @brief Renames a body part to the given name.
+ *
+ * @param part Body part to rename.
+ * @param new_name Its new name.
  */
 void animation_editor::rename_body_part(
     body_part* part, const string &new_name
@@ -944,12 +964,11 @@ void animation_editor::rename_body_part(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Renames a sprite to the given name.
- * spr:
- *   Sprite to rename.
- * new_name:
- *   Its new name.
+/**
+ * @brief Renames a sprite to the given name.
+ *
+ * @param spr Sprite to rename.
+ * @param new_name Its new name.
  */
 void animation_editor::rename_sprite(
     sprite* spr, const string &new_name
@@ -1003,26 +1022,26 @@ void animation_editor::rename_sprite(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the camera's X and Y coordinates.
+/**
+ * @brief Resets the camera's X and Y coordinates.
  */
 void animation_editor::reset_cam_xy() {
     game.cam.target_pos = point();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the camera's zoom.
+/**
+ * @brief Resets the camera's zoom.
  */
 void animation_editor::reset_cam_zoom() {
     zoom_with_cursor(1.0f);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resizes all sprites, hitboxes, etc. by a multiplier.
- * mult:
- *   Multiplier to resize by.
+/**
+ * @brief Resizes all sprites, hitboxes, etc. by a multiplier.
+ *
+ * @param mult Multiplier to resize by.
  */
 void animation_editor::resize_everything(const float mult) {
     if(mult == 0.0f) {
@@ -1045,12 +1064,11 @@ void animation_editor::resize_everything(const float mult) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resizes a sprite by a multiplier.
- * s:
- *   Sprite to resize.
- * mult:
- *   Multiplier to resize by.
+/**
+ * @brief Resizes a sprite by a multiplier.
+ *
+ * @param s Sprite to resize.
+ * @param mult Multiplier to resize by.
  */
 void animation_editor::resize_sprite(sprite* s, const float mult) {
     if(mult == 0.0f) {
@@ -1079,9 +1097,10 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the animation database onto the mob's file.
- * Returns true on success, false otherwise.
+/**
+ * @brief Saves the animation database onto the mob's file.
+ *
+ * @return Whether it succeded.
  */
 bool animation_editor::save_animation_database() {
     anims.engine_version = get_engine_version_string();
@@ -1296,10 +1315,10 @@ bool animation_editor::save_animation_database() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets all sprite scales to the value specified in the textbox.
- * scale:
- *   Value to set the scales to.
+/**
+ * @brief Sets all sprite scales to the value specified in the textbox.
+ *
+ * @param scale Value to set the scales to.
  */
 void animation_editor::set_all_sprite_scales(const float scale) {
     if(scale == 0) {
@@ -1318,9 +1337,10 @@ void animation_editor::set_all_sprite_scales(const float scale) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the current frame to be the most apt sprite it can find, given the
- * current circumstances.
+/**
+ * @brief Sets the current frame to be the most apt sprite it can find,
+ * given the current circumstances.
+ *
  * Basically, it picks a sprite that's called something similar to
  * the current animation.
  */
@@ -1393,17 +1413,14 @@ void animation_editor::set_best_frame_sprite() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Performs a flood fill on the bitmap sprite, to see what parts
+/**
+ * @brief Performs a flood fill on the bitmap sprite, to see what parts
  * contain non-alpha pixels, based on a starting position.
- * bmp:
- *   Locked bitmap to check.
- * selection_pixels:
- *   Array that controls which pixels are selected or not.
- * x:
- *   X coordinate to start on.
- * y:
- *   Y coordinate to start on.
+ *
+ * @param bmp Locked bitmap to check.
+ * @param selection_pixels Array that controls which pixels are selected or not.
+ * @param x X coordinate to start on.
+ * @param y Y coordinate to start on.
  */
 void animation_editor::sprite_bmp_flood_fill(
     ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
@@ -1419,17 +1436,41 @@ void animation_editor::sprite_bmp_flood_fill(
         return;
     }
     
+    /**
+     * @brief A point, but with integer coordinates.
+     */
     struct int_point {
+        
+        //--- Members ---
+
         //X coordinate.
         int x;
+
         //Y coordinate.
         int y;
+
+
+        //--- Function definitions ---
+
+        /**
+         * @brief Constructs a new int point object.
+         * 
+         * @param p The float point coordinates.
+         */
         explicit int_point(const point &p) :
             x(p.x),
             y(p.y) { }
+        
+        /**
+         * @brief Constructs a new int point object.
+         * 
+         * @param x X coordinate.
+         * @param y Y coordinate.
+         */
         int_point(int x, int y) :
             x(x),
             y(y) { }
+        
     };
     
     queue<int_point> pixels_left;
@@ -1518,8 +1559,8 @@ void animation_editor::sprite_bmp_flood_fill(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the editor from memory.
+/**
+ * @brief Unloads the editor from memory.
  */
 void animation_editor::unload() {
     editor::unload();
@@ -1536,10 +1577,11 @@ void animation_editor::unload() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the current hitbox pointer to match the same body part as before,
- * but on the hitbox of the current sprite.
- * If not applicable, it chooses a valid hitbox.
+/**
+ * @brief Updates the current hitbox pointer to match the same body part as
+ * before, but on the hitbox of the current sprite. If not applicable,
+ * it chooses a valid hitbox.
+ *
  */
 void animation_editor::update_cur_hitbox() {
     if(cur_sprite->hitboxes.empty()) {
@@ -1553,8 +1595,8 @@ void animation_editor::update_cur_hitbox() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Update every frame's hitbox instances in light of new hitbox info.
+/**
+ * @brief Update every frame's hitbox instances in light of new hitbox info.
  */
 void animation_editor::update_hitboxes() {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {

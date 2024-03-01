@@ -21,19 +21,28 @@ using std::vector;
 struct edge;
 
 
-/* ----------------------------------------------------------------------------
- * A vertex is a 2D point, used to determine
- * the end-points of an edge.
+/**
+ * @brief A 2D point, used to determine the end-points of an edge.
+ *
  */
 struct vertex {
+
+    //--- Members ---
+
     //X coordinate.
     float x;
+    
     //Y coordinate.
     float y;
+
     //Index number of the edges around it.
     vector<size_t> edge_nrs;
+
     //Edges around it.
     vector<edge*> edges;
+    
+
+    //--- Function declarations ---
     
     explicit vertex(float x = 0.0f, float y = 0.0f);
     void add_edge(edge* e_ptr, const size_t e_nr);
@@ -47,6 +56,7 @@ struct vertex {
     ) const;
     bool is_neighbor(const vertex* v_ptr) const;
     void remove_edge(const edge* e_ptr);
+    
 };
 
 

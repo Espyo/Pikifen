@@ -21,15 +21,22 @@
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Simple 2D point.
+/**
+ * @brief Simple 2D point.
  */
 struct point {
+
+    //--- Members ---
+
     //X coordinate.
     float x;
+
     //Y coordinate.
     float y;
     
+
+    //--- Function declarations ---
+
     point(const float x, const float y);
     point();
     const point operator +(const point &p) const;
@@ -38,6 +45,7 @@ struct point {
     const point operator /(const point &p) const;
     const point operator +(const float n) const;
     const point operator -(const float n) const;
+    const point operator *(const float m) const;
     const point operator /(const float n) const;
     point operator +=(const point &p);
     point operator -=(const point &p);
@@ -45,12 +53,13 @@ struct point {
     point operator *=(const float n);
     bool operator ==(const point &p) const;
     bool operator !=(const point &p) const;
-    const point operator *(const float m) const;
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A distance.
+/**
+ * @brief A distance.
+ * 
  * Basically this is just a number, but for optimization's sake,
  * this number is actually the distance SQUARED.
  * It's faster to compare two squared distances than square-rooting them both,
@@ -62,7 +71,11 @@ struct point {
  * to LARGE_FLOAT if it is uncached.
  */
 struct dist {
-    public:
+
+public:
+
+    //--- Function declarations ---
+
     dist(const point &p1, const point &p2);
     explicit dist(const float d = 0.0f);
     dist &operator =(const float d);
@@ -84,11 +97,16 @@ struct dist {
     void operator -=(const dist &d2);
     float to_float();
     
-    private:
+private:
+
+    //--- Members ---
+
     //Distance squared. Most operations are based on this number.
     float distance_squared;
+
     //Square root of the distance squared. Only used if necessary.
     float normal_distance;
+    
     //Do we know the normal distance?
     bool has_normal_distance;
     

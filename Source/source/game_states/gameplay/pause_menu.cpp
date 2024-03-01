@@ -19,59 +19,78 @@
 
 
 namespace PAUSE_MENU {
+
 //Path to the leaving confirmation page GUI information file.
 const string CONFIRMATION_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_confirmation.txt";
+    
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;
+
 //Interval between calculations of the Go Here path.
 const float GO_HERE_CALC_INTERVAL = 0.15f;
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_menu.txt";
+    
 //Path to the help page GUI information file.
 const string HELP_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_help.txt";
+    
 //Path to the mission page GUI information file.
 const string MISSION_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_mission.txt";
+    
 //Background color of the radar.
 const ALLEGRO_COLOR RADAR_BG_COLOR =
     al_map_rgb(32, 24, 0);
+    
 //Default radar zoom level.
 const float RADAR_DEF_ZOOM = 0.4f;
+
 //Path to the radar page GUI information file.
 const string RADAR_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_radar.txt";
+    
 //Color of the highest sector in the radar.
 const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
     al_map_rgb(200, 200, 180);
+    
 //Color of the lowest sector in the radar.
 const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
     al_map_rgb(80, 64, 0);
+    
 //Maximum radar zoom level.
 const float RADAR_MAX_ZOOM = 4.0f;
+
 //Minimum radar zoom level.
 const float RADAR_MIN_ZOOM = 0.03f;
+
 //How long an Onion waits before fading to the next color.
 const float RADAR_ONION_COLOR_FADE_CYCLE_DUR = 1.0f;
+
 //How long an Onion fades between two colors.
 const float RADAR_ONION_COLOR_FADE_DUR = 0.2f;
+
 //Max radar pan speed when not using mouse, in pixels per second.
 const float RADAR_PAN_SPEED = 600.0f;
+
 //Max radar zoom speed when not using mouse, in amount per second.
 const float RADAR_ZOOM_SPEED = 2.5f;
+
 //Path to the status page GUI information file.
 const string STATUS_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_status.txt";
+    
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a pause menu struct.
- * start_on_radar:
- *   True if the page to start on should be the radar, false if it should
- *   be the system page.
+/**
+ * @brief Constructs a new pause menu struct object.
+ *
+ * @param start_on_radar True if the page to start on should be the radar,
+ * false if it should be the system page.
  */
 pause_menu_struct::pause_menu_struct(bool start_on_radar) :
     bg_alpha_mult(0.0f),
@@ -192,8 +211,8 @@ pause_menu_struct::pause_menu_struct(bool start_on_radar) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a pause menu struct.
+/**
+ * @brief Destroys the pause menu struct object.
  */
 pause_menu_struct::~pause_menu_struct() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
@@ -234,15 +253,13 @@ pause_menu_struct::~pause_menu_struct() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new bullet point to either the fail condition list, or the
+/**
+ * @brief Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
- * list:
- *   List to add to.
- * text:
- *   Text.
- * color:
- *   Text color.
+ *
+ * @param list List to add to.
+ * @param text Text.
+ * @param color Text color.
  */
 void pause_menu_struct::add_bullet(
     list_gui_item* list, const string &text,
@@ -267,30 +284,20 @@ void pause_menu_struct::add_bullet(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new line to one of the Pikmin status boxes.
- * list:
- *   List to add to.
- * pik_type:
- *   Relevant Pikmin type, if applicable.
- * group_text:
- *   Text to display on the "group" cell.
- * idle_text:
- *   Text to display on the "idle" cell.
- * field_text:
- *   Text to display on the "field" cell.
- * onion_text:
- *   Text to display on the "Onion" cell.
- * total_text:
- *   Text to display on the "total" cell.
- * new_text:
- *   Text to display on the "new" cell.
- * lost_text:
- *   Text to display on the "lost" cell.
- * is_single:
- *   True if this is a box with a single row.
- * is_totals:
- *   True if this is the totals box.
+/**
+ * @brief Adds a new line to one of the Pikmin status boxes.
+ *
+ * @param list List to add to.
+ * @param pik_type Relevant Pikmin type, if applicable.
+ * @param group_text Text to display on the "group" cell.
+ * @param idle_text Text to display on the "idle" cell.
+ * @param field_text Text to display on the "field" cell.
+ * @param onion_text Text to display on the "Onion" cell.
+ * @param total_text Text to display on the "total" cell.
+ * @param new_text Text to display on the "new" cell.
+ * @param lost_text Text to display on the "lost" cell.
+ * @param is_single True if this is a box with a single row.
+ * @param is_totals True if this is the totals box.
  */
 void pause_menu_struct::add_pikmin_status_line(
     list_gui_item* list,
@@ -523,9 +530,9 @@ void pause_menu_struct::add_pikmin_status_line(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the Go Here path from the selected leader to the radar cursor,
- * if applicable, and stores the results in go_here_path and
+/**
+ * @brief Calculates the Go Here path from the selected leader to the radar
+ * cursor, if applicable, and stores the results in go_here_path and
  * go_here_path_result.
  */
 void pause_menu_struct::calculate_go_here_path() {
@@ -580,9 +587,10 @@ void pause_menu_struct::calculate_go_here_path() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Either asks the player to confirm if they wish to leave, or leaves outright,
- * based on the player's confirmation question preferences.
+/**
+ * @brief Either asks the player to confirm if they wish to leave, or leaves
+ * outright, based on the player's confirmation question preferences.
+ *
  */
 void pause_menu_struct::confirm_or_leave() {
     bool do_confirmation = false;
@@ -665,15 +673,15 @@ void pause_menu_struct::confirm_or_leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a button meant for changing to a page either to the left or to the
- * right of the current one.
- * target_page:
- *   Which page this button leads to.
- * left:
- *   True if this page is to the left of the current, false if to the right.
- * cur_gui:
- *   Pointer to the current page's GUI manager.
+/**
+ * @brief Creates a button meant for changing to a page either to the left or
+ * to the right of the current one.
+ *
+ * @param target_page Which page this button leads to.
+ * @param left True if this page is to the left of the current,
+ * false if to the right.
+ * @param cur_gui Pointer to the current page's GUI manager.
+ * @return The button.
  */
 button_gui_item* pause_menu_struct::create_page_button(
     PAUSE_MENU_PAGES target_page, bool left,
@@ -721,12 +729,11 @@ button_gui_item* pause_menu_struct::create_page_button(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates the buttons and input GUI items that allow switching pages.
- * cur_page:
- *   Page that these creations belong to.
- * cur_gui:
- *   Pointer to the current page's GUI manager.
+/**
+ * @brief Creates the buttons and input GUI items that allow switching pages.
+ *
+ * @param cur_page Page that these creations belong to.
+ * @param cur_gui Pointer to the current page's GUI manager.
  */
 void pause_menu_struct::create_page_buttons(
     PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui
@@ -775,8 +782,8 @@ void pause_menu_struct::create_page_buttons(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the pause menu.
+/**
+ * @brief Draws the pause menu.
  */
 void pause_menu_struct::draw() {
     gui.draw();
@@ -788,18 +795,15 @@ void pause_menu_struct::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a segment of the Go Here path.
- * start:
- *   Starting point.
- * end:
- *   Ending point.
- * color:
- *   Color of the segment.
- * texture_point:
- *   Pointer to a variable keeping track of what point of the texture we've
- *   drawn so far for this path, so that the effect is seamless
- *   between segments.
+/**
+ * @brief Draws a segment of the Go Here path.
+ *
+ * @param start Starting point.
+ * @param end Ending point.
+ * @param color Color of the segment.
+ * @param texture_point Pointer to a variable keeping track of what point of
+ * the texture we've drawn so far for this path, so that the effect is seamless
+ * between segments.
  */
 void pause_menu_struct::draw_go_here_segment(
     const point &start, const point &end,
@@ -848,12 +852,11 @@ void pause_menu_struct::draw_go_here_segment(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the radar itself.
- * center:
- *   Center coordinates of the radar on-screen.
- * size:
- *   Width and height of the radar on-screen.
+/**
+ * @brief Draws the radar itself.
+ *
+ * @param center Center coordinates of the radar on-screen.
+ * @param size Width and height of the radar on-screen.
  */
 void pause_menu_struct::draw_radar(
     const point &center, const point &size
@@ -1273,17 +1276,15 @@ void pause_menu_struct::draw_radar(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws some help page tidbit's text.
- * font:
- *   Font to use.
- * where:
- *   Coordinates to draw the text on.
- * max_size:
- *   Maximum width or height the text can occupy. A value of zero in
- *   one of these coordinates makes it not have a limit in that dimension.
- * text:
- *   Text to draw.
+/**
+ * @brief Draws some help page tidbit's text.
+ *
+ * @param font Font to use.
+ * @param where Coordinates to draw the text on.
+ * @param max_size Maximum width or height the text can occupy.
+ * A value of zero in one of these coordinates makes it not have a
+ * limit in that dimension.
+ * @param text Text to draw.
  */
 void pause_menu_struct::draw_tidbit(
     const ALLEGRO_FONT* const font, const point &where,
@@ -1329,10 +1330,10 @@ void pause_menu_struct::draw_tidbit(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fills the list of mission fail conditions.
- * list:
- *   List item to fill.
+/**
+ * @brief Fills the list of mission fail conditions.
+ *
+ * @param list List item to fill.
  */
 void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
@@ -1370,10 +1371,10 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fills the list of mission grading information.
- * list:
- *   List item to fill.
+/**
+ * @brief Fills the list of mission grading information.
+ *
+ * @param list List item to fill.
  */
 void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
     switch(game.cur_area_data.mission.grading_mode) {
@@ -1477,8 +1478,11 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string representing the player's status towards the mission goal.
+/**
+ * @brief Returns a string representing the player's status towards the
+ * mission goal.
+ *
+ * @return The status.
  */
 string pause_menu_struct::get_mission_goal_status() {
     float percentage = 0.0f;
@@ -1498,10 +1502,10 @@ string pause_menu_struct::get_mission_goal_status() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev Event to handle.
  */
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
@@ -1569,10 +1573,10 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a player action.
- * action:
- *   Data about the player action.
+/**
+ * @brief Handles a player action.
+ *
+ * @param action Data about the player action.
  */
 void pause_menu_struct::handle_player_action(const player_action &action) {
     if(opening_lockout_timer > 0.0f) {
@@ -1679,8 +1683,8 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the leaving confirmation page.
+/**
+ * @brief Initializes the leaving confirmation page.
  */
 void pause_menu_struct::init_confirmation_page() {
     data_node gui_file(PAUSE_MENU::CONFIRMATION_GUI_FILE_PATH);
@@ -1768,8 +1772,8 @@ void pause_menu_struct::init_confirmation_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the help page.
+/**
+ * @brief Initializes the help page.
  */
 void pause_menu_struct::init_help_page() {
     const vector<string> category_node_names {
@@ -1967,8 +1971,8 @@ void pause_menu_struct::init_help_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the pause menu's main menu.
+/**
+ * @brief Initializes the pause menu's main menu.
  */
 void pause_menu_struct::init_main_pause_menu() {
     //Menu items.
@@ -2153,8 +2157,8 @@ void pause_menu_struct::init_main_pause_menu() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the mission page.
+/**
+ * @brief Initializes the mission page.
  */
 void pause_menu_struct::init_mission_page() {
     data_node gui_file(PAUSE_MENU::MISSION_GUI_FILE_PATH);
@@ -2279,8 +2283,8 @@ void pause_menu_struct::init_mission_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the radar page.
+/**
+ * @brief Initializes the radar page.
  */
 void pause_menu_struct::init_radar_page() {
     data_node gui_file(PAUSE_MENU::RADAR_GUI_FILE_PATH);
@@ -2552,8 +2556,8 @@ void pause_menu_struct::init_radar_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the status page.
+/**
+ * @brief Initializes the status page.
  */
 void pause_menu_struct::init_status_page() {
     data_node gui_file(PAUSE_MENU::STATUS_GUI_FILE_PATH);
@@ -2729,10 +2733,10 @@ void pause_menu_struct::init_status_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Pans the radar by an amount.
- * amount:
- *   How much to pan by.
+/**
+ * @brief Pans the radar by an amount.
+ *
+ * @param amount How much to pan by.
  */
 void pause_menu_struct::pan_radar(point amount) {
     point delta = amount / radar_cam.zoom;
@@ -2744,10 +2748,10 @@ void pause_menu_struct::pan_radar(point amount) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Populates the help page's list of tidbits.
- * category:
- *   Category of tidbits to use.
+/**
+ * @brief Populates the help page's list of tidbits.
+ *
+ * @param category Category of tidbits to use.
  */
 void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
     vector<tidbit> &tidbit_list = tidbits[category];
@@ -2803,8 +2807,8 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the player confirms their action in the radar.
+/**
+ * @brief When the player confirms their action in the radar.
  */
 void pause_menu_struct::radar_confirm() {
     calculate_go_here_path();
@@ -2829,10 +2833,10 @@ void pause_menu_struct::radar_confirm() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the closing process.
- * cur_gui:
- *   The currently active GUI manager.
+/**
+ * @brief Starts the closing process.
+ *
+ * @param cur_gui The currently active GUI manager.
  */
 void pause_menu_struct::start_closing(gui_manager* cur_gui) {
     cur_gui->start_animation(
@@ -2850,8 +2854,8 @@ void pause_menu_struct::start_closing(gui_manager* cur_gui) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the process of leaving the gameplay state.
+/**
+ * @brief Starts the process of leaving the gameplay state.
  */
 void pause_menu_struct::start_leaving_gameplay() {
     if(
@@ -2868,14 +2872,12 @@ void pause_menu_struct::start_leaving_gameplay() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Switches pages in the pause menu.
- * cur_gui:
- *   Pointer to the current page's GUI manager.
- * new_page:
- *   The new page to switch to.
- * left:
- *   Is the new page to the left of the current one, or the right?
+/**
+ * @brief Switches pages in the pause menu.
+ *
+ * @param cur_gui Pointer to the current page's GUI manager.
+ * @param new_page The new page to switch to.
+ * @param left Is the new page to the left of the current one, or the right?
  */
 void pause_menu_struct::switch_page(
     gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
@@ -2914,10 +2916,10 @@ void pause_menu_struct::switch_page(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
@@ -2997,12 +2999,11 @@ void pause_menu_struct::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the radar transformations.
- * radar_center:
- *   Coordinates of the radar's center.
- * radar_size:
- *   Dimensions of the radar.
+/**
+ * @brief Updates the radar transformations.
+ *
+ * @param radar_center Coordinates of the radar's center.
+ * @param radar_size Dimensions of the radar.
  */
 void pause_menu_struct::update_radar_transformations(
     const point &radar_center, const point &radar_size
@@ -3022,10 +3023,10 @@ void pause_menu_struct::update_radar_transformations(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Zooms the radar by an amount.
- * amount:
- *   How much to zoom by.
+/**
+ * @brief Zooms the radar by an amount.
+ *
+ * @param amount How much to zoom by.
  */
 void pause_menu_struct::zoom_radar(float amount) {
     float delta = amount * radar_cam.zoom;
@@ -3038,14 +3039,12 @@ void pause_menu_struct::zoom_radar(float amount) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Zooms the radar by an amount, anchored on the radar cursor.
- * amount:
- *   How much to zoom by.
- * radar_center:
- *   Coordinates of the radar's center.
- * radar_size:
- *   Dimensions of the radar.
+/**
+ * @brief Zooms the radar by an amount, anchored on the radar cursor.
+ *
+ * @param amount How much to zoom by.
+ * @param radar_center Coordinates of the radar's center.
+ * @param radar_size Dimensions of the radar.
  */
 void pause_menu_struct::zoom_radar_with_mouse(
     float amount, const point &radar_center, const point &radar_size

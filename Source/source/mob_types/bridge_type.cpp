@@ -16,8 +16,8 @@
 #include "../mobs/bridge.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of bridge.
+/**
+ * @brief Constructs a new bridge type object.
  */
 bridge_type::bridge_type() :
     mob_type(MOB_CATEGORY_BRIDGES),
@@ -60,8 +60,8 @@ bridge_type::bridge_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector bridge_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -71,10 +71,10 @@ anim_conversion_vector bridge_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void bridge_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -83,10 +83,10 @@ void bridge_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void bridge_type::load_resources(data_node* file) {
     reader_setter rs(file);
@@ -109,8 +109,8 @@ void bridge_type::load_resources(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads resources from memory.
+/**
+ * @brief Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
     game.textures.detach(main_texture_file_name);

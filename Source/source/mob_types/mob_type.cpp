@@ -32,15 +32,17 @@ using std::string;
 
 
 namespace MOB_TYPE {
+
 //ID of the default, "idling" animation, in an animation database.
 const size_t ANIM_IDLING = 0;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a non-specific mob type.
- * category_id:
- *   The ID of the category it belongs to.
+/**
+ * @brief Constructs a new mob type object.
+ *
+ * @param category_id The ID of the category it belongs to.
  */
 mob_type::mob_type(MOB_CATEGORIES category_id) :
     category(game.mob_categories.get(category_id)),
@@ -81,6 +83,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
         MOB_TARGET_TYPE_FRAGILE
     ),
     starting_team(MOB_TEAM_NONE),
+    draw_mob_callback(nullptr),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
     has_group(false),
@@ -89,14 +92,13 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     appears_in_area_editor(true),
     area_editor_recommend_links_from(false),
     area_editor_recommend_links_to(false),
-    max_span(0.0f),
-    draw_mob_callback(nullptr) {
+    max_span(0.0f) {
     
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a mob type.
+/**
+ * @brief Destroys the mob type object.
  */
 mob_type::~mob_type() {
     states.clear();
@@ -108,8 +110,8 @@ mob_type::~mob_type() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds carrying-related states to the FSM.
+/**
+ * @brief Adds carrying-related states to the FSM.
  */
 void mob_type::add_carrying_states() {
 
@@ -217,34 +219,36 @@ void mob_type::add_carrying_states() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Specifies what animation conversions there are, if any.
+/**
+ * @brief Specifies what animation conversions there are, if any.
+ *
+ * @return The animation conversions.
  */
 anim_conversion_vector mob_type::get_anim_conversions() const {
     return anim_conversion_vector();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file, if any.
+/**
+ * @brief Loads properties from a data file, if any.
  */
 void mob_type::load_properties(data_node*) { }
 
 
-/* ----------------------------------------------------------------------------
- * Loads any resources into memory, if any.
+/**
+ * @brief Loads any resources into memory, if any.
  */
 void mob_type::load_resources(data_node*) { }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded resources from memory.
+/**
+ * @brief Unloads loaded resources from memory.
  */
 void mob_type::unload_resources() { }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about an area editor's mob property.
+/**
+ * @brief Constructs a new area editor property struct object.
  */
 mob_type::area_editor_prop_struct::area_editor_prop_struct() :
     type(AEMP_TEXT) {
@@ -254,8 +258,8 @@ mob_type::area_editor_prop_struct::area_editor_prop_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new vulnerability structure.
+/**
+ * @brief Constructs a new vulnerability struct object.
  */
 mob_type::vulnerability_struct::vulnerability_struct() :
     damage_mult(1.0f),
@@ -265,13 +269,13 @@ mob_type::vulnerability_struct::vulnerability_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Grabs an animation conversion vector, filled with base animations,
+/**
+ * @brief Grabs an animation conversion vector, filled with base animations,
  * and outputs one that combines all base animations with their groups.
- * v:
- *   The animation conversion vector.
- * base_anim_total:
- *   How many base animations exist.
+ *
+ * @param v The animation conversion vector.
+ * @param base_anim_total How many base animations exist.
+ * @return The vector.
  */
 anim_conversion_vector
 mob_type_with_anim_groups::get_anim_conversions_with_groups(
@@ -294,9 +298,9 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates special mob types, needed by the engine, that are beyond the ones
- * loaded from the game data folder.
+/**
+ * @brief Creates special mob types, needed by the engine,
+ * that are beyond the ones loaded from the game data folder.
  */
 void create_special_mob_types() {
     mob_category* custom_category =
@@ -318,17 +322,14 @@ void create_special_mob_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a mob type's info from a text file.
- * mt:
- *   Mob type to read data into.
- * file:
- *   File to read data from.
- * load_resources:
- *   If true, resources like bitmaps are loaded too. If you don't need them,
- *   let this be false so it loads faster.
- * folder:
- *   Name of the folder where this mob type's data is from.
+/**
+ * @brief Loads a mob type's info from a text file.
+ *
+ * @param mt Mob type to read data into.
+ * @param file File to read data from.
+ * @param load_resources If true, resources like bitmaps are loaded too.
+ * If you don't need them, let this be false so it loads faster.
+ * @param folder Name of the folder where this mob type's data is from.
  */
 void load_mob_type_from_file(
     mob_type* mt, data_node &file,
@@ -1007,11 +1008,11 @@ void load_mob_type_from_file(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads all mob types.
- * load_resources:
- *   If true, resources like bitmaps are loaded too. If you don't need them,
- *   let this be false so it loads faster.
+/**
+ * @brief Loads all mob types.
+ *
+ * @param load_resources If true, resources like bitmaps are loaded too.
+ * If you don't need them, let this be false so it loads faster.
  */
 void load_mob_types(bool load_resources) {
     //Load the categorized mob types.
@@ -1113,12 +1114,12 @@ void load_mob_types(bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the mob types from a category's folder.
- * category:
- *   Pointer to the mob category.
- * load_resources:
- *   False if you don't need the images and sounds, so it loads faster.
+/**
+ * @brief Loads the mob types from a category's folder.
+ *
+ * @param category Pointer to the mob category.
+ * @param load_resources False if you don't need the images and sounds,
+ * so it loads faster.
  */
 void load_mob_types(mob_category* category, bool load_resources) {
     if(category->folder.empty()) return;
@@ -1150,13 +1151,12 @@ void load_mob_types(mob_category* category, bool load_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads a type of mob.
- * mt:
- *   Mob type to unload.
- * unload_resources:
- *   False if you don't need to unload images or sounds,
- *   since they never got loaded in the first place.
+/**
+ * @brief Unloads a type of mob.
+ *
+ * @param mt Mob type to unload.
+ * @param unload_resources False if you don't need to unload images or sounds,
+ * since they never got loaded in the first place.
  */
 void unload_mob_type(mob_type* mt, const bool unload_resources) {
     if(unload_resources) {
@@ -1168,11 +1168,11 @@ void unload_mob_type(mob_type* mt, const bool unload_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads all loaded types of mob from memory.
- * unload_resources:
- *   False if you don't need to unload images or sounds,
- *   since they never got loaded in the first place.
+/**
+ * @brief Unloads all loaded types of mob from memory.
+ *
+ * @param unload_resources False if you don't need to unload images or sounds,
+ * since they never got loaded in the first place.
  */
 void unload_mob_types(const bool unload_resources) {
     game.config.leader_order.clear();
@@ -1185,13 +1185,12 @@ void unload_mob_types(const bool unload_resources) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads all loaded types of mob from a category.
- * category:
- *   Pointer to the mob category.
- * unload_resources:
- *   False if you don't need to unload images or sounds,
- *   since they never got loaded in the first place.
+/**
+ * @brief Unloads all loaded types of mob from a category.
+ *
+ * @param category Pointer to the mob category.
+ * @param unload_resources False if you don't need to unload images or sounds,
+ * since they never got loaded in the first place.
  */
 void unload_mob_types(mob_category* category, bool unload_resources) {
 

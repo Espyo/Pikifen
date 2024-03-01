@@ -22,13 +22,15 @@ using std::vector;
 
 
 namespace PATHS {
+
 //Minimum radius of a path stop.
 const float MIN_STOP_RADIUS = 16.0f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a structure with settings about how to follow a path.
+/**
+ * @brief Constructs a new path follow settings object.
  */
 path_follow_settings::path_follow_settings() :
     target_mob(nullptr),
@@ -38,14 +40,12 @@ path_follow_settings::path_follow_settings() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new stop link.
- * start_ptr:
- *   The path stop at the start of this link.
- * end_ptr:
- *   The path stop at the end of this link.
- * end_nr:
- *   Index number of the path stop at the end of this link.
+/**
+ * @brief Constructs a new path link object.
+ *
+ * @param start_ptr The path stop at the start of this link.
+ * @param end_ptr The path stop at the end of this link.
+ * @param end_nr Index number of the path stop at the end of this link.
  */
 path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
     start_ptr(start_ptr),
@@ -58,40 +58,42 @@ path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates and stores the distance between the two stops.
+/**
+ * @brief Calculates and stores the distance between the two stops.
  * Because the link doesn't know about the starting stop,
  * you need to provide it as a parameter when calling the function.
- * start_ptr:
- *   The path stop at the start of this link.
+ *
+ * @param start_ptr The path stop at the start of this link.
  */
 void path_link::calculate_dist(const path_stop* start_ptr) {
     distance = dist(start_ptr->pos, end_ptr->pos).to_float();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones a path link's properties onto another,
+/**
+ * @brief Clones a path link's properties onto another,
  * not counting the path stops.
- * destination:
- *   Path link to clone the data into.
+ *
+ * @param destination Path link to clone the data into.
  */
 void path_link::clone(path_link* destination) const {
     destination->type = type;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a path link is a plain one-way link, or if it's actually one part
- * of a normal, two-way link.
+/**
+ * @brief Checks if a path link is a plain one-way link,
+ * or if it's actually one part of a normal, two-way link.
+ *
+ * @return Whether it's one-way.
  */
 bool path_link::is_one_way() const {
     return end_ptr->get_link(start_ptr) == NULL;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears all info.
+/**
+ * @brief Clears all info.
  */
 void path_manager::clear() {
     obstructions.clear();
@@ -106,9 +108,9 @@ void path_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the area having been loaded. It checks all path stops and saves
- * any sector hazards found.
+/**
+ * @brief Handles the area having been loaded. It checks all path stops
+ * and saves any sector hazards found.
  */
 void path_manager::handle_area_load() {
     //Go through all path stops and check if they're on hazardous sectors.
@@ -121,11 +123,11 @@ void path_manager::handle_area_load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an obstacle having been placed. This way, any link with that
+/**
+ * @brief Handles an obstacle having been placed. This way, any link with that
  * obstruction can get updated.
- * m:
- *   Pointer to the obstacle mob that got added.
+ *
+ * @param m Pointer to the obstacle mob that got added.
  */
 void path_manager::handle_obstacle_add(mob* m) {
     //Add the obstacle to our list, if needed.
@@ -163,11 +165,11 @@ void path_manager::handle_obstacle_add(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an obstacle having been cleared. This way, any link with that
+/**
+ * @brief Handles an obstacle having been cleared. This way, any link with that
  * obstruction can get updated.
- * m:
- *   Pointer to the obstacle mob that got cleared.
+ *
+ * @param m Pointer to the obstacle mob that got cleared.
  */
 void path_manager::handle_obstacle_remove(mob* m) {
     //Remove the obstacle from our list, if it's there.
@@ -201,11 +203,11 @@ void path_manager::handle_obstacle_remove(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a sector having changed its hazards. This way, any stop on that
- * sector can be updated.
- * sector_ptr:
- *   Pointer to the sector whose hazards got updated.
+/**
+ * @brief Handles a sector having changed its hazards.
+ * This way, any stop on that sector can be updated.
+ *
+ * @param sector_ptr Pointer to the sector whose hazards got updated.
  */
 void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
     //Remove relevant stops from our list.
@@ -240,12 +242,11 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new path stop.
- * pos:
- *   Its coordinates.
- * links:
- *   List of path links, linking it to other stops.
+/**
+ * @brief Constructs a new path stop object.
+ *
+ * @param pos Its coordinates.
+ * @param links List of path links, linking it to other stops.
  */
 path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
@@ -257,8 +258,8 @@ path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a path stop.
+/**
+ * @brief Destroys the path stop object.
  */
 path_stop::~path_stop() {
     while(!links.empty()) {
@@ -268,14 +269,13 @@ path_stop::~path_stop() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a link between this stop and another, whether it's one-way or not.
- * Also adds the link to the other stop, if applicable.
+/**
+ * @brief Adds a link between this stop and another, whether it's
+ * one-way or not. Also adds the link to the other stop, if applicable.
  * If these two stops already had some link, it gets removed.
- * other_stop:
- *   Pointer to the other stop.
- * normal:
- *   Normal link? False means one-way link.
+ *
+ * @param other_stop Pointer to the other stop.
+ * @param normal Normal link? False means one-way link.
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
     PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
@@ -303,8 +303,8 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors.
+/**
+ * @brief Calculates the distance between it and all neighbors.
  */
 void path_stop::calculate_dists() {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -313,10 +313,10 @@ void path_stop::calculate_dists() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors, and then goes through
- * the neighbors and updates their distance back to this stop, if that
- * neighbor links back.
+/**
+ * @brief Calculates the distance between it and all neighbors, and then
+ * goes through the neighbors and updates their distance back to this stop,
+ * if that neighbor links back.
  */
 void path_stop::calculate_dists_plus_neighbors() {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -334,10 +334,10 @@ void path_stop::calculate_dists_plus_neighbors() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones a path stop's properties onto another, not counting the links.
- * destination:
- *   Path stop to clone the data into.
+/**
+ * @brief Clones a path stop's properties onto another, not counting the links.
+ *
+ * @param destination Path stop to clone the data into.
  */
 void path_stop::clone(path_stop* destination) const {
     destination->radius = radius;
@@ -346,13 +346,13 @@ void path_stop::clone(path_stop* destination) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the pointer of the link between this stop and another.
+/**
+ * @brief Returns the pointer of the link between this stop and another.
  * The links in memory are one-way, meaning that if the only link
  * is from the other stop to this one, it will not count.
- * Returns NULL if it does not link to that stop.
- * other_stop:
- *   Path stop to check against.
+ *
+ * @param other_stop Path stop to check against.
+ * @return The link, or NULL if it does not link to that stop.
  */
 path_link* path_stop::get_link(const path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -362,11 +362,11 @@ path_link* path_stop::get_link(const path_stop* other_stop) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes the specified link.
+/**
+ * @brief Removes the specified link.
  * Does nothing if there is no such link.
- * link_ptr:
- *   Pointer to the link to remove.
+ *
+ * @param link_ptr Pointer to the link to remove.
  */
 void path_stop::remove_link(const path_link* link_ptr) {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -379,11 +379,11 @@ void path_stop::remove_link(const path_link* link_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes the link between this stop and the specified one.
+/**
+ * @brief Removes the link between this stop and the specified one.
  * Does nothing if there is no such link.
- * other_stop:
- *   Path stop to remove the link from.
+ *
+ * @param other_stop Path stop to remove the link from.
  */
 void path_stop::remove_link(const path_stop* other_stop) {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -396,14 +396,13 @@ void path_stop::remove_link(const path_stop* other_stop) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a path stop can be taken given some contraints.
- * stop_ptr:
- *   Stop to check.
- * settings:
- *   Settings about how the path should be followed.
- * reason:
- *   If not NULL, the reason is returned here.
+/**
+ * @brief Checks if a path stop can be taken given some contraints.
+ *
+ * @param stop_ptr Stop to check.
+ * @param settings Settings about how the path should be followed.
+ * @param reason If not NULL, the reason is returned here.
+ * @return Whether it can be taken.
  */
 bool can_take_path_stop(
     path_stop* stop_ptr, const path_follow_settings &settings,
@@ -426,16 +425,14 @@ bool can_take_path_stop(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a path stop can be taken given some contraints.
- * stop_ptr:
- *   Stop to check.
- * settings:
- *   Settings about how the path should be followed.
- * sector_ptr:
- *   Pointer to the sector this stop is on.
- * reason:
- *   If not NULL, the reason is returned here.
+/**
+ * @brief Checks if a path stop can be taken given some contraints.
+ *
+ * @param stop_ptr Stop to check.
+ * @param settings Settings about how the path should be followed.
+ * @param sector_ptr Pointer to the sector this stop is on.
+ * @param reason If not NULL, the reason is returned here.
+ * @return Whether it can take it.
  */
 bool can_take_path_stop(
     const path_stop* stop_ptr, const path_follow_settings &settings,
@@ -506,14 +503,13 @@ bool can_take_path_stop(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a link can be traversed given some contraints.
- * link_ptr:
- *   Link to check.
- * settings:
- *   Settings about how the path should be followed.
- * reason:
- *   If not NULL, the reason is returned here.
+/**
+ * @brief Checks if a link can be traversed given some contraints.
+ *
+ * @param link_ptr Link to check.
+ * @param settings Settings about how the path should be followed.
+ * @param reason If not NULL, the reason is returned here.
+ * @return Whether it can traverse it.
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
@@ -579,14 +575,12 @@ bool can_traverse_path_link(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Traverses a graph using the depth first search algorithm.
- * nodes:
- *   Vector of nodes.
- * visited:
- *   Set with the visited nodes.
- * start:
- *   Starting node.
+/**
+ * @brief Traverses a graph using the depth first search algorithm.
+ *
+ * @param nodes Vector of nodes.
+ * @param visited Set with the visited nodes.
+ * @param start Starting node.
  */
 void depth_first_search(
     vector<path_stop*> &nodes, unordered_set<path_stop*> &visited,
@@ -615,19 +609,15 @@ void depth_first_search(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Uses Dijkstra's algorithm to get the shortest path between two nodes.
- * Returns the operation's result.
- * final_path:
- *   The stops to visit, in order, are returned here.
- * start_node:
- *   Start node.
- * end_node:
- *   End node.
- * settings:
- *   Settings about how the path should be followed.
- * total_dist:
- *   If not NULL, place the total path distance here.
+/**
+ * @brief Uses Dijkstra's algorithm to get the shortest path between two nodes.
+ *
+ * @param final_path The stops to visit, in order, are returned here.
+ * @param start_node Start node.
+ * @param end_node End node.
+ * @param settings Settings about how the path should be followed.
+ * @param total_dist If not NULL, place the total path distance here.
+ * @return The operation's result.
  */
 PATH_RESULTS dijkstra(
     vector<path_stop*> &final_path,
@@ -761,24 +751,19 @@ PATH_RESULTS dijkstra(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Gets the shortest available path between two points, following
+/**
+ * @brief Gets the shortest available path between two points, following
  * the area's path graph.
- * Returns the operation's result.
- * start:
- *   Start coordinates.
- * end:
- *   End coordinates.
- * settings:
- *   Settings about how the path should be followed.
- * full_path:
- *   The stops to visit, in order, are returned here, if any.
- * total_dist:
- *   If not NULL, place the total path distance here.
- * start_stop:
- *   If not NULL, the closest stop to the start is returned here.
- * end_stop:
- *   If not NULL, the closest stop to the end is returned here.
+ *
+ * @param start Start coordinates.
+ * @param end End coordinates.
+ * @param settings Settings about how the path should be followed.
+ * @param full_path The stops to visit, in order, are returned here, if any.
+ * @param total_dist If not NULL, place the total path distance here.
+ * @param start_stop If not NULL, the closest stop to the start is
+ * returned here.
+ * @param end_stop If not NULL, the closest stop to the end is returned here.
+ * @return The operation's result.
  */
 PATH_RESULTS get_path(
     const point &start, const point &end,
@@ -896,10 +881,11 @@ PATH_RESULTS get_path(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string representation of a path block reason.
- * reason:
- *   Reason to convert.
+/**
+ * @brief Returns a string representation of a path block reason.
+ *
+ * @param reason Reason to convert.
+ * @return The string.
  */
 string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
     switch(reason) {
@@ -940,10 +926,11 @@ string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
 
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string representation of a path result.
- * result:
- *   Result to convert.
+/**
+ * @brief Returns a string representation of a path result.
+ *
+ * @param result Result to convert.
+ * @return The string.
  */
 string path_result_to_string(PATH_RESULTS result) {
     switch(result) {

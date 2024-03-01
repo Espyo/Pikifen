@@ -16,8 +16,8 @@
 #include "../mobs/bouncer.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the bouncer category.
+/**
+ * @brief Constructs a new bouncer category object.
  */
 bouncer_category::bouncer_category() :
     mob_category(
@@ -28,8 +28,8 @@ bouncer_category::bouncer_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of bouncers.
+/**
+ * @brief Clears the list of registered types of bouncers.
  */
 void bouncer_category::clear_types() {
     for(auto &t : game.mob_types.bouncer) {
@@ -39,14 +39,13 @@ void bouncer_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a bouncer and adds it to the list of bouncers.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a bouncer and adds it to the list of bouncers.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The created mob.
  */
 mob* bouncer_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,18 +56,20 @@ mob* bouncer_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of bouncer.
+/**
+ * @brief Creates a new, empty type of bouncer.
+ *
+ * @return The type.
  */
 mob_type* bouncer_category::create_type() {
     return new bouncer_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a bouncer from the list of bouncers.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a bouncer from the list of bouncers.
+ *
+ * @param m The mob to erase.
  */
 void bouncer_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.bouncers.erase(
@@ -81,10 +82,11 @@ void bouncer_category::erase_mob(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of bouncer given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of bouncer given its name
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* bouncer_category::get_type(const string &name) const {
     auto it = game.mob_types.bouncer.find(name);
@@ -93,10 +95,10 @@ mob_type* bouncer_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of bouncer by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of bouncer by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void bouncer_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.bouncer) {
@@ -105,10 +107,10 @@ void bouncer_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of bouncer.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of bouncer.
+ *
+ * @param type Mob type to register.
  */
 void bouncer_category::register_type(mob_type* type) {
     game.mob_types.bouncer[type->name] = (bouncer_type*) type;

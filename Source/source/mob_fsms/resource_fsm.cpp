@@ -17,10 +17,10 @@
 #include "gen_mob_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the resource's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the resource's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void resource_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -168,15 +168,13 @@ void resource_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the resource is fully delivered. This should only run code that cannot
- * be handled by ships or Onions.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the resource is fully delivered. This should only run
+ * code that cannot be handled by ships or Onions.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
@@ -194,14 +192,12 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the resource is dropped.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the resource is dropped.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
@@ -215,14 +211,12 @@ void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the resource reaches its carry destination.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the resource reaches its carry destination.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::handle_reach_destination(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
@@ -235,14 +229,12 @@ void resource_fsm::handle_reach_destination(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the resource starts moving.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the resource starts moving.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::handle_start_moving(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
@@ -250,14 +242,12 @@ void resource_fsm::handle_start_moving(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the resource lands from being launched in the air.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the resource lands from being launched in the air.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
     m->speed.x = 0;
@@ -266,14 +256,12 @@ void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a resource starts being delivered.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a resource starts being delivered.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     if(
@@ -285,14 +273,12 @@ void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a resource starts idling, waiting to be carried.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a resource starts idling, waiting to be carried.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
@@ -316,14 +302,13 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Vanishes, either disappearing for good, or returning to its origin pile.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Vanishes, either disappearing for good, or returning to
+ * its origin pile.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void resource_fsm::vanish(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;

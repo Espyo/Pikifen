@@ -17,14 +17,12 @@
 #include "resource.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a pile.
- * pos:
- *   Starting coordinates.
- * type:
- *   Pile type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new pile object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Pile type this mob belongs to.
+ * @param angle Starting angle.
  */
 pile::pile(const point &pos, pile_type* type, const float angle) :
     mob(pos, type, angle),
@@ -38,10 +36,10 @@ pile::pile(const point &pos, pile_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes the amount in the pile, and updates the appropriate variables.
- * change:
- *   Amount to increase by.
+/**
+ * @brief Changes the amount in the pile, and updates the appropriate variables.
+ *
+ * @param change Amount to increase by.
  */
 void pile::change_amount(const int change) {
     if(change < 0 && amount == 0) return;
@@ -54,17 +52,15 @@ void pile::change_amount(const int change) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information on how to show the fraction numbers.
- * Returns true if the fraction numbers should be shown, false if not.
+/**
+ * @brief Returns information on how to show the fraction numbers.
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
- * fraction_value_nr:
- *   The fraction's value (upper) number gets set here.
- * fraction_req_nr:
- *   The fraction's required (lower) number gets set here.
- * fraction_color:
- *   The fraction's color gets set here.
+ *
+ * @param fraction_value_nr The fraction's value (upper) number gets set here.
+ * @param fraction_req_nr The fraction's required (lower) number gets set here.
+ * @param fraction_color The fraction's color gets set here.
+ * @return Whether the numbers should be shown.
  */
 bool pile::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
@@ -78,10 +74,10 @@ bool pile::get_fraction_numbers_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void pile::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -99,8 +95,8 @@ void pile::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds some more to the pile from a periodic recharge.
+/**
+ * @brief Adds some more to the pile from a periodic recharge.
  */
 void pile::recharge() {
     recharge_timer.start();
@@ -108,10 +104,10 @@ void pile::recharge() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void pile::tick_class_specifics(const float delta_t) {
     recharge_timer.tick(delta_t);
@@ -134,8 +130,8 @@ void pile::tick_class_specifics(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the animation to the right one, the recharge timer, and
+/**
+ * @brief Updates the animation to the right one, the recharge timer, and
  * some other things.
  */
 void pile::update() {

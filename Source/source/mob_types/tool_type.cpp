@@ -14,8 +14,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new type of tool mob.
+/**
+ * @brief Constructs a new tool type object.
  */
 tool_type::tool_type() :
     mob_type(MOB_CATEGORY_TOOLS),
@@ -39,10 +39,10 @@ tool_type::tool_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void tool_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -61,10 +61,10 @@ void tool_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void tool_type::load_resources(data_node* file) {
     reader_setter rs(file);

@@ -16,8 +16,8 @@
 #include "../mobs/drop.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the drop category.
+/**
+ * @brief Constructs a new drop category object.
  */
 drop_category::drop_category() :
     mob_category(
@@ -28,8 +28,8 @@ drop_category::drop_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of drops.
+/**
+ * @brief Clears the list of registered types of drops.
  */
 void drop_category::clear_types() {
     for(auto &t : game.mob_types.drop) {
@@ -39,14 +39,13 @@ void drop_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a drop and adds it to the list of drops.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a drop and adds it to the list of drops.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* drop_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* drop_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of drop.
+/**
+ * @brief Creates a new, empty type of drop.
+ *
+ * @return The type.
  */
 mob_type* drop_category::create_type() {
     return new drop_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a drop from the list of drops.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a drop from the list of drops.
+ *
+ * @param m The mob to erase.
  */
 void drop_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.drops.erase(
         find(
-        game.states.gameplay->mobs.drops.begin(),
-        game.states.gameplay->mobs.drops.end(),
-        (drop*) m
+            game.states.gameplay->mobs.drops.begin(),
+            game.states.gameplay->mobs.drops.end(),
+            (drop*) m
         )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of drop given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of drop given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* drop_category::get_type(const string &name) const {
     auto it = game.mob_types.drop.find(name);
@@ -93,10 +95,10 @@ mob_type* drop_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of drop by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of drop by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void drop_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.drop) {
@@ -105,10 +107,10 @@ void drop_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of drop.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of drop.
+ *
+ * @param type Mob type to register.
  */
 void drop_category::register_type(mob_type* type) {
     game.mob_types.drop[type->name] = (drop_type*) type;

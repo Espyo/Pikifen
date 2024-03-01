@@ -21,8 +21,10 @@ extern const float STEP_HEIGHT;
 }
 
 
-/* ----------------------------------------------------------------------------
- * A bridge mob. Bridges on the engine are made up of two parts:
+/**
+ * @brief A bridge mob.
+ *
+ * Bridges on the engine are made up of two parts:
  * the mob itself, which Pikmin damage, and a series of components.
  * Each component is a mob that other mobs can walk on top of, serving
  * either as the floor of the bridge, or one of the rails.
@@ -31,43 +33,55 @@ extern const float STEP_HEIGHT;
  * existing ones.
  */
 class bridge : public mob {
+
 private:
+    
+    //--- Members ---
+
     //How many chunks are needed to fully build this bridge.
     size_t total_chunks_needed;
+
     //Total length that the bridge should have.
     float total_length;
+
     //Total vertical offset over the bridge.
     float delta_z;
+
     //Starting position of the bridge.
     point start_pos;
+
     //Starting vertical position of the bridge.
     float start_z;
+
     //How many chunks have successfully been created so far.
     size_t chunks;
+
     //Z offset of the previous chunk. Cache for convenience.
     float prev_chunk_z_offset;
+
     //Components of the previous chunk. Cache for convenience.
     vector<mob*> prev_chunk_components;
+
     //How many times did we combine chunks? Cache for convenience.
     size_t prev_chunk_combo;
     
 public:
+    
+    //--- Members ---
+
     //What type of bridge it is.
     bridge_type* bri_type;
     
-    //Constructor.
-    bridge(const point &pos, bridge_type* bri_type, const float angle);
     
-    //Draws a bridge component.
+    //--- Function declarations ---
+    
+    bridge(const point &pos, bridge_type* bri_type, const float angle);
     static void draw_component(mob* m);
-    //Checks if any chunks need to be created, and creates them if needed.
     bool check_health();
-    //Returns the starting point of the bridge.
     point get_start_point();
-    //Reads the provided script variables, if any, and does stuff with them.
     void read_script_vars(const script_var_reader &svr) override;
-    //Sets up the bridge using its linked mob.
     void setup();
+    
 };
 
 

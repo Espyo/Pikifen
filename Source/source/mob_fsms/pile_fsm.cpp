@@ -24,10 +24,10 @@
 using std::size_t;
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the pile's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the pile's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void pile_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -54,14 +54,13 @@ void pile_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles being attacked, and checks if it must drop another resource or not.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Handles being attacked, and checks if it must drop another
+ * resource or not.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     gen_mob_fsm::be_attacked(m, info1, info2);
@@ -149,14 +148,12 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a pile starts idling.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a pile starts idling.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pile_fsm::become_idle(mob* m, void* info1, void* info2) {
     pile* pil_ptr = (pile*) m;

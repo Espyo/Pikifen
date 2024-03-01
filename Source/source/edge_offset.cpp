@@ -21,13 +21,12 @@
 #include "game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Draws an edge offset effect of a given edge onto the current target bitmap,
- * which acts as a buffer.
- * caches:
- *   List of caches to fetch edge info from.
- * e_idx:
- *   Index of the edge whose effects to draw.
+/**
+ * @brief Draws an edge offset effect of a given edge onto the current
+ * target bitmap, which acts as a buffer.
+ *
+ * @param caches List of caches to fetch edge info from.
+ * @param e_idx Index of the edge whose effects to draw.
  */
 void draw_edge_offset_on_buffer(
     const vector<edge_offset_cache> &caches, size_t e_idx
@@ -181,15 +180,13 @@ void draw_edge_offset_on_buffer(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws edge offset effects onto the given sector. This requires that
+/**
+ * @brief Draws edge offset effects onto the given sector. This requires that
  * the effects have been drawn onto a buffer, from which this algorithm samples.
- * s_ptr:
- *   Sector to draw the effects of.
- * buffer:
- *   Buffer to draw from.
- * opacity:
- *   Draw at this opacity, 0 - 1.
+ *
+ * @param s_ptr Sector to draw the effects of.
+ * @param buffer Buffer to draw from.
+ * @param opacity Draw at this opacity, 0 - 1.
  */
 void draw_sector_edge_offsets(
     sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
@@ -228,36 +225,30 @@ void draw_sector_edge_offsets(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information about one of the ends of an edge offset effect.
- * e_ptr:
- *   Edge with the effect.
- * end_vertex:
- *   Vertex of the end being processed.
- * end_idx:
- *   Index of the end being processed. 0 is the end of the edge where the
- *   sector receiving the effect is to the left, if you face
- *   from end 0 to end 1.
- * edge_process_angle:
- *   Angle that the edge makes from the current end to the opposite one.
- * checker:
- *   Pointer to a function that checks if the edge should have the
- *   intended effect or not. It also returns what sector of the edge
- *   will be affected by the effect, and which won't.
- * length_getter:
- *   Function that returns the length of the effect.
- * color_getter:
- *   Function that returns the color of the effect.
- * final_angle:
- *   The angle of the tip of this end of the effect's "rectangle".
- * final_length:
- *   The length of the tip of this end of the effect's "rectangle".
- * final_color:
- *   The color at this end of the effect's "rectangle".
- * final_elbow_angle:
- *   The angle that the elbow must finish at. 0 if no elbow is needed.
- * final_elbow_length:
- *   The length of the line at the end of the elbow. 0 if no elbow is needed.
+/**
+ * @brief Returns information about one of the ends of an edge offset effect.
+ *
+ * @param e_ptr Edge with the effect.
+ * @param end_vertex Vertex of the end being processed.
+ * @param end_idx Index of the end being processed. 0 is the end of the
+ * edge where the sector receiving the effect is to the left, if you face
+ * from end 0 to end 1.
+ * @param edge_process_angle Angle that the edge makes from the current end
+ * to the opposite one.
+ * @param checker Pointer to a function that checks if the edge should have the
+ * intended effect or not. It also returns what sector of the edge
+ * will be affected by the effect, and which won't.
+ * @param length_getter Function that returns the length of the effect.
+ * @param color_getter Function that returns the color of the effect.
+ * @param final_angle The angle of the tip of this end of the effect's
+ * "rectangle".
+ * @param final_length The length of the tip of this end of the effect's
+ * "rectangle".
+ * @param final_color The color at this end of the effect's "rectangle".
+ * @param final_elbow_angle The angle that the elbow must finish at.
+ * 0 if no elbow is needed.
+ * @param final_elbow_length The length of the line at the end of the elbow.
+ * 0 if no elbow is needed.
  */
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
@@ -410,8 +401,10 @@ void get_edge_offset_edge_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the point in which the far end of two edge offset effects intersect.
+/**
+ * @brief Returns the point in which the far end of two edge offset
+ * effects intersect.
+ *
  * This calculation is only for the base "rectangle" shape of the effect,
  * and doesn't take into account any inward slants given on the ends, nor
  * does it care about elbows.
@@ -423,22 +416,18 @@ void get_edge_offset_edge_info(
  * lines.
  * We could use get_miter_points for this, but it's surprisingly not much
  * faster, and this allows us to tackle some visually glitchy edge-cases.
- * e1:
- *   First effect-casting edge. This is the main edge being processed.
- * e2:
- *   Second effect-casting edge.
- * common_vertex:
- *   The vertex shared between these two edges.
- * base_effect_angle1:
- *   The base angle at which edge 1's effect is projected.
- * base_effect_angle2:
- *   Same as base_effect_angle1, but for edge 2.
- * effect_length:
- *   Length of either effect.
- * final_angle:
- *   The angle from the common vertex to the intersection point.
- * final_length:
- *   The length from the common vertex to the intersection point.
+ *
+ * @param e1 First effect-casting edge. This is the main edge being processed.
+ * @param e2 Second effect-casting edge.
+ * @param common_vertex The vertex shared between these two edges.
+ * @param base_effect_angle1 The base angle at which edge 1's effect
+ * is projected.
+ * @param base_effect_angle2 Same as base_effect_angle1, but for edge 2.
+ * @param effect_length Length of either effect.
+ * @param final_angle The angle from the common vertex to the
+ * intersection point.
+ * @param final_length The length from the common vertex to the
+ * intersection point.
  */
 void get_edge_offset_intersection(
     const edge* e1, const edge* e2, const vertex* common_vertex,
@@ -504,23 +493,18 @@ void get_edge_offset_intersection(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the next edge in a vertex's list of edges.
+/**
+ * @brief Returns the next edge in a vertex's list of edges.
  * It checks in a given direction, starting from some pivot angle.
- * v_ptr:
- *   Vertex to work on.
- * pivot_angle:
- *   Angle to check from.
- * clockwise:
- *   True to check in a clockwise direction, false for counter-clockwise.
- * ignore:
- *   Edge to ignore while checking, if any.
- * final_edge:
- *   The found edge is returned here, or NULL.
- * final_angle:
- *   Angle of the found edge.
- * final_diff:
- *   Difference in angle between the two.
+ *
+ * @param v_ptr Vertex to work on.
+ * @param pivot_angle Angle to check from.
+ * @param clockwise True to check in a clockwise direction,
+ * false for counter-clockwise.
+ * @param ignore Edge to ignore while checking, if any.
+ * @param final_edge The found edge is returned here, or NULL.
+ * @param final_angle Angle of the found edge.
+ * @param final_diff Difference in angle between the two.
  */
 void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
@@ -562,30 +546,23 @@ void get_next_edge(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the next edge that needs the given edge offset event,
+/**
+ * @brief Returns the next edge that needs the given edge offset event,
  * in a vertex's list of edges. It checks in a given direction,
  * starting from some pivot angle.
- * v_ptr:
- *   Vertex to work on.
- * pivot_angle:
- *   Angle to check from.
- * clockwise:
- *   True to check in a clockwise direction, false for counter-clockwise.
- * ignore:
- *   Edge to ignore while checking, if any.
- * edge_checker:
- *   Function that returns whether or not a given edge should use the effect.
- * final_edge:
- *   The found edge is returned here, or NULL.
- * final_angle:
- *   Angle of the found edge.
- * final_diff:
- *   Difference in angle between the two.
- * final_base_effect_angle:
- *   The base effect angle of the found edge.
- * final_effect_cw:
- *   Is the effect cast clockwise?
+ *
+ * @param v_ptr Vertex to work on.
+ * @param pivot_angle Angle to check from.
+ * @param clockwise True to check in a clockwise direction,
+ * false for counter-clockwise.
+ * @param ignore Edge to ignore while checking, if any.
+ * @param edge_checker Function that returns whether or not a given edge
+ * should use the effect.
+ * @param final_edge The found edge is returned here, or NULL.
+ * @param final_angle Angle of the found edge.
+ * @param final_diff Difference in angle between the two.
+ * @param final_base_effect_angle The base effect angle of the found edge.
+ * @param final_effect_cw Is the effect cast clockwise?
  */
 void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
@@ -653,20 +630,17 @@ void get_next_offset_effect_edge(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws edge offset effects for all edges on-screen onto a buffer image,
+/**
+ * @brief Draws edge offset effects for all edges on-screen onto a buffer image,
  * so that sectors may then sample from it to draw what effects they need.
- * cam_tl:
- *   Top-left corner of the camera boundaries. The edges of any sector that is
+ *
+ * @param cam_tl Top-left corner of the camera boundaries.
+ * The edges of any sector that is
  *   beyond these boundaries will be ignored.
- * cam_br:
- *   Same as cam_tl, but for the bottom-right boundaries.
- * caches:
- *   List of caches to fetch edge info from.
- * buffer:
- *   Buffer to draw to.
- * clear_first:
- *   If true, the bitmap is cleared before any drawing is done.
+ * @param cam_br Same as cam_tl, but for the bottom-right boundaries.
+ * @param caches List of caches to fetch edge info from.
+ * @param buffer Buffer to draw to.
+ * @param clear_first If true, the bitmap is cleared before any drawing is done.
  */
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
@@ -726,20 +700,16 @@ void update_offset_effect_buffer(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the cached information about all edge offsets.
- * caches:
- *   List of caches to update.
- * vertexes_to_update:
- *   List of vertexes whose edges need updating.
- * checker:
- *   Pointer to a function that checks if the edge should have the
- *   intended effect or not. It also returns what sector of the edge
- *   will be affected by the effect, and which won't.
- * length_getter:
- *   Function that returns the length of the effect.
- * color_getter:
- *   Function that returns the color of the effect.
+/**
+ * @brief Updates the cached information about all edge offsets.
+ *
+ * @param caches List of caches to update.
+ * @param vertexes_to_update List of vertexes whose edges need updating.
+ * @param checker Pointer to a function that checks if the edge should have the
+ * intended effect or not. It also returns what sector of the edge
+ *  will be affected by the effect, and which won't.
+ * @param length_getter Function that returns the length of the effect.
+ * @param color_getter Function that returns the color of the effect.
  */
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,

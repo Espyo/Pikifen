@@ -22,11 +22,16 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Mob category for the bridges.
+/**
+ * @brief Mob category for the bridges.
  */
 class bridge_category : public mob_category {
+
 public:
+
+    //--- Function declarations ---
+
+    bridge_category();
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;
     mob_type* create_type() override;
@@ -36,8 +41,6 @@ public:
     ) override;
     void erase_mob(mob* m) override;
     void clear_types() override;
-    
-    bridge_category();
 };
 
 

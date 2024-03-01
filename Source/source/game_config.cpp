@@ -13,81 +13,116 @@
 
 
 namespace GAME_CONFIG {
+
 //Default values for whether leaders can throw leaders.
 const bool DEF_CAN_THROW_LEADERS = true;
+
 //Default value for the non-specific carrying movement color.
 const ALLEGRO_COLOR DEF_CARRYING_COLOR_MOVE =
 { 1.00f, 1.00f, 1.00f, 1.00f};
+
 //Default value for the carrying stopped color.
 const ALLEGRO_COLOR DEF_CARRYING_COLOR_STOP =
 { 0.40f, 0.75f, 0.75f, 1.00f };
+
 //Default value for the carrying speed base multiplier.
 const float DEF_CARRYING_SPEED_BASE_MULT = 0.5f;
+
 //Default value for the carrying speed maximum multiplier.
 const float DEF_CARRYING_SPEED_MAX_MULT = 0.8f;
+
 //Default value for the carrying speed weight multiplier.
 const float DEF_CARRYING_SPEED_WEIGHT_MULT = 0.0004f;
+
 //Default value for the cursor maximum distance.
 const float DEF_CURSOR_MAX_DIST = 200.0f;
+
 //Default value for the cursor spin speed.
 const float DEF_CURSOR_SPIN_SPEED = 180.0f;
+
 //Default value for the day end time.
 const float DEF_DAY_MINUTES_END = 60 * 19;
+
 //Default value for the day time passing speed.
 const float DEF_DAY_MINUTES_PER_IRL_SEC = 2;
+
 //Default value for the day start time.
 const float DEF_DAY_MINUTES_START = 60 * 7;
+
 //Default value for the group member grab range.
 const float DEF_GROUP_MEMBER_GRAB_RANGE = 64.0f;
+
 //Default value for the idle Pikmin bump delay.
 const float DEF_IDLE_BUMP_DELAY = 5.0f;
+
 //Default value for the idle Pikmin bump range.
 const float DEF_IDLE_BUMP_RANGE = 50.0f;
+
 //Default value for the idle Pikmin task range.
 const float DEF_IDLE_TASK_RANGE = 50.0f;
+
 //Default value for the maturity power multiplier.
 const float DEF_MATURITY_POWER_MULT = 0.1f;
+
 //Default value for the maturity speed multiplier.
 const float DEF_MATURITY_SPEED_MULT = 0.1f;
+
 //Default value for the maximum number of Pikmin in the field.
 const size_t DEF_MAX_PIKMIN_IN_FIELD = 100;
+
 //Default value for the message character interval.
 const float DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
+
 //Default value for the next Pikmin auto-pluck range.
 const float DEF_NEXT_PLUCK_RANGE = 160.0f;
+
 //Default value for the color that represents no Pikmin.
 const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR = { 0.75f, 0.90f, 0.90f, 1.0f };
+
 //Default value for the Onion opening range.
 const float DEF_ONION_OPEN_RANGE = 24.0f;
+
 //Default value for the Pikmin chase range.
 const float DEF_PIKMIN_CHASE_RANGE = 200.0f;
+
 //Default value for the pluck range.
 const float DEF_PLUCK_RANGE = 30.0f;
+
 //Default value for the standard leader height.
 const float DEF_STANDARD_LEADER_HEIGHT = 46.0f;
+
 //Default value for the standard leader radius.
 const float DEF_STANDARD_LEADER_RADIUS = 16.0f;
+
 //Default value for the standard Pikmin height.
 const float DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
+
 //Default value for the standard Pikmin radius.
 const float DEF_STANDARD_PIKMIN_RADIUS = 5.0f;
+
 //Default value for the swarming task range.
 const float DEF_SWARM_TASK_RANGE = 3.0f;
+
 //Default value for the maximum throw distance.
 const float DEF_THROW_MAX_DIST = DEF_CURSOR_MAX_DIST;
+
 //Default value for the whistle growth speed.
 const float DEF_WHISTLE_GROWTH_SPEED = 180.0f;
+
 //Default value for the maximum whistle distance.
 const float DEF_WHISTLE_MAX_DIST = DEF_CURSOR_MAX_DIST;
+
 //Default value for the maximum zoom level.
 const float DEF_ZOOM_MAX_LEVEL = 3.0f;
+
 //Default value for the minimum zoom level.
 const float DEF_ZOOM_MIN_LEVEL = 0.66f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a game config struct.
+/**
+ * @brief Constructs a new game config object.
  */
 game_config::game_config() :
     can_throw_leaders(GAME_CONFIG::DEF_CAN_THROW_LEADERS),
@@ -127,10 +162,10 @@ game_config::game_config() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the game's config from a file.
- * file:
- *   File to load from.
+/**
+ * @brief Loads the game's config from a file.
+ *
+ * @param file File to load from.
  */
 void game_config::load(data_node* file) {
     reader_setter rs(file);

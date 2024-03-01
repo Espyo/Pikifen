@@ -13,10 +13,10 @@
 #include "status.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a status effect instance.
- * type:
- *   Its type.
+/**
+ * @brief Constructs a new status object.
+ * 
+ * @param type Its type.
  */
 status::status(status_type* type) :
     type(type),
@@ -27,11 +27,11 @@ status::status(status_type* type) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks a status effect instance's time by one frame of logic, but does not
- * tick its effects logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks a status effect instance's time by one frame of logic,
+ * but does not tick its effects logic.
+ * 
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void status::tick(const float delta_t) {
     if(type->auto_remove_time > 0.0f) {
@@ -43,8 +43,8 @@ void status::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a status effect type.
+/**
+ * @brief Constructs a new status type object.
  */
 status_type::status_type() :
     affects(0),

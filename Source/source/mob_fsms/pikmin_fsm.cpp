@@ -25,10 +25,10 @@
 #include "gen_mob_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the Pikmin's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the Pikmin's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void pikmin_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -1714,14 +1714,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is hit by an attack and gets knocked back.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is hit by an attack and gets knocked back.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
@@ -1774,14 +1772,12 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is dismissed by its leader.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the world coordinates to go to.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is dismissed by its leader.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the world coordinates to go to.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -1798,14 +1794,12 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is grabbed by an enemy.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the enemy.
- * info2:
- *   Pointer to the hitbox that grabbed.
+/**
+ * @brief When a Pikmin is grabbed by an enemy.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the enemy.
+ * @param info2 Pointer to the hitbox that grabbed.
  */
 void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1826,14 +1820,12 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is grabbed by a leader.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is grabbed by a leader.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -1843,14 +1835,12 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is gently released by a leader or enemy.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is gently released by a leader or enemy.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -1866,14 +1856,12 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is thrown by a leader.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is thrown by a leader.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -1907,14 +1895,12 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is thrown after being plucked.
- * m:
- *   The mob.
- * info1:
- *   Points to the bouncer mob.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is thrown after being plucked.
+ *
+ * @param m The mob.
+ * @param info1 Points to the bouncer mob.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -1949,14 +1935,12 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is thrown by a bouncer mob.
- * m:
- *   The mob.
- * info1:
- *   Points to the bouncer mob.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is thrown by a bouncer mob.
+ *
+ * @param m The mob.
+ * @param info1 Points to the bouncer mob.
+ * @param info2 Unused.
  */
 void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -1966,14 +1950,12 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin becomes "helpless".
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin becomes "helpless".
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -1983,14 +1965,12 @@ void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin becomes idling.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin becomes idling.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -2013,14 +1993,12 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin becomes a seed or a sprout.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin becomes a seed or a sprout.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
@@ -2035,14 +2013,12 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes a Pikmin begin its plucking process.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that is plucking.
- * info2:
- *   Unused.
+/**
+ * @brief Makes a Pikmin begin its plucking process.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that is plucking.
+ * @param info2 Unused.
  */
 void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2061,15 +2037,13 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is called over by a leader, either by being whistled,
+/**
+ * @brief When a Pikmin is called over by a leader, either by being whistled,
  * or touched when idling.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   If not NULL, then the Pikmin must be silent.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 If not NULL, then the Pikmin must be silent.
  */
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2089,15 +2063,13 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin that is knocked down is called over by a leader,
+/**
+ * @brief When a Pikmin that is knocked down is called over by a leader,
  * either by being whistled, or touched when idling.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
  */
 void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2122,16 +2094,14 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin should check the attack it has just received.
+/**
+ * @brief When a Pikmin should check the attack it has just received.
  * If the attack is successful, another event is triggered. Otherwise
  * nothing happens.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::check_incoming_attack(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2160,15 +2130,13 @@ void pikmin_fsm::check_incoming_attack(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin should check if the leader bumping it should result in it
- * being added to the group or not.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin should check if the leader bumping it should
+ * result in it being added to the group or not.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -2181,16 +2149,14 @@ void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin should check the attack it is about to unleash.
+/**
+ * @brief When a Pikmin should check the attack it is about to unleash.
  * If it realizes it's doing no damage, it should start considering
  * sighing and giving up.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the opponent.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the opponent.
+ * @param info2 Unused.
  */
 void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2208,14 +2174,12 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to circle around its opponent.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to circle around its opponent.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -2239,29 +2203,25 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to clear any timer set.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to clear any timer set.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
     m->set_timer(0);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin reaches an opponent that it was chasing after,
+/**
+ * @brief When the Pikmin reaches an opponent that it was chasing after,
  * and should now decide how to attack it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -2359,14 +2319,12 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to bounce back from an impact attack.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to bounce back from an impact attack.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -2406,14 +2364,12 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin must start climbing up an Onion's leg.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin must start climbing up an Onion's leg.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -2436,28 +2392,24 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin falls down a bottomless pit.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin falls down a bottomless pit.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(false, false, 0);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin successfully finishes carrying an object.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin successfully finishes carrying an object.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::finish_carrying(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
@@ -2474,14 +2426,12 @@ void pikmin_fsm::finish_carrying(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin finishes drinking the drop it was drinking.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin finishes drinking the drop it was drinking.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -2506,14 +2456,12 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin finishes getting up from being knocked down.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin finishes getting up from being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
     mob* prev_focused_mob = m->focused_mob;
@@ -2539,14 +2487,12 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin finishes its sequence of landing on another mob.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin finishes its sequence of landing on another mob.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -2573,14 +2519,12 @@ void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin finishes picking some object up to hold it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin finishes picking some object up to hold it.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) (m->focused_mob);
@@ -2602,14 +2546,12 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin must move towards the whistle.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
+/**
+ * @brief When the Pikmin must move towards the whistle.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
  */
 void pikmin_fsm::flail_to_leader(mob* m, void* info1, void* info2) {
     mob* caller = (mob*) info1;
@@ -2617,15 +2559,13 @@ void pikmin_fsm::flail_to_leader(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to drop the object it's carrying, or
+/**
+ * @brief When a Pikmin is meant to drop the object it's carrying, or
  * stop chasing the object if it's not carrying it yet, but wants to.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
@@ -2640,14 +2580,12 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to forget a group task object it was going for.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to forget a group task object it was going for.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::forget_group_task(mob* m, void* info1, void* info2) {
     if(!m->focused_mob) return;
@@ -2659,14 +2597,12 @@ void pikmin_fsm::forget_group_task(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to forget a tool object it was going for.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to forget a tool object it was going for.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
     if(!m->focused_mob) return;
@@ -2677,14 +2613,12 @@ void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin gets knocked back.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin gets knocked back.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2692,14 +2626,12 @@ void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin gets knocked back and lands on the floor.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin gets knocked back and lands on the floor.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -2718,14 +2650,12 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to go towards its spot on a carriable object.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the mob to carry.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to go towards its spot on a carriable object.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob to carry.
+ * @param info2 Unused.
  */
 void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2792,14 +2722,12 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to go towards a group task mob.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the group task.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to go towards a group task mob.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the group task.
+ * @param info2 Unused.
  */
 void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2845,14 +2773,12 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to walk towards an Onion to climb inside.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the Onion.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to walk towards an Onion to climb inside.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the Onion.
+ * @param info2 Unused.
  */
 void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2890,14 +2816,12 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to walk towards an opponent.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the opponent.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to walk towards an opponent.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the opponent.
+ * @param info2 Unused.
  */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2954,14 +2878,12 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to go towards a tool mob.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the tool.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to go towards a tool mob.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the tool.
+ * @param info2 Unused.
  */
 void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3007,14 +2929,12 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to get going to its dismiss spot.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin needs to get going to its dismiss spot.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3029,14 +2949,12 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a thrown Pikmin lands.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a thrown Pikmin lands.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     pikmin_fsm::stand_still(m, NULL, NULL);
@@ -3045,14 +2963,13 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin being bounced back from an impact attack lands on the ground.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin being bounced back from an impact attack lands
+ * on the ground.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
     if(m->script_timer.time_left > 0.0f) {
@@ -3064,14 +2981,13 @@ void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin being bounced back from an impact attack lands on the ground.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin being bounced back from an impact attack lands
+ * on the ground.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3088,14 +3004,12 @@ void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a thrown Pikmin lands on a mob, to latch on to it.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+/**
+ * @brief When a thrown Pikmin lands on a mob, to latch on to it.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3149,14 +3063,12 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a thrown Pikmin lands on a mob, whilst holding something.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hitbox touch information structure.
- * info2:
- *   Unused.
+/**
+ * @brief When a thrown Pikmin lands on a mob, whilst holding something.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hitbox touch information structure.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3213,15 +3125,13 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a thrown Pikmin lands while holding something.
+/**
+ * @brief When a thrown Pikmin lands while holding something.
  * Depending on what it is, it might drop it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
     engine_assert(!m->holding.empty(), m->print_state_history());
@@ -3251,14 +3161,12 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin leaves its Onion because it got called out.
- * m:
- *   The mob.
- * info1:
- *   Points to the Onion.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin leaves its Onion because it got called out.
+ *
+ * @param m The mob.
+ * @param info1 Points to the Onion.
+ * @param info2 Unused.
  */
 void pikmin_fsm::leave_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3268,14 +3176,12 @@ void pikmin_fsm::leave_onion(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin leaves a hazardous sector.
- * m:
- *   The mob.
- * info1:
- *   Points to the hazard.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin leaves a hazardous sector.
+ *
+ * @param m The mob.
+ * @param info1 Points to the hazard.
+ * @param info2 Unused.
  */
 void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3287,28 +3193,24 @@ void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the mob the Pikmin is latched on to disappears.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the mob the Pikmin is latched on to disappears.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::lose_latched_mob(mob* m, void* info1, void* info2) {
     m->stop_chasing();
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin notifies the leader that it must gently release it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin notifies the leader that it must gently release it.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::notify_leader_release(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = ((pikmin*) m);
@@ -3318,15 +3220,13 @@ void pikmin_fsm::notify_leader_release(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to decide a new spot to run off to whilst
+/**
+ * @brief When a Pikmin needs to decide a new spot to run off to whilst
  * in panicking.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
     m->chase(
@@ -3340,14 +3240,12 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to reel back to unleash an attack.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to reel back to unleash an attack.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -3376,14 +3274,12 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin reaches its spot on a carriable object.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin reaches its spot on a carriable object.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3414,14 +3310,12 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin reaches its dismissal spot.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin reaches its dismissal spot.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -3429,15 +3323,13 @@ void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin that just attacked an opponent needs to walk
+/**
+ * @brief When a Pikmin that just attacked an opponent needs to walk
  * towards it again.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
 
@@ -3477,14 +3369,13 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to release the tool it is currently holding.
- * m:
- *   The mob.
- * info1:
- *   If NULL, release as normal. Otherwise, this is a "gentle" release.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to release the tool it is currently holding.
+ *
+ * @param m The mob.
+ * @param info1 If NULL, release as normal.
+ * Otherwise, this is a "gentle" release.
+ * @param info2 Unused.
  */
 void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
@@ -3511,14 +3402,12 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin seed lands on the ground.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin seed lands on the ground.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
@@ -3541,14 +3430,12 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to set its timer for the bump lock.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to set its timer for the bump lock.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::set_bump_lock(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3556,56 +3443,48 @@ void pikmin_fsm::set_bump_lock(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to change "reach" to the idle task reach.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to change "reach" to the idle task reach.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::set_idle_task_reach(mob* m, void* info1, void* info2) {
     m->near_reach = 0;
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to change "reach" to the swarm reach.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to change "reach" to the swarm reach.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::set_swarm_reach(mob* m, void* info1, void* info2) {
     m->near_reach = 1;
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to sigh.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to sigh.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_SIGHING);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Causes a sprout to evolve.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Causes a sprout to evolve.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
@@ -3657,14 +3536,12 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Schedules the next evolution for a sprout.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Schedules the next evolution for a sprout.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::sprout_schedule_evol(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
@@ -3672,14 +3549,12 @@ void pikmin_fsm::sprout_schedule_evol(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to stand still in place.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to stand still in place.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_circling();
@@ -3690,16 +3565,14 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to start chasing after its leader (or the group spot
- * belonging to the leader).
- * m:
- *   The mob.
- * info1:
- *   Points to the position struct with the final destination.
+/**
+ * @brief When a Pikmin needs to start chasing after its leader
+ * (or the group spot belonging to the leader).
+ *
+ * @param m The mob.
+ * @param info1 Points to the position struct with the final destination.
  *   If NULL, the final destination is calculated in this function.
- * info2:
- *   Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
@@ -3708,14 +3581,12 @@ void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts drinking the drop it touched.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the drop mob.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts drinking the drop it touched.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the drop mob.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
     mob* drop_ptr = (mob*) info1;
@@ -3727,14 +3598,12 @@ void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts flailing.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts flailing.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     pikmin_fsm::release_tool(m, NULL, NULL);
@@ -3758,14 +3627,12 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts getting up from being knocked down.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts getting up from being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3778,14 +3645,12 @@ void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts lunging forward for an impact attack.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts lunging forward for an impact attack.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -3795,28 +3660,24 @@ void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin lands on a mob and needs to start its landing animation.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin lands on a mob and needs to start its landing animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_mob_landing(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_MOB_LANDING);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts panicking.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts panicking.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3829,14 +3690,12 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts picking some object up to hold it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts picking some object up to hold it.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_picking_up(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -3844,14 +3703,13 @@ void pikmin_fsm::start_picking_up(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin must start returning to the carried object's return point.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the mob that used to be carried.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin must start returning to the carried object's
+ * return point.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob that used to be carried.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -3897,14 +3755,12 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts riding on a track.
- * m:
- *   The mob.
- * info1:
- *   Points to the track mob.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin starts riding on a track.
+ *
+ * @param m The mob.
+ * @param info1 Points to the track mob.
+ * @param info2 Unused.
  */
 void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) info1;
@@ -3939,14 +3795,12 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin must no longer be idling.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin must no longer be idling.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -3954,28 +3808,24 @@ void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is no longer in the thrown state.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is no longer in the thrown state.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to release an object it is carrying.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is meant to release an object it is carrying.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
@@ -3988,14 +3838,12 @@ void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin stands still while in a leader's group.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin stands still while in a leader's group.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -4011,14 +3859,12 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to teleport to its spot in the Onion leg.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to teleport to its spot in the Onion leg.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::tick_entering_onion(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
@@ -4031,14 +3877,12 @@ void pikmin_fsm::tick_entering_onion(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to teleport to its spot in a group task.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to teleport to its spot in a group task.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -4060,14 +3904,12 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin has to teleport to its spot in a track it is riding.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin has to teleport to its spot in a track it is riding.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
@@ -4088,14 +3930,12 @@ void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin touches a "eat" hitbox.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin touches a "eat" hitbox.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -4116,14 +3956,12 @@ void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin touches a hazard.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the hazard type.
- * info2:
- *   Pointer to the hitbox that caused this, if any.
+/**
+ * @brief When a Pikmin touches a hazard.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the hazard type.
+ * @param info2 Pointer to the hitbox that caused this, if any.
  */
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -4181,14 +4019,12 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is sprayed.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the spray type.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is sprayed.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the spray type.
+ * @param info2 Unused.
  */
 void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -4205,16 +4041,14 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin gets grabbed by an enemy. It should try to swap places
+/**
+ * @brief When the Pikmin gets grabbed by an enemy. It should try to swap places
  * with the object that it is holding, instead, if possible.
  * If not, it should drop the object and get grabbed like normal.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
     assert(!m->holding.empty());
@@ -4243,14 +4077,12 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin stops latching on to an enemy.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the Pikmin stops latching on to an enemy.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
     if(!m->focused_mob) return;
@@ -4260,15 +4092,13 @@ void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin should update its destination when chasing the leader.
- * m:
- *   The mob.
- * info1:
- *   Points to the position struct with the final destination.
+/**
+ * @brief When the Pikmin should update its destination when chasing the leader.
+ *
+ * @param m The mob.
+ * @param info1 Points to the position struct with the final destination.
  *   If NULL, the final destination is calculated in this function.
- * info2:
- *   Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -4293,14 +4123,12 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is whistled over by a leader while holding a tool.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is whistled over by a leader while holding a tool.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
  */
 void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -4317,14 +4145,12 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a Pikmin is whistled over by a leader while riding on a track.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
+/**
+ * @brief When a Pikmin is whistled over by a leader while riding on a track.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
  */
 void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info, m->print_state_history());
@@ -4339,14 +4165,12 @@ void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the Pikmin should start working on a group task.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the Pikmin should start working on a group task.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());

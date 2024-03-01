@@ -16,21 +16,28 @@
 #include "pile.h"
 
 
-/* ----------------------------------------------------------------------------
- * A resource is any object that a single Pikmin can pick up, and deliver
+/**
+ * @brief A resource is any object that a single Pikmin can pick up, and deliver
  * somewhere else. It can optionally return to where the origin of the
  * resource came from.
  */
 class resource : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of resource it is.
     resource_type* res_type;
     
     //Pile it belongs to, if any.
     pile* origin_pile;
     
-    //Constructor.
+
+    //--- Function declarations ---
+    
     resource(const point &pos, resource_type* type, const float angle);
+    
 };
 
 

@@ -17,10 +17,10 @@
 #include "gen_mob_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the treasure's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the treasure's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void treasure_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -141,14 +141,12 @@ void treasure_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a treasure falls into a bottomless pit and should respawn.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a treasure falls into a bottomless pit and should respawn.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
     m->become_uncarriable(); //Force all Pikmin to let go.
@@ -157,14 +155,12 @@ void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the treasure should lose its momentum and stand still.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the treasure should lose its momentum and stand still.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void treasure_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_chasing();

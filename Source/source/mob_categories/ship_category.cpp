@@ -16,8 +16,8 @@
 #include "../mobs/ship.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the ship category.
+/**
+ * @brief Constructs a new ship category object.
  */
 ship_category::ship_category() :
     mob_category(
@@ -28,8 +28,8 @@ ship_category::ship_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of ship.
+/**
+ * @brief Clears the list of registered types of ship.
  */
 void ship_category::clear_types() {
     for(auto &t : game.mob_types.ship) {
@@ -39,14 +39,13 @@ void ship_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a ship and adds it to the list of ships.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a ship and adds it to the list of ships.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* ship_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* ship_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of ship.
+/**
+ * @brief Creates a new, empty type of ship.
+ *
+ * @return The type.
  */
 mob_type* ship_category::create_type() {
     return new ship_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a ship from the list of ships.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a ship from the list of ships.
+ *
+ * @param m The mob to erase.
  */
 void ship_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.ships.erase(
         find(
-        game.states.gameplay->mobs.ships.begin(),
- game.states.gameplay->mobs.ships.end(), 
- (ship*) m
- )
+            game.states.gameplay->mobs.ships.begin(),
+            game.states.gameplay->mobs.ships.end(),
+            (ship*) m
+        )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of ship given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of ship given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* ship_category::get_type(const string &name) const {
     auto it = game.mob_types.ship.find(name);
@@ -93,10 +95,10 @@ mob_type* ship_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of ship by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of ship by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void ship_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.ship) {
@@ -105,10 +107,10 @@ void ship_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of ship.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of ship.
+ *
+ * @param type Mob type to register.
  */
 void ship_category::register_type(mob_type* type) {
     game.mob_types.ship[type->name] = (ship_type*) type;

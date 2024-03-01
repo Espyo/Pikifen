@@ -16,22 +16,28 @@
 
 
 namespace GUI_EDITOR {
+
 //Possible grid intervals.
 const vector<float> GRID_INTERVALS =
 {1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
+
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
+
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 64.0f;
+
 //Minimum zoom level possible in the editor.
 const float ZOOM_MIN_LEVEL = 0.5f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes GUI editor class stuff.
+/**
+ * @brief Constructs a new GUI editor object.
  */
 gui_editor::gui_editor() :
     cur_item(INVALID),
@@ -44,8 +50,8 @@ gui_editor::gui_editor() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the load dialog is closed.
+/**
+ * @brief Code to run when the load dialog is closed.
  */
 void gui_editor::close_load_dialog() {
     if(!loaded_content_yet && file_name.empty()) {
@@ -56,16 +62,16 @@ void gui_editor::close_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the options dialog is closed.
+/**
+ * @brief Code to run when the options dialog is closed.
  */
 void gui_editor::close_options_dialog() {
     save_options();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the GUI editor.
+/**
+ * @brief Handles the logic part of the main loop of the GUI editor.
  */
 void gui_editor::do_logic() {
     editor::do_logic_pre();
@@ -76,12 +82,11 @@ void gui_editor::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Dear ImGui callback for when the canvas needs to be drawn on-screen.
- * parent_list:
- *   Unused.
- * cmd:
- *   Unused.
+/**
+ * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ *
+ * @param parent_list Unused.
+ * @param cmd Unused.
  */
 void gui_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -90,33 +95,40 @@ void gui_editor::draw_canvas_imgui_callback(
 }
 
 
-/* ----------------------------------------------------------------------------
- * In the options data file, options pertaining to an editor's history
+/**
+ * @brief In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
+ *
+ * @return The prefix.
  */
 string gui_editor::get_history_option_prefix() const {
     return "gui_editor_history";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string gui_editor::get_name() const {
     return "GUI editor";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of the currently opened file, or an empty string if none.
+/**
+ * @brief Returns the name of the currently opened file, or an empty string
+ * if none.
+ *
+ * @return The name.
  */
 string gui_editor::get_opened_file_name() const {
     return file_name;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI editor.
+/**
+ * @brief Loads the GUI editor.
  */
 void gui_editor::load() {
     editor::load();
@@ -135,10 +147,11 @@ void gui_editor::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI file.
- * should_update_history:
- *   If true, this loading process should update the user's file open history.
+/**
+ * @brief Loads the GUI file.
+ *
+ * @param should_update_history If true, this loading process should update
+ * the user's file open history.
  */
 void gui_editor::load_file(
     const bool should_update_history
@@ -190,10 +203,10 @@ void gui_editor::load_file(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- * ev:
- *   Event to handle.
+/**
+ * @brief Pans the camera around.
+ *
+ * @param ev Event to handle.
  */
 void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
@@ -205,14 +218,12 @@ void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks a file from the picker.
- * name:
- *   Name of the file.
- * category:
- *   Unused.
- * is_new:
- *   Unused
+/**
+ * @brief Callback for when the user picks a file from the picker.
+ *
+ * @param name Name of the file.
+ * @param category Unused.
+ * @param is_new Unused.
  */
 void gui_editor::pick_file(
     const string &name, const string &category, const bool is_new
@@ -223,8 +234,8 @@ void gui_editor::pick_file(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the grid interval decrease button is pressed.
+/**
+ * @brief Code to run when the grid interval decrease button is pressed.
  */
 void gui_editor::press_grid_interval_decrease_button() {
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS[0];
@@ -245,8 +256,8 @@ void gui_editor::press_grid_interval_decrease_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the grid interval increase button is pressed.
+/**
+ * @brief Code to run when the grid interval increase button is pressed.
  */
 void gui_editor::press_grid_interval_increase_button() {
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS.back();
@@ -267,8 +278,8 @@ void gui_editor::press_grid_interval_increase_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the load button widget is pressed.
+/**
+ * @brief Code to run when the load button widget is pressed.
  */
 void gui_editor::press_load_button() {
     changes_mgr.ask_if_unsaved(
@@ -280,8 +291,8 @@ void gui_editor::press_load_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the quit button widget is pressed.
+/**
+ * @brief Code to run when the quit button widget is pressed.
  */
 void gui_editor::press_quit_button() {
     changes_mgr.ask_if_unsaved(
@@ -293,8 +304,8 @@ void gui_editor::press_quit_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the reload button widget is pressed.
+/**
+ * @brief Code to run when the reload button widget is pressed.
  */
 void gui_editor::press_reload_button() {
     changes_mgr.ask_if_unsaved(
@@ -306,8 +317,8 @@ void gui_editor::press_reload_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the save button widget is pressed.
+/**
+ * @brief Code to run when the save button widget is pressed.
  */
 void gui_editor::press_save_button() {
     if(!save_file()) {
@@ -316,8 +327,8 @@ void gui_editor::press_save_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the snap mode button widget is pressed.
+/**
+ * @brief Code to run when the snap mode button widget is pressed.
  */
 void gui_editor::press_snap_mode_button() {
     game.options.gui_editor_snap = !game.options.gui_editor_snap;
@@ -332,16 +343,16 @@ void gui_editor::press_snap_mode_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom and position reset button widget is pressed.
+/**
+ * @brief Code to run when the zoom and position reset button widget is pressed.
  */
 void gui_editor::press_zoom_and_pos_reset_button() {
     reset_cam(false);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom in button widget is pressed.
+/**
+ * @brief Code to run when the zoom in button widget is pressed.
  */
 void gui_editor::press_zoom_in_button() {
     game.cam.target_zoom =
@@ -353,8 +364,8 @@ void gui_editor::press_zoom_in_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom out button widget is pressed.
+/**
+ * @brief Code to run when the zoom out button widget is pressed.
  */
 void gui_editor::press_zoom_out_button() {
     game.cam.target_zoom =
@@ -366,19 +377,21 @@ void gui_editor::press_zoom_out_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the camera.
- * instantaneous:
- *   Whether the camera moves to its spot instantaneously or not.
+/**
+ * @brief Resets the camera.
+ *
+ * @param instantaneous Whether the camera moves to its spot instantaneously
+ * or not.
  */
 void gui_editor::reset_cam(const bool instantaneous) {
     center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the GUI file onto the disk.
- * Returns true on success, false on failure.
+/**
+ * @brief Saves the GUI file onto the disk.
+ *
+ * @return Whether it succeded.
  */
 bool gui_editor::save_file() {
     data_node* positions_node = file_node.get_child_by_name("positions");
@@ -411,11 +424,12 @@ bool gui_editor::save_file() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Snaps a point to the nearest available grid spot, or keeps the point as is
- * if Shift is pressed.
- * p:
- *   Point to snap.
+/**
+ * @brief Snaps a point to the nearest available grid spot,
+ * or keeps the point as is if Shift is pressed.
+ *
+ * @param p Point to snap.
+ * @return The snapped point.
  */
 point gui_editor::snap_point(const point &p) {
     point final_point = p;
@@ -448,8 +462,8 @@ point gui_editor::snap_point(const point &p) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the editor from memory.
+/**
+ * @brief Unloads the editor from memory.
  */
 void gui_editor::unload() {
     editor::unload();

@@ -22,8 +22,9 @@
 const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
 { 2 * 60, 2 * 60, 3 * 60 };
 
-/* ----------------------------------------------------------------------------
- * Creates a type of Pikmin.
+/**
+ * @brief Constructs a new Pikmin type object.
+ *
  */
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN),
@@ -114,8 +115,10 @@ pikmin_type::pikmin_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector pikmin_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -139,10 +142,10 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void pikmin_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -173,7 +176,7 @@ void pikmin_type::load_properties(data_node* file) {
             );
         }
     }
-
+    
     for(size_t s = 0; s < sounds.size(); ++s) {
         if(sounds[s].name == "attack") {
             sfx_data_idxs[PIKMIN_SOUND_ATTACK] = s;
@@ -200,10 +203,10 @@ void pikmin_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void pikmin_type::load_resources(data_node* file) {
     reader_setter rs(file);
@@ -248,8 +251,8 @@ void pikmin_type::load_resources(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads resources from memory.
+/**
+ * @brief Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
     game.bitmaps.detach(bmp_icon);

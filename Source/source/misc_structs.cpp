@@ -25,36 +25,50 @@
 
 
 namespace MSG_BOX {
+
 //How quickly the advance button icon fades, in alpha (0-1) per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
+
 //How many pixels of margin between the message box and screen borders.
 const float MARGIN = 16.0f;
+
 //How long to protect the player from misinputs for.
 const float MISINPUT_PROTECTION_DURATION = 0.75f;
+
 //How many pixels of padding between the message box borders and text.
 const float PADDING = 8.0f;
+
 //How long each token animates for when being shown.
 const float TOKEN_ANIM_DURATION = 0.5f;
+
 //How much to move a token in the X direction when animating it.
 const float TOKEN_ANIM_X_AMOUNT = 7.0f;
+
 //How much to move a token in the Y direction when animating it.
 const float TOKEN_ANIM_Y_AMOUNT = 3.0f;
+
 //How long to swipe the current section's tokens away for.
 const float TOKEN_SWIPE_DURATION = 0.45f;
+
 //How much to move a token in the X direction when swiping it away.
 const float TOKEN_SWIPE_X_AMOUNT = -2.0f;
+
 //How much to move a token in the Y direction when swiping it away.
 const float TOKEN_SWIPE_Y_AMOUNT = -15.0f;
+
 }
 
 
 namespace NOTIFICATION {
+
 //How quickly it fades, in alpha per second.
 const float FADE_SPEED = 4.0f;
+
 }
 
 
 namespace WHISTLE {
+
 //R, G, and B components for each dot color.
 const unsigned char DOT_COLORS[N_DOT_COLORS][3] = {
     {214, 25,  25 }, //Red.
@@ -64,12 +78,16 @@ const unsigned char DOT_COLORS[N_DOT_COLORS][3] = {
     {30,  30,  219}, //Blue.
     {133, 28,  237}, //Purple.
 };
+
 //Seconds that need to pass before another dot is added.
 const float DOT_INTERVAL = 0.03;
+
 //A whistle dot spins these many radians a second.
 const float DOT_SPIN_SPEED = TAU / 4;
+
 //Time the whistle animations take to fade out.
 const float FADE_TIME = 0.13f;
+
 //R, G, and B components for each ring color.
 const unsigned char RING_COLORS[N_RING_COLORS][3] = {
     {255, 255, 0  },
@@ -81,14 +99,18 @@ const unsigned char RING_COLORS[N_RING_COLORS][3] = {
     {0,   255, 0  },
     {128, 255, 0  }
 };
+
 //Whistle rings move these many units per second.
 const float RING_SPEED = 600.0f;
+
 //Seconds that need to pass before another whistle ring appears.
 const float RINGS_INTERVAL = 0.1f;
+
 }
 
 
 namespace MAKER_TOOLS {
+
 //Internal names of each maker tool.
 const string NAMES[N_MAKER_TOOLS] = {
     "",
@@ -104,11 +126,12 @@ const string NAMES[N_MAKER_TOOLS] = {
     "path_info",
     "teleport"
 };
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new asset file name list struct.
+/**
+ * @brief Constructs a new asset file names struct object.
  */
 asset_file_names_struct::asset_file_names_struct() :
     bmp_area_name_font("Area_name_font.png"),
@@ -170,10 +193,10 @@ asset_file_names_struct::asset_file_names_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the asset file names from a file.
- * file:
- *   File to load from.
+/**
+ * @brief Loads the asset file names from a file.
+ *
+ * @param file File to load from.
  */
 void asset_file_names_struct::load(data_node* file) {
     reader_setter grs(file->get_child_by_name("graphics"));
@@ -236,8 +259,8 @@ void asset_file_names_struct::load(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty bitmap effect info struct.
+/**
+ * @brief Constructs a new bitmap effect info object.
  */
 bitmap_effect_info::bitmap_effect_info() :
     translation(0, 0),
@@ -249,11 +272,10 @@ bitmap_effect_info::bitmap_effect_info() :
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Creates a bitmap manager.
- * base_dir:
- *   Base directory its files belong to.
+/**
+ * @brief Constructs a new bmp manager object.
+ *
+ * @param base_dir Base directory its files belong to.
  */
 bmp_manager::bmp_manager(const string &base_dir) :
     base_dir(base_dir),
@@ -262,8 +284,8 @@ bmp_manager::bmp_manager(const string &base_dir) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes all bitmaps loaded and clears the list.
+/**
+ * @brief Deletes all bitmaps loaded and clears the list.
  */
 void bmp_manager::clear() {
     for(auto &b : list) {
@@ -276,11 +298,11 @@ void bmp_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a bitmap to have one less call.
+/**
+ * @brief Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * it:
- *   Iterator from the map for the bitmap.
+ *
+ * @param it Iterator from the map for the bitmap.
  */
 void bmp_manager::detach(map<string, bmp_info>::iterator it) {
     if(it == list.end()) return;
@@ -296,11 +318,11 @@ void bmp_manager::detach(map<string, bmp_info>::iterator it) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a bitmap to have one less call.
+/**
+ * @brief Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * name:
- *   Bitmap's file name.
+ *
+ * @param name Bitmap's file name.
  */
 void bmp_manager::detach(const string &name) {
     if(name.empty()) return;
@@ -308,11 +330,11 @@ void bmp_manager::detach(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks a bitmap to have one less call.
+/**
+ * @brief Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
- * bmp:
- *   Bitmap to detach.
+ *
+ * @param bmp Bitmap to detach.
  */
 void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
     if(!bmp || bmp == game.bmp_error) return;
@@ -326,14 +348,13 @@ void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the specified bitmap, by name.
- * name:
- *   Name of the bitmap to get.
- * node:
- *   If not NULL, blame this data node if the file doesn't exist.
- * report_errors:
- *   Only issues errors if this is true.
+/**
+ * @brief Returns the specified bitmap, by name.
+ *
+ * @param name Name of the bitmap to get.
+ * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The bitmap.
  */
 ALLEGRO_BITMAP* bmp_manager::get(
     const string &name, const data_node* node,
@@ -355,8 +376,10 @@ ALLEGRO_BITMAP* bmp_manager::get(
 };
 
 
-/* ----------------------------------------------------------------------------
- * Returns the size of the list. Used for debugging.
+/**
+ * @brief Returns the size of the list. Used for debugging.
+ *
+ * @return The size.
  */
 size_t bmp_manager::get_list_size() const {
     return list.size();
@@ -364,18 +387,20 @@ size_t bmp_manager::get_list_size() const {
 
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total number of calls. Used for debugging.
+/**
+ * @brief Returns the total number of calls. Used for debugging.
+ *
+ * @return The amount.
  */
 long bmp_manager::get_total_calls() const {
     return total_calls;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with information about a bitmap, for the manager.
- * b:
- *   The bitmap.
+/**
+ * @brief Constructs a new bitmap info object.
+ *
+ * @param b The bitmap.
  */
 bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
     b(b),
@@ -384,8 +409,8 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a camera info struct.
+/**
+ * @brief Constructs a new camera info object.
  */
 camera_info::camera_info() :
     target_zoom(1.0f),
@@ -394,10 +419,10 @@ camera_info::camera_info() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Instantly places the camera at the specified coordinates.
- * new_pos:
- *   Coordinates to place the camera at.
+/**
+ * @brief Instantly places the camera at the specified coordinates.
+ *
+ * @param new_pos Coordinates to place the camera at.
  */
 void camera_info::set_pos(const point &new_pos) {
     pos = new_pos;
@@ -405,10 +430,10 @@ void camera_info::set_pos(const point &new_pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Instantly places the camera at the specified zoom.
- * new_zoom:
- *   Zoom to set to.
+/**
+ * @brief Instantly places the camera at the specified zoom.
+ *
+ * @param new_zoom Zoom to set to.
  */
 void camera_info::set_zoom(const float new_zoom) {
     zoom = new_zoom;
@@ -416,10 +441,10 @@ void camera_info::set_zoom(const float new_zoom) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks camera movement by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks camera movement by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void camera_info::tick(const float delta_t) {
     pos.x +=
@@ -431,9 +456,9 @@ void camera_info::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the camera's visibility box, based on the screen_to_world_transform
- * transformation.
+/**
+ * @brief Updates the camera's visibility box,
+ * based on the screen_to_world_transform transformation.
  */
 void camera_info::update_box() {
     box[0] = point(0, 0);
@@ -456,8 +481,8 @@ void camera_info::update_box() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a wall effect cache struct.
+/**
+ * @brief Constructs a new edge offset cache object.
  */
 edge_offset_cache::edge_offset_cache() :
     lengths{0, 0},
@@ -470,11 +495,11 @@ edge_offset_cache::edge_offset_cache() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the index number of an item, given its name.
- * Returns INVALID on error.
- * name:
- *   Name of the item.
+/**
+ * @brief Returns the index number of an item, given its name.
+ *
+ * @param name Name of the item.
+ * @return The index, or INVALID on error.
  */
 size_t enum_name_database::get_idx(const string &name) const {
     for(size_t n = 0; n < names.size(); ++n) {
@@ -484,11 +509,11 @@ size_t enum_name_database::get_idx(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of an item, given its index number.
- * Returns an empty string on error.
- * idx:
- *   Index number of the item.
+/**
+ * @brief Returns the name of an item, given its index number.
+ *
+ * @param idx Index number of the item.
+ * @return The name, or an empty string on error.
  */
 string enum_name_database::get_name(const size_t idx) const {
     if(idx < names.size()) return names[idx];
@@ -496,20 +521,21 @@ string enum_name_database::get_name(const size_t idx) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the number of items registered.
+/**
+ * @brief Returns the number of items registered.
+ *
+ * @return The amount.
  */
 size_t enum_name_database::get_nr_of_items() const {
     return names.size();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a new item.
- * idx:
- *   Its index number.
- * name:
- *   Its name.
+/**
+ * @brief Registers a new item.
+ *
+ * @param idx Its index number.
+ * @param name Its name.
  */
 void enum_name_database::register_item(
     const size_t idx, const string &name
@@ -522,10 +548,10 @@ void enum_name_database::register_item(
 
 
 
-/* ----------------------------------------------------------------------------
- * Emits an error in the gameplay "info" window.
- * s:
- *   Full error description.
+/**
+ * @brief Emits an error in the gameplay "info" window.
+ *
+ * @param s Full error description.
  */
 void error_manager::emit_in_gameplay(const string &s) {
     string info_str =
@@ -536,20 +562,20 @@ void error_manager::emit_in_gameplay(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Logs an error to stdout (i.e. the console).
- * s:
- *   Full error description.
+/**
+ * @brief Logs an error to stdout (i.e. the console).
+ *
+ * @param s Full error description.
  */
 void error_manager::log_to_console(const string &s) {
     std::cout << s << std::endl;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Logs an error to the log file.
- * s:
- *   Full error description.
+/**
+ * @brief Logs an error to the log file.
+ *
+ * @param s Full error description.
  */
 void error_manager::log_to_file(const string &s) {
     string prev_error_log;
@@ -600,8 +626,8 @@ void error_manager::log_to_file(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Prepares everything for an area load.
+/**
+ * @brief Prepares everything for an area load.
  */
 void error_manager::prepare_area_load() {
     nr_errors_on_area_load = nr_session_errors;
@@ -609,13 +635,12 @@ void error_manager::prepare_area_load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reports an error to the user and logs it.
- * s:
- *   String that represents the error.
- * d:
- *   If not null, this will be used to obtain the file name
- *   and line that caused the error.
+/**
+ * @brief Reports an error to the user and logs it.
+ *
+ * @param s String that represents the error.
+ * @param d If not null, this will be used to obtain the file name
+ * and line that caused the error.
  */
 void error_manager::report(const string &s, const data_node* d) {
     string full_error = s;
@@ -635,8 +660,8 @@ void error_manager::report(const string &s, const data_node* d) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reports to the gameplay "info" window if any errors happened during
+/**
+ * @brief Reports to the gameplay "info" window if any errors happened during
  * area load.
  * This will override whatever is in the "info" window, which is likely
  * the latest error, but that's okay since this information is more important.
@@ -660,16 +685,18 @@ void error_manager::report_area_load_errors() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether this session has had any error reports.
+/**
+ * @brief Returns whether this session has had any error reports.
+ *
+ * @return Whether it had errors.
  */
 bool error_manager::session_has_errors() {
     return nr_session_errors > 0;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a fade manager.
+/**
+ * @brief Constructs a new fade manager object.
  */
 fade_manager::fade_manager() :
     time_left(0),
@@ -679,8 +706,8 @@ fade_manager::fade_manager() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the fade overlay, if there is a fade in progress.
+/**
+ * @brief Draws the fade overlay, if there is a fade in progress.
  */
 void fade_manager::draw() {
     if(is_fading()) {
@@ -695,36 +722,41 @@ void fade_manager::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the percentage of progress left in the current fade.
+/**
+ * @brief Returns the percentage of progress left in the current fade.
+ *
+ * @return The percentage.
  */
 float fade_manager::get_perc_left() const {
     return time_left / GAME::FADE_DURATION;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the current fade is a fade in or fade out.
+/**
+ * @brief Returns whether the current fade is a fade in or fade out.
+ *
+ * @return Whether it is a fade in.
  */
 bool fade_manager::is_fade_in() const {
     return fade_in;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not a fade is currently in progress.
+/**
+ * @brief Returns whether or not a fade is currently in progress.
+ *
+ * @return Whether it is in progress.
  */
 bool fade_manager::is_fading() const {
     return time_left > 0;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets up the start of a fade.
- * is_fade_in:
- *   If true, this fades in. If false, fades out.
- * on_end:
- *   Code to run when the fade finishes.
+/**
+ * @brief Sets up the start of a fade.
+ *
+ * @param is_fade_in If true, this fades in. If false, fades out.
+ * @param on_end Code to run when the fade finishes.
  */
 void fade_manager::start_fade(
     const bool is_fade_in, const std::function<void()> &on_end
@@ -735,10 +767,10 @@ void fade_manager::start_fade(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void fade_manager::tick(const float delta_t) {
     if(time_left == 0) return;
@@ -751,8 +783,8 @@ void fade_manager::tick(const float delta_t) {
 
 
 
-/* ----------------------------------------------------------------------------
- * Creates a font list struct.
+/**
+ * @brief Constructs a new font list object.
  */
 font_list::font_list() :
     area_name(nullptr),
@@ -767,10 +799,11 @@ font_list::font_list() :
 
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new keyframe interpolator.
- * initial_value:
- *   Initial value of the thing being interpolated. This gets used at t = 0.
+/**
+ * @brief Constructs a new keyframe interpolator object.
+ *
+ * @param initial_value Initial value of the thing being interpolated.
+ * This gets used at t = 0.
  */
 keyframe_interpolator::keyframe_interpolator(const float initial_value) {
     keyframe_times.push_back(0.0f);
@@ -779,14 +812,12 @@ keyframe_interpolator::keyframe_interpolator(const float initial_value) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new keyframe.
- * t:
- *   Time in which this keyframe takes place. Ranges from 0 to 1.
- * value:
- *   Value of the thing to interpolate at the keyframe's moment.
- * ease:
- *   Easing method, if any.
+/**
+ * @brief Adds a new keyframe.
+ *
+ * @param t Time in which this keyframe takes place. Ranges from 0 to 1.
+ * @param value Value of the thing to interpolate at the keyframe's moment.
+ * @param ease Easing method, if any.
  */
 void keyframe_interpolator::add(
     const float t, const float value, const EASING_METHODS ease
@@ -797,10 +828,11 @@ void keyframe_interpolator::add(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the value at a given point in time.
- * t:
- *   Time.
+/**
+ * @brief Returns the value at a given point in time.
+ *
+ * @param t Time.
+ * @return The value.
  */
 float keyframe_interpolator::get(const float t) {
     if(t < 0.0f) return keyframe_values[0];
@@ -820,8 +852,8 @@ float keyframe_interpolator::get(const float t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a maker tool info struct.
+/**
+ * @brief Constructs a new maker tools info object.
  */
 maker_tools_info::maker_tools_info() :
     enabled(true),
@@ -851,8 +883,8 @@ maker_tools_info::maker_tools_info() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the states of the tools so that players can play without any
+/**
+ * @brief Resets the states of the tools so that players can play without any
  * tool affecting the experience.
  */
 void maker_tools_info::reset_for_gameplay() {
@@ -868,16 +900,16 @@ void maker_tools_info::reset_for_gameplay() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Hides the OS mouse in the game window.
+/**
+ * @brief Hides the OS mouse in the game window.
  */
 void mouse_cursor_struct::hide() const {
     al_hide_mouse_cursor(game.display);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes everything.
+/**
+ * @brief Initializes everything.
  */
 void mouse_cursor_struct::init() {
     hide();
@@ -894,8 +926,8 @@ void mouse_cursor_struct::init() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the cursor's state.
+/**
+ * @brief Resets the cursor's state.
  */
 void mouse_cursor_struct::reset() {
     ALLEGRO_MOUSE_STATE mouse_state;
@@ -911,20 +943,20 @@ void mouse_cursor_struct::reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Shows the OS mouse in the game window.
+/**
+ * @brief Shows the OS mouse in the game window.
  */
 void mouse_cursor_struct::show() const {
     al_show_mouse_cursor(game.display);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the coordinates from an Allegro mouse event.
- * ev:
- *   Event to handle.
- * screen_to_world_transform:
- *   Transformation to use to get the screen coordinates.
+/**
+ * @brief Updates the coordinates from an Allegro mouse event.
+ *
+ * @param ev Event to handle.
+ * @param screen_to_world_transform Transformation to use to get the
+ * screen coordinates.
  */
 void mouse_cursor_struct::update_pos(
     const ALLEGRO_EVENT &ev,
@@ -940,8 +972,8 @@ void mouse_cursor_struct::update_pos(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes a movement struct with all movements set to 0.
+/**
+ * @brief Constructs a new movement struct object.
  */
 movement_struct::movement_struct() :
     right(0),
@@ -952,16 +984,14 @@ movement_struct::movement_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the values of the coordinates, magnitude, and angle,
+/**
+ * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
  * All parameters are mandatory.
- * coords:
- *   Final X and Y coordinates.
- * angle:
- *   Angle compared to the center.
- * magnitude:
- *   Magnitude from the center.
+ *
+ * @param coords Final X and Y coordinates.
+ * @param angle Angle compared to the center.
+ * @param magnitude Magnitude from the center.
  */
 void movement_struct::get_info(
     point* coords, float* angle, float* magnitude
@@ -977,8 +1007,8 @@ void movement_struct::get_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the information.
+/**
+ * @brief Resets the information.
  */
 void movement_struct::reset() {
     right = 0.0f;
@@ -989,12 +1019,11 @@ void movement_struct::reset() {
 
 
 
-/* ----------------------------------------------------------------------------
- * Creates a message box information struct.
- * text:
- *   Text to display.
- * speaker_icon:
- *   Bitmap representing who is talking, if not NULL.
+/**
+ * @brief Constructs a new message box info object.
+ *
+ * @param text Text to display.
+ * @param speaker_icon Bitmap representing who is talking, if not NULL.
  */
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon),
@@ -1035,8 +1064,8 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the user having pressed the button to continue the message,
+/**
+ * @brief Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
  */
 void msg_box_info::advance() {
@@ -1069,8 +1098,8 @@ void msg_box_info::advance() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Closes the message box, even if it is still writing something.
+/**
+ * @brief Closes the message box, even if it is still writing something.
  */
 void msg_box_info::close() {
     if(!transition_in && transition_timer > 0.0f) return;
@@ -1079,10 +1108,10 @@ void msg_box_info::close() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void msg_box_info::tick(const float delta_t) {
     size_t tokens_in_section = 0;
@@ -1172,8 +1201,8 @@ void msg_box_info::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a notification struct instance.
+/**
+ * @brief Constructs a new notification struct object.
  */
 notification_struct::notification_struct() :
     enabled(true),
@@ -1182,8 +1211,8 @@ notification_struct::notification_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the notification on-screen.
+/**
+ * @brief Draws the notification on-screen.
  */
 void notification_struct::draw() const {
     if(visibility == 0.0f) return;
@@ -1262,17 +1291,19 @@ void notification_struct::draw() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how "present" the notification is.
+/**
+ * @brief Returns how "present" the notification is.
  * 0 means hidden, 1 is fully visible. Mid values are transition.
+ *
+ * @return The visibility.
  */
 float notification_struct::get_visibility() const {
     return visibility;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the whole thing.
+/**
+ * @brief Resets the whole thing.
  */
 void notification_struct::reset() {
     enabled = true;
@@ -1283,14 +1314,12 @@ void notification_struct::reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the contents to show.
- * input:
- *   Player input icon to show.
- * text:
- *   Text to show.
- * pos:
- *   Where to show it in the game world.
+/**
+ * @brief Sets the contents to show.
+ *
+ * @param input Player input icon to show.
+ * @param text Text to show.
+ * @param pos Where to show it in the game world.
  */
 void notification_struct::set_contents(
     const player_input &input, const string &text, const point &pos
@@ -1301,20 +1330,20 @@ void notification_struct::set_contents(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets whether the notification is meant to show or not.
- * enabled:
- *   Whether it's enabled or not.
+/**
+ * @brief Sets whether the notification is meant to show or not.
+ *
+ * @param enabled Whether it's enabled or not.
  */
 void notification_struct::set_enabled(const bool enabled) {
     this->enabled = enabled;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void notification_struct::tick(const float delta_t) {
     if(enabled) {
@@ -1326,8 +1355,8 @@ void notification_struct::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a performance monitor.
+/**
+ * @brief Constructs a new performance monitor struct object.
  */
 performance_monitor_struct::performance_monitor_struct() :
     cur_state(PERF_MON_STATE_LOADING),
@@ -1340,10 +1369,10 @@ performance_monitor_struct::performance_monitor_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Enters the given state of the monitoring process.
- * state:
- *   New state.
+/**
+ * @brief Enters the given state of the monitoring process.
+ *
+ * @param state New state.
  */
 void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
     if(paused) return;
@@ -1358,8 +1387,8 @@ void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the latest measurement.
+/**
+ * @brief Finishes the latest measurement.
  */
 void performance_monitor_struct::finish_measurement() {
     if(paused) return;
@@ -1392,8 +1421,8 @@ void performance_monitor_struct::finish_measurement() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the current state of the monitoring process.
+/**
+ * @brief Leaves the current state of the monitoring process.
  */
 void performance_monitor_struct::leave_state() {
     if(paused) return;
@@ -1454,8 +1483,8 @@ void performance_monitor_struct::leave_state() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets all of the performance monitor's information.
+/**
+ * @brief Resets all of the performance monitor's information.
  */
 void performance_monitor_struct::reset() {
     area_name.clear();
@@ -1473,8 +1502,8 @@ void performance_monitor_struct::reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves a log file with all known stats, if there is anything to save.
+/**
+ * @brief Saves a log file with all known stats, if there is anything to save.
  */
 void performance_monitor_struct::save_log() {
     if(loading_page.measurements.empty()) {
@@ -1536,30 +1565,30 @@ void performance_monitor_struct::save_log() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the name of the area that was monitored.
- * name:
- *   Name of the area.
+/**
+ * @brief Sets the name of the area that was monitored.
+ *
+ * @param name Name of the area.
  */
 void performance_monitor_struct::set_area_name(const string &name) {
     area_name = name;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets whether monitoring is currently paused or not.
- * paused:
- *   Pause value.
+/**
+ * @brief Sets whether monitoring is currently paused or not.
+ *
+ * @param paused Pause value.
  */
 void performance_monitor_struct::set_paused(const bool paused) {
     this->paused = paused;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts measuring a certain point in the loading procedure.
- * name:
- *   Name of the measurement.
+/**
+ * @brief Starts measuring a certain point in the loading procedure.
+ *
+ * @param name Name of the measurement.
  */
 void performance_monitor_struct::start_measurement(const string &name) {
     if(paused) return;
@@ -1577,18 +1606,18 @@ void performance_monitor_struct::start_measurement(const string &name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a performance monitor page struct.
+/**
+ * @brief Constructs a new page object.
  */
 performance_monitor_struct::page::page() :
     duration(0.0) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Writes a page of information to a string.
- * s:
- *   String to write to.
+/**
+ * @brief Writes a page of information to a string.
+ *
+ * @param s String to write to.
  */
 void performance_monitor_struct::page::write(string &s) {
     //Get the total measured time.
@@ -1614,16 +1643,13 @@ void performance_monitor_struct::page::write(string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Writes a measurement in a human-friendly format onto a string.
- * str:
- *   The string to write to.
- * name:
- *   The name of this measurement.
- * dur:
- *   How long it lasted for, in seconds.
- * total:
- *   How long the entire procedure lasted for.
+/**
+ * @brief Writes a measurement in a human-friendly format onto a string.
+ *
+ * @param str The string to write to.
+ * @param name The name of this measurement.
+ * @param dur How long it lasted for, in seconds.
+ * @param total How long the entire procedure lasted for.
  */
 void performance_monitor_struct::page::write_measurement(
     string &str, const string &name, const double dur, const float total
@@ -1644,10 +1670,10 @@ void performance_monitor_struct::page::write_measurement(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "reader setter".
- * dn:
- *   Pointer to the base data node.
+/**
+ * @brief Constructs a new reader setter object.
+ *
+ * @param dn Pointer to the base data node.
  */
 reader_setter::reader_setter(data_node* dn) :
     node(dn) {
@@ -1655,16 +1681,15 @@ reader_setter::reader_setter(data_node* dn) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is an Allegro color.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is an Allegro color.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, ALLEGRO_COLOR &var, data_node** child_node
@@ -1679,16 +1704,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is a string.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is a string.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, string &var, data_node** child_node
@@ -1703,16 +1727,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is an integer.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is an integer.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, size_t &var, data_node** child_node
@@ -1727,16 +1750,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is an integer.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is an integer.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, int &var, data_node** child_node
@@ -1751,16 +1773,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is an unsigned integer.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is an unsigned integer.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, unsigned int &var, data_node** child_node
@@ -1775,16 +1796,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is an unsigned char.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is an unsigned char.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, unsigned char &var, data_node** child_node
@@ -1799,16 +1819,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is a boolean.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is a boolean.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, bool &var, data_node** child_node
@@ -1823,16 +1842,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is a float.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is a float.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, float &var, data_node** child_node
@@ -1847,16 +1865,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is a double.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is a double.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, double &var, data_node** child_node
@@ -1871,16 +1888,15 @@ void reader_setter::set(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads a child node's value, and uses it to set a variable.
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:
- *   Name of the child node.
- * var:
- *   The var to set. This is a point.
- * child_node:
- *   If not-NULL, the node from whence the value came is placed here.
- *   NULL is placed if the property does not exist or has no value.
+ *
+ * @param child Name of the child node.
+ * @param var The var to set. This is a point.
+ * @param child_node If not-NULL, the node from whence the value came
+ * is placed here. NULL is placed if the property does not exist or has
+ * no value.
  */
 void reader_setter::set(
     const string &child, point &var, data_node** child_node
@@ -1896,10 +1912,10 @@ void reader_setter::set(
 
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "script var reader".
- * vars:
- *   Map of variables to read from.
+/**
+ * @brief Constructs a new script var reader object.
+ *
+ * @param vars Map of variables to read from.
  */
 script_var_reader::script_var_reader(map<string, string> &vars) :
     vars(vars) {
@@ -1907,13 +1923,13 @@ script_var_reader::script_var_reader(map<string, string> &vars) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns an Allegro color to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns an Allegro color to the value of a given variable,
+ * if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
     auto v = vars.find(name);
@@ -1925,13 +1941,12 @@ bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns a string to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns a string to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, string &dest) const {
     auto v = vars.find(name);
@@ -1943,13 +1958,12 @@ bool script_var_reader::get(const string &name, string &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns a size_t to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns a size_t to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, size_t &dest) const {
     auto v = vars.find(name);
@@ -1961,13 +1975,12 @@ bool script_var_reader::get(const string &name, size_t &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns an int to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns an int to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, int &dest) const {
     auto v = vars.find(name);
@@ -1979,13 +1992,13 @@ bool script_var_reader::get(const string &name, int &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns an unsigned char to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns an unsigned char to the value of a given variable,
+ * if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, unsigned char &dest) const {
     auto v = vars.find(name);
@@ -1997,13 +2010,12 @@ bool script_var_reader::get(const string &name, unsigned char &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns a bool to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns a bool to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, bool &dest) const {
     auto v = vars.find(name);
@@ -2015,13 +2027,12 @@ bool script_var_reader::get(const string &name, bool &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns a float to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns a float to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, float &dest) const {
     auto v = vars.find(name);
@@ -2033,13 +2044,12 @@ bool script_var_reader::get(const string &name, float &dest) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns a point to the value of a given variable, if it exists.
- * Returns true if it exists, false if not.
- * name:
- *   Name of the variable to read.
- * dest:
- *   Destination for the value.
+/**
+ * @brief Assigns a point to the value of a given variable, if it exists.
+ *
+ * @param name Name of the variable to read.
+ * @param dest Destination for the value.
+ * @return Whether it exists.
  */
 bool script_var_reader::get(const string &name, point &dest) const {
     auto v = vars.find(name);
@@ -2051,9 +2061,8 @@ bool script_var_reader::get(const string &name, point &dest) const {
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Constructs a new statistics struct instance.
+/**
+ * @brief Constructs a new statistics struct object.
  */
 statistics_struct::statistics_struct() :
     startups(0),
@@ -2079,8 +2088,8 @@ statistics_struct::statistics_struct() :
 
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered subgroup types.
+/**
+ * @brief Clears the list of registered subgroup types.
  */
 void subgroup_type_manager::clear() {
     for(size_t t = 0; t < types.size(); ++t) {
@@ -2090,18 +2099,21 @@ void subgroup_type_manager::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the first registered subgroup type.
+/**
+ * @brief Returns the first registered subgroup type.
+ *
+ * @return The first type.
  */
 subgroup_type* subgroup_type_manager::get_first_type() const {
     return types.front();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the subgroup type that comes after the given type.
- * sgt:
- *   Subgroup type to iterate from.
+/**
+ * @brief Returns the subgroup type that comes after the given type.
+ *
+ * @param sgt Subgroup type to iterate from.
+ * @return The next type.
  */
 subgroup_type* subgroup_type_manager::get_next_type(
     const subgroup_type* sgt
@@ -2115,10 +2127,11 @@ subgroup_type* subgroup_type_manager::get_next_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the subgroup type that comes before the given type.
- * sgt:
- *   Subgroup type to iterate from.
+/**
+ * @brief Returns the subgroup type that comes before the given type.
+ *
+ * @param sgt Subgroup type to iterate from.
+ * @return The previous type.
  */
 subgroup_type* subgroup_type_manager::get_prev_type(
     const subgroup_type* sgt
@@ -2132,13 +2145,13 @@ subgroup_type* subgroup_type_manager::get_prev_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the type of subgroup corresponding to the parameters.
- * Returns NULL if not found.
- * category:
- *   The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * specific_type:
- *   Specific type of mob, if you want to specify further.
+/**
+ * @brief Returns the type of subgroup corresponding to the parameters.
+ *
+ * @param category The category of subgroup type. Pikmin, leader,
+ * bomb-rock, etc.
+ * @param specific_type Specific type of mob, if you want to specify further.
+ * @return The type, or NULL if not found.
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
@@ -2157,14 +2170,13 @@ subgroup_type* subgroup_type_manager::get_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a new type of subgroup.
- * category:
- *   The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * specific_type:
- *   Specific type of mob, if you want to specify further.
- * icon:
- *   If not NULL, use this icon to represent this subgroup.
+/**
+ * @brief Registers a new type of subgroup.
+ *
+ * @param category The category of subgroup type. Pikmin, leader,
+ * bomb-rock, etc.
+ * @param specific_type Specific type of mob, if you want to specify further.
+ * @param icon If not NULL, use this icon to represent this subgroup.
  */
 void subgroup_type_manager::register_type(
     const SUBGROUP_TYPE_CATEGORIES category,
@@ -2181,8 +2193,8 @@ void subgroup_type_manager::register_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a system asset list struct.
+/**
+ * @brief Constructs a new system asset list object.
  */
 system_asset_list::system_asset_list():
     bmp_bright_circle(nullptr),
@@ -2237,12 +2249,11 @@ system_asset_list::system_asset_list():
 
 
 
-/* ----------------------------------------------------------------------------
- * Creates a timer.
- * duration:
- *   How long before it reaches the end, in seconds.
- * on_end:
- *   Code to run when time ends.
+/**
+ * @brief Constructs a new timer object.
+ *
+ * @param duration How long before it reaches the end, in seconds.
+ * @param on_end Code to run when time ends.
  */
 timer::timer(float duration, const std::function<void()> &on_end) :
     time_left(0),
@@ -2253,16 +2264,19 @@ timer::timer(float duration, const std::function<void()> &on_end) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a timer.
+/**
+ * @brief Destroys the timer object.
  */
 timer::~timer() {
     //TODO Valgrind detects a leak with on_end...
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the ratio of time left (i.e. 0 if done, 1 if all time is left).
+/**
+ * @brief Returns the ratio of time left
+ * (i.e. 0 if done, 1 if all time is left).
+ *
+ * @return The ratio left.
  */
 float timer::get_ratio_left() const {
     return time_left / duration;
@@ -2270,11 +2284,11 @@ float timer::get_ratio_left() const {
 
 
 
-/* ----------------------------------------------------------------------------
- * Starts a timer.
- * can_restart:
- *   If false, calling this while the timer is still ticking down
- *   will not do anything.
+/**
+ * @brief Starts a timer.
+ *
+ * @param can_restart If false, calling this while the timer is still
+ * ticking down will not do anything.
  */
 void timer::start(const bool can_restart) {
     if(!can_restart && time_left > 0) return;
@@ -2282,10 +2296,10 @@ void timer::start(const bool can_restart) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts a timer, but sets a new duration.
- * new_duration:
- *   Its new duration.
+/**
+ * @brief Starts a timer, but sets a new duration.
+ *
+ * @param new_duration Its new duration.
  */
 void timer::start(const float new_duration) {
     duration = new_duration;
@@ -2293,18 +2307,18 @@ void timer::start(const float new_duration) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stops a timer, without executing the on_end callback.
+/**
+ * @brief Stops a timer, without executing the on_end callback.
  */
 void timer::stop() {
     time_left = 0.0f;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void timer::tick(const float delta_t) {
     if(time_left == 0.0f) return;
@@ -2315,8 +2329,8 @@ void timer::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a whistle struct.
+/**
+ * @brief Constructs a new whistle struct object.
  */
 whistle_struct::whistle_struct() :
     radius(0.0f),
@@ -2358,8 +2372,8 @@ whistle_struct::whistle_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stuff to do when a leader starts whistling.
+/**
+ * @brief Stuff to do when a leader starts whistling.
  */
 void whistle_struct::start_whistling() {
     for(unsigned char d = 0; d < 6; ++d) {
@@ -2371,8 +2385,8 @@ void whistle_struct::start_whistling() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stuff to do when a leader stops whistling.
+/**
+ * @brief Stuff to do when a leader stops whistling.
  */
 void whistle_struct::stop_whistling() {
     whistling = false;
@@ -2382,16 +2396,13 @@ void whistle_struct::stop_whistling() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * center:
- *   What its center is on this frame.
- * whistle_range:
- *   How far the whistle can reach from the cursor center.
- * leader_to_cursor_dist:
- *   Distance between the leader and the cursor.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param center What its center is on this frame.
+ * @param whistle_range How far the whistle can reach from the cursor center.
+ * @param leader_to_cursor_dist Distance between the leader and the cursor.
  */
 void whistle_struct::tick(
     const float delta_t, const point &center,

@@ -13,14 +13,12 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a scale mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Scale type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new scale object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Scale type this mob belongs to.
+ * @param angle Starting angle.
  */
 scale::scale(const point &pos, scale_type* type, float angle) :
     mob(pos, type, angle),
@@ -31,8 +29,10 @@ scale::scale(const point &pos, scale_type* type, float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the total weight currently on top of the mob.
+/**
+ * @brief Calculates the total weight currently on top of the mob.
+ *
+ * @return The weight.
  */
 float scale::calculate_cur_weight() const {
 
@@ -60,17 +60,15 @@ float scale::calculate_cur_weight() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information on how to show the fraction numbers.
- * Returns true if the fraction numbers should be shown, false if not.
+/**
+ * @brief Returns information on how to show the fraction numbers.
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
- * fraction_value_nr:
- *   The fraction's value (upper) number gets set here.
- * fraction_req_nr:
- *   The fraction's required (lower) number gets set here.
- * fraction_color:
- *   The fraction's color gets set here.
+ *
+ * @param fraction_value_nr The fraction's value (upper) number gets set here.
+ * @param fraction_req_nr The fraction's required (lower) number gets set here.
+ * @param fraction_color The fraction's color gets set here.
+ * @return Whether the numbers should be shown.
  */
 bool scale::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
@@ -85,10 +83,10 @@ bool scale::get_fraction_numbers_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void scale::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);

@@ -19,39 +19,54 @@
 
 
 namespace HUD {
+
 //Dampen the mission goal indicator's movement by this much.
 const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
+
 //Path to the GUI information file.
 const string GUI_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
+
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
+
 //Standard mission score medal icon scale.
 const float MEDAL_ICON_SCALE = 1.5f;
+
 //Multiply time by this much to get the right scale animation amount.
 const float MEDAL_ICON_SCALE_MULT = 0.3f;
+
 //Multiply time by this much to get the right scale animation speed.
 const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
+
 //Dampen the mission score indicator's movement by this much.
 const float SCORE_INDICATOR_SMOOTHNESS_MULT = 5.5f;
+
 //How many points to show before and after the mission score ruler flapper.
 const int SCORE_RULER_RANGE = 125;
+
 //How long the spray swap juice animation lasts for.
 const float SPRAY_SWAP_JUICE_DURATION = 0.7f;
+
 //How long the standby swap juice animation lasts for.
 const float STANDBY_SWAP_JUICE_DURATION = 0.5f;
+
 //The Sun Meter's sun spins these many radians per second.
 const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
+
 //Speed at which previously-unnecessary items fade in, in alpha per second.
 const float UNNECESSARY_ITEMS_FADE_IN_SPEED = 2.5f;
+
 //Delay before unnecessary items start fading out.
 const float UNNECESSARY_ITEMS_FADE_OUT_DELAY = 2.5f;
+
 //Speed at which unnecessary items fade out, in alpha per second.
 const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new HUD structure instance.
+/**
+ * @brief Constructs a new HUD struct object.
  */
 hud_struct::hud_struct() :
     bmp_bubble(nullptr),
@@ -1458,8 +1473,8 @@ hud_struct::hud_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destructor for the HUD struct.
+/**
+ * @brief Destroys the HUD struct object.
  */
 hud_struct::~hud_struct() {
     game.bitmaps.detach(bmp_bubble);
@@ -1476,10 +1491,12 @@ hud_struct::~hud_struct() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates either the primary or the secondary mission fail condition HUD items.
- * primary:
- *   True if it's the primary HUD item, false if it's the secondary.
+/**
+ * @brief Creates either the primary or the secondary mission fail condition
+ * HUD items.
+ *
+ * @param primary True if it's the primary HUD item,
+ * false if it's the secondary.
  */
 void hud_struct::create_mission_fail_cond_items(const bool primary) {
     MISSION_FAIL_CONDITIONS cond =
@@ -1692,11 +1709,12 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to draw a spray icon with. This does not apply to the second spray.
- * which:
- *   Which spray icon to draw -- the previous type's, the current type's,
- *   or the next type's.
+/**
+ * @brief Code to draw a spray icon with. This does not apply to the
+ * second spray.
+ *
+ * @param which Which spray icon to draw -- the previous type's,
+ * the current type's, or the next type's.
  */
 void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
     if(!game.states.gameplay->cur_leader_ptr) return;
@@ -1716,11 +1734,11 @@ void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to draw a standby icon with.
- * which:
- *   Which standby icon to draw -- the previous type's, the current type's,
- *   or the next type's.
+/**
+ * @brief Code to draw a standby icon with.
+ *
+ * @param which Which standby icon to draw -- the previous type's,
+ * the current type's, or the next type's.
  */
 void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
     point final_center;
@@ -1754,10 +1772,10 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void hud_struct::tick(const float delta_t) {
     //Update leader bubbles.

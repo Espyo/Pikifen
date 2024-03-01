@@ -22,23 +22,25 @@
 
 
 namespace ENEMY {
+
 //Maximum diameter an enemy's spirit can be.
 const float SPIRIT_MAX_SIZE = 128;
+
 //Minimum diameter an enemy's spirit can be.
 const float SPIRIT_MIN_SIZE = 16;
+
 //Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
 const float SPIRIT_SIZE_MULT = 0.7;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an enemy mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Enemy type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new enemy object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Enemy type this mob belongs to.
+ * @param angle Starting angle.
  */
 enemy::enemy(const point &pos, enemy_type* type, const float angle) :
     mob(pos, type, angle),
@@ -47,18 +49,19 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not an enemy can receive a given status effect.
- * s:
- *   Status type to check.
+/**
+ * @brief Returns whether or not an enemy can receive a given status effect.
+ *
+ * @param s Status type to check.
+ * @return Whether it can receive the status.
  */
 bool enemy::can_receive_status(status_type* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_ENEMIES);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an enemy.
+/**
+ * @brief Draws an enemy.
  */
 void enemy::draw_mob() {
     sprite* s_ptr = get_cur_sprite();
@@ -80,8 +83,8 @@ void enemy::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Logic specific to enemies for when they finish dying.
+/**
+ * @brief Logic specific to enemies for when they finish dying.
  */
 void enemy::finish_dying_class_specifics() {
     if(ene_type->drops_corpse) {
@@ -106,8 +109,8 @@ void enemy::finish_dying_class_specifics() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets up stuff for the beginning of the enemy's death process.
+/**
+ * @brief Sets up stuff for the beginning of the enemy's death process.
  */
 void enemy::start_dying_class_specifics() {
     game.states.gameplay->enemy_deaths++;

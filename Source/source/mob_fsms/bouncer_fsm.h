@@ -14,8 +14,8 @@
 #include "../mob_types/mob_type.h"
 
 
-/* ----------------------------------------------------------------------------
- * Functions about the bouncer's finite state machine and behavior.
+/**
+ * @brief Functions about the bouncer's finite state machine and behavior.
  */
 namespace bouncer_fsm {
 void create_fsm(mob_type* typ);

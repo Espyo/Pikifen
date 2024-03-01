@@ -22,11 +22,16 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Mob category for the ships.
+/**
+ * @brief Mob category for the ships.
  */
 class ship_category : public mob_category {
+
 public:
+
+    //--- Function declarations ---
+
+    ship_category();
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;
     mob_type* create_type() override;
@@ -37,7 +42,6 @@ public:
     void erase_mob(mob* m) override;
     void clear_types() override;
     
-    ship_category();
 };
 
 

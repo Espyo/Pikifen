@@ -24,26 +24,37 @@ constexpr float TAU = (float)M_PI * 2.0f;
 
 //Methods for easing numbers.
 enum EASING_METHODS {
+    
     //No easing. AKA linear interpolation.
     EASE_NONE,
+
     //Eased as it goes in, then gradually goes out normally.
     EASE_IN,
+    
     //Gradually goes in normally, then eased as it goes out.
     EASE_OUT,
+    
     //Goes backwards before going in.
     EASE_IN_BACK,
+    
     //Overshoots at the end then finishes.
     EASE_OUT_BACK,
+    
     //Combines in back with out back.
     EASE_IN_OUT_BACK,
+    
     //Springs backwards before going in.
     EASE_IN_ELASTIC,
+    
     //Near the end, it overshoots and then springs to normal.
     EASE_OUT_ELASTIC,
+    
     //Goes up to 1, then back down to 0, in a sine-wave.
     EASE_UP_AND_DOWN,
+    
     //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
     EASE_UP_AND_DOWN_ELASTIC,
+    
 };
 
 

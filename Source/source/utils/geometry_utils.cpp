@@ -20,12 +20,11 @@
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new distance number, given two points.
- * p1:
- *   First point.
- * p2:
- *   Second point.
+/**
+ * @brief Constructs a new dist object, given two points.
+ *
+ * @param p1 First point.
+ * @param p2 Second point.
  */
 dist::dist(const point &p1, const point &p2) :
     distance_squared(
@@ -38,10 +37,10 @@ dist::dist(const point &p1, const point &p2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new distance number, given a non-squared distance.
- * d:
- *   Regular, non-squared distance.
+/**
+ * @brief Constructs a new dist object, given a non-squared distance.
+ *
+ * @param d Regular, non-squared distance.
  */
 dist::dist(const float d) :
     distance_squared(d * d),
@@ -51,10 +50,11 @@ dist::dist(const float d) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the value given a non-squared distance.
- * d:
- *   Regular, non-squared distance.
+/**
+ * @brief Sets the value given a non-squared distance.
+ *
+ * @param d Regular, non-squared distance.
+ * @return The current object.
  */
 dist &dist::operator =(const float d) {
     distance_squared = d * d;
@@ -64,130 +64,142 @@ dist &dist::operator =(const float d) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is smaller than the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is smaller than the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is smaller.
  */
 bool dist::operator<(const float d2) const {
     return distance_squared < (d2 * d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is larger than the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is larger than the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is larger.
  */
 bool dist::operator>(const float d2) const {
     return distance_squared > (d2 * d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is the same as the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is the same as the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is the same.
  */
 bool dist::operator==(const float d2) const {
     return distance_squared == (d2 * d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is smaller than or equal to the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is smaller than or equal to the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is smaller or equal.
  */
 bool dist::operator<=(const float d2) const {
     return !operator>(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is larger than or equal to the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is larger than or equal to the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is larger or equal.
  */
 bool dist::operator>=(const float d2) const {
     return !operator<(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is different from the specified one.
- * d2:
- *   Regular, non-squared distance to check.
+/**
+ * @brief Checks if this distance is different from the specified one.
+ *
+ * @param d2 Regular, non-squared distance to check.
+ * @return Whether it is different.
  */
 bool dist::operator!=(const float d2) const {
     return !operator==(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is smaller than the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is smaller than the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is smaller.
  */
 bool dist::operator<(const dist &d2) const {
     return distance_squared < d2.distance_squared;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is larger than the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is larger than the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is larger.
  */
 bool dist::operator>(const dist &d2) const {
     return distance_squared > d2.distance_squared;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is the same as the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is the same as the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is the same.
  */
 bool dist::operator==(const dist &d2) const {
     return distance_squared == d2.distance_squared;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is smaller than or equal to the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is smaller than or equal to the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is smaller or equal.
  */
 bool dist::operator<=(const dist &d2) const {
     return !operator>(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is larger than or equal to the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is larger than or equal to the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is larger or equal.
  */
 bool dist::operator>=(const dist &d2) const {
     return !operator<(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if this distance is different from the specified one.
- * d2:
- *   Distance object to check.
+/**
+ * @brief Checks if this distance is different from the specified one.
+ *
+ * @param d2 Distance object to check.
+ * @return Whether it is different.
  */
 bool dist::operator!=(const dist &d2) const {
     return !operator==(d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds some distance to the current one.
- * d2:
- *   Amount of distance to add.
+/**
+ * @brief Adds some distance to the current one.
+ *
+ * @param d2 Amount of distance to add.
  */
 void dist::operator+=(const float d2) {
     if(!has_normal_distance) {
@@ -199,10 +211,10 @@ void dist::operator+=(const float d2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds some distance to the current one.
- * d2:
- *   Amount of distance to add.
+/**
+ * @brief Adds some distance to the current one.
+ *
+ * @param d2 Amount of distance to add.
  */
 void dist::operator+=(const dist &d2) {
     distance_squared += d2.distance_squared;
@@ -216,20 +228,20 @@ void dist::operator+=(const dist &d2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes some distance from the current one.
- * d2:
- *   Amount of distance to remove.
+/**
+ * @brief Removes some distance from the current one.
+ *
+ * @param d2 Amount of distance to remove.
  */
 void dist::operator-=(const float d2) {
     operator+=(-d2);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes some distance from the current one.
- * d2:
- *   Amount of distance to remove.
+/**
+ * @brief Removes some distance from the current one.
+ *
+ * @param d2 Amount of distance to remove.
  */
 void dist::operator-=(const dist &d2) {
     distance_squared -= d2.distance_squared;
@@ -243,8 +255,10 @@ void dist::operator-=(const dist &d2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the regular, non-squared distance as a number.
+/**
+ * @brief Returns the regular, non-squared distance as a number.
+ *
+ * @return The non-squared distance.
  */
 float dist::to_float() {
     if(!has_normal_distance) {
@@ -255,12 +269,11 @@ float dist::to_float() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a point, given its coordinates.
- * x:
- *   X coordinate.
- * y:
- *   Y coordinate.
+/**
+ * @brief Constructs a new point object, given its coordinates.
+ *
+ * @param x X coordinate.
+ * @param y Y coordinate.
  */
 point::point(const float x, const float y) :
     x(x),
@@ -269,8 +282,8 @@ point::point(const float x, const float y) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a point, with the coordinates set to 0,0.
+/**
+ * @brief Constructs a new point object, with the coordinates set to 0,0.
  */
 point::point() :
     x(0),
@@ -279,80 +292,99 @@ point::point() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds the coordinates of two points.
- * p:
- *   Point with values to add with.
+/**
+ * @brief Adds the coordinates of two points.
+ *
+ * @param p Point with values to add with.
+ * @return The new point.
  */
 const point point::operator +(const point &p) const {
     return point(x + p.x, y + p.y);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Subtracts the coordinates of two points.
- * p:
- *   Point with values to subtract with.
+/**
+ * @brief Subtracts the coordinates of two points.
+ *
+ * @param p Point with values to subtract with.
+ * @return The new point.
  */
 const point point::operator -(const point &p) const {
     return point(x - p.x, y - p.y);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Multiplies the coordinates of two points.
- * p:
- *   Point with values to multiply with.
+/**
+ * @brief Multiplies the coordinates of two points.
+ *
+ * @param p Point with values to multiply with.
+ * @return The new point.
  */
 const point point::operator *(const point &p) const {
     return point(x * p.x, y * p.y);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Divides the coordinates of two points.
- * p:
- *   Point with values to divide with.
+/**
+ * @brief Divides the coordinates of two points.
+ *
+ * @param p Point with values to divide with.
+ * @return The new point.
  */
 const point point::operator /(const point &p) const {
     return point(x / p.x, y / p.y);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a number to the coordinates.
- * n:
- *   Number to add to both coordinates.
+/**
+ * @brief Adds a number to the coordinates.
+ *
+ * @param n Number to add to both coordinates.
+ * @return The new point.
  */
 const point point::operator +(const float n) const {
     return point(x + n, y + n);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Subtracts a number from each coordinates.
- * n:
- *   Number to subtract from both coordinates.
+/**
+ * @brief Multiplies the coordinates by a number.
+ *
+ * @param n Value to multiply both coordinates with.
+ * @return The new point.
+ */
+const point point::operator *(const float n) const {
+    return point(x * n, y * n);
+}
+
+
+/**
+ * @brief Subtracts a number from each coordinates.
+ *
+ * @param n Number to subtract from both coordinates.
+ * @return The new point.
  */
 const point point::operator -(const float n) const {
     return point(x - n, y - n);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Divides the coordinates by a number.
- * n:
- *   Number to divide both coordinates with.
+/**
+ * @brief Divides the coordinates by a number.
+ *
+ * @param n Number to divide both coordinates with.
+ * @return The new point.
  */
 const point point::operator /(const float n) const {
     return point(x / n, y / n);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds the coordinates of another point to this one's.
- * p:
- *   Point with the values to add with.
+/**
+ * @brief Adds the coordinates of another point to this one's.
+ *
+ * @param p Point with the values to add with.
+ * @return The current object.
  */
 point point::operator +=(const point &p) {
     x += p.x;
@@ -361,10 +393,11 @@ point point::operator +=(const point &p) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Subtracts the coordinates of another point to this one's.
- * p:
- *   Point with the values to subtract with.
+/**
+ * @brief Subtracts the coordinates of another point to this one's.
+ *
+ * @param p Point with the values to subtract with.
+ * @return The current object.
  */
 point point::operator -=(const point &p) {
     x -= p.x;
@@ -373,10 +406,11 @@ point point::operator -=(const point &p) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a given number to the coordinates.
- * n:
- *   Value to add to both coordinates with.
+/**
+ * @brief Adds a given number to the coordinates.
+ *
+ * @param n Value to add to both coordinates with.
+ * @return The current object.
  */
 point point::operator +=(const float n) {
     x += n;
@@ -385,10 +419,11 @@ point point::operator +=(const float n) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Multiplies the coordinates by a given number.
- * n:
- *   Value to multiply both coordinates with.
+/**
+ * @brief Multiplies the coordinates by a given number.
+ *
+ * @param n Value to multiply both coordinates with.
+ * @return The current object.
  */
 point point::operator *=(const float n) {
     x *= n;
@@ -397,43 +432,35 @@ point point::operator *=(const float n) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Compares if two points are the same.
- * p:
- *   Other point to compare against.
+/**
+ * @brief Compares if two points are the same.
+ *
+ * @param p Other point to compare against.
+ * @return Whether they are the same.
  */
 bool point::operator ==(const point &p) const {
     return x == p.x && y == p.y;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Compares if two points are different.
- * p:
- *   Other point to compare against.
+/**
+ * @brief Compares if two points are different.
+ *
+ * @param p Other point to compare against.
+ * @return Whether they are different.
  */
 bool point::operator !=(const point &p) const {
     return x != p.x || y != p.y;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Multiplies the coordinates by a number.
- * m:
- *   Value to multiply both coordinates with.
- */
-const point point::operator *(const float m) const {
-    return point(x * m, y * m);
-}
 
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector coordinates of an angle.
- * angle:
- *   The angle.
- * magnitude:
- *   Its magnitude.
+/**
+ * @brief Returns the vector coordinates of an angle.
+ *
+ * @param angle The angle.
+ * @param magnitude Its magnitude.
+ * @return The coordinates.
  */
 point angle_to_coordinates(
     const float angle, const float magnitude
@@ -446,26 +473,25 @@ point angle_to_coordinates(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts angular distance to linear distance.
- * angular_dist:
- *   Angular distance value.
- * radius:
- *   Radius of the circle.
+/**
+ * @brief Converts angular distance to linear distance.
+ *
+ * @param angular_dist Angular distance value.
+ * @param radius Radius of the circle.
+ * @return The linear distance.
  */
 float angular_dist_to_linear(const float angular_dist, const float radius) {
     return (float) (2 * radius * tan(angular_dist / 2));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if two spheres are colliding via a bounding-box check.
- * center1:
- *   Coordinates of the first sphere.
- * center2:
- *   Coordinates of the second sphere.
- * r:
- *   Range of the bounding box.
+/**
+ * @brief Checks if two spheres are colliding via a bounding-box check.
+ *
+ * @param center1 Coordinates of the first sphere.
+ * @param center2 Coordinates of the second sphere.
+ * @param r Range of the bounding box.
+ * @return Whether they are colliding.
  */
 bool bbox_check(const point &center1, const point &center2, const float r) {
     return
@@ -476,16 +502,15 @@ bool bbox_check(const point &center1, const point &center2, const float r) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a rectangle and a sphere are colliding via a bounding-box check.
- * tl1:
- *   Top-left coordinates of the rectangle.
- * br1:
- *   Bottom-right coordinates of the rectangle.
- * center2:
- *   Coordinates of the sphere.
- * r:
- *   Radius of the sphere.
+/**
+ * @brief Checks if a rectangle and a sphere are colliding via a
+ * bounding-box check.
+ *
+ * @param tl1 Top-left coordinates of the rectangle.
+ * @param br1 Bottom-right coordinates of the rectangle.
+ * @param center2 Coordinates of the sphere.
+ * @param r Radius of the sphere.
+ * @return Whether they are colliding.
  */
 bool bbox_check(
     const point &tl1, const point &br1,
@@ -499,30 +524,25 @@ bool bbox_check(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the required horizontal and vertical speed in order to
+/**
+ * @brief Calculates the required horizontal and vertical speed in order to
  * throw something to the specified coordinates, such that it reaches a
  * specific peak height.
+ *
  * If the calculation is impossible (like if the peak height is lower than the
  * starting height), the speed variables will all be set to 0.
- * start_xy:
- *   Starting X and Y coordinates.
- * start_z:
- *   Starting Z coordinate.
- * target_xy:
- *   Target destination's X and Y coordinates.
- * target_z:
- *   Target destination's Z coordinate.
- * max_h:
- *   Maximum height, using the starting Z as the reference.
- * gravity:
- *   Constant for the force of gravity, in units per second squared.
- * req_speed_xy:
- *   The required X and Y speed is returned here.
- * req_speed_z:
- *   The required Z speed is returned here.
- * final_h_angle:
- *   The final horizontal angle is returned here (if not NULL).
+ *
+ * @param start_xy Starting X and Y coordinates.
+ * @param start_z Starting Z coordinate.
+ * @param target_xy Target destination's X and Y coordinates.
+ * @param target_z Target destination's Z coordinate.
+ * @param max_h Maximum height, using the starting Z as the reference.
+ * @param gravity Constant for the force of gravity, in units per
+ * second squared.
+ * @param req_speed_xy The required X and Y speed is returned here.
+ * @param req_speed_z The required Z speed is returned here.
+ * @param final_h_angle The final horizontal angle is returned here
+ * (if not NULL).
  */
 void calculate_throw(
     const point &start_xy, const float start_z,
@@ -583,20 +603,18 @@ void calculate_throw(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a circle is touching a line segment or not.
- * circle:
- *   Coordinates of the circle.
- * radius:
- *   Radius of the circle.
- * line_p1:
- *   Starting point of the line segment.
- * line_p2:
- *   Ending point of the line segment.
- * lix:
- *   If not NULL, the line intersection's X coordinate is returned here.
- * liy:
- *   If not NULL, the line intersection's Y coordinate is returned here.
+/**
+ * @brief Returns whether a circle is touching a line segment or not.
+ *
+ * @param circle Coordinates of the circle.
+ * @param radius Radius of the circle.
+ * @param line_p1 Starting point of the line segment.
+ * @param line_p2 Ending point of the line segment.
+ * @param lix If not NULL, the line intersection's X coordinate is
+ * returned here.
+ * @param liy If not NULL, the line intersection's Y coordinate is
+ * returned here.
+ * @return Whether they intersect.
  */
 bool circle_intersects_line_seg(
     const point &circle, const float radius,
@@ -641,25 +659,20 @@ bool circle_intersects_line_seg(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a circle is touching a rotated rectangle or not.
+/**
+ * @brief Returns whether a circle is touching a rotated rectangle or not.
  * This includes being completely inside the rectangle.
- * circle:
- *   Coordinates of the circle.
- * radius:
- *   Radius of the circle.
- * rectangle:
- *   Central coordinates of the rectangle.
- * rect_dim:
- *   Dimensions of the rectangle.
- * rect_angle:
- *   Angle the rectangle is facing.
- * overlap_dist:
- *   If not NULL, the amount of overlap is returned here.
- * rectangle_side_angle:
- *   If not NULL, the angle of the side of the rectangle
- *   that the circle is on, aligned to the sides of the rectangle, is
- *   returned here.
+ *
+ * @param circle Coordinates of the circle.
+ * @param radius Radius of the circle.
+ * @param rectangle Central coordinates of the rectangle.
+ * @param rect_dim Dimensions of the rectangle.
+ * @param rect_angle Angle the rectangle is facing.
+ * @param overlap_dist If not NULL, the amount of overlap is returned here.
+ * @param rectangle_side_angle If not NULL, the angle of the side of the
+ * rectangle that the circle is on, aligned to the sides of the rectangle, is
+ * returned here.
+ * @return Whether they intersect.
  */
 bool circle_intersects_rectangle(
     const point &circle, const float radius,
@@ -737,23 +750,19 @@ bool circle_intersects_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments, which are known to be collinear,
- * are intersecting.
- * a:
- *   Starting point of the first line segment.
- * b:
- *   Ending point of the first line segment.
- * c:
- *   Starting point of the second line segment.
- * d:
- *   Ending point of the second line segment.
- * intersection_tl:
- *   If not NULL, and if there is an intersection, return the top-left
- *   corner of the intersection here.
- * intersection_br:
- *   If not NULL, and if there is an intersection, return the bottom-right
- *   corner of the intersection here.
+/**
+ * @brief Returns whether the two line segments, which are known to be
+ * collinear, are intersecting.
+ *
+ * @param a Starting point of the first line segment.
+ * @param b Ending point of the first line segment.
+ * @param c Starting point of the second line segment.
+ * @param d Ending point of the second line segment.
+ * @param intersection_tl If not NULL, and if there is an intersection,
+ * return the top-left corner of the intersection here.
+ * @param intersection_br If not NULL, and if there is an intersection,
+ * return the bottom-right corner of the intersection here.
+ * @return Whether they intersect.
  */
 bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
@@ -782,14 +791,12 @@ bool collinear_line_segs_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the angle and magnitude of vector coordinates.
- * coordinates:
- *   The coordinates.
- * angle:
- *   Variable to return the angle to.
- * magnitude:
- *   Variable to return the magnitude to.
+/**
+ * @brief Returns the angle and magnitude of vector coordinates.
+ *
+ * @param coordinates The coordinates.
+ * @param angle Variable to return the angle to.
+ * @param magnitude Variable to return the magnitude to.
  */
 void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
@@ -803,58 +810,60 @@ void coordinates_to_angle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts an angle from degrees to radians.
- * deg:
- *   Angle, in degrees.
+/**
+ * @brief Converts an angle from degrees to radians.
+ *
+ * @param deg Angle, in degrees.
+ * @return The radians.
  */
 float deg_to_rad(const float deg) {
     return (float) (M_PI / 180.0f) * deg;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the dot product between two vectors.
- * v1:
- *   First vector.
- * v2:
- *   Second vector.
+/**
+ * @brief Returns the dot product between two vectors.
+ *
+ * @param v1 First vector.
+ * @param v2 Second vector.
+ * @return The dot product.
  */
 float dot_product(const point &v1, const point &v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the angle from the origin and the specified point.
- * focus:
- *   Point that the origin is focusing on.
+/**
+ * @brief Returns the angle from the origin and the specified point.
+ *
+ * @param focus Point that the origin is focusing on.
+ * @return The angle.
  */
 float get_angle(const point &focus) {
     return (float) atan2(focus.y, focus.x);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the angle between two points.
+/**
+ * @brief Returns the angle between two points.
  * In other words, this is the angle "center" is facing when it is looking
  * at "focus".
- * center:
- *   Center point.
- * focus:
- *   Point that the center is focusing on.
+ *
+ * @param center Center point.
+ * @param focus Point that the center is focusing on.
+ * @return The angle.
  */
 float get_angle(const point &center, const point &focus) {
     return (float) atan2(focus.y - center.y, focus.x - center.x);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the clockwise distance between a1 and a2, in radians.
- * a1:
- *   First angle.
- * a2:
- *   Second angle.
+/**
+ * @brief Returns the clockwise distance between a1 and a2, in radians.
+ *
+ * @param a1 First angle.
+ * @param a2 Second angle.
+ * @return The distance.
  */
 float get_angle_cw_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
@@ -864,12 +873,12 @@ float get_angle_cw_dif(float a1, float a2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the smallest distance between two angles.
- * a1:
- *   First angle.
- * a2:
- *   Second angle.
+/**
+ * @brief Returns the smallest distance between two angles.
+ *
+ * @param a1 First angle.
+ * @param a2 Second angle.
+ * @return The distance.
  */
 float get_angle_smallest_dif(const float a1, const float a2) {
     return
@@ -880,17 +889,15 @@ float get_angle_smallest_dif(const float a1, const float a2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the closest point in a line segment to a given point.
- * l1:
- *   Starting point of the line segment.
- * l2:
- *   Ending point of the line segment.
- * p:
- *   Reference point.
- * segment_ratio:
- *   If not NULL, the ratio from l1 to l2 is returned here.
- *   Between 0 and 1, it belongs to the line segment. If not, it doesn't.
+/**
+ * @brief Returns the closest point in a line segment to a given point.
+ *
+ * @param l1 Starting point of the line segment.
+ * @param l2 Ending point of the line segment.
+ * @param p Reference point.
+ * @param segment_ratio If not NULL, the ratio from l1 to l2 is returned here.
+ * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
+ * @return The closest point.
  */
 point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p, float* segment_ratio
@@ -917,21 +924,18 @@ point get_closest_point_in_line_seg(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the closest point in a rotated rectangle's perimeter
+/**
+ * @brief Returns the closest point in a rotated rectangle's perimeter
  * to the specified point. This only happens if the point is outside the
  * rectangle, otherwise the reference point's coordinates are returned instead.
- * p:
- *   Reference point.
- * rect_center:
- *   Center of the rectangle.
- * rect_dim:
- *   Width and height of the rectangle.
- * rect_angle:
- *   Angle of the rectangle.
- * is_inside:
- *   If not NULL, returns whether or not the reference point is inside
- *   the rectangle.
+ *
+ * @param p Reference point.
+ * @param rect_center Center of the rectangle.
+ * @param rect_dim Width and height of the rectangle.
+ * @param rect_angle Angle of the rectangle.
+ * @param is_inside If not NULL, returns whether or not the reference point
+ * is inside the rectangle.
+ * @return The closest point.
  */
 point get_closest_point_in_rotated_rectangle(
     const point &p,
@@ -988,24 +992,19 @@ point get_closest_point_in_rotated_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given two line segments that share a point, and have some thickness, this
- * returns the location of the inner point and outer point of their miter joint.
- * a:
- *   First point of the first line segment.
- * b:
- *   Common point of both line segments. It is on this point that the miter
- *   takes place, meaning this is the point between a and c.
- * c:
- *   Final point of the second line segment.
- * thickness:
- *   Line thickness.
- * miter_point_1:
- *   The first point is returned here.
- * miter_point_2:
- *   The second point is returned here.
- * max_miter_length:
- *   If not 0, the miter is limited to this length.
+/**
+ * @brief Given two line segments that share a point, and have some thickness,
+ * this returns the location of the inner point and outer point of their
+ * miter joint.
+ *
+ * @param a First point of the first line segment.
+ * @param b Common point of both line segments. It is on this point that
+ * the miter takes place, meaning this is the point between a and c.
+ * @param c Final point of the second line segment.
+ * @param thickness Line thickness.
+ * @param miter_point_1 The first point is returned here.
+ * @param miter_point_2 The second point is returned here.
+ * @param max_miter_length If not 0, the miter is limited to this length.
  */
 void get_miter_points(
     const point &a, const point &b, const point &c, const float thickness,
@@ -1044,35 +1043,30 @@ void get_miter_points(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a point's sign on a line segment,
+/**
+ * @brief Returns a point's sign on a line segment,
  * used for detecting if it's inside a triangle.
- * p:
- *   The point to check.
- * lp1:
- *   Starting point of the line segment.
- * lp2:
- *   Ending point of the line segment.
+ *
+ * @param p The point to check.
+ * @param lp1 Starting point of the line segment.
+ * @param lp2 Ending point of the line segment.
+ * @return The sign.
  */
 float get_point_sign(const point &p, const point &lp1, const point &lp2) {
     return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Gets the bounding box coordinates of a rectangle that has undergone
+/**
+ * @brief Gets the bounding box coordinates of a rectangle that has undergone
  * translation, scale, and/or rotation transformations, and places it
  * in the specified point structs.
- * center:
- *   Center point of the rectangle.
- * dimensions:
- *   The rectangle's width and height.
- * angle:
- *   Angle of rotation.
- * min_coords:
- *   The top-left coordinates are returned here.
- * max_coords:
- *   The bottom-right coordinates are returned here.
+ *
+ * @param center Center point of the rectangle.
+ * @param dimensions The rectangle's width and height.
+ * @param angle Angle of rotation.
+ * @param min_coords The top-left coordinates are returned here.
+ * @param max_coords The bottom-right coordinates are returned here.
  */
 void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, const float angle,
@@ -1117,19 +1111,18 @@ void get_transformed_rectangle_bounding_box(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the interpolation between two points, given a number in an interval.
- * input:
- *   The input number.
- * input_start:
- *   Start of the interval the input number falls on, inclusive.
- *   The closer to input_start, the closer the output is to output_start.
- * input_end:
- *   End of the interval the number falls on, inclusive.
- * output_start:
- *   Point on the starting tip of the interpolation.
- * output_end:
- *   Point on the ending tip of the interpolation.
+/**
+ * @brief Returns the interpolation between two points, given a number
+ * in an interval.
+ *
+ * @param input The input number.
+ * @param input_start Start of the interval the input number falls on,
+ * inclusive. The closer to input_start, the closer the output is to
+ * output_start.
+ * @param input_end End of the interval the number falls on, inclusive.
+ * @param output_start Point on the starting tip of the interpolation.
+ * @param output_end Point on the ending tip of the interpolation.
+ * @return The interpolated point.
  */
 point interpolate_point(
     const float input, const float input_start, const float input_end,
@@ -1148,14 +1141,13 @@ point interpolate_point(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a triangle or not.
- * p:
- *   The point to check.
- * rect_center:
- *   Center coordinates of the rectangle.
- * rect_size:
- *   Width and height of the rectangle.
+/**
+ * @brief Returns whether a point is inside a triangle or not.
+ *
+ * @param p The point to check.
+ * @param rect_center Center coordinates of the rectangle.
+ * @param rect_size Width and height of the rectangle.
+ * @return Whether it is inside.
  */
 bool is_point_in_rectangle(
     const point &p, const point &rect_center, const point &rect_size
@@ -1168,20 +1160,17 @@ bool is_point_in_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a triangle or not.
- * p:
- *   The point to check.
- * tp1:
- *   First point of the triangle.
- * tp2:
- *   Second point of the triangle.
- * tp3:
- *   Third point of the triangle.
- * loq:
- *   If true, use a "less or equal" comparison.
- *   Different code requires different precision for on-line cases.
- *   Just...don't overthink this, I added this based on what worked and didn't.
+/**
+ * @brief Returns whether a point is inside a triangle or not.
+ *
+ * @param p The point to check.
+ * @param tp1 First point of the triangle.
+ * @param tp2 Second point of the triangle.
+ * @param tp3 Third point of the triangle.
+ * @param loq If true, use a "less or equal" comparison.
+ * Different code requires different precision for on-line cases.
+ * Just...don't overthink this, I added this based on what worked and didn't.
+ * @return Whether it is inside.
  */
 bool is_point_in_triangle(
     const point &p, const point &tp1, const point &tp2, const point &tp3,
@@ -1212,17 +1201,15 @@ bool is_point_in_triangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a line segment intersects with a rectangle.
+/**
+ * @brief Returns whether a line segment intersects with a rectangle.
  * Also returns true if the line is fully inside the rectangle.
- * r1:
- *   Top-left corner of the rectangle.
- * r2:
- *   Bottom-right corner of the rectangle.
- * l1:
- *   Starting point of the line segment.
- * l2:
- *   Ending point of the line segment.
+ *
+ * @param r1 Top-left corner of the rectangle.
+ * @param r2 Bottom-right corner of the rectangle.
+ * @param l1 Starting point of the line segment.
+ * @param l2 Ending point of the line segment.
+ * @return Whether they intersect.
  */
 bool line_seg_intersects_rectangle(
     const point &r1, const point &r2,
@@ -1276,18 +1263,16 @@ bool line_seg_intersects_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a line segment intersects with a rotated rectangle or not.
- * lp1:
- *   First point of the line segment.
- * lp2:
- *   Second point of the line segment.
- * rect_center:
- *   Center point of the rectangle.
- * rect_dim:
- *   Width and height of the rectangle.
- * rect_angle:
- *   Angle of the rectangle.
+/**
+ * @brief Returns whether a line segment intersects with a rotated rectangle
+ * or not.
+ *
+ * @param lp1 First point of the line segment.
+ * @param lp2 Second point of the line segment.
+ * @param rect_center Center point of the rectangle.
+ * @param rect_dim Width and height of the rectangle.
+ * @param rect_angle Angle of the rectangle.
+ * @return Whether they intersect.
  */
 bool line_seg_intersects_rotated_rectangle(
     const point &lp1, const point &lp2,
@@ -1358,16 +1343,14 @@ bool line_seg_intersects_rotated_rectangle(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments are collinear.
- * a:
- *   Starting point of the first line segment.
- * b:
- *   Ending point of the first line segment.
- * c:
- *   Starting point of the second line segment.
- * d:
- *   Ending point of the second line segment.
+/**
+ * @brief Returns whether the two line segments are collinear.
+ *
+ * @param a Starting point of the first line segment.
+ * @param b Ending point of the first line segment.
+ * @param c Starting point of the second line segment.
+ * @param d Ending point of the second line segment.
+ * @return Whether they are collinear.
  */
 bool line_segs_are_collinear(
     const point &a, const point &b, const point &c, const point &d
@@ -1378,22 +1361,18 @@ bool line_segs_are_collinear(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * l1p1:
- *   Starting point of the first line segment.
- * l1p2:
- *   Ending point of the first line segment.
- * l2p1:
- *   Starting point of the second line segment.
- * l2p2:
- *   Ending point of the second line segment.
- * final_l1r:
- *   If not NULL and they intersect, returns the distance from
- *   the start of line 1 in which the intersection happens.
- *   This is a ratio, so 0 is the start, 1 is the end of the line.
- * final_l2r:
- *   Same as final_l1r, but for line 2.
+/**
+ * @brief Returns whether the two line segments intersect.
+ *
+ * @param l1p1 Starting point of the first line segment.
+ * @param l1p2 Ending point of the first line segment.
+ * @param l2p1 Starting point of the second line segment.
+ * @param l2p2 Ending point of the second line segment.
+ * @param final_l1r If not NULL and they intersect, returns the distance from
+ * the start of line 1 in which the intersection happens.
+ * This is a ratio, so 0 is the start, 1 is the end of the line.
+ * @param final_l2r Same as final_l1r, but for line 2.
+ * @return Whether they intersect.
  */
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
@@ -1417,18 +1396,15 @@ bool line_segs_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * l1p1:
- *   Starting point of the first line segment.
- * l1p2:
- *   Ending point of the first line segment.
- * l2p1:
- *   Starting point of the second line segment.
- * l2p2:
- *   Ending point of the second line segment.
- * intersection:
- *   Return the intersection point here, if not NULL.
+/**
+ * @brief Returns whether the two line segments intersect.
+ *
+ * @param l1p1 Starting point of the first line segment.
+ * @param l1p2 Ending point of the first line segment.
+ * @param l2p1 Starting point of the second line segment.
+ * @param l2p2 Ending point of the second line segment.
+ * @param intersection Return the intersection point here, if not NULL.
+ * @return Whether they intersect.
  */
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
@@ -1448,35 +1424,31 @@ bool line_segs_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts linear distance to angular distance.
- * linear_dist:
- *   Linear distance.
- * radius:
- *   Radius of the circle.
+/**
+ * @brief Converts linear distance to angular distance.
+ *
+ * @param linear_dist Linear distance.
+ * @param radius Radius of the circle.
+ * @return The angular distance.
  */
 float linear_dist_to_angular(const float linear_dist, const float radius) {
     return (float) (2 * atan(linear_dist / (2 * radius)));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether two lines (not line segments) intersect, and returns
+/**
+ * @brief Returns whether two lines (not line segments) intersect, and returns
  * information about where it happens.
- * l1p1:
- *   Point 1 of the first line.
- * l1p2:
- *   Point 2 of the first line.
- * l2p1:
- *   Point 1 of the second line.
- * l2p2:
- *   Point 2 of the second line.
- * final_l1r:
- *   If not NULL and they intersect, returns the distance from
- *   the start of line 1 in which the intersection happens.
- *   This is a ratio, so 0 is the start, 1 is the end of the line.
- * final_l2r:
- *   Same as final_l1r, but for line 2.
+ *
+ * @param l1p1 Point 1 of the first line.
+ * @param l1p2 Point 2 of the first line.
+ * @param l2p1 Point 1 of the second line.
+ * @param l2p2 Point 2 of the second line.
+ * @param final_l1r If not NULL and they intersect, returns the distance from
+ * the start of line 1 in which the intersection happens.
+ * This is a ratio, so 0 is the start, 1 is the end of the line.
+ * @param final_l2r Same as final_l1r, but for line 2.
+ * @return Whether they intersect.
  */
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
@@ -1522,20 +1494,17 @@ bool lines_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether two lines (not line segments) intersect, and returns
+/**
+ * @brief Returns whether two lines (not line segments) intersect, and returns
  * information about where it happens.
- * l1p1:
- *   Point 1 of the first line.
- * l1p2:
- *   Point 2 of the first line.
- * l2p1:
- *   Point 1 of the second line.
- * l2p2:
- *   Point 2 of the second line.
- * final_point:
- *   If not NULL and they intersect,
- *   returns the coordinates of where it happens.
+ *
+ * @param l1p1 Point 1 of the first line.
+ * @param l1p2 Point 2 of the first line.
+ * @param l2p1 Point 1 of the second line.
+ * @param l2p2 Point 2 of the second line.
+ * @param final_point If not NULL and they intersect,
+ * returns the coordinates of where it happens.
+ * @return Whether they intersect.
  */
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
@@ -1561,25 +1530,18 @@ bool lines_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the movement necessary to move a point.
- * start:
- *   Coordinates of the initial point.
- * target:
- *   Coordinates of the target point.
- * speed:
- *   Speed at which the point can move.
- * reach_radius:
- *   If the point is within this range of the target,
- *   consider it as already being there.
- * mov:
- *   Variable to return the amount of movement to.
- * angle:
- *   Variable to return the angle the point faces to.
- * reached:
- *   Variable to return whether the point reached the target.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Returns the movement necessary to move a point.
+ *
+ * @param start Coordinates of the initial point.
+ * @param target Coordinates of the target point.
+ * @param speed Speed at which the point can move.
+ * @param reach_radius If the point is within this range of the target,
+ * consider it as already being there.
+ * @param mov Variable to return the amount of movement to.
+ * @param angle Variable to return the angle the point faces to.
+ * @param reached Variable to return whether the point reached the target.
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void move_point(
     const point &start, const point &target,
@@ -1607,10 +1569,11 @@ void move_point(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Normalizes an angle so that it's between 0 and TAU (M_PI * 2).
- * a:
- *   Angle to normalize.
+/**
+ * @brief Normalizes an angle so that it's between 0 and TAU (M_PI * 2).
+ *
+ * @param a Angle to normalize.
+ * @return The normalized angle.
  */
 float normalize_angle(float a) {
     a = (float) fmod(a, (float) TAU);
@@ -1619,10 +1582,11 @@ float normalize_angle(float a) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Normalizes the specified vector so its magnitude is 1.
- * v:
- *   Vector to normalize.
+/**
+ * @brief Normalizes the specified vector so its magnitude is 1.
+ *
+ * @param v Vector to normalize.
+ * @return The normalized vector.
  */
 point normalize_vector(const point &v) {
     float length = dist(point(), v).to_float();
@@ -1635,14 +1599,13 @@ point normalize_vector(const point &v) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether three given points are collinear or not.
- * a:
- *   First point.
- * b:
- *   Second point.
- * c:
- *   Third point.
+/**
+ * @brief Returns whether three given points are collinear or not.
+ *
+ * @param a First point.
+ * @param b Second point.
+ * @param c Third point.
+ * @return Whether they are collinear.
  */
 bool points_are_collinear(
     const point &a, const point &b, const point &c
@@ -1654,16 +1617,13 @@ bool points_are_collinear(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Projects a set of vertexes onto an axis.
- * v:
- *   Vertexes to project.
- * axis:
- *   The axis to project onto.
- * min:
- *   The smallest value of all the vertexes.
- * max:
- *   The largest value of all the vertexes.
+/**
+ * @brief Projects a set of vertexes onto an axis.
+ *
+ * @param v Vertexes to project.
+ * @param axis The axis to project onto.
+ * @param min The smallest value of all the vertexes.
+ * @param max The largest value of all the vertexes.
  */
 void project_vertexes(
     const vector<point> &v, const point axis, float* min, float* max
@@ -1678,26 +1638,25 @@ void project_vertexes(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts an angle from radians to degrees.
- * rad:
- *   Angle, in radians.
+/**
+ * @brief Converts an angle from radians to degrees.
+ *
+ * @param rad Angle, in radians.
+ * @return The degrees.
  */
 float rad_to_deg(const float rad) {
     return (float) (180.0f / M_PI) * rad;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if two rectangles are colliding.
- * tl1:
- *   Coordinates of the first box's top-left.
- * br1:
- *   Coordinates of the first box's bottom-right.
- * tl2:
- *   Coordinates of the second box's top-left.
- * br2:
- *   Coordinates of the second box's bottom-right.
+/**
+ * @brief Checks if two rectangles are colliding.
+ *
+ * @param tl1 Coordinates of the first box's top-left.
+ * @param br1 Coordinates of the first box's bottom-right.
+ * @param tl2 Coordinates of the second box's top-left.
+ * @param br2 Coordinates of the second box's bottom-right.
+ * @return Whether they intersect.
  */
 bool rectangles_intersect(
     const point &tl1, const point &br1,
@@ -1711,26 +1670,20 @@ bool rectangles_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a rotated rectangle is touching another rotated
+/**
+ * @brief Returns whether a rotated rectangle is touching another rotated
  * rectangle or not. This includes being completely inside the rectangle.
- * rect1:
- *   Center coordinates of the first rectangle.
- * rect_dim1:
- *   Dimensions of the first rectangle.
- * rect_angle1:
- *   Angle the first rectangle is facing.
- * rect2:
- *   Center coordinates of the second rectangle.
- * rect_dim2:
- *   Dimensions of the second rectangle.
- * rect_angle2:
- *   Angle the second rectangle is facing.
- * overlap_dist:
- *   If not NULL, the amount of overlap is returned here.
- * overlap_angle:
- *   If not NULL, the direction that rectangle 1 would push rectangle 2
- *   away with is returned here.
+ *
+ * @param rect1 Center coordinates of the first rectangle.
+ * @param rect_dim1 Dimensions of the first rectangle.
+ * @param rect_angle1 Angle the first rectangle is facing.
+ * @param rect2 Center coordinates of the second rectangle.
+ * @param rect_dim2 Dimensions of the second rectangle.
+ * @param rect_angle2 Angle the second rectangle is facing.
+ * @param overlap_dist If not NULL, the amount of overlap is returned here.
+ * @param overlap_angle If not NULL, the direction that rectangle 1 would
+ * push rectangle 2 away with is returned here.
+ * @return Whether they intersect.
  */
 bool rectangles_intersect(
     const point &rect1, const point &rect_dim1, const float rect_angle1,
@@ -1824,14 +1777,14 @@ bool rectangles_intersect(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resizes a pair of size-related coordinates such that they fit the
+/**
+ * @brief Resizes a pair of size-related coordinates such that they fit the
  * specified "box" size as snuggly as possible, whilst keeping their original
  * aspect ratio.
- * original_size:
- *   The original size coordinates.
- * box_size:
- *   Width and height of the box to fit into.
+ *
+ * @param original_size The original size coordinates.
+ * @param box_size Width and height of the box to fit into.
+ * @return The resized dimensions.
  */
 point resize_to_box_keeping_aspect_ratio(
     const point &original_size,
@@ -1856,14 +1809,14 @@ point resize_to_box_keeping_aspect_ratio(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Rotates a point by an angle.
+/**
+ * @brief Rotates a point by an angle.
  * The x and y are meant to represent the difference
  * between the point and the center of the rotation.
- * coords:
- *   Coordinates to rotate.
- * angle:
- *   Angle to rotate by.
+ *
+ * @param coords Coordinates to rotate.
+ * @param angle Angle to rotate by.
+ * @return The rotated point.
  */
 point rotate_point(const point &coords, const float angle) {
     float c = (float) cos(angle);

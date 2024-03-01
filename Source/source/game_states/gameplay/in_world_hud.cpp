@@ -19,41 +19,55 @@
 
 
 namespace IN_WORLD_FRACTION {
+
 //How much to grow when performing a juicy grow animation.
 const float GROW_JUICE_AMOUNT = 0.06f;
+
 //How long it takes to animate the numbers growing.
 const float GROW_JUICE_DURATION = 0.3f;
+
 //Padding between mob and fraction.
 const float PADDING = 8.0f;
+
 //How much to grow when performing a requirement met juicy grow animation.
 const float REQ_MET_GROW_JUICE_AMOUNT = 0.12f;
+
 //How long it takes to animate the numbers flashing.
 const float REQ_MET_JUICE_DURATION = 0.5f;
+
 //How long it takes to fade in.
 const float TRANSITION_IN_DURATION = 0.4f;
+
 //How long it takes to fade out.
 const float TRANSITION_OUT_DURATION = 0.5f;
+
 }
 
 
 namespace IN_WORLD_HEALTH_WHEEL {
+
 //Standard opacity.
 const float OPACITY = 0.85f;
+
 //Padding between mob and wheel.
 const float PADDING = 4.0f;
+
 //Multiply health wheel speed by this.
 const float SMOOTHNESS_MULT = 6.0f;
+
 //How long it takes to fade in.
 const float TRANSITION_IN_DURATION = 0.2f;
+
 //How long it takes to fade out.
 const float TRANSITION_OUT_DURATION = 1.5f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world fraction.
- * m:
- *   Mob it belongs to.
+/**
+ * @brief Constructs a new in-world fraction object.
+ *
+ * @param m Mob it belongs to.
  */
 in_world_fraction::in_world_fraction(mob* m) :
     in_world_hud_item(m),
@@ -67,8 +81,8 @@ in_world_fraction::in_world_fraction(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an in-world fraction.
+/**
+ * @brief Draws an in-world fraction.
  */
 void in_world_fraction::draw() {
     float alpha_mult = 1.0f;
@@ -142,10 +156,10 @@ void in_world_fraction::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the color.
- * new_color:
- *   Color to set to.
+/**
+ * @brief Sets the color.
+ *
+ * @param new_color Color to set to.
  */
 void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
     if(color == new_color) return;
@@ -155,10 +169,10 @@ void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the requirement number.
- * new_req_nr:
- *   Requirement number to set to.
+/**
+ * @brief Sets the requirement number.
+ *
+ * @param new_req_nr Requirement number to set to.
  */
 void in_world_fraction::set_requirement_number(const float new_req_nr) {
     if(requirement_number == new_req_nr) return;
@@ -178,10 +192,10 @@ void in_world_fraction::set_requirement_number(const float new_req_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the value number.
- * new_value_nr:
- *   Value number to set to.
+/**
+ * @brief Sets the value number.
+ *
+ * @param new_value_nr Value number to set to.
  */
 void in_world_fraction::set_value_number(const float new_value_nr) {
     if(value_number == new_value_nr) return;
@@ -202,8 +216,8 @@ void in_world_fraction::set_value_number(const float new_value_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts fading away.
+/**
+ * @brief Starts fading away.
  */
 void in_world_fraction::start_fading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
@@ -214,10 +228,10 @@ void in_world_fraction::start_fading() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void in_world_fraction::tick(const float delta_t) {
     in_world_hud_item::tick(delta_t);
@@ -230,10 +244,10 @@ void in_world_fraction::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world health wheel.
- * m:
- *   Mob it belongs to.
+/**
+ * @brief Constructs a new in-world health wheel object.
+ *
+ * @param m Mob it belongs to.
  */
 in_world_health_wheel::in_world_health_wheel(mob* m) :
     in_world_hud_item(m),
@@ -246,8 +260,8 @@ in_world_health_wheel::in_world_health_wheel(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an in-world health wheel.
+/**
+ * @brief Draws an in-world health wheel.
  */
 void in_world_health_wheel::draw() {
     float alpha_mult = 1.0f;
@@ -285,8 +299,8 @@ void in_world_health_wheel::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts fading away.
+/**
+ * @brief Starts fading away.
  */
 void in_world_health_wheel::start_fading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
@@ -297,10 +311,10 @@ void in_world_health_wheel::start_fading() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void in_world_health_wheel::tick(const float delta_t) {
     in_world_hud_item::tick(delta_t);
@@ -313,10 +327,10 @@ void in_world_health_wheel::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an in-world HUD item.
- * m:
- *   Mob it belongs to.
+/**
+ * @brief Constructs a new in-world HUD item object.
+ *
+ * @param m Mob it belongs to.
  */
 in_world_hud_item::in_world_hud_item(mob* m) :
     m(m),
@@ -327,10 +341,10 @@ in_world_hud_item::in_world_hud_item(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void in_world_hud_item::tick(const float delta_t) {
     switch(transition) {

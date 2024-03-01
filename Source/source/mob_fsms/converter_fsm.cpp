@@ -16,10 +16,10 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the converter's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the converter's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void converter_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -91,14 +91,12 @@ void converter_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Enters the idle state.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Enters the idle state.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -114,14 +112,12 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Does a little bumpy animation after a leader touches it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Does a little bumpy animation after a leader touches it.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::bumped(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -137,42 +133,36 @@ void converter_fsm::bumped(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the converter close after it gets bumped.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Makes the converter close after it gets bumped.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::finish_being_bumped(mob* m, void* info1, void* info2) {
     ((converter*) m)->close();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the converter vanish.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Makes the converter vanish.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::finish_dying(mob* m, void* info1, void* info2) {
     m->to_delete = true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an object bumping against it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Handles an object bumping against it.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
     mob* bumper = (mob*) info1;
@@ -182,14 +172,12 @@ void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to handle a Pikmin having been thrown inside.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Code to handle a Pikmin having been thrown inside.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -235,14 +223,12 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the converter open up.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Makes the converter open up.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::open(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -255,15 +241,13 @@ void converter_fsm::open(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to the opening state or the dying state, depending
+/**
+ * @brief Changes to the opening state or the dying state, depending
  * on whether it can still output Pikmin.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -276,15 +260,13 @@ void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to the opening state or the spitting state, depending
+/**
+ * @brief Changes to the opening state or the spitting state, depending
  * on whether it has Pikmin in the buffer or not.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -297,14 +279,12 @@ void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Spews out the converted seeds.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Spews out the converted seeds.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::spew(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
@@ -319,14 +299,12 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the converter start dying.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Makes the converter start dying.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void converter_fsm::start_dying(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;

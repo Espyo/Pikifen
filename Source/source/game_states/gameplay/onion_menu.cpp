@@ -18,21 +18,24 @@
 
 
 namespace ONION_MENU {
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Onion_menu.txt";
+
 //How long to let text turn red for.
 const float RED_TEXT_DURATION = 1.0f;
+
 //The Onion menu can only show, at most, these many Pikmin types per page.
 const size_t TYPES_PER_PAGE = 5;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an Onion menu struct.
- * n_ptr:
- *   Pointer to the nest information struct.
- * l_ptr:
- *   Leader responsible.
+/**
+ * @brief Constructs a new Onion menu struct object.
+ *
+ * @param n_ptr Pointer to the nest information struct.
+ * @param l_ptr Leader responsible.
  */
 onion_menu_struct::onion_menu_struct(
     pikmin_nest_struct* n_ptr, leader* l_ptr
@@ -528,16 +531,17 @@ onion_menu_struct::onion_menu_struct(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys an Onion menu struct.
+/**
+ * @brief Destroys the Onion menu struct object.
+ *
  */
 onion_menu_struct::~onion_menu_struct() {
     gui.destroy();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin of each type from Onion to the group, if possible.
+/**
+ * @brief Adds one Pikmin of each type from Onion to the group, if possible.
  */
 void onion_menu_struct::add_all_to_group() {
     for(size_t t = 0; t < types.size(); ++t) {
@@ -546,8 +550,8 @@ void onion_menu_struct::add_all_to_group() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin of each type from the group to the Onion, if possible.
+/**
+ * @brief Adds one Pikmin of each type from the group to the Onion, if possible.
  */
 void onion_menu_struct::add_all_to_onion() {
     for(size_t t = 0; t < types.size(); ++t) {
@@ -556,10 +560,10 @@ void onion_menu_struct::add_all_to_onion() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin from the Onion to the group, if possible.
- * type_idx:
- *   Index of the Onion's Pikmin type.
+/**
+ * @brief Adds one Pikmin from the Onion to the group, if possible.
+ *
+ * @param type_idx Index of the Onion's Pikmin type.
  */
 void onion_menu_struct::add_to_group(const size_t type_idx) {
     size_t real_onion_amount =
@@ -605,10 +609,10 @@ void onion_menu_struct::add_to_group(const size_t type_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin from the group to the Onion, if possible.
- * type_idx:
- *   Index of the Onion's Pikmin type.
+/**
+ * @brief Adds one Pikmin from the group to the Onion, if possible.
+ *
+ * @param type_idx Index of the Onion's Pikmin type.
  */
 void onion_menu_struct::add_to_onion(const size_t type_idx) {
     size_t real_group_amount =
@@ -639,8 +643,8 @@ void onion_menu_struct::add_to_onion(const size_t type_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Confirms the player's changes, and sets up the Pikmin to climb up the
+/**
+ * @brief Confirms the player's changes, and sets up the Pikmin to climb up the
  * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
  */
 void onion_menu_struct::confirm() {
@@ -656,10 +660,10 @@ void onion_menu_struct::confirm() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Flips to the specified page of Pikmin types.
- * page:
- *   Index of the new page.
+/**
+ * @brief Flips to the specified page of Pikmin types.
+ *
+ * @param page Index of the new page.
  */
 void onion_menu_struct::go_to_page(const size_t page) {
     this->page = page;
@@ -668,8 +672,8 @@ void onion_menu_struct::go_to_page(const size_t page) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the Onion and group buttons juicy grow.
+/**
+ * @brief Makes the Onion and group buttons juicy grow.
  */
 void onion_menu_struct::grow_buttons() {
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
@@ -695,38 +699,38 @@ void onion_menu_struct::grow_buttons() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev Event to handle.
  */
 void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     if(!closing) gui.handle_event(ev);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a player action.
- * action:
- *   Data about the player action.
+/**
+ * @brief Handles a player action.
+ *
+ * @param action Data about the player action.
  */
 void onion_menu_struct::handle_player_action(const player_action &action) {
     gui.handle_player_action(action);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes a given GUI item turn red.
- * item:
- *   The item.
+/**
+ * @brief Makes a given GUI item turn red.
+ *
+ * @param item The item.
  */
 void onion_menu_struct::make_gui_item_red(gui_item* item) {
     red_items[item] = ONION_MENU::RED_TEXT_DURATION;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the closing process.
+/**
+ * @brief Starts the closing process.
  */
 void onion_menu_struct::start_closing() {
     closing = true;
@@ -741,10 +745,10 @@ void onion_menu_struct::start_closing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void onion_menu_struct::tick(const float delta_t) {
 
@@ -838,8 +842,8 @@ void onion_menu_struct::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Toggles the "select all" mode.
+/**
+ * @brief Toggles the "select all" mode.
  */
 void onion_menu_struct::toggle_select_all() {
     select_all = !select_all;
@@ -848,8 +852,8 @@ void onion_menu_struct::toggle_select_all() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates some things about the Onion's state, especially caches.
+/**
+ * @brief Updates some things about the Onion's state, especially caches.
  */
 void onion_menu_struct::update() {
     //Reset the on-screen types.
@@ -950,12 +954,11 @@ void onion_menu_struct::update() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an Onion menu Pikmin type struct.
- * idx:
- *   Index of the Pikmin type in the nest object.
- * pik_type:
- *   The Pikmin type.
+/**
+ * @brief Constructs a new Onion menu type struct object.
+ *
+ * @param idx Index of the Pikmin type in the nest object.
+ * @param pik_type The Pikmin type.
  */
 onion_menu_type_struct::onion_menu_type_struct(
     const size_t idx, pikmin_type* pik_type

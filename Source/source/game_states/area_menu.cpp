@@ -20,21 +20,27 @@
 
 
 namespace AREA_MENU {
+
 //Path to the main GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
+
 //Path to the area info GUI information file.
 const string INFO_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_info.txt";
+
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 //Path to the mission specs GUI information file.
 const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an "area menu" state.
+/**
+ * @brief Constructs a new area menu state object.
  */
 area_menu_state::area_menu_state() :
     game_state(),
@@ -66,13 +72,12 @@ area_menu_state::area_menu_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new bullet point to either the fail condition list, or the
+/**
+ * @brief Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
- * list:
- *   List to add to.
- * text:
- *   Text.
+ *
+ * @param list List to add to.
+ * @param text Text.
  */
 void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
     size_t bullet_idx = list->children.size();
@@ -94,8 +99,8 @@ void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Animates the GUI items inside of the info and specs pages.
+/**
+ * @brief Animates the GUI items inside of the info and specs pages.
  */
 void area_menu_state::animate_info_and_specs() {
     info_name_text->start_juice_animation(
@@ -146,10 +151,10 @@ void area_menu_state::animate_info_and_specs() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes the area information to a new area's information.
- * area_idx:
- *   Index of the newly-selected area.
+/**
+ * @brief Changes the area information to a new area's information.
+ *
+ * @param area_idx Index of the newly-selected area.
  */
 void area_menu_state::change_info(const size_t area_idx) {
     if(area_idx == cur_area_idx) return;
@@ -393,8 +398,8 @@ void area_menu_state::change_info(const size_t area_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the area menu.
+/**
+ * @brief Draws the area menu.
  */
 void area_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
@@ -413,8 +418,8 @@ void area_menu_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
+/**
+ * @brief Ticks time by one frame of logic.
  */
 void area_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
@@ -430,18 +435,20 @@ void area_menu_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string area_menu_state::get_name() const {
     return "area menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -450,8 +457,8 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the area info page GUI items.
+/**
+ * @brief Initializes the area info page GUI items.
  */
 void area_menu_state::init_gui_info_page() {
     gui.register_coords("info_name",    36,  6, 68,  8);
@@ -602,8 +609,8 @@ void area_menu_state::init_gui_info_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the main GUI items.
+/**
+ * @brief Initializes the main GUI items.
  */
 void area_menu_state::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
@@ -851,8 +858,8 @@ void area_menu_state::init_gui_main() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the mission specs page GUI items.
+/**
+ * @brief Initializes the mission specs page GUI items.
  */
 void area_menu_state::init_gui_specs_page() {
     gui.register_coords("specs_name",     50,  5, 96,  6);
@@ -925,8 +932,8 @@ void area_menu_state::init_gui_specs_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the area menu and goes into the main menu.
+/**
+ * @brief Leaves the area menu and goes into the main menu.
  */
 void area_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
@@ -936,8 +943,8 @@ void area_menu_state::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the area menu into memory.
+/**
+ * @brief Loads the area menu into memory.
  */
 void area_menu_state::load() {
     bmp_menu_bg = NULL;
@@ -1043,8 +1050,8 @@ void area_menu_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the area menu from memory.
+/**
+ * @brief Unloads the area menu from memory.
  */
 void area_menu_state::unload() {
 

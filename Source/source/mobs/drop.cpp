@@ -16,14 +16,12 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a drop mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Drop type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new drop object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Drop type this mob belongs to.
+ * @param angle Starting angle.
  */
 drop::drop(const point &pos, drop_type* type, const float angle) :
     mob(pos, type, angle),
@@ -35,8 +33,8 @@ drop::drop(const point &pos, drop_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a drop, but with its size reflecting the doses left or
+/**
+ * @brief Draws a drop, but with its size reflecting the doses left or
  * the process of vanishing.
  */
 void drop::draw_mob() {
@@ -59,10 +57,10 @@ void drop::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void drop::tick_class_specifics(const float delta_t) {
     float intended_scale;

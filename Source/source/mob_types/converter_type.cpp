@@ -15,8 +15,8 @@
 #include "../mob_fsms/converter_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of converter.
+/**
+ * @brief Constructs a new converter type object.
  */
 converter_type::converter_type() :
     mob_type(MOB_CATEGORY_CONVERTERS),
@@ -33,8 +33,8 @@ converter_type::converter_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector converter_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -50,10 +50,10 @@ anim_conversion_vector converter_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void converter_type::load_properties(data_node* file) {
     reader_setter rs(file);

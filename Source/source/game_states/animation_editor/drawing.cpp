@@ -19,8 +19,8 @@
 
 
 
-/* ----------------------------------------------------------------------------
- * Handles the drawing part of the main loop of the animation editor.
+/**
+ * @brief Handles the drawing part of the main loop of the animation editor.
  */
 void animation_editor::do_drawing() {
     //Render what is needed for the GUI.
@@ -41,9 +41,10 @@ void animation_editor::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draw the canvas. This is called as a callback inside the
- * ImGui rendering process.
+/**
+ * @brief Draw the canvas.
+ *
+ * This is called as a callback inside the Dear ImGui rendering process.
  */
 void animation_editor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
@@ -335,8 +336,8 @@ void animation_editor::draw_canvas() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the comparison sprite on the canvas, all tinted and everything.
+/**
+ * @brief Draws the comparison sprite on the canvas, all tinted and everything.
  */
 void animation_editor::draw_comparison() {
     if(
@@ -362,16 +363,13 @@ void animation_editor::draw_comparison() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a hitbox on the canvas in the sideways view.
- * h_ptr:
- *   Hitbox to draw.
- * color:
- *   Color to use for the hitbox's main shape.
- * outline_color:
- *   Color to use for the hitbox's outline.
- * outline_thickness:
- *   Thickness of the hitbox's outline.
+/**
+ * @brief Draws a hitbox on the canvas in the sideways view.
+ *
+ * @param h_ptr Hitbox to draw.
+ * @param color Color to use for the hitbox's main shape.
+ * @param outline_color Color to use for the hitbox's outline.
+ * @param outline_thickness Thickness of the hitbox's outline.
  */
 void animation_editor::draw_side_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
@@ -416,10 +414,11 @@ void animation_editor::draw_side_view_hitbox(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a leader's silhouette on the canvas in the sideways view.
- * x_offset:
- *   From the center, offset the silhouette this much to the right.
+/**
+ * @brief Draws a leader's silhouette on the canvas in the sideways view.
+ *
+ * @param x_offset From the center, offset the silhouette this much
+ * to the right.
  */
 void animation_editor::draw_side_view_leader_silhouette(const float x_offset) {
     draw_bitmap(
@@ -431,10 +430,10 @@ void animation_editor::draw_side_view_leader_silhouette(const float x_offset) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a sprite on the canvas in the sideways view.
- * s:
- *   Sprite to draw.
+/**
+ * @brief Draws a sprite on the canvas in the sideways view.
+ *
+ * @param s Sprite to draw.
  */
 void animation_editor::draw_side_view_sprite(const sprite* s) {
     point min, max;
@@ -460,8 +459,8 @@ void animation_editor::draw_side_view_sprite(const sprite* s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a timeline for the current animation.
+/**
+ * @brief Draws a timeline for the current animation.
  */
 void animation_editor::draw_timeline() {
     if(!cur_anim || cur_anim->frames.empty()) return;
@@ -609,16 +608,13 @@ void animation_editor::draw_timeline() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a hitbox on the canvas in the standard top-down view.
- * h_ptr:
- *   Hitbox to draw.
- * color:
- *   Color of the hitbox's main shape.
- * outline_color:
- *   Color of the hitbox's outline.
- * outline_thickness:
- *   Thickness of the hitbox's outline.
+/**
+ * @brief Draws a hitbox on the canvas in the standard top-down view.
+ *
+ * @param h_ptr Hitbox to draw.
+ * @param color Color of the hitbox's main shape.
+ * @param outline_color Color of the hitbox's outline.
+ * @param outline_thickness Thickness of the hitbox's outline.
  */
 void animation_editor::draw_top_down_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
@@ -637,10 +633,11 @@ void animation_editor::draw_top_down_view_hitbox(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a leader silhouette on the canvas in the standard top-down view.
- * x_offset:
- *   From the center, offset the leader silhouette this much to the right.
+/**
+ * @brief Draws a leader silhouette on the canvas in the standard top-down view.
+ *
+ * @param x_offset From the center, offset the leader silhouette this much
+ * to the right.
  */
 void animation_editor::draw_top_down_view_leader_silhouette(
     const float x_offset
@@ -653,10 +650,10 @@ void animation_editor::draw_top_down_view_leader_silhouette(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the mob radius on the canvas in the standard top-down view.
- * mt:
- *   Type of the mob to draw.
+/**
+ * @brief Draws the mob radius on the canvas in the standard top-down view.
+ *
+ * @param mt Type of the mob to draw.
  */
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
@@ -673,10 +670,10 @@ void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a sprite on the canvas in the standard top-down view.
- * s:
- *   Sprite to draw.
+/**
+ * @brief Draws a sprite on the canvas in the standard top-down view.
+ *
+ * @param s Sprite to draw.
  */
 void animation_editor::draw_top_down_view_sprite(sprite* s) {
     if(!comparison_above) {

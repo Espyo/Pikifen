@@ -38,7 +38,7 @@ def get_documentation_problems_in_file(file_path):
                 break
             else:
                 cur_line = cur_line - 1
-                if lines[cur_line - 1].startswith('/* ---'):
+                if lines[cur_line - 1].startswith('/**'):
                     # Found the start of the comment!
                     comment_start = cur_line
                     finding_comment = False
@@ -54,7 +54,7 @@ def get_documentation_problems_in_file(file_path):
 
         params_documented = []
         for l in comment_lines:
-            match = re.search(r'\* ([^ \.]+):\n', l)
+            match = re.search(r'\* @param ([^ \.]+)', l)
             if match is not None:
                 params_documented.append(match.group(1))
         

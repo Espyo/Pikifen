@@ -15,30 +15,40 @@
 #include "mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * A drop mob. This is a droplet that sits on the ground and can be consumed
+/**
+ * @brief A drop mob.
+ *
+ * This is a droplet that sits on the ground and can be consumed
  * by certain mobs. When that happens, some effect is triggered, depending
  * on what the drop is.
  */
 class drop : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of drop it is.
     drop_type* dro_type;
     
     //Current scale. Used for shrinking.
     float cur_scale;
+    
     //How many doses are left.
     size_t doses_left;
     
-    //Constructor.
+
+    //--- Function declarations ---
+
     drop(const point &pos, drop_type* dro_type, const float angle);
-    
-    //Mob drawing routine.
     void draw_mob() override;
     
 protected:
-    //Tick class-specific logic.
+    
+    //--- Function declarations ---
+    
     void tick_class_specifics(const float delta_t) override;
+    
 };
 
 

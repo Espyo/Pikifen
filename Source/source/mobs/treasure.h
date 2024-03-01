@@ -16,9 +16,10 @@
 #include "pikmin.h"
 
 
-/* ----------------------------------------------------------------------------
- * "Treasure" is the catch-all term for the
+/**
+ * @brief "Treasure" is the catch-all term for the
  * main collectible in the game.
+ *
  * Without it, you cannot complete the game,
  * and normally you need to collect them all;
  * collecting specific ones makes the story
@@ -36,12 +37,19 @@
  * and without the fruits, Koppai would starve.
  */
 class treasure : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of treasure it is.
     treasure_type* tre_type;
     
-    //Constructor.
+    
+    //--- Function declarations ---
+    
     treasure(const point &pos, treasure_type* type, const float angle);
+    
 };
 
 

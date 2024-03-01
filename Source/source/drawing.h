@@ -43,63 +43,89 @@ extern const float NOTIFICATION_PADDING;
 
 //Possible shapes for a player input icon.
 enum PLAYER_INPUT_ICON_SHAPES {
+
     //Doesn't really have a shape, but instead draws a bitmap.
     PLAYER_INPUT_ICON_SHAPE_BITMAP,
+    
     //Rectangle shape, representing keyboard keys.
     PLAYER_INPUT_ICON_SHAPE_RECTANGLE,
+    
     //Circle/ellipse shape, representing buttons.
     PLAYER_INPUT_ICON_SHAPE_ROUNDED,
+
 };
 
 
 //Player input icon spritesheet sprites.
 //The order matches what's in the spritesheet.
 enum PLAYER_INPUT_ICON_SPRITES {
+
     //Left mouse button.
     PLAYER_INPUT_ICON_SPRITE_LMB,
+    
     //Right mouse button.
     PLAYER_INPUT_ICON_SPRITE_RMB,
+    
     //Middle mouse button.
     PLAYER_INPUT_ICON_SPRITE_MMB,
+    
     //Mouse wheel up.
     PLAYER_INPUT_ICON_SPRITE_MWU,
+    
     //Mouse wheel down.
     PLAYER_INPUT_ICON_SPRITE_MWD,
+    
     //Up key.
     PLAYER_INPUT_ICON_SPRITE_UP,
+    
     //Left key.
     PLAYER_INPUT_ICON_SPRITE_LEFT,
+    
     //Down key.
     PLAYER_INPUT_ICON_SPRITE_DOWN,
+    
     //Right key.
     PLAYER_INPUT_ICON_SPRITE_RIGHT,
+    
     //Backspace key.
     PLAYER_INPUT_ICON_SPRITE_BACKSPACE,
+    
     //Shift key.
     PLAYER_INPUT_ICON_SPRITE_SHIFT,
+    
     //Tab key.
     PLAYER_INPUT_ICON_SPRITE_TAB,
+    
     //Enter key.
     PLAYER_INPUT_ICON_SPRITE_ENTER,
+    
     //Game controller stick up.
     PLAYER_INPUT_ICON_SPRITE_STICK_UP,
+    
     //Game controller stick left.
     PLAYER_INPUT_ICON_SPRITE_STICK_LEFT,
+    
     //Game controller stick down.
     PLAYER_INPUT_ICON_SPRITE_STICK_DOWN,
+    
     //Game controller stick right.
     PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
+
 };
 
 
 //Ways to vertically align text when rendering it.
 enum TEXT_VALIGN_MODES {
+    
     //Align to the top.
     TEXT_VALIGN_TOP,
+    
     //Align to the center.
     TEXT_VALIGN_CENTER,
+    
     //Align to the bottom.
     TEXT_VALIGN_BOTTOM,
+    
 };
 
 

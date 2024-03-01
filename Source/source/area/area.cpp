@@ -22,27 +22,36 @@ using std::vector;
 
 
 namespace AREA {
+
 //Default day time speed, in game-minutes per real-minutes.
 const float DEF_DAY_TIME_SPEED = 120;
+
 //Default day time at the start of gameplay, in minutes.
 const size_t DEF_DAY_TIME_START = 7 * 60;
+
 //Default difficulty.
 const unsigned char DEF_DIFFICULTY = 0;
+
 //Default mission bronze medal point requirement.
 const int DEF_MISSION_MEDAL_BRONZE_REQ = 1000;
+
 //Default mission gold medal point requirement.
 const int DEF_MISSION_MEDAL_GOLD_REQ = 3000;
+
 //Default mission platinum medal point requirement.
 const int DEF_MISSION_MEDAL_PLATINUM_REQ = 4000;
+
 //Default mission silver medal point requirement.
 const int DEF_MISSION_MEDAL_SILVER_REQ = 2000;
+
 //Default mission time limit duration, in seconds.
 const size_t DEF_MISSION_TIME_LIMIT = 60;
-};
+
+}
 
 
-/* ----------------------------------------------------------------------------
- * Creates info on an area.
+/**
+ * @brief Constructs a new area data object.
  */
 area_data::area_data() :
     type(AREA_TYPE_SIMPLE),
@@ -58,9 +67,12 @@ area_data::area_data() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * A debugging tool. This checks to see if all numbers match their pointers,
- * for the various edges, vertexes, etc. Aborts execution if any doesn't.
+/**
+ * @brief Checks to see if all numbers match their pointers,
+ * for the various edges, vertexes, etc.
+ *
+ * This is merely a debugging tool. Aborts execution if any of the pointers
+ * don't match.
  */
 void area_data::check_stability() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -107,8 +119,8 @@ void area_data::check_stability() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the info of an area map.
+/**
+ * @brief Clears the info of an area map.
  */
 void area_data::clear() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -203,10 +215,10 @@ void area_data::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones this area data into another area_data object.
- * other:
- *   The area data object to clone to.
+/**
+ * @brief Clones this area data into another area_data object.
+ *
+ * @param other The area data object to clone to.
  */
 void area_data::clone(area_data &other) {
     other.clear();
@@ -421,15 +433,15 @@ void area_data::clone(area_data &other) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Connects an edge to a sector, adding the sector and its number to the edge's
- * lists, and adding the edge and its number to the sector's.
- * e_ptr:
- *   Edge to connect.
- * s_ptr:
- *   Sector to connect.
- * side:
- *   Which of the sides of the edge the sector goes to.
+/**
+ * @brief Connects an edge to a sector.
+ *
+ * This adds the sector and its number to the edge's
+ * lists, and adds the edge and its number to the sector's.
+ *
+ * @param e_ptr Edge to connect.
+ * @param s_ptr Sector to connect.
+ * @param side Which of the sides of the edge the sector goes to.
  */
 void area_data::connect_edge_to_sector(
     edge* e_ptr, sector* s_ptr, size_t side
@@ -445,15 +457,15 @@ void area_data::connect_edge_to_sector(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Connects an edge to a vertex, adding the vertex and its number to the edge's
- * lists, and adding the edge and its number to the vertex's.
- * e_ptr:
- *   Edge to connect.
- * v_ptr:
- *   Vertex to connect.
- * endpoint:
- *   Which of the edge endpoints the vertex goes to.
+/**
+ * @brief Connects an edge to a vertex.
+ *
+ * This adds the vertex and its number to the edge's
+ * lists, and adds the edge and its number to the vertex's.
+ *
+ * @param e_ptr Edge to connect.
+ * @param v_ptr Vertex to connect.
+ * @param endpoint Which of the edge endpoints the vertex goes to.
  */
 void area_data::connect_edge_to_vertex(
     edge* e_ptr, vertex* v_ptr, size_t endpoint
@@ -468,10 +480,11 @@ void area_data::connect_edge_to_vertex(
 
 
 
-/* ----------------------------------------------------------------------------
- * Connects the edges of a sector that link to it into the edge_nrs vector.
- * s_ptr:
- *   The sector.
+/**
+ * @brief Connects the edges of a sector that link to it into the
+ * edge_nrs vector.
+ *
+ * @param s_ptr The sector.
  */
 void area_data::connect_sector_edges(sector* s_ptr) {
     s_ptr->edge_nrs.clear();
@@ -485,10 +498,10 @@ void area_data::connect_sector_edges(sector* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Connects the edges that link to it into the edge_nrs vector.
- * v_ptr:
- *   The vertex.
+/**
+ * @brief Connects the edges that link to it into the edge_nrs vector.
+ *
+ * @param v_ptr The vertex.
  */
 void area_data::connect_vertex_edges(vertex* v_ptr) {
     v_ptr->edge_nrs.clear();
@@ -502,11 +515,12 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Scans the list of edges and retrieves the number of the specified edge.
- * Returns INVALID if not found.
- * e_ptr:
- *   Edge to find.
+/**
+ * @brief Scans the list of edges and retrieves the number of
+ * the specified edge.
+ *
+ * @param e_ptr Edge to find.
+ * @return The number, or INVALID if not found.
  */
 size_t area_data::find_edge_nr(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -516,11 +530,12 @@ size_t area_data::find_edge_nr(const edge* e_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Scans the list of mob generators and retrieves the number of
- * the specified mob generator. Returns INVALID if not found.
- * m_ptr:
- *   Mob to find.
+/**
+ * @brief Scans the list of mob generators and retrieves the number of
+ * the specified mob generator.
+ *
+ * @param m_ptr Mob to find.
+ * @return The number, or INVALID if not found.
  */
 size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
@@ -530,11 +545,12 @@ size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Scans the list of sectors and retrieves the number of the specified sector.
- * Returns INVALID if not found.
- * s_ptr:
- *   Sector to find.
+/**
+ * @brief Scans the list of sectors and retrieves the number of
+ * the specified sector.
+ *
+ * @param s_ptr Sector to find.
+ * @return The number, or INVALID if not found.
  */
 size_t area_data::find_sector_nr(const sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); ++s) {
@@ -544,11 +560,12 @@ size_t area_data::find_sector_nr(const sector* s_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Scans the list of vertexes and retrieves the number of the specified vertex.
- * Returns INVALID if not found.
- * v_ptr:
- *   Vertex to find.
+/**
+ * @brief Scans the list of vertexes and retrieves the number of
+ * the specified vertex.
+ *
+ * @param v_ptr Vertex to find.
+ * @return The number, or INVALID if not found.
  */
 size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -558,12 +575,12 @@ size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the sector and vertex numbers in an edge,
+/**
+ * @brief Fixes the sector and vertex numbers in an edge,
  * making them match the correct sectors and vertexes,
  * based on the existing sector and vertex pointers.
- * e_ptr:
- *   Edge to fix the numbers of.
+ *
+ * @param e_ptr Edge to fix the numbers of.
  */
 void area_data::fix_edge_nrs(edge* e_ptr) {
     for(size_t s = 0; s < 2; ++s) {
@@ -584,12 +601,12 @@ void area_data::fix_edge_nrs(edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the sector and vertex pointers of an edge,
+/**
+ * @brief Fixes the sector and vertex pointers of an edge,
  * making them point to the correct sectors and vertexes,
  * based on the existing sector and vertex numbers.
- * e_ptr:
- *   Edge to fix the pointers of.
+ *
+ * @param e_ptr Edge to fix the pointers of.
  */
 void area_data::fix_edge_pointers(edge* e_ptr) {
     e_ptr->sectors[0] = NULL;
@@ -608,12 +625,12 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the path stop numbers in a path stop's links,
+/**
+ * @brief Fixes the path stop numbers in a path stop's links,
  * making them match the correct path stops,
  * based on the existing path stop pointers.
- * s_ptr:
- *   Path stop to fix the numbers of.
+ *
+ * @param s_ptr Path stop to fix the numbers of.
  */
 void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
@@ -632,12 +649,12 @@ void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the path stop pointers in a path stop's links,
+/**
+ * @brief Fixes the path stop pointers in a path stop's links,
  * making them point to the correct path stops,
  * based on the existing path stop numbers.
- * s_ptr:
- *   Path stop to fix the pointers of.
+ *
+ * @param s_ptr Path stop to fix the pointers of.
  */
 void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
@@ -652,11 +669,12 @@ void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the edge numbers in a sector, making them match the correct edges,
+/**
+ * @brief Fixes the edge numbers in a sector,
+ * making them match the correct edges,
  * based on the existing edge pointers.
- * s_ptr:
- *   Sector to fix the numbers of.
+ *
+ * @param s_ptr Sector to fix the numbers of.
  */
 void area_data::fix_sector_nrs(sector* s_ptr) {
     s_ptr->edge_nrs.clear();
@@ -666,11 +684,12 @@ void area_data::fix_sector_nrs(sector* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the edge pointers in a sector, making them point to the correct edges,
+/**
+ * @brief Fixes the edge pointers in a sector,
+ * making them point to the correct edges,
  * based on the existing edge numbers.
- * s_ptr:
- *   Sector to fix the pointers of.
+ *
+ * @param s_ptr Sector to fix the pointers of.
  */
 void area_data::fix_sector_pointers(sector* s_ptr) {
     s_ptr->edges.clear();
@@ -681,11 +700,12 @@ void area_data::fix_sector_pointers(sector* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the edge numbers in a vertex, making them match the correct edges,
+/**
+ * @brief Fixes the edge numbers in a vertex,
+ * making them match the correct edges,
  * based on the existing edge pointers.
- * v_ptr:
- *   Vertex to fix the numbers of.
+ *
+ * @param v_ptr Vertex to fix the numbers of.
  */
 void area_data::fix_vertex_nrs(vertex* v_ptr) {
     v_ptr->edge_nrs.clear();
@@ -695,11 +715,12 @@ void area_data::fix_vertex_nrs(vertex* v_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the edge pointers in a vertex, making them point to the correct edges,
+/**
+ * @brief Fixes the edge pointers in a vertex,
+ * making them point to the correct edges,
  * based on the existing edge numbers.
- * v_ptr:
- *   Vertex to fix the pointers of.
+ *
+ * @param v_ptr Vertex to fix the pointers of.
  */
 void area_data::fix_vertex_pointers(vertex* v_ptr) {
     v_ptr->edges.clear();
@@ -710,8 +731,8 @@ void area_data::fix_vertex_pointers(vertex* v_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Generates the blockmap for the area, given the current info.
+/**
+ * @brief Generates the blockmap for the area, given the current info.
  */
 void area_data::generate_blockmap() {
     bmap.clear();
@@ -806,10 +827,10 @@ void area_data::generate_blockmap() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Generates the blockmap for a set of edges.
- * edge_list:
- *   Edges to generate the blockmap around.
+/**
+ * @brief Generates the blockmap for a set of edges.
+ *
+ * @param edge_list Edges to generate the blockmap around.
  */
 void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
     for(size_t e = 0; e < edge_list.size(); ++e) {
@@ -878,8 +899,10 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many path links exist in the area.
+/**
+ * @brief Returns how many path links exist in the area.
+ *
+ * @return The number of path links.
  */
 size_t area_data::get_nr_path_links() {
     size_t one_ways_found = 0;
@@ -900,11 +923,11 @@ size_t area_data::get_nr_path_links() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the thumbnail image from the disk and updates the
+/**
+ * @brief Loads the thumbnail image from the disk and updates the
  * thumbnail class member.
- * thumbnail_path:
- *   Path to the bitmap.
+ *
+ * @param thumbnail_path Path to the bitmap.
  */
 void area_data::load_thumbnail(const string &thumbnail_path) {
     if(thumbnail) {
@@ -923,8 +946,10 @@ void area_data::load_thumbnail(const string &thumbnail_path) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new edge to the list and returns its pointer.
+/**
+ * @brief Adds a new edge to the list.
+ *
+ * @return The new edge's pointer.
  */
 edge* area_data::new_edge() {
     edge* e_ptr = new edge();
@@ -933,8 +958,10 @@ edge* area_data::new_edge() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new sector to the list and returns its pointer.
+/**
+ * @brief Adds a new sector to the list.
+ *
+ * @return The new sector's pointer.
  */
 sector* area_data::new_sector() {
     sector* s_ptr = new sector();
@@ -943,8 +970,10 @@ sector* area_data::new_sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new vertex to the list and returns its pointer.
+/**
+ * @brief Adds a new vertex to the list.
+ *
+ * @return The new vertex's pointer.
  */
 vertex* area_data::new_vertex() {
     vertex* v_ptr = new vertex();
@@ -953,10 +982,10 @@ vertex* area_data::new_vertex() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an edge from the list, and updates all IDs referencing it.
- * e_nr:
- *   Index number of the edge to remove.
+/**
+ * @brief Removes an edge from the list, and updates all IDs referencing it.
+ *
+ * @param e_nr Index number of the edge to remove.
  */
 void area_data::remove_edge(const size_t e_nr) {
     edges.erase(edges.begin() + e_nr);
@@ -997,10 +1026,10 @@ void area_data::remove_edge(const size_t e_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an edge from the list, and updates all IDs referencing it.
- * e_ptr:
- *   Pointer of the edge to remove.
+/**
+ * @brief Removes an edge from the list, and updates all IDs referencing it.
+ *
+ * @param e_ptr Pointer of the edge to remove.
  */
 void area_data::remove_edge(const edge* e_ptr) {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -1012,10 +1041,10 @@ void area_data::remove_edge(const edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes a sector from the list, and updates all IDs referencing it.
- * s_nr:
- *   Index number of the sector to remove.
+/**
+ * @brief Removes a sector from the list, and updates all IDs referencing it.
+ *
+ * @param s_nr Index number of the sector to remove.
  */
 void area_data::remove_sector(const size_t s_nr) {
     sectors.erase(sectors.begin() + s_nr);
@@ -1039,10 +1068,10 @@ void area_data::remove_sector(const size_t s_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes a sector from the list, and updates all IDs referencing it.
- * s_ptr:
- *   Pointer of the sector to remove.
+/**
+ * @brief Removes a sector from the list, and updates all IDs referencing it.
+ *
+ * @param s_ptr Pointer of the sector to remove.
  */
 void area_data::remove_sector(const sector* s_ptr) {
     for(size_t s = 0; s < sectors.size(); ++s) {
@@ -1054,10 +1083,10 @@ void area_data::remove_sector(const sector* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes a vertex from the list, and updates all IDs referencing it.
- * v_nr:
- *   Index number of the vertex to remove.
+/**
+ * @brief Removes a vertex from the list, and updates all IDs referencing it.
+ *
+ * @param v_nr Index number of the vertex to remove.
  */
 void area_data::remove_vertex(const size_t v_nr) {
     vertexes.erase(vertexes.begin() + v_nr);
@@ -1081,10 +1110,10 @@ void area_data::remove_vertex(const size_t v_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes a vertex from the list, and updates all IDs referencing it.
- * v_ptr:
- *   Pointer of the vertex to remove.
+/**
+ * @brief Removes a vertex from the list, and updates all IDs referencing it.
+ *
+ * @param v_ptr Pointer of the vertex to remove.
  */
 void area_data::remove_vertex(const vertex* v_ptr) {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -1096,8 +1125,8 @@ void area_data::remove_vertex(const vertex* v_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a blockmap.
+/**
+ * @brief Constructs a new blockmap object.
  */
 blockmap::blockmap() :
     n_cols(0),
@@ -1106,8 +1135,8 @@ blockmap::blockmap() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the info of the blockmap.
+/**
+ * @brief Clears the info of the blockmap.
  */
 void blockmap::clear() {
     top_left_corner = point();
@@ -1118,11 +1147,11 @@ void blockmap::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the block column in which an X coordinate is contained.
- * Returns INVALID on error.
- * x:
- *   X coordinate.
+/**
+ * @brief Returns the block column in which an X coordinate is contained.
+ *
+ * @param x X coordinate.
+ * @return The column, or INVALID on error.
  */
 size_t blockmap::get_col(const float x) const {
     if(x < top_left_corner.x) return INVALID;
@@ -1132,15 +1161,14 @@ size_t blockmap::get_col(const float x) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Obtains a list of edges that are within the specified rectangular region.
- * Returns true on success, false on error.
- * tl:
- *   Top-left coordinates of the region.
- * br:
- *   Bottom-right coordinates of the region.
- * edges:
- *   Set to fill the edges into.
+/**
+ * @brief Obtains a list of edges that are within the specified
+ * rectangular region.
+ *
+ * @param tl Top-left coordinates of the region.
+ * @param br Bottom-right coordinates of the region.
+ * @param edges Set to fill the edges into.
+ * @return Whether it succeeded.
  */
 bool blockmap::get_edges_in_region(
     const point &tl, const point &br, set<edge*> &edges
@@ -1175,11 +1203,11 @@ bool blockmap::get_edges_in_region(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the block row in which a Y coordinate is contained.
- * Returns INVALID on error.
- * y:
- *   Y coordinate.
+/**
+ * @brief Returns the block row in which a Y coordinate is contained.
+ *
+ * @param y Y coordinate.
+ * @return The row, or INVALID on error.
  */
 size_t blockmap::get_row(const float y) const {
     if(y < top_left_corner.y) return INVALID;
@@ -1189,12 +1217,12 @@ size_t blockmap::get_row(const float y) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the top-left coordinates for the specified column and row.
- * col:
- *   Column to check.
- * row:
- *   Row to check.
+/**
+ * @brief Returns the top-left coordinates for the specified column and row.
+ *
+ * @param col Column to check.
+ * @param row Row to check.
+ * @return The top-left coordinates.
  */
 point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
     return
@@ -1205,16 +1233,13 @@ point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a mob generation structure.
- * pos:
- *   Coordinates.
- * type:
- *   The mob type.
- * angle:
- *   Angle it is facing.
- * vars:
- *   String representation of the script vars.
+/**
+ * @brief Constructs a new mob generator object.
+ *
+ * @param pos Coordinates.
+ * @param type The mob type.
+ * @param angle Angle it is facing.
+ * @param vars String representation of the script vars.
  */
 mob_gen::mob_gen(
     const point &pos, mob_type* type, const float angle, const string &vars
@@ -1228,12 +1253,12 @@ mob_gen::mob_gen(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones the properties of this mob generator onto another mob generator.
- * destination:
- *   Mob generator to clone the data into.
- * include_position:
- *   If true, the position is included too.
+/**
+ * @brief Clones the properties of this mob generator onto another
+ * mob generator.
+ *
+ * @param destination Mob generator to clone the data into.
+ * @param include_position If true, the position is included too.
  */
 void mob_gen::clone(mob_gen* destination, const bool include_position) const {
     destination->angle = angle;
@@ -1245,20 +1270,16 @@ void mob_gen::clone(mob_gen* destination, const bool include_position) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a tree shadow.
- * center:
- *   Center coordinates.
- * size:
- *   Width and height.
- * angle:
- *   Angle it is rotated by.
- * alpha:
- *   How opaque it is [0-255].
- * file_name:
- *   Name of the file with the tree shadow's texture.
- * sway:
- *   Multiply the sway distance by this much, horizontally and vertically.
+/**
+ * @brief Constructs a new tree shadow object.
+ *
+ * @param center Center coordinates.
+ * @param size Width and height.
+ * @param angle Angle it is rotated by.
+ * @param alpha How opaque it is [0-255].
+ * @param file_name Name of the file with the tree shadow's texture.
+ * @param sway Multiply the sway distance by this much, horizontally and
+ * vertically.
  */
 tree_shadow::tree_shadow(
     const point &center, const point &size, const float angle,
@@ -1275,22 +1296,23 @@ tree_shadow::tree_shadow(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a tree shadow.
+/**
+ * @brief Destroys the tree shadow object.
+ *
  */
 tree_shadow::~tree_shadow() {
     game.textures.detach(file_name);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the folder name and area type of an area on disk, given its path.
- * requested_area_path:
- *   Relative path to the requested area.
- * final_area_folder_name:
- *   The area's folder name is returned here, if not NULL.
- * final_area_type:
- *   The area's type is returned here, if not NULL.
+/**
+ * @brief Returns the folder name and area type of an area on disk,
+ * given its path.
+ *
+ * @param requested_area_path Relative path to the requested area.
+ * @param final_area_folder_name The area's folder name is returned here,
+ * if not NULL.
+ * @param final_area_type The area's type is returned here, if not NULL.
  */
 void get_area_info_from_path(
     const string &requested_area_path,
@@ -1313,14 +1335,14 @@ void get_area_info_from_path(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the folder path where certain area folders are stored,
+/**
+ * @brief Returns the folder path where certain area folders are stored,
  * based on the type of area and whether it's to load from the game data folder
  * or the user data folder.
- * type:
- *   Type of area.
- * from_game_data:
- *   If true, get the folder in the game data folder.
+ *
+ * @param type Type of area.
+ * @param from_game_data If true, get the folder in the game data folder.
+ * @return The folder path.
  */
 string get_base_area_folder_path(
     const AREA_TYPES type, const bool from_game_data

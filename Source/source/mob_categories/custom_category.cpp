@@ -15,8 +15,8 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the category for the custom mob types.
+/**
+ * @brief Constructs a new custom category object.
  */
 custom_category::custom_category() :
     mob_category(
@@ -27,8 +27,8 @@ custom_category::custom_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of custom mob.
+/**
+ * @brief Clears the list of registered types of custom mob.
  */
 void custom_category::clear_types() {
     for(auto &t : game.mob_types.custom) {
@@ -38,14 +38,13 @@ void custom_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a custom mob and adds it to the list of custom mobs.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a custom mob and adds it to the list of custom mobs.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* custom_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -55,26 +54,29 @@ mob* custom_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty custom type.
+/**
+ * @brief Creates a new, empty custom type.
+ *
+ * @return The type.
  */
 mob_type* custom_category::create_type() {
     return new mob_type(MOB_CATEGORY_CUSTOM);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a custom mob from the list of custom mobs.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a custom mob from the list of custom mobs.
+ *
+ * @param m The mob to erase.
  */
 void custom_category::erase_mob(mob* m) { }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a custom type given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a custom type given its name, or NULL on error.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type.
  */
 mob_type* custom_category::get_type(const string &name) const {
     auto it = game.mob_types.custom.find(name);
@@ -83,10 +85,10 @@ mob_type* custom_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all custom types by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all custom types by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void custom_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.custom) {
@@ -95,10 +97,10 @@ void custom_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created custom type.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created custom type.
+ *
+ * @param type Mob type to register.
  */
 void custom_category::register_type(mob_type* type) {
     game.mob_types.custom[type->name] = type;

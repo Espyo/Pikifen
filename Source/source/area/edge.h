@@ -21,28 +21,41 @@
 struct sector;
 
 
-/* ----------------------------------------------------------------------------
- * A line segment that delimits a sector -- an edge of a polygon.
+/**
+ * @brief A line segment that delimits a sector -- an edge of a polygon.
  * In DOOM, these are what's known as linedefs.
  */
 struct edge {
+
+    //--- Members ---
+
     //Vertexes that make up the edge.
     vertex* vertexes[2];
+
     //Index of the vertexes that make up the edge.
     size_t vertex_nrs[2];
+
     //Sectors on each side of the edge.
     sector* sectors[2];
+
     //Index of the sectors on each side of the edge.
     size_t sector_nrs[2];
+
     //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
     float wall_shadow_length;
+
     //Color of the wall shadow, opacity included.
     ALLEGRO_COLOR wall_shadow_color;
+
     //Length of the ledge smoothing effect. 0 = none.
     float ledge_smoothing_length;
+
     //Color of the ledge smoothing effect, opacity included.
     ALLEGRO_COLOR ledge_smoothing_color;
     
+
+    //--- Function declarations ---
+
     explicit edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
     void clone(edge* destination) const;
     sector* get_other_sector(const sector* v_ptr) const;
@@ -56,21 +69,30 @@ struct edge {
     void transfer_sector(
         sector* from, sector* to, const size_t to_nr, const size_t edge_nr
     );
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * Intersection between two edges. Used to mark
- * edges as red on the editor.
+/**
+ * @brief Intersection between two edges.
+ * Used to mark edges as red on the editor.
  */
 struct edge_intersection {
+    
+    //--- Members ---
+
     //First edge in the intersection.
     edge* e1;
+
     //Second edge in the intersection.
     edge* e2;
     
+
+    //--- Function declarations ---
+    
     edge_intersection(edge* e1, edge* e2);
     bool contains(const edge* e);
+    
 };
 
 

@@ -24,16 +24,15 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-/* ----------------------------------------------------------------------------
- * Creates an animation.
- * name:
- *   Name, should be unique.
- * frames:
- *   List of frames.
- * loop_frame:
- *   Loop frame number.
- * hit_rate:
- *   If this has an attack, this is the chance of hitting. 0 - 100.
+
+/**
+ * @brief Constructs a new animation object.
+ *
+ * @param name Name, should be unique.
+ * @param frames List of frames.
+ * @param loop_frame Loop frame number.
+ * @param hit_rate If this has an attack, this is the chance of hitting.
+ * 0 - 100.
  */
 animation::animation(
     const string &name, const vector<frame> &frames,
@@ -47,10 +46,10 @@ animation::animation(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an animation by copying info from another animation.
- * a2:
- *   The other animation.
+/**
+ * @brief Constructs a new animation object.
+ *
+ * @param a2 The other animation.
  */
 animation::animation(const animation &a2) :
     name(a2.name),
@@ -60,10 +59,11 @@ animation::animation(const animation &a2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an animation by copying info from another animation.
- * a2:
- *   The other animation.
+/**
+ * @brief Creates an animation by copying info from another animation.
+ *
+ * @param a2 The other animation.
+ * @return The current object.
  */
 animation &animation::operator=(const animation &a2) {
     if(this != &a2) {
@@ -77,8 +77,10 @@ animation &animation::operator=(const animation &a2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total duration of the animation.
+/**
+ * @brief Returns the total duration of the animation.
+ *
+ * @return The duration.
  */
 float animation::get_duration() {
     float duration = 0.0f;
@@ -89,15 +91,13 @@ float animation::get_duration() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the frame number, and time within that frame, that matches the
- * specified time.
- * t:
- *   Time to check.
- * frame_nr:
- *   The frame number is returned here.
- * frame_time:
- *   The time within the frame is returned here.
+/**
+ * @brief Returns the frame number, and time within that frame,
+ * that matches the specified time.
+ *
+ * @param t Time to check.
+ * @param frame_nr The frame number is returned here.
+ * @param frame_time The time within the frame is returned here.
  */
 void animation::get_frame_and_time(
     const float t, size_t* frame_nr, float* frame_time
@@ -126,13 +126,13 @@ void animation::get_frame_and_time(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total time since the animation start, when given a frame
+/**
+ * @brief Returns the total time since the animation start, when given a frame
  * and the current time in the current frame.
- * frame_nr:
- *   Current frame number.
- * frame_time:
- *   Time in the current frame.
+ *
+ * @param frame_nr Current frame number.
+ * @param frame_time Time in the current frame.
+ * @return The time.
  */
 float animation::get_time(const size_t frame_nr, const float frame_time) {
     if(frame_nr == INVALID) {
@@ -151,14 +151,12 @@ float animation::get_time(const size_t frame_nr, const float frame_time) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an animation database.
- * a:
- *   List of animations.
- * s:
- *   List of sprites.
- * b:
- *   List of body parts.
+/**
+ * @brief Constructs a new animation database object.
+ *
+ * @param a List of animations.
+ * @param s List of sprites.
+ * @param b List of body parts.
  */
 animation_database::animation_database(
     const vector<animation*> &a, const vector<sprite*> &s,
@@ -172,8 +170,8 @@ animation_database::animation_database(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the maximum distance that any of its hitbox can reach.,
+/**
+ * @brief Calculates the maximum distance that any of its hitbox can reach.,
  * and stores it in the max_span variable.
  */
 void animation_database::calculate_max_span() {
@@ -191,8 +189,8 @@ void animation_database::calculate_max_span() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Enemies and such have a regular list of animations.
+/**
+ * @brief Enemies and such have a regular list of animations.
  * The only way to change these animations is through the script.
  * So animation control is done entirely through game data.
  * However, the animations for Pikmin, leaders, etc. are pre-named.
@@ -204,13 +202,11 @@ void animation_database::calculate_max_span() {
  * into the corresponding number on the animation file.
  * This is where this comes in.
  *
- * conversions:
- *   A vector of size_t and strings.
- *   The size_t is the hardcoded ID (probably in some constant or enum).
- *   The string is the name of the animation in the animation file.
- * file:
- *   File from where these animations were loaded. Used to
- *   report errors.
+ * @param conversions A vector of size_t and strings.
+ * The size_t is the hardcoded ID (probably in some constant or enum).
+ * The string is the name of the animation in the animation file.
+ * @param file File from where these animations were loaded. Used to
+ * report errors.
  */
 void animation_database::create_conversions(
     vector<std::pair<size_t, string> > conversions, const data_node* file
@@ -240,8 +236,8 @@ void animation_database::create_conversions(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys an animation database and all of its content.
+/**
+ * @brief Destroys an animation database and all of its content.
  */
 void animation_database::destroy() {
     for(size_t a = 0; a < animations.size(); ++a) {
@@ -259,10 +255,10 @@ void animation_database::destroy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fills each frame's sound index cache variable, where applicable.
- * mt_ptr:
- *   Mob type with the sound data.
+/**
+ * @brief Fills each frame's sound index cache variable, where applicable.
+ *
+ * @param mt_ptr Mob type with the sound data.
  */
 void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
     for(size_t a = 0; a < animations.size(); ++a) {
@@ -282,11 +278,11 @@ void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified animation.
- * Returns INVALID if not found.
- * name:
- *   Name of the animation to search for.
+/**
+ * @brief Returns the index of the specified animation.
+ *
+ * @param name Name of the animation to search for.
+ * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_animation(const string &name) const {
     for(size_t a = 0; a < animations.size(); ++a) {
@@ -296,11 +292,11 @@ size_t animation_database::find_animation(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified body part.
- * Returns INVALID if not found.
- * name:
- *   Name of the body part to search for.
+/**
+ * @brief Returns the index of the specified body part.
+ *
+ * @param name Name of the body part to search for.
+ * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_body_part(const string &name) const {
     for(size_t b = 0; b < body_parts.size(); ++b) {
@@ -310,11 +306,11 @@ size_t animation_database::find_body_part(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified sprite.
- * Returns INVALID if not found.
- * name:
- *   Name of the sprite to search for.
+/**
+ * @brief Returns the index of the specified sprite.
+ *
+ * @param name Name of the sprite to search for.
+ * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_sprite(const string &name) const {
     for(size_t s = 0; s < sprites.size(); ++s) {
@@ -324,8 +320,8 @@ size_t animation_database::find_sprite(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes the pointers for body parts.
+/**
+ * @brief Fixes the pointers for body parts.
  */
 void animation_database::fix_body_part_pointers() {
     for(size_t s = 0; s < sprites.size(); ++s) {
@@ -346,8 +342,9 @@ void animation_database::fix_body_part_pointers() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sorts all animations and sprites alphabetically, making them more organized.
+/**
+ * @brief Sorts all animations and sprites alphabetically,
+ * making them more organized.
  */
 void animation_database::sort_alphabetically() {
     sort(
@@ -374,10 +371,10 @@ void animation_database::sort_alphabetically() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an animation instance.
- * anim_db:
- *   The animation database. Used when changing animations.
+/**
+ * @brief Constructs a new animation instance::animation instance object.
+ *
+ * @param anim_db The animation database. Used when changing animations.
  */
 animation_instance::animation_instance(animation_database* anim_db) :
     cur_anim(nullptr),
@@ -388,10 +385,10 @@ animation_instance::animation_instance(animation_database* anim_db) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an animation instance by copying info from another.
- * ai2:
- *   The other animation instance.
+/**
+ * @brief Constructs a new animation instance::animation instance object.
+ *
+ * @param ai2 The other animation instance.
  */
 animation_instance::animation_instance(const animation_instance &ai2) :
     cur_anim(ai2.cur_anim),
@@ -401,10 +398,11 @@ animation_instance::animation_instance(const animation_instance &ai2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Copies data from another animation instance.
- * ai2:
- *   The other animation instance.
+/**
+ * @brief Copies data from another animation instance.
+ *
+ * @param ai2 The other animation instance.
+ * @return The current object.
  */
 animation_instance &animation_instance::operator=(
     const animation_instance &ai2
@@ -420,8 +418,10 @@ animation_instance &animation_instance::operator=(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the sprite of the current frame of animation.
+/**
+ * @brief Returns the sprite of the current frame of animation.
+ *
+ * @return The sprite.
  */
 sprite* animation_instance::get_cur_sprite() const {
     if(!cur_anim) return NULL;
@@ -430,9 +430,11 @@ sprite* animation_instance::get_cur_sprite() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Skips the current animation instance ahead in time for a random amount of
- * time. The time is anywhere between 0 and the total duration of the
+/**
+ * @brief Skips the current animation instance ahead in time for a
+ * random amount of time.
+ *
+ * The time is anywhere between 0 and the total duration of the
  * animation. Frame signals will be ignored.
  */
 void animation_instance::skip_ahead_randomly() {
@@ -448,8 +450,8 @@ void animation_instance::skip_ahead_randomly() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts or restarts the animation.
+/**
+ * @brief Starts or restarts the animation.
  * It's called automatically when the animation is set.
  */
 void animation_instance::start() {
@@ -458,15 +460,13 @@ void animation_instance::start() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the animation time by one frame of logic.
- * Returns whether or not the animation ended its final frame.
- * delta_t:
- *   How long the frame's tick is, in seconds.
- * signals:
- *   Any frame that sends a signal adds it here.
- * sounds:
- *   Any frame that should play a sound adds it here.
+/**
+ * @brief Ticks the animation time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @param signals Any frame that sends a signal adds it here.
+ * @param sounds Any frame that should play a sound adds it here.
+ * @return Whether or not the animation ended its final frame.
  */
 bool animation_instance::tick(
     const float delta_t, vector<size_t>* signals,
@@ -508,20 +508,15 @@ bool animation_instance::tick(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a frame of animation.
- * sn:
- *   Name of the sprite.
- * si:
- *   Index of the sprite in the animation database.
- * sp:
- *   Pointer to the sprite.
- * d:
- *   Duration.
- * snd:
- *   Sound name.
- * s:
- *   Signal.
+/**
+ * @brief Constructs a new frame object.
+ *
+ * @param sn Name of the sprite.
+ * @param si Index of the sprite in the animation database.
+ * @param sp Pointer to the sprite.
+ * @param d Duration.
+ * @param snd Sound name.
+ * @param s Signal.
  */
 frame::frame(
     const string &sn, const size_t si, sprite* sp, const float d,
@@ -538,14 +533,12 @@ frame::frame(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sprite, with a pre-existing bitmap.
- * name:
- *   Internal name; should be unique.
- * b:
- *   Bitmap.
- * h:
- *   List of hitboxes.
+/**
+ * @brief Constructs a new sprite object.
+ *
+ * @param name Internal name; should be unique.
+ * @param b Bitmap.
+ * @param h List of hitboxes.
  */
 sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b, const vector<hitbox> &h
@@ -563,18 +556,15 @@ sprite::sprite(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sprite using a parent bitmap and the coordinates.
- * name:
- *   Internal name, should be unique.
- * b:
- *   Parent bitmap.
- * b_pos:
- *   X and Y of the top-left corner of the sprite, in the parent's bitmap.
- * b_size:
- *   Width and height of the sprite, in the parent's bitmap.
- * h:
- *   List of hitboxes.
+/**
+ * @brief Constructs a new sprite object.
+ *
+ * @param name Internal name, should be unique.
+ * @param b Parent bitmap.
+ * @param b_pos X and Y of the top-left corner of the sprite, in the
+ * parent's bitmap.
+ * @param b_size Width and height of the sprite, in the parent's bitmap.
+ * @param h List of hitboxes.
  */
 sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
@@ -598,10 +588,10 @@ sprite::sprite(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sprite by copying info from another sprite.
- * s2:
- *   The other sprite.
+/**
+ * @brief Constructs a new sprite object.
+ *
+ * @param s2 The other sprite.
  */
 sprite::sprite(const sprite &s2) :
     name(s2.name),
@@ -623,22 +613,20 @@ sprite::sprite(const sprite &s2) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a sprite and its bitmaps.
+/**
+ * @brief Destroys the sprite object.
  */
 sprite::~sprite() {
     set_bitmap("", point(), point());
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates the hitboxes, based on the body parts.
- * adb:
- *   The animation database the sprites and body parts belong to.
- * height:
- *   The hitboxes's starting height.
- * radius:
- *   The hitboxes's starting radius.
+/**
+ * @brief Creates the hitboxes, based on the body parts.
+ *
+ * @param adb The animation database the sprites and body parts belong to.
+ * @param height The hitboxes's starting height.
+ * @param radius The hitboxes's starting radius.
  */
 void sprite::create_hitboxes(
     animation_database* const adb, const float height, const float radius
@@ -657,10 +645,11 @@ void sprite::create_hitboxes(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Copies data from another sprite.
- * s2:
- *   The other sprite.
+/**
+ * @brief Copies data from another sprite.
+ *
+ * @param s2 The other sprite.
+ * @return The current object.
  */
 sprite &sprite::operator=(const sprite &s2) {
     if(this != &s2) {
@@ -684,20 +673,17 @@ sprite &sprite::operator=(const sprite &s2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the bitmap and parent bitmap, according to the given information.
+/**
+ * @brief Sets the bitmap and parent bitmap, according to the given information.
  * This automatically manages bitmap un/loading and such.
  * If the file name string is empty, sets to a NULL bitmap
  * (and still unloads the old bitmap).
- * new_file_name:
- *   File name of the bitmap.
- * new_file_pos:
- *   Top-left coordinates of the sub-bitmap inside the bitmap.
- * new_file_size:
- *   Dimensions of the sub-bitmap.
- * node:
- *   If not NULL, this will be used to report an error with, in case
- *   something happens.
+ *
+ * @param new_file_name File name of the bitmap.
+ * @param new_file_pos Top-left coordinates of the sub-bitmap inside the bitmap.
+ * @param new_file_size Dimensions of the sub-bitmap.
+ * @param node If not NULL, this will be used to report an error with, in case
+ * something happens.
  */
 void sprite::set_bitmap(
     const string &new_file_name,
@@ -746,10 +732,11 @@ void sprite::set_bitmap(
 
 
 
-/* ----------------------------------------------------------------------------
- * Loads the animations from a file.
- * file_node:
- *   File to load from.
+/**
+ * @brief Loads the animations from a file.
+ *
+ * @param file_node File to load from.
+ * @return The database.
  */
 animation_database load_animation_database_from_file(data_node* file_node) {
     animation_database adb;

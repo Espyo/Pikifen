@@ -24,37 +24,44 @@ using std::string;
 
 
 namespace ONION {
+
 //How quickly an Onion fades to and from see-through, in values per second.
 const float FADE_SPEED = 255.0f;
+
 //Delay before the Onion starts the seed spewing process.
 const float FULL_SPEW_DELAY = 2.0f;
+
 //Delay between each individual seed being spit.
 const float NEXT_SPEW_DELAY = 0.10f;
+
 //Onion opacity when it goes see-through.
 const unsigned char SEETHROUGH_ALPHA = 128;
+
 }
 
 
 //An Onion-spat seed starts with this Z offset from the Onion.
 const float onion::ONION_NEW_SEED_Z_OFFSET = 320.0f;
+
 //After spitting a seed, the next seed's angle shifts by this much.
 const float onion::ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
+
 //An Onion-spat seed is this quick, horizontally.
 const float onion::ONION_SPEW_H_SPEED = 80.0f;
+
 //Deviate the seed's horizontal speed by this much, more or less.
 const float onion::ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
+
 //An Onion-spat seed is this quick, vertically.
 const float onion::ONION_SPEW_V_SPEED = 600.0f;
 
 
-/* ----------------------------------------------------------------------------
- * Creates an Onion mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Onion type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new Onion object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Onion type this mob belongs to.
+ * @param angle Starting angle.
  */
 onion::onion(const point &pos, onion_type* type, const float angle) :
     mob(pos, type, angle),
@@ -97,16 +104,16 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys an Onion mob.
+/**
+ * @brief Destroys the Onion object.
  */
 onion::~onion() {
     delete nest;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws an Onion.
+/**
+ * @brief Draws an Onion.
  */
 void onion::draw_mob() {
     sprite* s_ptr = get_cur_sprite();
@@ -129,10 +136,10 @@ void onion::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void onion::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -141,8 +148,8 @@ void onion::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Spew a Pikmin seed in the queue or add it to the Onion's storage.
+/**
+ * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void onion::spew() {
     for(size_t t = 0; t < spew_queue.size(); ++t) {
@@ -184,10 +191,10 @@ void onion::spew() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void onion::tick_class_specifics(const float delta_t) {
     bool needs_to_spew = false;

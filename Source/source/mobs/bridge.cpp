@@ -19,21 +19,22 @@
 
 
 namespace BRIDGE {
+
 //Width of the bridge's main floor, i.e., sans rails.
 const float FLOOR_WIDTH = 192.0f;
+
 //How far apart bridge steps are, vertically.
 const float STEP_HEIGHT = 10;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a bridge mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Bridge type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new bridge object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Bridge type this mob belongs to.
+ * @param angle Starting angle.
  */
 bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     mob(pos, type, angle),
@@ -53,9 +54,10 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks the bridge's health, and updates the chunks if necessary.
- * Returns true if new chunks were created.
+/**
+ * @brief Checks the bridge's health, and updates the chunks if necessary.
+ *
+ * @return Whether new chunks were created.
  */
 bool bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
@@ -226,10 +228,10 @@ bool bridge::check_health() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a bridge component, making sure to follow the right dimensions.
- * m:
- *   Bridge component mob.
+/**
+ * @brief Draws a bridge component, making sure to follow the right dimensions.
+ *
+ * @param m Bridge component mob.
  */
 void bridge::draw_component(mob* m) {
     if(m->links.empty() || !m->links[0]) return;
@@ -294,18 +296,20 @@ void bridge::draw_component(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the starting point of the bridge.
+/**
+ * @brief Returns the starting point of the bridge.
+ *
+ * @return The point.
  */
 point bridge::get_start_point() {
     return start_pos;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void bridge::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -314,9 +318,9 @@ void bridge::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets up the bridge with the data surrounding it, like its linked destination
- * object.
+/**
+ * @brief Sets up the bridge with the data surrounding it,
+ * like its linked destination object.
  */
 void bridge::setup() {
     if(!links.empty() && links[0]) {

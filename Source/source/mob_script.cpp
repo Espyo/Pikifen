@@ -26,8 +26,8 @@
 #include "utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the easy fsm creator.
+/**
+ * @brief Constructs a new easy FSM creator object.
  */
 easy_fsm_creator::easy_fsm_creator() :
     cur_state(nullptr),
@@ -36,11 +36,11 @@ easy_fsm_creator::easy_fsm_creator() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new action call for the current event, one that changes
+/**
+ * @brief Creates a new action call for the current event, one that changes
  * the mob's state to something else.
- * new_state:
- *   State to change to.
+ *
+ * @param new_state State to change to.
  */
 void easy_fsm_creator::change_state(const string &new_state) {
     cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
@@ -49,8 +49,8 @@ void easy_fsm_creator::change_state(const string &new_state) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the event that is currently under construction, if any.
+/**
+ * @brief Finishes the event that is currently under construction, if any.
  */
 void easy_fsm_creator::commit_event() {
     if(!cur_event) return;
@@ -58,8 +58,8 @@ void easy_fsm_creator::commit_event() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the state that is currently under construction, if any.
+/**
+ * @brief Finishes the state that is currently under construction, if any.
  */
 void easy_fsm_creator::commit_state() {
     if(!cur_state) return;
@@ -68,9 +68,11 @@ void easy_fsm_creator::commit_state() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes any event or state under construction and returns the
+/**
+ * @brief Finishes any event or state under construction and returns the
  * final vector of states.
+ *
+ * @return The states.
  */
 vector<mob_state*> easy_fsm_creator::finish() {
     commit_event();
@@ -85,11 +87,11 @@ vector<mob_state*> easy_fsm_creator::finish() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the previous event, if any, creates a new event for the
+/**
+ * @brief Finishes the previous event, if any, creates a new event for the
  * current state, and starts tracking for the creation of its actions.
- * type:
- *   Type of event.
+ *
+ * @param type Type of event.
  */
 void easy_fsm_creator::new_event(const MOB_EV_TYPES type) {
     commit_event();
@@ -98,13 +100,12 @@ void easy_fsm_creator::new_event(const MOB_EV_TYPES type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the previous state, if any, creates a new state,
+/**
+ * @brief Finishes the previous state, if any, creates a new state,
  * and starts tracking for the creation of its events.
- * name:
- *   Name of the state.
- * id:
- *   Its ID.
+ *
+ * @param name Name of the state.
+ * @param id Its ID.
  */
 void easy_fsm_creator::new_state(const string &name, const size_t id) {
     commit_state();
@@ -113,25 +114,23 @@ void easy_fsm_creator::new_state(const string &name, const size_t id) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new action for the current event, one that
+/**
+ * @brief Creates a new action for the current event, one that
  * runs some custom code.
- * code:
- *   Function with said code.
+ *
+ * @param code Function with said code.
  */
 void easy_fsm_creator::run(custom_action_code code) {
     cur_event->actions.push_back(new mob_action_call(code));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about an event where two hitboxes touch.
- * mob2:
- *   The other mob.
- * h1:
- *   The current mob's hitbox.
- * h2:
- *   The other mob's hitbox.
+/**
+ * @brief Constructs a new hitbox interaction object.
+ *
+ * @param mob2 The other mob.
+ * @param h1 The current mob's hitbox.
+ * @param h2 The other mob's hitbox.
  */
 hitbox_interaction::hitbox_interaction(
     mob* mob2, hitbox* h1, hitbox* h2
@@ -142,12 +141,11 @@ hitbox_interaction::hitbox_interaction(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new event given a data node.
- * node:
- *   The data node.
- * actions:
- *   Its actions.
+/**
+ * @brief Constructs a new mob event object given a data node.
+ *
+ * @param node The data node.
+ * @param actions Its actions.
  */
 mob_event::mob_event(
     const data_node* node, const vector<mob_action_call*> &actions
@@ -202,12 +200,11 @@ mob_event::mob_event(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new event.
- * t:
- *   The event type.
- * a:
- *   Its actions.
+/**
+ * @brief Constructs a new mob event object.
+ *
+ * @param t The event type.
+ * @param a Its actions.
  */
 mob_event::mob_event(const MOB_EV_TYPES t, const vector<mob_action_call*> &a) :
     type(t),
@@ -216,14 +213,12 @@ mob_event::mob_event(const MOB_EV_TYPES t, const vector<mob_action_call*> &a) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Runs a mob event. Basically runs all actions within.
- * m:
- *   The mob.
- * custom_data_1:
- *   Custom argument #1 to pass to the code.
- * custom_data_2:
- *   Custom argument #2 to pass to the code.
+/**
+ * @brief Runs a mob event. Basically runs all actions within.
+ *
+ * @param m The mob.
+ * @param custom_data_1 Custom argument #1 to pass to the code.
+ * @param custom_data_2 Custom argument #2 to pass to the code.
  */
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     if(m->parent && m->parent->relay_events) {
@@ -315,10 +310,10 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new mob FSM.
- * m:
- *   The mob this FSM belongs to.
+/**
+ * @brief Constructs a new mob FSM object.
+ *
+ * @param m The mob this FSM belongs to.
  */
 mob_fsm::mob_fsm(mob* m) :
     cur_state(nullptr),
@@ -329,22 +324,23 @@ mob_fsm::mob_fsm(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a pointer to an event of the given type in the current state,
+/**
+ * @brief Returns a pointer to an event of the given type in the current state,
  * if it exists.
- * type:
- *   The event's type.
+ *
+ * @param type The event's type.
+ * @return The event.
  */
 mob_event* mob_fsm::get_event(const MOB_EV_TYPES type) const {
     return cur_state->events[type];
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the number of the specified state, if it exists. Otherwise,
- * returns INVALID.
- * name:
- *   The state's name.
+/**
+ * @brief Returns the number of the specified state.
+ *
+ * @param name The state's name.
+ * @return The number, or INVALID if it doesn't exist.
  */
 size_t mob_fsm::get_state_nr(const string &name) const {
     for(size_t s = 0; s < m->type->states.size(); ++s) {
@@ -356,14 +352,12 @@ size_t mob_fsm::get_state_nr(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Runs an event in the current state, if it exists.
- * type:
- *   The event's type.
- * custom_data_1:
- *   Custom argument #1 to pass to the code.
- * custom_data_2:
- *   Custom argument #2 to pass to the code.
+/**
+ * @brief Runs an event in the current state, if it exists.
+ *
+ * @param type The event's type.
+ * @param custom_data_1 Custom argument #1 to pass to the code.
+ * @param custom_data_2 Custom argument #2 to pass to the code.
  */
 void mob_fsm::run_event(
     const MOB_EV_TYPES type, void* custom_data_1, void* custom_data_2
@@ -386,15 +380,14 @@ void mob_fsm::run_event(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes the fsm to use a different state.
- * new_state:
- *   The state to change to.
- * info1:
- *   Data to pass on to the code after the state change.
- *   This data comes from the event that started all of this.
- * info2:
- *   Same as info1, but a second variable.
+/**
+ * @brief Changes the FSM to use a different state.
+ *
+ * @param new_state The state to change to.
+ * @param info1 Data to pass on to the code after the state change.
+ * This data comes from the event that started all of this.
+ * @param info2 Same as info1, but a second variable.
+ * @return Whether it succeeded.
  */
 bool mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
@@ -428,10 +421,10 @@ bool mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new state.
- * name:
- *   The state's name.
+/**
+ * @brief Constructs a new mob state object.
+ *
+ * @param name The state's name.
  */
 mob_state::mob_state(const string &name) :
     name(name),
@@ -443,12 +436,11 @@ mob_state::mob_state(const string &name) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new state.
- * name:
- *   The state's name.
- * evs:
- *   Its events.
+/**
+ * @brief Constructs a new mob state object.
+ *
+ * @param name The state's name.
+ * @param evs Its events.
  */
 mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
     name(name),
@@ -460,12 +452,11 @@ mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty state.
- * name:
- *   The state's name.
- * id:
- *   Its ID, for sorting on the vector of states.
+/**
+ * @brief Constructs a new mob state object.
+ *
+ * @param name The state's name.
+ * @param id Its ID, for sorting on the vector of states.
  */
 mob_state::mob_state(const string &name, const size_t id) :
     name(name),
@@ -477,27 +468,26 @@ mob_state::mob_state(const string &name, const size_t id) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a pointer to an event of the given type in the state,
+/**
+ * @brief Returns a pointer to an event of the given type in the state,
  * if it exists.
- * type:
- *   The event's type.
+ *
+ * @param type The event's type.
+ * @return The event.
  */
 mob_event* mob_state::get_event(const MOB_EV_TYPES type) const {
     return events[type];
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fixes some things in the list of states.
+/**
+ * @brief Fixes some things in the list of states.
  * For instance, state-switching actions that use a name instead of a number.
- * Returns the number of the starting state.
- * states:
- *   The vector of states.
- * starting_state:
- *   Name of the starting state for the mob.
- * mt:
- *   Mob type these states belong to.
+ *
+ * @param states The vector of states.
+ * @param starting_state Name of the starting state for the mob.
+ * @param mt Mob type these states belong to.
+ * @return The number of the starting state.
  */
 size_t fix_states(
     vector<mob_state*> &states, const string &starting_state, const mob_type* mt
@@ -551,14 +541,12 @@ size_t fix_states(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the states off of a data node.
- * mt:
- *   The type of mob the states are going to.
- * node:
- *   The data node.
- * states:
- *   Vector of states to place the new states on.
+/**
+ * @brief Loads the states off of a data node.
+ *
+ * @param mt The type of mob the states are going to.
+ * @param node The data node.
+ * @param states Vector of states to place the new states on.
  */
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     size_t n_new_states = node->get_nr_of_children();
@@ -733,10 +721,10 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the states from memory.
- * mt:
- *   The type of mob.
+/**
+ * @brief Unloads the states from memory.
+ *
+ * @param mt The type of mob.
  */
 void unload_script(mob_type* mt) {
     for(size_t s = 0; s < mt->states.size(); ++s) {

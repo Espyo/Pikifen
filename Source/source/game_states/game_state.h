@@ -23,12 +23,16 @@ using std::size_t;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * A game macro-state. It might be easier to think of this as a "screen".
+/**
+ * @brief A game macro-state. It might be easier to think of this as a "screen".
  * You've got the title screen, the options screen, the gameplay screen, etc.
  */
 class game_state {
+
 public:
+    
+    //--- Function declarations ---
+    
     game_state();
     virtual ~game_state() = default;
     virtual void load() = 0;
@@ -38,6 +42,7 @@ public:
     virtual void do_drawing() = 0;
     virtual void update_transformations();
     virtual string get_name() const = 0;
+    
 };
 
 

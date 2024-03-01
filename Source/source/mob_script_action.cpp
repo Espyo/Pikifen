@@ -24,8 +24,8 @@
 using std::set;
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty mob action.
+/**
+ * @brief Constructs a new mob action object.
  */
 mob_action::mob_action() :
     type(MOB_ACTION_UNKNOWN),
@@ -35,10 +35,10 @@ mob_action::mob_action() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty mob action call, of a certain type.
- * type:
- *   Type of mob action call.
+/**
+ * @brief Constructs a new mob action call object of a certain type.
+ *
+ * @param type Type of mob action call.
  */
 mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
     action(nullptr),
@@ -55,10 +55,10 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new mob action call that is meant to run custom code.
- * code:
- *   The function to run.
+/**
+ * @brief Constructs a new mob action call object meant to run custom code.
+ *
+ * @param code The function to run.
  */
 mob_action_call::mob_action_call(custom_action_code code):
     action(nullptr),
@@ -75,12 +75,12 @@ mob_action_call::mob_action_call(custom_action_code code):
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a mob action call from a data node.
- * dn:
- *   The data node.
- * mt:
- *   Mob type this action's fsm belongs to.
+/**
+ * @brief Loads a mob action call from a data node.
+ *
+ * @param dn The data node.
+ * @param mt Mob type this action's fsm belongs to.
+ * @return Whether it was successful.
  */
 bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 
@@ -194,16 +194,13 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Runs an action.
- * Return value is only used by the "if" actions, to indicate their
- *   evaluation result.
- * m:
- *   The mob.
- * custom_data_1:
- *   Custom argument #1 to pass to the code.
- * custom_data_2:
- *   Custom argument #2 to pass to the code.
+/**
+ * @brief Runs an action.
+ *
+ * @param m The mob.
+ * @param custom_data_1 Custom argument #1 to pass to the code.
+ * @param custom_data_2 Custom argument #2 to pass to the code.
+ * @return Evaluation result, used only by the "if" actions.
  */
 bool mob_action_call::run(
     mob* m, void* custom_data_1, void* custom_data_2
@@ -232,10 +229,11 @@ bool mob_action_call::run(
 
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the arachnorb logic plan mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the arachnorb logic plan mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
     if(call.args[0] == "home") {
@@ -254,10 +252,11 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the calculation mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the calculation mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::calculate(mob_action_call &call) {
     if(call.args[2] == "+") {
@@ -278,10 +277,11 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the focus mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the focus mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::focus(mob_action_call &call) {
     if(call.args[0] == "link") {
@@ -298,10 +298,11 @@ bool mob_action_loaders::focus(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the info getting script actions.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the info getting script actions.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::get_area_info(mob_action_call &call) {
     if(call.args[1] == "day_minutes") {
@@ -319,10 +320,11 @@ bool mob_action_loaders::get_area_info(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the info getting script actions.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the info getting script actions.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::get_event_info(mob_action_call &call) {
     if(call.args[1] == "body_part") {
@@ -350,10 +352,11 @@ bool mob_action_loaders::get_event_info(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the info getting script actions.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the info getting script actions.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::get_mob_info(mob_action_call &call) {
 
@@ -411,10 +414,11 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the hold focused mob mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the hold focused mob mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::hold_focus(mob_action_call &call) {
     size_t p_nr = call.mt->anims.find_body_part(call.args[0]);
@@ -428,10 +432,11 @@ bool mob_action_loaders::hold_focus(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the "if" mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the "if" mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::if_function(mob_action_call &call) {
     if(call.args[1] == "=") {
@@ -454,10 +459,11 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the move to target mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the move to target mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::move_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_foot_logic") {
@@ -480,10 +486,11 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the sound playing mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the sound playing mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::play_sound(mob_action_call &call) {
     for(size_t s = 0; s < call.mt->sounds.size(); ++s) {
@@ -498,10 +505,11 @@ bool mob_action_loaders::play_sound(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the status reception mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the status reception mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::receive_status(mob_action_call &call) {
     if(game.status_types.find(call.args[0]) == game.status_types.end()) {
@@ -513,10 +521,11 @@ bool mob_action_loaders::receive_status(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the status removal mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the status removal mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::remove_status(mob_action_call &call) {
     if(game.status_types.find(call.args[0]) == game.status_types.end()) {
@@ -528,12 +537,11 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reports an error of an unknown enum value.
- * call:
- *   Mob action call that called this.
- * arg_nr:
- *   Index number of the argument that is an enum.
+/**
+ * @brief Reports an error of an unknown enum value.
+ *
+ * @param call Mob action call that called this.
+ * @param arg_nr Index number of the argument that is an enum.
  */
 void mob_action_loaders::report_enum_error(
     mob_action_call &call, const size_t arg_nr
@@ -546,10 +554,11 @@ void mob_action_loaders::report_enum_error(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the animation setting mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the animation setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_animation(mob_action_call &call) {
     size_t a_pos = call.mt->anims.find_animation(call.args[0]);
@@ -576,10 +585,11 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the far reach setting mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the far reach setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_far_reach(mob_action_call &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
@@ -593,10 +603,11 @@ bool mob_action_loaders::set_far_reach(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the holdable setting mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the holdable setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_holdable(mob_action_call &call) {
     for(size_t a = 0; a < call.args.size(); ++a) {
@@ -613,10 +624,11 @@ bool mob_action_loaders::set_holdable(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the near reach setting mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the near reach setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_near_reach(mob_action_call &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
@@ -630,10 +642,11 @@ bool mob_action_loaders::set_near_reach(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the team setting mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the team setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_team(mob_action_call &call) {
     size_t team_nr = string_to_team_nr(call.args[0]);
@@ -646,10 +659,11 @@ bool mob_action_loaders::set_team(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the spawning mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the spawning mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::spawn(mob_action_call &call) {
     for(size_t s = 0; s < call.mt->spawns.size(); ++s) {
@@ -664,10 +678,11 @@ bool mob_action_loaders::spawn(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the z stabilization mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the z stabilization mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::stabilize_z(mob_action_call &call) {
     if(call.args[0] == "lowest") {
@@ -682,10 +697,11 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the chomping start mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the chomping start mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::start_chomping(mob_action_call &call) {
     for(size_t s = 1; s < call.args.size(); ++s) {
@@ -701,10 +717,11 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the particle start mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the particle start mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::start_particles(mob_action_call &call) {
     if(
@@ -719,10 +736,11 @@ bool mob_action_loaders::start_particles(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loading code for the turn to target mob script action.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Loading code for the turn to target mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
  */
 bool mob_action_loaders::turn_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_head_logic") {
@@ -739,16 +757,14 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new mob action parameter struct.
- * name:
- *   Name of the parameter.
- * type:
- *   Type of parameter.
- * force_const:
- *   If true, this must be a constant value. If false, it can also be a var.
- * is_extras:
- *   If true, this is an array of them (minimum amount 0).
+/**
+ * @brief Constructs a new mob action param::mob action param object.
+ *
+ * @param name Name of the parameter.
+ * @param type Type of parameter.
+ * @param force_const If true, this must be a constant value.
+ * If false, it can also be a var.
+ * @param is_extras If true, this is an array of them (minimum amount 0).
  */
 mob_action_param::mob_action_param(
     const string &name,
@@ -764,12 +780,11 @@ mob_action_param::mob_action_param(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new mob action run data struct.
- * m:
- *   The mob responsible.
- * call:
- *   Mob action call that called this.
+/**
+ * @brief Constructs a new mob action run data object.
+ *
+ * @param m The mob responsible.
+ * @param call Mob action call that called this.
  */
 mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
     m(m),
@@ -781,20 +796,20 @@ mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the health addition mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the health addition mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::add_health(mob_action_run_data &data) {
     data.m->set_health(true, false, s2f(data.args[0]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the arachnorb logic plan mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the arachnorb logic plan mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
     data.m->arachnorb_plan_logic(
@@ -803,10 +818,10 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the calculation mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the calculation mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
@@ -851,20 +866,20 @@ void mob_action_runners::calculate(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the deletion mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the deletion mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::delete_function(mob_action_run_data &data) {
     data.m->to_delete = true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the liquid draining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the liquid draining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     sector* s_ptr = get_sector(data.m->pos, NULL, true);
@@ -892,20 +907,20 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the death finish mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the death finish mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::finish_dying(mob_action_run_data &data) {
     data.m->finish_dying();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the focus mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the focus mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
     MOB_ACTION_FOCUS_TYPES t = (MOB_ACTION_FOCUS_TYPES) s2i(data.args[0]);
@@ -935,10 +950,10 @@ void mob_action_runners::focus(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the follow path randomly mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the follow path randomly mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     string label;
@@ -998,10 +1013,10 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the follow path to absolute mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the follow path to absolute mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
     float x = s2f(data.args[0]);
@@ -1021,10 +1036,10 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the angle obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the angle obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_angle(mob_action_run_data &data) {
     float center_x = s2f(data.args[1]);
@@ -1038,10 +1053,10 @@ void mob_action_runners::get_angle(mob_action_run_data &data) {
 
 
 
-/* ----------------------------------------------------------------------------
- * Code for the area info obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the area info obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_area_info(mob_action_run_data &data) {
     string* var = &(data.m->vars[data.args[0]]);
@@ -1062,10 +1077,10 @@ void mob_action_runners::get_area_info(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the mob script action for getting chomped.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the getting chomped mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_chomped(mob_action_run_data &data) {
     if(data.call->parent_event == MOB_EV_HITBOX_TOUCH_EAT) {
@@ -1077,10 +1092,10 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the coordinate from angle obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the coordinate from angle obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
     float angle = s2f(data.args[2]);
@@ -1092,10 +1107,10 @@ void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the distance obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the distance obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_distance(mob_action_run_data &data) {
     float center_x = s2f(data.args[1]);
@@ -1109,10 +1124,10 @@ void mob_action_runners::get_distance(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the event info obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the event info obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_event_info(mob_action_run_data &data) {
     string* var = &(data.m->vars[data.args[0]]);
@@ -1207,10 +1222,10 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the floor Z obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the floor Z obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_floor_z(mob_action_run_data &data) {
     float x = s2f(data.args[1]);
@@ -1220,10 +1235,10 @@ void mob_action_runners::get_floor_z(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the focused mob var getting script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the focused mob var getting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_focus_var(mob_action_run_data &data) {
     if(!data.m->focused_mob) return;
@@ -1232,10 +1247,10 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the mob info obtaining mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the mob info obtaining mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
     mob* target_mob = NULL;
@@ -1339,10 +1354,10 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the decimal number randomization mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the decimal number randomization mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
@@ -1350,10 +1365,10 @@ void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the integer number randomization mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the integer number randomization mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::get_random_int(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
@@ -1361,10 +1376,10 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the hold focused mob mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the hold focused mob mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::hold_focus(mob_action_run_data &data) {
     if(data.m->focused_mob) {
@@ -1377,10 +1392,10 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the "if" mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the "if" mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::if_function(mob_action_run_data &data) {
     string lhs = data.args[0];
@@ -1426,10 +1441,10 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the link with focus mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the link with focus mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::link_with_focus(mob_action_run_data &data) {
     if(!data.m->focused_mob) {
@@ -1447,10 +1462,10 @@ void mob_action_runners::link_with_focus(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the load focused mob memory mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the load focused mob memory mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
     if(data.m->focused_mob_memory.empty()) {
@@ -1461,10 +1476,10 @@ void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the move to absolute coordinates mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the move to absolute coordinates mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
     float x = s2f(data.args[0]);
@@ -1474,10 +1489,10 @@ void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the move to relative coordinates mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the move to relative coordinates mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::move_to_relative(mob_action_run_data &data) {
     float x = s2f(data.args[0]);
@@ -1488,10 +1503,10 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the move to target mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the move to target mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::move_to_target(mob_action_run_data &data) {
     MOB_ACTION_MOVE_TYPES t = (MOB_ACTION_MOVE_TYPES) s2i(data.args[0]);
@@ -1552,10 +1567,10 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the release order mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the release order mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::order_release(mob_action_run_data &data) {
     if(data.m->holder.m) {
@@ -1564,10 +1579,10 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the sound playing mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the sound playing mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
     size_t sfx_id = data.m->play_sound(s2i(data.args[0]));
@@ -1577,10 +1592,10 @@ void mob_action_runners::play_sound(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the text printing mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the text printing mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::print(mob_action_run_data &data) {
     string text = vector_tail_to_string(data.args, 0);
@@ -1591,40 +1606,40 @@ void mob_action_runners::print(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the status reception mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the status reception mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
     data.m->apply_status_effect(game.status_types[data.args[0]], false, false);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the release mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the release mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::release(mob_action_run_data &data) {
     data.m->release_chomped_pikmin();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the release stored mobs mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the release stored mobs mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
     data.m->release_stored_mobs();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the status removal mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the status removal mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::remove_status(mob_action_run_data &data) {
     for(size_t s = 0; s < data.m->statuses.size(); ++s) {
@@ -1635,10 +1650,10 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the save focused mob memory mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the save focused mob memory mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
     if(!data.m->focused_mob) {
@@ -1649,10 +1664,10 @@ void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the focused mob message sending mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the focused mob message sending mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
     if(!data.m->focused_mob) return;
@@ -1660,10 +1675,10 @@ void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the linked mob message sending mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the linked mob message sending mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
     for(size_t l = 0; l < data.m->links.size(); ++l) {
@@ -1674,10 +1689,10 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the nearby mob message sending mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the nearby mob message sending mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
     float d = s2f(data.args[0]);
@@ -1697,10 +1712,10 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the animation setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the animation setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
     START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL;
@@ -1712,30 +1727,30 @@ void mob_action_runners::set_animation(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the block paths setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the block paths setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_can_block_paths(mob_action_run_data &data) {
     data.m->set_can_block_paths(s2b(data.args[0]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the far reach setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the far reach setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_far_reach(mob_action_run_data &data) {
     data.m->far_reach = s2i(data.args[0]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the flying setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the flying setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_flying(mob_action_run_data &data) {
     if(s2b(data.args[0])) {
@@ -1746,30 +1761,30 @@ void mob_action_runners::set_flying(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the gravity setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the gravity setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_gravity(mob_action_run_data &data) {
     data.m->gravity_mult = s2f(data.args[0]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the health setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the health setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_health(mob_action_run_data &data) {
     data.m->set_health(false, false, s2f(data.args[0]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the height setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the height setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_height(mob_action_run_data &data) {
     data.m->height = s2f(data.args[0]);
@@ -1786,10 +1801,10 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the hiding setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the hiding setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_hiding(mob_action_run_data &data) {
     if(s2b(data.args[0])) {
@@ -1800,10 +1815,10 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the holdable setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the holdable setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_holdable(mob_action_run_data &data) {
     if(typeid(*(data.m)) == typeid(tool)) {
@@ -1816,10 +1831,10 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the huntable setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the huntable setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_huntable(mob_action_run_data &data) {
     if(s2b(data.args[0])) {
@@ -1830,10 +1845,10 @@ void mob_action_runners::set_huntable(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the limb animation setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the limb animation setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
     if(!data.m->parent) {
@@ -1855,30 +1870,30 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the near reach setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the near reach setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_near_reach(mob_action_run_data &data) {
     data.m->near_reach = s2i(data.args[0]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the radius setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the radius setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_radius(mob_action_run_data &data) {
     data.m->radius = s2f(data.args[0]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the sector scroll setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the sector scroll setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
     sector* s_ptr = get_sector(data.m->pos, NULL, true);
@@ -1889,10 +1904,10 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the shadow visibility setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the shadow visibility setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
     if(s2b(data.args[0])) {
@@ -1903,10 +1918,10 @@ void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the state setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the state setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_state(mob_action_run_data &data) {
     data.m->fsm.set_state(
@@ -1917,10 +1932,10 @@ void mob_action_runners::set_state(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the tangible setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the tangible setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_tangible(mob_action_run_data &data) {
     if(s2b(data.args[0])) {
@@ -1931,60 +1946,60 @@ void mob_action_runners::set_tangible(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the team setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the team setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_team(mob_action_run_data &data) {
     data.m->team = (MOB_TEAMS) s2i(data.args[0]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the timer setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the timer setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_timer(mob_action_run_data &data) {
     data.m->set_timer(s2f(data.args[0]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the var setting mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the var setting mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::set_var(mob_action_run_data &data) {
     data.m->set_var(data.args[0], data.args[1]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the show message from var mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the show message from var mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
     start_message(data.m->vars[data.args[0]], NULL);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the spawning mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the spawning mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::spawn(mob_action_run_data &data) {
     data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the z stabilization mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the z stabilization mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     if(data.m->links.empty() || !data.m->links[0]) {
@@ -2021,10 +2036,10 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the chomping start mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the chomping start mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::start_chomping(mob_action_run_data &data) {
     data.m->chomp_max = s2i(data.args[0]);
@@ -2035,30 +2050,30 @@ void mob_action_runners::start_chomping(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the dying start mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the dying start mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::start_dying(mob_action_run_data &data) {
     data.m->start_dying();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the height effect start mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the height effect start mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::start_height_effect(mob_action_run_data &data) {
     data.m->start_height_effect();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the particle start mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the particle start mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::start_particles(mob_action_run_data &data) {
     float offset_x = 0;
@@ -2079,10 +2094,10 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -2091,10 +2106,10 @@ void mob_action_runners::stop(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the chomp stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the chomp stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop_chomping(mob_action_run_data &data) {
     data.m->chomp_max = 0;
@@ -2102,50 +2117,50 @@ void mob_action_runners::stop_chomping(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the height effect stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the height effect stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
     data.m->stop_height_effect();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the particle stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the particle stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop_particles(mob_action_run_data &data) {
     data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the sound stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the sound stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop_sound(mob_action_run_data &data) {
     game.audio.destroy_sfx_source(s2i(data.args[0]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the vertical stopping mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the vertical stopping mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::stop_vertically(mob_action_run_data &data) {
     data.m->speed_z = 0;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the focus storing mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the focus storing mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
     if(data.m->focused_mob && !data.m->focused_mob->is_stored_inside_mob()) {
@@ -2154,30 +2169,30 @@ void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the swallow mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the swallow mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::swallow(mob_action_run_data &data) {
     data.m->swallow_chomped_pikmin(s2i(data.args[1]));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the swallow all mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the swallow all mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::swallow_all(mob_action_run_data &data) {
     data.m->swallow_chomped_pikmin(data.m->chomping_mobs.size());
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the teleport to absolute coordinates mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the teleport to absolute coordinates mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -2189,10 +2204,10 @@ void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the teleport to relative coordinates mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the teleport to relative coordinates mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -2209,10 +2224,10 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the throw focused mob mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the throw focused mob mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::throw_focus(mob_action_run_data &data) {
     if(!data.m->focused_mob) {
@@ -2242,10 +2257,10 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the turn to an absolute angle mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the turn to an absolute angle mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
     if(data.args.size() == 1) {
@@ -2260,10 +2275,10 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the turn to a relative angle mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the turn to a relative angle mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
     if(data.args.size() == 1) {
@@ -2279,10 +2294,10 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code for the turn to target mob script action.
- * data:
- *   Data about the action call.
+/**
+ * @brief Code for the turn to target mob script action.
+ *
+ * @param data Data about the action call.
  */
 void mob_action_runners::turn_to_target(mob_action_run_data &data) {
     MOB_ACTION_TURN_TYPES t = (MOB_ACTION_TURN_TYPES) s2i(data.args[0]);
@@ -2307,17 +2322,16 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Confirms if the "if", "else", "end_if", "goto", and "label" actions in
+/**
+ * @brief Confirms if the "if", "else", "end_if", "goto", and "label" actions in
  * a given vector of actions are all okay, and there are no mismatches, like
  * for instance, an "else" without an "if".
  * Also checks if there are actions past a "set_state" action.
- * If everything is okay, returns true. If not, throws errors to the
- * error log and returns false.
- * actions:
- *   The vector of actions to check.
- * dn:
- *   Data node from where these actions came.
+ * If something goes wrong, it throws the errors to the error log.
+ *
+ * @param actions The vector of actions to check.
+ * @param dn Data node from where these actions came.
+ * @return Whether it succeeded.
  */
 bool assert_actions(
     const vector<mob_action_call*> &actions, const data_node* dn
@@ -2426,10 +2440,11 @@ bool assert_actions(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Gets the mob that triggered an event.
- * data:
- *   Data about the action call.
+/**
+ * @brief Gets the mob that triggered an event.
+ *
+ * @param data Data about the action call.
+ * @return The mob.
  */
 mob* get_trigger_mob(mob_action_run_data &data) {
     if (
@@ -2464,14 +2479,12 @@ mob* get_trigger_mob(mob_action_run_data &data) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the actions to be run when the mob initializes.
- * mt:
- *   The type of mob the actions are going to.
- * node:
- *   The data node.
- * actions:
- *   Vector of actions to be filled.
+/**
+ * @brief Loads the actions to be run when the mob initializes.
+ *
+ * @param mt The type of mob the actions are going to.
+ * @param node The data node.
+ * @param actions Vector of actions to be filled.
  */
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions

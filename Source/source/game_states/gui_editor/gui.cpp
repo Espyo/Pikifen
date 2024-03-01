@@ -15,8 +15,8 @@
 #include "../../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Opens the "load" dialog.
+/**
+ * @brief Opens the "load" dialog.
  */
 void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
@@ -46,8 +46,8 @@ void gui_editor::open_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens the options dialog.
+/**
+ * @brief Opens the options dialog.
  */
 void gui_editor::open_options_dialog() {
     open_dialog(
@@ -59,8 +59,8 @@ void gui_editor::open_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes ImGui for this frame.
+/**
+ * @brief Processes Dear ImGui for this frame.
  */
 void gui_editor::process_gui() {
     //Initial setup.
@@ -135,8 +135,8 @@ void gui_editor::process_gui() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui control panel for this frame.
  */
 void gui_editor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
@@ -160,8 +160,8 @@ void gui_editor::process_gui_control_panel() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the "load" dialog for this frame.
+/**
+ * @brief Processes the "load" dialog for this frame.
  */
 void gui_editor::process_gui_load_dialog() {
     //History node.
@@ -188,8 +188,8 @@ void gui_editor::process_gui_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui menu bar for this frame.
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
  */
 void gui_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
@@ -340,8 +340,8 @@ void gui_editor::process_gui_menu_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the options dialog for this frame.
+/**
+ * @brief Processes the options dialog for this frame.
  */
 void gui_editor::process_gui_options_dialog() {
     //Controls node.
@@ -396,8 +396,8 @@ void gui_editor::process_gui_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the GUI item info panel for this frame.
+/**
+ * @brief Processes the GUI item info panel for this frame.
  */
 void gui_editor::process_gui_panel_item() {
     if(cur_item == INVALID) return;
@@ -478,8 +478,8 @@ void gui_editor::process_gui_panel_item() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the GUI item list panel for this frame.
+/**
+ * @brief Processes the GUI item list panel for this frame.
  */
 void gui_editor::process_gui_panel_items() {
     //Items text.
@@ -539,8 +539,8 @@ void gui_editor::process_gui_panel_items() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui status bar for this frame.
+/**
+ * @brief Processes the Dear ImGui status bar for this frame.
  */
 void gui_editor::process_gui_status_bar() {
     //Status bar text.
@@ -565,8 +565,8 @@ void gui_editor::process_gui_status_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui toolbar for this frame.
+/**
+ * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void gui_editor::process_gui_toolbar() {
     //Quit button.

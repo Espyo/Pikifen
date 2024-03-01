@@ -20,8 +20,8 @@
 #include "../../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Shows the "load" dialog.
+/**
+ * @brief Shows the "load" dialog.
  */
 void area_editor::open_load_dialog() {
     vector<picker_item> areas;
@@ -73,8 +73,8 @@ void area_editor::open_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens the options dialog.
+/**
+ * @brief Opens the options dialog.
  */
 void area_editor::open_options_dialog() {
     open_dialog(
@@ -86,8 +86,8 @@ void area_editor::open_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes ImGui for this frame.
+/**
+ * @brief Processes Dear ImGui for this frame.
  */
 void area_editor::process_gui() {
     //Initial setup.
@@ -156,8 +156,8 @@ void area_editor::process_gui() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui control panel for this frame.
  */
 void area_editor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
@@ -198,8 +198,8 @@ void area_editor::process_gui_control_panel() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the Dear ImGui area deletion dialog for this frame.
+/**
+ * @brief Processes the Dear ImGui area deletion dialog for this frame.
  */
 void area_editor::process_gui_delete_area_dialog() {
     //Explanation text.
@@ -254,8 +254,8 @@ void area_editor::process_gui_delete_area_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui "load" dialog for this frame.
+/**
+ * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
 void area_editor::process_gui_load_dialog() {
     //History node.
@@ -288,8 +288,8 @@ void area_editor::process_gui_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui menu bar for this frame.
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
  */
 void area_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
@@ -654,10 +654,10 @@ void area_editor::process_gui_menu_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui mob script vars for this frame.
- * m_ptr:
- *   Mob to process.
+/**
+ * @brief Processes the Dear ImGui mob script vars for this frame.
+ *
+ * @param m_ptr Mob to process.
  */
 void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     if(!m_ptr->type) return;
@@ -896,8 +896,8 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the options dialog for this frame.
+/**
+ * @brief Processes the options dialog for this frame.
  */
 void area_editor::process_gui_options_dialog() {
     //Controls node.
@@ -1183,8 +1183,8 @@ void area_editor::process_gui_options_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui area details control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui area details control panel for this frame.
  */
 void area_editor::process_gui_panel_details() {
     ImGui::BeginChild("details");
@@ -1401,8 +1401,8 @@ void area_editor::process_gui_panel_details() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui edge control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui edge control panel for this frame.
  */
 void area_editor::process_gui_panel_edge() {
     edge* e_ptr = *selected_edges.begin();
@@ -1559,8 +1559,9 @@ void area_editor::process_gui_panel_edge() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui area gameplay settings control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui area gameplay settings control panel for
+ * this frame.
  */
 void area_editor::process_gui_panel_gameplay() {
     ImGui::BeginChild("gameplay");
@@ -1657,8 +1658,8 @@ void area_editor::process_gui_panel_gameplay() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui area info control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui area info control panel for this frame.
  */
 void area_editor::process_gui_panel_info() {
     ImGui::BeginChild("info");
@@ -2230,8 +2231,8 @@ void area_editor::process_gui_panel_info() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui layout control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui layout control panel for this frame.
  */
 void area_editor::process_gui_panel_layout() {
     ImGui::BeginChild("main");
@@ -2493,8 +2494,8 @@ void area_editor::process_gui_panel_layout() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui main control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
@@ -2654,8 +2655,8 @@ void area_editor::process_gui_panel_main() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui mission control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui mission control panel for this frame.
  */
 void area_editor::process_gui_panel_mission() {
 
@@ -3941,8 +3942,8 @@ void area_editor::process_gui_panel_mission() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui mob control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui mob control panel for this frame.
  */
 void area_editor::process_gui_panel_mob() {
 
@@ -4152,8 +4153,8 @@ void area_editor::process_gui_panel_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui mobs control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui mobs control panel for this frame.
  */
 void area_editor::process_gui_panel_mobs() {
     ImGui::BeginChild("mobs");
@@ -4374,8 +4375,8 @@ void area_editor::process_gui_panel_mobs() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui path link control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui path link control panel for this frame.
  */
 void area_editor::process_gui_panel_path_link() {
     path_link* l_ptr = *selected_path_links.begin();
@@ -4398,8 +4399,8 @@ void area_editor::process_gui_panel_path_link() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui path stop control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui path stop control panel for this frame.
  */
 void area_editor::process_gui_panel_path_stop() {
     path_stop* s_ptr = *selected_path_stops.begin();
@@ -4473,8 +4474,8 @@ void area_editor::process_gui_panel_path_stop() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui paths control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui paths control panel for this frame.
  */
 void area_editor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
@@ -4936,8 +4937,8 @@ void area_editor::process_gui_panel_paths() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui review control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui review control panel for this frame.
  */
 void area_editor::process_gui_panel_review() {
     ImGui::BeginChild("review");
@@ -5115,8 +5116,8 @@ void area_editor::process_gui_panel_review() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui sector control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui sector control panel for this frame.
  */
 void area_editor::process_gui_panel_sector() {
     sector* s_ptr = *selected_sectors.begin();
@@ -5575,8 +5576,8 @@ void area_editor::process_gui_panel_sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui tools control panel for this frame.
+/**
+ * @brief Processes the Dear ImGui tools control panel for this frame.
  */
 void area_editor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
@@ -5752,8 +5753,8 @@ void area_editor::process_gui_panel_tools() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui status bar for this frame.
+/**
+ * @brief Processes the Dear ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
     //Status bar text.
@@ -5778,8 +5779,8 @@ void area_editor::process_gui_status_bar() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the ImGui toolbar for this frame.
+/**
+ * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void area_editor::process_gui_toolbar() {
     //Quit button.

@@ -11,14 +11,12 @@
 #include "tool.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new tool mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Tool type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new tool object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Tool type this mob belongs to.
+ * @param angle Starting angle.
  */
 tool::tool(
     const point &pos, tool_type* type, const float angle

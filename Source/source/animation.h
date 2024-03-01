@@ -30,7 +30,7 @@ class animation_database;
 class mob_type;
 
 
-/* ----------------------------------------------------------------------------
+/*
  * Animations work as follows:
  * An animation is a set of frames.
  * A frame contains hitboxes.
@@ -60,41 +60,61 @@ class mob_type;
  */
 
 
-/* ----------------------------------------------------------------------------
- * A sprite in a spritesheet.
+/**
+ * @brief A sprite in a spritesheet.
  */
 class sprite {
+
 public:
+
+    //--- Members ---
+    
     //Name of the sprite.
     string name;
+
     //Parent bitmap, normally a spritesheet.
     ALLEGRO_BITMAP* parent_bmp;
+
     //File name where the parent bitmap is at.
     string file;
+
     //Top-left corner of the sprite inside the image file.
     point file_pos;
+
     //Size of the sprite inside the image file.
     point file_size;
+
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
     point offset;
+
     //Scale multiplier.
     point scale;
+
     //Angle to rotate the image by.
     float angle;
+
     //X&Y of the Pikmin's top (left/bud/flower).
     point top_pos;
+
     //W&H of the Pikmin's top.
     point top_size;
+
     //Angle of the Pikmin's top.
     float top_angle;
+
     //Does this sprite even have a visible Pikmin top?
     bool top_visible;
+
     //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
     ALLEGRO_BITMAP* bitmap;
+
     //List of hitboxes on this frame.
     vector<hitbox> hitboxes;
     
+
+    //--- Function declarations ---
+
     explicit sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
         const vector<hitbox> &h = vector<hitbox>()
@@ -104,6 +124,7 @@ public:
         const point &b_size, const vector<hitbox> &h
     );
     sprite(const sprite &s2);
+    ~sprite();
     sprite &operator=(const sprite &s2);
     void create_hitboxes(
         animation_database* const adb,
@@ -114,57 +135,80 @@ public:
         const point &new_file_pos, const point &new_file_size,
         const data_node* node = NULL
     );
-    
-    ~sprite();
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A frame inside an animation.
+/**
+ * @brief A frame inside an animation.
  * A single sprite can appear multiple times in the same animation
  * (imagine an enemy shaking back and forth).
  */
 class frame {
+
 public:
+    
+    //--- Members ---
+
     //Name of the sprite to use in this frame.
     string sprite_name;
+
     //Index of the sprite. Cache for performance.
     size_t sprite_index;
+
     //Pointer to the sprite. Cache for performance.
     sprite* sprite_ptr;
+
     //How long this frame lasts for, in seconds.
     float duration;
+
     //Sound to play, if any. This is a sound info block in the mob's data.
     string sound;
+
     //Index of the sound to play, or INVALID. Cache for performance.
     size_t sound_idx;
+
     //Signal to send, if any. INVALID = none.
     size_t signal;
     
+
+    //--- Function declarations ---
+
     explicit frame(
         const string &sn = "", const size_t si = INVALID,
         sprite* sp = NULL, const float d = 0.1,
         const string &snd = "", const size_t s = INVALID
     );
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * An animation. A list of frames, basically.
+/**
+ * @brief An animation. A list of frames, basically.
  */
 class animation {
+
 public:
+
+    //--- Members ---
+    
     //Name of the animation.
     string name;
+
     //List of frames.
     vector<frame> frames;
+
     //The animation loops back to this frame when it reaches the end.
     size_t loop_frame;
+
     //If this animation represents an attack that can miss,
     //this represents the successful hit rate.
     //100 means it cannot miss and/or is a normal animation.
     unsigned char hit_rate;
     
+
+    //--- Function declarations ---
+
     explicit animation(
         const string &name = "",
         const vector<frame> &frames = vector<frame>(),
@@ -172,43 +216,53 @@ public:
     );
     animation(const animation &a2);
     animation &operator=(const animation &a2);
-    
     float get_duration();
     void get_frame_and_time(
         const float t, size_t* frame_nr, float* frame_time
     );
     float get_time(const size_t frame_nr, const float frame_time);
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A database of animations, sprites, and body parts.
+/**
+ * @brief A database of animations, sprites, and body parts.
  */
 class animation_database {
+
 public:
+    
+    //--- Members ---
+
     //List of known animations.
     vector<animation*> animations;
+
     //List of known sprites.
     vector<sprite*> sprites;
+
     //List of known body parts.
     vector<body_part*> body_parts;
+
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
+
     //Version of the engine this animation database was built in.
     string engine_version;
+
     //Maximum span of the hitboxes. Cache for performance.
     float max_span;
     
+
+    //--- Function declarations ---
+
     explicit animation_database(
         const vector<animation*> &a = vector<animation*>(),
         const vector<sprite*>    &s = vector<sprite*>(),
         const vector<body_part*> &b = vector<body_part*>()
     );
-    
     size_t find_animation(const string &name) const;
     size_t find_sprite(   const string &name) const;
     size_t find_body_part(const string &name) const;
-    
     void calculate_max_span();
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, const data_node* file
@@ -216,30 +270,38 @@ public:
     void fill_sound_index_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
     void sort_alphabetically();
-    
     void destroy();
     
 };
 
 
-/* ----------------------------------------------------------------------------
- * Instance of a running animation. This can be played, rewinded, etc.
+/**
+ * @brief Instance of a running animation. This can be played, rewinded, etc.
  */
 class animation_instance {
+
 public:
+    
+    //--- Members ---
+
     //The animation currently running.
     animation* cur_anim;
+
     //The database this belongs to.
     animation_database* anim_db;
+
     //Time passed on the current frame.
     float cur_frame_time;
+
     //Index of the current frame of animation.
     size_t cur_frame_index;
     
+
+    //--- Function declarations ---
+
     explicit animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);
     animation_instance &operator=(const animation_instance &ai2);
-    
     void start();
     void skip_ahead_randomly();
     bool tick(
@@ -248,17 +310,23 @@ public:
         vector<size_t>* sounds = NULL
     );
     sprite* get_cur_sprite() const;
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * An animation_database and an animation_instance.
+/**
+ * @brief An animation_database and an animation_instance.
  */
 struct single_animation_suite {
+
+    //--- Members ---
+    
     //Animation database.
     animation_database database;
+    
     //Animation instance.
     animation_instance instance;
+    
 };
 
 

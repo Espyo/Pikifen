@@ -33,6 +33,12 @@ const size_t MAX_SYMBOL_LENGTH = 512;
 #include <cxxabi.h>
 
 
+/**
+ * @brief Demangles a mangled debugging symbol.
+ * 
+ * @param symbol The symbol to demangle.
+ * @return The demangled symbol.
+ */
 string demangle_symbol(const string &symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
     size_t module_size = 0;
@@ -96,6 +102,11 @@ string demangle_symbol(const string &symbol) {
 }
 
 
+/**
+ * @brief Returns the backtrace of the current stack.
+ * 
+ * @return The backtrace.
+ */
 vector<string> get_backtrace() {
     vector<string> result;
     void* stack[BACKTRACE::MAX_FRAMES];
@@ -124,6 +135,12 @@ vector<string> get_backtrace() {
 #include <DbgHelp.h>
 #include <sstream>
 #include <WinBase.h>
+
+/**
+ * @brief Returns the backtrace of the current stack.
+ * 
+ * @return The backtrace.
+ */
 vector<string> get_backtrace() {
     vector<string> result;
     void* stack[BACKTRACE::MAX_FRAMES];
@@ -180,6 +197,11 @@ vector<string> get_backtrace() {
 #else
 //Not supported.
 
+/**
+ * @brief Returns the backtrace of the current stack.
+ * 
+ * @return The backtrace.
+ */
 vector<string> get_backtrace() {
     vector<string> v;
     v.push_back("(Not supported)");

@@ -22,12 +22,12 @@
 #include "../../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the logic of aesthetic things regarding the leader.
+/**
+ * @brief Ticks the logic of aesthetic things regarding the leader.
  * If the game is paused, these can be frozen in place without
  * any negative impact.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
     if(!cur_leader_ptr) return;
@@ -134,11 +134,11 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the logic of aesthetic things. If the game is paused, these can
+/**
+ * @brief Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void gameplay_state::do_aesthetic_logic(const float delta_t) {
     //Leader stuff.
@@ -149,10 +149,10 @@ void gameplay_state::do_aesthetic_logic(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the logic of leader gameplay-related things.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks the logic of leader gameplay-related things.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     if(!cur_leader_ptr) return;
@@ -580,10 +580,10 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the logic of gameplay-related things.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks the logic of gameplay-related things.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void gameplay_state::do_gameplay_logic(const float delta_t) {
 
@@ -1034,8 +1034,8 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the logic of in-game menu-related things.
+/**
+ * @brief Ticks the logic of in-game menu-related things.
  */
 void gameplay_state::do_menu_logic() {
     if(onion_menu) {
@@ -1443,18 +1443,21 @@ void gameplay_state::do_menu_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if the mission goal has been met.
+/**
+ * @brief Checks if the mission goal has been met.
+ *
+ * @return Whether the goal is met.
  */
 bool gameplay_state::is_mission_clear_met() {
     return game.mission_goals[game.cur_area_data.mission.goal]->is_met(this);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a mission fail condition has been met.
- * reason:
- *   The reason gets returned here, if any.
+/**
+ * @brief Checks if a mission fail condition has been met.
+ *
+ * @param reason The reason gets returned here, if any.
+ * @return Whether a failure condition is met.
  */
 bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
@@ -1474,13 +1477,12 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic required to tick a specific mob and its interactions
+/**
+ * @brief Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
- * m_ptr:
- *   Mob to process.
- * m:
- *   Index of the mob.
+ *
+ * @param m_ptr Mob to process.
+ * @param m Index of the mob.
  */
 void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
     vector<pending_intermob_event> pending_intermob_events;
@@ -1573,20 +1575,16 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic between m_ptr and m2_ptr regarding miscellaneous things.
- * m_ptr:
- *   Mob that's being processed.
- * m2_ptr:
- *   Check against this mob.
- * m:
- *   Index of the mob being processed.
- * m2:
- *   Index of the mob to check against.
- * d:
- *   Distance between the two.
- * pending_intermob_events:
- *   Vector of events to be processed.
+/**
+ * @brief Handles the logic between m_ptr and m2_ptr regarding
+ * miscellaneous things.
+ *
+ * @param m_ptr Mob that's being processed.
+ * @param m2_ptr Check against this mob.
+ * @param m Index of the mob being processed.
+ * @param m2 Index of the mob to check against.
+ * @param d Distance between the two.
+ * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_misc_interactions(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
@@ -1671,21 +1669,16 @@ void gameplay_state::process_mob_misc_interactions(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic between m_ptr and m2_ptr regarding everything involving
- * one being in the other's reach.
- * m_ptr:
- *   Mob that's being processed.
- * m2_ptr:
- *   Check against this mob.
- * m:
- *   Index of the mob being processed.
- * m2:
- *   Index of the mob to check against.
- * d:
- *   Distance between the two.
- * pending_intermob_events:
- *   Vector of events to be processed.
+/**
+ * @brief Handles the logic between m_ptr and m2_ptr regarding everything
+ * involving one being in the other's reach.
+ *
+ * @param m_ptr Mob that's being processed.
+ * @param m2_ptr Check against this mob.
+ * @param m Index of the mob being processed.
+ * @param m2 Index of the mob to check against.
+ * @param d Distance between the two.
+ * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_reaches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
@@ -1741,19 +1734,15 @@ void gameplay_state::process_mob_reaches(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic between m_ptr and m2_ptr regarding everything involving
- * one touching the other.
- * m_ptr:
- *   Mob that's being processed.
- * m2_ptr:
- *   Check against this mob.
- * m:
- *   Index of the mob being processed.
- * m2:
- *   Index of the mob to check against.
- * d:
- *   Distance between the two.
+/**
+ * @brief Handles the logic between m_ptr and m2_ptr regarding everything
+ * involving one touching the other.
+ *
+ * @param m_ptr Mob that's being processed.
+ * @param m2_ptr Check against this mob.
+ * @param m Index of the mob being processed.
+ * @param m2 Index of the mob to check against.
+ * @param d Distance between the two.
  */
 void gameplay_state::process_mob_touches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d

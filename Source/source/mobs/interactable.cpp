@@ -11,14 +11,12 @@
 #include "interactable.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new interactable mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Interactable type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new interactable object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Interactable type this mob belongs to.
+ * @param angle Starting angle.
  */
 interactable::interactable(
     const point &pos, interactable_type* type, const float angle

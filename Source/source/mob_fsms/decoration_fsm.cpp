@@ -16,10 +16,10 @@
 #include "gen_mob_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the decoration's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the decoration's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void decoration_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -53,28 +53,24 @@ void decoration_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the decoration gets bumped.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the decoration gets bumped.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
     m->set_animation(DECORATION_ANIM_BUMPED);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When the decoration becomes idle.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When the decoration becomes idle.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
     decoration* dec_ptr = (decoration*) m;
@@ -92,14 +88,12 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Check if the decoration should really get bumped.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the mob that touched it.
- * info2:
- *   Unused.
+/**
+ * @brief Check if the decoration should really get bumped.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob that touched it.
+ * @param info2 Unused.
  */
 void decoration_fsm::check_bump(mob* m, void* info1, void* info2) {
     mob* toucher = (mob*) info1;

@@ -17,10 +17,10 @@
 #include "gen_mob_fsm.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the bridge's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the bridge's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void bridge_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -67,14 +67,12 @@ void bridge_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the bridge check its health and update its chunks, if needed.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Makes the bridge check its health and update its chunks, if needed.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
     bridge* bri_ptr = (bridge*) m;
@@ -84,14 +82,12 @@ void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens up the bridge.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Opens up the bridge.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bridge_fsm::open(mob* m, void* info1, void* info2) {
     bridge* bri_ptr = (bridge*) m;
@@ -102,14 +98,12 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the standard "idling" animation.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Sets the standard "idling" animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(
@@ -118,15 +112,13 @@ void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets up the bridge with the data surrounding it, like its linked destination
- * object.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief Sets up the bridge with the data surrounding it,
+ * like its linked destination object.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bridge_fsm::setup(mob* m, void* info1, void* info2) {
     bridge* bri_ptr = (bridge*) m;

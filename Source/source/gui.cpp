@@ -21,39 +21,49 @@
 
 
 namespace GUI {
+
 //Interval between auto-repeat activations, at the slowest speed.
 const float AUTO_REPEAT_MAX_INTERVAL = 0.3f;
+
 //Interval between auto-repeat activations, at the fastest speed.
 const float AUTO_REPEAT_MIN_INTERVAL = 0.011f;
+
 //How long it takes for the auto-repeat activations to reach max speed.
 const float AUTO_REPEAT_RAMP_TIME = 0.9f;
+
 //Padding before/after the circle in a bullet point item.
 const float BULLET_PADDING = 6.0f;
+
 //Radius of the circle that represents the bullet in a bullet point item.
 const float BULLET_RADIUS = 4.0f;
+
 //When an item does a juicy grow, this is the full effect duration.
 const float JUICY_GROW_DURATION = 0.3f;
+
 //When an item does a juicy elastic grow, this is the full effect duration.
 const float JUICY_GROW_ELASTIC_DURATION = 0.4f;
+
 //Grow scale multiplier for a juicy icon grow animation.
 const float JUICY_GROW_ICON_MULT = 5.0f;
+
 //Grow scale multiplier for a juicy text high grow animation.
 const float JUICY_GROW_TEXT_HIGH_MULT = 0.15f;
+
 //Grow scale multiplier for a juicy text low grow animation.
 const float JUICY_GROW_TEXT_LOW_MULT = 0.02f;
+
 //Grow scale multiplier for a juicy text medium grow animation.
 const float JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new bullet point GUI item.
- * text:
- *   Text to display on the bullet point.
- * font:
- *   Font for the button's text.
- * color:
- *   Color of the button's text.
+/**
+ * @brief Constructs a new bullet point gui item object.
+ *
+ * @param text Text to display on the bullet point.
+ * @param font Font for the button's text.
+ * @param color Color of the button's text.
  */
 bullet_point_gui_item::bullet_point_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
@@ -101,14 +111,12 @@ bullet_point_gui_item::bullet_point_gui_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new button GUI item.
- * text:
- *   Text to display on the button.
- * font:
- *   Font for the button's text.
- * color:
- *   Color of the button's text.
+/**
+ * @brief Constructs a new button gui item object.
+ *
+ * @param text Text to display on the button.
+ * @param font Font for the button's text.
+ * @param color Color of the button's text.
  */
 button_gui_item::button_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
@@ -128,16 +136,13 @@ button_gui_item::button_gui_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new checkbox GUI item.
- * value:
- *   Pointer to the boolean that stores the current checkmark value.
- * text:
- *   Text to display on the checkbox.
- * font:
- *   Font for the checkbox's text.
- * color:
- *   Color of the checkbox's text.
+/**
+ * @brief Constructs a new check gui item object.
+ *
+ * @param value Pointer to the boolean that stores the current checkmark value.
+ * @param text Text to display on the checkbox.
+ * @param font Font for the checkbox's text.
+ * @param color Color of the checkbox's text.
  */
 check_gui_item::check_gui_item(
     bool* value, const string &text, ALLEGRO_FONT* font,
@@ -192,10 +197,10 @@ check_gui_item::check_gui_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new GUI item.
- * selectable:
- *   Can the item be selected by the player?
+/**
+ * @brief Constructs a new gui item object.
+ *
+ * @param selectable Can the item be selected by the player?
  */
 gui_item::gui_item(const bool selectable) :
     manager(nullptr),
@@ -222,10 +227,11 @@ gui_item::gui_item(const bool selectable) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Activates the item. Returns whether it could activate it.
- * cursor_pos:
- *   Cursor coordinates, if applicable.
+/**
+ * @brief Activates the item.
+ *
+ * @param cursor_pos Cursor coordinates, if applicable.
+ * @return Whether it could activate it.
  */
 bool gui_item::activate(const point &cursor_pos) {
     if(!on_activate) return false;
@@ -243,10 +249,10 @@ bool gui_item::activate(const point &cursor_pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a child item.
- * item:
- *   Item to add as a child item.
+/**
+ * @brief Adds a child item.
+ *
+ * @param item Item to add as a child item.
  */
 void gui_item::add_child(gui_item* item) {
     children.push_back(item);
@@ -254,8 +260,8 @@ void gui_item::add_child(gui_item* item) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes and deletes all children items.
+/**
+ * @brief Removes and deletes all children items.
  */
 void gui_item::delete_all_children() {
     while(!children.empty()) {
@@ -267,9 +273,11 @@ void gui_item::delete_all_children() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the bottommost Y coordinate, in height ratio,
+/**
+ * @brief Returns the bottommost Y coordinate, in height ratio,
  * of the item's children items.
+ *
+ * @return The Y coordinate.
  */
 float gui_item::get_child_bottom() {
     float bottommost = 0.0f;
@@ -285,9 +293,10 @@ float gui_item::get_child_bottom() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the value related to the current juice animation.
- * Returns 0 if there's no animation.
+/**
+ * @brief Returns the value related to the current juice animation.
+ *
+ * @return The juice value, or 0 if there's no animation.
  */
 float gui_item::get_juice_value() {
     switch(juice_type) {
@@ -347,8 +356,11 @@ float gui_item::get_juice_value() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the reference center coordinates, i.e. used when not animating.
+/**
+ * @brief Returns the reference center coordinates,
+ * i.e. used when not animating.
+ *
+ * @return The center.
  */
 point gui_item::get_reference_center() {
     if(parent) {
@@ -367,8 +379,10 @@ point gui_item::get_reference_center() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the reference width and height, i.e. used when not animating.
+/**
+ * @brief Returns the reference width and height, i.e. used when not animating.
+ *
+ * @return The size.
  */
 point gui_item::get_reference_size() {
     point mult;
@@ -382,10 +396,11 @@ point gui_item::get_reference_size() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the mouse cursor is on top of it.
- * cursor_pos:
- *   Position of the mouse cursor, in screen coordinates.
+/**
+ * @brief Returns whether the mouse cursor is on top of it.
+ *
+ * @param cursor_pos Position of the mouse cursor, in screen coordinates.
+ * @return Whether the cursor is on top.
  */
 bool gui_item::is_mouse_on(const point &cursor_pos) {
     if(parent && !parent->is_mouse_on(cursor_pos)) {
@@ -404,8 +419,10 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not it is responsive, and also checks the parents.
+/**
+ * @brief Returns whether or not it is responsive, and also checks the parents.
+ *
+ * @return Whether it is responsive.
  */
 bool gui_item::is_responsive() {
     if(parent) return parent->is_responsive();
@@ -413,8 +430,10 @@ bool gui_item::is_responsive() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not it is visible, and also checks the parents.
+/**
+ * @brief Returns whether or not it is visible, and also checks the parents.
+ *
+ * @return Whether it is visible.
  */
 bool gui_item::is_visible() {
     if(parent) return parent->is_visible();
@@ -422,10 +441,10 @@ bool gui_item::is_visible() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an item from the list of children, without deleting it.
- * item:
- *   Child item to remove.
+/**
+ * @brief Removes an item from the list of children, without deleting it.
+ *
+ * @param item Child item to remove.
  */
 void gui_item::remove_child(gui_item* item) {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -438,10 +457,10 @@ void gui_item::remove_child(gui_item* item) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts some juice animation.
- * type:
- *   Type of juice animation.
+/**
+ * @brief Starts some juice animation.
+ *
+ * @param type Type of juice animation.
  */
 void gui_item::start_juice_animation(JUICE_TYPES type) {
     juice_type = type;
@@ -466,8 +485,8 @@ void gui_item::start_juice_animation(JUICE_TYPES type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new GUI manager.
+/**
+ * @brief Constructs a new gui manager object.
  */
 gui_manager::gui_manager() :
     selected_item(nullptr),
@@ -510,12 +529,12 @@ gui_manager::gui_manager() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Add an item to the list.
- * item:
- *   Pointer to the new item.
- * id:
- *   If this item has an associated ID, specify it here. Empty string if none.
+/**
+ * @brief Add an item to the list.
+ *
+ * @param item Pointer to the new item.
+ * @param id If this item has an associated ID, specify it here.
+ * Empty string if none.
  */
 void gui_manager::add_item(gui_item* item, const string &id) {
     auto c = registered_centers.find(id);
@@ -532,8 +551,8 @@ void gui_manager::add_item(gui_item* item, const string &id) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys and deletes all items and information.
+/**
+ * @brief Destroys and deletes all items and information.
  */
 void gui_manager::destroy() {
     set_selected_item(NULL);
@@ -547,8 +566,8 @@ void gui_manager::destroy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws all items on-screen.
+/**
+ * @brief Draws all items on-screen.
  */
 void gui_manager::draw() {
     if(!visible) return;
@@ -593,8 +612,10 @@ void gui_manager::draw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the currently selected item's tooltip, if any.
+/**
+ * @brief Returns the currently selected item's tooltip, if any.
+ *
+ * @return The tooltip.
  */
 string gui_manager::get_current_tooltip() {
     if(!selected_item) return string();
@@ -603,15 +624,13 @@ string gui_manager::get_current_tooltip() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a given item's drawing information.
- * Returns true if the item exists and is meant to be drawn, false otherwise.
- * item:
- *   What item to check.
- * draw_center:
- *   The drawing center coordinates to use.
- * draw_size:
- *   The drawing width and height to use.
+/**
+ * @brief Returns a given item's drawing information.
+ *
+ * @param item What item to check.
+ * @param draw_center The drawing center coordinates to use.
+ * @param draw_size The drawing width and height to use.
+ * @return True if the item exists and is meant to be drawn, false otherwise.
  */
 bool gui_manager::get_item_draw_info(
     gui_item* item, point* draw_center, point* draw_size
@@ -745,11 +764,11 @@ bool gui_manager::get_item_draw_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handle an Allegro event.
+/**
+ * @brief Handle an Allegro event.
  * Controls are handled in handle_player_action.
- * ev:
- *   Event.
+ *
+ * @param ev Event.
  */
 void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     if(!responsive) return;
@@ -810,11 +829,11 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a player input.
- * Returns true if the input was used.
- * action:
- *   Data about the player action.
+/**
+ * @brief Handles a player input.
+ *
+ * @param action Data about the player action.
+ * @return Whether the input was used.
  */
 bool gui_manager::handle_player_action(const player_action &action) {
     if(!responsive) {
@@ -996,18 +1015,18 @@ bool gui_manager::handle_player_action(const player_action &action) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Hides all items until an animation shows them again.
+/**
+ * @brief Hides all items until an animation shows them again.
  */
 void gui_manager::hide_items() {
     visible = false;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads item default centers and sizes from a data node.
- * node:
- *   Data node to read from.
+/**
+ * @brief Reads item default centers and sizes from a data node.
+ *
+ * @param node Data node to read from.
  */
 void gui_manager::read_coords(data_node* node) {
     size_t n_items = node->get_nr_of_children();
@@ -1025,18 +1044,14 @@ void gui_manager::read_coords(data_node* node) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers an item's default center and size.
- * id:
- *   String ID of the item.
- * cx:
- *   Center X, in screen percentage.
- * cy:
- *   Center Y, in screen percentage.
- * w:
- *   Width, in screen percentage.
- * h:
- *   Height, in screen percentage.
+/**
+ * @brief Registers an item's default center and size.
+ *
+ * @param id String ID of the item.
+ * @param cx Center X, in screen percentage.
+ * @param cy Center Y, in screen percentage.
+ * @param w Width, in screen percentage.
+ * @param h Height, in screen percentage.
  */
 void gui_manager::register_coords(
     const string &id,
@@ -1049,10 +1064,10 @@ void gui_manager::register_coords(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an item from the list.
- * item:
- *   Item to remove.
+/**
+ * @brief Removes an item from the list.
+ *
+ * @param item Item to remove.
  */
 void gui_manager::remove_item(gui_item* item) {
     if(selected_item == item) {
@@ -1071,14 +1086,13 @@ void gui_manager::remove_item(gui_item* item) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the given item as the one that is selected, or none.
- * item:
- *   Item to select, or NULL for none.
- * silent:
- *   If true, no sound effect will play. Useful if you want the item to be
- *   selected not because of user input, but because it's the default selected
- *   item when the GUI loads.
+/**
+ * @brief Sets the given item as the one that is selected, or none.
+ *
+ * @param item Item to select, or NULL for none.
+ * @param silent If true, no sound effect will play.
+ * Useful if you want the item to be selected not because of user input,
+ * but because it's the default selected item when the GUI loads.
  */
 void gui_manager::set_selected_item(gui_item* item, bool silent) {
     if(selected_item == item) {
@@ -1115,20 +1129,19 @@ void gui_manager::set_selected_item(gui_item* item, bool silent) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Shows all items, if they were hidden.
+/**
+ * @brief Shows all items, if they were hidden.
  */
 void gui_manager::show_items() {
     visible = true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts an animation that affects all items.
- * type:
- *   Type of aniimation to start.
- * duration:
- *   Total duration of the animation.
+/**
+ * @brief Starts an animation that affects all items.
+ *
+ * @param type Type of aniimation to start.
+ * @param duration Total duration of the animation.
  */
 void gui_manager::start_animation(
     const GUI_MANAGER_ANIMS type, const float duration
@@ -1139,10 +1152,10 @@ void gui_manager::start_animation(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks the time of all items by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks the time of all items by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void gui_manager::tick(const float delta_t) {
     //Tick the animation.
@@ -1191,16 +1204,18 @@ void gui_manager::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether the last input was a mouse input.
+/**
+ * @brief Returns whether the last input was a mouse input.
+ *
+ * @return Whether it was a mouse input.
  */
 bool gui_manager::was_last_input_mouse() {
     return last_input_was_mouse;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new list GUI item.
+/**
+ * @brief Constructs a new list gui item object.
  */
 list_gui_item::list_gui_item() :
     gui_item(),
@@ -1344,16 +1359,13 @@ list_gui_item::list_gui_item() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new picker GUI item.
- * base_text:
- *   Text to display before the current option's name.
- * option:
- *   Text that matches the current option.
- * nr_options:
- *   Total amount of options.
- * cur_option_idx:
- *   Index of the currently selected option.
+/**
+ * @brief Constructs a new picker gui item object.
+ *
+ * @param base_text Text to display before the current option's name.
+ * @param option Text that matches the current option.
+ * @param nr_options Total amount of options.
+ * @param cur_option_idx Index of the currently selected option.
  */
 picker_gui_item::picker_gui_item(
     const string &base_text, const string &option,
@@ -1489,8 +1501,8 @@ picker_gui_item::picker_gui_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new scrollbar GUI item.
+/**
+ * @brief Constructs a new scroll gui item object.
  */
 scroll_gui_item::scroll_gui_item() :
     gui_item(),
@@ -1552,16 +1564,13 @@ scroll_gui_item::scroll_gui_item() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new text GUI item.
- * text:
- *   Text to display.
- * font:
- *   Font to use for the text.
- * color:
- *   Color to use for the text.
- * flags:
- *   Allegro text flags to use.
+/**
+ * @brief Constructs a new text gui item object.
+ *
+ * @param text Text to display.
+ * @param font Font to use for the text.
+ * @param color Color to use for the text.
+ * @param flags Allegro text flags to use.
  */
 text_gui_item::text_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
@@ -1641,10 +1650,10 @@ text_gui_item::text_gui_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new tooltip GUI item.
- * gui:
- *   Pointer to the GUI it belongs to.
+/**
+ * @brief Constructs a new tooltip gui item object.
+ *
+ * @param gui Pointer to the GUI it belongs to.
  */
 tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
     gui_item(),

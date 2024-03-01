@@ -15,12 +15,11 @@
 #include "edge.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a vertex.
- * x:
- *   X coordinate.
- * y:
- *   Y coordinate.
+/**
+ * @brief Constructs a new vertex object.
+ *
+ * @param x X coordinate.
+ * @param y Y coordinate.
  */
 vertex::vertex(float x, float y) :
     x(x),
@@ -29,12 +28,11 @@ vertex::vertex(float x, float y) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds an edge to the vertex's list of edges, if it's not there already.
- * e_ptr:
- *   Edge to add.
- * e_nr:
- *   Index number of the edge to add.
+/**
+ * @brief Adds an edge to the vertex's list of edges, if it's not there already.
+ *
+ * @param e_ptr Edge to add.
+ * @param e_nr Index number of the edge to add.
  */
 void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
     for(size_t i = 0; i < edges.size(); ++i) {
@@ -47,11 +45,12 @@ void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the edge that has the specified vertex as a neighbor of this vertex.
- * Returns NULL if not found.
- * neighbor:
- *   The neighbor vertex to check.
+/**
+ * @brief Returns the edge that has the specified vertex as a neighbor
+ * of this vertex.
+ *
+ * @param neighbor The neighbor vertex to check.
+ * @return The edge, or NULL if not found.
  */
 edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -63,10 +62,11 @@ edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not this vertex has the specified edge in its list.
- * e_ptr:
- *   Edge to check.
+/**
+ * @brief Returns whether or not this vertex has the specified edge in its list.
+ *
+ * @param e_ptr Edge to check.
+ * @return Whether it has the edge.
  */
 bool vertex::has_edge(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -76,13 +76,14 @@ bool vertex::has_edge(const edge* e_ptr) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not this vertex is a second-degree neighbor to the
+/**
+ * @brief Returns whether or not this vertex is a second-degree neighbor to the
  * specified vertex. i.e. they have a shared neighbor between them.
- * other_v:
- *   The vertex to compare against.
- * first_neighbor:
- *   Return the common neighbor between them here, if the result is true.
+ *
+ * @param other_v The vertex to compare against.
+ * @param first_neighbor Return the common neighbor between them here,
+ * if the result is true.
+ * @return Whether it is a second-degree neighbor.
  */
 bool vertex::is_2nd_degree_neighbor(
     const vertex* other_v, vertex** first_neighbor
@@ -105,13 +106,14 @@ bool vertex::is_2nd_degree_neighbor(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not this vertex is a second-degree neighbor to the
+/**
+ * @brief Returns whether or not this vertex is a second-degree neighbor to the
  * specified edge. i.e. one of the vertex's neighbors is used by the edge.
- * other_e:
- *   The edge to compare against.
- * first_neighbor:
- *   Return the common neighbor between them here, if the result is true.
+ *
+ * @param other_e The edge to compare against.
+ * @param first_neighbor Return the common neighbor between them here,
+ * if the result is true.
+ * @return Whether it is a second-degree neighbor.
  */
 bool vertex::is_2nd_degree_neighbor(
     const edge* other_e, vertex** first_neighbor
@@ -134,11 +136,12 @@ bool vertex::is_2nd_degree_neighbor(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not this vertex is a neighbor to the
+/**
+ * @brief Returns whether or not this vertex is a neighbor to the
  * specified vertex. i.e. they have a shared edge between them.
- * other_v:
- *   The vertex to compare against.
+ *
+ * @param other_v The vertex to compare against.
+ * @return Whether it is a neighbor.
  */
 bool vertex::is_neighbor(const vertex* other_v) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -150,10 +153,10 @@ bool vertex::is_neighbor(const vertex* other_v) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an edge from a vertex's list of edges, if it is there.
- * e_ptr:
- *   Edge to remove.
+/**
+ * @brief Removes an edge from a vertex's list of edges, if it is there.
+ *
+ * @param e_ptr Edge to remove.
  */
 void vertex::remove_edge(const edge* e_ptr) {
     size_t i = 0;

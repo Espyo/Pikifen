@@ -19,29 +19,38 @@
 
 //Onion object states.
 enum ONION_STATES {
+    
     //Idling.
     ONION_STATE_IDLING,
     
     //Total amount of Onion object states.
     N_ONION_STATES,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * An Onion type.
+/**
+ * @brief An Onion type.
  * It's basically associated with one or more Pikmin types.
  */
 class onion_type : public mob_type {
+
 public:
-    onion_type();
-    ~onion_type();
-    
+
+    //--- Members ---
+
     //Nest data.
     pikmin_nest_type_struct* nest;
     
+    
+    //--- Function declarations ---
+
+    onion_type();
+    ~onion_type();
     void load_properties(data_node* file) override;
     void load_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
+    
 };
 
 

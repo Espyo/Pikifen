@@ -17,16 +17,23 @@
 #include "mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * A mob that the current leader can interact with.
+/**
+ * @brief A mob that the current leader can interact with.
  */
 class interactable : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of interactable it is.
     interactable_type* int_type;
     
-    //Constructor.
+    
+    //--- Function declarations ---
+
     interactable(const point &pos, interactable_type* type, const float angle);
+    
 };
 
 

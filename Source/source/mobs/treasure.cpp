@@ -17,14 +17,12 @@
 #include "ship.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a treasure.
- * pos:
- *   Starting coordinates.
- * type:
- *   Treasure type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new treasure object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Treasure type this mob belongs to.
+ * @param angle Starting angle.
  */
 treasure::treasure(const point &pos, treasure_type* type, const float angle) :
     mob(pos, type, angle),

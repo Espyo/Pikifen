@@ -28,77 +28,116 @@ using std::string;
 
 //Types of sector.
 enum SECTOR_TYPES {
+
     //Normal sector.
     SECTOR_TYPE_NORMAL,
+    
     //Blocks all mob movement.
     SECTOR_TYPE_BLOCKING,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * Information about a sector's texture.
+/**
+ * @brief Info about a sector's texture.
  */
 struct sector_texture_info {
+
+    //--- Members ---
+
     //Texture scale.
     point scale;
+
     //Texture translation.
     point translation;
+
     //Texture rotation.
     float rot;
+
     //Texture bitmap.
     ALLEGRO_BITMAP* bitmap;
+
     //Texture tint.
     ALLEGRO_COLOR tint;
+
     //File name of the texture bitmap.
     string file_name;
     
+
+    //--- Function declarations ---
+
     sector_texture_info();
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A sector, like the ones in DOOM.
+/**
+ * @brief A sector, like the ones in DOOM.
+ *
  * It's composed of edges (linedefs), so it's essentially
  * a polygon (or multiple). It has a certain height, and its appearance
  * is determined by its floors.
  */
 struct sector {
+
+    //--- Members ---
+
     //Its type.
     SECTOR_TYPES type;
+    
     //Is it a bottomless pit?
     bool is_bottomless_pit;
+
     //Z coordinate of the floor.
     float z;
+
     //Extra information, if any.
     string tag;
+
     //Brightness.
     unsigned char brightness;
+
     //Information about its texture.
     sector_texture_info texture_info;
+
     //Is this sector meant to fade textures from neighboring sectors?
     bool fade;
+
     //String representing its hazards. Used for the editor.
     string hazards_str;
+
     //List of hazards.
     vector<hazard*> hazards;
+
     //Is only floor hazardous, or the air as well?
     bool hazard_floor;
+
     //Time left to drain the liquid in the sector.
     float liquid_drain_left;
+
     //Is it currently draining its liquid?
     bool draining_liquid;
+
     //Scrolling speed, if any.
     point scroll;
+
     //Index number of the edges that make up this sector.
     vector<size_t> edge_nrs;
+
     //Edges that make up this sector.
     vector<edge*> edges;
+
     //Triangles it is composed of.
     vector<triangle> triangles;
+
     //Bounding box.
     point bbox[2];
     
+
+    //--- Function declarations ---
+
     sector();
+    ~sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
     void calculate_bounding_box();
     void clone(sector* destination) const;
@@ -111,7 +150,7 @@ struct sector {
         const std::function<bool(sector* s_ptr)> &condition,
         vector<sector*> &sector_list
     );
-    ~sector();
+    
 };
 
 

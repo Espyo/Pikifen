@@ -14,8 +14,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of enemy.
+/**
+ * @brief Constructs a new enemy type object.
  */
 enemy_type::enemy_type() :
     mob_type(MOB_CATEGORY_ENEMIES),
@@ -40,10 +40,10 @@ enemy_type::enemy_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void enemy_type::load_properties(data_node* file) {
     reader_setter rs(file);

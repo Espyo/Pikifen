@@ -13,14 +13,12 @@
 #include "../game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new group task mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Group task type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new group task object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Group task type this mob belongs to.
+ * @param angle Starting angle.
  */
 group_task::group_task(
     const point &pos, group_task_type* type, const float angle
@@ -79,10 +77,10 @@ group_task::group_task(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a Pikmin to the task as an actual worker.
- * who:
- *   Pikmin to add.
+/**
+ * @brief Adds a Pikmin to the task as an actual worker.
+ *
+ * @param who Pikmin to add.
  */
 void group_task::add_worker(pikmin* who) {
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -117,8 +115,8 @@ void group_task::add_worker(pikmin* who) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the task is finished.
+/**
+ * @brief Code to run when the task is finished.
  */
 void group_task::finish_task() {
     for(
@@ -133,10 +131,10 @@ void group_task::finish_task() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Frees up a previously-reserved spot.
- * whose:
- *   Who had the reservation?
+/**
+ * @brief Frees up a previously-reserved spot.
+ *
+ * @param whose Who had the reservation?
  */
 void group_task::free_up_spot(pikmin* whose) {
     bool was_contributing = false;
@@ -179,17 +177,16 @@ void group_task::free_up_spot(pikmin* whose) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information on how to show the fraction numbers.
- * Returns true if the fraction numbers should be shown, false if not.
+/**
+ * @brief Returns information on how to show the fraction numbers.
+ *
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
- * fraction_value_nr:
- *   The fraction's value (upper) number gets set here.
- * fraction_req_nr:
- *   The fraction's required (lower) number gets set here.
- * fraction_color:
- *   The fraction's color gets set here.
+ *
+ * @param fraction_value_nr The fraction's value (upper) number gets set here.
+ * @param fraction_req_nr The fraction's required (lower) number gets set here.
+ * @param fraction_color The fraction's color gets set here.
+ * @return Whether the fraction numbers should be shown.
  */
 bool group_task::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
@@ -203,10 +200,11 @@ bool group_task::get_fraction_numbers_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a free spot, closest to the center and to the frontmost row as
+/**
+ * @brief Returns a free spot, closest to the center and to the frontmost row as
  * possible.
- * Returns NULL if there is none.
+ *
+ * @return The spot, or NULL if there is none.
  */
 group_task::group_task_spot* group_task::get_free_spot() {
     size_t spots_taken = 0;
@@ -227,19 +225,21 @@ group_task::group_task_spot* group_task::get_free_spot() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current power put into the task.
+/**
+ * @brief Returns the current power put into the task.
+ *
+ * @return The power.
  */
 float group_task::get_power() const {
     return power;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current world coordinates of a spot, occupied by a Pikmin.
- * Returns a (0,0) point if that Pikmin doesn't have a spot.
- * whose:
- *   Pikmin whose spot to check.
+/**
+ * @brief Returns the current world coordinates of a spot, occupied by a Pikmin.
+ *
+ * @param whose Pikmin whose spot to check.
+ * @return The coordinates, or (0,0) if that Pikmin doesn't have a spot.
  */
 point group_task::get_spot_pos(const pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -251,10 +251,10 @@ point group_task::get_spot_pos(const pikmin* whose) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void group_task::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -263,12 +263,11 @@ void group_task::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reserves a spot for a Pikmin.
- * spot:
- *   Pointer to the spot to reserve.
- * who:
- *   Who will be reserving this spot?
+/**
+ * @brief Reserves a spot for a Pikmin.
+ *
+ * @param spot Pointer to the spot to reserve.
+ * @param who Who will be reserving this spot?
  */
 void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
     spot->state = 1;
@@ -276,10 +275,10 @@ void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void group_task::tick_class_specifics(const float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {
@@ -308,9 +307,10 @@ void group_task::tick_class_specifics(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the absolute position of all spots, based on where the group task
- * mob currently is and where it is currently facing.
+/**
+ * @brief Updates the absolute position of all spots,
+ * based on where the group task mob currently is and where it is
+ * currently facing.
  */
 void group_task::update_spot_absolute_positions() {
     ALLEGRO_TRANSFORM t;
@@ -326,10 +326,10 @@ void group_task::update_spot_absolute_positions() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new group task spot struct.
- * pos:
- *   Position of the spot, in relative coordinates.
+/**
+ * @brief Constructs a new group task spot object.
+ *
+ * @param pos Position of the spot, in relative coordinates.
  */
 group_task::group_task_spot::group_task_spot(const point &pos) :
     relative_pos(pos), absolute_pos(pos), state(0), pikmin_here(nullptr) {

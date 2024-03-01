@@ -15,19 +15,28 @@
 #include "mob_type.h"
 
 
-/* ----------------------------------------------------------------------------
- * A type of "interactable" mob. This can be a readable sign, a switch, etc.
+/**
+ * @brief A type of "interactable" mob. This can be a readable sign,
+ * a switch, etc.
  */
 class interactable_type : public mob_type {
+
 public:
+    
+    //--- Members ---
+
     //Text to display above the mob, prompting the player on what to do.
     string prompt_text;
+    
     //How close the leader must be before the player can interact with it.
     float trigger_range;
     
+
+    //--- Function declarations ---
+
     interactable_type();
-    
     void load_properties(data_node* file) override;
+    
 };
 
 

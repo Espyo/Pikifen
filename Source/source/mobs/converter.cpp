@@ -16,27 +16,31 @@
 
 
 namespace CONVERTER {
+
 //A converter-spat seed starts with this Z offset from the converter.
 const float NEW_SEED_Z_OFFSET = 32.0f;
+
 //After spitting a seed, the next seed's angle shifts by this much.
 const float SPEW_ANGLE_SHIFT = TAU * 0.12345;
+
 //A converter-spat seed is this quick, horizontally.
 const float SPEW_H_SPEED = 90.0f;
+
 //Deviate the seed's horizontal speed by this much, more or less.
 const float SPEW_H_SPEED_DEVIATION = 10.0f;
+
 //A converter-spat seed is this quick, vertically.
 const float SPEW_V_SPEED = 1200.0f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a converter mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Convert type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new converter object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Convert type this mob belongs to.
+ * @param angle Starting angle.
  */
 converter::converter(
     const point &pos, converter_type* type, const float angle
@@ -59,8 +63,8 @@ converter::converter(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to the next type in the list, if applicable.
+/**
+ * @brief Changes to the next type in the list, if applicable.
  */
 void converter::change_type() {
     current_type_nr =
@@ -82,8 +86,8 @@ void converter::change_type() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Closes up and gets ready for a conversion.
+/**
+ * @brief Closes up and gets ready for a conversion.
  */
 void converter::close() {
     fsm.set_state(CONVERTER_STATE_CLOSING);
@@ -97,8 +101,8 @@ void converter::close() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Spews out the converted seeds.
+/**
+ * @brief Spews out the converted seeds.
  */
 void converter::spew() {
     size_t total_to_spit = amount_in_buffer * con_type->pikmin_per_conversion;
@@ -131,10 +135,10 @@ void converter::spew() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void converter::tick_class_specifics(const float delta_t) {
     type_change_timer.tick(delta_t);

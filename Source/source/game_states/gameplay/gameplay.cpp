@@ -28,63 +28,90 @@
 
 
 namespace GAMEPLAY {
+
 //How long the HUD moves for when the area is entered.
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
+
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
+
 //How long the "Go!" big message lasts for.
 const float BIG_MSG_GO_DUR = 1.5f;
+
 //What text to show in the "Go!" big message.
 const string BIG_MSG_GO_TEXT = "GO!";
+
 //How long the "Mission clear!" big message lasts for.
 const float BIG_MSG_MISSION_CLEAR_DUR = 4.5f;
+
 //What text to show in the "Mission clear!" big message.
 const string BIG_MSG_MISSION_CLEAR_TEXT = "MISSION CLEAR!";
+
 //How long the "Mission failed..." big message lasts for.
 const float BIG_MSG_MISSION_FAILED_DUR = 4.5f;
+
 //What text to show in the "Mission failed..." big message.
 const string BIG_MSG_MISSION_FAILED_TEXT = "MISSION FAILED...";
+
 //How long the "Ready?" big message lasts for.
 const float BIG_MSG_READY_DUR = 2.5f;
+
 //What text to show in the "Ready?" big message.
 const string BIG_MSG_READY_TEXT = "READY?";
+
 //Distance between current leader and boss before the boss music kicks in.
 const float BOSS_MUSIC_DISTANCE = 300.0f;
+
 //Name of the boss theme song.
 const string BOSS_SONG_NAME = "boss";
+
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
+
 //Dampen the camera's movements by this much.
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+
 //Opacity of the collision bubbles in the maker tool.
 const unsigned char COLLISION_OPACITY = 192;
+
 //If an enemy is this close to the active leader, turn on the song's enemy mix.
 const float ENEMY_MIX_DISTANCE = 150.0f;
+
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
+
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
+
 //How long the HUD moves for when a menu is exited.
 const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
+
 //Opacity of the throw preview.
 const unsigned char PREVIEW_OPACITY = 160;
+
 //Scale of the throw preview's effect texture.
 const float PREVIEW_TEXTURE_SCALE = 20.0f;
+
 //Time multiplier for the throw preview's effect texture animation.
 const float PREVIEW_TEXTURE_TIME_MULT = 20.0f;
+
 //How frequently should a replay state be saved.
 const float REPLAY_SAVE_FREQUENCY = 1.0f;
+
 //Swarming arrows move these many units per second.
 const float SWARM_ARROW_SPEED = 400.0f;
+
 //Tree shadows sway this much away from their neutral position.
 const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
+
 //Tree shadows sway this much per second (TAU = full back-and-forth cycle).
 const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates the "gameplay" state.
+/**
+ * @brief Constructs a new gameplay state object.
  */
 gameplay_state::gameplay_state() :
     game_state(),
@@ -170,13 +197,12 @@ gameplay_state::gameplay_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes the amount of sprays of a certain type the player owns.
+/**
+ * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
- * type_nr:
- *   Number of the spray type.
- * amount:
- *   Amount to change by.
+ *
+ * @param type_nr Number of the spray type.
+ * @param amount Amount to change by.
  */
 void gameplay_state::change_spray_count(
     const size_t type_nr, signed int amount
@@ -207,8 +233,8 @@ void gameplay_state::change_spray_count(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draw the gameplay.
+/**
+ * @brief Draws the gameplay.
  */
 void gameplay_state::do_drawing() {
     do_game_drawing();
@@ -219,8 +245,8 @@ void gameplay_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Tick the gameplay logic by one frame.
+/**
+ * @brief Tick the gameplay logic by one frame.
  */
 void gameplay_state::do_logic() {
     if(game.perf_mon) {
@@ -258,10 +284,10 @@ void gameplay_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ends the currently ongoing mission.
- * cleared:
- *   Did the player reach the goal?
+/**
+ * @brief Ends the currently ongoing mission.
+ *
+ * @param cleared Did the player reach the goal?
  */
 void gameplay_state::end_mission(const bool cleared) {
     if(cur_interlude != INTERLUDE_NONE) {
@@ -305,8 +331,8 @@ void gameplay_state::end_mission(const bool cleared) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the state is entered, be it from the area menu, be it
+/**
+ * @brief Code to run when the state is entered, be it from the area menu, be it
  * from the result menu's "keep playing" option.
  */
 void gameplay_state::enter() {
@@ -361,12 +387,12 @@ void gameplay_state::enter() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Generates the bitmap that'll draw the fog fade effect.
- * near_radius:
- *   Until this radius, the fog is not present.
- * far_radius:
- *   From this radius on, the fog is fully dense.
+/**
+ * @brief Generates the bitmap that'll draw the fog fade effect.
+ *
+ * @param near_radius Until this radius, the fog is not present.
+ * @param far_radius From this radius on, the fog is fully dense.
+ * @return The bitmap.
  */
 ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
     const float near_radius, const float far_radius
@@ -438,11 +464,12 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many Pikmin are in the field in the current area.
+/**
+ * @brief Returns how many Pikmin are in the field in the current area.
  * This also checks inside converters.
- * filter:
- *   If not NULL, only return Pikmin matching this type.
+ *
+ * @param filter If not NULL, only return Pikmin matching this type.
+ * @return The amount.
  */
 size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
     size_t total = 0;
@@ -465,10 +492,11 @@ size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many Pikmin are in the group.
- * filter:
- *   If not NULL, only return Pikmin matching this type.
+/**
+ * @brief Returns how many Pikmin are in the group.
+ *
+ * @param filter If not NULL, only return Pikmin matching this type.
+ * @return The amount.
  */
 size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
     size_t total = 0;
@@ -486,10 +514,11 @@ size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many Pikmin are idling in the area.
- * filter:
- *   If not NULL, only return Pikmin matching this type.
+/**
+ * @brief Returns how many Pikmin are idling in the area.
+ *
+ * @param filter If not NULL, only return Pikmin matching this type.
+ * @return The amount.
  */
 size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
     size_t total = 0;
@@ -509,11 +538,12 @@ size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many Pikmin are inside of Onions in the current area.
+/**
+ * @brief Returns how many Pikmin are inside of Onions in the current area.
  * This also checks ships.
- * filter:
- *   If not NULL, only return Pikmin matching this type.
+ *
+ * @param filter If not NULL, only return Pikmin matching this type.
+ * @return The amount.
  */
 long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
     long total = 0;
@@ -556,12 +586,13 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the total amount of Pikmin the player has.
+/**
+ * @brief Returns the total amount of Pikmin the player has.
  * This includes Pikmin in the field as well as the Onions, and also
  * Pikmin inside converters.
- * filter:
- *   If not NULL, only return Pikmin matching this type.
+ *
+ * @param filter If not NULL, only return Pikmin matching this type.
+ * @return The amount.
  */
 long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
     long total = 0;
@@ -577,14 +608,14 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the closest group member of a given standby subgroup.
+/**
+ * @brief Returns the closest group member of a given standby subgroup.
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
  * and more mature one.
- * Returns NULL if there is no member of that subgroup available.
- * type:
- *   Type to search for.
+ *
+ * @param type Type to search for.
+ * @return The member, or NULL if there is no member of that subgroup available.
  */
 mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     if(!cur_leader_ptr) return NULL;
@@ -647,18 +678,20 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string gameplay_state::get_name() const {
     return "gameplay";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev Event to handle.
  */
 void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
@@ -683,19 +716,19 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the HUD.
+/**
+ * @brief Initializes the HUD.
  */
 void gameplay_state::init_hud() {
     hud = new hud_struct();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the gameplay state and enters the main menu,
+/**
+ * @brief Leaves the gameplay state and enters the main menu,
  * or area selection, or etc.
- * target:
- *   Where to leave to.
+ *
+ * @param target Where to leave to.
  */
 void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     if(unloading) return;
@@ -731,8 +764,8 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the "gameplay" state into memory.
+/**
+ * @brief Loads the "gameplay" state into memory.
  */
 void gameplay_state::load() {
     if(game.perf_mon) {
@@ -1108,8 +1141,8 @@ void gameplay_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads all of the game's content.
+/**
+ * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
     load_custom_particle_generators(true);
@@ -1147,18 +1180,18 @@ void gameplay_state::load_game_content() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the fade out to leave the gameplay state.
- * target:
- *   Where to leave to.
+/**
+ * @brief Starts the fade out to leave the gameplay state.
+ *
+ * @param target Where to leave to.
  */
 void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
     game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the "gameplay" state from memory.
+/**
+ * @brief Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
     unloading = true;
@@ -1224,8 +1257,8 @@ void gameplay_state::unload() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded game content.
+/**
+ * @brief Unloads loaded game content.
  */
 void gameplay_state::unload_game_content() {
     unload_weather();
@@ -1243,8 +1276,8 @@ void gameplay_state::unload_game_content() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the list of leaders available to be controlled.
+/**
+ * @brief Updates the list of leaders available to be controlled.
  */
 void gameplay_state::update_available_leaders() {
     //Build the list.
@@ -1289,10 +1322,11 @@ void gameplay_state::update_available_leaders() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the variables that indicate what the closest
+/**
+ * @brief Updates the variables that indicate what the closest
  * group member of the standby subgroup is, for the current
  * standby subgroup, the previous, and the next.
+ *
  * In the case all candidate members are out of reach,
  * this gets set to the closest. Otherwise, it gets set to the closest
  * and more mature one.
@@ -1370,8 +1404,9 @@ void gameplay_state::update_closest_group_members() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the transformations, with the current camera coordinates, zoom, etc.
+/**
+ * @brief Updates the transformations, with the current camera coordinates,
+ * zoom, etc.
  */
 void gameplay_state::update_transformations() {
     //World coordinates to screen coordinates.

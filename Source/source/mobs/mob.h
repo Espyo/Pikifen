@@ -85,194 +85,259 @@ extern const float WAVE_RING_DURATION;
 
 
 
-/* ----------------------------------------------------------------------------
- * A mob, short for "mobile object" or "map object",
+/**
+ * @brief A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
  * an object in the game world. It can move, follow a point,
  * has health, and can be a variety of different sub-types,
  * like leader, Pikmin, enemy, Onion, etc.
  */
 class mob {
+
 public:
-    //---Basic information---
+    
+    //--- Members ---
+
+    //-Basic information-
     
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type;
+
     //Schedule this mob to be deleted from memory at the end of the frame.
     bool to_delete;
     
-    //---Position---
+    //-Position-
     
     //Coordinates.
     point pos;
+
     //Z coordinate. This is height; the higher the value, the higher in the sky.
     float z;
+
     //Current facing angle. 0 = right, PI / 2 = up, etc.
     float angle;
+
     //The highest ground below the entire mob.
     sector* ground_sector;
+
     //Sector that the mob's center is on.
     sector* center_sector;
+
     //Mob this mob is standing on top of, if any.
     mob* standing_on_mob;
     
-    //---Basic movement---
+    //-Basic movement-
     
     //X/Y speed at which external movement is applied (i.e. not walking).
     point speed;
+
     //Same as speed, but for the Z coordinate.
     float speed_z;
+
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     float z_cap;
+
     //Multiply the mob's gravity by this.
     float gravity_mult;
+
     //How much it's being pushed by another mob.
     float push_amount;
+
     //Angle that another mob is pushing it to.
     float push_angle;
+
     //How much the mob moved this frame, if it's walkable.
     point walkable_moved;
     
-    //---Complex states---
+    //-Complex states-
     
     //Information about what it is chasing after.
     chase_info_struct chase_info;
+
     //Information about the path it is following, if any.
     path_info_struct* path_info;
+
     //Information about the mob/point it's circling, if any.
     circling_info_struct* circling_info;
+
     //Riding a track. If NULL, the mob is not riding on any track.
     track_info_struct* track_info;
+
     //Info on how this mob should be carried. Uncarriable if NULL.
     carry_info_struct* carry_info;
+
     //Onion delivery info. If NULL, the mob is not being delivered.
     delivery_info_struct* delivery_info;
     
-    //---Physical space---
+    //-Physical space-
     
     //Current radius.
     float radius;
+
     //Current height.
     float height;
+
     //Current rectangular dimensions.
     point rectangular_dim;
     
-    //---Scripting---
+    //-Scripting-
     
     //Finite-state machine.
     mob_fsm fsm;
+
     //The script-controlled timer.
     timer script_timer;
+
     //Variables.
     map<string, string> vars;
     
-    //---Brain and behavior---
+    //-Brain and behavior-
     
     //The mob it has focus on.
     mob* focused_mob;
+
     //Further memory of focused mobs.
     map<size_t, mob*> focused_mob_memory;
+
     //Angle the mob wants to be facing.
     float intended_turn_angle;
+
     //Variable that holds the position the mob wants to be facing.
     point* intended_turn_pos;
+
     //Starting coordinates; what the mob calls "home".
     point home;
+
     //Index of the reach to use for "X in reach" events.
     size_t far_reach;
+
     //Index or the reach to use for "focused mob out of reach" events.
     size_t near_reach;
+
     //How long it's been alive for.
     float time_alive;
+
     //Incremental ID. Used for minor things.
     size_t id;
     
-    //---General state---
+    //-General state-
     
     //Current health.
     float health;
+
     //Maximum health.
     float max_health;
+
     //During this period, the mob cannot be attacked.
     timer invuln_period;
+
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
     vector<std::pair<float, mob*> > hit_opponents;
+
     //How much damage did it take since the last time the itch event triggered?
     float itch_damage;
+
     //How much time has passed the last time the itch event triggered?
     float itch_time;
+
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
+
     //Hazard of the sector the mob is currently on.
     hazard* on_hazard;
+
     //If this mob is a sub-mob, this points to the parent mob.
     parent_info_struct* parent;
+
     //Miscellanous flags. Use MOB_FLAG_*.
     uint16_t flags;
     
-    //---Interactions with other mobs---
+    //-Interactions with other mobs-
     
     //Mobs it is linked to.
     vector<mob*> links;
+
     //If it's being held by another mob, the information is kept here.
     hold_info_struct holder;
+
     //List of mobs it is holding.
     vector<mob*> holding;
+
     //If it's stored inside another mob, this indicates which mob it is.
     mob* stored_inside_another;
+
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
+
     //List of mobs currently in its mouth, i.e., chomped.
     vector<mob*> chomping_mobs;
+
     //Max number of mobs it can chomp in the current attack.
     size_t chomp_max;
+
     //Mob's team (who it can damage).
     MOB_TEAMS team;
     
-    //---Group---
+    //-Group-
     
     //The current mob is following this mob's group.
     mob* following_group;
+
     //Index of this mob's spot in the leader's group spots.
     size_t group_spot_index;
+
     //The current subgroup type.
     subgroup_type* subgroup_type_ptr;
+
     //Info on the group this mob is a leader of, if any.
     group_info_struct* group;
     
-    //---Animation---
+    //-Animation-
     
     //Current animation instance.
     animation_instance anim;
+
     //Force the usage of this specific sprite.
     sprite* forced_sprite;
     
-    //---Aesthetic---
+    //-Aesthetic-
     
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot;
+
     //Time left in the current damage squash-and-stretch animation.
     float damage_squash_time;
+
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
+
     //Data about its on-screen health wheel, if any.
     in_world_health_wheel* health_wheel;
+
     //Data about its on-screen fraction numbers, if any.
     in_world_fraction* fraction;
     
-    //---Caches---
+    //-Caches-
     
     //Cached value of the angle's cosine.
     float angle_cos;
+
     //Cached value of the angle's sine.
     float angle_sin;
+
     //Cached value of how far its hitboxes or radius can reach from the center.
     float max_span;
+
     //It's invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
     
     
+    //--- Function declarations ---
+    
+    mob(const point &pos, mob_type* type, const float angle);
+    virtual ~mob();
+
     void tick(const float delta_t);
     void draw_limb();
     virtual void draw_mob();
@@ -423,89 +488,81 @@ public:
     bool tick_track_ride();
     void stop_track_ride();
     
-    //Drawing tools.
     void get_sprite_bitmap_effects(
         sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
     ) const;
     
     string print_state_history() const;
     
-    //Constructor.
-    mob(const point &pos, mob_type* type, const float angle);
-    //Destructor.
-    virtual ~mob();
-    
 protected:
+    
+    //--- Members ---
+
     //Is it currently capable of blocking paths?
     bool can_block_paths;
     
-    //Returns what Pikmin type is decided when carrying something.
+
+    //--- Function declarations ---
+
     pikmin_type* decide_carry_pikmin_type(
         const unordered_set<pikmin_type*> &available_types,
         mob* added, mob* removed
     ) const;
-    //Returns a walkable mob to stand on.
     mob* get_mob_to_walk_on() const;
-    //Returns edge intersections at a certain spot.
     H_MOVE_RESULTS get_movement_edge_intersections(
         const point &new_pos, vector<edge*>* intersecting_edges
     ) const;
-    //Returns how the mob should move horizontally this frame.
     H_MOVE_RESULTS get_physics_horizontal_movement(
         const float delta_t, const float move_speed_mult, point* move_speed
     );
-    //Returns the angle at which the mob should slide against a wall.
     H_MOVE_RESULTS get_wall_slide_angle(
         const edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
     ) const;
-    //Goes to the path's final destination.
     void move_to_path_end(const float speed, const float acceleration);
-    //Tick its animation logic.
     void tick_animation(const float delta_t);
-    //Tick the mob's "thinking" logic.
     void tick_brain(const float delta_t);
-    //Tick its horizontal movement physics logic.
     void tick_horizontal_movement_physics(
         const float delta_t, const point &attempted_move_speed,
         bool* touched_wall
     );
-    //Tick misc. things.
     void tick_misc_logic(const float delta_t);
-    //Tick its physics logic.
     void tick_physics(const float delta_t);
-    //Tick its rotation physics logic.
     void tick_rotation_physics(
         const float delta_t, const float move_speed_mult
     );
-    //Tick its script logic.
     void tick_script(const float delta_t);
-    //Tick its vertical movement physics logic.
     void tick_vertical_movement_physics(
         const float delta_t, const float pre_move_ground_z,
         const bool was_teleport = false
     );
-    //Tick physics logic for riding atop a walkable mob.
     void tick_walkable_riding_physics(const float delta_t);
-    //Tick class-specific logic.
     virtual void tick_class_specifics(const float delta_t);
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * See mob_type_with_anim_groups.
+/**
+ * @brief See mob_type_with_anim_groups.
  */
 class mob_with_anim_groups {
+
 public:
+    
+    //--- Members ---
+
     //Index number of its current base animation.
     size_t cur_base_anim_nr;
     
+
+    //--- Function declarations ---
+
+    mob_with_anim_groups();
     size_t get_animation_nr_from_base_and_group(
         const size_t base_anim_nr, const size_t group_nr,
         const size_t base_anim_total
     ) const;
     
-    mob_with_anim_groups();
 };
 
 

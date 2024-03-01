@@ -14,14 +14,12 @@
 #include "../functions.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a decoration mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Decoration type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new decoration object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Decoration type this mob belongs to.
+ * @param angle Starting angle.
  */
 decoration::decoration(
     const point &pos, decoration_type* type, const float angle
@@ -64,9 +62,9 @@ decoration::decoration(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a decorative object. This is responsible for randomly tinting it,
- * rotating it, etc.
+/**
+ * @brief Draws a decorative object. This is responsible for randomly
+ * tinting it, rotating it, etc.
  */
 void decoration::draw_mob() {
     sprite* s_ptr = get_cur_sprite();
@@ -94,10 +92,10 @@ void decoration::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void decoration::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);

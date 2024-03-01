@@ -17,16 +17,23 @@
 #include "mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * An object that throws another mob, bouncing it away.
+/**
+ * @brief An object that throws another mob, bouncing it away.
  */
 class bouncer : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of bouncer it is.
     bouncer_type* bou_type;
     
-    //Constructor.
+    
+    //--- Function declarations ---
+
     bouncer(const point &pos, bouncer_type* type, const float angle);
+    
 };
 
 

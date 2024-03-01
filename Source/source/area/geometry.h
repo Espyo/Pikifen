@@ -48,33 +48,50 @@ extern const float SMOOTHING_MAX_LENGTH;
 
 //Possible errors after a triangulation operation.
 enum TRIANGULATION_ERRORS {
+
     //No error occured.
     TRIANGULATION_NO_ERROR,
+    
     //Invalid arguments provided.
     TRIANGULATION_ERROR_INVALID_ARGS,
+    
     //Non-simple sector: Sector is not closed.
     TRIANGULATION_ERROR_NOT_CLOSED,
+    
     //Non-simple sector: Lone edges break the sector.
     TRIANGULATION_ERROR_LONE_EDGES,
+    
     //Non-simple sector: Ran out of ears while triangulating.
     TRIANGULATION_ERROR_NO_EARS,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A triangle. Sectors (essentially polygons) are made out of triangles.
+/**
+ * @brief A triangle.
+ *
+ * Sectors (essentially polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
  */
 struct triangle {
+
+    //--- Members ---
+
     //Points that make up this triangle.
     vertex* points[3];
     
+
+    //--- Function declarations ---
+
     triangle(vertex* v1, vertex* v2, vertex* v3);
+
 };
 
 
-/* ----------------------------------------------------------------------------
+/**
+ * @brief A polygon.
+ *
  * Represents a series of vertexes that make up a plain old geometric polygon.
  * A polygon cannot have holes or islands.
  * Since a polygon can have children polygons, this is effectively a node
@@ -82,11 +99,20 @@ struct triangle {
  * root of said tree.
  */
 struct polygon {
+
+    //--- Members ---
+
     //Ordered list of vertexes that represent the polygon.
     vector<vertex*> vertexes;
+
     //Children, if any.
     vector<polygon*> children;
     
+
+    //--- Function declarations ---
+
+    polygon();
+    explicit polygon(const vector<vertex*> &vertexes);
     void clean(bool recursive);
     void cut();
     void cut_all_as_root();
@@ -94,20 +120,23 @@ struct polygon {
     vertex* get_rightmost_vertex() const;
     bool insert_child(polygon* p);
     bool is_point_inside(const point &p) const;
-    
-    polygon();
-    explicit polygon(const vector<vertex*> &vertexes);
+
 };
 
 
-/* ----------------------------------------------------------------------------
- * A structure holding info on the geometry problems the area currently has.
+/**
+ * @brief Info about the geometry problems the area currently has.
  */
 struct geometry_problems {
+
+    //--- Members ---
+
     //Non-simple sectors found, and their reason for being broken.
     map<sector*, TRIANGULATION_ERRORS> non_simples;
+    
     //List of lone edges found.
     unordered_set<edge*> lone_edges;
+    
 };
 
 

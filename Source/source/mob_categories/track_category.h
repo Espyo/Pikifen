@@ -19,12 +19,17 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Mob category for anything that transports a mob from point A to point B
- * in a more-or-less linear fashion.
+/**
+ * @brief Mob category for anything that transports a mob from point A to
+ * point B in a more-or-less linear fashion.
  */
 class track_category : public mob_category {
+
 public:
+
+    //--- Function declarations ---
+
+    track_category();
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;
     mob_type* create_type() override;
@@ -35,7 +40,6 @@ public:
     void erase_mob(mob* m) override;
     void clear_types() override;
     
-    track_category();
 };
 
 

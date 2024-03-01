@@ -18,87 +18,121 @@
 #include "../game.h"
 
 namespace LEADER {
+
 //Auto-throw starts at this cooldown.
 const float AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
+
 //Auto-throw ends at this cooldown.
 const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
+
 //Auto-throw cooldown lowers at this speed.
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
+
 //Members cannot go past this range from the angle of dismissal.
 const float DISMISS_ANGLE_RANGE = TAU / 2;
+
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
+
 //Opacity of the dismiss particles.
 const float DISMISS_PARTICLE_ALPHA = 1.0f;
+
 //Amount of dismiss particles to spawn.
 const size_t DISMISS_PARTICLE_AMOUNT = WHISTLE::N_DOT_COLORS * 3;
+
 //Dismiss particle friction.
 const float DISMISS_PARTICLE_FRICTION = 3.2f;
+
 //Dismiss particle maximum duration.
 const float DISMISS_PARTICLE_MAX_DURATION = 1.4f;
+
 //Dismiss particle maximum speed.
 const float DISMISS_PARTICLE_MAX_SPEED = 210.0f;
+
 //Dismiss particle minimum duration.
 const float DISMISS_PARTICLE_MIN_DURATION = 1.0f;
+
 //Dismiss particle minimum speed.
 const float DISMISS_PARTICLE_MIN_SPEED = 170.0f;
+
 //Dismiss particle size.
 const float DISMISS_PARTICLE_SIZE = 8.0f;
+
 //Dismissed groups must have this much distance between them/the leader.
 const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
+
 //Ratio of health at which a leader's health wheel starts giving a warning.
 const float HEALTH_CAUTION_RATIO = 0.3f;
+
 //How long the low health caution ring lasts for.
 const float HEALTH_CAUTION_RING_DURATION = 2.5f;
+
 //Angle at which leaders hold their group members.
 const float HELD_GROUP_MEMBER_ANGLE = TAU / 2;
+
 //How far away from the leader is a held group member placed, horizontally.
 const float HELD_GROUP_MEMBER_H_DIST = 1.2f;
+
 //How far away from the leader is a held group member placed, vertically.
 const float HELD_GROUP_MEMBER_V_DIST = 0.5f;
+
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 1.5f;
+
 //Seconds that need to pass before another swarm arrow appears.
 const float SWARM_ARROW_INTERVAL = 0.1f;
+
 //Swarm particle opacity.
 const float SWARM_PARTICLE_ALPHA = 0.8f;
+
 //Swarm particle random angle deviation.
 const float SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
+
 //Swarm particle friction.
 const float SWARM_PARTICLE_FRICTION = 2.0f;
+
 //Swarm particle maximum duration.
 const float SWARM_PARTICLE_MAX_DURATION = 1.5f;
+
 //Swarm particle minimum duration.
 const float SWARM_PARTICLE_MIN_DURATION = 1.0f;
+
 //Swarm particle size.
 const float SWARM_PARTICLE_SIZE = 6.0f;
+
 //Swarm particle random speed deviation.
 const float SWARM_PARTICLE_SPEED_DEVIATION = 10.0f;
+
 //Swarm particle speed multiplier.
 const float SWARM_PARTICLE_SPEED_MULT = 500.0f;
+
 //Throws cannot happen any faster than this interval.
 const float THROW_COOLDOWN_DURATION = 0.15f;
+
 //Throw preview maximum thickness.
 const float THROW_PREVIEW_DEF_MAX_THICKNESS = 8.0f;
+
 //The throw preview starts fading in at this ratio.
 const float THROW_PREVIEW_FADE_IN_RATIO = 0.30f;
+
 //The throw preview starts fading out at this ratio.
 const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f - THROW_PREVIEW_FADE_IN_RATIO;
+
 //Throw preview minimum thickness.
 const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a leader mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Leader type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new leader object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Leader type this mob belongs to.
+ * @param angle Starting angle.
  */
 leader::leader(const point &pos, leader_type* type, const float angle) :
     mob(pos, type, angle),
@@ -177,18 +211,21 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not a leader can receive a given status effect.
- * s:
- *   Status type to check.
+/**
+ * @brief Returns whether or not a leader can receive a given status effect.
+ *
+ * @param s Status type to check.
+ * @return Whether it can receive the status.
  */
 bool leader::can_receive_status(status_type* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_LEADERS);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not a leader can throw.
+/**
+ * @brief Returns whether or not a leader can throw.
+ *
+ * @return Whether it can throw.
  */
 bool leader::check_throw_ok() const {
     if(holding.empty()) {
@@ -205,8 +242,8 @@ bool leader::check_throw_ok() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes a leader dismiss their group.
+/**
+ * @brief Makes a leader dismiss their group.
  * The group is then organized in groups, by type,
  * and is dismissed close to the leader.
  */
@@ -247,14 +284,22 @@ void leader::dismiss() {
         base_angle = get_angle(pos, group_center);
     }
     
-    
+    /**
+     * @brief Info about a group subgroup when being dismissed.
+     */
     struct subgroup_dismiss_info {
+        
+        //--- Members ---
+        
         //Radius of the group.
         float radius;
+        
         //Group members of this subgroup type.
         vector<mob*> members;
+        
         //Center point of the subgroup.
         point center;
+
     };
     vector<subgroup_dismiss_info> subgroups_info;
     
@@ -312,29 +357,41 @@ void leader::dismiss() {
             LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
     }
     
-    //We'll need to place the subgroups inside arched rows.
-    //Like stripes on a rainbow.
-    //For each row, we must fit as many Pikmin subgroups as possible.
-    //Each row can have a different thickness,
-    //based on the size of the subgroups within.
-    //Starts off on the row closest to the leader.
-    //We place the first subgroup, then some padding, then the next group,
-    //etc. For every subgroup we place, we must update the thickness.
+    /**
+     * @brief We'll need to place the subgroups inside arched rows.
+     * Like stripes on a rainbow.
+     * For each row, we must fit as many Pikmin subgroups as possible.
+     * Each row can have a different thickness,
+     * based on the size of the subgroups within.
+     * Starts off on the row closest to the leader.
+     * We place the first subgroup, then some padding, then the next group,
+     * etc. For every subgroup we place, we must update the thickness.
+     */
     struct row_info {
+
+        //--- Members ---
+
         //Index of subgroups in this row.
         vector<size_t> subgroups;
+
         //Angular distance spread out from the row center.
         float dist_between_center;
+
         //How thick this row is.
         float thickness;
+        
         //How much is taken up by Pikmin and padding.
         float angle_occupation;
         
+
+        //--- Function definitions ---
+
         row_info() {
             dist_between_center = 0;
             thickness = 0;
             angle_occupation = 0;
         }
+        
     };
     
     bool done = false;
@@ -543,8 +600,8 @@ void leader::dismiss() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draw a leader mob.
+/**
+ * @brief Draw a leader mob.
  */
 void leader::draw_mob() {
     mob::draw_mob();
@@ -583,11 +640,12 @@ void leader::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many rows will be needed to fit all of the members.
+/**
+ * @brief Returns how many rows will be needed to fit all of the members.
  * Used to calculate how subgroup members will be placed when dismissing.
- * n_members:
- *   Total number of group members to dismiss.
+ *
+ * @param n_members Total number of group members to dismiss.
+ * @return The amount of rows.
  */
 size_t leader::get_dismiss_rows(const size_t n_members) const {
     size_t members_that_fit = 1;
@@ -600,14 +658,13 @@ size_t leader::get_dismiss_rows(const size_t n_members) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns its group spot information.
+/**
+ * @brief Returns its group spot information.
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
- * final_spot:
- *   The final coordinates are returned here.
- * final_dist:
- *   The final distance to those coordinates is returned here.
+ *
+ * @param final_spot The final coordinates are returned here.
+ * @param final_dist The final distance to those coordinates is returned here.
  */
 void leader::get_group_spot_info(
     point* final_spot, float* final_dist
@@ -643,19 +700,17 @@ void leader::get_group_spot_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Orders Pikmin from the group to leave the group, and head for the specified
- * nest, with the goal of being stored inside. This function prioritizes
- * less matured Pikmin, and ones closest to the nest.
- * Returns true if the specified number of Pikmin were successfully ordered,
- * and false if there were not enough Pikmin of that type in the group
+/**
+ * @brief Orders Pikmin from the group to leave the group, and head for the
+ * specified nest, with the goal of being stored inside.
+ * This function prioritizes less matured Pikmin, and ones closest to the nest.
+ *
+ * @param type Type of Pikmin to order.
+ * @param n_ptr Nest to enter.
+ * @param amount Amount of Pikmin of the given type to order.
+ * @return Whether the specified number of Pikmin were successfully ordered.
+ * Returns false if there were not enough Pikmin of that type in the group
  * to fulfill the order entirely.
- * type:
- *   Type of Pikmin to order.
- * n_ptr:
- *   Nest to enter.
- * amount:
- *   Amount of Pikmin of the given type to order.
  */
 bool leader::order_pikmin_to_onion(
     const pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
@@ -718,8 +773,8 @@ bool leader::order_pikmin_to_onion(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Queues up a throw. This will cause the throw to go through whenever
+/**
+ * @brief Queues up a throw. This will cause the throw to go through whenever
  * the throw cooldown ends.
  */
 void leader::queue_throw() {
@@ -731,8 +786,8 @@ void leader::queue_throw() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Signals the group members that the swarm mode stopped.
+/**
+ * @brief Signals the group members that the swarm mode stopped.
  */
 void leader::signal_swarm_end() const {
     for(size_t m = 0; m < group->members.size(); ++m) {
@@ -741,8 +796,8 @@ void leader::signal_swarm_end() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Signals the group members that the swarm mode started.
+/**
+ * @brief Signals the group members that the swarm mode started.
  */
 void leader::signal_swarm_start() const {
     for(size_t m = 0; m < group->members.size(); ++m) {
@@ -751,8 +806,8 @@ void leader::signal_swarm_start() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the auto-throw mode.
+/**
+ * @brief Starts the auto-throw mode.
  */
 void leader::start_auto_throwing() {
     auto_throwing = true;
@@ -761,8 +816,9 @@ void leader::start_auto_throwing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the particle generator that leaves a trail behind a thrown Pikmin.
+/**
+ * @brief Starts the particle generator that leaves a trail behind a
+ * thrown Pikmin.
  */
 void leader::start_throw_trail() {
     particle throw_p(
@@ -778,8 +834,8 @@ void leader::start_throw_trail() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the leader start whistling.
+/**
+ * @brief Makes the leader start whistling.
  */
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
@@ -802,16 +858,16 @@ void leader::start_whistling() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stops the auto-throw mode.
+/**
+ * @brief Stops the auto-throw mode.
  */
 void leader::stop_auto_throwing() {
     auto_throwing = false;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the leader stop whistling.
+/**
+ * @brief Makes the leader stop whistling.
  */
 void leader::stop_whistling() {
     if(!game.states.gameplay->whistle.whistling) return;
@@ -821,10 +877,10 @@ void leader::stop_whistling() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Swaps out the currently held Pikmin for a different one.
- * new_pik:
- *   The new Pikmin to hold.
+/**
+ * @brief Swaps out the currently held Pikmin for a different one.
+ *
+ * @param new_pik The new Pikmin to hold.
  */
 void leader::swap_held_pikmin(mob* new_pik) {
     if(holding.empty()) return;
@@ -850,10 +906,10 @@ void leader::swap_held_pikmin(mob* new_pik) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void leader::tick_class_specifics(const float delta_t) {
     //Throw-related things.
@@ -922,8 +978,8 @@ void leader::tick_class_specifics(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates variables related to how the leader's throw would go.
+/**
+ * @brief Updates variables related to how the leader's throw would go.
  */
 void leader::update_throw_variables() {
     throwee = NULL;
@@ -993,17 +1049,15 @@ void leader::update_throw_variables() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Switch active leader.
- * forward:
- *   If true, switch to the next one. If false, to the previous.
- * force_success:
- *   If true, switch to this leader even if they can't currently handle the
- *   leader switch script event.
- * keep_idx:
- *   If true, swap to a leader that has the same index in the list of available
- *   leaders as the current one does. Usually this is used because the
- *   current leader is no longer available.
+/**
+ * @brief Switch active leader.
+ *
+ * @param forward If true, switch to the next one. If false, to the previous.
+ * @param force_success If true, switch to this leader even if they can't
+ * currently handle the leader switch script event.
+ * @param keep_idx If true, swap to a leader that has the same index in the
+ * list of available leaders as the current one does.
+ * Usually this is used because the current leader is no longer available.
  */
 void change_to_next_leader(
     const bool forward, const bool force_success, const bool keep_idx
@@ -1104,9 +1158,11 @@ void change_to_next_leader(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Makes the current leader grab the closest group member of the standby type.
- * Returns true on success, false on failure.
+/**
+ * @brief Makes the current leader grab the closest group member of the
+ * standby type.
+ *
+ * @return Whether it succeeded.
  */
 bool grab_closest_group_member() {
     if(!game.states.gameplay->cur_leader_ptr) return false;

@@ -18,10 +18,10 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the ship's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the ship's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -50,14 +50,12 @@ void ship_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a ship finishes receiving a mob carried by Pikmin.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the mob.
- * info2:
- *   Unused.
+/**
+ * @brief When a ship finishes receiving a mob carried by Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob.
+ * @param info2 Unused.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -153,14 +151,12 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a ship needs to enter its default "idling" animation.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a ship needs to enter its default "idling" animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(
@@ -169,14 +165,12 @@ void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a ship starts receiving a mob carried by Pikmin.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When a ship starts receiving a mob carried by Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void ship_fsm::start_delivery(mob* m, void* info1, void* info2) {
     ship* shi_ptr = (ship*) m;

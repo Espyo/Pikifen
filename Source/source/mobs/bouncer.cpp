@@ -11,14 +11,12 @@
 #include "bouncer.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new bouncer mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Bouncer type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new bouncer object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Bouncer type this mob belongs to.
+ * @param angle Starting angle.
  */
 bouncer::bouncer(
     const point &pos, bouncer_type* type, const float angle

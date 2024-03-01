@@ -16,8 +16,8 @@
 #include "../mobs/scale.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the scale category.
+/**
+ * @brief Constructs a new scale category object.
  */
 scale_category::scale_category() :
     mob_category(
@@ -28,8 +28,8 @@ scale_category::scale_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of scale.
+/**
+ * @brief Clears the list of registered types of scale.
  */
 void scale_category::clear_types() {
     for(auto &t : game.mob_types.scale) {
@@ -39,14 +39,13 @@ void scale_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a scale and adds it to the list of scales.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a scale and adds it to the list of scales.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* scale_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* scale_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of scale.
+/**
+ * @brief Creates a new, empty type of scale.
+ *
+ * @return The type.
  */
 mob_type* scale_category::create_type() {
     return new scale_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a scale from the list of scales.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a scale from the list of scales.
+ *
+ * @param m The mob to erase.
  */
 void scale_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.scales.erase(
         find(
-        game.states.gameplay->mobs.scales.begin(), 
-        game.states.gameplay->mobs.scales.end(),
- (scale*) m
- )
+            game.states.gameplay->mobs.scales.begin(),
+            game.states.gameplay->mobs.scales.end(),
+            (scale*) m
+        )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of scale given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of scale given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* scale_category::get_type(const string &name) const {
     auto it = game.mob_types.scale.find(name);
@@ -93,10 +95,10 @@ mob_type* scale_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of scale by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of scale by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void scale_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.scale) {
@@ -105,10 +107,10 @@ void scale_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of scale.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of scale.
+ *
+ * @param type Mob type to register.
  */
 void scale_category::register_type(mob_type* type) {
     game.mob_types.scale[type->name] = (scale_type*) type;

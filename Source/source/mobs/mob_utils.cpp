@@ -24,10 +24,10 @@ using std::unordered_set;
 using std::size_t;
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about a carrying spot.
- * pos:
- *   The spot's relative coordinates.
+/**
+ * @brief Constructs a new carrier spot struct object.
+ *
+ * @param pos The spot's relative coordinates.
  */
 carrier_spot_struct::carrier_spot_struct(const point &pos) :
     state(CARRY_SPOT_FREE),
@@ -37,12 +37,11 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about carrying.
- * m:
- *   The mob this info belongs to.
- * destination:
- *   Where to deliver the mob.
+/**
+ * @brief Constructs a new carry info struct object.
+ *
+ * @param m The mob this info belongs to.
+ * @param destination Where to deliver the mob.
  */
 carry_info_struct::carry_info_struct(
     mob* m, const CARRY_DESTINATIONS destination
@@ -77,9 +76,11 @@ carry_info_struct::carry_info_struct(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns true if the carriers can all fly, and thus, the object can
+/**
+ * @brief Returns true if the carriers can all fly, and thus, the object can
  * be carried through the air.
+ *
+ * @return Whether it can fly.
  */
 bool carry_info_struct::can_fly() const {
     for(size_t c = 0; c < spot_info.size(); ++c) {
@@ -93,8 +94,11 @@ bool carry_info_struct::can_fly() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a list of hazards to which all carrier Pikmin are invulnerable.
+/**
+ * @brief Returns a list of hazards to which all carrier Pikmin
+ * are invulnerable.
+ *
+ * @return The invulnerabilities.
  */
 vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
@@ -109,8 +113,11 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the speed at which the object should move, given the carrier Pikmin.
+/**
+ * @brief Returns the speed at which the object should move,
+ * given the carrier Pikmin.
+ *
+ * @return The speed.
  */
 float carry_info_struct::get_speed() const {
     if(cur_n_carriers == 0) {
@@ -150,8 +157,10 @@ float carry_info_struct::get_speed() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns true if no spot is reserved or used. False otherwise.
+/**
+ * @brief Returns true if no spot is reserved or used. False otherwise.
+ *
+ * @return Whether it is empty.
  */
 bool carry_info_struct::is_empty() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
@@ -161,8 +170,10 @@ bool carry_info_struct::is_empty() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns true if all spots are reserved. False otherwise.
+/**
+ * @brief Returns true if all spots are reserved. False otherwise.
+ *
+ * @return Whether it is full.
  */
 bool carry_info_struct::is_full() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
@@ -172,13 +183,13 @@ bool carry_info_struct::is_full() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Rotates all points in the struct, making it so spot 0 faces the specified
- * angle away from the mob.
+/**
+ * @brief Rotates all points in the struct, making it so spot 0 faces
+ * the specified angle away from the mob.
  * This is useful when the first Pikmin is coming, to make the first carry
  * spot be closer to that Pikmin.
- * angle:
- *   Angle to rotate to.
+ *
+ * @param angle Angle to rotate to.
  */
 void carry_info_struct::rotate_points(const float angle) {
     for(size_t s = 0; s < spot_info.size(); ++s) {
@@ -194,8 +205,8 @@ void carry_info_struct::rotate_points(const float angle) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a structure with info about what the mob's chasing.
+/**
+ * @brief Constructs a new chase info struct object.
  */
 chase_info_struct::chase_info_struct() :
     state(CHASE_STATE_STOPPED),
@@ -211,10 +222,10 @@ chase_info_struct::chase_info_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a structure with info about the mob's circling.
- * m:
- *   Mob this circling info struct belongs to.
+/**
+ * @brief Constructs a new circling info struct object.
+ *
+ * @param m Mob this circling info struct belongs to.
  */
 circling_info_struct::circling_info_struct(mob* m) :
     m(m),
@@ -228,8 +239,8 @@ circling_info_struct::circling_info_struct(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new delivery information struct.
+/**
+ * @brief Constructs a new delivery info struct object.
  */
 delivery_info_struct::delivery_info_struct() :
     anim_type(DELIVERY_ANIM_SUCK),
@@ -239,10 +250,10 @@ delivery_info_struct::delivery_info_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new group information struct.
- * leader_ptr:
- *   Mob this group info struct belongs to.
+/**
+ * @brief Constructs a new group info struct object.
+ *
+ * @param leader_ptr Mob this group info struct belongs to.
  */
 group_info_struct::group_info_struct(mob* leader_ptr) :
     radius(0.0f),
@@ -254,20 +265,20 @@ group_info_struct::group_info_struct(mob* leader_ptr) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the standby group member type to the next available one,
+/**
+ * @brief Sets the standby group member type to the next available one,
  * or NULL if none.
- * Returns true on success, false on failure.
- * move_backwards:
- *   If true, go through the list backwards.
+ *
+ * @param move_backwards If true, go through the list backwards.
+ * @return Whether it succeeded.
  */
 bool group_info_struct::change_standby_type(const bool move_backwards) {
     return get_next_standby_type(move_backwards, &cur_standby_type);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to a different standby subgroup type in case there are no more
+/**
+ * @brief Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
 void group_info_struct::change_standby_type_if_needed() {
@@ -282,10 +293,11 @@ void group_info_struct::change_standby_type_if_needed() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many members of the given type exist in the group.
- * type:
- *   Type to check.
+/**
+ * @brief Returns how many members of the given type exist in the group.
+ *
+ * @param type Type to check.
+ * @return The amount.
  */
 size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
     size_t amount = 0;
@@ -298,8 +310,10 @@ size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the average position of the members.
+/**
+ * @brief Returns the average position of the members.
+ *
+ * @return The average position.
  */
 point group_info_struct::get_average_member_pos() const {
     point avg;
@@ -310,11 +324,12 @@ point group_info_struct::get_average_member_pos() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a list of hazards to which all of a leader's group mobs
+/**
+ * @brief Returns a list of hazards to which all of a leader's group mobs
  * are invulnerable.
- * include_leader:
- *   If not NULL, include the group leader mob.
+ *
+ * @param include_leader If not NULL, include the group leader mob.
+ * @return The list of invulnerabilities.
  */
 vector<hazard*> group_info_struct::get_group_invulnerabilities(
     mob* include_leader
@@ -333,14 +348,12 @@ vector<hazard*> group_info_struct::get_group_invulnerabilities(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the next available standby group member type,
- * or NULL if none.
- * Returns true on success, false on failure.
- * move_backwards:
- *   If true, go through the list backwards.
- * new_type:
- *   The new type is returned here.
+/**
+ * @brief Returns the next available standby group member type, or NULL if none.
+ *
+ * @param move_backwards If true, go through the list backwards.
+ * @param new_type The new type is returned here.
+ * @return Whether it succeeded.
  */
 bool group_info_struct::get_next_standby_type(
     const bool move_backwards, subgroup_type** new_type
@@ -410,11 +423,12 @@ bool group_info_struct::get_next_standby_type(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a point's offset from the anchor,
+/**
+ * @brief Returns a point's offset from the anchor,
  * given the current group transformation.
- * spot_index:
- *   Index of the spot to check.
+ *
+ * @param spot_index Index of the spot to check.
+ * @return The offset.
  */
 point group_info_struct::get_spot_offset(const size_t spot_index) const {
     point res = spots[spot_index].pos;
@@ -423,13 +437,13 @@ point group_info_struct::get_spot_offset(const size_t spot_index) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * (Re-)Initializes the group spots. This resizes it to the current number
- * of group members. Any old group members are moved to the appropriate
+/**
+ * @brief (Re-)Initializes the group spots. This resizes it to the current
+ * number of group members. Any old group members are moved to the appropriate
  * new spot.
- * affected_mob_ptr:
- *   If this initialization is because a new mob entered
- *   or left the group, this should point to said mob.
+ *
+ * @param affected_mob_ptr If this initialization is because a new mob entered
+ * or left the group, this should point to said mob.
  */
 void group_info_struct::init_spots(mob* affected_mob_ptr) {
     if(members.empty()) {
@@ -446,13 +460,31 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     }
     
     //Now, rebuild the spots. Let's draw wheels from the center, for now.
+
+    /**
+     * @brief Initial spot.
+     */
     struct alpha_spot {
+
+        //--- Members ---
+
         //Position of the spot.
         point pos;
+
         //How far away it is from the rightmost spot.
         dist distance_to_rightmost;
+
+
+        //--- Function definitions ---
+
+        /**
+         * @brief Constructs a new alpha spot object.
+         * 
+         * @param p The position.
+         */
         explicit alpha_spot(const point &p) :
             pos(p) { }
+        
     };
     
     vector<alpha_spot> alpha_spots;
@@ -537,7 +569,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     
     std::sort(
         alpha_spots.begin(), alpha_spots.end(),
-    [] (const alpha_spot &a1, const alpha_spot &a2) -> bool {
+    [] (const alpha_spot & a1, const alpha_spot & a2) -> bool {
         return a1.distance_to_rightmost < a2.distance_to_rightmost;
     }
     );
@@ -585,8 +617,8 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Assigns each mob a new spot, given how close each one of them is to
+/**
+ * @brief Assigns each mob a new spot, given how close each one of them is to
  * each spot.
  */
 void group_info_struct::reassign_spots() {
@@ -616,11 +648,12 @@ void group_info_struct::reassign_spots() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sorts the group with the specified type at the front, and the other types
- * (in order) behind.
- * leading_type:
- *   The subgroup type that will be at the front of the group.
+/**
+ * @brief Sorts the group with the specified type at the front, and the
+ * other types (in order) behind.
+ *
+ * @param leading_type The subgroup type that will be at the front of
+ * the group.
  */
 void group_info_struct::sort(subgroup_type* leading_type) {
 
@@ -667,8 +700,8 @@ void group_info_struct::sort(subgroup_type* leading_type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a mob-holding information struct.
+/**
+ * @brief Constructs a new hold info struct object.
  */
 hold_info_struct::hold_info_struct() :
     m(nullptr),
@@ -682,8 +715,8 @@ hold_info_struct::hold_info_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the information.
+/**
+ * @brief Clears the information.
  */
 void hold_info_struct::clear() {
     m = NULL;
@@ -694,10 +727,11 @@ void hold_info_struct::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the final coordinates this mob should be at.
- * final_z:
- *   The Z coordinate is returned here.
+/**
+ * @brief Returns the final coordinates this mob should be at.
+ *
+ * @param final_z The Z coordinate is returned here.
+ * @return The (X and Y) coordinates.
  */
 point hold_info_struct::get_final_pos(float* final_z) const {
     if(!m) return point();
@@ -736,11 +770,10 @@ point hold_info_struct::get_final_pos(float* final_z) const {
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Initializes a parent mob information struct.
- * m:
- *   The parent mob.
+/**
+ * @brief Constructs a new parent info struct object.
+ *
+ * @param m The parent mob.
  */
 parent_info_struct::parent_info_struct(mob* m) :
     m(m),
@@ -760,12 +793,11 @@ parent_info_struct::parent_info_struct(mob* m) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a structure with info about the mob's path-following.
- * m:
- *   Mob this path info struct belongs to.
- * settings:
- *   Settings about how the path should be followed.
+/**
+ * @brief Constructs a new path info struct object.
+ *
+ * @param m Mob this path info struct belongs to.
+ * @param settings Settings about how the path should be followed.
  */
 path_info_struct::path_info_struct(
     mob* m,
@@ -785,10 +817,11 @@ path_info_struct::path_info_struct(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates whether or not the way forward is currently blocked.
- * reason:
- *   If not NULL, the reason is returned here.
+/**
+ * @brief Calculates whether or not the way forward is currently blocked.
+ *
+ * @param reason If not NULL, the reason is returned here.
+ * @return Whether there is a blockage.
  */
 bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
     if(
@@ -812,13 +845,11 @@ bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a class with info about a mob that
- * can nest Pikmin inside.
- * m_ptr:
- *   Nest mob responsible.
- * type:
- *   Type of nest.
+/**
+ * @brief Constructs a new Pikmin nest struct object.
+ *
+ * @param m_ptr Nest mob responsible.
+ * @param type Type of nest.
  */
 pikmin_nest_struct::pikmin_nest_struct(
     mob* m_ptr, pikmin_nest_type_struct* type
@@ -835,14 +866,13 @@ pikmin_nest_struct::pikmin_nest_struct(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calls out a Pikmin from inside the nest, if possible.
+/**
+ * @brief Calls out a Pikmin from inside the nest, if possible.
  * Gives priority to the higher maturities.
- * Returns true if a Pikmin was spawned, false otherwise.
- * m_ptr:
- *   Pointer to the nest mob.
- * type_idx:
- *   Index of the Pikmin type, from the types this nest manages.
+ *
+ * @param m_ptr Pointer to the nest mob.
+ * @param type_idx Index of the Pikmin type, from the types this nest manages.
+ * @return Whether a Pikmin spawned.
  */
 bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
     if(
@@ -907,10 +937,11 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many Pikmin of the given type exist inside.
- * type:
- *   Type to check.
+/**
+ * @brief Returns how many Pikmin of the given type exist inside.
+ *
+ * @param type Type to check.
+ * @return The amount.
  */
 size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
@@ -926,11 +957,11 @@ size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with
  * any that are related to nests.
- * svr:
- *   Script var reader to use.
+ *
+ * @param svr Script var reader to use.
  */
 void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
     string pikmin_inside_var;
@@ -951,14 +982,13 @@ void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Requests that Pikmin of the given type get called out.
- * type_idx:
- *   Index of the type of Pikmin to call out, from the nest's types.
- * amount:
- *   How many to call out.
- * l_ptr:
- *   Leader responsible.
+/**
+ * @brief Requests that Pikmin of the given type get called out.
+ *
+ * @param type_idx Index of the type of Pikmin to call out, from the
+ * nest's types.
+ * @param amount How many to call out.
+ * @param l_ptr Leader responsible.
  */
 void pikmin_nest_struct::request_pikmin(
     const size_t type_idx, const size_t amount, leader* l_ptr
@@ -969,11 +999,11 @@ void pikmin_nest_struct::request_pikmin(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stores the given Pikmin inside the nest. This basically deletes the
+/**
+ * @brief Stores the given Pikmin inside the nest. This basically deletes the
  * Pikmin and updates the amount inside the nest.
- * p_ptr:
- *   Pikmin to store.
+ *
+ * @param p_ptr Pikmin to store.
  */
 void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
@@ -987,10 +1017,10 @@ void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void pikmin_nest_struct::tick(const float delta_t) {
     if(calling_leader && calling_leader->to_delete) {
@@ -1030,9 +1060,8 @@ void pikmin_nest_struct::tick(const float delta_t) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a class with info about a mob type that
- * can nest Pikmin inside.
+/**
+ * @brief Constructs a new pikmin nest type struct object.
  */
 pikmin_nest_type_struct::pikmin_nest_type_struct() :
     pikmin_enter_speed(0.7f),
@@ -1041,10 +1070,10 @@ pikmin_nest_type_struct::pikmin_nest_type_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads nest-related properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads nest-related properties from a data file.
+ *
+ * @param file File to read from.
  */
 void pikmin_nest_type_struct::load_properties(
     data_node* file
@@ -1092,15 +1121,12 @@ void pikmin_nest_type_struct::load_properties(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of a structure with info about the track the mob
- * is riding.
- * m:
- *   Mob this track info struct belongs to.
- * checkpoints:
- *   List of checkpoints (body part indexes) to cross.
- * ride_speed:
- *  Speed to ride at, in ratio per second.
+/**
+ * @brief Constructs a new track info struct object.
+ *
+ * @param m Mob this track info struct belongs to.
+ * @param checkpoints List of checkpoints (body part indexes) to cross.
+ * @param ride_speed Speed to ride at, in ratio per second.
  */
 track_info_struct::track_info_struct(
     mob* m, const vector<size_t> &checkpoints, const float ride_speed
@@ -1114,14 +1140,13 @@ track_info_struct::track_info_struct(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the maximum span that a mob can ever reach from its center.
- * radius:
- *   The mob's radius.
- * anim_max_span:
- *   Maximum span of its animation-related data.
- * rectangular_dim:
- *   Rectangular dimensions of the mob, if any.
+/**
+ * @brief Calculates the maximum span that a mob can ever reach from its center.
+ *
+ * @param radius The mob's radius.
+ * @param anim_max_span Maximum span of its animation-related data.
+ * @param rectangular_dim Rectangular dimensions of the mob, if any.
+ * @return The span.
  */
 float calculate_mob_max_span(
     const float radius, const float anim_max_span, const point &rectangular_dim
@@ -1139,25 +1164,20 @@ float calculate_mob_max_span(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a mob, adding it to the corresponding vectors.
- * Returns the new mob.
- * category:
- *   The category the new mob belongs to.
- * pos:
- *   Initial position.
- * type:
- *   Type of the new mob.
- * angle:
- *   Initial facing angle.
- * vars:
- *   Script variables.
- * code_after_creation:
- *   Code to run right after the mob is created, if any.
- *   This is run before any scripting takes place.
- * first_state_override:
- *   If this is INVALID, use the first state number defined in the mob's
- *   FSM struct, or the standard first state number. Otherwise, use this.
+/**
+ * @brief Creates a mob, adding it to the corresponding vectors.
+ *
+ * @param category The category the new mob belongs to.
+ * @param pos Initial position.
+ * @param type Type of the new mob.
+ * @param angle Initial facing angle.
+ * @param vars Script variables.
+ * @param code_after_creation Code to run right after the mob is created,
+ * if any. This is run before any scripting takes place.
+ * @param first_state_override If this is INVALID, use the first state
+ * number defined in the mob's FSM struct, or the standard first state number.
+ * Otherwise, use this.
+ * @return The new mob.
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
@@ -1279,16 +1299,16 @@ mob* create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes a mob from the relevant vectors.
+/**
+ * @brief Deletes a mob from the relevant vectors.
+ *
  * It's always removed from the vector of mobs, but it's
  * also removed from the vector of Pikmin if it's a Pikmin,
  * leaders if it's a leader, etc.
- * m_ptr:
- *   The mob to delete.
- * complete_destruction:
- *   If true, don't bother removing it from groups and such,
- *   since everything is going to be destroyed.
+ *
+ * @param m_ptr The mob to delete.
+ * @param complete_destruction If true, don't bother removing it from groups
+ * and such, since everything is going to be destroyed.
  */
 void delete_mob(mob* m_ptr, const bool complete_destruction) {
     if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = NULL;
@@ -1370,11 +1390,12 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string that describes the given mob. Used in error messages
+/**
+ * @brief Returns a string that describes the given mob. Used in error messages
  * where you have to indicate a specific mob in the area.
- * m:
- *   The mob.
+ *
+ * @param m The mob.
+ * @return The string.
  */
 string get_error_message_mob_info(mob* m) {
     return
@@ -1383,10 +1404,12 @@ string get_error_message_mob_info(mob* m) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a list of hazards to which all mob types given are invulnerable.
- * types:
- *   Mob types to check.
+/**
+ * @brief Returns a list of hazards to which all mob types given
+ * are invulnerable.
+ *
+ * @param types Mob types to check.
+ * @return The invulnerabilities.
  */
 vector<hazard*> get_mob_type_list_invulnerabilities(
     const unordered_set<mob_type*> &types
@@ -1413,13 +1436,12 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a child info block, returns the spawn info block that matches.
- * Returns NULL if not found.
- * type:
- *   Mob type that owns the children and spawn blocks.
- * child_info:
- *   Child info to check.
+/**
+ * @brief Given a child info block, returns the spawn info block that matches.
+ *
+ * @param type Mob type that owns the children and spawn blocks.
+ * @param child_info Child info to check.
+ * @return The spawn info, or NULL if not found.
  */
 mob_type::spawn_struct* get_spawn_info_from_child_info(
     mob_type* type, const mob_type::child_struct* child_info
@@ -1433,11 +1455,11 @@ mob_type::spawn_struct* get_spawn_info_from_child_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to the numeric representation of a mob target type.
- * Returns INVALID if the string is not valid.
- * type_str:
- *   Text representation of the target type.
+/**
+ * @brief Converts a string to the numeric representation of a mob target type.
+ *
+ * @param type_str Text representation of the target type.
+ * @return The type, or INVALID if invalid.
  */
 MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str) {
     if(type_str == "none") {
@@ -1463,11 +1485,11 @@ MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to the numeric representation of a team.
- * Returns INVALID if the string is not valid.
- * team_str:
- *   Text representation of the team.
+/**
+ * @brief Converts a string to the numeric representation of a team.
+ *
+ * @param team_str Text representation of the team.
+ * @return The team, or INVALID if invalid.
  */
 MOB_TEAMS string_to_team_nr(const string &team_str) {
     for(size_t t = 0; t < N_MOB_TEAMS; ++t) {

@@ -18,10 +18,10 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates the finite state machine for the bouncer's logic.
- * typ:
- *   Mob type to create the finite state machine for.
+/**
+ * @brief Creates the finite state machine for the bouncer's logic.
+ *
+ * @param typ Mob type to create the finite state machine for.
  */
 void bouncer_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -58,14 +58,12 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When something is on top of the bouncer.
- * m:
- *   The mob.
- * info1:
- *   Points to the mob that is on top of it.
- * info2:
- *   Unused.
+/**
+ * @brief When something is on top of the bouncer.
+ *
+ * @param m The mob.
+ * @param info1 Points to the mob that is on top of it.
+ * @param info2 Unused.
  */
 void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     bouncer* bou_ptr = (bouncer*) m;
@@ -147,28 +145,24 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When it must change to the bouncing animation.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When it must change to the bouncing animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
     m->set_animation(BOUNCER_ANIM_BOUNCING);
 }
 
 
-/* ----------------------------------------------------------------------------
- * When it must change to the idling animation.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
+/**
+ * @brief When it must change to the idling animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
  */
 void bouncer_fsm::set_idling_animation(mob* m, void* info1, void* info2) {
     m->set_animation(

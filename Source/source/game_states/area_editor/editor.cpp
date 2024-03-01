@@ -28,71 +28,102 @@ using std::vector;
 
 
 namespace AREA_EDITOR {
+
 //A comfortable distance, useful for many scenarios.
 const float COMFY_DIST = 32.0f;
+
 //Radius to use when drawing a cross-section point.
 const float CROSS_SECTION_POINT_RADIUS = 8.0f;
+
 //The cursor snap for heavy modes updates these many times a second.
 const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
+
 //Scale the debug text by this much.
 const float DEBUG_TEXT_SCALE = 1.3f;
+
 //Default reference image opacity.
 const unsigned char DEF_REFERENCE_ALPHA = 128;
+
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
+
 //Maximum number of points that a circle sector can be created with.
 const unsigned char MAX_CIRCLE_SECTOR_POINTS = 32;
+
 //Maximum grid interval.
 const float MAX_GRID_INTERVAL = 4096;
+
 //Maximum number of texture suggestions.
 const size_t MAX_TEXTURE_SUGGESTIONS = 20;
+
 //Text color for various measurement labels in the canvas.
 const ALLEGRO_COLOR MEASUREMENT_COLOR = al_map_rgb(64, 255, 64);
+
 //Minimum number of points that a circle sector can be created with.
 const unsigned char MIN_CIRCLE_SECTOR_POINTS = 3;
+
 //Minimum grid interval.
 const float MIN_GRID_INTERVAL = 2.0;
+
 //Mission exit region minimum size.
 const float MISSION_EXIT_MIN_SIZE = 32.0f;
+
 //Thickness to use when drawing a mob link line.
 const float MOB_LINK_THICKNESS = 2.0f;
+
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+
 //How long to tint the new sector's line(s) red for.
 const float NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
+
 //Thickness to use when drawing a path link line.
 const float PATH_LINK_THICKNESS = 3.0f;
+
 //Radius to use when drawing a path preview checkpoint.
 const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+
 //Only fetch the path these many seconds after the player stops the checkpoints.
 const float PATH_PREVIEW_TIMER_DUR = 0.1f;
+
 //Scale the letters on the "points" of various features by this much.
 const float POINT_LETTER_TEXT_SCALE = 1.5f;
+
 //Quick previewing lasts this long in total, including the fade out.
 const float QUICK_PREVIEW_DURATION = 4.0f;
+
 //Minimum width or height that the reference image can have.
 const float REFERENCE_MIN_SIZE = 5.0f;
+
 //Color of a selected element, or the selection box.
 const unsigned char SELECTION_COLOR[3] = {255, 255, 0};
+
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float SELECTION_EFFECT_SPEED = TAU * 2;
+
 //Padding for the transformation widget when manipulating the selection.
 const float SELECTION_TW_PADDING = 8.0f;
+
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
+
 //Wait this long before letting a new repeat undo operation be saved.
 const float UNDO_SAVE_LOCK_DURATION = 1.0f;
+
 //Minimum distance between two vertexes for them to merge.
 const float VERTEX_MERGE_RADIUS = 10.0f;
+
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 8.0f;
+
 //Minimum zoom level possible in the editor.
 const float ZOOM_MIN_LEVEL = 0.01f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes area editor class stuff.
+/**
+ * @brief Constructs a new area editor object.
  */
 area_editor::area_editor() :
     quick_play_cam_z(1.0f),
@@ -173,15 +204,14 @@ area_editor::area_editor() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates what the day speed should be taking into account the specified
- * start day time, end day time, and mission duration.
- * day_start_min:
- *   Day start time, in minutes.
- * day_end_min:
- *   Day end time, in minutes.
- * mission_min:
- *   Mission duration, in minutes.
+/**
+ * @brief Calculates what the day speed should be, taking into account
+ * the specified start day time, end day time, and mission duration.
+ *
+ * @param day_start_min Day start time, in minutes.
+ * @param day_end_min Day end time, in minutes.
+ * @param mission_min Mission duration, in minutes.
+ * @return The day speed.
  */
 float area_editor::calculate_day_speed(
     const float day_start_min, const float day_end_min,
@@ -196,8 +226,8 @@ float area_editor::calculate_day_speed(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Cancels the circular sector creation operation and returns to normal.
+/**
+ * @brief Cancels the circular sector creation operation and returns to normal.
  */
 void area_editor::cancel_circle_sector() {
     clear_circle_sector();
@@ -206,8 +236,8 @@ void area_editor::cancel_circle_sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Cancels the edge drawing operation and returns to normal.
+/**
+ * @brief Cancels the edge drawing operation and returns to normal.
  */
 void area_editor::cancel_layout_drawing() {
     clear_layout_drawing();
@@ -216,8 +246,8 @@ void area_editor::cancel_layout_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Cancels the vertex moving operation.
+/**
+ * @brief Cancels the vertex moving operation.
  */
 void area_editor::cancel_layout_moving() {
     for(auto const &v : selected_vertexes) {
@@ -228,10 +258,10 @@ void area_editor::cancel_layout_moving() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes to a new state, cleaning up whatever is needed.
- * new_state:
- *   The new state.
+/**
+ * @brief Changes to a new state, cleaning up whatever is needed.
+ *
+ * @param new_state The new state.
  */
 void area_editor::change_state(const EDITOR_STATES new_state) {
     clear_selection();
@@ -241,8 +271,8 @@ void area_editor::change_state(const EDITOR_STATES new_state) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the data about the circular sector creation.
+/**
+ * @brief Clears the data about the circular sector creation.
  */
 void area_editor::clear_circle_sector() {
     new_circle_sector_step = 0;
@@ -250,8 +280,8 @@ void area_editor::clear_circle_sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the currently loaded area data.
+/**
+ * @brief Clears the currently loaded area data.
  */
 void area_editor::clear_current_area() {
     reference_file_name.clear();
@@ -295,8 +325,8 @@ void area_editor::clear_current_area() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the data about the layout drawing.
+/**
+ * @brief Clears the data about the layout drawing.
  */
 void area_editor::clear_layout_drawing() {
     drawing_nodes.clear();
@@ -305,8 +335,8 @@ void area_editor::clear_layout_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the data about the layout moving.
+/**
+ * @brief Clears the data about the layout moving.
  */
 void area_editor::clear_layout_moving() {
     if(pre_move_area_data) {
@@ -319,8 +349,8 @@ void area_editor::clear_layout_moving() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the data about the current problems, if any.
+/**
+ * @brief Clears the data about the current problems, if any.
  */
 void area_editor::clear_problems() {
     problem_type = EPT_NONE_YET;
@@ -336,8 +366,8 @@ void area_editor::clear_problems() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the data about the current selection.
+/**
+ * @brief Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
     if(sub_state == EDITOR_SUB_STATE_OCTEE) {
@@ -356,8 +386,8 @@ void area_editor::clear_selection() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of texture suggestions. This frees up the bitmaps.
+/**
+ * @brief Clears the list of texture suggestions. This frees up the bitmaps.
  */
 void area_editor::clear_texture_suggestions() {
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
@@ -367,8 +397,8 @@ void area_editor::clear_texture_suggestions() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the undo history, deleting the memory allocated for them.
+/**
+ * @brief Clears the undo history, deleting the memory allocated for them.
  */
 void area_editor::clear_undo_history() {
     for(size_t h = 0; h < undo_history.size(); ++h) {
@@ -382,8 +412,8 @@ void area_editor::clear_undo_history() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the area picker is closed.
+/**
+ * @brief Code to run when the area picker is closed.
  */
 void area_editor::close_load_dialog() {
     if(!loaded_content_yet && game.cur_area_data.folder_name.empty()) {
@@ -394,20 +424,19 @@ void area_editor::close_load_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the options dialog is closed.
+/**
+ * @brief Code to run when the options dialog is closed.
  */
 void area_editor::close_options_dialog() {
     save_options();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new area to work on.
- * requested_area_folder_name:
- *   Name of the folder of the requested area.
- * requested_area_type:
- *   Type of the requested area.
+/**
+ * @brief Creates a new area to work on.
+ *
+ * @param requested_area_folder_name Name of the folder of the requested area.
+ * @param requested_area_type Type of the requested area.
  */
 void area_editor::create_area(
     const string &requested_area_folder_name,
@@ -500,8 +529,9 @@ void area_editor::create_area(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates vertexes based on the edge drawing the user has just made.
+/**
+ * @brief Creates vertexes based on the edge drawing the user has just made.
+ *
  * Drawing nodes that are already on vertexes don't count, but the other ones
  * either create edge splits, or create simple vertexes inside a sector.
  */
@@ -534,8 +564,8 @@ void area_editor::create_drawing_vertexes() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new mob where the cursor is.
+/**
+ * @brief Creates a new mob where the cursor is.
  */
 void area_editor::create_mob_under_cursor() {
     register_change("object creation");
@@ -564,13 +594,12 @@ void area_editor::create_mob_under_cursor() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new area or loads an existing one, depending on whether the
+/**
+ * @brief Creates a new area or loads an existing one, depending on whether the
  * specified area exists or not.
- * requested_area_folder_name:
- *   Name of the folder of the requested area.
- * requested_area_type:
- *   Type of the requested area.
+ *
+ * @param requested_area_folder_name Name of the folder of the requested area.
+ * @param requested_area_type Type of the requested area.
  */
 void area_editor::create_or_load_area(
     const string &requested_area_folder_name,
@@ -593,8 +622,8 @@ void area_editor::create_or_load_area(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes the current area.
+/**
+ * @brief Deletes the current area.
  */
 void area_editor::delete_current_area() {
     bool go_to_area_select = false;
@@ -677,8 +706,9 @@ void area_editor::delete_current_area() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the area editor.
+/**
+ * @brief Handles the logic part of the main loop of the area editor.
+ *
  */
 void area_editor::do_logic() {
     editor::do_logic_pre();
@@ -709,8 +739,8 @@ void area_editor::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Splits the sector using the user's final drawing.
+/**
+ * @brief Splits the sector using the user's final drawing.
  */
 void area_editor::do_sector_split() {
     //Create the drawing's new edges and connect them.
@@ -922,12 +952,11 @@ void area_editor::do_sector_split() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Dear ImGui callback for when the canvas needs to be drawn on-screen.
- * parent_list:
- *   Unused.
- * cmd:
- *   Unused.
+/**
+ * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ *
+ * @param parent_list Unused.
+ * @param cmd Unused.
  */
 void area_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -936,10 +965,11 @@ void area_editor::draw_canvas_imgui_callback(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Emits a message onto the status bar, based on the given triangulation error.
- * error:
- *   The triangulation error.
+/**
+ * @brief Emits a message onto the status bar, based on the given
+ * triangulation error.
+ *
+ * @param error The triangulation error.
  */
 void area_editor::emit_triangulation_error_status_bar_message(
     const TRIANGULATION_ERRORS error
@@ -976,8 +1006,8 @@ void area_editor::emit_triangulation_error_status_bar_message(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes drawing a circular sector.
+/**
+ * @brief Finishes drawing a circular sector.
  */
 void area_editor::finish_circle_sector() {
     clear_layout_drawing();
@@ -995,8 +1025,8 @@ void area_editor::finish_circle_sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes a vertex moving procedure.
+/**
+ * @brief Finishes a vertex moving procedure.
  */
 void area_editor::finish_layout_moving() {
     unordered_set<sector*> affected_sectors;
@@ -1227,8 +1257,8 @@ void area_editor::finish_layout_moving() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes creating a new sector.
+/**
+ * @brief Finishes creating a new sector.
  */
 void area_editor::finish_new_sector_drawing() {
     if(drawing_nodes.size() < 3) {
@@ -1347,35 +1377,35 @@ void area_editor::finish_new_sector_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Forgets a pre-prepared area state that was almost ready to be added to
+/**
+ * @brief Forgets a pre-prepared area state that was almost ready to be added to
  * the undo history.
- * prepared_state:
- *   The prepared state to forget.
+ *
+ * @param prepared_state The prepared state to forget.
  */
 void area_editor::forget_prepared_state(area_data* prepared_state) {
     delete prepared_state;
 }
 
 
-/* ----------------------------------------------------------------------------
- * In the options data file, options pertaining to an editor's history
+/**
+ * @brief In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
+ *
+ * @return The prefix.
  */
 string area_editor::get_history_option_prefix() const {
     return "area_editor_history_";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns which layout element the mouse is over, if any. It will only return
- * one of them.
- * hovered_vertex:
- *   If a vertex is hovered, it is returned here.
- * hovered_edge:
- *   If an edge is hovered, it is returned here.
- * hovered_sector:
- *   If a sector is hovered, it is returned here.
+/**
+ * @brief Returns which layout element the mouse is over, if any.
+ * It will only return one of them.
+ *
+ * @param hovered_vertex If a vertex is hovered, it is returned here.
+ * @param hovered_edge If an edge is hovered, it is returned here.
+ * @param hovered_sector If a sector is hovered, it is returned here.
  */
 void area_editor::get_hovered_layout_element(
     vertex** hovered_vertex, edge** hovered_edge, sector** hovered_sector
@@ -1398,8 +1428,10 @@ void area_editor::get_hovered_layout_element(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the number of required mobs for this mission.
+/**
+ * @brief Returns the number of required mobs for this mission.
+ *
+ * @return The number.
  */
 size_t area_editor::get_mission_required_mob_count() const {
     size_t total_required = 0;
@@ -1427,16 +1459,20 @@ size_t area_editor::get_mission_required_mob_count() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string area_editor::get_name() const {
     return "area editor";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of the currently opened folder, or an empty string if none.
+/**
+ * @brief Returns the name of the currently opened folder.
+ *
+ * @return The name, or an empty string if none.
  */
 string area_editor::get_opened_folder_path() const {
     if(!game.cur_area_data.folder_name.empty()) {
@@ -1449,11 +1485,12 @@ string area_editor::get_opened_folder_path() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a file path, but shortened in such a way that only the text file's
- * name and brief context about its folder remain.
- * p:
- *   The long path name.
+/**
+ * @brief Returns a file path, but shortened in such a way that only the text
+ * file's name and brief context about its folder remain.
+ *
+ * @param p The long path name.
+ * @return The name.
  */
 string area_editor::get_path_short_name(const string &p) const {
     string match = GAME_DATA_FOLDER_PATH + "/" + AREA_TYPES_FOLDER_NAME;
@@ -1466,8 +1503,11 @@ string area_editor::get_path_short_name(const string &p) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Evaluates the user's drawing to figure out how the split is going to work.
+/**
+ * @brief Evaluates the user's drawing to figure out how the split is
+ * going to work.
+ *
+ * @return The evaluation result.
  */
 area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
     sector_split_info.traversed_edges[0].clear();
@@ -1513,8 +1553,8 @@ area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Focuses the camera on the problem found, if any.
+/**
+ * @brief Focuses the camera on the problem found, if any.
  */
 void area_editor::goto_problem() {
     switch(problem_type) {
@@ -1755,9 +1795,8 @@ void area_editor::goto_problem() {
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Handles an error in the line the user is trying to draw.
+/**
+ * @brief Handles an error in the line the user is trying to draw.
  */
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
@@ -1795,8 +1834,8 @@ void area_editor::handle_line_error() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the area editor.
+/**
+ * @brief Loads the area editor.
  */
 void area_editor::load() {
     editor::load();
@@ -1872,16 +1911,15 @@ void area_editor::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Load the area from the disk.
- * requested_area_folder_name:
- *   Name of the folder of the requested area.
- * requested_area_type:
- *   Type of the requested area.
- * from_backup:
- *   If false, load it normally. If true, load from a backup, if any.
- * should_update_history:
- *   If true, this loading process should update the user's folder open history.
+/**
+ * @brief Load the area from the disk.
+ *
+ * @param requested_area_folder_name Name of the folder of the requested area.
+ * @param requested_area_type Type of the requested area.
+ * @param from_backup If false, load it normally.
+ * If true, load from a backup, if any.
+ * @param should_update_history If true, this loading process should update
+ * the user's folder open history.
  */
 void area_editor::load_area(
     const string &requested_area_folder_name,
@@ -1953,8 +1991,8 @@ void area_editor::load_area(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a backup file.
+/**
+ * @brief Loads a backup file.
  */
 void area_editor::load_backup() {
     load_area(
@@ -1971,8 +2009,8 @@ void area_editor::load_backup() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the reference image data from the reference configuration file.
+/**
+ * @brief Loads the reference image data from the reference configuration file.
  */
 void area_editor::load_reference() {
     data_node file(
@@ -2004,10 +2042,10 @@ void area_editor::load_reference() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- * ev:
- *   Event to handle.
+/**
+ * @brief Pans the camera around.
+ *
+ * @param ev Event to handle.
  */
 void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
@@ -2019,14 +2057,12 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks an area from the picker.
- * name:
- *   Name of the area.
- * category:
- *   Unused.
- * is_new:
- *   Is it a new area, or an existing one?
+/**
+ * @brief Callback for when the user picks an area from the picker.
+ *
+ * @param name Name of the area.
+ * @param category Unused.
+ * @param is_new Is it a new area, or an existing one?
  */
 void area_editor::pick_area(
     const string &name, const string &category, const bool is_new
@@ -2040,14 +2076,12 @@ void area_editor::pick_area(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks a texture from the picker.
- * name:
- *   Name of the texture.
- * category:
- *   Unused.
- * is_new:
- *   Unused.
+/**
+ * @brief Callback for when the user picks a texture from the picker.
+ *
+ * @param name Name of the texture.
+ * @param category Unused.
+ * @param is_new Unused.
  */
 void area_editor::pick_texture(
     const string &name, const string &category, const bool is_new
@@ -2104,9 +2138,11 @@ void area_editor::pick_texture(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Prepares an area state to be delivered to register_change() later,
+/**
+ * @brief Prepares an area state to be delivered to register_change() later,
  * or forgotten altogether with forget_prepared_state().
+ *
+ * @return The prepared state.
  */
 area_data* area_editor::prepare_state() {
     area_data* new_state = new area_data();
@@ -2115,8 +2151,8 @@ area_data* area_editor::prepare_state() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the circle sector button widget is pressed.
+/**
+ * @brief Code to run when the circle sector button widget is pressed.
  */
 void area_editor::press_circle_sector_button() {
     if(moving || selecting) {
@@ -2149,8 +2185,8 @@ void area_editor::press_circle_sector_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the copy properties button widget is pressed.
+/**
+ * @brief Code to run when the copy properties button widget is pressed.
  */
 void area_editor::press_copy_properties_button() {
     switch(state) {
@@ -2172,8 +2208,8 @@ void area_editor::press_copy_properties_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the delete current area button widget is pressed.
+/**
+ * @brief Code to run when the delete current area button widget is pressed.
  */
 void area_editor::press_delete_area_button() {
     open_dialog(
@@ -2184,8 +2220,8 @@ void area_editor::press_delete_area_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the delete button widget is pressed.
+/**
+ * @brief Code to run when the delete button widget is pressed.
  */
 void area_editor::press_delete_button() {
     switch(state) {
@@ -2206,8 +2242,8 @@ void area_editor::press_delete_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the duplicate mobs button widget is pressed.
+/**
+ * @brief Code to run when the duplicate mobs button widget is pressed.
  */
 void area_editor::press_duplicate_mobs_button() {
     if(
@@ -2229,8 +2265,8 @@ void area_editor::press_duplicate_mobs_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the grid interval decrease button is pressed.
+/**
+ * @brief Code to run when the grid interval decrease button is pressed.
  */
 void area_editor::press_grid_interval_decrease_button() {
     game.options.area_editor_grid_interval =
@@ -2245,8 +2281,8 @@ void area_editor::press_grid_interval_decrease_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the grid interval increase button is pressed.
+/**
+ * @brief Code to run when the grid interval increase button is pressed.
  */
 void area_editor::press_grid_interval_increase_button() {
     game.options.area_editor_grid_interval =
@@ -2261,8 +2297,8 @@ void area_editor::press_grid_interval_increase_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the layout drawing button widget is pressed.
+/**
+ * @brief Code to run when the layout drawing button widget is pressed.
  */
 void area_editor::press_layout_drawing_button() {
     if(moving || selecting) {
@@ -2295,8 +2331,8 @@ void area_editor::press_layout_drawing_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the load area button widget is pressed.
+/**
+ * @brief Code to run when the load area button widget is pressed.
  */
 void area_editor::press_load_button() {
     if(moving || selecting) {
@@ -2312,8 +2348,8 @@ void area_editor::press_load_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the new mob button widget is pressed.
+/**
+ * @brief Code to run when the new mob button widget is pressed.
  */
 void area_editor::press_new_mob_button() {
     if(moving || selecting) {
@@ -2336,8 +2372,8 @@ void area_editor::press_new_mob_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the new path button widget is pressed.
+/**
+ * @brief Code to run when the new path button widget is pressed.
  */
 void area_editor::press_new_path_button() {
     if(moving || selecting) {
@@ -2355,8 +2391,8 @@ void area_editor::press_new_path_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the new tree shadow button widget is pressed.
+/**
+ * @brief Code to run when the new tree shadow button widget is pressed.
  */
 void area_editor::press_new_tree_shadow_button() {
     if(moving || selecting) {
@@ -2373,8 +2409,8 @@ void area_editor::press_new_tree_shadow_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the paste properties button widget is pressed.
+/**
+ * @brief Code to run when the paste properties button widget is pressed.
  */
 void area_editor::press_paste_properties_button() {
     if(sub_state != EDITOR_SUB_STATE_NONE) return;
@@ -2397,8 +2433,8 @@ void area_editor::press_paste_properties_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the paste texture button widget is pressed.
+/**
+ * @brief Code to run when the paste texture button widget is pressed.
  */
 void area_editor::press_paste_texture_button() {
     if(state != EDITOR_STATE_LAYOUT) return;
@@ -2407,8 +2443,8 @@ void area_editor::press_paste_texture_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the quick play button widget is pressed.
+/**
+ * @brief Code to run when the quick play button widget is pressed.
  */
 void area_editor::press_quick_play_button() {
     if(!save_area(false)) return;
@@ -2421,8 +2457,8 @@ void area_editor::press_quick_play_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the quit button widget is pressed.
+/**
+ * @brief Code to run when the quit button widget is pressed.
  */
 void area_editor::press_quit_button() {
     changes_mgr.ask_if_unsaved(
@@ -2434,8 +2470,8 @@ void area_editor::press_quit_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the redo button widget is pressed.
+/**
+ * @brief Code to run when the redo button widget is pressed.
  */
 void area_editor::press_redo_button() {
     if(
@@ -2450,8 +2486,8 @@ void area_editor::press_redo_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the toggle reference button widget is pressed.
+/**
+ * @brief Code to run when the toggle reference button widget is pressed.
  */
 void area_editor::press_reference_button() {
     show_reference = !show_reference;
@@ -2461,8 +2497,8 @@ void area_editor::press_reference_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the reload button widget is pressed.
+/**
+ * @brief Code to run when the reload button widget is pressed.
  */
 void area_editor::press_reload_button() {
     if(!area_exists_on_disk) {
@@ -2482,8 +2518,8 @@ void area_editor::press_reload_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the remove edge button widget is pressed.
+/**
+ * @brief Code to run when the remove edge button widget is pressed.
  */
 void area_editor::press_remove_edge_button() {
     //Check if the user can delete.
@@ -2522,8 +2558,8 @@ void area_editor::press_remove_edge_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the remove mob button widget is pressed.
+/**
+ * @brief Code to run when the remove mob button widget is pressed.
  */
 void area_editor::press_remove_mob_button() {
     //Check if the user can delete.
@@ -2559,8 +2595,8 @@ void area_editor::press_remove_mob_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the remove path button widget is pressed.
+/**
+ * @brief Code to run when the remove path button widget is pressed.
  */
 void area_editor::press_remove_path_button() {
     //Check if the user can delete.
@@ -2605,8 +2641,8 @@ void area_editor::press_remove_path_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the remove tree shadow button widget is pressed.
+/**
+ * @brief Code to run when the remove tree shadow button widget is pressed.
  */
 void area_editor::press_remove_tree_shadow_button() {
     if(moving || selecting) {
@@ -2639,8 +2675,8 @@ void area_editor::press_remove_tree_shadow_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the save button widget is pressed.
+/**
+ * @brief Code to run when the save button widget is pressed.
  */
 void area_editor::press_save_button() {
     if(!save_area(false)) {
@@ -2649,8 +2685,8 @@ void area_editor::press_save_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the select all button widget is pressed.
+/**
+ * @brief Code to run when the select all button widget is pressed.
  */
 void area_editor::press_select_all_button() {
     if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
@@ -2703,8 +2739,8 @@ void area_editor::press_select_all_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the selection filter button widget is pressed.
+/**
+ * @brief Code to run when the selection filter button widget is pressed.
  */
 void area_editor::press_selection_filter_button() {
     clear_selection();
@@ -2738,8 +2774,8 @@ void area_editor::press_selection_filter_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the snap mode button widget is pressed.
+/**
+ * @brief Code to run when the snap mode button widget is pressed.
  */
 void area_editor::press_snap_mode_button() {
     if(!is_shift_pressed) {
@@ -2775,8 +2811,8 @@ void area_editor::press_snap_mode_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the undo button widget is pressed.
+/**
+ * @brief Code to run when the undo button widget is pressed.
  */
 void area_editor::press_undo_button() {
     if(
@@ -2791,8 +2827,8 @@ void area_editor::press_undo_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom and position reset button widget is pressed.
+/**
+ * @brief Code to run when the zoom and position reset button widget is pressed.
  */
 void area_editor::press_zoom_and_pos_reset_button() {
     if(game.cam.target_zoom == 1.0f) {
@@ -2803,8 +2839,8 @@ void area_editor::press_zoom_and_pos_reset_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom everything button widget is pressed.
+/**
+ * @brief Code to run when the zoom everything button widget is pressed.
  */
 void area_editor::press_zoom_everything_button() {
     bool got_something = false;
@@ -2867,8 +2903,8 @@ void area_editor::press_zoom_everything_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom in button widget is pressed.
+/**
+ * @brief Code to run when the zoom in button widget is pressed.
  */
 void area_editor::press_zoom_in_button() {
     game.cam.target_zoom =
@@ -2880,8 +2916,8 @@ void area_editor::press_zoom_in_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom out button widget is pressed.
+/**
+ * @brief Code to run when the zoom out button widget is pressed.
  */
 void area_editor::press_zoom_out_button() {
     game.cam.target_zoom =
@@ -2893,9 +2929,11 @@ void area_editor::press_zoom_out_button() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Recreates the current drawing's nodes. Useful if the data the nodes were
- * holding is stale, like if the area's state had to be reverted mid-drawing.
+/**
+ * @brief Recreates the current drawing's nodes. Useful if the data the nodes
+ * were holding is stale, like if the area's state had to be reverted
+ * mid-drawing.
+ *
  */
 void area_editor::recreate_drawing_nodes() {
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
@@ -2904,8 +2942,8 @@ void area_editor::recreate_drawing_nodes() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Redoes the latest undone change to the area using the undo history,
+/**
+ * @brief Redoes the latest undone change to the area using the undo history,
  * if available.
  */
 void area_editor::redo() {
@@ -2932,17 +2970,18 @@ void area_editor::redo() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the state of the area in the undo history.
+/**
+ * @brief Saves the state of the area in the undo history.
+ *
  * When this happens, a timer is set. During this timer, if the next change's
  * operation is the same as the previous one's, then it is ignored.
  * This is useful to stop, for instance, a slider
  * drag from saving several dozen operations in the undo history.
- * operation_name:
- *   Name of the operation.
- * pre_prepared_state:
- *   If you have the area state prepared from elsewhere in
- *   the code, specify it here. Otherwise, it uses the current area state.
+ *
+ * @param operation_name Name of the operation.
+ * @param pre_prepared_state If you have the area state prepared from
+ * elsewhere in the code, specify it here.
+ * Otherwise, it uses the current area state.
  */
 void area_editor::register_change(
     const string &operation_name, area_data* pre_prepared_state
@@ -2982,45 +3021,46 @@ void area_editor::register_change(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes the current area thumbnail, if any.
+/**
+ * @brief Removes the current area thumbnail, if any.
  */
 void area_editor::remove_thumbnail() {
     game.cur_area_data.thumbnail = NULL;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the camera's X and Y coordinates.
+/**
+ * @brief Resets the camera's X and Y coordinates.
  */
 void area_editor::reset_cam_xy() {
     game.cam.target_pos = point();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the camera's zoom.
+/**
+ * @brief Resets the camera's zoom.
  */
 void area_editor::reset_cam_zoom() {
     zoom_with_cursor(1.0f);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns to a previously prepared area state.
- * prepared_state:
- *   Prepared state to return to.
+/**
+ * @brief Returns to a previously prepared area state.
+ *
+ * @param prepared_state Prepared state to return to.
  */
 void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
     prepared_state->clone(game.cur_area_data);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the area onto the disk.
- * Returns true on success, false on failure.
- * to_backup:
- *   If false, save normally. If true, save to an auto-backup file.
+/**
+ * @brief Saves the area onto the disk.
+ *
+ * @param to_backup If false, save normally.
+ * If true, save to an auto-backup file.
+ * @return Whether it succeded.
  */
 bool area_editor::save_area(const bool to_backup) {
 
@@ -3751,8 +3791,8 @@ bool area_editor::save_area(const bool to_backup) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the area onto a backup file.
+/**
+ * @brief Saves the area onto a backup file.
  */
 void area_editor::save_backup() {
 
@@ -3784,8 +3824,8 @@ void area_editor::save_backup() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the reference data to disk, in the area's reference config file.
+/**
+ * @brief Saves the reference data to disk, in the area's reference config file.
  */
 void area_editor::save_reference() {
     string file_name =
@@ -3832,10 +3872,10 @@ void area_editor::save_reference() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Selects an edge and its vertexes.
- * e:
- *   Edge to select.
+/**
+ * @brief Selects an edge and its vertexes.
+ *
+ * @param e Edge to select.
  */
 void area_editor::select_edge(edge* e) {
     if(selection_filter == SELECTION_FILTER_VERTEXES) return;
@@ -3847,10 +3887,10 @@ void area_editor::select_edge(edge* e) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Selects all path stops with the given label.
- * label:
- *   Label to search for.
+/**
+ * @brief Selects all path stops with the given label.
+ *
+ * @param label Label to search for.
  */
 void area_editor::select_path_stops_with_label(const string &label) {
     clear_selection();
@@ -3864,10 +3904,10 @@ void area_editor::select_path_stops_with_label(const string &label) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Selects a sector and its edges and vertexes.
- * s:
- *   Sector to select.
+/**
+ * @brief Selects a sector and its edges and vertexes.
+ *
+ * @param s Sector to select.
  */
 void area_editor::select_sector(sector* s) {
     if(selection_filter != SELECTION_FILTER_SECTORS) return;
@@ -3879,10 +3919,10 @@ void area_editor::select_sector(sector* s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Selects a tree shadow.
- * s_ptr:
- *   Tree shadow to select.
+/**
+ * @brief Selects a tree shadow.
+ *
+ * @param s_ptr Tree shadow to select.
  */
 void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
     selected_shadow = s_ptr;
@@ -3890,10 +3930,10 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Selects a vertex.
- * v:
- *   Vertex to select.
+/**
+ * @brief Selects a vertex.
+ *
+ * @param v Vertex to select.
  */
 void area_editor::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
@@ -3902,8 +3942,8 @@ void area_editor::select_vertex(vertex* v) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the vector of points that make up a new circle sector.
+/**
+ * @brief Sets the vector of points that make up a new circle sector.
  */
 void area_editor::set_new_circle_sector_points() {
     float anchor_angle =
@@ -3971,8 +4011,8 @@ void area_editor::set_new_circle_sector_points() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the status text based on how many things are selected.
+/**
+ * @brief Sets the status text based on how many things are selected.
  */
 void area_editor::set_selection_status_text() {
     set_status();
@@ -4050,11 +4090,11 @@ void area_editor::set_selection_status_text() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Changes the state of the area using one of the saved states in the undo
- * history or redo history.
- * state:
- *   State to load.
+/**
+ * @brief Changes the state of the area using one of the saved states in the
+ * undo history or redo history.
+ *
+ * @param state State to load.
  */
 void area_editor::set_state_from_undo_or_redo_history(area_data* state) {
     state->clone(game.cur_area_data);
@@ -4078,8 +4118,8 @@ void area_editor::set_state_from_undo_or_redo_history(area_data* state) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets up the editor's logic to split a sector.
+/**
+ * @brief Sets up the editor's logic to split a sector.
  */
 void area_editor::setup_sector_split() {
     if(drawing_nodes.size() < 2) {
@@ -4128,8 +4168,8 @@ void area_editor::setup_sector_split() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Procedure to start moving the selected mobs.
+/**
+ * @brief Procedure to start moving the selected mobs.
  */
 void area_editor::start_mob_move() {
     register_change("object movement");
@@ -4152,8 +4192,8 @@ void area_editor::start_mob_move() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Procedure to start moving the selected path stops.
+/**
+ * @brief Procedure to start moving the selected path stops.
  */
 void area_editor::start_path_stop_move() {
     register_change("path stop movement");
@@ -4179,8 +4219,8 @@ void area_editor::start_path_stop_move() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Procedure to start moving the selected vertexes.
+/**
+ * @brief Procedure to start moving the selected vertexes.
  */
 void area_editor::start_vertex_move() {
     pre_move_area_data = prepare_state();
@@ -4204,8 +4244,9 @@ void area_editor::start_vertex_move() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Traverses a sector's edges, in order, going from neighbor to neighbor.
+/**
+ * @brief Traverses a sector's edges, in order, going from neighbor to neighbor.
+ *
  * Traversal starts at a vertex, and during stage 1, the encountered
  * edges/vertexes are saved in the first set of vectors.
  * The direction of travel depends on whatever the first edge is in the
@@ -4218,21 +4259,19 @@ void area_editor::start_vertex_move() {
  * If the sector has inner sectors, not all edges will be encountered, since
  * this algorithm only goes neighbor by neighbor.
  * If the checkpoint vertex is never found, stage 2's data will be empty.
- * s_ptr:
- *   Sector to traverse.
- * begin:
- *   Vertex to begin in.
- * checkpoint:
- *   Vertex to switch stages at.
- * edges:
- *   Pointer to an array of two vectors. Edges encountered during each stage
- *   are inserted into either one of these vectors.
- * vertexes:
- *   Pointer to an array of two vectors. Vertexes encountered during each stage
- *   are inserted into either one of these vectors.
- * working_sector_left:
- *   This bool will be set to true if, during stage 1 traversal, the
- *   working sector is to the left, and false if to the right.
+ *
+ * @param s_ptr Sector to traverse.
+ * @param begin Vertex to begin in.
+ * @param checkpoint Vertex to switch stages at.
+ * @param edges Pointer to an array of two vectors.
+ * Edges encountered during each stage are inserted into either one
+ * of these vectors.
+ * @param vertexes Pointer to an array of two vectors.
+ * Vertexes encountered during each stage are inserted into either one
+ * of these vectors.
+ * @param working_sector_left This bool will be set to true if,
+ * during stage 1 traversal, the working sector is to the left,
+ * and false if to the right.
  */
 void area_editor::traverse_sector_for_split(
     const sector* s_ptr, vertex* begin, const vertex* checkpoint,
@@ -4302,8 +4341,9 @@ void area_editor::traverse_sector_for_split(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Undoes the last change to the area using the undo history, if available.
+/**
+ * @brief Undoes the last change to the area using the undo history,
+ * if available.
  */
 void area_editor::undo() {
     if(undo_history.empty()) {
@@ -4329,8 +4369,8 @@ void area_editor::undo() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Undoes the last placed layout drawing node.
+/**
+ * @brief Undoes the last placed layout drawing node.
  */
 void area_editor::undo_layout_drawing_node() {
     if(drawing_nodes.empty()) return;
@@ -4348,8 +4388,8 @@ void area_editor::undo_layout_drawing_node() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the editor from memory.
+/**
+ * @brief Unloads the editor from memory.
  */
 void area_editor::unload() {
     editor::unload();
@@ -4386,8 +4426,8 @@ void area_editor::unload() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates all edge offset caches relevant to the area editor.
+/**
+ * @brief Updates all edge offset caches relevant to the area editor.
  */
 void area_editor::update_all_edge_offset_caches() {
     game.wall_smoothing_effect_caches.clear();
@@ -4425,9 +4465,10 @@ void area_editor::update_all_edge_offset_caches() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the status text according to what's going on in the current
+/**
+ * @brief Updates the status text according to what's going on in the current
  * sector drawing.
+ *
  */
 void area_editor::update_layout_drawing_status_text() {
     bool useless_split_part_2 = false;
@@ -4451,8 +4492,9 @@ void area_editor::update_layout_drawing_status_text() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the reference image's bitmap, since its file name just changed.
+/**
+ * @brief Updates the reference image's bitmap, since its file name
+ * just changed.
  */
 void area_editor::update_reference() {
     if(reference_bitmap && reference_bitmap != game.bmp_error) {
@@ -4480,12 +4522,11 @@ void area_editor::update_reference() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates a sector's texture.
- * s_ptr:
- *   Sector to update.
- * file_name:
- *   New file name of the texture.
+/**
+ * @brief Updates a sector's texture.
+ *
+ * @param s_ptr Sector to update.
+ * @param file_name New file name of the texture.
  */
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
@@ -4496,10 +4537,11 @@ void area_editor::update_sector_texture(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the list of texture suggestions, adding a new one or bumping it up.
- * n:
- *   Name of the chosen texture.
+/**
+ * @brief Updates the list of texture suggestions, adding a new one or
+ * bumping it up.
+ *
+ * @param n Name of the chosen texture.
  */
 void area_editor::update_texture_suggestions(const string &n) {
     //First, check if it exists.
@@ -4537,8 +4579,8 @@ void area_editor::update_texture_suggestions(const string &n) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the state and description of the undo button based on
+/**
+ * @brief Updates the state and description of the undo button based on
  * the undo history.
  */
 void area_editor::update_undo_history() {
@@ -4548,8 +4590,8 @@ void area_editor::update_undo_history() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the selection transformation widget's information, since
+/**
+ * @brief Updates the selection transformation widget's information, since
  * a new vertex was just selected.
  */
 void area_editor::update_vertex_selection() {
@@ -4574,12 +4616,11 @@ void area_editor::update_vertex_selection() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a layout drawing node based on the mouse's click position.
- * ae_ptr:
- *   Pointer to the area editor instance in charge.
- * mouse_click:
- *   Coordinates of the mouse click.
+/**
+ * @brief Constructs a new layout drawing node object.
+ *
+ * @param ae_ptr Pointer to the area editor instance in charge.
+ * @param mouse_click Coordinates of the mouse click.
  */
 area_editor::layout_drawing_node::layout_drawing_node(
     const area_editor* ae_ptr, const point &mouse_click
@@ -4634,8 +4675,9 @@ area_editor::layout_drawing_node::layout_drawing_node(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a layout drawing node with no info.
+/**
+ * @brief Constructs a new layout drawing node object.
+ *
  */
 area_editor::layout_drawing_node::layout_drawing_node() :
     on_vertex(nullptr),
@@ -4649,10 +4691,10 @@ area_editor::layout_drawing_node::layout_drawing_node() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a texture suggestion.
- * n:
- *   File name of the texture.
+/**
+ * @brief Constructs a new texture suggestion object.
+ *
+ * @param n File name of the texture.
  */
 area_editor::texture_suggestion::texture_suggestion(
     const string &n
@@ -4664,8 +4706,8 @@ area_editor::texture_suggestion::texture_suggestion(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a texture suggestion.
+/**
+ * @brief Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
     game.textures.detach(name);

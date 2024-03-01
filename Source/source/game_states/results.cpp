@@ -17,15 +17,18 @@
 
 
 namespace RESULTS {
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "results" state.
+/**
+ * @brief Constructs a new results state object.
  */
 results_state::results_state() :
     game_state(),
@@ -36,11 +39,11 @@ results_state::results_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new mission score criterion-related stat to the stats list GUI item,
- * if applicable.
- * criterion:
- *   Mission score criterion to use.
+/**
+ * @brief Adds a new mission score criterion-related stat to the stats list
+ * GUI item, if applicable.
+ *
+ * @param criterion Mission score criterion to use.
  */
 void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     if(
@@ -84,14 +87,12 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new stat to the stats list GUI item.
- * label:
- *   Label text of this stat.
- * value:
- *   Value of this stat.
- * color:
- *   Color.
+/**
+ * @brief Adds a new stat to the stats list GUI item.
+ *
+ * @param label Label text of this stat.
+ * @param value Value of this stat.
+ * @param color Color.
  */
 void results_state::add_stat(
     const string &label, const string &value,
@@ -130,9 +131,9 @@ void results_state::add_stat(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the results menu and goes back to the gameplay state to continue
- * playing the area.
+/**
+ * @brief Leaves the results menu and goes back to the gameplay state to
+ * continue playing the area.
  */
 void results_state::continue_playing() {
     game.fade_mgr.start_fade(false, [] () {
@@ -145,8 +146,8 @@ void results_state::continue_playing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the results state.
+/**
+ * @brief Draws the results state.
  */
 void results_state::do_drawing() {
     //Background.
@@ -171,8 +172,8 @@ void results_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks one frame's worth of logic.
+/**
+ * @brief Ticks one frame's worth of logic.
  */
 void results_state::do_logic() {
     gui_time_spent += game.delta_t;
@@ -209,18 +210,20 @@ void results_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string results_state::get_name() const {
     return "results";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -229,8 +232,8 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the results menu and goes to the area menu.
+/**
+ * @brief Leaves the results menu and goes to the area menu.
  */
 void results_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
@@ -246,8 +249,8 @@ void results_state::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the results state into memory.
+/**
+ * @brief Loads the results state into memory.
  */
 void results_state::load() {
     bool goal_was_cleared =
@@ -804,8 +807,8 @@ void results_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the results menu and goes back to the gameplay state to retry
+/**
+ * @brief Leaves the results menu and goes back to the gameplay state to retry
  * the area.
  */
 void results_state::retry_area() {
@@ -816,8 +819,8 @@ void results_state::retry_area() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the results state from memory.
+/**
+ * @brief Unloads the results state from memory.
  */
 void results_state::unload() {
     //Menu items.

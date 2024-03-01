@@ -16,8 +16,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new type of track mob.
+/**
+ * @brief Constructs a new track type object.
  */
 track_type::track_type() :
     mob_type(MOB_CATEGORY_TRACKS),
@@ -32,8 +32,10 @@ track_type::track_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector track_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -42,10 +44,10 @@ anim_conversion_vector track_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void track_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -95,10 +97,10 @@ void track_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void track_type::load_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function

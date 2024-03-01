@@ -39,31 +39,29 @@
 #include "utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Calls al_fwrite, but with an std::string instead of a c-string.
- * f:
- *   Allegro file.
- * s:
- *   String to write.
+/**
+ * @brief Calls al_fwrite, but with an std::string instead of a c-string.
+ *
+ * @param f Allegro file.
+ * @param s String to write.
  */
 void al_fwrite(ALLEGRO_FILE* f, const string &s) {
     al_fwrite(f, s.c_str(), s.size());
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if there are any walls between two points. i.e. any edges that a
- * mob can't simply step up to.
- * p1:
- *   First point.
- * p2:
- *   Second point.
- * ignore_walls_below_z:
- *   Any walls whose sector Zs are below this value get ignored.
- *   Use -FLT_MAX to not ignore any wall.
- * impassable_walls:
- *   If not NULL, true will be returned here if any of the walls are
- *   impassable, i.e. the void or "blocking"-type sectors. False otherwise.
+/**
+ * @brief Checks if there are any walls between two points.
+ * i.e. any edges that a mob can't simply step up to.
+ *
+ * @param p1 First point.
+ * @param p2 Second point.
+ * @param ignore_walls_below_z Any walls whose sector Zs are below
+ * this value get ignored. Use -FLT_MAX to not ignore any wall.
+ * @param impassable_walls If not NULL, true will be returned here if
+ * any of the walls are impassable, i.e. the void or "blocking"-type
+ * sectors. False otherwise.
+ * @return Whether there are walls between.
  */
 bool are_walls_between(
     const point &p1, const point &p2,
@@ -130,10 +128,11 @@ bool are_walls_between(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a color to its string representation.
- * c:
- *   Color to convert.
+/**
+ * @brief Converts a color to its string representation.
+ *
+ * @param c Color to convert.
+ * @return The string.
  */
 string c2s(const ALLEGRO_COLOR &c) {
     return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
@@ -141,12 +140,12 @@ string c2s(const ALLEGRO_COLOR &c) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the color that was provided, but with the alpha changed.
- * c:
- *   The color to change the alpha on.
- * a:
- *   The new alpha, [0-255].
+/**
+ * @brief Returns the color that was provided, but with the alpha changed.
+ *
+ * @param c The color to change the alpha on.
+ * @param a The new alpha, [0-255].
+ * @return The new color.
  */
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
     ALLEGRO_COLOR c2;
@@ -156,12 +155,12 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the color provided, but darker or lighter by l amount.
- * c:
- *   The color to change the lighting on.
- * l:
- *   Lighting amount, positive or negative, from 0 to 1.
+/**
+ * @brief Returns the color provided, but darker or lighter by l amount.
+ *
+ * @param c The color to change the lighting on.
+ * @param l Lighting amount, positive or negative, from 0 to 1.
+ * @return The new color.
  */
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
     ALLEGRO_COLOR c2;
@@ -173,8 +172,8 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the textures of the area's sectors from memory.
+/**
+ * @brief Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
@@ -190,15 +189,13 @@ void clear_area_textures() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Purposely crashes the engine, reporting as much information as possible to
- * the logs. Used when a fatal problem occurs.
- * reason:
- *   Explanation of the type of crash (assert, SIGSEGV, etc.).
- * info:
- *   Any extra information to report to the logs.
- * exit_status:
- *   Program exit status.
+/**
+ * @brief Purposely crashes the engine, reporting as much information
+ * as possible to the logs. Used when a fatal problem occurs.
+ *
+ * @param reason Explanation of the type of crash (assert, SIGSEGV, etc.).
+ * @param info Any extra information to report to the logs.
+ * @param exit_status Program exit status.
  */
 void crash(const string &reason, const string &info, const int exit_status) {
 
@@ -307,17 +304,16 @@ void crash(const string &reason, const string &info, const int exit_status) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether a given edge should get a ledge smoothing edge offset effect
- * or not.
- * e_ptr:
- *   Edge to check.
- * affected_sector:
- *   If there should be an effect, this is the affected sector,
- *   i.e. the one getting the smoothing.
- * unaffected_sector:
- *   If there should be an effect, this is the unaffected sector,
- *   i.e. the lower one.
+/**
+ * @brief Checks whether a given edge should get a ledge smoothing
+ * edge offset effect or not.
+ *
+ * @param e_ptr Edge to check.
+ * @param affected_sector If there should be an effect,
+ * this is the affected sector, i.e. the one getting the smoothing.
+ * @param unaffected_sector If there should be an effect,
+ * this is the unaffected sector, i.e. the lower one.
+ * @return Whether it has ledge smoothing.
  */
 bool does_edge_have_ledge_smoothing(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
@@ -361,17 +357,16 @@ bool does_edge_have_ledge_smoothing(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether a given edge should get a liquid limit edge offset effect
- * or not.
- * e_ptr:
- *   Edge to check.
- * affected_sector:
- *   If there should be an effect, this is the affected sector,
- *   i.e. the one with the liquid.
- * unaffected_sector:
- *   If there should be an effect, this is the unaffected sector,
- *   i.e. the one without the liquid.
+/**
+ * @brief Checks whether a given edge should get a liquid limit
+ * edge offset effect or not.
+ *
+ * @param e_ptr Edge to check.
+ * @param affected_sector If there should be an effect, this is the
+ * affected sector, i.e. the one with the liquid.
+ * @param unaffected_sector If there should be an effect, this is the
+ * unaffected sector, i.e. the one without the liquid.
+ * @return Whether it has a liquid limit.
  */
 bool does_edge_have_liquid_limit(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
@@ -404,17 +399,16 @@ bool does_edge_have_liquid_limit(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether a given edge should get a wall shadow edge offset effect
- * or not.
- * e_ptr:
- *   Edge to check.
- * affected_sector:
- *   If there should be an effect, this is the affected sector,
- *   i.e. the one getting shaded.
- * unaffected_sector:
- *   If there should be an effect, this is the unaffected sector,
- *   i.e. the one casting the shadow.
+/**
+ * @brief Checks whether a given edge should get a wall shadow
+ * edge offset effect or not.
+ *
+ * @param e_ptr Edge to check.
+ * @param affected_sector If there should be an effect, this is the
+ * affected sector, i.e. the one getting shaded.
+ * @param unaffected_sector If there should be an effect, this is the
+ * unaffected sector, i.e. the one casting the shadow.
+ * @return Whether it has a wall shadow.
  */
 bool does_edge_have_wall_shadow(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
@@ -451,14 +445,13 @@ bool does_edge_have_wall_shadow(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Stores the names of all files in a folder into a vector.
- * folder_name:
- *   Name of the folder.
- * folders:
- *   If true, only read folders. If false, only read files.
- * folder_found:
- *   If not NULL, returns whether the folder was found or not.
+/**
+ * @brief Stores the names of all files in a folder into a vector.
+ *
+ * @param folder_name Name of the folder.
+ * @param folders If true, only read folders. If false, only read files.
+ * @param folder_found If not NULL, returns whether the folder was found or not.
+ * @return The vector.
  */
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found
@@ -515,8 +508,10 @@ vector<string> folder_to_vector(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mob that is closest to the mouse cursor.
+/**
+ * @brief Returns the mob that is closest to the mouse cursor.
+ *
+ * @return The mob.
  */
 mob* get_closest_mob_to_cursor() {
     dist closest_mob_to_cursor_dist;
@@ -539,10 +534,12 @@ mob* get_closest_mob_to_cursor() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string representing the current date and time.
- * filename_friendly:
- *   If true, slashes become dashes, and semicolons become dots.
+/**
+ * @brief Returns a string representing the current date and time.
+ *
+ * @param filename_friendly If true, slashes become dashes,
+ * and semicolons become dots.
+ * @return The string.
  */
 string get_current_time(const bool filename_friendly) {
     time_t tt;
@@ -563,8 +560,10 @@ string get_current_time(const bool filename_friendly) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the engine's version as a string.
+/**
+ * @brief Returns the engine's version as a string.
+ *
+ * @return The string.
  */
 string get_engine_version_string() {
     return
@@ -574,16 +573,17 @@ string get_engine_version_string() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a name for the specified Allegro keyboard keycode.
+/**
+ * @brief Returns a name for the specified Allegro keyboard keycode.
+ *
  * This basically makes use of al_keycode_to_name, but with some special cases
  * and with some nice capitalization.
- * Returns an empty string on error.
- * keycode:
- *   Keycode to check.
- * condensed:
- *   If true, only the key name is returned. If false, some extra disambiguation
- *   is returned too, e.g. whether this is the left or right Ctrl.
+ *
+ * @param keycode Keycode to check.
+ * @param condensed If true, only the key name is returned. If false,
+ * some extra disambiguation is returned too, e.g. whether this is
+ * the left or right Ctrl.
+ * @return The name, or an empty string on error.
  */
 string get_key_name(const int keycode, const bool condensed) {
     switch(keycode) {
@@ -710,40 +710,44 @@ string get_key_name(const int keycode, const bool condensed) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the color a ledge's smoothing should be.
- * e_ptr:
- *   Edge with the ledge.
+/**
+ * @brief Returns the color a ledge's smoothing should be.
+ *
+ * @param e_ptr Edge with the ledge.
+ * @return The color.
  */
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
     return e_ptr->ledge_smoothing_color;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the length a ledge's smoothing should be.
- * e_ptr:
- *   Edge with the ledge.
+/**
+ * @brief Returns the length a ledge's smoothing should be.
+ *
+ * @param e_ptr Edge with the ledge.
+ * @return The length.
  */
 float get_ledge_smoothing_length(edge* e_ptr) {
     return e_ptr->ledge_smoothing_length;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the color a liquid limit's effect should be.
- * e_ptr:
- *   Edge with the liquid limit.
+/**
+ * @brief Returns the color a liquid limit's effect should be.
+ *
+ * @param e_ptr Edge with the liquid limit.
+ * @return The color.
  */
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
     return {1.0f, 1.0f, 1.0f, 0.75f};
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the length a liquid's limit effect.
- * e_ptr:
- *   Edge with the liquid limit.
+/**
+ * @brief Returns the length a liquid's limit effect.
+ *
+ * @param e_ptr Edge with the liquid limit.
+ * @return The length.
  */
 float get_liquid_limit_length(edge* e_ptr) {
     //Let's vary the length randomly by the topleftmost edge coordinates.
@@ -760,19 +764,17 @@ float get_liquid_limit_length(edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the width and height of a block of multi-line text.
+/**
+ * @brief Returns the width and height of a block of multi-line text.
+ *
  * Lines are split by a single "\n" character.
  * These are the dimensions of a bitmap
  * that would hold a drawing by draw_text_lines().
- * font:
- *   The text's font.
- * text:
- *   The text.
- * ret_w:
- *   The width gets returned here, if not NULL.
- * ret_h:
- *   The height gets returned here, if not NULL.
+ *
+ * @param font The text's font.
+ * @param text The text.
+ * @param ret_w The width gets returned here, if not NULL.
+ * @param ret_h The height gets returned here, if not NULL.
  */
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
@@ -797,14 +799,14 @@ void get_multiline_text_dimensions(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns an area's subtitle or, if none is specified, the mission's goal.
- * subtitle:
- *   Area subtitle.
- * area_type:
- *   Type of area.
- * goal:
- *   Mission goal.
+/**
+ * @brief Returns an area's subtitle or, if none is specified,
+ * the mission's goal.
+ *
+ * @param subtitle Area subtitle.
+ * @param area_type Type of area.
+ * @param goal Mission goal.
+ * @return The subtitle or goal.
  */
 string get_subtitle_or_mission_goal(
     const string &subtitle, const AREA_TYPES area_type,
@@ -818,32 +820,26 @@ string get_subtitle_or_mission_goal(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the vertex info necessary to draw the throw preview line,
+/**
+ * @brief Calculates the vertex info necessary to draw the throw preview line,
  * from a given start point to a given end point.
+ *
  * The vertexes returned always come in groups of four, and each group
  * must be drawn individually with the ALLEGRO_PRIM_TRIANGLE_FAN type.
- * Returns the amount of vertexes needed.
- * vertexes:
- *   The array of vertexes to fill. Must have room for at least 16.
- * start:
- *   Start the line at this point. This is a ratio from the leader (0) to
- *   the cursor (1).
- * end:
- *   Same as start, but for the end point.
- * leader_pos:
- *   Position of the leader.
- * cursor_pos:
- *   Position of the cursor.
- * color:
- *   Color of the line.
- * u_offset:
- *   Offset the texture u by this much.
- * u_scale:
- *   Scale the texture u by this much.
- * vary_thickness:
- *   If true, thickness varies as the line goes forward. False makes it use the
- *   same thickness (the minimal one) throughout.
+ *
+ * @param vertexes The array of vertexes to fill.
+ * Must have room for at least 16.
+ * @param start Start the line at this point.
+ * This is a ratio from the leader (0) to the cursor (1).
+ * @param end Same as start, but for the end point.
+ * @param leader_pos Position of the leader.
+ * @param cursor_pos Position of the cursor.
+ * @param color Color of the line.
+ * @param u_offset Offset the texture u by this much.
+ * @param u_scale Scale the texture u by this much.
+ * @param vary_thickness If true, thickness varies as the line goes
+ * forward. False makes it use the same thickness (the minimal one) throughout.
+ * @return The amount of vertexes needed.
  */
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
@@ -949,12 +945,13 @@ unsigned char get_throw_preview_vertexes(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a string representation of mob script variables,
+/**
+ * @brief Given a string representation of mob script variables,
  * returns a map, where every key is a variable, and every value is the
  * variable's value.
- * vars_string:
- *   String with the variables.
+ *
+ * @param vars_string String with the variables.
+ * @return The map.
  */
 map<string, string> get_var_map(const string &vars_string) {
     map<string, string> final_map;
@@ -971,20 +968,22 @@ map<string, string> get_var_map(const string &vars_string) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the color a wall's shadow should be.
- * e_ptr:
- *   Edge with the wall.
+/**
+ * @brief Returns the color a wall's shadow should be.
+ *
+ * @param e_ptr Edge with the wall.
+ * @return The color.
  */
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
     return e_ptr->wall_shadow_color;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the length a wall's shadow should be.
- * e_ptr:
- *   Edge with the wall.
+/**
+ * @brief Returns the length a wall's shadow should be.
+ *
+ * @param e_ptr Edge with the wall.
+ * @return The length.
  */
 float get_wall_shadow_length(edge* e_ptr) {
     if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
@@ -1002,10 +1001,11 @@ float get_wall_shadow_length(edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Auxiliary function that returns a table used in the weather configs.
- * node:
- *   Data node with the weather table.
+/**
+ * @brief Auxiliary function that returns a table used in the weather configs.
+ *
+ * @param node Data node with the weather table.
+ * @return The table.
  */
 vector<std::pair<int, string> > get_weather_table(data_node* node) {
     vector<std::pair<int, string> > table;
@@ -1058,19 +1058,18 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the interpolation between two colors, given a number in an interval.
- * input:
- *   The input number.
- * input_start:
- *   Start of the interval the input number falls on, inclusive.
- *   The closer to input_start, the closer the output is to output_start.
- * input_end:
- *   End of the interval the number falls on, inclusive.
- * output_start:
- *   Color on the starting tip of the interpolation.
- * output_end:
- *   Color on the ending tip of the interpolation.
+/**
+ * @brief Returns the interpolation between two colors, given a number in
+ * an interval.
+ *
+ * @param input The input number.
+ * @param input_start Start of the interval the input number falls on,
+ * inclusive. The closer to input_start, the closer the output is
+ * to output_start.
+ * @param input_end End of the interval the number falls on, inclusive.
+ * @param output_start Color on the starting tip of the interpolation.
+ * @param output_end Color on the ending tip of the interpolation.
+ * @return The interpolated color.
  */
 ALLEGRO_COLOR interpolate_color(
     const float input, const float input_start, const float input_end,
@@ -1088,26 +1087,24 @@ ALLEGRO_COLOR interpolate_color(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a point to a string.
- * p:
- *   Point to convert.
- * z:
- *   If not NULL, add a third word which is this Z coordinate.
+/**
+ * @brief Converts a point to a string.
+ *
+ * @param p Point to convert.
+ * @param z If not NULL, add a third word which is this Z coordinate.
+ * @return The string.
  */
 string p2s(const point &p, const float* z) {
     return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
 }
 
 
-/* ----------------------------------------------------------------------------
- * Prints a bit of info onto the screen, for some seconds.
- * text:
- *   Text to print. Can use line breaks.
- * total_duration:
- *   Total amount of time in which the text is present.
- * fade_duration:
- *   When closing, fade out in the last N seconds.
+/**
+ * @brief Prints a bit of info onto the screen, for some seconds.
+ *
+ * @param text Text to print. Can use line breaks.
+ * @param total_duration Total amount of time in which the text is present.
+ * @param fade_duration When closing, fade out in the last N seconds.
  */
 void print_info(
     const string &text, const float total_duration, const float fade_duration
@@ -1119,17 +1116,14 @@ void print_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates and opens an Allegro native file dialog, and returns
- * the user's choice(s).
- * initial_path:
- *   Initial path for the dialog.
- * title:
- *   Title of the dialog.
- * patterns:
- *   File name patterns to match, separated by semicolon.
- * mode:
- *   al_create_native_file_dialog mode flags.
+/**
+ * @brief Creates and opens an Allegro native file dialog.
+ *
+ * @param initial_path Initial path for the dialog.
+ * @param title Title of the dialog.
+ * @param patterns File name patterns to match, separated by semicolon.
+ * @param mode al_create_native_file_dialog mode flags.
+ * @return The user's choice(s).
  */
 vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
@@ -1161,25 +1155,23 @@ vector<string> prompt_file_dialog(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates and opens an Allegro native file dialog, and returns
- * the user's choice(s), but confines the results to a specific folder.
+/**
+ * @brief Creates and opens an Allegro native file dialog, but confines
+ * the results to a specific folder.
+ *
  * The result pointer returns FILE_DIALOG_RES_SUCCESS on success,
  * FILE_DIALOG_RES_WRONG_FOLDER if the one or more choices do not belong to
  * the specified folder, and FILE_DIALOG_RES_CANCELED if the user canceled.
  * The list of choices that are returned only have the file name, not the
  * rest of the path. Choices can also be contained inside subfolders of the
  * specified folder.
- * folder:
- *   The folder to lock to, without the ending slash.
- * title:
- *   Title of the dialog.
- * patterns:
- *   File name patterns to match, separated by semicolon.
- * mode:
- *   al_create_native_file_dialog mode flags.
- * result:
- *   The result of the dialog is returned here.
+ *
+ * @param folder The folder to lock to, without the ending slash.
+ * @param title Title of the dialog.
+ * @param patterns File name patterns to match, separated by semicolon.
+ * @param mode al_create_native_file_dialog mode flags.
+ * @param result The result of the dialog is returned here.
+ * @return The user's choice(s).
  */
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
@@ -1210,11 +1202,12 @@ vector<string> prompt_file_dialog_locked_to_folder(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Basically, it destroys and recreates a bitmap.
+/**
+ * @brief Basically, it destroys and recreates a bitmap.
  * The main purpose of this is to update its mipmap.
- * b:
- *   The bitmap.
+ *
+ * @param b The bitmap.
+ * @return The recreated bitmap.
  */
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
     ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
@@ -1223,12 +1216,11 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reports a fatal error to the user and shuts down the program.
- * s:
- *   String explaining the error.
- * dn:
- *   File to log the error into, if any.
+/**
+ * @brief Reports a fatal error to the user and shuts down the program.
+ *
+ * @param s String explaining the error.
+ * @param dn File to log the error into, if any.
  */
 void report_fatal_error(const string &s, const data_node* dn) {
     game.errors.report(s, dn);
@@ -1246,11 +1238,12 @@ void report_fatal_error(const string &s, const data_node* dn) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to an Allegro color.
+/**
+ * @brief Converts a string to an Allegro color.
  * Components are separated by spaces, and the final one (alpha) is optional.
- * s:
- *   String to convert.
+ *
+ * @param s String to convert.
+ * @return The color.
  */
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
@@ -1287,12 +1280,12 @@ ALLEGRO_COLOR s2c(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Converts a string to a point.
- * s:
- *   String to convert.
- * z:
- *   If not NULL, the third word is placed here.
+/**
+ * @brief Converts a string to a point.
+ *
+ * @param s String to convert.
+ * @param z If not NULL, the third word is placed here.
+ * @return The (X and Y) coordinates.
  */
 point s2p(const string &s, float* z) {
     vector<string> words = split(s);
@@ -1310,12 +1303,13 @@ point s2p(const string &s, float* z) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sanitizes a file name (or part of it), such that it doesn't use any
+/**
+ * @brief Sanitizes a file name (or part of it), such that it doesn't use any
  * weird characters.
  * Do not use on paths, since colons, slashes, and backslashes will be replaced!
- * s:
- *   File name to sanitize.
+ *
+ * @param s File name to sanitize.
+ * @return The sanitized file name.
  */
 string sanitize_file_name(const string &s) {
     string ret;
@@ -1337,8 +1331,8 @@ string sanitize_file_name(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the maker tools settings.
+/**
+ * @brief Saves the maker tools settings.
  */
 void save_maker_tools() {
     data_node file("", "");
@@ -1413,8 +1407,8 @@ void save_maker_tools() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the player's options.
+/**
+ * @brief Saves the player's options.
  */
 void save_options() {
     data_node file("", "");
@@ -1464,8 +1458,8 @@ void save_options() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the current backbuffer onto a file.
+/**
+ * @brief Saves the current backbuffer onto a file.
  * In other words, dumps a screenshot.
  */
 void save_screenshot() {
@@ -1527,8 +1521,8 @@ void save_screenshot() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the engine's lifetime statistics.
+/**
+ * @brief Saves the engine's lifetime statistics.
  */
 void save_statistics() {
     data_node stats_file("", "");
@@ -1561,19 +1555,17 @@ void save_statistics() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a list of items, chooses which item comes next geometrically in the
- * specified direction. Useful for menus with several buttons the player can
- * select multidirectionally in.
+/**
+ * @brief Given a list of items, chooses which item comes next
+ * geometrically in the specified direction. Useful for menus with
+ * several buttons the player can select multidirectionally in.
  * Also, it loops around.
- * item_coordinates:
- *   Vector with the center coordinates of all items.
- * selected_item:
- *   Index of the selected item.
- * direction:
- *   Angle specifying the direction.
- * loop_region:
- *   Width and height of the loop region.
+ *
+ * @param item_coordinates Vector with the center coordinates of all items.
+ * @param selected_item Index of the selected item.
+ * @param direction Angle specifying the direction.
+ * @param loop_region Width and height of the loop region.
+ * @return The next item's index in the list.
  */
 size_t select_next_item_directionally(
     const vector<point> &item_coordinates, const size_t selected_item,
@@ -1675,12 +1667,13 @@ size_t select_next_item_directionally(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a vector with all items inside a semicolon-separated list.
- * s:
- *   The string containing the list.
- * sep:
- *   Separator to use, in case you need something else. Default is semicolon.
+/**
+ * @brief Returns a vector with all items inside a semicolon-separated list.
+ *
+ * @param s The string containing the list.
+ * @param sep Separator to use, in case you need something else.
+ * Default is semicolon.
+ * @return The vector.
  */
 vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
     vector<string> parts = split(s, sep);
@@ -1691,20 +1684,16 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the width of all string tokens in a vector of tokens.
- * tokens:
- *   Vector of tokens to set the widths of.
- * text_font:
- *   Text font.
- * control_font:
- *   Font for control bind icons.
- * max_control_bitmap_height:
- *   If bitmap icons need to be condensed vertically to fit a certain space,
- *   then their width will be affected too. Specify the maximum height here.
- *   Use 0 to indicate no maximum height.
- * control_condensed:
- *   If true, control bind player icons are condensed.
+/**
+ * @brief Sets the width of all string tokens in a vector of tokens.
+ *
+ * @param tokens Vector of tokens to set the widths of.
+ * @param text_font Text font.
+ * @param control_font Font for control bind icons.
+ * @param max_control_bitmap_height If bitmap icons need to be condensed
+ * vertically to fit a certain space, then their width will be affected too.
+ * Specify the maximum height here. Use 0 to indicate no maximum height.
+ * @param control_condensed If true, control bind player icons are condensed.
  */
 void set_string_token_widths(
     vector<string_token> &tokens,
@@ -1735,22 +1724,20 @@ void set_string_token_widths(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Shows a native message box. It is better to call this rather than
+/**
+ * @brief Shows a native message box. It is better to call this rather than
  * al_show_native_message_box() directly because it does not reset the locale
  * after it is done.
- * display:
- *   Display responsible for this dialog.
- * title:
- *   Title to display on the dialog.
- * heading:
- *   Heading text to display on the dialog.
- * text:
- *   Main text to display on the dialog.
- * buttons:
- *   Buttons the user can press.
- * flags:
- *   al_show_native_message_box flags.
+ *
+ * @param display Display responsible for this dialog.
+ * @param title Title to display on the dialog.
+ * @param heading Heading text to display on the dialog.
+ * @param text Main text to display on the dialog.
+ * @param buttons Buttons the user can press.
+ * @param flags al_show_native_message_box flags.
+ * @return 0 if the window was closed without activating a button.
+ * 1 if the OK or Yes button was pressed.
+ * 2 if the Cancel or No button was pressed.
  */
 int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
@@ -1768,10 +1755,10 @@ int show_message_box(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a system signal.
- * signum:
- *   Signal number.
+/**
+ * @brief Handles a system signal.
+ *
+ * @param signum Signal number.
  */
 void signal_handler(const int signum) {
     volatile static bool already_handling_signal = false;
@@ -1798,20 +1785,15 @@ void signal_handler(const int signum) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Spews out a Pikmin from a given point. Used by Onions and converters.
- * pos:
- *   Point of origin.
- * z:
- *   Z of the point of origin.
- * pik_type:
- *   Type of the Pikmin to spew out.
- * angle:
- *   Direction in which to spew.
- * horizontal_speed:
- *   Horizontal speed in which to spew.
- * vertical_speed:
- *   Vertical speed in which to spew.
+/**
+ * @brief Spews out a Pikmin from a given point. Used by Onions and converters.
+ *
+ * @param pos Point of origin.
+ * @param z Z of the point of origin.
+ * @param pik_type Type of the Pikmin to spew out.
+ * @param angle Direction in which to spew.
+ * @param horizontal_speed Horizontal speed in which to spew.
+ * @param vertical_speed Vertical speed in which to spew.
  */
 void spew_pikmin_seed(
     const point pos, const float z, pikmin_type* pik_type,
@@ -1833,13 +1815,14 @@ void spew_pikmin_seed(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Splits a long string, composed of string tokens, into different line breaks,
- * such that no line goes over the limit, unless necessary.
- * tokens:
- *   Tokens that make up the string.
- * max_width:
- *   Maximum width of each line.
+/**
+ * @brief Splits a long string, composed of string tokens,
+ * into different line breaks, such that no line goes over the limit
+ * unless necessary.
+ *
+ * @param tokens Tokens that make up the string.
+ * @param max_width Maximum width of each line.
+ * @return The lines.
  */
 vector<vector<string_token> > split_long_string_with_tokens(
     const vector<string_token> &tokens, const int max_width
@@ -1919,11 +1902,12 @@ vector<vector<string_token> > split_long_string_with_tokens(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Standardizes a path, making it use forward slashes instead of backslashes,
- * and removing excess slashes at the end.
- * path:
- *   Path to standardize.
+/**
+ * @brief Standardizes a path, making it use forward slashes instead of
+ * backslashes, and removing excess slashes at the end.
+ *
+ * @param path Path to standardize.
+ * @return The standardized path.
  */
 string standardize_path(const string &path) {
     string res = replace_all(path, "\\", "/");
@@ -1932,15 +1916,15 @@ string standardize_path(const string &path) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Starts the display of a text message.
+/**
+ * @brief Starts the display of a text message.
+ *
  * If the text is empty, it closes the message box.
  * Any newline characters or slashes followed by n ("\n") will be used to
  * separate the message into lines.
- * text:
- *   Text to display.
- * speaker_bmp:
- *   Bitmap representing the speaker.
+ *
+ * @param text Text to display.
+ * @param speaker_bmp Bitmap representing the speaker.
  */
 void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
@@ -1964,10 +1948,12 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
 
 #if defined(_WIN32)
 
-/* ----------------------------------------------------------------------------
- * An implementation of strsignal from POSIX.
- * signum:
- *   Signal number.
+
+/**
+ * @brief An implementation of strsignal from POSIX.
+ *
+ * @param signum Signal number.
+ * @return The string.
  */
 string strsignal(const int signum) {
     switch(signum) {
@@ -1997,11 +1983,12 @@ string strsignal(const int signum) {
 #endif //if defined(_WIN32)
 
 
-/* ----------------------------------------------------------------------------
- * Returns the tokens that make up a string. This does not set the tokens's
- * width.
- * s:
- *   String to tokenize.
+/**
+ * @brief Returns the tokens that make up a string.
+ * This does not set the tokens's width.
+ *
+ * @param s String to tokenize.
+ * @return The tokens.
  */
 vector<string_token> tokenize_string(const string &s) {
     vector<string_token> tokens;
@@ -2050,11 +2037,12 @@ vector<string_token> tokenize_string(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unescapes a user string. This converts two backslashes into one, and
+/**
+ * @brief Unescapes a user string. This converts two backslashes into one, and
  * converts backslash n into a newline character.
- * s:
- *   String to unescape.
+ *
+ * @param s String to unescape.
+ * @return The unescaped string.
  */
 string unescape_string(const string &s) {
     if(s.empty()) return s;
@@ -2088,14 +2076,14 @@ string unescape_string(const string &s) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a string that's a join of the strings in the specified vector,
+/**
+ * @brief Returns a string that's a join of the strings in the specified vector,
  * but only past a certain position. The strings are joined with a space
  * character.
- * v:
- *   The vector of strings.
- * pos:
- *   Use the string at this position and onward.
+ *
+ * @param v The vector of strings.
+ * @param pos Use the string at this position and onward.
+ * @return The joined string.
  */
 string vector_tail_to_string(const vector<string> &v, const size_t pos) {
     string result = v[pos];
@@ -2106,13 +2094,13 @@ string vector_tail_to_string(const vector<string> &v, const size_t pos) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes all "non-important" files inside of a folder.
+/**
+ * @brief Deletes all "non-important" files inside of a folder.
  * Then, if the folder ends up empty, also deletes the folder.
- * folder_path:
- *   Path to the folder to wipe.
- * non_important_files:
- *   List of files that can be deleted.
+ *
+ * @param folder_path Path to the folder to wipe.
+ * @param non_important_files List of files that can be deleted.
+ * @return An error code.
  */
 WIPE_FOLDER_RESULTS wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
@@ -2189,17 +2177,17 @@ WIPE_FOLDER_RESULTS wipe_folder(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a string, representing a long line of text, it automatically
+/**
+ * @brief Given a string, representing a long line of text, it automatically
  * adds line breaks along the text in order to break it up into smaller lines,
  * such that no line exceeds the number of characters in n_chars_per_line
  * (if possible). Lines are only split at space characters.
  * This is a naive approach, in that it doesn't care about font size.
- * s:
- *   Input string.
- * n_chars_per_line:
- *   Number of characters that a line cannot exceed, unless it's impossible
- *   to split.
+ *
+ * @param s Input string.
+ * @param n_chars_per_line Number of characters that a line cannot exceed,
+ * unless it's impossible to split.
+ * @return The wrapped string.
  */
 string word_wrap(const string &s, const size_t n_chars_per_line) {
     string result;

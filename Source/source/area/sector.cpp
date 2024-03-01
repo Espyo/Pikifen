@@ -17,8 +17,9 @@
 #include "geometry.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sector.
+/**
+ * @brief Constructs a new sector object.
+ *
  */
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
@@ -33,8 +34,9 @@ sector::sector() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a sector.
+/**
+ * @brief Destroys the sector object.
+ *
  */
 sector::~sector() {
     for(size_t t = 0; t < 2; ++t) {
@@ -45,12 +47,11 @@ sector::~sector() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds an edge to the sector's list of edges, if it's not there already.
- * e_ptr:
- *   Edge to add.
- * e_nr:
- *   Index number of the edge to add.
+/**
+ * @brief Adds an edge to the sector's list of edges, if it's not there already.
+ *
+ * @param e_ptr Edge to add.
+ * @param e_nr Index number of the edge to add.
  */
 void sector::add_edge(edge* e_ptr, const size_t e_nr) {
     for(size_t i = 0; i < edges.size(); ++i) {
@@ -63,8 +64,8 @@ void sector::add_edge(edge* e_ptr, const size_t e_nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Calculates the bounding box coordinates and saves them
+/**
+ * @brief Calculates the bounding box coordinates and saves them
  * in the object's bbox variables.
  */
 void sector::calculate_bounding_box() {
@@ -96,12 +97,12 @@ void sector::calculate_bounding_box() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clones a sector's properties onto another,
+/**
+ * @brief Clones a sector's properties onto another,
  * not counting the list of edges, bounding box, or bitmap
  * (the file name is cloned too, though).
- * destination:
- *   Sector to clone the data into.
+ *
+ * @param destination Sector to clone the data into.
  */
 void sector::clone(sector* destination) const {
     destination->type = type;
@@ -120,14 +121,14 @@ void sector::clone(sector* destination) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Fills a vector with neighboring sectors, recursively, but only if they
+/**
+ * @brief Fills a vector with neighboring sectors, recursively, but only if they
  * meet certain criteria.
- * condition:
- *   Function that accepts a sector and checks its criteria. This
- *   function must return true if accepted, false if not.
- * sector_list:
- *   List of sectors to be filled. Also doubles as the list of visited sectors.
+ *
+ * @param condition Function that accepts a sector and checks its criteria.
+ * This function must return true if accepted, false if not.
+ * @param sector_list List of sectors to be filled.
+ * Also doubles as the list of visited sectors.
  */
 void sector::get_neighbor_sectors_conditionally(
     const std::function<bool(sector* s_ptr)> &condition,
@@ -158,8 +159,10 @@ void sector::get_neighbor_sectors_conditionally(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a sector.
+/**
+ * @brief Returns the vertex farthest to the right in a sector.
+ *
+ * @return The vertex.
  */
 vertex* sector::get_rightmost_vertex() const {
     vertex* rightmost = NULL;
@@ -177,13 +180,12 @@ vertex* sector::get_rightmost_vertex() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * If texture merging is required, this returns what two neighboring sectors
- * will be used for it.
- * s1:
- *   Receives the first sector.
- * s2:
- *   Receives the second sector.
+/**
+ * @brief If texture merging is required, this returns what two
+ * neighboring sectors will be used for it.
+ *
+ * @param s1 Receives the first sector.
+ * @param s2 Receives the second sector.
  */
 void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //Check all edges to find which two textures need merging.
@@ -254,8 +256,10 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a sector's vertexes are ordered clockwise or not.
+/**
+ * @brief Returns whether a sector's vertexes are ordered clockwise or not.
+ *
+ * @return Whether it is clockwise.
  */
 bool sector::is_clockwise() const {
     vector<vertex*> vertexes;
@@ -266,10 +270,11 @@ bool sector::is_clockwise() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a sector by checking its triangles.
- * p:
- *   Point to check.
+/**
+ * @brief Returns whether a point is inside a sector by checking its triangles.
+ *
+ * @param p Point to check.
+ * @return Whether it is in the sector.
  */
 bool sector::is_point_in_sector(const point &p) const {
     for(size_t t = 0; t < triangles.size(); ++t) {
@@ -291,10 +296,10 @@ bool sector::is_point_in_sector(const point &p) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Removes an edge from a sector's list of edges, if it is there.
- * e_ptr:
- *   Edge to remove.
+/**
+ * @brief Removes an edge from a sector's list of edges, if it is there.
+ *
+ * @param e_ptr Edge to remove.
  */
 void sector::remove_edge(const edge* e_ptr) {
     size_t i = 0;
@@ -308,8 +313,8 @@ void sector::remove_edge(const edge* e_ptr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a sector texture's info struct.
+/**
+ * @brief Constructs a new sector texture info object.
  */
 sector_texture_info::sector_texture_info() :
     scale(1.0, 1.0),
@@ -319,16 +324,16 @@ sector_texture_info::sector_texture_info() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns which sector the specified point belongs to.
- * p:
- *   Coordinates of the point.
- * sector_nr:
- *   If not NULL, the number of the sector on the area map is placed here.
- *   The number will not be set if the search is using the blockmap.
- * use_blockmap:
- *   If true, use the blockmap to search.
- *   This provides faster results, but the blockmap must be built.
+/**
+ * @brief Returns which sector the specified point belongs to.
+ *
+ * @param p Coordinates of the point.
+ * @param sector_nr If not NULL, the number of the sector on the
+ * area map is placed here. The number will not be set if the search
+ * is using the blockmap.
+ * @param use_blockmap If true, use the blockmap to search.
+ * This provides faster results, but the blockmap must be built.
+ * @return The sector.
  */
 sector* get_sector(
     const point &p, size_t* sector_nr, const bool use_blockmap

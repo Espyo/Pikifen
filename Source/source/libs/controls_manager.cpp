@@ -14,8 +14,8 @@
 #include "controls_manager.h"
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new control bind.
+/**
+ * @brief Constructs a new control bind object.
  */
 control_bind::control_bind() :
     action_type_id(0),
@@ -23,15 +23,15 @@ control_bind::control_bind() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * When a game controller stick input is received, it should be checked with
- * the state of that entire stick to see if it needs to be normalized,
+/**
+ * @brief When a game controller stick input is received, it should be checked
+ * with the state of that entire stick to see if it needs to be normalized,
  * deadzones should be applied, etc.
  * The final cleaned stick positions can be found in the clean_sticks variable.
- * input:
- *   Input to clean.
+ *
+ * @param input Input to clean.
  */
-void controls_manager::clean_stick(const player_input& input) {
+void controls_manager::clean_stick(const player_input &input) {
     //https://www.gamedeveloper.com/
     //  disciplines/doing-thumbstick-dead-zones-right
     //https://www.gamedeveloper.com/
@@ -66,10 +66,11 @@ void controls_manager::clean_stick(const player_input& input) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a list of action types that get triggered by the given input.
- * input:
- *   The input.
+/**
+ * @brief Returns a list of action types that get triggered by the given input.
+ *
+ * @param input The input.
+ * @return The action types.
  */
 vector<int> controls_manager::get_action_types_from_input(
     const player_input &input
@@ -132,16 +133,15 @@ vector<int> controls_manager::get_action_types_from_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles a final clean input.
- * input:
- *   Player input to process.
- * add_directly:
- *   If true, the player actions bound to this input will be added to the queue
- *   of actions directly.
- *   If false, the manager will save the player actions' current state, and
- *   only add the actions at the end of the frame, if their state is different
- *   from the last frame's state.
+/**
+ * @brief Handles a final clean input.
+ *
+ * @param input Player input to process.
+ * @param add_directly If true, the player actions bound to this input will
+ * be added to the queue of actions directly.
+ * If false, the manager will save the player actions' current state, and
+ * only add the actions at the end of the frame, if their state is different
+ * from the last frame's state.
  */
 void controls_manager::handle_clean_input(
     const player_input &input, bool add_directly
@@ -165,10 +165,10 @@ void controls_manager::handle_clean_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an input from hardware.
- * input:
- *   The input.
+/**
+ * @brief Handles an input from hardware.
+ *
+ * @param input The input.
  */
 void controls_manager::handle_input(
     const player_input &input
@@ -238,9 +238,11 @@ void controls_manager::handle_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player actions that occurred during the last frame of gameplay,
- * and begins a new frame.
+/**
+ * @brief Returns the player actions that occurred during the last frame of
+ * gameplay, and begins a new frame.
+ *
+ * @return The actions.
  */
 vector<player_action> controls_manager::new_frame() {
     for(auto &a : action_type_values) {
@@ -261,8 +263,8 @@ vector<player_action> controls_manager::new_frame() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new controls manager options struct.
+/**
+ * @brief Constructs a new controls manager options object.
  */
 controls_manager_options::controls_manager_options() :
     stick_min_deadzone(0.0f),
@@ -271,8 +273,8 @@ controls_manager_options::controls_manager_options() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new player action.
+/**
+ * @brief Constructs a new player action object.
  */
 player_action::player_action() :
     action_type_id(0),
@@ -280,8 +282,8 @@ player_action::player_action() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new player input.
+/**
+ * @brief Constructs a new player input object.
  */
 player_input::player_input() :
     type(INPUT_TYPE_NONE),

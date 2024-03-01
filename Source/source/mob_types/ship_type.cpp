@@ -17,8 +17,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of ship.
+/**
+ * @brief Constructs a new ship type object.
  */
 ship_type::ship_type() :
     mob_type(MOB_CATEGORY_SHIPS),
@@ -45,16 +45,18 @@ ship_type::ship_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a type of ship.
+/**
+ * @brief Destroys the ship type object.
  */
 ship_type::~ship_type() {
     delete nest;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
+ *
+ * @return The vector.
  */
 anim_conversion_vector ship_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -63,10 +65,10 @@ anim_conversion_vector ship_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void ship_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -80,10 +82,10 @@ void ship_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void ship_type::load_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function

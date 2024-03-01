@@ -22,12 +22,17 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Mob category for tasks that require multiple Pikmin to
+/**
+ * @brief Mob category for tasks that require multiple Pikmin to
  * work together to clear.
  */
 class group_task_category : public mob_category {
+
 public:
+    
+    //--- Function declarations ---
+
+    group_task_category();
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;
     mob_type* create_type() override;
@@ -38,7 +43,6 @@ public:
     void erase_mob(mob* m) override;
     void clear_types() override;
     
-    group_task_category();
 };
 
 

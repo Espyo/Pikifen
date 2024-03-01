@@ -20,25 +20,28 @@
 
 
 namespace SHIP {
+
 //Animate the control point's ring for this long.
 const float CONTROL_POINT_ANIM_DUR = 10.0f;
+
 //The amount of rings the ship's control point has.
 const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
+
 //How often the tractor beam generates a ring.
 const float TRACTOR_BEAM_EMIT_RATE = 0.15f;
+
 //Animate each tractor beam ring for this long.
 const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a ship mob.
- * pos:
- *   Starting coordinates.
- * type:
- *   Ship type this mob belongs to.
- * angle:
- *   Starting angle.
+/**
+ * @brief Constructs a new ship object.
+ *
+ * @param pos Starting coordinates.
+ * @param type Ship type this mob belongs to.
+ * @param angle Starting angle.
  */
 ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
@@ -75,16 +78,16 @@ ship::ship(const point &pos, ship_type* type, float angle) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys a ship mob.
+/**
+ * @brief Destroys the ship object.
  */
 ship::~ship() {
     delete nest;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a ship.
+/**
+ * @brief Draws a ship.
  */
 void ship::draw_mob() {
 
@@ -204,10 +207,10 @@ void ship::draw_mob() {
 }
 
 
-/* ----------------------------------------------------------------------------
-* Heals a leader, causes particle effects, etc.
-* l:
-*   Leader to heal.
+/**
+* @brief Heals a leader, causes particle effects, etc.
+* 
+* @param l Leader to heal.
 */
 void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
@@ -228,11 +231,12 @@ void ship::heal_leader(leader* l) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks whether the specified leader is currently on the ship's
+/**
+ * @brief Checks whether the specified leader is currently on the ship's
  * control point or not.
- * l:
- *   Leader to check.
+ *
+ * @param l Leader to check.
+ * @return Whether the leader is on the control point.
  */
 bool ship::is_leader_on_cp(const leader* l) const {
     return
@@ -241,10 +245,10 @@ bool ship::is_leader_on_cp(const leader* l) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- * svr:
- *   Script var reader to use.
+/**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
  */
 void ship::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -253,10 +257,10 @@ void ship::read_script_vars(const script_var_reader &svr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
- * delta_t:
- *   How long the frame's tick is, in seconds.
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
 void ship::tick_class_specifics(const float delta_t) {
     nest->tick(delta_t);

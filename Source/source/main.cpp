@@ -11,13 +11,13 @@
 #include "game.h"
 
 
-/* ----------------------------------------------------------------------------
- * Main function. It calls the game class's functions to initialize and run
- * the game.
- * argc:
- *   Command line argument count. Unused.
- * argv:
- *   Command line argument values. Unused.
+/**
+ * @brief Main function. It calls the game class's functions to initialize
+ * and run the game.
+ *
+ * @param argc Command line argument count. Unused.
+ * @param argv Command line argument values. Unused.
+ * @return 0 if everything went well, or an error number otherwise.
  */
 int main(int argc, char** argv) {
     game = game_class();

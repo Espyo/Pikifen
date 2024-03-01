@@ -52,8 +52,8 @@
 #include "utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Destroys Allegro and modules.
+/**
+ * @brief Destroys Allegro and modules.
  */
 void destroy_allegro() {
     al_uninstall_joystick();
@@ -64,12 +64,11 @@ void destroy_allegro() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys Allegro's event-related things.
- * logic_timer:
- *   The game logic timer.
- * logic_queue:
- *   Queue of game logic events.
+/**
+ * @brief Destroys Allegro's event-related things.
+ *
+ * @param logic_timer The game logic timer.
+ * @param logic_queue Queue of game logic events.
  */
 void destroy_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
@@ -80,8 +79,8 @@ void destroy_event_things(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys miscellaneous things.
+/**
+ * @brief Destroys miscellaneous things.
  */
 void destroy_misc() {
     al_destroy_bitmap(game.bmp_error);
@@ -96,16 +95,16 @@ void destroy_misc() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys registered mob categories.
+/**
+ * @brief Destroys registered mob categories.
  */
 void destroy_mob_categories() {
     game.mob_categories.clear();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes Allegro and its modules.
+/**
+ * @brief Initializes Allegro and its modules.
  */
 void init_allegro() {
     if(!al_init()) {
@@ -151,8 +150,8 @@ void init_allegro() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes things related to the controls.
+/**
+ * @brief Initializes things related to the controls.
  */
 void init_controls() {
     //Register the existing actions.
@@ -538,8 +537,8 @@ void init_controls() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes Dear ImGui.
+/**
+ * @brief Initializes Dear ImGui.
  */
 void init_dear_imgui() {
     IMGUI_CHECKVERSION();
@@ -553,8 +552,8 @@ void init_dear_imgui() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the error bitmap.
+/**
+ * @brief Initializes the error bitmap.
  */
 void init_error_bitmap() {
     //Error bitmap.
@@ -574,8 +573,8 @@ void init_error_bitmap() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes some essential things.
+/**
+ * @brief Initializes some essential things.
  */
 void init_essentials() {
     //Signal handlers.
@@ -586,12 +585,12 @@ void init_essentials() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes things regarding Allegro events, like the queue, timer, etc.
- * logic_timer:
- *   The game logic timer.
- * logic_queue:
- *   Queue of game logic events.
+/**
+ * @brief Initializes things regarding Allegro events, like the queue,
+ * timer, etc.
+ * 
+ * @param logic_timer The game logic timer.
+ * @param logic_queue Queue of game logic events.
  */
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
@@ -661,8 +660,8 @@ void init_event_things(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes miscellaneous things and settings.
+/**
+ * @brief Initializes miscellaneous things and settings.
  */
 void init_misc() {
     game.mouse_cursor.init();
@@ -714,8 +713,8 @@ void init_misc() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the list of sector types, mission goals, etc.
+/**
+ * @brief Initializes the list of sector types, mission goals, etc.
  */
 void init_misc_databases() {
     //Sector types.
@@ -797,8 +796,8 @@ void init_misc_databases() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the list of mob actions.
+/**
+ * @brief Initializes the list of mob actions.
  */
 void init_mob_actions() {
 
@@ -1537,8 +1536,8 @@ void init_mob_actions() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the list of mob categories.
+/**
+ * @brief Initializes the list of mob categories.
  */
 void init_mob_categories() {
 
@@ -1608,14 +1607,12 @@ void init_mob_categories() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads a single animation from the system animations definition file.
- * anim_def_file:
- *   The animation definition file.
- * name:
- *   Name of the animation on this file.
- * anim:
- *   The single animation suite structure to fill.
+/**
+ * @brief Loads a single animation from the system animations definition file.
+ *
+ * @param anim_def_file The animation definition file.
+ * @param name Name of the animation on this file.
+ * @param anim The single animation suite structure to fill.
  */
 void init_single_animation(
     data_node* anim_def_file, const string &name,

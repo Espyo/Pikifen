@@ -25,18 +25,23 @@ using std::vector;
 
 //Types of precipitation.
 enum PRECIPITATION_TYPES {
+    
     //None.
     PRECIPITATION_TYPE_NONE,
+
     //Rain.
     PRECIPITATION_TYPE_RAIN,
+
     //Wind.
     PRECIPITATION_TYPE_WIND,
+    
 };
 
 
 
-/* ----------------------------------------------------------------------------
- * Weather information.
+/**
+ * @brief Weather information.
+ * 
  * Daylight is mixed in with the weather, as
  * different weather conditions imply different
  * lighting throughout the day (on a sunny day,
@@ -45,24 +50,38 @@ enum PRECIPITATION_TYPES {
  * and grayer).
  */
 class weather {
+
 public:
+    
+    //--- Members ---
+
     //Name of this weather type.
     string name;
+    
     //Daylight color table for specific times of day, in minutes.
     vector<std::pair<int, ALLEGRO_COLOR> > daylight;
+    
     //Sun strength table for specific times of day, in minutes.
     vector<std::pair<int, unsigned char> > sun_strength;
+    
     //Blackout effect's strength table for specific times of day, in minutes.
     vector<std::pair<int, unsigned char> > blackout_strength;
+    
     //Fog -- distance at which everything is still fully visible.
     float fog_near;
+    
     //Fog -- distance at which everything is 100% foggy.
     float fog_far;
+    
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<std::pair<int, ALLEGRO_COLOR> > fog_color;
+    
     //Precipitation type, if any.
     PRECIPITATION_TYPES precipitation_type;
     
+
+    //--- Function declarations ---
+
     weather();
     weather(
         const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
@@ -76,21 +95,20 @@ public:
     float get_sun_strength();
     
 private:
-    /* ------------------------------------------------------------------------
-     * Returns how to obtain a value from a table of values, based on the
+    
+    //--- Function definitions ---
+
+    /**
+     * @brief Returns how to obtain a value from a table of values, based on the
      * current time.
-     * Returns true on success, false on failure.
-     * table:
-     *   Table to read from.
-     * cur_time:
-     *   What time it is, in minutes.
-     * ratio:
-     *   The ratio between value1 and value2 that results in the final
-     *   value is returned here.
-     * value1:
-     *   First value to interpolate with.
-     * value2:
-     *   Second value to interpolate with.
+     * 
+     * @param table Table to read from.
+     * @param cur_time What time it is, in minutes.
+     * @param ratio The ratio between value1 and value2 that results in
+     * the final value is returned here.
+     * @param value1 First value to interpolate with.
+     * @param value2 Second value to interpolate with.
+     * @return Whether it succeeded.
      */
     template<typename T>
     bool get_table_values(
@@ -126,6 +144,7 @@ private:
         
         return false;
     }
+    
 };
 
 

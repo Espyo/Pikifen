@@ -19,8 +19,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of leader.
+/**
+ * @brief Constructs a new leader type object.
  */
 leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
@@ -49,8 +49,8 @@ leader_type::leader_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector leader_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -71,10 +71,10 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void leader_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -94,10 +94,10 @@ void leader_type::load_properties(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads resources into memory.
- * file:
- *   File to read from.
+/**
+ * @brief Loads resources into memory.
+ *
+ * @param file File to read from.
  */
 void leader_type::load_resources(data_node* file) {
     reader_setter rs(file);
@@ -117,8 +117,8 @@ void leader_type::load_resources(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads resources from memory.
+/**
+ * @brief Unloads resources from memory.
  */
 void leader_type::unload_resources() {
     game.bitmaps.detach(bmp_icon);

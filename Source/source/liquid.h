@@ -22,8 +22,10 @@
 using std::string;
 
 
-/* ----------------------------------------------------------------------------
- * A liquid type defines how a sector should look to make it look like water.
+/**
+ * @brief A liquid type defines how a sector should look to make it look
+ * like water.
+ *
  * This is considered a "liquid" and not specifically "water" because the
  * engine allows creating other water-like things, like acid, lava, etc.
  * Each have their own color, reflectivity, etc.
@@ -31,22 +33,35 @@ using std::string;
  * engine has to know if a sector is to be shown as a liquid or not.
  */
 struct liquid {
+
+    //--- Members ---
+
     //Name of this liquid.
     string name;
+    
     //Color that best represents this liquid.
     ALLEGRO_COLOR main_color;
+    
     //Color used for this liquid in the radar.
     ALLEGRO_COLOR radar_color;
+    
     //Animation database containing its liquid surface animation.
     animation_database anim_db;
+    
     //Animation instance for the liquid surface.
     animation_instance anim_instance;
+    
     //Speed at which to scroll each layer of the surface.
     float surface_speed[2];
+    
     //Opacity of the surface.
     unsigned char surface_alpha;
-    
+
+
+    //--- Function declarations ---
+        
     liquid();
+    
 };
 
 

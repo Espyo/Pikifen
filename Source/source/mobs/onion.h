@@ -28,11 +28,24 @@ extern const unsigned char SEETHROUGH_ALPHA;
 }
 
 
-/* ----------------------------------------------------------------------------
- * An Onion is where Pikmin are stored.
+/**
+ * @brief An Onion is where Pikmin are stored.
  */
 class onion : public mob {
+
 public:
+
+    //--- Misc. declarations ---
+
+    static const float ONION_NEW_SEED_Z_OFFSET;
+    static const float ONION_SPEW_ANGLE_SHIFT;
+    static const float ONION_SPEW_H_SPEED;
+    static const float ONION_SPEW_H_SPEED_DEVIATION;
+    static const float ONION_SPEW_V_SPEED;
+
+    
+    //--- Members ---
+
     //What type of Onion it is.
     onion_type* oni_type;
     
@@ -41,38 +54,40 @@ public:
     
     //Is this Onion currently activated?
     bool activated;
+
     //How many seeds are queued up to be spat, of each type.
     vector<size_t> spew_queue;
+
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
+
     //Time left until it spews the next seed in the queue.
     timer next_spew_timer;
+
     //Angle at which the next seed will be spit.
     float next_spew_angle;
+    
     //The Onion's alpha.
     unsigned char seethrough;
     
     //Spit a new seed.
     void spew();
     
-    //Constructor.
+
+    //--- Function declarations ---
+
     onion(const point &pos, onion_type* type, const float angle);
-    //Destructor.
     ~onion();
-    //Mob drawing routine.
     void draw_mob() override;
-    //Read script variables from the area data.
     void read_script_vars(const script_var_reader &svr) override;
     
-    static const float ONION_NEW_SEED_Z_OFFSET;
-    static const float ONION_SPEW_ANGLE_SHIFT;
-    static const float ONION_SPEW_H_SPEED;
-    static const float ONION_SPEW_H_SPEED_DEVIATION;
-    static const float ONION_SPEW_V_SPEED;
     
 protected:
-    //Tick class-specific logic.
+    
+    //--- Function declarations ---
+
     void tick_class_specifics(const float delta_t) override;
+    
 };
 
 

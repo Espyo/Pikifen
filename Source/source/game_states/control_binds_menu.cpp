@@ -20,19 +20,24 @@
 
 
 namespace CONTROL_BINDS_MENU {
+
 //Height of each bind button.
 const float BIND_BUTTON_HEIGHT = 0.07f;
+
 //Padding between each bind button.
 const float BIND_BUTTON_PADDING = 0.01f;
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Control_binds_menu.txt";
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "controls menu" state.
+/**
+ * @brief Constructs a new control binds menu state object.
  */
 control_binds_menu_state::control_binds_menu_state() :
     game_state(),
@@ -46,14 +51,13 @@ control_binds_menu_state::control_binds_menu_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Chooses the input for a given action type's bind.
+/**
+ * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
  * action type, then a new one gets added.
- * action_type:
- *   Action type.
- * bind_idx:
- *   Index of that action type's bind.
+ *
+ * @param action_type Action type.
+ * @param bind_idx Index of that action type's bind.
  */
 void control_binds_menu_state::choose_input(
     const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
@@ -77,12 +81,11 @@ void control_binds_menu_state::choose_input(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Deletes a bind from an action type.
- * action_type:
- *   Action type it belongs to.
- * bind_idx:
- *   Index number of the control.
+/**
+ * @brief Deletes a bind from an action type.
+ *
+ * @param action_type Action type it belongs to.
+ * @param bind_idx Index number of the control.
  */
 void control_binds_menu_state::delete_bind(
     const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
@@ -104,8 +107,8 @@ void control_binds_menu_state::delete_bind(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the controls menu.
+/**
+ * @brief Draws the controls menu.
  */
 void control_binds_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
@@ -141,8 +144,8 @@ void control_binds_menu_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks time by one frame of logic.
+/**
+ * @brief Ticks time by one frame of logic.
  */
 void control_binds_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
@@ -164,18 +167,20 @@ void control_binds_menu_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string control_binds_menu_state::get_name() const {
     return "controls menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -214,8 +219,8 @@ void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the controls menu and goes to the options menu.
+/**
+ * @brief Leaves the controls menu and goes to the options menu.
  */
 void control_binds_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
@@ -226,8 +231,8 @@ void control_binds_menu_state::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the controls menu into memory.
+/**
+ * @brief Loads the controls menu into memory.
  */
 void control_binds_menu_state::load() {
     bmp_menu_bg = NULL;
@@ -295,8 +300,8 @@ void control_binds_menu_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Populates the list of binds.
+/**
+ * @brief Populates the list of binds.
  */
 void control_binds_menu_state::populate_binds() {
     list_box->delete_all_children();
@@ -633,10 +638,10 @@ void control_binds_menu_state::populate_binds() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Restores the default binds for a given player action.
- * action_type_id:
- *   Action type ID of the action to restore.
+/**
+ * @brief Restores the default binds for a given player action.
+ *
+ * @param action_type_id Action type ID of the action to restore.
  */
 void control_binds_menu_state::restore_defaults(
     const PLAYER_ACTION_TYPES action_type_id
@@ -673,8 +678,8 @@ void control_binds_menu_state::restore_defaults(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the controls menu from memory.
+/**
+ * @brief Unloads the controls menu from memory.
  */
 void control_binds_menu_state::unload() {
 

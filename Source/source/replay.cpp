@@ -18,8 +18,8 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new replay.
+/**
+ * @brief Construct a new replay object.
  */
 replay::replay() :
     prev_leader_nr(INVALID) {
@@ -28,23 +28,17 @@ replay::replay() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a new state to the replay, filling it with data from the supplied
+/**
+ * @brief Adds a new state to the replay, filling it with data from the supplied
  * mob vectors.
- * leader_list:
- *   List of leaders.
- * pikmin_list:
- *   List of Pikmin.
- * enemy_list:
- *   List of enemies.
- * treasure_list:
- *   List of treasures.
- * onion_list:
- *   List of Onions.
- * obstacle_list:
- *   List of mobs that represent obstacles.
- * cur_leader_nr:
- *   Index number of the current leader.
+ * 
+ * @param leader_list List of leaders.
+ * @param pikmin_list List of Pikmin.
+ * @param enemy_list List of enemies.
+ * @param treasure_list List of treasures.
+ * @param onion_list List of Onions.
+ * @param obstacle_list List of mobs that represent obstacles.
+ * @param cur_leader_nr Index number of the current leader.
  */
 void replay::add_state(
     const vector<leader*> &leader_list,
@@ -157,8 +151,8 @@ void replay::add_state(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears all data about this replay.
+/**
+ * @brief Clears all data about this replay.
  */
 void replay::clear() {
     states.clear();
@@ -167,18 +161,18 @@ void replay::clear() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes the recording of a new replay.
+/**
+ * @brief Finishes the recording of a new replay.
  */
 void replay::finish_recording() {
     clear();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads replay data from a file in the disk.
- * file_name:
- *   Name of the file to load from.
+/**
+ * @brief Loads replay data from a file in the disk.
+ * 
+ * @param file_name Name of the file to load from.
  */
 void replay::load_from_file(const string &file_name) {
     clear();
@@ -220,10 +214,10 @@ void replay::load_from_file(const string &file_name) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves replay data to a file in the disk.
- * file_name:
- *   Name of the file to save to.
+/**
+ * @brief Saves replay data to a file in the disk.
+ * 
+ * @param file_name Name of the file to save to.
  */
 void replay::save_to_file(const string &file_name) const {
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "wb");
@@ -250,12 +244,11 @@ void replay::save_to_file(const string &file_name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new replay element.
- * type:
- *   Type of element.
- * pos:
- *   Its coordinates.
+/**
+ * @brief Constructs a new replay element object.
+ * 
+ * @param type Type of element.
+ * @param pos Its coordinates.
  */
 replay_element::replay_element(
     const REPLAY_ELEMENT_TYPES type, const point &pos
@@ -266,12 +259,11 @@ replay_element::replay_element(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new replay event.
- * type:
- *   Type of event.
- * data:
- *   Any numerical data this event needs.
+/**
+ * @brief Constructs a new replay event object.
+ * 
+ * @param type Type of event.
+ * @param data Any numerical data this event needs.
  */
 replay_event::replay_event(
     const REPLAY_EVENT_TYPES type, const size_t data

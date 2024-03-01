@@ -17,16 +17,23 @@
 #include "mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * An object that moves others around as if on a track.
+/**
+ * @brief An object that moves others around as if on a track.
  */
 class track : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of track it is.
     track_type* tra_type;
     
-    //Constructor.
+    
+    //--- Function declarations ---
+
     track(const point &pos, track_type* type, const float angle);
+    
 };
 
 

@@ -16,8 +16,8 @@
 #include "../mobs/pile.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the pile category.
+/**
+ * @brief Constructs a new pile category object.
  */
 pile_category::pile_category() :
     mob_category(
@@ -28,8 +28,8 @@ pile_category::pile_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of pile.
+/**
+ * @brief Clears the list of registered types of pile.
  */
 void pile_category::clear_types() {
     for(auto &t : game.mob_types.pile) {
@@ -39,14 +39,13 @@ void pile_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a pile and adds it to the list of piles.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a pile and adds it to the list of piles.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* pile_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* pile_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of pile.
+/**
+ * @brief Creates a new, empty type of pile.
+ *
+ * @return The type.
  */
 mob_type* pile_category::create_type() {
     return new pile_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a pile from the list of piles.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a pile from the list of piles.
+ *
+ * @param m The mob to erase.
  */
 void pile_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.piles.erase(
         find(
-        game.states.gameplay->mobs.piles.begin(), 
-        game.states.gameplay->mobs.piles.end(), 
-        (pile*) m
+            game.states.gameplay->mobs.piles.begin(),
+            game.states.gameplay->mobs.piles.end(),
+            (pile*) m
         )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of pile given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of pile given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* pile_category::get_type(const string &name) const {
     auto it = game.mob_types.pile.find(name);
@@ -93,10 +95,10 @@ mob_type* pile_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of pile by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of pile by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void pile_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.pile) {
@@ -105,10 +107,10 @@ void pile_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of pile.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of pile.
+ *
+ * @param type Mob type to register.
  */
 void pile_category::register_type(mob_type* type) {
     game.mob_types.pile[type->name] = (pile_type*) type;

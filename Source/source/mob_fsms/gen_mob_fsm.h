@@ -14,8 +14,8 @@
 #include "../mobs/mob.h"
 
 
-/* ----------------------------------------------------------------------------
- * Functions about the generic mob's finite state machine and behavior.
+/**
+ * @brief Functions about the generic mob's finite state machine and behavior.
  */
 namespace gen_mob_fsm {
 void be_attacked(mob* m, void* info1, void* info2);

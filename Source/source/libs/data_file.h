@@ -57,35 +57,50 @@ extern const string UTF8_MAGIC_NUMBER;
 }
 
 
-/* ----------------------------------------------------------------------------
- * A node of data. Nodes may contain a value, and/or a list of children nodes.
+/**
+ * @brief A node of data. Nodes may contain a value,
+ * and/or a list of children nodes.
  */
 class data_node {
+
 public:
+    
+    //--- Members ---
+
     //The node's name.
     string name;
+
     //The node's value.
     string value;
+
     //True if the node or parent(s) was created from a file
     //that was opened successfuly.
     bool file_was_opened;
+
     //Full file name of the file used to open this node or its parent(s).
     string file_name;
+
     //Line on the text file this node's in.
     size_t line_nr;
     
+
+    //--- Function declarations ---
+
+    data_node();
+    explicit data_node(const string &file_name);
+    data_node(const string &name, const string &value);
+    data_node(const data_node &dn2);
+    data_node &operator=(const data_node &dn2);
+    ~data_node();
     string get_value_or_default(const string &def) const;
-    
     size_t get_nr_of_children() const;
     data_node* get_child(const size_t number);
     size_t get_nr_of_children_by_name(const string &name) const;
     data_node* get_child_by_name(
         const string &name, const size_t occurrence_number = 0
     );
-    
     size_t add(data_node* new_node);
     bool remove(data_node* node_to_remove);
-    
     void load_file(
         const string &file_name,
         const bool trim_values = true,
@@ -108,18 +123,18 @@ public:
         const bool encrypted = false
     ) const;
     
-    data_node();
-    explicit data_node(const string &file_name);
-    data_node(const string &name, const string &value);
-    data_node(const data_node &dn2);
-    data_node &operator=(const data_node &dn2);
-    ~data_node();
-    
 private:
+
+    //--- Members ---
+
     //List of children nodes.
     vector<data_node*> children;
+    
     //Dummy children, returned upon error.
     vector<data_node*> dummy_children;
+    
+
+    //--- Function declarations ---
     
     data_node* create_dummy();
     static unsigned char decrypt_char(const unsigned char c);

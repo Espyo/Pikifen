@@ -20,27 +20,35 @@
 
 
 namespace MAIN_MENU {
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu.txt";
+    
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
+
 //Path to the make page GUI information file.
 const string MAKE_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_make.txt";
+    
 //Path to the play page GUI information file.
 const string PLAY_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_play.txt";
+    
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 //Path to the tutorial question page GUI information file.
 const string TUTORIAL_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_tutorial.txt";
+    
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a "main menu" state.
+/**
+ * @brief Constructs a new main menu state object.
+ *
  */
 main_menu_state::main_menu_state() :
     game_state(),
@@ -59,8 +67,8 @@ main_menu_state::main_menu_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the main menu.
+/**
+ * @brief Draws the main menu.
  */
 void main_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
@@ -120,8 +128,8 @@ void main_menu_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks a frame's worth of logic.
+/**
+ * @brief Ticks a frame's worth of logic.
  */
 void main_menu_state::do_logic() {
     //Animate the logo Pikmin.
@@ -178,18 +186,20 @@ void main_menu_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string main_menu_state::get_name() const {
     return "main menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -201,8 +211,8 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI elements for the main menu's main page.
+/**
+ * @brief Loads the GUI elements for the main menu's main page.
  */
 void main_menu_state::init_gui_main_page() {
 
@@ -321,8 +331,8 @@ void main_menu_state::init_gui_main_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI elements for the main menu's make page.
+/**
+ * @brief Loads the GUI elements for the main menu's make page.
  */
 void main_menu_state::init_gui_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
@@ -420,8 +430,8 @@ void main_menu_state::init_gui_make_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI elements for the main menu's play page.
+/**
+ * @brief Loads the GUI elements for the main menu's play page.
  */
 void main_menu_state::init_gui_play_page() {
     data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
@@ -499,8 +509,8 @@ void main_menu_state::init_gui_play_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the GUI elements for the main menu's tutorial question page.
+/**
+ * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void main_menu_state::init_gui_tutorial_page() {
     data_node gui_file(MAIN_MENU::TUTORIAL_GUI_FILE_PATH);
@@ -577,8 +587,8 @@ void main_menu_state::init_gui_tutorial_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the main menu into memory.
+/**
+ * @brief Loads the main menu into memory.
  */
 void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
@@ -718,8 +728,8 @@ void main_menu_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the main menu from memory.
+/**
+ * @brief Unloads the main menu from memory.
  */
 void main_menu_state::unload() {
 

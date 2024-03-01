@@ -11,8 +11,8 @@
 #include "spray_type.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a spray type.
+/**
+ * @brief Constructs a new spray type object.
  */
 spray_type::spray_type() :
     group(true),

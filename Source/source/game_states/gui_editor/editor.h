@@ -26,63 +26,92 @@ extern const float ZOOM_MIN_LEVEL;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Information about the GUI editor.
+/**
+ * @brief Info about the GUI editor.
  */
 class gui_editor : public editor {
+
 public:
+
+    //--- Members ---
 
     //Automatically load this file upon boot-up of the editor, if any.
     string auto_load_file;
     
+
+    //--- Function declarations ---
+
+    gui_editor();
     void do_logic() override;
     void do_drawing() override;
     void load() override;
     void unload() override;
     string get_name() const override;
-    
     void draw_canvas();
     string get_history_option_prefix() const override;
     string get_opened_file_name() const;
     
-    gui_editor();
-    
 private:
 
-    //Represents a GUI item.
+    //--- Misc. declarations ---
+
+    /**
+     * @brief Represents a GUI item.
+     */
     struct item {
+        
+        //--- Members ---
+
         //Its name in the file.
         string name;
+
         //Center coordinates.
         point center;
+
         //Width and height.
         point size;
+        
     };
     
+
+    //--- Members ---
+
     //Currently selected item, or INVALID for none.
     size_t cur_item;
+    
     //File name of the file currently being edited.
     string file_name;
+
     //Data node for the contents of this GUI file.
     data_node file_node;
+
     //List of items for the current file.
     vector<item> items;
+
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
+
     //Position of the load widget.
     point load_widget_pos;
+
     //The list of items must focus on the currently selected item.
     bool must_focus_on_cur_item;
+
     //Small hack -- does the camera need recentering in process_gui()?
     bool must_recenter_cam;
+
     //Position of the reload widget.
     point reload_widget_pos;
+
     //Position of the quit widget.
     point quit_widget_pos;
+
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     
-    //General functions.
+
+    //--- Function declarations ---
+    
     void close_load_dialog();
     void close_options_dialog();
     void load_file(const bool should_update_history);
@@ -93,13 +122,9 @@ private:
     );
     bool save_file();
     point snap_point(const point &p);
-    
-    //Drawing functions.
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
-    
-    //(Dear ImGui) GUI functions.
     void press_grid_interval_decrease_button();
     void press_grid_interval_increase_button();
     void press_load_button();
@@ -119,8 +144,6 @@ private:
     void process_gui_panel_items();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    
-    //Input handler functions.
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;

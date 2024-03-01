@@ -14,8 +14,8 @@
 #include "../utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new type of interactable mob.
+/**
+ * @brief Constructs a new interactable type object.
  */
 interactable_type::interactable_type() :
     mob_type(MOB_CATEGORY_INTERACTABLES),
@@ -26,10 +26,10 @@ interactable_type::interactable_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void interactable_type::load_properties(data_node* file) {
     reader_setter rs(file);

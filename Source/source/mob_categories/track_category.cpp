@@ -16,8 +16,8 @@
 #include "../mobs/track.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the track category.
+/**
+ * @brief Constructs a new track category object.
  */
 track_category::track_category() :
     mob_category(
@@ -28,8 +28,8 @@ track_category::track_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of tracks.
+/**
+ * @brief Clears the list of registered types of tracks.
  */
 void track_category::clear_types() {
     for(auto &t : game.mob_types.track) {
@@ -39,14 +39,13 @@ void track_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a track and adds it to the list of tracks.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a track and adds it to the list of tracks.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* track_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* track_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of track.
+/**
+ * @brief Creates a new, empty type of track.
+ *
+ * @return The type.
  */
 mob_type* track_category::create_type() {
     return new track_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a track from the list of tracks.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a track from the list of tracks.
+ *
+ * @param m The mob to erase.
  */
 void track_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.tracks.erase(
         find(
-        game.states.gameplay->mobs.tracks.begin(), 
-        game.states.gameplay->mobs.tracks.end(), 
-        (track*) m
+            game.states.gameplay->mobs.tracks.begin(),
+            game.states.gameplay->mobs.tracks.end(),
+            (track*) m
         )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of track given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of track given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* track_category::get_type(const string &name) const {
     auto it = game.mob_types.track.find(name);
@@ -93,10 +95,10 @@ mob_type* track_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of track by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of track by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void track_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.track) {
@@ -105,10 +107,10 @@ void track_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of track.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of track.
+ *
+ * @param type Mob type to register.
  */
 void track_category::register_type(mob_type* type) {
     game.mob_types.track[type->name] = (track_type*) type;

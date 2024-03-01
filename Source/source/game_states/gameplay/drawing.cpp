@@ -22,12 +22,13 @@
 
 
 #pragma warning(disable: 4701)
-/* ----------------------------------------------------------------------------
- * Does the drawing for the main game loop.
- * bmp_output:
- *   If not NULL, draw the area onto this.
- * bmp_transform:
- *   Transformation to use when drawing to a bitmap.
+
+
+/**
+ * @brief Does the drawing for the main game loop.
+ *
+ * @param bmp_output If not NULL, draw the area onto this.
+ * @param bmp_transform Transformation to use when drawing to a bitmap.
  */
 void gameplay_state::do_game_drawing(
     ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform
@@ -196,13 +197,15 @@ void gameplay_state::do_game_drawing(
     
     al_flip_display();
 }
+
+
 #pragma warning(default: 4701)
 
 
-/* ----------------------------------------------------------------------------
- * Draws the area background.
- * bmp_output:
- *   If not NULL, draw the background onto this.
+/**
+ * @brief Draws the area background.
+ *
+ * @param bmp_output If not NULL, draw the background onto this.
  */
 void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     if(!game.cur_area_data.bg_bmp) return;
@@ -264,8 +267,8 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the current big message, if any.
+/**
+ * @brief Draws the current big message, if any.
  */
 void gameplay_state::draw_big_msg() {
     switch(cur_big_msg) {
@@ -388,8 +391,8 @@ void gameplay_state::draw_big_msg() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws any debug visualization tools useful for debugging.
+/**
+ * @brief Draws any debug visualization tools useful for debugging.
  */
 void gameplay_state::draw_debug_tools() {
     //Raw analog stick viewer.
@@ -602,8 +605,8 @@ void gameplay_state::draw_debug_tools() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the in-game text.
+/**
+ * @brief Draws the in-game text.
  */
 void gameplay_state::draw_ingame_text() {
     //Mob things.
@@ -827,10 +830,10 @@ void gameplay_state::draw_ingame_text() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the leader's cursor and associated effects.
- * color:
- *   Color to tint it by.
+/**
+ * @brief Draws the leader's cursor and associated effects.
+ *
+ * @param color Color to tint it by.
  */
 void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     if(!cur_leader_ptr) return;
@@ -1001,8 +1004,8 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the full-screen effects that will represent lighting.
+/**
+ * @brief Draws the full-screen effects that will represent lighting.
  */
 void gameplay_state::draw_lighting_filter() {
     al_use_transform(&game.identity_transform);
@@ -1148,8 +1151,8 @@ void gameplay_state::draw_lighting_filter() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a message box.
+/**
+ * @brief Draws a message box.
  */
 void gameplay_state::draw_message_box() {
     //Mouse cursor.
@@ -1321,8 +1324,8 @@ void gameplay_state::draw_message_box() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the current Onion menu.
+/**
+ * @brief Draws the current Onion menu.
  */
 void gameplay_state::draw_onion_menu() {
     al_draw_filled_rectangle(
@@ -1336,8 +1339,8 @@ void gameplay_state::draw_onion_menu() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the current pause menu.
+/**
+ * @brief Draws the current pause menu.
  */
 void gameplay_state::draw_pause_menu() {
     al_draw_filled_rectangle(
@@ -1351,8 +1354,8 @@ void gameplay_state::draw_pause_menu() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the precipitation.
+/**
+ * @brief Draws the precipitation.
  */
 void gameplay_state::draw_precipitation() {
     if(
@@ -1370,8 +1373,8 @@ void gameplay_state::draw_precipitation() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws system stuff.
+/**
+ * @brief Draws system stuff.
  */
 void gameplay_state::draw_system_stuff() {
     if(!game.maker_tools.info_print_text.empty()) {
@@ -1444,8 +1447,8 @@ void gameplay_state::draw_system_stuff() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a leader's throw preview.
+/**
+ * @brief Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
     if(!cur_leader_ptr) return;
@@ -1703,8 +1706,10 @@ void gameplay_state::draw_throw_preview() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the current area and mobs to a bitmap and returns it.
+/**
+ * @brief Draws the current area and mobs to a bitmap and returns it.
+ *
+ * @return The bitmap.
  */
 ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     //First, get the full dimensions of the map.
@@ -1752,8 +1757,8 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws tree shadows.
+/**
+ * @brief Draws tree shadows.
  */
 void gameplay_state::draw_tree_shadows() {
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
@@ -1782,10 +1787,11 @@ void gameplay_state::draw_tree_shadows() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the components that make up the game world: layout, objects, etc.
- * bmp_output:
- *   If not NULL, draw the area onto this.
+/**
+ * @brief Draws the components that make up the game world:
+ * layout, objects, etc.
+ *
+ * @param bmp_output If not NULL, draw the area onto this.
  */
 void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = NULL;
@@ -1965,7 +1971,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     
     sort(
         components.begin(), components.end(),
-    [] (const world_component &c1, const world_component &c2) -> bool {
+    [] (const world_component & c1, const world_component & c2) -> bool {
         if(c1.z == c2.z) {
             return c1.nr < c2.nr;
         }

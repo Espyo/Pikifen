@@ -19,16 +19,23 @@
 using std::map;
 
 
+//Methods for a HUD bubble to move.
 enum HUD_BUBBLE_MOVE_METHODS {
+    
+    //In a straight line.
     HUD_BUBBLE_MOVE_METHOD_STRAIGHT,
+    
+    //In a circular path.
     HUD_BUBBLE_MOVE_METHOD_CIRCLE,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * Manages the contents of "bubbles" in the HUD that have the ability to move
- * around, or fade in/out of existence, depending on what the player swapped,
- * and how.
+/**
+ * @brief Manages the contents of "bubbles" in the HUD that have the ability to
+ * move around, or fade in/out of existence, depending on what the player
+ * swapped, and how.
+ *
  * I'm calling these "bubbles" because this slide/shrink/grow behavior is
  * typically used by HUD items that are drawn inside some bubble.
  * When a transition happens, in the first half, bubbles use their old data,
@@ -37,26 +44,46 @@ enum HUD_BUBBLE_MOVE_METHODS {
  * of the transition. For thing X, for the first half, it's the old GUI item
  * that is in charge of showing it moving. For the second half, it's the new
  * GUI item.
+
+ * @tparam t Type of content the bubble holds.
  */
 template<typename t>
 struct hud_bubble_manager {
-    public:
-    //Represents a bubble GUI item.
+
+public:
+
+    //--- Misc. declarations ---
+
+    /**
+     * @brief Represents a bubble GUI item.
+     */
     struct bubble_info {
+
+        //--- Members ---
+
         //GUI item.
         gui_item* bubble;
+
         //Reference to base its existence off of.
         void* ref;
+
         //Content that it holds.
         t content;
+
         //Reference pre-transition.
         void* pre_transition_ref;
+
         //Content that it held, pre-transition.
         t pre_transition_content;
         
-        /* ---------------------------------------------------------------------
-        * Creates a HUD bubble manager bubble info instance.
-        */
+
+        //--- Function definitions ---
+
+        /**
+         * @brief Constructs a new bubble info object.
+         * 
+         * @param bubble The bubble GUI item.
+         */
         explicit bubble_info(gui_item* bubble = NULL) :
             bubble(bubble),
             ref(NULL),
@@ -64,18 +91,29 @@ struct hud_bubble_manager {
             pre_transition_ref(NULL),
             pre_transition_content() {
         }
+        
     };
     
+
+    //--- Members ---
+
     //GUI manager the HUD belongs to.
     gui_manager* hud;
+
     //How long a transition lasts for.
     float transition_duration;
+
     //How to move the bubbles around during a transition.
     HUD_BUBBLE_MOVE_METHODS move_method;
     
-    /* -------------------------------------------------------------------------
-    * Creates a HUD bubble manager instance.
-    */
+
+    //--- Function definitions ---
+
+    /**
+     * @brief Constructs a new HUD bubble manager object.
+     * 
+     * @param hud The HUD manager it belongs to.
+     */
     explicit hud_bubble_manager(gui_manager* hud) :
         hud(hud),
         transition_duration(0.0f),
@@ -85,18 +123,15 @@ struct hud_bubble_manager {
         
     }
     
-    /* -------------------------------------------------------------------------
-    * Returns the necessary information for the bubble to know how
+    /**
+    * @brief Returns the necessary information for the bubble to know how
     * to draw itself.
-    * number:
-    *   Number of the registered bubble.
-    * content:
-    *   The content the bubble should use is returned here.
-    *   A default-constructed object is returned on error.
-    * pos:
-    *   The final position it should use is returned here.
-    * size:
-    *   The final size it should use is returned here.
+    * 
+    * @param number Number of the registered bubble.
+    * @param content The content the bubble should use is returned here.
+    * A default-constructed object is returned on error.
+    * @param pos The final position it should use is returned here.
+    * @param size The final size it should use is returned here.
     */
     void get_drawing_info(
         const size_t number,
@@ -262,22 +297,21 @@ struct hud_bubble_manager {
     }
     
     
-    /* -------------------------------------------------------------------------
-    * Registers a bubble.
-    * bubble:
-    *   GUI item that represents this bubble.
-    * number:
-    *   Number of this item in its "family". For instance, if this is the icon
-    *   for the second leader, this value is 1 (0-indexed).
+    /**
+    * @brief Registers a bubble.
+    * 
+    * @param bubble GUI item that represents this bubble.
+    * @param number Number of this item in its "family". For instance, if
+    * this is the icon for the second leader, this value is 1 (0-indexed).
     */
     void register_bubble(const size_t number, gui_item* bubble) {
         bubbles[number] = bubble_info(bubble);
     }
     
-    /* -------------------------------------------------------------------------
-    * Ticks time by one frame of logic.
-    * delta_t:
-    *   How long the frame's tick is, in seconds.
+    /**
+    * @brief Ticks time by one frame of logic.
+    * 
+    * @param delta_t How long the frame's tick is, in seconds.
     */
     void tick(const float delta_t) {
         if(transition_timer > 0.0f) {
@@ -287,14 +321,12 @@ struct hud_bubble_manager {
         }
     }
     
-    /* -------------------------------------------------------------------------
-    * Updates the reference and content of a given bubble.
-    * number:
-    *   Number of the registered bubble.
-    * new_ref:
-    *   New reference.
-    * new_content:
-    *   New content.
+    /**
+    * @brief Updates the reference and content of a given bubble.
+    * 
+    * @param number Number of the registered bubble.
+    * @param new_ref New reference.
+    * @param new_content New content.
     */
     void update(const size_t number, void* new_ref, t new_content) {
         auto it = bubbles.find(number);
@@ -312,10 +344,15 @@ struct hud_bubble_manager {
     }
     
 private:
+    
+    //--- Members ---
+
     //List of all registered bubble GUI items.
     map<size_t, bubble_info> bubbles;
+
     //Time left in the current transition, or 0 if none.
     float transition_timer;
+
     //Have we set each bubble's "pre-transition" class members yet?
     bool transition_is_setup;
     

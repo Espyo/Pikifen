@@ -29,25 +29,34 @@
 
 //Possible results for the player interacting with a file dialog.
 enum FILE_DIALOG_RESULTS {
+
     //Successful operation.
     FILE_DIALOG_RES_SUCCESS,
+    
     //The option picked is not in the expected folder.
     FILE_DIALOG_RES_WRONG_FOLDER,
+    
     //The player cancelled the dialog.
     FILE_DIALOG_RES_CANCELED,
+
 };
 
 
 //Possible results for a folder wipe operation.
 enum WIPE_FOLDER_RESULTS {
+    
     //Wipe successful.
     WIPE_FOLDER_RESULT_OK,
+    
     //Folder not found.
     WIPE_FOLDER_RESULT_NOT_FOUND,
+    
     //Folder has important files inside, or has folders inside.
     WIPE_FOLDER_RESULT_HAS_IMPORTANT,
+    
     //An error occurred somewhere when deleting a file or folder.
     WIPE_FOLDER_RESULT_DELETE_ERROR,
+    
 };
 
 
@@ -260,14 +269,16 @@ string p2s(const point &p, const float* z = NULL);
 point s2p(const string &s, float* z = NULL);
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the two vectors contain the same items,
+/**
+ * @brief Returns whether or not the two vectors contain the same items,
  * regardless of order.
- * v1:
- *   First vector.
- * v2:
- *   Second vector.
+ *
+ * @tparam t The contents of the vector.
+ * @param v1 First vector.
+ * @param v2 Second vector.
+ * @return Whether they contain the same items.
  */
+
 template<typename t>
 bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
     if(v1.size() != v2.size()) {

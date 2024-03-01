@@ -20,29 +20,40 @@
 
 //Flags that control how it can be held.
 enum HOLDABILITY_FLAGS {
+    
     //The mob can be held by Pikmin.
     HOLDABLE_BY_PIKMIN = 1,
+    
     //The mob can be held by enemies.
     HOLDABLE_BY_ENEMIES = 2,
+    
 };
 
 
-/* ----------------------------------------------------------------------------
- * A tool for Pikmin.
+/**
+ * @brief A tool for Pikmin.
  * This is anything that a Pikmin can carry to use at a later date.
  */
 class tool : public mob {
+
 public:
+    
+    //--- Members ---
+
     //What type of tool it is.
     tool_type* too_type;
     
     //Flags indicating if and how the mob can be held by other mobs.
     unsigned char holdability_flags;
+    
     //If a Pikmin is already reserved to get this tool, this points to it.
     pikmin* reserved;
     
-    //Constructor.
+    
+    //--- Function declarations ---
+    
     tool(const point &pos, tool_type* type, const float angle);
+    
 };
 
 

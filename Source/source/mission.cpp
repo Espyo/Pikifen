@@ -16,8 +16,8 @@
 #include "utils/string_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Initializes a mission data struct.
+/**
+ * @brief Constructs a new mission data object.
  */
 mission_data::mission_data() :
     goal(MISSION_GOAL_END_MANUALLY),
@@ -53,10 +53,11 @@ mission_data::mission_data() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_kill_enemies::get_cur_amount(
     gameplay_state* gameplay
@@ -65,10 +66,11 @@ int mission_fail_kill_enemies::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_kill_enemies::get_end_reason(
     mission_data* mission
@@ -80,16 +82,14 @@ string mission_fail_kill_enemies::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_kill_enemies::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -103,10 +103,11 @@ bool mission_fail_kill_enemies::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_kill_enemies::get_hud_label(
     gameplay_state* gameplay
@@ -115,18 +116,21 @@ string mission_fail_kill_enemies::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_kill_enemies::get_name() const {
     return "Kill enemies";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_kill_enemies::get_player_description(
     mission_data* mission
@@ -140,10 +144,11 @@ string mission_fail_kill_enemies::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_kill_enemies::get_req_amount(
     gameplay_state* gameplay
@@ -152,14 +157,13 @@ int mission_fail_kill_enemies::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_kill_enemies::get_status(
     const int cur, const int req, const float percentage
@@ -171,18 +175,21 @@ string mission_fail_kill_enemies::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_kill_enemies::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_kill_enemies::is_met(
     gameplay_state* gameplay
@@ -191,10 +198,11 @@ bool mission_fail_kill_enemies::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_lose_leaders::get_cur_amount(
     gameplay_state* gameplay
@@ -203,10 +211,11 @@ int mission_fail_lose_leaders::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_lose_leaders::get_end_reason(
     mission_data* mission
@@ -218,16 +227,14 @@ string mission_fail_lose_leaders::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_lose_leaders::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -241,10 +248,11 @@ bool mission_fail_lose_leaders::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_lose_leaders::get_hud_label(
     gameplay_state* gameplay
@@ -253,18 +261,21 @@ string mission_fail_lose_leaders::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_lose_leaders::get_name() const {
     return "Lose leaders";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_lose_leaders::get_player_description(
     mission_data* mission
@@ -276,10 +287,11 @@ string mission_fail_lose_leaders::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_lose_leaders::get_req_amount(
     gameplay_state* gameplay
@@ -288,14 +300,13 @@ int mission_fail_lose_leaders::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_lose_leaders::get_status(
     const int cur, const int req, const float percentage
@@ -307,18 +318,21 @@ string mission_fail_lose_leaders::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_lose_leaders::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_lose_leaders::is_met(
     gameplay_state* gameplay
@@ -327,10 +341,11 @@ bool mission_fail_lose_leaders::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_lose_pikmin::get_cur_amount(
     gameplay_state* gameplay
@@ -339,10 +354,11 @@ int mission_fail_lose_pikmin::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_lose_pikmin::get_end_reason(
     mission_data* mission
@@ -354,16 +370,14 @@ string mission_fail_lose_pikmin::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_lose_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -377,10 +391,11 @@ bool mission_fail_lose_pikmin::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_lose_pikmin::get_hud_label(
     gameplay_state* gameplay
@@ -389,18 +404,21 @@ string mission_fail_lose_pikmin::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_lose_pikmin::get_name() const {
     return "Lose Pikmin";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_lose_pikmin::get_player_description(
     mission_data* mission
@@ -410,10 +428,11 @@ string mission_fail_lose_pikmin::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_lose_pikmin::get_req_amount(
     gameplay_state* gameplay
@@ -422,14 +441,13 @@ int mission_fail_lose_pikmin::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_lose_pikmin::get_status(
     const int cur, const int req, const float percentage
@@ -441,18 +459,21 @@ string mission_fail_lose_pikmin::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_lose_pikmin::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_lose_pikmin::is_met(
     gameplay_state* gameplay
@@ -461,10 +482,11 @@ bool mission_fail_lose_pikmin::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_pause_menu::get_cur_amount(
     gameplay_state* gameplay
@@ -473,10 +495,11 @@ int mission_fail_pause_menu::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_pause_menu::get_end_reason(
     mission_data* mission
@@ -485,16 +508,14 @@ string mission_fail_pause_menu::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_pause_menu::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -503,10 +524,11 @@ bool mission_fail_pause_menu::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_pause_menu::get_hud_label(
     gameplay_state* gameplay
@@ -515,18 +537,21 @@ string mission_fail_pause_menu::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_pause_menu::get_name() const {
     return "End from pause menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_pause_menu::get_player_description(
     mission_data* mission
@@ -535,10 +560,11 @@ string mission_fail_pause_menu::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_pause_menu::get_req_amount(
     gameplay_state* gameplay
@@ -547,14 +573,13 @@ int mission_fail_pause_menu::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_pause_menu::get_status(
     const int cur, const int req, const float percentage
@@ -563,18 +588,21 @@ string mission_fail_pause_menu::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_pause_menu::has_hud_content() const {
     return false;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_pause_menu::is_met(
     gameplay_state* gameplay
@@ -584,10 +612,11 @@ bool mission_fail_pause_menu::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_take_damage::get_cur_amount(
     gameplay_state* gameplay
@@ -596,10 +625,11 @@ int mission_fail_take_damage::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_take_damage::get_end_reason(
     mission_data* mission
@@ -608,16 +638,14 @@ string mission_fail_take_damage::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_take_damage::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -631,10 +659,11 @@ bool mission_fail_take_damage::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_take_damage::get_hud_label(
     gameplay_state* gameplay
@@ -643,18 +672,21 @@ string mission_fail_take_damage::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_take_damage::get_name() const {
     return "Take damage";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_take_damage::get_player_description(
     mission_data* mission
@@ -663,10 +695,11 @@ string mission_fail_take_damage::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_take_damage::get_req_amount(
     gameplay_state* gameplay
@@ -675,14 +708,13 @@ int mission_fail_take_damage::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_take_damage::get_status(
     const int cur, const int req, const float percentage
@@ -691,18 +723,21 @@ string mission_fail_take_damage::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_take_damage::has_hud_content() const {
     return false;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_take_damage::is_met(
     gameplay_state* gameplay
@@ -724,10 +759,11 @@ bool mission_fail_take_damage::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_time_limit::get_cur_amount(
     gameplay_state* gameplay
@@ -736,10 +772,11 @@ int mission_fail_time_limit::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_time_limit::get_end_reason(
     mission_data* mission
@@ -753,16 +790,14 @@ string mission_fail_time_limit::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_time_limit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -771,10 +806,11 @@ bool mission_fail_time_limit::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_time_limit::get_hud_label(
     gameplay_state* gameplay
@@ -786,18 +822,21 @@ string mission_fail_time_limit::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_time_limit::get_name() const {
     return "Reach the time limit";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_time_limit::get_player_description(
     mission_data* mission
@@ -810,10 +849,11 @@ string mission_fail_time_limit::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_time_limit::get_req_amount(
     gameplay_state* gameplay
@@ -822,14 +862,13 @@ int mission_fail_time_limit::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_time_limit::get_status(
     const int cur, const int req, const float percentage
@@ -840,18 +879,21 @@ string mission_fail_time_limit::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_time_limit::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_time_limit::is_met(
     gameplay_state* gameplay
@@ -861,10 +903,11 @@ bool mission_fail_time_limit::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_too_few_pikmin::get_cur_amount(
     gameplay_state* gameplay
@@ -873,10 +916,11 @@ int mission_fail_too_few_pikmin::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_too_few_pikmin::get_end_reason(
     mission_data* mission
@@ -888,16 +932,14 @@ string mission_fail_too_few_pikmin::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_too_few_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -911,10 +953,11 @@ bool mission_fail_too_few_pikmin::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_too_few_pikmin::get_hud_label(
     gameplay_state* gameplay
@@ -923,18 +966,21 @@ string mission_fail_too_few_pikmin::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_too_few_pikmin::get_name() const {
     return "Reach too few Pikmin";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_too_few_pikmin::get_player_description(
     mission_data* mission
@@ -944,10 +990,11 @@ string mission_fail_too_few_pikmin::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_too_few_pikmin::get_req_amount(
     gameplay_state* gameplay
@@ -956,14 +1003,13 @@ int mission_fail_too_few_pikmin::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_too_few_pikmin::get_status(
     const int cur, const int req, const float percentage
@@ -975,18 +1021,21 @@ string mission_fail_too_few_pikmin::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_too_few_pikmin::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_too_few_pikmin::is_met(
     gameplay_state* gameplay
@@ -997,10 +1046,11 @@ bool mission_fail_too_few_pikmin::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_too_many_pikmin::get_cur_amount(
     gameplay_state* gameplay
@@ -1009,10 +1059,11 @@ int mission_fail_too_many_pikmin::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief Explains why the player lost, with values fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_fail_too_many_pikmin::get_end_reason(
     mission_data* mission
@@ -1024,16 +1075,14 @@ string mission_fail_too_many_pikmin::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_fail_too_many_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1047,10 +1096,11 @@ bool mission_fail_too_many_pikmin::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The label.
  */
 string mission_fail_too_many_pikmin::get_hud_label(
     gameplay_state* gameplay
@@ -1059,18 +1109,21 @@ string mission_fail_too_many_pikmin::get_hud_label(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
  */
 string mission_fail_too_many_pikmin::get_name() const {
     return "Reach too many Pikmin";
 }
 
 
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_fail_too_many_pikmin::get_player_description(
     mission_data* mission
@@ -1080,10 +1133,11 @@ string mission_fail_too_many_pikmin::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the condition needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_fail_too_many_pikmin::get_req_amount(
     gameplay_state* gameplay
@@ -1092,14 +1146,13 @@ int mission_fail_too_many_pikmin::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_fail_too_many_pikmin::get_status(
     const int cur, const int req, const float percentage
@@ -1111,18 +1164,21 @@ string mission_fail_too_many_pikmin::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Whether it has anything to show in the HUD.
+/**
+ * @brief Whether it has anything to show in the HUD.
+ *
+ * @return Whether it has content.
  */
 bool mission_fail_too_many_pikmin::has_hud_content() const {
     return true;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a fail.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Checks if its conditions have been met to end the mission as a fail.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_fail_too_many_pikmin::is_met(
     gameplay_state* gameplay
@@ -1133,10 +1189,11 @@ bool mission_fail_too_many_pikmin::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_battle_enemies::get_cur_amount(
     gameplay_state* gameplay
@@ -1147,11 +1204,12 @@ int mission_goal_battle_enemies::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_battle_enemies::get_end_reason(
     mission_data* mission
@@ -1172,16 +1230,14 @@ string mission_goal_battle_enemies::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_battle_enemies::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1195,26 +1251,31 @@ bool mission_goal_battle_enemies::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_battle_enemies::get_hud_label() const {
     return "Enemies";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_battle_enemies::get_name() const {
     return "Battle enemies";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_battle_enemies::get_player_description(
     mission_data* mission
@@ -1231,10 +1292,11 @@ string mission_goal_battle_enemies::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_battle_enemies::get_req_amount(
     gameplay_state* gameplay
@@ -1243,14 +1305,13 @@ int mission_goal_battle_enemies::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_battle_enemies::get_status(
     const int cur, const int req, const float percentage
@@ -1261,10 +1322,11 @@ string mission_goal_battle_enemies::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_battle_enemies::is_met(
     gameplay_state* gameplay
@@ -1273,10 +1335,12 @@ bool mission_goal_battle_enemies::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_battle_enemies::is_mob_applicable(
     mob_type* type
@@ -1285,10 +1349,11 @@ bool mission_goal_battle_enemies::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_collect_treasures::get_cur_amount(
     gameplay_state* gameplay
@@ -1297,11 +1362,12 @@ int mission_goal_collect_treasures::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_collect_treasures::get_end_reason(
     mission_data* mission
@@ -1316,16 +1382,14 @@ string mission_goal_collect_treasures::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_collect_treasures::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1339,26 +1403,31 @@ bool mission_goal_collect_treasures::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_collect_treasures::get_hud_label() const {
     return "Treasures";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_collect_treasures::get_name() const {
     return "Collect treasures";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_collect_treasures::get_player_description(
     mission_data* mission
@@ -1375,10 +1444,11 @@ string mission_goal_collect_treasures::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_collect_treasures::get_req_amount(
     gameplay_state* gameplay
@@ -1387,14 +1457,13 @@ int mission_goal_collect_treasures::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_collect_treasures::get_status(
     const int cur, const int req, const float percentage
@@ -1405,10 +1474,11 @@ string mission_goal_collect_treasures::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_collect_treasures::is_met(
     gameplay_state* gameplay
@@ -1419,10 +1489,12 @@ bool mission_goal_collect_treasures::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_collect_treasures::is_mob_applicable(
     mob_type* type
@@ -1454,10 +1526,11 @@ bool mission_goal_collect_treasures::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_end_manually::get_cur_amount(
     gameplay_state* gameplay
@@ -1466,11 +1539,12 @@ int mission_goal_end_manually::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_end_manually::get_end_reason(
     mission_data* mission
@@ -1479,16 +1553,14 @@ string mission_goal_end_manually::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_end_manually::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1497,26 +1569,31 @@ bool mission_goal_end_manually::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_end_manually::get_hud_label() const {
     return "";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_end_manually::get_name() const {
     return "End whenever you want";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_end_manually::get_player_description(
     mission_data* mission
@@ -1525,10 +1602,11 @@ string mission_goal_end_manually::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_end_manually::get_req_amount(
     gameplay_state* gameplay
@@ -1537,14 +1615,13 @@ int mission_goal_end_manually::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_end_manually::get_status(
     const int cur, const int req, const float percentage
@@ -1553,10 +1630,11 @@ string mission_goal_end_manually::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_end_manually::is_met(
     gameplay_state* gameplay
@@ -1566,10 +1644,12 @@ bool mission_goal_end_manually::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_end_manually::is_mob_applicable(
     mob_type* type
@@ -1578,10 +1658,11 @@ bool mission_goal_end_manually::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_get_to_exit::get_cur_amount(
     gameplay_state* gameplay
@@ -1590,11 +1671,12 @@ int mission_goal_get_to_exit::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_get_to_exit::get_end_reason(
     mission_data* mission
@@ -1603,16 +1685,14 @@ string mission_goal_get_to_exit::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_get_to_exit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1639,26 +1719,31 @@ bool mission_goal_get_to_exit::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_get_to_exit::get_hud_label() const {
     return "In exit";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_get_to_exit::get_name() const {
     return "Get to the exit";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_get_to_exit::get_player_description(
     mission_data* mission
@@ -1675,10 +1760,11 @@ string mission_goal_get_to_exit::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_get_to_exit::get_req_amount(
     gameplay_state* gameplay
@@ -1687,14 +1773,13 @@ int mission_goal_get_to_exit::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_get_to_exit::get_status(
     const int cur, const int req, const float percentage
@@ -1705,10 +1790,11 @@ string mission_goal_get_to_exit::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_get_to_exit::is_met(
     gameplay_state* gameplay
@@ -1719,10 +1805,12 @@ bool mission_goal_get_to_exit::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_get_to_exit::is_mob_applicable(
     mob_type* type
@@ -1731,10 +1819,11 @@ bool mission_goal_get_to_exit::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_grow_pikmin::get_cur_amount(
     gameplay_state* gameplay
@@ -1743,11 +1832,12 @@ int mission_goal_grow_pikmin::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_grow_pikmin::get_end_reason(
     mission_data* mission
@@ -1759,16 +1849,14 @@ string mission_goal_grow_pikmin::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_grow_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1782,26 +1870,31 @@ bool mission_goal_grow_pikmin::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_grow_pikmin::get_hud_label() const {
     return "Pikmin";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_grow_pikmin::get_name() const {
     return "Grow Pikmin";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_grow_pikmin::get_player_description(
     mission_data* mission
@@ -1810,10 +1903,11 @@ string mission_goal_grow_pikmin::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_grow_pikmin::get_req_amount(
     gameplay_state* gameplay
@@ -1822,14 +1916,13 @@ int mission_goal_grow_pikmin::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_grow_pikmin::get_status(
     const int cur, const int req, const float percentage
@@ -1840,10 +1933,11 @@ string mission_goal_grow_pikmin::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_grow_pikmin::is_met(
     gameplay_state* gameplay
@@ -1852,10 +1946,12 @@ bool mission_goal_grow_pikmin::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_grow_pikmin::is_mob_applicable(
     mob_type* type
@@ -1864,10 +1960,11 @@ bool mission_goal_grow_pikmin::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's current amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_timed_survival::get_cur_amount(
     gameplay_state* gameplay
@@ -1876,11 +1973,12 @@ int mission_goal_timed_survival::get_cur_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a celebration describing the player's victory,
+/**
+ * @brief Returns a celebration describing the player's victory,
  * with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The reason.
  */
 string mission_goal_timed_survival::get_end_reason(
     mission_data* mission
@@ -1894,16 +1992,14 @@ string mission_goal_timed_survival::get_end_reason(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
+/**
+ * @brief Returns where the camera should go to to zoom on the mission
+ * end reason.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param final_cam_pos The final camera position is returned here.
+ * @param final_cam_zoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere.
  */
 bool mission_goal_timed_survival::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
@@ -1912,26 +2008,31 @@ bool mission_goal_timed_survival::get_end_zoom_data(
 }
 
 
-/* ----------------------------------------------------------------------------
- * HUD label for the player's current amount.
+/**
+ * @brief HUD label for the player's current amount.
+ *
+ * @return The label.
  */
 string mission_goal_timed_survival::get_hud_label() const {
     return "Time";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the goal's name.
+/**
+ * @brief Returns the goal's name.
+ *
+ * @return The name.
  */
 string mission_goal_timed_survival::get_name() const {
     return "Survive";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
+/**
+ * @brief A description for the player, fed from the mission data.
+ *
+ * @param mission Mission data object to get info from.
+ * @return The description.
  */
 string mission_goal_timed_survival::get_player_description(
     mission_data* mission
@@ -1944,10 +2045,11 @@ string mission_goal_timed_survival::get_player_description(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the mission needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns the player's required amount for whatever the mission needs.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount.
  */
 int mission_goal_timed_survival::get_req_amount(
     gameplay_state* gameplay
@@ -1956,14 +2058,13 @@ int mission_goal_timed_survival::get_req_amount(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
+/**
+ * @brief Status for the pause menu.
+ *
+ * @param cur Current amount.
+ * @param req Required amount.
+ * @param percentage Percentage cleared.
+ * @return The status.
  */
 string mission_goal_timed_survival::get_status(
     const int cur, const int req, const float percentage
@@ -1975,10 +2076,11 @@ string mission_goal_timed_survival::get_status(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mission goal's has been met.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
+/**
+ * @brief Returns whether or not the mission goal's has been met.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
  */
 bool mission_goal_timed_survival::is_met(
     gameplay_state* gameplay
@@ -1987,10 +2089,12 @@ bool mission_goal_timed_survival::is_met(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a given mob is applicable to this goal's required mobs.
- * type:
- *   Type of the mob.
+/**
+ * @brief Returns whether a given mob is applicable to this goal's
+ * required mobs.
+ *
+ * @param type Type of the mob.
+ * @return Whether it is applicable.
  */
 bool mission_goal_timed_survival::is_mob_applicable(
     mob_type* type
@@ -1999,8 +2103,8 @@ bool mission_goal_timed_survival::is_mob_applicable(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Constructs a new mission record.
+/**
+ * @brief Constructs a new mission record::mission record object.
  */
 mission_record::mission_record() :
     clear(false),
@@ -2009,10 +2113,11 @@ mission_record::mission_record() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not this record is a platinum medal.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns whether or not this record is a platinum medal.
+ *
+ * @param mission Mission data to get info from.
+ * @return Whether it is platinum.
  */
 bool mission_record::is_platinum(const mission_data &mission) {
     switch(mission.grading_mode) {
@@ -2028,10 +2133,11 @@ bool mission_record::is_platinum(const mission_data &mission) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_enemy_points::get_multiplier(
     mission_data* mission
@@ -2040,20 +2146,22 @@ int mission_score_criterion_enemy_points::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_enemy_points::get_name() const {
     return "Enemy points";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_enemy_points::get_score(
     gameplay_state* gameplay, mission_data* mission
@@ -2065,10 +2173,11 @@ int mission_score_criterion_enemy_points::get_score(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_pikmin_born::get_multiplier(
     mission_data* mission
@@ -2077,20 +2186,22 @@ int mission_score_criterion_pikmin_born::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_pikmin_born::get_name() const {
     return "Pikmin born";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_pikmin_born::get_score(
     gameplay_state* gameplay, mission_data* mission
@@ -2102,10 +2213,11 @@ int mission_score_criterion_pikmin_born::get_score(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_pikmin_death::get_multiplier(
     mission_data* mission
@@ -2114,20 +2226,22 @@ int mission_score_criterion_pikmin_death::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_pikmin_death::get_name() const {
     return "Pikmin deaths";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_pikmin_death::get_score(
     gameplay_state* gameplay, mission_data* mission
@@ -2139,10 +2253,11 @@ int mission_score_criterion_pikmin_death::get_score(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_sec_left::get_multiplier(
     mission_data* mission
@@ -2160,20 +2275,22 @@ int mission_score_criterion_sec_left::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_sec_left::get_name() const {
     return "Seconds left";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_sec_left::get_score(
     gameplay_state* gameplay, mission_data* mission
@@ -2184,10 +2301,11 @@ int mission_score_criterion_sec_left::get_score(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_sec_passed::get_multiplier(
     mission_data* mission
@@ -2196,20 +2314,22 @@ int mission_score_criterion_sec_passed::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_sec_passed::get_name() const {
     return "Seconds passed";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_sec_passed::get_score(
     gameplay_state* gameplay, mission_data* mission
@@ -2220,10 +2340,11 @@ int mission_score_criterion_sec_passed::get_score(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's point multiplier.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
  */
 int mission_score_criterion_treasure_points::get_multiplier(
     mission_data* mission
@@ -2232,20 +2353,22 @@ int mission_score_criterion_treasure_points::get_multiplier(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the mission score criterion's name.
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
  */
 string mission_score_criterion_treasure_points::get_name() const {
     return "Treasure points";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the player's score for this criterion.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * mission:
- *   Mission data to get info from.
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
  */
 int mission_score_criterion_treasure_points::get_score(
     gameplay_state* gameplay, mission_data* mission

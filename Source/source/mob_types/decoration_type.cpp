@@ -15,8 +15,8 @@
 #include "../mobs/decoration.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates a type of decoration.
+/**
+ * @brief Constructs a new decoration type object.
  */
 decoration_type::decoration_type() :
     mob_type(MOB_CATEGORY_DECORATIONS),
@@ -73,8 +73,8 @@ decoration_type::decoration_type() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
+/**
+ * @brief Returns the vector of animation conversions.
  */
 anim_conversion_vector decoration_type::get_anim_conversions() const {
     anim_conversion_vector v;
@@ -84,10 +84,10 @@ anim_conversion_vector decoration_type::get_anim_conversions() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads properties from a data file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads properties from a data file.
+ *
+ * @param file File to read from.
  */
 void decoration_type::load_properties(data_node* file) {
     reader_setter rs(file);

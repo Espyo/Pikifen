@@ -22,39 +22,58 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * A spray type. It decides how the spray behaves,
+/**
+ * @brief A spray type. It decides how the spray behaves,
  * what status effect it causes, and some other values.
  */
 class spray_type {
+
 public:
+    
+    //--- Members ---
+
     //Name of the spray type.
     string name;
+
     //What the spray does.
     vector<status_type*> effects;
+
     //True: applied to the entire group. False: applied in a specified range.
     bool group;
+
     //Does it only apply to Pikmin in the group, or leaders too?
     bool group_pikmin_only;
+
     //Apply the spray to its user as well.
     bool affects_user;
+
     //If applied outside of the group, this is the angle of shooting.
     float angle;
+
     //If applied outside of the group, this is the distance range.
     float distance_range;
+
     //If applied outside of the group, this is the angle range.
     float angle_range;
+
     //Main color that represents this spray.
     ALLEGRO_COLOR main_color;
+
     //Bitmap for the spray count.
     ALLEGRO_BITMAP* bmp_spray;
+
     //How many ingredients are needed in order to concot a new spray.
     //0 means there are no ingredients for this spray type.
     size_t ingredients_needed;
+
     //Does it bury Pikmin?
     bool buries_pikmin;
     
+
+    //--- Function declarations ---
+    
     spray_type();
+    
 };
 
 

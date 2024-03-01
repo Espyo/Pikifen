@@ -14,8 +14,8 @@
 #include "../mob_types/mob_type.h"
 
 
-/* ----------------------------------------------------------------------------
- * Functions about the treasure's finite state machine and behavior.
+/**
+ * @brief Functions about the treasure's finite state machine and behavior.
  */
 namespace treasure_fsm {
 void create_fsm(mob_type* typ);

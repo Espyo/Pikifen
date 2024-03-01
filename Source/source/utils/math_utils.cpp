@@ -16,26 +16,26 @@
 #include "math_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Limits the given number to the given range, inclusive.
- * number:
- *   Number to clamp.
- * minimum:
- *   Minimum value it can have, inclusive.
- * maximum:
- *   Maximum value it can have, inclusive.
+/**
+ * @brief Limits the given number to the given range, inclusive.
+ *
+ * @param number Number to clamp.
+ * @param minimum Minimum value it can have, inclusive.
+ * @param maximum Maximum value it can have, inclusive.
+ * @return The clamped number.
  */
 float clamp(const float number, const float minimum, const float maximum) {
     return std::min(maximum, std::max(minimum, number));
 }
 
 
-/* ----------------------------------------------------------------------------
- * Eases a number [0, 1] in accordance to a non-linear interpolation method.
- * method:
- *   The method to use.
- * n:
- *   The number to ease, in the range [0, 1].
+/**
+ * @brief Eases a number [0, 1] in accordance to a non-linear
+ * interpolation method.
+ *
+ * @param method The method to use.
+ * @param n The number to ease, in the range [0, 1].
+ * @return The eased number.
  */
 float ease(const EASING_METHODS method, const float n) {
     switch(method) {
@@ -117,10 +117,12 @@ float ease(const EASING_METHODS method, const float n) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given an input, it returns a 32-bit unsigned integer hash of that input.
- * input:
- *   The input number.
+/**
+ * @brief Given an input, it returns a 32-bit unsigned integer hash of
+ * that input.
+ *
+ * @param input The input number.
+ * @return The hash.
  */
 uint32_t hash_nr(const unsigned int input) {
     //Robert Jenkins' 32 bit integer hash function.
@@ -136,12 +138,13 @@ uint32_t hash_nr(const unsigned int input) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given two inputs, it returns a 32-bit unsigned integer hash of those inputs.
- * input1:
- *   First input number.
- * input2:
- *   Second input number.
+/**
+ * @brief Given two inputs, it returns a 32-bit unsigned integer hash of
+ * those inputs.
+ *
+ * @param input1 First input number.
+ * @param input2 Second input number.
+ * @return The hash.
  */
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
     uint32_t n1 = hash_nr(input1);
@@ -159,15 +162,14 @@ uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Given a starting number, it increases or decreases it towards the target
- * value, but the change will not be higher than the max step.
- * start:
- *   Starting value.
- * target:
- *   Target value.
- * max_step:
- *   Maximum change in value allowed.
+/**
+ * @brief Given a starting number, it increases or decreases it towards the
+ * target value, but the change will not be higher than the max step.
+ *
+ * @param start Starting value.
+ * @param target Target value.
+ * @param max_step Maximum change in value allowed.
+ * @return The inched number.
  */
 float inch_towards(float start, float target, float max_step) {
     if(fabs(target - start) <= max_step) return target;
@@ -176,19 +178,18 @@ float inch_towards(float start, float target, float max_step) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the interpolation between two numbers, given a number in an interval.
- * input:
- *   The input number.
- * input_start:
- *   Start of the interval the input number falls on, inclusive.
- *   The closer to input_start, the closer the output is to output_start.
- * input_end:
- *   End of the interval the number falls on, inclusive.
- * output_start:
- *   Number on the starting tip of the interpolation.
- * output_end:
- *   Number on the ending tip of the interpolation.
+/**
+ * @brief Returns the interpolation between two numbers, given a number in
+ * an interval.
+ *
+ * @param input The input number.
+ * @param input_start Start of the interval the input number falls on,
+ * inclusive. The closer to input_start, the closer the output is
+ * to output_start.
+ * @param input_end End of the interval the number falls on, inclusive.
+ * @param output_start Number on the starting tip of the interpolation.
+ * @param output_end Number on the ending tip of the interpolation.
+ * @return The interpolated number.
  */
 float interpolate_number(
     const float input, const float input_start, const float input_end,
@@ -201,12 +202,12 @@ float interpolate_number(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a random float between the provided range, inclusive.
- * minimum:
- *   Minimum value that can be generated, inclusive.
- * maximum:
- *   Maximum value that can be generated, inclusive.
+/**
+ * @brief Returns a random float between the provided range, inclusive.
+ *
+ * @param minimum Minimum value that can be generated, inclusive.
+ * @param maximum Maximum value that can be generated, inclusive.
+ * @return The random number.
  */
 float randomf(float minimum, float maximum) {
     if(minimum == maximum) return minimum;
@@ -215,12 +216,12 @@ float randomf(float minimum, float maximum) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a random integer between the provided range, inclusive.
- * minimum:
- *   Minimum value that can be generated, inclusive.
- * maximum:
- *   Maximum value that can be generated, inclusive.
+/**
+ * @brief Returns a random integer between the provided range, inclusive.
+ *
+ * @param minimum Minimum value that can be generated, inclusive.
+ * @param maximum Maximum value that can be generated, inclusive.
+ * @return The random number.
  */
 int randomi(int minimum, int maximum) {
     if(minimum == maximum) return minimum;
@@ -229,15 +230,14 @@ int randomi(int minimum, int maximum) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sums a number to another (even if negative), and then
+/**
+ * @brief Sums a number to another (even if negative), and then
  * wraps that number across a limit, applying a modulus operation.
- * nr:
- *   Base number.
- * sum:
- *   Number to add (or subtract).
- * wrap_limit:
- *   Wrap between [0 - wrap_limit[.
+ *
+ * @param nr Base number.
+ * @param sum Number to add (or subtract).
+ * @param wrap_limit Wrap between [0 - wrap_limit[.
+ * @return The wrapped number.
  */
 int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
     int final_nr = nr + sum;
@@ -248,14 +248,13 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Wraps a floating point number between the specified interval.
- * nr:
- *   Base number.
- * minimum:
- *   Minimum of the interval.
- * maximum:
- *   Maximum of the interval.
+/**
+ * @brief Wraps a floating point number between the specified interval.
+ *
+ * @param nr Base number.
+ * @param minimum Minimum of the interval.
+ * @param maximum Maximum of the interval.
+ * @return The wrapped number.
  */
 float wrap_float(const float nr, const float minimum, const float maximum) {
     const float diff = maximum - minimum;

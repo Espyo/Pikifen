@@ -21,30 +21,38 @@
 
 
 namespace OPTIONS_MENU {
+
 //Path to the audio menu GUI information file.
 const string AUDIO_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_audio.txt";
+    
 //Path to the controls menu GUI information file.
 const string CONTROLS_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_controls.txt";
+    
 //Path to the graphics menu GUI information file.
 const string GRAPHICS_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_graphics.txt";
+    
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
+
 //Path to the misc menu GUI information file.
 const string MISC_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_misc.txt";
+    
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
+
 //Path to the top-level menu GUI information file.
 const string TOP_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu_top.txt";
+    
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an "options menu" state.
+/**
+ * @brief Constructs a new options menu state object.
  */
 options_menu_state::options_menu_state() :
     game_state(),
@@ -106,8 +114,8 @@ options_menu_state::options_menu_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the options menu.
+/**
+ * @brief Draws the options menu.
  */
 void options_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
@@ -131,8 +139,8 @@ void options_menu_state::do_drawing() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Ticks one frame's worth of logic.
+/**
+ * @brief Ticks one frame's worth of logic.
  */
 void options_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
@@ -156,16 +164,18 @@ void options_menu_state::do_logic() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
  */
 string options_menu_state::get_name() const {
     return "options menu";
 }
 
 
-/* ----------------------------------------------------------------------------
- * Goes to the controls menu.
+/**
+ * @brief Goes to the controls menu.
  */
 void options_menu_state::go_to_control_binds() {
     game.fade_mgr.start_fade(false, [] () {
@@ -174,10 +184,10 @@ void options_menu_state::go_to_control_binds() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles Allegro events.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
  */
 void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -190,8 +200,8 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the audio options menu GUI.
+/**
+ * @brief Initializes the audio options menu GUI.
  */
 void options_menu_state::init_gui_audio_page() {
     //Menu items.
@@ -338,8 +348,8 @@ void options_menu_state::init_gui_audio_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the controls options menu GUI.
+/**
+ * @brief Initializes the controls options menu GUI.
  */
 void options_menu_state::init_gui_controls_page() {
     //Menu items.
@@ -438,8 +448,8 @@ void options_menu_state::init_gui_controls_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the graphics options menu GUI.
+/**
+ * @brief Initializes the graphics options menu GUI.
  */
 void options_menu_state::init_gui_graphics_page() {
     //Menu items.
@@ -556,8 +566,8 @@ void options_menu_state::init_gui_graphics_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the misc. options menu GUI.
+/**
+ * @brief Initializes the misc. options menu GUI.
  */
 void options_menu_state::init_gui_misc_page() {
     //Menu items.
@@ -663,8 +673,8 @@ void options_menu_state::init_gui_misc_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes the top-level menu GUI.
+/**
+ * @brief Initializes the top-level menu GUI.
  */
 void options_menu_state::init_gui_top_page() {
     //Menu items.
@@ -802,8 +812,8 @@ void options_menu_state::init_gui_top_page() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Leaves the options menu and goes to the main menu.
+/**
+ * @brief Leaves the options menu and goes to the main menu.
  */
 void options_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
@@ -813,8 +823,8 @@ void options_menu_state::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the options menu into memory.
+/**
+ * @brief Loads the options menu into memory.
  */
 void options_menu_state::load() {
     //Resources.
@@ -844,8 +854,8 @@ void options_menu_state::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Triggers the restart warning at the bottom of the screen.
+/**
+ * @brief Triggers the restart warning at the bottom of the screen.
  */
 void options_menu_state::trigger_restart_warning() {
     if(!warning_text->visible) {
@@ -857,8 +867,8 @@ void options_menu_state::trigger_restart_warning() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads the options menu from memory.
+/**
+ * @brief Unloads the options menu from memory.
  */
 void options_menu_state::unload() {
 

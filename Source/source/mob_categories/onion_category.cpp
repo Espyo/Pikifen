@@ -16,8 +16,8 @@
 #include "../mobs/onion.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the Onion category.
+/**
+ * @brief Constructs a new Onion category object.
  */
 onion_category::onion_category() :
     mob_category(
@@ -28,8 +28,8 @@ onion_category::onion_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of Onion.
+/**
+ * @brief Clears the list of registered types of Onion.
  */
 void onion_category::clear_types() {
     for(auto &t : game.mob_types.onion) {
@@ -39,14 +39,13 @@ void onion_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an Onion and adds it to the list of Onions.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates an Onion and adds it to the list of Onions.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* onion_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* onion_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of Onion.
+/**
+ * @brief Creates a new, empty type of Onion.
+ *
+ * @return The type.
  */
 mob_type* onion_category::create_type() {
     return new onion_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears an Onion from the list of Onions.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears an Onion from the list of Onions.
+ *
+ * @param m The mob to erase.
  */
 void onion_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.onions.erase(
         find(
-        game.states.gameplay->mobs.onions.begin(),
-        game.states.gameplay->mobs.onions.end(),
-        (onion*) m
+            game.states.gameplay->mobs.onions.begin(),
+            game.states.gameplay->mobs.onions.end(),
+            (onion*) m
         )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of Onion given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of Onion given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* onion_category::get_type(const string &name) const {
     auto it = game.mob_types.onion.find(name);
@@ -93,10 +95,10 @@ mob_type* onion_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of Onion by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of Onion by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void onion_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.onion) {
@@ -105,10 +107,10 @@ void onion_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of Onion.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of Onion.
+ *
+ * @param type Mob type to register.
  */
 void onion_category::register_type(mob_type* type) {
     game.mob_types.onion[type->name] = (onion_type*) type;

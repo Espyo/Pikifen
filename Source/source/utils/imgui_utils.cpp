@@ -15,17 +15,16 @@
 #include "imgui_utils.h"
 
 
-/* ----------------------------------------------------------------------------
- * Helps creating an ImGui combo box, using a vector of strings for the
+/**
+ * @brief Helps creating an ImGui combo box, using a vector of strings for the
  * list of items.
- * label:
- *   Combo widget label.
- * current_item:
- *   Index number of the current selected item. -1 means none.
- * items:
- *   List of items.
- * popup_max_height_in_items:
- *   Maximum height of the popup, in number of items.
+ *
+ * @param label Combo widget label.
+ * @param current_item Index number of the current selected item. -1 means none.
+ * @param items List of items.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
  */
 bool ImGui::Combo(
     const string &label, int* current_item, const vector<string> &items,
@@ -44,17 +43,16 @@ bool ImGui::Combo(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Helps creating an ImGui combo box, using a string to control the selection,
- * as well as a vector of strings for the list of items.
- * label:
- *   Combo widget label.
- * current_item:
- *   Name of the current selected item.
- * items:
- *   List of items.
- * popup_max_height_in_items:
- *   Maximum height of the popup, in number of items.
+/**
+ * @brief Helps creating an ImGui combo box, using a string to control the
+ * selection, as well as a vector of strings for the list of items.
+ *
+ * @param label Combo widget label.
+ * @param current_item Name of the current selected item.
+ * @param items List of items.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
  */
 bool ImGui::Combo(
     const string &label, string* current_item, const vector<string> &items,
@@ -86,24 +84,19 @@ bool ImGui::Combo(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates two ImGui drag ints, one that sets the number of minutes, one that
- * sets the number of seconds. Though with some arguments, this can be changed
- * to hours and minutes.
- * Returns true if either value was changed.
- * label:
- *   Widget label.
- * total_amount:
- *   Time in the total amount of seconds. Or minutes, or whatever the lowest
- *   unit represent is.
- * format1:
- *   String to write in front of the first component's value.
- * format2:
- *   String to write in front of the second component's value.
- * limit1:
- *   Maximum value for the first component.
- * limit2:
- *   Maximum value for the second component.
+/**
+ * @brief Creates two ImGui drag ints, one that sets the number of minutes,
+ * one that sets the number of seconds. Though with some arguments,
+ * this can be changed to hours and minutes.
+ *
+ * @param label Widget label.
+ * @param total_amount Time in the total amount of seconds.
+ * Or minutes, or whatever the lowest unit represent is.
+ * @param format1 String to write in front of the first component's value.
+ * @param format2 String to write in front of the second component's value.
+ * @param limit1 Maximum value for the first component.
+ * @param limit2 Maximum value for the second component.
+ * @return Whether either value was changed.
  */
 bool ImGui::DragTime2(
     const string &label, int* total_amount,
@@ -146,18 +139,15 @@ bool ImGui::DragTime2(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Helps creating an ImGui ImageButton, followed by a centered Text.
- * id:
- *   Button widget ID.
- * icon:
- *   Icon to show on the button.
- * icon_size:
- *   Width and height of the icon.
- * button_padding:
- *   Padding between the icon and button edges.
- * text:
- *   The button's text.
+/**
+ * @brief Helps creating an ImGui ImageButton, followed by a centered Text.
+ *
+ * @param id Button widget ID.
+ * @param icon Icon to show on the button.
+ * @param icon_size Width and height of the icon.
+ * @param button_padding Padding between the icon and button edges.
+ * @param text The button's text.
+ * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonAndText(
     const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
@@ -191,17 +181,15 @@ bool ImGui::ImageButtonAndText(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Helps creating an ImGui list box, using a vector of strings for the
+/**
+ * @brief Helps creating an ImGui list box, using a vector of strings for the
  * list of items.
- * label:
- *   ListBox widget label.
- * current_item:
- *   Index number of the current selected item.
- * items:
- *   List of items.
- * height_in_items:
- *   Maximum height, in number of items.
+ *
+ * @param label ListBox widget label.
+ * @param current_item Index number of the current selected item.
+ * @param items List of items.
+ * @param height_in_items Maximum height, in number of items.
+ * @return Whether the value was changed.
  */
 bool ImGui::ListBox(
     const string &label, int* current_item, const vector<string> &items,
@@ -224,8 +212,8 @@ bool ImGui::ListBox(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets some variables inside the ImGui namespace.
+/**
+ * @brief Resets some variables inside the ImGui namespace.
  */
 void ImGui::Reset() {
     ImGuiIO &io = ImGui::GetIO();
@@ -258,10 +246,10 @@ void ImGui::Reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Prepares the "cursor X" so that the next widgets will be centered.
- * upcoming_items_width:
- *   Width of the items that will belong to this line.
+/**
+ * @brief Prepares the "cursor X" so that the next widgets will be centered.
+ *
+ * @param upcoming_items_width Width of the items that will belong to this line.
  */
 void ImGui::SetupCentering(const int upcoming_items_width) {
     int window_width = ImGui::GetWindowSize().x;

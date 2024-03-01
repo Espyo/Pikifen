@@ -19,106 +19,153 @@
 
 
 namespace OPTIONS {
+
 //Default value for the ambiance sound volume.
 const float DEF_AMBIANCE_VOLUME = 1.0f;
+
 //Default value for the area editor advanced mode setting.
 const bool DEF_AREA_EDITOR_ADVANCED_MODE = false;
+
 //Default value for the area editor backup interval.
 const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
+
 //Default value for the area editor grid interval.
 const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
+
 //Default value for the area editor selection transformation widget.
 const bool DEF_AREA_EDITOR_SEL_TRANS = false;
+
 //Default value for whether to show a circular sector's info in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO = true;
+
 //Default value for whether to show an edge's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
+
 //Default value for whether to show a path link's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
+
 //Default value for whether to show a mob's territory in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_TERRITORY = false;
+
 //Default value for the area editor snap mode.
 const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE =
     area_editor::SNAP_GRID;
+    
 //Default value for the area editor snap threshold.
 const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
+
 //Default value for the area editor undo limit.
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
+
 //Default value for the area editor view mode.
 const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
+    
 //Default value for the auto-throw mode.
 const AUTO_THROW_MODES DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
+
 //Default value for the cursor camera weight.
 const float DEF_CURSOR_CAM_WEIGHT = 0.0f;
+
 //Default value for the cursor speed.
 const float DEF_CURSOR_SPEED = 500.0f;
+
 //Default value for the cursor trail.
 const bool DEF_DRAW_CURSOR_TRAIL = true;
+
 //Default value for the editor highlights.
 const ALLEGRO_COLOR DEF_EDITOR_HIGHLIGHT_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 //Default value for whether the middle mouse button pans in editors.
 const bool DEF_EDITOR_MMB_PAN = false;
+
 //Default value for the editor mouse drag threshold.
 const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
+
 //Default value for the editor primary color.
 const ALLEGRO_COLOR DEF_EDITOR_PRIMARY_COLOR = {0.05f, 0.05f, 0.05f, 1.0f};
+
 //Default value for the editor secondary color.
 const ALLEGRO_COLOR DEF_EDITOR_SECONDARY_COLOR = {0.19f, 0.47f, 0.78f, 1.0f};
+
 //Default value for whether to show tooltips in editors.
 const bool DEF_EDITOR_SHOW_TOOLTIPS = true;
+
 //Default value for the editor text color.
 const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR = {1.0f, 1.0f, 1.0f, 1.0f};
+
 //Default value for whether to use custom styles in editors.
 const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
+
 //Default value for the GUI editor grid interval.
 const float DEF_GUI_EDITOR_GRID_INTERVAL = 2.5f;
+
 //Default value for the GUI editor snap mode.
 const bool DEF_GUI_EDITOR_SNAP = true;
+
 //Default value for the joystick maximum deadzone.
 const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
+
 //Default value for the joystick minimum deadzone.
 const float DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
+
 //Default value for the pause menu leaving confirmation mode.
 const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE =
     LEAVING_CONFIRMATION_ALWAYS;
+    
 //Default value for the master sound volume.
 const float DEF_MASTER_VOLUME = 0.8f;
+
 //Default value for the maximum amount of particles.
 const size_t DEF_MAX_PARTICLES = 200;
+
 //Default value for whether mipmaps are enabled.
 const bool DEF_MIPMAPS_ENABLED = true;
+
 //Default value for whether the mouse moves the cursor, for each player.
 const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+
 //Default value for the music volume.
 const float DEF_MUSIC_VOLUME = 1.0f;
+
 //Default value for whether to show player input icons on the HUD.
 const bool DEF_SHOW_HUD_INPUT_ICONS = true;
+
 //Default value for whether to use smooth scaling.
 const bool DEF_SMOOTH_SCALING = true;
+
 //Default value for the default target framerate.
 const unsigned int DEF_TARGET_FPS = 60;
+
 //Default value for whether to use true fullscreen.
 const bool DEF_TRUE_FULLSCREEN = false;
+
 //Default value for UI sound effects volume.
 const float DEF_UI_SFX_VOLUME = 1.0f;
+
 //Default value for whether to use the window position hack.
 const bool DEF_WINDOW_POSITION_HACK = false;
+
 //Default value for whether to use fullscreen.
 const bool DEF_WIN_FULLSCREEN = false;
+
 //Default value for the window height.
 const unsigned int DEF_WIN_H = 768;
+
 //Default value for the window width.
 const unsigned int DEF_WIN_W = 1024;
+
 //Default value for world sound effects volume.
 const float DEF_WORLD_SFX_VOLUME = 1.0f;
+
 //Default value for the middle zoom level.
 const float DEF_ZOOM_MID_LEVEL = 1.4f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an options struct.
+/**
+ * @brief Constructs a new options struct object.
  */
 options_struct::options_struct() :
     ambiance_volume(OPTIONS::DEF_AMBIANCE_VOLUME),
@@ -176,10 +223,10 @@ options_struct::options_struct() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads the player's options from a file.
- * file:
- *   File to read from.
+/**
+ * @brief Loads the player's options from a file.
+ *
+ * @param file File to read from.
  */
 void options_struct::load(data_node* file) {
     reader_setter rs(file);
@@ -350,10 +397,10 @@ void options_struct::load(data_node* file) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Saves the player's options into a file.
- * file:
- *   File to write to.
+/**
+ * @brief Saves the player's options into a file.
+ *
+ * @param file File to write to.
  */
 void options_struct::save(data_node* file) const {
     //First, group the controls by action and player.

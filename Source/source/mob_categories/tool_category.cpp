@@ -16,8 +16,8 @@
 #include "../mobs/tool.h"
 
 
-/* ----------------------------------------------------------------------------
- * Creates an instance of the tool category.
+/**
+ * @brief Constructs a new tool category object.
  */
 tool_category::tool_category() :
     mob_category(
@@ -28,8 +28,8 @@ tool_category::tool_category() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears the list of registered types of tools.
+/**
+ * @brief Clears the list of registered types of tools.
  */
 void tool_category::clear_types() {
     for(auto &t : game.mob_types.tool) {
@@ -39,14 +39,13 @@ void tool_category::clear_types() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a tool and adds it to the list of tools.
- * pos:
- *   Starting coordinates.
- * type:
- *   Mob type.
- * angle:
- *   Starting angle.
+/**
+ * @brief Creates a tool and adds it to the list of tools.
+ *
+ * @param pos Starting coordinates.
+ * @param type Mob type.
+ * @param angle Starting angle.
+ * @return The mob.
  */
 mob* tool_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -57,34 +56,37 @@ mob* tool_category::create_mob(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of tool.
+/**
+ * @brief Creates a new, empty type of tool.
+ *
+ * @return The type.
  */
 mob_type* tool_category::create_type() {
     return new tool_type();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Clears a tool from the list of tools.
- * m:
- *   The mob to erase.
+/**
+ * @brief Clears a tool from the list of tools.
+ *
+ * @param m The mob to erase.
  */
 void tool_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.tools.erase(
         find(
-        game.states.gameplay->mobs.tools.begin(), 
-        game.states.gameplay->mobs.tools.end(), 
-        (tool*) m
+            game.states.gameplay->mobs.tools.begin(),
+            game.states.gameplay->mobs.tools.end(),
+            (tool*) m
         )
     );
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns a type of tool given its name, or NULL on error.
- * name:
- *   Name of the mob type to get.
+/**
+ * @brief Returns a type of tool given its name.
+ *
+ * @param name Name of the mob type to get.
+ * @return The type, or NULL on error.
  */
 mob_type* tool_category::get_type(const string &name) const {
     auto it = game.mob_types.tool.find(name);
@@ -93,10 +95,10 @@ mob_type* tool_category::get_type(const string &name) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all types of tool by name.
- * list:
- *   This list gets filled with the mob type names.
+/**
+ * @brief Returns all types of tool by name.
+ *
+ * @param list This list gets filled with the mob type names.
  */
 void tool_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.tool) {
@@ -105,10 +107,10 @@ void tool_category::get_type_names(vector<string> &list) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a created type of tool.
- * type:
- *   Mob type to register.
+/**
+ * @brief Registers a created type of tool.
+ *
+ * @param type Mob type to register.
  */
 void tool_category::register_type(mob_type* type) {
     game.mob_types.tool[type->name] = (tool_type*) type;

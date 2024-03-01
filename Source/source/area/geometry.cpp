@@ -27,56 +27,69 @@ using std::vector;
 
 
 namespace GEOMETRY {
+
 //Area blockmap blocks have this width and height.
 const float BLOCKMAP_BLOCK_SIZE = 128;
+
 //Default sector brightness.
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
+
 //Liquids drain for this long.
 const float LIQUID_DRAIN_DURATION = 2.0f;
+
 //Auto wall shadow lengths are the sector height difference multiplied by this.
 const float SHADOW_AUTO_LENGTH_MULT = 0.2f;
+
 //Default color of wall shadows. This is the color at the edge.
 const ALLEGRO_COLOR SHADOW_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.90f};
+
 //Maximum length a wall shadow can be when the length is automatic.
 const float SHADOW_MAX_AUTO_LENGTH = 50.0f;
+
 //Maximum length a wall shadow can be.
 const float SHADOW_MAX_LENGTH = 100.0f;
+
 //Minimum length a wall shadow can be when the length is automatic.
 const float SHADOW_MIN_AUTO_LENGTH = 8.0f;
+
 //Minimum length a wall shadow can be.
 const float SHADOW_MIN_LENGTH = 1.0f;
+
 //Default color of the smoothing effect.
 const ALLEGRO_COLOR SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.70f};
+
 //Maximum length the smoothing effect can be.
 const float SMOOTHING_MAX_LENGTH = 100.0f;
+
 //Mobs can walk up sectors that are, at the most,
 //this high from the current one, as if climbing up steps.
 const float STEP_HEIGHT = 50;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates an empty polygon.
+/**
+ * @brief Constructs a new polygon object.
  */
 polygon::polygon() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a polygon with the specified list of vertexes.
- * vertexes:
- *   Vertexes that make up the polygon.
+/**
+ * @brief Constructs a new polygon object.
+ *
+ * @param vertexes Vertexes that make up the polygon.
  */
 polygon::polygon(const vector<vertex*> &vertexes) :
     vertexes(vertexes) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Cleans a polygon's vertexes.
+/**
+ * @brief Cleans a polygon's vertexes.
  * This deletes 0-length edges, and 180-degree vertexes.
- * recursive:
- *   If true, clean the children polyon too recursively.
+ *
+ * @param recursive If true, clean the children polyon too recursively.
  */
 void polygon::clean(bool recursive) {
     for(size_t v = 0; v < vertexes.size();) {
@@ -126,8 +139,8 @@ void polygon::clean(bool recursive) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * When this polygon has children polygons, a cut must be made between it
+/**
+ * @brief When this polygon has children polygons, a cut must be made between it
  * and the children polygons, as to make this one holeless.
  */
 void polygon::cut() {
@@ -352,8 +365,8 @@ void polygon::cut() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Cuts all children polygons, as the root of the polygon tree.
+/**
+ * @brief Cuts all children polygons, as the root of the polygon tree.
  */
 void polygon::cut_all_as_root() {
     for(size_t o = 0; o < children.size(); ++o) {
@@ -381,8 +394,8 @@ void polygon::cut_all_as_root() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Destroys the polygon, deleting from memory all children, recursively.
+/**
+ * @brief Destroys the polygon, deleting from memory all children, recursively.
  */
 void polygon::destroy() {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -392,8 +405,10 @@ void polygon::destroy() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a polygon.
+/**
+ * @brief Returns the vertex farthest to the right in a polygon.
+ *
+ * @return The farthest right vertex.
  */
 vertex* polygon::get_rightmost_vertex() const {
     vertex* rightmost = NULL;
@@ -411,13 +426,13 @@ vertex* polygon::get_rightmost_vertex() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Adds a polygon as a child of this polygon, or as a child of one of
+/**
+ * @brief Adds a polygon as a child of this polygon, or as a child of one of
  * its children, recursively.
  * It does this by checking if the polygon goes inside or not.
- * Returns true if it got inserted, false if not.
- * p:
- *   Polygon to insert.
+ *
+ * @param p Polygon to insert.
+ * @return Whether it got inserted.
  */
 bool polygon::insert_child(polygon* p) {
     //First, check if it can be inserted in a child.
@@ -444,10 +459,11 @@ bool polygon::insert_child(polygon* p) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside of the polygon.
- * p:
- *   Point to check.
+/**
+ * @brief Returns whether a point is inside of the polygon.
+ *
+ * @param p Point to check.
+ * @return Whether it is inside.
  */
 bool polygon::is_point_inside(const point &p) const {
     //http://paulbourke.net/geometry/polygonmesh/index.html#insidepoly
@@ -480,14 +496,12 @@ bool polygon::is_point_inside(const point &p) const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a triangle.
- * v1:
- *   First vertex.
- * v2:
- *   Second vertex.
- * v3:
- *   Third vertex.
+/**
+ * @brief Constructs a new triangle object.
+ *
+ * @param v1 First vertex.
+ * @param v2 Second vertex.
+ * @param v3 Third vertex.
  */
 triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
     points[0] = v1;
@@ -496,35 +510,32 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the next edge the trace algorithm should go to.
+/**
+ * @brief Returns the next edge the trace algorithm should go to.
+ *
  * Because at each vertex there can be multiple edges, including multiple
  * edges that belong to the sector we are looking for, we should pick
  * the next edge carefully.
  * Based on information from the previous edge, we should continue travelling
  * via the edge with the smallest angle difference (depending on the rotation
  * direction we're heading.
- * v_ptr:
- *   Vertex to check.
- * prev_v_ptr:
- *   Vertex that we came from, if any. Used to ensure we don't go backwards.
- * s_ptr:
- *   Sector we are trying to trace.
- * prev_e_angle:
- *   Angle of the previous edge. This is the angle from the previous vertex to
- *   the current vertex, so it's sent here cached for performance.
- * best_is_closest_cw:
- *   True if we want the edge that is closest clockwise from the previous edge.
- *   False for the closest counter-clockwise.
- * next_e_ptr:
- *   The next edge is returned here. If there is none, NULL is returned.
- * next_e_angle:
- *   The next edge's angle is returned here. This is used to feed the next
- *   iteration of the algorithm so it doesn't need to re-calculate the angle.
- * next_v_ptr:
- *   Opposing vertex of the next edge.
- * excluded_edges:
- *   List of edges that must not be checked, if any.
+ *
+ * @param v_ptr Vertex to check.
+ * @param prev_v_ptr Vertex that we came from, if any.
+ * Used to ensure we don't go backwards.
+ * @param s_ptr Sector we are trying to trace.
+ * @param prev_e_angle Angle of the previous edge.
+ * This is the angle from the previous vertex to the current vertex,
+ * so it's sent here cached for performance.
+ * @param best_is_closest_cw True if we want the edge that is closest clockwise
+ * from the previous edge. False for the closest counter-clockwise.
+ * @param next_e_ptr The next edge is returned here.
+ * If there is none, NULL is returned.
+ * @param next_e_angle The next edge's angle is returned here.
+ * This is used to feed the next iteration of the algorithm so it
+ * doesn't need to re-calculate the angle.
+ * @param next_v_ptr Opposing vertex of the next edge.
+ * @param excluded_edges List of edges that must not be checked, if any.
  */
 void find_trace_edge(
     vertex* v_ptr, const vertex* prev_v_ptr, const sector* s_ptr,
@@ -595,16 +606,13 @@ void find_trace_edge(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Get the convex, concave and ear vertexes.
- * vertexes_left:
- *   List of vertexes left to be processed.
- * ears:
- *   List of ears found.
- * convex_vertexes:
- *   List of convex vertexes found.
- * concave_vertexes:
- *   List of concave vertexes found.
+/**
+ * @brief Get the convex, concave and ear vertexes.
+ *
+ * @param vertexes_left List of vertexes left to be processed.
+ * @param ears List of ears found.
+ * @param convex_vertexes List of convex vertexes found.
+ * @param concave_vertexes List of concave vertexes found.
  */
 void get_cce(
     const vector<vertex*> &vertexes_left, vector<size_t> &ears,
@@ -631,16 +639,15 @@ void get_cce(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns all vertexes that are close enough to be merged with
+/**
+ * @brief Returns all vertexes that are close enough to be merged with
  * the specified point, as well as their distances to said point.
- * pos:
- *   Coordinates of the point.
- * all_vertexes:
- *   Vector with all of the vertexes in the area.
- * merge_radius:
- *   Minimum radius to merge. This does not take the camera zoom
- *   level into account.
+ *
+ * @param pos Coordinates of the point.
+ * @param all_vertexes Vector with all of the vertexes in the area.
+ * @param merge_radius Minimum radius to merge.
+ * This does not take the camera zoom level into account.
+ * @return The merge vertexes.
  */
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &pos, const vector<vertex*> &all_vertexes,
@@ -662,18 +669,19 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the polygons of a sector. Polygons can include child polygons.
+/**
+ * @brief Returns the polygons of a sector.
+ *
+ * Polygons can include child polygons.
  * Outer polygons are all the ones that contain the sector inside, and inner
  * polygons do not contain the sector inside. (In theory, since in practice
  * an inner polygon could contain another outer polygon inside.)
  * The vertexes are ordered counter-clockwise for the outer polygons,
  * and clockwise for the inner ones.
- * Returns an error code.
- * s_ptr:
- *   Pointer to the sector.
- * polys:
- *   Return the polygons here.
+ *
+ * @param s_ptr Pointer to the sector.
+ * @param polys Return the polygons here.
+ * @return An error code.
  */
 TRIANGULATION_ERRORS get_polys(
     sector* s_ptr, polygon* polys
@@ -719,18 +727,16 @@ TRIANGULATION_ERRORS get_polys(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Helper function that returns whether we are going to trace an outer polygon
- * or an inner polygon.
- * Returns true if it's an outer polygon.
- * v_ptr:
- *   Pointer to the vertex the trace is starting on.
- * s_ptr:
- *   Pointer to the sector we're working on.
- * edges_left:
- *   Edges that are still remaining to get polygons from.
- * doing_first_polygon:
- *   True if we're doing the first polygon of the sector, false otherwise.
+/**
+ * @brief Helper function that returns whether we are going to trace
+ * an outer polygon or an inner polygon.
+ *
+ * @param v_ptr Pointer to the vertex the trace is starting on.
+ * @param s_ptr Pointer to the sector we're working on.
+ * @param edges_left Edges that are still remaining to get polygons from.
+ * @param doing_first_polygon True if we're doing the first polygon of the
+ * sector, false otherwise.
+ * @return Whether it is an outer polygon.
  */
 bool get_polys_is_outer(
     vertex* v_ptr, const sector* s_ptr, unordered_set<edge*> edges_left,
@@ -804,10 +810,11 @@ bool get_polys_is_outer(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a list of edges.
- * edges:
- *   Edges to check.
+/**
+ * @brief Returns the vertex farthest to the right in a list of edges.
+ *
+ * @param edges Edges to check.
+ * @return The vertex.
  */
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
     vertex* rightmost = NULL;
@@ -824,15 +831,16 @@ vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right between the two.
+/**
+ * @brief Returns the vertex farthest to the right between the two.
+ *
  * In the case of a tie, the highest one is returned.
  * This is necessary because at one point, the rightmost
  * vertex was being decided kinda randomly.
- * v1:
- *   First vertex to check.
- * v2:
- *   Second vertex to check.
+ *
+ * @param v1 First vertex to check.
+ * @param v2 Second vertex to check.
+ * @return The vertex.
  */
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
     if(v1->x > v2->x) return v1;
@@ -841,11 +849,12 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether a polygon was created clockwise or anti-clockwise,
+/**
+ * @brief Returns whether a polygon was created clockwise or anti-clockwise,
  * given the order of its vertexes.
- * vertexes:
- *   Vertexes to check.
+ *
+ * @param vertexes Vertexes to check.
+ * @return Whether it is clockwise.
  */
 bool is_polygon_clockwise(vector<vertex*> &vertexes) {
     //Solution by http://stackoverflow.com/a/1165943
@@ -859,12 +868,12 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether this vertex is convex or not.
- * vec:
- *   List of all vertexes.
- * nr:
- *   Index number of the vertex to check.
+/**
+ * @brief Returns whether this vertex is convex or not.
+ *
+ * @param vec List of all vertexes.
+ * @param nr Index number of the vertex to check.
+ * @return Whether it is convex.
  */
 bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     const vertex* cur_v = vec[nr];
@@ -885,14 +894,13 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether this vertex is an ear or not.
- * vec:
- *   List of all vertexes.
- * concaves:
- *   List of concave vertexes.
- * nr:
- *   Index number of the vertex to check.
+/**
+ * @brief Returns whether this vertex is an ear or not.
+ *
+ * @param vec List of all vertexes.
+ * @param concaves List of concave vertexes.
+ * @param nr Index number of the vertex to check.
+ * @return Whether it is an ear.
  */
 bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
@@ -922,24 +930,20 @@ bool is_vertex_ear(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Traces edges until it returns to the start, at which point it
+/**
+ * @brief Traces edges until it returns to the start, at which point it
  * closes a polygon.
- * Returns an error code.
- * start_v_ptr:
- *   Vertex to start on.
- * s_ptr:
- *   Sector to trace around.
- * going_cw:
- *   True if the travel direction should be clockwise,
- *   false for counter-clockwise.
- * vertexes:
- *   The final list of vertexes is returned here.
- * unvisited_edges:
- *   List of edges that have not been visited, so the algorithm can
- *   remove them from the list as it visits them.
- * polygon_edges_so_far:
- *   List of edges that have already been added to the polygon so far.
+ *
+ * @param start_v_ptr Vertex to start on.
+ * @param s_ptr Sector to trace around.
+ * @param going_cw True if the travel direction should be clockwise,
+ * false for counter-clockwise.
+ * @param vertexes The final list of vertexes is returned here.
+ * @param unvisited_edges List of edges that have not been visited,
+ * so the algorithm can remove them from the list as it visits them.
+ * @param polygon_edges_so_far List of edges that have already been added
+ * to the polygon so far.
+ * @return An error code.
  */
 TRIANGULATION_ERRORS trace_edges(
     vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
@@ -1089,14 +1093,15 @@ TRIANGULATION_ERRORS trace_edges(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Triangulates a polygon via the Triangulation by Ear Clipping algorithm.
+/**
+ * @brief Triangulates a polygon via the Triangulation by Ear Clipping
+ * algorithm.
+ *
  * http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
- * Returns an error code.
- * poly:
- *   The polygon to triangulate.
- * triangles:
- *   The final list of triangles is returned here.
+ *
+ * @param poly The polygon to triangulate.
+ * @param triangles The final list of triangles is returned here.
+ * @return An error code.
  */
 TRIANGULATION_ERRORS triangulate_polygon(
     polygon* poly, vector<triangle>* triangles
@@ -1155,16 +1160,16 @@ TRIANGULATION_ERRORS triangulate_polygon(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Triangulates (turns into triangles) a sector.
- * This is because drawing concave polygons is not possible.
- * Returns an error code.
- * s_ptr:
- *   Pointer to the sector.
- * lone_edges:
- *   Return lone edges found here.
- * clear_lone_edges:
- *   Clear this sector's edges from the list of lone edges, if they are there.
+/**
+ * @brief Triangulates (turns into triangles) a sector.
+ *
+ * We need to do this because drawing concave polygons is not possible.
+ *
+ * @param s_ptr Pointer to the sector.
+ * @param lone_edges Return lone edges found here.
+ * @param clear_lone_edges Clear this sector's edges from the list of
+ * lone edges, if they are there.
+ * @return An error code.
  */
 TRIANGULATION_ERRORS triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges

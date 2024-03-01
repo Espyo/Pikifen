@@ -23,10 +23,10 @@ unsigned int code_debug_benchmark_iterations;
 map<void*, string> code_debug_new_allocs;
 bool code_debug_new_recording;
 
-/* ----------------------------------------------------------------------------
- * Overrides operator delete.
- * ptr:
- *   Pointer to memory to deallocate.
+/**
+ * @brief Overrides operator delete.
+ *
+ * @param ptr Pointer to memory to deallocate.
  */
 void operator delete(void* ptr) noexcept {
     if(code_debug_new_recording) {
@@ -39,10 +39,10 @@ void operator delete(void* ptr) noexcept {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Overrides operator delete[].
- * ptr:
- *   Pointer to memory to deallocate.
+/**
+ * @brief Overrides operator delete[].
+ *
+ * @param ptr Pointer to memory to deallocate.
  */
 void operator delete[](void* ptr) noexcept {
     if(code_debug_new_recording) {
@@ -55,14 +55,12 @@ void operator delete[](void* ptr) noexcept {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Overrides operator new.
- * size:
- *   Size of memory to allocate.
- * file:
- *   Name of the code file that requested this allocation.
- * line:
- *   Line in the code file that requested this allocation.
+/**
+ * @brief Overrides operator new.
+ *
+ * @param size Size of memory to allocate.
+ * @param file Name of the code file that requested this allocation.
+ * @param line Line in the code file that requested this allocation.
  */
 void* operator new(size_t size, char* file, int line) {
     void* ptr = malloc(size);
@@ -74,14 +72,12 @@ void* operator new(size_t size, char* file, int line) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Overrides operator new[].
- * size:
- *   Size of memory to allocate.
- * file:
- *   Name of the code file that requested this allocation.
- * line:
- *   Line in the code file that requested this allocation.
+/**
+ * @brief Overrides operator new[].
+ *
+ * @param size Size of memory to allocate.
+ * @param file Name of the code file that requested this allocation.
+ * @param line Line in the code file that requested this allocation.
  */
 void* operator new[](size_t size, char* file, int line) {
     void* ptr = malloc(size);
@@ -97,17 +93,19 @@ void* operator new[](size_t size, char* file, int line) {
 
 
 
-/* ----------------------------------------------------------------------------
- * Starts a time measurement for benchmarking.
+/**
+ * @brief Starts a time measurement for benchmarking.
  */
 void code_debug_benchmark_start_measuring() {
     code_debug_benchmark_measure_start = al_get_time();
 }
 
 
-/* ----------------------------------------------------------------------------
- * Finishes a time measurement for benchmarking. Stores and returns the
+/**
+ * @brief Finishes a time measurement for benchmarking. Stores and returns the
  * time difference.
+ *
+ * @return The time difference.
  */
 double code_debug_benchmark_end_measuring() {
     double duration = al_get_time() - code_debug_benchmark_measure_start;
@@ -117,8 +115,10 @@ double code_debug_benchmark_end_measuring() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the average duration of all measurements taken so far.
+/**
+ * @brief Returns the average duration of all measurements taken so far.
+ *
+ * @return The average duration.
  */
 double code_debug_benchmark_get_avg_duration() {
     if(code_debug_benchmark_iterations == 0) return 0.0f;

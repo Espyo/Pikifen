@@ -26,43 +26,61 @@
 
 
 namespace EDITOR {
+
 //Default history maximum size.
 const size_t DEF_MAX_HISTORY_SIZE = 6;
+
 //Time until the next click is no longer considered a double-click.
 const float DOUBLE_CLICK_TIMEOUT = 0.5f;
+
 //Every icon in the icon bitmap file is these many pixels from the previous.
 const int ICON_BMP_PADDING = 1;
+
 //Every icon in the icon bitmap file has this size.
 const int ICON_BMP_SIZE = 24;
+
 //How much to zoom in/out with the keyboard keys.
 const float KEYBOARD_CAM_ZOOM = 0.25f;
+
 //How quickly the operation error red flash effect cursor shakes.
 const float OP_ERROR_CURSOR_SHAKE_SPEED = 55.0f;
+
 //How much the operation error red flash effect cursor shakes left and right.
 const float OP_ERROR_CURSOR_SHAKE_WIDTH = 6.0f;
+
 //Width or height of the operation error red flash effect cursor.
 const float OP_ERROR_CURSOR_SIZE = 32.0f;
+
 //Thickness of the operation error red flash effect cursor.
 const float OP_ERROR_CURSOR_THICKNESS = 5.0f;
+
 //Duration of the operation error red flash effect.
 const float OP_ERROR_FLASH_DURATION = 1.5f;
+
 //Picker dialog maximum button size.
 const float PICKER_IMG_BUTTON_MAX_SIZE = 160.0f;
+
 //Picker dialog minimum button size.
 const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
+
 //Default size of the transformation widget.
 const float TW_DEF_SIZE = 32.0f;
+
 //Radius of a handle in the transformation widget.
 const float TW_HANDLE_RADIUS = 6.0f;
+
 //Thickness of the outline in the transformation widget.
 const float TW_OUTLINE_THICKNESS = 2.0f;
+
 //Thickness of the rotation handle in the transformation widget.
 const float TW_ROTATION_HANDLE_THICKNESS = 8.0f;
+
 }
 
 
-/* ----------------------------------------------------------------------------
- * Initializes editor class stuff.
+/**
+ * @brief Constructs a new editor object.
+ *
  */
 editor::editor() :
     bmp_editor_icons(nullptr),
@@ -95,18 +113,16 @@ editor::editor() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Centers the camera so that these four points are in view.
+/**
+ * @brief Centers the camera so that these four points are in view.
  * A bit of padding is added, so that, for instance, the top-left
  * point isn't exactly on the top-left of the screen,
  * where it's hard to see.
- * min_coords:
- *   Top-left coordinates of the content to focus on.
- * max_coords:
- *   Bottom-right coordinates of the content to focus on.
- * instantaneous:
- *   If true, the camera moves there instantaneously. If false, it smoothly
- *   gets there over time.
+ *
+ * @param min_coords Top-left coordinates of the content to focus on.
+ * @param max_coords Bottom-right coordinates of the content to focus on.
+ * @param instantaneous If true, the camera moves there instantaneously.
+ * If false, it smoothly gets there over time.
  */
 void editor::center_camera(
     const point &min_coords, const point &max_coords,
@@ -141,8 +157,8 @@ void editor::center_camera(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Closes the topmost dialog.
+/**
+ * @brief Closes the topmost dialog.
  */
 void editor::close_top_dialog() {
     if(dialogs.empty()) return;
@@ -150,9 +166,9 @@ void editor::close_top_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the editor. This is meant to
- * be run after the editor's own logic code.
+/**
+ * @brief Handles the logic part of the main loop of the editor.
+ * This is meant to be run after the editor's own logic code.
  */
 void editor::do_logic_post() {
     escape_was_pressed = false;
@@ -160,9 +176,9 @@ void editor::do_logic_post() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the editor. This is meant to
- * be run before the editor's own logic code.
+/**
+ * @brief Handles the logic part of the main loop of the editor.
+ * This is meant to be run before the editor's own logic code.
  */
 void editor::do_logic_pre() {
     if(double_click_time > 0) {
@@ -179,15 +195,14 @@ void editor::do_logic_pre() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the grid, using the current game camera.
- * interval:
- *   Interval between grid lines.
- * major_color:
- *   Color to use for major lines. These are lines that happen at major
- *   milestones (i.e. twice the interval).
- * minor_color:
- *   Color to use for minor lines. These are lines that aren't major.
+/**
+ * @brief Draws the grid, using the current game camera.
+ *
+ * @param interval Interval between grid lines.
+ * @param major_color Color to use for major lines.
+ * These are lines that happen at major milestones (i.e. twice the interval).
+ * @param minor_color Color to use for minor lines.
+ * These are lines that aren't major.
  */
 void editor::draw_grid(
     const float interval,
@@ -258,8 +273,8 @@ void editor::draw_grid(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws a small red X on the cursor, signifying an operation has failed.
+/**
+ * @brief Draws a small red X on the cursor, signifying an operation has failed.
  */
 void editor::draw_op_error_cursor() {
     float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
@@ -302,16 +317,20 @@ void editor::draw_op_error_cursor() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the maximum number of history entries for this editor.
+/**
+ * @brief Returns the maximum number of history entries for this editor.
+ *
+ * @return The size.
  */
 size_t editor::get_history_size() const {
     return EDITOR::DEF_MAX_HISTORY_SIZE;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the position of the last widget, in screen coordinates.
+/**
+ * @brief Returns the position of the last widget, in screen coordinates.
+ *
+ * @return The position.
  */
 point editor::get_last_widget_pos() {
     return
@@ -322,10 +341,10 @@ point editor::get_last_widget_pos() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles an Allegro event for control-related things.
- * ev:
- *   Event to handle.
+/**
+ * @brief Handles an Allegro event for control-related things.
+ *
+ * @param ev Event to handle.
  */
 void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -588,188 +607,186 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being "char-typed" anywhere.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being "char-typed" anywhere.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being "char-typed" in the canvas.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being "char-typed" in the canvas.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being pressed down anywhere.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being pressed down anywhere.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being pressed down in the canvas.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being pressed down in the canvas.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being released anywhere.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being released anywhere.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling a key being released in the canvas.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling a key being released in the canvas.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_key_up_canvas(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the left mouse button being double-clicked
+/**
+ * @brief Placeholder for handling the left mouse button being double-clicked
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the left mouse button being pressed down
+/**
+ * @brief Placeholder for handling the left mouse button being pressed down
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the left mouse button being dragged
+/**
+ * @brief Placeholder for handling the left mouse button being dragged
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the left mouse button released
+/**
+ * @brief Placeholder for handling the left mouse button released
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the middle mouse button being double-clicked
+/**
+ * @brief Placeholder for handling the middle mouse button being double-clicked
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the middle mouse button being pressed down
+/**
+ * @brief Placeholder for handling the middle mouse button being pressed down
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the middle mouse button being dragged
+/**
+ * @brief Placeholder for handling the middle mouse button being dragged
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the middle mouse button being released
+/**
+ * @brief Placeholder for handling the middle mouse button being released
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the mouse coordinates being updated.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling the mouse coordinates being updated.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the mouse wheel being turned in the canvas.
- * ev:
- *   Event to process.
+/**
+ * @brief Placeholder for handling the mouse wheel being turned in the canvas.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the right mouse button being double-clicked
+/**
+ * @brief Placeholder for handling the right mouse button being double-clicked
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the right mouse button being pressed down
+/**
+ * @brief Placeholder for handling the right mouse button being pressed down
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the right mouse button being dragged
+/**
+ * @brief Placeholder for handling the right mouse button being dragged
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Placeholder for handling the right mouse button being released
+/**
+ * @brief Placeholder for handling the right mouse button being released
  * in the canvas.
- * ev:
- *   Event to process.
+ *
+ * @param ev Event to process.
  */
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
 
-/* ----------------------------------------------------------------------------
- * Displays a popup, if applicable, and fills it with a text input for the
- * user to type something in.
- * Returns true if the user pressed Return or the Ok button.
- * label:
- *   Name of the popup.
- * prompt:
- *   What to prompt to the user. e.g.: "New name:"
- * text:
- *   Pointer to the starting text, as well as the user's final text.
+/**
+ * @brief Displays a popup, if applicable, and fills it with a text input
+ * for the user to type something in.
+ *
+ * @param label Name of the popup.
+ * @param prompt What to prompt to the user. e.g.: "New name:"
+ * @param text Pointer to the starting text, as well as the user's final text.
+ * @return Whether the user pressed Return or the Ok button.
  */
 bool editor::input_popup(
     const char* label, const char* prompt, string* text
@@ -807,17 +824,15 @@ bool editor::input_popup(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether or not the pressed key corresponds to the specified
+/**
+ * @brief Returns whether or not the pressed key corresponds to the specified
  * key combination. Used for keyboard shortcuts.
- * pressed_key:
- *   Key that the user pressed.
- * match_key:
- *   Key that must be matched in order to return true.
- * needs_ctrl:
- *   If true, only returns true if Ctrl was also pressed.
- * needs_shift:
- *   If true, only returns true if Shift was also pressed.
+ *
+ * @param pressed_key Key that the user pressed.
+ * @param match_key Key that must be matched in order to return true.
+ * @param needs_ctrl If true, only returns true if Ctrl was also pressed.
+ * @param needs_shift If true, only returns true if Shift was also pressed.
+ * @return Whether the pressed key corresponds.
  */
 bool editor::key_check(
     const int pressed_key, const int match_key,
@@ -837,8 +852,8 @@ bool editor::key_check(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Exits out of the editor, with a fade.
+/**
+ * @brief Exits out of the editor, with a fade.
  */
 void editor::leave() {
     //Save the user's preferred tree node open states.
@@ -859,16 +874,14 @@ void editor::leave() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Displays a popup, if applicable, and fills it with selectable items
- * from a list. Returns true if one of the items was clicked on,
- * false otherwise.
- * label:
- *   Name of the popup.
- * items:
- *   List of items.
- * picked_item:
- *   If an item was picked, set this to its name.
+/**
+ * @brief Displays a popup, if applicable, and fills it with selectable items
+ * from a list.
+ *
+ * @param label Name of the popup.
+ * @param items List of items.
+ * @param picked_item If an item was picked, set this to its name.
+ * @return Whether an item was clicked on.
  */
 bool editor::list_popup(
     const char* label, const vector<string> &items, string* picked_item
@@ -891,8 +904,8 @@ bool editor::list_popup(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads content common for all editors.
+/**
+ * @brief Loads content common for all editors.
  */
 void editor::load() {
     game.mouse_cursor.show();
@@ -925,11 +938,11 @@ void editor::load() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Loads all mob types into the custom_cat_types list.
- * is_area_editor:
- *   If true, mob types that do not appear in the area editor will not
- *   be counted for here.
+/**
+ * @brief Loads all mob types into the custom_cat_types list.
+ *
+ * @param is_area_editor If true, mob types that do not appear in the
+ * area editor will not be counted for here.
  */
 void editor::load_custom_mob_cat_types(const bool is_area_editor) {
     //Load.
@@ -987,14 +1000,13 @@ void editor::load_custom_mob_cat_types(const bool is_area_editor) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens a dialog.
- * title:
- *   Title of the dialog window. This is normally a request to the user,
- *   like "Pick an area.".
- * process_callback:
- *   A function to call when it's time to process the contents inside
- *   the dialog.
+/**
+ * @brief Opens a dialog.
+ *
+ * @param title Title of the dialog window.
+ * This is normally a request to the user, like "Pick an area.".
+ * @param process_callback A function to call when it's time to process
+ * the contents inside the dialog.
  */
 void editor::open_dialog(
     const string &title,
@@ -1009,25 +1021,21 @@ void editor::open_dialog(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Opens a dialog with "picker" widgets inside, with the given content.
- * title:
- *   Title of the picker's dialog window. This is normally
- *   a request to the user, like "Pick an area.".
- * items:
- *   List of items to populate the picker with.
- * pick_callback:
- *   A function to call when the user clicks an item or enters a new one.
- *   This function's first argument is the name of the item.
- *   Its second argument is the category of the item, or an empty string.
- *   Its third argument is whether it's a new item or not.
- * list_header:
- *   If not-empty, display this text above the list.
- * can_make_new:
- *   If true, the user can create a new element, by writing its
- *   name on the textbox, and pressing the "+" button.
- * filter:
- *   Filter of names. Only items that match this will appear.
+/**
+ * @brief Opens a dialog with "picker" widgets inside, with the given content.
+ *
+ * @param title Title of the picker's dialog window.
+ * This is normally a request to the user, like "Pick an area.".
+ * @param items List of items to populate the picker with.
+ * @param pick_callback A function to call when the user clicks an item
+ * or enters a new one.
+ * This function's first argument is the name of the item.
+ * Its second argument is the category of the item, or an empty string.
+ * Its third argument is whether it's a new item or not.
+ * @param list_header If not-empty, display this text above the list.
+ * @param can_make_new If true, the user can create a new element,
+ * by writing its name on the textbox, and pressing the "+" button.
+ * @param filter Filter of names. Only items that match this will appear.
  */
 void editor::open_picker_dialog(
     const string &title,
@@ -1057,11 +1065,11 @@ void editor::open_picker_dialog(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates widgets with the goal of placing a disabled text widget to the
+/**
+ * @brief Creates widgets with the goal of placing a disabled text widget to the
  * right side of the panel.
- * title:
- *   Title to write.
+ *
+ * @param title Title to write.
  */
 void editor::panel_title(const char* title) {
     ImGui::SameLine(
@@ -1072,12 +1080,13 @@ void editor::panel_title(const char* title) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Begins a Dear ImGui popup, with logic to close it if Escape was pressed.
- * label:
- *   The popup's label.
- * flags:
- *   Any Dear ImGui popup flags.
+/**
+ * @brief Begins a Dear ImGui popup, with logic to close it if
+ * Escape was pressed.
+ *
+ * @param label The popup's label.
+ * @param flags Any Dear ImGui popup flags.
+ * @return Whether the popup opened.
  */
 bool editor::popup(const char* label, ImGuiWindowFlags flags) {
     bool result = ImGui::BeginPopup(label, flags);
@@ -1090,8 +1099,8 @@ bool editor::popup(const char* label, ImGuiWindowFlags flags) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes all currently open dialogs for this frame.
+/**
+ * @brief Processes all currently open dialogs for this frame.
  */
 void editor::process_dialogs() {
     //Delete closed ones.
@@ -1116,8 +1125,9 @@ void editor::process_dialogs() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the widgets that allow the player to set a custom editor style.
+/**
+ * @brief Processes the widgets that allow the player to set a custom
+ * editor style.
  */
 void editor::process_gui_editor_style() {
     //Style node.
@@ -1193,14 +1203,13 @@ void editor::process_gui_editor_style() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the widgets that show the editor's history.
- * name_display_callback:
- *   When an entry's name needs to be displayed as button text, this function
- *   gets called with the entry name as an argument, to determine what the
- *   final button text will be.
- * pick_callback:
- *   Code to run when an entry is picked.
+/**
+ * @brief Processes the widgets that show the editor's history.
+ *
+ * @param name_display_callback When an entry's name needs to be displayed as
+ * button text, this function gets called with the entry name as an argument,
+ * to determine what the final button text will be.
+ * @param pick_callback Code to run when an entry is picked.
  */
 void editor::process_gui_history(
     const std::function<string(const string &)> &name_display_callback,
@@ -1239,14 +1248,14 @@ void editor::process_gui_history(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the category and type widgets that allow a user to select a mob
- * type.
- * Returns true if the user changed the category or type, false otherwise.
- * custom_cat_name:
- *   Pointer to the custom category name reflected in the combo box.
- * type:
- *   Pointer to the type reflected in the combo box.
+/**
+ * @brief Processes the category and type widgets that allow a user to
+ * select a mob type.
+ *
+ * @param custom_cat_name Pointer to the custom category name reflected
+ * in the combo box.
+ * @param type Pointer to the type reflected in the combo box.
+ * @return Whether the user changed the category/type.
  */
 bool editor::process_gui_mob_type_widgets(
     string* custom_cat_name, mob_type** type
@@ -1386,25 +1395,21 @@ bool editor::process_gui_mob_type_widgets(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Process the width and height widgets that allow a user to
+/**
+ * @brief Process the width and height widgets that allow a user to
  * specify the size of something.
- * Returns true if the user changed one of the values.
- * label:
- *   Label for the widgets.
- * size:
- *   Size variable to alter.
- * v_speed:
- *   Variable change speed. Same value you'd pass to ImGui::DragFloat2.
- *   1.0f for default.
- * keep_aspect_ratio:
- *   If true, changing one will change the other in the same ratio.
- * min_size:
- *   Minimum value that either width or height is allowed to have.
- *   Use -FLT_MAX for none.
- * pre_change_callback:
- *   Callback to call when the width or height is changed, before it actually
- *   changes.
+ *
+ * @param label Label for the widgets.
+ * @param size Size variable to alter.
+ * @param v_speed Variable change speed. Same value you'd pass to
+ * ImGui::DragFloat2. 1.0f for default.
+ * @param keep_aspect_ratio If true, changing one will change the other
+ * in the same ratio.
+ * @param min_size Minimum value that either width or height is allowed
+ * to have. Use -FLT_MAX for none.
+ * @param pre_change_callback Callback to call when the width or height is
+ * changed, before it actually changes.
+ * @return Whether the user changed one of the values.
  */
 bool editor::process_gui_size_widgets(
     const char* label, point &size, const float v_speed,
@@ -1459,11 +1464,12 @@ bool editor::process_gui_size_widgets(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Process the text widget in the status bar. This is responsible for
- * showing the text if there's anything to say, showing "Ready." if there's
- * nothing to say, and coloring the text in case it's an error that needs to be
- * flashed red.
+/**
+ * @brief Process the text widget in the status bar.
+ *
+ * This is responsible for showing the text if there's anything to say,
+ * showing "Ready." if there's nothing to say,
+ * and coloring the text in case it's an error that needs to be flashed red.
  */
 void editor::process_gui_status_bar_text() {
     float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
@@ -1494,8 +1500,9 @@ void editor::process_gui_status_bar_text() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the Dear ImGui unsaved changes confirmation dialog for this frame.
+/**
+ * @brief Processes the Dear ImGui unsaved changes confirmation dialog
+ * for this frame.
  */
 void editor::process_gui_unsaved_changes_dialog() {
     //Explanation 1 text.
@@ -1562,17 +1569,19 @@ void editor::process_gui_unsaved_changes_dialog() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
- * based on the user's preferences. It also saves the user's preferences as
- * they open and close the node.
+/**
+ * @brief Processes an ImGui::TreeNode, except it pre-emptively opens it or
+ * closes it based on the user's preferences.
+ *
+ * It also saves the user's preferences as they open and close the node.
  * In order for these preferences to be saved onto disk, save_options must
  * be called.
- * category:
- *   Category this node belongs to. This is just a generic term, and
- *   you likely want to use the panel this node belongs to.
- * label:
- *   Label to give to Dear ImGui.
+ *
+ * @param category Category this node belongs to.
+ * This is just a generic term, and you likely want to use the panel
+ * this node belongs to.
+ * @param label Label to give to Dear ImGui.
+ * @return Whether the node is open.
  */
 bool editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;
@@ -1583,13 +1592,12 @@ bool editor::saveable_tree_node(const string &category, const string &label) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the status bar, and notifies the user of an error, if it is an error,
- * by flashing the text.
- * text:
- *   Text to put in the status bar.
- * error:
- *   Whether there was an error or not.
+/**
+ * @brief Sets the status bar, and notifies the user of an error,
+ * if it is an error, by flashing the text.
+ *
+ * @param text Text to put in the status bar.
+ * @param error Whether there was an error or not.
  */
 void editor::set_status(const string &text, const bool error) {
     status_text = text;
@@ -1600,15 +1608,13 @@ void editor::set_status(const string &text, const bool error) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the tooltip of the previous widget.
- * explanation:
- *   Text explaining the widget.
- * shortcut:
- *   If the widget has a shortcut key, specify its name here.
- * widget_explanation:
- *   If the way the widget works needs to be explained, specify
- *   the explanation type here.
+/**
+ * @brief Sets the tooltip of the previous widget.
+ *
+ * @param explanation Text explaining the widget.
+ * @param shortcut If the widget has a shortcut key, specify its name here.
+ * @param widget_explanation If the way the widget works needs to be explained,
+ * specify the explanation type here.
  */
 void editor::set_tooltip(
     const string &explanation, const string &shortcut,
@@ -1674,13 +1680,13 @@ void editor::set_tooltip(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Snaps a point to either the vertical axis or horizontal axis, depending
- * on the anchor point.
- * p:
- *   Point to snap.
- * anchor:
- *   Anchor point.
+/**
+ * @brief Snaps a point to either the vertical axis or horizontal axis,
+ * depending on the anchor point.
+ *
+ * @param p Point to snap.
+ * @param anchor Anchor point.
+ * @return The snapped point.
  */
 point editor::snap_point_to_axis(const point &p, const point &anchor) {
     float h_diff = fabs(p.x - anchor.x);
@@ -1693,12 +1699,12 @@ point editor::snap_point_to_axis(const point &p, const point &anchor) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Snaps a point to the nearest grid intersection.
- * p:
- *   Point to snap.
- * grid_interval:
- *   Current grid interval.
+/**
+ * @brief Snaps a point to the nearest grid intersection.
+ *
+ * @param p Point to snap.
+ * @param grid_interval Current grid interval.
+ * @return The snapped point.
  */
 point editor::snap_point_to_grid(const point &p, const float grid_interval) {
     return
@@ -1709,8 +1715,8 @@ point editor::snap_point_to_grid(const point &p, const float grid_interval) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Unloads loaded editor-related content.
+/**
+ * @brief Unloads loaded editor-related content.
  */
 void editor::unload() {
     if(bmp_editor_icons) {
@@ -1727,10 +1733,10 @@ void editor::unload() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the history list, by adding a new entry or bumping it up.
- * n:
- *   Name of the entry.
+/**
+ * @brief Updates the history list, by adding a new entry or bumping it up.
+ *
+ * @param n Name of the entry.
  */
 void editor::update_history(const string &n) {
     //First, check if it exists.
@@ -1761,8 +1767,8 @@ void editor::update_history(const string &n) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the Dear ImGui style based on the player's options.
+/**
+ * @brief Updates the Dear ImGui style based on the player's options.
  */
 void editor::update_style() {
 
@@ -1909,8 +1915,9 @@ void editor::update_style() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Updates the transformations, with the current camera coordinates, zoom, etc.
+/**
+ * @brief Updates the transformations, with the current camera coordinates,
+ * zoom, etc.
  */
 void editor::update_transformations() {
     //World coordinates to screen coordinates.
@@ -1934,10 +1941,11 @@ void editor::update_transformations() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Zooms to the specified level, keeping the mouse cursor in the same spot.
- * new_zoom:
- *   New zoom level.
+/**
+ * @brief Zooms to the specified level, keeping the mouse cursor in
+ * the same spot.
+ *
+ * @param new_zoom New zoom level.
  */
 void editor::zoom_with_cursor(const float new_zoom) {
     //Keep a backup of the old mouse coordinates.
@@ -1973,10 +1981,10 @@ void editor::zoom_with_cursor(const float new_zoom) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new changes manager.
- * ed:
- *   Pointer to the editor.
+/**
+ * @brief Constructs a new changes manager object.
+ *
+ * @param ed Pointer to the editor.
  */
 editor::changes_manager::changes_manager(editor* ed) :
     ed(ed),
@@ -1988,26 +1996,22 @@ editor::changes_manager::changes_manager(editor* ed) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * If there are no unsaved changes, performs a given action.
+/**
+ * @brief If there are no unsaved changes, performs a given action.
  * Otherwise, it opens a dialog asking the user if they
  * want to cancel, save and then do the action, or do the action without saving.
- * Returns true if there are unsaved changes, false otherwise.
- * pos:
- *   Screen coordinates to show the warning on.
- *   If 0,0, then these will be set to the last processed widget's position.
- * action_long:
- *   String representing the action the user is attempting in a long format.
- *   This is for the main prompt of the warning dialog, so it can be as
- *   long as you want. It should start with a lowercase.
- * action_short:
- *   String representing the action the user is attempting in a short format.
- *   This is for the buttons of the warning dialog, so it should ideally be
- *   only one word. It should start with a lowercase.
- * action_callback:
- *   Code to run to perform the action.
- * save_callback:
- *   Code to run when the unsaved changes must be saved.
+ *
+ * @param pos Screen coordinates to show the warning on.
+ * If 0,0, then these will be set to the last processed widget's position.
+ * @param action_long String representing the action the user is attempting
+ * in a long format. This is for the main prompt of the warning dialog,
+ * so it can be as long as you want. It should start with a lowercase.
+ * @param action_short String representing the action the user is attempting
+ * in a short format. This is for the buttons of the warning dialog,
+ * so it should ideally be only one word. It should start with a lowercase.
+ * @param action_callback Code to run to perform the action.
+ * @param save_callback Code to run when the unsaved changes must be saved.
+ * @return Whether there were unsaved changes.
  */
 bool editor::changes_manager::ask_if_unsaved(
     const point &pos,
@@ -2063,17 +2067,22 @@ bool editor::changes_manager::ask_if_unsaved(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how many unsaved changes have been made so far since the last save.
+/**
+ * @brief Returns how many unsaved changes have been made so far since the
+ * last save.
+ *
+ * @return The amount.
  */
 size_t editor::changes_manager::get_unsaved_changes() const {
     return unsaved_changes;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns how long ago was the last time the player went from saved to unsaved,
- * in seconds. Returns 0 if it's currently saved.
+/**
+ * @brief Returns how long ago was the last time the player went from saved
+ * to unsaved, in seconds.
+ *
+ * @return The time, or 0 if there are no unsaved changes.
  */
 float editor::changes_manager::get_unsaved_time_delta() const {
     if(unsaved_changes == 0) return 0.0f;
@@ -2081,8 +2090,10 @@ float editor::changes_manager::get_unsaved_time_delta() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current unsaved changes warning long action text.
+/**
+ * @brief Returns the current unsaved changes warning long action text.
+ *
+ * @return The text.
  */
 const string &editor::changes_manager::get_unsaved_warning_action_long()
 const {
@@ -2090,8 +2101,10 @@ const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current unsaved changes warning short action text.
+/**
+ * @brief Returns the current unsaved changes warning short action text.
+ *
+ * @return The text.
  */
 const string &editor::changes_manager::get_unsaved_warning_action_short()
 const {
@@ -2099,8 +2112,10 @@ const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current unsaved changes warning action callback.
+/**
+ * @brief Returns the current unsaved changes warning action callback.
+ *
+ * @return The callback.
  */
 const std::function<void()> &
 editor::changes_manager::get_unsaved_warning_action_callback() const {
@@ -2108,8 +2123,10 @@ editor::changes_manager::get_unsaved_warning_action_callback() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the current unsaved changes warning save callback.
+/**
+ * @brief Returns the current unsaved changes warning save callback.
+ *
+ * @return The callback.
  */
 const std::function<bool()> &
 editor::changes_manager::get_unsaved_warning_save_callback() const {
@@ -2117,16 +2134,18 @@ editor::changes_manager::get_unsaved_warning_save_callback() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns whether there are unsaved changes or not.
+/**
+ * @brief Returns whether there are unsaved changes or not.
+ *
+ * @return Whether there are unsaved changes.
  */
 bool editor::changes_manager::has_unsaved_changes() {
     return unsaved_changes != 0;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks that the user has made new changes, which have obviously not yet
+/**
+ * @brief Marks that the user has made new changes, which have obviously not yet
  * been saved.
  */
 void editor::changes_manager::mark_as_changed() {
@@ -2139,8 +2158,8 @@ void editor::changes_manager::mark_as_changed() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Marks the state of the editor's file as saved.
+/**
+ * @brief Marks the state of the editor's file as saved.
  * The unsaved changes warning dialog does not set this, so this should be
  * called manually in those cases.
  */
@@ -2150,8 +2169,8 @@ void editor::changes_manager::mark_as_saved() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Resets the state of the changes manager.
+/**
+ * @brief Resets the state of the changes manager.
  */
 void editor::changes_manager::reset() {
     unsaved_changes = 0;
@@ -2159,8 +2178,8 @@ void editor::changes_manager::reset() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new dialog info.
+/**
+ * @brief Constructs a new dialog info object.
  */
 editor::dialog_info::dialog_info() :
     process_callback(nullptr),
@@ -2172,8 +2191,8 @@ editor::dialog_info::dialog_info() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the dialog for this frame.
+/**
+ * @brief Processes the dialog for this frame.
  */
 void editor::dialog_info::process() {
     if(!is_open) return;
@@ -2222,10 +2241,10 @@ void editor::dialog_info::process() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new picker info.
- * editor_ptr:
- *   Pointer to the editor in charge.
+/**
+ * @brief Constructs a new picker info object.
+ *
+ * @param editor_ptr Pointer to the editor in charge.
  */
 editor::picker_info::picker_info(editor* editor_ptr) :
     editor_ptr(editor_ptr),
@@ -2236,8 +2255,8 @@ editor::picker_info::picker_info(editor* editor_ptr) :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Processes the picker for this frame.
+/**
+ * @brief Processes the picker for this frame.
  */
 void editor::picker_info::process() {
     ImGuiStyle &style = ImGui::GetStyle();
@@ -2495,14 +2514,12 @@ void editor::picker_info::process() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a picker item.
- * name:
- *   Name of the item.
- * category:
- *   Category it belongs to. If none, use an empty string.
- * bitmap:
- *   Bitmap to display on the item. If none, use NULL.
+/**
+ * @brief Constructs a new picker item object.
+ *
+ * @param name Name of the item.
+ * @param category Category it belongs to. If none, use an empty string.
+ * @param bitmap Bitmap to display on the item. If none, use NULL.
  */
 editor::picker_item::picker_item(
     const string &name, const string &category, ALLEGRO_BITMAP* bitmap
@@ -2514,8 +2531,9 @@ editor::picker_item::picker_item(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new transformation widget.
+/**
+ * @brief Constructs a new transformation widget object.
+ *
  */
 editor::transformation_widget::transformation_widget() :
     moving_handle(-1),
@@ -2525,16 +2543,13 @@ editor::transformation_widget::transformation_widget() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Draws the widget on-screen.
- * center:
- *   Center point.
- * size:
- *   Width and height. If NULL, no scale handles will be drawn.
- * angle:
- *   Angle. If NULL, the rotation handle will not be drawn.
- * zoom:
- *   Zoom the widget's components by this much.
+/**
+ * @brief Draws the widget on-screen.
+ *
+ * @param center Center point.
+ * @param size Width and height. If NULL, no scale handles will be drawn.
+ * @param angle Angle. If NULL, the rotation handle will not be drawn.
+ * @param zoom Zoom the widget's components by this much.
  */
 void editor::transformation_widget::draw(
     const point* const center, const point* const size,
@@ -2581,22 +2596,18 @@ void editor::transformation_widget::draw(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the location of all handles, based on the information it
+/**
+ * @brief Returns the location of all handles, based on the information it
  * was fed.
- * center:
- *   Center point.
- * size:
- *   Width and height. If NULL, the default size is used.
- * angle:
- *   Angle. If NULL, zero is used.
- * handles:
- *   Return the location of all nine translation and scale handles here.
- * radius:
- *   Return the angle handle's radius here.
- * transform:
- *   If not NULL, return the transformation used here.
- *   The transformation will only rotate and translate, not scale.
+ *
+ * @param center Center point.
+ * @param size Width and height. If NULL, the default size is used.
+ * @param angle Angle. If NULL, zero is used.
+ * @param handles Return the location of all nine translation and scale
+ * handles here.
+ * @param radius Return the angle handle's radius here.
+ * @param transform If not NULL, return the transformation used here.
+ * The transformation will only rotate and translate, not scale.
  */
 void editor::transformation_widget::get_locations(
     const point* const center, const point* const size,
@@ -2642,27 +2653,25 @@ void editor::transformation_widget::get_locations(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns the center point before the user dragged the central handle.
+/**
+ * @brief Returns the center point before the user dragged the central handle.
+ *
+ * @return The old center.
  */
 point editor::transformation_widget::get_old_center() const {
     return old_center;
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the user having held the left mouse button down.
- * Returns true if the user did click on a handle.
- * mouse_coords:
- *   Mouse coordinates.
- * center:
- *   Center point.
- * size:
- *   Width and height. If NULL, no scale handling will be performed.
- * angle:
- *   Angle. If NULL, no rotation handling will be performed.
- * zoom:
- *   Zoom the widget's components by this much.
+/**
+ * @brief Handles the user having held the left mouse button down.
+ *
+ * @param mouse_coords Mouse coordinates.
+ * @param center Center point.
+ * @param size Width and height. If NULL, no scale handling will be performed.
+ * @param angle Angle. If NULL, no rotation handling will be performed.
+ * @param zoom Zoom the widget's components by this much.
+ * @return Whether the user clicked on a handle.
  */
 bool editor::transformation_widget::handle_mouse_down(
     const point &mouse_coords, const point* const center,
@@ -2707,26 +2716,20 @@ bool editor::transformation_widget::handle_mouse_down(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the user having moved the mouse cursor.
- * Returns true if the user is dragging a handle.
- * mouse_coords:
- *   Mouse coordinates.
- * center:
- *   Center point.
- * size:
- *   Width and height. If NULL, no scale handling will be performed.
- * angle:
- *   Angle. If NULL, no rotation handling will be performed.
- * zoom:
- *   Zoom the widget's components by this much.
- * keep_aspect_ratio:
- *   If true, aspect ratio is kept when resizing.
- * min_size:
- *   Minimum possible size for the width or height. Use -FLT_MAX for none.
- * lock_center:
- *   If true, scaling happens with the center locked. If false, the opposite
- *   edge or corner is locked instead.
+/**
+ * @brief Handles the user having moved the mouse cursor.
+ *
+ * @param mouse_coords Mouse coordinates.
+ * @param center Center point.
+ * @param size Width and height. If NULL, no scale handling will be performed.
+ * @param angle Angle. If NULL, no rotation handling will be performed.
+ * @param zoom Zoom the widget's components by this much.
+ * @param keep_aspect_ratio If true, aspect ratio is kept when resizing.
+ * @param min_size Minimum possible size for the width or height.
+ * Use -FLT_MAX for none.
+ * @param lock_center If true, scaling happens with the center locked.
+ * If false, the opposite edge or corner is locked instead.
+ * @return Whether the user is dragging a handle.
  */
 bool editor::transformation_widget::handle_mouse_move(
     const point &mouse_coords, point* center, point* size, float* angle,
@@ -2874,9 +2877,10 @@ bool editor::transformation_widget::handle_mouse_move(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Handles the user having released the left mouse button.
- * Returns true if the user stopped dragging a handle.
+/**
+ * @brief Handles the user having released the left mouse button.
+ *
+ * @return Whether the user stopped dragging a handle.
  */
 bool editor::transformation_widget::handle_mouse_up() {
     if(moving_handle == -1) {
@@ -2888,16 +2892,20 @@ bool editor::transformation_widget::handle_mouse_up() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Is the user currently moving the central handle?
+/**
+ * @brief Is the user currently moving the central handle?
+ *
+ * @return Whether the user is moving the handle.
  */
 bool editor::transformation_widget::is_moving_center_handle() {
     return (moving_handle == 4);
 }
 
 
-/* ----------------------------------------------------------------------------
- * Is the user currently moving a handle?
+/**
+ * @brief Is the user currently moving a handle?
+ *
+ * @return Whether the user is moving a handle.
  */
 bool editor::transformation_widget::is_moving_handle() {
     return (moving_handle != -1);
