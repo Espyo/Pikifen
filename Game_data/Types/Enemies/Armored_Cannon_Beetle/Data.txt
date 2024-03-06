@@ -41,8 +41,30 @@ sounds {
         volume = 60
     }
     stomp {
-        file = Stomp.ogg
-        speed_deviation = 20
+        file = Stomp_quick.ogg
+        volume = 70
+        speed = 30
+        speed_deviation = 5
+        stack_min_pos = 0.01
+    }
+    wings {
+        file = Page_flip.ogg
+        volume = 30
+        speed = 25
+    }
+    steam {
+        file = Steam.ogg
+        volume = 40
+    }
+    dying {
+        file = Stomp_long.ogg
+        volume = 80
+        speed = 120
+    }
+    shaking {
+        file = Shaking.ogg
+        volume = 30
+        speed = 50
     }
 }
 

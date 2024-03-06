@@ -6,6 +6,7 @@ animations{
 			}
 			bumping2{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1{
 				duration=0.1000
@@ -22,6 +23,7 @@ animations{
 			}
 			closing2{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4{
 				duration=0.1000
@@ -34,37 +36,39 @@ animations{
 	dying{
 		frames{
 			dying1{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2{
-				duration=0.1000
+				duration=0.1500
+				sound=dying
 			}
 			dying3{
-				duration=0.1000
+				duration=0.1500
+				sound=rustling
 			}
 			dying4{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying5{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying6{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying7{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
@@ -91,6 +95,7 @@ animations{
 			}
 			closing3{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2{
 				duration=0.1000
@@ -110,6 +115,7 @@ animations{
 			}
 			closed{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -385,3 +391,4 @@ sprites{
 body_parts{
 	receptacle
 }
+engine_version=0.25.0

@@ -10,3 +10,12 @@ pikmin_types = Blue Pikmin
 pushable = false
 pushes = false
 radius = 16
+
+sounds {
+    pop {
+        file = Seed_pop.ogg
+        volume = 40
+        speed_deviation = 5
+        stack_min_pos = 0.005
+    }
+}

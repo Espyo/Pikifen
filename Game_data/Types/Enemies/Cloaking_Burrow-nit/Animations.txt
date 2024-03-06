@@ -69,6 +69,7 @@ animations{
 			}
 			emerging4{
 				duration=0.1000
+				sound=burying
 			}
 			emerging1{
 				duration=0.1000
@@ -258,6 +259,7 @@ animations{
 			}
 			emerging2{
 				duration=0.1000
+				sound=burying
 			}
 			emerging1{
 				duration=0.1000

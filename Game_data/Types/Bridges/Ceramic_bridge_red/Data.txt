@@ -20,6 +20,14 @@ children {
     }
 }
 
+sounds {
+    click {
+        file = Ceramic.ogg
+        speed_deviation = 10
+        volume = 50
+    }
+}
+
 spawns {
     base {
         object = Ceramic bridge base red

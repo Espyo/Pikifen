@@ -6,6 +6,9 @@ script{
         on_enter {
             set_animation idling
         }
+        on_damage {
+            play_sound sticks
+        }
     }
     destroyed {
         on_enter {

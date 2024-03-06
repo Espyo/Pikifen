@@ -8,3 +8,11 @@ increase_amount = 2
 radius = 20
 shrink_speed = 40
 total_doses = 10
+
+sounds {
+    bumped {
+        file = Low_boing_2.ogg
+        volume = 40
+        speed_deviation = 8
+    }
+}

@@ -13,9 +13,11 @@ animations{
 			}
 			moving1{
 				duration=0.1000
+				sound=stomp
 			}
 			moving2{
 				duration=0.1000
+				sound=stomp
 			}
 			moving1{
 				duration=0.1000
@@ -25,9 +27,11 @@ animations{
 			}
 			moving3{
 				duration=0.1000
+				sound=stomp
 			}
 			moving4{
 				duration=0.1000
+				sound=stomp
 			}
 			moving3{
 				duration=0.1000
@@ -38,12 +42,14 @@ animations{
 		frames{
 			idling{
 				duration=0.2000
+				sound=stomp
 			}
 			bored1{
 				duration=0.2000
 			}
 			idling{
 				duration=0.2000
+				sound=stomp
 			}
 			bored2{
 				duration=0.2000
@@ -129,6 +135,7 @@ animations{
 			}
 			inhale1{
 				duration=0.1000
+				sound=stomp
 			}
 			idling{
 				duration=0.8000
@@ -138,9 +145,11 @@ animations{
 			}
 			opening2{
 				duration=0.1000
+				sound=wings
 			}
 			idling_hot{
 				duration=0.3000
+				sound=steam
 			}
 		}
 	}
@@ -151,9 +160,11 @@ animations{
 			}
 			moving_hot1{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_hot2{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_hot1{
 				duration=0.1000
@@ -163,9 +174,11 @@ animations{
 			}
 			moving_hot3{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_hot4{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_hot3{
 				duration=0.1000
@@ -179,6 +192,7 @@ animations{
 			}
 			idling_cool{
 				duration=0.1000
+				sound=shaking
 			}
 			moving_cool3{
 				duration=0.1000
@@ -207,6 +221,7 @@ animations{
 			closing_cool1{
 				duration=0.1000
 				signal=0
+				sound=wings
 			}
 			closing_cool2{
 				duration=0.1000
@@ -226,6 +241,7 @@ animations{
 			}
 			idling_hot{
 				duration=0.1000
+				sound=shaking
 			}
 			moving_hot3{
 				duration=0.1000
@@ -254,6 +270,7 @@ animations{
 			closing_hot1{
 				duration=0.1000
 				signal=0
+				sound=wings
 			}
 			closing_hot2{
 				duration=0.1000
@@ -280,6 +297,7 @@ animations{
 			}
 			dying3{
 				duration=0.1000
+				sound=dying
 			}
 			dying4{
 				duration=1.0000
@@ -294,9 +312,11 @@ animations{
 			}
 			moving_cool1{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_cool2{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_cool1{
 				duration=0.1000
@@ -306,9 +326,11 @@ animations{
 			}
 			moving_cool3{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_cool4{
 				duration=0.1000
+				sound=stomp
 			}
 			moving_cool3{
 				duration=0.1000
@@ -1660,3 +1682,4 @@ body_parts{
 	blowhole
 	shell
 }
+engine_version=0.25.0

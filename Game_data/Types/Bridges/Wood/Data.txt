@@ -14,3 +14,11 @@ radius = 32
 rectangular_dimensions = 42 192
 right_rail_texture = Wood_bridge_rail.jpg
 show_health = false
+
+sounds {
+    sticks {
+        file = Sticks.ogg
+        speed_deviation = 10
+        volume = 35
+    }
+}

@@ -6,6 +6,7 @@ animations{
 			}
 			bumping2_blue{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1_blue{
 				duration=0.1000
@@ -22,6 +23,7 @@ animations{
 			}
 			bumping2_red{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1_red{
 				duration=0.1000
@@ -38,6 +40,7 @@ animations{
 			}
 			bumping2_rock{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1_rock{
 				duration=0.1000
@@ -54,6 +57,7 @@ animations{
 			}
 			bumping2_winged{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1_winged{
 				duration=0.1000
@@ -70,6 +74,7 @@ animations{
 			}
 			bumping2_yellow{
 				duration=0.1000
+				sound=bumped
 			}
 			bumping1_yellow{
 				duration=0.1000
@@ -86,6 +91,7 @@ animations{
 			}
 			closing2_blue{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4_blue{
 				duration=0.1000
@@ -102,6 +108,7 @@ animations{
 			}
 			closing2_red{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4_red{
 				duration=0.1000
@@ -118,6 +125,7 @@ animations{
 			}
 			closing2_rock{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4_rock{
 				duration=0.1000
@@ -134,6 +142,7 @@ animations{
 			}
 			closing2_winged{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4_winged{
 				duration=0.1000
@@ -150,6 +159,7 @@ animations{
 			}
 			closing2_yellow{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing4_yellow{
 				duration=0.1000
@@ -162,118 +172,124 @@ animations{
 	dying_blue{
 		frames{
 			dying1_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_blue{
-				duration=0.1000
+				duration=0.1500
+				sound=dying
 			}
 			dying3_blue{
-				duration=0.1000
+				duration=0.1500
+				sound=rustling
 			}
 			dying4_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying5_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying6_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying7_blue{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
 	dying_red{
 		frames{
 			dying1_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_red{
-				duration=0.1000
+				duration=0.1500
+				sound=dying
 			}
 			dying3_red{
-				duration=0.1000
+				duration=0.1500
+				sound=rustling
 			}
 			dying4_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying5_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying6_red{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying7_red{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
 	dying_rock{
 		frames{
 			dying1_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_rock{
-				duration=0.1000
+				duration=0.1500
+				sound=dying
 			}
 			dying3_rock{
-				duration=0.1000
+				duration=0.1500
+				sound=rustling
 			}
 			dying4_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying5_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying6_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying7_rock{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
 	dying_winged{
 		frames{
 			dying1_winged{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_winged{
 				duration=0.1000
@@ -289,9 +305,11 @@ animations{
 			}
 			dying2_winged{
 				duration=0.1000
+				sound=dying
 			}
 			dying3_winged{
 				duration=0.1000
+				sound=rustling
 			}
 			dying4_winged{
 				duration=0.1000
@@ -310,37 +328,39 @@ animations{
 	dying_yellow{
 		frames{
 			dying1_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying1_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying2_yellow{
-				duration=0.1000
+				duration=0.1500
+				sound=dying
 			}
 			dying3_yellow{
-				duration=0.1000
+				duration=0.1500
+				sound=rustling
 			}
 			dying4_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying5_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying6_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 			dying7_yellow{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
@@ -431,6 +451,7 @@ animations{
 			}
 			closing3_blue{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2_blue{
 				duration=0.1000
@@ -450,6 +471,7 @@ animations{
 			}
 			closing3_red{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2_red{
 				duration=0.1000
@@ -469,6 +491,7 @@ animations{
 			}
 			closing3_rock{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2_rock{
 				duration=0.1000
@@ -488,6 +511,7 @@ animations{
 			}
 			closing3_winged{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2_winged{
 				duration=0.1000
@@ -507,6 +531,7 @@ animations{
 			}
 			closing3_yellow{
 				duration=0.1000
+				sound=rustling_short
 			}
 			closing2_yellow{
 				duration=0.1000
@@ -526,6 +551,7 @@ animations{
 			}
 			closed_blue{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -536,6 +562,7 @@ animations{
 			}
 			closed_red{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -546,6 +573,7 @@ animations{
 			}
 			closed_rock{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -556,6 +584,7 @@ animations{
 			}
 			closed_winged{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -566,6 +595,7 @@ animations{
 			}
 			closed_yellow{
 				duration=0.3000
+				sound=pop
 			}
 		}
 	}
@@ -1905,3 +1935,4 @@ sprites{
 body_parts{
 	receptacle
 }
+engine_version=0.25.0

@@ -24,3 +24,11 @@ weight = 1
 reaches {
     chase = 80 360
 }
+
+sounds {
+    burying {
+        file = Burying.ogg
+        speed_deviation = 20
+        volume = 30
+    }
+}

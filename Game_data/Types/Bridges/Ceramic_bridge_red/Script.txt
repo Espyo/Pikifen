@@ -2,6 +2,7 @@ script {
     idling {
         on_finish_receiving_delivery {
             start_particles dust_explosion_small 0 0 200
+            play_sound click
         }
     }
     destroyed {

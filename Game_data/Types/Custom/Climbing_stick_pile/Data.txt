@@ -11,6 +11,15 @@ radius = 20
 target_type = pikmin_obstacle
 team = obstacle
 
+sounds {
+    sticks {
+        file = Sticks.ogg
+        speed_deviation = 10
+        volume = 30
+        stack_min_pos = 0.25
+    }
+}
+
 spawns {
     full_stick {
         object = Climbing stick

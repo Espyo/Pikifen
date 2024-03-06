@@ -29,6 +29,7 @@ animations{
 			}
 			emerging2{
 				duration=0.1500
+				sound=burying
 			}
 			emerging3{
 				duration=0.1500
@@ -48,6 +49,7 @@ animations{
 			}
 			burying1{
 				duration=0.1500
+				sound=burying
 			}
 			burying2{
 				duration=0.1500
@@ -106,8 +108,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -123,8 +123,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -140,8 +138,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -157,8 +153,6 @@ sprites{
 				radius=9.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -175,8 +169,6 @@ sprites{
 				radius=9.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -192,8 +184,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -210,8 +200,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -227,8 +215,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -245,8 +231,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -262,8 +246,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -280,8 +262,6 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -296,8 +276,6 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -312,8 +290,6 @@ sprites{
 				radius=12.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -328,8 +304,6 @@ sprites{
 				radius=12.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -344,8 +318,6 @@ sprites{
 				radius=12.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -360,8 +332,6 @@ sprites{
 				radius=12.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -377,8 +347,6 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -386,3 +354,4 @@ sprites{
 body_parts{
 	body
 }
+engine_version=0.25.0

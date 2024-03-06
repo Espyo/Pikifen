@@ -186,6 +186,8 @@ void onion::spew() {
         next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
         next_spew_angle = normalize_angle(next_spew_angle);
         
+        play_sound(oni_type->sfx_pop_idx);
+        
         return;
     }
 }

@@ -40,4 +40,9 @@ sounds {
         file = Shaking.ogg
         volume = 60
     }
+    burying {
+        file = Burying.ogg
+        speed_deviation = 20
+        volume = 30
+    }
 }

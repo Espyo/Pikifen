@@ -42,6 +42,9 @@ public:
     //Nest data.
     pikmin_nest_type_struct* nest;
     
+    //Sound data index for the pop sound. Cache for performance.
+    size_t sfx_pop_idx;
+    
     
     //--- Function declarations ---
 

@@ -20,7 +20,8 @@
  * @brief Constructs a new Onion type object.
  */
 onion_type::onion_type() :
-    mob_type(MOB_CATEGORY_ONIONS) {
+    mob_type(MOB_CATEGORY_ONIONS),
+    sfx_pop_idx(INVALID) {
     
     nest = new pikmin_nest_type_struct();
     
@@ -69,6 +70,12 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
  */
 void onion_type::load_properties(data_node* file) {
     nest->load_properties(file);
+    
+    for(size_t s = 0; s < sounds.size(); ++s) {
+        if(sounds[s].name == "pop") {
+            sfx_pop_idx = s;
+        }
+    }
 }
 
 

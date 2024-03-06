@@ -13,6 +13,7 @@ animations{
 			}
 			idling{
 				duration=0.1400
+				sound=bumped
 			}
 			bumped2{
 				duration=0.1400
@@ -93,3 +94,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0

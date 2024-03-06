@@ -10,7 +10,7 @@ tint_random_maximum = 255 255 128
 
 sounds {
     bumped {
-        file = Foliage.ogg
+        file = Foliage_long.ogg
         volume = 40
         speed_deviation = 40
         volume_deviation = 10

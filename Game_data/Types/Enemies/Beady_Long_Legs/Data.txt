@@ -81,6 +81,14 @@ reaches {
     ambush = 300 360
 }
 
+sounds {
+    shaking {
+        file = Shaking.ogg
+        volume = 30
+        speed = 50
+    }
+}
+
 spawns {
     foot_fr {
         object = Beady Long Legs foot
