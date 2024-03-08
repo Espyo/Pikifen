@@ -1483,28 +1483,28 @@ void area_editor::draw_canvas() {
             get_sector(cross_section_checkpoints[0], NULL, false);
         sector* cs_right_sector =
             get_sector(cross_section_checkpoints[1], NULL, false);
-        
+            
         /**
          * @brief Info about a split.
          */
         struct split_info {
-
+        
             //--- Members ---
-
+            
             //Sector pointers.
-            sector* sector_ptrs[2];
-
+            sector* sector_ptrs[2] = { nullptr, nullptr };
+            
             //Line 1 intersection point.
-            float l1r;
-
+            float l1r = 0.0f;
+            
             //Line 2 intersection point.
-            float l2r;
-
+            float l2r = 0.0f;
+            
             //--- Function definitions ---
-
+            
             /**
              * @brief Constructs a new split info object.
-             * 
+             *
              * @param s1 Sector 1.
              * @param s2 Sector 2.
              * @param l1r Line 1 intersection point.

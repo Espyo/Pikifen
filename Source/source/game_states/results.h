@@ -27,10 +27,9 @@ extern const string GUI_FILE_PATH;
 class results_state : public game_state {
 
 public:
-    
-    //--- Function declarations ---
 
-    results_state();
+    //--- Function declarations ---
+    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -39,25 +38,25 @@ public:
     string get_name() const override;
     
 private:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //GUI manager.
     gui_manager gui;
-
+    
     //Time spent on this state.
-    float gui_time_spent;
-
+    float gui_time_spent = 0.0f;
+    
     //GUI items that need to grow during the periodic text animation.
     vector<gui_item*> text_to_animate;
-
+    
     //Stats box GUI item.
-    list_gui_item* stats_list;
+    list_gui_item* stats_list = nullptr;
     
     //Final mission score. Cache for convenience.
-    int final_mission_score;
+    int final_mission_score = 0;
     
-
+    
     //--- Function declarations ---
     
     void add_score_stat(const MISSION_SCORE_CRITERIA criterion);

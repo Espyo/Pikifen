@@ -47,28 +47,28 @@ public:
     //--- Members ---
 
     //What type of Onion it is.
-    onion_type* oni_type;
+    onion_type* oni_type = nullptr;
     
     //Nest data.
-    pikmin_nest_struct* nest;
+    pikmin_nest_struct* nest = nullptr;
     
     //Is this Onion currently activated?
-    bool activated;
+    bool activated = true;
 
     //How many seeds are queued up to be spat, of each type.
     vector<size_t> spew_queue;
 
     //Time left until it starts spewing queued seeds.
-    timer full_spew_timer;
+    timer full_spew_timer = timer(ONION::FULL_SPEW_DELAY);
 
     //Time left until it spews the next seed in the queue.
-    timer next_spew_timer;
+    timer next_spew_timer = timer(ONION::NEXT_SPEW_DELAY);
 
     //Angle at which the next seed will be spit.
-    float next_spew_angle;
+    float next_spew_angle = 0.0f;
     
     //The Onion's alpha.
-    unsigned char seethrough;
+    unsigned char seethrough = 255;
     
     //Spit a new seed.
     void spew();

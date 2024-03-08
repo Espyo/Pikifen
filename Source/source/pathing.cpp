@@ -23,20 +23,12 @@ using std::vector;
 
 namespace PATHS {
 
+//Default distance at which the mob considers the chase finished.
+const float DEF_CHASE_TARGET_DISTANCE = 3.0f;
+
 //Minimum radius of a path stop.
 const float MIN_STOP_RADIUS = 16.0f;
 
-}
-
-
-/**
- * @brief Constructs a new path follow settings object.
- */
-path_follow_settings::path_follow_settings() :
-    target_mob(nullptr),
-    final_target_distance(MOB::DEF_CHASE_TARGET_DISTANCE),
-    flags(0) {
-    
 }
 
 
@@ -50,10 +42,7 @@ path_follow_settings::path_follow_settings() :
 path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
     start_ptr(start_ptr),
     end_ptr(end_ptr),
-    end_nr(end_nr),
-    type(PATH_LINK_TYPE_NORMAL),
-    distance(0),
-    blocked_by_obstacle(false) {
+    end_nr(end_nr) {
     
 }
 
@@ -250,10 +239,7 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
  */
 path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
-    radius(PATHS::MIN_STOP_RADIUS),
-    flags(0),
-    links(links),
-    sector_ptr(nullptr) {
+    links(links) {
     
 }
 

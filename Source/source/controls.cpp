@@ -522,13 +522,3 @@ void gameplay_state::process_system_key_press(const int keycode) {
         
     }
 }
-
-
-/**
- * @brief Constructs a new player action type object.
- */
-player_action_type::player_action_type() :
-    id(PLAYER_ACTION_NONE),
-    category(PLAYER_ACTION_CAT_NONE) {
-    
-}

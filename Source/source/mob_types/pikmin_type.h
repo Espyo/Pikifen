@@ -21,6 +21,12 @@
 #include "mob_type.h"
 
 
+namespace PIKMIN_TYPE {
+extern const float DEF_KNOCKED_DOWN_DURATION;
+extern const float DEF_KNOCKED_DOWN_WHISTLE_BONUS;
+}
+
+
 //Pikmin object states.
 enum PIKMIN_STATES {
 
@@ -291,43 +297,43 @@ public:
     //--- Members ---
 
     //How many Pikmin they are worth when carrying.
-    float carry_strength;
+    float carry_strength = 1.0f;
 
     //How many Pikmin they are worth when pushing.
-    float push_strength;
+    float push_strength = 1.0f;
 
     //Maximum height that the peak of their throw arc can reach.
-    float max_throw_height;
+    float max_throw_height = 260.0f;
 
     //What the main method of attack is.
-    PIKMIN_ATTACK_METHODS attack_method;
+    PIKMIN_ATTACK_METHODS attack_method = PIKMIN_ATTACK_LATCH;
 
     //How long it stays on the floor for after knocked down, if left alone.
-    float knocked_down_duration;
+    float knocked_down_duration = PIKMIN_TYPE::DEF_KNOCKED_DOWN_DURATION;
 
     //A whistled Pikmin that got knocked down loses this much in lie-down time.
-    float knocked_down_whistle_bonus;
+    float knocked_down_whistle_bonus = PIKMIN_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
 
     //Whether it can fly or not.
-    bool can_fly;
+    bool can_fly = false;
 
     //Whether it can carry tool-type objects or not.
-    bool can_carry_tools;
+    bool can_carry_tools = true;
 
     //How long it takes to evolve in maturity, as a sprout.
-    float sprout_evolution_time[N_MATURITIES];
+    float sprout_evolution_time[N_MATURITIES] = { 0.0f, 0.0f, 0.0f };
 
     //Top (leaf/bud/flower) bitmap for each maturity.
-    ALLEGRO_BITMAP* bmp_top[N_MATURITIES];
+    ALLEGRO_BITMAP* bmp_top[N_MATURITIES] = { nullptr, nullptr, nullptr };
 
     //Standby icon.
-    ALLEGRO_BITMAP* bmp_icon;
+    ALLEGRO_BITMAP* bmp_icon = nullptr;
 
     //Standby maturity icons.
-    ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES];
+    ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES] = { nullptr, nullptr, nullptr };
 
     //Icon for its Onion.
-    ALLEGRO_BITMAP* bmp_onion_icon;
+    ALLEGRO_BITMAP* bmp_onion_icon = nullptr;
 
     //Sound data index for each sound. Cache for performance.
     size_t sfx_data_idxs[N_PIKMIN_SOUNDS];

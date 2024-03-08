@@ -15,6 +15,7 @@
 
 #include <vector>
 
+#include "const.h"
 #include "libs/data_file.h"
 
 
@@ -313,7 +314,7 @@ public:
     //--- Members ---
 
     //Type of event.
-    MOB_EV_TYPES type;
+    MOB_EV_TYPES type = MOB_EV_UNKNOWN;
     
     //Actions to run.
     vector<mob_action_call*> actions;
@@ -347,7 +348,7 @@ public:
     string name;
     
     //State ID.
-    size_t id;
+    size_t id = INVALID;
     
     //List of events to handle in this state.
     mob_event* events[N_MOB_EVENTS];
@@ -375,10 +376,10 @@ public:
     //--- Members ---
 
     //Mob that this FSM belongs to.
-    mob* m;
+    mob* m = nullptr;
     
     //Current state the mob is in.
-    mob_state* cur_state;
+    mob_state* cur_state = nullptr;
     
     //Conversion between pre-named states and in-file states.
     vector<size_t> pre_named_conversions;
@@ -387,7 +388,7 @@ public:
     string prev_state_names[STATE_HISTORY_SIZE];
     
     //If this is INVALID, use the mob type's first state nr. Else, use this.
-    size_t first_state_override;
+    size_t first_state_override = INVALID;
     
 
     //--- Function declarations ---
@@ -431,7 +432,6 @@ public:
     void change_state(const string &new_state);
     void run(custom_action_code code);
     vector<mob_state*> finish();
-    easy_fsm_creator();
     
 private:
     
@@ -441,10 +441,10 @@ private:
     vector<mob_state*> states;
     
     //State currently being staged.
-    mob_state* cur_state;
+    mob_state* cur_state = nullptr;
     
     //Event currently being staged.
-    mob_event* cur_event;
+    mob_event* cur_event = nullptr;
     
 
     //--- Function declarations ---
@@ -463,13 +463,13 @@ struct hitbox_interaction {
     //--- Members ---
 
     //Mob that touched our mob.
-    mob* mob2;
+    mob* mob2 = nullptr;
     
     //Hitbox of our mob that got touched.
-    hitbox* h1;
+    hitbox* h1 = nullptr;
     
     //Hitbox of the other mob.
-    hitbox* h2;
+    hitbox* h2 = nullptr;
     
 
     //--- Function declarations ---

@@ -21,15 +21,7 @@
  * @brief Constructs a new resource type object.
  */
 resource_type::resource_type() :
-    mob_type(MOB_CATEGORY_RESOURCES),
-    vanish_on_drop(false),
-    return_to_pile_on_vanish(false),
-    vanish_delay(0.0f),
-    carrying_destination(CARRY_DESTINATION_SHIP),
-    delivery_result(RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS),
-    damage_mob_amount(1.0f),
-    spray_to_concoct(INVALID),
-    point_amount(1.0f) {
+    mob_type(MOB_CATEGORY_RESOURCES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

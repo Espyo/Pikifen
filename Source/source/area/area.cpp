@@ -32,38 +32,6 @@ const size_t DEF_DAY_TIME_START = 7 * 60;
 //Default difficulty.
 const unsigned char DEF_DIFFICULTY = 0;
 
-//Default mission bronze medal point requirement.
-const int DEF_MISSION_MEDAL_BRONZE_REQ = 1000;
-
-//Default mission gold medal point requirement.
-const int DEF_MISSION_MEDAL_GOLD_REQ = 3000;
-
-//Default mission platinum medal point requirement.
-const int DEF_MISSION_MEDAL_PLATINUM_REQ = 4000;
-
-//Default mission silver medal point requirement.
-const int DEF_MISSION_MEDAL_SILVER_REQ = 2000;
-
-//Default mission time limit duration, in seconds.
-const size_t DEF_MISSION_TIME_LIMIT = 60;
-
-}
-
-
-/**
- * @brief Constructs a new area data object.
- */
-area_data::area_data() :
-    type(AREA_TYPE_SIMPLE),
-    bg_bmp(nullptr),
-    bg_bmp_zoom(1),
-    bg_dist(2),
-    bg_color(map_gray(0)),
-    thumbnail(nullptr),
-    difficulty(AREA::DEF_DIFFICULTY),
-    day_time_start(AREA::DEF_DAY_TIME_START),
-    day_time_speed(AREA::DEF_DAY_TIME_SPEED) {
-    
 }
 
 
@@ -185,8 +153,8 @@ void area_data::clear() {
     mission.goal_exit_center = point();
     mission.goal_exit_size =
         point(
-            AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
-            AREA_EDITOR::MISSION_EXIT_MIN_SIZE
+            MISSION::EXIT_MIN_SIZE,
+            MISSION::EXIT_MIN_SIZE
         );
     mission.fail_conditions = 0;
     mission.fail_too_few_pik_amount = 0;
@@ -194,7 +162,7 @@ void area_data::clear() {
     mission.fail_pik_killed = 1;
     mission.fail_leaders_kod = 1;
     mission.fail_enemies_killed = 1;
-    mission.fail_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
+    mission.fail_time_limit = MISSION::DEF_TIME_LIMIT;
     mission.grading_mode = MISSION_GRADING_GOAL;
     mission.points_per_pikmin_born = 0;
     mission.points_per_pikmin_death = 0;
@@ -205,10 +173,10 @@ void area_data::clear() {
     mission.point_loss_data = 0;
     mission.point_hud_data = 255;
     mission.starting_points = 0;
-    mission.bronze_req = AREA::DEF_MISSION_MEDAL_BRONZE_REQ;
-    mission.silver_req = AREA::DEF_MISSION_MEDAL_SILVER_REQ;
-    mission.gold_req = AREA::DEF_MISSION_MEDAL_GOLD_REQ;
-    mission.platinum_req = AREA::DEF_MISSION_MEDAL_PLATINUM_REQ;
+    mission.bronze_req = MISSION::DEF_MEDAL_REQ_BRONZE;
+    mission.silver_req = MISSION::DEF_MEDAL_REQ_SILVER;
+    mission.gold_req = MISSION::DEF_MEDAL_REQ_GOLD;
+    mission.platinum_req = MISSION::DEF_MEDAL_REQ_PLATINUM;
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -1126,16 +1094,6 @@ void area_data::remove_vertex(const vertex* v_ptr) {
 
 
 /**
- * @brief Constructs a new blockmap object.
- */
-blockmap::blockmap() :
-    n_cols(0),
-    n_rows(0) {
-    
-}
-
-
-/**
  * @brief Clears the info of the blockmap.
  */
 void blockmap::clear() {
@@ -1247,8 +1205,7 @@ mob_gen::mob_gen(
     type(type),
     pos(pos),
     angle(angle),
-    vars(vars),
-    stored_inside(INVALID) {
+    vars(vars) {
     
 }
 

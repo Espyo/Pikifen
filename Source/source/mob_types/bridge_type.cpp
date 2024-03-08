@@ -20,11 +20,7 @@
  * @brief Constructs a new bridge type object.
  */
 bridge_type::bridge_type() :
-    mob_type(MOB_CATEGORY_BRIDGES),
-    bmp_main_texture(nullptr),
-    bmp_left_rail_texture(nullptr),
-    bmp_right_rail_texture(nullptr),
-    rail_width(16.0f) {
+    mob_type(MOB_CATEGORY_BRIDGES) {
     
     radius = 32;
     max_health = 2000;

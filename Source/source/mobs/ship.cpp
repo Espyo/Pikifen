@@ -46,9 +46,6 @@ const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
 ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
     shi_type(type),
-    nest(nullptr),
-    next_tractor_beam_ring_timer(SHIP::TRACTOR_BEAM_EMIT_RATE),
-    mobs_being_beamed(0),
     control_point_final_pos(
         rotate_point(type->control_point_offset, angle)
     ),

@@ -65,9 +65,6 @@ const unsigned char MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
 const float MIN_GRID_INTERVAL = 2.0;
 
-//Mission exit region minimum size.
-const float MISSION_EXIT_MIN_SIZE = 32.0f;
-
 //Thickness to use when drawing a mob link line.
 const float MOB_LINK_THICKNESS = 2.0f;
 
@@ -126,58 +123,8 @@ const float ZOOM_MIN_LEVEL = 0.01f;
  * @brief Constructs a new area editor object.
  */
 area_editor::area_editor() :
-    quick_play_cam_z(1.0f),
-    hack_skip_drawing(false),
     backup_timer(game.options.area_editor_backup_interval),
-    area_exists_on_disk(false),
-    copy_buffer_edge(nullptr),
-    copy_buffer_mob(nullptr),
-    copy_buffer_path_link(nullptr),
-    copy_buffer_sector(nullptr),
-    cur_hazard_nr(INVALID),
-    cursor_snap_timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL),
-    debug_edge_nrs(false),
-    debug_sector_nrs(false),
-    debug_path_nrs(false),
-    debug_triangulation(false),
-    debug_vertex_nrs(false),
-    drawing_line_result(DRAWING_LINE_OK),
-    highlighted_edge(nullptr),
-    highlighted_mob(nullptr),
-    highlighted_path_link(nullptr),
-    highlighted_path_stop(nullptr),
-    highlighted_sector(nullptr),
-    highlighted_vertex(nullptr),
-    last_mob_type(nullptr),
-    load_dialog_picker(this),
-    moving(false),
-    moving_path_preview_checkpoint(-1),
-    moving_cross_section_point(-1),
-    new_sector_error_tint_timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION),
-    octee_mode(OCTEE_MODE_OFFSET),
-    path_drawing_flags(0),
-    path_drawing_normals(true),
-    path_drawing_type(PATH_LINK_TYPE_NORMAL),
-    path_preview_result(PATH_RESULT_NOT_CALCULATED),
-    pre_move_area_data(nullptr),
-    preview_mode(false),
-    problem_edge_intersection(NULL, NULL),
-    quick_height_set_start_height(0.0f),
-    quick_preview_timer(AREA_EDITOR::QUICK_PREVIEW_DURATION),
-    reference_bitmap(nullptr),
-    reference_keep_aspect_ratio(true),
-    selected_shadow(nullptr),
-    selected_shadow_keep_aspect_ratio(false),
-    selecting(false),
-    selection_angle(0.0f),
-    selection_effect(0.0f),
-    selection_filter(SELECTION_FILTER_SECTORS),
-    selection_orig_angle(0.0f),
-    show_closest_stop(false),
-    show_path_preview(false),
-    show_reference(true),
-    thumbnail_needs_saving(false),
-    thumbnail_backup_needs_saving(false) {
+    load_dialog_picker(this) {
     
     enable_flag(path_preview_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
     path_preview_timer =
@@ -4626,14 +4573,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     const area_editor* ae_ptr, const point &mouse_click
 ) :
     raw_spot(mouse_click),
-    snapped_spot(mouse_click),
-    on_vertex(nullptr),
-    on_vertex_nr(INVALID),
-    on_edge(nullptr),
-    on_edge_nr(INVALID),
-    on_sector(nullptr),
-    on_sector_nr(INVALID),
-    is_new_vertex(false) {
+    snapped_spot(mouse_click) {
     
     vector<std::pair<dist, vertex*> > merge_vertexes =
         get_merge_vertexes(
@@ -4679,15 +4619,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
  * @brief Constructs a new layout drawing node object.
  *
  */
-area_editor::layout_drawing_node::layout_drawing_node() :
-    on_vertex(nullptr),
-    on_vertex_nr(INVALID),
-    on_edge(nullptr),
-    on_edge_nr(INVALID),
-    on_sector(nullptr),
-    on_sector_nr(INVALID),
-    is_new_vertex(false) {
-    
+area_editor::layout_drawing_node::layout_drawing_node() {
 }
 
 

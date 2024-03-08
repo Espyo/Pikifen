@@ -14,6 +14,7 @@
 #include <string>
 #include <unordered_set>
 
+#include "const.h"
 #include "mob_categories/mob_category.h"
 #include "utils/geometry_utils.h"
 
@@ -22,6 +23,16 @@ using std::unordered_set;
 
 
 class gameplay_state;
+
+
+namespace MISSION {
+extern const int DEF_MEDAL_REQ_BRONZE;
+extern const int DEF_MEDAL_REQ_GOLD;
+extern const int DEF_MEDAL_REQ_PLATINUM;
+extern const int DEF_MEDAL_REQ_SILVER;
+extern const size_t DEF_TIME_LIMIT;
+extern const float EXIT_MIN_SIZE;
+}
 
 
 //Possible goals in a mission.
@@ -44,7 +55,7 @@ enum MISSION_GOALS {
     
     //The player must grow enough Pikmin to reach a certain total.
     MISSION_GOAL_GROW_PIKMIN,
-
+    
 };
 
 
@@ -74,7 +85,7 @@ enum MISSION_FAIL_CONDITIONS {
     
     //Ending from the pause menu.
     MISSION_FAIL_COND_PAUSE_MENU,
-
+    
 };
 
 
@@ -95,7 +106,7 @@ enum MISSION_MEDALS {
     
     //Platinum.
     MISSION_MEDAL_PLATINUM,
-
+    
 };
 
 
@@ -110,13 +121,13 @@ enum MISSION_GRADING_MODES {
     
     //Based on whether the player played or not.
     MISSION_GRADING_PARTICIPATION,
-
+    
 };
 
 
 //Possible criteria for a mission's point scoring.
 enum MISSION_SCORE_CRITERIA {
-    
+
     //Points per Pikmin born.
     MISSION_SCORE_CRITERIA_PIKMIN_BORN,
     
@@ -144,99 +155,97 @@ enum MISSION_SCORE_CRITERIA {
 struct mission_data {
 
     //--- Members ---
-
+    
     //Mission goal.
-    MISSION_GOALS goal;
-
+    MISSION_GOALS goal = MISSION_GOAL_END_MANUALLY;
+    
     //Does the mission goal require all relevant items, or just specific ones?
-    bool goal_all_mobs;
-
+    bool goal_all_mobs = true;
+    
     //If the mission goal requires specific items, their mob indexes go here.
     unordered_set<size_t> goal_mob_idxs;
-
+    
     //Total amount of something required for the current mission goal.
-    size_t goal_amount;
-
+    size_t goal_amount = 1;
+    
     //Mission exit region center coordinates.
     point goal_exit_center;
-
+    
     //Mission exit region dimensions.
-    point goal_exit_size;
-
+    point goal_exit_size = point(
+        MISSION::EXIT_MIN_SIZE,
+        MISSION::EXIT_MIN_SIZE
+    );
+    
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
-    uint8_t fail_conditions;
-
+    uint8_t fail_conditions = 0;
+    
     //Amount for the "reach too few Pikmin" mission fail condition.
-    size_t fail_too_few_pik_amount;
-
+    size_t fail_too_few_pik_amount = 0;
+    
     //Amount for the "reach too many Pikmin" mission fail condition.
-    size_t fail_too_many_pik_amount;
-
+    size_t fail_too_many_pik_amount = 1;
+    
     //Amount for the "lose Pikmin" mission fail condition.
-    size_t fail_pik_killed;
-
+    size_t fail_pik_killed = 1;
+    
     //Amount for the "lose leaders" mission fail condition.
-    size_t fail_leaders_kod;
-
+    size_t fail_leaders_kod = 1;
+    
     //Amount for the "kill enemies" mission fail condition.
-    size_t fail_enemies_killed;
-
+    size_t fail_enemies_killed = 1;
+    
     //Seconds amount for the "time limit" mission fail condition.
-    size_t fail_time_limit;
-
+    size_t fail_time_limit = MISSION::DEF_TIME_LIMIT;
+    
     //Primary HUD element's fail condition. INVALID for none.
-    size_t fail_hud_primary_cond;
-
+    size_t fail_hud_primary_cond = INVALID;
+    
     //Secondary HUD element's fail condition. INVALID for none.
-    size_t fail_hud_secondary_cond;
-
+    size_t fail_hud_secondary_cond = INVALID;
+    
     //Mission grading mode.
-    MISSION_GRADING_MODES grading_mode;
-
+    MISSION_GRADING_MODES grading_mode = MISSION_GRADING_GOAL;
+    
     //Mission point multiplier for each Pikmin born.
-    int points_per_pikmin_born;
-
+    int points_per_pikmin_born = 0;
+    
     //Mission point multiplier for each Pikmin lost.
-    int points_per_pikmin_death;
-
+    int points_per_pikmin_death = 0;
+    
     //Mission point multiplier for each second left (only if time limit is on).
     int points_per_sec_left;
-
-    //Mission point multiplier for each second passed.
-    int points_per_sec_passed;
-
-    //Mission point multiplier for each treasure point obtained.
-    int points_per_treasure_point;
-
-    //Mission point multiplier for each enemy point obtained.
-    int points_per_enemy_point;
-
-    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    uint8_t point_loss_data;
-
-    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    uint8_t point_hud_data;
-
-    //Starting number of points.
-    int starting_points;
-
-    //Bronze medal point requirement.
-    int bronze_req;
-
-    //Silver medal point requirement.
-    int silver_req;
-
-    //Gold medal point requirement.
-    int gold_req;
-
-    //Platinum medal point requirement.
-    int platinum_req;
     
-
-    //--- Function declarations ---
-
-    mission_data();
-
+    //Mission point multiplier for each second passed.
+    int points_per_sec_passed = 0;
+    
+    //Mission point multiplier for each treasure point obtained.
+    int points_per_treasure_point = 0;
+    
+    //Mission point multiplier for each enemy point obtained.
+    int points_per_enemy_point = 0;
+    
+    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
+    uint8_t point_loss_data = 0;
+    
+    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
+    uint8_t point_hud_data = 255;
+    
+    //Starting number of points.
+    int starting_points = 0;
+    
+    //Bronze medal point requirement.
+    int bronze_req = MISSION::DEF_MEDAL_REQ_BRONZE;
+    
+    //Silver medal point requirement.
+    int silver_req = MISSION::DEF_MEDAL_REQ_SILVER;
+    
+    //Gold medal point requirement.
+    int gold_req = MISSION::DEF_MEDAL_REQ_GOLD;
+    
+    //Platinum medal point requirement.
+    int platinum_req = MISSION::DEF_MEDAL_REQ_PLATINUM;
+    
 };
 
 
@@ -246,22 +255,21 @@ struct mission_data {
 struct mission_record {
 
     //--- Members ---
-
+    
     //Has the mission's goal been cleared?
-    bool clear;
+    bool clear = false;
     
     //Score obtained.
-    int score;
+    int score = 0;
     
     //Date of the record.
     string date;
     
-
+    
     //--- Function declarations ---
-
-    mission_record();
+    
     bool is_platinum(const mission_data &mission);
-
+    
 };
 
 
@@ -271,9 +279,10 @@ struct mission_record {
 class mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
+    virtual ~mission_fail() = default;
     virtual string get_name() const = 0;
     virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
     virtual int get_req_amount(gameplay_state* gameplay) const = 0;
@@ -288,7 +297,7 @@ public:
     virtual string get_hud_label(gameplay_state* gameplay) const = 0;
     virtual bool has_hud_content() const = 0;
     virtual bool is_met(gameplay_state* gameplay) const = 0;
-
+    
 };
 
 
@@ -298,9 +307,9 @@ public:
 class mission_fail_kill_enemies : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -315,7 +324,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -325,9 +334,9 @@ public:
 class mission_fail_lose_leaders : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -342,7 +351,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -352,9 +361,9 @@ public:
 class mission_fail_lose_pikmin : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -369,7 +378,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -379,9 +388,9 @@ public:
 class mission_fail_pause_menu : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -396,7 +405,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -406,9 +415,9 @@ public:
 class mission_fail_take_damage : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -423,7 +432,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -433,9 +442,9 @@ public:
 class mission_fail_time_limit: public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -450,7 +459,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -460,9 +469,9 @@ public:
 class mission_fail_too_few_pikmin : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -477,7 +486,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -487,9 +496,9 @@ public:
 class mission_fail_too_many_pikmin : public mission_fail {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -504,7 +513,7 @@ public:
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
-
+    
 };
 
 
@@ -514,9 +523,10 @@ public:
 class mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
+    virtual ~mission_goal() = default;
     virtual string get_name() const = 0;
     virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
     virtual int get_req_amount(gameplay_state* gameplay) const = 0;
@@ -531,7 +541,7 @@ public:
     virtual string get_hud_label() const = 0;
     virtual bool is_met(gameplay_state* gameplay) const = 0;
     virtual bool is_mob_applicable(mob_type* type) const = 0;
-
+    
 };
 
 
@@ -541,9 +551,9 @@ public:
 class mission_goal_battle_enemies : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -558,7 +568,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -568,9 +578,9 @@ public:
 class mission_goal_collect_treasures : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -585,7 +595,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -595,9 +605,9 @@ public:
 class mission_goal_end_manually : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -612,7 +622,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -622,9 +632,9 @@ public:
 class mission_goal_get_to_exit : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -639,7 +649,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -649,9 +659,9 @@ public:
 class mission_goal_grow_pikmin : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -666,7 +676,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -676,9 +686,9 @@ public:
 class mission_goal_timed_survival : public mission_goal {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
@@ -693,7 +703,7 @@ public:
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
     bool is_mob_applicable(mob_type* type) const override;
-
+    
 };
 
 
@@ -703,15 +713,16 @@ public:
 class mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
+    virtual ~mission_score_criterion() = default;
     virtual string get_name() const = 0;
     virtual int get_multiplier(mission_data* mission) const = 0;
     virtual int get_score(
         gameplay_state* gameplay, mission_data* mission
     ) const = 0;
-
+    
 };
 
 
@@ -721,9 +732,9 @@ public:
 class mission_score_criterion_enemy_points : public mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;
     int get_score(
@@ -739,15 +750,15 @@ public:
 class mission_score_criterion_pikmin_born : public mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;
     int get_score(
         gameplay_state* gameplay, mission_data* mission
     ) const override;
-
+    
 };
 
 
@@ -757,15 +768,15 @@ public:
 class mission_score_criterion_pikmin_death : public mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;
     int get_score(
         gameplay_state* gameplay, mission_data* mission
     ) const override;
-
+    
 };
 
 
@@ -775,15 +786,15 @@ public:
 class mission_score_criterion_sec_left : public mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;
     int get_score(
         gameplay_state* gameplay, mission_data* mission
     ) const override;
-
+    
 };
 
 
@@ -793,15 +804,15 @@ public:
 class mission_score_criterion_sec_passed : public mission_score_criterion {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;
     int get_score(
         gameplay_state* gameplay, mission_data* mission
     ) const override;
-
+    
 };
 
 
@@ -811,7 +822,7 @@ public:
 class mission_score_criterion_treasure_points : public mission_score_criterion {
 
 public:
-    
+
     //--- Function declarations ---
     
     string get_name() const override;

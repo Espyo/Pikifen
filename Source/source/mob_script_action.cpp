@@ -25,27 +25,12 @@ using std::set;
 
 
 /**
- * @brief Constructs a new mob action object.
- */
-mob_action::mob_action() :
-    type(MOB_ACTION_UNKNOWN),
-    code(nullptr),
-    extra_load_logic(nullptr) {
-    
-}
-
-
-/**
  * @brief Constructs a new mob action call object of a certain type.
  *
  * @param type Type of mob action call.
  */
-mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
-    action(nullptr),
-    code(nullptr),
-    parent_event(MOB_EV_UNKNOWN),
-    mt(nullptr) {
-    
+mob_action_call::mob_action_call(MOB_ACTION_TYPES type) {
+
     for(size_t a = 0; a < game.mob_actions.size(); ++a) {
         if(game.mob_actions[a].type == type) {
             action = &(game.mob_actions[a]);
@@ -60,11 +45,8 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
  *
  * @param code The function to run.
  */
-mob_action_call::mob_action_call(custom_action_code code):
-    action(nullptr),
-    code(code),
-    parent_event(MOB_EV_UNKNOWN),
-    mt(nullptr) {
+mob_action_call::mob_action_call(custom_action_code code) :
+    code(code) {
     
     for(size_t a = 0; a < game.mob_actions.size(); ++a) {
         if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) {
@@ -788,10 +770,7 @@ mob_action_param::mob_action_param(
  */
 mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
     m(m),
-    call(call),
-    custom_data_1(nullptr),
-    custom_data_2(nullptr),
-    return_value(false) {
+    call(call) {
     
 }
 
@@ -990,7 +969,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
             size_t c = randomi(0, (int) choices.size() - 1);
             if(
                 dist(choices[c]->pos, data.m->pos) >
-                MOB::DEF_CHASE_TARGET_DISTANCE
+                PATHS::DEF_CHASE_TARGET_DISTANCE
             ) {
                 final_stop = choices[c];
                 break;

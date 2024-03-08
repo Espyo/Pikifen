@@ -16,6 +16,7 @@
 #include "vertex.h"
 
 #include "../const.h"
+#include "geometry.h"
 
 
 struct sector;
@@ -28,34 +29,34 @@ struct sector;
 struct edge {
 
     //--- Members ---
-
-    //Vertexes that make up the edge.
-    vertex* vertexes[2];
-
-    //Index of the vertexes that make up the edge.
-    size_t vertex_nrs[2];
-
-    //Sectors on each side of the edge.
-    sector* sectors[2];
-
-    //Index of the sectors on each side of the edge.
-    size_t sector_nrs[2];
-
-    //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
-    float wall_shadow_length;
-
-    //Color of the wall shadow, opacity included.
-    ALLEGRO_COLOR wall_shadow_color;
-
-    //Length of the ledge smoothing effect. 0 = none.
-    float ledge_smoothing_length;
-
-    //Color of the ledge smoothing effect, opacity included.
-    ALLEGRO_COLOR ledge_smoothing_color;
     
-
+    //Vertexes that make up the edge.
+    vertex* vertexes[2] = { nullptr, nullptr };
+    
+    //Index of the vertexes that make up the edge.
+    size_t vertex_nrs[2] = { INVALID, INVALID };
+    
+    //Sectors on each side of the edge.
+    sector* sectors[2] = { nullptr, nullptr };
+    
+    //Index of the sectors on each side of the edge.
+    size_t sector_nrs[2] = { INVALID, INVALID };
+    
+    //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
+    float wall_shadow_length = LARGE_FLOAT;
+    
+    //Color of the wall shadow, opacity included.
+    ALLEGRO_COLOR wall_shadow_color = GEOMETRY::SHADOW_DEF_COLOR;
+    
+    //Length of the ledge smoothing effect. 0 = none.
+    float ledge_smoothing_length = 0.0f;
+    
+    //Color of the ledge smoothing effect, opacity included.
+    ALLEGRO_COLOR ledge_smoothing_color = GEOMETRY::SMOOTHING_DEF_COLOR;
+    
+    
     //--- Function declarations ---
-
+    
     explicit edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
     void clone(edge* destination) const;
     sector* get_other_sector(const sector* v_ptr) const;
@@ -69,7 +70,7 @@ struct edge {
     void transfer_sector(
         sector* from, sector* to, const size_t to_nr, const size_t edge_nr
     );
-
+    
 };
 
 
@@ -78,16 +79,16 @@ struct edge {
  * Used to mark edges as red on the editor.
  */
 struct edge_intersection {
-    
+
     //--- Members ---
-
-    //First edge in the intersection.
-    edge* e1;
-
-    //Second edge in the intersection.
-    edge* e2;
     
-
+    //First edge in the intersection.
+    edge* e1 = nullptr;
+    
+    //Second edge in the intersection.
+    edge* e2 = nullptr;
+    
+    
     //--- Function declarations ---
     
     edge_intersection(edge* e1, edge* e2);

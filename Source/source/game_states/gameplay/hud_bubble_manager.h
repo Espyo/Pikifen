@@ -62,19 +62,19 @@ public:
         //--- Members ---
 
         //GUI item.
-        gui_item* bubble;
+        gui_item* bubble = nullptr;
 
         //Reference to base its existence off of.
-        void* ref;
+        void* ref = nullptr;
 
         //Content that it holds.
-        t content;
+        t content = t();
 
         //Reference pre-transition.
-        void* pre_transition_ref;
+        void* pre_transition_ref = nullptr;
 
         //Content that it held, pre-transition.
-        t pre_transition_content;
+        t pre_transition_content = t();
         
 
         //--- Function definitions ---
@@ -85,11 +85,7 @@ public:
          * @param bubble The bubble GUI item.
          */
         explicit bubble_info(gui_item* bubble = NULL) :
-            bubble(bubble),
-            ref(NULL),
-            content(),
-            pre_transition_ref(NULL),
-            pre_transition_content() {
+            bubble(bubble) {
         }
         
     };
@@ -98,13 +94,13 @@ public:
     //--- Members ---
 
     //GUI manager the HUD belongs to.
-    gui_manager* hud;
+    gui_manager* hud = nullptr;
 
     //How long a transition lasts for.
-    float transition_duration;
+    float transition_duration = 0.0f;
 
     //How to move the bubbles around during a transition.
-    HUD_BUBBLE_MOVE_METHODS move_method;
+    HUD_BUBBLE_MOVE_METHODS move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     
 
     //--- Function definitions ---
@@ -115,11 +111,7 @@ public:
      * @param hud The HUD manager it belongs to.
      */
     explicit hud_bubble_manager(gui_manager* hud) :
-        hud(hud),
-        transition_duration(0.0f),
-        move_method(HUD_BUBBLE_MOVE_METHOD_STRAIGHT),
-        transition_timer(0.0f),
-        transition_is_setup(false) {
+        hud(hud) {
         
     }
     
@@ -351,10 +343,10 @@ private:
     map<size_t, bubble_info> bubbles;
 
     //Time left in the current transition, or 0 if none.
-    float transition_timer;
+    float transition_timer = 0.0f;
 
     //Have we set each bubble's "pre-transition" class members yet?
-    bool transition_is_setup;
+    bool transition_is_setup = false;
     
 };
 

@@ -165,65 +165,6 @@ const float DEF_ZOOM_MID_LEVEL = 1.4f;
 
 
 /**
- * @brief Constructs a new options struct object.
- */
-options_struct::options_struct() :
-    ambiance_volume(OPTIONS::DEF_AMBIANCE_VOLUME),
-    area_editor_advanced_mode(OPTIONS::DEF_AREA_EDITOR_ADVANCED_MODE),
-    area_editor_backup_interval(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL),
-    area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
-    area_editor_sel_trans(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS),
-    area_editor_show_circular_info(OPTIONS::DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO),
-    area_editor_show_edge_length(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
-    area_editor_show_path_link_length(
-        OPTIONS::DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH
-    ),
-    area_editor_show_territory(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY),
-    area_editor_snap_mode(OPTIONS::DEF_AREA_EDITOR_SNAP_MODE),
-    area_editor_snap_threshold(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD),
-    area_editor_undo_limit(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT),
-    area_editor_view_mode(OPTIONS::DEF_AREA_EDITOR_VIEW_MODE),
-    auto_throw_mode(OPTIONS::DEF_AUTO_THROW_MODE),
-    cursor_cam_weight(OPTIONS::DEF_CURSOR_CAM_WEIGHT),
-    cursor_speed(OPTIONS::DEF_CURSOR_SPEED),
-    draw_cursor_trail(OPTIONS::DEF_DRAW_CURSOR_TRAIL),
-    editor_highlight_color(OPTIONS::DEF_EDITOR_HIGHLIGHT_COLOR),
-    editor_mmb_pan(OPTIONS::DEF_EDITOR_MMB_PAN),
-    editor_mouse_drag_threshold(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
-    editor_primary_color(OPTIONS::DEF_EDITOR_PRIMARY_COLOR),
-    editor_secondary_color(OPTIONS::DEF_EDITOR_SECONDARY_COLOR),
-    editor_show_tooltips(OPTIONS::DEF_EDITOR_SHOW_TOOLTIPS),
-    editor_text_color(OPTIONS::DEF_EDITOR_TEXT_COLOR),
-    editor_use_custom_style(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE),
-    gui_editor_grid_interval(OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL),
-    gui_editor_snap(OPTIONS::DEF_GUI_EDITOR_SNAP),
-    intended_win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
-    intended_win_h(OPTIONS::DEF_WIN_H),
-    intended_win_w(OPTIONS::DEF_WIN_W),
-    joystick_max_deadzone(OPTIONS::DEF_JOYSTICK_MAX_DEADZONE),
-    joystick_min_deadzone(OPTIONS::DEF_JOYSTICK_MIN_DEADZONE),
-    leaving_confirmation_mode(OPTIONS::DEF_LEAVING_CONFIRMATION_MODE),
-    master_volume(OPTIONS::DEF_MASTER_VOLUME),
-    max_particles(OPTIONS::DEF_MAX_PARTICLES),
-    mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
-    music_volume(OPTIONS::DEF_MUSIC_VOLUME),
-    smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
-    show_hud_input_icons(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS),
-    target_fps(OPTIONS::DEF_TARGET_FPS),
-    true_fullscreen(OPTIONS::DEF_TRUE_FULLSCREEN),
-    ui_sfx_volume(OPTIONS::DEF_UI_SFX_VOLUME),
-    window_position_hack(OPTIONS::DEF_WINDOW_POSITION_HACK),
-    world_sfx_volume(OPTIONS::DEF_WORLD_SFX_VOLUME),
-    zoom_mid_level(OPTIONS::DEF_ZOOM_MID_LEVEL) {
-    
-    mouse_moves_cursor[0] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[0];
-    mouse_moves_cursor[1] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[1];
-    mouse_moves_cursor[2] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[2];
-    mouse_moves_cursor[3] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[3];
-}
-
-
-/**
  * @brief Loads the player's options from a file.
  *
  * @param file File to read from.

@@ -40,39 +40,6 @@ const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
 
 
 /**
- * @brief Constructs a new area menu state object.
- */
-area_menu_state::area_menu_state() :
-    game_state(),
-    area_type(AREA_TYPE_SIMPLE),
-    bmp_menu_bg(nullptr),
-    info_box(nullptr),
-    specs_box(nullptr),
-    cur_area_idx(INVALID),
-    list_box(nullptr),
-    first_area_button(nullptr),
-    info_name_text(nullptr),
-    specs_name_text(nullptr),
-    subtitle_text(nullptr),
-    cur_thumb(nullptr),
-    description_text(nullptr),
-    difficulty_text(nullptr),
-    tags_text(nullptr),
-    maker_text(nullptr),
-    version_text(nullptr),
-    record_info_text(nullptr),
-    cur_stamp(nullptr),
-    cur_medal(nullptr),
-    record_date_text(nullptr),
-    goal_text(nullptr),
-    fail_list(nullptr),
-    grading_list(nullptr),
-    show_mission_specs(false) {
-    
-}
-
-
-/**
  * @brief Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
  *

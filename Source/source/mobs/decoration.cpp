@@ -25,11 +25,7 @@ decoration::decoration(
     const point &pos, decoration_type* type, const float angle
 ) :
     mob(pos, type, angle),
-    dec_type(type),
-    individual_random_anim_delay(true),
-    individual_tint(COLOR_WHITE),
-    individual_scale(1.0f),
-    individual_rotation(0.0f) {
+    dec_type(type) {
     
     float tint_interpol_ratio = randomf(0.0f, 1.0f);
     ALLEGRO_COLOR tint_limit = dec_type->tint_random_maximum;

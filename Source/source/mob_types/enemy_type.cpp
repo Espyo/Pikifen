@@ -18,12 +18,7 @@
  * @brief Constructs a new enemy type object.
  */
 enemy_type::enemy_type() :
-    mob_type(MOB_CATEGORY_ENEMIES),
-    pikmin_seeds(0),
-    drops_corpse(true),
-    allow_ground_attacks(true),
-    points(10),
-    is_boss(false) {
+    mob_type(MOB_CATEGORY_ENEMIES) {
     
     target_type = MOB_TARGET_TYPE_ENEMY;
     huntable_targets =

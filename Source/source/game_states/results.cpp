@@ -28,18 +28,6 @@ const string SONG_NAME = "menus";
 
 
 /**
- * @brief Constructs a new results state object.
- */
-results_state::results_state() :
-    game_state(),
-    gui_time_spent(0.0f),
-    stats_list(nullptr),
-    final_mission_score(0) {
-    
-}
-
-
-/**
  * @brief Adds a new mission score criterion-related stat to the stats list
  * GUI item, if applicable.
  *

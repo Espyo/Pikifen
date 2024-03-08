@@ -73,7 +73,7 @@ public:
     string name;
 
     //Parent bitmap, normally a spritesheet.
-    ALLEGRO_BITMAP* parent_bmp;
+    ALLEGRO_BITMAP* parent_bmp = nullptr;
 
     //File name where the parent bitmap is at.
     string file;
@@ -89,25 +89,25 @@ public:
     point offset;
 
     //Scale multiplier.
-    point scale;
+    point scale = point(1.0, 1.0);
 
     //Angle to rotate the image by.
-    float angle;
+    float angle = 0.0f;
 
     //X&Y of the Pikmin's top (left/bud/flower).
     point top_pos;
 
     //W&H of the Pikmin's top.
-    point top_size;
+    point top_size = point(5.5, 10);
 
     //Angle of the Pikmin's top.
-    float top_angle;
+    float top_angle = 0.0f;
 
     //Does this sprite even have a visible Pikmin top?
-    bool top_visible;
+    bool top_visible = true;
 
     //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
-    ALLEGRO_BITMAP* bitmap;
+    ALLEGRO_BITMAP* bitmap = nullptr;
 
     //List of hitboxes on this frame.
     vector<hitbox> hitboxes;
@@ -133,7 +133,7 @@ public:
     void set_bitmap(
         const string &new_file_name,
         const point &new_file_pos, const point &new_file_size,
-        const data_node* node = NULL
+        data_node* node = NULL
     );
 
 };
@@ -154,22 +154,22 @@ public:
     string sprite_name;
 
     //Index of the sprite. Cache for performance.
-    size_t sprite_index;
+    size_t sprite_index = INVALID;
 
     //Pointer to the sprite. Cache for performance.
-    sprite* sprite_ptr;
+    sprite* sprite_ptr = nullptr;
 
     //How long this frame lasts for, in seconds.
-    float duration;
+    float duration = 0.0f;
 
     //Sound to play, if any. This is a sound info block in the mob's data.
     string sound;
 
     //Index of the sound to play, or INVALID. Cache for performance.
-    size_t sound_idx;
+    size_t sound_idx = INVALID;
 
     //Signal to send, if any. INVALID = none.
-    size_t signal;
+    size_t signal = INVALID;
     
 
     //--- Function declarations ---
@@ -199,12 +199,12 @@ public:
     vector<frame> frames;
 
     //The animation loops back to this frame when it reaches the end.
-    size_t loop_frame;
+    size_t loop_frame = 0;
 
     //If this animation represents an attack that can miss,
     //this represents the successful hit rate.
     //100 means it cannot miss and/or is a normal animation.
-    unsigned char hit_rate;
+    unsigned char hit_rate = 100;
     
 
     //--- Function declarations ---
@@ -250,7 +250,7 @@ public:
     string engine_version;
 
     //Maximum span of the hitboxes. Cache for performance.
-    float max_span;
+    float max_span = 0.0f;
     
 
     //--- Function declarations ---
@@ -285,16 +285,16 @@ public:
     //--- Members ---
 
     //The animation currently running.
-    animation* cur_anim;
+    animation* cur_anim = nullptr;
 
     //The database this belongs to.
-    animation_database* anim_db;
+    animation_database* anim_db = nullptr;
 
     //Time passed on the current frame.
-    float cur_frame_time;
+    float cur_frame_time = 0.0f;
 
     //Index of the current frame of animation.
-    size_t cur_frame_index;
+    size_t cur_frame_index = 0;
     
 
     //--- Function declarations ---

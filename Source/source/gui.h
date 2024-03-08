@@ -80,7 +80,7 @@ enum GUI_MANAGER_ANIMS {
     
     //Items are in view, and slide right out of view.
     GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-
+    
 };
 
 
@@ -96,111 +96,111 @@ class gui_item {
 public:
 
     //--- Misc. declarations ---
-
+    
     //Juicy animation types for GUI items.
     enum JUICE_TYPES {
-
+    
         //None.
         JUICE_TYPE_NONE,
         
         //Text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_LOW,
-
+        
         //Text grow effect, medium impact.
         JUICE_TYPE_GROW_TEXT_MEDIUM,
-
+        
         //Text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_HIGH,
-
+        
         //Elastic text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_LOW,
-
+        
         //Elastic text grow effect, medium impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM,
-
+        
         //Elastic text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH,
-
+        
         //Icon grow effect.
         JUICE_TYPE_GROW_ICON,
         
     };
-
-
+    
+    
     //--- Members ---
     
     //What GUI manager it belongs to, if any.
-    gui_manager* manager;
-
+    gui_manager* manager = nullptr;
+    
     //Its raw on-screen position, in screen ratio (or parent ratio).
     point center;
-
+    
     //Its raw width and height, in screen ratio (or parent ratio).
     point size;
-
+    
     //Is it currently visible?
-    bool visible;
-
+    bool visible = true;
+    
     //Is it currentl responsive?
-    bool responsive;
-
+    bool responsive = true;
+    
     //Can it be selected?
-    bool selectable;
-
+    bool selectable = false;
+    
     //Is it currently the selected item?
-    bool selected;
-
+    bool selected = false;
+    
     //If it is placed inside of another item, specify it here.
-    gui_item* parent;
-
+    gui_item* parent = nullptr;
+    
     //List of children items, that are placed inside this one.
     vector<gui_item*> children;
-
+    
     //Vertical offset (height percentage) of the items inside of it, if any.
-    float offset;
-
+    float offset = 0.0f;
+    
     //Padding amount, if it has items inside of it.
-    float padding;
-
+    float padding = 0.0f;
+    
     //Can this item's activation be auto-repeated by holding the button down?
-    bool can_auto_repeat;
-
+    bool can_auto_repeat = false;
+    
     //Type of the current juice animation.
-    JUICE_TYPES juice_type;
-
+    JUICE_TYPES juice_type = JUICE_TYPE_NONE;
+    
     //Timer that controls the current juice animation.
-    float juice_timer;
+    float juice_timer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const point &center, const point &size)> on_draw;
+    std::function<void(const point &center, const point &size)> on_draw = nullptr;
     
     //What to do when it's time to tick one frame.
-    std::function<void(const float time)> on_tick;
+    std::function<void(const float time)> on_tick = nullptr;
     
     //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT &ev)> on_event;
+    std::function<void(const ALLEGRO_EVENT &ev)> on_event = nullptr;
     
     //What to do when the item is activated.
-    std::function<void(const point &cursor_pos)> on_activate;
+    std::function<void(const point &cursor_pos)> on_activate = nullptr;
     
     //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const point &cursor_pos)> on_mouse_over;
+    std::function<void(const point &cursor_pos)> on_mouse_over = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
-    std::function<bool(const size_t button_id)> on_menu_dir_button;
+    std::function<bool(const size_t button_id)> on_menu_dir_button = nullptr;
     
     //What to do when it gets selected.
-    std::function<void()> on_selected;
+    std::function<void()> on_selected = nullptr;
     
     //What to do when one of its children became the selected item.
-    std::function<void(const gui_item* child)> on_child_selected;
+    std::function<void(const gui_item* child)> on_child_selected = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
-    std::function<string()> on_get_tooltip;
+    std::function<string()> on_get_tooltip = nullptr;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit gui_item(const bool selectable = false);
     bool activate(const point &cursor_pos);
     void add_child(gui_item* item);
@@ -214,7 +214,7 @@ public:
     bool is_visible();
     void remove_child(gui_item* item);
     void start_juice_animation(JUICE_TYPES type);
-
+    
 };
 
 
@@ -227,24 +227,24 @@ class bullet_point_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
+    
     //Text to display on the bullet point.
     string text;
-
-    //Font to display the text with.
-    ALLEGRO_FONT* font;
-
-    //Color to tint the text with.
-    ALLEGRO_COLOR color;
     
-
+    //Font to display the text with.
+    ALLEGRO_FONT* font = nullptr;
+    
+    //Color to tint the text with.
+    ALLEGRO_COLOR color = COLOR_WHITE;
+    
+    
     //--- Function declarations ---
-
+    
     bullet_point_gui_item(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
+    
 };
 
 
@@ -256,24 +256,24 @@ class button_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
+    
     //Text to display on the button.
     string text;
-
-    //Font to display the text with.
-    ALLEGRO_FONT* font;
-
-    //Color to tint the text with.
-    ALLEGRO_COLOR color;
     
-
+    //Font to display the text with.
+    ALLEGRO_FONT* font = nullptr;
+    
+    //Color to tint the text with.
+    ALLEGRO_COLOR color = COLOR_WHITE;
+    
+    
     //--- Function declarations ---
-
+    
     button_gui_item(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
+    
 };
 
 
@@ -285,27 +285,27 @@ class check_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
+    
     //Variable that controls the checkmark value.
-    bool* value;
-
+    bool* value = nullptr;
+    
     //Text to display on the button.
     string text;
-
-    //Font to display the text with.
-    ALLEGRO_FONT* font;
-
-    //Color to tint the text with.
-    ALLEGRO_COLOR color;
     
-
+    //Font to display the text with.
+    ALLEGRO_FONT* font = nullptr;
+    
+    //Color to tint the text with.
+    ALLEGRO_COLOR color = COLOR_WHITE;
+    
+    
     //--- Function declarations ---
-
+    
     check_gui_item(
         bool* value, const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
+    
 };
 
 
@@ -319,15 +319,15 @@ class list_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
-    //What the offset is supposed to be, after it finishes animating.
-    float target_offset;
     
-
+    //What the offset is supposed to be, after it finishes animating.
+    float target_offset = 0.0f;
+    
+    
     //--- Function declarations ---
-
+    
     list_gui_item();
-
+    
 };
 
 
@@ -340,28 +340,28 @@ class picker_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
+    
     //The text to show before the currently selected option.
     string base_text;
-
+    
     //The currently selected option.
     string option;
-
+    
     //Total amount of options. Optional.
-    size_t nr_options;
-
+    size_t nr_options = 0;
+    
     //Index of the currently selected option. Only used if nr_options > 0.
-    size_t cur_option_idx;
+    size_t cur_option_idx = INVALID;
     
     //What to do when the user picks the previous option.
-    std::function<void()> on_previous;
+    std::function<void()> on_previous = nullptr;
     
     //What to do when the user picks the next option.
-    std::function<void()> on_next;
+    std::function<void()> on_next = nullptr;
     
-
+    
     //--- Function declarations ---
-
+    
     picker_gui_item(
         const string &base_text, const string &option,
         const size_t nr_options = 0, const size_t cur_option_idx = INVALID
@@ -370,10 +370,10 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Highlight one of the arrows due to mouse-over. 255 = none.
-    unsigned char arrow_highlight;
-
+    unsigned char arrow_highlight = 255;
+    
 };
 
 
@@ -383,17 +383,17 @@ private:
 class scroll_gui_item : public gui_item {
 
 public:
-    
+
     //--- Members ---
-
-    //What item this scrollbar is in charge of controlling.
-    list_gui_item* list_item;
     
-
+    //What item this scrollbar is in charge of controlling.
+    list_gui_item* list_item = nullptr;
+    
+    
     //--- Function declarations ---
-
+    
     scroll_gui_item();
-
+    
 };
 
 
@@ -404,36 +404,36 @@ public:
 class text_gui_item : public gui_item {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Text to display.
     string text;
-
-    //Font to display the text with.
-    ALLEGRO_FONT* font;
-
-    //Color to tint the text with.
-    ALLEGRO_COLOR color;
-
-    //Allegro flags.
-    int flags;
-
-    //Wrap long lines. Also enables markup.
-    bool line_wrap;
-
-    //Whether to show a selection box when selected.
-    bool show_selection_box;
     
-
+    //Font to display the text with.
+    ALLEGRO_FONT* font = nullptr;
+    
+    //Color to tint the text with.
+    ALLEGRO_COLOR color = COLOR_WHITE;
+    
+    //Allegro flags.
+    int flags = ALLEGRO_ALIGN_CENTER;
+    
+    //Wrap long lines. Also enables markup.
+    bool line_wrap = false;
+    
+    //Whether to show a selection box when selected.
+    bool show_selection_box = false;
+    
+    
     //--- Function declarations ---
-
+    
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE,
         const int flags = ALLEGRO_ALIGN_CENTER
     );
-
+    
 };
 
 
@@ -446,22 +446,22 @@ class tooltip_gui_item : public gui_item {
 public:
 
     //--- Members ---
-
-    //The GUI it belongs to.
-    gui_manager* gui;
     
-
+    //The GUI it belongs to.
+    gui_manager* gui = nullptr;
+    
+    
     //--- Function declarations ---
-
+    
     explicit tooltip_gui_item(gui_manager* gui);
-
+    
 private:
 
     //--- Members ---
-
+    
     //Text it was showing the previous frame.
     string prev_text;
-
+    
 };
 
 
@@ -481,28 +481,28 @@ class gui_manager {
 public:
 
     //--- Members ---
-
+    
     //List of items.
     vector<gui_item*> items;
-
-    //Which item is currently selected.
-    gui_item* selected_item;
-
-    //Item to activate when the user chooses to go back.
-    gui_item* back_item;
-
-    //Is it currently responding to input?
-    bool responsive;
-
-    //Should it ignore input while animating?
-    bool ignore_input_on_animation;
-
-    //What to do when the currently selected item changes.
-    std::function<void()> on_selection_changed;
     
-
+    //Which item is currently selected.
+    gui_item* selected_item = nullptr;
+    
+    //Item to activate when the user chooses to go back.
+    gui_item* back_item = nullptr;
+    
+    //Is it currently responding to input?
+    bool responsive = true;
+    
+    //Should it ignore input while animating?
+    bool ignore_input_on_animation = true;
+    
+    //What to do when the currently selected item changes.
+    std::function<void()> on_selection_changed = nullptr;
+    
+    
     //--- Function declarations ---
-
+    
     gui_manager();
     void add_item(gui_item* item, const string &id = "");
     void draw();
@@ -531,51 +531,51 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Registered default centers.
     map<string, point> registered_centers;
-
+    
     //Registered default sizes.
     map<string, point> registered_sizes;
-
+    
     //Is the right button pressed?
-    bool right_pressed;
-
+    bool right_pressed = false;
+    
     //Is the up button pressed?
-    bool up_pressed;
-
+    bool up_pressed = false;
+    
     //Is the left button pressed?
-    bool left_pressed;
-
+    bool left_pressed = false;
+    
     //Is the down button pressed?
-    bool down_pressed;
-
+    bool down_pressed = false;
+    
     //Is the OK button pressed?
-    bool ok_pressed;
-
+    bool ok_pressed = false;
+    
     //Is the back button pressed?
-    bool back_pressed;
-
+    bool back_pressed = false;
+    
     //Was the last input given a mouse movement?
-    bool last_input_was_mouse;
-
+    bool last_input_was_mouse = false;
+    
     //Is the current item's activation auto-repeat mode on?
-    bool auto_repeat_on;
-
+    bool auto_repeat_on = false;
+    
     //How long the activation button has been held for.
-    float auto_repeat_duration;
-
+    float auto_repeat_duration = 0.0f;
+    
     //How long until the item's next activation, from the button being held.
-    float auto_repeat_next_activation;
-
+    float auto_repeat_next_activation = 0.0f;
+    
     //Type of the current animation, if any.
-    GUI_MANAGER_ANIMS anim_type;
-
+    GUI_MANAGER_ANIMS anim_type = GUI_MANAGER_ANIM_NONE;
+    
     //Timer for the current animation.
     timer anim_timer;
-
+    
     //Are the items currently visible?
-    bool visible;
+    bool visible = true;
     
 };
 

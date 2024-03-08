@@ -20,9 +20,7 @@
  * @brief Constructs a new bouncer type object.
  */
 bouncer_type::bouncer_type() :
-    mob_type(MOB_CATEGORY_BOUNCERS),
-    riders(BOUNCER_RIDER_PIKMIN),
-    riding_pose(BOUNCER_RIDING_POSE_STOPPED) {
+    mob_type(MOB_CATEGORY_BOUNCERS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;

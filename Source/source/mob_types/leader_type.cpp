@@ -19,14 +19,19 @@
 #include "../utils/string_utils.h"
 
 
+namespace LEADER_TYPE {
+
+//The whistle can't go past this radius, by default.
+const float DEF_WHISTLE_RANGE = 80.0f;
+
+}
+
+
 /**
  * @brief Constructs a new leader type object.
  */
 leader_type::leader_type() :
-    mob_type(MOB_CATEGORY_LEADERS),
-    whistle_range(LEADER::DEF_WHISTLE_RANGE),
-    max_throw_height(0),
-    bmp_icon(nullptr) {
+    mob_type(MOB_CATEGORY_LEADERS) {
     
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;

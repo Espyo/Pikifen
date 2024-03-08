@@ -69,27 +69,22 @@ struct player_input {
     //--- Members ---
 
     //Type of input.
-    INPUT_TYPES type;
+    INPUT_TYPES type = INPUT_TYPE_NONE;
 
     //Device number. i.e. the game controller number.
-    int device_nr;
+    int device_nr = 0;
 
     //Button. Game controller button, keyboard key, mouse button, etc.
-    int button_nr;
+    int button_nr = 0;
 
     //Game controller stick, if any.
-    int stick_nr;
+    int stick_nr = 0;
 
     //Game controller axis, if any.
-    int axis_nr;
+    int axis_nr = 0;
 
     //Value associated, if applicable.
-    float value;
-    
-
-    //--- Function declarations ---
-
-    player_input();
+    float value = 0.0f;
 
 };
 
@@ -103,18 +98,13 @@ struct control_bind {
     //--- Members ---
 
     //Action type ID.
-    int action_type_id;
+    int action_type_id = 0;
 
     //Player number, starting at 0.
-    int player_nr;
+    int player_nr = 0;
 
     //Player input bound.
     player_input input;
-    
-
-    //--- Function declarations ---
-
-    control_bind();
     
 };
 
@@ -127,15 +117,10 @@ struct player_action {
     //--- Members ---
 
     //Action type ID.
-    int action_type_id;
+    int action_type_id = 0;
     
     //Value associated. 0 to 1.
-    float value;
-    
-
-    //--- Function declarations ---
-
-    player_action();
+    float value = 0.0f;
 
 };
 
@@ -148,15 +133,10 @@ struct controls_manager_options {
     //--- Members ---
 
     //Minimum deadzone for sticks. 0 for none.
-    float stick_min_deadzone;
+    float stick_min_deadzone = 0.0f;
 
     //Maximum deadzone for sticks. 1 for none.
-    float stick_max_deadzone;
-    
-
-    //--- Function declarations ---
-
-    controls_manager_options();
+    float stick_max_deadzone = 1.0f;
 
 };
 

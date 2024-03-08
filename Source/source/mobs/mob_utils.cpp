@@ -30,9 +30,7 @@ using std::size_t;
  * @param pos The spot's relative coordinates.
  */
 carrier_spot_struct::carrier_spot_struct(const point &pos) :
-    state(CARRY_SPOT_FREE),
-    pos(pos),
-    pik_ptr(NULL) {
+    pos(pos) {
     
 }
 
@@ -47,15 +45,7 @@ carry_info_struct::carry_info_struct(
     mob* m, const CARRY_DESTINATIONS destination
 ) :
     m(m),
-    destination(destination),
-    cur_carrying_strength(0),
-    cur_n_carriers(0),
-    is_moving(false),
-    intended_mob(nullptr),
-    intended_pik_type(nullptr),
-    destination_exists(false),
-    must_return(false),
-    return_dist(0) {
+    destination(destination) {
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         point p;
@@ -206,35 +196,12 @@ void carry_info_struct::rotate_points(const float angle) {
 
 
 /**
- * @brief Constructs a new chase info struct object.
- */
-chase_info_struct::chase_info_struct() :
-    state(CHASE_STATE_STOPPED),
-    flags(0),
-    offset_z(0.0f),
-    orig_coords(nullptr),
-    orig_z(nullptr),
-    target_dist(0.0f),
-    acceleration(0.0f),
-    cur_speed(0.0f),
-    max_speed(-1.0f) {
-    
-}
-
-
-/**
  * @brief Constructs a new circling info struct object.
  *
  * @param m Mob this circling info struct belongs to.
  */
 circling_info_struct::circling_info_struct(mob* m) :
-    m(m),
-    circling_mob(nullptr),
-    radius(0),
-    clockwise(true),
-    speed(0),
-    can_free_move(false),
-    cur_angle(0) {
+    m(m) {
     
 }
 
@@ -243,10 +210,7 @@ circling_info_struct::circling_info_struct(mob* m) :
  * @brief Constructs a new delivery info struct object.
  */
 delivery_info_struct::delivery_info_struct() :
-    anim_type(DELIVERY_ANIM_SUCK),
-    anim_time_ratio_left(1.0f),
-    color(game.config.carrying_color_move),
-    intended_pik_type(nullptr) {
+    color(game.config.carrying_color_move) {
 }
 
 
@@ -256,12 +220,8 @@ delivery_info_struct::delivery_info_struct() :
  * @param leader_ptr Mob this group info struct belongs to.
  */
 group_info_struct::group_info_struct(mob* leader_ptr) :
-    radius(0.0f),
     anchor(leader_ptr->pos),
-    anchor_angle(TAU / 2.0f),
-    transform(game.identity_transform),
-    cur_standby_type(nullptr),
-    mode(MODE_SHUFFLE) {
+    transform(game.identity_transform) {
 }
 
 
@@ -701,21 +661,6 @@ void group_info_struct::sort(subgroup_type* leading_type) {
 
 
 /**
- * @brief Constructs a new hold info struct object.
- */
-hold_info_struct::hold_info_struct() :
-    m(nullptr),
-    hitbox_nr(INVALID),
-    offset_dist(0),
-    offset_angle(0),
-    vertical_dist(0),
-    above_holder(false),
-    rotation_method(HOLD_ROTATION_METHOD_NEVER) {
-    
-}
-
-
-/**
  * @brief Clears the information.
  */
 void hold_info_struct::clear() {
@@ -776,19 +721,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
  * @param m The parent mob.
  */
 parent_info_struct::parent_info_struct(mob* m) :
-    m(m),
-    handle_damage(false),
-    relay_damage(false),
-    handle_statuses(false),
-    relay_statuses(false),
-    handle_events(false),
-    relay_events(false),
-    limb_thickness(32.0),
-    limb_parent_body_part(INVALID),
-    limb_parent_offset(0),
-    limb_child_body_part(INVALID),
-    limb_child_offset(0),
-    limb_draw_method(LIMB_DRAW_ABOVE_CHILD) {
+    m(m) {
     
 }
 
@@ -804,9 +737,6 @@ path_info_struct::path_info_struct(
     const path_follow_settings &settings
 ) :
     m(m),
-    cur_path_stop_nr(0),
-    result(PATH_RESULT_NOT_CALCULATED),
-    block_reason(PATH_BLOCK_REASON_NONE),
     settings(settings) {
     
     result =
@@ -855,9 +785,7 @@ pikmin_nest_struct::pikmin_nest_struct(
     mob* m_ptr, pikmin_nest_type_struct* type
 ) :
     m_ptr(m_ptr),
-    nest_type(type),
-    calling_leader(nullptr),
-    next_call_time(0.0f) {
+    nest_type(type) {
     
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
@@ -1061,16 +989,6 @@ void pikmin_nest_struct::tick(const float delta_t) {
 
 
 /**
- * @brief Constructs a new pikmin nest type struct object.
- */
-pikmin_nest_type_struct::pikmin_nest_type_struct() :
-    pikmin_enter_speed(0.7f),
-    pikmin_exit_speed(2.0f) {
-    
-}
-
-
-/**
  * @brief Loads nest-related properties from a data file.
  *
  * @param file File to read from.
@@ -1133,8 +1051,6 @@ track_info_struct::track_info_struct(
 ) :
     m(m),
     checkpoints(checkpoints),
-    cur_cp_nr(0),
-    cur_cp_progress(0.0f),
     ride_speed(ride_speed) {
     
 }

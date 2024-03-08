@@ -77,10 +77,10 @@ public:
     //--- Members ---
 
     //Flags representing which mobs can ride on it.
-    unsigned char riders;
+    unsigned char riders = BOUNCER_RIDER_PIKMIN;
     
     //Pose that riders should take.
-    BOUNCER_RIDING_POSES riding_pose;
+    BOUNCER_RIDING_POSES riding_pose = BOUNCER_RIDING_POSE_STOPPED;
     
 
     //--- Function declarations ---

@@ -83,28 +83,7 @@ const float TW_ROTATION_HANDLE_THICKNESS = 8.0f;
  *
  */
 editor::editor() :
-    bmp_editor_icons(nullptr),
-    canvas_separator_x(-1),
-    changes_mgr(this),
-    double_click_time(0),
-    escape_was_pressed(false),
-    is_alt_pressed(false),
-    is_ctrl_pressed(false),
-    is_m1_pressed(false),
-    is_m2_pressed(false),
-    is_m3_pressed(false),
-    is_mouse_in_gui(false),
-    is_shift_pressed(false),
-    last_mouse_click(INVALID),
-    last_mouse_click_sub_state(INVALID),
-    last_input_was_keyboard(false),
-    loaded_content_yet(false),
-    mouse_drag_confirmed(false),
-    op_error_flash_timer(EDITOR::OP_ERROR_FLASH_DURATION),
-    state(0),
-    sub_state(0),
-    zoom_max_level(0),
-    zoom_min_level(0) {
+    changes_mgr(this) {
     
     editor_icons.reserve(N_EDITOR_ICONS);
     for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
@@ -1987,11 +1966,7 @@ void editor::zoom_with_cursor(const float new_zoom) {
  * @param ed Pointer to the editor.
  */
 editor::changes_manager::changes_manager(editor* ed) :
-    ed(ed),
-    unsaved_changes(0),
-    unsaved_time(0.0f),
-    unsaved_warning_action_callback(nullptr),
-    unsaved_warning_save_callback(nullptr) {
+    ed(ed) {
     
 }
 
@@ -2179,19 +2154,6 @@ void editor::changes_manager::reset() {
 
 
 /**
- * @brief Constructs a new dialog info object.
- */
-editor::dialog_info::dialog_info() :
-    process_callback(nullptr),
-    event_callback(nullptr),
-    close_callback(nullptr),
-    is_open(true),
-    custom_pos(-1.0f, -1.0f) {
-    
-}
-
-
-/**
  * @brief Processes the dialog for this frame.
  */
 void editor::dialog_info::process() {
@@ -2247,11 +2209,7 @@ void editor::dialog_info::process() {
  * @param editor_ptr Pointer to the editor in charge.
  */
 editor::picker_info::picker_info(editor* editor_ptr) :
-    editor_ptr(editor_ptr),
-    needs_filter_box_focus(true),
-    pick_callback(nullptr),
-    can_make_new(false),
-    dialog_ptr(nullptr) {
+    editor_ptr(editor_ptr) {
 }
 
 
@@ -2527,18 +2485,6 @@ editor::picker_item::picker_item(
     name(name),
     category(category),
     bitmap(bitmap) {
-    
-}
-
-
-/**
- * @brief Constructs a new transformation widget object.
- *
- */
-editor::transformation_widget::transformation_widget() :
-    moving_handle(-1),
-    old_angle(0.0f),
-    old_mouse_angle(0.0f) {
     
 }
 

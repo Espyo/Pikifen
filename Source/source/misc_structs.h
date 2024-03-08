@@ -111,7 +111,7 @@ enum MAKER_TOOL_TYPES {
     
     //Total amount of maker tools.
     N_MAKER_TOOLS,
-
+    
 };
 
 
@@ -134,7 +134,7 @@ enum STRING_TOKEN_TYPES {
     
     //A control bind icon.
     STRING_TOKEN_CONTROL_BIND,
-
+    
 };
 
 
@@ -144,182 +144,181 @@ enum STRING_TOKEN_TYPES {
 struct asset_file_names_struct {
 
     //--- Members ---
-
+    
     //Graphics.
     
     //Area name font.
-    string bmp_area_name_font;
+    string bmp_area_name_font = "Area_name_font.png";
     
     //Bright circle.
-    string bmp_bright_circle;
+    string bmp_bright_circle = "Bright_circle.png";
     
     //Bright ring.
-    string bmp_bright_ring;
+    string bmp_bright_ring = "Bright_ring.png";
     
     //Bubble box.
-    string bmp_bubble_box;
+    string bmp_bubble_box = "Bubble_box.png";
     
     //Texture box for player input buttons.
-    string bmp_button_box;
+    string bmp_button_box = "Button_box.png";
     
     //Checkbox with a checkmark.
-    string bmp_checkbox_check;
+    string bmp_checkbox_check = "Checkbox_check.png";
     
     //Checkbox without a checkmark.
-    string bmp_checkbox_no_check;
+    string bmp_checkbox_no_check = "Checkbox_no_check.png";
     
     //Counter font.
-    string bmp_counter_font;
+    string bmp_counter_font = "Counter_font.png";
     
     //Leader cursor.
-    string bmp_cursor;
+    string bmp_cursor = "Cursor.png";
     
     //Cursor counter font.
-    string bmp_cursor_counter_font;
+    string bmp_cursor_counter_font = "Cursor_counter_font.png";
     
     //Editor icons.
-    string bmp_editor_icons;
-
+    string bmp_editor_icons = "Editor_icons.png";
+    
     //Enemy spirit.
-    string bmp_enemy_spirit;
-
+    string bmp_enemy_spirit = "Enemy_spirit.png";
+    
     //GUI focus box.
-    string bmp_focus_box;
-
+    string bmp_focus_box = "Focus_box.png";
+    
     //Pikifen icon.
-    string bmp_icon;
-
+    string bmp_icon = "Icon.png";
+    
     //Idle glow.
-    string bmp_idle_glow;
-
+    string bmp_idle_glow = "Idle_glow.png";
+    
     //Texture box for player input keys.
-    string bmp_key_box;
-
+    string bmp_key_box = "Key_box.png";
+    
     //Leader silhouette from the side.
-    string bmp_leader_silhouette_side;
-
+    string bmp_leader_silhouette_side = "Leader_silhouette_side.png";
+    
     //Leader silhouette from the top.
-    string bmp_leader_silhouette_top;
-
+    string bmp_leader_silhouette_top = "Leader_silhouette_top.png";
+    
     //Main font.
-    string bmp_main_font;
-
+    string bmp_main_font = "Font.png";
+    
     //Main menu background.
-    string bmp_main_menu;
-
+    string bmp_main_menu = "Main_menu.jpg";
+    
     //Bronze medal.
-    string bmp_medal_bronze;
-
+    string bmp_medal_bronze = "Medal_bronze.png";
+    
     //Gold medal.
-    string bmp_medal_gold;
-
+    string bmp_medal_gold = "Medal_gold.png";
+    
     //No medal.
-    string bmp_medal_none;
-
+    string bmp_medal_none = "Medal_none.png";
+    
     //Platinum medal.
-    string bmp_medal_platinum;
-
+    string bmp_medal_platinum = "Medal_platinum.png";
+    
     //Silver medal.
-    string bmp_medal_silver;
-
+    string bmp_medal_silver = "Medal_silver.png";
+    
     //Mission clear stamp.
-    string bmp_mission_clear;
-
+    string bmp_mission_clear = "Mission_clear.png";
+    
     //Mission fail stamp.
-    string bmp_mission_fail;
-
+    string bmp_mission_fail = "Mission_fail.png";
+    
     //"More..." icon.
-    string bmp_more;
-
+    string bmp_more = "More.png";
+    
     //Mouse cursor.
-    string bmp_mouse_cursor;
-
+    string bmp_mouse_cursor = "Mouse_cursor.png";
+    
     //Notification.
-    string bmp_notification;
-
+    string bmp_notification = "Notification.png";
+    
     //Pikmin spirit.
-    string bmp_pikmin_spirit;
-
+    string bmp_pikmin_spirit = "Pikmin_spirit.png";
+    
     //Misc. specific player input icons.
-    string bmp_player_input_icons;
-
+    string bmp_player_input_icons = "Player_input_icons.png";
+    
     //Randomness symbol.
-    string bmp_random;
-
+    string bmp_random = "Random.png";
+    
     //A rock.
-    string bmp_rock;
-
+    string bmp_rock = "Rock.png";
+    
     //Slim font.
-    string bmp_slim_font;
-
+    string bmp_slim_font = "Slim_font.otf";
+    
     //Mob shadow.
-    string bmp_shadow;
-
+    string bmp_shadow = "Shadow.png";
+    
     //Smack effect.
-    string bmp_smack;
-
+    string bmp_smack = "Smack.png";
+    
     //Smoke.
-    string bmp_smoke;
-
+    string bmp_smoke = "Smoke.png";
+    
     //Sparkle effect.
-    string bmp_sparkle;
-
+    string bmp_sparkle = "Sparkle.png";
+    
     //Spotlight for blackout.
-    string bmp_spotlight;
-
+    string bmp_spotlight = "Spotlight.png";
+    
     //Swarm arrow.
-    string bmp_swarm_arrow;
-
+    string bmp_swarm_arrow = "Swarm_arrow.png";
+    
     //Invalid throw marker.
-    string bmp_throw_invalid;
-
+    string bmp_throw_invalid = "Throw_invalid.png";
+    
     //Throw preview texture.
-    string bmp_throw_preview;
-
+    string bmp_throw_preview = "Throw_preview.png";
+    
     //Dashed throw preview texture.
-    string bmp_throw_preview_dashed;
-
+    string bmp_throw_preview_dashed = "Throw_preview_dashed.png";
+    
     //Value font.
-    string bmp_value_font;
-
+    string bmp_value_font = "Value_font.png";
+    
     //Wave ring.
-    string bmp_wave_ring;
+    string bmp_wave_ring = "Wave_ring.png";
     
     //Sound effects.
     
     //Attack.
-    string sfx_attack;
-
-    //Camera zoom level.
-    string sfx_camera;
-
-    //Menu item activation.
-    string sfx_menu_activate;
-
-    //Menu item back.
-    string sfx_menu_back;
-
-    //Menu item selection.
-    string sfx_menu_select;
-
-    //Pluck sound effect.
-    string sfx_pluck;
-
-    //Using a spray.
-    string sfx_spray;
-
-    //Switching standby Pikmin type.
-    string sfx_switch_pikmin;
-
-    //Throwing.
-    string sfx_throw;
+    string sfx_attack = "Attack.ogg";
     
-
+    //Camera zoom level.
+    string sfx_camera = "Camera.ogg";
+    
+    //Menu item activation.
+    string sfx_menu_activate = "Menu_activate.ogg";
+    
+    //Menu item back.
+    string sfx_menu_back = "Menu_back.ogg";
+    
+    //Menu item selection.
+    string sfx_menu_select = "Menu_select.ogg";
+    
+    //Pluck sound effect.
+    string sfx_pluck = "Pluck.ogg";
+    
+    //Using a spray.
+    string sfx_spray = "Spray.ogg";
+    
+    //Switching standby Pikmin type.
+    string sfx_switch_pikmin = "Switch_Pikmin.ogg";
+    
+    //Throwing.
+    string sfx_throw = "Throw.ogg";
+    
+    
     //--- Function declarations ---
-
-    asset_file_names_struct();
+    
     void load(data_node* file);
-
+    
 };
 
 
@@ -330,31 +329,30 @@ struct asset_file_names_struct {
 struct camera_info {
 
     //--- Members ---
-
+    
     //Top-left and bottom-right world coordinates that this camera can see.
     point box[2];
-
+    
     //Current position.
     point pos;
-
+    
     //Position it wants to be at.
     point target_pos;
-
-    //Zoom it wants to be at.
-    float target_zoom;
-
-    //Current zoom.
-    float zoom;
     
-
+    //Zoom it wants to be at.
+    float target_zoom = 1.0f;
+    
+    //Current zoom.
+    float zoom = 1.0f;
+    
+    
     //--- Function declarations ---
     
-    camera_info();
     void set_pos(const point &new_pos);
     void set_zoom(const float new_zoom);
     void tick(const float delta_t);
     void update_box();
-
+    
 };
 
 
@@ -364,32 +362,32 @@ struct camera_info {
 struct error_manager {
 
     //--- Function declarations ---
-
+    
     void report(const string &s, const data_node* d = NULL);
     void report_area_load_errors();
     void prepare_area_load();
     bool session_has_errors();
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     //How many errors have been reported this application session.
     size_t nr_session_errors = 0;
-
+    
     //Errors reported by the time the area load started.
     size_t nr_errors_on_area_load = 0;
-
+    
     //First error reported during area load.
     string first_area_load_error;
     
-
+    
     //--- Function declarations ---
-
+    
     void emit_in_gameplay(const string &s);
     void log_to_console(const string &s);
     void log_to_file(const string &s);
-
+    
 };
 
 
@@ -398,19 +396,20 @@ private:
  */
 struct enum_name_database {
 
-public:
+    public:
     
     //--- Function declarations ---
-
+    
     void register_item(const size_t enum_idx, const string &name);
     size_t get_idx(const string &name) const;
     string get_name(const size_t idx) const;
     size_t get_nr_of_items() const;
+    void clear();
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     //Known items.
     vector<string> names;
     
@@ -423,20 +422,16 @@ private:
 struct string_token {
 
     //--- Members ---
-
+    
     //Type of token.
-    STRING_TOKEN_TYPES type;
+    STRING_TOKEN_TYPES type = STRING_TOKEN_CHAR;
     
     //Its content.
     string content;
     
     //Width that it takes up, in pixels.
-    int width;
+    int width = 0;
     
-
-    //--- Function declarations ---
-    string_token() : type(STRING_TOKEN_CHAR), width(0) {}
-
 };
 
 
@@ -445,21 +440,21 @@ struct string_token {
  * to tick, etc.
  */
 struct timer {
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //How much time is left until 0.
-    float time_left;
+    float time_left = 0.0f;
     
     //When the timer starts, its time is set to this.
-    float duration;
+    float duration = 0.0f;
     
     //Code to run when the timer ends, if any.
-    std::function<void()> on_end;
+    std::function<void()> on_end = nullptr;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit timer(
         const float duration = 0,
         const std::function<void()> &on_end = nullptr
@@ -470,7 +465,7 @@ struct timer {
     void stop();
     void tick(const float delta_t);
     float get_ratio_left() const;
-
+    
 };
 
 
@@ -479,87 +474,87 @@ struct timer {
  * @brief Info about all of the maker tools.
  */
 struct maker_tools_info {
-    
+
     //--- Members ---
-
+    
     //Are the tools enabled?
-    bool enabled;
-
+    bool enabled = true;
+    
     //Padding around the area in the area image tool.
-    float area_image_padding;
-
+    float area_image_padding = 32.0f;
+    
     //Show tree shadows in the area image tool?
-    bool area_image_shadows;
-
+    bool area_image_shadows = true;
+    
     //Maximum width or height of the area image.
-    int area_image_size;
-
+    int area_image_size = 2048;
+    
     //Show mobs in the area image?
-    bool area_image_mobs;
-
+    bool area_image_mobs = true;
+    
     //Automatically pick this from the list of the selected auto-entry mode.
     string auto_start_option;
-
+    
     //Automatically enter this game mode when the game boots.
     string auto_start_mode;
-
+    
     //Are we currently changing the game speed?
-    bool change_speed;
-
+    bool change_speed = false;
+    
     //Multiplier to change the game speed by.
-    float change_speed_mult;
-
+    float change_speed_mult = 2.0f;
+    
     //Are collision boxes visible in-game?
-    bool collision;
-
+    bool collision = false;
+    
     //Is the geometry information tool enabled?
-    bool geometry_info;
-
+    bool geometry_info = false;
+    
     //Are hitboxes visible in-game?
-    bool hitboxes;
-
+    bool hitboxes = false;
+    
     //Is the HUD visible?
-    bool hud;
-
+    bool hud = true;
+    
     //Mob currently locked-on to for the mob information tool. NULL if off.
-    mob* info_lock;
-
+    mob* info_lock = nullptr;
+    
     //If any maker info is being printed, this is how long it lasts on-screen.
-    float info_print_duration;
-
+    float info_print_duration = 5.0f;
+    
     //If any maker info is being printed, this is how long its fade lasts.
-    float info_print_fade_duration;
-
+    float info_print_fade_duration = 3.0f;
+    
     //If any maker info is being printed, this is its text.
     string info_print_text;
-
+    
     //If any maker info is being printed, this represents its time to live.
     timer info_print_timer;
-
+    
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
     MAKER_TOOL_TYPES keys[20];
-
-    //When we last spawned a Pikmin, what was its type?
-    pikmin_type* last_pikmin_type;
-
-    //When hurting mobs with the hurting tool, dock this much of its max HP off.
-    float mob_hurting_ratio;
-
-    //Show path info?
-    bool path_info;
-
-    //Use the performance monitor?
-    bool use_perf_mon;
-
-    //Has the player made use of any tools that could help them play?
-    bool used_helping_tools;
     
-
+    //When we last spawned a Pikmin, what was its type?
+    pikmin_type* last_pikmin_type = nullptr;
+    
+    //When hurting mobs with the hurting tool, dock this much of its max HP off.
+    float mob_hurting_ratio = 0.75f;
+    
+    //Show path info?
+    bool path_info = false;
+    
+    //Use the performance monitor?
+    bool use_perf_mon = false;
+    
+    //Has the player made use of any tools that could help them play?
+    bool used_helping_tools = false;
+    
+    
     //--- Function declarations ---
-
+    
     maker_tools_info();
     void reset_for_gameplay();
-
+    
 };
 
 
@@ -567,9 +562,9 @@ struct maker_tools_info {
  * @brief Info about the operative system's mouse cursor.
  */
 struct mouse_cursor_struct {
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Position, in screen coordinates.
     point s_pos;
     
@@ -582,9 +577,9 @@ struct mouse_cursor_struct {
     //Time left until the position of the cursor is saved on the vector.
     timer save_timer;
     
-
+    
     //--- Function declarations ---
-
+    
     void hide() const;
     void init();
     void reset();
@@ -593,7 +588,7 @@ struct mouse_cursor_struct {
         const ALLEGRO_EVENT &ev,
         ALLEGRO_TRANSFORM &screen_to_world_transform
     );
-
+    
 };
 
 
@@ -631,13 +626,13 @@ struct mouse_cursor_struct {
  */
 struct bmp_manager {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
+    
     explicit bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
-        const string &name, const data_node* node = NULL,
+        const string &name, data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_BITMAP* bmp);
@@ -646,32 +641,32 @@ public:
     long get_total_calls() const;
     size_t get_list_size() const;
     
-private:
-
+    private:
+    
     //--- Misc. declarations ---
-
+    
     /**
      * @brief Info about a bitmap.
      */
     struct bmp_info {
-
+    
         //--- Members ---
-
+        
         //Bitmap pointer.
-        ALLEGRO_BITMAP* b;
+        ALLEGRO_BITMAP* b = nullptr;
         
         //How many calls it has.
-        size_t calls;
+        size_t calls = 1;
         
-
+        
         //--- Function declarations ---
-
+        
         explicit bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
-
-
+    
+    
     //--- Members ---
-
+    
     //Base directory that this manager works on.
     string base_dir;
     
@@ -679,11 +674,11 @@ private:
     map<string, bmp_info> list;
     
     //Total sum of calls. Useful for debugging.
-    long total_calls;
+    long total_calls = 0;
     
-
+    
     //--- Function declarations ---
-
+    
     void detach(map<string, bmp_info>::iterator it);
     
 };
@@ -696,33 +691,28 @@ private:
 struct font_list {
 
     //--- Members ---
-
+    
     //Font for the area's name in loading screens.
-    ALLEGRO_FONT* area_name;
+    ALLEGRO_FONT* area_name = nullptr;
     
     //Allegro's built-in font.
-    ALLEGRO_FONT* builtin;
+    ALLEGRO_FONT* builtin = nullptr;
     
     //Font for HUD counters.
-    ALLEGRO_FONT* counter;
+    ALLEGRO_FONT* counter = nullptr;
     
     //Counter displayed next to the cursor.
-    ALLEGRO_FONT* cursor_counter;
+    ALLEGRO_FONT* cursor_counter = nullptr;
     
     //Font for slim text.
-    ALLEGRO_FONT* slim;
+    ALLEGRO_FONT* slim = nullptr;
     
     //Font for standard text.
-    ALLEGRO_FONT* standard;
+    ALLEGRO_FONT* standard = nullptr;
     
     //Font for the carrying / money values.
-    ALLEGRO_FONT* value;
+    ALLEGRO_FONT* value = nullptr;
     
-
-    //--- Function declarations ---
-
-    font_list();
-
 };
 
 
@@ -734,84 +724,25 @@ struct font_list {
 struct movement_struct {
 
     //--- Members ---
-
+    
     //Amount to the east.
-    float right;
+    float right = 0.0f;
     
     //Amount to the north.
-    float up;
+    float up = 0.0f;
     
     //Amount to the west.
-    float left;
+    float left = 0.0f;
     
     //Amount to the south.
-    float down;
+    float down = 0.0f;
     
-
+    
     //--- Function declarations ---
-
-    movement_struct();
+    
     void get_info(point* coords, float* angle, float* magnitude) const;
     void reset();
-
-};
-
-
-
-/**
- * @brief Info about the current on-screen message box, if any.
- */
-struct msg_box_info {
-
-    //--- Members ---
-
-    //Full list of message tokens, per line.
-    vector<vector<string_token> > tokens_per_line;
-
-    //Icon that represents the speaker, if any.
-    ALLEGRO_BITMAP* speaker_icon;
-
-    //What section of the message are we in?
-    size_t cur_section;
-
-    //What token of the section are we in, for the typing animation?
-    size_t cur_token;
-
-    //From what token did the player perform a typing skip? INVALID = none.
-    size_t skipped_at_token;
-
-    //How long have we been animating tokens for.
-    float total_token_anim_time;
-
-    //How long have we been animating the skipped tokens for.
-    float total_skip_anim_time;
-
-    //Timer where the player can't advance. Stops accidental misinputs.
-    float misinput_protection_timer;
-
-    //Opacity of the advance button icon.
-    float advance_button_alpha;
-
-    //Time left to swipe the current section away with.
-    float swipe_timer;
-
-    //Time left in the current transition.
-    float transition_timer;
-
-    //Is it transitioning into view, or out of view?
-    bool transition_in;
-
-    //Is the message box meant to be deleted?
-    bool to_delete;
     
-
-    //--- Function declarations ---
-
-    msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);
-    void advance();
-    void close();
-    void tick(const float delta_t);
-
 };
 
 
@@ -825,13 +756,13 @@ struct msg_box_info {
 struct reader_setter {
 
     //--- Members ---
-
-    //Node that this reader-setter pertains to.
-    data_node* node;
     
-
+    //Node that this reader-setter pertains to.
+    data_node* node = nullptr;
+    
+    
     //--- Function declarations ---
-
+    
     explicit reader_setter(data_node* dn = NULL);
     void set(
         const string &child, string &var, data_node** child_node = NULL
@@ -863,7 +794,7 @@ struct reader_setter {
     void set(
         const string &child, point &var, data_node** child_node = NULL
     );
-
+    
 };
 
 
@@ -876,13 +807,13 @@ struct reader_setter {
 struct script_var_reader {
 
     //--- Members ---
-
+    
     //Reference to the list of script variables it pertains to.
     map<string, string> &vars;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit script_var_reader(map<string, string> &vars);
     bool get(const string &name, string &dest) const;
     bool get(const string &name, size_t &dest) const;
@@ -892,7 +823,7 @@ struct script_var_reader {
     bool get(const string &name, float &dest) const;
     bool get(const string &name, ALLEGRO_COLOR &dest) const;
     bool get(const string &name, point &dest) const;
-
+    
 };
 
 
@@ -901,164 +832,159 @@ struct script_var_reader {
  * @brief List of loaded system assets.
  */
 struct system_asset_list {
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Graphics.
     
     //Bright circle.
-    ALLEGRO_BITMAP* bmp_bright_circle;
-
+    ALLEGRO_BITMAP* bmp_bright_circle = nullptr;
+    
     //Bright ring.
-    ALLEGRO_BITMAP* bmp_bright_ring;
-
+    ALLEGRO_BITMAP* bmp_bright_ring = nullptr;
+    
     //Bubble box.
-    ALLEGRO_BITMAP* bmp_bubble_box;
-
+    ALLEGRO_BITMAP* bmp_bubble_box = nullptr;
+    
     //Box texture for player input buttons.
-    ALLEGRO_BITMAP* bmp_button_box;
-
+    ALLEGRO_BITMAP* bmp_button_box = nullptr;
+    
     //Checkbox with a checkmark.
-    ALLEGRO_BITMAP* bmp_checkbox_check;
-
+    ALLEGRO_BITMAP* bmp_checkbox_check = nullptr;
+    
     //Checkbox without a checkmark.
-    ALLEGRO_BITMAP* bmp_checkbox_no_check;
-
+    ALLEGRO_BITMAP* bmp_checkbox_no_check = nullptr;
+    
     //Leader cursor.
-    ALLEGRO_BITMAP* bmp_cursor;
-
+    ALLEGRO_BITMAP* bmp_cursor = nullptr;
+    
     //Enemy spirit.
-    ALLEGRO_BITMAP* bmp_enemy_spirit;
-
+    ALLEGRO_BITMAP* bmp_enemy_spirit = nullptr;
+    
     //Focus box.
-    ALLEGRO_BITMAP* bmp_focus_box;
-
+    ALLEGRO_BITMAP* bmp_focus_box = nullptr;
+    
     //Pikifen icon.
-    ALLEGRO_BITMAP* bmp_icon;
-
+    ALLEGRO_BITMAP* bmp_icon = nullptr;
+    
     //Idle glow.
-    ALLEGRO_BITMAP* bmp_idle_glow;
-
+    ALLEGRO_BITMAP* bmp_idle_glow = nullptr;
+    
     //Box texture for player input keys.
-    ALLEGRO_BITMAP* bmp_key_box;
-
+    ALLEGRO_BITMAP* bmp_key_box = nullptr;
+    
     //Leader silhouette from the side.
-    ALLEGRO_BITMAP* bmp_leader_silhouette_side;
-
+    ALLEGRO_BITMAP* bmp_leader_silhouette_side = nullptr;
+    
     //Leader silhouette from the top.
-    ALLEGRO_BITMAP* bmp_leader_silhouette_top;
-
+    ALLEGRO_BITMAP* bmp_leader_silhouette_top = nullptr;
+    
     //Bronze mission medal.
-    ALLEGRO_BITMAP* bmp_medal_bronze;
-
+    ALLEGRO_BITMAP* bmp_medal_bronze = nullptr;
+    
     //Gold mission medal.
-    ALLEGRO_BITMAP* bmp_medal_gold;
-
+    ALLEGRO_BITMAP* bmp_medal_gold = nullptr;
+    
     //No mission medal.
-    ALLEGRO_BITMAP* bmp_medal_none;
-
+    ALLEGRO_BITMAP* bmp_medal_none = nullptr;
+    
     //Platinum mission medal.
-    ALLEGRO_BITMAP* bmp_medal_platinum;
-
+    ALLEGRO_BITMAP* bmp_medal_platinum = nullptr;
+    
     //Silver mission medal.
-    ALLEGRO_BITMAP* bmp_medal_silver;
-
+    ALLEGRO_BITMAP* bmp_medal_silver = nullptr;
+    
     //Mission clear stamp.
-    ALLEGRO_BITMAP* bmp_mission_clear;
-
+    ALLEGRO_BITMAP* bmp_mission_clear = nullptr;
+    
     //Mission fail stamp.
-    ALLEGRO_BITMAP* bmp_mission_fail;
-
+    ALLEGRO_BITMAP* bmp_mission_fail = nullptr;
+    
     //"More..." icon.
-    ALLEGRO_BITMAP* bmp_more;
-
+    ALLEGRO_BITMAP* bmp_more = nullptr;
+    
     //Mouse cursor.
-    ALLEGRO_BITMAP* bmp_mouse_cursor;
-
+    ALLEGRO_BITMAP* bmp_mouse_cursor = nullptr;
+    
     //Notification.
-    ALLEGRO_BITMAP* bmp_notification;
-
+    ALLEGRO_BITMAP* bmp_notification = nullptr;
+    
     //Pikmin spirit.
-    ALLEGRO_BITMAP* bmp_pikmin_spirit;
-
+    ALLEGRO_BITMAP* bmp_pikmin_spirit = nullptr;
+    
     //Misc. specific player input icons.
-    ALLEGRO_BITMAP* bmp_player_input_icons;
-
+    ALLEGRO_BITMAP* bmp_player_input_icons = nullptr;
+    
     //Randomness symbol.
-    ALLEGRO_BITMAP* bmp_random;
-
+    ALLEGRO_BITMAP* bmp_random = nullptr;
+    
     //A rock.
-    ALLEGRO_BITMAP* bmp_rock;
-
+    ALLEGRO_BITMAP* bmp_rock = nullptr;
+    
     //Mob shadow.
-    ALLEGRO_BITMAP* bmp_shadow;
-
+    ALLEGRO_BITMAP* bmp_shadow = nullptr;
+    
     //Smack effect.
-    ALLEGRO_BITMAP* bmp_smack;
-
+    ALLEGRO_BITMAP* bmp_smack = nullptr;
+    
     //Smoke.
-    ALLEGRO_BITMAP* bmp_smoke;
-
+    ALLEGRO_BITMAP* bmp_smoke = nullptr;
+    
     //Sparkle effect.
-    ALLEGRO_BITMAP* bmp_sparkle;
-
+    ALLEGRO_BITMAP* bmp_sparkle = nullptr;
+    
     //Spotlight for blackout.
-    ALLEGRO_BITMAP* bmp_spotlight;
-
+    ALLEGRO_BITMAP* bmp_spotlight = nullptr;
+    
     //Swarm arrow.
-    ALLEGRO_BITMAP* bmp_swarm_arrow;
-
+    ALLEGRO_BITMAP* bmp_swarm_arrow = nullptr;
+    
     //Invalid throw marker.
-    ALLEGRO_BITMAP* bmp_throw_invalid;
-
+    ALLEGRO_BITMAP* bmp_throw_invalid = nullptr;
+    
     //Throw preview texture.
-    ALLEGRO_BITMAP* bmp_throw_preview;
-
+    ALLEGRO_BITMAP* bmp_throw_preview = nullptr;
+    
     //Dashed throw preview texture.
-    ALLEGRO_BITMAP* bmp_throw_preview_dashed;
-
+    ALLEGRO_BITMAP* bmp_throw_preview_dashed = nullptr;
+    
     //Wave ring.
-    ALLEGRO_BITMAP* bmp_wave_ring;
+    ALLEGRO_BITMAP* bmp_wave_ring = nullptr;
     
     //Sound effects.
     
     //Attack.
-    ALLEGRO_SAMPLE* sfx_attack;
-
+    ALLEGRO_SAMPLE* sfx_attack = nullptr;
+    
     //Camera zoom level.
-    ALLEGRO_SAMPLE* sfx_camera;
-
+    ALLEGRO_SAMPLE* sfx_camera = nullptr;
+    
     //Menu item activation.
-    ALLEGRO_SAMPLE* sfx_menu_activate;
-
+    ALLEGRO_SAMPLE* sfx_menu_activate = nullptr;
+    
     //Menu item back.
-    ALLEGRO_SAMPLE* sfx_menu_back;
-
+    ALLEGRO_SAMPLE* sfx_menu_back = nullptr;
+    
     //Menu item selection.
-    ALLEGRO_SAMPLE* sfx_menu_select;
-
+    ALLEGRO_SAMPLE* sfx_menu_select = nullptr;
+    
     //Pluck sound effect.
-    ALLEGRO_SAMPLE* sfx_pluck;
-
+    ALLEGRO_SAMPLE* sfx_pluck = nullptr;
+    
     //Using a spray.
-    ALLEGRO_SAMPLE* sfx_spray;
-
+    ALLEGRO_SAMPLE* sfx_spray = nullptr;
+    
     //Switching standby Pikmin type.
-    ALLEGRO_SAMPLE* sfx_switch_pikmin;
-
+    ALLEGRO_SAMPLE* sfx_switch_pikmin = nullptr;
+    
     //Throwing.
-    ALLEGRO_SAMPLE* sfx_throw;
+    ALLEGRO_SAMPLE* sfx_throw = nullptr;
     
     //Animations.
     
     //Leader damage spark.
     single_animation_suite spark_animation;
     
-
-    //--- Function declarations ---
-
-    system_asset_list();
-
 };
 
 
@@ -1067,11 +993,10 @@ struct system_asset_list {
  */
 struct fade_manager {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
-    fade_manager();
+    
     void start_fade(const bool fade_in, const std::function<void()> &on_end);
     bool is_fade_in() const;
     bool is_fading() const;
@@ -1079,18 +1004,18 @@ public:
     void tick(const float delta_t);
     void draw();
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     //Time left in the current fade in/out.
-    float time_left;
+    float time_left = 0.0f;
     
     //True if fading in, false if fading out.
-    bool fade_in;
+    bool fade_in = false;
     
     //Code to run when the fade in/out finishes.
-    std::function<void()> on_end;
+    std::function<void()> on_end = nullptr;
     
 };
 
@@ -1103,11 +1028,10 @@ private:
  */
 struct notification_struct {
 
-public:
+    public:
     
     //--- Function declarations ---
-
-    notification_struct();
+    
     void draw() const;
     float get_visibility() const;
     void reset();
@@ -1117,12 +1041,12 @@ public:
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
     
-private:
+    private:
     
     //--- Members ---
-
+    
     //Is it meant to exist?
-    bool enabled;
+    bool enabled = true;
     
     //What player input icon to show.
     player_input input;
@@ -1134,8 +1058,8 @@ private:
     point pos;
     
     //Visibility. 0 is hidden, 1 is fully visible. Mid values for transitioning.
-    float visibility;
-
+    float visibility = 0.0f;
+    
 };
 
 
@@ -1148,44 +1072,31 @@ private:
 struct spike_damage_type {
 
     //--- Members ---
-
+    
     //Name of the type. "Poison", "Ice", etc.
     string name;
-
+    
     //Amount of damage to cause, either in absolute HP or max HP ratio.
-    float damage;
-
+    float damage = 0.0f;
+    
     //If true, damage is only dealt if the victim is eaten. e.g. White Pikmin.
-    bool ingestion_only;
-
+    bool ingestion_only = false;
+    
     //If true, the damage var represents max HP ratio. If false, absolute HP.
-    bool is_damage_ratio;
-
+    bool is_damage_ratio = false;
+    
     //Particle generator to use to generate particles, if any.
-    particle_generator* particle_gen;
-
+    particle_generator* particle_gen = nullptr;
+    
     //Offset the particles by this much, horizontally.
     point particle_offset_pos;
-
-    //Offset the particles by this much, vertically.
-    float particle_offset_z;
-
-    //Apply this status effect when the spike damage is applied.
-    status_type* status_to_apply;
     
-
-    //--- Function declarations ---
-
-    spike_damage_type() :
-        damage(0.0f),
-        ingestion_only(false),
-        is_damage_ratio(false),
-        particle_gen(nullptr),
-        particle_offset_z(0.0f),
-        status_to_apply(nullptr) {
-        
-    }
-
+    //Offset the particles by this much, vertically.
+    float particle_offset_z = 0.0f;
+    
+    //Apply this status effect when the spike damage is applied.
+    status_type* status_to_apply = nullptr;
+    
 };
 
 
@@ -1197,27 +1108,22 @@ struct spike_damage_type {
 struct bitmap_effect_info {
 
     //--- Members ---
-
+    
     //Offset horizontally and vertically by this much.
     point translation;
-
-    //Rotate the bitmap by this angle, in radians.
-    float rotation;
-
-    //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
-    point scale;
-
-    //Tint the bitmap by this color. Also makes it transparent.
-    ALLEGRO_COLOR tint_color;
-
-    //Re-draws the bitmap on top, in additive blend, with this color.
-    ALLEGRO_COLOR glow_color;
     
-
-    //--- Function declarations ---
-
-    bitmap_effect_info();
-
+    //Rotate the bitmap by this angle, in radians.
+    float rotation = 0.0f;
+    
+    //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
+    point scale = point(1.0f, 1.0f);
+    
+    //Tint the bitmap by this color. Also makes it transparent.
+    ALLEGRO_COLOR tint_color = COLOR_WHITE;
+    
+    //Re-draws the bitmap on top, in additive blend, with this color.
+    ALLEGRO_COLOR glow_color = COLOR_BLACK;
+    
 };
 
 
@@ -1227,18 +1133,18 @@ struct bitmap_effect_info {
  */
 struct keyframe_interpolator {
 
-public:
+    public:
     
     //--- Function declarations ---
-
+    
     float get(const float t);
     void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
     explicit keyframe_interpolator(const float initial_value);
     
-private:
+    private:
     
     //--- Members ---
-
+    
     //Keyframe times.
     vector<float> keyframe_times;
     
@@ -1247,19 +1153,19 @@ private:
     
     //Keyframe easing methods.
     vector<EASING_METHODS> keyframe_eases;
-
+    
 };
 
 
 //Performance monitor states.
 enum PERF_MON_STATES {
-    
+
     //Measuring loading times.
     PERF_MON_STATE_LOADING,
     
     //Measuring gameplay frame performance.
     PERF_MON_STATE_FRAME,
-
+    
 };
 
 
@@ -1269,10 +1175,10 @@ enum PERF_MON_STATES {
  */
 struct performance_monitor_struct {
 
-public:
+    public:
     
     //--- Function declarations ---
-
+    
     performance_monitor_struct();
     void set_area_name(const string &name);
     void set_paused(const bool paused);
@@ -1283,80 +1189,79 @@ public:
     void save_log();
     void reset();
     
-private:
+    private:
     
     //--- Misc. declarations ---
-
+    
     /**
      * @brief A page in the report.
      */
     struct page {
-
-    public:
+    
+        public:
         
         //--- Members ---
-
+        
         //How long it lasted for in total.
-        double duration;
+        double duration = 0.0f;
         
         //Measurements took, and how long each one took.
         vector<std::pair<string, double> > measurements;
         
-
+        
         //--- Function declarations ---
         
-        page();
         void write(string &s);
         
-    private:
+        private:
         
         //--- Function declarations ---
-
+        
         void write_measurement(
             string &str, const string &name,
             const double time, const float total
         );
     };
     
-
+    
     //--- Members ---
-
+    
     //Name of the area being monitored.
     string area_name;
-
+    
     //Current state.
-    PERF_MON_STATES cur_state;
-
+    PERF_MON_STATES cur_state = PERF_MON_STATE_LOADING;
+    
     //Is the monitoring currently paused?
-    bool paused;
-
+    bool paused = false;
+    
     //When the current state began.
-    double cur_state_start_time;
-
+    double cur_state_start_time = 0.0f;
+    
     //When the current measurement began.
-    double cur_measurement_start_time;
-
+    double cur_measurement_start_time = 0.0f;
+    
     //Name of the current measurement.
     string cur_measurement_name;
-
+    
     //Page of information about the current working info.
     performance_monitor_struct::page cur_page;
-
+    
     //How many frames of gameplay have been sampled.
-    size_t frame_samples;
-
+    size_t frame_samples = 0;
+    
     //Page of information about the loading process.
     performance_monitor_struct::page loading_page;
-
+    
     //Page of information about the average frame.
     performance_monitor_struct::page frame_avg_page;
-
+    
     //Page of information about the fastest frame.
     performance_monitor_struct::page frame_fastest_page;
-
+    
     //Page of information about the slowest frame.
     performance_monitor_struct::page frame_slowest_page;
-
+    
 };
 
 
@@ -1369,10 +1274,10 @@ struct subgroup_type_manager;
  */
 struct subgroup_type {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
+    
     SUBGROUP_TYPE_CATEGORIES get_category() const { return category; }
     ALLEGRO_BITMAP* get_icon() const { return icon; }
     
@@ -1381,25 +1286,16 @@ private:
     friend subgroup_type_manager;
     
     //--- Members ---
-
+    
     //Category this subgroup type belongs to.
-    SUBGROUP_TYPE_CATEGORIES category;
+    SUBGROUP_TYPE_CATEGORIES category = SUBGROUP_TYPE_CATEGORY_LEADER;
     
     //Specific mob type it refers to.
-    mob_type* specific_type;
+    mob_type* specific_type = nullptr;
     
     //Icon used to represent this subgroup type.
-    ALLEGRO_BITMAP* icon;
+    ALLEGRO_BITMAP* icon = nullptr;
     
-
-    //--- Function declarations ---
-
-    subgroup_type() :
-        category(SUBGROUP_TYPE_CATEGORY_LEADER),
-        specific_type(nullptr),
-        icon(nullptr) {
-    }
-
 };
 
 
@@ -1407,11 +1303,11 @@ private:
  * @brief Manages what types of subgroups exist.
  */
 struct subgroup_type_manager {
-    
-public:
+
+    public:
     
     //--- Function declarations ---
-
+    
     void register_type(
         const SUBGROUP_TYPE_CATEGORIES category,
         mob_type* specific_type = NULL,
@@ -1426,13 +1322,13 @@ public:
     subgroup_type* get_next_type(const subgroup_type* sgt) const;
     void clear();
     
-private:
+    private:
     
     //--- Members ---
-
+    
     //Known types.
     vector<subgroup_type*> types;
-
+    
 };
 
 
@@ -1441,20 +1337,15 @@ private:
  * for the available spray types.
  */
 struct spray_stats_struct {
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Number of sprays of this type owned.
-    size_t nr_sprays;
+    size_t nr_sprays = 0;
     
     //Number of concoction ingredients owned.
-    size_t nr_ingredients;
+    size_t nr_ingredients = 0;
     
-
-    //--- Function declarations ---
-
-    spray_stats_struct() : nr_sprays(0), nr_ingredients(0) { }
-
 };
 
 
@@ -1464,66 +1355,61 @@ struct spray_stats_struct {
 struct statistics_struct {
 
     //--- Members ---
-
-    //Times Pikifen was started.
-    uint32_t startups;
-
-    //Time Pikifen was running for, in seconds.
-    double runtime;
-
-    //Time gameplay happened for, in seconds.
-    double gameplay_time;
-
-    //Times areas were entered.
-    uint32_t area_entries;
-
-    //Times Pikmin were born from an Onion.
-    uint64_t pikmin_births;
-
-    //Times Pikmin died for other reasons.
-    uint64_t pikmin_deaths;
-
-    //Times Pikmin died by being eaten.
-    uint64_t pikmin_eaten;
-
-    //Times Pikmin died from a hazard.
-    uint64_t pikmin_hazard_deaths;
-
-    //Times Pikmin bloomed (leaf to bud, leaf to flower, or bud to flower).
-    uint64_t pikmin_blooms;
-
-    //Times Pikmin were saved from a hazard by being whistled.
-    uint64_t pikmin_saved;
-
-    //Times enemies died.
-    uint64_t enemy_deaths;
-
-    //Times Pikmin were thrown. Leaders thrown don't count.
-    uint64_t pikmin_thrown;
-
-    //Times the whistle was used.
-    uint64_t whistle_uses;
-
-    //Distance walked by an active leader, in pixels.
-    double distance_walked;
-
-    //Damage suffered by leaders.
-    double leader_damage_suffered;
-
-    //Damage caused by punches.
-    double punch_damage_caused;
-
-    //Times leaders were KO'd.
-    uint64_t leader_kos;
-
-    //Times sprays were used.
-    uint64_t sprays_used;
     
-
-    //--- Function declarations ---
-
-    statistics_struct();
-
+    //Times Pikifen was started.
+    uint32_t startups = 0;
+    
+    //Time Pikifen was running for, in seconds.
+    double runtime = 0.0f;
+    
+    //Time gameplay happened for, in seconds.
+    double gameplay_time = 0.0f;
+    
+    //Times areas were entered.
+    uint32_t area_entries = 0;
+    
+    //Times Pikmin were born from an Onion.
+    uint64_t pikmin_births = 0;
+    
+    //Times Pikmin died for other reasons.
+    uint64_t pikmin_deaths = 0;
+    
+    //Times Pikmin died by being eaten.
+    uint64_t pikmin_eaten = 0;
+    
+    //Times Pikmin died from a hazard.
+    uint64_t pikmin_hazard_deaths = 0;
+    
+    //Times Pikmin bloomed (leaf to bud, leaf to flower, or bud to flower).
+    uint64_t pikmin_blooms = 0;
+    
+    //Times Pikmin were saved from a hazard by being whistled.
+    uint64_t pikmin_saved = 0;
+    
+    //Times enemies died.
+    uint64_t enemy_deaths = 0;
+    
+    //Times Pikmin were thrown. Leaders thrown don't count.
+    uint64_t pikmin_thrown = 0;
+    
+    //Times the whistle was used.
+    uint64_t whistle_uses = 0;
+    
+    //Distance walked by an active leader, in pixels.
+    double distance_walked = 0.0f;
+    
+    //Damage suffered by leaders.
+    double leader_damage_suffered = 0.0f;
+    
+    //Damage caused by punches.
+    double punch_damage_caused = 0.0f;
+    
+    //Times leaders were KO'd.
+    uint64_t leader_kos = 0;
+    
+    //Times sprays were used.
+    uint64_t sprays_used = 0;
+    
 };
 
 
@@ -1533,30 +1419,25 @@ struct statistics_struct {
 struct edge_offset_cache {
 
     //--- Members ---
-
-    //Length of the effect's "rectangle", per end vertex. 0 for none.
-    float lengths[2];
-
-    //Angle of the effect's "rectangle", per end vertex.
-    float angles[2];
-
-    //Color of the effect, per end vertex.
-    ALLEGRO_COLOR colors[2];
-
-    //Length of the effect's "elbow", per end vertex. 0 for none.
-    float elbow_lengths[2];
-
-    //Angle of the effect's "elbow", per end vertex.
-    float elbow_angles[2];
-
-    //Index of the vertex that should be processed first.
-    unsigned char first_end_vertex_idx;
     
-
-    //--- Function declarations ---
-
-    edge_offset_cache();
-
+    //Length of the effect's "rectangle", per end vertex. 0 for none.
+    float lengths[2] = {0.0f, 0.0f};
+    
+    //Angle of the effect's "rectangle", per end vertex.
+    float angles[2] = {0.0f, 0.0f};
+    
+    //Color of the effect, per end vertex.
+    ALLEGRO_COLOR colors[2] = {COLOR_EMPTY, COLOR_EMPTY};
+    
+    //Length of the effect's "elbow", per end vertex. 0 for none.
+    float elbow_lengths[2] = {0.0f, 0.0f};
+    
+    //Angle of the effect's "elbow", per end vertex.
+    float elbow_angles[2] = {0.0f, 0.0f};
+    
+    //Index of the vertex that should be processed first.
+    unsigned char first_end_vertex_idx = 0;
+    
 };
 
 
@@ -1566,43 +1447,43 @@ struct edge_offset_cache {
 struct whistle_struct {
 
     //--- Members ---
-
+    
     //Current center.
     point center;
-
+    
     //Current radius of the whistle.
-    float radius;
-
+    float radius = 0.0f;
+    
     //Radius of every 6th dot.
-    float dot_radius[6];
-
+    float dot_radius[6] = {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
+    
     //Radius the whistle was at pre-fade.
-    float fade_radius;
-
+    float fade_radius = 0.0f;
+    
     //Time left for the whistle's fading animations.
-    timer fade_timer;
-
+    timer fade_timer = timer(WHISTLE::FADE_TIME);
+    
     //Time left until the next series of dots begins.
-    timer next_dot_timer;
-
+    timer next_dot_timer = timer(WHISTLE::DOT_INTERVAL);
+    
     //Time left until the next ring is spat out.
-    timer next_ring_timer;
-
+    timer next_ring_timer = timer(WHISTLE::RINGS_INTERVAL);
+    
     //Color index of each ring.
     vector<unsigned char> ring_colors;
-
+    
     //Color index of the previous ring.
-    unsigned char ring_prev_color;
-
+    unsigned char ring_prev_color = 0;
+    
     //Distance of each ring.
     vector<float> rings;
-
-    //Is the whistle currently being blown?
-    bool whistling;
     
-
+    //Is the whistle currently being blown?
+    bool whistling = false;
+    
+    
     //--- Function declarations ---
-
+    
     whistle_struct();
     void start_whistling();
     void stop_whistling();

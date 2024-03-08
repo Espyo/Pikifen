@@ -77,7 +77,7 @@ private:
     //--- Members ---
 
     //Currently selected item, or INVALID for none.
-    size_t cur_item;
+    size_t cur_item = INVALID;
     
     //File name of the file currently being edited.
     string file_name;
@@ -95,10 +95,10 @@ private:
     point load_widget_pos;
 
     //The list of items must focus on the currently selected item.
-    bool must_focus_on_cur_item;
+    bool must_focus_on_cur_item = false;
 
     //Small hack -- does the camera need recentering in process_gui()?
-    bool must_recenter_cam;
+    bool must_recenter_cam = false;
 
     //Position of the reload widget.
     point reload_widget_pos;

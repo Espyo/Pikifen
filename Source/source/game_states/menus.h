@@ -87,13 +87,13 @@ enum MAIN_MENU_PAGES {
     
     //Make page.
     MAIN_MENU_PAGE_MAKE,
-
+    
 };
 
 
 //Pages of the options menu.
 enum OPTIONS_MENU_PAGES {
-    
+
     //Top-level page.
     OPTIONS_MENU_PAGE_TOP,
     
@@ -109,16 +109,15 @@ enum OPTIONS_MENU_PAGES {
 class main_menu_state : public game_state {
 
 public:
-    
+
     //--- Members ---
     
     //What page to load when it is created.
-    MAIN_MENU_PAGES page_to_load;
-
-
+    MAIN_MENU_PAGES page_to_load = MAIN_MENU_PAGE_MAIN;
+    
+    
     //--- Function declarations ---
-
-    main_menu_state();
+    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -129,99 +128,99 @@ public:
 private:
 
     //--- Misc. declarations ---
-
+    
     /**
      * @brief Represents a Pikmin in the logo.
      */
     struct logo_pik {
-
+    
         //--- Members ---
-
+        
         //Position.
         point pos;
-
+        
         //Current angle.
-        float angle;
-
+        float angle = 0.0f;
+        
         //Forward movement speed.
-        float speed;
-
+        float speed = 0.0f;
+        
         //Its destination.
         point destination;
-
+        
         //Speed at which it sways.
-        float sway_speed;
-
+        float sway_speed = 0.0f;
+        
         //Variable that controls its swaying.
-        float sway_var;
-
+        float sway_var = 0.0f;
+        
         //Image that represents this Pikmin's top.
-        ALLEGRO_BITMAP* top;
-
+        ALLEGRO_BITMAP* top = nullptr;
+        
         //Has it reached its destination?
-        bool reached_destination;
-
+        bool reached_destination = false;
+        
     };
     
-
+    
     //--- Members ---
-
+    
     //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg;
-
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
     //List of Pikmin that make up the logo.
     vector<logo_pik> logo_pikmin;
-
+    
     //GUI for the main page.
     gui_manager main_gui;
-
+    
     //GUI for the play page.
     gui_manager play_gui;
-
+    
     //GUI for the make page.
     gui_manager make_gui;
-
+    
     //GUI for the tutorial question page.
     gui_manager tutorial_gui;
-
+    
     //Top-left coordinates of the logo, in screen percentage.
-    point logo_min_screen_limit;
-
+    point logo_min_screen_limit = point(10.0f, 10.0f);
+    
     //Bottom-right coordinates of the logo, in screen percentage.
-    point logo_max_screen_limit;
-
+    point logo_max_screen_limit = point(90.0f, 50.0f);
+    
     //Maximum speed a logo Pikmin can move at.
-    float logo_pikmin_max_speed;
-
+    float logo_pikmin_max_speed = 800.0f;
+    
     //Minimum speed a logo Pikmin can move at.
-    float logo_pikmin_min_speed;
-
+    float logo_pikmin_min_speed = 600.0f;
+    
     //How much to smooth a logo Pikmin's speed by.
-    float logo_pikmin_speed_smoothness;
-
+    float logo_pikmin_speed_smoothness = 0.08f;
+    
     //How much to sway a logo Pikmin by.
-    float logo_pikmin_sway_amount;
-
+    float logo_pikmin_sway_amount = 3.0f;
+    
     //Maximum speed at which a logo Pikmin can sway.
-    float logo_pikmin_sway_max_speed;
-
+    float logo_pikmin_sway_max_speed = 5.5f;
+    
     //Minimum speed at which a logo Pikmin can sway.
-    float logo_pikmin_sway_min_speed;
-
+    float logo_pikmin_sway_min_speed = 2.5f;
+    
     //Width and height of a logo Pikmin.
-    point logo_pikmin_size;
-
+    point logo_pikmin_size = point(3.5f, 3.5f);
+    
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
-
+    
     //--- Function declarations ---
-
+    
     void init_gui_main_page();
     void init_gui_make_page();
     void init_gui_play_page();
     void init_gui_tutorial_page();
-
+    
 };
 
 
@@ -236,34 +235,34 @@ class options_menu_picker_gui_item : public picker_gui_item {
 public:
 
     //--- Members ---
-
+    
     //Points to the current value.
-    t* cur_value;
-
+    t* cur_value = nullptr;
+    
     //Default value.
-    const t def_value;
-
+    const t def_value = t();
+    
     //Tooltip, sans default. Used if the presets don't have their own tooltips.
     string tooltip;
-
+    
     //Value of each preset.
     vector<t> preset_values;
-
+    
     //Name of each preset.
     vector<string> preset_names;
-
+    
     //Tooltip for each preset. If empty, "tooltip" is used instead.
     vector<string> preset_descriptions;
-
+    
     //Code to run after a value is changed, if any.
-    std::function<void()> after_change;
-
+    std::function<void()> after_change = nullptr;
+    
     //Converts a value to a string. Used in the tooltip's default, if necessary.
-    std::function<string(t)> value_to_string;
+    std::function<string(t)> value_to_string = nullptr;
     
     
     //--- Function definitions ---
-
+    
     /**
      * @brief Constructs a new options menu picker GUI item object.
      *
@@ -284,9 +283,7 @@ public:
         def_value(def_value),
         tooltip(tooltip),
         preset_values(preset_values),
-        preset_names(preset_names),
-        after_change(nullptr),
-        value_to_string(nullptr) {
+        preset_names(preset_names) {
     }
     
     
@@ -382,15 +379,15 @@ public:
 class options_menu_state : public game_state {
 
 public:
-    
+
     //--- Members ---
-
+    
     //What page to load when it is created.
-    OPTIONS_MENU_PAGES page_to_load;
-
-
+    OPTIONS_MENU_PAGES page_to_load = OPTIONS_MENU_PAGE_TOP;
+    
+    
     //--- Function declarations ---
-
+    
     options_menu_state();
     void load() override;
     void unload() override;
@@ -402,66 +399,66 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Known good resolution presets.
     vector<std::pair<int, int> > resolution_presets;
-
+    
     //Currently selected resolution.
     std::pair<int, int> cur_resolution_option;
-
+    
     //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg;
-
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
     //GUI for the top-level page.
     gui_manager top_gui;
-
+    
     //GUI for the controls options page.
     gui_manager controls_gui;
-
+    
     //GUI for the graphics options page.
     gui_manager graphics_gui;
-
+    
     //GUI for the audio options page.
     gui_manager audio_gui;
-
+    
     //GUI for the misc. options page.
     gui_manager misc_gui;
-
+    
     //Auto-throw picker widget.
-    options_menu_picker_gui_item<AUTO_THROW_MODES>* auto_throw_picker;
-
+    options_menu_picker_gui_item<AUTO_THROW_MODES>* auto_throw_picker = nullptr;
+    
     //Resolution picker widget.
-    options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker;
-
+    options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker = nullptr;
+    
     //Cursor speed picker widget.
-    options_menu_picker_gui_item<float>* cursor_speed_picker;
-
+    options_menu_picker_gui_item<float>* cursor_speed_picker = nullptr;
+    
     //Cursor camera weight picker widget.
-    options_menu_picker_gui_item<float>* cursor_cam_weight_picker;
-
+    options_menu_picker_gui_item<float>* cursor_cam_weight_picker = nullptr;
+    
     //Leaving confirmation picker widget.
     options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>*
-    leaving_confirmation_picker;
-
-    //Master volume picker widget.
-    options_menu_picker_gui_item<float>* master_vol_picker;
-
-    //World sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* world_sfx_vol_picker;
-
-    //Music volume picker widget.
-    options_menu_picker_gui_item<float>* music_vol_picker;
-
-    //Ambiance sound volume picker widget.
-    options_menu_picker_gui_item<float>* ambiance_vol_picker;
-
-    //UI sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* ui_sfx_vol_picker;
-
-    //Restart warning text widget.
-    text_gui_item* warning_text;
+    leaving_confirmation_picker = nullptr;
     
-
+    //Master volume picker widget.
+    options_menu_picker_gui_item<float>* master_vol_picker = nullptr;
+    
+    //World sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* world_sfx_vol_picker = nullptr;
+    
+    //Music volume picker widget.
+    options_menu_picker_gui_item<float>* music_vol_picker = nullptr;
+    
+    //Ambiance sound volume picker widget.
+    options_menu_picker_gui_item<float>* ambiance_vol_picker = nullptr;
+    
+    //UI sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* ui_sfx_vol_picker = nullptr;
+    
+    //Restart warning text widget.
+    text_gui_item* warning_text = nullptr;
+    
+    
     //--- Function declarations ---
     
     void go_to_control_binds();
@@ -472,7 +469,7 @@ private:
     void init_gui_top_page();
     void leave();
     void trigger_restart_warning();
-
+    
 };
 
 
@@ -484,8 +481,7 @@ class control_binds_menu_state : public game_state {
 public:
 
     //--- Function declarations ---
-
-    control_binds_menu_state();
+    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -496,37 +492,37 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Bitmap of the menu's background.
-    ALLEGRO_BITMAP* bmp_menu_bg;
-
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
     //GUI.
     gui_manager gui;
-
+    
     //GUI for the "more..." options of an action type.
     gui_manager more_gui;
-
+    
     //Control list GUI item.
-    list_gui_item* list_box;
-
+    list_gui_item* list_box = nullptr;
+    
     //Is it currently capturing input? 0: No. 1: Capturing. 2: Finishing.
-    unsigned char capturing_input;
-
+    unsigned char capturing_input = 0;
+    
     //Is it showing an action type's "more..." menu?
-    bool showing_more;
-
+    bool showing_more = false;
+    
     //List of binds per player action type.
     vector<vector<control_bind> > binds_per_action_type;
-
-    //Current player action type.
-    PLAYER_ACTION_TYPES cur_action_type;
-
-    //Current global bind index we're working with.
-    size_t cur_bind_idx;
     
-
+    //Current player action type.
+    PLAYER_ACTION_TYPES cur_action_type = PLAYER_ACTION_NONE;
+    
+    //Current global bind index we're working with.
+    size_t cur_bind_idx = 0;
+    
+    
     //--- Function declarations ---
-
+    
     void choose_input(
         const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
     );
@@ -548,14 +544,13 @@ class area_menu_state : public game_state {
 public:
 
     //--- Members ---
-
-    //Type of area that the menu is dealing with.
-    AREA_TYPES area_type;
     
-
+    //Type of area that the menu is dealing with.
+    AREA_TYPES area_type = AREA_TYPE_SIMPLE;
+    
+    
     //--- Function declarations ---
-
-    area_menu_state();
+    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -568,116 +563,116 @@ private:
     //--- Members ---
     
     //Bitmap of the menu background,
-    ALLEGRO_BITMAP* bmp_menu_bg;
-
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
     //Folder name of each area available.
     vector<string> areas_to_pick;
-
+    
     //Button for each area available.
     vector<gui_item*> area_buttons;
-
+    
     //Display name of each area available.
     vector<string> area_names;
-
+    
     //Subtitle of each area available.
     vector<string> area_subtitles;
-
+    
     //Description of each area available.
     vector<string> area_descriptions;
-
+    
     //Difficulty of each area available.
     vector<unsigned char> area_difficulties;
-
+    
     //Tags of each area available.
     vector<string> area_tags;
-
+    
     //Maker of each area available.
     vector<string> area_makers;
-
+    
     //Version of each area available.
     vector<string> area_versions;
-
+    
     //Thumbnail of each area available.
     vector<ALLEGRO_BITMAP*> area_thumbs;
-
+    
     //Mission data of each area available.
     vector<mission_data> area_mission_data;
-
+    
     //Records of each area available.
     vector<mission_record> area_records;
-
+    
     //Main GUI.
     gui_manager gui;
-
-    //Area info GUI item.
-    gui_item* info_box;
-
-    //Mission specs GUI item.
-    gui_item* specs_box;
-
-    //Currently selected area, or INVALID for none.
-    size_t cur_area_idx;
-
-    //Area list box item.
-    list_gui_item* list_box;
-
-    //Button of the first area available, if any.
-    button_gui_item* first_area_button;
-
-    //Name text item, in the info page.
-    text_gui_item* info_name_text;
-
-    //Name text item, in the specs page.
-    text_gui_item* specs_name_text;
-
-    //Subtitle text item.
-    text_gui_item* subtitle_text;
-
-    //Thumbnail of the currently selected area.
-    ALLEGRO_BITMAP* cur_thumb;
-
-    //Description text item.
-    text_gui_item* description_text;
-
-    //Difficulty text item.
-    text_gui_item* difficulty_text;
-
-    //Tags text item.
-    text_gui_item* tags_text;
-
-    //Maker text item.
-    text_gui_item* maker_text;
-
-    //Version text item.
-    text_gui_item* version_text;
-
-    //Record info text item.
-    text_gui_item* record_info_text;
-
-    //Record stamp of the currently selected area.
-    ALLEGRO_BITMAP* cur_stamp;
-
-    //Record medal of the currently selected area.
-    ALLEGRO_BITMAP* cur_medal;
-
-    //Record date text item.
-    text_gui_item* record_date_text;
-
-    //Goal text item.
-    text_gui_item* goal_text;
-
-    //Fail explanation list item.
-    list_gui_item* fail_list;
-
-    //Grading explanation list item.
-    list_gui_item* grading_list;
-
-    //Show the mission specs?
-    bool show_mission_specs;
     
-
+    //Area info GUI item.
+    gui_item* info_box = nullptr;
+    
+    //Mission specs GUI item.
+    gui_item* specs_box = nullptr;
+    
+    //Currently selected area, or INVALID for none.
+    size_t cur_area_idx = INVALID;
+    
+    //Area list box item.
+    list_gui_item* list_box = nullptr;
+    
+    //Button of the first area available, if any.
+    button_gui_item* first_area_button = nullptr;
+    
+    //Name text item, in the info page.
+    text_gui_item* info_name_text = nullptr;
+    
+    //Name text item, in the specs page.
+    text_gui_item* specs_name_text = nullptr;
+    
+    //Subtitle text item.
+    text_gui_item* subtitle_text = nullptr;
+    
+    //Thumbnail of the currently selected area.
+    ALLEGRO_BITMAP* cur_thumb = nullptr;
+    
+    //Description text item.
+    text_gui_item* description_text = nullptr;
+    
+    //Difficulty text item.
+    text_gui_item* difficulty_text = nullptr;
+    
+    //Tags text item.
+    text_gui_item* tags_text = nullptr;
+    
+    //Maker text item.
+    text_gui_item* maker_text = nullptr;
+    
+    //Version text item.
+    text_gui_item* version_text = nullptr;
+    
+    //Record info text item.
+    text_gui_item* record_info_text = nullptr;
+    
+    //Record stamp of the currently selected area.
+    ALLEGRO_BITMAP* cur_stamp = nullptr;
+    
+    //Record medal of the currently selected area.
+    ALLEGRO_BITMAP* cur_medal = nullptr;
+    
+    //Record date text item.
+    text_gui_item* record_date_text = nullptr;
+    
+    //Goal text item.
+    text_gui_item* goal_text = nullptr;
+    
+    //Fail explanation list item.
+    list_gui_item* fail_list = nullptr;
+    
+    //Grading explanation list item.
+    list_gui_item* grading_list = nullptr;
+    
+    //Show the mission specs?
+    bool show_mission_specs = false;
+    
+    
     //--- Function declarations ---
-
+    
     void add_bullet(list_gui_item* list, const string &text);
     void animate_info_and_specs();
     void change_info(const size_t area_idx);
@@ -697,8 +692,7 @@ class stats_menu_state : public game_state {
 public:
 
     //--- Function declarations ---
-
-    stats_menu_state();
+    
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -709,20 +703,20 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg;
-
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
     //Statistics list item.
-    list_gui_item* stats_list;
-
+    list_gui_item* stats_list = nullptr;
+    
     //Runtime stat text item.
-    text_gui_item* runtime_value_text;
+    text_gui_item* runtime_value_text = nullptr;
     
     //GUI.
     gui_manager gui;
     
-
+    
     //--- Function declarations ---
     
     void add_header(const string &label);

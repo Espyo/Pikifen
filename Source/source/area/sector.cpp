@@ -18,23 +18,6 @@
 
 
 /**
- * @brief Constructs a new sector object.
- *
- */
-sector::sector() :
-    type(SECTOR_TYPE_NORMAL),
-    is_bottomless_pit(false),
-    z(0),
-    brightness(GEOMETRY::DEF_SECTOR_BRIGHTNESS),
-    fade(false),
-    hazard_floor(true),
-    liquid_drain_left(0),
-    draining_liquid(false) {
-    
-}
-
-
-/**
  * @brief Destroys the sector object.
  *
  */
@@ -310,17 +293,6 @@ void sector::remove_edge(const edge* e_ptr) {
             return;
         }
     }
-}
-
-
-/**
- * @brief Constructs a new sector texture info object.
- */
-sector_texture_info::sector_texture_info() :
-    scale(1.0, 1.0),
-    rot(0),
-    bitmap(nullptr),
-    tint(COLOR_WHITE) {
 }
 
 

@@ -19,25 +19,27 @@
 #include "../utils/string_utils.h"
 
 
+namespace PIKMIN_TYPE {
+
+//How long a Pikmin that got knocked down stays on the floor for, if left alone.
+const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
+
+//A whistled Pikmin that got knocked down loses this much in lie-down time.
+const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
+
+}
+
+
 const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
 { 2 * 60, 2 * 60, 3 * 60 };
+
 
 /**
  * @brief Constructs a new Pikmin type object.
  *
  */
 pikmin_type::pikmin_type() :
-    mob_type(MOB_CATEGORY_PIKMIN),
-    carry_strength(1),
-    push_strength(1),
-    max_throw_height(260),
-    attack_method(PIKMIN_ATTACK_LATCH),
-    knocked_down_duration(PIKMIN::DEF_KNOCKED_DOWN_DURATION),
-    knocked_down_whistle_bonus(PIKMIN::DEF_KNOCKED_DOWN_WHISTLE_BONUS),
-    can_fly(false),
-    can_carry_tools(true),
-    bmp_icon(nullptr),
-    bmp_onion_icon(nullptr) {
+    mob_type(MOB_CATEGORY_PIKMIN) {
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];

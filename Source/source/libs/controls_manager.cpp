@@ -15,15 +15,6 @@
 
 
 /**
- * @brief Constructs a new control bind object.
- */
-control_bind::control_bind() :
-    action_type_id(0),
-    player_nr(0) {
-}
-
-
-/**
  * @brief When a game controller stick input is received, it should be checked
  * with the state of that entire stick to see if it needs to be normalized,
  * deadzones should be applied, etc.
@@ -260,36 +251,4 @@ vector<player_action> controls_manager::new_frame() {
     action_queue.clear();
     
     return result;
-}
-
-
-/**
- * @brief Constructs a new controls manager options object.
- */
-controls_manager_options::controls_manager_options() :
-    stick_min_deadzone(0.0f),
-    stick_max_deadzone(1.0f) {
-    
-}
-
-
-/**
- * @brief Constructs a new player action object.
- */
-player_action::player_action() :
-    action_type_id(0),
-    value(0.0f) {
-}
-
-
-/**
- * @brief Constructs a new player input object.
- */
-player_input::player_input() :
-    type(INPUT_TYPE_NONE),
-    device_nr(0),
-    button_nr(0),
-    stick_nr(0),
-    axis_nr(0),
-    value(0.0f) {
 }

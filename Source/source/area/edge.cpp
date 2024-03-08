@@ -24,16 +24,7 @@
  * @param v1 Its first vertex.
  * @param v2 Its second vertex.
  */
-edge::edge(size_t v1, size_t v2) :
-    wall_shadow_length(LARGE_FLOAT),
-    wall_shadow_color(GEOMETRY::SHADOW_DEF_COLOR),
-    ledge_smoothing_length(0),
-    ledge_smoothing_color(GEOMETRY::SMOOTHING_DEF_COLOR) {
-    
-    vertexes[0] = vertexes[1] = NULL;
-    sectors[0] = sectors[1] = NULL;
-    sector_nrs[0] = sector_nrs[1] = INVALID;
-    
+edge::edge(size_t v1, size_t v2) {
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
 }
 

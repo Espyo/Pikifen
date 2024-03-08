@@ -95,25 +95,25 @@ public:
     //--- Members ---
 
     //What sorts of mobs can consume this drop.
-    DROP_CONSUMERS consumer;
+    DROP_CONSUMERS consumer = DROP_CONSUMER_PIKMIN;
 
     //Effects upon consumption.
-    DROP_EFFECTS effect;
+    DROP_EFFECTS effect = DROP_EFFECT_MATURATE;
 
     //How many doses does this drop have? i.e. how many mobs can it serve?
-    size_t total_doses;
+    size_t total_doses = 1;
 
     //If the consumption effect increases something, this specifies the amount.
-    int increase_amount;
+    int increase_amount = 2;
 
     //If it increases a spray type count, this specifies the spray type index.
-    size_t spray_type_to_increase;
+    size_t spray_type_to_increase = INVALID;
 
     //If it gives a status effect, this points to the status type.
-    status_type* status_to_give;
+    status_type* status_to_give = nullptr;
     
     //How quickly it shrinks. Aesthetic only.
-    float shrink_speed;
+    float shrink_speed = 40.0f;
     
 
     //--- Function declarations ---

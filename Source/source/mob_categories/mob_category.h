@@ -16,6 +16,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "../const.h"
 #include "../utils/geometry_utils.h"
 
 
@@ -114,7 +115,7 @@ public:
     string name;
 
     //ID of the mob category.
-    MOB_CATEGORIES id;
+    MOB_CATEGORIES id = MOB_CATEGORY_NONE;
 
     //Name used when referring to objects of this category in plural.
     string plural_name;
@@ -123,7 +124,7 @@ public:
     string folder;
 
     //Color used to represent objects of this category in the area editor.
-    ALLEGRO_COLOR editor_color;
+    ALLEGRO_COLOR editor_color = COLOR_WHITE;
     
 
     //--- Function declarations ---

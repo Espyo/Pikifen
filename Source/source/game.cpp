@@ -56,30 +56,7 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
 /**
  * @brief Constructs a new game class object.
  */
-game_class::game_class() :
-    bitmaps(""),
-    bmp_error(nullptr),
-    cur_frame_process_time(0.0f),
-    delta_t(0.0),
-    display(nullptr),
-    dummy_mob_state(nullptr),
-    framerate_last_avg_point(0),
-    is_game_running(true),
-    liquid_limit_effect_buffer(nullptr),
-    loading_subtext_bmp(nullptr),
-    loading_text_bmp(nullptr),
-    perf_mon(nullptr),
-    show_system_info(false),
-    textures(TEXTURES_FOLDER_NAME),
-    time_passed(0.0f),
-    wall_offset_effect_buffer(nullptr),
-    win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
-    win_h(OPTIONS::DEF_WIN_H),
-    win_w(OPTIONS::DEF_WIN_W),
-    cur_state(nullptr),
-    logic_queue(nullptr),
-    logic_timer(nullptr),
-    reset_delta_t(true) {
+game_class::game_class() {
     
     team_internal_names[MOB_TEAM_NONE] = "none";
     team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
@@ -447,24 +424,6 @@ int game_class::start() {
  */
 void game_class::unload_loaded_state(game_state* loaded_state) {
     loaded_state->unload();
-}
-
-
-/**
- * @brief Constructs a new game state list object.
- */
-game_state_list::game_state_list() :
-    animation_ed(nullptr),
-    area_ed(nullptr),
-    area_menu(nullptr),
-    control_binds_menu(nullptr),
-    gameplay(nullptr),
-    gui_ed(nullptr),
-    main_menu(nullptr),
-    options_menu(nullptr),
-    stats_menu(nullptr),
-    results(nullptr) {
-    
 }
 
 

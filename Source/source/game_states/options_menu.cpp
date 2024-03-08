@@ -54,21 +54,7 @@ const string TOP_GUI_FILE_PATH =
 /**
  * @brief Constructs a new options menu state object.
  */
-options_menu_state::options_menu_state() :
-    game_state(),
-    page_to_load(OPTIONS_MENU_PAGE_TOP),
-    bmp_menu_bg(nullptr),
-    auto_throw_picker(nullptr),
-    resolution_picker(nullptr),
-    cursor_speed_picker(nullptr),
-    cursor_cam_weight_picker(nullptr),
-    leaving_confirmation_picker(nullptr),
-    master_vol_picker(nullptr),
-    world_sfx_vol_picker(nullptr),
-    music_vol_picker(nullptr),
-    ambiance_vol_picker(nullptr),
-    ui_sfx_vol_picker(nullptr),
-    warning_text(nullptr) {
+options_menu_state::options_menu_state() {
     
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round

@@ -44,30 +44,25 @@ enum SECTOR_TYPES {
 struct sector_texture_info {
 
     //--- Members ---
-
+    
     //Texture scale.
-    point scale;
-
+    point scale = point(1.0f, 1.0f);
+    
     //Texture translation.
     point translation;
-
+    
     //Texture rotation.
-    float rot;
-
+    float rot = 0.0f;
+    
     //Texture bitmap.
-    ALLEGRO_BITMAP* bitmap;
-
+    ALLEGRO_BITMAP* bitmap = nullptr;
+    
     //Texture tint.
-    ALLEGRO_COLOR tint;
-
+    ALLEGRO_COLOR tint = COLOR_WHITE;
+    
     //File name of the texture bitmap.
     string file_name;
     
-
-    //--- Function declarations ---
-
-    sector_texture_info();
-
 };
 
 
@@ -81,62 +76,61 @@ struct sector_texture_info {
 struct sector {
 
     //--- Members ---
-
+    
     //Its type.
-    SECTOR_TYPES type;
+    SECTOR_TYPES type = SECTOR_TYPE_NORMAL;
     
     //Is it a bottomless pit?
-    bool is_bottomless_pit;
-
+    bool is_bottomless_pit = false;
+    
     //Z coordinate of the floor.
-    float z;
-
+    float z = 0.0f;
+    
     //Extra information, if any.
     string tag;
-
+    
     //Brightness.
-    unsigned char brightness;
-
+    unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
+    
     //Information about its texture.
     sector_texture_info texture_info;
-
+    
     //Is this sector meant to fade textures from neighboring sectors?
-    bool fade;
-
+    bool fade = false;
+    
     //String representing its hazards. Used for the editor.
     string hazards_str;
-
+    
     //List of hazards.
     vector<hazard*> hazards;
-
+    
     //Is only floor hazardous, or the air as well?
-    bool hazard_floor;
-
+    bool hazard_floor = true;
+    
     //Time left to drain the liquid in the sector.
-    float liquid_drain_left;
-
+    float liquid_drain_left = 0.0f;
+    
     //Is it currently draining its liquid?
-    bool draining_liquid;
-
+    bool draining_liquid = false;
+    
     //Scrolling speed, if any.
     point scroll;
-
+    
     //Index number of the edges that make up this sector.
     vector<size_t> edge_nrs;
-
+    
     //Edges that make up this sector.
     vector<edge*> edges;
-
+    
     //Triangles it is composed of.
     vector<triangle> triangles;
-
+    
     //Bounding box.
     point bbox[2];
     
-
+    
     //--- Function declarations ---
-
-    sector();
+    
     ~sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
     void calculate_bounding_box();

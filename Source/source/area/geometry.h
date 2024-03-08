@@ -77,15 +77,15 @@ enum TRIANGULATION_ERRORS {
 struct triangle {
 
     //--- Members ---
-
-    //Points that make up this triangle.
-    vertex* points[3];
     
-
+    //Points that make up this triangle.
+    vertex* points[3] = { nullptr, nullptr, nullptr };
+    
+    
     //--- Function declarations ---
-
+    
     triangle(vertex* v1, vertex* v2, vertex* v3);
-
+    
 };
 
 
@@ -101,16 +101,16 @@ struct triangle {
 struct polygon {
 
     //--- Members ---
-
+    
     //Ordered list of vertexes that represent the polygon.
     vector<vertex*> vertexes;
-
+    
     //Children, if any.
     vector<polygon*> children;
     
-
+    
     //--- Function declarations ---
-
+    
     polygon();
     explicit polygon(const vector<vertex*> &vertexes);
     void clean(bool recursive);
@@ -120,7 +120,7 @@ struct polygon {
     vertex* get_rightmost_vertex() const;
     bool insert_child(polygon* p);
     bool is_point_inside(const point &p) const;
-
+    
 };
 
 
@@ -130,7 +130,7 @@ struct polygon {
 struct geometry_problems {
 
     //--- Members ---
-
+    
     //Non-simple sectors found, and their reason for being broken.
     map<sector*, TRIANGULATION_ERRORS> non_simples;
     

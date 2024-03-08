@@ -36,6 +36,12 @@ namespace MOB_TYPE {
 //ID of the default, "idling" animation, in an animation database.
 const size_t ANIM_IDLING = 0;
 
+//The default acceleration of a mob type.
+const float DEF_ACCELERATION = 400.0f;
+
+//The default rotation speed of a mob type.
+const float DEF_ROTATION_SPEED = 630.0f;
+
 }
 
 
@@ -46,53 +52,7 @@ const size_t ANIM_IDLING = 0;
  */
 mob_type::mob_type(MOB_CATEGORIES category_id) :
     category(game.mob_categories.get(category_id)),
-    custom_category_name(category->name),
-    main_color(al_map_rgb(128, 128, 128)),
-    show_health(true),
-    casts_shadow(true),
-    blackout_radius(-1.0f),
-    move_speed(0),
-    acceleration(MOB::DEF_ACCELERATION),
-    rotation_speed(MOB::DEF_ROTATION_SPEED),
-    can_free_move(false),
-    radius(0),
-    height(0),
-    weight(0),
-    max_carriers(0),
-    pushes(false),
-    pushable(false),
-    pushes_softly(false),
-    pushes_with_hitboxes(false),
-    terrain_radius(-1),
-    walkable(false),
-    can_walk_on_others(false),
-    can_block_paths(false),
-    max_health(100),
-    health_regen(0),
-    territory_radius(0),
-    itch_damage(0),
-    itch_time(0),
-    target_type(MOB_TARGET_TYPE_NONE),
-    huntable_targets(
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY
-    ),
-    hurtable_targets(
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_FRAGILE
-    ),
-    starting_team(MOB_TEAM_NONE),
-    draw_mob_callback(nullptr),
-    first_state_nr(INVALID),
-    death_state_nr(INVALID),
-    has_group(false),
-    default_vulnerability(1.0f),
-    spike_damage(nullptr),
-    appears_in_area_editor(true),
-    area_editor_recommend_links_from(false),
-    area_editor_recommend_links_to(false),
-    max_span(0.0f) {
+    custom_category_name(category->name) {
     
 }
 
@@ -245,28 +205,6 @@ void mob_type::load_resources(data_node*) { }
  * @brief Unloads loaded resources from memory.
  */
 void mob_type::unload_resources() { }
-
-
-/**
- * @brief Constructs a new area editor property struct object.
- */
-mob_type::area_editor_prop_struct::area_editor_prop_struct() :
-    type(AEMP_TEXT) {
-    
-    min_value = -LARGE_FLOAT;
-    max_value = LARGE_FLOAT;
-}
-
-
-/**
- * @brief Constructs a new vulnerability struct object.
- */
-mob_type::vulnerability_struct::vulnerability_struct() :
-    damage_mult(1.0f),
-    status_to_apply(nullptr),
-    status_overrides(true) {
-    
-}
 
 
 /**

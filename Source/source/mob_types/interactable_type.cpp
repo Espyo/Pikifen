@@ -18,8 +18,7 @@
  * @brief Constructs a new interactable type object.
  */
 interactable_type::interactable_type() :
-    mob_type(MOB_CATEGORY_INTERACTABLES),
-    trigger_range(64.0f) {
+    mob_type(MOB_CATEGORY_INTERACTABLES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

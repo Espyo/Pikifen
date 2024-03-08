@@ -24,12 +24,6 @@
 
 namespace PIKMIN {
 
-//How long a Pikmin that got knocked down stays on the floor for, if left alone.
-const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
-
-//A whistled Pikmin that got knocked down loses this much in lie-down time.
-const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
-
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
 
@@ -79,21 +73,7 @@ const float pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH = 0.5f;
  */
 pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     mob(pos, type, angle),
-    pik_type(type),
-    carrying_mob(NULL),
-    missed_attack_ptr(nullptr),
-    was_last_hit_dud(false),
-    consecutive_dud_hits(0),
-    maturity(2),
-    is_seed_or_sprout(false),
-    is_grabbed_by_enemy(false),
-    pluck_reserved(false),
-    leader_to_return_to(nullptr),
-    latched(false),
-    is_tool_primed_for_whistle(false),
-    must_follow_link_as_leader(false),
-    bump_lock(0.0f),
-    temp_i(0) {
+    pik_type(type) {
     
     invuln_period = timer(PIKMIN::INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;

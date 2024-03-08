@@ -38,7 +38,6 @@ extern const size_t MAX_TEXTURE_SUGGESTIONS;
 extern const ALLEGRO_COLOR MEASUREMENT_COLOR;
 extern const unsigned char MIN_CIRCLE_SECTOR_POINTS;
 extern const float MIN_GRID_INTERVAL;
-extern const float MISSION_EXIT_MIN_SIZE;
 extern const float MOB_LINK_THICKNESS;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float NEW_SECTOR_ERROR_TINT_DURATION;
@@ -67,64 +66,64 @@ class area_editor : public editor {
 public:
 
     //--- Misc. declarations ---
-
+    
     //Ways for the cursor to snap.
     enum SNAP_MODES {
-
+    
         //Snap to grid.
         SNAP_GRID,
-
+        
         //Snap to vertexes.
         SNAP_VERTEXES,
-
+        
         //Snap to edges.
         SNAP_EDGES,
-
+        
         //Snap to nothing.
         SNAP_NOTHING,
         
         //Total amount of snap modes.
         N_SNAP_MODES,
-
+        
     };
     
     //Ways for the area to be viewed in-editor.
     enum VIEW_MODES {
-
+    
         //Textures.
         VIEW_MODE_TEXTURES,
-
+        
         //Wireframe.
         VIEW_MODE_WIREFRAME,
-
+        
         //Heightmap.
         VIEW_MODE_HEIGHTMAP,
-
+        
         //Brightness map.
         VIEW_MODE_BRIGHTNESS,
         
         //Total amount of view modes.
         N_VIEW_MODES,
-
+        
     };
-
-
+    
+    
     //--- Members ---
-
+    
     //Load this area when the area editor loads.
     string auto_load_area;
-
+    
     //Area being edited when using the quick-play button.
     string quick_play_area_path;
-
+    
     //Position the camera was it in the editor before quick-play.
     point quick_play_cam_pos;
-
+    
     //Editor camera zoom before quick-play.
-    float quick_play_cam_z;
-
+    float quick_play_cam_z = 1.0f;
+    
     //This hack fixes a glitch by skipping drawing for one frame.
-    bool hack_skip_drawing;
+    bool hack_skip_drawing = false;
     
     
     //--- Function declarations ---
@@ -145,92 +144,92 @@ private:
      * @brief Represents a suggested texture.
      */
     struct texture_suggestion {
-
+    
         //--- Members ---
-
+        
         //Bitmap of the texture.
-        ALLEGRO_BITMAP* bmp;
-
+        ALLEGRO_BITMAP* bmp = nullptr;
+        
         //File name of the texture.
         string name;
         
-
+        
         //--- Function declarations ---
-
+        
         explicit texture_suggestion(const string &n);
         void destroy();
-
+        
     };
     
     /**
      * @brief Represents a point in the current layout drawing.
      */
     struct layout_drawing_node {
-
+    
         //--- Members ---
-
+        
         //Raw coordinates of the mouse click.
         point raw_spot;
-
+        
         //Final spot of the node, after snapping to an existing vertex/edge.
         point snapped_spot;
-
+        
         //Is this node on top of an existing vertex? This points to it if so.
-        vertex* on_vertex;
-
+        vertex* on_vertex = nullptr;
+        
         //on_vertex's vertex number.
-        size_t on_vertex_nr;
-
+        size_t on_vertex_nr = INVALID;
+        
         //Is this node on top of an existing edge? This points to it if so.
-        edge* on_edge;
-
+        edge* on_edge = nullptr;
+        
         //on_edge's edge number.
-        size_t on_edge_nr;
-
+        size_t on_edge_nr = INVALID;
+        
         //Is this node just on top of a sector? This points to it if so.
-        sector* on_sector;
-
+        sector* on_sector = nullptr;
+        
         //on_sector's sector number.
-        size_t on_sector_nr;
-
+        size_t on_sector_nr = INVALID;
+        
         //Is on_vertex a new vertex, created during the sector creation?
-        bool is_new_vertex;
-
-
+        bool is_new_vertex = false;
+        
+        
         //--- Function declarations ---
-
+        
         layout_drawing_node(
             const area_editor* ae_ptr, const point &mouse_click
         );
         layout_drawing_node();
-
+        
     };
     
     /**
      * @brief Info pertaining a sector split operation.
      */
     struct sector_split_info_struct {
-        
+    
         //--- Members ---
-
+        
         //Area data from before the split.
         area_data* pre_split_area_data = NULL;
-
+        
         //Sector being worked on in a sector split operation.
         sector* working_sector = NULL;
-
+        
         //Edges of the sector split sector, before the split operation.
         vector<edge*> working_sector_old_edges;
-
+        
         //Edges traversed in each step.
         vector<edge*> traversed_edges[2];
-
+        
         //Vertexes traversed in each step.
         vector<vertex*> traversed_vertexes[2];
         
         //During stage 1, was the working sector to the left?
         bool is_working_at_stage_1_left = false;
-
+        
         //Nr. of drawing nodes before a useless split part 2. Or INVALID.
         size_t useless_split_part_2_checkpoint = INVALID;
         
@@ -238,22 +237,22 @@ private:
     
     //Possible results after a line drawing operation.
     enum DRAWING_LINE_RESULTS {
-
+    
         //No error.
         DRAWING_LINE_OK,
-
+        
         //Hit an existing edge or vertex when drawing a new sector.
         DRAWING_LINE_HIT_EDGE_OR_VERTEX,
-
+        
         //Trying to draw along an existing edge.
         DRAWING_LINE_ALONG_EDGE,
-
+        
         //Crosses exsting edges.
         DRAWING_LINE_CROSSES_EDGES,
-
+        
         //Crosses previous parts of the drawing.
         DRAWING_LINE_CROSSES_DRAWING,
-
+        
         //Goes towards a sector different from the working sector.
         DRAWING_LINE_WAYWARD_SECTOR,
         
@@ -261,589 +260,589 @@ private:
     
     //Possible errors for a sector split operation.
     enum SECTOR_SPLIT_RESULTS {
-
+    
         //Ok to split.
         SECTOR_SPLIT_OK,
-
+        
         //The split is invalid.
         SECTOR_SPLIT_INVALID,
-
+        
         //That wouldn't split in any useful way. e.g. Slice through a donut.
         SECTOR_SPLIT_USELESS,
-
+        
     };
     
     //Types of problems in the area.
     enum EDITOR_PROBLEM_TYPES {
-
+    
         //None found so far.
         EPT_NONE_YET,
-
+        
         //No problems.
         EPT_NONE,
-
+        
         //Two edges intersect.
         EPT_INTERSECTING_EDGES,
-
+        
         //An edge is all by itself.
         EPT_LONE_EDGE,
-
+        
         //Two vertexes in the same spot.
         EPT_OVERLAPPING_VERTEXES,
-
+        
         //A sector is corrupted.
         EPT_BAD_SECTOR,
-
+        
         //No leader mob found.
         EPT_MISSING_LEADER,
-
+        
         //A texture is not found in the game files.
         EPT_UNKNOWN_TEXTURE,
-
+        
         //Mob with no type.
         EPT_TYPELESS_MOB,
-
+        
         //Mob out of bounds.
         EPT_MOB_OOB,
-
+        
         //Mob stuck in a wall.
         EPT_MOB_IN_WALL,
-
+        
         //Mob links to itself.
         EPT_MOB_LINKS_TO_SELF,
-
+        
         //Mobs stored in a loop.
         EPT_MOB_STORED_IN_LOOP,
-
+        
         //Pikmin amount goes over the limit.
         EPT_PIKMIN_OVER_LIMIT,
-
+        
         //Bridge mob missing a bridge sector.
         EPT_SECTORLESS_BRIDGE,
-
+        
         //A path stop is all by itself.
         EPT_LONE_PATH_STOP,
-
+        
         //A path stop is out of bounds.
         EPT_PATH_STOP_OOB,
-
+        
         //Two path stops are in the same place.
         EPT_PATH_STOPS_TOGETHER,
-
+        
         //A path stop is on top of an unrelated link.
         EPT_PATH_STOP_ON_LINK,
-
+        
         //Bridge blocks the path from pile to it.
         EPT_PILE_BRIDGE_PATH,
-
+        
         //Unknown tree shadow image.
         EPT_UNKNOWN_SHADOW,
-
+        
         //No active score criteria for this mission.
         EPT_NO_SCORE_CRITERIA,
-
+        
         //No mission goal mobs.
         EPT_NO_GOAL_MOBS,
-
+        
     };
     
     //Editor states.
     enum EDITOR_STATES {
-
+    
         //Main menu.
         EDITOR_STATE_MAIN,
-
+        
         //Area info editing.
         EDITOR_STATE_INFO,
-
+        
         //Area gameplay settings editing.
         EDITOR_STATE_GAMEPLAY,
-
+        
         //Layout editing.
         EDITOR_STATE_LAYOUT,
-
+        
         //Mob editing.
         EDITOR_STATE_MOBS,
-
+        
         //Path editing.
         EDITOR_STATE_PATHS,
-
+        
         //Detail editing.
         EDITOR_STATE_DETAILS,
-
+        
         //Review.
         EDITOR_STATE_REVIEW,
-
+        
         //Tools.
         EDITOR_STATE_TOOLS,
-
+        
     };
     
     //Editor sub-states.
     enum EDITOR_SUB_STATES {
-
+    
         //None.
         EDITOR_SUB_STATE_NONE,
-
+        
         //Picking a mission exit region.
         EDITOR_SUB_STATE_MISSION_EXIT,
-
+        
         //Drawing the layout.
         EDITOR_SUB_STATE_DRAWING,
-
+        
         //Drawing a circular sector.
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
-
+        
         //On-canvas texture effect editing.
         EDITOR_SUB_STATE_OCTEE,
-
+        
         //Quick sector height set.
         EDITOR_SUB_STATE_QUICK_HEIGHT_SET,
-
+        
         //Adding a new mob.
         EDITOR_SUB_STATE_NEW_MOB,
-
+        
         //Duplicating a mob.
         EDITOR_SUB_STATE_DUPLICATE_MOB,
-
+        
         //Storing a mob inside another.
         EDITOR_SUB_STATE_STORE_MOB_INSIDE,
-
+        
         //Adding a mob link.
         EDITOR_SUB_STATE_ADD_MOB_LINK,
-
+        
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
-
+        
         //Picking required mobs for the mission.
         EDITOR_SUB_STATE_MISSION_MOBS,
-
+        
         //Drawing paths.
         EDITOR_SUB_STATE_PATH_DRAWING,
-
+        
         //Adding a new tree shadow.
         EDITOR_SUB_STATE_NEW_SHADOW,
-
+        
     };
     
     //On-canvas texture effect editing modes.
     enum OCTEE_MODES {
-
+    
         //Editing texture offset.
         OCTEE_MODE_OFFSET,
-
+        
         //Editing texture scale.
         OCTEE_MODE_SCALE,
-
+        
         //Editing texture angle.
         OCTEE_MODE_ANGLE,
-
+        
     };
     
     //Filters for selecting.
     enum SELECTION_FILTERS {
-
+    
         //Select sectors, edges, and vertexes.
         SELECTION_FILTER_SECTORS,
-
+        
         //Select edges and vertexes.
         SELECTION_FILTER_EDGES,
-
+        
         //Select vertexes only.
         SELECTION_FILTER_VERTEXES,
         
         //Total amount of selection filters.
         N_SELECTION_FILTERS,
-
+        
     };
     
     //Layout editing panel modes.
     enum LAYOUT_MODES {
-        
+    
         //Sector info.
         LAYOUT_MODE_SECTORS,
-
+        
         //Edge info.
         LAYOUT_MODE_EDGES,
         
     };
     
-
+    
     //--- Members ---
-
+    
     //Time left until a backup is generated.
     timer backup_timer;
-
+    
     //Does the area exist on disk, or RAM only?
-    bool area_exists_on_disk;
-
+    bool area_exists_on_disk = false;
+    
     //When the player copies an edge's properties, they go here.
-    edge* copy_buffer_edge;
-
+    edge* copy_buffer_edge = nullptr;
+    
     //When the player copies a mob's properties, they go here.
-    mob_gen* copy_buffer_mob;
-
+    mob_gen* copy_buffer_mob = nullptr;
+    
     //When the player copies a path link's properties, they go here.
-    path_link* copy_buffer_path_link;
-
+    path_link* copy_buffer_path_link = nullptr;
+    
     //When the player copies a sector's properties, they go here.
-    sector* copy_buffer_sector;
-
+    sector* copy_buffer_sector = nullptr;
+    
     //Where the cross-section tool points are.
     point cross_section_checkpoints[2];
-
+    
     //Cross-section window's start coordinates.
     point cross_section_window_start;
-
+    
     //Cross-section window's end coordinates.
     point cross_section_window_end;
-
+    
     //Cross-section Z legend window's start coordinates.
     point cross_section_z_window_start;
-
+    
     //Cross-section Z legend window's end coordinates.
     point cross_section_z_window_end;
-
+    
     //When showing a hazard in the list, this is the index of the current one.
-    size_t cur_hazard_nr;
-
+    size_t cur_hazard_nr = INVALID;
+    
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
-
+    
     //Last known cursor snap position for heavy snap modes.
     point cursor_snap_cache;
-
+    
     //Time left to update the cursor snap position for heavy snap modes.
-    timer cursor_snap_timer;
-
+    timer cursor_snap_timer = timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL);
+    
     //Debug tool -- show the edge numbers?
-    bool debug_edge_nrs;
-
+    bool debug_edge_nrs = false;
+    
     //Debug tool -- show the sector numbers?
-    bool debug_sector_nrs;
-
+    bool debug_sector_nrs = false;
+    
     //Debug tool -- show the path numbers?
-    bool debug_path_nrs;
-
+    bool debug_path_nrs = false;
+    
     //Debug tool -- show the triangulation?
-    bool debug_triangulation;
-
+    bool debug_triangulation = false;
+    
     //Debug tool -- show the vertex numbers?
-    bool debug_vertex_nrs;
-
+    bool debug_vertex_nrs = false;
+    
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;
-
+    
     //Result of the current drawing line.
-    DRAWING_LINE_RESULTS drawing_line_result;
-
+    DRAWING_LINE_RESULTS drawing_line_result = DRAWING_LINE_OK;
+    
     //Currently highlighted edge, if any.
-    edge* highlighted_edge;
-
+    edge* highlighted_edge = nullptr;
+    
     //Currently highlighted mob, if any.
-    mob_gen* highlighted_mob;
-
+    mob_gen* highlighted_mob = nullptr;
+    
     //Currently highlighted path link, if any.
-    path_link* highlighted_path_link;
-
+    path_link* highlighted_path_link = nullptr;
+    
     //Currently highlighted path stop, if any.
-    path_stop* highlighted_path_stop;
-
+    path_stop* highlighted_path_stop = nullptr;
+    
     //Currently highlighted sector, if any.
-    sector* highlighted_sector;
-
+    sector* highlighted_sector = nullptr;
+    
     //Currently highlighted vertex, if any.
-    vertex* highlighted_vertex;
-
+    vertex* highlighted_vertex = nullptr;
+    
     //Category name of the last mob placed.
     string last_mob_custom_cat_name;
-
+    
     //Mob type of the last mob placed.
-    mob_type* last_mob_type;
-
+    mob_type* last_mob_type = nullptr;
+    
     //Are we editing sectors or edges?
-    LAYOUT_MODES layout_mode;
-
+    LAYOUT_MODES layout_mode = LAYOUT_MODE_SECTORS;
+    
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
-
+    
     //Closest mob to the mouse when moving.
-    mob_gen* move_closest_mob;
-
+    mob_gen* move_closest_mob = nullptr;
+    
     //Closest path stop to the mouse when moving.
-    path_stop* move_closest_stop;
-
+    path_stop* move_closest_stop = nullptr;
+    
     //Closest vertex to the mouse when moving.
-    vertex* move_closest_vertex;
-
+    vertex* move_closest_vertex = nullptr;
+    
     //The moved thing was here when the move started (world coords).
     point move_start_pos;
-
+    
     //The mouse cursor was here when the move started (world coords).
     point move_mouse_start_pos;
-
+    
     //Currently moving the selected vertexes, objects, etc.?
     bool moving;
-
+    
     //Path preview checkpoint that is currently being moved, or -1 for none.
-    signed char moving_path_preview_checkpoint;
-
+    signed char moving_path_preview_checkpoint = -1;
+    
     //Cross-section point that is currently being moved, or -1 for none.
-    signed char moving_cross_section_point;
-
+    signed char moving_cross_section_point = -1;
+    
     //New circle sector's second point.
     point new_circle_sector_anchor;
-
+    
     //New circle sector's center.
     point new_circle_sector_center;
-
+    
     //Points where the new circle sector's vertexes will end up.
     vector<point> new_circle_sector_points;
-
+    
     //What step of the circular sector building process are we in?
-    unsigned char new_circle_sector_step;
-
+    unsigned char new_circle_sector_step = 0;
+    
     //For each edge of the new circle sector, is it valid?
     vector<bool> new_circle_sector_valid_edges;
-
+    
     //Time left to keep the error-redness of the new sector's line(s) for.
-    timer new_sector_error_tint_timer;
-
+    timer new_sector_error_tint_timer = timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION);
+    
     //Mouse drag start coordinates, when using on-canvas texture effect editing.
     point octee_drag_start;
-
+    
     //Texture's original angle, when using on-canvas texture effect editing.
-    float octee_orig_angle;
-
+    float octee_orig_angle = 0.0f;
+    
     //Texture's original offset, when using on-canvas texture effect editing.
     point octee_orig_offset;
-
+    
     //Texture's original scale, when using on-canvas texture effect editing.
     point octee_orig_scale;
-
+    
     //Current on-canvas texture effect edit mode.
-    OCTEE_MODES octee_mode;
-
+    OCTEE_MODES octee_mode = OCTEE_MODE_OFFSET;
+    
     //When drawing a path, use these stop flags.
-    uint8_t path_drawing_flags;
-
+    uint8_t path_drawing_flags = 0;
+    
     //When drawing a path, use this label.
     string path_drawing_label;
-
+    
     //When drawing a path, create normal links. False for one-way links.
-    bool path_drawing_normals;
-
+    bool path_drawing_normals = true;
+    
     //When drawing a path, use this type.
-    PATH_LINK_TYPES path_drawing_type;
-
+    PATH_LINK_TYPES path_drawing_type = PATH_LINK_TYPE_NORMAL;
+    
     //First stop of the next link when drawing a path.
-    path_stop* path_drawing_stop_1;
-
+    path_stop* path_drawing_stop_1 = nullptr;
+    
     //Path stops that make up the current path preview.
     vector<path_stop*> path_preview;
-
+    
     //Location of the two path preview checkpoints.
     point path_preview_checkpoints[2];
-
+    
     //The closest stop to the path preview start and end.
-    path_stop* path_preview_closest[2];
-
+    path_stop* path_preview_closest[2] = { nullptr, nullptr };
+    
     //Total distance of the previewed path.
-    float path_preview_dist;
-
+    float path_preview_dist = 0.0f;
+    
     //Settings for the path preview.
     path_follow_settings path_preview_settings;
-
+    
     //Result of the path preview's calculation.
-    PATH_RESULTS path_preview_result;
-
+    PATH_RESULTS path_preview_result = PATH_RESULT_NOT_CALCULATED;
+    
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
-
+    
     //Area data before vertex movement.
-    area_data* pre_move_area_data;
-
+    area_data* pre_move_area_data = nullptr;
+    
     //Position of the selected mobs before movement.
     map<mob_gen*, point> pre_move_mob_coords;
-
+    
     //Position of the selected path stops before movement.
     map<path_stop*, point> pre_move_stop_coords;
-
+    
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
-
+    
     //Is preview mode on?
-    bool preview_mode;
-
+    bool preview_mode = false;
+    
     //Name of the area song we're previewing, if any.
     string preview_song;
-
+    
     //Description of the current problem found.
     string problem_description;
-
+    
     //Information about the problematic intersecting edges, if any.
-    edge_intersection problem_edge_intersection;
-
+    edge_intersection problem_edge_intersection = edge_intersection(NULL, NULL);
+    
     //Pointer to the problematic mob, if any.
-    mob_gen* problem_mob_ptr;
-
+    mob_gen* problem_mob_ptr = nullptr;
+    
     //Pointer to the problematic path stop, if any.
-    path_stop* problem_path_stop_ptr;
-
+    path_stop* problem_path_stop_ptr = nullptr;
+    
     //Type of the current problem found in the review panel.
-    EDITOR_PROBLEM_TYPES problem_type;
-
+    EDITOR_PROBLEM_TYPES problem_type = EPT_NONE_YET;
+    
     //Pointer to the problematic sector, if any.
-    sector* problem_sector_ptr;
-
+    sector* problem_sector_ptr = nullptr;
+    
     //Pointer to the problematic tree shadow, if any.
-    tree_shadow* problem_shadow_ptr;
-
+    tree_shadow* problem_shadow_ptr = nullptr;
+    
     //Title of the current problem found.
     string problem_title;
-
+    
     //Pointer to the problematic vertex, if any.
-    vertex* problem_vertex_ptr;
-
+    vertex* problem_vertex_ptr = nullptr;
+    
     //Sector height when the quick height set mode was entered.
-    float quick_height_set_start_height;
-
+    float quick_height_set_start_height = 0.0f;
+    
     //Mouse coordinates (screen) when the quick height set mode was entered.
     point quick_height_set_start_pos;
-
+    
     //Time left in the quick preview mode, including fade out.
-    timer quick_preview_timer;
-
+    timer quick_preview_timer = timer(AREA_EDITOR::QUICK_PREVIEW_DURATION);
+    
     //Redo history, with the state of the area at each point. Front = latest.
     deque<std::pair<area_data*, string> > redo_history;
-
+    
     //Opacity of the reference image.
-    unsigned char reference_alpha;
-
+    unsigned char reference_alpha = 255;
+    
     //Reference image center.
     point reference_center;
-
+    
     //Reference image dimensions.
     point reference_size;
-
+    
     //Bitmap of the reference image.
-    ALLEGRO_BITMAP* reference_bitmap;
-
+    ALLEGRO_BITMAP* reference_bitmap = nullptr;
+    
     //File name of the reference image.
     string reference_file_name;
-
+    
     //Keep the aspect ratio when resizing the reference?
-    bool reference_keep_aspect_ratio;
-
+    bool reference_keep_aspect_ratio = true;
+    
     //Info about the current sector split operation.
     sector_split_info_struct sector_split_info;
-
+    
     //Currently selected edges.
     set<edge*> selected_edges;
-
+    
     //Currently selected mobs.
     set<mob_gen*> selected_mobs;
-
+    
     //Currently selected path links.
     set<path_link*> selected_path_links;
-
+    
     //Currently selected path stops.
     set<path_stop*> selected_path_stops;
-
+    
     //Currently selected sectors.
     set<sector*> selected_sectors;
-
+    
     //Currently selected tree shadow.
-    tree_shadow* selected_shadow;
-
+    tree_shadow* selected_shadow = nullptr;
+    
     //Keep the aspect ratio of the currently selected shadow?
-    bool selected_shadow_keep_aspect_ratio;
-
+    bool selected_shadow_keep_aspect_ratio = false;
+    
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
-
+    
     //Is the user currently performing a rectangle box?
-    bool selecting;
-
+    bool selecting = false;
+    
     //Angle of the selection.
-    float selection_angle;
-
+    float selection_angle = 0.0f;
+    
     //Center of the selection.
     point selection_center;
-
+    
     //The selection's alpha depends on this value.
-    float selection_effect;
-
+    float selection_effect = 0.0f;
+    
     //Point where the selection is currently at.
     point selection_end;
-
+    
     //Current selection filter.
-    SELECTION_FILTERS selection_filter;
-
+    SELECTION_FILTERS selection_filter = SELECTION_FILTER_SECTORS;
+    
     //Has the user agreed to homogenize the selection?
-    bool selection_homogenized;
-
+    bool selection_homogenized = false;
+    
     //Angle of the selection, before it got transformed.
-    float selection_orig_angle;
-
+    float selection_orig_angle = 0.0f;
+    
     //Center of the selection, before it got transformed.
     point selection_orig_center;
-
+    
     //Size of the selection, before it got transformed.
     point selection_orig_size;
-
+    
     //Size of the selection, padding included.
     point selection_size;
-
+    
     //Point where the selection started.
     point selection_start;
-
+    
     //Show the path stop closest to the cursor?
-    bool show_closest_stop;
-
+    bool show_closest_stop = false;
+    
     //Use the cross-section view tool?
-    bool show_cross_section;
-
+    bool show_cross_section = false;
+    
     //When using the cross-section view tool, render the grid?
-    bool show_cross_section_grid;
-
+    bool show_cross_section_grid = true;
+    
     //Show the path preview and the checkpoints?
-    bool show_path_preview;
-
+    bool show_path_preview = false;
+    
     //Render the reference image?
-    bool show_reference;
-
+    bool show_reference = true;
+    
     //Render the tree shadows?
-    bool show_shadows;
-
+    bool show_shadows = false;
+    
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
-
+    
     //Position of the load widget.
     point load_widget_pos;
-
+    
     //Position of the reload widget.
     point reload_widget_pos;
-
+    
     //Position of the quit widget.
     point quit_widget_pos;
-
+    
     //Was the area's thumbnail changed in any way since the last save?
-    bool thumbnail_needs_saving;
-
+    bool thumbnail_needs_saving = false;
+    
     //Was the area's thumbnail changed in any way since the last backup save?
-    bool thumbnail_backup_needs_saving;
-
+    bool thumbnail_backup_needs_saving = false;
+    
     //Undo history, with the state of the area at each point. Front = latest.
     deque<std::pair<area_data*, string> > undo_history;
-
+    
     //Name of the undo operation responsible for the lock.
     string undo_save_lock_operation;
-
+    
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
     
-
+    
     //--- Function declarations ---
     
     bool are_nodes_traversable(

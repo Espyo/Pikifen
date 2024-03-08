@@ -18,6 +18,11 @@
 #include "mob_type.h"
 
 
+namespace LEADER_TYPE {
+extern const float DEF_WHISTLE_RANGE;
+}
+
+
 //Leader object states.
 enum LEADER_STATES {
 
@@ -128,7 +133,7 @@ enum LEADER_STATES {
     
     //Total amount of leader object states.
     N_LEADER_STATES,
-
+    
     
 };
 
@@ -174,13 +179,13 @@ enum LEADER_ANIMATIONS {
     
     //Drinking a drop.
     LEADER_ANIM_DRINKING,
-
+    
 };
 
 
 //Leader object sounds.
 enum LEADER_SOUNDS {
-    
+
     //Dismissing their group.
     LEADER_SOUND_DISMISSING,
     
@@ -210,22 +215,22 @@ enum LEADER_SOUNDS {
 class leader_type : public mob_type {
 
 public:
-    
+
     //--- Members ---
-
+    
     //How far its whistle reaches from the center point.
-    float whistle_range;
-
+    float whistle_range = LEADER_TYPE::DEF_WHISTLE_RANGE;
+    
     //How high it can reach when thrown.
-    float max_throw_height;
+    float max_throw_height = 0.0f;
     
     //Standby icon.
-    ALLEGRO_BITMAP* bmp_icon;
+    ALLEGRO_BITMAP* bmp_icon = nullptr;
     
     //Sound data index for each sound. Cache for performance.
     size_t sfx_data_idxs[N_LEADER_SOUNDS];
     
-
+    
     //--- Function declarations ---
     
     leader_type();

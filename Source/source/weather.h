@@ -25,13 +25,13 @@ using std::vector;
 
 //Types of precipitation.
 enum PRECIPITATION_TYPES {
-    
+
     //None.
     PRECIPITATION_TYPE_NONE,
-
+    
     //Rain.
     PRECIPITATION_TYPE_RAIN,
-
+    
     //Wind.
     PRECIPITATION_TYPE_WIND,
     
@@ -41,7 +41,7 @@ enum PRECIPITATION_TYPES {
 
 /**
  * @brief Weather information.
- * 
+ *
  * Daylight is mixed in with the weather, as
  * different weather conditions imply different
  * lighting throughout the day (on a sunny day,
@@ -52,9 +52,9 @@ enum PRECIPITATION_TYPES {
 class weather {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Name of this weather type.
     string name;
     
@@ -68,20 +68,20 @@ public:
     vector<std::pair<int, unsigned char> > blackout_strength;
     
     //Fog -- distance at which everything is still fully visible.
-    float fog_near;
+    float fog_near = 0.0f;
     
     //Fog -- distance at which everything is 100% foggy.
-    float fog_far;
+    float fog_far = 0.0f;
     
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<std::pair<int, ALLEGRO_COLOR> > fog_color;
     
     //Precipitation type, if any.
-    PRECIPITATION_TYPES precipitation_type;
+    PRECIPITATION_TYPES precipitation_type = PRECIPITATION_TYPE_NONE;
     
-
+    
     //--- Function declarations ---
-
+    
     weather();
     weather(
         const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
@@ -95,13 +95,13 @@ public:
     float get_sun_strength();
     
 private:
-    
-    //--- Function definitions ---
 
+    //--- Function definitions ---
+    
     /**
      * @brief Returns how to obtain a value from a table of values, based on the
      * current time.
-     * 
+     *
      * @param table Table to read from.
      * @param cur_time What time it is, in minutes.
      * @param ratio The ratio between value1 and value2 that results in

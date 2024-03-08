@@ -25,25 +25,25 @@ public:
     //--- Members ---
 
     //Icon used to represent this tool in the HUD group info.
-    ALLEGRO_BITMAP* bmp_icon;
+    ALLEGRO_BITMAP* bmp_icon = nullptr;
 
     //If true, the Pikmin holding it can be swapped for the tool, when chomped.
-    bool can_be_hotswapped;
+    bool can_be_hotswapped = true;
 
     //Should it be dropped if the Pikmin carrying it is whistled?
-    bool dropped_when_pikmin_is_whistled;
+    bool dropped_when_pikmin_is_whistled = false;
 
     //Should it be dropped if the Pikmin carrying it lands from a throw?
-    bool dropped_when_pikmin_lands;
+    bool dropped_when_pikmin_lands = true;
 
     //Should it be dropped if the Pikmin carrying it lands on an opponent?
-    bool dropped_when_pikmin_lands_on_opponent;
+    bool dropped_when_pikmin_lands_on_opponent = false;
 
     //Should it stay stuck to the opponent if the thrown Pikmin drops it there?
-    bool stuck_when_pikmin_lands_on_opponent;
+    bool stuck_when_pikmin_lands_on_opponent = false;
     
     //Should the Pikmin return to the group after using this tool?
-    bool pikmin_returns_after_using;
+    bool pikmin_returns_after_using = true;
     
 
     //--- Function declarations ---

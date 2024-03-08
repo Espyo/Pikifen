@@ -14,6 +14,8 @@
 
 #include <allegro5/allegro.h>
 
+#include "../../const.h"
+
 
 namespace IN_WORLD_FRACTION {
 extern const float GROW_JUICE_DURATION;
@@ -37,7 +39,7 @@ extern const float TRANSITION_OUT_DURATION;
 
 //In-world HUD item transitions.
 enum IN_WORLD_HUD_TRANSITIONS {
-    
+
     //Not transitioning.
     IN_WORLD_HUD_TRANSITION_NONE,
     
@@ -63,20 +65,20 @@ class in_world_hud_item {
 public:
 
     //--- Members ---
-
-    //Associated mob, if any.
-    mob* m;
-
-    //Current transition.
-    IN_WORLD_HUD_TRANSITIONS transition;
-
-    //Time left in the current transition, if any.
-    float transition_timer;
-
-    //Does it need to be deleted?
-    bool to_delete;
     
-
+    //Associated mob, if any.
+    mob* m = nullptr;
+    
+    //Current transition.
+    IN_WORLD_HUD_TRANSITIONS transition = IN_WORLD_HUD_TRANSITION_IN;
+    
+    //Time left in the current transition, if any.
+    float transition_timer = 0.0f;
+    
+    //Does it need to be deleted?
+    bool to_delete = false;
+    
+    
     //--- Function declarations ---
     
     in_world_hud_item(mob* m);
@@ -84,7 +86,7 @@ public:
     virtual void draw() = 0;
     virtual void start_fading() = 0;
     virtual void tick(const float delta_t);
-
+    
 };
 
 
@@ -96,7 +98,7 @@ class in_world_fraction : public in_world_hud_item {
 public:
 
     //--- Function declarations ---
-
+    
     explicit in_world_fraction(mob* m);
     void draw() override;
     void set_color(const ALLEGRO_COLOR &new_color);
@@ -108,22 +110,22 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Upper number, the one representing the current value.
-    float value_number;
-
+    float value_number = 0.0f;
+    
     //Lower number, the one representing the requirement.
-    float requirement_number;
-
+    float requirement_number = 0.0f;
+    
     //Color to use.
-    ALLEGRO_COLOR color;
-
+    ALLEGRO_COLOR color = COLOR_BLACK;
+    
     //Value change growth juice timer. 0 means not animating.
-    float grow_juice_timer;
-
+    float grow_juice_timer = 0.0f;
+    
     //Requirement met flash juice timer. 0 means not animating.
-    float req_met_juice_timer;
-
+    float req_met_juice_timer = 0.0f;
+    
 };
 
 
@@ -136,13 +138,13 @@ class in_world_health_wheel : public in_world_hud_item {
 public:
 
     //--- Members ---
-
-    //How much the health wheel is filled. Gradually moves to the target amount.
-    float visible_ratio;
     
-
+    //How much the health wheel is filled. Gradually moves to the target amount.
+    float visible_ratio = 0.0f;
+    
+    
     //--- Function declarations ---
-
+    
     explicit in_world_health_wheel(mob* m);
     void draw() override;
     void start_fading() override;

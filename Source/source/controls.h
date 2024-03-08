@@ -222,10 +222,10 @@ struct player_action_type {
     //--- Members ---
 
     //ID of the action type.
-    PLAYER_ACTION_TYPES id;
+    PLAYER_ACTION_TYPES id = PLAYER_ACTION_NONE;
     
     //Category, for use in stuff like the options menu.
-    PLAYER_ACTION_CATEGORIES category;
+    PLAYER_ACTION_CATEGORIES category = PLAYER_ACTION_CAT_NONE;
     
     //Name, for use in the options menu.
     string name;
@@ -238,11 +238,6 @@ struct player_action_type {
     
     //String representing of this action type's default control bind.
     string default_bind_str;
-    
-
-    //--- Function declarations ---
-
-    player_action_type();
     
 };
 

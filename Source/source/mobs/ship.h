@@ -35,13 +35,13 @@ public:
     //--- Members ---
 
     //What type of ship it is.
-    ship_type* shi_type;
+    ship_type* shi_type = nullptr;
     
     //Nest data.
-    pikmin_nest_struct* nest;
+    pikmin_nest_struct* nest = nullptr;
     
     //Time left until the next tractor beam ring is spat out.
-    timer next_tractor_beam_ring_timer;
+    timer next_tractor_beam_ring_timer = timer(SHIP::TRACTOR_BEAM_EMIT_RATE);
 
     //Hue of each tractor beam ring.
     vector<float> tractor_beam_ring_colors;
@@ -50,7 +50,7 @@ public:
     vector<float> tractor_beam_rings;
 
     //How many objects are currently being beamed?
-    size_t mobs_being_beamed;
+    size_t mobs_being_beamed = 0;
     
     //The control point's absolute coordinates.
     point control_point_final_pos;
@@ -59,7 +59,7 @@ public:
     point receptacle_final_pos;
     
     //Distance between control point and receptacle. Cache for convenience.
-    float control_point_to_receptacle_dist;
+    float control_point_to_receptacle_dist = 0.0f;
     
     
     //--- Function declarations ---

@@ -158,6 +158,7 @@ enum PATH_BLOCK_REASONS {
 
 
 namespace PATHS {
+extern const float DEF_CHASE_TARGET_DISTANCE;
 extern const float MIN_STOP_RADIUS;
 }
 
@@ -173,14 +174,14 @@ struct path_follow_settings {
     point target_point;
     
     //If the target is a mob, this points to it.
-    mob* target_mob;
+    mob* target_mob = nullptr;
     
     //For the final chase, from the last path stop to
     //the destination, use this for the target distance parameter.
-    float final_target_distance;
+    float final_target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
     //Some flags. Use PATH_FOLLOW_FLAG_*.
-    unsigned char flags;
+    unsigned char flags = 0;
     
     //Invulnerabilities of the mob/carriers.
     vector<hazard*> invulnerabilities;
@@ -193,11 +194,6 @@ struct path_follow_settings {
     
     //Faked end point. Used to fake calculations.
     point faked_end;
-    
-
-    //--- Function declarations ---
-
-    path_follow_settings();
 
 };
 
@@ -219,10 +215,10 @@ struct path_stop {
     point pos;
     
     //Radius.
-    float radius;
+    float radius = PATHS::MIN_STOP_RADIUS;
     
     //Flags. Use PATH_STOP_FLAGS.
-    uint8_t flags;
+    uint8_t flags = 0;
     
     //Its label, if any.
     string label;
@@ -231,7 +227,7 @@ struct path_stop {
     vector<path_link*> links;
     
     //Sector it's on. Only applicable during gameplay. Cache for performance.
-    sector* sector_ptr;
+    sector* sector_ptr = nullptr;
     
 
     //--- Function declarations ---
@@ -261,22 +257,22 @@ struct path_link {
     //--- Members ---
 
     //Pointer to the path stop at the start.
-    path_stop* start_ptr;
+    path_stop* start_ptr = nullptr;
     
     //Pointer to the path stop at the end.
-    path_stop* end_ptr;
+    path_stop* end_ptr = nullptr;
     
     //Index number of the path stop at the end.
-    size_t end_nr;
+    size_t end_nr = 0;
     
     //Type. Used for special restrictions and behaviors.
-    PATH_LINK_TYPES type;
+    PATH_LINK_TYPES type = PATH_LINK_TYPE_NORMAL;
     
     //Distance between the two stops.
-    float distance;
+    float distance = 0.0f;
     
     //Is the stop currently blocked by an obstacle? Cache for performance.
-    bool blocked_by_obstacle;
+    bool blocked_by_obstacle = false;
     
 
     //--- Function declarations ---

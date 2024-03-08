@@ -28,10 +28,10 @@ public:
     //--- Members ---
 
     //What type of resource it is.
-    resource_type* res_type;
+    resource_type* res_type = nullptr;
     
     //Pile it belongs to, if any.
-    pile* origin_pile;
+    pile* origin_pile = nullptr;
     
 
     //--- Function declarations ---

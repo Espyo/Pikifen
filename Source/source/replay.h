@@ -34,34 +34,34 @@ enum REPLAY_ELEMENT_TYPES {
 
     //A leader.
     REPLAY_ELEMENT_LEADER,
-
+    
     //A Pikmin.
     REPLAY_ELEMENT_PIKMIN,
-
+    
     //An enemy.
     REPLAY_ELEMENT_ENEMY,
-
+    
     //A treasure.
     REPLAY_ELEMENT_TREASURE,
-
+    
     //An Onion.
     REPLAY_ELEMENT_ONION,
-
+    
     //An obstacle.
     REPLAY_ELEMENT_OBSTACLE,
-
+    
 };
 
 
 //Types of events that can happen in a replay.
 enum REPLAY_EVENT_TYPES {
-    
+
     //A replay element was added.
     REPLAY_EVENT_ADDED,
     
     //A replay element was removed.
     REPLAY_EVENT_REMOVED,
-
+    
     //The player switched to a different leader.
     REPLAY_EVENT_LEADER_SWITCHED,
     
@@ -75,18 +75,18 @@ enum REPLAY_EVENT_TYPES {
 struct replay_element {
 
     //--- Members ---
-
+    
     //Type of element this represents.
-    REPLAY_ELEMENT_TYPES type;
+    REPLAY_ELEMENT_TYPES type = REPLAY_ELEMENT_LEADER;
     
     //Its current position.
     point pos;
     
-
+    
     //--- Function declarations ---
-
+    
     replay_element(const REPLAY_ELEMENT_TYPES type, const point &pos);
-
+    
 };
 
 
@@ -98,20 +98,20 @@ struct replay_element {
 struct replay_event {
 
     //--- Members ---
-
+    
     //Type of event.
-    REPLAY_EVENT_TYPES type;
+    REPLAY_EVENT_TYPES type = REPLAY_EVENT_ADDED;
     
     //Informational data about the event.
-    size_t data;
+    size_t data = 0;
     
-
+    
     //--- Function declarations ---
-
+    
     replay_event(
         const REPLAY_EVENT_TYPES type, const size_t data
     );
-
+    
 };
 
 
@@ -122,7 +122,7 @@ struct replay_event {
 struct replay_state {
 
     //--- Members ---
-
+    
     //List of elements.
     vector<replay_element> elements;
     
@@ -134,7 +134,7 @@ struct replay_state {
 
 /**
  * @brief A replay contains data about a playthrough of an area.
- * 
+ *
  * It contains very
  * minimal and abstract data about what happened, such as what Pikmin
  * have moved where and when, considering the replay is only meant for the
@@ -146,15 +146,15 @@ struct replay_state {
 class replay {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //States.
     vector<replay_state> states;
     
-
+    
     //--- Function declarations ---
-
+    
     replay();
     void add_state(
         const vector<leader*> &leader_list,
@@ -173,12 +173,12 @@ public:
 private:
 
     //--- Members ---
-
+    
     //List of mobs in the previous state.
     vector<mob*> prev_state_mobs;
     
     //Number of the previous leader.
-    size_t prev_leader_nr;
+    size_t prev_leader_nr = INVALID;
     
 };
 

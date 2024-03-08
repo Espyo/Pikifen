@@ -28,9 +28,6 @@ const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
 //Auto-throw cooldown lowers at this speed.
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 
-//The whistle can't go past this radius, by default.
-const float DEF_WHISTLE_RANGE = 80.0f;
-
 //Members cannot go past this range from the angle of dismissal.
 const float DISMISS_ANGLE_RANGE = TAU / 2;
 
@@ -136,27 +133,7 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  */
 leader::leader(const point &pos, leader_type* type, const float angle) :
     mob(pos, type, angle),
-    lea_type(type),
-    active(false),
-    auto_plucking(false),
-    pluck_target(nullptr),
-    queued_pluck_cancel(false),
-    mid_go_here(false),
-    is_in_walking_anim(false),
-    swarm_next_arrow_timer(LEADER::SWARM_ARROW_INTERVAL),
-    throw_cooldown(0.0f),
-    throw_queued(false),
-    auto_throwing(false),
-    auto_throw_cooldown(0.0f),
-    auto_throw_cooldown_duration(0.0f),
-    throwee(nullptr),
-    throwee_angle(0.0f),
-    throwee_max_z(0.0f),
-    throwee_speed_z(0.0f),
-    throwee_can_reach(false),
-    health_wheel_visible_ratio(1.0f),
-    health_wheel_caution_timer(0.0f),
-    whistle_sfx_source_id(0) {
+    lea_type(type) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER::INVULN_PERIOD);
@@ -288,7 +265,7 @@ void leader::dismiss() {
      * @brief Info about a group subgroup when being dismissed.
      */
     struct subgroup_dismiss_info {
-        
+    
         //--- Members ---
         
         //Radius of the group.
@@ -299,7 +276,7 @@ void leader::dismiss() {
         
         //Center point of the subgroup.
         point center;
-
+        
     };
     vector<subgroup_dismiss_info> subgroups_info;
     
@@ -368,24 +345,24 @@ void leader::dismiss() {
      * etc. For every subgroup we place, we must update the thickness.
      */
     struct row_info {
-
+    
         //--- Members ---
-
+        
         //Index of subgroups in this row.
         vector<size_t> subgroups;
-
+        
         //Angular distance spread out from the row center.
         float dist_between_center;
-
+        
         //How thick this row is.
         float thickness;
         
         //How much is taken up by Pikmin and padding.
         float angle_occupation;
         
-
+        
         //--- Function definitions ---
-
+        
         row_info() {
             dist_between_center = 0;
             thickness = 0;

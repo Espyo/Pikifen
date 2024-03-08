@@ -276,7 +276,7 @@ enum MOB_ACTION_TYPES {
     
     //Total amount of mob actions.
     N_MOB_ACTIONS,
-
+    
 };
 
 
@@ -294,7 +294,7 @@ enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES {
     
     //Plan a counter-clockwise turn.
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN,
-
+    
 };
 
 
@@ -309,7 +309,7 @@ enum MOB_ACTION_TURN_TYPES {
     
     //Turn towards home.
     MOB_ACTION_TURN_HOME,
-
+    
 };
 
 
@@ -324,7 +324,7 @@ enum MOB_ACTION_FOCUS_TYPES {
     
     //Focus on the mob that triggered the event.
     MOB_ACTION_FOCUS_TRIGGER,
-
+    
 };
 
 
@@ -348,7 +348,7 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
     
     //Check if a value is more than another value, or equal.
     MOB_ACTION_IF_OP_MORE_E,
-
+    
 };
 
 
@@ -363,7 +363,7 @@ enum MOB_ACTION_GET_INFO_TARGET_TYPES {
     
     //Gets info about the mob that triggered the event.
     MOB_ACTION_GET_INFO_TARGET_TRIGGER,
-
+    
 };
 
 
@@ -375,7 +375,7 @@ enum MOB_ACTION_GET_AREA_INFO_TYPES {
     
     //Get number of Pikmin on the field.
     MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN,
-
+    
 };
 
 
@@ -402,7 +402,7 @@ enum MOB_ACTION_GET_EV_INFO_TYPES {
     
     //Get the other body part that triggered the event.
     MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART,
-
+    
 };
 
 
@@ -456,7 +456,7 @@ enum MOB_ACTION_GET_MOB_INFO_TYPES {
     
     //Get Z.
     MOB_ACTION_GET_MOB_INFO_Z,
-
+    
 };
 
 
@@ -480,7 +480,7 @@ enum MOB_ACTION_MOVE_TYPES {
     
     //Move towards the average spot of the linked mobs.
     MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
-
+    
 };
 
 
@@ -501,7 +501,7 @@ enum MOB_ACTION_CALCULATE_TYPES {
     
     //Get the modulo of a number with another.
     MOB_ACTION_CALCULATE_MODULO,
-
+    
 };
 
 
@@ -513,13 +513,13 @@ enum MOB_ACTION_STABILIZE_Z_TYPES {
     
     //Stabilize towards lowest z.
     MOB_ACTION_STABILIZE_Z_LOWEST,
-
+    
 };
 
 
 //Types of variables that a parameter can use.
 enum MOB_ACTION_PARAM_TYPE {
-    
+
     //Signed integer.
     MOB_ACTION_PARAM_INT,
     
@@ -544,29 +544,29 @@ enum MOB_ACTION_PARAM_TYPE {
 struct mob_action_param {
 
     //--- Members ---
-
+    
     //Name of the parameter.
     string name;
     
     //Type of variable it's meant to hold.
-    MOB_ACTION_PARAM_TYPE type;
+    MOB_ACTION_PARAM_TYPE type = MOB_ACTION_PARAM_STRING;
     
     //If true, it must be a constant value. Else, it can also be a var.
-    bool force_const;
+    bool force_const = false;
     
     //If true, this is an array of them (minimum amount 0).
-    bool is_extras;
+    bool is_extras = false;
     
-
+    
     //--- Function declarations ---
-
+    
     mob_action_param(
         const string &name,
         const MOB_ACTION_PARAM_TYPE type,
         const bool force_const,
         const bool is_extras
     );
-
+    
 };
 
 
@@ -576,30 +576,30 @@ struct mob_action_param {
 struct mob_action_run_data {
 
     //--- Members ---
-
+    
     //Mob that will run the action.
-    mob* m;
+    mob* m = nullptr;
     
     //Action call information.
-    mob_action_call* call;
+    mob_action_call* call = nullptr;
     
     //Arguments used.
     vector<string> args;
     
     //Event custom data 1.
-    void* custom_data_1;
+    void* custom_data_1 = nullptr;
     
     //Event custom data 2.
-    void* custom_data_2;
+    void* custom_data_2 = nullptr;
     
     //Return value, if applicable.
-    bool return_value;
+    bool return_value = false;
     
-
+    
     //--- Function declarations ---
-
+    
     mob_action_run_data(mob* m, mob_action_call* call);
-
+    
 };
 
 
@@ -613,27 +613,22 @@ typedef bool (mob_action_load_code)(mob_action_call &call);
 struct mob_action {
 
     //--- Members ---
-
+    
     //Type of mob action.
-    MOB_ACTION_TYPES type;
+    MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN;
     
     //Name.
     string name;
     
     //Code to run.
-    mob_action_code* code;
+    mob_action_code* code = nullptr;
     
     //Extra logic to run when this action is loaded from a script file.
-    mob_action_load_code* extra_load_logic;
+    mob_action_load_code* extra_load_logic = nullptr;
     
     //Parameters that it can take.
     vector<mob_action_param> parameters;
     
-
-    //--- Function declarations ---
-
-    mob_action();
-
 };
 
 
@@ -644,12 +639,12 @@ struct mob_action {
 struct mob_action_call {
 
     //--- Members ---
-
+    
     //Action to run, if any.
-    mob_action* action;
+    mob_action* action = nullptr;
     
     //Custom code to run, if any.
-    custom_action_code code;
+    custom_action_code code = nullptr;
     
     //Arguments to use.
     vector<string> args;
@@ -661,14 +656,14 @@ struct mob_action_call {
     string custom_error;
     
     //Event the action belongs to.
-    MOB_EV_TYPES parent_event;
+    MOB_EV_TYPES parent_event = MOB_EV_UNKNOWN;
     
     //Mob type that owns these calls.
-    mob_type* mt;
+    mob_type* mt = nullptr;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
     explicit mob_action_call(custom_action_code code);
     bool load_from_data_node(data_node* dn, mob_type* mt);

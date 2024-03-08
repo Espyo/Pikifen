@@ -30,9 +30,7 @@ dist::dist(const point &p1, const point &p2) :
     distance_squared(
         (p2.x - p1.x) * (p2.x - p1.x) +
         (p2.y - p1.y) * (p2.y - p1.y)
-    ),
-    normal_distance(0),
-    has_normal_distance(false) {
+    ) {
     
 }
 
@@ -285,10 +283,7 @@ point::point(const float x, const float y) :
 /**
  * @brief Constructs a new point object, with the coordinates set to 0,0.
  */
-point::point() :
-    x(0),
-    y(0) {
-    
+point::point() {
 }
 
 

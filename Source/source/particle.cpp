@@ -36,15 +36,10 @@ particle::particle(
 ) :
     type(type),
     duration(duration),
-    bitmap(nullptr),
-    friction(1.0f),
-    gravity(1.0f),
-    size_grow_speed(0.0f),
     time(duration),
     pos(pos),
     z(z),
     size(size),
-    color(COLOR_WHITE),
     priority(priority) {
     
 }
@@ -186,23 +181,9 @@ particle_generator::particle_generator(
     const float emission_interval,
     const particle &base_particle, const size_t number
 ) :
-    id(MOB_PARTICLE_GENERATOR_NONE),
     base_particle(base_particle),
     number(number),
     emission_interval(emission_interval),
-    follow_mob(nullptr),
-    follow_z_offset(0),
-    follow_angle(nullptr),
-    interval_deviation(0.0f),
-    number_deviation(0),
-    duration_deviation(0),
-    friction_deviation(0),
-    gravity_deviation(0),
-    size_deviation(0),
-    angle(0),
-    angle_deviation(0),
-    total_speed(0),
-    total_speed_deviation(0),
     emission_timer(emission_interval) {
     
 }
@@ -347,7 +328,6 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
  * @param max_nr Maximum number of particles it can manage.
  */
 particle_manager::particle_manager(const size_t &max_nr) :
-    particles(nullptr),
     max_nr(max_nr) {
     
     if(max_nr == 0) return;
@@ -362,7 +342,6 @@ particle_manager::particle_manager(const size_t &max_nr) :
  * @param pm2 Particle manager to copy from.
  */
 particle_manager::particle_manager(const particle_manager &pm2) :
-    particles(NULL),
     count(pm2.count),
     max_nr(pm2.max_nr) {
     

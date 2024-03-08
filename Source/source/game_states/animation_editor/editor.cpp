@@ -68,37 +68,8 @@ const float ZOOM_MIN_LEVEL = 0.05f;
 /**
  * @brief Constructs a new animation editor object.
  */
-animation_editor::animation_editor() :
-    anim_playing(false),
-    comparison(false),
-    comparison_above(true),
-    comparison_blink(true),
-    comparison_blink_show(true),
-    comparison_blink_timer(0),
-    comparison_sprite(nullptr),
-    comparison_tint(true),
-    cur_anim(NULL),
-    cur_frame_nr(INVALID),
-    cur_frame_time(0),
-    cur_hitbox(nullptr),
-    cur_hitbox_alpha(0),
-    cur_hitbox_nr(INVALID),
-    cur_maturity(0),
-    cur_sprite(NULL),
-    cur_sprite_keep_aspect_ratio(true),
-    grid_visible(true),
-    hitboxes_visible(true),
-    loaded_mob_type(nullptr),
-    mob_radius_visible(false),
-    leader_silhouette_visible(false),
-    reset_load_dialog(true),
-    side_view(false),
-    sprite_bmp_add_mode(false),
-    top_keep_aspect_ratio(true) {
-    
-    top_bmp[0] = NULL;
-    top_bmp[1] = NULL;
-    top_bmp[2] = NULL;
+animation_editor::animation_editor() {
+
     comparison_blink_timer =
         timer(
             0.6,
@@ -1440,37 +1411,37 @@ void animation_editor::sprite_bmp_flood_fill(
      * @brief A point, but with integer coordinates.
      */
     struct int_point {
-        
+    
         //--- Members ---
-
+        
         //X coordinate.
-        int x;
-
+        int x = 0;
+        
         //Y coordinate.
-        int y;
-
-
+        int y = 0;
+        
+        
         //--- Function definitions ---
-
+        
         /**
          * @brief Constructs a new int point object.
-         * 
+         *
          * @param p The float point coordinates.
          */
         explicit int_point(const point &p) :
             x(p.x),
             y(p.y) { }
-        
+            
         /**
          * @brief Constructs a new int point object.
-         * 
+         *
          * @param x X coordinate.
          * @param y Y coordinate.
          */
         int_point(int x, int y) :
             x(x),
             y(y) { }
-        
+            
     };
     
     queue<int_point> pixels_left;

@@ -40,10 +40,7 @@ const float ZOOM_MIN_LEVEL = 0.5f;
  * @brief Constructs a new GUI editor object.
  */
 gui_editor::gui_editor() :
-    cur_item(INVALID),
-    load_dialog_picker(this),
-    must_focus_on_cur_item(false),
-    must_recenter_cam(false) {
+    load_dialog_picker(this) {
     
     zoom_max_level = GUI_EDITOR::ZOOM_MAX_LEVEL;
     zoom_min_level = GUI_EDITOR::ZOOM_MIN_LEVEL;

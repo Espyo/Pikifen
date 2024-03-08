@@ -19,13 +19,7 @@
  * @brief Constructs a new converter type object.
  */
 converter_type::converter_type() :
-    mob_type(MOB_CATEGORY_CONVERTERS),
-    type_change_interval(3.0f),
-    total_input_pikmin(5),
-    pikmin_per_conversion(1),
-    buffer_size(5),
-    same_type_counts_for_output(false),
-    auto_conversion_timeout(5.0f) {
+    mob_type(MOB_CATEGORY_CONVERTERS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

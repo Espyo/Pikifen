@@ -52,14 +52,7 @@ const float SONG_SOFTENED_GAIN = 0.4f;
  */
 audio_manager::audio_manager() :
     samples(""),
-    streams(""),
-    master_mixer(nullptr),
-    world_sfx_mixer(nullptr),
-    music_mixer(nullptr),
-    world_ambiance_sfx_mixer(nullptr),
-    ui_sfx_mixer(nullptr),
-    voice(nullptr),
-    next_sfx_source_id(1) {
+    streams("") {
 }
 
 
@@ -1153,8 +1146,7 @@ void audio_manager::update_volumes(
  * @param base_dir Base directory its files belong to.
  */
 audio_stream_manager::audio_stream_manager(const string &base_dir) :
-    base_dir(base_dir),
-    total_calls(0) {
+    base_dir(base_dir) {
     
 }
 
@@ -1228,7 +1220,7 @@ void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
  * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::get(
-    const string &name, const data_node* node,
+    const string &name, data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_audio_stream("", node, report_errors);
@@ -1274,8 +1266,7 @@ long audio_stream_manager::get_total_calls() const {
  * @param s The stream.
  */
 audio_stream_manager::stream_info::stream_info(ALLEGRO_AUDIO_STREAM* s) :
-    s(s),
-    calls(1) {
+    s(s) {
     
 }
 
@@ -1286,8 +1277,7 @@ audio_stream_manager::stream_info::stream_info(ALLEGRO_AUDIO_STREAM* s) :
  * @param base_dir Base directory its files belong to.
  */
 sfx_sample_manager::sfx_sample_manager(const string &base_dir) :
-    base_dir(base_dir),
-    total_calls(0) {
+    base_dir(base_dir) {
     
 }
 
@@ -1361,7 +1351,7 @@ void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
  * @return The sample.
  */
 ALLEGRO_SAMPLE* sfx_sample_manager::get(
-    const string &name, const data_node* node,
+    const string &name, data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_sample("", node, report_errors);
@@ -1407,7 +1397,6 @@ long sfx_sample_manager::get_total_calls() const {
  * @param s The sample.
  */
 sfx_sample_manager::sample_info::sample_info(ALLEGRO_SAMPLE* s) :
-    s(s),
-    calls(1) {
+    s(s) {
     
 }

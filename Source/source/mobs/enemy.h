@@ -32,7 +32,7 @@ public:
     //--- Members ---
 
     //What type of enemy it is.
-    enemy_type* ene_type;
+    enemy_type* ene_type = nullptr;
     
 
     //--- Function declarations ---

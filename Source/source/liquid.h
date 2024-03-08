@@ -35,15 +35,15 @@ using std::string;
 struct liquid {
 
     //--- Members ---
-
+    
     //Name of this liquid.
     string name;
     
     //Color that best represents this liquid.
-    ALLEGRO_COLOR main_color;
+    ALLEGRO_COLOR main_color = COLOR_EMPTY;
     
     //Color used for this liquid in the radar.
-    ALLEGRO_COLOR radar_color;
+    ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
     //Animation database containing its liquid surface animation.
     animation_database anim_db;
@@ -52,15 +52,10 @@ struct liquid {
     animation_instance anim_instance;
     
     //Speed at which to scroll each layer of the surface.
-    float surface_speed[2];
+    float surface_speed[2] = { 10.0f, -13.0f };
     
     //Opacity of the surface.
-    unsigned char surface_alpha;
-
-
-    //--- Function declarations ---
-        
-    liquid();
+    unsigned char surface_alpha = 255;
     
 };
 

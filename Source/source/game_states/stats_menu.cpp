@@ -31,18 +31,6 @@ const string SONG_NAME = "menus";
 
 
 /**
- * @brief Constructs a new stats menu state object.
- */
-stats_menu_state::stats_menu_state() :
-    game_state(),
-    bmp_menu_bg(nullptr),
-    stats_list(nullptr),
-    runtime_value_text(nullptr) {
-    
-}
-
-
-/**
  * @brief Adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */

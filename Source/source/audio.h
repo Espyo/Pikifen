@@ -350,7 +350,7 @@ public:
 
     explicit sfx_sample_manager(const string &base_dir);
     ALLEGRO_SAMPLE* get(
-        const string &name, const data_node* node = NULL,
+        const string &name, data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_SAMPLE* s);
@@ -371,10 +371,10 @@ private:
         //--- Members ---
 
         //Sample pointer.
-        ALLEGRO_SAMPLE* s;
+        ALLEGRO_SAMPLE* s = nullptr;
 
         //How many calls it has.
-        size_t calls;
+        size_t calls = 1;
         
 
         //--- Function declarations ---
@@ -392,7 +392,7 @@ private:
     map<string, sample_info> list;
 
     //Total sum of calls. Useful for debugging.
-    long total_calls;
+    long total_calls = 0;
     
 
     //--- Function declarations ---
@@ -414,7 +414,7 @@ public:
 
     explicit audio_stream_manager(const string &base_dir);
     ALLEGRO_AUDIO_STREAM* get(
-        const string &name, const data_node* node = NULL,
+        const string &name, data_node* node = NULL,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_AUDIO_STREAM* s);
@@ -435,10 +435,10 @@ private:
         //--- Members ---
 
         //Stream pointer.
-        ALLEGRO_AUDIO_STREAM* s;
+        ALLEGRO_AUDIO_STREAM* s = nullptr;
 
         //How many calls it has.
-        size_t calls;
+        size_t calls = 1;
         
 
         //--- Function declarations ---
@@ -456,7 +456,7 @@ private:
     map<string, stream_info> list;
 
     //Total sum of calls. Useful for debugging.
-    long total_calls;
+    long total_calls = 0;
 
 
     //--- Function declarations ---
@@ -537,25 +537,25 @@ private:
     //--- Members ---
 
     //Master mixer.
-    ALLEGRO_MIXER* master_mixer;
+    ALLEGRO_MIXER* master_mixer = nullptr;
 
     //General in-world sound effect mixer.
-    ALLEGRO_MIXER* world_sfx_mixer;
+    ALLEGRO_MIXER* world_sfx_mixer = nullptr;
 
     //Music mixer.
-    ALLEGRO_MIXER* music_mixer;
+    ALLEGRO_MIXER* music_mixer = nullptr;
 
     //In-world ambiance sound effect mixer.
-    ALLEGRO_MIXER* world_ambiance_sfx_mixer;
+    ALLEGRO_MIXER* world_ambiance_sfx_mixer = nullptr;
     
     //UI sound effect mixer.
-    ALLEGRO_MIXER* ui_sfx_mixer;
+    ALLEGRO_MIXER* ui_sfx_mixer = nullptr;
     
     //Allegro voice from which the sound effects play.
-    ALLEGRO_VOICE* voice;
+    ALLEGRO_VOICE* voice = nullptr;
     
     //Incremental ID, used for the next source to create.
-    size_t next_sfx_source_id;
+    size_t next_sfx_source_id = 1;
     
     //Mob-specific sound effect sources.
     map<size_t, mob*> mob_sources;

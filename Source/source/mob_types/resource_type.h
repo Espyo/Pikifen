@@ -85,28 +85,28 @@ public:
     //--- Members ---
 
     //Should it vanish when the Pikmin carrying it drops it?
-    bool vanish_on_drop;
+    bool vanish_on_drop = false;
 
     //Should it return to the pile it came from when it vanishes?
-    bool return_to_pile_on_vanish;
+    bool return_to_pile_on_vanish = false;
 
     //How long before it vanishes, after being dropped.
-    float vanish_delay;
+    float vanish_delay = 0.0f;
 
     //Carry destination.
-    CARRY_DESTINATIONS carrying_destination;
+    CARRY_DESTINATIONS carrying_destination = CARRY_DESTINATION_SHIP;
 
     //Result when successfully delivered.
-    RESOURCE_DELIVERY_RESULTS delivery_result;
+    RESOURCE_DELIVERY_RESULTS delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
 
     //If it damages the mob it was carried to, this is the damage amount.
-    float damage_mob_amount;
+    float damage_mob_amount = 1.0f;
 
     //If it concocts a spray when delivered, this is the spray type index.
-    size_t spray_to_concoct;
+    size_t spray_to_concoct = INVALID;
     
     //If it adds points when delivered, this is the amount.
-    float point_amount;
+    float point_amount = 1.0f;
     
 
     //--- Function declarations ---

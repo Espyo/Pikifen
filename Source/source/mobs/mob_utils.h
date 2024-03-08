@@ -54,13 +54,13 @@ struct carrier_spot_struct {
     //--- Members ---
 
     //State.
-    CARRY_SPOT_STATES state;
+    CARRY_SPOT_STATES state = CARRY_SPOT_FREE;
 
     //Relative coordinates of each spot. Cache for performance.
     point pos;
 
     //Pikmin that is in this spot.
-    mob* pik_ptr;
+    mob* pik_ptr = nullptr;
     
 
     //--- Function declarations ---
@@ -78,43 +78,43 @@ struct carry_info_struct {
     //--- Members ---
 
     //Mob that this struct belongs to.
-    mob* m;
+    mob* m = nullptr;
 
     //Generic type of delivery destination.
-    CARRY_DESTINATIONS destination;
+    CARRY_DESTINATIONS destination = CARRY_DESTINATION_SHIP;
 
     //Information about each carrier spot.
     vector<carrier_spot_struct> spot_info;
 
     //Current carrying strength. Cache for performance.
-    float cur_carrying_strength;
+    float cur_carrying_strength = 0.0f;
 
     //Number of carriers, including reserves. Cache for performance.
-    size_t cur_n_carriers;
+    size_t cur_n_carriers = 0;
 
     //Is the object moving at the moment?
-    bool is_moving;
+    bool is_moving = false;
 
     //When the object begins moving, the idea is to carry it to this mob.
-    mob* intended_mob;
+    mob* intended_mob = nullptr;
 
     //When the object begins moving, the idea is to carry it to this point.
     point intended_point;
 
     //When delivering to an Onion, this is the Pikmin type that will benefit.
-    pikmin_type* intended_pik_type;
+    pikmin_type* intended_pik_type = nullptr;
 
     //True if a destination does exist, false otherwise.
-    bool destination_exists;
+    bool destination_exists = false;
 
     //Is the Pikmin meant to return somewhere after carrying?
-    bool must_return;
+    bool must_return = false;
 
     //Location to return to once they finish carrying.
     point return_point;
 
     //Distance from the return point to stop at.
-    float return_dist;
+    float return_dist = 0.0f;
     
 
     //--- Function declarations ---
@@ -138,39 +138,34 @@ struct chase_info_struct {
     //--- Members ---
 
     //Current chasing state.
-    CHASE_STATES state;
+    CHASE_STATES state = CHASE_STATE_STOPPED;
 
     //Flags that control how to chase. Use CHASE_FLAG_*.
-    unsigned char flags;
+    unsigned char flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.
     point offset;
 
     //Same as above, but for the Z coordinate.
-    float offset_z;
+    float offset_z = 0.0f;
 
     //Pointer to the origin of the coordinates, or NULL for the world origin.
-    point* orig_coords;
+    point* orig_coords = nullptr;
 
     //Same as above, but for the Z coordinate.
-    float* orig_z;
+    float* orig_z = nullptr;
     
     //Distance from the target in which the mob is considered as being there.
-    float target_dist;
+    float target_dist = 0.0f;
 
     //Acceleration to apply, in units per second per second.
-    float acceleration;
+    float acceleration = 0.0f;
 
     //Current speed to move towards the target at.
-    float cur_speed;
+    float cur_speed = 0.0f;
 
     //Maximum speed.
-    float max_speed;
-    
-
-    //--- Function declarations ---
-
-    chase_info_struct();
+    float max_speed = -1.0f;
 
 };
 
@@ -184,28 +179,28 @@ struct circling_info_struct {
     //--- Members ---
 
     //Mob that this struct belongs to.
-    mob* m;
+    mob* m = nullptr;
 
     //Mob that it is circling.
-    mob* circling_mob;
+    mob* circling_mob = nullptr;
 
     //Point that it is circling, if it's not circling a mob.
     point circling_point;
 
     //Radius at which to circle around.
-    float radius;
+    float radius = 0.0f;
 
     //Is it circling clockwise?
-    bool clockwise;
+    bool clockwise = true;
 
     //Speed at which to move.
-    float speed;
+    float speed = 0.0f;
 
     //Can the mob move freely, or only forward?
-    bool can_free_move;
+    bool can_free_move = false;
 
     //Angle of the circle to go to.
-    float cur_angle;
+    float cur_angle = 0.0f;
     
 
     //--- Function declarations ---
@@ -223,16 +218,16 @@ struct delivery_info_struct {
     //--- Members ---
 
     //Animation type.
-    DELIVERY_ANIMATIONS anim_type;
+    DELIVERY_ANIMATIONS anim_type = DELIVERY_ANIM_SUCK;
 
     //Ratio of time left in the animation.
-    float anim_time_ratio_left;
+    float anim_time_ratio_left = 1.0f;
 
     //Color to make the mob glow with.
     ALLEGRO_COLOR color;
 
     //Intended delivery Pikmin type, in the case of Onions.
-    pikmin_type* intended_pik_type;
+    pikmin_type* intended_pik_type = nullptr;
     
 
     //--- Function declarations ---
@@ -278,7 +273,7 @@ struct group_info_struct {
         point pos;
 
         //Mob in this spot.
-        mob* mob_ptr;
+        mob* mob_ptr = nullptr;
         
 
         //--- Function declarations ---
@@ -298,26 +293,27 @@ struct group_info_struct {
     vector<group_spot> spots;
 
     //Radius of the group.
-    float radius;
+    float radius = 0.0f;
 
     //Absolute position of element 0 of the group (frontmost member).
     point anchor;
 
     //Angle from the leader to the anchor.
-    float anchor_angle;
+    float anchor_angle = TAU / 2.0f;
 
     //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
 
     //Currently selected standby type.
-    subgroup_type* cur_standby_type;
+    subgroup_type* cur_standby_type = nullptr;
 
     //Mode of operation.
-    MODES mode;
+    MODES mode = MODE_SHUFFLE;
     
 
     //--- Function declarations ---
 
+    explicit group_info_struct(mob* leader_ptr);
     void init_spots(mob* affected_mob_ptr = NULL);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
@@ -332,7 +328,6 @@ struct group_info_struct {
     point get_spot_offset(const size_t spot_index) const;
     void reassign_spots();
     bool change_standby_type(const bool move_backwards);
-    explicit group_info_struct(mob* leader_ptr);
 };
 
 
@@ -345,31 +340,30 @@ struct hold_info_struct {
     //--- Members ---
 
     //Points to the mob holding the current one, if any.
-    mob* m;
+    mob* m = nullptr;
 
     //ID of the hitbox the mob is attached to.
     //If INVALID, it's attached to the mob center.
-    size_t hitbox_nr;
+    size_t hitbox_nr = INVALID;
 
     //Ratio of distance from the hitbox/body center. 1 is the full radius.
-    float offset_dist;
+    float offset_dist = 0.0f;
 
     //Angle the mob makes with the center of the hitbox/body.
-    float offset_angle;
+    float offset_angle = 0.0f;
 
     //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
-    float vertical_dist;
+    float vertical_dist = 0.0f;
 
     //Is the mob drawn above the holder?
-    bool above_holder;
+    bool above_holder = false;
 
     //How should the held object rotate?
-    HOLD_ROTATION_METHODS rotation_method;
+    HOLD_ROTATION_METHODS rotation_method = HOLD_ROTATION_METHOD_NEVER;
     
 
     //--- Function declarations ---
 
-    hold_info_struct();
     void clear();
     point get_final_pos(float* final_z) const;
 
@@ -547,46 +541,46 @@ struct parent_info_struct {
     //--- Members ---
 
     //Mob serving as the parent.
-    mob* m;
+    mob* m = nullptr;
 
     //Should the child handle damage?
-    bool handle_damage;
+    bool handle_damage = false;
 
     //Should the child relay damage to the parent?
-    bool relay_damage;
+    bool relay_damage = false;
 
     //Should the child handle status effects?
-    bool handle_statuses;
+    bool handle_statuses = false;
 
     //Should the child relay status effects to the parent?
-    bool relay_statuses;
+    bool relay_statuses = false;
 
     //Should the child handle script events?
-    bool handle_events;
+    bool handle_events = false;
 
     //Should the child relay script events to the parent?
-    bool relay_events;
+    bool relay_events = false;
 
     //Animation used for the limb connecting child and parent.
     animation_instance limb_anim;
 
     //Thickness of the limb.
-    float limb_thickness;
+    float limb_thickness = 32.0f;
 
     //Body part of the parent to link the limb to.
-    size_t limb_parent_body_part;
+    size_t limb_parent_body_part = INVALID;
 
     //Offset from the parent body part to link the limb at.
-    float limb_parent_offset;
+    float limb_parent_offset = 0.0f;
 
     //Body part of the child to link the limb to.
-    size_t limb_child_body_part;
+    size_t limb_child_body_part = INVALID;
 
     //Offset from the child body part to link the limb at.
-    float limb_child_offset;
+    float limb_child_offset = 0.0f;
 
     //Method by which the limb should be drawn.
-    LIMB_DRAW_METHODS limb_draw_method;
+    LIMB_DRAW_METHODS limb_draw_method = LIMB_DRAW_ABOVE_CHILD;
     
 
     //--- Function declarations ---
@@ -605,19 +599,19 @@ struct path_info_struct {
     //--- Members ---
 
     //Mob that this struct belongs to.
-    mob* m;
+    mob* m = nullptr;
 
     //Path to take the mob to while being carried.
     vector<path_stop*> path;
 
     //Index of the current stop in the projected carrying path.
-    size_t cur_path_stop_nr;
+    size_t cur_path_stop_nr = 0;
 
     //Result of the path calculation.
-    PATH_RESULTS result;
+    PATH_RESULTS result = PATH_RESULT_NOT_CALCULATED;
 
     //Is the way forward currently blocked? If so, why?
-    PATH_BLOCK_REASONS block_reason;
+    PATH_BLOCK_REASONS block_reason = PATH_BLOCK_REASON_NONE;
 
     //Settings about how the path should be followed.
     path_follow_settings settings;
@@ -649,15 +643,14 @@ struct pikmin_nest_type_struct {
     vector<string> leg_body_parts;
 
     //Speed at which Pikmin enter the nest.
-    float pikmin_enter_speed;
+    float pikmin_enter_speed = 0.7f;
 
     //Speed at which Pikmin exit the nest.
-    float pikmin_exit_speed;
+    float pikmin_exit_speed = 2.0f;
     
 
     //--- Function declarations ---
 
-    pikmin_nest_type_struct();
     void load_properties(data_node* file);
 
 };
@@ -674,10 +667,10 @@ public:
     //--- Members ---
 
     //Pointer to the nest mob responsible.
-    mob* m_ptr;
+    mob* m_ptr = nullptr;
 
     //Pointer to the type of nest.
-    pikmin_nest_type_struct* nest_type;
+    pikmin_nest_type_struct* nest_type = nullptr;
 
     //How many Pikmin are inside, per type, per maturity.
     vector<vector<size_t> > pikmin_inside;
@@ -686,10 +679,10 @@ public:
     vector<size_t> call_queue;
 
     //Which leader is calling the Pikmin over?
-    leader* calling_leader;
+    leader* calling_leader = nullptr;
 
     //Time left until it can eject the next Pikmin in the call queue.
-    float next_call_time;
+    float next_call_time = 0.0f;
     
 
     //--- Function declarations ---
@@ -716,20 +709,20 @@ struct track_info_struct {
     //--- Members ---
 
     //Pointer to the track mob.
-    mob* m;
+    mob* m = nullptr;
 
     //List of checkpoints (body part indexes) to cross.
     vector<size_t> checkpoints;
 
     //Current checkpoint of the track. This is the last checkpoint crossed.
-    size_t cur_cp_nr;
+    size_t cur_cp_nr = 0;
 
     //Progress within the current checkpoint. 0 means at the checkpoint.
     //1 means it's at the next checkpoint.
-    float cur_cp_progress;
+    float cur_cp_progress = 0.0f;
 
     //Speed to ride at, in ratio per second.
-    float ride_speed;
+    float ride_speed = 0.0f;
     
 
     //--- Function declarations ---

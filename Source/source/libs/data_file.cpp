@@ -28,9 +28,7 @@ const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
 /**
  * @brief Constructs a new empty data node object.
  */
-data_node::data_node() :
-    file_was_opened(false),
-    line_nr(0) {
+data_node::data_node() {
     
 }
 
@@ -63,9 +61,7 @@ data_node::data_node(const data_node &dn2) :
  * @param file_name Name of the file to load.
  */
 data_node::data_node(const string &file_name) :
-    file_was_opened(false),
-    file_name(file_name),
-    line_nr(0) {
+    file_name(file_name) {
     
     load_file(file_name);
 }
@@ -79,9 +75,7 @@ data_node::data_node(const string &file_name) :
  */
 data_node::data_node(const string &name, const string &value) :
     name(name),
-    value(value),
-    file_was_opened(false),
-    line_nr(0) {
+    value(value) {
     
 }
 

@@ -70,12 +70,7 @@ const float TRANSITION_OUT_DURATION = 1.5f;
  * @param m Mob it belongs to.
  */
 in_world_fraction::in_world_fraction(mob* m) :
-    in_world_hud_item(m),
-    value_number(0),
-    requirement_number(0),
-    color(COLOR_BLACK),
-    grow_juice_timer(0.0f),
-    req_met_juice_timer(0.0f) {
+    in_world_hud_item(m) {
     
     transition_timer = IN_WORLD_FRACTION::TRANSITION_IN_DURATION;
 }
@@ -250,8 +245,7 @@ void in_world_fraction::tick(const float delta_t) {
  * @param m Mob it belongs to.
  */
 in_world_health_wheel::in_world_health_wheel(mob* m) :
-    in_world_hud_item(m),
-    visible_ratio(0.0f) {
+    in_world_hud_item(m) {
     
     if(m->max_health > 0.0f) {
         visible_ratio = m->health / m->max_health;
@@ -333,10 +327,7 @@ void in_world_health_wheel::tick(const float delta_t) {
  * @param m Mob it belongs to.
  */
 in_world_hud_item::in_world_hud_item(mob* m) :
-    m(m),
-    transition(IN_WORLD_HUD_TRANSITION_IN),
-    transition_timer(0.0f),
-    to_delete(false) {
+    m(m) {
     
 }
 

@@ -164,8 +164,7 @@ animation_database::animation_database(
 ) :
     animations(a),
     sprites(s),
-    body_parts(b),
-    max_span(0.0f) {
+    body_parts(b) {
     
 }
 
@@ -378,9 +377,7 @@ void animation_database::sort_alphabetically() {
  */
 animation_instance::animation_instance(animation_database* anim_db) :
     cur_anim(nullptr),
-    anim_db(anim_db),
-    cur_frame_time(0),
-    cur_frame_index(0) {
+    anim_db(anim_db) {
     
 }
 
@@ -527,7 +524,6 @@ frame::frame(
     sprite_ptr(sp),
     duration(d),
     sound(snd),
-    sound_idx(INVALID),
     signal(s) {
     
 }
@@ -544,12 +540,6 @@ sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b, const vector<hitbox> &h
 ) :
     name(name),
-    parent_bmp(nullptr),
-    scale(point(1.0, 1.0)),
-    angle(0),
-    top_size(5.5, 10),
-    top_angle(0),
-    top_visible(true),
     bitmap(b),
     hitboxes(h) {
     
@@ -688,7 +678,7 @@ sprite &sprite::operator=(const sprite &s2) {
 void sprite::set_bitmap(
     const string &new_file_name,
     const point &new_file_pos, const point &new_file_size,
-    const data_node* node
+    data_node* node
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);

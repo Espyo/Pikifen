@@ -92,36 +92,7 @@ const string STATUS_GUI_FILE_PATH =
  * @param start_on_radar True if the page to start on should be the radar,
  * false if it should be the system page.
  */
-pause_menu_struct::pause_menu_struct(bool start_on_radar) :
-    bg_alpha_mult(0.0f),
-    opening_lockout_timer(0.0f),
-    closing_timer(0.0f),
-    to_delete(false),
-    closing(false),
-    help_category_text(nullptr),
-    help_tidbit_list(nullptr),
-    confirmation_explanation_text(nullptr),
-    cur_tidbit(nullptr),
-    leave_target(LEAVE_TO_AREA_SELECT),
-    lowest_sector_z(0.0f),
-    highest_sector_z(0.0f),
-    radar_mouse_down(false),
-    radar_mouse_dragging(false),
-    bmp_radar_cursor(nullptr),
-    bmp_radar_pikmin(nullptr),
-    bmp_radar_treasure(nullptr),
-    bmp_radar_enemy(nullptr),
-    bmp_radar_leader_bubble(nullptr),
-    bmp_radar_onion_skeleton(nullptr),
-    bmp_radar_onion_bulb(nullptr),
-    bmp_radar_ship(nullptr),
-    bmp_radar_path(nullptr),
-    radar_selected_leader(nullptr),
-    radar_cursor_leader(nullptr),
-    go_here_calc_time(0.0f),
-    go_here_path_result(PATH_RESULT_NOT_CALCULATED),
-    radar_zoom_in(false),
-    radar_zoom_out(false) {
+pause_menu_struct::pause_menu_struct(bool start_on_radar) {
     
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);

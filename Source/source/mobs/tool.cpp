@@ -22,9 +22,7 @@ tool::tool(
     const point &pos, tool_type* type, const float angle
 ):
     mob(pos, type, angle),
-    too_type(type),
-    holdability_flags(0),
-    reserved(nullptr) {
+    too_type(type) {
     
     team = MOB_TEAM_NONE;
 }

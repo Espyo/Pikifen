@@ -2,11 +2,17 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Code cleanup
+        NULL -> nullptr?
+        Use #pragma region in header files?
+        Remove all statics in classes that should be consts in namespaces instead
+        We have amount_str and nr_and_plural - they're the same
+        Constants for enums and flags have inconsistent styles
+            Bitmasks should use a typedef called bitmask8, bitmask16, etc.
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    lockpick man's resize bug
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -48,7 +54,7 @@ Next tasks (roughly sorted most important first)
                 x Generic fire attack
                 x Water fountain
                 x Boulder rolling
-                Burrowing sound
+                x Burrowing sound
                 Enemy spirit floating
             Other mobs
                 Onion/ship beam
@@ -60,8 +66,8 @@ Next tasks (roughly sorted most important first)
                 Generic sparkles (Spiderworts regrowing, Pikmin flowering)
                 Boing (Bouncy Mushrooms)
                 Thud (carriable rock landing, airborne enemy enemy lands)
-                Ceramic clunk (ceramic bridge piece fitting)
-                Sticks clacking (climbing stick growing)
+                x Ceramic clunk (ceramic bridge piece fitting)
+                x Sticks clacking (climbing stick growing)
                 Rocks crumbling (clog being destroyed)
                 Crystal shattering
                 x Leaves rustling (vegetation)
@@ -76,6 +82,10 @@ Next tasks (roughly sorted most important first)
         A couple of gameplay songs
         Boss
         Results screen
+    Boss music logic needs some tweaks
+        A way for the song to start right away, so that songs with intros can slam instead of slowly fading in
+        A way to skip to different portions
+        A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
@@ -800,6 +810,7 @@ Misc things (so I don't forget)
         The ability for particle generators to consist of multiple particle generators
     GUI things
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
+        GUI items could be told they are currently being activated, so that buttons can appear pressed in
         The selector cursor should be a part of the GUI manager itself
             It should smoothly jump from item to item as you choose which one is selected
             It should fade out when nothing is selected, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
@@ -908,7 +919,7 @@ Tasks for later on (I might never implement these)
                 It could check what kind of animation this is, like a Pikmin type, and determine that there are some needed animations that are not included
                 Maybe report if an enemy has attack hitboxes that don't hit below it?
         Both editors
-            Put the canvas in one ImGui window and the panel in another?
+            Put the canvas in one Dear ImGui window and the panel in another?
             [NEEDS BRAINSTORMING] A tutorial built into each editor? Pros: no need to go out of the engine just for help. Cons: an HTML page has a lot more powerful content than just some text and some widgets
             Hold Ctrl while dragging to lock to an axis?
             [NEEDS BRAINSTORMING] For buttons that change the state of something (e.g. toggle reference image on/off, change current snapping mode), I need to figure out what to do...

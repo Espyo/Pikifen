@@ -19,14 +19,7 @@
  * @brief Constructs a new drop type object.
  */
 drop_type::drop_type() :
-    mob_type(MOB_CATEGORY_DROPS),
-    consumer(DROP_CONSUMER_PIKMIN),
-    effect(DROP_EFFECT_MATURATE),
-    total_doses(1),
-    increase_amount(2),
-    spray_type_to_increase(INVALID),
-    status_to_give(nullptr),
-    shrink_speed(40.0f) {
+    mob_type(MOB_CATEGORY_DROPS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     height = 8.0f;

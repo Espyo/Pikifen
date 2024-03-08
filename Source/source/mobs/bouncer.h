@@ -27,7 +27,7 @@ public:
     //--- Members ---
 
     //What type of bouncer it is.
-    bouncer_type* bou_type;
+    bouncer_type* bou_type = nullptr;
     
     
     //--- Function declarations ---

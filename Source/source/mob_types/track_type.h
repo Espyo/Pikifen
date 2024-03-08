@@ -74,16 +74,16 @@ public:
     //--- Members ---
 
     //Flags representing possible riders.
-    unsigned char riders;
+    unsigned char riders = TRACK_RIDER_PIKMIN;
 
     //Pose that riders must take.
-    TRACK_RIDING_POSES riding_pose;
+    TRACK_RIDING_POSES riding_pose = TRACK_RIDING_POSE_STOPPED;
 
     //How quickly riders ride the track, in ratio per second.
-    float ride_speed;
+    float ride_speed = 0.5f;
     
     //Can the ride be cancelled if the rider is whistled?
-    bool cancellable_with_whistle;
+    bool cancellable_with_whistle = false;
     
 
     //--- Function declarations ---

@@ -21,9 +21,7 @@
  * @brief Constructs a new ship type object.
  */
 ship_type::ship_type() :
-    mob_type(MOB_CATEGORY_SHIPS),
-    can_heal(false),
-    control_point_radius(45.0f) {
+    mob_type(MOB_CATEGORY_SHIPS) {
     
     nest = new pikmin_nest_type_struct();
     

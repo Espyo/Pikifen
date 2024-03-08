@@ -29,13 +29,13 @@ public:
     //--- Members ---
 
     //What type of drop it is.
-    drop_type* dro_type;
+    drop_type* dro_type = nullptr;
     
     //Current scale. Used for shrinking.
-    float cur_scale;
+    float cur_scale = 1.0f;
     
     //How many doses are left.
-    size_t doses_left;
+    size_t doses_left = 0;
     
 
     //--- Function declarations ---

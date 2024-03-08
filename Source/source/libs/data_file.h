@@ -75,13 +75,13 @@ public:
 
     //True if the node or parent(s) was created from a file
     //that was opened successfuly.
-    bool file_was_opened;
+    bool file_was_opened = false;
 
     //Full file name of the file used to open this node or its parent(s).
     string file_name;
 
     //Line on the text file this node's in.
-    size_t line_nr;
+    size_t line_nr = 0;
     
 
     //--- Function declarations ---

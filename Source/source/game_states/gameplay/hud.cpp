@@ -69,36 +69,10 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
  * @brief Constructs a new HUD struct object.
  */
 hud_struct::hud_struct() :
-    bmp_bubble(nullptr),
-    bmp_counter_bubble_group(nullptr),
-    bmp_counter_bubble_field(nullptr),
-    bmp_counter_bubble_standby(nullptr),
-    bmp_counter_bubble_total(nullptr),
-    bmp_day_bubble(nullptr),
-    bmp_distant_pikmin_marker(nullptr),
-    bmp_hard_bubble(nullptr),
-    bmp_no_pikmin_bubble(nullptr),
-    bmp_sun(nullptr),
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
     standby_icon_mgr(&gui),
-    spray_icon_mgr(&gui),
-    standby_items_opacity(0.0f),
-    standby_items_fade_timer(0.0f),
-    spray_items_opacity(0.0f),
-    spray_items_fade_timer(0.0f),
-    prev_standby_type(nullptr),
-    prev_maturity_icon(nullptr),
-    spray_1_amount(nullptr),
-    spray_2_amount(nullptr),
-    standby_count_nr(0),
-    standby_amount(nullptr),
-    group_count_nr(0),
-    group_amount(nullptr),
-    field_count_nr(0),
-    field_amount(nullptr),
-    total_count_nr(0),
-    total_amount(nullptr) {
+    spray_icon_mgr(&gui) {
     
     data_node hud_file_node(HUD::GUI_FILE_NAME);
     

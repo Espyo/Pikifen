@@ -29,10 +29,10 @@ struct point {
     //--- Members ---
 
     //X coordinate.
-    float x;
+    float x = 0.0f;
 
     //Y coordinate.
-    float y;
+    float y = 0.0f;
     
 
     //--- Function declarations ---
@@ -102,13 +102,13 @@ private:
     //--- Members ---
 
     //Distance squared. Most operations are based on this number.
-    float distance_squared;
+    float distance_squared = 0.0f;
 
     //Square root of the distance squared. Only used if necessary.
-    float normal_distance;
+    float normal_distance = 0.0f;
     
     //Do we know the normal distance?
-    bool has_normal_distance;
+    bool has_normal_distance = false;
     
 };
 

@@ -47,13 +47,10 @@ converter::converter(
 ) :
     mob(pos, type, angle),
     con_type(type),
-    amount_in_buffer(0),
     input_pikmin_left(con_type->total_input_pikmin),
     current_type(con_type->available_pikmin_types[0]),
-    current_type_nr(0),
     type_change_timer(con_type->type_change_interval),
-    auto_conversion_timer(con_type->auto_conversion_timeout),
-    next_spew_angle(0) {
+    auto_conversion_timer(con_type->auto_conversion_timeout) {
     
     type_change_timer.on_end =
     [this] () { this->change_type(); };

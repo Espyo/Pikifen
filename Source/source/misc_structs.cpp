@@ -131,69 +131,6 @@ const string NAMES[N_MAKER_TOOLS] = {
 
 
 /**
- * @brief Constructs a new asset file names struct object.
- */
-asset_file_names_struct::asset_file_names_struct() :
-    bmp_area_name_font("Area_name_font.png"),
-    bmp_bright_circle("Bright_circle.png"),
-    bmp_bright_ring("Bright_ring.png"),
-    bmp_bubble_box("Bubble_box.png"),
-    bmp_button_box("Button_box.png"),
-    bmp_checkbox_check("Checkbox_check.png"),
-    bmp_checkbox_no_check("Checkbox_no_check.png"),
-    bmp_counter_font("Counter_font.png"),
-    bmp_cursor("Cursor.png"),
-    bmp_cursor_counter_font("Cursor_counter_font.png"),
-    bmp_editor_icons("Editor_icons.png"),
-    bmp_enemy_spirit("Enemy_spirit.png"),
-    bmp_focus_box("Focus_box.png"),
-    bmp_icon("Icon.png"),
-    bmp_idle_glow("Idle_glow.png"),
-    bmp_key_box("Key_box.png"),
-    bmp_leader_silhouette_side("Leader_silhouette_side.png"),
-    bmp_leader_silhouette_top("Leader_silhouette_top.png"),
-    bmp_main_font("Font.png"),
-    bmp_main_menu("Main_menu.jpg"),
-    bmp_medal_bronze("Medal_bronze.png"),
-    bmp_medal_gold("Medal_gold.png"),
-    bmp_medal_none("Medal_none.png"),
-    bmp_medal_platinum("Medal_platinum.png"),
-    bmp_medal_silver("Medal_silver.png"),
-    bmp_mission_clear("Mission_clear.png"),
-    bmp_mission_fail("Mission_fail.png"),
-    bmp_more("More.png"),
-    bmp_mouse_cursor("Mouse_cursor.png"),
-    bmp_notification("Notification.png"),
-    bmp_pikmin_spirit("Pikmin_spirit.png"),
-    bmp_player_input_icons("Player_input_icons.png"),
-    bmp_random("Random.png"),
-    bmp_rock("Rock.png"),
-    bmp_slim_font("Slim_font.otf"),
-    bmp_shadow("Shadow.png"),
-    bmp_smack("Smack.png"),
-    bmp_smoke("Smoke.png"),
-    bmp_sparkle("Sparkle.png"),
-    bmp_spotlight("Spotlight.png"),
-    bmp_swarm_arrow("Swarm_arrow.png"),
-    bmp_throw_invalid("Throw_invalid.png"),
-    bmp_throw_preview("Throw_preview.png"),
-    bmp_throw_preview_dashed("Throw_preview_dashed.png"),
-    bmp_value_font("Value_font.png"),
-    bmp_wave_ring("Wave_ring.png"),
-    sfx_attack("Attack.ogg"),
-    sfx_camera("Camera.ogg"),
-    sfx_menu_activate("Menu_activate.ogg"),
-    sfx_menu_back("Menu_back.ogg"),
-    sfx_menu_select("Menu_select.ogg"),
-    sfx_pluck("Pluck.ogg"),
-    sfx_spray("Spray.ogg"),
-    sfx_switch_pikmin("Switch_Pikmin.ogg"),
-    sfx_throw("Throw.ogg") {
-    
-}
-
-
-/**
  * @brief Loads the asset file names from a file.
  *
  * @param file File to load from.
@@ -256,19 +193,6 @@ void asset_file_names_struct::load(data_node* file) {
     srs.set("spray", sfx_spray);
     srs.set("switch_pikmin", sfx_switch_pikmin);
     srs.set("throw", sfx_throw);
-}
-
-
-/**
- * @brief Constructs a new bitmap effect info object.
- */
-bitmap_effect_info::bitmap_effect_info() :
-    translation(0, 0),
-    rotation(0),
-    scale(1, 1),
-    tint_color(COLOR_WHITE),
-    glow_color(COLOR_BLACK) {
-    
 }
 
 
@@ -357,7 +281,7 @@ void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* bmp_manager::get(
-    const string &name, const data_node* node,
+    const string &name, data_node* node,
     const bool report_errors
 ) {
     if(name.empty()) return load_bmp("", node, report_errors);
@@ -405,16 +329,6 @@ long bmp_manager::get_total_calls() const {
 bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
     b(b),
     calls(1) {
-    
-}
-
-
-/**
- * @brief Constructs a new camera info object.
- */
-camera_info::camera_info() :
-    target_zoom(1.0f),
-    zoom(1.0f) {
     
 }
 
@@ -478,20 +392,6 @@ void camera_info::update_box() {
     box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].y += GAMEPLAY::CAMERA_BOX_MARGIN;
-}
-
-
-/**
- * @brief Constructs a new edge offset cache object.
- */
-edge_offset_cache::edge_offset_cache() :
-    lengths{0, 0},
-    angles{0, 0},
-    colors{COLOR_EMPTY, COLOR_EMPTY},
-    elbow_lengths{0, 0},
-    elbow_angles{0, 0},
-    first_end_vertex_idx(0) {
-    
 }
 
 
@@ -696,17 +596,6 @@ bool error_manager::session_has_errors() {
 
 
 /**
- * @brief Constructs a new fade manager object.
- */
-fade_manager::fade_manager() :
-    time_left(0),
-    fade_in(false),
-    on_end(nullptr) {
-    
-}
-
-
-/**
  * @brief Draws the fade overlay, if there is a fade in progress.
  */
 void fade_manager::draw() {
@@ -779,22 +668,6 @@ void fade_manager::tick(const float delta_t) {
         time_left = 0;
         if(on_end) on_end();
     }
-}
-
-
-
-/**
- * @brief Constructs a new font list object.
- */
-font_list::font_list() :
-    area_name(nullptr),
-    builtin(nullptr),
-    counter(nullptr),
-    cursor_counter(nullptr),
-    slim(nullptr),
-    standard(nullptr),
-    value(nullptr) {
-    
 }
 
 
@@ -973,18 +846,6 @@ void mouse_cursor_struct::update_pos(
 
 
 /**
- * @brief Constructs a new movement struct object.
- */
-movement_struct::movement_struct() :
-    right(0),
-    up(0),
-    left(0),
-    down(0) {
-    
-}
-
-
-/**
  * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
  * All parameters are mandatory.
@@ -1017,198 +878,6 @@ void movement_struct::reset() {
     down = 0.0f;
 }
 
-
-
-/**
- * @brief Constructs a new message box info object.
- *
- * @param text Text to display.
- * @param speaker_icon Bitmap representing who is talking, if not NULL.
- */
-msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
-    speaker_icon(speaker_icon),
-    cur_section(0),
-    cur_token(0),
-    skipped_at_token(INVALID),
-    total_token_anim_time(0.0f),
-    total_skip_anim_time(0.0f),
-    misinput_protection_timer(0.0f),
-    advance_button_alpha(0.0f),
-    swipe_timer(0.0f),
-    transition_timer(GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME),
-    transition_in(true),
-    to_delete(false) {
-    
-    string message = unescape_string(text);
-    if(message.size() && message.back() == '\n') {
-        message.pop_back();
-    }
-    vector<string_token> tokens = tokenize_string(message);
-    set_string_token_widths(
-        tokens, game.fonts.standard, game.fonts.slim,
-        al_get_font_line_height(game.fonts.standard), true
-    );
-    
-    vector<string_token> line;
-    for(size_t t = 0; t < tokens.size(); ++t) {
-        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
-            tokens_per_line.push_back(line);
-            line.clear();
-        } else {
-            line.push_back(tokens[t]);
-        }
-    }
-    if(!line.empty()) {
-        tokens_per_line.push_back(line);
-    }
-}
-
-
-/**
- * @brief Handles the user having pressed the button to continue the message,
- * or to skip to showing everything in the current section.
- */
-void msg_box_info::advance() {
-    if(
-        transition_timer > 0.0f ||
-        misinput_protection_timer > 0.0f ||
-        swipe_timer > 0.0f
-    ) return;
-    
-    size_t last_token = 0;
-    for(size_t l = 0; l < 3; ++l) {
-        size_t line_idx = cur_section * 3 + l;
-        if(line_idx >= tokens_per_line.size()) break;
-        last_token += tokens_per_line[line_idx].size();
-    }
-    
-    if(cur_token >= last_token + 1) {
-        if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
-            //End of the message. Start closing the message box.
-            close();
-        } else {
-            //Start swiping to go to the next section.
-            swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;
-        }
-    } else {
-        //Skip the text typing and show everything in this section.
-        skipped_at_token = cur_token;
-        cur_token = last_token + 1;
-    }
-}
-
-
-/**
- * @brief Closes the message box, even if it is still writing something.
- */
-void msg_box_info::close() {
-    if(!transition_in && transition_timer > 0.0f) return;
-    transition_in = false;
-    transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param delta_t How long the frame's tick is, in seconds.
- */
-void msg_box_info::tick(const float delta_t) {
-    size_t tokens_in_section = 0;
-    for(size_t l = 0; l < 3; ++l) {
-        size_t line_idx = cur_section * 3 + l;
-        if(line_idx >= tokens_per_line.size()) break;
-        tokens_in_section += tokens_per_line[line_idx].size();
-    }
-    
-    //Animate the swipe animation.
-    if(swipe_timer > 0.0f) {
-        swipe_timer -= delta_t;
-        if(swipe_timer <= 0.0f) {
-            //Go to the next section.
-            swipe_timer = 0.0f;
-            cur_section++;
-            total_token_anim_time = 0.0f;
-            total_skip_anim_time = 0.0f;
-            skipped_at_token = INVALID;
-        }
-    }
-    
-    if(!transition_in || transition_timer == 0.0f) {
-    
-        //Animate the text.
-        if(game.config.message_char_interval == 0.0f) {
-            skipped_at_token = 0;
-            cur_token = tokens_in_section + 1;
-        } else {
-            total_token_anim_time += delta_t;
-            if(skipped_at_token == INVALID) {
-                size_t prev_token = cur_token;
-                cur_token =
-                    total_token_anim_time / game.config.message_char_interval;
-                cur_token =
-                    std::min(cur_token, tokens_in_section + 1);
-                if(
-                    cur_token == tokens_in_section + 1 &&
-                    prev_token != cur_token
-                ) {
-                    //We've reached the last token organically.
-                    //Start a misinput protection timer, so the player
-                    //doesn't accidentally go to the next section when they
-                    //were just trying to skip the text.
-                    misinput_protection_timer =
-                        MSG_BOX::MISINPUT_PROTECTION_DURATION;
-                }
-            } else {
-                total_skip_anim_time += delta_t;
-            }
-        }
-        
-    }
-    
-    //Animate the transition.
-    transition_timer -= delta_t;
-    transition_timer = std::max(0.0f, transition_timer);
-    if(!transition_in && transition_timer == 0.0f) {
-        to_delete = true;
-    }
-    
-    //Misinput protection logic.
-    misinput_protection_timer -= delta_t;
-    misinput_protection_timer = std::max(0.0f, misinput_protection_timer);
-    
-    //Button opacity logic.
-    if(
-        transition_timer == 0.0f &&
-        misinput_protection_timer == 0.0f &&
-        swipe_timer == 0.0f &&
-        cur_token >= tokens_in_section + 1
-    ) {
-        advance_button_alpha =
-            std::min(
-                advance_button_alpha +
-                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
-                1.0f
-            );
-    } else {
-        advance_button_alpha =
-            std::max(
-                0.0f,
-                advance_button_alpha -
-                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
-            );
-    }
-}
-
-
-/**
- * @brief Constructs a new notification struct object.
- */
-notification_struct::notification_struct() :
-    enabled(true),
-    visibility(0.0f) {
-    
-}
 
 
 /**
@@ -1603,14 +1272,6 @@ void performance_monitor_struct::start_measurement(const string &name) {
     
     cur_measurement_start_time = al_get_time();
     cur_measurement_name = name;
-}
-
-
-/**
- * @brief Constructs a new page object.
- */
-performance_monitor_struct::page::page() :
-    duration(0.0) {
 }
 
 
@@ -2062,33 +1723,6 @@ bool script_var_reader::get(const string &name, point &dest) const {
 
 
 /**
- * @brief Constructs a new statistics struct object.
- */
-statistics_struct::statistics_struct() :
-    startups(0),
-    runtime(0.0f),
-    gameplay_time(0.0f),
-    area_entries(0),
-    pikmin_births(0),
-    pikmin_deaths(0),
-    pikmin_eaten(0),
-    pikmin_hazard_deaths(0),
-    pikmin_blooms(0),
-    pikmin_saved(0),
-    enemy_deaths(0),
-    pikmin_thrown(0),
-    whistle_uses(0),
-    distance_walked(0.0f),
-    leader_damage_suffered(0.0f),
-    punch_damage_caused(0.0f),
-    leader_kos(0),
-    sprays_used(0) {
-    
-}
-
-
-
-/**
  * @brief Clears the list of registered subgroup types.
  */
 void subgroup_type_manager::clear() {
@@ -2191,62 +1825,6 @@ void subgroup_type_manager::register_type(
     
     types.push_back(new_sg_type);
 }
-
-
-/**
- * @brief Constructs a new system asset list object.
- */
-system_asset_list::system_asset_list():
-    bmp_bright_circle(nullptr),
-    bmp_bright_ring(nullptr),
-    bmp_bubble_box(nullptr),
-    bmp_button_box(nullptr),
-    bmp_checkbox_check(nullptr),
-    bmp_checkbox_no_check(nullptr),
-    bmp_cursor(nullptr),
-    bmp_enemy_spirit(nullptr),
-    bmp_focus_box(nullptr),
-    bmp_icon(nullptr),
-    bmp_idle_glow(nullptr),
-    bmp_key_box(nullptr),
-    bmp_leader_silhouette_side(nullptr),
-    bmp_leader_silhouette_top(nullptr),
-    bmp_medal_bronze(nullptr),
-    bmp_medal_gold(nullptr),
-    bmp_medal_none(nullptr),
-    bmp_medal_platinum(nullptr),
-    bmp_medal_silver(nullptr),
-    bmp_mission_clear(nullptr),
-    bmp_mission_fail(nullptr),
-    bmp_more(nullptr),
-    bmp_mouse_cursor(nullptr),
-    bmp_notification(nullptr),
-    bmp_pikmin_spirit(nullptr),
-    bmp_player_input_icons(nullptr),
-    bmp_random(nullptr),
-    bmp_rock(nullptr),
-    bmp_shadow(nullptr),
-    bmp_smack(nullptr),
-    bmp_smoke(nullptr),
-    bmp_sparkle(nullptr),
-    bmp_spotlight(nullptr),
-    bmp_swarm_arrow(nullptr),
-    bmp_throw_invalid(nullptr),
-    bmp_throw_preview(nullptr),
-    bmp_throw_preview_dashed(nullptr),
-    bmp_wave_ring(nullptr),
-    sfx_attack(nullptr),
-    sfx_camera(nullptr),
-    sfx_menu_activate(nullptr),
-    sfx_menu_back(nullptr),
-    sfx_menu_select(nullptr),
-    sfx_pluck(nullptr),
-    sfx_spray(nullptr),
-    sfx_switch_pikmin(nullptr),
-    sfx_throw(nullptr) {
-    
-}
-
 
 
 /**

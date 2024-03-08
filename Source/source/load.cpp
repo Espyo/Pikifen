@@ -770,7 +770,7 @@ void load_asset_file_names() {
  * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
-    const string &file_name, const data_node* node, bool report_errors
+    const string &file_name, data_node* node, bool report_errors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
         al_load_audio_stream(
@@ -804,7 +804,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, const data_node* node,
+    const string &file_name, data_node* node,
     const bool report_error, const bool error_bmp_on_error,
     const bool error_bmp_on_empty, const bool path_from_root
 ) {
@@ -1436,7 +1436,7 @@ void load_options() {
  * @return The sample.
  */
 ALLEGRO_SAMPLE* load_sample(
-    const string &file_name, const data_node* node, bool report_errors
+    const string &file_name, data_node* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample =
         al_load_sample((AUDIO_SOUNDS_FOLDER_PATH + "/" + file_name).c_str());

@@ -29,7 +29,7 @@ public:
     //--- Members ---
 
     //What type of pellet it is.
-    pellet_type* pel_type;
+    pellet_type* pel_type = nullptr;
     
     
     //--- Function declarations ---

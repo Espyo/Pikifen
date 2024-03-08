@@ -26,19 +26,19 @@ public:
     //--- Members ---
 
     //What type of decoration it is.
-    decoration_type* dec_type;
+    decoration_type* dec_type = nullptr;
     
     //Whether this decoration is allowed to use the random anim delay or not.
-    bool individual_random_anim_delay;
+    bool individual_random_anim_delay = true;
 
     //This decoration's random tint, if any.
-    ALLEGRO_COLOR individual_tint;
+    ALLEGRO_COLOR individual_tint = COLOR_WHITE;
 
     //This decoration's random scale, if any.
-    float individual_scale;
+    float individual_scale = 1.0f;
     
     //This decoration's random rotation, if any.
-    float individual_rotation;
+    float individual_rotation = 0.0f;
     
 
     //--- Function declarations ---

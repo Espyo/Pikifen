@@ -28,20 +28,20 @@ struct edge;
 struct vertex {
 
     //--- Members ---
-
+    
     //X coordinate.
-    float x;
+    float x = 0.0f;
     
     //Y coordinate.
-    float y;
-
+    float y = 0.0f;
+    
     //Index number of the edges around it.
     vector<size_t> edge_nrs;
-
+    
     //Edges around it.
     vector<edge*> edges;
     
-
+    
     //--- Function declarations ---
     
     explicit vertex(float x = 0.0f, float y = 0.0f);

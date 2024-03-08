@@ -22,8 +22,7 @@
  * @brief Constructs a new treasure type object.
  */
 treasure_type::treasure_type() :
-    mob_type(MOB_CATEGORY_TREASURES),
-    points(10) {
+    mob_type(MOB_CATEGORY_TREASURES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

@@ -111,93 +111,6 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 
 
 /**
- * @brief Constructs a new gameplay state object.
- */
-gameplay_state::gameplay_state() :
-    game_state(),
-    after_hours(false),
-    area_time_passed(0.0f),
-    area_title_fade_timer(GAMEPLAY::AREA_TITLE_FADE_DURATION),
-    bmp_fog(nullptr),
-    closest_group_member_distant(false),
-    cur_leader_nr(0),
-    cur_leader_ptr(nullptr),
-    day(1),
-    day_minutes(0.0f),
-    delta_t_mult(1.0f),
-    gameplay_time_passed(0.0f),
-    hud(nullptr),
-    leader_cursor_sector(nullptr),
-    msg_box(nullptr),
-    next_mob_id(0),
-    particles(0),
-    precipitation(0),
-    selected_spray(0),
-    swarm_angle(0),
-    swarm_magnitude(0.0f),
-    throw_dest_mob(nullptr),
-    throw_dest_sector(nullptr),
-    loading(false),
-    unloading(false),
-    went_to_results(false),
-    mission_required_mob_amount(0),
-    pikmin_born(0),
-    pikmin_deaths(0),
-    treasures_collected(0),
-    treasures_total(0),
-    goal_treasures_collected(0),
-    goal_treasures_total(0),
-    treasure_points_collected(0),
-    treasure_points_total(0),
-    enemy_deaths(0),
-    enemy_total(0),
-    enemy_points_collected(0),
-    enemy_points_total(0),
-    mission_fail_reason((MISSION_FAIL_CONDITIONS) INVALID),
-    mission_score(0),
-    old_mission_score(0),
-    mission_score_cur_text(nullptr),
-    old_mission_goal_cur(0),
-    mission_goal_cur_text(nullptr),
-    old_mission_fail_1_cur(0),
-    mission_fail_1_cur_text(nullptr),
-    old_mission_fail_2_cur(0),
-    mission_fail_2_cur_text(nullptr),
-    cur_leaders_in_mission_exit(0),
-    nr_living_leaders(0),
-    leaders_kod(0),
-    starting_nr_of_leaders(0),
-    goal_indicator_ratio(0.0f),
-    fail_1_indicator_ratio(0.0f),
-    fail_2_indicator_ratio(0.0f),
-    score_indicator(0.0f),
-    cur_interlude(INTERLUDE_NONE),
-    interlude_time(0.0f),
-    cur_big_msg(BIG_MESSAGE_NONE),
-    big_msg_time(0.0f),
-    radar_zoom(PAUSE_MENU::RADAR_DEF_ZOOM),
-    close_to_interactable_to_use(nullptr),
-    close_to_nest_to_open(nullptr),
-    close_to_pikmin_to_pluck(nullptr),
-    close_to_ship_to_heal(nullptr),
-    cursor_height_diff_light(0.0f),
-    is_input_allowed(false),
-    lightmap_bmp(nullptr),
-    onion_menu(nullptr),
-    pause_menu(nullptr),
-    paused(false),
-    playing_boss_music(false),
-    ready_for_input(false),
-    swarm_cursor(false) {
-    
-    closest_group_member[BUBBLE_PREVIOUS] = NULL;
-    closest_group_member[BUBBLE_CURRENT] = NULL;
-    closest_group_member[BUBBLE_NEXT] = NULL;
-    
-}
-
-
-/**
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
@@ -1423,4 +1336,175 @@ void gameplay_state::update_transformations() {
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;
     al_invert_transform(&game.screen_to_world_transform);
+}
+
+
+/**
+ * @brief Constructs a new message box info object.
+ *
+ * @param text Text to display.
+ * @param speaker_icon Bitmap representing who is talking, if not NULL.
+ */
+msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
+    speaker_icon(speaker_icon) {
+    
+    string message = unescape_string(text);
+    if(message.size() && message.back() == '\n') {
+        message.pop_back();
+    }
+    vector<string_token> tokens = tokenize_string(message);
+    set_string_token_widths(
+        tokens, game.fonts.standard, game.fonts.slim,
+        al_get_font_line_height(game.fonts.standard), true
+    );
+    
+    vector<string_token> line;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
+            tokens_per_line.push_back(line);
+            line.clear();
+        } else {
+            line.push_back(tokens[t]);
+        }
+    }
+    if(!line.empty()) {
+        tokens_per_line.push_back(line);
+    }
+}
+
+
+/**
+ * @brief Handles the user having pressed the button to continue the message,
+ * or to skip to showing everything in the current section.
+ */
+void msg_box_info::advance() {
+    if(
+        transition_timer > 0.0f ||
+        misinput_protection_timer > 0.0f ||
+        swipe_timer > 0.0f
+    ) return;
+    
+    size_t last_token = 0;
+    for(size_t l = 0; l < 3; ++l) {
+        size_t line_idx = cur_section * 3 + l;
+        if(line_idx >= tokens_per_line.size()) break;
+        last_token += tokens_per_line[line_idx].size();
+    }
+    
+    if(cur_token >= last_token + 1) {
+        if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
+            //End of the message. Start closing the message box.
+            close();
+        } else {
+            //Start swiping to go to the next section.
+            swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;
+        }
+    } else {
+        //Skip the text typing and show everything in this section.
+        skipped_at_token = cur_token;
+        cur_token = last_token + 1;
+    }
+}
+
+
+/**
+ * @brief Closes the message box, even if it is still writing something.
+ */
+void msg_box_info::close() {
+    if(!transition_in && transition_timer > 0.0f) return;
+    transition_in = false;
+    transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ */
+void msg_box_info::tick(const float delta_t) {
+    size_t tokens_in_section = 0;
+    for(size_t l = 0; l < 3; ++l) {
+        size_t line_idx = cur_section * 3 + l;
+        if(line_idx >= tokens_per_line.size()) break;
+        tokens_in_section += tokens_per_line[line_idx].size();
+    }
+    
+    //Animate the swipe animation.
+    if(swipe_timer > 0.0f) {
+        swipe_timer -= delta_t;
+        if(swipe_timer <= 0.0f) {
+            //Go to the next section.
+            swipe_timer = 0.0f;
+            cur_section++;
+            total_token_anim_time = 0.0f;
+            total_skip_anim_time = 0.0f;
+            skipped_at_token = INVALID;
+        }
+    }
+    
+    if(!transition_in || transition_timer == 0.0f) {
+    
+        //Animate the text.
+        if(game.config.message_char_interval == 0.0f) {
+            skipped_at_token = 0;
+            cur_token = tokens_in_section + 1;
+        } else {
+            total_token_anim_time += delta_t;
+            if(skipped_at_token == INVALID) {
+                size_t prev_token = cur_token;
+                cur_token =
+                    total_token_anim_time / game.config.message_char_interval;
+                cur_token =
+                    std::min(cur_token, tokens_in_section + 1);
+                if(
+                    cur_token == tokens_in_section + 1 &&
+                    prev_token != cur_token
+                ) {
+                    //We've reached the last token organically.
+                    //Start a misinput protection timer, so the player
+                    //doesn't accidentally go to the next section when they
+                    //were just trying to skip the text.
+                    misinput_protection_timer =
+                        MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                }
+            } else {
+                total_skip_anim_time += delta_t;
+            }
+        }
+        
+    }
+    
+    //Animate the transition.
+    transition_timer -= delta_t;
+    transition_timer = std::max(0.0f, transition_timer);
+    if(!transition_in && transition_timer == 0.0f) {
+        to_delete = true;
+    }
+    
+    //Misinput protection logic.
+    misinput_protection_timer -= delta_t;
+    misinput_protection_timer = std::max(0.0f, misinput_protection_timer);
+    
+    //Button opacity logic.
+    if(
+        transition_timer == 0.0f &&
+        misinput_protection_timer == 0.0f &&
+        swipe_timer == 0.0f &&
+        cur_token >= tokens_in_section + 1
+    ) {
+        advance_button_alpha =
+            std::min(
+                advance_button_alpha +
+                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
+                1.0f
+            );
+    } else {
+        advance_button_alpha =
+            std::max(
+                0.0f,
+                advance_button_alpha -
+                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
+            );
+    }
 }

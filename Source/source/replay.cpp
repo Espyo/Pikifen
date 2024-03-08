@@ -21,9 +21,8 @@ using std::vector;
 /**
  * @brief Construct a new replay object.
  */
-replay::replay() :
-    prev_leader_nr(INVALID) {
-    
+replay::replay() {
+
     clear();
 }
 
@@ -31,7 +30,7 @@ replay::replay() :
 /**
  * @brief Adds a new state to the replay, filling it with data from the supplied
  * mob vectors.
- * 
+ *
  * @param leader_list List of leaders.
  * @param pikmin_list List of Pikmin.
  * @param enemy_list List of enemies.
@@ -171,7 +170,7 @@ void replay::finish_recording() {
 
 /**
  * @brief Loads replay data from a file in the disk.
- * 
+ *
  * @param file_name Name of the file to load from.
  */
 void replay::load_from_file(const string &file_name) {
@@ -216,7 +215,7 @@ void replay::load_from_file(const string &file_name) {
 
 /**
  * @brief Saves replay data to a file in the disk.
- * 
+ *
  * @param file_name Name of the file to save to.
  */
 void replay::save_to_file(const string &file_name) const {
@@ -246,7 +245,7 @@ void replay::save_to_file(const string &file_name) const {
 
 /**
  * @brief Constructs a new replay element object.
- * 
+ *
  * @param type Type of element.
  * @param pos Its coordinates.
  */
@@ -261,7 +260,7 @@ replay_element::replay_element(
 
 /**
  * @brief Constructs a new replay event object.
- * 
+ *
  * @param type Type of event.
  * @param data Any numerical data this event needs.
  */

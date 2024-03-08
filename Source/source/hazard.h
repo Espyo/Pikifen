@@ -16,6 +16,8 @@
 #include <string>
 #include <vector>
 
+#include "const.h"
+
 
 using std::string;
 using std::vector;
@@ -36,23 +38,18 @@ struct status_type;
 struct hazard {
 
     //--- Members ---
-
+    
     //Name of the hazard.
     string name;
     
     //Color that best represents this hazard.
-    ALLEGRO_COLOR main_color;
+    ALLEGRO_COLOR main_color = COLOR_EMPTY;
     
     //Status effects for mobs that interact with this hazard.
     vector<status_type*> effects;
     
     //If it's got an associated liquid, this points to it.
-    liquid* associated_liquid;
-    
-
-    //--- Function declarations ---
-    
-    hazard();
+    liquid* associated_liquid = nullptr;
     
 };
 

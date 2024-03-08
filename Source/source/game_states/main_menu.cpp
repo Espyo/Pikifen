@@ -47,27 +47,6 @@ const string TUTORIAL_GUI_FILE_PATH =
 
 
 /**
- * @brief Constructs a new main menu state object.
- *
- */
-main_menu_state::main_menu_state() :
-    game_state(),
-    page_to_load(MAIN_MENU_PAGE_MAIN),
-    bmp_menu_bg(NULL),
-    logo_min_screen_limit(10.0f, 10.0f),
-    logo_max_screen_limit(90.0f, 50.0f),
-    logo_pikmin_max_speed(800.0f),
-    logo_pikmin_min_speed(600.0f),
-    logo_pikmin_speed_smoothness(0.08f),
-    logo_pikmin_sway_amount(3.0f),
-    logo_pikmin_sway_max_speed(5.5f),
-    logo_pikmin_sway_min_speed(2.5f),
-    logo_pikmin_size(3.5f, 3.5f) {
-    
-}
-
-
-/**
  * @brief Draws the main menu.
  */
 void main_menu_state::do_drawing() {

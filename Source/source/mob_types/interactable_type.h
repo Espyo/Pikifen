@@ -29,7 +29,7 @@ public:
     string prompt_text;
     
     //How close the leader must be before the player can interact with it.
-    float trigger_range;
+    float trigger_range = 64.0f;
     
 
     //--- Function declarations ---

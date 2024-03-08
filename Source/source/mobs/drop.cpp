@@ -26,7 +26,6 @@
 drop::drop(const point &pos, drop_type* type, const float angle) :
     mob(pos, type, angle),
     dro_type(type),
-    cur_scale(1.0),
     doses_left(dro_type->total_doses) {
     
     

@@ -42,10 +42,10 @@ public:
         point absolute_pos;
 
         //Current state. 0 = free. 1 = reserved. 2 = occupied.
-        unsigned char state;
+        unsigned char state = 0;
 
         //What Pikmin is reserving/occupying. NULL if free.
-        pikmin* pikmin_here;
+        pikmin* pikmin_here = nullptr;
 
         
         //--- Function declarations ---
@@ -58,10 +58,10 @@ public:
     //--- Members ---
 
     //What type of group task it is.
-    group_task_type* tas_type;
+    group_task_type* tas_type = nullptr;
 
     //Power requirement in order to reach the goal. Group task type override.
-    size_t power_goal;
+    size_t power_goal = 0;
     
     //List of spots for Pikmin to use.
     vector<group_task_spot> spots;
@@ -94,10 +94,10 @@ private:
     //--- Members ---
     
     //Combined Pikmin power put into the task right now. Cache for performance.
-    float power;
+    float power = 0.0f;
     
     //Has it already run the "task finished" code?
-    bool ran_task_finished_code;
+    bool ran_task_finished_code = false;
     
 
     //--- Function declarations ---

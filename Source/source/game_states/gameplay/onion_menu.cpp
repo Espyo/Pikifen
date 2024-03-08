@@ -41,23 +41,7 @@ onion_menu_struct::onion_menu_struct(
     pikmin_nest_struct* n_ptr, leader* l_ptr
 ) :
     n_ptr(n_ptr),
-    l_ptr(l_ptr),
-    select_all(false),
-    page(0),
-    nr_pages(0),
-    onion_all_button(nullptr),
-    group_all_button(nullptr),
-    onion_more_l_icon(nullptr),
-    onion_more_r_icon(nullptr),
-    group_more_l_icon(nullptr),
-    group_more_r_icon(nullptr),
-    prev_page_button(nullptr),
-    next_page_button(nullptr),
-    field_amount_text(nullptr),
-    bg_alpha_mult(0.0f),
-    closing_timer(0.0f),
-    to_delete(false),
-    closing(false) {
+    l_ptr(l_ptr) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         types.push_back(
@@ -533,7 +517,6 @@ onion_menu_struct::onion_menu_struct(
 
 /**
  * @brief Destroys the Onion menu struct object.
- *
  */
 onion_menu_struct::~onion_menu_struct() {
     gui.destroy();
@@ -963,9 +946,7 @@ void onion_menu_struct::update() {
 onion_menu_type_struct::onion_menu_type_struct(
     const size_t idx, pikmin_type* pik_type
 ) :
-    delta(0),
     type_idx(idx),
-    on_screen_idx(INVALID),
     pik_type(pik_type) {
     
 }

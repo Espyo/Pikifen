@@ -21,17 +21,7 @@
  * @brief Constructs a new pile type object.
  */
 pile_type::pile_type() :
-    mob_type(MOB_CATEGORY_PILES),
-    contents(nullptr),
-    recharge_interval(0.0f),
-    recharge_amount(0),
-    max_amount(1),
-    health_per_resource(1.0f),
-    can_drop_multiple(false),
-    show_amount(true),
-    hide_when_empty(true),
-    auto_shrink_smallest_radius(0.0f),
-    delete_when_finished(true) {
+    mob_type(MOB_CATEGORY_PILES) {
     
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     

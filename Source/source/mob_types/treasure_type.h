@@ -52,7 +52,7 @@ public:
     //--- Members ---
 
     //How many points it is worth.
-    size_t points;
+    size_t points = 10;
     
 
     //--- Function declarations ---

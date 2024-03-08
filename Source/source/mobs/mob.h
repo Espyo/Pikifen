@@ -47,9 +47,6 @@ extern const float CARRY_SWAY_TIME_MULT;
 extern const float CARRY_SWAY_X_TRANSLATION_AMOUNT;
 extern const float CARRY_SWAY_Y_TRANSLATION_AMOUNT;
 extern const float CARRY_SWAY_ROTATION_AMOUNT;
-extern const float DEF_ACCELERATION;
-extern const float DEF_CHASE_TARGET_DISTANCE;
-extern const float DEF_ROTATION_SPEED;
 extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
 extern const float DELIVERY_SUCK_SHAKING_MULT;
 extern const float DELIVERY_SUCK_TIME;
@@ -101,10 +98,10 @@ public:
     //-Basic information-
     
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
-    mob_type* type;
+    mob_type* type = nullptr;
 
     //Schedule this mob to be deleted from memory at the end of the frame.
-    bool to_delete;
+    bool to_delete = false;
     
     //-Position-
     
@@ -112,19 +109,19 @@ public:
     point pos;
 
     //Z coordinate. This is height; the higher the value, the higher in the sky.
-    float z;
+    float z = 0.0f;
 
     //Current facing angle. 0 = right, PI / 2 = up, etc.
-    float angle;
+    float angle = 0.0f;
 
     //The highest ground below the entire mob.
-    sector* ground_sector;
+    sector* ground_sector = nullptr;
 
     //Sector that the mob's center is on.
-    sector* center_sector;
+    sector* center_sector = nullptr;
 
     //Mob this mob is standing on top of, if any.
-    mob* standing_on_mob;
+    mob* standing_on_mob = nullptr;
     
     //-Basic movement-
     
@@ -132,20 +129,20 @@ public:
     point speed;
 
     //Same as speed, but for the Z coordinate.
-    float speed_z;
+    float speed_z = 0.0f;
 
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
-    float z_cap;
+    float z_cap = FLT_MAX;
 
     //Multiply the mob's gravity by this.
-    float gravity_mult;
+    float gravity_mult = 1.0f;
 
     //How much it's being pushed by another mob.
-    float push_amount;
+    float push_amount = 0.0f;
 
     //Angle that another mob is pushing it to.
-    float push_angle;
+    float push_angle = 0.0f;
 
     //How much the mob moved this frame, if it's walkable.
     point walkable_moved;
@@ -156,27 +153,27 @@ public:
     chase_info_struct chase_info;
 
     //Information about the path it is following, if any.
-    path_info_struct* path_info;
+    path_info_struct* path_info = nullptr;
 
     //Information about the mob/point it's circling, if any.
-    circling_info_struct* circling_info;
+    circling_info_struct* circling_info = nullptr;
 
     //Riding a track. If NULL, the mob is not riding on any track.
-    track_info_struct* track_info;
+    track_info_struct* track_info = nullptr;
 
     //Info on how this mob should be carried. Uncarriable if NULL.
-    carry_info_struct* carry_info;
+    carry_info_struct* carry_info = nullptr;
 
     //Onion delivery info. If NULL, the mob is not being delivered.
-    delivery_info_struct* delivery_info;
+    delivery_info_struct* delivery_info = nullptr;
     
     //-Physical space-
     
     //Current radius.
-    float radius;
+    float radius = 0.0f;
 
     //Current height.
-    float height;
+    float height = 0.0f;
 
     //Current rectangular dimensions.
     point rectangular_dim;
@@ -195,7 +192,7 @@ public:
     //-Brain and behavior-
     
     //The mob it has focus on.
-    mob* focused_mob;
+    mob* focused_mob = nullptr;
 
     //Further memory of focused mobs.
     map<size_t, mob*> focused_mob_memory;
@@ -204,30 +201,30 @@ public:
     float intended_turn_angle;
 
     //Variable that holds the position the mob wants to be facing.
-    point* intended_turn_pos;
+    point* intended_turn_pos = nullptr;
 
     //Starting coordinates; what the mob calls "home".
     point home;
 
     //Index of the reach to use for "X in reach" events.
-    size_t far_reach;
+    size_t far_reach = INVALID;
 
     //Index or the reach to use for "focused mob out of reach" events.
-    size_t near_reach;
+    size_t near_reach = INVALID;
 
     //How long it's been alive for.
-    float time_alive;
+    float time_alive = 0.0f;
 
     //Incremental ID. Used for minor things.
-    size_t id;
+    size_t id = 0;
     
     //-General state-
     
     //Current health.
-    float health;
+    float health = 0.0f;
 
     //Maximum health.
-    float max_health;
+    float max_health = 0.0f;
 
     //During this period, the mob cannot be attacked.
     timer invuln_period;
@@ -236,22 +233,22 @@ public:
     vector<std::pair<float, mob*> > hit_opponents;
 
     //How much damage did it take since the last time the itch event triggered?
-    float itch_damage;
+    float itch_damage = 0.0f;
 
     //How much time has passed the last time the itch event triggered?
-    float itch_time;
+    float itch_time = 0.0f;
 
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
 
     //Hazard of the sector the mob is currently on.
-    hazard* on_hazard;
+    hazard* on_hazard = nullptr;
 
     //If this mob is a sub-mob, this points to the parent mob.
-    parent_info_struct* parent;
+    parent_info_struct* parent = nullptr;
 
     //Miscellanous flags. Use MOB_FLAG_*.
-    uint16_t flags;
+    uint16_t flags = 0;
     
     //-Interactions with other mobs-
     
@@ -265,7 +262,7 @@ public:
     vector<mob*> holding;
 
     //If it's stored inside another mob, this indicates which mob it is.
-    mob* stored_inside_another;
+    mob* stored_inside_another = nullptr;
 
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
@@ -274,24 +271,24 @@ public:
     vector<mob*> chomping_mobs;
 
     //Max number of mobs it can chomp in the current attack.
-    size_t chomp_max;
+    size_t chomp_max = 0;
 
     //Mob's team (who it can damage).
-    MOB_TEAMS team;
+    MOB_TEAMS team = MOB_TEAM_NONE;
     
     //-Group-
     
     //The current mob is following this mob's group.
-    mob* following_group;
+    mob* following_group = nullptr;
 
     //Index of this mob's spot in the leader's group spots.
-    size_t group_spot_index;
+    size_t group_spot_index = INVALID;
 
     //The current subgroup type.
-    subgroup_type* subgroup_type_ptr;
+    subgroup_type* subgroup_type_ptr = nullptr;
 
     //Info on the group this mob is a leader of, if any.
-    group_info_struct* group;
+    group_info_struct* group = nullptr;
     
     //-Animation-
     
@@ -299,38 +296,38 @@ public:
     animation_instance anim;
 
     //Force the usage of this specific sprite.
-    sprite* forced_sprite;
+    sprite* forced_sprite = nullptr;
     
     //-Aesthetic-
     
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
-    float height_effect_pivot;
+    float height_effect_pivot = LARGE_FLOAT;
 
     //Time left in the current damage squash-and-stretch animation.
-    float damage_squash_time;
+    float damage_squash_time = 0.0f;
 
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
 
     //Data about its on-screen health wheel, if any.
-    in_world_health_wheel* health_wheel;
+    in_world_health_wheel* health_wheel = nullptr;
 
     //Data about its on-screen fraction numbers, if any.
-    in_world_fraction* fraction;
+    in_world_fraction* fraction = nullptr;
     
     //-Caches-
     
     //Cached value of the angle's cosine.
-    float angle_cos;
+    float angle_cos = 0.0f;
 
     //Cached value of the angle's sine.
-    float angle_sin;
+    float angle_sin = 0.0f;
 
     //Cached value of how far its hitboxes or radius can reach from the center.
-    float max_span;
+    float max_span = 0.0f;
 
     //It's invisible due to a status effect. Cache for performance.
-    bool has_invisibility_status;
+    bool has_invisibility_status = false;
     
     
     //--- Function declarations ---
@@ -434,13 +431,13 @@ public:
         point* orig_coords, float* orig_z,
         const point &offset = point(), const float offset_z = 0.0f,
         const unsigned char flags = 0,
-        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
+        const float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void chase(
         const point &coords, const float coords_z,
         const unsigned char flags = 0,
-        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
+        const float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void stop_chasing();
@@ -552,12 +549,11 @@ public:
     //--- Members ---
 
     //Index number of its current base animation.
-    size_t cur_base_anim_nr;
+    size_t cur_base_anim_nr = INVALID;
     
 
     //--- Function declarations ---
 
-    mob_with_anim_groups();
     size_t get_animation_nr_from_base_and_group(
         const size_t base_anim_nr, const size_t group_nr,
         const size_t base_anim_total

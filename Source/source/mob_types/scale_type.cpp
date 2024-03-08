@@ -18,8 +18,7 @@
  * @brief Constructs a new scale type object.
  */
 scale_type::scale_type() :
-    mob_type(MOB_CATEGORY_SCALES),
-    goal_number(0) {
+    mob_type(MOB_CATEGORY_SCALES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;

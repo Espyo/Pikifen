@@ -52,39 +52,38 @@ struct game_state_list {
     //--- Members ---
 
     //Animation editor.
-    animation_editor* animation_ed;
+    animation_editor* animation_ed = nullptr;
     
     //Area editor.
-    area_editor* area_ed;
+    area_editor* area_ed = nullptr;
     
     //Area selection menu.
-    area_menu_state* area_menu;
+    area_menu_state* area_menu = nullptr;
     
     //Controls menu.
-    control_binds_menu_state* control_binds_menu;
+    control_binds_menu_state* control_binds_menu = nullptr;
     
     //Gameplay state.
-    gameplay_state* gameplay;
+    gameplay_state* gameplay = nullptr;
     
     //GUI editor state.
-    gui_editor* gui_ed;
+    gui_editor* gui_ed = nullptr;
     
     //Main menu.
-    main_menu_state* main_menu;
+    main_menu_state* main_menu = nullptr;
     
     //Options menu.
-    options_menu_state* options_menu;
+    options_menu_state* options_menu = nullptr;
     
     //Statistics menu.
-    stats_menu_state* stats_menu;
+    stats_menu_state* stats_menu = nullptr;
     
     //Area results menu.
-    results_state* results;
+    results_state* results = nullptr;
 
 
     //--- Function declarations ---
     
-    game_state_list();
     void init();
     void destroy();
     
@@ -107,10 +106,10 @@ public:
     audio_manager audio;
     
     //Manager of all main bitmaps (not floor textures).
-    bmp_manager bitmaps;
+    bmp_manager bitmaps = bmp_manager("");
     
     //The error bitmap used to represent bitmaps that were not loaded.
-    ALLEGRO_BITMAP* bmp_error;
+    ALLEGRO_BITMAP* bmp_error = nullptr;
     
     //Player 1's camera.
     camera_info cam;
@@ -122,7 +121,7 @@ public:
     controls_mediator controls;
     
     //Total amount of time the current frame took to process, in seconds.
-    double cur_frame_process_time;
+    double cur_frame_process_time = 0.0f;
     
     //Info about the maker tools.
     maker_tools_info maker_tools;
@@ -134,13 +133,13 @@ public:
     map<string, particle_generator> custom_particle_generators;
     
     //Time between the previous frame and the current.
-    double delta_t;
+    double delta_t = 0.0f;
     
     //Allegro display that represents the program window.
-    ALLEGRO_DISPLAY* display;
+    ALLEGRO_DISPLAY* display = nullptr;
     
     //A dummy mob state for mobs with no state to use.
-    mob_state* dummy_mob_state;
+    mob_state* dummy_mob_state = nullptr;
     
     //Error manager.
     error_manager errors;
@@ -155,7 +154,7 @@ public:
     vector<double> framerate_history;
     
     //Last framerate average started at this point in the history.
-    size_t framerate_last_avg_point;
+    size_t framerate_last_avg_point = 0.0f;
     
     //List of hazards.
     map<string, hazard> hazards;
@@ -167,13 +166,13 @@ public:
     ImVec4 imgui_default_style[ImGuiCol_COUNT];
     
     //Set to false to stop program execution next frame.
-    bool is_game_running;
+    bool is_game_running = true;
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controller_numbers;
     
     //Buffer with the liquid limit effect.
-    ALLEGRO_BITMAP* liquid_limit_effect_buffer;
+    ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;
     
     //Info on every edge's liquid limit offset effect. Cache for performance.
     vector<edge_offset_cache> liquid_limit_effect_caches;
@@ -182,10 +181,10 @@ public:
     map<string, liquid*> liquids;
     
     //Loading screen subtext buffer.
-    ALLEGRO_BITMAP* loading_subtext_bmp;
+    ALLEGRO_BITMAP* loading_subtext_bmp = nullptr;
     
     //Loading screen main text buffer.
-    ALLEGRO_BITMAP* loading_text_bmp;
+    ALLEGRO_BITMAP* loading_text_bmp = nullptr;
     
     //List of mob actions.
     vector<mob_action> mob_actions;
@@ -212,7 +211,7 @@ public:
     options_struct options;
     
     //Performance monitor.
-    performance_monitor_struct* perf_mon;
+    performance_monitor_struct* perf_mon = nullptr;
     
     //Database of all sector types and their names.
     enum_name_database sector_types;
@@ -221,7 +220,7 @@ public:
     ALLEGRO_TRANSFORM screen_to_world_transform;
     
     //Should we be showing system info? (Framerate, version, etc.)
-    bool show_system_info;
+    bool show_system_info = false;
     
     //List of spike damage types.
     map<string, spike_damage_type> spike_damage_types;
@@ -248,13 +247,13 @@ public:
     string team_names[N_MOB_TEAMS];
     
     //Manager of all floor texture bitmaps.
-    bmp_manager textures;
+    bmp_manager textures = bmp_manager(TEXTURES_FOLDER_NAME);
     
     //How much time has passed since the program booted.
-    float time_passed;
+    float time_passed = 0.0f;
     
     //Buffer with the wall shadows and ledge smoothings.
-    ALLEGRO_BITMAP* wall_offset_effect_buffer;
+    ALLEGRO_BITMAP* wall_offset_effect_buffer = nullptr;
     
     //Info on every edge's wall shadow offset effect. Cache for performance.
     vector<edge_offset_cache> wall_shadow_effect_caches;
@@ -266,13 +265,13 @@ public:
     map<string, weather> weather_conditions;
     
     //Current fullscreen state.
-    bool win_fullscreen;
+    bool win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;
     
     //Current window height.
-    unsigned int win_h;
+    unsigned int win_h = OPTIONS::DEF_WIN_H;
     
     //Current window width.
-    unsigned int win_w;
+    unsigned int win_w = OPTIONS::DEF_WIN_W;
     
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;
@@ -296,16 +295,16 @@ private:
     //--- Members ---
 
     //Current game state: main menu, gameplay, etc.
-    game_state* cur_state;
+    game_state* cur_state = nullptr;
     
     //Queue of events.
-    ALLEGRO_EVENT_QUEUE* logic_queue;
+    ALLEGRO_EVENT_QUEUE* logic_queue = nullptr;
     
     //Timer for the main frame logic.
-    ALLEGRO_TIMER* logic_timer;
+    ALLEGRO_TIMER* logic_timer = nullptr;
     
     //Is delta_t meant to be reset for the next frame?
-    bool reset_delta_t;
+    bool reset_delta_t = true;
     
     
     //--- Function declarations ---

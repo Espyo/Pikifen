@@ -55,15 +55,6 @@ const float DAMAGE_SQUASH_AMOUNT = 0.04f;
 //Duration of the damage squash-and-stretch animation.
 const float DAMAGE_SQUASH_DURATION = 0.25f;
 
-//The default acceleration of a mob type.
-const float DEF_ACCELERATION = 400.0f;
-
-//Default distance at which the mob considers the chase finished.
-const float DEF_CHASE_TARGET_DISTANCE = 3.0f;
-
-//The default rotation speed of a mob type.
-const float DEF_ROTATION_SPEED = 630.0f;
-
 //When a mob shakes during delivery, this is the shake multiplier.
 const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
 
@@ -168,62 +159,19 @@ const float WAVE_RING_DURATION = 1.0f;
  */
 mob::mob(const point &pos, mob_type* type, const float angle) :
     type(type),
-    to_delete(false),
     pos(pos),
-    z(0),
     angle(angle),
-    ground_sector(nullptr),
-    center_sector(nullptr),
-    standing_on_mob(nullptr),
-    speed_z(0),
-    z_cap(FLT_MAX),
-    gravity_mult(1.0f),
-    push_amount(0),
-    push_angle(0),
-    path_info(nullptr),
-    circling_info(nullptr),
-    track_info(nullptr),
-    carry_info(nullptr),
-    delivery_info(nullptr),
     radius(type->radius),
     height(type->height),
     rectangular_dim(type->rectangular_dim),
     fsm(this),
-    script_timer(0),
-    focused_mob(nullptr),
     intended_turn_angle(angle),
-    intended_turn_pos(nullptr),
     home(pos),
-    far_reach(INVALID),
-    near_reach(INVALID),
-    time_alive(0.0f),
     id(game.states.gameplay->next_mob_id),
     health(type->max_health),
     max_health(type->max_health),
-    invuln_period(0),
-    itch_damage(0),
-    itch_time(0),
-    on_hazard(nullptr),
-    parent(nullptr),
-    flags(0),
-    stored_inside_another(nullptr),
-    chomp_max(0),
-    team(MOB_TEAM_NONE),
-    following_group(nullptr),
-    group_spot_index(INVALID),
-    subgroup_type_ptr(nullptr),
-    group(nullptr),
     anim(&type->anims),
-    forced_sprite(nullptr),
-    height_effect_pivot(LARGE_FLOAT),
-    damage_squash_time(0.0f),
-    health_wheel(nullptr),
-    fraction(nullptr),
-    angle_cos(0.0f),
-    angle_sin(0.0f),
-    max_span(type->max_span),
-    has_invisibility_status(false),
-    can_block_paths(false) {
+    max_span(type->max_span) {
     
     game.states.gameplay->next_mob_id++;
     
@@ -1708,7 +1656,7 @@ bool mob::follow_path(
         chase(
             next_stop->pos, next_stop_z,
             CHASE_FLAG_ANY_ANGLE,
-            MOB::DEF_CHASE_TARGET_DISTANCE,
+            PATHS::DEF_CHASE_TARGET_DISTANCE,
             speed, acceleration
         );
         
@@ -3454,7 +3402,7 @@ void mob::tick_brain(const float delta_t) {
             ),
             circling_z,
             (circling_info->can_free_move ? CHASE_FLAG_ANY_ANGLE : 0),
-            MOB::DEF_CHASE_TARGET_DISTANCE,
+            PATHS::DEF_CHASE_TARGET_DISTANCE,
             circling_info->speed
         );
     }
@@ -3530,7 +3478,7 @@ void mob::tick_brain(const float delta_t) {
                         chase(
                             next_stop->pos, next_stop_z,
                             CHASE_FLAG_ANY_ANGLE,
-                            MOB::DEF_CHASE_TARGET_DISTANCE,
+                            PATHS::DEF_CHASE_TARGET_DISTANCE,
                             chase_info.max_speed
                         );
                     }
@@ -4043,15 +3991,6 @@ bool mob::tick_track_ride() {
  */
 void mob::unfocus_from_mob() {
     focused_mob = nullptr;
-}
-
-
-/**
- * @brief Constructs a new mob with anim groups object.
- */
-mob_with_anim_groups::mob_with_anim_groups() :
-    cur_base_anim_nr(INVALID) {
-    
 }
 
 

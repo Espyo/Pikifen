@@ -27,10 +27,10 @@ public:
     //--- Members ---
 
     //What type of scale it is.
-    scale_type* sca_type;
+    scale_type* sca_type = nullptr;
     
     //Weight number that must be met to reach a goal. 0 for none. Type override.
-    size_t goal_number;
+    size_t goal_number = 0;
     
     
     //--- Function declarations ---

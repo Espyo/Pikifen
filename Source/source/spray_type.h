@@ -29,50 +29,45 @@ using std::vector;
 class spray_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Name of the spray type.
     string name;
-
+    
     //What the spray does.
     vector<status_type*> effects;
-
+    
     //True: applied to the entire group. False: applied in a specified range.
-    bool group;
-
+    bool group = true;
+    
     //Does it only apply to Pikmin in the group, or leaders too?
-    bool group_pikmin_only;
-
+    bool group_pikmin_only = true;
+    
     //Apply the spray to its user as well.
-    bool affects_user;
-
+    bool affects_user = false;
+    
     //If applied outside of the group, this is the angle of shooting.
-    float angle;
-
+    float angle = 0.0f;
+    
     //If applied outside of the group, this is the distance range.
-    float distance_range;
-
+    float distance_range = 0.0f;
+    
     //If applied outside of the group, this is the angle range.
-    float angle_range;
-
+    float angle_range = 0.0f;
+    
     //Main color that represents this spray.
-    ALLEGRO_COLOR main_color;
-
+    ALLEGRO_COLOR main_color = COLOR_EMPTY;
+    
     //Bitmap for the spray count.
-    ALLEGRO_BITMAP* bmp_spray;
-
+    ALLEGRO_BITMAP* bmp_spray = nullptr;
+    
     //How many ingredients are needed in order to concot a new spray.
     //0 means there are no ingredients for this spray type.
-    size_t ingredients_needed;
-
+    size_t ingredients_needed = 10;
+    
     //Does it bury Pikmin?
-    bool buries_pikmin;
-    
-
-    //--- Function declarations ---
-    
-    spray_type();
+    bool buries_pikmin = false;
     
 };
 

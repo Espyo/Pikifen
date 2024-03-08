@@ -23,7 +23,7 @@ using std::vector;
 
 //Types of hitboxes.
 enum HITBOX_TYPES {
-    
+
     //Can be hurt by "attack"-type hitboxes.
     HITBOX_TYPE_NORMAL,
     
@@ -45,17 +45,17 @@ struct hazard;
 class body_part {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //The body part's name.
     string name;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit body_part(const string &name = "");
-
+    
 };
 
 
@@ -65,9 +65,9 @@ public:
 class hitbox {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //The name of the body part to use.
     string body_part_name;
     
@@ -75,22 +75,22 @@ public:
     size_t body_part_index;
     
     //Pointer to the body part. Cache for performance.
-    body_part* body_part_ptr;
+    body_part* body_part_ptr = nullptr;
     
     //Center of the hitbox (relative coordinates).
     point pos;
     
     //Bottom of the hitbox (relative coordinates).
-    float z;
+    float z = 0.0f;
     
     //Total hitbox height.
-    float height;
+    float height = 128.0f;
     
     //Hitbox radius.
-    float radius;
+    float radius = 32.0f;
     
     //Type of hitbox.
-    HITBOX_TYPES type;
+    HITBOX_TYPES type = HITBOX_TYPE_NORMAL;
     
     //String representing the list of hazards.
     string hazards_str;
@@ -100,25 +100,25 @@ public:
     
     //If it's a normal hitbox, this is the defense multiplier.
     //If it's an attack one, the attack power.
-    float value;
+    float value = 1.0f;
     
     //If true, the Pikmin is knocked away from the center.
-    bool knockback_outward;
+    bool knockback_outward = true;
     
     //Knockback angle.
-    float knockback_angle;
+    float knockback_angle = 0.0f;
     
     //Knockback strength.
-    float knockback;
+    float knockback = 1.0f;
     
     //Chance of this attack withering a Pikmin's maturity (0-100).
-    unsigned char wither_chance;
+    unsigned char wither_chance = 0.0f;
     
     //Can the Pikmin latch on to this hitbox to continue inflicting damage?
     //Example of a non-latchable hitbox: Goolix' larger core.
-    bool can_pikmin_latch;
+    bool can_pikmin_latch = false;
     
-
+    
     //--- Function declarations ---
     
     explicit hitbox(

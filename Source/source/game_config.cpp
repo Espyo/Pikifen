@@ -122,47 +122,6 @@ const float DEF_ZOOM_MIN_LEVEL = 0.66f;
 
 
 /**
- * @brief Constructs a new game config object.
- */
-game_config::game_config() :
-    can_throw_leaders(GAME_CONFIG::DEF_CAN_THROW_LEADERS),
-    carrying_color_move(GAME_CONFIG::DEF_CARRYING_COLOR_MOVE),
-    carrying_color_stop(GAME_CONFIG::DEF_CARRYING_COLOR_STOP),
-    carrying_speed_base_mult(GAME_CONFIG::DEF_CARRYING_SPEED_BASE_MULT),
-    carrying_speed_max_mult(GAME_CONFIG::DEF_CARRYING_SPEED_MAX_MULT),
-    carrying_speed_weight_mult(GAME_CONFIG::DEF_CARRYING_SPEED_WEIGHT_MULT),
-    cursor_max_dist(GAME_CONFIG::DEF_CURSOR_MAX_DIST),
-    cursor_spin_speed(GAME_CONFIG::DEF_CURSOR_SPIN_SPEED),
-    day_minutes_end(GAME_CONFIG::DEF_DAY_MINUTES_END),
-    day_minutes_start(GAME_CONFIG::DEF_DAY_MINUTES_START),
-    group_member_grab_range(GAME_CONFIG::DEF_GROUP_MEMBER_GRAB_RANGE),
-    idle_bump_delay(GAME_CONFIG::DEF_IDLE_BUMP_DELAY),
-    idle_bump_range(GAME_CONFIG::DEF_IDLE_BUMP_RANGE),
-    idle_task_range(GAME_CONFIG::DEF_IDLE_TASK_RANGE),
-    maturity_power_mult(GAME_CONFIG::DEF_MATURITY_POWER_MULT),
-    maturity_speed_mult(GAME_CONFIG::DEF_MATURITY_SPEED_MULT),
-    max_pikmin_in_field(GAME_CONFIG::DEF_MAX_PIKMIN_IN_FIELD),
-    message_char_interval(GAME_CONFIG::DEF_MESSAGE_CHAR_INTERVAL),
-    next_pluck_range(GAME_CONFIG::DEF_NEXT_PLUCK_RANGE),
-    no_pikmin_color(GAME_CONFIG::DEF_NO_PIKMIN_COLOR),
-    onion_open_range(GAME_CONFIG::DEF_ONION_OPEN_RANGE),
-    pikmin_chase_range(GAME_CONFIG::DEF_PIKMIN_CHASE_RANGE),
-    pluck_range(GAME_CONFIG::DEF_PLUCK_RANGE),
-    standard_leader_height(GAME_CONFIG::DEF_STANDARD_LEADER_HEIGHT),
-    standard_leader_radius(GAME_CONFIG::DEF_STANDARD_LEADER_RADIUS),
-    standard_pikmin_height(GAME_CONFIG::DEF_STANDARD_PIKMIN_HEIGHT),
-    standard_pikmin_radius(GAME_CONFIG::DEF_STANDARD_PIKMIN_RADIUS),
-    swarm_task_range(GAME_CONFIG::DEF_SWARM_TASK_RANGE),
-    throw_max_dist(GAME_CONFIG::DEF_THROW_MAX_DIST),
-    whistle_growth_speed(GAME_CONFIG::DEF_WHISTLE_GROWTH_SPEED),
-    whistle_max_dist(GAME_CONFIG::DEF_WHISTLE_MAX_DIST),
-    zoom_max_level(GAME_CONFIG::DEF_ZOOM_MAX_LEVEL),
-    zoom_min_level(GAME_CONFIG::DEF_ZOOM_MIN_LEVEL) {
-    
-}
-
-
-/**
  * @brief Loads the game's config from a file.
  *
  * @param file File to load from.

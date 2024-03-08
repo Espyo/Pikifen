@@ -27,16 +27,6 @@
 
 
 /**
- * @brief Constructs a new easy FSM creator object.
- */
-easy_fsm_creator::easy_fsm_creator() :
-    cur_state(nullptr),
-    cur_event(nullptr) {
-    
-}
-
-
-/**
  * @brief Creates a new action call for the current event, one that changes
  * the mob's state to something else.
  *
@@ -136,8 +126,8 @@ hitbox_interaction::hitbox_interaction(
     mob* mob2, hitbox* h1, hitbox* h2
 ) {
     this->mob2 = mob2;
-    this->h1   = h1;
-    this->h2   = h2;
+    this->h1 = h1;
+    this->h2 = h2;
 }
 
 
@@ -315,10 +305,8 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
  *
  * @param m The mob this FSM belongs to.
  */
-mob_fsm::mob_fsm(mob* m) :
-    cur_state(nullptr),
-    first_state_override(INVALID) {
-    
+mob_fsm::mob_fsm(mob* m) {
+
     if(!m) return;
     this->m = m;
 }
@@ -427,8 +415,7 @@ bool mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
  * @param name The state's name.
  */
 mob_state::mob_state(const string &name) :
-    name(name),
-    id(INVALID) {
+    name(name) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = nullptr;
@@ -443,8 +430,7 @@ mob_state::mob_state(const string &name) :
  * @param evs Its events.
  */
 mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
-    name(name),
-    id(INVALID) {
+    name(name) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = evs[e];

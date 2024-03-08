@@ -1464,7 +1464,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     NULL,
                     1.0f / game.cam.zoom,
                     false,
-                    AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
+                    MISSION::EXIT_MIN_SIZE,
                     is_alt_pressed
                 );
             }

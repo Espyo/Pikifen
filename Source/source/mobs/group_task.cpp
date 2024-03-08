@@ -25,9 +25,7 @@ group_task::group_task(
 ):
     mob(pos, type, angle),
     tas_type(type),
-    power_goal(type->power_goal),
-    power(0),
-    ran_task_finished_code(false) {
+    power_goal(type->power_goal) {
     
     //Initialize spots.
     float row_angle = get_angle(tas_type->first_row_p1, tas_type->first_row_p2);
@@ -332,6 +330,7 @@ void group_task::update_spot_absolute_positions() {
  * @param pos Position of the spot, in relative coordinates.
  */
 group_task::group_task_spot::group_task_spot(const point &pos) :
-    relative_pos(pos), absolute_pos(pos), state(0), pikmin_here(nullptr) {
+    relative_pos(pos),
+    absolute_pos(pos) {
     
 }

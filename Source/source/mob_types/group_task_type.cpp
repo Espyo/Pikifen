@@ -20,17 +20,7 @@
  * @brief Constructs a new group task type object.
  */
 group_task_type::group_task_type() :
-    mob_type(MOB_CATEGORY_GROUP_TASKS),
-    power_goal(10),
-    max_pikmin(20),
-    spots_z(0.0f),
-    interval_between_rows(10.0f),
-    pikmin_per_row(10),
-    worker_pikmin_angle(0),
-    worker_pikmin_pose(GROUP_TASK_PIKMIN_POSE_STOPPED),
-    contribution_method(GROUP_TASK_CONTRIBUTION_NORMAL),
-    speed_bonus(1.0f),
-    flying_pikmin_only(false) {
+    mob_type(MOB_CATEGORY_GROUP_TASKS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

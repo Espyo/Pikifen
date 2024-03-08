@@ -18,14 +18,7 @@
  * @brief Constructs a new tool type object.
  */
 tool_type::tool_type() :
-    mob_type(MOB_CATEGORY_TOOLS),
-    bmp_icon(NULL),
-    can_be_hotswapped(true),
-    dropped_when_pikmin_is_whistled(false),
-    dropped_when_pikmin_lands(true),
-    dropped_when_pikmin_lands_on_opponent(false),
-    stuck_when_pikmin_lands_on_opponent(false),
-    pikmin_returns_after_using(true) {
+    mob_type(MOB_CATEGORY_TOOLS) {
     
     target_type = MOB_TARGET_TYPE_FRAGILE;
     hurtable_targets =

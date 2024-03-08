@@ -42,13 +42,13 @@ class animation_editor : public editor {
 public:
 
     //--- Members ---
-
+    
     //Automatically load this animation file upon boot-up of the editor, if any.
     string auto_load_anim;
     
-
+    
     //--- Function declarations ---
-
+    
     animation_editor();
     void do_logic() override;
     void do_drawing() override;
@@ -62,168 +62,166 @@ public:
 private:
 
     //--- Misc. declarations ---
-
+    
     //Editor states.
     enum EDITOR_STATES {
-        
+    
         //Main menu.
         EDITOR_STATE_MAIN,
-
+        
         //Animation editing.
         EDITOR_STATE_ANIMATION,
-
+        
         //Sprite editing.
         EDITOR_STATE_SPRITE,
-
+        
         //Body part editing.
         EDITOR_STATE_BODY_PART,
-
+        
         //Hitbox editing.
         EDITOR_STATE_HITBOXES,
-
+        
         //Sprite bitmap editing.
         EDITOR_STATE_SPRITE_BITMAP,
-
+        
         //Sprite transformations editing.
         EDITOR_STATE_SPRITE_TRANSFORM,
-
+        
         //Top editing.
         EDITOR_STATE_TOP,
-
+        
         //Tools.
         EDITOR_STATE_TOOLS,
         
     };
     
-
+    
     //--- Members ---
-
+    
     //Currently loaded animation database.
     animation_database anims;
-
+    
     //Is the current animation playing?
-    bool anim_playing;
-
+    bool anim_playing = false;
+    
     //Does the animation exist on disk, or RAM only?
-    bool animation_exists_on_disk;
-
+    bool animation_exists_on_disk = false;
+    
     //Can the user use the "save" button?
-    bool can_save;
-
+    bool can_save = false;
+    
     //Is the sprite comparison mode on?
-    bool comparison;
-
+    bool comparison = false;
+    
     //Is the comparison sprite above the working sprite?
-    bool comparison_above;
-
+    bool comparison_above = true;
+    
     //Is the comparison sprite meant to blink?
-    bool comparison_blink;
-
+    bool comparison_blink = true;
+    
     //Is the blinking comparison sprite currently visible?
-    bool comparison_blink_show;
-
+    bool comparison_blink_show = true;
+    
     //Time left until the blinking comparison sprite's visibility is swapped.
     timer comparison_blink_timer;
-
+    
     //Comparison sprite to use in sprite comparison mode.
-    sprite* comparison_sprite;
-
+    sprite* comparison_sprite = nullptr;
+    
     //Is the comparison sprite mode tinting the sprites?
-    bool comparison_tint;
-
+    bool comparison_tint = true;
+    
     //Current animation.
-    animation* cur_anim;
-
+    animation* cur_anim = nullptr;
+    
     //Index number of the current frame of animation.
-    size_t cur_frame_nr;
-
+    size_t cur_frame_nr = INVALID;
+    
     //Time spent in the current frame of animation.
-    float cur_frame_time;
-
+    float cur_frame_time = 0.0f;
+    
     //Current hitbox.
-    hitbox* cur_hitbox;
-
+    hitbox* cur_hitbox = nullptr;
+    
     //The alpha is calculated using the sine of this value.
-    float cur_hitbox_alpha;
-
+    float cur_hitbox_alpha = 0.0f;
+    
     //Index number of the current hitbox.
-    size_t cur_hitbox_nr;
-
+    size_t cur_hitbox_nr = INVALID;
+    
     //Current maturity to display on the Pikmin's top.
-    unsigned char cur_maturity;
-
+    unsigned char cur_maturity = 0;
+    
     //Current sprite.
-    sprite* cur_sprite;
-
+    sprite* cur_sprite = nullptr;
+    
     //Keep the aspect ratio when resizing the current sprite?
-    bool cur_sprite_keep_aspect_ratio;
-
+    bool cur_sprite_keep_aspect_ratio = true;
+    
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
-
+    
     //File path of the file currently being edited.
     string file_path;
-
+    
     //Cache with the names of all global animation files (sans extension).
     vector<string> global_anim_files_cache;
-
+    
     //Is the grid visible?
-    bool grid_visible;
-
+    bool grid_visible = true;
+    
     //Are the hitboxes currently visible?
-    bool hitboxes_visible;
-
+    bool hitboxes_visible = true;
+    
     //Last file used as for a spritesheet.
     string last_spritesheet_used;
-
+    
     //Mob type of the currently loaded animation file, if any.
-    mob_type* loaded_mob_type;
-
+    mob_type* loaded_mob_type = nullptr;
+    
     //Is the mob radius visible?
-    bool mob_radius_visible;
-
+    bool mob_radius_visible = false;
+    
     //Is the leader silhouette visible?
-    bool leader_silhouette_visible;
-
+    bool leader_silhouette_visible = false;
+    
     //Before entering the sprite bitmap state, this was the camera position.
     point pre_sprite_bmp_cam_pos;
-
+    
     //Before entering the sprite bitmap state, this was the camera zoom.
-    float pre_sprite_bmp_cam_zoom;
-
+    float pre_sprite_bmp_cam_zoom = 1.0f;
+    
     //Should the load dialog's GUI variables be reset?
-    bool reset_load_dialog;
-
+    bool reset_load_dialog = true;
+    
     //Is side view on?
-    bool side_view;
-
+    bool side_view = false;
+    
     //Is the add mode on in the sprite bitmap state?
-    bool sprite_bmp_add_mode;
-
+    bool sprite_bmp_add_mode = false;
+    
     //Top bitmaps for the current Pikmin type.
-    ALLEGRO_BITMAP* top_bmp[N_MATURITIES];
-
+    ALLEGRO_BITMAP* top_bmp[N_MATURITIES] = { nullptr, nullptr, nullptr };
+    
     //Keep the aspect ratio when resizing the Pikmin top?
-    bool top_keep_aspect_ratio;
+    bool top_keep_aspect_ratio = true;
     
     //Position of the load widget.
     point load_widget_pos;
-
+    
     //Position of the reload widget.
     point reload_widget_pos;
-
+    
     //Position of the quit widget.
     point quit_widget_pos;
     
     
     //--- Function declarations ---
-
+    
     void center_camera_on_sprite_bitmap(const bool instant);
     void change_state(const EDITOR_STATES new_state);
     void close_load_dialog();
     void close_options_dialog();
-    void enter_side_view();
-    void exit_side_view();
     float get_cursor_timeline_time();
     string get_path_short_name(const string &p) const;
     void handle_lmb_drag_in_timeline();

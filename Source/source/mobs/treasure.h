@@ -43,7 +43,7 @@ public:
     //--- Members ---
 
     //What type of treasure it is.
-    treasure_type* tre_type;
+    treasure_type* tre_type = nullptr;
     
     
     //--- Function declarations ---

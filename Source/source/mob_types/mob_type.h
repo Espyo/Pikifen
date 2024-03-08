@@ -36,6 +36,8 @@ typedef vector<std::pair<size_t, string> > anim_conversion_vector;
 
 namespace MOB_TYPE {
 extern const size_t ANIM_IDLING;
+extern const float DEF_ACCELERATION;
+extern const float DEF_ROTATION_SPEED;
 }
 
 
@@ -50,188 +52,142 @@ extern const size_t ANIM_IDLING;
 class mob_type {
 
 public:
-    
-    //--- Misc. declarations ---
 
+    //--- Misc. declarations ---
+    
     /**
      * @brief Info about a mob's reach.
      */
     struct reach_struct {
-
+    
         //--- Members ---
-
+        
         //Name of this reach.
         string name;
-
-        //Radius of possibility 1.
-        float radius_1;
-
-        //Angle of possibility 1.
-        float angle_1;
-
-        //Radius of possibility 2.
-        float radius_2;
-
-        //Angle of possibility 2.
-        float angle_2;
         
-        //--- Function definitions ---
-
-        /**
-         * @brief Constructs a new reach struct object.
-         */
-        reach_struct() :
-            radius_1(-1), angle_1(-1),
-            radius_2(-1), angle_2(-1) { }
-
+        //Radius of possibility 1.
+        float radius_1 = -1.0f;
+        
+        //Angle of possibility 1.
+        float angle_1 = -1.0f;
+        
+        //Radius of possibility 2.
+        float radius_2 = -1.0f;
+        
+        //Angle of possibility 2.
+        float angle_2 = -1.0f;
+        
     };
     
     /**
      * @brief Info about how a mob spawns another.
      */
     struct spawn_struct {
-
+    
         //--- Members ---
-
+        
         //Name of this spawn information block.
         string name;
-
+        
         //Name of the mob type to spawn.
         string mob_type_name;
-
+        
         //Spawn in coordinates relative to the spawner?
-        bool relative;
-
+        bool relative = true;
+        
         //Coordenates to spawn on.
         point coords_xy;
-
+        
         //Z coordinate to spawn on.
-        float coords_z;
-
+        float coords_z = 0.0f;
+        
         //Angle of the spawned object. Could be relative or absolute.
-        float angle;
-
+        float angle = 0.0f;
+        
         //Script vars to give the spawned object.
         string vars;
-
-        //Should the spawner link to the spawned?
-        bool link_object_to_spawn;
-
-        //Should the spawned link to the spawner?
-        bool link_spawn_to_object;
-
-        //Momentum to apply in a random direction upon spawn, if any.
-        float momentum;
         
-
-        //--- Function definitions ---
-
-        /**
-         * @brief Constructs a new spawn struct object.
-         */
-        spawn_struct() :
-            relative(true),
-            coords_z(0),
-            angle(0),
-            link_object_to_spawn(false),
-            link_spawn_to_object(false),
-            momentum(0) {}
-
+        //Should the spawner link to the spawned?
+        bool link_object_to_spawn = false;
+        
+        //Should the spawned link to the spawner?
+        bool link_spawn_to_object = false;
+        
+        //Momentum to apply in a random direction upon spawn, if any.
+        float momentum = 0.0f;
+        
     };
     
     /**
      * @brief Info about how a mob can be a child of another.
      */
     struct child_struct {
-
+    
         //--- Members ---
-
+        
         //Name of this child information block.
         string name;
-
+        
         //Name of the spawn information block to use.
         string spawn_name;
-
+        
         //Does the parent mob hold the child mob?
-        bool parent_holds;
-
+        bool parent_holds = false;
+        
         //If the parent holds, this is the name of the body part that holds.
         string hold_body_part;
-
+        
         //If the parent holds, this is how far from the body part center.
-        float hold_offset_dist;
-
+        float hold_offset_dist = 0.0f;
+        
         //If the parent holds, this is how far from the body part Z.
-        float hold_offset_vert_dist;
-
+        float hold_offset_vert_dist = 0.0f;
+        
         //If the parent holds, this is in what direction from the body part.
-        float hold_offset_angle;
-
+        float hold_offset_angle = 0.0f;
+        
         //Method by which the parent should hold the child.
-        HOLD_ROTATION_METHODS hold_rotation_method;
-
+        HOLD_ROTATION_METHODS hold_rotation_method = HOLD_ROTATION_METHOD_NEVER;
+        
         //Should the child handle damage?
-        bool handle_damage;
-
+        bool handle_damage = false;
+        
         //Should the child relay damage to the parent?
-        bool relay_damage;
-
+        bool relay_damage = false;
+        
         //Should the child handle script events?
-        bool handle_events;
-
+        bool handle_events = false;
+        
         //Should the child relay script events to the parent?
-        bool relay_events;
-
+        bool relay_events = false;
+        
         //Should the child handle status effects?
-        bool handle_statuses;
-
+        bool handle_statuses = false;
+        
         //Should the child relay status effects to the parent?
-        bool relay_statuses;
-
+        bool relay_statuses = false;
+        
         //Name of the limb animation between parent and child.
         string limb_anim_name;
-
+        
         //Thickness of the limb.
-        float limb_thickness;
-
+        float limb_thickness = 32.0f;
+        
         //Body part of the parent to link the limb to.
         string limb_parent_body_part;
-
+        
         //Offset from the parent body part to link the limb at.
-        float limb_parent_offset;
-
+        float limb_parent_offset = 0.0f;
+        
         //Body part of the child to link the limb to.
         string limb_child_body_part;
-
-        //Offset from the child body part to link the limb at.
-        float limb_child_offset;
-
-        //Method by which the limb should be drawn.
-        LIMB_DRAW_METHODS limb_draw_method;
         
-
-        //--- Function definitions ---
-
-        /**
-         * @brief Constructs a new child struct object.
-         */
-        child_struct() :
-            parent_holds(false),
-            hold_offset_dist(0.0f),
-            hold_offset_vert_dist(0.0f),
-            hold_offset_angle(0.0f),
-            hold_rotation_method(HOLD_ROTATION_METHOD_NEVER),
-            handle_damage(false),
-            relay_damage(false),
-            handle_events(false),
-            relay_events(false),
-            handle_statuses(false),
-            relay_statuses(false),
-            limb_thickness(32.0f),
-            limb_parent_offset(0),
-            limb_child_offset(0),
-            limb_draw_method(LIMB_DRAW_ABOVE_BOTH) {}
-
+        //Offset from the child body part to link the limb at.
+        float limb_child_offset = 0.0f;
+        
+        //Method by which the limb should be drawn.
+        LIMB_DRAW_METHODS limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+        
     };
     
     /**
@@ -239,101 +195,91 @@ public:
      * to better help users set the properties of a mob instance.
      */
     struct area_editor_prop_struct {
-
+    
         //--- Members ---
-
+        
         //Name of the widget.
         string name;
-
+        
         //Variable it sets.
         string var;
-
+        
         //What type of content this var has.
-        AEMP_TYPES type;
-
+        AEMP_TYPES type = AEMP_TEXT;
+        
         //Default value.
         string def_value;
-
+        
         //Minimum value.
-        float min_value;
-
+        float min_value = -LARGE_FLOAT;
+        
         //Maximum value.
-        float max_value;
-
+        float max_value = LARGE_FLOAT;
+        
         //If it's a list, this list the values.
         vector<string> value_list;
-
+        
         //Tooltip to show on the widget, if any.
         string tooltip;
-
-
-        //--- Function declarations ---
-
-        area_editor_prop_struct();
-
+        
     };
     
     /**
      * @brief Info on how vulnerable the object is to a certain source.
      */
     struct vulnerability_struct {
-
+    
         //--- Members ---
         
         //Multiply damage taken by this.
-        float damage_mult;
-
-        //When affected by the source, receive this status effect.
-        status_type* status_to_apply;
-
-        //If "status_to_apply" overrides any status effect that'd be received.
-        bool status_overrides;
+        float damage_mult = 1.0f;
         
-
-        //--- Function declarations ---
-
-        vulnerability_struct();
-
+        //When affected by the source, receive this status effect.
+        status_type* status_to_apply = nullptr;
+        
+        //If "status_to_apply" overrides any status effect that'd be received.
+        bool status_overrides = true;
+        
     };
     
     /**
      * @brief Info on a sound effect this mob can emit.
      */
     struct sfx_struct {
-
+    
         //--- Members ---
-
+        
         //Its name.
         string name;
-
+        
         //The loaded sample.
         ALLEGRO_SAMPLE* sample = nullptr;
-
+        
         //Type of sound.
         SFX_TYPE type = SFX_TYPE_WORLD_POS;
-
+        
         //Configuration.
         sfx_source_config_struct config;
-
+        
     };
     
-
+    
     //--- Members ---
     
     //- Basic information -
     
     //Its full name.
     string name;
-
+    
     //Blurb-like description. Mostly used for gameplay, not content-making.
     string description;
-
+    
     //Name of the folder its data is on.
     string folder_name;
-
+    
     //Mob category.
-    mob_category* category;
-
+    mob_category* category = nullptr;
+    
     //Custom category name. Used in editors.
     string custom_category_name;
     
@@ -341,138 +287,143 @@ public:
     
     //Database with all its animation data.
     animation_database anims;
-
+    
     //A color that represents this mob.
-    ALLEGRO_COLOR main_color;
-
+    ALLEGRO_COLOR main_color = al_map_rgb(128, 128, 128);
+    
     //Show its health?
-    bool show_health;
-
+    bool show_health = true;
+    
     //Does it cast a shadow?
-    bool casts_shadow;
-
+    bool casts_shadow = true;
+    
     //How much light does it cast in a blackout? <0 to use the mob's radius.
-    float blackout_radius;
-
+    float blackout_radius = -1.0f;
+    
     //List of sounds it can play.
     vector<sfx_struct> sounds;
     
     //- Movement -
     
     //Moves these many units per second.
-    float move_speed;
-
+    float move_speed = 0.0f;
+    
     //Acceleration. This is in units per second per second.
-    float acceleration;
-
+    float acceleration = MOB_TYPE::DEF_ACCELERATION;
+    
     //Rotates these many radians per second.
-    float rotation_speed;
-
+    float rotation_speed = MOB_TYPE::DEF_ROTATION_SPEED;
+    
     //True if it can move in any direction, as opposed to just forward.
-    bool can_free_move;
+    bool can_free_move = false;
     
     //- Physical space -
     
     //Radius of the space it occupies. Can be overridden on a per-mob basis.
-    float radius;
-
+    float radius = 0.0f;
+    
     //Height. Can be overridden on a per-mob basis.
-    float height;
-
+    float height = 0.0f;
+    
     //Rectangular dimensions, if it's meant to use them instead of a radius.
     point rectangular_dim;
-
+    
     //Pikmin strength needed to carry it.
-    float weight;
-
+    float weight = 0.0f;
+    
     //How many Pikmin can carry it, at most.
-    size_t max_carriers;
-
+    size_t max_carriers = 0;
+    
     //Pushes other mobs (only those that can be pushed).
-    bool pushes;
-
+    bool pushes = false;
+    
     //Can be pushed by other mobs.
-    bool pushable;
-
+    bool pushable = false;
+    
     //If true, the push is soft and allows squeezing through with persistance.
-    bool pushes_softly;
-
+    bool pushes_softly = false;
+    
     //If true, the push is via hitbox, as opposed to the mob's radius.
-    bool pushes_with_hitboxes;
-
+    bool pushes_with_hitboxes = false;
+    
     //Radius for terrain collision. Negative = use regular radius property.
-    float terrain_radius;
-
+    float terrain_radius = - 1.0f;
+    
     //Can you walk on top of this mob?
-    bool walkable;
-
+    bool walkable = false;
+    
     //Can this mob walk on top of other mobs?
-    bool can_walk_on_others;
-
+    bool can_walk_on_others = false;
+    
     //If true, carrier Pikmin will be considered blocked if it's in the way.
-    bool can_block_paths;
-
+    bool can_block_paths = false;
+    
     //Override the carrying spots with these coordinates, if not-empty.
     vector<point> custom_carry_spots;
     
     //- General behavior -
     
     //Maximum health. Can be overridden on a per-mob basis.
-    float max_health;
-
+    float max_health = 100.0f;
+    
     //Regenerates these many health points per second.
-    float health_regen;
-
+    float health_regen = 0.0f;
+    
     //How far its territory reaches from the home point.
-    float territory_radius;
-
+    float territory_radius = 0.0f;
+    
     //Information on all of its "reaches".
     vector<reach_struct> reaches;
-
+    
     //After it takes this much damage, it sends an "itch" event to the FSM.
-    float itch_damage;
-
+    float itch_damage = 0.0f;
+    
     //Only send an "itch" event after these many seconds have passed.
-    float itch_time;
-
+    float itch_time = 0.0f;
+    
     //Other mobs decide if they can/want to hurt it by this target type.
-    MOB_TARGET_TYPES target_type;
-
+    MOB_TARGET_TYPES target_type = MOB_TARGET_TYPE_NONE;
+    
     //What types of targets this mob can hunt down.
-    uint16_t huntable_targets;
-
+    uint16_t huntable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY;
+        
     //What types of targets this mob can hurt.
-    uint16_t hurtable_targets;
-
+    uint16_t hurtable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_FRAGILE;
+        
     //Its initial team.
-    MOB_TEAMS starting_team;
+    MOB_TEAMS starting_team = MOB_TEAM_NONE;
     
     //Custom behavior callbacks.
-    void(*draw_mob_callback)(mob* m);
+    void(*draw_mob_callback)(mob* m) = nullptr;
     
     //- Script -
     
     //Actions to run on spawn.
     vector<mob_action_call*> init_actions;
-
+    
     //The states, events and actions. Basically, the FSM.
     vector<mob_state*> states;
-
+    
     //Number of the state a mob starts at.
-    size_t first_state_nr;
-
+    size_t first_state_nr = INVALID;
+    
     //Name of the state to go to on death.
     string death_state_name;
-
+    
     //Number of the state to go to on death.
-    size_t death_state_nr;
-
+    size_t death_state_nr = INVALID;
+    
     //States that ignore the death event.
     vector<string> states_ignoring_death;
-
+    
     //States that ignore the spray event.
     vector<string> states_ignoring_spray;
-
+    
     //States that ignore the hazard events.
     vector<string> states_ignoring_hazard;
     
@@ -480,27 +431,27 @@ public:
     
     //Information on everything it can spawn.
     vector<spawn_struct> spawns;
-
+    
     //Information on its children mobs.
     vector<child_struct> children;
-
+    
     //Does this mob have a group of other mobs following it (e.g. leader)?
-    bool has_group;
+    bool has_group = false;
     
     //- Vulnerabilities -
     
     //All damage received is multiplied by this much.
-    float default_vulnerability;
-
+    float default_vulnerability = 1.0f;
+    
     //For every hazard, multiply damage taken by this much.
     map<hazard*, vulnerability_struct> hazard_vulnerabilities;
-
+    
     //What sort of spike damage it causes, if any.
-    spike_damage_type* spike_damage;
-
+    spike_damage_type* spike_damage = nullptr;
+    
     //For every type of spike damage, multiply damage taken by this much.
     map<spike_damage_type*, vulnerability_struct> spike_damage_vulnerabilities;
-
+    
     //For every type of status, multiply damage taken by this much.
     map<status_type*, vulnerability_struct> status_vulnerabilities;
     
@@ -508,27 +459,27 @@ public:
     
     //Tips to show in the area editor about this mob type, if any.
     string area_editor_tips;
-
+    
     //Widgets to show on the area editor, to help parametrize each mob.
     vector<area_editor_prop_struct> area_editor_props;
-
+    
     //Can the player choose to place one of these in the area editor?
-    bool appears_in_area_editor;
-
+    bool appears_in_area_editor = true;
+    
     //Should it have links going out of it?
-    bool area_editor_recommend_links_from;
-
+    bool area_editor_recommend_links_from = false;
+    
     //Should it have links going into it?
-    bool area_editor_recommend_links_to;
+    bool area_editor_recommend_links_to = false;
     
     //- Caches -
     
     //How far its hitboxes or radius can reach from the center.
-    float max_span;
+    float max_span = 0.0f;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit mob_type(MOB_CATEGORIES category_id);
     virtual ~mob_type();
     virtual void load_properties(data_node* file);
@@ -536,7 +487,7 @@ public:
     virtual anim_conversion_vector get_anim_conversions() const;
     virtual void unload_resources();
     void add_carrying_states();
-
+    
 };
 
 
@@ -555,15 +506,15 @@ public:
 class mob_type_with_anim_groups {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Suffixes used for each animation group.
     vector<string> animation_group_suffixes;
-
+    
     
     //--- Function declarations ---
-
+    
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, const size_t base_anim_total
     ) const;

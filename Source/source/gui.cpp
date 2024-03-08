@@ -203,26 +203,7 @@ check_gui_item::check_gui_item(
  * @param selectable Can the item be selected by the player?
  */
 gui_item::gui_item(const bool selectable) :
-    manager(nullptr),
-    visible(true),
-    responsive(true),
-    selectable(selectable),
-    selected(false),
-    parent(nullptr),
-    offset(0.0f),
-    padding(0.0f),
-    can_auto_repeat(false),
-    juice_type(JUICE_TYPE_NONE),
-    juice_timer(0.0f),
-    on_draw(nullptr),
-    on_tick(nullptr),
-    on_event(nullptr),
-    on_activate(nullptr),
-    on_mouse_over(nullptr),
-    on_menu_dir_button(nullptr),
-    on_selected(nullptr),
-    on_child_selected(nullptr),
-    on_get_tooltip(nullptr) {
+    selectable(selectable) {
     
 }
 
@@ -488,25 +469,8 @@ void gui_item::start_juice_animation(JUICE_TYPES type) {
 /**
  * @brief Constructs a new gui manager object.
  */
-gui_manager::gui_manager() :
-    selected_item(nullptr),
-    back_item(nullptr),
-    responsive(true),
-    ignore_input_on_animation(true),
-    on_selection_changed(nullptr),
-    right_pressed(false),
-    up_pressed(false),
-    left_pressed(false),
-    down_pressed(false),
-    ok_pressed(false),
-    back_pressed(false),
-    last_input_was_mouse(false),
-    auto_repeat_on(false),
-    auto_repeat_duration(0.0f),
-    auto_repeat_next_activation(0.0f),
-    anim_type(GUI_MANAGER_ANIM_NONE),
-    visible(true) {
-    
+gui_manager::gui_manager() {
+
     anim_timer =
         timer(
     0.0f, [this] () {
@@ -1218,8 +1182,7 @@ bool gui_manager::was_last_input_mouse() {
  * @brief Constructs a new list gui item object.
  */
 list_gui_item::list_gui_item() :
-    gui_item(),
-    target_offset(0.0f) {
+    gui_item() {
     
     padding = 8.0f;
     on_draw =
@@ -1375,10 +1338,7 @@ picker_gui_item::picker_gui_item(
     base_text(base_text),
     option(option),
     nr_options(nr_options),
-    cur_option_idx(cur_option_idx),
-    on_previous(nullptr),
-    on_next(nullptr),
-    arrow_highlight(255) {
+    cur_option_idx(cur_option_idx) {
     
     on_draw =
     [this] (const point & center, const point & size) {
@@ -1505,8 +1465,7 @@ picker_gui_item::picker_gui_item(
  * @brief Constructs a new scroll gui item object.
  */
 scroll_gui_item::scroll_gui_item() :
-    gui_item(),
-    list_item(nullptr) {
+    gui_item() {
     
     on_draw =
     [this] (const point & center, const point & size) {
@@ -1580,9 +1539,7 @@ text_gui_item::text_gui_item(
     text(text),
     font(font),
     color(color),
-    flags(flags),
-    line_wrap(false),
-    show_selection_box(false) {
+    flags(flags) {
     
     on_draw =
     [this] (const point & center, const point & size) {

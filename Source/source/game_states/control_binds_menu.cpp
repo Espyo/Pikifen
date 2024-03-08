@@ -37,21 +37,6 @@ const string SONG_NAME = "menus";
 
 
 /**
- * @brief Constructs a new control binds menu state object.
- */
-control_binds_menu_state::control_binds_menu_state() :
-    game_state(),
-    bmp_menu_bg(NULL),
-    list_box(nullptr),
-    capturing_input(0),
-    showing_more(false),
-    cur_action_type(PLAYER_ACTION_NONE),
-    cur_bind_idx(0) {
-    
-}
-
-
-/**
  * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
  * action type, then a new one gets added.

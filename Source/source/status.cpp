@@ -15,13 +15,11 @@
 
 /**
  * @brief Constructs a new status object.
- * 
+ *
  * @param type Its type.
  */
 status::status(status_type* type) :
-    type(type),
-    from_hazard(false),
-    to_delete(false) {
+    type(type) {
     
     time_left = type->auto_remove_time;
 }
@@ -30,7 +28,7 @@ status::status(status_type* type) :
 /**
  * @brief Ticks a status effect instance's time by one frame of logic,
  * but does not tick its effects logic.
- * 
+ *
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void status::tick(const float delta_t) {
@@ -40,38 +38,4 @@ void status::tick(const float delta_t) {
             to_delete = true;
         }
     }
-}
-
-
-/**
- * @brief Constructs a new status type object.
- */
-status_type::status_type() :
-    affects(0),
-    color(COLOR_EMPTY),
-    tint(COLOR_WHITE),
-    glow(COLOR_EMPTY),
-    removable_with_whistle(false),
-    remove_on_hazard_leave(false),
-    auto_remove_time(0.0f),
-    reapply_rule(STATUS_REAPPLY_KEEP_TIME),
-    health_change(0.0f),
-    health_change_ratio(0.0f),
-    maturity_change_amount(0),
-    state_change_type(STATUS_STATE_CHANGE_NONE),
-    speed_multiplier(1.0f),
-    attack_multiplier(1.0f),
-    defense_multiplier(1.0f),
-    anim_speed_multiplier(1.0f),
-    disables_attack(false),
-    turns_inedible(false),
-    turns_invisible(false),
-    freezes_animation(false),
-    generates_particles(false),
-    particle_gen(nullptr),
-    particle_offset_z(0.0f),
-    shaking_effect(0.0f),
-    overlay_anim_mob_scale(1.0f),
-    replacement_on_timeout(nullptr) {
-    
 }

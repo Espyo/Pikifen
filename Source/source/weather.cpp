@@ -18,16 +18,13 @@
 /**
  * @brief Constructs a new weather object.
  */
-weather::weather() :
-    fog_near(0.0f),
-    fog_far(0.0f),
-    precipitation_type(PRECIPITATION_TYPE_NONE) {
+weather::weather() {
 }
 
 
 /**
  * @brief Constructs a new weather object.
- * 
+ *
  * @param n Its name.
  * @param dl Daylight information table.
  * @param ss Sun strength information table.
@@ -44,8 +41,6 @@ weather::weather(
     daylight(dl),
     sun_strength(ss),
     blackout_strength(bs),
-    fog_near(0),
-    fog_far(0),
     precipitation_type(pt) {
     
 }
@@ -53,7 +48,7 @@ weather::weather(
 
 /**
  * @brief Returns the blackout effect's strength for the current time.
- * 
+ *
  * @return The blackout strength.
  */
 unsigned char weather::get_blackout_strength() {
@@ -76,7 +71,7 @@ unsigned char weather::get_blackout_strength() {
 
 /**
  * @brief Returns the daylight color for the current time.
- * 
+ *
  * @return The daylight color.
  */
 ALLEGRO_COLOR weather::get_daylight_color() {
@@ -99,7 +94,7 @@ ALLEGRO_COLOR weather::get_daylight_color() {
 
 /**
  * @brief Returns the fog color for the current time.
- * 
+ *
  * @return The fog color.
  */
 ALLEGRO_COLOR weather::get_fog_color() {
@@ -122,7 +117,7 @@ ALLEGRO_COLOR weather::get_fog_color() {
 
 /**
  * @brief Returns the sun strength for the current time, in the range 0 - 1.
- * 
+ *
  * @return The sun strength.
  */
 float weather::get_sun_strength() {

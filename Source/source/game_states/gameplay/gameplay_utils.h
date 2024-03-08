@@ -38,10 +38,10 @@ struct pending_intermob_event {
     dist d;
 
     //Pointer to the relevant event.
-    mob_event* event_ptr;
+    mob_event* event_ptr = nullptr;
 
     //Mob who the event belongs to.
-    mob* mob_ptr;
+    mob* mob_ptr = nullptr;
     
 
     //--- Function definitions ---

@@ -21,12 +21,7 @@
  * @brief Constructs a new pellet type object.
  */
 pellet_type::pellet_type() :
-    mob_type(MOB_CATEGORY_PELLETS),
-    pik_type(nullptr),
-    number(0),
-    match_seeds(0),
-    non_match_seeds(0),
-    bmp_number(nullptr) {
+    mob_type(MOB_CATEGORY_PELLETS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

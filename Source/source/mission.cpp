@@ -16,40 +16,26 @@
 #include "utils/string_utils.h"
 
 
-/**
- * @brief Constructs a new mission data object.
- */
-mission_data::mission_data() :
-    goal(MISSION_GOAL_END_MANUALLY),
-    goal_all_mobs(true),
-    goal_amount(1),
-    goal_exit_size(
-        AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
-    ),
-    fail_conditions(0),
-    fail_too_few_pik_amount(0),
-    fail_too_many_pik_amount(1),
-    fail_pik_killed(1),
-    fail_leaders_kod(1),
-    fail_enemies_killed(1),
-    fail_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
-    fail_hud_primary_cond(INVALID),
-    fail_hud_secondary_cond(INVALID),
-    grading_mode(MISSION_GRADING_GOAL),
-    points_per_pikmin_born(0),
-    points_per_pikmin_death(0),
-    points_per_sec_left(0),
-    points_per_sec_passed(0),
-    points_per_treasure_point(0),
-    points_per_enemy_point(0),
-    point_loss_data(0),
-    point_hud_data(255),
-    starting_points(0),
-    bronze_req(AREA::DEF_MISSION_MEDAL_BRONZE_REQ),
-    silver_req(AREA::DEF_MISSION_MEDAL_SILVER_REQ),
-    gold_req(AREA::DEF_MISSION_MEDAL_GOLD_REQ),
-    platinum_req(AREA::DEF_MISSION_MEDAL_PLATINUM_REQ) {
-    
+namespace MISSION {
+
+//Default mission bronze medal point requirement.
+const int DEF_MEDAL_REQ_BRONZE = 1000;
+
+//Default mission gold medal point requirement.
+const int DEF_MEDAL_REQ_GOLD = 3000;
+
+//Default mission platinum medal point requirement.
+const int DEF_MEDAL_REQ_PLATINUM = 4000;
+
+//Default mission silver medal point requirement.
+const int DEF_MEDAL_REQ_SILVER = 2000;
+
+//Default mission time limit duration, in seconds.
+const size_t DEF_TIME_LIMIT = 60;
+
+//Mission exit region minimum size.
+const float EXIT_MIN_SIZE = 32.0f;
+
 }
 
 
@@ -2100,16 +2086,6 @@ bool mission_goal_timed_survival::is_mob_applicable(
     mob_type* type
 ) const {
     return false;
-}
-
-
-/**
- * @brief Constructs a new mission record::mission record object.
- */
-mission_record::mission_record() :
-    clear(false),
-    score(0) {
-    
 }
 
 
