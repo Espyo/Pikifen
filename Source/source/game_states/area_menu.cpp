@@ -208,7 +208,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             "(None)" :
             area_mission_data[area_idx].grading_mode ==
             MISSION_GRADING_POINTS ?
-            nr_and_plural(score, "point") :
+            amount_str(score, "point") :
             "";
         cur_stamp =
             !record_exists ?

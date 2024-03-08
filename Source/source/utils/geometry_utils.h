@@ -151,7 +151,7 @@ float deg_to_rad(const float rad);
 float dot_product(const point &v1, const point &v2);
 float get_angle(const point &focus);
 float get_angle(const point &center, const point &focus);
-float get_angle_cw_dif(float a1, float a2);
+float get_angle_cw_diff(float a1, float a2);
 float get_angle_smallest_dif(const float a1, const float a2);
 point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p,

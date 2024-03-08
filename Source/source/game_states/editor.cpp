@@ -1488,7 +1488,7 @@ void editor::process_gui_unsaved_changes_dialog() {
     size_t nr_unsaved_changes = changes_mgr.get_unsaved_changes();
     string explanation1_str =
         "You have " +
-        nr_and_plural(nr_unsaved_changes, "unsaved change") +
+        amount_str(nr_unsaved_changes, "unsaved change") +
         ", made in the last " +
         time_to_str3(
             changes_mgr.get_unsaved_time_delta(),

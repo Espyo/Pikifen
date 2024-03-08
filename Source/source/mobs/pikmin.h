@@ -20,11 +20,15 @@ class leader;
 
 
 namespace PIKMIN {
+extern const float CIRCLE_OPPONENT_CHANCE_GROUNDED;
+extern const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH;
 extern const float DISMISS_TIMEOUT;
+extern const float FLIER_ABOVE_FLOOR_HEIGHT;
 extern const float GOTO_TIMEOUT;
 extern const float GROUNDED_ATTACK_DIST;
 extern const float IDLE_GLOW_SPIN_SPEED;
 extern const float INVULN_PERIOD;
+extern const float MISSED_ATTACK_DURATION;
 extern const float PANIC_CHASE_INTERVAL;
 extern const float THROW_HOR_SPEED;
 extern const float THROW_VER_SPEED;
@@ -37,14 +41,6 @@ extern const float THROW_VER_SPEED;
 class pikmin : public mob {
 
 public:
-
-    //--- Misc. declarations ---
-
-    static const float CIRCLE_OPPONENT_CHANCE_GROUNDED;
-    static const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH;
-    static const float FLIER_ABOVE_FLOOR_HEIGHT;
-    static const float MISSED_ATTACK_DURATION;
-    
 
     //--- Members ---
 

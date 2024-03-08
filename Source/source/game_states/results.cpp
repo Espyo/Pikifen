@@ -66,7 +66,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     } else {
         add_stat(
             "    x " +
-            nr_and_plural(mult, "point") +
+            amount_str(mult, "point") +
             " = ",
             i2s(c_ptr->get_score(game.states.gameplay, mission)),
             COLOR_GOLD

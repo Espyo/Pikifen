@@ -150,34 +150,6 @@ bool is_number(const string &s) {
 
 
 /**
- * @brief Returns a string that contains an amount, then a space, then a word in
- * either singular form or plural form, depending on the amount.
- *
- * @param amount The amount to use.
- * @param singular_form The string in singular form.
- * @param plural_form The string in plural form.
- * If empty, then the function uses the singular form, but with an added
- * "s" at the end.
- * @return The string.
- */
-string nr_and_plural(
-    const size_t amount, const string &singular_form, const string &plural_form
-) {
-    return
-        i2s(amount) + " " +
-        (
-            amount == 1 ?
-            singular_form :
-            (
-                plural_form.empty() ?
-                (singular_form + "s") :
-                plural_form
-            )
-        );
-}
-
-
-/**
  * @brief Pads a given string such that it is at least the given size.
  * It uses the provided character to pad out the remaining space.
  * This only pads the left side of the string.

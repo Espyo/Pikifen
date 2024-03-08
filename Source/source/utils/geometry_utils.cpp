@@ -860,7 +860,7 @@ float get_angle(const point &center, const point &focus) {
  * @param a2 Second angle.
  * @return The distance.
  */
-float get_angle_cw_dif(float a1, float a2) {
+float get_angle_cw_diff(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
     if(a1 > a2) a1 -= TAU;
@@ -1543,17 +1543,17 @@ void move_point(
     const float speed, const float reach_radius,
     point* mov, float* angle, bool* reached, const float delta_t
 ) {
-    point dif = target - start;
-    float dis = (float) sqrt(dif.x * dif.x + dif.y * dif.y);
+    point diff = target - start;
+    float dis = (float) sqrt(diff.x * diff.x + diff.y * diff.y);
     
     if(dis > reach_radius) {
         float move_amount =
             (float) std::min((double) (dis / delta_t / 2.0f), (double) speed);
             
-        dif *= (move_amount / dis);
+        diff *= (move_amount / dis);
         
-        if(mov) *mov = dif;
-        if(angle) *angle = (float) atan2(dif.y, dif.x);
+        if(mov) *mov = diff;
+        if(angle) *angle = (float) atan2(diff.y, diff.x);
         if(reached) *reached = false;
         
     } else {

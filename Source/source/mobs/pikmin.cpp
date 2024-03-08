@@ -24,8 +24,17 @@
 
 namespace PIKMIN {
 
+//Chance of circling the opponent instead of striking, when grounded.
+const float CIRCLE_OPPONENT_CHANCE_GROUNDED = 0.2f;
+
+//Chance of circling the opponent instead of latching, if it can latch.
+const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH = 0.5f;
+
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
+
+//Height above the floor that a flying Pikmin prefers to stay at.
+const float FLIER_ABOVE_FLOOR_HEIGHT = 55.0f;
 
 //Timeout before a Pikmin gives up, when ordered to go to something.
 const float GOTO_TIMEOUT = 5.0f;
@@ -39,6 +48,9 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
 
+//How long to remember a missed incoming attack for.
+const float MISSED_ATTACK_DURATION = 1.5f;
+
 //Interval for when a Pikmin decides a new chase spot, when panicking.
 const float PANIC_CHASE_INTERVAL = 0.2f;
 
@@ -51,17 +63,6 @@ const float THROW_VER_SPEED = 900.0f;
 }
 
 
-//Height above the floor that a flying Pikmin prefers to stay at.
-const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 55.0f;
-
-//How long to remember a missed incoming attack for.
-const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
-
-//Chance of circling the opponent instead of striking, when grounded.
-const float pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED = 0.2f;
-
-//Chance of circling the opponent instead of latching, if it can latch.
-const float pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH = 0.5f;
 
 
 /**
@@ -86,7 +87,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     
     missed_attack_timer =
         timer(
-            MISSED_ATTACK_DURATION,
+            PIKMIN::MISSED_ATTACK_DURATION,
     [this] () { this->missed_attack_ptr = nullptr; }
         );
         

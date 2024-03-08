@@ -31,29 +31,29 @@ const float FADE_SPEED = 255.0f;
 //Delay before the Onion starts the seed spewing process.
 const float FULL_SPEW_DELAY = 2.0f;
 
+//An Onion-spat seed starts with this Z offset from the Onion.
+const float NEW_SEED_Z_OFFSET = 320.0f;
+
 //Delay between each individual seed being spit.
 const float NEXT_SPEW_DELAY = 0.10f;
 
 //Onion opacity when it goes see-through.
 const unsigned char SEETHROUGH_ALPHA = 128;
 
+//After spitting a seed, the next seed's angle shifts by this much.
+const float SPEW_ANGLE_SHIFT = TAU * 0.12345;
+
+//An Onion-spat seed is this quick, horizontally.
+const float SPEW_H_SPEED = 80.0f;
+
+//Deviate the seed's horizontal speed by this much, more or less.
+const float SPEW_H_SPEED_DEVIATION = 10.0f;
+
+//An Onion-spat seed is this quick, vertically.
+const float SPEW_V_SPEED = 600.0f;
 }
 
 
-//An Onion-spat seed starts with this Z offset from the Onion.
-const float onion::ONION_NEW_SEED_Z_OFFSET = 320.0f;
-
-//After spitting a seed, the next seed's angle shifts by this much.
-const float onion::ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
-
-//An Onion-spat seed is this quick, horizontally.
-const float onion::ONION_SPEW_H_SPEED = 80.0f;
-
-//Deviate the seed's horizontal speed by this much, more or less.
-const float onion::ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
-
-//An Onion-spat seed is this quick, vertically.
-const float onion::ONION_SPEW_V_SPEED = 600.0f;
 
 
 /**
@@ -167,17 +167,17 @@ void onion::spew() {
         }
         
         float horizontal_strength =
-            ONION_SPEW_H_SPEED +
+            ONION::SPEW_H_SPEED +
             randomf(
-                -ONION_SPEW_H_SPEED_DEVIATION,
-                ONION_SPEW_H_SPEED_DEVIATION
+                -ONION::SPEW_H_SPEED_DEVIATION,
+                ONION::SPEW_H_SPEED_DEVIATION
             );
         spew_pikmin_seed(
-            pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->nest->pik_types[t],
-            next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
+            pos, z + ONION::NEW_SEED_Z_OFFSET, oni_type->nest->pik_types[t],
+            next_spew_angle, horizontal_strength, ONION::SPEW_V_SPEED
         );
         
-        next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
+        next_spew_angle += ONION::SPEW_ANGLE_SHIFT;
         next_spew_angle = normalize_angle(next_spew_angle);
         
         play_sound(oni_type->sfx_pop_idx);

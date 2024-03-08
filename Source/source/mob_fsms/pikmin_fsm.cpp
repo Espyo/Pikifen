@@ -1981,7 +1981,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
         enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         pik_ptr->chase(
             pik_ptr->pos,
-            pik_ptr->ground_sector->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
+            pik_ptr->ground_sector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
         );
     }
     
@@ -2266,7 +2266,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             
             if(
                 randomf(0.0f, 1.0f) <=
-                pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
+                PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
                 pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
             ) {
                 //Circle around the opponent a bit before smacking.
@@ -2281,7 +2281,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             
             if(
                 randomf(0, 1) <=
-                pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH &&
+                PIKMIN::CIRCLE_OPPONENT_CHANCE_PRE_LATCH &&
                 pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
             ) {
                 //Circle around the opponent a bit before latching.
@@ -2302,7 +2302,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
         
         if(
             randomf(0, 1) <=
-            pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
+            PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
             pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
         ) {
             //Circle around the opponent a bit before lunging.
@@ -3356,7 +3356,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         //The opponent cannot be chased down. Become idle.
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         
-    } else if(randomf(0.0f, 1.0f) <= pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
+    } else if(randomf(0.0f, 1.0f) <= PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
         //Circle around it a bit before attacking from a new angle.
         pik_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
         
@@ -4117,7 +4117,7 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     
     m->chase(
         target_pos,
-        pik_ptr->following_group->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
+        pik_ptr->following_group->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
     );
     
 }

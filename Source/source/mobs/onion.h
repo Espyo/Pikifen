@@ -23,8 +23,13 @@
 namespace ONION {
 extern const float FADE_SPEED;
 extern const float FULL_SPEW_DELAY;
+extern const float NEW_SEED_Z_OFFSET;
 extern const float NEXT_SPEW_DELAY;
 extern const unsigned char SEETHROUGH_ALPHA;
+extern const float SPEW_ANGLE_SHIFT;
+extern const float SPEW_H_SPEED;
+extern const float SPEW_H_SPEED_DEVIATION;
+extern const float SPEW_V_SPEED;
 }
 
 
@@ -34,15 +39,6 @@ extern const unsigned char SEETHROUGH_ALPHA;
 class onion : public mob {
 
 public:
-
-    //--- Misc. declarations ---
-
-    static const float ONION_NEW_SEED_Z_OFFSET;
-    static const float ONION_SPEW_ANGLE_SHIFT;
-    static const float ONION_SPEW_H_SPEED;
-    static const float ONION_SPEW_H_SPEED_DEVIATION;
-    static const float ONION_SPEW_V_SPEED;
-
     
     //--- Members ---
 

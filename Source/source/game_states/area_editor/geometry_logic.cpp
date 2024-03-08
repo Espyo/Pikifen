@@ -1264,7 +1264,7 @@ edge* area_editor::get_closest_edge_to_angle(
                 point(v_ptr->x, v_ptr->y),
                 point(other_v_ptr->x, other_v_ptr->y)
             );
-        float diff = get_angle_cw_dif(angle, a);
+        float diff = get_angle_cw_diff(angle, a);
         
         if(
             !best_edge ||

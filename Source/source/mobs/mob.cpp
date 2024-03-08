@@ -473,7 +473,7 @@ void mob::arachnorb_head_turn_logic() {
         float cur_angle =
             get_angle(pos, links[l]->pos) - angle;
         float angle_deviation =
-            get_angle_cw_dif(default_angle, cur_angle);
+            get_angle_cw_diff(default_angle, cur_angle);
         if(angle_deviation > M_PI) {
             angle_deviation -= TAU;
         }
@@ -508,7 +508,7 @@ void mob::arachnorb_plan_logic(
     
     switch(goal) {
     case MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME: {
-        amount_to_turn = get_angle_cw_dif(angle, get_angle(pos, home));
+        amount_to_turn = get_angle_cw_diff(angle, get_angle(pos, home));
         if(amount_to_turn > TAU / 2)  amount_to_turn -= TAU;
         if(amount_to_turn < -TAU / 2) amount_to_turn += TAU;
         
@@ -1650,7 +1650,7 @@ bool mob::follow_path(
         ) {
             next_stop_z =
                 next_stop->sector_ptr->z +
-                pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+                PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
         }
         
         chase(
@@ -3472,7 +3472,7 @@ void mob::tick_brain(const float delta_t) {
                         ) {
                             next_stop_z =
                                 next_stop->sector_ptr->z +
-                                pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+                                PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
                         }
                         
                         chase(

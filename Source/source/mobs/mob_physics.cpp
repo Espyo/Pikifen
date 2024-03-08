@@ -358,7 +358,7 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
         wall_normal = normalize_angle(wall_angle - TAU / 4);
     }
     
-    float nd = get_angle_cw_dif(wall_normal, move_angle);
+    float nd = get_angle_cw_diff(wall_normal, move_angle);
     if(nd < TAU * 0.25 || nd > TAU * 0.75) {
         //If the difference between the movement and the wall's
         //normal is this, that means we came FROM the wall.

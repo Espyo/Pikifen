@@ -63,7 +63,7 @@ string mission_fail_kill_enemies::get_end_reason(
 ) const {
     return
         "Killed " +
-        nr_and_plural(mission->fail_enemies_killed, "enemy", "enemies") +
+        amount_str(mission->fail_enemies_killed, "enemy", "enemies") +
         "...";
 }
 
@@ -123,7 +123,7 @@ string mission_fail_kill_enemies::get_player_description(
 ) const {
     return
         "Kill " +
-        nr_and_plural(
+        amount_str(
             mission->fail_enemies_killed, "enemy", "enemies"
         ) +
         " or more.";
@@ -208,7 +208,7 @@ string mission_fail_lose_leaders::get_end_reason(
 ) const {
     return
         "Lost " +
-        nr_and_plural(mission->fail_leaders_kod, "leader") +
+        amount_str(mission->fail_leaders_kod, "leader") +
         "...";
 }
 
@@ -268,7 +268,7 @@ string mission_fail_lose_leaders::get_player_description(
 ) const {
     return
         "Lose " +
-        nr_and_plural(mission->fail_leaders_kod, "leader") +
+        amount_str(mission->fail_leaders_kod, "leader") +
         " or more.";
 }
 
@@ -1206,7 +1206,7 @@ string mission_goal_battle_enemies::get_end_reason(
     } else {
         return
             "Defeated the " +
-            nr_and_plural(
+            amount_str(
                 mission->goal_mob_idxs.size(),
                 "enemy",
                 "enemies"

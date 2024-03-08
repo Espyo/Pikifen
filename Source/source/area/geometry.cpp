@@ -295,7 +295,7 @@ void polygon::cut() {
             //Find where to insert.
             insertion_vertex_nr = bridges.back();
             float new_bridge_angle =
-                get_angle_cw_dif(
+                get_angle_cw_diff(
                     get_angle(
                         point(best_vertex->x, best_vertex->y),
                         point(start->x, start->y)
@@ -307,7 +307,7 @@ void polygon::cut() {
                 vertex* v_ptr = vertexes[bridges[v]];
                 vertex* nv_ptr = get_next_in_vector(vertexes, bridges[v]);
                 float a =
-                    get_angle_cw_dif(
+                    get_angle_cw_diff(
                         get_angle(
                             point(v_ptr->x, v_ptr->y),
                             point(nv_ptr->x, nv_ptr->y)
@@ -584,7 +584,7 @@ void find_trace_edge(
             );
             
         float angle_cw_dif =
-            get_angle_cw_dif(prev_e_angle + TAU / 2.0f, e_angle);
+            get_angle_cw_diff(prev_e_angle + TAU / 2.0f, e_angle);
             
         //Check if this is the best.
         if(
@@ -776,7 +776,7 @@ bool get_polys_is_outer(
                 point(v_ptr->x, v_ptr->y),
                 point(e_other_v_ptr->x, e_other_v_ptr->y)
             );
-        float edge_cw_angle = get_angle_cw_dif(0.0f, edge_angle);
+        float edge_cw_angle = get_angle_cw_diff(0.0f, edge_angle);
         if(!closest_edge_cw || edge_cw_angle < closest_edge_cw_angle) {
             closest_edge_cw = e_ptr;
             closest_edge_cw_angle = edge_cw_angle;
@@ -890,7 +890,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
             point(next_v->x, next_v->y)
         );
         
-    return get_angle_cw_dif(angle_prev, angle_next) < TAU / 2;
+    return get_angle_cw_diff(angle_prev, angle_next) < TAU / 2;
 }
 
 

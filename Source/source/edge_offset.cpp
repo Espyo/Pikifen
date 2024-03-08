@@ -78,8 +78,8 @@ void draw_edge_offset_on_buffer(
             
             float rect_to_elbow_diff =
                 end == 0 ?
-                get_angle_cw_dif(elbow_angle, angle) :
-                get_angle_cw_dif(angle, elbow_angle);
+                get_angle_cw_diff(elbow_angle, angle) :
+                get_angle_cw_diff(angle, elbow_angle);
                 
             if(rect_to_elbow_diff > TAU / 8.00001f) {
                 //We add a small amount to the threshold because of floating
@@ -370,11 +370,11 @@ void get_edge_offset_edge_info(
             *final_elbow_angle =
                 end_idx == 0 ?
                 next_eff_edge_angle +
-                get_angle_cw_dif(
+                get_angle_cw_diff(
                     next_eff_edge_angle, edge_process_angle
                 ) / 2.0f :
                 edge_process_angle +
-                get_angle_cw_dif(
+                get_angle_cw_diff(
                     edge_process_angle, next_eff_edge_angle
                 ) / 2.0f;
             *final_color =
@@ -530,8 +530,8 @@ void get_next_edge(
             
         float diff =
             clockwise ?
-            get_angle_cw_dif(pivot_angle, angle) :
-            get_angle_cw_dif(angle, pivot_angle);
+            get_angle_cw_diff(pivot_angle, angle) :
+            get_angle_cw_diff(angle, pivot_angle);
             
         if(!best_edge || diff < best_edge_diff) {
             best_edge = e_ptr;
@@ -605,8 +605,8 @@ void get_next_offset_effect_edge(
             
         float diff =
             clockwise ?
-            get_angle_cw_dif(pivot_angle, angle) :
-            get_angle_cw_dif(angle, pivot_angle);
+            get_angle_cw_diff(pivot_angle, angle) :
+            get_angle_cw_diff(angle, pivot_angle);
             
         if(!best_edge || diff < best_edge_diff) {
             best_edge = e_ptr;

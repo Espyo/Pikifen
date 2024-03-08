@@ -49,10 +49,6 @@ void duplicate_string(const string &orig_str, string &new_str);
 string f2s(const float f);
 string get_matching_string_starts(const string &s1, const string &s2);
 bool is_number(const string &s);
-string nr_and_plural(
-    const size_t amount, const string &singular_form,
-    const string &plural_form = ""
-);
 string pad_string(const string &s, const size_t size, const char padding);
 string remove_extension(const string &s);
 string replace_all(
