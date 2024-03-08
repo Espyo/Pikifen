@@ -220,7 +220,7 @@ void control_binds_menu_state::leave() {
  * @brief Loads the controls menu into memory.
  */
 void control_binds_menu_state::load() {
-    bmp_menu_bg = NULL;
+    bmp_menu_bg = nullptr;
     capturing_input = 0;
     showing_more = false;
     cur_action_type = PLAYER_ACTION_NONE;

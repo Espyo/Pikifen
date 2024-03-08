@@ -66,7 +66,7 @@ mob_action_call::mob_action_call(custom_action_code code) :
  */
 bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 
-    action = NULL;
+    action = nullptr;
     this->mt = mt;
     
     //First, get the name and arguments.
@@ -861,7 +861,7 @@ void mob_action_runners::delete_function(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::drain_liquid(mob_action_run_data &data) {
-    sector* s_ptr = get_sector(data.m->pos, NULL, true);
+    sector* s_ptr = get_sector(data.m->pos, nullptr, true);
     if(!s_ptr) return;
     
     vector<sector*> sectors_to_drain;
@@ -962,7 +962,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     
     //Pick a stop from the choices at random, but make sure we don't
     //pick a stop that the mob is practically on already.
-    path_stop* final_stop = NULL;
+    path_stop* final_stop = nullptr;
     if(!choices.empty()) {
         size_t tries = 0;
         while(!final_stop && tries < 5) {
@@ -1209,7 +1209,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
 void mob_action_runners::get_floor_z(mob_action_run_data &data) {
     float x = s2f(data.args[1]);
     float y = s2f(data.args[2]);
-    sector* s = get_sector(point(x, y), NULL, true);
+    sector* s = get_sector(point(x, y), nullptr, true);
     data.m->vars[data.args[0]] = f2s(s ? s->z : 0);
 }
 
@@ -1232,7 +1232,7 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
-    mob* target_mob = NULL;
+    mob* target_mob = nullptr;
     MOB_ACTION_GET_INFO_TARGET_TYPES tt =
         (MOB_ACTION_GET_INFO_TARGET_TYPES) s2i(data.args[1]);
         
@@ -1553,7 +1553,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
  */
 void mob_action_runners::order_release(mob_action_run_data &data) {
     if(data.m->holder.m) {
-        data.m->holder.m->fsm.run_event(MOB_EV_RELEASE_ORDER, NULL, NULL);
+        data.m->holder.m->fsm.run_event(MOB_EV_RELEASE_ORDER, nullptr, nullptr);
     }
 }
 
@@ -1875,7 +1875,7 @@ void mob_action_runners::set_radius(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
-    sector* s_ptr = get_sector(data.m->pos, NULL, true);
+    sector* s_ptr = get_sector(data.m->pos, nullptr, true);
     if(!s_ptr) return;
     
     s_ptr->scroll.x = s2f(data.args[0]);
@@ -1961,7 +1961,7 @@ void mob_action_runners::set_var(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
-    start_message(data.m->vars[data.args[0]], NULL);
+    start_message(data.m->vars[data.args[0]], nullptr);
 }
 
 
@@ -2231,7 +2231,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
         max_height, MOB::GRAVITY_ADDER,
         &data.m->focused_mob->speed,
         &data.m->focused_mob->speed_z,
-        NULL
+        nullptr
     );
 }
 
@@ -2244,12 +2244,12 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
 void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
     if(data.args.size() == 1) {
         //Turn to an absolute angle.
-        data.m->face(deg_to_rad(s2f(data.args[0])), NULL);
+        data.m->face(deg_to_rad(s2f(data.args[0])), nullptr);
     } else {
         //Turn to some absolute coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
-        data.m->face(get_angle(data.m->pos, point(x, y)), NULL);
+        data.m->face(get_angle(data.m->pos, point(x, y)), nullptr);
     }
 }
 
@@ -2262,13 +2262,13 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
 void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
     if(data.args.size() == 1) {
         //Turn to a relative angle.
-        data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), NULL);
+        data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), nullptr);
     } else {
         //Turn to some relative coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
         point p = rotate_point(point(x, y), data.m->angle);
-        data.m->face(get_angle(data.m->pos, data.m->pos + p), NULL);
+        data.m->face(get_angle(data.m->pos, data.m->pos + p), nullptr);
     }
 }
 
@@ -2293,7 +2293,7 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_TURN_HOME: {
-        data.m->face(get_angle(data.m->pos, data.m->home), NULL);
+        data.m->face(get_angle(data.m->pos, data.m->home), nullptr);
         break;
         
     }
@@ -2454,7 +2454,7 @@ mob* get_trigger_mob(mob_action_run_data &data) {
         
     }
     
-    return NULL;
+    return nullptr;
 }
 
 

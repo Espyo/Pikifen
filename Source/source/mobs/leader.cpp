@@ -537,7 +537,7 @@ void leader::dismiss() {
     
     //Dismiss leaders now.
     while(!group->members.empty()) {
-        group->members[0]->fsm.run_event(MOB_EV_DISMISSED, NULL);
+        group->members[0]->fsm.run_event(MOB_EV_DISMISSED, nullptr);
         group->members[0]->leave_group();
     }
     
@@ -959,7 +959,7 @@ void leader::tick_class_specifics(const float delta_t) {
  * @brief Updates variables related to how the leader's throw would go.
  */
 void leader::update_throw_variables() {
-    throwee = NULL;
+    throwee = nullptr;
     if(!holding.empty()) {
         throwee = holding[0];
     } else if(game.states.gameplay->cur_leader_ptr == this) {
@@ -1042,7 +1042,7 @@ void change_to_next_leader(
     if(game.states.gameplay->available_leaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
         game.states.gameplay->cur_leader_nr = INVALID;
-        game.states.gameplay->cur_leader_ptr = NULL;
+        game.states.gameplay->cur_leader_ptr = nullptr;
         game.states.gameplay->update_closest_group_members();
         return;
     }
@@ -1078,7 +1078,7 @@ void change_to_next_leader(
     if(keep_idx) {
         forward ? new_leader_nr-- : new_leader_nr++;
     }
-    leader* new_leader_ptr = NULL;
+    leader* new_leader_ptr = nullptr;
     bool searching = true;
     leader* original_leader_ptr = game.states.gameplay->cur_leader_ptr;
     bool cant_find_new_leader = false;

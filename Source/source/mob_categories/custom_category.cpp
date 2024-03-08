@@ -73,14 +73,14 @@ void custom_category::erase_mob(mob* m) { }
 
 
 /**
- * @brief Returns a custom type given its name, or NULL on error.
+ * @brief Returns a custom type given its name, or nullptr on error.
  *
  * @param name Name of the mob type to get.
  * @return The type.
  */
 mob_type* custom_category::get_type(const string &name) const {
     auto it = game.mob_types.custom.find(name);
-    if(it == game.mob_types.custom.end()) return NULL;
+    if(it == game.mob_types.custom.end()) return nullptr;
     return it->second;
 }
 

@@ -116,7 +116,7 @@ public:
     //--- Function declarations ---
 
     explicit sprite(
-        const string &name = "", ALLEGRO_BITMAP* const b = NULL,
+        const string &name = "", ALLEGRO_BITMAP* const b = nullptr,
         const vector<hitbox> &h = vector<hitbox>()
     );
     sprite(
@@ -133,7 +133,7 @@ public:
     void set_bitmap(
         const string &new_file_name,
         const point &new_file_pos, const point &new_file_size,
-        data_node* node = NULL
+        data_node* node = nullptr
     );
 
 };
@@ -176,7 +176,7 @@ public:
 
     explicit frame(
         const string &sn = "", const size_t si = INVALID,
-        sprite* sp = NULL, const float d = 0.1,
+        sprite* sp = nullptr, const float d = 0.1,
         const string &snd = "", const size_t s = INVALID
     );
 
@@ -299,15 +299,15 @@ public:
 
     //--- Function declarations ---
 
-    explicit animation_instance(animation_database* anim_db = NULL);
+    explicit animation_instance(animation_database* anim_db = nullptr);
     animation_instance(const animation_instance &ai2);
     animation_instance &operator=(const animation_instance &ai2);
     void start();
     void skip_ahead_randomly();
     bool tick(
         const float delta_t,
-        vector<size_t>* signals = NULL,
-        vector<size_t>* sounds = NULL
+        vector<size_t>* signals = nullptr,
+        vector<size_t>* sounds = nullptr
     );
     sprite* get_cur_sprite() const;
 

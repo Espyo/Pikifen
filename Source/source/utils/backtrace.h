@@ -85,7 +85,7 @@ string demangle_symbol(const string &symbol) {
         int demangle_status;
         char* demangled_name =
             abi::__cxa_demangle(
-                mangled_name.c_str(), NULL, NULL, &demangle_status
+                mangled_name.c_str(), nullptr, nullptr, &demangle_status
             );
             
         if(demangle_status == 0) {
@@ -158,12 +158,12 @@ vector<string> get_backtrace() {
     IMAGEHLP_LINE64* line = (IMAGEHLP_LINE64*) malloc(sizeof(IMAGEHLP_LINE64));
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
     
-    SymInitialize(process, NULL, TRUE);
+    SymInitialize(process, nullptr, TRUE);
     size_t n_symbols =
-        CaptureStackBackTrace(0, BACKTRACE::MAX_FRAMES, stack, NULL);
+        CaptureStackBackTrace(0, BACKTRACE::MAX_FRAMES, stack, nullptr);
         
     for(size_t s = 0; s < n_symbols; ++s) {
-        SymFromAddr(process, (DWORD64) stack[s], NULL, symbol);
+        SymFromAddr(process, (DWORD64) stack[s], nullptr, symbol);
         
         std::stringstream str;
         if(

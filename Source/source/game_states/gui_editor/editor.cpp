@@ -401,14 +401,14 @@ bool gui_editor::save_file() {
     
     if(!file_node.save_file(file_path)) {
         show_message_box(
-            NULL, "Save failed!",
+            nullptr, "Save failed!",
             "Could not save the GUI file!",
             (
                 "An error occured while saving the GUI data to the file \"" +
                 file_path + "\". Make sure that the folder it is saving to "
                 "exists and it is not read-only, and try again."
             ).c_str(),
-            NULL,
+            nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
         set_status("Could not save the GUI file!", true);

@@ -158,13 +158,13 @@ public:
     //Information about the mob/point it's circling, if any.
     circling_info_struct* circling_info = nullptr;
 
-    //Riding a track. If NULL, the mob is not riding on any track.
+    //Riding a track. If nullptr, the mob is not riding on any track.
     track_info_struct* track_info = nullptr;
 
-    //Info on how this mob should be carried. Uncarriable if NULL.
+    //Info on how this mob should be carried. Uncarriable if nullptr.
     carry_info_struct* carry_info = nullptr;
 
-    //Onion delivery info. If NULL, the mob is not being delivered.
+    //Onion delivery info. If nullptr, the mob is not being delivered.
     delivery_info_struct* delivery_info = nullptr;
     
     //-Physical space-
@@ -414,16 +414,16 @@ public:
     void release_chomped_pikmin();
     void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;
-    mob* spawn(const mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
+    mob* spawn(const mob_type::spawn_struct* info, mob_type* type_ptr = nullptr);
     void start_dying();
     void finish_dying();
     void respawn();
     dist get_distance_between(
-        const mob* m2_ptr, const dist* regular_distance_cache = NULL
+        const mob* m2_ptr, const dist* regular_distance_cache = nullptr
     ) const;
     hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(
-        const point &p, const size_t h_type = INVALID, dist* d = NULL
+        const point &p, const size_t h_type = INVALID, dist* d = nullptr
     ) const;
     bool has_clear_line(const mob* target_mob) const;
     
@@ -455,7 +455,7 @@ public:
     void face(
         const float new_angle, point* new_pos, const bool instantly = false
     );
-    point get_chase_target(float* z = NULL) const;
+    point get_chase_target(float* z = nullptr) const;
     virtual float get_base_speed() const;
     float get_speed_multiplier() const;
     

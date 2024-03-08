@@ -86,11 +86,11 @@ void track_category::erase_mob(mob* m) {
  * @brief Returns a type of track given its name.
  *
  * @param name Name of the mob type to get.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
 mob_type* track_category::get_type(const string &name) const {
     auto it = game.mob_types.track.find(name);
-    if(it == game.mob_types.track.end()) return NULL;
+    if(it == game.mob_types.track.end()) return nullptr;
     return it->second;
 }
 

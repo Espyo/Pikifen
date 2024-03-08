@@ -58,7 +58,7 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s) {
  * @param p2 Second point.
  * @param ignore_walls_below_z Any walls whose sector Zs are below
  * this value get ignored. Use -FLT_MAX to not ignore any wall.
- * @param impassable_walls If not NULL, true will be returned here if
+ * @param impassable_walls If not nullptr, true will be returned here if
  * any of the walls are impassable, i.e. the void or "blocking"-type
  * sectors. False otherwise.
  * @return Whether there are walls between.
@@ -88,7 +88,7 @@ bool are_walls_between(
                 p1, p2,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL
+                nullptr
             )
         ) {
             continue;
@@ -183,7 +183,7 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap != game.bmp_error
         ) {
             game.textures.detach(s_ptr->texture_info.file_name);
-            s_ptr->texture_info.bitmap = NULL;
+            s_ptr->texture_info.bitmap = nullptr;
         }
     }
 }
@@ -292,11 +292,11 @@ void crash(const string &reason, const string &info, const int exit_status) {
     game.errors.report(error_str);
     
     show_message_box(
-        NULL, "Program crash!",
+        nullptr, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
         "troubleshooting section of the included manual. Thanks!",
-        NULL,
+        nullptr,
         ALLEGRO_MESSAGEBOX_ERROR
     );
     
@@ -450,7 +450,7 @@ bool does_edge_have_wall_shadow(
  *
  * @param folder_name Name of the folder.
  * @param folders If true, only read folders. If false, only read files.
- * @param folder_found If not NULL, returns whether the folder was found or not.
+ * @param folder_found If not nullptr, returns whether the folder was found or not.
  * @return The vector.
  */
 vector<string> folder_to_vector(
@@ -474,8 +474,8 @@ vector<string> folder_to_vector(
     }
     
     
-    ALLEGRO_FS_ENTRY* entry = NULL;
-    while((entry = al_read_directory(folder)) != NULL) {
+    ALLEGRO_FS_ENTRY* entry = nullptr;
+    while((entry = al_read_directory(folder)) != nullptr) {
         if(
             folders ==
             (has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
@@ -515,7 +515,7 @@ vector<string> folder_to_vector(
  */
 mob* get_closest_mob_to_cursor() {
     dist closest_mob_to_cursor_dist;
-    mob* closest_mob_to_cursor = NULL;
+    mob* closest_mob_to_cursor = nullptr;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
@@ -773,8 +773,8 @@ float get_liquid_limit_length(edge* e_ptr) {
  *
  * @param font The text's font.
  * @param text The text.
- * @param ret_w The width gets returned here, if not NULL.
- * @param ret_h The height gets returned here, if not NULL.
+ * @param ret_w The width gets returned here, if not nullptr.
+ * @param ret_h The height gets returned here, if not nullptr.
  */
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
@@ -1091,7 +1091,7 @@ ALLEGRO_COLOR interpolate_color(
  * @brief Converts a point to a string.
  *
  * @param p Point to convert.
- * @param z If not NULL, add a third word which is this Z coordinate.
+ * @param z If not nullptr, add a third word which is this Z coordinate.
  * @return The string.
  */
 string p2s(const point &p, const float* z) {
@@ -1226,10 +1226,10 @@ void report_fatal_error(const string &s, const data_node* dn) {
     game.errors.report(s, dn);
     
     show_message_box(
-        NULL, "Fatal error!",
+        nullptr, "Fatal error!",
         "Pikifen has encountered a fatal error!",
         s.c_str(),
-        NULL,
+        nullptr,
         ALLEGRO_MESSAGEBOX_ERROR
     );
     
@@ -1284,7 +1284,7 @@ ALLEGRO_COLOR s2c(const string &s) {
  * @brief Converts a string to a point.
  *
  * @param s String to convert.
- * @param z If not NULL, the third word is placed here.
+ * @param z If not nullptr, the third word is placed here.
  * @return The (X and Y) coordinates.
  */
 point s2p(const string &s, float* z) {
@@ -1937,7 +1937,7 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
         );
     } else {
         delete game.states.gameplay->msg_box;
-        game.states.gameplay->msg_box = NULL;
+        game.states.gameplay->msg_box = nullptr;
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME

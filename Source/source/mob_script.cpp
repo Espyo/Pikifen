@@ -44,7 +44,7 @@ void easy_fsm_creator::change_state(const string &new_state) {
  */
 void easy_fsm_creator::commit_event() {
     if(!cur_event) return;
-    cur_event = NULL;
+    cur_event = nullptr;
 }
 
 
@@ -54,7 +54,7 @@ void easy_fsm_creator::commit_event() {
 void easy_fsm_creator::commit_state() {
     if(!cur_state) return;
     commit_event();
-    cur_state = NULL;
+    cur_state = nullptr;
 }
 
 

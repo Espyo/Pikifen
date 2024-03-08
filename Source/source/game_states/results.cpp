@@ -330,7 +330,7 @@ void results_state::load() {
     
     if(!saved_successfully) {
         show_message_box(
-            NULL, "Save failed!",
+            nullptr, "Save failed!",
             "Could not save this result!",
             (
                 "An error occured while saving the mission record to the "
@@ -338,7 +338,7 @@ void results_state::load() {
                 "the folder it is saving to exists and it is not read-only, "
                 "and try beating the mission again."
             ).c_str(),
-            NULL,
+            nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
     }
@@ -493,7 +493,7 @@ void results_state::load() {
         gui_item* medal_item = new gui_item;
         medal_item->on_draw =
         [medal] (const point & center, const point & size) {
-            ALLEGRO_BITMAP* bmp = NULL;
+            ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
                 bmp = game.sys_assets.bmp_medal_none;

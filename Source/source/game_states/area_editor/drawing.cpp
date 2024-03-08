@@ -354,7 +354,7 @@ void area_editor::draw_canvas() {
                 }
                 
                 al_draw_prim(
-                    av, NULL, NULL,
+                    av, nullptr, nullptr,
                     0, 3, ALLEGRO_PRIM_TRIANGLE_LIST
                 );
                 
@@ -642,7 +642,7 @@ void area_editor::draw_canvas() {
     if(state == EDITOR_STATE_MOBS && mob_opacity > 0.0f) {
         for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-            mob_gen* m2_ptr = NULL;
+            mob_gen* m2_ptr = nullptr;
             
             if(!m_ptr->type) continue;
             
@@ -1006,7 +1006,7 @@ void area_editor::draw_canvas() {
         
         //Closest stop line.
         if(show_closest_stop) {
-            path_stop* closest = NULL;
+            path_stop* closest = nullptr;
             float closest_dist;
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
@@ -1181,7 +1181,7 @@ void area_editor::draw_canvas() {
         cur_transformation_widget.draw(
             &game.cur_area_data.mission.goal_exit_center,
             &game.cur_area_data.mission.goal_exit_size,
-            NULL,
+            nullptr,
             1.0f / game.cam.zoom
         );
     }
@@ -1240,7 +1240,7 @@ void area_editor::draw_canvas() {
             cur_transformation_widget.draw(
                 &reference_center,
                 &reference_size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom
             );
         }
@@ -1480,9 +1480,9 @@ void area_editor::draw_canvas() {
         }
         
         sector* cs_left_sector =
-            get_sector(cross_section_checkpoints[0], NULL, false);
+            get_sector(cross_section_checkpoints[0], nullptr, false);
         sector* cs_right_sector =
-            get_sector(cross_section_checkpoints[1], NULL, false);
+            get_sector(cross_section_checkpoints[1], nullptr, false);
             
         /**
          * @brief Info about a split.
@@ -1607,7 +1607,7 @@ void area_editor::draw_canvas() {
                 );
             }
             
-            sector* central_sector = NULL;
+            sector* central_sector = nullptr;
             for(size_t s = 1; s < splits.size(); ++s) {
                 if(splits[s].l2r > 0.5) {
                     central_sector = splits[s].sector_ptrs[0];

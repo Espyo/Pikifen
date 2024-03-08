@@ -111,7 +111,7 @@ void leader_type::load_resources(data_node* file) {
     string icon_str;
     string name_call_sfx_str;
     string whistle_sfx_str;
-    data_node* icon_node = NULL;
+    data_node* icon_node = nullptr;
     
     rs.set("dismiss_sfx", dismiss_sfx_str);
     rs.set("icon", icon_str, &icon_node);

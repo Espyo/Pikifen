@@ -58,7 +58,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
  * @param info2 Unused.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     mob* delivery = (mob*) info1;
     ship* shi_ptr = (ship*) m;

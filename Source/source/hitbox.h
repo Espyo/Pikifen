@@ -122,7 +122,7 @@ public:
     //--- Function declarations ---
     
     explicit hitbox(
-        const string &bpn = "", size_t bpi = INVALID, body_part* bpp = NULL,
+        const string &bpn = "", size_t bpi = INVALID, body_part* bpp = nullptr,
         const point &pos = point(), const float z = 0,
         const float height = 128, const float radius = 32
     );

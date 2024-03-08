@@ -205,7 +205,7 @@ void area_editor::check_drawing_line(const point &pos) {
                 prev_node->snapped_spot, pos,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL, NULL
+                nullptr, nullptr
             )
         ) {
             drawing_line_result = DRAWING_LINE_CROSSES_EDGES;
@@ -394,7 +394,7 @@ void area_editor::copy_path_link_properties() {
     
     path_link* source_link = *selected_path_links.begin();
     if(!copy_buffer_path_link) {
-        copy_buffer_path_link = new path_link(NULL, NULL, INVALID);
+        copy_buffer_path_link = new path_link(nullptr, nullptr, INVALID);
     }
     source_link->clone(copy_buffer_path_link);
     set_status("Successfully copied the path link's properties.");
@@ -438,8 +438,8 @@ void area_editor::copy_sector_properties() {
 
 /**
  * @brief Creates a new sector for use in layout drawing operations.
- * This automatically clones it from another sector, if not NULL, or gives it
- * a recommended texture if the other sector NULL.
+ * This automatically clones it from another sector, if not nullptr, or gives it
+ * a recommended texture if the other sector nullptr.
  *
  * @param copy_from Sector to copy from.
  * @return The created sector.
@@ -642,7 +642,7 @@ void area_editor::find_problems() {
             point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
             point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
             point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
-            &r, NULL
+            &r, nullptr
         );
         
         float a =
@@ -736,7 +736,7 @@ void area_editor::find_problems() {
     bool has_leader = false;
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         if(
-            game.cur_area_data.mob_generators[m]->type != NULL &&
+            game.cur_area_data.mob_generators[m]->type != nullptr &&
             game.cur_area_data.mob_generators[m]->type->category->id ==
             MOB_CATEGORY_LEADERS
         ) {
@@ -768,7 +768,7 @@ void area_editor::find_problems() {
     //Objects out of bounds.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-        if(!get_sector(m_ptr->pos, NULL, false)) {
+        if(!get_sector(m_ptr->pos, nullptr, false)) {
             problem_mob_ptr = m_ptr;
             problem_type = EPT_MOB_OOB;
             problem_title = "Mob out of bounds!";
@@ -804,7 +804,7 @@ void area_editor::find_problems() {
                     point(
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     ),
-                    NULL, NULL
+                    nullptr, nullptr
                 )
             ) {
             
@@ -815,7 +815,7 @@ void area_editor::find_problems() {
                     continue;
                 }
                 
-                sector* mob_sector = get_sector(m_ptr->pos, NULL, false);
+                sector* mob_sector = get_sector(m_ptr->pos, nullptr, false);
                 
                 bool in_wall = false;
                 
@@ -954,7 +954,7 @@ void area_editor::find_problems() {
             get_path(
                 m_ptr->pos, m_ptr->links[l]->pos,
                 settings, path,
-                NULL, NULL, NULL
+                nullptr, nullptr, nullptr
             );
             
             for(size_t s = 1; s < path.size(); ++s) {
@@ -984,7 +984,7 @@ void area_editor::find_problems() {
     //Path stops out of bounds.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        if(!get_sector(s_ptr->pos, NULL, false)) {
+        if(!get_sector(s_ptr->pos, nullptr, false)) {
             problem_path_stop_ptr = s_ptr;
             problem_type = EPT_PATH_STOP_OOB;
             problem_title = "Path stop out of bounds!";
@@ -1184,7 +1184,7 @@ void area_editor::find_problems() {
 
 /**
  * @brief Adds to the list all sectors affected by the specified sector.
- * The list can include the NULL sector, and will include the
+ * The list can include the nullptr sector, and will include the
  * provided sector too.
  *
  * @param s_ptr Sector that's affecting others.
@@ -1202,7 +1202,7 @@ void area_editor::get_affected_sectors(
 
 /**
  * @brief Adds to the list all sectors affected by the specified sectors.
- * The list can include the NULL sector, and will include the
+ * The list can include the nullptr sector, and will include the
  * provided sectors too.
  *
  * @param sectors Sectors that are affecting others.
@@ -1219,7 +1219,7 @@ void area_editor::get_affected_sectors(
 
 /**
  * @brief Adds to the list all sectors affected by the specified vertexes.
- * The list can include the NULL sector.
+ * The list can include the nullptr sector.
  *
  * @param vertexes Vertexes that are affecting sectors.
  * @param list The list of affected sectors to fill out.
@@ -1243,7 +1243,7 @@ void area_editor::get_affected_sectors(
  * @param v_ptr Pointer to the vertex.
  * @param angle Angle coming into the vertex.
  * @param clockwise Return the closest edge clockwise?
- * @param closest_edge_angle If not NULL, the angle the edge makes into its
+ * @param closest_edge_angle If not nullptr, the angle the edge makes into its
  * other vertex is returned here.
  * @return The closest edge.
  */
@@ -1251,7 +1251,7 @@ edge* area_editor::get_closest_edge_to_angle(
     vertex* v_ptr, const float angle, const bool clockwise,
     float* closest_edge_angle
 ) const {
-    edge* best_edge = NULL;
+    edge* best_edge = nullptr;
     float best_angle_diff = 0;
     float best_edge_angle = 0;
     
@@ -1352,7 +1352,7 @@ bool area_editor::get_common_sector(
     }
     
     if(sectors.empty()) {
-        *result = NULL;
+        *result = nullptr;
         return false;
     } else if(sectors.size() == 1) {
         *result = *sectors.begin();
@@ -1367,9 +1367,9 @@ bool area_editor::get_common_sector(
     //outer square sectors. The triangle "belongs" to the inner sector,
     //and we can easily find out which is the inner one with this method.
     float best_rightmost_x = 0;
-    sector* best_rightmost_sector = NULL;
+    sector* best_rightmost_sector = nullptr;
     for(auto &s : sectors) {
-        if(s == NULL) continue;
+        if(s == nullptr) continue;
         vertex* v_ptr = s->get_rightmost_vertex();
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
             best_rightmost_sector = s;
@@ -1444,7 +1444,7 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
             *result =
                 get_sector(
                     (n1->snapped_spot + n2->snapped_spot) / 2,
-                    NULL, false
+                    nullptr, false
                 );
             return true;
         }
@@ -1467,7 +1467,7 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
 
 
 /**
- * @brief Returns the edge currently under the specified point, or NULL if none.
+ * @brief Returns the edge currently under the specified point, or nullptr if none.
  *
  * @param p The point.
  * @param after Only check edges that come after this one.
@@ -1504,7 +1504,7 @@ edge* area_editor::get_edge_under_point(
         }
     }
     
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1527,7 +1527,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
                     point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
                     point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
                     point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
-                    NULL, NULL
+                    nullptr, nullptr
                 )
             ) {
                 intersections.push_back(edge_intersection(e1_ptr, e2_ptr));
@@ -1555,7 +1555,7 @@ float area_editor::get_mob_gen_radius(mob_gen* m) const {
  * @brief Returns true if there are path links currently under the specified
  * point. data1 takes the info of the found link. If there's also a link in
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
- * with NULLs.
+ * with nullptrs.
  *
  * @param p The point to check against.
  * @param data1 If there is a link under the point, its data is returned here.
@@ -1577,7 +1577,7 @@ bool area_editor::get_mob_link_under_point(
                 )
             ) {
                 *data1 = std::make_pair(m_ptr, m2_ptr);
-                *data2 = std::make_pair((mob_gen*) NULL, (mob_gen*) NULL);
+                *data2 = std::make_pair((mob_gen*) nullptr, (mob_gen*) nullptr);
                 
                 for(size_t l2 = 0; l2 < m2_ptr->links.size(); ++l2) {
                     if(m2_ptr->links[l2] == m_ptr) {
@@ -1595,10 +1595,10 @@ bool area_editor::get_mob_link_under_point(
 
 
 /**
- * @brief Returns the mob currently under the specified point, or NULL if none.
+ * @brief Returns the mob currently under the specified point, or nullptr if none.
  *
  * @param p The point to check against.
- * @param idx If not NULL, the mob index is returned here.
+ * @param idx If not nullptr, the mob index is returned here.
  * If no mob matches, INVALID is returned instead.
  * @return The mob.
  */
@@ -1617,14 +1617,14 @@ mob_gen* area_editor::get_mob_under_point(
     }
     
     if(idx) *idx = INVALID;
-    return NULL;
+    return nullptr;
 }
 
 
 /**
  * @brief Returns true if there are path links currently under the specified
  * point. link1 takes the info of the found link. If there's also a link in
- * the opposite direction, link2 gets that data, otherwise link2 receives NULL.
+ * the opposite direction, link2 gets that data, otherwise link2 receives nullptr.
  *
  * @param p The point to check against.
  * @param link1 If there is a path link under that point,
@@ -1658,7 +1658,7 @@ bool area_editor::get_path_link_under_point(
 
 /**
  * @brief Returns the path stop currently under the specified point,
- * or NULL if none.
+ * or nullptr if none.
  *
  * @param p Point to check against.
  * @return The stop.
@@ -1672,25 +1672,25 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
         }
     }
     
-    return NULL;
+    return nullptr;
 }
 
 
 /**
  * @brief Returns the sector currently under the specified point,
- * or NULL if none.
+ * or nullptr if none.
  *
  * @param p Point to check against.
  * @return The sector.
  */
 sector* area_editor::get_sector_under_point(const point &p) const {
-    return get_sector(p, NULL, false);
+    return get_sector(p, nullptr, false);
 }
 
 
 /**
  * @brief Returns the vertex currently under the specified point,
- * or NULL if none.
+ * or nullptr if none.
  *
  * @param p Point to check against.
  * @return The vertex.
@@ -1717,7 +1717,7 @@ vertex* area_editor::get_vertex_under_point(const point &p) const {
         }
     }
     
-    return NULL;
+    return nullptr;
 }
 
 
@@ -2199,7 +2199,7 @@ void area_editor::resize_everything(const float mults[2]) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->texture_info.scale.x *= mults[0];
         s_ptr->texture_info.scale.y *= mults[1];
-        triangulate_sector(s_ptr, NULL, false);
+        triangulate_sector(s_ptr, nullptr, false);
         s_ptr->calculate_bounding_box();
     }
     
@@ -2467,14 +2467,14 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  * @param l1 Path link to split.
  * @param l2 If there is also a path link going in the opposite direction
  * between the two stops involved, this contains its data.
- * Otherwise, it contains NULLs.
+ * Otherwise, it contains nullptrs.
  * @param where Where to make the split.
  * @return The newly-created stop.
  */
 path_stop* area_editor::split_path_link(
     path_link* l1, path_link* l2, const point &where
 ) {
-    bool normal_link = (l2 != NULL);
+    bool normal_link = (l2 != nullptr);
     point new_stop_pos =
         get_closest_point_in_line_seg(
             l1->start_ptr->pos, l1->end_ptr->pos,

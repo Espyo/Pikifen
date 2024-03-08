@@ -68,7 +68,7 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
 void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     bouncer* bou_ptr = (bouncer*) m;
     mob* toucher = (mob*) info1;
-    mob* target_mob = NULL;
+    mob* target_mob = nullptr;
     
     if(!bou_ptr->links.empty()) {
         target_mob = bou_ptr->links[0];
@@ -82,7 +82,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         return;
     }
     
-    mob_event* ev = NULL;
+    mob_event* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(
@@ -137,7 +137,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         &angle
     );
     
-    toucher->face(angle, NULL, true);
+    toucher->face(angle, nullptr, true);
     
     ev->run(toucher, (void*) m);
     

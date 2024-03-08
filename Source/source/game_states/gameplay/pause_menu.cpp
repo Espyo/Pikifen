@@ -212,15 +212,15 @@ pause_menu_struct::~pause_menu_struct() {
     game.bitmaps.detach(bmp_radar_onion_bulb);
     game.bitmaps.detach(bmp_radar_ship);
     game.bitmaps.detach(bmp_radar_path);
-    bmp_radar_cursor = NULL;
-    bmp_radar_pikmin = NULL;
-    bmp_radar_treasure = NULL;
-    bmp_radar_enemy = NULL;
-    bmp_radar_leader_bubble = NULL;
-    bmp_radar_onion_skeleton = NULL;
-    bmp_radar_onion_bulb = NULL;
-    bmp_radar_ship = NULL;
-    bmp_radar_path = NULL;
+    bmp_radar_cursor = nullptr;
+    bmp_radar_pikmin = nullptr;
+    bmp_radar_treasure = nullptr;
+    bmp_radar_enemy = nullptr;
+    bmp_radar_leader_bubble = nullptr;
+    bmp_radar_onion_skeleton = nullptr;
+    bmp_radar_onion_bulb = nullptr;
+    bmp_radar_ship = nullptr;
+    bmp_radar_path = nullptr;
 }
 
 
@@ -507,7 +507,7 @@ void pause_menu_struct::add_pikmin_status_line(
  * go_here_path_result.
  */
 void pause_menu_struct::calculate_go_here_path() {
-    radar_cursor_leader = NULL;
+    radar_cursor_leader = nullptr;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(dist(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom) {
@@ -532,7 +532,7 @@ void pause_menu_struct::calculate_go_here_path() {
         return;
     }
     
-    sector* cursor_sector = get_sector(radar_cursor, NULL, true);
+    sector* cursor_sector = get_sector(radar_cursor, nullptr, true);
     
     if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
         go_here_path.clear();
@@ -553,7 +553,7 @@ void pause_menu_struct::calculate_go_here_path() {
             radar_selected_leader->pos,
             radar_cursor,
             settings,
-            go_here_path, NULL, NULL, NULL
+            go_here_path, nullptr, nullptr, nullptr
         );
 }
 
@@ -816,7 +816,7 @@ void pause_menu_struct::draw_go_here_segment(
     av[3].v = bmp_h;
     
     al_draw_prim(
-        av, NULL, bmp_radar_path, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+        av, nullptr, bmp_radar_path, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
     );
     
     *texture_point = texture_end;
@@ -885,7 +885,7 @@ void pause_menu_struct::draw_radar(
             }
             
             al_draw_prim(
-                av, NULL, NULL,
+                av, nullptr, nullptr,
                 0, 3, ALLEGRO_PRIM_TRIANGLE_LIST
             );
         }
@@ -1768,7 +1768,7 @@ void pause_menu_struct::init_help_page() {
             tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";
-            new_t.image = parts.size() > 2 ? game.bitmaps.get(parts[2]) : NULL;
+            new_t.image = parts.size() > 2 ? game.bitmaps.get(parts[2]) : nullptr;
             category_tidbits.push_back(new_t);
         }
     }
@@ -1909,8 +1909,8 @@ void pause_menu_struct::init_help_page() {
     gui_item* image_item = new gui_item();
     image_item->on_draw =
     [this] (const point & center, const point & size) {
-        if(cur_tidbit == NULL) return;
-        if(cur_tidbit->image == NULL) return;
+        if(cur_tidbit == nullptr) return;
+        if(cur_tidbit->image == nullptr) return;
         draw_bitmap_in_box(
             cur_tidbit->image,
             center, size, false
@@ -1937,7 +1937,7 @@ void pause_menu_struct::init_help_page() {
     help_gui.hide_items();
     help_gui.on_selection_changed =
     [this] () {
-        cur_tidbit = NULL;
+        cur_tidbit = nullptr;
     };
 }
 
@@ -2521,7 +2521,7 @@ void pause_menu_struct::init_radar_page() {
     radar_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    radar_gui.set_selected_item(NULL);
+    radar_gui.set_selected_item(nullptr);
     radar_gui.responsive = false;
     radar_gui.hide_items();
 }
@@ -2613,7 +2613,7 @@ void pause_menu_struct::init_status_page() {
     //Setup the list header.
     add_pikmin_status_line(
         list_header,
-        NULL,
+        nullptr,
         "Group",
         "Idle",
         "Field",
@@ -2686,7 +2686,7 @@ void pause_menu_struct::init_status_page() {
     //Setup the list totals.
     add_pikmin_status_line(
         totals,
-        NULL,
+        nullptr,
         i2s(total_in_group),
         i2s(total_idling),
         i2s(total_on_field),
@@ -2853,7 +2853,7 @@ void pause_menu_struct::start_leaving_gameplay() {
 void pause_menu_struct::switch_page(
     gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
 ) {
-    gui_manager* new_gui = NULL;
+    gui_manager* new_gui = nullptr;
     switch(new_page) {
     case PAUSE_MENU_PAGE_SYSTEM: {
         new_gui = &gui;

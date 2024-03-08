@@ -44,7 +44,7 @@ public:
         //Current state. 0 = free. 1 = reserved. 2 = occupied.
         unsigned char state = 0;
 
-        //What Pikmin is reserving/occupying. NULL if free.
+        //What Pikmin is reserving/occupying. nullptr if free.
         pikmin* pikmin_here = nullptr;
 
         

@@ -231,7 +231,7 @@ void bridge::draw_component(mob* m) {
     
     bitmap_effect_info eff;
     m->get_sprite_bitmap_effects(
-        NULL, &eff,
+        nullptr, &eff,
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS
     );
     
@@ -285,7 +285,7 @@ void bridge::draw_component(mob* m) {
         vertexes[v].y += m->pos.y;
     }
     
-    al_draw_prim(vertexes, NULL, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+    al_draw_prim(vertexes, nullptr, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
 }
 
 
@@ -318,7 +318,7 @@ void bridge::read_script_vars(const script_var_reader &svr) {
 void bridge::setup() {
     if(!links.empty() && links[0]) {
         total_length = dist(pos, links[0]->pos).to_float();
-        face(get_angle(pos, links[0]->pos), NULL, true);
+        face(get_angle(pos, links[0]->pos), nullptr, true);
         delta_z = links[0]->z - z;
         total_chunks_needed =
             std::max(

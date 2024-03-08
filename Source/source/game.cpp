@@ -317,12 +317,12 @@ int game_class::start() {
     //Panic check: is there a Game_data folder?
     if(folder_to_vector(GAME_DATA_FOLDER_PATH, true).empty()) {
         show_message_box(
-            NULL, "Game_data folder not found!",
+            nullptr, "Game_data folder not found!",
             "Game_data folder not found!",
             "Could not find the \"Game_data\" folder! "
             "If you are running the engine from a zip file, "
             "you have to unpack it first.",
-            NULL,
+            nullptr,
             ALLEGRO_MESSAGEBOX_ERROR
         );
         return -1;
@@ -442,15 +442,15 @@ void game_state_list::destroy() {
     delete stats_menu;
     delete results;
     
-    animation_ed = NULL;
-    area_ed = NULL;
-    area_menu = NULL;
-    control_binds_menu = NULL;
-    gameplay = NULL;
-    gui_ed = NULL;
-    main_menu = NULL;
-    options_menu = NULL;
-    results = NULL;
+    animation_ed = nullptr;
+    area_ed = nullptr;
+    area_menu = nullptr;
+    control_binds_menu = nullptr;
+    gameplay = nullptr;
+    gui_ed = nullptr;
+    main_menu = nullptr;
+    options_menu = nullptr;
+    results = nullptr;
 }
 
 

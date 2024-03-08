@@ -71,7 +71,7 @@ void gui_editor::process_gui() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
     ImGui::Begin(
-        "GUI editor", NULL,
+        "GUI editor", nullptr,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoCollapse
@@ -98,7 +98,7 @@ void gui_editor::process_gui() {
     ImVec2 br = ImGui::GetItemRectMax();
     canvas_br.x = br.x;
     canvas_br.y = br.y;
-    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, NULL);
+    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
     
     //Small hack. Recenter the camera, if necessary.
     if(must_recenter_cam) {
@@ -324,7 +324,7 @@ void gui_editor::process_gui_menu_bar() {
                     "in the engine's folder.";
                 show_message_box(
                     game.display, "Help", "GUI editor help",
-                    help_str.c_str(), NULL, 0
+                    help_str.c_str(), nullptr, 0
                 );
             }
             set_tooltip(
@@ -621,7 +621,7 @@ void gui_editor::process_gui_toolbar() {
     );
     
     //Snap mode button.
-    ALLEGRO_BITMAP* snap_mode_bmp = NULL;
+    ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
     if(game.options.gui_editor_snap) {
         snap_mode_bmp = editor_icons[ICON_SNAP_GRID];

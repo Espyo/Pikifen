@@ -84,8 +84,8 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             pil_ptr->pil_type->health_per_resource * intended_amount;
     }
     
-    resource* resource_to_pick_up = NULL;
-    pikmin* pikmin_to_start_carrying = NULL;
+    resource* resource_to_pick_up = nullptr;
+    pikmin* pikmin_to_start_carrying = nullptr;
     
     for(size_t r = 0; r < (size_t) amount_to_spawn; ++r) {
         point spawn_pos;

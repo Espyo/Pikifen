@@ -357,7 +357,7 @@ bool audio_manager::emit(size_t source_id) {
     playback_ptr->gain = playback_ptr->target_gain;
     playback_ptr->pan = playback_ptr->target_pan;
     
-    ALLEGRO_MIXER* mixer = NULL;
+    ALLEGRO_MIXER* mixer = nullptr;
     switch(source_ptr->type) {
     case SFX_TYPE_WORLD_GLOBAL:
     case SFX_TYPE_WORLD_POS: {
@@ -411,11 +411,11 @@ bool audio_manager::emit(size_t source_id) {
  * @brief Returns a source's pointer from a source in the list.
  *
  * @param source_id ID of the sound source.
- * @return The source, or NULL if invalid.
+ * @return The source, or nullptr if invalid.
  */
 sfx_source_struct* audio_manager::get_source(size_t source_id) {
     auto source_it = sources.find(source_id);
-    if(source_it == sources.end()) return NULL;
+    if(source_it == sources.end()) return nullptr;
     return &source_it->second;
 }
 
@@ -755,7 +755,7 @@ void audio_manager::start_song_track(
  * @brief Stops all playbacks. Alternatively, stops all playbacks of
  * a given sound sample.
  *
- * @param filter Sound sample to filter by, or NULL to stop all playbacks.
+ * @param filter Sound sample to filter by, or nullptr to stop all playbacks.
  */
 void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
     for(size_t p = 0; p < playbacks.size(); ++p) {
@@ -1215,7 +1215,7 @@ void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
  * @brief Returns the specified audio stream, by name.
  *
  * @param name Name of the audio stream to get.
- * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The stream.
  */
@@ -1346,7 +1346,7 @@ void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
  * @brief Returns the specified sound sample, by name.
  *
  * @param name Name of the sound sample to get.
- * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The sample.
  */

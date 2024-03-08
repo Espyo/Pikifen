@@ -1273,7 +1273,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
  * @param info2 Unused.
  */
 void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
     
@@ -1467,7 +1467,7 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::check_punch_damage(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     hitbox_interaction* info = (hitbox_interaction*) info1;
     
@@ -1493,7 +1493,7 @@ void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     
     dist d;
-    pikmin* new_pikmin = NULL;
+    pikmin* new_pikmin = nullptr;
     
     if(!lea_ptr->queued_pluck_cancel) {
         new_pikmin =
@@ -1569,7 +1569,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader* leader_ptr = (leader*) m;
     mob* holding_ptr = leader_ptr->holding[0];
     
-    engine_assert(holding_ptr != NULL, m->print_state_history());
+    engine_assert(holding_ptr != nullptr, m->print_state_history());
     
     holding_ptr->fsm.run_event(MOB_EV_THROWN);
     holding_ptr->start_height_effect();
@@ -1580,7 +1580,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->z_cap = leader_ptr->throwee_max_z;
     
-    holding_ptr->face(leader_ptr->throwee_angle, NULL, true);
+    holding_ptr->face(leader_ptr->throwee_angle, nullptr, true);
     holding_ptr->speed = leader_ptr->throwee_speed;
     holding_ptr->speed_z = leader_ptr->throwee_speed_z;
     
@@ -1640,7 +1640,7 @@ void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
-    leader_fsm::dismiss(m, NULL, NULL);
+    leader_fsm::dismiss(m, nullptr, nullptr);
     m->stop_chasing();
     
     m->become_carriable(CARRY_DESTINATION_ONION);
@@ -1673,7 +1673,7 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    engine_assert(m->focused_mob != nullptr, m->print_state_history());
     drop* dro_ptr = (drop*) m->focused_mob;
     
     switch(dro_ptr->dro_type->effect) {
@@ -1718,7 +1718,7 @@ void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
     pikmin* pik_ptr = (pikmin*) info1;
@@ -1756,7 +1756,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
     mob* grabbed_mob = (mob*) info1;
@@ -1871,7 +1871,7 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
@@ -1901,7 +1901,7 @@ void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::move(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
@@ -1971,7 +1971,7 @@ void leader_fsm::release(mob* m, void* info1, void* info2) {
     //so that the leader doesn't release the Pikmin inside a wall behind them.
     m->holding[0]->pos = m->pos;
     m->holding[0]->z = m->z;
-    m->holding[0]->face(m->angle + TAU / 2.0f, NULL, true);
+    m->holding[0]->face(m->angle + TAU / 2.0f, nullptr, true);
     m->release(m->holding[0]);
 }
 
@@ -1988,7 +1988,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     
     dist d;
-    pikmin* new_pikmin = NULL;
+    pikmin* new_pikmin = nullptr;
     if(!lea_ptr->queued_pluck_cancel) {
         new_pikmin =
             get_closest_sprout(lea_ptr->pos, &d, false);
@@ -2187,7 +2187,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
-    leader_fsm::update_in_group_chasing(m, NULL, NULL);
+    leader_fsm::update_in_group_chasing(m, nullptr, nullptr);
     m->set_animation(LEADER_ANIM_WALKING);
 }
 
@@ -2204,7 +2204,7 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(drop_ptr);
-    m->face(get_angle(m->pos, drop_ptr->pos), NULL);
+    m->face(get_angle(m->pos, drop_ptr->pos), nullptr);
     m->set_animation(LEADER_ANIM_DRINKING);
 }
 
@@ -2250,7 +2250,7 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
-    engine_assert(lea_ptr->pluck_target != NULL, m->print_state_history());
+    engine_assert(lea_ptr->pluck_target != nullptr, m->print_state_history());
     
     lea_ptr->pluck_target->fsm.run_event(MOB_EV_PLUCKED, (void*) lea_ptr);
     lea_ptr->pluck_target->pluck_reserved = false;
@@ -2269,7 +2269,7 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
 void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) info1;
     
-    leader_fsm::dismiss(m, NULL, NULL);
+    leader_fsm::dismiss(m, nullptr, nullptr);
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(tra_ptr);
@@ -2309,7 +2309,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
     delete m->delivery_info;
-    m->delivery_info = NULL;
+    m->delivery_info = nullptr;
     m->set_animation(LEADER_ANIM_GETTING_UP);
 }
 
@@ -2341,7 +2341,7 @@ void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
     }
     lea_ptr->auto_plucking = false;
     lea_ptr->queued_pluck_cancel = false;
-    lea_ptr->pluck_target = NULL;
+    lea_ptr->pluck_target = nullptr;
     lea_ptr->set_animation(LEADER_ANIM_IDLING);
 }
 
@@ -2406,7 +2406,7 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
-    m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), NULL);
+    m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), nullptr);
 }
 
 
@@ -2418,14 +2418,14 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
-    engine_assert(m->track_info != NULL, m->print_state_history());
+    engine_assert(m->track_info != nullptr, m->print_state_history());
     
     if(m->tick_track_ride()) {
         //Finished!
         if(((leader*) m)->active) {
-            m->fsm.set_state(LEADER_STATE_ACTIVE, NULL, NULL);
+            m->fsm.set_state(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
-            m->fsm.set_state(LEADER_STATE_IDLING, NULL, NULL);
+            m->fsm.set_state(LEADER_STATE_IDLING, nullptr, nullptr);
         }
     }
 }
@@ -2439,7 +2439,7 @@ void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
@@ -2490,7 +2490,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* l = (leader*) m;
     spray_type* s = (spray_type*) info1;
@@ -2507,7 +2507,7 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
  *
  * @param m The mob.
  * @param info1 Points to the position struct with the final destination.
- *   If NULL, the final destination is calculated in this function.
+ *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
 void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
@@ -2554,6 +2554,6 @@ void leader_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     }
     
     m->stop_track_ride();
-    leader_fsm::join_group(m, info1, NULL);
+    leader_fsm::join_group(m, info1, nullptr);
     m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
 }

@@ -63,7 +63,7 @@ void tool_type::load_resources(data_node* file) {
     reader_setter rs(file);
     
     string icon_str;
-    data_node* icon_node = NULL;
+    data_node* icon_node = nullptr;
     
     rs.set("icon", icon_str, &icon_node);
     

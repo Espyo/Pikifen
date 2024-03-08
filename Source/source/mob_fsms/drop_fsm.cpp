@@ -139,7 +139,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         
     }
     
-    mob_event* ev = NULL;
+    mob_event* ev = nullptr;
     
     if(will_drink) {
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_DROP);

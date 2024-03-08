@@ -23,13 +23,13 @@ using std::set;
  * @brief Returns which walkable mob this mob should be considered to be on
  * top of.
  *
- * @return The mob to walk on, or NULL if none is found.
+ * @return The mob to walk on, or nullptr if none is found.
  */
 mob* mob::get_mob_to_walk_on() const {
     //Can't walk on anything if it's moving upwards.
-    if(speed_z > 0.0f) return NULL;
+    if(speed_z > 0.0f) return nullptr;
     
-    mob* best_candidate = NULL;
+    mob* best_candidate = nullptr;
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(!m_ptr->type->walkable) {
@@ -141,7 +141,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
                 new_pos, radius_to_use,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL, NULL
+                nullptr, nullptr
             )
         ) {
             //No intersection? Well, obviously this one doesn't count.
@@ -233,7 +233,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         if(has_flag(chase_info.flags, CHASE_FLAG_TELEPORT)) {
         
             sector* sec =
-                get_sector(final_target_pos, NULL, true);
+                get_sector(final_target_pos, nullptr, true);
                 
             if(!sec) {
                 //No sector, invalid teleport. No move.
@@ -421,7 +421,7 @@ void mob::tick_horizontal_movement_physics(
         sector* new_ground_sector = ground_sector;
         
         //Get the sector the mob will be on.
-        sector* new_center_sector = get_sector(new_pos, NULL, true);
+        sector* new_center_sector = get_sector(new_pos, nullptr, true);
         sector* step_sector = new_center_sector;
         
         if(!new_center_sector) {
@@ -770,7 +770,7 @@ void mob::tick_vertical_movement_physics(
     }
     
     //Landing.
-    hazard* new_on_hazard = NULL;
+    hazard* new_on_hazard = nullptr;
     if(speed_z <= 0) {
         if(standing_on_mob) {
             z = standing_on_mob->z + standing_on_mob->height;
@@ -819,7 +819,7 @@ void mob::tick_vertical_movement_physics(
         }
     }
     
-    if(new_on_hazard != on_hazard && on_hazard != NULL) {
+    if(new_on_hazard != on_hazard && on_hazard != nullptr) {
         fsm.run_event(
             MOB_EV_LEFT_HAZARD,
             (void*) on_hazard
@@ -845,8 +845,8 @@ void mob::tick_vertical_movement_physics(
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void mob::tick_walkable_riding_physics(const float delta_t) {
-    mob* rider_added_ev_mob = NULL;
-    mob* rider_removed_ev_mob = NULL;
+    mob* rider_added_ev_mob = nullptr;
+    mob* rider_removed_ev_mob = nullptr;
     mob* new_standing_on_mob = get_mob_to_walk_on();
     
     //Check which mob it is on top of, if any.

@@ -98,7 +98,7 @@ void area_editor::process_gui() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
     ImGui::Begin(
-        "Area editor", NULL,
+        "Area editor", nullptr,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoCollapse
@@ -125,7 +125,7 @@ void area_editor::process_gui() {
     ImVec2 br = ImGui::GetItemRectMax();
     canvas_br.x = br.x;
     canvas_br.y = br.y;
-    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, NULL);
+    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
     
     //Status bar.
     process_gui_status_bar();
@@ -637,7 +637,7 @@ void area_editor::process_gui_menu_bar() {
                     "in the engine's folder.";
                 show_message_box(
                     game.display, "Help", "Area editor help",
-                    help_str.c_str(), NULL, 0
+                    help_str.c_str(), nullptr, 0
                 );
             }
             set_tooltip(
@@ -1312,7 +1312,7 @@ void area_editor::process_gui_panel_details() {
                     }
                     selected_shadow->bitmap =
                         game.textures.get(
-                            selected_shadow->file_name, NULL, false
+                            selected_shadow->file_name, nullptr, false
                         );
                 }
                 
@@ -2348,7 +2348,7 @@ void area_editor::process_gui_panel_layout() {
         }
         
         //Selection filter button.
-        ALLEGRO_BITMAP* sel_filter_bmp = NULL;
+        ALLEGRO_BITMAP* sel_filter_bmp = nullptr;
         string sel_filter_description;
         switch(selection_filter) {
         case SELECTION_FILTER_VERTEXES: {
@@ -2454,7 +2454,7 @@ void area_editor::process_gui_panel_layout() {
             }
             
             //Edges tab.
-            if(ImGui::BeginTabItem("Edges", NULL)) {
+            if(ImGui::BeginTabItem("Edges", nullptr)) {
             
                 layout_mode = LAYOUT_MODE_EDGES;
                 
@@ -5942,7 +5942,7 @@ void area_editor::process_gui_toolbar() {
     }
     
     //Snap mode button.
-    ALLEGRO_BITMAP* snap_mode_bmp = NULL;
+    ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
     switch(game.options.area_editor_snap_mode) {
     case SNAP_GRID: {

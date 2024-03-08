@@ -537,7 +537,7 @@ bool bbox_check(
  * @param req_speed_xy The required X and Y speed is returned here.
  * @param req_speed_z The required Z speed is returned here.
  * @param final_h_angle The final horizontal angle is returned here
- * (if not NULL).
+ * (if not nullptr).
  */
 void calculate_throw(
     const point &start_xy, const float start_z,
@@ -605,9 +605,9 @@ void calculate_throw(
  * @param radius Radius of the circle.
  * @param line_p1 Starting point of the line segment.
  * @param line_p2 Ending point of the line segment.
- * @param lix If not NULL, the line intersection's X coordinate is
+ * @param lix If not nullptr, the line intersection's X coordinate is
  * returned here.
- * @param liy If not NULL, the line intersection's Y coordinate is
+ * @param liy If not nullptr, the line intersection's Y coordinate is
  * returned here.
  * @return Whether they intersect.
  */
@@ -663,8 +663,8 @@ bool circle_intersects_line_seg(
  * @param rectangle Central coordinates of the rectangle.
  * @param rect_dim Dimensions of the rectangle.
  * @param rect_angle Angle the rectangle is facing.
- * @param overlap_dist If not NULL, the amount of overlap is returned here.
- * @param rectangle_side_angle If not NULL, the angle of the side of the
+ * @param overlap_dist If not nullptr, the amount of overlap is returned here.
+ * @param rectangle_side_angle If not nullptr, the angle of the side of the
  * rectangle that the circle is on, aligned to the sides of the rectangle, is
  * returned here.
  * @return Whether they intersect.
@@ -753,9 +753,9 @@ bool circle_intersects_rectangle(
  * @param b Ending point of the first line segment.
  * @param c Starting point of the second line segment.
  * @param d Ending point of the second line segment.
- * @param intersection_tl If not NULL, and if there is an intersection,
+ * @param intersection_tl If not nullptr, and if there is an intersection,
  * return the top-left corner of the intersection here.
- * @param intersection_br If not NULL, and if there is an intersection,
+ * @param intersection_br If not nullptr, and if there is an intersection,
  * return the bottom-right corner of the intersection here.
  * @return Whether they intersect.
  */
@@ -890,7 +890,7 @@ float get_angle_smallest_dif(const float a1, const float a2) {
  * @param l1 Starting point of the line segment.
  * @param l2 Ending point of the line segment.
  * @param p Reference point.
- * @param segment_ratio If not NULL, the ratio from l1 to l2 is returned here.
+ * @param segment_ratio If not nullptr, the ratio from l1 to l2 is returned here.
  * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
  * @return The closest point.
  */
@@ -928,7 +928,7 @@ point get_closest_point_in_line_seg(
  * @param rect_center Center of the rectangle.
  * @param rect_dim Width and height of the rectangle.
  * @param rect_angle Angle of the rectangle.
- * @param is_inside If not NULL, returns whether or not the reference point
+ * @param is_inside If not nullptr, returns whether or not the reference point
  * is inside the rectangle.
  * @return The closest point.
  */
@@ -1213,7 +1213,7 @@ bool line_seg_intersects_rectangle(
     //Line crosses left side?
     if(
         line_segs_intersect(
-            l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), NULL, NULL
+            l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), nullptr, nullptr
         )
     ) {
         return true;
@@ -1221,7 +1221,7 @@ bool line_seg_intersects_rectangle(
     //Line crosses right side?
     if(
         line_segs_intersect(
-            l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), NULL, NULL
+            l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), nullptr, nullptr
         )
     ) {
         return true;
@@ -1229,7 +1229,7 @@ bool line_seg_intersects_rectangle(
     //Line crosses top side?
     if(
         line_segs_intersect(
-            l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), NULL, NULL
+            l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), nullptr, nullptr
         )
     ) {
         return true;
@@ -1237,7 +1237,7 @@ bool line_seg_intersects_rectangle(
     //Line crosses bottom side?
     if(
         line_segs_intersect(
-            l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), NULL, NULL
+            l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), nullptr, nullptr
         )
     ) {
         return true;
@@ -1289,7 +1289,7 @@ bool line_seg_intersects_rotated_rectangle(
             delta_p2,
             point(half_dim.x, -half_dim.y),
             point(half_dim.x, half_dim.y),
-            NULL
+            nullptr
         )
     ) {
         return true;
@@ -1302,7 +1302,7 @@ bool line_seg_intersects_rotated_rectangle(
             delta_p2,
             point(-half_dim.x, -half_dim.y),
             point(half_dim.x, -half_dim.y),
-            NULL
+            nullptr
         )
     ) {
         return true;
@@ -1315,7 +1315,7 @@ bool line_seg_intersects_rotated_rectangle(
             delta_p2,
             point(-half_dim.x, -half_dim.y),
             point(-half_dim.x, half_dim.y),
-            NULL
+            nullptr
         )
     ) {
         return true;
@@ -1328,7 +1328,7 @@ bool line_seg_intersects_rotated_rectangle(
             delta_p2,
             point(-half_dim.x, half_dim.y),
             point(half_dim.x, half_dim.y),
-            NULL
+            nullptr
         )
     ) {
         return true;
@@ -1363,7 +1363,7 @@ bool line_segs_are_collinear(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param final_l1r If not NULL and they intersect, returns the distance from
+ * @param final_l1r If not nullptr and they intersect, returns the distance from
  * the start of line 1 in which the intersection happens.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
  * @param final_l2r Same as final_l1r, but for line 2.
@@ -1398,7 +1398,7 @@ bool line_segs_intersect(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param intersection Return the intersection point here, if not NULL.
+ * @param intersection Return the intersection point here, if not nullptr.
  * @return Whether they intersect.
  */
 bool line_segs_intersect(
@@ -1410,7 +1410,7 @@ bool line_segs_intersect(
         intersection->x = 0.0f;
         intersection->y = 0.0f;
     }
-    if(!line_segs_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
+    if(!line_segs_intersect(l1p1, l1p2, l2p1, l2p2, &r, nullptr)) return false;
     if(intersection) {
         intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
         intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
@@ -1439,7 +1439,7 @@ float linear_dist_to_angular(const float linear_dist, const float radius) {
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param final_l1r If not NULL and they intersect, returns the distance from
+ * @param final_l1r If not nullptr and they intersect, returns the distance from
  * the start of line 1 in which the intersection happens.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
  * @param final_l2r Same as final_l1r, but for line 2.
@@ -1497,7 +1497,7 @@ bool lines_intersect(
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param final_point If not NULL and they intersect,
+ * @param final_point If not nullptr and they intersect,
  * returns the coordinates of where it happens.
  * @return Whether they intersect.
  */
@@ -1512,7 +1512,7 @@ bool lines_intersect(
     }
     
     float r = 0.0f;
-    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) {
+    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &r, nullptr)) {
         return false;
     }
     
@@ -1675,8 +1675,8 @@ bool rectangles_intersect(
  * @param rect2 Center coordinates of the second rectangle.
  * @param rect_dim2 Dimensions of the second rectangle.
  * @param rect_angle2 Angle the second rectangle is facing.
- * @param overlap_dist If not NULL, the amount of overlap is returned here.
- * @param overlap_angle If not NULL, the direction that rectangle 1 would
+ * @param overlap_dist If not nullptr, the amount of overlap is returned here.
+ * @param overlap_angle If not nullptr, the direction that rectangle 1 would
  * push rectangle 2 away with is returned here.
  * @return Whether they intersect.
  */

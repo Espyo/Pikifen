@@ -434,7 +434,7 @@ void gui_item::remove_child(gui_item* item) {
         }
     }
     
-    item->parent = NULL;
+    item->parent = nullptr;
 }
 
 
@@ -519,8 +519,8 @@ void gui_manager::add_item(gui_item* item, const string &id) {
  * @brief Destroys and deletes all items and information.
  */
 void gui_manager::destroy() {
-    set_selected_item(NULL);
-    back_item = NULL;
+    set_selected_item(nullptr);
+    back_item = nullptr;
     for(size_t i = 0; i < items.size(); i++) {
         delete items[i];
     }
@@ -745,7 +745,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
-        gui_item* selection_result = NULL;
+        gui_item* selection_result = nullptr;
         for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
             if(
@@ -1035,10 +1035,10 @@ void gui_manager::register_coords(
  */
 void gui_manager::remove_item(gui_item* item) {
     if(selected_item == item) {
-        set_selected_item(NULL);
+        set_selected_item(nullptr);
     }
     if(back_item == item) {
-        back_item = NULL;
+        back_item = nullptr;
     }
     
     for(size_t i = 0; i < items.size(); ++i) {
@@ -1046,14 +1046,14 @@ void gui_manager::remove_item(gui_item* item) {
             items.erase(items.begin() + i);
         }
     }
-    item->manager = NULL;
+    item->manager = nullptr;
 }
 
 
 /**
  * @brief Sets the given item as the one that is selected, or none.
  *
- * @param item Item to select, or NULL for none.
+ * @param item Item to select, or nullptr for none.
  * @param silent If true, no sound effect will play.
  * Useful if you want the item to be selected not because of user input,
  * but because it's the default selected item when the GUI loads.
@@ -1225,7 +1225,7 @@ list_gui_item::list_gui_item() :
             vertexes[7].y = y2;
             vertexes[7].color = c_empty;
             al_draw_prim(
-                vertexes, NULL, NULL, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+                vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
             );
         }
         float child_bottom = get_child_bottom();
@@ -1264,7 +1264,7 @@ list_gui_item::list_gui_item() :
             vertexes[7].y = y2;
             vertexes[7].color = c_empty;
             al_draw_prim(
-                vertexes, NULL, NULL, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+                vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
             );
         }
     };

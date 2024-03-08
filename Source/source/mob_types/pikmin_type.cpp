@@ -43,8 +43,8 @@ pikmin_type::pikmin_type() :
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
-        bmp_top[m] = NULL;
-        bmp_maturity_icon[m] = NULL;
+        bmp_top[m] = nullptr;
+        bmp_maturity_icon[m] = nullptr;
     }
     for(size_t s = 0; s < N_PIKMIN_SOUNDS; ++s) {
         sfx_data_idxs[s] = INVALID;
@@ -152,7 +152,7 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
 void pikmin_type::load_properties(data_node* file) {
     reader_setter rs(file);
     string attack_method_str;
-    data_node* attack_method_node = NULL;
+    data_node* attack_method_node = nullptr;
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
     rs.set("knocked_down_duration", knocked_down_duration);
@@ -221,14 +221,14 @@ void pikmin_type::load_resources(data_node* file) {
     string icon_bud_str;
     string icon_flower_str;
     string icon_onion_str;
-    data_node* top_leaf_node = NULL;
-    data_node* top_bud_node = NULL;
-    data_node* top_flower_node = NULL;
-    data_node* icon_node = NULL;
-    data_node* icon_leaf_node = NULL;
-    data_node* icon_bud_node = NULL;
-    data_node* icon_flower_node = NULL;
-    data_node* icon_onion_node = NULL;
+    data_node* top_leaf_node = nullptr;
+    data_node* top_bud_node = nullptr;
+    data_node* top_flower_node = nullptr;
+    data_node* icon_node = nullptr;
+    data_node* icon_leaf_node = nullptr;
+    data_node* icon_bud_node = nullptr;
+    data_node* icon_flower_node = nullptr;
+    data_node* icon_onion_node = nullptr;
     
     rs.set("icon", icon_str, &icon_node);
     rs.set("icon_bud", icon_bud_str, &icon_bud_node);

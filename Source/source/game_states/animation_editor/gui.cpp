@@ -25,7 +25,7 @@
  */
 void animation_editor::open_load_dialog() {
     global_anim_files_cache =
-        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
+        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, nullptr);
     for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
         global_anim_files_cache[f] =
             remove_extension(global_anim_files_cache[f]);
@@ -67,7 +67,7 @@ void animation_editor::process_gui() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
     ImGui::Begin(
-        "Animation editor", NULL,
+        "Animation editor", nullptr,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoCollapse
@@ -94,7 +94,7 @@ void animation_editor::process_gui() {
     ImVec2 br = ImGui::GetItemRectMax();
     canvas_br.x = br.x;
     canvas_br.y = br.y;
-    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, NULL);
+    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
     
     //Status bar.
     process_gui_status_bar();
@@ -287,7 +287,7 @@ void animation_editor::process_gui_load_dialog() {
     },
     [this](const string  &name) {
         file_path = name;
-        loaded_mob_type = NULL;
+        loaded_mob_type = nullptr;
         load_animation_database(true);
         close_top_dialog();
     }
@@ -299,7 +299,7 @@ void animation_editor::process_gui_load_dialog() {
     //Object animation node.
     if(saveable_tree_node("load", "Object animation")) {
         static string custom_cat_name;
-        static mob_type* type = NULL;
+        static mob_type* type = nullptr;
         
         if(reset_load_dialog) {
             custom_cat_name = game.config.pikmin_order[0]->custom_category_name;
@@ -345,7 +345,7 @@ void animation_editor::process_gui_load_dialog() {
         //Load button.
         if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
             if(!chosen_anim.empty()) {
-                loaded_mob_type = NULL;
+                loaded_mob_type = nullptr;
                 file_path = ANIMATIONS_FOLDER_PATH + "/" + chosen_anim + ".txt";
                 load_animation_database(true);
                 close_top_dialog();
@@ -382,7 +382,7 @@ void animation_editor::process_gui_load_dialog() {
             if(!f.empty() && !f[0].empty()) {
                 file_path = f[0];
                 
-                loaded_mob_type = NULL;
+                loaded_mob_type = nullptr;
                 load_animation_database(true);
                 close_top_dialog();
             }
@@ -538,7 +538,7 @@ void animation_editor::process_gui_menu_bar() {
                     "in the engine's folder.";
                 show_message_box(
                     game.display, "Help", "Animation editor help",
-                    help_str.c_str(), NULL, 0
+                    help_str.c_str(), nullptr, 0
                 );
             }
             set_tooltip(
@@ -659,7 +659,7 @@ void animation_editor::process_gui_panel_animation() {
     if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
         for(size_t a = 0; a < anims.animations.size(); ++a) {
-            ALLEGRO_BITMAP* anim_frame_1 = NULL;
+            ALLEGRO_BITMAP* anim_frame_1 = nullptr;
             if(!anims.animations[a]->frames.empty()) {
                 size_t s_pos =
                     anims.find_sprite(
@@ -734,7 +734,7 @@ void animation_editor::process_gui_panel_animation() {
             size_t nr = anims.find_animation(cur_anim_name);
             anims.animations.erase(anims.animations.begin() + nr);
             if(anims.animations.empty()) {
-                cur_anim = NULL;
+                cur_anim = nullptr;
                 cur_frame_nr = INVALID;
             } else {
                 nr = std::min(nr, anims.animations.size() - 1);
@@ -855,7 +855,7 @@ void animation_editor::process_gui_panel_animation() {
         //Frame list node.
         if(saveable_tree_node("animation", "Frame list")) {
         
-            frame* frame_ptr = NULL;
+            frame* frame_ptr = nullptr;
             if(cur_anim) {
                 if(cur_frame_nr == INVALID && !cur_anim->frames.empty()) {
                     cur_frame_nr = 0;
@@ -1005,7 +1005,7 @@ void animation_editor::process_gui_panel_animation() {
                         );
                         if(cur_anim->frames.empty()) {
                             cur_frame_nr = INVALID;
-                            frame_ptr = NULL;
+                            frame_ptr = nullptr;
                         } else if(cur_frame_nr >= cur_anim->frames.size()) {
                             cur_frame_nr = cur_anim->frames.size() - 1;
                             frame_ptr = &(cur_anim->frames[cur_frame_nr]);
@@ -1583,8 +1583,8 @@ void animation_editor::process_gui_panel_sprite() {
             size_t nr = anims.find_sprite(deleted_sprite_name);
             anims.sprites.erase(anims.sprites.begin() + nr);
             if(anims.sprites.empty()) {
-                cur_sprite = NULL;
-                cur_hitbox = NULL;
+                cur_sprite = nullptr;
+                cur_hitbox = nullptr;
                 cur_hitbox_nr = INVALID;
             } else {
                 nr = std::min(nr, anims.sprites.size() - 1);
@@ -2530,7 +2530,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
                 if(comparison_sprite_idx != INVALID) {
                     comparison_sprite = anims.sprites[comparison_sprite_idx];
                 } else {
-                    comparison_sprite = NULL;
+                    comparison_sprite = nullptr;
                 }
                 
                 //Comparison blinks checkbox.

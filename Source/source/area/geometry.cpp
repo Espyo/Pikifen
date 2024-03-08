@@ -155,12 +155,12 @@ void polygon::cut() {
     //We have to make one cut for every inner.
     for(size_t c = 0; c < children.size(); ++c) {
         polygon* child_ptr = children[c];
-        vertex* closest_edge_v1 = NULL;
-        vertex* closest_edge_v2 = NULL;
+        vertex* closest_edge_v1 = nullptr;
+        vertex* closest_edge_v2 = nullptr;
         float closest_edge_r = FLT_MAX;
-        vertex* closest_vertex = NULL;
+        vertex* closest_vertex = nullptr;
         float closest_vertex_r = FLT_MAX;
-        vertex* best_vertex = NULL;
+        vertex* best_vertex = nullptr;
         
         //Find the rightmost vertex on this inner.
         vertex* start = child_ptr->get_rightmost_vertex();
@@ -179,7 +179,7 @@ void polygon::cut() {
         //Let's also check the vertexes.
         //If the closest thing is a vertex, not an edge, then
         //we can skip a bunch of steps.
-        vertex* v1 = NULL, *v2 = NULL;
+        vertex* v1 = nullptr, *v2 = nullptr;
         for(size_t v = 0; v < vertexes.size(); ++v) {
             v1 = vertexes[v];
             v2 = get_next_in_vector(vertexes, v);
@@ -193,7 +193,7 @@ void polygon::cut() {
                         point(v1->x, v1->y), point(v2->x, v2->y),
                         point(start->x, start->y),
                         point(rightmost->x, start->y),
-                        NULL, &r
+                        nullptr, &r
                     )
                 ) {
                     if(!closest_edge_v1 || r < closest_edge_r) {
@@ -411,7 +411,7 @@ void polygon::destroy() {
  * @return The farthest right vertex.
  */
 vertex* polygon::get_rightmost_vertex() const {
-    vertex* rightmost = NULL;
+    vertex* rightmost = nullptr;
     
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
@@ -530,7 +530,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  * @param best_is_closest_cw True if we want the edge that is closest clockwise
  * from the previous edge. False for the closest counter-clockwise.
  * @param next_e_ptr The next edge is returned here.
- * If there is none, NULL is returned.
+ * If there is none, nullptr is returned.
  * @param next_e_angle The next edge's angle is returned here.
  * This is used to feed the next iteration of the algorithm so it
  * doesn't need to re-calculate the angle.
@@ -544,10 +544,10 @@ void find_trace_edge(
     unordered_set<edge*>* excluded_edges
 ) {
     //Info about the best candidate edge, if any.
-    edge* best_e_ptr = NULL;
+    edge* best_e_ptr = nullptr;
     float best_e_angle = 0;
     float best_e_angle_cw_dif = 0;
-    vertex* best_v_ptr = NULL;
+    vertex* best_v_ptr = nullptr;
     
     //Go through each edge to check for the best.
     for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
@@ -752,7 +752,7 @@ bool get_polys_is_outer(
     //imagine an arrow pointing straight right. Obviously no other vertex of
     //the sector can be this way. But let's start rotating the arrow clockwise
     //along the vertex's edges and find the one closest.
-    edge* closest_edge_cw = NULL;
+    edge* closest_edge_cw = nullptr;
     float closest_edge_cw_angle = FLT_MAX;
     
     for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
@@ -817,7 +817,7 @@ bool get_polys_is_outer(
  * @return The vertex.
  */
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
-    vertex* rightmost = NULL;
+    vertex* rightmost = nullptr;
     
     for(auto &e : edges) {
         if(!rightmost) rightmost = e->vertexes[0];
@@ -957,15 +957,15 @@ TRIANGULATION_ERRORS trace_edges(
     unordered_set<edge*> polygon_edges;
     
     //At the start, no need to check if we're going to the previous vertex.
-    vertex* prev_v_ptr = NULL;
+    vertex* prev_v_ptr = nullptr;
     //At the start, assume the angle is left.
     float prev_e_angle = TAU / 2.0f;
     
-    edge* next_e_ptr = NULL;
-    vertex* next_v_ptr = NULL;
+    edge* next_e_ptr = nullptr;
+    vertex* next_v_ptr = nullptr;
     float next_e_angle = 0.0f;
     
-    edge* first_e_ptr = NULL;
+    edge* first_e_ptr = nullptr;
     
     TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
     bool poly_done = false;
@@ -1050,7 +1050,7 @@ TRIANGULATION_ERRORS trace_edges(
         //trace clockwise, then continue that way so we turn outward.
         
         bool best_is_closest_cw = going_cw;
-        if(prev_v_ptr != NULL) best_is_closest_cw = true;
+        if(prev_v_ptr != nullptr) best_is_closest_cw = true;
         
         find_trace_edge(
             v_ptr, prev_v_ptr, s_ptr, prev_e_angle, best_is_closest_cw,

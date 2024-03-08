@@ -50,7 +50,7 @@ void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
  * of this vertex.
  *
  * @param neighbor The neighbor vertex to check.
- * @return The edge, or NULL if not found.
+ * @return The edge, or nullptr if not found.
  */
 edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -58,7 +58,7 @@ edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
             return edges[e];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 

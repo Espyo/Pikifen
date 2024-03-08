@@ -86,11 +86,11 @@ void onion_category::erase_mob(mob* m) {
  * @brief Returns a type of Onion given its name.
  *
  * @param name Name of the mob type to get.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
 mob_type* onion_category::get_type(const string &name) const {
     auto it = game.mob_types.onion.find(name);
-    if(it == game.mob_types.onion.end()) return NULL;
+    if(it == game.mob_types.onion.end()) return nullptr;
     return it->second;
 }
 

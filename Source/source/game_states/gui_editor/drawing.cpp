@@ -139,7 +139,7 @@ void gui_editor::draw_canvas() {
         cur_transformation_widget.draw(
             &items[cur_item].center,
             &items[cur_item].size,
-            NULL,
+            nullptr,
             1.0f / game.cam.zoom
         );
     }

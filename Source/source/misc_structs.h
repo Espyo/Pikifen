@@ -363,7 +363,7 @@ struct error_manager {
 
     //--- Function declarations ---
     
-    void report(const string &s, const data_node* d = NULL);
+    void report(const string &s, const data_node* d = nullptr);
     void report_area_load_errors();
     void prepare_area_load();
     bool session_has_errors();
@@ -516,7 +516,7 @@ struct maker_tools_info {
     //Is the HUD visible?
     bool hud = true;
     
-    //Mob currently locked-on to for the mob information tool. NULL if off.
+    //Mob currently locked-on to for the mob information tool. nullptr if off.
     mob* info_lock = nullptr;
     
     //If any maker info is being printed, this is how long it lasts on-screen.
@@ -632,7 +632,7 @@ struct bmp_manager {
     
     explicit bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
-        const string &name, data_node* node = NULL,
+        const string &name, data_node* node = nullptr,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_BITMAP* bmp);
@@ -661,7 +661,7 @@ struct bmp_manager {
         
         //--- Function declarations ---
         
-        explicit bmp_info(ALLEGRO_BITMAP* b = NULL);
+        explicit bmp_info(ALLEGRO_BITMAP* b = nullptr);
     };
     
     
@@ -763,36 +763,36 @@ struct reader_setter {
     
     //--- Function declarations ---
     
-    explicit reader_setter(data_node* dn = NULL);
+    explicit reader_setter(data_node* dn = nullptr);
     void set(
-        const string &child, string &var, data_node** child_node = NULL
+        const string &child, string &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, size_t &var, data_node** child_node = NULL
+        const string &child, size_t &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, int &var, data_node** child_node = NULL
+        const string &child, int &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, unsigned int &var, data_node** child_node = NULL
+        const string &child, unsigned int &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, unsigned char &var, data_node** child_node = NULL
+        const string &child, unsigned char &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, bool &var, data_node** child_node = NULL
+        const string &child, bool &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, float &var, data_node** child_node = NULL
+        const string &child, float &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, double &var, data_node** child_node = NULL
+        const string &child, double &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, ALLEGRO_COLOR &var, data_node** child_node = NULL
+        const string &child, ALLEGRO_COLOR &var, data_node** child_node = nullptr
     );
     void set(
-        const string &child, point &var, data_node** child_node = NULL
+        const string &child, point &var, data_node** child_node = nullptr
     );
     
 };
@@ -1310,12 +1310,12 @@ struct subgroup_type_manager {
     
     void register_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        mob_type* specific_type = NULL,
-        ALLEGRO_BITMAP* icon = NULL
+        mob_type* specific_type = nullptr,
+        ALLEGRO_BITMAP* icon = nullptr
     );
     subgroup_type* get_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        const mob_type* specific_type = NULL
+        const mob_type* specific_type = nullptr
     ) const;
     subgroup_type* get_first_type() const;
     subgroup_type* get_prev_type(const subgroup_type* sgt) const;

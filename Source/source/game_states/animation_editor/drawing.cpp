@@ -56,7 +56,7 @@ void animation_editor::draw_canvas() {
     
     al_clear_to_color(al_map_rgb(128, 144, 128));
     
-    sprite* s = NULL;
+    sprite* s = nullptr;
     if(state == EDITOR_STATE_ANIMATION) {
         if(cur_frame_nr != INVALID) {
             string name =
@@ -252,7 +252,7 @@ void animation_editor::draw_canvas() {
                 cur_transformation_widget.draw(
                     &cur_hitbox->pos,
                     &hitbox_size,
-                    NULL,
+                    nullptr,
                     1.0f / game.cam.zoom
                 );
             } else if(cur_hitbox->height != 0.0f) {
@@ -266,7 +266,7 @@ void animation_editor::draw_canvas() {
                 cur_transformation_widget.draw(
                     &hitbox_center,
                     &hitbox_size,
-                    NULL,
+                    nullptr,
                     1.0f / game.cam.zoom
                 );
             }

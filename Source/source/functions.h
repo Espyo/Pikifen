@@ -118,7 +118,7 @@ typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 bool are_walls_between(
     const point &p1, const point &p2,
-    float ignore_walls_below_z = -FLT_MAX, bool* impassable_walls = NULL
+    float ignore_walls_below_z = -FLT_MAX, bool* impassable_walls = nullptr
 );
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
@@ -137,7 +137,7 @@ void draw_edge_offset_on_buffer(
     const vector<edge_offset_cache> &caches, size_t e_idx
 );
 vector<string> folder_to_vector(
-    string folder_name, const bool folders, bool* folder_found = NULL
+    string folder_name, const bool folders, bool* folder_found = nullptr
 );
 string get_current_time(const bool filename_friendly);
 mob* get_closest_mob_to_cursor();
@@ -210,7 +210,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
     const string &patterns, const int mode, FILE_DIALOG_RESULTS* result
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
-void report_fatal_error(const string &s, const data_node* dn = NULL);
+void report_fatal_error(const string &s, const data_node* dn = nullptr);
 string sanitize_file_name(const string &s);
 void save_maker_tools();
 void save_options();
@@ -265,8 +265,8 @@ string word_wrap(const string &s, const size_t n_chars_per_line);
 void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR s2c(const string &s);
-string p2s(const point &p, const float* z = NULL);
-point s2p(const string &s, float* z = NULL);
+string p2s(const point &p, const float* z = nullptr);
+point s2p(const string &s, float* z = nullptr);
 
 
 /**

@@ -55,8 +55,8 @@ void bouncer_type::load_properties(data_node* file) {
     
     string riders_str;
     string riding_pose_str;
-    data_node* riders_node = NULL;
-    data_node* riding_pose_node = NULL;
+    data_node* riders_node = nullptr;
+    data_node* riding_pose_node = nullptr;
     
     rs.set("riders", riders_str, &riders_node);
     rs.set("riding_pose", riding_pose_str, &riding_pose_node);

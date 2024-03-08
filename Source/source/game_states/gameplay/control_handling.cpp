@@ -531,7 +531,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             pikmin* closest_members[N_MATURITIES];
             dist closest_dists[N_MATURITIES];
             for(size_t m = 0; m < N_MATURITIES; ++m) {
-                closest_members[m] = NULL;
+                closest_members[m] = nullptr;
             }
             
             for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
@@ -553,7 +553,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             }
             
             size_t next_maturity = held_p_ptr->maturity;
-            mob* new_pikmin = NULL;
+            mob* new_pikmin = nullptr;
             bool finished = false;
             do {
                 next_maturity =

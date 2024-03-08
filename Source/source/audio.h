@@ -254,7 +254,7 @@ struct sfx_playback_struct {
     size_t source_id = 0;
     
     //Its Allegro sample instance.
-    ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = nullptr;
     
     //State.
     SFX_PLAYBACK_STATES state = SFX_PLAYBACK_PLAYING;
@@ -350,7 +350,7 @@ public:
 
     explicit sfx_sample_manager(const string &base_dir);
     ALLEGRO_SAMPLE* get(
-        const string &name, data_node* node = NULL,
+        const string &name, data_node* node = nullptr,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_SAMPLE* s);
@@ -379,7 +379,7 @@ private:
 
         //--- Function declarations ---
 
-        explicit sample_info(ALLEGRO_SAMPLE* s = NULL);
+        explicit sample_info(ALLEGRO_SAMPLE* s = nullptr);
     };
 
 
@@ -414,7 +414,7 @@ public:
 
     explicit audio_stream_manager(const string &base_dir);
     ALLEGRO_AUDIO_STREAM* get(
-        const string &name, data_node* node = NULL,
+        const string &name, data_node* node = nullptr,
         const bool report_errors = true
     );
     void detach(const ALLEGRO_AUDIO_STREAM* s);
@@ -443,7 +443,7 @@ private:
 
         //--- Function declarations ---
 
-        explicit stream_info(ALLEGRO_AUDIO_STREAM* s = NULL);
+        explicit stream_info(ALLEGRO_AUDIO_STREAM* s = nullptr);
     };
 
 
@@ -525,7 +525,7 @@ public:
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(const string &name, bool from_start = true);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
-    void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = NULL);
+    void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);
     void update_volumes(
         float master_volume, float world_sfx_volume, float music_volume,

@@ -31,7 +31,7 @@
  * @param info2 Unused.
  */
 void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     hitbox_interaction* info = (hitbox_interaction*) info1;
     
@@ -53,10 +53,10 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
-    engine_assert(m->carry_info != NULL, m->print_state_history());
+    engine_assert(m->carry_info != nullptr, m->print_state_history());
     
     m->circle_around(
-        NULL, m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
+        nullptr, m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
         m->carry_info->get_speed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
@@ -258,7 +258,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     
     m->carry_info->destination_exists =
         m->calculate_carrying_destination(
-            pik_ptr, NULL,
+            pik_ptr, nullptr,
             &m->carry_info->intended_pik_type,
             &m->carry_info->intended_mob, &m->carry_info->intended_point
         );
@@ -324,7 +324,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     mob* prev_destination = m->carry_info->intended_mob;
     
     //Update the numbers and such.
-    m->carry_info->spot_info[pik_ptr->temp_i].pik_ptr = NULL;
+    m->carry_info->spot_info[pik_ptr->temp_i].pik_ptr = nullptr;
     m->carry_info->spot_info[pik_ptr->temp_i].state = CARRY_SPOT_FREE;
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
@@ -333,7 +333,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
     m->calculate_carrying_destination(
-        NULL, pik_ptr,
+        nullptr, pik_ptr,
         &m->carry_info->intended_pik_type,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
@@ -394,7 +394,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    engine_assert(m->focused_mob != nullptr, m->print_state_history());
     
     m->focused_mob->fsm.run_event(
         MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
@@ -458,7 +458,7 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     hazard* h = (hazard*) info1;
     
@@ -476,7 +476,7 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
+    engine_assert(info1 != nullptr, m->print_state_history());
     
     spray_type* s = (spray_type*) info1;
     

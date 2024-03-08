@@ -130,8 +130,8 @@ void sector::get_neighbor_sectors_conditionally(
     sector_list.push_back(this);
     
     //Now check its neighbors.
-    edge* e_ptr = NULL;
-    sector* other_s = NULL;
+    edge* e_ptr = nullptr;
+    sector* other_s = nullptr;
     for(size_t e = 0; e < edges.size(); ++e) {
         e_ptr = edges[e];
         other_s = e_ptr->get_other_sector(this);
@@ -148,7 +148,7 @@ void sector::get_neighbor_sectors_conditionally(
  * @return The vertex.
  */
 vertex* sector::get_rightmost_vertex() const {
-    vertex* rightmost = NULL;
+    vertex* rightmost = nullptr;
     
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
@@ -172,10 +172,10 @@ vertex* sector::get_rightmost_vertex() const {
  */
 void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //Check all edges to find which two textures need merging.
-    edge* e_ptr = NULL;
-    sector* neighbor = NULL;
+    edge* e_ptr = nullptr;
+    sector* neighbor = nullptr;
     map<sector*, dist> neighbors;
-    sector* texture_sector[2] = {NULL, NULL};
+    sector* texture_sector[2] = {nullptr, nullptr};
     
     //The two neighboring sectors with the lenghtiest edges are picked.
     //So save all sector/length pairs.
@@ -300,7 +300,7 @@ void sector::remove_edge(const edge* e_ptr) {
  * @brief Returns which sector the specified point belongs to.
  *
  * @param p Coordinates of the point.
- * @param sector_nr If not NULL, the number of the sector on the
+ * @param sector_nr If not nullptr, the number of the sector on the
  * area map is placed here. The number will not be set if the search
  * is using the blockmap.
  * @param use_blockmap If true, use the blockmap to search.
@@ -315,7 +315,7 @@ sector* get_sector(
     
         size_t col = game.cur_area_data.bmap.get_col(p.x);
         size_t row = game.cur_area_data.bmap.get_row(p.y);
-        if(col == INVALID || row == INVALID) return NULL;
+        if(col == INVALID || row == INVALID) return nullptr;
         
         unordered_set<sector*>* sectors =
             &game.cur_area_data.bmap.sectors[col][row];
@@ -332,7 +332,7 @@ sector* get_sector(
             }
         }
         
-        return NULL;
+        return nullptr;
         
     } else {
     
@@ -355,7 +355,7 @@ sector* get_sector(
         }
         
         if(sector_nr) *sector_nr = INVALID;
-        return NULL;
+        return nullptr;
         
     }
 }

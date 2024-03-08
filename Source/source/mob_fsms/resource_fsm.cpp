@@ -186,7 +186,7 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
             true, false, -res_ptr->res_type->damage_mob_amount
         );
         
-        hitbox_interaction ev_info(res_ptr, NULL, NULL);
+        hitbox_interaction ev_info(res_ptr, nullptr, nullptr);
         res_ptr->fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info);
     }
 }

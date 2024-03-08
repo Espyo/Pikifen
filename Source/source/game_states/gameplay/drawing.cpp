@@ -27,7 +27,7 @@
 /**
  * @brief Does the drawing for the main game loop.
  *
- * @param bmp_output If not NULL, draw the area onto this.
+ * @param bmp_output If not nullptr, draw the area onto this.
  * @param bmp_transform Transformation to use when drawing to a bitmap.
  */
 void gameplay_state::do_game_drawing(
@@ -205,7 +205,7 @@ void gameplay_state::do_game_drawing(
 /**
  * @brief Draws the area background.
  *
- * @param bmp_output If not NULL, draw the background onto this.
+ * @param bmp_output If not nullptr, draw the background onto this.
  */
 void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     if(!game.cur_area_data.bg_bmp) return;
@@ -261,7 +261,7 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
         (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
         
     al_draw_prim(
-        bg_v, NULL, game.cur_area_data.bg_bmp,
+        bg_v, nullptr, game.cur_area_data.bg_bmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
 }
@@ -1470,7 +1470,7 @@ void gameplay_state::draw_throw_preview() {
             
         for(unsigned char v = 0; v < n_vertexes; v += 4) {
             al_draw_prim(
-                vertexes, NULL, NULL,
+                vertexes, nullptr, nullptr,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
@@ -1529,7 +1529,7 @@ void gameplay_state::draw_throw_preview() {
                 throw_dest,
                 point(e->vertexes[0]->x, e->vertexes[0]->y),
                 point(e->vertexes[1]->x, e->vertexes[1]->y),
-                &r, NULL
+                &r, nullptr
             )
         ) {
             //No collision.
@@ -1605,7 +1605,7 @@ void gameplay_state::draw_throw_preview() {
             
         for(unsigned char v = 0; v < n_vertexes; v += 4) {
             al_draw_prim(
-                vertexes, NULL, game.sys_assets.bmp_throw_preview,
+                vertexes, nullptr, game.sys_assets.bmp_throw_preview,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
@@ -1638,7 +1638,7 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, game.sys_assets.bmp_throw_preview,
+                    vertexes, nullptr, game.sys_assets.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1668,7 +1668,7 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, game.sys_assets.bmp_throw_preview,
+                    vertexes, nullptr, game.sys_assets.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1686,7 +1686,7 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, game.sys_assets.bmp_throw_preview_dashed,
+                    vertexes, nullptr, game.sys_assets.bmp_throw_preview_dashed,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1791,11 +1791,11 @@ void gameplay_state::draw_tree_shadows() {
  * @brief Draws the components that make up the game world:
  * layout, objects, etc.
  *
- * @param bmp_output If not NULL, draw the area onto this.
+ * @param bmp_output If not nullptr, draw the area onto this.
  */
 void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
-    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = NULL;
-    ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = NULL;
+    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
+    ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = nullptr;
     if(!bmp_output) {
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],

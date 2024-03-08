@@ -329,7 +329,7 @@ public:
         const MOB_EV_TYPES t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()
     );
-    void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
+    void run(mob* m, void* custom_data_1 = nullptr, void* custom_data_2 = nullptr);
 
 };
 
@@ -393,15 +393,15 @@ public:
 
     //--- Function declarations ---
 
-    explicit mob_fsm(mob* m = NULL);
+    explicit mob_fsm(mob* m = nullptr);
     mob_event* get_event(const MOB_EV_TYPES type) const;
     size_t get_state_nr(const string &name) const;
     void run_event(
         const MOB_EV_TYPES type,
-        void* custom_data_1 = NULL, void* custom_data_2 = NULL
+        void* custom_data_1 = nullptr, void* custom_data_2 = nullptr
     );
     bool set_state(
-        const size_t new_state, void* info1 = NULL, void* info2 = NULL
+        const size_t new_state, void* info1 = nullptr, void* info2 = nullptr
     );
 
 };
@@ -475,8 +475,8 @@ struct hitbox_interaction {
     //--- Function declarations ---
     
     explicit hitbox_interaction(
-        mob* mob2 = NULL,
-        hitbox* h1 = NULL, hitbox* h2 = NULL
+        mob* mob2 = nullptr,
+        hitbox* h1 = nullptr, hitbox* h2 = nullptr
     );
     
 };

@@ -52,9 +52,9 @@ void resource_type::load_properties(data_node* file) {
     string carrying_destination_str;
     string delivery_result_str;
     string spray_to_concoct_str;
-    data_node* carrying_destination_node = NULL;
-    data_node* delivery_result_node = NULL;
-    data_node* spray_to_concoct_node = NULL;
+    data_node* carrying_destination_node = nullptr;
+    data_node* delivery_result_node = nullptr;
+    data_node* spray_to_concoct_node = nullptr;
     
     rs.set(
         "carrying_destination", carrying_destination_str,

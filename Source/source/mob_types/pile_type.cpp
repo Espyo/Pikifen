@@ -62,7 +62,7 @@ void pile_type::load_properties(data_node* file) {
     
     string contents_str;
     string size_animation_suffixes_str;
-    data_node* contents_node = NULL;
+    data_node* contents_node = nullptr;
     
     rs.set("auto_shrink_smallest_radius", auto_shrink_smallest_radius);
     rs.set("can_drop_multiple", can_drop_multiple);

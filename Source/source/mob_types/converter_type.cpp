@@ -54,8 +54,8 @@ void converter_type::load_properties(data_node* file) {
     
     string pikmin_types_str;
     string type_animation_suffixes_str;
-    data_node* pikmin_types_node = NULL;
-    data_node* type_animation_suffixes_node = NULL;
+    data_node* pikmin_types_node = nullptr;
+    data_node* type_animation_suffixes_node = nullptr;
     
     rs.set("auto_conversion_timeout", auto_conversion_timeout);
     rs.set("available_pikmin_types", pikmin_types_str, &pikmin_types_node);

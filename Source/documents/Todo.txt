@@ -3,7 +3,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Code cleanup
-        NULL -> nullptr?
         Use #pragma region in header files?
         Remove all statics in classes that should be consts in namespaces instead
         We have amount_str and nr_and_plural - they're the same

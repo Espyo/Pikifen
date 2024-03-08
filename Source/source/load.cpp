@@ -71,8 +71,8 @@ void load_area(
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
     
-    data_node* weather_node = NULL;
-    data_node* song_node = NULL;
+    data_node* weather_node = nullptr;
+    data_node* song_node = nullptr;
     
     rs.set("name", game.cur_area_data.name);
     rs.set("subtitle", game.cur_area_data.subtitle);
@@ -97,8 +97,8 @@ void load_area(
     
     if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
     if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
-    game.loading_text_bmp = NULL;
-    game.loading_subtext_bmp = NULL;
+    game.loading_text_bmp = nullptr;
+    game.loading_subtext_bmp = nullptr;
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
@@ -323,7 +323,7 @@ void load_area(
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
-                game.textures.get(new_sector->texture_info.file_name, NULL);
+                game.textures.get(new_sector->texture_info.file_name, nullptr);
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -387,7 +387,7 @@ void load_area(
             mob_ptr->type = category->get_type(type_name);
         } else {
             category = game.mob_categories.get(MOB_CATEGORY_NONE);
-            mob_ptr->type = NULL;
+            mob_ptr->type = nullptr;
         }
         
         vector<string> link_strs =
@@ -408,7 +408,7 @@ void load_area(
             
         if(!valid) {
             //Error.
-            mob_ptr->type = NULL;
+            mob_ptr->type = nullptr;
             if(!load_for_editor) {
                 game.errors.report(
                     "Unknown mob type \"" + type_name + "\" of category \"" +
@@ -462,7 +462,7 @@ void load_area(
             
             path_link* l_struct =
                 new path_link(
-                s_ptr, NULL, s2i(link_data_parts[0])
+                s_ptr, nullptr, s2i(link_data_parts[0])
             );
             if(link_data_parts.size() >= 2) {
                 l_struct->type = (PATH_LINK_TYPES) s2i(link_data_parts[1]);
@@ -517,7 +517,7 @@ void load_area(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = game.textures.get(s_ptr->file_name, NULL);
+        s_ptr->bitmap = game.textures.get(s_ptr->file_name, nullptr);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
@@ -579,8 +579,8 @@ void load_area(
         for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = game.cur_area_data.sectors[s];
             if(s_ptr->fade) {
-                sector* n1 = NULL;
-                sector* n2 = NULL;
+                sector* n1 = nullptr;
+                sector* n2 = nullptr;
                 s_ptr->get_texture_merge_sectors(&n1, &n2);
                 if(n1 && n2) {
                     s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
@@ -765,7 +765,7 @@ void load_asset_file_names() {
  * @brief Loads an audio stream from the game's content.
  *
  * @param file_name Name of the file to load.
- * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The stream.
  */
@@ -796,9 +796,9 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  * @param node If present, it will be used to report errors, if any.
  * @param report_error If false, omits error reporting.
  * @param error_bmp_on_error If true, returns the error bitmap in the case of an
- * error. Otherwise, returns NULL.
+ * error. Otherwise, returns nullptr.
  * @param error_bmp_on_empty If true, returns the error bitmap in the case of an
- * empty file name. Otherwise, returns NULL.
+ * empty file name. Otherwise, returns nullptr.
  * @param path_from_root Normally, files are fetched from the images folder.
  * If this parameter is true, the path starts from the game's root.
  * @return The bitmap.
@@ -812,7 +812,7 @@ ALLEGRO_BITMAP* load_bmp(
         if(error_bmp_on_empty) {
             return game.bmp_error;
         } else {
-            return NULL;
+            return nullptr;
         }
     }
     
@@ -866,7 +866,7 @@ void load_custom_particle_generators(const bool load_resources) {
         float emission_interval_float = 0.0f;
         size_t number_int = 1;
         string bitmap_str;
-        data_node* bitmap_node = NULL;
+        data_node* bitmap_node = nullptr;
         
         particle base_p;
         
@@ -1091,8 +1091,8 @@ void load_hazards() {
         
         string effects_str;
         string liquid_str;
-        data_node* effects_node = NULL;
-        data_node* liquid_node = NULL;
+        data_node* effects_node = nullptr;
+        data_node* liquid_node = nullptr;
         
         rs.set("name", new_h.name);
         rs.set("color", new_h.main_color);
@@ -1224,7 +1224,7 @@ void load_maker_tools() {
     
     reader_setter rs(&file);
     
-    data_node* mob_hurting_percentage_node = NULL;
+    data_node* mob_hurting_percentage_node = nullptr;
     
     rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
     rs.set("area_image_padding", game.maker_tools.area_image_padding);
@@ -1431,7 +1431,7 @@ void load_options() {
  * @brief Loads an audio sample from the game's content.
  *
  * @param file_name Name of the file to load.
- * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The sample.
  */
@@ -1470,7 +1470,7 @@ void load_songs() {
         reader_setter rs(&file);
         
         string main_track_str;
-        data_node* main_track_node = NULL;
+        data_node* main_track_node = nullptr;
         
         rs.set("name", new_song.name);
         rs.set("main_track", main_track_str, &main_track_node);
@@ -1539,9 +1539,9 @@ void load_spike_damage_types() {
         
         string particle_generator_name;
         string status_name;
-        data_node* damage_node = NULL;
-        data_node* particle_generator_node = NULL;
-        data_node* status_name_node = NULL;
+        data_node* damage_node = nullptr;
+        data_node* particle_generator_node = nullptr;
+        data_node* status_name_node = nullptr;
         
         rs.set("name", new_t.name);
         rs.set("damage", new_t.damage, &damage_node);
@@ -1621,8 +1621,8 @@ void load_spray_types(const bool load_resources) {
         
         string effects_str;
         string icon_str;
-        data_node* effects_node = NULL;
-        data_node* icon_node = NULL;
+        data_node* effects_node = nullptr;
+        data_node* icon_node = nullptr;
         
         rs.set("name", new_t.name);
         rs.set("effects", effects_str, &effects_node);
@@ -1781,9 +1781,9 @@ void load_status_types(const bool load_resources) {
         string particle_offset_str;
         string particle_gen_str;
         string replacement_str;
-        data_node* reapply_rule_node = NULL;
-        data_node* sc_type_node = NULL;
-        data_node* particle_gen_node = NULL;
+        data_node* reapply_rule_node = nullptr;
+        data_node* sc_type_node = nullptr;
+        data_node* particle_gen_node = nullptr;
         
         rs.set("name",                    new_t->name);
         rs.set("color",                   new_t->color);

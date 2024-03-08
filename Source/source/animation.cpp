@@ -421,8 +421,8 @@ animation_instance &animation_instance::operator=(
  * @return The sprite.
  */
 sprite* animation_instance::get_cur_sprite() const {
-    if(!cur_anim) return NULL;
-    if(cur_frame_index == INVALID) return NULL;
+    if(!cur_anim) return nullptr;
+    if(cur_frame_index == INVALID) return nullptr;
     return cur_anim->frames[cur_frame_index].sprite_ptr;
 }
 
@@ -585,7 +585,7 @@ sprite::sprite(
  */
 sprite::sprite(const sprite &s2) :
     name(s2.name),
-    parent_bmp(NULL),
+    parent_bmp(nullptr),
     file(s2.file),
     file_pos(s2.file_pos),
     file_size(s2.file_size),
@@ -596,7 +596,7 @@ sprite::sprite(const sprite &s2) :
     top_size(s2.top_size),
     top_angle(s2.top_angle),
     top_visible(s2.top_visible),
-    bitmap(NULL),
+    bitmap(nullptr),
     hitboxes(s2.hitboxes) {
     
     set_bitmap(file, file_pos, file_size);
@@ -644,7 +644,7 @@ void sprite::create_hitboxes(
 sprite &sprite::operator=(const sprite &s2) {
     if(this != &s2) {
         name = s2.name;
-        parent_bmp = NULL;
+        parent_bmp = nullptr;
         file_pos = s2.file_pos;
         file_size = s2.file_size;
         offset = s2.offset;
@@ -654,7 +654,7 @@ sprite &sprite::operator=(const sprite &s2) {
         top_size = s2.top_size;
         top_angle = s2.top_angle;
         top_visible = s2.top_visible;
-        bitmap = NULL;
+        bitmap = nullptr;
         hitboxes = s2.hitboxes;
         set_bitmap(s2.file, file_pos, file_size);
     }
@@ -666,13 +666,13 @@ sprite &sprite::operator=(const sprite &s2) {
 /**
  * @brief Sets the bitmap and parent bitmap, according to the given information.
  * This automatically manages bitmap un/loading and such.
- * If the file name string is empty, sets to a NULL bitmap
+ * If the file name string is empty, sets to a nullptr bitmap
  * (and still unloads the old bitmap).
  *
  * @param new_file_name File name of the bitmap.
  * @param new_file_pos Top-left coordinates of the sub-bitmap inside the bitmap.
  * @param new_file_size Dimensions of the sub-bitmap.
- * @param node If not NULL, this will be used to report an error with, in case
+ * @param node If not nullptr, this will be used to report an error with, in case
  * something happens.
  */
 void sprite::set_bitmap(
@@ -682,11 +682,11 @@ void sprite::set_bitmap(
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);
-        bitmap = NULL;
+        bitmap = nullptr;
     }
     if(new_file_name != file && parent_bmp) {
         game.bitmaps.detach(file);
-        parent_bmp = NULL;
+        parent_bmp = nullptr;
     }
     
     if(new_file_name.empty()) {
@@ -697,7 +697,7 @@ void sprite::set_bitmap(
     }
     
     if(new_file_name != file || !parent_bmp) {
-        parent_bmp = game.bitmaps.get(new_file_name, node, node != NULL);
+        parent_bmp = game.bitmaps.get(new_file_name, node, node != nullptr);
     }
     
     int parent_w = al_get_bitmap_width(parent_bmp);
@@ -830,7 +830,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
         sprite* new_s =
             new sprite(
             sprite_node->name,
-            NULL,
+            nullptr,
             s2p(sprite_node->get_child_by_name("file_pos")->value),
             s2p(sprite_node->get_child_by_name("file_size")->value),
             hitboxes
@@ -886,7 +886,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 frame(
                     frame_node->name,
                     s_pos,
-                    (s_pos == INVALID) ? NULL : adb.sprites[s_pos],
+                    (s_pos == INVALID) ? nullptr : adb.sprites[s_pos],
                     s2f(frame_node->get_child_by_name("duration")->value),
                     frame_node->get_child_by_name("sound")->value,
                     (signal_str.empty() ? INVALID : s2i(signal_str))

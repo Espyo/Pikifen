@@ -126,7 +126,7 @@ void gameplay_state::change_spray_count(
             (signed int) 0
         );
         
-    gui_item* spray_hud_item = NULL;
+    gui_item* spray_hud_item = nullptr;
     if(game.spray_types.size() > 2) {
         if(selected_spray == type_nr) {
             spray_hud_item = hud->spray_1_amount;
@@ -310,7 +310,7 @@ void gameplay_state::enter() {
 ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
     const float near_radius, const float far_radius
 ) {
-    if(far_radius == 0) return NULL;
+    if(far_radius == 0) return nullptr;
     
     ALLEGRO_BITMAP* bmp =
         al_create_bitmap(GAMEPLAY::FOG_BITMAP_SIZE, GAMEPLAY::FOG_BITMAP_SIZE);
@@ -381,7 +381,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * @brief Returns how many Pikmin are in the field in the current area.
  * This also checks inside converters.
  *
- * @param filter If not NULL, only return Pikmin matching this type.
+ * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
 size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
@@ -408,7 +408,7 @@ size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
 /**
  * @brief Returns how many Pikmin are in the group.
  *
- * @param filter If not NULL, only return Pikmin matching this type.
+ * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
 size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
@@ -430,7 +430,7 @@ size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
 /**
  * @brief Returns how many Pikmin are idling in the area.
  *
- * @param filter If not NULL, only return Pikmin matching this type.
+ * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
 size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
@@ -455,7 +455,7 @@ size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
  * @brief Returns how many Pikmin are inside of Onions in the current area.
  * This also checks ships.
  *
- * @param filter If not NULL, only return Pikmin matching this type.
+ * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
 long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
@@ -504,7 +504,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
  * This includes Pikmin in the field as well as the Onions, and also
  * Pikmin inside converters.
  *
- * @param filter If not NULL, only return Pikmin matching this type.
+ * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
 long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
@@ -528,18 +528,18 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
  * and more mature one.
  *
  * @param type Type to search for.
- * @return The member, or NULL if there is no member of that subgroup available.
+ * @return The member, or nullptr if there is no member of that subgroup available.
  */
 mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
-    if(!cur_leader_ptr) return NULL;
+    if(!cur_leader_ptr) return nullptr;
     
-    mob* result = NULL;
+    mob* result = nullptr;
     
     //Closest members so far for each maturity.
     dist closest_dists[N_MATURITIES];
     mob* closest_ptrs[N_MATURITIES];
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-        closest_ptrs[m] = NULL;
+        closest_ptrs[m] = nullptr;
     }
     
     //Fetch the closest, for each maturity.
@@ -787,7 +787,7 @@ void gameplay_state::load() {
                 );
             mobs_per_gen.push_back(new_mob);
         } else {
-            mobs_per_gen.push_back(NULL);
+            mobs_per_gen.push_back(nullptr);
         }
     }
     
@@ -820,7 +820,7 @@ void gameplay_state::load() {
     //Save each path stop's sector.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         game.cur_area_data.path_stops[s]->sector_ptr =
-            get_sector(game.cur_area_data.path_stops[s]->pos, NULL, true);
+            get_sector(game.cur_area_data.path_stops[s]->pos, nullptr, true);
     }
     
     //Sort leaders.
@@ -852,7 +852,7 @@ void gameplay_state::load() {
     update_available_leaders();
     
     cur_leader_nr = INVALID;
-    cur_leader_ptr = NULL;
+    cur_leader_ptr = nullptr;
     starting_nr_of_leaders = mobs.leaders.size();
     
     if(!mobs.leaders.empty()) {
@@ -966,7 +966,7 @@ void gameplay_state::load() {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
-                "area \"" + game.cur_area_data.name + "\"!", NULL
+                "area \"" + game.cur_area_data.name + "\"!", nullptr
             );
             continue;
         }
@@ -1112,16 +1112,16 @@ void gameplay_state::unload() {
     if(hud) {
         hud->gui.destroy();
         delete hud;
-        hud = NULL;
+        hud = nullptr;
     }
     
     cur_leader_nr = INVALID;
-    cur_leader_ptr = NULL;
+    cur_leader_ptr = nullptr;
     
-    close_to_interactable_to_use = NULL;
-    close_to_nest_to_open = NULL;
-    close_to_pikmin_to_pluck = NULL;
-    close_to_ship_to_heal = NULL;
+    close_to_interactable_to_use = nullptr;
+    close_to_nest_to_open = nullptr;
+    close_to_pikmin_to_pluck = nullptr;
+    close_to_ship_to_heal = nullptr;
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
@@ -1132,7 +1132,7 @@ void gameplay_state::unload() {
     
     if(lightmap_bmp) {
         al_destroy_bitmap(lightmap_bmp);
-        lightmap_bmp = NULL;
+        lightmap_bmp = nullptr;
     }
     
     unload_area();
@@ -1149,20 +1149,20 @@ void gameplay_state::unload() {
     
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);
-        bmp_fog = NULL;
+        bmp_fog = nullptr;
     }
     
     if(msg_box) {
         delete msg_box;
-        msg_box = NULL;
+        msg_box = nullptr;
     }
     if(onion_menu) {
         delete onion_menu;
-        onion_menu = NULL;
+        onion_menu = nullptr;
     }
     if(pause_menu) {
         delete pause_menu;
-        pause_menu = NULL;
+        pause_menu = nullptr;
     }
     game.maker_tools.info_print_text.clear();
     
@@ -1243,12 +1243,12 @@ void gameplay_state::update_available_leaders() {
  * In the case all candidate members are out of reach,
  * this gets set to the closest. Otherwise, it gets set to the closest
  * and more mature one.
- * Sets to NULL if there is no member of that subgroup available.
+ * Sets to nullptr if there is no member of that subgroup available.
  */
 void gameplay_state::update_closest_group_members() {
-    closest_group_member[BUBBLE_PREVIOUS] = NULL;
-    closest_group_member[BUBBLE_CURRENT] = NULL;
-    closest_group_member[BUBBLE_NEXT] = NULL;
+    closest_group_member[BUBBLE_PREVIOUS] = nullptr;
+    closest_group_member[BUBBLE_CURRENT] = nullptr;
+    closest_group_member[BUBBLE_NEXT] = nullptr;
     closest_group_member_distant = false;
     
     if(!cur_leader_ptr) return;
@@ -1343,7 +1343,7 @@ void gameplay_state::update_transformations() {
  * @brief Constructs a new message box info object.
  *
  * @param text Text to display.
- * @param speaker_icon Bitmap representing who is talking, if not NULL.
+ * @param speaker_icon Bitmap representing who is talking, if not nullptr.
  */
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {

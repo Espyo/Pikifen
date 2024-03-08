@@ -119,7 +119,7 @@ struct mob_gen {
     
     explicit mob_gen(
         const point &pos = point(),
-        mob_type* type = NULL, const float angle = 0, const string &vars = ""
+        mob_type* type = nullptr, const float angle = 0, const string &vars = ""
     );
     void clone(mob_gen* destination, const bool include_position = true) const;
     

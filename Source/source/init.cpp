@@ -681,7 +681,7 @@ void init_misc() {
     
     al_identity_transform(&game.identity_transform);
     
-    srand(time(NULL));
+    srand(time(nullptr));
     
     game.states.gameplay->whistle.next_dot_timer.start();
     game.states.gameplay->whistle.next_ring_timer.start();

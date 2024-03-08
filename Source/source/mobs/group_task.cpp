@@ -143,7 +143,7 @@ void group_task::free_up_spot(pikmin* whose) {
                 was_contributing = true;
             }
             spots[s].state = 0;
-            spots[s].pikmin_here = NULL;
+            spots[s].pikmin_here = nullptr;
             break;
         }
     }
@@ -202,7 +202,7 @@ bool group_task::get_fraction_numbers_info(
  * @brief Returns a free spot, closest to the center and to the frontmost row as
  * possible.
  *
- * @return The spot, or NULL if there is none.
+ * @return The spot, or nullptr if there is none.
  */
 group_task::group_task_spot* group_task::get_free_spot() {
     size_t spots_taken = 0;
@@ -213,13 +213,13 @@ group_task::group_task_spot* group_task::get_free_spot() {
             if(spots_taken == tas_type->max_pikmin) {
                 //Max Pikmin reached! The Pikmin can't join,
                 //regardless of there being free spots.
-                return NULL;
+                return nullptr;
             }
         }
         if(spots[s].state == 0) return &(spots[s]);
     }
     
-    return NULL;
+    return nullptr;
 }
 
 

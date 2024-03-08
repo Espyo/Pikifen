@@ -86,11 +86,11 @@ void treasure_category::erase_mob(mob* m) {
  * @brief Returns a type of treasure given its name.
  *
  * @param name Name of the mob type to get.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
 mob_type* treasure_category::get_type(const string &name) const {
     auto it = game.mob_types.treasure.find(name);
-    if(it == game.mob_types.treasure.end()) return NULL;
+    if(it == game.mob_types.treasure.end()) return nullptr;
     return it->second;
 }
 

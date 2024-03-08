@@ -282,13 +282,13 @@ void load_mob_type_from_file(
     string huntable_targets_str;
     string hurtable_targets_str;
     string team_str;
-    data_node* area_editor_tips_node = NULL;
-    data_node* custom_carry_spots_node = NULL;
-    data_node* spike_damage_node = NULL;
-    data_node* target_type_node = NULL;
-    data_node* huntable_targets_node = NULL;
-    data_node* hurtable_targets_node = NULL;
-    data_node* team_node = NULL;
+    data_node* area_editor_tips_node = nullptr;
+    data_node* custom_carry_spots_node = nullptr;
+    data_node* spike_damage_node = nullptr;
+    data_node* target_type_node = nullptr;
+    data_node* huntable_targets_node = nullptr;
+    data_node* hurtable_targets_node = nullptr;
+    data_node* team_node = nullptr;
     
     rs.set("acceleration", mt->acceleration);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
@@ -748,7 +748,7 @@ void load_mob_type_from_file(
         reader_setter prop_rs(prop_node);
         string type_str;
         string list_str;
-        data_node* type_node = NULL;
+        data_node* type_node = nullptr;
         
         mob_type::area_editor_prop_struct new_prop;
         new_prop.name = prop_node->name;

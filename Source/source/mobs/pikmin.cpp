@@ -87,7 +87,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     missed_attack_timer =
         timer(
             MISSED_ATTACK_DURATION,
-    [this] () { this->missed_attack_ptr = NULL; }
+    [this] () { this->missed_attack_ptr = nullptr; }
         );
         
     if(pik_type->can_fly) {
@@ -197,7 +197,7 @@ void pikmin::draw_mob() {
  * @param m The mob to carry.
  */
 void pikmin::force_carry(mob* m) {
-    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, NULL);
+    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr);
     fsm.run_event(MOB_EV_REACHED_DESTINATION);
 }
 
@@ -312,7 +312,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         fsm.cur_state->id == PIKMIN_STATE_FLAILING
     ) {
         fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
+        pikmin_fsm::stand_still(this, nullptr, nullptr);
         invuln_period.start();
     }
     
@@ -322,7 +322,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         fsm.cur_state->id == PIKMIN_STATE_HELPLESS
     ) {
         fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
+        pikmin_fsm::stand_still(this, nullptr, nullptr);
         invuln_period.start();
         
     } else if(
@@ -331,7 +331,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         fsm.cur_state->id == PIKMIN_STATE_PANICKING
     ) {
         fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
+        pikmin_fsm::stand_still(this, nullptr, nullptr);
         invuln_period.start();
         
     }
@@ -480,7 +480,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
     if(health <= 0 && !is_grabbed_by_enemy) {
         to_delete = true;
         
-        pikmin_fsm::notify_leader_release(this, NULL, NULL);
+        pikmin_fsm::notify_leader_release(this, nullptr, nullptr);
         
         particle par(
             PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
@@ -540,7 +540,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
  * @brief Returns the sprout closest to a leader. Used when auto-plucking.
  *
  * @param pos Coordinates of the leader.
- * @param d Variable to return the distance to. NULL for none.
+ * @param d Variable to return the distance to. nullptr for none.
  * @param ignore_reserved If true, ignore any sprouts that are "reserved"
  * (i.e. already chosen to be plucked by another leader).
  * @return The sprout.
@@ -549,7 +549,7 @@ pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved
 ) {
     dist closest_distance;
-    pikmin* closest_pikmin = NULL;
+    pikmin* closest_pikmin = nullptr;
     
     size_t n_pikmin = game.states.gameplay->mobs.pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; ++p) {
@@ -561,7 +561,7 @@ pikmin* get_closest_sprout(
         }
         
         dist dis(pos, game.states.gameplay->mobs.pikmin_list[p]->pos);
-        if(closest_pikmin == NULL || dis < closest_distance) {
+        if(closest_pikmin == nullptr || dis < closest_distance) {
         
             if(
                 !(

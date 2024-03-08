@@ -491,7 +491,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 game.mouse_cursor.w_pos,
                 &game.cur_area_data.mission.goal_exit_center,
                 &game.cur_area_data.mission.goal_exit_size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom
             );
         }
@@ -676,9 +676,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 //Start a new layout selection or select something.
                 bool start_new_selection = true;
                 
-                vertex* clicked_vertex = NULL;
-                edge* clicked_edge = NULL;
-                sector* clicked_sector = NULL;
+                vertex* clicked_vertex = nullptr;
+                edge* clicked_edge = nullptr;
+                sector* clicked_sector = nullptr;
                 get_hovered_layout_element(
                     &clicked_vertex, &clicked_edge, &clicked_sector
                 );
@@ -1037,10 +1037,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             if(path_drawing_stop_1) {
                 //A starting stop already exists, so now we create a link.
-                path_stop* next_stop = NULL;
+                path_stop* next_stop = nullptr;
                 if(clicked_stop) {
                     if(clicked_stop == path_drawing_stop_1) {
-                        path_drawing_stop_1 = NULL;
+                        path_drawing_stop_1 = nullptr;
                     } else {
                         next_stop = clicked_stop;
                     }
@@ -1070,7 +1070,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     set_status("Created path link.");
                     
                     if(clicked_stop) {
-                        path_drawing_stop_1 = NULL;
+                        path_drawing_stop_1 = nullptr;
                     } else {
                         path_drawing_stop_1 = next_stop;
                     }
@@ -1164,7 +1164,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             clear_selection();
                         }
                         selected_path_links.insert(clicked_link_1);
-                        if(clicked_link_2 != NULL) {
+                        if(clicked_link_2 != nullptr) {
                             selected_path_links.insert(clicked_link_2);
                         }
                     }
@@ -1216,7 +1216,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             if(!transformation_handled) {
                 //Select a tree shadow.
-                selected_shadow = NULL;
+                selected_shadow = nullptr;
                 for(
                     size_t s = 0;
                     s < game.cur_area_data.tree_shadows.size(); ++s
@@ -1257,7 +1257,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 game.mouse_cursor.w_pos,
                 &reference_center,
                 &reference_size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom
             );
         }
@@ -1461,7 +1461,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     snap_point(game.mouse_cursor.w_pos, true),
                     &game.cur_area_data.mission.goal_exit_center,
                     &game.cur_area_data.mission.goal_exit_size,
-                    NULL,
+                    nullptr,
                     1.0f / game.cam.zoom,
                     false,
                     MISSION::EXIT_MIN_SIZE,
@@ -1697,7 +1697,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 snap_point(game.mouse_cursor.w_pos),
                 &reference_center,
                 &reference_size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom,
                 reference_keep_aspect_ratio,
                 5.0f,
@@ -1801,12 +1801,12 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     );
     
     //Update highlighted elements.
-    highlighted_vertex = NULL;
-    highlighted_edge = NULL;
-    highlighted_sector = NULL;
-    highlighted_mob = NULL;
-    highlighted_path_stop = NULL;
-    highlighted_path_link = NULL;
+    highlighted_vertex = nullptr;
+    highlighted_edge = nullptr;
+    highlighted_sector = nullptr;
+    highlighted_mob = nullptr;
+    highlighted_path_stop = nullptr;
+    highlighted_path_link = nullptr;
     if(!is_mouse_in_gui) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
@@ -1824,14 +1824,14 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
             highlighted_path_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
                 
-            if (highlighted_path_stop == NULL) {
+            if (highlighted_path_stop == nullptr) {
                 //Selecting the stop takes priority,
                 //so keep the link null if there's a stop.
                 get_path_link_under_point(
                     game.mouse_cursor.w_pos,
                     &hovered_link_1, &highlighted_path_link
                 );
-                if(highlighted_path_link == NULL) {
+                if(highlighted_path_link == nullptr) {
                     highlighted_path_link = hovered_link_1;
                 }
             }

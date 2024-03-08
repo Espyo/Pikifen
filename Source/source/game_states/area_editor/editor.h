@@ -213,10 +213,10 @@ private:
         //--- Members ---
         
         //Area data from before the split.
-        area_data* pre_split_area_data = NULL;
+        area_data* pre_split_area_data = nullptr;
         
         //Sector being worked on in a sector split operation.
-        sector* working_sector = NULL;
+        sector* working_sector = nullptr;
         
         //Edges of the sector split sector, before the split operation.
         vector<edge*> working_sector_old_edges;
@@ -681,7 +681,7 @@ private:
     string problem_description;
     
     //Information about the problematic intersecting edges, if any.
-    edge_intersection problem_edge_intersection = edge_intersection(NULL, NULL);
+    edge_intersection problem_edge_intersection = edge_intersection(nullptr, nullptr);
     
     //Pointer to the problematic mob, if any.
     mob_gen* problem_mob_ptr = nullptr;
@@ -923,7 +923,7 @@ private:
     ) const;
     bool get_drawing_outer_sector(sector** result) const;
     edge* get_edge_under_point(
-        const point &p, const edge* after = NULL
+        const point &p, const edge* after = nullptr
     ) const;
     vector<edge_intersection> get_intersecting_edges() const;
     size_t get_mission_required_mob_count() const;
@@ -933,7 +933,7 @@ private:
         std::pair<mob_gen*, mob_gen*>* data1,
         std::pair<mob_gen*, mob_gen*>* data2
     ) const;
-    mob_gen* get_mob_under_point(const point &p, size_t* idx = NULL) const;
+    mob_gen* get_mob_under_point(const point &p, size_t* idx = nullptr) const;
     bool get_path_link_under_point(
         const point &p, path_link** link1, path_link** link2
     ) const;
@@ -970,7 +970,7 @@ private:
     void recreate_drawing_nodes();
     void redo();
     void register_change(
-        const string &operation_name, area_data* pre_prepared_change = NULL
+        const string &operation_name, area_data* pre_prepared_change = nullptr
     );
     void remove_thumbnail();
     void resize_everything(const float mults[2]);

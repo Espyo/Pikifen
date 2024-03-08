@@ -77,7 +77,7 @@ void path_link::clone(path_link* destination) const {
  * @return Whether it's one-way.
  */
 bool path_link::is_one_way() const {
-    return end_ptr->get_link(start_ptr) == NULL;
+    return end_ptr->get_link(start_ptr) == nullptr;
 }
 
 
@@ -338,13 +338,13 @@ void path_stop::clone(path_stop* destination) const {
  * is from the other stop to this one, it will not count.
  *
  * @param other_stop Path stop to check against.
- * @return The link, or NULL if it does not link to that stop.
+ * @return The link, or nullptr if it does not link to that stop.
  */
 path_link* path_stop::get_link(const path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
         if(links[l]->end_ptr == other_stop) return links[l];
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -387,7 +387,7 @@ void path_stop::remove_link(const path_stop* other_stop) {
  *
  * @param stop_ptr Stop to check.
  * @param settings Settings about how the path should be followed.
- * @param reason If not NULL, the reason is returned here.
+ * @param reason If not nullptr, the reason is returned here.
  * @return Whether it can be taken.
  */
 bool can_take_path_stop(
@@ -399,7 +399,7 @@ bool can_take_path_stop(
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        sector_ptr = get_sector(stop_ptr->pos, NULL, false);
+        sector_ptr = get_sector(stop_ptr->pos, nullptr, false);
         if(!sector_ptr) {
             //It's really the void. Nothing that can be done here then.
             if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
@@ -417,7 +417,7 @@ bool can_take_path_stop(
  * @param stop_ptr Stop to check.
  * @param settings Settings about how the path should be followed.
  * @param sector_ptr Pointer to the sector this stop is on.
- * @param reason If not NULL, the reason is returned here.
+ * @param reason If not nullptr, the reason is returned here.
  * @return Whether it can take it.
  */
 bool can_take_path_stop(
@@ -494,7 +494,7 @@ bool can_take_path_stop(
  *
  * @param link_ptr Link to check.
  * @param settings Settings about how the path should be followed.
- * @param reason If not NULL, the reason is returned here.
+ * @param reason If not nullptr, the reason is returned here.
  * @return Whether it can traverse it.
  */
 bool can_traverse_path_link(
@@ -518,7 +518,7 @@ bool can_traverse_path_link(
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        start_sector = get_sector(link_ptr->start_ptr->pos, NULL, false);
+        start_sector = get_sector(link_ptr->start_ptr->pos, nullptr, false);
         if(!start_sector) {
             //It's really the void. Nothing that can be done here then.
             if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
@@ -528,7 +528,7 @@ bool can_traverse_path_link(
     sector* end_sector = link_ptr->end_ptr->sector_ptr;
     if(!end_sector) {
         //Same as above.
-        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
+        end_sector = get_sector(link_ptr->end_ptr->pos, nullptr, false);
         if(!end_sector) {
             if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
@@ -602,7 +602,7 @@ void depth_first_search(
  * @param start_node Start node.
  * @param end_node End node.
  * @param settings Settings about how the path should be followed.
- * @param total_dist If not NULL, place the total path distance here.
+ * @param total_dist If not nullptr, place the total path distance here.
  * @return The operation's result.
  */
 PATH_RESULTS dijkstra(
@@ -624,7 +624,7 @@ PATH_RESULTS dijkstra(
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);
-        data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
+        data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) nullptr);
     }
     
     //The distance between the start node and the start node is 0.
@@ -634,7 +634,7 @@ PATH_RESULTS dijkstra(
     while(!unvisited.empty()) {
     
         //Figure out what node to work on in this iteration.
-        path_stop* shortest_node = NULL;
+        path_stop* shortest_node = nullptr;
         float shortest_node_dist = 0;
         std::unordered_set<path_stop*>::iterator shortest_node_it =
             unvisited.end();
@@ -745,10 +745,10 @@ PATH_RESULTS dijkstra(
  * @param end End coordinates.
  * @param settings Settings about how the path should be followed.
  * @param full_path The stops to visit, in order, are returned here, if any.
- * @param total_dist If not NULL, place the total path distance here.
- * @param start_stop If not NULL, the closest stop to the start is
+ * @param total_dist If not nullptr, place the total path distance here.
+ * @param start_stop If not nullptr, the closest stop to the start is
  * returned here.
- * @param end_stop If not NULL, the closest stop to the end is returned here.
+ * @param end_stop If not nullptr, the closest stop to the end is returned here.
  * @return The operation's result.
  */
 PATH_RESULTS get_path(
@@ -776,8 +776,8 @@ PATH_RESULTS get_path(
         end;
         
     //Start by finding the closest stops to the start and finish.
-    path_stop* closest_to_start = NULL;
-    path_stop* closest_to_end = NULL;
+    path_stop* closest_to_start = nullptr;
+    path_stop* closest_to_end = nullptr;
     float closest_to_start_dist = 0.0f;
     float closest_to_end_dist = 0.0f;
     

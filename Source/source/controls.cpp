@@ -466,8 +466,8 @@ void gameplay_state::process_system_key_press(const int keycode) {
             mob* m = get_closest_mob_to_cursor();
             mob* prev_lock_mob = game.maker_tools.info_lock;
             game.maker_tools.info_lock =
-                (game.maker_tools.info_lock == m ? NULL : m);
-            if(prev_lock_mob != NULL && game.maker_tools.info_lock == NULL) {
+                (game.maker_tools.info_lock == m ? nullptr : m);
+            if(prev_lock_mob != nullptr && game.maker_tools.info_lock == nullptr) {
                 print_info("Mob: None.", 2.0f, 2.0f);
             }
             game.maker_tools.used_helping_tools = true;
@@ -506,7 +506,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
-                get_sector(game.mouse_cursor.w_pos, NULL, true);
+                get_sector(game.mouse_cursor.w_pos, nullptr, true);
             if(mouse_sector && cur_leader_ptr) {
                 cur_leader_ptr->chase(
                     game.mouse_cursor.w_pos, mouse_sector->z,

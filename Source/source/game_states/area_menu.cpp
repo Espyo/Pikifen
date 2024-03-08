@@ -132,12 +132,12 @@ void area_menu_state::change_info(const size_t area_idx) {
     subtitle_text->text.clear();
     description_text->text.clear();
     difficulty_text->text.clear();
-    cur_thumb = NULL;
+    cur_thumb = nullptr;
     tags_text->text.clear();
     maker_text->text.clear();
     version_text->text.clear();
-    cur_stamp = NULL;
-    cur_medal = NULL;
+    cur_stamp = nullptr;
+    cur_medal = nullptr;
     if(area_type == AREA_TYPE_MISSION) {
         record_info_text->text.clear();
         record_date_text->text.clear();
@@ -212,12 +212,12 @@ void area_menu_state::change_info(const size_t area_idx) {
             "";
         cur_stamp =
             !record_exists ?
-            NULL :
+            nullptr :
             area_records[area_idx].clear ?
             game.sys_assets.bmp_mission_clear :
             game.sys_assets.bmp_mission_fail;
         if(!record_exists) {
-            cur_medal = NULL;
+            cur_medal = nullptr;
         } else {
             switch(area_mission_data[area_idx].grading_mode) {
             case MISSION_GRADING_POINTS: {
@@ -692,7 +692,7 @@ void area_menu_state::init_gui_main() {
                     point(0.12f, BUTTON_HEIGHT * 0.60f);
                 medal_item->on_draw =
                 [this, a] (const point & center, const point & size) {
-                    ALLEGRO_BITMAP* medal_bmp = NULL;
+                    ALLEGRO_BITMAP* medal_bmp = nullptr;
                     switch(area_mission_data[a].grading_mode) {
                     case MISSION_GRADING_POINTS: {
                         int score = area_records[a].score;
@@ -769,8 +769,8 @@ void area_menu_state::init_gui_main() {
             );
             view_toggle_button->on_activate =
             [this, view_toggle_button] (const point &) {
-                gui_item* box_to_show = NULL;
-                gui_item* box_to_hide = NULL;
+                gui_item* box_to_show = nullptr;
+                gui_item* box_to_hide = nullptr;
                 if(show_mission_specs) {
                     box_to_show = info_box;
                     box_to_hide = specs_box;
@@ -914,12 +914,12 @@ void area_menu_state::leave() {
  * @brief Loads the area menu into memory.
  */
 void area_menu_state::load() {
-    bmp_menu_bg = NULL;
-    first_area_button = NULL;
+    bmp_menu_bg = nullptr;
+    first_area_button = nullptr;
     cur_area_idx = INVALID;
-    cur_thumb = NULL;
-    cur_stamp = NULL;
-    cur_medal = NULL;
+    cur_thumb = nullptr;
+    cur_stamp = nullptr;
+    cur_medal = nullptr;
     show_mission_specs = false;
     
     //Areas.
@@ -1041,9 +1041,9 @@ void area_menu_state::unload() {
     area_mission_data.clear();
     area_records.clear();
     
-    cur_thumb = NULL;
-    cur_stamp = NULL;
-    cur_medal = NULL;
+    cur_thumb = nullptr;
+    cur_stamp = nullptr;
+    cur_medal = nullptr;
     for(size_t a = 0; a < area_thumbs.size(); ++a) {
         if(area_thumbs[a]) {
             al_destroy_bitmap(area_thumbs[a]);

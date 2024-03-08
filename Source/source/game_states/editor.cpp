@@ -87,7 +87,7 @@ editor::editor() :
     
     editor_icons.reserve(N_EDITOR_ICONS);
     for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
-        editor_icons.push_back(NULL);
+        editor_icons.push_back(nullptr);
     }
 }
 
@@ -890,7 +890,7 @@ void editor::load() {
     game.mouse_cursor.show();
     
     bmp_editor_icons =
-        load_bmp(game.asset_file_names.bmp_editor_icons, NULL, true, false);
+        load_bmp(game.asset_file_names.bmp_editor_icons, nullptr, true, false);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
             editor_icons[i] =
@@ -1245,7 +1245,7 @@ bool editor::process_gui_mob_type_widgets(
     //is processed somewhere else entirely.
     static bool internal_changed_by_dialog = false;
     static string internal_custom_cat_name;
-    static mob_type* internal_mob_type = NULL;
+    static mob_type* internal_mob_type = nullptr;
     
     if(internal_changed_by_dialog) {
         //Somewhere else in the code, the picker dialog changed these variables
@@ -1261,7 +1261,7 @@ bool editor::process_gui_mob_type_widgets(
     }
     
     //Column setup.
-    ImGui::Columns(2, NULL, false);
+    ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnWidth(-1, 51.0f);
     
     //Search button.
@@ -1293,7 +1293,7 @@ bool editor::process_gui_mob_type_widgets(
             //be run wherever dialogs are processed.
             internal_changed_by_dialog = true;
             internal_custom_cat_name = c;
-            internal_mob_type = NULL;
+            internal_mob_type = nullptr;
             size_t custom_cat_idx = custom_cat_name_idxs[c];
             const vector<mob_type*> &types =
                 custom_cat_types[custom_cat_idx];
@@ -1701,10 +1701,10 @@ void editor::unload() {
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
             al_destroy_bitmap(editor_icons[i]);
-            editor_icons[i] = NULL;
+            editor_icons[i] = nullptr;
         }
         al_destroy_bitmap(bmp_editor_icons);
-        bmp_editor_icons = NULL;
+        bmp_editor_icons = nullptr;
     }
     custom_cat_name_idxs.clear();
     custom_cat_types.clear();
@@ -2477,7 +2477,7 @@ void editor::picker_info::process() {
  *
  * @param name Name of the item.
  * @param category Category it belongs to. If none, use an empty string.
- * @param bitmap Bitmap to display on the item. If none, use NULL.
+ * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 editor::picker_item::picker_item(
     const string &name, const string &category, ALLEGRO_BITMAP* bitmap
@@ -2493,8 +2493,8 @@ editor::picker_item::picker_item(
  * @brief Draws the widget on-screen.
  *
  * @param center Center point.
- * @param size Width and height. If NULL, no scale handles will be drawn.
- * @param angle Angle. If NULL, the rotation handle will not be drawn.
+ * @param size Width and height. If nullptr, no scale handles will be drawn.
+ * @param angle Angle. If nullptr, the rotation handle will not be drawn.
  * @param zoom Zoom the widget's components by this much.
  */
 void editor::transformation_widget::draw(
@@ -2505,7 +2505,7 @@ void editor::transformation_widget::draw(
     
     point handles[9];
     float radius;
-    get_locations(center, size, angle, handles, &radius, NULL);
+    get_locations(center, size, angle, handles, &radius, nullptr);
     
     //Draw the rotation handle.
     if(angle && radius >= 0.0f) {
@@ -2547,12 +2547,12 @@ void editor::transformation_widget::draw(
  * was fed.
  *
  * @param center Center point.
- * @param size Width and height. If NULL, the default size is used.
- * @param angle Angle. If NULL, zero is used.
+ * @param size Width and height. If nullptr, the default size is used.
+ * @param angle Angle. If nullptr, zero is used.
  * @param handles Return the location of all nine translation and scale
  * handles here.
  * @param radius Return the angle handle's radius here.
- * @param transform If not NULL, return the transformation used here.
+ * @param transform If not nullptr, return the transformation used here.
  * The transformation will only rotate and translate, not scale.
  */
 void editor::transformation_widget::get_locations(
@@ -2614,8 +2614,8 @@ point editor::transformation_widget::get_old_center() const {
  *
  * @param mouse_coords Mouse coordinates.
  * @param center Center point.
- * @param size Width and height. If NULL, no scale handling will be performed.
- * @param angle Angle. If NULL, no rotation handling will be performed.
+ * @param size Width and height. If nullptr, no scale handling will be performed.
+ * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @return Whether the user clicked on a handle.
  */
@@ -2627,7 +2627,7 @@ bool editor::transformation_widget::handle_mouse_down(
     
     point handles[9];
     float radius;
-    get_locations(center, size, angle, handles, &radius, NULL);
+    get_locations(center, size, angle, handles, &radius, nullptr);
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; ++h) {
@@ -2667,8 +2667,8 @@ bool editor::transformation_widget::handle_mouse_down(
  *
  * @param mouse_coords Mouse coordinates.
  * @param center Center point.
- * @param size Width and height. If NULL, no scale handling will be performed.
- * @param angle Angle. If NULL, no rotation handling will be performed.
+ * @param size Width and height. If nullptr, no scale handling will be performed.
+ * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @param keep_aspect_ratio If true, aspect ratio is kept when resizing.
  * @param min_size Minimum possible size for the width or height.

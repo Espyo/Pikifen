@@ -149,7 +149,7 @@ struct chase_info_struct {
     //Same as above, but for the Z coordinate.
     float offset_z = 0.0f;
 
-    //Pointer to the origin of the coordinates, or NULL for the world origin.
+    //Pointer to the origin of the coordinates, or nullptr for the world origin.
     point* orig_coords = nullptr;
 
     //Same as above, but for the Z coordinate.
@@ -278,7 +278,7 @@ struct group_info_struct {
 
         //--- Function declarations ---
 
-        explicit group_spot(const point &p = point(), mob* m = NULL) :
+        explicit group_spot(const point &p = point(), mob* m = nullptr) :
             pos(p), mob_ptr(m) {}
 
     };
@@ -314,13 +314,13 @@ struct group_info_struct {
     //--- Function declarations ---
 
     explicit group_info_struct(mob* leader_ptr);
-    void init_spots(mob* affected_mob_ptr = NULL);
+    void init_spots(mob* affected_mob_ptr = nullptr);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
     size_t get_amount_by_type(const mob_type* type) const;
     point get_average_member_pos() const;
     vector<hazard*> get_group_invulnerabilities(
-        mob* include_leader = NULL
+        mob* include_leader = nullptr
     ) const;
     bool get_next_standby_type(
         const bool move_backwards, subgroup_type** new_type
@@ -623,7 +623,7 @@ struct path_info_struct {
         mob* m,
         const path_follow_settings &settings
     );
-    bool check_blockage(PATH_BLOCK_REASONS* reason = NULL);
+    bool check_blockage(PATH_BLOCK_REASONS* reason = nullptr);
 
 };
 

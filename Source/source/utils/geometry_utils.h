@@ -132,17 +132,17 @@ void calculate_throw(
 bool circle_intersects_line_seg(
     const point &circle, const float cr,
     const point &line_p1, const point &line_p2,
-    float* lix = NULL, float* liy = NULL
+    float* lix = nullptr, float* liy = nullptr
 );
 bool circle_intersects_rectangle(
     const point &circle, const float cr,
     const point &rectangle, const point &rect_dim,
     const float rect_angle,
-    float* overlap_dist = NULL, float* rectangle_side_angle = NULL
+    float* overlap_dist = nullptr, float* rectangle_side_angle = nullptr
 );
 bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
-    point* intersection_tl = NULL, point* intersection_br = NULL
+    point* intersection_tl = nullptr, point* intersection_br = nullptr
 );
 void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
@@ -155,7 +155,7 @@ float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(const float a1, const float a2);
 point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p,
-    float* segment_ratio = NULL
+    float* segment_ratio = nullptr
 );
 point get_closest_point_in_rotated_rectangle(
     const point &p,
@@ -237,7 +237,7 @@ bool rectangles_intersect(
     const float rect_angle1,
     const point &rect2, const point &rect_dim2,
     const float rect_angle2,
-    float* overlap_dist = NULL, float* overlap_angle = NULL
+    float* overlap_dist = nullptr, float* overlap_angle = nullptr
 );
 point resize_to_box_keeping_aspect_ratio(
     const point &original_size,

@@ -82,11 +82,11 @@ size_t edge::get_side_with_sector(const sector* s_ptr) const {
 
 
 /**
- * @brief If the specified edge and this one are not neighbors, returns NULL.
+ * @brief If the specified edge and this one are not neighbors, returns nullptr.
  * Otherwise, returns the vertex that binds them.
  *
  * @param other Edge to check as a neighbor.
- * @return The binding vertex, or NULL if they are not neighbors.
+ * @return The binding vertex, or nullptr if they are not neighbors.
  */
 vertex* edge::has_neighbor(const edge* other) const {
     for(size_t v1 = 0; v1 < 2; ++v1) {
@@ -96,13 +96,13 @@ vertex* edge::has_neighbor(const edge* other) const {
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
 /**
  * @brief Returns whether or not an edge is valid.
- * An edge is valid if it has non-NULL vertexes.
+ * An edge is valid if it has non-nullptr vertexes.
  *
  * @return Whether it is valid.
  */
@@ -134,7 +134,7 @@ size_t edge::remove_from_sectors() {
                 break;
             }
         }
-        sectors[s] = NULL;
+        sectors[s] = nullptr;
         sector_nrs[s] = INVALID;
     }
     return e_nr;
@@ -162,7 +162,7 @@ size_t edge::remove_from_vertexes() {
                 break;
             }
         }
-        vertexes[v] = NULL;
+        vertexes[v] = nullptr;
         vertex_nrs[v] = INVALID;
     }
     return e_nr;

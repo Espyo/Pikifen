@@ -361,11 +361,11 @@ public:
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
-    size_t get_amount_of_field_pikmin(const pikmin_type* filter = NULL);
-    size_t get_amount_of_group_pikmin(const pikmin_type* filter = NULL);
-    size_t get_amount_of_idle_pikmin(const pikmin_type* filter = NULL);
-    long get_amount_of_onion_pikmin(const pikmin_type* filter = NULL);
-    long get_amount_of_total_pikmin(const pikmin_type* filter = NULL);
+    size_t get_amount_of_field_pikmin(const pikmin_type* filter = nullptr);
+    size_t get_amount_of_group_pikmin(const pikmin_type* filter = nullptr);
+    size_t get_amount_of_idle_pikmin(const pikmin_type* filter = nullptr);
+    long get_amount_of_onion_pikmin(const pikmin_type* filter = nullptr);
+    long get_amount_of_total_pikmin(const pikmin_type* filter = nullptr);
     void update_available_leaders();
     void update_closest_group_members();
     void load() override;
@@ -439,8 +439,8 @@ private:
     void do_aesthetic_leader_logic(const float delta_t);
     void do_aesthetic_logic(const float delta_t);
     void do_game_drawing(
-        ALLEGRO_BITMAP* bmp_output = NULL,
-        const ALLEGRO_TRANSFORM* bmp_transform = NULL
+        ALLEGRO_BITMAP* bmp_output = nullptr,
+        const ALLEGRO_TRANSFORM* bmp_transform = nullptr
     );
     void do_gameplay_leader_logic(const float delta_t);
     void do_gameplay_logic(const float delta_t);

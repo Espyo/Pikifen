@@ -123,7 +123,7 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 game.mouse_cursor.w_pos,
                 &items[cur_item].center,
                 &items[cur_item].size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom
             );
     }
@@ -183,7 +183,7 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 snap_point(game.mouse_cursor.w_pos),
                 &items[cur_item].center,
                 &items[cur_item].size,
-                NULL,
+                nullptr,
                 1.0f / game.cam.zoom,
                 false,
                 0.10f,

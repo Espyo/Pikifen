@@ -476,7 +476,7 @@ void draw_filled_diamond(
     vert[3].x = center.x - radius;
     vert[3].y = center.y;
     
-    al_draw_prim(vert, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+    al_draw_prim(vert, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
 }
 
 
@@ -680,7 +680,7 @@ void draw_liquid(
         }
         
         al_draw_prim(
-            av, NULL, s_ptr->texture_info.bitmap,
+            av, nullptr, s_ptr->texture_info.bitmap,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
@@ -709,14 +709,14 @@ void draw_liquid(
     }
     
     al_draw_prim(
-        av, NULL, NULL,
+        av, nullptr, nullptr,
         0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     
     //Layers 3 and 4 - Water surface texture.
     for(unsigned char l = 0; l < 2; ++l) {
     
-        sprite* anim_sprite = NULL;
+        sprite* anim_sprite = nullptr;
         float layer_2_dy = 0;
         float layer_speed[2];
         layer_speed[0] = l_ptr->surface_speed[0];
@@ -761,7 +761,7 @@ void draw_liquid(
         }
         
         al_draw_prim(
-            av, NULL, anim_sprite->bitmap,
+            av, nullptr, anim_sprite->bitmap,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
@@ -932,7 +932,7 @@ void draw_loading_screen(
         text_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            text_vertexes, NULL, game.loading_text_bmp,
+            text_vertexes, nullptr, game.loading_text_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -997,7 +997,7 @@ void draw_loading_screen(
         subtext_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            subtext_vertexes, NULL, game.loading_subtext_bmp,
+            subtext_vertexes, nullptr, game.loading_subtext_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -1182,7 +1182,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             vertexes[3].color = end_color;
             
             al_draw_prim(
-                vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+                vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
             );
             
             anchor = s;
@@ -1418,7 +1418,7 @@ void draw_sector_texture(
     if(s_ptr->is_bottomless_pit) return;
     
     unsigned char n_textures = 1;
-    sector* texture_sector[2] = {NULL, NULL};
+    sector* texture_sector[2] = {nullptr, nullptr};
     
     if(s_ptr->fade) {
         s_ptr->get_texture_merge_sectors(
@@ -1535,7 +1535,7 @@ void draw_sector_texture(
             texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
             
         al_draw_prim(
-            av, NULL, tex,
+            av, nullptr, tex,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
@@ -1824,7 +1824,7 @@ void draw_textured_box(
     }
     
     al_draw_prim(
-        vert, NULL, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        vert, nullptr, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
 }
 

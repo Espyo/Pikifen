@@ -227,7 +227,7 @@ group_info_struct::group_info_struct(mob* leader_ptr) :
 
 /**
  * @brief Sets the standby group member type to the next available one,
- * or NULL if none.
+ * or nullptr if none.
  *
  * @param move_backwards If true, go through the list backwards.
  * @return Whether it succeeded.
@@ -288,7 +288,7 @@ point group_info_struct::get_average_member_pos() const {
  * @brief Returns a list of hazards to which all of a leader's group mobs
  * are invulnerable.
  *
- * @param include_leader If not NULL, include the group leader mob.
+ * @param include_leader If not nullptr, include the group leader mob.
  * @return The list of invulnerabilities.
  */
 vector<hazard*> group_info_struct::get_group_invulnerabilities(
@@ -309,7 +309,7 @@ vector<hazard*> group_info_struct::get_group_invulnerabilities(
 
 
 /**
- * @brief Returns the next available standby group member type, or NULL if none.
+ * @brief Returns the next available standby group member type, or nullptr if none.
  *
  * @param move_backwards If true, go through the list backwards.
  * @param new_type The new type is returned here.
@@ -320,7 +320,7 @@ bool group_info_struct::get_next_standby_type(
 ) {
 
     if(members.empty()) {
-        *new_type = NULL;
+        *new_type = nullptr;
         return true;
     }
     
@@ -544,7 +544,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
                     alpha_spots[s].pos.x - radius,
                     alpha_spots[s].pos.y
                 ),
-                NULL
+                nullptr
             );
     }
     
@@ -588,7 +588,7 @@ void group_info_struct::reassign_spots() {
     
     for(size_t s = 0; s < spots.size(); ++s) {
         point spot_pos = anchor + get_spot_offset(s);
-        mob* closest_mob = NULL;
+        mob* closest_mob = nullptr;
         dist closest_dist;
         
         for(size_t m = 0; m < members.size(); ++m) {
@@ -628,7 +628,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
         point spot_pos = anchor + get_spot_offset(cur_spot);
         
         //Find the member closest to this spot.
-        mob* closest_member = NULL;
+        mob* closest_member = nullptr;
         dist closest_dist;
         for(size_t m = 0; m < members.size(); ++m) {
             mob* m_ptr = members[m];
@@ -664,7 +664,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
  * @brief Clears the information.
  */
 void hold_info_struct::clear() {
-    m = NULL;
+    m = nullptr;
     hitbox_nr = INVALID;
     offset_dist = 0;
     offset_angle = 0;
@@ -681,7 +681,7 @@ void hold_info_struct::clear() {
 point hold_info_struct::get_final_pos(float* final_z) const {
     if(!m) return point();
     
-    hitbox* h_ptr = NULL;
+    hitbox* h_ptr = nullptr;
     if(hitbox_nr != INVALID) {
         h_ptr = m->get_hitbox(hitbox_nr);
     }
@@ -742,7 +742,7 @@ path_info_struct::path_info_struct(
     result =
         get_path(
             m->pos, settings.target_point, settings,
-            path, NULL, NULL, NULL
+            path, nullptr, nullptr, nullptr
         );
 }
 
@@ -750,7 +750,7 @@ path_info_struct::path_info_struct(
 /**
  * @brief Calculates whether or not the way forward is currently blocked.
  *
- * @param reason If not NULL, the reason is returned here.
+ * @param reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
 bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
@@ -952,7 +952,7 @@ void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
  */
 void pikmin_nest_struct::tick(const float delta_t) {
     if(calling_leader && calling_leader->to_delete) {
-        calling_leader = NULL;
+        calling_leader = nullptr;
     }
     
     //Call out Pikmin, if the timer agrees.
@@ -1000,8 +1000,8 @@ void pikmin_nest_type_struct::load_properties(
     
     string pik_types_str;
     string legs_str;
-    data_node* pik_types_node = NULL;
-    data_node* legs_node = NULL;
+    data_node* pik_types_node = nullptr;
+    data_node* legs_node = nullptr;
     
     rs.set("leg_body_parts", legs_str, &legs_node);
     rs.set("pikmin_types", pik_types_str, &pik_types_node);
@@ -1108,7 +1108,7 @@ mob* create_mob(
     }
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
-        type->init_actions[a]->run(m_ptr, NULL, NULL);
+        type->init_actions[a]->run(m_ptr, nullptr, nullptr);
     }
     
     if(!vars.empty()) {
@@ -1164,7 +1164,7 @@ mob* create_mob(
         p_info->relay_statuses = child_info->relay_statuses;
         if(!child_info->limb_anim_name.empty()) {
             p_info->limb_anim.anim_db = m_ptr->anim.anim_db;
-            animation* anim_to_use = NULL;
+            animation* anim_to_use = nullptr;
             for(size_t a = 0; a < m_ptr->anim.anim_db->animations.size(); ++a) {
                 if(
                     m_ptr->anim.anim_db->animations[a]->name ==
@@ -1227,7 +1227,7 @@ mob* create_mob(
  * and such, since everything is going to be destroyed.
  */
 void delete_mob(mob* m_ptr, const bool complete_destruction) {
-    if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = NULL;
+    if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = nullptr;
     
     if(!complete_destruction) {
         m_ptr->leave_group();
@@ -1238,31 +1238,31 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                 m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
                 m2_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
                 m2_ptr->fsm.run_event(MOB_EV_FOCUS_DIED);
-                m2_ptr->focused_mob = NULL;
+                m2_ptr->focused_mob = nullptr;
             }
             if(m2_ptr->parent && m2_ptr->parent->m == m_ptr) {
                 delete m2_ptr->parent;
-                m2_ptr->parent = NULL;
+                m2_ptr->parent = nullptr;
                 m2_ptr->to_delete = true;
             }
             for(size_t f = 0; f < m2_ptr->focused_mob_memory.size(); ++f) {
                 if(m2_ptr->focused_mob_memory[f] == m_ptr) {
-                    m2_ptr->focused_mob_memory[f] = NULL;
+                    m2_ptr->focused_mob_memory[f] = nullptr;
                 }
             }
             for(size_t c = 0; c < m2_ptr->chomping_mobs.size(); ++c) {
                 if(m2_ptr->chomping_mobs[c] == m_ptr) {
-                    m2_ptr->chomping_mobs[c] = NULL;
+                    m2_ptr->chomping_mobs[c] = nullptr;
                 }
             }
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
                 if(m2_ptr->links[l] == m_ptr) {
-                    m2_ptr->links[l] = NULL;
+                    m2_ptr->links[l] = nullptr;
                 }
             }
             if(m2_ptr->stored_inside_another == m_ptr) {
                 m_ptr->release(m2_ptr);
-                m2_ptr->stored_inside_another = NULL;
+                m2_ptr->stored_inside_another = nullptr;
             }
             if(m2_ptr->carry_info) {
                 for(
@@ -1270,7 +1270,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                 ) {
                     if(m2_ptr->carry_info->spot_info[c].pik_ptr == m_ptr) {
                         m2_ptr->carry_info->spot_info[c].pik_ptr =
-                            NULL;
+                            nullptr;
                         m2_ptr->carry_info->spot_info[c].state =
                             CARRY_SPOT_FREE;
                     }
@@ -1357,7 +1357,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
  *
  * @param type Mob type that owns the children and spawn blocks.
  * @param child_info Child info to check.
- * @return The spawn info, or NULL if not found.
+ * @return The spawn info, or nullptr if not found.
  */
 mob_type::spawn_struct* get_spawn_info_from_child_info(
     mob_type* type, const mob_type::child_struct* child_info
@@ -1367,7 +1367,7 @@ mob_type::spawn_struct* get_spawn_info_from_child_info(
             return &type->spawns[s];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 

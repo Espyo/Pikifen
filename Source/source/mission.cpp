@@ -1688,7 +1688,7 @@ bool mission_goal_get_to_exit::get_end_zoom_data(
     }
     point avg_pos;
     for(size_t leader_id : gameplay->mission_remaining_mob_ids) {
-        mob* leader_ptr = NULL;
+        mob* leader_ptr = nullptr;
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
             mob* m_ptr = game.states.gameplay->mobs.all[m];
             if(m_ptr->id == leader_id) {

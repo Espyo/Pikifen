@@ -288,7 +288,7 @@ void area_editor::clear_layout_drawing() {
 void area_editor::clear_layout_moving() {
     if(pre_move_area_data) {
         forget_prepared_state(pre_move_area_data);
-        pre_move_area_data = NULL;
+        pre_move_area_data = nullptr;
     }
     pre_move_vertex_coords.clear();
     clear_selection();
@@ -303,13 +303,13 @@ void area_editor::clear_problems() {
     problem_type = EPT_NONE_YET;
     problem_title.clear();
     problem_description.clear();
-    problem_edge_intersection.e1 = NULL;
-    problem_edge_intersection.e2 = NULL;
-    problem_mob_ptr = NULL;
-    problem_path_stop_ptr = NULL;
-    problem_sector_ptr = NULL;
-    problem_shadow_ptr = NULL;
-    problem_vertex_ptr = NULL;
+    problem_edge_intersection.e1 = nullptr;
+    problem_edge_intersection.e2 = nullptr;
+    problem_mob_ptr = nullptr;
+    problem_path_stop_ptr = nullptr;
+    problem_sector_ptr = nullptr;
+    problem_shadow_ptr = nullptr;
+    problem_vertex_ptr = nullptr;
 }
 
 
@@ -327,7 +327,7 @@ void area_editor::clear_selection() {
     selected_mobs.clear();
     selected_path_stops.clear();
     selected_path_links.clear();
-    selected_shadow = NULL;
+    selected_shadow = nullptr;
     selection_homogenized = false;
     set_selection_status_text();
 }
@@ -486,7 +486,7 @@ void area_editor::create_drawing_vertexes() {
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         if(n_ptr->on_vertex) continue;
-        vertex* new_vertex = NULL;
+        vertex* new_vertex = nullptr;
         
         if(n_ptr->on_edge) {
             new_vertex = split_edge(n_ptr->on_edge, n_ptr->snapped_spot);
@@ -828,7 +828,7 @@ void area_editor::do_sector_split() {
     
     //The new sector is created, but only its outer edges exist.
     //Triangulate these so we can check what's inside.
-    triangulate_sector(new_sector, NULL, false);
+    triangulate_sector(new_sector, nullptr, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed. Since we're only checking from the edges
@@ -962,7 +962,7 @@ void area_editor::finish_circle_sector() {
         layout_drawing_node n;
         n.raw_spot = new_circle_sector_points[p];
         n.snapped_spot = n.raw_spot;
-        n.on_sector = get_sector(n.raw_spot, NULL, false);
+        n.on_sector = get_sector(n.raw_spot, nullptr, false);
         drawing_nodes.push_back(n);
     }
     finish_new_sector_drawing();
@@ -1011,7 +1011,7 @@ void area_editor::finish_layout_moving() {
         }
         );
         
-        vertex* merge_v = NULL;
+        vertex* merge_v = nullptr;
         if(!merge_vertexes.empty()) {
             merge_v = merge_vertexes[0].second;
         }
@@ -1020,7 +1020,7 @@ void area_editor::finish_layout_moving() {
             merges[v] = merge_v;
             
         } else {
-            edge* e_ptr = NULL;
+            edge* e_ptr = nullptr;
             bool e_ptr_v1_selected = false;
             bool e_ptr_v2_selected = false;
             
@@ -1035,7 +1035,7 @@ void area_editor::finish_layout_moving() {
                         selected_vertexes.end();
                 }
             } while(
-                e_ptr != NULL &&
+                e_ptr != nullptr &&
                 (
                     v->has_edge(e_ptr) ||
                     e_ptr_v1_selected || e_ptr_v2_selected
@@ -1085,7 +1085,7 @@ void area_editor::finish_layout_moving() {
         }
         if(is_merge_target) continue;
         
-        edge* e_ptr = NULL;
+        edge* e_ptr = nullptr;
         bool valid = true;
         do {
             e_ptr = get_edge_under_point(p, e_ptr);
@@ -1143,7 +1143,7 @@ void area_editor::finish_layout_moving() {
     if(!intersections.empty()) {
         cancel_layout_moving();
         forget_prepared_state(pre_move_area_data);
-        pre_move_area_data = NULL;
+        pre_move_area_data = nullptr;
         set_status("That move would cause edges to intersect!", true);
         return;
     }
@@ -1154,14 +1154,14 @@ void area_editor::finish_layout_moving() {
     //unable to use it for the second merge. There are no plans to support
     //this complex corner case, so abort!
     for(auto &m : merges) {
-        vertex* crushed_vertex = NULL;
+        vertex* crushed_vertex = nullptr;
         if(m.first->is_2nd_degree_neighbor(m.second, &crushed_vertex)) {
         
             for(auto const &m2 : merges) {
                 if(m2.second == crushed_vertex) {
                     cancel_layout_moving();
                     forget_prepared_state(pre_move_area_data);
-                    pre_move_area_data = NULL;
+                    pre_move_area_data = nullptr;
                     set_status(
                         "That move would crush an edge that's in the middle!",
                         true
@@ -1199,7 +1199,7 @@ void area_editor::finish_layout_moving() {
     update_affected_sectors(affected_sectors);
     
     register_change("vertex movement", pre_move_area_data);
-    pre_move_area_data = NULL;
+    pre_move_area_data = nullptr;
     clear_layout_moving();
 }
 
@@ -1217,7 +1217,7 @@ void area_editor::finish_new_sector_drawing() {
     //vertexes provided by the user, as a "child" of an existing sector.
     
     //Get the outer sector, so we can know where to start working in.
-    sector* outer_sector = NULL;
+    sector* outer_sector = nullptr;
     if(!get_drawing_outer_sector(&outer_sector)) {
         //Something went wrong. Abort.
         cancel_layout_drawing();
@@ -1234,7 +1234,7 @@ void area_editor::finish_new_sector_drawing() {
     } else {
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
-            if(e_ptr->sectors[0] == NULL || e_ptr->sectors[1] == NULL) {
+            if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 outer_sector_old_edges.push_back(e_ptr);
             }
         }
@@ -1294,7 +1294,7 @@ void area_editor::finish_new_sector_drawing() {
     
     //The new sector is created, but only its outer edges exist.
     //Triangulate these so we can check what's inside.
-    triangulate_sector(new_sector, NULL, false);
+    triangulate_sector(new_sector, nullptr, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
@@ -1358,8 +1358,8 @@ void area_editor::get_hovered_layout_element(
     vertex** hovered_vertex, edge** hovered_edge, sector** hovered_sector
 ) const {
     *hovered_vertex = get_vertex_under_point(game.mouse_cursor.w_pos);
-    *hovered_edge = NULL;
-    *hovered_sector = NULL;
+    *hovered_edge = nullptr;
+    *hovered_sector = nullptr;
     
     if(*hovered_vertex) return;
     
@@ -1792,9 +1792,9 @@ void area_editor::load() {
     is_ctrl_pressed = false;
     is_shift_pressed = false;
     last_mob_custom_cat_name.clear();
-    last_mob_type = NULL;
+    last_mob_type = nullptr;
     loaded_content_yet = false;
-    selected_shadow = NULL;
+    selected_shadow = nullptr;
     selection_effect = 0.0;
     selection_homogenized = false;
     show_closest_stop = false;
@@ -2033,7 +2033,7 @@ void area_editor::pick_area(
 void area_editor::pick_texture(
     const string &name, const string &category, const bool is_new
 ) {
-    sector* s_ptr = NULL;
+    sector* s_ptr = nullptr;
     string final_name = name;
     if(selected_sectors.size() == 1 || selection_homogenized) {
         s_ptr = *selected_sectors.begin();
@@ -2332,7 +2332,7 @@ void area_editor::press_new_path_button() {
     }
     
     clear_selection();
-    path_drawing_stop_1 = NULL;
+    path_drawing_stop_1 = nullptr;
     set_status("Use the canvas to draw a path.");
     sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
 }
@@ -2613,7 +2613,7 @@ void area_editor::press_remove_tree_shadow_button() {
                     game.cur_area_data.tree_shadows.begin() + s
                 );
                 delete selected_shadow;
-                selected_shadow = NULL;
+                selected_shadow = nullptr;
                 break;
             }
         }
@@ -2972,7 +2972,7 @@ void area_editor::register_change(
  * @brief Removes the current area thumbnail, if any.
  */
 void area_editor::remove_thumbnail() {
-    game.cur_area_data.thumbnail = NULL;
+    game.cur_area_data.thumbnail = nullptr;
 }
 
 
@@ -3701,7 +3701,7 @@ bool area_editor::save_area(const bool to_backup) {
     
     if(!geo_save_ok || !data_save_ok) {
         show_message_box(
-            NULL, "Save failed!",
+            nullptr, "Save failed!",
             "Could not save the area!",
             (
                 "An error occured while saving the area to the folder \"" +
@@ -3710,7 +3710,7 @@ bool area_editor::save_area(const bool to_backup) {
                 "Make sure that the folder exists and it is not read-only, "
                 "and try again."
             ).c_str(),
-            NULL,
+            nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
         
@@ -3945,7 +3945,7 @@ void area_editor::set_new_circle_sector_points() {
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     ),
                     new_circle_sector_points[p], next,
-                    NULL, NULL
+                    nullptr, nullptr
                 )
             ) {
                 valid = false;
@@ -4104,7 +4104,7 @@ void area_editor::setup_sector_split() {
     } else {
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
-            if(e_ptr->sectors[0] == NULL || e_ptr->sectors[1] == NULL) {
+            if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 sector_split_info.working_sector_old_edges.push_back(e_ptr);
             }
         }
@@ -4121,7 +4121,7 @@ void area_editor::setup_sector_split() {
 void area_editor::start_mob_move() {
     register_change("object movement");
     
-    move_closest_mob = NULL;
+    move_closest_mob = nullptr;
     dist move_closest_mob_dist;
     for(auto const &m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
@@ -4145,7 +4145,7 @@ void area_editor::start_mob_move() {
 void area_editor::start_path_stop_move() {
     register_change("path stop movement");
     
-    move_closest_stop = NULL;
+    move_closest_stop = nullptr;
     dist move_closest_stop_dist;
     for(
         auto s = selected_path_stops.begin();
@@ -4172,7 +4172,7 @@ void area_editor::start_path_stop_move() {
 void area_editor::start_vertex_move() {
     pre_move_area_data = prepare_state();
     
-    move_closest_vertex = NULL;
+    move_closest_vertex = nullptr;
     dist move_closest_vertex_dist;
     for(auto const &v : selected_vertexes) {
         point p(v->x, v->y);
@@ -4225,22 +4225,22 @@ void area_editor::traverse_sector_for_split(
     vector<edge*>* edges, vector<vertex*>* vertexes,
     bool* working_sector_left
 ) {
-    edge* first_e_ptr = NULL;
+    edge* first_e_ptr = nullptr;
     unsigned char first_edge_visits = 0;
     
     for(unsigned char s = 0; s < 2; ++s) {
         vertex* v_ptr = begin;
-        vertex* prev_v_ptr = NULL;
+        vertex* prev_v_ptr = nullptr;
         float prev_e_angle = TAU / 2.0f;
         
         while(true) {
-            edge* next_e_ptr = NULL;
+            edge* next_e_ptr = nullptr;
             float next_e_angle = 0.0f;
-            vertex* next_v_ptr = NULL;
+            vertex* next_v_ptr = nullptr;
             
             find_trace_edge(
                 v_ptr, prev_v_ptr, s_ptr, prev_e_angle, s == 0,
-                &next_e_ptr, &next_e_angle, &next_v_ptr, NULL
+                &next_e_ptr, &next_e_angle, &next_v_ptr, nullptr
             );
             
             if(!next_e_ptr) {
@@ -4345,19 +4345,19 @@ void area_editor::unload() {
     
     if(copy_buffer_sector) {
         delete copy_buffer_sector;
-        copy_buffer_sector = NULL;
+        copy_buffer_sector = nullptr;
     }
     if(copy_buffer_edge) {
         delete copy_buffer_edge;
-        copy_buffer_edge = NULL;
+        copy_buffer_edge = nullptr;
     }
     if(copy_buffer_mob) {
         delete copy_buffer_mob;
-        copy_buffer_mob = NULL;
+        copy_buffer_mob = nullptr;
     }
     if(copy_buffer_path_link) {
         delete copy_buffer_path_link;
-        copy_buffer_path_link = NULL;
+        copy_buffer_path_link = nullptr;
     }
     
     clear_current_area();
@@ -4447,11 +4447,11 @@ void area_editor::update_reference() {
     if(reference_bitmap && reference_bitmap != game.bmp_error) {
         al_destroy_bitmap(reference_bitmap);
     }
-    reference_bitmap = NULL;
+    reference_bitmap = nullptr;
     
     if(!reference_file_name.empty()) {
         reference_bitmap =
-            load_bmp(reference_file_name, NULL, false, true, true, true);
+            load_bmp(reference_file_name, nullptr, false, true, true, true);
             
         if(
             reference_size.x == 0 ||
@@ -4631,10 +4631,10 @@ area_editor::layout_drawing_node::layout_drawing_node() {
 area_editor::texture_suggestion::texture_suggestion(
     const string &n
 ) :
-    bmp(NULL),
+    bmp(nullptr),
     name(n) {
     
-    bmp = game.textures.get(name, NULL, false);
+    bmp = game.textures.get(name, nullptr, false);
 }
 
 

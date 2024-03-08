@@ -276,7 +276,7 @@ void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
  * @brief Returns the specified bitmap, by name.
  *
  * @param name Name of the bitmap to get.
- * @param node If not NULL, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The bitmap.
  */
@@ -766,9 +766,9 @@ void maker_tools_info::reset_for_gameplay() {
     geometry_info = false;
     hitboxes = false;
     hud = true;
-    info_lock = NULL;
-    last_pikmin_type = NULL;
-    path_info = NULL;
+    info_lock = nullptr;
+    last_pikmin_type = nullptr;
+    path_info = false;
     used_helping_tools = false;
 }
 
@@ -1348,8 +1348,8 @@ reader_setter::reader_setter(data_node* dn) :
  *
  * @param child Name of the child node.
  * @param var The var to set. This is an Allegro color.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1360,7 +1360,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2c(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1371,8 +1371,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is a string.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1383,7 +1383,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = n->value;
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1394,8 +1394,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is an integer.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1406,7 +1406,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1417,8 +1417,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is an integer.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1429,7 +1429,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1440,8 +1440,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is an unsigned integer.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1452,7 +1452,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1463,8 +1463,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is an unsigned char.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1475,7 +1475,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1486,8 +1486,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is a boolean.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1498,7 +1498,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2b(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1509,8 +1509,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is a float.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1521,7 +1521,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2f(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1532,8 +1532,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is a double.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1544,7 +1544,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2f(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1555,8 +1555,8 @@ void reader_setter::set(
  *
  * @param child Name of the child node.
  * @param var The var to set. This is a point.
- * @param child_node If not-NULL, the node from whence the value came
- * is placed here. NULL is placed if the property does not exist or has
+ * @param child_node If not-nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void reader_setter::set(
@@ -1567,7 +1567,7 @@ void reader_setter::set(
         if(child_node) *child_node = n;
         var = s2p(n->value);
     } else {
-        if(child_node) *child_node = NULL;
+        if(child_node) *child_node = nullptr;
     }
 }
 
@@ -1757,7 +1757,7 @@ subgroup_type* subgroup_type_manager::get_next_type(
             return get_next_in_vector(types, t);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1775,7 +1775,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
             return get_prev_in_vector(types, t);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1785,7 +1785,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
  * @param category The category of subgroup type. Pikmin, leader,
  * bomb-rock, etc.
  * @param specific_type Specific type of mob, if you want to specify further.
- * @return The type, or NULL if not found.
+ * @return The type, or nullptr if not found.
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
@@ -1800,7 +1800,7 @@ subgroup_type* subgroup_type_manager::get_type(
             return t_ptr;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1810,7 +1810,7 @@ subgroup_type* subgroup_type_manager::get_type(
  * @param category The category of subgroup type. Pikmin, leader,
  * bomb-rock, etc.
  * @param specific_type Specific type of mob, if you want to specify further.
- * @param icon If not NULL, use this icon to represent this subgroup.
+ * @param icon If not nullptr, use this icon to represent this subgroup.
  */
 void subgroup_type_manager::register_type(
     const SUBGROUP_TYPE_CATEGORIES category,

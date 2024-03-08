@@ -175,7 +175,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             game.mouse_cursor.w_pos,
                             &cur_hitbox->pos,
                             &hitbox_size,
-                            NULL,
+                            nullptr,
                             1.0f / game.cam.zoom
                         );
                 } else {
@@ -191,7 +191,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             game.mouse_cursor.w_pos,
                             &hitbox_center,
                             &hitbox_size,
-                            NULL,
+                            nullptr,
                             1.0f / game.cam.zoom
                         );
                 }
@@ -231,7 +231,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
                 
                 if(clicked_hitboxes.empty()) {
-                    cur_hitbox = NULL;
+                    cur_hitbox = nullptr;
                     cur_hitbox_nr = INVALID;
                     
                 } else {
@@ -387,7 +387,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         game.mouse_cursor.w_pos,
                         &cur_hitbox->pos,
                         &hitbox_size,
-                        NULL,
+                        nullptr,
                         1.0f / game.cam.zoom,
                         true,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
@@ -407,7 +407,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         game.mouse_cursor.w_pos,
                         &hitbox_center,
                         &hitbox_size,
-                        NULL,
+                        nullptr,
                         1.0f / game.cam.zoom,
                         false,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,

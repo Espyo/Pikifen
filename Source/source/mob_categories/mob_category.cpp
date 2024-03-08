@@ -62,14 +62,14 @@ void mob_category_manager::clear() {
  * type of that name.
  *
  * @param name Name of the mob type.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
 mob_type* mob_category_manager::find_mob_type(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         mob_type* t = categories[n]->get_type(name);
         if(t) return t;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -89,7 +89,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
         mob_type* mt = cat->get_type(types[t]);
         if(mt->folder_name == name) return mt;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -97,10 +97,10 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
  * @brief Returns a category given its ID.
  *
  * @param id ID of the category.
- * @return The category, or NULL on error.
+ * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get(const MOB_CATEGORIES id) const {
-    if(id >= categories.size()) return NULL;
+    if(id >= categories.size()) return nullptr;
     return categories[id];
 }
 
@@ -109,7 +109,7 @@ mob_category* mob_category_manager::get(const MOB_CATEGORIES id) const {
  * @brief Returns a category given its folder name.
  *
  * @param name Name of the folder.
- * @return The category, or NULL on error.
+ * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get_from_folder_name(
     const string &name
@@ -120,7 +120,7 @@ mob_category* mob_category_manager::get_from_folder_name(
     game.errors.report(
         "Mob category with the folder name \"" + name + "\" not found!"
     );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -128,13 +128,13 @@ mob_category* mob_category_manager::get_from_folder_name(
  * @brief Returns a category given its name.
  *
  * @param name Name of the category.
- * @return The category, or NULL on error.
+ * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get_from_name(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->name == name) return categories[n];
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -142,13 +142,13 @@ mob_category* mob_category_manager::get_from_name(const string &name) const {
  * @brief Returns a category given its plural name.
  *
  * @param pname Plural name of the category.
- * @return The category, or NULL on error.
+ * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get_from_pname(const string &pname) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->plural_name == pname) return categories[n];
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -166,7 +166,7 @@ void mob_category_manager::register_category(
         categories.insert(
             categories.end(),
             (nr + 1) - categories.size(),
-            NULL
+            nullptr
         );
     }
     categories[nr] = category;
@@ -202,7 +202,7 @@ void none_category::clear_types() { }
  */
 mob* none_category::create_mob(
     const point &pos, mob_type* type, const float angle
-) { return NULL; }
+) { return nullptr; }
 
 
 /**
@@ -210,7 +210,7 @@ mob* none_category::create_mob(
  *
  * @return The type.
  */
-mob_type* none_category::create_type() { return NULL; }
+mob_type* none_category::create_type() { return nullptr; }
 
 
 /**
@@ -225,9 +225,9 @@ void none_category::erase_mob(mob* m) { }
  * @brief Returns a type of mob given its name.
  *
  * @param name Name of the mob type to get.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
-mob_type* none_category::get_type(const string &name) const { return NULL; }
+mob_type* none_category::get_type(const string &name) const { return nullptr; }
 
 
 /**

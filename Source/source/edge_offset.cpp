@@ -134,7 +134,7 @@ void draw_edge_offset_on_buffer(
     }
     
     //Draw the "rectangle"!
-    al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+    al_draw_prim(av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
     
     if(n_elbow_tris[0] == 0 && n_elbow_tris[1] == 0) {
         //If we don't need to draw elbows, we can quit now.
@@ -172,7 +172,7 @@ void draw_edge_offset_on_buffer(
     for(unsigned char e = 0; e < 2; ++e) {
         if(n_elbow_tris[e] == 0) continue;
         al_draw_prim(
-            elbow_av[e], NULL, NULL, 0,
+            elbow_av[e], nullptr, nullptr, 0,
             n_elbow_tris[e] + 2,
             ALLEGRO_PRIM_TRIANGLE_FAN
         );
@@ -217,7 +217,7 @@ void draw_sector_edge_offsets(
     }
     
     al_draw_prim(
-        av, NULL, buffer,
+        av, nullptr, buffer,
         0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     
@@ -271,10 +271,10 @@ void get_edge_offset_edge_info(
     base_effect_angle = normalize_angle(base_effect_angle);
     bool edge_effect_cw = end_idx == 1;
     
-    edge* next_edge = NULL;
+    edge* next_edge = nullptr;
     float next_edge_angle = 0.0f;
     float next_edge_diff = 0.0f;
-    edge* next_eff_edge = NULL;
+    edge* next_eff_edge = nullptr;
     float next_eff_edge_angle = 0.0f;
     float next_eff_edge_diff = 0.0f;
     bool next_eff_edge_effect_cw = false;
@@ -470,7 +470,7 @@ void get_edge_offset_intersection(
         lines_intersect(
             effect1_p0, effect1_p1,
             effect2_p0, effect2_p1,
-            &r, NULL
+            &r, nullptr
         )
     ) {
         //Clamp r to prevent long, close edges from
@@ -502,7 +502,7 @@ void get_edge_offset_intersection(
  * @param clockwise True to check in a clockwise direction,
  * false for counter-clockwise.
  * @param ignore Edge to ignore while checking, if any.
- * @param final_edge The found edge is returned here, or NULL.
+ * @param final_edge The found edge is returned here, or nullptr.
  * @param final_angle Angle of the found edge.
  * @param final_diff Difference in angle between the two.
  */
@@ -510,7 +510,7 @@ void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
     const edge* ignore, edge** final_edge, float* final_angle, float* final_diff
 ) {
-    edge* best_edge = NULL;
+    edge* best_edge = nullptr;
     float best_edge_diff = 0.0f;
     float best_edge_angle = 0.0f;
     
@@ -558,7 +558,7 @@ void get_next_edge(
  * @param ignore Edge to ignore while checking, if any.
  * @param edge_checker Function that returns whether or not a given edge
  * should use the effect.
- * @param final_edge The found edge is returned here, or NULL.
+ * @param final_edge The found edge is returned here, or nullptr.
  * @param final_angle Angle of the found edge.
  * @param final_diff Difference in angle between the two.
  * @param final_base_effect_angle The base effect angle of the found edge.
@@ -571,7 +571,7 @@ void get_next_offset_effect_edge(
     float* final_base_effect_angle,
     bool* final_effect_cw
 ) {
-    edge* best_edge = NULL;
+    edge* best_edge = nullptr;
     float best_edge_diff = 0;
     float best_edge_angle = 0;
     bool best_edge_effect_cw = false;
@@ -726,8 +726,8 @@ void update_offset_effect_caches (
     for(size_t e : edges_to_update) {
         edge* e_ptr = game.cur_area_data.edges[e];
         
-        sector* unaffected_sector = NULL;
-        sector* affected_sector = NULL;
+        sector* unaffected_sector = nullptr;
+        sector* affected_sector = nullptr;
         
         if(!checker(e_ptr, &affected_sector, &unaffected_sector)) {
             //This edge doesn't get the effect.

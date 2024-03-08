@@ -119,7 +119,7 @@ void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
  */
 void animation_editor::change_state(const EDITOR_STATES new_state) {
     comparison = false;
-    comparison_sprite = NULL;
+    comparison_sprite = nullptr;
     state = new_state;
     set_status();
 }
@@ -410,7 +410,7 @@ void animation_editor::load() {
     game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
     
     if(!auto_load_anim.empty()) {
-        loaded_mob_type = NULL;
+        loaded_mob_type = nullptr;
         file_path = auto_load_anim;
         load_animation_database(true);
     } else {
@@ -446,10 +446,10 @@ void animation_editor::load_animation_database(
     anims = load_animation_database_from_file(&file);
     
     anim_playing = false;
-    cur_anim = NULL;
-    cur_sprite = NULL;
+    cur_anim = nullptr;
+    cur_sprite = nullptr;
     cur_frame_nr = INVALID;
-    cur_hitbox = NULL;
+    cur_hitbox = nullptr;
     cur_hitbox_nr = 0;
     
     animation_exists_on_disk = true;
@@ -510,7 +510,7 @@ void animation_editor::load_animation_database(
     for(unsigned char t = 0; t < N_MATURITIES; ++t) {
         if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
             al_destroy_bitmap(top_bmp[t]);
-            top_bmp[t] = NULL;
+            top_bmp[t] = nullptr;
         }
     }
     
@@ -1264,14 +1264,14 @@ bool animation_editor::save_animation_database() {
     
     if(!file_node.save_file(file_path)) {
         show_message_box(
-            NULL, "Save failed!",
+            nullptr, "Save failed!",
             "Could not save the animation!",
             (
                 "An error occured while saving the animation to the file \"" +
                 file_path + "\". Make sure that the folder it is saving to "
                 "exists and it is not read-only, and try again."
             ).c_str(),
-            NULL,
+            nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
         set_status("Could not save the animation file!", true);
@@ -1556,7 +1556,7 @@ void animation_editor::unload() {
  */
 void animation_editor::update_cur_hitbox() {
     if(cur_sprite->hitboxes.empty()) {
-        cur_hitbox = NULL;
+        cur_hitbox = nullptr;
         cur_hitbox_nr = INVALID;
         return;
     }
@@ -1610,7 +1610,7 @@ void animation_editor::update_hitboxes() {
             if(!hitbox_found) {
                 s_ptr->hitboxes.push_back(
                     hitbox(
-                        name, INVALID, NULL, point(), 0,
+                        name, INVALID, nullptr, point(), 0,
                         loaded_mob_type ? loaded_mob_type->height : 128,
                         loaded_mob_type ? loaded_mob_type->radius : 32
                     )

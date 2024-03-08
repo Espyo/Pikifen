@@ -485,7 +485,7 @@ hud_struct::hud_struct() :
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         if(!l_ptr || !l_ptr->group) return;
         
-        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
+        ALLEGRO_BITMAP* standby_mat_bmp = nullptr;
         mob* closest =
             game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
             
@@ -1249,8 +1249,8 @@ hud_struct::hud_struct() :
                 al_map_rgb(79, 172, 153)         //Platinum.
             };
             ALLEGRO_BITMAP* seg_icons[] = {
-                NULL,
-                NULL,
+                nullptr,
+                nullptr,
                 game.sys_assets.bmp_medal_bronze,
                 game.sys_assets.bmp_medal_silver,
                 game.sys_assets.bmp_medal_gold,
@@ -1291,7 +1291,7 @@ hud_struct::hud_struct() :
                 vertexes[3].y = center.y - size.y / 2.0f;
                 vertexes[3].color = seg_colors_top[s];
                 al_draw_prim(
-                    vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                    vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
             
@@ -1754,7 +1754,7 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
 void hud_struct::tick(const float delta_t) {
     //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
-        leader* l_ptr = NULL;
+        leader* l_ptr = nullptr;
         if(l < game.states.gameplay->available_leaders.size()) {
             size_t l_idx =
                 (size_t) sum_and_wrap(
@@ -1766,7 +1766,7 @@ void hud_struct::tick(const float delta_t) {
         }
         
         leader_icon_bubble icon;
-        icon.bmp = NULL;
+        icon.bmp = nullptr;
         icon.color = COLOR_EMPTY;
         if(l_ptr) {
             icon.bmp = l_ptr->lea_type->bmp_icon;
@@ -1790,10 +1790,10 @@ void hud_struct::tick(const float delta_t) {
     //Update standby bubbles.
     for(unsigned char s = 0; s < 3; ++s) {
     
-        ALLEGRO_BITMAP* icon = NULL;
+        ALLEGRO_BITMAP* icon = nullptr;
         leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
         mob* member = game.states.gameplay->closest_group_member[s];
-        subgroup_type* type = NULL;
+        subgroup_type* type = nullptr;
         
         if(cur_leader_ptr) {
             switch(s) {
@@ -1857,9 +1857,9 @@ void hud_struct::tick(const float delta_t) {
     }
     spray_icon_mgr.update(
         BUBBLE_CURRENT,
-        top_spray_idx == INVALID ? NULL :
+        top_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[top_spray_idx],
-        top_spray_idx == INVALID ? NULL :
+        top_spray_idx == INVALID ? nullptr :
         game.spray_types[top_spray_idx].bmp_spray
     );
     
@@ -1874,9 +1874,9 @@ void hud_struct::tick(const float delta_t) {
     }
     spray_icon_mgr.update(
         BUBBLE_PREVIOUS,
-        prev_spray_idx == INVALID ? NULL :
+        prev_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[prev_spray_idx],
-        prev_spray_idx == INVALID ? NULL :
+        prev_spray_idx == INVALID ? nullptr :
         game.spray_types[prev_spray_idx].bmp_spray
     );
     
@@ -1891,9 +1891,9 @@ void hud_struct::tick(const float delta_t) {
     }
     spray_icon_mgr.update(
         BUBBLE_NEXT,
-        next_spray_idx == INVALID ? NULL :
+        next_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[next_spray_idx],
-        next_spray_idx == INVALID ? NULL :
+        next_spray_idx == INVALID ? nullptr :
         game.spray_types[next_spray_idx].bmp_spray
     );
     

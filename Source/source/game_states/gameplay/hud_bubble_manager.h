@@ -84,7 +84,7 @@ public:
          * 
          * @param bubble The bubble GUI item.
          */
-        explicit bubble_info(gui_item* bubble = NULL) :
+        explicit bubble_info(gui_item* bubble = nullptr) :
             bubble(bubble) {
         }
         
@@ -148,7 +148,7 @@ public:
         }
         
         typename map<size_t, bubble_info>::iterator match_it;
-        gui_item* match_ptr = NULL;
+        gui_item* match_ptr = nullptr;
         point match_pos;
         point match_size;
         
@@ -189,7 +189,7 @@ public:
                     match_ptr, &match_pos, &match_size
                 )
             ) {
-                match_ptr = NULL;
+                match_ptr = nullptr;
             }
         }
         

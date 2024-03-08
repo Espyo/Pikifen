@@ -299,7 +299,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
         speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
         speed.y = sin(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
         speed_z = MOB::KNOCKBACK_V_POWER;
-        face(get_angle(speed) + TAU / 2, NULL);
+        face(get_angle(speed) + TAU / 2, nullptr);
         start_height_effect();
     }
 }
@@ -480,7 +480,7 @@ void mob::arachnorb_head_turn_logic() {
         angle_deviation_avg += angle_deviation;
     }
     
-    face(angle + (angle_deviation_avg / n_feet), NULL);
+    face(angle + (angle_deviation_avg / n_feet), nullptr);
 }
 
 
@@ -579,7 +579,7 @@ void mob::become_uncarriable() {
     stop_chasing();
     
     delete carry_info;
-    carry_info = NULL;
+    carry_info = nullptr;
 }
 
 
@@ -601,7 +601,7 @@ bool mob::calculate_carrying_destination(
     mob* added, mob* removed,
     pikmin_type** target_type, mob** target_mob, point* target_point
 ) const {
-    *target_mob = NULL;
+    *target_mob = nullptr;
     *target_point = pos;
     if(!carry_info) return false;
     
@@ -609,7 +609,7 @@ bool mob::calculate_carrying_destination(
     case CARRY_DESTINATION_SHIP: {
 
         //Go to the nearest ship.
-        ship* closest_ship = NULL;
+        ship* closest_ship = nullptr;
         dist closest_ship_dist;
         
         for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
@@ -699,7 +699,7 @@ bool mob::calculate_carrying_destination(
     } case CARRY_DESTINATION_LINKED_MOB: {
 
         //If it's towards a linked mob, just go to the closest one.
-        mob* closest_link = NULL;
+        mob* closest_link = nullptr;
         dist closest_link_dist;
         
         for(size_t s = 0; s < links.size(); ++s) {
@@ -1026,7 +1026,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
 /**
  * @brief Sets a target for the mob to follow.
  *
- * @param orig_coords Pointer to changing coordinates. If NULL, it is
+ * @param orig_coords Pointer to changing coordinates. If nullptr, it is
  * the world origin. Use this to make the mob follow another mob
  * wherever they go, for instance.
  * @param orig_z Same as orig_coords, but for the Z coordinate.
@@ -1085,7 +1085,7 @@ void mob::chase(
     const float target_distance, const float speed, const float acceleration
 ) {
     chase(
-        NULL, NULL, coords, coords_z,
+        nullptr, nullptr, coords, coords_z,
         flags, target_distance, speed, acceleration
     );
 }
@@ -1127,7 +1127,7 @@ void mob::chomp(mob* m, const hitbox* hitbox_info) {
 /**
  * @brief Makes the mob start circling around a point or another mob.
  *
- * @param m The mob to circle around. If NULL, circle around a point instead.
+ * @param m The mob to circle around. If nullptr, circle around a point instead.
  * @param p The point to circle around, if any.
  * @param radius Circle these many units around the target.
  * @param clockwise Circle clockwise or counter-clockwise?
@@ -1172,7 +1172,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
     
     //Count how many of each type there are carrying.
     for(size_t p = 0; p < type->max_carriers; ++p) {
-        pikmin* pik_ptr = NULL;
+        pikmin* pik_ptr = nullptr;
         
         if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
         
@@ -1209,7 +1209,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
         }
     }
     
-    pikmin_type* decided_type = NULL;
+    pikmin_type* decided_type = nullptr;
     
     //Now let's pick an Pikmin type from the candidates.
     if(majority_types.size() == 1) {
@@ -1290,7 +1290,7 @@ void mob::delete_old_status_effects() {
     }
     
     if(removed_forced_sprite) {
-        forced_sprite = NULL;
+        forced_sprite = nullptr;
     }
     
     //Update some flags.
@@ -1488,7 +1488,7 @@ void mob::draw_mob() {
  * @brief Makes a mob intend to face a new angle, or face there right away.
  *
  * @param new_angle Face this angle.
- * @param new_pos If this is not NULL, turn towards this point every frame,
+ * @param new_pos If this is not nullptr, turn towards this point every frame,
  * instead.
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
@@ -1549,7 +1549,7 @@ bool mob::follow_path(
     const float speed, const float acceleration
 ) {
     bool was_blocked = false;
-    path_stop* old_next_stop = NULL;
+    path_stop* old_next_stop = nullptr;
     
     //Some setup before we begin.
     if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
@@ -1684,7 +1684,7 @@ float mob::get_base_speed() const {
 /**
  * @brief Returns the actual location of the movement target.
  *
- * @param z If not NULL, the Z coordinate is returned here.
+ * @param z If not nullptr, the Z coordinate is returned here.
  * @return The (X and Y) coordinates of the target.
  */
 point mob::get_chase_target(float* z) const {
@@ -1711,8 +1711,8 @@ hitbox* mob::get_closest_hitbox(
     const point &p, const size_t h_type, dist* d
 ) const {
     sprite* s = get_cur_sprite();
-    if(!s) return NULL;
-    hitbox* closest_hitbox = NULL;
+    if(!s) return nullptr;
+    hitbox* closest_hitbox = nullptr;
     float closest_hitbox_dist = 0;
     
     for(size_t h = 0; h < s->hitboxes.size(); ++h) {
@@ -1723,7 +1723,7 @@ hitbox* mob::get_closest_hitbox(
             dist(
                 h_ptr->get_cur_pos(pos, angle_cos, angle_sin), p
             ).to_float() - h_ptr->radius;
-        if(closest_hitbox == NULL || this_d < closest_hitbox_dist) {
+        if(closest_hitbox == nullptr || this_d < closest_hitbox_dist) {
             closest_hitbox_dist = this_d;
             closest_hitbox = h_ptr;
         }
@@ -1756,7 +1756,7 @@ sprite* mob::get_cur_sprite() const {
  * @param m2_ptr Pointer to the mob to check.
  * @param regular_distance_cache If the regular distance had already been
  * calculated, specify it here. This should help with performance.
- * Otherwise, use NULL.
+ * Otherwise, use nullptr.
  * @return The distance.
  */
 dist mob::get_distance_between(
@@ -1881,8 +1881,8 @@ mob_type::vulnerability_struct mob::get_hazard_vulnerability(
  */
 hitbox* mob::get_hitbox(const size_t nr) const {
     sprite* s = get_cur_sprite();
-    if(!s) return NULL;
-    if(s->hitboxes.empty()) return NULL;
+    if(!s) return nullptr;
+    if(s->hitboxes.empty()) return nullptr;
     return &s->hitboxes[nr];
 }
 
@@ -2303,11 +2303,11 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
         status_type* t = this->statuses[st].type;
         if(t->overlay_animation.empty()) continue;
         sprite* sp = t->overlay_anim_instance.get_cur_sprite();
-        if(!sp) return NULL;
+        if(!sp) return nullptr;
         *bmp_scale = t->overlay_anim_mob_scale;
         return sp->bitmap;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -2400,7 +2400,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
                 circle_intersects_line_seg(
                     m_ptr->pos, m_ptr->radius,
                     pos, target_mob->pos,
-                    NULL, NULL
+                    nullptr, nullptr
                 )
             ) {
                 return false;
@@ -2575,7 +2575,7 @@ void mob::leave_group() {
     
     group_leader->group->change_standby_type_if_needed();
     
-    following_group = NULL;
+    following_group = nullptr;
     
     game.states.gameplay->update_closest_group_members();
 }
@@ -2607,7 +2607,7 @@ void mob::move_to_path_end(const float speed, const float acceleration) {
     } else {
         chase(
             path_info->settings.target_point,
-            get_sector(path_info->settings.target_point, NULL, true)->z,
+            get_sector(path_info->settings.target_point, nullptr, true)->z,
             CHASE_FLAG_ANY_ANGLE,
             path_info->settings.final_target_distance,
             speed, acceleration
@@ -2697,7 +2697,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
             game.errors.report(
                 "Unknown team name \"" + team_var +
                 "\", when trying to create mob (" +
-                get_error_message_mob_info(this) + ")!", NULL
+                get_error_message_mob_info(this) + ")!", nullptr
             );
         } else {
             team = team_nr;
@@ -2760,7 +2760,7 @@ void mob::release_stored_mobs() {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(m_ptr->stored_inside_another == this) {
             release(m_ptr);
-            m_ptr->stored_inside_another = NULL;
+            m_ptr->stored_inside_another = nullptr;
             m_ptr->time_alive = 0.0f;
             float a = randomf(0, TAU);
             const float momentum = 100;
@@ -2793,7 +2793,7 @@ void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id) {
  */
 void mob::respawn() {
     pos = home;
-    center_sector = get_sector(pos, NULL, true);
+    center_sector = get_sector(pos, nullptr, true);
     ground_sector = center_sector;
     z = center_sector->z + 100;
 }
@@ -2987,8 +2987,8 @@ void mob::set_var(const string &name, const string &value) {
  * @brief Makes the current mob spawn a new mob, given some spawn information.
  *
  * @param info Structure with information about how to spawn it.
- * @param type_ptr If NULL, the pointer to the mob type is obtained given its
- * name in the information structure. If not NULL, uses this instead.
+ * @param type_ptr If nullptr, the pointer to the mob type is obtained given its
+ * name in the information structure. If not nullptr, uses this instead.
  * @return The new mob.
  */
 mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
@@ -3004,7 +3004,7 @@ mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
             "type \"" + info->mob_type_name + "\", but there is no such "
             "object type!"
         );
-        return NULL;
+        return nullptr;
     }
     
     if(
@@ -3012,7 +3012,7 @@ mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
     ) {
-        return NULL;
+        return nullptr;
     }
     
     point new_xy;
@@ -3029,9 +3029,9 @@ mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
         new_angle = info->angle;
     }
     
-    if(!get_sector(new_xy, NULL, true)) {
+    if(!get_sector(new_xy, nullptr, true)) {
         //Spawn out of bounds? No way!
-        return NULL;
+        return nullptr;
     }
     
     mob* new_mob =
@@ -3145,7 +3145,7 @@ void mob::start_height_effect() {
  */
 void mob::stop_chasing() {
     chase_info.state = CHASE_STATE_STOPPED;
-    chase_info.orig_z = NULL;
+    chase_info.orig_z = nullptr;
     
     speed.x = 0.0f;
     speed.y = 0.0f;
@@ -3161,7 +3161,7 @@ void mob::stop_chasing() {
 void mob::stop_circling() {
     if(circling_info) {
         delete circling_info;
-        circling_info = NULL;
+        circling_info = nullptr;
         stop_chasing();
     }
 }
@@ -3176,7 +3176,7 @@ void mob::stop_following_path() {
     stop_chasing();
     
     delete path_info;
-    path_info = NULL;
+    path_info = nullptr;
 }
 
 
@@ -3195,7 +3195,7 @@ void mob::stop_track_ride() {
     if(!track_info) return;
     
     delete track_info;
-    track_info = NULL;
+    track_info = nullptr;
     stop_chasing();
     speed_z = 0;
     stop_height_effect();
@@ -3206,7 +3206,7 @@ void mob::stop_track_ride() {
  * @brief Makes a mob stop wanting to turn towards some direciton.
  */
 void mob::stop_turning() {
-    face(angle, NULL, true);
+    face(angle, nullptr, true);
 }
 
 
@@ -3434,7 +3434,7 @@ void mob::tick_brain(const float delta_t) {
             
             //Let the mob think about facing the actual target.
             if(!type->can_free_move && horiz_dist > 0.0f) {
-                face(get_angle(pos, final_target_pos), NULL);
+                face(get_angle(pos, final_target_pos), nullptr);
             }
             
         } else {
@@ -3611,7 +3611,7 @@ void mob::tick_misc_logic(const float delta_t) {
         health_wheel->tick(delta_t);
         if(health_wheel->to_delete) {
             delete health_wheel;
-            health_wheel = NULL;
+            health_wheel = nullptr;
         }
     }
     
@@ -3641,7 +3641,7 @@ void mob::tick_misc_logic(const float delta_t) {
         }
         if(fraction->to_delete) {
             delete fraction;
-            fraction = NULL;
+            fraction = nullptr;
         }
     }
     
@@ -3701,7 +3701,7 @@ void mob::tick_misc_logic(const float delta_t) {
                 type->move_speed,
                 group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
                 &mov,
-                NULL, NULL, delta_t
+                nullptr, nullptr, delta_t
             );
             group->anchor += mov * delta_t;
             
@@ -3804,8 +3804,8 @@ void mob::tick_script(const float delta_t) {
             fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
         }
         
-        //We have to recheck if the focused mob is not NULL, because
-        //sending MOB_EV_FOCUS_DIED could've set this to NULL.
+        //We have to recheck if the focused mob is not nullptr, because
+        //sending MOB_EV_FOCUS_DIED could've set this to nullptr.
         if(focused_mob) {
         
             mob* focus = focused_mob;
@@ -3980,7 +3980,7 @@ bool mob::tick_track_ride() {
     float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
     
     chase(dest_xy, dest_z, CHASE_FLAG_TELEPORT);
-    face(dest_angle, NULL);
+    face(dest_angle, nullptr);
     
     return false;
 }

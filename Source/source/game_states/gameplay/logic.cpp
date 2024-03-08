@@ -89,7 +89,7 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
         throw_dest = leader_cursor_w;
     }
     
-    throw_dest_mob = NULL;
+    throw_dest_mob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
         if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->max_span)) {
@@ -119,10 +119,10 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
     }
     
     leader_cursor_sector =
-        get_sector(leader_cursor_w, NULL, true);
+        get_sector(leader_cursor_w, nullptr, true);
         
     throw_dest_sector =
-        get_sector(throw_dest, NULL, true);
+        get_sector(throw_dest, nullptr, true);
         
     if(leader_cursor_sector) {
         cursor_height_diff_light =
@@ -312,7 +312,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         dist d;
         
         //Ship healing notification.
-        close_to_ship_to_heal = NULL;
+        close_to_ship_to_heal = nullptr;
         for(size_t s = 0; s < mobs.ships.size(); ++s) {
             ship* s_ptr = mobs.ships[s];
             d = dist(cur_leader_ptr->pos, s_ptr->pos);
@@ -345,7 +345,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Interactable mob notification.
         closest_d = 0;
         d = 0;
-        close_to_interactable_to_use = NULL;
+        close_to_interactable_to_use = nullptr;
         if(!notification_done) {
             for(size_t i = 0; i < mobs.interactables.size(); ++i) {
                 d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
@@ -373,7 +373,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Pikmin pluck notification.
         closest_d = 0;
         d = 0;
-        close_to_pikmin_to_pluck = NULL;
+        close_to_pikmin_to_pluck = nullptr;
         if(!notification_done) {
             pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
             if(p && d <= game.config.pluck_range) {
@@ -395,7 +395,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Nest open notification.
         closest_d = 0;
         d = 0;
-        close_to_nest_to_open = NULL;
+        close_to_nest_to_open = nullptr;
         if(!notification_done) {
             for(size_t o = 0; o < mobs.onions.size(); ++o) {
                 d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
@@ -1019,7 +1019,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
     
         msg_box->tick(delta_t);
         if(msg_box->to_delete) {
-            start_message("", NULL);
+            start_message("", nullptr);
         }
         
     }
@@ -1043,7 +1043,7 @@ void gameplay_state::do_menu_logic() {
             onion_menu->tick(game.delta_t);
         } else {
             delete onion_menu;
-            onion_menu = NULL;
+            onion_menu = nullptr;
             paused = false;
             game.audio.handle_world_unpause();
         }
@@ -1052,7 +1052,7 @@ void gameplay_state::do_menu_logic() {
             pause_menu->tick(game.delta_t);
         } else {
             delete pause_menu;
-            pause_menu = NULL;
+            pause_menu = nullptr;
             paused = false;
             game.audio.handle_world_unpause();
         }
@@ -1331,7 +1331,7 @@ void gameplay_state::do_menu_logic() {
     //Print mouse coordinates.
     if(game.maker_tools.geometry_info) {
         sector* mouse_sector =
-            get_sector(game.mouse_cursor.w_pos, NULL, true);
+            get_sector(game.mouse_cursor.w_pos, nullptr, true);
             
         string coords_str =
             box_string(f2s(game.mouse_cursor.w_pos.x), 6) + " " +

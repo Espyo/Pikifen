@@ -81,7 +81,7 @@ void leader_category::erase_mob(mob* m) {
             (leader*) m
         )
     );
-    leader_fsm::die((leader*) m, NULL, NULL);
+    leader_fsm::die((leader*) m, nullptr, nullptr);
 }
 
 
@@ -89,11 +89,11 @@ void leader_category::erase_mob(mob* m) {
  * @brief Returns a type of leader given its name.
  *
  * @param name Name of the mob type to get.
- * @return The type, or NULL on error.
+ * @return The type, or nullptr on error.
  */
 mob_type* leader_category::get_type(const string &name) const {
     auto it = game.mob_types.leader.find(name);
-    if(it == game.mob_types.leader.end()) return NULL;
+    if(it == game.mob_types.leader.end()) return nullptr;
     return it->second;
 }
 

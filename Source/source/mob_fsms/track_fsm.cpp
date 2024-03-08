@@ -55,7 +55,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) m;
     mob* toucher = (mob*) info1;
     
-    mob_event* ev = NULL;
+    mob_event* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(

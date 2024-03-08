@@ -65,7 +65,7 @@ void area_data::check_stability() {
         for(size_t s = 0; s < 2; ++s) {
             sector* s_ptr = e_ptr->sectors[s];
             if(
-                s_ptr == NULL &&
+                s_ptr == nullptr &&
                 e_ptr->sector_nrs[s] == INVALID
             ) {
                 continue;
@@ -120,10 +120,10 @@ void area_data::clear() {
     
     if(bg_bmp) {
         game.bitmaps.detach(bg_bmp);
-        bg_bmp = NULL;
+        bg_bmp = nullptr;
     }
     if(thumbnail) {
-        thumbnail = NULL;
+        thumbnail = nullptr;
     }
     
     name.clear();
@@ -196,9 +196,9 @@ void area_data::clone(area_data &other) {
     }
     other.bg_bmp_file_name = bg_bmp_file_name;
     if(other.bg_bmp_file_name.empty()) {
-        other.bg_bmp = NULL;
+        other.bg_bmp = nullptr;
     } else {
-        other.bg_bmp = game.bitmaps.get(bg_bmp_file_name, NULL, false);
+        other.bg_bmp = game.bitmaps.get(bg_bmp_file_name, nullptr, false);
     }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
@@ -252,12 +252,12 @@ void area_data::clone(area_data &other) {
         oe_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[0];
         oe_ptr->vertex_nrs[1] = e_ptr->vertex_nrs[1];
         if(e_ptr->sector_nrs[0] == INVALID) {
-            oe_ptr->sectors[0] = NULL;
+            oe_ptr->sectors[0] = nullptr;
         } else {
             oe_ptr->sectors[0] = other.sectors[e_ptr->sector_nrs[0]];
         }
         if(e_ptr->sector_nrs[1] == INVALID) {
-            oe_ptr->sectors[1] = NULL;
+            oe_ptr->sectors[1] = nullptr;
         } else {
             oe_ptr->sectors[1] = other.sectors[e_ptr->sector_nrs[1]];
         }
@@ -272,7 +272,7 @@ void area_data::clone(area_data &other) {
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
         os_ptr->texture_info.bitmap =
-            game.textures.get(s_ptr->texture_info.file_name, NULL, false);
+            game.textures.get(s_ptr->texture_info.file_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -337,7 +337,7 @@ void area_data::clone(area_data &other) {
         ot_ptr->file_name = t_ptr->file_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = game.textures.get(t_ptr->file_name, NULL, false);
+        ot_ptr->bitmap = game.textures.get(t_ptr->file_name, nullptr, false);
     }
     
     other.type = type;
@@ -577,18 +577,18 @@ void area_data::fix_edge_nrs(edge* e_ptr) {
  * @param e_ptr Edge to fix the pointers of.
  */
 void area_data::fix_edge_pointers(edge* e_ptr) {
-    e_ptr->sectors[0] = NULL;
-    e_ptr->sectors[1] = NULL;
+    e_ptr->sectors[0] = nullptr;
+    e_ptr->sectors[1] = nullptr;
     for(size_t s = 0; s < 2; ++s) {
         size_t s_nr = e_ptr->sector_nrs[s];
-        e_ptr->sectors[s] = (s_nr == INVALID ? NULL : sectors[s_nr]);
+        e_ptr->sectors[s] = (s_nr == INVALID ? nullptr : sectors[s_nr]);
     }
     
-    e_ptr->vertexes[0] = NULL;
-    e_ptr->vertexes[1] = NULL;
+    e_ptr->vertexes[0] = nullptr;
+    e_ptr->vertexes[1] = nullptr;
     for(size_t v = 0; v < 2; ++v) {
         size_t v_nr = e_ptr->vertex_nrs[v];
-        e_ptr->vertexes[v] = (v_nr == INVALID ? NULL : vertexes[v_nr]);
+        e_ptr->vertexes[v] = (v_nr == INVALID ? nullptr : vertexes[v_nr]);
     }
 }
 
@@ -627,7 +627,7 @@ void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
 void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
         path_link* l_ptr = s_ptr->links[l];
-        l_ptr->end_ptr = NULL;
+        l_ptr->end_ptr = nullptr;
         
         if(l_ptr->end_nr == INVALID) continue;
         if(l_ptr->end_nr >= path_stops.size()) continue;
@@ -663,7 +663,7 @@ void area_data::fix_sector_pointers(sector* s_ptr) {
     s_ptr->edges.clear();
     for(size_t e = 0; e < s_ptr->edge_nrs.size(); ++e) {
         size_t e_nr = s_ptr->edge_nrs[e];
-        s_ptr->edges.push_back(e_nr == INVALID ? NULL : edges[e_nr]);
+        s_ptr->edges.push_back(e_nr == INVALID ? nullptr : edges[e_nr]);
     }
 }
 
@@ -694,7 +694,7 @@ void area_data::fix_vertex_pointers(vertex* v_ptr) {
     v_ptr->edges.clear();
     for(size_t e = 0; e < v_ptr->edge_nrs.size(); ++e) {
         size_t e_nr = v_ptr->edge_nrs[e];
-        v_ptr->edges.push_back(e_nr == INVALID ? NULL : edges[e_nr]);
+        v_ptr->edges.push_back(e_nr == INVALID ? nullptr : edges[e_nr]);
     }
 }
 
@@ -744,10 +744,10 @@ void area_data::generate_blockmap() {
     
     /* If at this point, there's any block that's missing a sector,
      * that means we couldn't figure out the sectors due to the edges it has
-     * alone. But the block still has a sector (or NULL). So we need another
+     * alone. But the block still has a sector (or nullptr). So we need another
      * way to figure it out.
      * We know the following things that can speed up the process:
-     * * The blocks at the edges of the blockmap have the NULL sector as the
+     * * The blocks at the edges of the blockmap have the nullptr sector as the
      *     only candidate.
      * * If a block's neighbor only has one sector, then this block has that
      *     same sector.
@@ -788,7 +788,7 @@ void area_data::generate_blockmap() {
             point corner = bmap.get_top_left_corner(bx, by);
             corner += GEOMETRY::BLOCKMAP_BLOCK_SIZE * 0.5;
             bmap.sectors[bx][by].insert(
-                get_sector(corner, NULL, false)
+                get_sector(corner, nullptr, false)
             );
         }
     }
@@ -899,7 +899,7 @@ size_t area_data::get_nr_path_links() {
  */
 void area_data::load_thumbnail(const string &thumbnail_path) {
     if(thumbnail) {
-        thumbnail = NULL;
+        thumbnail = nullptr;
     }
     
     if(al_filename_exists(thumbnail_path.c_str())) {
@@ -1268,8 +1268,8 @@ tree_shadow::~tree_shadow() {
  *
  * @param requested_area_path Relative path to the requested area.
  * @param final_area_folder_name The area's folder name is returned here,
- * if not NULL.
- * @param final_area_type The area's type is returned here, if not NULL.
+ * if not nullptr.
+ * @param final_area_type The area's type is returned here, if not nullptr.
  */
 void get_area_info_from_path(
     const string &requested_area_path,

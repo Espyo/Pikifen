@@ -366,7 +366,7 @@ particle_manager &particle_manager::operator =(
         if(this->particles) {
             delete[] this->particles;
         }
-        this->particles = NULL;
+        this->particles = nullptr;
         max_nr = pm2.max_nr;
         count = pm2.count;
         if(max_nr == 0) return *this;
