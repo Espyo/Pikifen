@@ -17,7 +17,7 @@
 
 
 namespace AUDIO {
-    
+
 //Default min stack pos. Let's use a value higher than 0, since if for any
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
@@ -34,6 +34,17 @@ const float PLAYBACK_PAN_SPEED = 8.0f;
 
 //Change speed of playback gain when un/pausing, measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
+
+//Distance to an audio source where it'll be considered close, i.e. it will
+//play at full volume and no pan.
+const float PLAYBACK_RANGE_CLOSE = 100.0f;
+
+//Distance after which an audio source's volume will be 0.
+const float PLAYBACK_RANGE_FAR_GAIN = 450.0f;
+
+//Horizontal distance after which an audio source's pan will be
+//fully left/right.
+const float PLAYBACK_RANGE_FAR_PAN = 300.0f;
 
 //Change speed of playback gain when stopping, measured in amount per second.
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
@@ -1082,26 +1093,24 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
     
     point cam_center = (cam_tl + cam_br) / 2.0f;
-    
-    //Get how many screens of distance it is from the center, for X and Y.
-    point delta = (source_ptr->pos - cam_center) / screen_size;
-    
-    float max_delta = std::max(fabs(delta.x), fabs(delta.y));
+    float d = dist(cam_center, source_ptr->pos).to_float();
+    point delta = source_ptr->pos - cam_center;
     
     //Set the gain.
     float gain =
         interpolate_number(
-            fabs(max_delta),
-            0.2f, 0.8f,
+            fabs(d),
+            AUDIO::PLAYBACK_RANGE_CLOSE, AUDIO::PLAYBACK_RANGE_FAR_GAIN,
             1.0f, 0.0f
         );
+    gain = clamp(gain, 0.0f, 1.0f);
     playback_ptr->target_gain = gain;
     
     //Set the pan.
     float pan_abs =
         interpolate_number(
             fabs(delta.x),
-            0.2f, 0.6f,
+            AUDIO::PLAYBACK_RANGE_CLOSE, AUDIO::PLAYBACK_RANGE_FAR_PAN,
             0.0f, 1.0f
         );
     pan_abs = clamp(pan_abs, 0.0f, 1.0f);
