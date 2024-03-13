@@ -4,6 +4,7 @@ description = Pikmin that are bubbled will start choking with a bubble of water 
 affects_pikmin = true
 color = 0 255 255
 health_change_ratio = -0.3
+maturity_change_amount = -1
 overlay_anim_mob_scale = 2
 overlay_animation = Bubble.txt
 particle_generator = bubble_hazard

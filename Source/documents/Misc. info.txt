@@ -505,6 +505,7 @@ Procedure for every version release
                     cppcheck . -iutils/code_debug.cpp -ilibs/imgui --config-exclude=libs/imgui --suppressions-list="../documents/Cppcheck suppressions.txt" -U_WIN32 -U_MSC_VER -U__APPLE__ -U__linux__ --std=c++14 --enable=all --template=gcc 2>~/Desktop/errors.txt
                 Use Valgrind and correct problems
                     valgrind --leak-check=yes ./pikifen 2> valgrind.txt
+                Use make analyze and correct problems
                 Confirm that there are no superfluous #includes (how?)
             Code cleanup
                 Confirm that no line goes over 80 characters

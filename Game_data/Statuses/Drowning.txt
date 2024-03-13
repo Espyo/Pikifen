@@ -4,6 +4,7 @@ description = Pikmin that are drowning in bodies of water will flail about, but 
 affects_pikmin = true
 color = 0 0 255
 health_change_ratio = -0.3
+maturity_change_amount = -1
 remove_on_hazard_leave = true
 speed_multiplier = 0.2
 state_change_type = flailing

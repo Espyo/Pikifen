@@ -4,6 +4,7 @@ description = Pikmin that are burning will start choking from the fire on their 
 affects_pikmin = true
 color = 255 0 0
 health_change_ratio = -0.3
+maturity_change_amount = -1
 overlay_anim_mob_scale = 0.75
 overlay_animation = Fire.txt
 particle_generator = smoke

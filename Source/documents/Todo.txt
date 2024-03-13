@@ -2,7 +2,9 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
+        Run make analyze
         Use #pragma region in header files?
         Constants for enums and flags have inconsistent styles
             Bitmasks should use a typedef called bitmask8, bitmask16, etc.
@@ -72,6 +74,7 @@ Next tasks (roughly sorted most important first)
                 Ambiance sounds
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
+        All sound files should be at peak amplitude
     Compose and add songs
         Start with a leitmotif?
         Title screen
@@ -85,7 +88,6 @@ Next tasks (roughly sorted most important first)
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     Make Rock Pikmin colors darker (thanks Nataly171)
-    If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     Find some way of making content sharing easier
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
@@ -93,6 +95,7 @@ Next tasks (roughly sorted most important first)
         Current problems
             When makers want to share their content, they have to fish its requirements from several folders
             When players want to install content, they have to place it in the right folders
+    A way for the user to set a background texture for the animation editor instead of the plain green
     
     --- Future ---
     Some tweaks to the HUD

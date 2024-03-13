@@ -38,6 +38,7 @@ tidbits{
 		Maturity;Pikmin with a leaf on their head walk and carry objects slowly. Bud Pikmin are a bit faster, and flower Pikmin are the fastest. To increase a Pikmin's maturity, let it stay underground for a while before plucking, or feed it nectar.;Help/Maturity.jpg
 		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;Help/Sprays.jpg
 		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;Help/Paths.jpg
+		Stuck on a path;Are Pikmin stuck moving in a circle? The path is probably blocked and they are waiting for it to be cleared!;Help/Carrying.jpg
 		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;Help/Saving_Pikmin.jpg
 		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.;Help/Getting_up.jpg
 		Onion menu;Whether you're ordering Pikmin to go in the Onion or calling some out, try holding down the button on-screen to choose your numbers faster.;Help/Onion_menu.jpg

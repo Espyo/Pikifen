@@ -4,6 +4,7 @@ description = Pikmin that are inked will have a harmless glob of ink on their to
 affects_pikmin = true
 auto_remove_time = 5
 color = 64 64 64
+maturity_change_amount = -1
 overlay_anim_mob_scale = 1.5
 overlay_animation = Ink.txt
 reapply_rule = keep_time
