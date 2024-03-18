@@ -1,84 +1,84 @@
 animations{
 	bumped{
 		frames{
-			bumped1{
+			bumped_01{
 				duration=0.1000
 			}
-			bumped2{
+			bumped_02{
 				duration=0.1000
 			}
-			bumped1{
+			bumped_01{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
-			bumped3{
+			bumped_03{
 				duration=0.1000
 			}
-			bumped4{
+			bumped_04{
 				duration=0.1000
 			}
-			bumped3{
+			bumped_03{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling{
+			idling_01{
 				duration=0.3000
 			}
-			idling2{
+			idling_02{
 				duration=0.3000
 			}
-			idling{
+			idling_01{
 				duration=0.3000
 			}
-			idling3{
+			idling_03{
 				duration=0.3000
 			}
 		}
 	}
 }
 sprites{
-	bumped1{
+	bumped_01{
 		file=Common_Glowcap.png
 		file_pos=0.0000 113.0000
 		file_size=124.0000 112.0000
 	}
-	bumped2{
+	bumped_02{
 		file=Common_Glowcap.png
 		file_pos=0.0000 226.0000
 		file_size=124.0000 112.0000
 	}
-	bumped3{
+	bumped_03{
 		file=Common_Glowcap.png
 		file_pos=0.0000 113.0000
 		file_size=124.0000 112.0000
 		scale=-1.0000 1.0000
 	}
-	bumped4{
+	bumped_04{
 		file=Common_Glowcap.png
 		file_pos=0.0000 226.0000
 		file_size=124.0000 112.0000
 		scale=-1.0000 1.0000
 	}
-	idling{
+	idling_01{
 		file=Common_Glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
 	}
-	idling2{
+	idling_02{
 		file=Common_Glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
 		offset=-0.8000 0.0000
 	}
-	idling3{
+	idling_03{
 		file=Common_Glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
@@ -86,3 +86,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0

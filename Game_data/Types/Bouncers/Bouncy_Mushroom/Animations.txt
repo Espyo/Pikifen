@@ -1,13 +1,13 @@
 animations{
 	bouncing{
 		frames{
-			bouncing1{
+			bouncing_01{
 				duration=0.0600
 			}
 			idling{
 				duration=0.0600
 			}
-			bouncing2{
+			bouncing_02{
 				duration=0.0600
 			}
 			idling{
@@ -24,13 +24,13 @@ animations{
 	}
 }
 sprites{
-	bouncing1{
+	bouncing_01{
 		file=Bouncy_Mushroom.png
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 		scale=0.9500 1.0500
 	}
-	bouncing2{
+	bouncing_02{
 		file=Bouncy_Mushroom.png
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
@@ -43,3 +43,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0

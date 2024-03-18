@@ -1,7 +1,7 @@
 animations{
 	down{
 		frames{
-			down{
+			down_01{
 				duration=0.1000
 			}
 		}
@@ -9,58 +9,58 @@ animations{
 	lowering{
 		loop_frame=15
 		frames{
-			up{
+			up_01{
 				duration=0.0800
 			}
-			up2{
-				duration=0.0800
-				signal=0
-			}
-			up3{
-				duration=0.0800
-			}
-			up4{
+			up_02{
 				duration=0.0800
 				signal=0
 			}
-			up{
+			up_03{
 				duration=0.0800
 			}
-			up2{
-				duration=0.0800
-				signal=0
-			}
-			up3{
-				duration=0.0800
-			}
-			up4{
+			up_04{
 				duration=0.0800
 				signal=0
 			}
-			down{
+			up_01{
 				duration=0.0800
 			}
-			down2{
-				duration=0.0800
-				signal=0
-			}
-			down3{
-				duration=0.0800
-			}
-			down4{
+			up_02{
 				duration=0.0800
 				signal=0
 			}
-			down{
+			up_03{
 				duration=0.0800
 			}
-			down2{
+			up_04{
+				duration=0.0800
+				signal=0
+			}
+			down_01{
 				duration=0.0800
 			}
-			down3{
+			down_02{
+				duration=0.0800
+				signal=0
+			}
+			down_03{
 				duration=0.0800
 			}
-			down4{
+			down_04{
+				duration=0.0800
+				signal=0
+			}
+			down_01{
+				duration=0.0800
+			}
+			down_02{
+				duration=0.0800
+			}
+			down_03{
+				duration=0.0800
+			}
+			down_04{
 				duration=0.0800
 			}
 		}
@@ -68,72 +68,72 @@ animations{
 	rising{
 		loop_frame=15
 		frames{
-			down{
+			down_01{
 				duration=0.0800
 			}
-			down2{
-				duration=0.0800
-				signal=0
-			}
-			down3{
-				duration=0.0800
-			}
-			down4{
+			down_02{
 				duration=0.0800
 				signal=0
 			}
-			down{
+			down_03{
 				duration=0.0800
 			}
-			down2{
-				duration=0.0800
-				signal=0
-			}
-			down3{
-				duration=0.0800
-			}
-			down4{
+			down_04{
 				duration=0.0800
 				signal=0
 			}
-			up{
+			down_01{
 				duration=0.0800
 			}
-			up2{
-				duration=0.0800
-				signal=0
-			}
-			up3{
-				duration=0.0800
-			}
-			up4{
+			down_02{
 				duration=0.0800
 				signal=0
 			}
-			up{
+			down_03{
 				duration=0.0800
 			}
-			up2{
+			down_04{
+				duration=0.0800
+				signal=0
+			}
+			up_01{
 				duration=0.0800
 			}
-			up3{
+			up_02{
+				duration=0.0800
+				signal=0
+			}
+			up_03{
 				duration=0.0800
 			}
-			up4{
+			up_04{
+				duration=0.0800
+				signal=0
+			}
+			up_01{
+				duration=0.0800
+			}
+			up_02{
+				duration=0.0800
+			}
+			up_03{
+				duration=0.0800
+			}
+			up_04{
 				duration=0.0800
 			}
 		}
 	}
 	up{
 		frames{
-			up{
+			up_01{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	down{
+	down_01{
 		file=Seesaw_block.png
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
@@ -148,7 +148,7 @@ sprites{
 			}
 		}
 	}
-	down2{
+	down_02{
 		file=Seesaw_block.png
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
@@ -164,7 +164,7 @@ sprites{
 			}
 		}
 	}
-	down3{
+	down_03{
 		file=Seesaw_block.png
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
@@ -180,7 +180,7 @@ sprites{
 			}
 		}
 	}
-	down4{
+	down_04{
 		file=Seesaw_block.png
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
@@ -196,7 +196,7 @@ sprites{
 			}
 		}
 	}
-	up{
+	up_01{
 		file=Seesaw_block.png
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
@@ -211,7 +211,7 @@ sprites{
 			}
 		}
 	}
-	up2{
+	up_02{
 		file=Seesaw_block.png
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
@@ -227,7 +227,7 @@ sprites{
 			}
 		}
 	}
-	up3{
+	up_03{
 		file=Seesaw_block.png
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
@@ -243,7 +243,7 @@ sprites{
 			}
 		}
 	}
-	up4{
+	up_04{
 		file=Seesaw_block.png
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
@@ -263,3 +263,4 @@ sprites{
 body_parts{
 	ropes
 }
+engine_version=0.25.0

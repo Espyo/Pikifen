@@ -8,78 +8,78 @@ animations{
 	}
 	stage_1_idling{
 		frames{
-			stage_1_idling_1{
+			stage_1_idling_01{
 				duration=0.0800
 			}
-			stage_1_idling_2{
+			stage_1_idling_02{
 				duration=0.0800
 			}
-			stage_1_idling_3{
+			stage_1_idling_03{
 				duration=0.0800
 			}
 		}
 	}
 	stage_1_shaking{
 		frames{
-			stage_1_shaking_1{
+			stage_1_shaking_01{
 				duration=0.0600
 			}
-			stage_1_shaking_2{
+			stage_1_shaking_02{
 				duration=0.0600
 			}
-			stage_1_idling_3{
+			stage_1_idling_03{
 				duration=0.0600
 			}
 		}
 	}
 	stage_2_idling{
 		frames{
-			stage_2_idling_1{
+			stage_2_idling_01{
 				duration=0.0800
 			}
-			stage_2_idling_2{
+			stage_2_idling_02{
 				duration=0.0800
 			}
-			stage_2_idling_3{
+			stage_2_idling_03{
 				duration=0.0800
 			}
 		}
 	}
 	stage_2_shaking{
 		frames{
-			stage_2_shaking_1{
+			stage_2_shaking_01{
 				duration=0.0600
 			}
-			stage_2_shaking_2{
+			stage_2_shaking_02{
 				duration=0.0600
 			}
-			stage_2_idling_3{
+			stage_2_idling_03{
 				duration=0.0600
 			}
 		}
 	}
 	stage_3_idling{
 		frames{
-			stage_3_idling_1{
+			stage_3_idling_01{
 				duration=0.0800
 			}
-			stage_3_idling_2{
+			stage_3_idling_02{
 				duration=0.0800
 			}
-			stage_3_idling_3{
+			stage_3_idling_03{
 				duration=0.0800
 			}
 		}
 	}
 	stage_3_shaking{
 		frames{
-			stage_3_shaking_1{
+			stage_3_shaking_01{
 				duration=0.0600
 			}
-			stage_3_shaking_2{
+			stage_3_shaking_02{
 				duration=0.0600
 			}
-			stage_3_idling_3{
+			stage_3_idling_03{
 				duration=0.0600
 			}
 		}
@@ -173,7 +173,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_idling_1{
+	stage_1_idling_01{
 		file=Electric_gate.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
@@ -270,7 +270,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_idling_2{
+	stage_1_idling_02{
 		file=Electric_gate.png
 		file_pos=49.0000 0.0000
 		file_size=48.0000 192.0000
@@ -367,7 +367,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_idling_3{
+	stage_1_idling_03{
 		file=Electric_gate.png
 		file_pos=98.0000 0.0000
 		file_size=48.0000 192.0000
@@ -464,7 +464,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_shaking_1{
+	stage_1_shaking_01{
 		file=Electric_gate.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
@@ -562,7 +562,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_shaking_2{
+	stage_1_shaking_02{
 		file=Electric_gate.png
 		file_pos=49.0000 0.0000
 		file_size=48.0000 192.0000
@@ -660,7 +660,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_idling_1{
+	stage_2_idling_01{
 		file=Electric_gate.png
 		file_pos=0.0000 193.0000
 		file_size=48.0000 192.0000
@@ -757,7 +757,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_idling_2{
+	stage_2_idling_02{
 		file=Electric_gate.png
 		file_pos=49.0000 193.0000
 		file_size=48.0000 192.0000
@@ -854,7 +854,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_idling_3{
+	stage_2_idling_03{
 		file=Electric_gate.png
 		file_pos=98.0000 193.0000
 		file_size=48.0000 192.0000
@@ -951,7 +951,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_shaking_1{
+	stage_2_shaking_01{
 		file=Electric_gate.png
 		file_pos=0.0000 193.0000
 		file_size=48.0000 192.0000
@@ -1049,7 +1049,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_shaking_2{
+	stage_2_shaking_02{
 		file=Electric_gate.png
 		file_pos=49.0000 193.0000
 		file_size=48.0000 192.0000
@@ -1147,7 +1147,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_idling_1{
+	stage_3_idling_01{
 		file=Electric_gate.png
 		file_pos=0.0000 386.0000
 		file_size=48.0000 192.0000
@@ -1244,7 +1244,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_idling_2{
+	stage_3_idling_02{
 		file=Electric_gate.png
 		file_pos=49.0000 386.0000
 		file_size=48.0000 192.0000
@@ -1341,7 +1341,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_idling_3{
+	stage_3_idling_03{
 		file=Electric_gate.png
 		file_pos=98.0000 386.0000
 		file_size=48.0000 192.0000
@@ -1438,7 +1438,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_shaking_1{
+	stage_3_shaking_01{
 		file=Electric_gate.png
 		file_pos=0.0000 386.0000
 		file_size=48.0000 192.0000
@@ -1536,7 +1536,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_shaking_2{
+	stage_3_shaking_02{
 		file=Electric_gate.png
 		file_pos=49.0000 386.0000
 		file_size=48.0000 192.0000
@@ -1647,3 +1647,4 @@ body_parts{
 	far_right
 	far_right_zap
 }
+engine_version=0.25.0

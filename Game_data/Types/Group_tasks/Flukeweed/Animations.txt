@@ -8,26 +8,26 @@ animations{
 	}
 	idling{
 		frames{
-			idling{
+			idling_01{
 				duration=0.2000
 			}
-			idling2{
+			idling_02{
 				duration=0.2000
 			}
-			idling{
+			idling_01{
 				duration=0.2000
 			}
-			idling3{
+			idling_03{
 				duration=0.2000
 			}
 		}
 	}
 	pulled{
 		frames{
-			pulled1{
+			pulled_01{
 				duration=0.0800
 			}
-			pulled2{
+			pulled_02{
 				duration=0.0800
 			}
 		}
@@ -39,30 +39,31 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 	}
-	idling{
+	idling_01{
 		file=Flukeweed.png
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	idling2{
+	idling_02{
 		file=Flukeweed.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	idling3{
+	idling_03{
 		file=Flukeweed.png
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	pulled1{
+	pulled_01{
 		file=Flukeweed.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	pulled2{
+	pulled_02{
 		file=Flukeweed.png
 		file_pos=132.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 }
 body_parts
+engine_version=0.25.0

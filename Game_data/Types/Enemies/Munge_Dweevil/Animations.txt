@@ -9,70 +9,70 @@ animations{
 	dying{
 		loop_frame=5
 		frames{
-			dying1{
+			dying_01{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.4000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying4{
+			dying_04{
 				duration=0.1000
 			}
-			dying5{
+			dying_05{
 				duration=0.1000
 			}
-			dying6{
+			dying_06{
 				duration=0.1000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			idling12{
+			idling_02{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			idling13{
+			idling_03{
 				duration=0.1000
 			}
 		}
 	}
 	moving{
 		frames{
-			moving1{
+			moving_01{
 				duration=0.1000
 			}
-			moving2{
+			moving_02{
 				duration=0.1000
 			}
-			moving3{
+			moving_03{
 				duration=0.1000
 			}
-			moving4{
+			moving_04{
 				duration=0.1000
 			}
-			moving5{
+			moving_05{
 				duration=0.1000
 			}
-			moving6{
+			moving_06{
 				duration=0.1000
 			}
 		}
 	}
 	picking_up{
 		frames{
-			picking_up1{
+			picking_up_01{
 				duration=0.1000
 			}
-			picking_up2{
+			picking_up_02{
 				duration=0.1000
 				signal=0
 			}
@@ -80,13 +80,13 @@ animations{
 	}
 	releasing{
 		frames{
-			moving3{
+			moving_03{
 				duration=0.1000
 			}
-			attacking2{
+			attacking_02{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.5000
 			}
 		}
@@ -94,37 +94,37 @@ animations{
 	shaking{
 		hit_rate=75
 		frames{
-			attacking1{
+			attacking_01{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			attacking2{
+			attacking_02{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			attacking1{
+			attacking_01{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			attacking2{
+			attacking_02{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			attacking1{
+			attacking_01{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			attacking2{
+			attacking_02{
 				duration=0.1000
 			}
 			shaking_kb{
@@ -134,7 +134,7 @@ animations{
 	}
 }
 sprites{
-	attacking1{
+	attacking_01{
 		file=Munge_Dweevil.png
 		file_pos=490.0000 144.0000
 		file_size=113.0000 116.0000
@@ -164,7 +164,7 @@ sprites{
 			}
 		}
 	}
-	attacking2{
+	attacking_02{
 		file=Munge_Dweevil.png
 		file_pos=604.0000 148.0000
 		file_size=113.0000 115.0000
@@ -223,7 +223,7 @@ sprites{
 			}
 		}
 	}
-	dying1{
+	dying_01{
 		file=Munge_Dweevil.png
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
@@ -252,7 +252,7 @@ sprites{
 			}
 		}
 	}
-	dying2{
+	dying_02{
 		file=Munge_Dweevil.png
 		file_pos=95.0000 121.0000
 		file_size=76.0000 52.0000
@@ -281,7 +281,7 @@ sprites{
 			}
 		}
 	}
-	dying3{
+	dying_03{
 		file=Munge_Dweevil.png
 		file_pos=172.0000 121.0000
 		file_size=103.0000 90.0000
@@ -310,7 +310,7 @@ sprites{
 			}
 		}
 	}
-	dying4{
+	dying_04{
 		file=Munge_Dweevil.png
 		file_pos=276.0000 136.0000
 		file_size=81.0000 74.0000
@@ -339,7 +339,7 @@ sprites{
 			}
 		}
 	}
-	dying5{
+	dying_05{
 		file=Munge_Dweevil.png
 		file_pos=358.0000 136.0000
 		file_size=70.0000 54.0000
@@ -368,7 +368,7 @@ sprites{
 			}
 		}
 	}
-	dying6{
+	dying_06{
 		file=Munge_Dweevil.png
 		file_pos=429.0000 144.0000
 		file_size=60.0000 52.0000
@@ -397,7 +397,7 @@ sprites{
 			}
 		}
 	}
-	idling1{
+	idling_01{
 		file=Munge_Dweevil.png
 		file_pos=0.0000 0.0000
 		file_size=118.0000 120.0000
@@ -426,7 +426,7 @@ sprites{
 			}
 		}
 	}
-	idling12{
+	idling_02{
 		file=Munge_Dweevil.png
 		file_pos=119.0000 0.0000
 		file_size=118.0000 120.0000
@@ -455,7 +455,7 @@ sprites{
 			}
 		}
 	}
-	idling13{
+	idling_03{
 		file=Munge_Dweevil.png
 		file_pos=238.0000 0.0000
 		file_size=118.0000 120.0000
@@ -484,7 +484,7 @@ sprites{
 			}
 		}
 	}
-	moving1{
+	moving_01{
 		file=Munge_Dweevil.png
 		file_pos=357.0000 0.0000
 		file_size=129.0000 135.0000
@@ -514,7 +514,7 @@ sprites{
 			}
 		}
 	}
-	moving2{
+	moving_02{
 		file=Munge_Dweevil.png
 		file_pos=487.0000 0.0000
 		file_size=137.0000 143.0000
@@ -544,7 +544,7 @@ sprites{
 			}
 		}
 	}
-	moving3{
+	moving_03{
 		file=Munge_Dweevil.png
 		file_pos=625.0000 0.0000
 		file_size=151.0000 147.0000
@@ -574,7 +574,7 @@ sprites{
 			}
 		}
 	}
-	moving4{
+	moving_04{
 		file=Munge_Dweevil.png
 		file_pos=777.0000 0.0000
 		file_size=147.0000 138.0000
@@ -604,7 +604,7 @@ sprites{
 			}
 		}
 	}
-	moving5{
+	moving_05{
 		file=Munge_Dweevil.png
 		file_pos=925.0000 0.0000
 		file_size=127.0000 128.0000
@@ -634,7 +634,7 @@ sprites{
 			}
 		}
 	}
-	moving6{
+	moving_06{
 		file=Munge_Dweevil.png
 		file_pos=1053.0000 0.0000
 		file_size=114.0000 121.0000
@@ -664,7 +664,7 @@ sprites{
 			}
 		}
 	}
-	picking_up1{
+	picking_up_01{
 		file=Munge_Dweevil.png
 		file_pos=487.0000 0.0000
 		file_size=137.0000 143.0000
@@ -693,7 +693,7 @@ sprites{
 			}
 		}
 	}
-	picking_up2{
+	picking_up_02{
 		file=Munge_Dweevil.png
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
@@ -758,4 +758,4 @@ body_parts{
 	gas
 	treasure
 }
-engine_version=0.22.0
+engine_version=0.25.0

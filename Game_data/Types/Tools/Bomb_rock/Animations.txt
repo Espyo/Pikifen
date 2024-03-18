@@ -4,60 +4,60 @@ animations{
 			flash{
 				duration=0.0500
 			}
-			exploding1{
+			exploding_01{
 				duration=0.0500
 			}
-			exploding2{
+			exploding_02{
 				duration=0.0500
 			}
-			exploding3{
+			exploding_03{
 				duration=0.0500
 			}
-			exploding4{
+			exploding_04{
 				duration=0.0500
 			}
-			exploding5{
+			exploding_05{
 				duration=0.0500
 			}
-			exploding6{
+			exploding_06{
 				duration=0.0500
 			}
 		}
 	}
 	held{
 		frames{
-			idling_no_hit{
+			idling_no_hit_01{
 				duration=0.2000
 			}
-			idling_no_hit2{
+			idling_no_hit_02{
 				duration=0.2000
 			}
-			idling_no_hit3{
+			idling_no_hit_03{
 				duration=0.2000
 			}
-			idling_no_hit4{
+			idling_no_hit_04{
 				duration=0.2000
 			}
-			idling_no_hit5{
+			idling_no_hit_05{
 				duration=0.2000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling{
+			idling_01{
 				duration=0.2000
 			}
-			idling2{
+			idling_02{
 				duration=0.2000
 			}
-			idling3{
+			idling_03{
 				duration=0.2000
 			}
-			idling4{
+			idling_04{
 				duration=0.2000
 			}
-			idling5{
+			idling_05{
 				duration=0.2000
 			}
 		}
@@ -65,131 +65,131 @@ animations{
 	primed{
 		loop_frame=38
 		frames{
-			primed1{
+			primed_01{
 				duration=0.1000
 			}
-			primed2{
+			primed_02{
 				duration=0.1000
 			}
-			primed1{
+			primed_01{
 				duration=0.1000
 			}
-			primed2{
+			primed_02{
 				duration=0.1000
 			}
-			primed1{
+			primed_01{
 				duration=0.1000
 			}
-			primed2{
+			primed_02{
 				duration=0.1000
 			}
-			primed1{
+			primed_01{
 				duration=0.1000
 			}
-			primed2{
+			primed_02{
 				duration=0.1000
 			}
-			primed1{
+			primed_01{
 				duration=0.1000
 			}
-			primed2{
+			primed_02{
 				duration=0.1000
 			}
-			primed3{
+			primed_03{
 				duration=0.1000
 			}
-			primed4{
+			primed_04{
 				duration=0.1000
 			}
-			primed3{
+			primed_03{
 				duration=0.1000
 			}
-			primed4{
+			primed_04{
 				duration=0.1000
 			}
-			primed3{
+			primed_03{
 				duration=0.1000
 			}
-			primed4{
+			primed_04{
 				duration=0.1000
 			}
-			primed3{
+			primed_03{
 				duration=0.1000
 			}
-			primed4{
+			primed_04{
 				duration=0.1000
 			}
-			primed3{
+			primed_03{
 				duration=0.1000
 			}
-			primed4{
+			primed_04{
 				duration=0.1000
 			}
-			primed5{
+			primed_05{
 				duration=0.1000
 			}
-			primed6{
+			primed_06{
 				duration=0.1000
 			}
-			primed5{
+			primed_05{
 				duration=0.1000
 			}
-			primed6{
+			primed_06{
 				duration=0.1000
 			}
-			primed5{
+			primed_05{
 				duration=0.1000
 			}
-			primed6{
+			primed_06{
 				duration=0.1000
 			}
-			primed5{
+			primed_05{
 				duration=0.1000
 			}
-			primed6{
+			primed_06{
 				duration=0.1000
 			}
-			primed5{
+			primed_05{
 				duration=0.1000
 			}
-			primed6{
+			primed_06{
 				duration=0.1000
 			}
-			primed7{
+			primed_07{
 				duration=0.1000
 			}
-			primed8{
+			primed_08{
 				duration=0.1000
 			}
-			primed7{
+			primed_07{
 				duration=0.1000
 			}
-			primed8{
+			primed_08{
 				duration=0.1000
 			}
-			primed7{
+			primed_07{
 				duration=0.1000
 			}
-			primed8{
+			primed_08{
 				duration=0.1000
 			}
-			primed7{
+			primed_07{
 				duration=0.1000
 			}
-			primed8{
+			primed_08{
 				duration=0.1000
 			}
-			primed7{
+			primed_07{
 				duration=0.1000
 			}
-			primed8{
+			primed_08{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	exploding1{
+	exploding_01{
 		file=Bomb_rock.png
 		file_pos=138.0000 98.0000
 		file_size=68.0000 68.0000
@@ -201,8 +201,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -216,7 +214,7 @@ sprites{
 			}
 		}
 	}
-	exploding2{
+	exploding_02{
 		file=Bomb_rock.png
 		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
@@ -229,8 +227,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -244,7 +240,7 @@ sprites{
 			}
 		}
 	}
-	exploding3{
+	exploding_03{
 		file=Bomb_rock.png
 		file_pos=207.0000 29.0000
 		file_size=68.0000 68.0000
@@ -257,8 +253,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -272,7 +266,7 @@ sprites{
 			}
 		}
 	}
-	exploding4{
+	exploding_04{
 		file=Bomb_rock.png
 		file_pos=207.0000 29.0000
 		file_size=68.0000 68.0000
@@ -285,8 +279,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -300,7 +292,7 @@ sprites{
 			}
 		}
 	}
-	exploding5{
+	exploding_05{
 		file=Bomb_rock.png
 		file_pos=138.0000 98.0000
 		file_size=68.0000 68.0000
@@ -313,8 +305,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -328,7 +318,7 @@ sprites{
 			}
 		}
 	}
-	exploding6{
+	exploding_06{
 		file=Bomb_rock.png
 		file_pos=207.0000 98.0000
 		file_size=68.0000 68.0000
@@ -341,8 +331,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 -48.0000
@@ -368,8 +356,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -377,12 +363,10 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling{
+	idling_01{
 		file=Bomb_rock.png
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
@@ -393,8 +377,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -402,12 +384,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling2{
+	idling_02{
 		file=Bomb_rock.png
 		file_pos=29.0000 0.0000
 		file_size=28.0000 28.0000
@@ -418,8 +398,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -427,12 +405,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling3{
+	idling_03{
 		file=Bomb_rock.png
 		file_pos=58.0000 0.0000
 		file_size=28.0000 28.0000
@@ -443,8 +419,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -452,12 +426,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling4{
+	idling_04{
 		file=Bomb_rock.png
 		file_pos=87.0000 0.0000
 		file_size=28.0000 28.0000
@@ -468,8 +440,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -477,12 +447,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling5{
+	idling_05{
 		file=Bomb_rock.png
 		file_pos=116.0000 0.0000
 		file_size=28.0000 28.0000
@@ -493,8 +461,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -502,12 +468,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_no_hit{
+	idling_no_hit_01{
 		file=Bomb_rock.png
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
@@ -518,8 +482,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -527,12 +489,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_no_hit2{
+	idling_no_hit_02{
 		file=Bomb_rock.png
 		file_pos=29.0000 0.0000
 		file_size=28.0000 28.0000
@@ -543,8 +503,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -552,12 +510,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_no_hit3{
+	idling_no_hit_03{
 		file=Bomb_rock.png
 		file_pos=58.0000 0.0000
 		file_size=28.0000 28.0000
@@ -568,8 +524,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -577,12 +531,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_no_hit4{
+	idling_no_hit_04{
 		file=Bomb_rock.png
 		file_pos=87.0000 0.0000
 		file_size=28.0000 28.0000
@@ -593,8 +545,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -602,12 +552,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_no_hit5{
+	idling_no_hit_05{
 		file=Bomb_rock.png
 		file_pos=116.0000 0.0000
 		file_size=28.0000 28.0000
@@ -618,8 +566,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -627,12 +573,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed1{
+	primed_01{
 		file=Bomb_rock.png
 		file_pos=0.0000 29.0000
 		file_size=68.0000 68.0000
@@ -644,8 +588,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -653,12 +595,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed2{
+	primed_02{
 		file=Bomb_rock.png
 		file_pos=0.0000 29.0000
 		file_size=68.0000 68.0000
@@ -670,8 +610,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -679,12 +617,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed3{
+	primed_03{
 		file=Bomb_rock.png
 		file_pos=69.0000 29.0000
 		file_size=68.0000 68.0000
@@ -696,8 +632,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -705,12 +639,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed4{
+	primed_04{
 		file=Bomb_rock.png
 		file_pos=69.0000 29.0000
 		file_size=68.0000 68.0000
@@ -722,8 +654,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -731,12 +661,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed5{
+	primed_05{
 		file=Bomb_rock.png
 		file_pos=0.0000 98.0000
 		file_size=68.0000 68.0000
@@ -748,8 +676,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -757,12 +683,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed6{
+	primed_06{
 		file=Bomb_rock.png
 		file_pos=0.0000 98.0000
 		file_size=68.0000 68.0000
@@ -774,8 +698,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -783,12 +705,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed7{
+	primed_07{
 		file=Bomb_rock.png
 		file_pos=69.0000 98.0000
 		file_size=68.0000 68.0000
@@ -800,8 +720,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -809,12 +727,10 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	primed8{
+	primed_08{
 		file=Bomb_rock.png
 		file_pos=69.0000 98.0000
 		file_size=68.0000 68.0000
@@ -826,8 +742,6 @@ sprites{
 				radius=14.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			explosion{
 				coords=0.0000 0.0000 0.0000
@@ -835,8 +749,6 @@ sprites{
 				radius=14.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -845,3 +757,4 @@ body_parts{
 	body
 	explosion
 }
+engine_version=0.25.0

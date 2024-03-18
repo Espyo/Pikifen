@@ -1,67 +1,67 @@
 animations{
-	hidden{
+	burying{
 		frames{
-			nothing{
-				duration=0.0000
+			idling{
+				duration=0.3000
+			}
+			burying_01{
+				duration=0.1500
+				sound=burying
+			}
+			burying_02{
+				duration=0.1500
+			}
+			burying_03{
+				duration=0.1500
+			}
+			burying_04{
+				duration=0.1500
+			}
+			underground{
+				duration=0.5000
 			}
 		}
 	}
-	moving{
+	dying{
+		loop_frame=5
 		frames{
-			idling{
+			dying_01{
 				duration=0.1000
 			}
-			moving1{
+			dying_02{
 				duration=0.1000
 			}
-			moving2{
+			dying_03{
 				duration=0.1000
 			}
-			moving1{
+			dying_04{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.4000
+			}
+			dying_04{
 				duration=0.1000
 			}
 		}
 	}
 	emerging{
 		frames{
-			emerging1{
+			emerging_01{
 				duration=0.1500
 			}
-			emerging2{
+			emerging_02{
 				duration=0.1500
 				sound=burying
 			}
-			emerging3{
+			emerging_03{
 				duration=0.1500
 			}
-			emerging4{
+			emerging_04{
 				duration=0.1500
 			}
 			idling{
 				duration=0.3000
-			}
-		}
-	}
-	burying{
-		frames{
-			idling{
-				duration=0.3000
-			}
-			burying1{
-				duration=0.1500
-				sound=burying
-			}
-			burying2{
-				duration=0.1500
-			}
-			burying3{
-				duration=0.1500
-			}
-			burying4{
-				duration=0.1500
-			}
-			nothing{
-				duration=0.5000
 			}
 		}
 	}
@@ -72,31 +72,226 @@ animations{
 			}
 		}
 	}
-	dying{
-		loop_frame=5
+	hidden{
 		frames{
-			dying1{
+			underground{
+				duration=0.0000
+			}
+		}
+	}
+	moving{
+		frames{
+			idling{
 				duration=0.1000
 			}
-			dying2{
+			moving_01{
 				duration=0.1000
 			}
-			dying3{
+			moving_02{
 				duration=0.1000
 			}
-			dying4{
-				duration=0.1000
-			}
-			dying5{
-				duration=0.4000
-			}
-			dying4{
+			moving_01{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
+	burying_01{
+		file=Female_Sheargrub.png
+		file_pos=55.0000 0.0000
+		file_size=36.0000 31.0000
+		offset=4.5000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	burying_02{
+		file=Female_Sheargrub.png
+		file_pos=55.0000 0.0000
+		file_size=36.0000 31.0000
+		offset=4.5000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	burying_03{
+		file=Female_Sheargrub.png
+		file_pos=92.0000 3.0000
+		file_size=26.0000 28.0000
+		offset=9.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	burying_04{
+		file=Female_Sheargrub.png
+		file_pos=92.0000 3.0000
+		file_size=26.0000 28.0000
+		offset=9.0000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	dying_01{
+		file=Female_Sheargrub.png
+		file_pos=0.0000 61.0000
+		file_size=38.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Female_Sheargrub.png
+		file_pos=39.0000 63.0000
+		file_size=38.0000 26.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Female_Sheargrub.png
+		file_pos=78.0000 63.0000
+		file_size=38.0000 26.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Female_Sheargrub.png
+		file_pos=117.0000 61.0000
+		file_size=38.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_05{
+		file=Female_Sheargrub.png
+		file_pos=78.0000 63.0000
+		file_size=38.0000 26.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	emerging_01{
+		file=Female_Sheargrub.png
+		file_pos=0.0000 4.0000
+		file_size=20.0000 27.0000
+		offset=-9.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=9.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	emerging_02{
+		file=Female_Sheargrub.png
+		file_pos=0.0000 4.0000
+		file_size=20.0000 27.0000
+		offset=-9.0000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=9.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	emerging_03{
+		file=Female_Sheargrub.png
+		file_pos=21.0000 2.0000
+		file_size=33.0000 29.0000
+		offset=-4.5000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	emerging_04{
+		file=Female_Sheargrub.png
+		file_pos=21.0000 2.0000
+		file_size=33.0000 29.0000
+		offset=-4.5000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	idling{
 		file=Female_Sheargrub.png
 		file_pos=0.0000 32.0000
@@ -111,7 +306,7 @@ sprites{
 			}
 		}
 	}
-	moving1{
+	moving_01{
 		file=Female_Sheargrub.png
 		file_pos=39.0000 32.0000
 		file_size=41.0000 28.0000
@@ -126,7 +321,7 @@ sprites{
 			}
 		}
 	}
-	moving2{
+	moving_02{
 		file=Female_Sheargrub.png
 		file_pos=81.0000 32.0000
 		file_size=44.0000 28.0000
@@ -141,131 +336,7 @@ sprites{
 			}
 		}
 	}
-	emerging1{
-		file=Female_Sheargrub.png
-		file_pos=0.0000 4.0000
-		file_size=20.0000 27.0000
-		offset=-9.0000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=9.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	emerging2{
-		file=Female_Sheargrub.png
-		file_pos=0.0000 4.0000
-		file_size=20.0000 27.0000
-		offset=-9.0000 0.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=9.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	emerging3{
-		file=Female_Sheargrub.png
-		file_pos=21.0000 2.0000
-		file_size=33.0000 29.0000
-		offset=-4.5000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	emerging4{
-		file=Female_Sheargrub.png
-		file_pos=21.0000 2.0000
-		file_size=33.0000 29.0000
-		offset=-4.5000 0.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	burying1{
-		file=Female_Sheargrub.png
-		file_pos=55.0000 0.0000
-		file_size=36.0000 31.0000
-		offset=4.5000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	burying2{
-		file=Female_Sheargrub.png
-		file_pos=55.0000 0.0000
-		file_size=36.0000 31.0000
-		offset=4.5000 0.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	burying3{
-		file=Female_Sheargrub.png
-		file_pos=92.0000 3.0000
-		file_size=26.0000 28.0000
-		offset=9.0000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	burying4{
-		file=Female_Sheargrub.png
-		file_pos=92.0000 3.0000
-		file_size=26.0000 28.0000
-		offset=9.0000 0.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	nothing{
+	underground{
 		file=Female_Sheargrub.png
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
@@ -275,77 +346,6 @@ sprites{
 				height=128.0000
 				radius=24.0000
 				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying1{
-		file=Female_Sheargrub.png
-		file_pos=0.0000 61.0000
-		file_size=38.0000 28.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying2{
-		file=Female_Sheargrub.png
-		file_pos=39.0000 63.0000
-		file_size=38.0000 26.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying3{
-		file=Female_Sheargrub.png
-		file_pos=78.0000 63.0000
-		file_size=38.0000 26.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying4{
-		file=Female_Sheargrub.png
-		file_pos=117.0000 61.0000
-		file_size=38.0000 28.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=12.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying5{
-		file=Female_Sheargrub.png
-		file_pos=78.0000 63.0000
-		file_size=38.0000 26.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=128.0000
-				radius=24.0000
-				type=0
 				value=1.0000
 			}
 		}

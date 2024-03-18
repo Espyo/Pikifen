@@ -8,13 +8,13 @@ animations{
 	}
 	left_idling{
 		frames{
-			left_idling_1{
+			left_idling_01{
 				duration=0.0800
 			}
-			left_idling_2{
+			left_idling_02{
 				duration=0.0800
 			}
-			left_idling_3{
+			left_idling_03{
 				duration=0.0800
 			}
 		}
@@ -33,17 +33,17 @@ sprites{
 		file_pos=98.0000 579.0000
 		file_size=48.0000 48.0000
 	}
-	left_idling_1{
+	left_idling_01{
 		file=Electric_gate.png
 		file_pos=49.0000 579.0000
 		file_size=48.0000 48.0000
 	}
-	left_idling_2{
+	left_idling_02{
 		file=Electric_gate.png
 		file_pos=49.0000 628.0000
 		file_size=48.0000 48.0000
 	}
-	left_idling_3{
+	left_idling_03{
 		file=Electric_gate.png
 		file_pos=49.0000 677.0000
 		file_size=48.0000 48.0000
@@ -55,3 +55,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0

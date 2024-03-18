@@ -1,31 +1,31 @@
 animations{
 	bumped{
 		frames{
-			bumping1{
+			bumping_01{
 				duration=0.1000
 			}
-			bumping2{
+			bumping_02{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1{
+			bumping_01{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.7000
 			}
 		}
 	}
 	closing{
 		frames{
-			closing1{
+			closing_01{
 				duration=0.1000
 			}
-			closing2{
+			closing_02{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4{
+			closing_04{
 				duration=0.1000
 			}
 			closed{
@@ -35,82 +35,82 @@ animations{
 	}
 	dying{
 		frames{
-			dying1{
+			dying_01{
 				duration=0.1500
 			}
-			dying2{
+			dying_02{
 				duration=0.1500
 			}
-			dying1{
+			dying_01{
 				duration=0.1500
 			}
-			dying2{
+			dying_02{
 				duration=0.1500
 			}
-			dying1{
+			dying_01{
 				duration=0.1500
 			}
-			dying2{
+			dying_02{
 				duration=0.1500
 				sound=dying
 			}
-			dying3{
+			dying_03{
 				duration=0.1500
 				sound=rustling
 			}
-			dying4{
+			dying_04{
 				duration=0.1500
 			}
-			dying5{
+			dying_05{
 				duration=0.1500
 			}
-			dying6{
+			dying_06{
 				duration=0.1500
 			}
-			dying7{
+			dying_07{
 				duration=0.1500
 			}
 		}
 	}
 	idling{
 		frames{
-			idling{
+			idling_01{
 				duration=0.2500
 			}
-			idling2{
+			idling_02{
 				duration=0.2500
 			}
-			idling{
+			idling_01{
 				duration=0.2500
 			}
-			idling3{
+			idling_03{
 				duration=0.2500
 			}
 		}
 	}
 	opening{
 		frames{
-			closing4{
+			closing_04{
 				duration=0.1000
 			}
-			closing3{
+			closing_03{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2{
+			closing_02{
 				duration=0.1000
 			}
-			closing1{
+			closing_01{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
 	spitting{
 		frames{
-			closing4{
+			closing_04{
 				duration=0.1000
 			}
 			closed{
@@ -121,7 +121,7 @@ animations{
 	}
 }
 sprites{
-	bumping1{
+	bumping_01{
 		file=Pink_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -137,7 +137,7 @@ sprites{
 			}
 		}
 	}
-	bumping2{
+	bumping_02{
 		file=Pink_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -168,7 +168,7 @@ sprites{
 			}
 		}
 	}
-	closing1{
+	closing_01{
 		file=Pink_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -183,7 +183,7 @@ sprites{
 			}
 		}
 	}
-	closing2{
+	closing_02{
 		file=Pink_Candypop_Bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
@@ -198,7 +198,7 @@ sprites{
 			}
 		}
 	}
-	closing3{
+	closing_03{
 		file=Pink_Candypop_Bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
@@ -213,7 +213,7 @@ sprites{
 			}
 		}
 	}
-	closing4{
+	closing_04{
 		file=Pink_Candypop_Bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
@@ -228,7 +228,7 @@ sprites{
 			}
 		}
 	}
-	dying1{
+	dying_01{
 		file=Pink_Candypop_Bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
@@ -244,7 +244,7 @@ sprites{
 			}
 		}
 	}
-	dying2{
+	dying_02{
 		file=Pink_Candypop_Bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
@@ -260,7 +260,7 @@ sprites{
 			}
 		}
 	}
-	dying3{
+	dying_03{
 		file=Pink_Candypop_Bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
@@ -276,7 +276,7 @@ sprites{
 			}
 		}
 	}
-	dying4{
+	dying_04{
 		file=Pink_Candypop_Bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
@@ -292,7 +292,7 @@ sprites{
 			}
 		}
 	}
-	dying5{
+	dying_05{
 		file=Pink_Candypop_Bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
@@ -308,7 +308,7 @@ sprites{
 			}
 		}
 	}
-	dying6{
+	dying_06{
 		file=Pink_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -324,7 +324,7 @@ sprites{
 			}
 		}
 	}
-	dying7{
+	dying_07{
 		file=Pink_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -340,7 +340,7 @@ sprites{
 			}
 		}
 	}
-	idling{
+	idling_01{
 		file=Pink_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -355,7 +355,7 @@ sprites{
 			}
 		}
 	}
-	idling2{
+	idling_02{
 		file=Pink_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -371,7 +371,7 @@ sprites{
 			}
 		}
 	}
-	idling3{
+	idling_03{
 		file=Pink_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000

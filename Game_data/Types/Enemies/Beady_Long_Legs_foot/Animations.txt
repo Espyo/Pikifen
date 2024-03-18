@@ -1,156 +1,144 @@
 animations{
+	dying{
+		loop_frame=5
+		frames{
+			idling{
+				duration=0.6000
+			}
+			crumbling_01{
+				duration=0.5000
+			}
+			crumbling_02{
+				duration=0.4000
+			}
+			crumbling_03{
+				duration=0.4000
+			}
+			crumbling_04{
+				duration=0.3000
+			}
+			crumbling_05{
+				duration=0.3000
+			}
+		}
+	}
 	idling{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	landing{
 		frames{
 			landing{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
-			}
-		}
-	}
-	dying{
-		loop_frame=5
-		frames{
-			idling{
-				duration=0.60
-			}
-			crumbling1{
-				duration=0.50
-			}
-			crumbling2{
-				duration=0.40
-			}
-			crumbling3{
-				duration=0.40
-			}
-			crumbling4{
-				duration=0.30
-			}
-			crumbling5{
-				duration=0.30
+				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	idling{
+	crumbling_01{
 		file=Beady_Long_Legs.png
-		file_pos=422.00 286.00
-		file_size=75.00 75.00
+		file_pos=498.0000 286.0000
+		file_size=75.0000 75.0000
 		hitboxes{
 			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
 				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
+				value=1.0000
+			}
+		}
+	}
+	crumbling_02{
+		file=Beady_Long_Legs.png
+		file_pos=574.0000 286.0000
+		file_size=75.0000 75.0000
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling_03{
+		file=Beady_Long_Legs.png
+		file_pos=650.0000 286.0000
+		file_size=75.0000 75.0000
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling_04{
+		file=Beady_Long_Legs.png
+		file_pos=422.0000 362.0000
+		file_size=75.0000 75.0000
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling_05{
+		file=Beady_Long_Legs.png
+		file_pos=498.0000 362.0000
+		file_size=75.0000 75.0000
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=Beady_Long_Legs.png
+		file_pos=422.0000 286.0000
+		file_size=75.0000 75.0000
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
 			}
 		}
 	}
 	landing{
 		file=Beady_Long_Legs.png
-		file_pos=422.00 286.00
-		file_size=75.00 75.00
+		file_pos=422.0000 286.0000
+		file_size=75.0000 75.0000
 		hitboxes{
 			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=40.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
 				knockback_outward=true
-				knockback=0.50
-			}
-		}
-	}
-	crumbling1{
-		file=Beady_Long_Legs.png
-		file_pos=498.00 286.00
-		file_size=75.00 75.00
-		hitboxes{
-			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
-				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
-			}
-		}
-	}
-	crumbling2{
-		file=Beady_Long_Legs.png
-		file_pos=574.00 286.00
-		file_size=75.00 75.00
-		hitboxes{
-			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
-				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
-			}
-		}
-	}
-	crumbling3{
-		file=Beady_Long_Legs.png
-		file_pos=650.00 286.00
-		file_size=75.00 75.00
-		hitboxes{
-			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
-				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
-			}
-		}
-	}
-	crumbling4{
-		file=Beady_Long_Legs.png
-		file_pos=422.00 362.00
-		file_size=75.00 75.00
-		hitboxes{
-			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
-				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
-			}
-		}
-	}
-	crumbling5{
-		file=Beady_Long_Legs.png
-		file_pos=498.00 362.00
-		file_size=75.00 75.00
-		hitboxes{
-			foot{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=37.50
-				type=2
-				value=1.00
-				knockback_outward=true
-				knockback=1.00
+				knockback=0.5000
 			}
 		}
 	}
@@ -158,3 +146,4 @@ sprites{
 body_parts{
 	foot
 }
+engine_version=0.25.0

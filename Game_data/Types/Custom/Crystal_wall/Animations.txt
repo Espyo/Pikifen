@@ -1,21 +1,4 @@
 animations{
-	broken{
-		frames{
-			broken{
-				duration=0.1000
-			}
-		}
-	}
-	broken_shaking{
-		frames{
-			broken2{
-				duration=0.0600
-			}
-			broken3{
-				duration=0.0600
-			}
-		}
-	}
 	destroyed{
 		frames{
 			destroyed{
@@ -23,170 +6,59 @@ animations{
 			}
 		}
 	}
-	healthy{
+	stage_1_idling{
 		frames{
-			healthy{
+			stage_1_01{
 				duration=0.1000
 			}
 		}
 	}
-	healthy_shaking{
+	stage_1_shaking{
 		frames{
-			healthy2{
+			stage_1_02{
 				duration=0.0600
 			}
-			healthy3{
+			stage_1_03{
 				duration=0.0600
 			}
 		}
 	}
-	very_broken{
+	stage_2_idling{
 		frames{
-			very_broken{
+			stage_2_01{
 				duration=0.1000
 			}
 		}
 	}
-	very_broken_shaking{
+	stage_2_shaking{
 		frames{
-			very_broken_2{
+			stage_2_02{
 				duration=0.0600
 			}
-			very_broken_3{
+			stage_2_03{
+				duration=0.0600
+			}
+		}
+	}
+	stage_3_idling{
+		frames{
+			stage_3_01{
+				duration=0.1000
+			}
+		}
+	}
+	stage_3_shaking{
+		frames{
+			stage_3_02{
+				duration=0.0600
+			}
+			stage_3_03{
 				duration=0.0600
 			}
 		}
 	}
 }
 sprites{
-	broken{
-		file=Crystal_wall.png
-		file_pos=17.0000 49.0000
-		file_size=16.0000 240.0000
-		hitboxes{
-			center{
-				coords=0.0000 0.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_left{
-				coords=0.0000 -70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_right{
-				coords=0.0000 70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_left{
-				coords=0.0000 -35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_right{
-				coords=0.0000 35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	broken2{
-		file=Crystal_wall.png
-		file_pos=17.0000 49.0000
-		file_size=16.0000 240.0000
-		offset=0.7000 0.0000
-		hitboxes{
-			center{
-				coords=0.0000 0.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_left{
-				coords=0.0000 -70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_right{
-				coords=0.0000 70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_left{
-				coords=0.0000 -35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_right{
-				coords=0.0000 35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	broken3{
-		file=Crystal_wall.png
-		file_pos=17.0000 49.0000
-		file_size=16.0000 240.0000
-		offset=-0.7000 0.0000
-		hitboxes{
-			center{
-				coords=0.0000 0.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_left{
-				coords=0.0000 -70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			far_right{
-				coords=0.0000 70.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_left{
-				coords=0.0000 -35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-			near_right{
-				coords=0.0000 35.0000 0.0000
-				height=0.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
 	destroyed{
 		file=Crystal_wall.png
 		file_pos=51.0000 49.0000
@@ -229,7 +101,7 @@ sprites{
 			}
 		}
 	}
-	healthy{
+	stage_1_01{
 		file=Crystal_wall.png
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
@@ -271,7 +143,7 @@ sprites{
 			}
 		}
 	}
-	healthy2{
+	stage_1_02{
 		file=Crystal_wall.png
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
@@ -314,7 +186,7 @@ sprites{
 			}
 		}
 	}
-	healthy3{
+	stage_1_03{
 		file=Crystal_wall.png
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
@@ -357,7 +229,135 @@ sprites{
 			}
 		}
 	}
-	very_broken{
+	stage_2_01{
+		file=Crystal_wall.png
+		file_pos=17.0000 49.0000
+		file_size=16.0000 240.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_2_02{
+		file=Crystal_wall.png
+		file_pos=17.0000 49.0000
+		file_size=16.0000 240.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_2_03{
+		file=Crystal_wall.png
+		file_pos=17.0000 49.0000
+		file_size=16.0000 240.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_3_01{
 		file=Crystal_wall.png
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
@@ -399,7 +399,7 @@ sprites{
 			}
 		}
 	}
-	very_broken_2{
+	stage_3_02{
 		file=Crystal_wall.png
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
@@ -442,7 +442,7 @@ sprites{
 			}
 		}
 	}
-	very_broken_3{
+	stage_3_03{
 		file=Crystal_wall.png
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
@@ -493,3 +493,4 @@ body_parts{
 	near_left
 	near_right
 }
+engine_version=0.25.0

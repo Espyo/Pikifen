@@ -22,16 +22,16 @@ animations{
 	}
 	on{
 		frames{
-			on{
+			on_01{
 				duration=0.0400
 			}
-			on2{
+			on_02{
 				duration=0.0400
 			}
-			on{
+			on_01{
 				duration=0.0400
 			}
-			on3{
+			on_03{
 				duration=0.0400
 			}
 		}
@@ -80,7 +80,7 @@ sprites{
 			}
 		}
 	}
-	on{
+	on_01{
 		file=Timed_lever.png
 		file_pos=0.0000 33.0000
 		file_size=64.0000 32.0000
@@ -94,7 +94,7 @@ sprites{
 			}
 		}
 	}
-	on2{
+	on_02{
 		file=Timed_lever.png
 		file_pos=0.0000 66.0000
 		file_size=64.0000 32.0000
@@ -108,7 +108,7 @@ sprites{
 			}
 		}
 	}
-	on3{
+	on_03{
 		file=Timed_lever.png
 		file_pos=65.0000 66.0000
 		file_size=64.0000 32.0000
@@ -126,4 +126,4 @@ sprites{
 body_parts{
 	main
 }
-engine_version=0.24.0
+engine_version=0.25.0

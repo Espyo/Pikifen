@@ -12,7 +12,7 @@ script {
         }
         on_timer {
             set_var capturing false
-            set_state healthy
+            set_state stage_1_idling
         }
         on_touch_object {
             if $capturing = true
@@ -23,49 +23,49 @@ script {
         }
     }
 
-    healthy {
+    stage_1_idling {
         on_enter {
-            set_animation healthy
+            set_animation stage_1_idling
         }
         on_damage {
             get_mob_info t self health_ratio
             if $t < 0.85
-                set_state broken_shaking
+                set_state stage_2_shaking
             end_if
-            set_state healthy_shaking
+            set_state stage_1_shaking
         }
     }
 
-    healthy_shaking {
+    stage_1_shaking {
         on_enter {
-            set_animation healthy_shaking
+            set_animation stage_1_shaking
         }
         on_animation_end {
-            set_state healthy
+            set_state stage_1_idling
         }
         on_damage {
             get_mob_info t self health_ratio
             if $t < 0.85
-                set_state broken_shaking
+                set_state stage_2_shaking
             end_if
         }
     }
 
-    broken {
+    stage_2_idling {
         on_enter {
-            set_animation broken
+            set_animation stage_2_idling
         }
         on_damage {
-            set_state broken_shaking
+            set_state stage_2_shaking
         }
     }
 
-    broken_shaking {
+    stage_2_shaking {
         on_enter {
-            set_animation broken_shaking
+            set_animation stage_2_shaking
         }
         on_animation_end {
-            set_state broken
+            set_state stage_2_idling
         }
     }
 

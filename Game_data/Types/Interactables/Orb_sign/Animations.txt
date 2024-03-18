@@ -1,43 +1,43 @@
 animations{
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1700
 			}
-			idling2{
+			idling_02{
 				duration=0.1700
 			}
-			idling3{
+			idling_03{
 				duration=0.1700
 			}
-			idling4{
+			idling_04{
 				duration=0.1700
 			}
 		}
 	}
 }
 sprites{
-	idling1{
+	idling_01{
 		file=Orb_sign.png
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.5000 1.5000
 	}
-	idling2{
+	idling_02{
 		file=Orb_sign.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.5000 1.5000
 		angle=5.9341
 	}
-	idling3{
+	idling_03{
 		file=Orb_sign.png
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.5000 1.5000
 		angle=5.5851
 	}
-	idling4{
+	idling_04{
 		file=Orb_sign.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
@@ -45,4 +45,4 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2
+engine_version=0.25.0

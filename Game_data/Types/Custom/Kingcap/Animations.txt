@@ -6,23 +6,23 @@ animations{
 			}
 		}
 	}
-	idling_1{
+	idling_01{
 		frames{
-			idling_1{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
-	idling_2{
+	idling_02{
 		frames{
-			idling_2{
+			idling_02{
 				duration=0.1000
 			}
 		}
 	}
-	idling_3{
+	idling_03{
 		frames{
-			idling_3{
+			idling_03{
 				duration=0.1000
 			}
 		}
@@ -43,7 +43,7 @@ sprites{
 			}
 		}
 	}
-	idling_1{
+	idling_01{
 		file=Spotcaps.png
 		file_pos=0.0000 206.0000
 		file_size=102.0000 102.0000
@@ -58,7 +58,7 @@ sprites{
 			}
 		}
 	}
-	idling_2{
+	idling_02{
 		file=Spotcaps.png
 		file_pos=0.0000 103.0000
 		file_size=102.0000 102.0000
@@ -73,7 +73,7 @@ sprites{
 			}
 		}
 	}
-	idling_3{
+	idling_03{
 		file=Spotcaps.png
 		file_pos=0.0000 0.0000
 		file_size=102.0000 102.0000
@@ -92,3 +92,4 @@ sprites{
 body_parts{
 	hit
 }
+engine_version=0.25.0

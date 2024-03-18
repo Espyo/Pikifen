@@ -7,7 +7,7 @@ animations{
 			grabbing{
 				duration=0.1000
 			}
-			attack{
+			attacking{
 				duration=0.3000
 			}
 			grabbing{
@@ -89,7 +89,7 @@ animations{
 	}
 	plucking{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
 			idling{
@@ -116,32 +116,32 @@ animations{
 	}
 	sprout{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout2{
+			sprout_02{
 				duration=0.2000
 			}
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout3{
+			sprout_03{
 				duration=0.2000
 			}
 		}
 	}
 	thrown{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=0.0800
 			}
-			thrown2{
+			thrown_02{
 				duration=0.0800
 			}
-			thrown3{
+			thrown_03{
 				duration=0.0800
 			}
-			thrown4{
+			thrown_04{
 				duration=0.0800
 			}
 		}
@@ -151,32 +151,32 @@ animations{
 			idling{
 				duration=0.0500
 			}
-			walking1{
+			walking_01{
 				duration=0.0500
 			}
-			walking2{
+			walking_02{
 				duration=0.0500
 			}
-			walking1{
+			walking_01{
 				duration=0.0500
 			}
 			idling{
 				duration=0.0500
 			}
-			walking3{
+			walking_03{
 				duration=0.0500
 			}
-			walking4{
+			walking_04{
 				duration=0.0500
 			}
-			walking3{
+			walking_03{
 				duration=0.0500
 			}
 		}
 	}
 }
 sprites{
-	attack{
+	attacking{
 		file=Bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
@@ -422,7 +422,7 @@ sprites{
 			}
 		}
 	}
-	sprout1{
+	sprout_01{
 		file=Bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
@@ -448,7 +448,7 @@ sprites{
 			}
 		}
 	}
-	sprout2{
+	sprout_02{
 		file=Bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
@@ -474,7 +474,7 @@ sprites{
 			}
 		}
 	}
-	sprout3{
+	sprout_03{
 		file=Bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
@@ -500,7 +500,7 @@ sprites{
 			}
 		}
 	}
-	thrown1{
+	thrown_01{
 		file=Bulbmin.png
 		file_pos=0.0000 60.0000
 		file_size=33.0000 28.0000
@@ -526,7 +526,7 @@ sprites{
 			}
 		}
 	}
-	thrown2{
+	thrown_02{
 		file=Bulbmin.png
 		file_pos=34.0000 60.0000
 		file_size=35.0000 28.0000
@@ -552,7 +552,7 @@ sprites{
 			}
 		}
 	}
-	thrown3{
+	thrown_03{
 		file=Bulbmin.png
 		file_pos=70.0000 60.0000
 		file_size=33.0000 28.0000
@@ -578,7 +578,7 @@ sprites{
 			}
 		}
 	}
-	thrown4{
+	thrown_04{
 		file=Bulbmin.png
 		file_pos=104.0000 60.0000
 		file_size=35.0000 28.0000
@@ -604,7 +604,7 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	walking_01{
 		file=Bulbmin.png
 		file_pos=35.0000 0.0000
 		file_size=34.0000 28.0000
@@ -631,7 +631,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
+	walking_02{
 		file=Bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
@@ -658,7 +658,7 @@ sprites{
 			}
 		}
 	}
-	walking3{
+	walking_03{
 		file=Bulbmin.png
 		file_pos=35.0000 0.0000
 		file_size=34.0000 28.0000
@@ -685,7 +685,7 @@ sprites{
 			}
 		}
 	}
-	walking4{
+	walking_04{
 		file=Bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
@@ -717,3 +717,4 @@ body_parts{
 	top
 	body
 }
+engine_version=0.25.0

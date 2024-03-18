@@ -7,7 +7,7 @@ animations{
 			grabbing{
 				duration=0.1000
 			}
-			attack{
+			attacking{
 				duration=0.3000
 			}
 			grabbing{
@@ -27,7 +27,7 @@ animations{
 	}
 	drinking{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=1.0000
 			}
 		}
@@ -79,7 +79,7 @@ animations{
 	}
 	picking_up{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=0.1000
 			}
 			idling{
@@ -89,7 +89,7 @@ animations{
 	}
 	plucking{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
 			idling{
@@ -99,7 +99,7 @@ animations{
 	}
 	sighing{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=1.5000
 			}
 			idling{
@@ -116,32 +116,32 @@ animations{
 	}
 	sprout{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout2{
+			sprout_02{
 				duration=0.2000
 			}
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout3{
+			sprout_03{
 				duration=0.2000
 			}
 		}
 	}
 	thrown{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=0.0800
 			}
-			thrown2{
+			thrown_02{
 				duration=0.0800
 			}
-			thrown3{
+			thrown_03{
 				duration=0.0800
 			}
-			thrown4{
+			thrown_04{
 				duration=0.0800
 			}
 		}
@@ -151,20 +151,20 @@ animations{
 			idling{
 				duration=0.1000
 			}
-			walking2{
+			walking_02{
 				duration=0.1000
 			}
 			idling{
 				duration=0.1000
 			}
-			walking1{
+			walking_01{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	attack{
+	attacking{
 		file=Yellow_Pikmin.png
 		file_pos=206.0000 37.0000
 		file_size=26.0000 36.0000
@@ -403,7 +403,7 @@ sprites{
 			}
 		}
 	}
-	sprout1{
+	sprout_01{
 		file=Yellow_Pikmin.png
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
@@ -429,7 +429,7 @@ sprites{
 			}
 		}
 	}
-	sprout2{
+	sprout_02{
 		file=Yellow_Pikmin.png
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
@@ -455,7 +455,7 @@ sprites{
 			}
 		}
 	}
-	sprout3{
+	sprout_03{
 		file=Yellow_Pikmin.png
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
@@ -481,7 +481,7 @@ sprites{
 			}
 		}
 	}
-	thrown1{
+	thrown_01{
 		file=Yellow_Pikmin.png
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
@@ -507,7 +507,7 @@ sprites{
 			}
 		}
 	}
-	thrown2{
+	thrown_02{
 		file=Yellow_Pikmin.png
 		file_pos=29.0000 37.0000
 		file_size=34.0000 36.0000
@@ -533,7 +533,7 @@ sprites{
 			}
 		}
 	}
-	thrown3{
+	thrown_03{
 		file=Yellow_Pikmin.png
 		file_pos=64.0000 37.0000
 		file_size=32.0000 36.0000
@@ -559,7 +559,7 @@ sprites{
 			}
 		}
 	}
-	thrown4{
+	thrown_04{
 		file=Yellow_Pikmin.png
 		file_pos=97.0000 37.0000
 		file_size=36.0000 36.0000
@@ -585,7 +585,7 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	walking_01{
 		file=Yellow_Pikmin.png
 		file_pos=21.0000 0.0000
 		file_size=32.0000 36.0000
@@ -611,7 +611,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
+	walking_02{
 		file=Yellow_Pikmin.png
 		file_pos=21.0000 0.0000
 		file_size=32.0000 36.0000
@@ -643,3 +643,4 @@ body_parts{
 	top
 	body
 }
+engine_version=0.25.0

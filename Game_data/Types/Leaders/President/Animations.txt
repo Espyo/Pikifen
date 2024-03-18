@@ -1,8 +1,15 @@
 animations{
 	dismissing{
 		frames{
-			ducking{
+			ducking_01{
 				duration=0.5000
+			}
+		}
+	}
+	drinking{
+		frames{
+			ducking_01{
+				duration=1.0000
 			}
 		}
 	}
@@ -27,92 +34,6 @@ animations{
 			}
 		}
 	}
-	lying{
-		loop_frame=1
-		frames{
-			half_lying{
-				duration=0.0700
-			}
-			lying{
-				duration=0.1000
-			}
-		}
-	}
-	plucking{
-		loop_frame=4
-		frames{
-			ducking{
-				duration=0.2000
-			}
-			idling{
-				duration=0.1000
-			}
-			limbo{
-				duration=0.1000
-			}
-			half_limbo{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	throwing{
-		loop_frame=1
-		frames{
-			ducking{
-				duration=0.2000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	walking{
-		frames{
-			idling{
-				duration=0.1000
-			}
-			walking2{
-				duration=0.1000
-				sound=footstep_2
-			}
-			idling{
-				duration=0.1000
-			}
-			walking1{
-				duration=0.1000
-				sound=footstep_1
-			}
-		}
-	}
-	whistling{
-		frames{
-			ducking{
-				duration=0.0800
-			}
-			ducking2{
-				duration=0.0800
-			}
-		}
-	}
-	pain{
-		frames{
-			half_limbo{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			ducking{
-				duration=0.1000
-			}
-			idling{
-				duration=0.3000
-			}
-		}
-	}
 	knocked_down{
 		frames{
 			half_lying{
@@ -129,10 +50,47 @@ animations{
 			}
 		}
 	}
-	spraying{
+	lying{
+		loop_frame=1
 		frames{
-			ducking{
-				duration=1.0000
+			half_lying{
+				duration=0.0700
+			}
+			lying{
+				duration=0.1000
+			}
+		}
+	}
+	pain{
+		frames{
+			half_limbo{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			ducking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
+			}
+		}
+	}
+	plucking{
+		loop_frame=4
+		frames{
+			ducking_01{
+				duration=0.2000
+			}
+			idling{
+				duration=0.1000
+			}
+			limbo{
+				duration=0.1000
+			}
+			half_limbo{
+				duration=0.1000
 			}
 			idling{
 				duration=0.1000
@@ -147,7 +105,7 @@ animations{
 			punch{
 				duration=0.2000
 			}
-			ducking{
+			ducking_01{
 				duration=0.1000
 			}
 			idling{
@@ -155,16 +113,58 @@ animations{
 			}
 		}
 	}
-	drinking{
+	spraying{
 		frames{
-			ducking{
+			ducking_01{
 				duration=1.0000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	throwing{
+		loop_frame=1
+		frames{
+			ducking_01{
+				duration=0.2000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	walking{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			walking_02{
+				duration=0.1000
+				sound=footstep_2
+			}
+			idling{
+				duration=0.1000
+			}
+			walking_01{
+				duration=0.1000
+				sound=footstep_1
+			}
+		}
+	}
+	whistling{
+		frames{
+			ducking_01{
+				duration=0.0800
+			}
+			ducking_02{
+				duration=0.0800
 			}
 		}
 	}
 }
 sprites{
-	ducking{
+	ducking_01{
 		file=President.png
 		file_pos=0.0000 65.0000
 		file_size=54.0000 64.0000
@@ -187,7 +187,7 @@ sprites{
 			}
 		}
 	}
-	ducking2{
+	ducking_02{
 		file=President.png
 		file_pos=55.0000 65.0000
 		file_size=54.0000 64.0000
@@ -324,7 +324,30 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	punch{
+		file=President.png
+		file_pos=391.0000 65.0000
+		file_size=82.0000 64.0000
+		offset=10.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=25.0000 0.0000 -20.0000
+				height=86.0000
+				radius=10.0000
+				type=1
+				value=8.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	walking_01{
 		file=President.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
@@ -346,7 +369,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
+	walking_02{
 		file=President.png
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
@@ -361,29 +384,6 @@ sprites{
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	punch{
-		file=President.png
-		file_pos=391.0000 65.0000
-		file_size=82.0000 64.0000
-		offset=10.0000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=25.0000 0.0000 -20.0000
-				height=86.0000
-				radius=10.0000
-				type=1
-				value=8.0000
-			}
-			body{
-				coords=4.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
@@ -419,3 +419,4 @@ body_parts{
 	fist
 	body
 }
+engine_version=0.25.0

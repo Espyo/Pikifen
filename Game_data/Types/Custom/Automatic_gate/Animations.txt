@@ -8,41 +8,41 @@ animations{
 	}
 	open{
 		frames{
-			open1{
+			open_01{
 				duration=0.2000
 			}
-			open2{
+			open_02{
 				duration=0.3000
 			}
-			open3{
+			open_03{
 				duration=0.7000
 			}
-			open2{
+			open_02{
 				duration=0.3000
 			}
-			open1{
+			open_01{
 				duration=0.2000
 			}
-			open4{
+			open_04{
 				duration=0.3000
 			}
-			open5{
+			open_05{
 				duration=0.7000
 			}
-			open4{
+			open_04{
 				duration=0.3000
 			}
 		}
 	}
 	rattling{
 		frames{
-			rattling1{
+			rattling_01{
 				duration=0.1000
 			}
-			rattling2{
+			rattling_02{
 				duration=0.1000
 			}
-			rattling3{
+			rattling_03{
 				duration=0.1000
 			}
 			closed{
@@ -57,48 +57,48 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 	}
-	open1{
+	open_01{
 		file=Automatic_gate.png
 		file_pos=41.0000 0.0000
 		file_size=40.0000 192.0000
 	}
-	open2{
+	open_02{
 		file=Automatic_gate.png
 		file_pos=41.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 0.0000
 	}
-	open3{
+	open_03{
 		file=Automatic_gate.png
 		file_pos=41.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=2.0000 0.0000
 	}
-	open4{
+	open_04{
 		file=Automatic_gate.png
 		file_pos=41.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=-1.0000 0.0000
 	}
-	open5{
+	open_05{
 		file=Automatic_gate.png
 		file_pos=41.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=-2.0000 0.0000
 	}
-	rattling1{
+	rattling_01{
 		file=Automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 1.0000
 	}
-	rattling2{
+	rattling_02{
 		file=Automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 -1.0000
 	}
-	rattling3{
+	rattling_03{
 		file=Automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
@@ -106,4 +106,4 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2
+engine_version=0.25.0

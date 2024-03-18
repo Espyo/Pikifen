@@ -1,85 +1,86 @@
 animations{
 	bumped{
 		frames{
-			bumped1{
+			bumped_01{
 				duration=0.1000
 			}
-			bumped2{
+			bumped_02{
 				duration=0.1000
 				sound=bumped
 			}
-			bumped1{
+			bumped_01{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
-			bumped3{
+			bumped_03{
 				duration=0.1000
 			}
-			bumped4{
+			bumped_04{
 				duration=0.1000
 			}
-			bumped3{
+			bumped_03{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling{
+			idling_01{
 				duration=0.3000
 			}
-			idling2{
+			idling_02{
 				duration=0.3000
 			}
-			idling{
+			idling_01{
 				duration=0.3000
 			}
-			idling3{
+			idling_03{
 				duration=0.3000
 			}
 		}
 	}
 }
 sprites{
-	bumped1{
+	bumped_01{
 		file=Shoot.png
 		file_pos=0.0000 285.0000
 		file_size=172.0000 94.0000
 	}
-	bumped2{
+	bumped_02{
 		file=Shoot.png
 		file_pos=0.0000 380.0000
 		file_size=172.0000 94.0000
 	}
-	bumped3{
+	bumped_03{
 		file=Shoot.png
 		file_pos=0.0000 475.0000
 		file_size=172.0000 94.0000
 	}
-	bumped4{
+	bumped_04{
 		file=Shoot.png
 		file_pos=0.0000 570.0000
 		file_size=172.0000 94.0000
 	}
-	idling{
+	idling_01{
 		file=Shoot.png
 		file_pos=0.0000 0.0000
 		file_size=172.0000 94.0000
 	}
-	idling2{
+	idling_02{
 		file=Shoot.png
 		file_pos=0.0000 95.0000
 		file_size=172.0000 94.0000
 	}
-	idling3{
+	idling_03{
 		file=Shoot.png
 		file_pos=0.0000 190.0000
 		file_size=172.0000 94.0000
 	}
 }
 body_parts
+engine_version=0.25.0

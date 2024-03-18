@@ -8,51 +8,51 @@ animations{
 	}
 	stage_1_idling{
 		frames{
-			stage_1_1{
+			stage_1_01{
 				duration=0.0000
 			}
 		}
 	}
 	stage_1_shaking{
 		frames{
-			stage_1_2{
+			stage_1_02{
 				duration=0.0600
 			}
-			stage_1_3{
+			stage_1_03{
 				duration=0.0600
 			}
 		}
 	}
 	stage_2_idling{
 		frames{
-			stage_2_1{
+			stage_2_01{
 				duration=0.0000
 			}
 		}
 	}
 	stage_2_shaking{
 		frames{
-			stage_2_2{
+			stage_2_02{
 				duration=0.0600
 			}
-			stage_2_3{
+			stage_2_03{
 				duration=0.0600
 			}
 		}
 	}
 	stage_3_idling{
 		frames{
-			stage_3_1{
+			stage_3_01{
 				duration=0.0000
 			}
 		}
 	}
 	stage_3_shaking{
 		frames{
-			stage_3_2{
+			stage_3_02{
 				duration=0.0600
 			}
-			stage_3_3{
+			stage_3_03{
 				duration=0.0600
 			}
 		}
@@ -101,7 +101,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_1{
+	stage_1_01{
 		file=White_gate.png
 		file_pos=0.0000 49.0000
 		file_size=48.0000 192.0000
@@ -148,7 +148,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_2{
+	stage_1_02{
 		file=White_gate.png
 		file_pos=0.0000 49.0000
 		file_size=48.0000 192.0000
@@ -196,7 +196,7 @@ sprites{
 			}
 		}
 	}
-	stage_1_3{
+	stage_1_03{
 		file=White_gate.png
 		file_pos=0.0000 49.0000
 		file_size=48.0000 192.0000
@@ -244,7 +244,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_1{
+	stage_2_01{
 		file=White_gate.png
 		file_pos=0.0000 242.0000
 		file_size=48.0000 192.0000
@@ -291,7 +291,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_2{
+	stage_2_02{
 		file=White_gate.png
 		file_pos=0.0000 242.0000
 		file_size=48.0000 192.0000
@@ -339,7 +339,7 @@ sprites{
 			}
 		}
 	}
-	stage_2_3{
+	stage_2_03{
 		file=White_gate.png
 		file_pos=0.0000 242.0000
 		file_size=48.0000 192.0000
@@ -387,7 +387,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_1{
+	stage_3_01{
 		file=White_gate.png
 		file_pos=0.0000 435.0000
 		file_size=48.0000 192.0000
@@ -434,7 +434,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_2{
+	stage_3_02{
 		file=White_gate.png
 		file_pos=0.0000 435.0000
 		file_size=48.0000 192.0000
@@ -482,7 +482,7 @@ sprites{
 			}
 		}
 	}
-	stage_3_3{
+	stage_3_03{
 		file=White_gate.png
 		file_pos=0.0000 435.0000
 		file_size=48.0000 192.0000
@@ -538,3 +538,4 @@ body_parts{
 	near_left
 	near_right
 }
+engine_version=0.25.0

@@ -869,7 +869,6 @@ void animation_editor::rename_animation(
     
     //Rename!
     anim->name = new_name;
-    anims.sort_alphabetically();
     
     changes_mgr.mark_as_changed();
     set_status(
@@ -984,7 +983,6 @@ void animation_editor::rename_sprite(
             }
         }
     }
-    anims.sort_alphabetically();
     
     changes_mgr.mark_as_changed();
     set_status(
@@ -1075,6 +1073,7 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
  */
 bool animation_editor::save_animation_database() {
     anims.engine_version = get_engine_version_string();
+    anims.sort_alphabetically();
     
     data_node file_node = data_node("", "");
     

@@ -4,13 +4,13 @@ animations{
 			grabbing_far{
 				duration=0.1000
 			}
-			grabbing1{
+			grabbing_01{
 				duration=0.1000
 			}
-			attack{
+			attacking{
 				duration=0.3000
 			}
-			grabbing1{
+			grabbing_01{
 				duration=0.1000
 			}
 			grabbing_far{
@@ -20,23 +20,23 @@ animations{
 	}
 	carrying{
 		frames{
-			grabbing1{
+			grabbing_01{
 				duration=0.0500
 			}
-			grabbing2{
+			grabbing_02{
 				duration=0.0500
 			}
-			grabbing1{
+			grabbing_01{
 				duration=0.0500
 			}
-			grabbing3{
+			grabbing_03{
 				duration=0.0500
 			}
 		}
 	}
 	drinking{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=1.0000
 			}
 		}
@@ -50,32 +50,32 @@ animations{
 	}
 	grabbing{
 		frames{
-			grabbing1{
+			grabbing_01{
 				duration=0.0500
 			}
-			grabbing2{
+			grabbing_02{
 				duration=0.0500
 			}
-			grabbing1{
+			grabbing_01{
 				duration=0.0500
 			}
-			grabbing3{
+			grabbing_03{
 				duration=0.0500
 			}
 		}
 	}
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.0500
 			}
-			idling2{
+			idling_02{
 				duration=0.0500
 			}
-			idling1{
+			idling_01{
 				duration=0.0500
 			}
-			idling3{
+			idling_03{
 				duration=0.0500
 			}
 		}
@@ -99,37 +99,37 @@ animations{
 			mob_landing{
 				duration=0.0700
 			}
-			grabbing1{
+			grabbing_01{
 				duration=0.4000
 			}
 		}
 	}
 	picking_up{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
 	plucking{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
 	sighing{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=1.5000
 			}
-			idling1{
+			idling_01{
 				duration=1.0000
 			}
 		}
@@ -143,55 +143,55 @@ animations{
 	}
 	sprout{
 		frames{
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout2{
+			sprout_02{
 				duration=0.2000
 			}
-			sprout1{
+			sprout_01{
 				duration=0.2000
 			}
-			sprout3{
+			sprout_03{
 				duration=0.2000
 			}
 		}
 	}
 	thrown{
 		frames{
-			thrown1{
+			thrown_01{
 				duration=0.0800
 			}
-			thrown2{
+			thrown_02{
 				duration=0.0800
 			}
-			thrown3{
+			thrown_03{
 				duration=0.0800
 			}
-			thrown4{
+			thrown_04{
 				duration=0.0800
 			}
 		}
 	}
 	walking{
 		frames{
-			walking1{
+			walking_01{
 				duration=0.0500
 			}
-			walking2{
+			walking_02{
 				duration=0.0500
 			}
-			walking1{
+			walking_01{
 				duration=0.0500
 			}
-			walking3{
+			walking_03{
 				duration=0.0500
 			}
 		}
 	}
 }
 sprites{
-	attack{
+	attacking{
 		file=Winged_Pikmin.png
 		file_pos=43.0000 147.0000
 		file_size=31.0000 28.0000
@@ -218,7 +218,7 @@ sprites{
 			}
 		}
 	}
-	grabbing1{
+	grabbing_01{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 118.0000
 		file_size=35.0000 28.0000
@@ -245,7 +245,7 @@ sprites{
 			}
 		}
 	}
-	grabbing2{
+	grabbing_02{
 		file=Winged_Pikmin.png
 		file_pos=36.0000 118.0000
 		file_size=31.0000 28.0000
@@ -272,7 +272,7 @@ sprites{
 			}
 		}
 	}
-	grabbing3{
+	grabbing_03{
 		file=Winged_Pikmin.png
 		file_pos=68.0000 118.0000
 		file_size=38.0000 28.0000
@@ -379,7 +379,7 @@ sprites{
 			}
 		}
 	}
-	idling1{
+	idling_01{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 0.0000
 		file_size=27.0000 28.0000
@@ -406,7 +406,7 @@ sprites{
 			}
 		}
 	}
-	idling2{
+	idling_02{
 		file=Winged_Pikmin.png
 		file_pos=28.0000 0.0000
 		file_size=23.0000 28.0000
@@ -433,7 +433,7 @@ sprites{
 			}
 		}
 	}
-	idling3{
+	idling_03{
 		file=Winged_Pikmin.png
 		file_pos=52.0000 0.0000
 		file_size=30.0000 28.0000
@@ -540,7 +540,7 @@ sprites{
 			}
 		}
 	}
-	sprout1{
+	sprout_01{
 		file=Winged_Pikmin.png
 		file_pos=83.0000 0.0000
 		file_size=12.0000 12.0000
@@ -566,7 +566,7 @@ sprites{
 			}
 		}
 	}
-	sprout2{
+	sprout_02{
 		file=Winged_Pikmin.png
 		file_pos=83.0000 0.0000
 		file_size=12.0000 12.0000
@@ -592,7 +592,7 @@ sprites{
 			}
 		}
 	}
-	sprout3{
+	sprout_03{
 		file=Winged_Pikmin.png
 		file_pos=83.0000 0.0000
 		file_size=12.0000 12.0000
@@ -618,7 +618,7 @@ sprites{
 			}
 		}
 	}
-	thrown1{
+	thrown_01{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
@@ -645,7 +645,7 @@ sprites{
 			}
 		}
 	}
-	thrown2{
+	thrown_02{
 		file=Winged_Pikmin.png
 		file_pos=28.0000 89.0000
 		file_size=34.0000 28.0000
@@ -671,7 +671,7 @@ sprites{
 			}
 		}
 	}
-	thrown3{
+	thrown_03{
 		file=Winged_Pikmin.png
 		file_pos=63.0000 89.0000
 		file_size=29.0000 28.0000
@@ -698,7 +698,7 @@ sprites{
 			}
 		}
 	}
-	thrown4{
+	thrown_04{
 		file=Winged_Pikmin.png
 		file_pos=93.0000 89.0000
 		file_size=36.0000 28.0000
@@ -724,7 +724,7 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	walking_01{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 29.0000
 		file_size=27.0000 28.0000
@@ -751,7 +751,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
+	walking_02{
 		file=Winged_Pikmin.png
 		file_pos=28.0000 29.0000
 		file_size=27.0000 28.0000
@@ -778,7 +778,7 @@ sprites{
 			}
 		}
 	}
-	walking3{
+	walking_03{
 		file=Winged_Pikmin.png
 		file_pos=56.0000 29.0000
 		file_size=29.0000 28.0000
@@ -810,3 +810,4 @@ body_parts{
 	top
 	body
 }
+engine_version=0.25.0

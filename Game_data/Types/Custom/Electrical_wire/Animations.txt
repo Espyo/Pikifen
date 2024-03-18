@@ -15,13 +15,13 @@ animations{
 	}
 	zapping{
 		frames{
-			zap1{
+			zapping_01{
 				duration=0.0600
 			}
-			zap2{
+			zapping_02{
 				duration=0.0600
 			}
-			zap3{
+			zapping_03{
 				duration=0.0600
 			}
 		}
@@ -128,7 +128,7 @@ sprites{
 			}
 		}
 	}
-	zap1{
+	zapping_01{
 		file=Electrical_wire.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 192.0000
@@ -193,7 +193,7 @@ sprites{
 			}
 		}
 	}
-	zap2{
+	zapping_02{
 		file=Electrical_wire.png
 		file_pos=66.0000 0.0000
 		file_size=32.0000 192.0000
@@ -258,7 +258,7 @@ sprites{
 			}
 		}
 	}
-	zap3{
+	zapping_03{
 		file=Electrical_wire.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 192.0000
@@ -332,4 +332,4 @@ body_parts{
 	zap4
 	zap5
 }
-engine_version=0.23.2
+engine_version=0.25.0

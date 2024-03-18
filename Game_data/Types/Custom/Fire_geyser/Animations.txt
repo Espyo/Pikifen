@@ -1,24 +1,31 @@
 animations{
-	safe{
+	destroyed{
 		frames{
-			safe{
+			destroyed{
 				duration=0.0000
 			}
 		}
 	}
 	shooting{
 		frames{
-			fire1{
+			shooting_01{
 				duration=0.1000
 			}
-			fire2{
+			shooting_02{
 				duration=0.1000
 			}
-			fire3{
+			shooting_03{
 				duration=0.1000
 			}
-			fire4{
+			shooting_04{
 				duration=0.1000
+			}
+		}
+	}
+	safe{
+		frames{
+			safe{
+				duration=0.0000
 			}
 		}
 	}
@@ -27,7 +34,7 @@ animations{
 			low{
 				duration=0.1000
 			}
-			fire4{
+			shooting_04{
 				duration=0.1000
 			}
 		}
@@ -42,41 +49,30 @@ animations{
 			}
 		}
 	}
-	destroyed{
-		frames{
-			destroyed{
-				duration=0.0000
-			}
-		}
-	}
 }
 sprites{
-	safe{
+	destroyed{
 		file=Fire_geyser.png
-		file_pos=0.0000 0.0000
+		file_pos=294.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
 			fire{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=28.0000
+				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=24.0000
-				type=0
+				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	fire1{
+	shooting_01{
 		file=Fire_geyser.png
 		file_pos=98.0000 0.0000
 		file_size=48.0000 48.0000
@@ -95,12 +91,10 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	fire2{
+	shooting_02{
 		file=Fire_geyser.png
 		file_pos=147.0000 0.0000
 		file_size=48.0000 48.0000
@@ -123,7 +117,7 @@ sprites{
 			}
 		}
 	}
-	fire3{
+	shooting_03{
 		file=Fire_geyser.png
 		file_pos=196.0000 0.0000
 		file_size=48.0000 48.0000
@@ -143,12 +137,10 @@ sprites{
 				type=0
 				value=1.0000
 				hazards=fire
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	fire4{
+	shooting_04{
 		file=Fire_geyser.png
 		file_pos=245.0000 0.0000
 		file_size=48.0000 48.0000
@@ -168,8 +160,6 @@ sprites{
 				type=0
 				value=1.0000
 				hazards=fire
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -192,33 +182,27 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	destroyed{
+	safe{
 		file=Fire_geyser.png
-		file_pos=294.0000 0.0000
+		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
 			fire{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=24.0000
+				radius=28.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=24.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -227,3 +211,4 @@ body_parts{
 	fire
 	hit
 }
+engine_version=0.25.0

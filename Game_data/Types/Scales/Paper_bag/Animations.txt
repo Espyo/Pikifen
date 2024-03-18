@@ -2,128 +2,128 @@ animations{
 	crushing{
 		loop_frame=20
 		frames{
-			up{
+			up_01{
 				duration=0.0800
 			}
-			up2{
+			up_02{
 				duration=0.0800
 			}
-			up3{
+			up_03{
 				duration=0.0800
 			}
-			up4{
+			up_04{
 				duration=0.0800
 			}
-			up{
+			up_01{
 				duration=0.0800
 			}
-			up2{
+			up_02{
 				duration=0.0800
 			}
-			up3{
+			up_03{
 				duration=0.0800
 			}
-			up4{
+			up_04{
 				duration=0.0800
 			}
-			up{
+			up_01{
 				duration=0.0800
 			}
-			up2{
+			up_02{
 				duration=0.0800
 			}
-			up3{
+			up_03{
 				duration=0.0800
 			}
-			up4{
+			up_04{
 				duration=0.0800
 			}
-			down{
+			down_01{
 				duration=0.0800
 			}
-			down2{
+			down_02{
 				duration=0.0800
 			}
-			down3{
+			down_03{
 				duration=0.0800
 			}
-			down4{
+			down_04{
 				duration=0.0800
 			}
-			down{
+			down_01{
 				duration=0.0800
 			}
-			down2{
+			down_02{
 				duration=0.0800
 			}
-			down3{
+			down_03{
 				duration=0.0800
 			}
-			down4{
+			down_04{
 				duration=0.0800
 			}
-			down{
+			down_01{
 				duration=0.0800
 			}
 		}
 	}
 	up{
 		frames{
-			up{
+			up_01{
 				duration=0.0000
 			}
 		}
 	}
 }
 sprites{
-	down{
+	down_01{
 		file=Paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		scale=0.9800 0.9800
 	}
-	down2{
+	down_02{
 		file=Paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=1.0000 0.0000
 		scale=0.9800 0.9800
 	}
-	down3{
+	down_03{
 		file=Paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=1.0000 1.0000
 		scale=0.9800 0.9800
 	}
-	down4{
+	down_04{
 		file=Paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=-1.0000 0.0000
 		scale=0.9800 0.9800
 	}
-	up{
+	up_01{
 		file=Paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		scale=1.0100 1.0100
 	}
-	up2{
+	up_02{
 		file=Paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		offset=1.0000 0.0000
 		scale=1.0100 1.0100
 	}
-	up3{
+	up_03{
 		file=Paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		offset=1.0000 1.0000
 		scale=1.0100 1.0100
 	}
-	up4{
+	up_04{
 		file=Paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
@@ -132,4 +132,4 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2
+engine_version=0.25.0

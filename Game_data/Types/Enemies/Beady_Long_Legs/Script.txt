@@ -1,6 +1,6 @@
 first_state = hidden
-death_state = dying1
-states_ignoring_death = dying1; dying2
+death_state = dying_1
+states_ignoring_death = dying_1; dying_2
 
 init {
     set_var max_step_distance 100
@@ -176,19 +176,19 @@ script {
         }
     }
     
-    dying1 {
+    dying_1 {
         on_enter {
-            set_animation dying1
+            set_animation dying_01
             start_dying
         }
         on_animation_end {
-            set_state dying2
+            set_state dying_2
         }
     }
     
-    dying2 {
+    dying_2 {
         on_enter {
-            set_animation dying2
+            set_animation dying_02
             start_particles beady_long_legs_crumbling 0 0
             send_message_to_links die
         }

@@ -6,13 +6,13 @@ script {
         on_enter {
             get_random_int t 1 3			
 			if $t = 1
-				set_animation idling_1
+				set_animation idling_01
 			end_if
 			if $t = 2
-				set_animation idling_2
+				set_animation idling_02
 			end_if
 			if $t = 3
-				set_animation idling_3
+				set_animation idling_03
 			end_if
             get_random_decimal t 0 360
             turn_to_relative $t

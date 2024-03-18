@@ -1,8 +1,155 @@
 animations{
+	attacking{
+		hit_rate=50
+		frames{
+			attacking_01{
+				duration=0.2000
+			}
+			attacking_02{
+				duration=0.2000
+			}
+			attacking_03{
+				duration=0.2000
+				sound=bite
+			}
+			attacking_04{
+				duration=0.2000
+			}
+		}
+	}
+	dying{
+		loop_frame=6
+		frames{
+			dying_01{
+				duration=0.2000
+			}
+			dying_02{
+				duration=0.1000
+			}
+			dying_03{
+				duration=1.0000
+			}
+			dying_02{
+				duration=0.1000
+			}
+			dying_01{
+				duration=0.2000
+			}
+			dying_04{
+				duration=0.1000
+			}
+			dead{
+				duration=0.5000
+			}
+		}
+	}
+	eating{
+		frames{
+			chomping_01{
+				duration=0.3000
+			}
+			chomping_02{
+				duration=0.1500
+			}
+			chomping_03{
+				duration=0.1500
+			}
+			chomping_02{
+				duration=0.1500
+				sound=chew
+			}
+			chomping_01{
+				duration=0.2000
+			}
+			chomping_02{
+				duration=0.1500
+			}
+			chomping_03{
+				duration=0.1500
+			}
+			chomping_02{
+				duration=0.1500
+				sound=chew
+			}
+			chomping_01{
+				duration=0.1500
+			}
+			idling{
+				duration=0.3000
+			}
+		}
+	}
+	failing{
+		loop_frame=3
+		frames{
+			failing_01{
+				duration=0.4000
+			}
+			failing_02{
+				duration=0.2000
+			}
+			attacking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1500
+			}
+		}
+	}
+	falling_asleep{
+		frames{
+			attacking_02{
+				duration=0.1000
+			}
+			chomping_01{
+				duration=0.1000
+			}
+			chomping_03{
+				duration=0.8000
+			}
+			chomping_01{
+				duration=0.2000
+			}
+			attacking_02{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
+			}
+		}
+	}
 	idling{
 		frames{
 			idling{
 				duration=0.0000
+			}
+		}
+	}
+	looking{
+		frames{
+			looking_01{
+				duration=0.1000
+			}
+			looking_02{
+				duration=0.3000
+			}
+			looking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			looking_03{
+				duration=0.1000
+			}
+			looking_04{
+				duration=0.3000
+			}
+			looking_03{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
 			}
 		}
 	}
@@ -11,167 +158,70 @@ animations{
 			idling{
 				duration=0.1000
 			}
-			moving1{
+			moving_01{
 				duration=0.1000
 			}
-			moving2{
+			moving_02{
 				duration=0.1000
 			}
-			moving1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			moving3{
-				duration=0.1000
-			}
-			moving4{
-				duration=0.1000
-			}
-			moving3{
-				duration=0.1000
-			}
-		}
-	}
-	attacking{
-		hit_rate=50
-		frames{
-			attacking1{
-				duration=0.2000
-			}
-			attacking2{
-				duration=0.2000
-			}
-			attacking3{
-				duration=0.2000
-				sound=bite
-			}
-			attacking4{
-				duration=0.2000
-			}
-		}
-	}
-	failing{
-		loop_frame=3
-		frames{
-			failing1{
-				duration=0.4000
-			}
-			failing2{
-				duration=0.2000
-			}
-			attacking1{
+			moving_01{
 				duration=0.1000
 			}
 			idling{
-				duration=0.1500
-			}
-		}
-	}
-	eating{
-		frames{
-			chomping1{
-				duration=0.3000
-			}
-			chomping2{
-				duration=0.1500
-			}
-			chomping3{
-				duration=0.1500
-			}
-			chomping2{
-				duration=0.1500
-				sound=chew
-			}
-			chomping1{
-				duration=0.2000
-			}
-			chomping2{
-				duration=0.1500
-			}
-			chomping3{
-				duration=0.1500
-			}
-			chomping2{
-				duration=0.1500
-				sound=chew
-			}
-			chomping1{
-				duration=0.1500
-			}
-			idling{
-				duration=0.3000
-			}
-		}
-	}
-	dying{
-		loop_frame=6
-		frames{
-			chomping1dead{
-				duration=0.2000
-			}
-			chomping2dead{
 				duration=0.1000
 			}
-			chomping3dead{
-				duration=1.0000
-			}
-			chomping2dead{
+			moving_03{
 				duration=0.1000
 			}
-			chomping1dead{
-				duration=0.2000
-			}
-			idlingdead{
+			moving_04{
 				duration=0.1000
 			}
-			dead{
-				duration=0.5000
+			moving_03{
+				duration=0.1000
 			}
 		}
 	}
 	shaking{
 		hit_rate=90
 		frames{
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
 			idling{
 				duration=0.1000
 			}
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
 			idling{
 				duration=0.1000
 			}
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
 			idling{
 				duration=0.2000
 			}
-			shaking2{
+			shaking_02{
 				duration=0.1500
 			}
 			idling{
 				duration=0.1500
 				sound=shaking
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1500
 			}
 			idling{
 				duration=0.1500
 			}
-			shaking2{
+			shaking_02{
 				duration=0.1500
 			}
 			idling{
 				duration=0.1500
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1500
 			}
 			idling{
@@ -181,249 +231,42 @@ animations{
 	}
 	sleeping{
 		frames{
-			sleeping1{
+			sleeping_01{
 				duration=0.5000
 			}
-			sleeping2{
+			sleeping_02{
 				duration=0.5000
 			}
 		}
 	}
 	waking_up{
 		frames{
-			sleeping1{
+			sleeping_01{
 				duration=0.1000
 			}
-			sleeping2{
+			sleeping_02{
 				duration=0.3000
 			}
-			failing2{
+			failing_02{
 				duration=0.3000
 			}
-			moving1{
+			moving_01{
 				duration=0.2000
 			}
 			idling{
 				duration=0.1500
 			}
-			moving3{
+			moving_03{
 				duration=0.1500
 			}
 			idling{
 				duration=0.1500
-			}
-		}
-	}
-	falling_asleep{
-		frames{
-			attacking2{
-				duration=0.1000
-			}
-			chomping1{
-				duration=0.1000
-			}
-			chomping3{
-				duration=0.8000
-			}
-			chomping1{
-				duration=0.2000
-			}
-			attacking2{
-				duration=0.1000
-			}
-			idling{
-				duration=0.3000
-			}
-		}
-	}
-	looking{
-		frames{
-			looking1{
-				duration=0.1000
-			}
-			looking2{
-				duration=0.3000
-			}
-			looking1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			looking3{
-				duration=0.1000
-			}
-			looking4{
-				duration=0.3000
-			}
-			looking3{
-				duration=0.1000
-			}
-			idling{
-				duration=0.3000
 			}
 		}
 	}
 }
 sprites{
-	idling{
-		file=Red_Bulborb.png
-		file_pos=0.0000 0.0000
-		file_size=153.0000 103.0000
-		offset=16.0000 0.0000
-		hitboxes{
-			body{
-				coords=52.0000 0.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 0.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 0.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	moving3{
-		file=Red_Bulborb.png
-		file_pos=154.0000 0.0000
-		file_size=153.0000 104.0000
-		offset=16.0000 2.0000
-		hitboxes{
-			body{
-				coords=52.0000 4.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 4.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 4.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	moving4{
-		file=Red_Bulborb.png
-		file_pos=308.0000 0.0000
-		file_size=153.0000 115.0000
-		offset=16.0000 4.0000
-		hitboxes{
-			body{
-				coords=52.0000 10.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 10.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 10.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	moving1{
-		file=Red_Bulborb.png
-		file_pos=154.0000 0.0000
-		file_size=153.0000 104.0000
-		offset=16.0000 -2.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=52.0000 -4.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 -4.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 -4.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	moving2{
-		file=Red_Bulborb.png
-		file_pos=308.0000 0.0000
-		file_size=153.0000 115.0000
-		offset=16.0000 -4.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=52.0000 -10.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 -10.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 -10.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	attacking1{
+	attacking_01{
 		file=Red_Bulborb.png
 		file_pos=0.0000 116.0000
 		file_size=160.0000 103.0000
@@ -454,7 +297,7 @@ sprites{
 			}
 		}
 	}
-	attacking2{
+	attacking_02{
 		file=Red_Bulborb.png
 		file_pos=161.0000 116.0000
 		file_size=174.0000 110.0000
@@ -485,7 +328,7 @@ sprites{
 			}
 		}
 	}
-	attacking3{
+	attacking_03{
 		file=Red_Bulborb.png
 		file_pos=336.0000 116.0000
 		file_size=174.0000 103.0000
@@ -516,7 +359,7 @@ sprites{
 			}
 		}
 	}
-	attacking4{
+	attacking_04{
 		file=Red_Bulborb.png
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
@@ -547,38 +390,7 @@ sprites{
 			}
 		}
 	}
-	failing1{
-		file=Red_Bulborb.png
-		file_pos=677.0000 116.0000
-		file_size=193.0000 135.0000
-		offset=32.0000 0.0000
-		hitboxes{
-			body{
-				coords=78.0000 2.0000 0.0000
-				height=128.0000
-				radius=45.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=12.0000 -13.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=97.0000 33.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping1{
+	chomping_01{
 		file=Red_Bulborb.png
 		file_pos=0.0000 252.0000
 		file_size=124.0000 103.0000
@@ -608,7 +420,7 @@ sprites{
 			}
 		}
 	}
-	chomping2{
+	chomping_02{
 		file=Red_Bulborb.png
 		file_pos=125.0000 252.0000
 		file_size=100.0000 103.0000
@@ -637,7 +449,7 @@ sprites{
 			}
 		}
 	}
-	chomping3{
+	chomping_03{
 		file=Red_Bulborb.png
 		file_pos=226.0000 252.0000
 		file_size=115.0000 103.0000
@@ -697,7 +509,533 @@ sprites{
 			}
 		}
 	}
-	shaking3{
+	dying_01{
+		file=Red_Bulborb.png
+		file_pos=0.0000 252.0000
+		file_size=124.0000 103.0000
+		hitboxes{
+			body{
+				coords=12.0000 0.0000 0.0000
+				height=128.0000
+				radius=48.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=55.0000 0.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Red_Bulborb.png
+		file_pos=125.0000 252.0000
+		file_size=100.0000 103.0000
+		offset=-11.5000 0.0000
+		hitboxes{
+			body{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-44.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=28.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Red_Bulborb.png
+		file_pos=226.0000 252.0000
+		file_size=115.0000 103.0000
+		offset=-4.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-14.0000 0.0000 0.0000
+				height=128.0000
+				radius=48.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=32.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Red_Bulborb.png
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=16.0000 0.0000
+		hitboxes{
+			body{
+				coords=52.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=90.0000 0.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	failing_01{
+		file=Red_Bulborb.png
+		file_pos=677.0000 116.0000
+		file_size=193.0000 135.0000
+		offset=32.0000 0.0000
+		hitboxes{
+			body{
+				coords=78.0000 2.0000 0.0000
+				height=128.0000
+				radius=45.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=12.0000 -13.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=97.0000 33.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	failing_02{
+		file=Red_Bulborb.png
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=20.0000 0.0000
+		hitboxes{
+			body{
+				coords=52.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=94.0000 12.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=Red_Bulborb.png
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=16.0000 0.0000
+		hitboxes{
+			body{
+				coords=52.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 0.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_01{
+		file=Red_Bulborb.png
+		file_pos=0.0000 358.0000
+		file_size=157.0000 121.0000
+		offset=16.0000 12.0000
+		hitboxes{
+			body{
+				coords=46.0000 16.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-9.0000 3.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=85.0000 28.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_02{
+		file=Red_Bulborb.png
+		file_pos=158.0000 358.0000
+		file_size=135.0000 131.0000
+		offset=6.0000 16.0000
+		hitboxes{
+			body{
+				coords=25.0000 36.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-10.0000 1.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=52.0000 66.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_03{
+		file=Red_Bulborb.png
+		file_pos=0.0000 358.0000
+		file_size=157.0000 121.0000
+		offset=16.0000 -12.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=46.0000 -16.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-9.0000 -3.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=85.0000 -28.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_04{
+		file=Red_Bulborb.png
+		file_pos=158.0000 358.0000
+		file_size=135.0000 131.0000
+		offset=6.0000 -16.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=25.0000 -36.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-10.0000 -1.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=52.0000 -66.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_01{
+		file=Red_Bulborb.png
+		file_pos=154.0000 0.0000
+		file_size=153.0000 104.0000
+		offset=16.0000 -2.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=52.0000 -4.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 -4.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 -4.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_02{
+		file=Red_Bulborb.png
+		file_pos=308.0000 0.0000
+		file_size=153.0000 115.0000
+		offset=16.0000 -4.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=52.0000 -10.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 -10.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 -10.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_03{
+		file=Red_Bulborb.png
+		file_pos=154.0000 0.0000
+		file_size=153.0000 104.0000
+		offset=16.0000 2.0000
+		hitboxes{
+			body{
+				coords=52.0000 4.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 4.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 4.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_04{
+		file=Red_Bulborb.png
+		file_pos=308.0000 0.0000
+		file_size=153.0000 115.0000
+		offset=16.0000 4.0000
+		hitboxes{
+			body{
+				coords=52.0000 10.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 10.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 10.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_01{
+		file=Red_Bulborb.png
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=16.0000 2.0000
+		hitboxes{
+			body{
+				coords=52.0000 2.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 2.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 2.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_02{
+		file=Red_Bulborb.png
+		file_pos=515.0000 252.0000
+		file_size=159.0000 105.0000
+		offset=16.0000 0.0000
+		hitboxes{
+			body{
+				coords=50.0000 8.0000 -32.0000
+				height=192.0000
+				radius=60.0000
+				type=1
+				value=0.0000
+				knockback_outward=true
+				knockback=3.0000
+				wither_chance=10
+			}
+			back{
+				coords=-13.0000 0.0000 -32.0000
+				height=192.0000
+				radius=64.0000
+				type=1
+				value=0.0000
+				knockback_outward=true
+				knockback=3.0000
+				wither_chance=10
+			}
+			mouth{
+				coords=85.0000 14.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_03{
 		file=Red_Bulborb.png
 		file_pos=515.0000 252.0000
 		file_size=159.0000 105.0000
@@ -735,188 +1073,7 @@ sprites{
 			}
 		}
 	}
-	shaking2{
-		file=Red_Bulborb.png
-		file_pos=515.0000 252.0000
-		file_size=159.0000 105.0000
-		offset=16.0000 0.0000
-		hitboxes{
-			body{
-				coords=50.0000 8.0000 -32.0000
-				height=192.0000
-				radius=60.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=3.0000
-				wither_chance=10
-			}
-			back{
-				coords=-13.0000 0.0000 -32.0000
-				height=192.0000
-				radius=64.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=3.0000
-				wither_chance=10
-			}
-			mouth{
-				coords=85.0000 14.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	failing2{
-		file=Red_Bulborb.png
-		file_pos=512.0000 116.0000
-		file_size=163.0000 103.0000
-		offset=20.0000 0.0000
-		hitboxes{
-			body{
-				coords=52.0000 0.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 0.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=94.0000 12.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping1dead{
-		file=Red_Bulborb.png
-		file_pos=0.0000 252.0000
-		file_size=124.0000 103.0000
-		hitboxes{
-			body{
-				coords=12.0000 0.0000 0.0000
-				height=128.0000
-				radius=48.0000
-				type=2
-				value=1.0000
-			}
-			back{
-				coords=-12.0000 0.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=2
-				value=1.0000
-			}
-			mouth{
-				coords=55.0000 0.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping2dead{
-		file=Red_Bulborb.png
-		file_pos=125.0000 252.0000
-		file_size=100.0000 103.0000
-		offset=-11.5000 0.0000
-		hitboxes{
-			body{
-				coords=-12.0000 0.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=2
-				value=1.0000
-			}
-			back{
-				coords=-44.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			mouth{
-				coords=28.0000 0.0000 0.0000
-				height=128.0000
-				radius=24.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping3dead{
-		file=Red_Bulborb.png
-		file_pos=226.0000 252.0000
-		file_size=115.0000 103.0000
-		offset=-4.0000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=128.0000
-				radius=52.0000
-				type=2
-				value=1.0000
-			}
-			back{
-				coords=-14.0000 0.0000 0.0000
-				height=128.0000
-				radius=48.0000
-				type=2
-				value=1.0000
-			}
-			mouth{
-				coords=32.0000 0.0000 0.0000
-				height=128.0000
-				radius=24.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	idlingdead{
-		file=Red_Bulborb.png
-		file_pos=0.0000 0.0000
-		file_size=153.0000 103.0000
-		offset=16.0000 0.0000
-		hitboxes{
-			body{
-				coords=52.0000 0.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=2
-				value=1.0000
-			}
-			back{
-				coords=-12.0000 0.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=2
-				value=1.0000
-			}
-			mouth{
-				coords=90.0000 0.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sleeping1{
+	sleeping_01{
 		file=Red_Bulborb.png
 		file_pos=462.0000 0.0000
 		file_size=161.0000 103.0000
@@ -947,7 +1104,7 @@ sprites{
 			}
 		}
 	}
-	sleeping2{
+	sleeping_02{
 		file=Red_Bulborb.png
 		file_pos=624.0000 0.0000
 		file_size=157.0000 103.0000
@@ -971,163 +1128,6 @@ sprites{
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	shaking1{
-		file=Red_Bulborb.png
-		file_pos=0.0000 0.0000
-		file_size=153.0000 103.0000
-		offset=16.0000 2.0000
-		hitboxes{
-			body{
-				coords=52.0000 2.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-12.0000 2.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=90.0000 2.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	looking1{
-		file=Red_Bulborb.png
-		file_pos=0.0000 358.0000
-		file_size=157.0000 121.0000
-		offset=16.0000 12.0000
-		hitboxes{
-			body{
-				coords=46.0000 16.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-9.0000 3.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=85.0000 28.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	looking2{
-		file=Red_Bulborb.png
-		file_pos=158.0000 358.0000
-		file_size=135.0000 131.0000
-		offset=6.0000 16.0000
-		hitboxes{
-			body{
-				coords=25.0000 36.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-10.0000 1.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=52.0000 66.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	looking3{
-		file=Red_Bulborb.png
-		file_pos=0.0000 358.0000
-		file_size=157.0000 121.0000
-		offset=16.0000 -12.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=46.0000 -16.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-9.0000 -3.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=85.0000 -28.0000 0.0000
-				height=128.0000
-				radius=16.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	looking4{
-		file=Red_Bulborb.png
-		file_pos=158.0000 358.0000
-		file_size=135.0000 131.0000
-		offset=6.0000 -16.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=25.0000 -36.0000 0.0000
-				height=128.0000
-				radius=40.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			back{
-				coords=-10.0000 -1.0000 0.0000
-				height=128.0000
-				radius=50.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			mouth{
-				coords=52.0000 -66.0000 0.0000
 				height=128.0000
 				radius=16.0000
 				type=2

@@ -2,166 +2,166 @@ animations{
 	dying{
 		loop_frame=17
 		frames{
-			dying1{
+			dying_01{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1200
 			}
-			dying3{
+			dying_03{
 				duration=0.1200
 			}
-			dying2{
+			dying_02{
 				duration=0.1400
 			}
-			dying3{
+			dying_03{
 				duration=0.1400
 			}
-			dying2{
+			dying_02{
 				duration=0.1600
 			}
-			dying3{
+			dying_03{
 				duration=0.2400
 			}
-			dying4{
+			dying_04{
 				duration=0.2000
 			}
-			dying5{
+			dying_05{
 				duration=0.0500
 			}
-			dying6{
+			dying_06{
 				duration=0.5000
 			}
 		}
 	}
 	flinging{
 		frames{
-			flinging1{
+			flinging_01{
 				duration=0.0500
 			}
-			flinging2{
+			flinging_02{
 				duration=0.0500
 				signal=0
 			}
-			flinging3{
+			flinging_03{
 				duration=0.5000
 			}
-			flinging4{
+			flinging_04{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.6000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1200
 			}
-			idling2{
+			idling_02{
 				duration=0.1200
 			}
-			idling3{
+			idling_03{
 				duration=0.1200
 			}
-			idling2{
+			idling_02{
 				duration=0.1200
 			}
 		}
 	}
 	picking_up{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			idling3{
+			idling_03{
 				duration=0.1000
 			}
-			picking_up1{
+			picking_up_01{
 				duration=0.1000
 				signal=0
 			}
-			picking_up2{
+			picking_up_02{
 				duration=0.1000
 			}
-			idling3{
+			idling_03{
 				duration=0.1000
 			}
 		}
 	}
 	preparing{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing1{
+			preparing_01{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing2{
+			preparing_02{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing1{
+			preparing_01{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing2{
+			preparing_02{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing1{
+			preparing_01{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing2{
+			preparing_02{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing1{
+			preparing_01{
 				duration=0.0700
 			}
-			idling1{
+			idling_01{
 				duration=0.0700
 			}
-			preparing2{
+			preparing_02{
 				duration=0.0700
 			}
 		}
@@ -169,145 +169,145 @@ animations{
 	shaking{
 		hit_rate=90
 		frames{
-			shaking1{
+			shaking_01{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking2{
+			shaking_02{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking1{
+			shaking_01{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking2{
+			shaking_02{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking1{
+			shaking_01{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking2{
+			shaking_02{
 				duration=0.0900
 			}
-			idling1{
+			idling_01{
 				duration=0.0900
 			}
-			shaking3{
+			shaking_03{
 				duration=0.0500
 			}
-			shaking4{
+			shaking_04{
 				duration=0.0500
 			}
-			flinging3{
+			flinging_03{
 				duration=0.5000
 			}
-			flinging4{
+			flinging_04{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.4000
 			}
 		}
 	}
 	stunned{
 		frames{
-			flinging4{
+			flinging_04{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.0700
 			}
-			stunned1{
+			stunned_01{
 				duration=0.0700
 			}
-			stunned2{
+			stunned_02{
 				duration=0.3000
 			}
-			flinging4{
+			flinging_04{
 				duration=0.1500
 			}
-			idling1{
+			idling_01{
 				duration=0.7000
 			}
 		}
 	}
 	walking{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			walking1{
+			walking_01{
 				duration=0.1000
 			}
-			walking2{
+			walking_02{
 				duration=0.1000
 			}
-			walking1{
+			walking_01{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			walking3{
+			walking_03{
 				duration=0.1000
 			}
-			walking4{
+			walking_04{
 				duration=0.1000
 			}
-			walking3{
+			walking_03{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	dying1{
+	dying_01{
 		file=Skutterchuck.png
 		file_pos=164.0000 172.0000
 		file_size=64.0000 56.0000
@@ -329,7 +329,7 @@ sprites{
 			}
 		}
 	}
-	dying2{
+	dying_02{
 		file=Skutterchuck.png
 		file_pos=129.0000 172.0000
 		file_size=34.0000 56.0000
@@ -352,7 +352,7 @@ sprites{
 			}
 		}
 	}
-	dying3{
+	dying_03{
 		file=Skutterchuck.png
 		file_pos=129.0000 172.0000
 		file_size=34.0000 56.0000
@@ -375,7 +375,7 @@ sprites{
 			}
 		}
 	}
-	dying4{
+	dying_04{
 		file=Skutterchuck.png
 		file_pos=0.0000 229.0000
 		file_size=64.0000 56.0000
@@ -396,7 +396,7 @@ sprites{
 			}
 		}
 	}
-	dying5{
+	dying_05{
 		file=Skutterchuck.png
 		file_pos=65.0000 229.0000
 		file_size=102.0000 56.0000
@@ -419,7 +419,7 @@ sprites{
 			}
 		}
 	}
-	dying6{
+	dying_06{
 		file=Skutterchuck.png
 		file_pos=65.0000 229.0000
 		file_size=102.0000 56.0000
@@ -440,7 +440,7 @@ sprites{
 			}
 		}
 	}
-	flinging1{
+	flinging_01{
 		file=Skutterchuck.png
 		file_pos=0.0000 172.0000
 		file_size=74.0000 56.0000
@@ -462,7 +462,7 @@ sprites{
 			}
 		}
 	}
-	flinging2{
+	flinging_02{
 		file=Skutterchuck.png
 		file_pos=75.0000 172.0000
 		file_size=53.0000 56.0000
@@ -484,7 +484,7 @@ sprites{
 			}
 		}
 	}
-	flinging3{
+	flinging_03{
 		file=Skutterchuck.png
 		file_pos=129.0000 172.0000
 		file_size=34.0000 56.0000
@@ -506,7 +506,7 @@ sprites{
 			}
 		}
 	}
-	flinging4{
+	flinging_04{
 		file=Skutterchuck.png
 		file_pos=164.0000 172.0000
 		file_size=64.0000 56.0000
@@ -528,7 +528,7 @@ sprites{
 			}
 		}
 	}
-	idling1{
+	idling_01{
 		file=Skutterchuck.png
 		file_pos=0.0000 0.0000
 		file_size=86.0000 56.0000
@@ -550,7 +550,7 @@ sprites{
 			}
 		}
 	}
-	idling2{
+	idling_02{
 		file=Skutterchuck.png
 		file_pos=87.0000 0.0000
 		file_size=88.0000 56.0000
@@ -572,7 +572,7 @@ sprites{
 			}
 		}
 	}
-	idling3{
+	idling_03{
 		file=Skutterchuck.png
 		file_pos=176.0000 0.0000
 		file_size=89.0000 56.0000
@@ -594,7 +594,7 @@ sprites{
 			}
 		}
 	}
-	picking_up1{
+	picking_up_01{
 		file=Skutterchuck.png
 		file_pos=0.0000 115.0000
 		file_size=94.0000 56.0000
@@ -616,7 +616,7 @@ sprites{
 			}
 		}
 	}
-	picking_up2{
+	picking_up_02{
 		file=Skutterchuck.png
 		file_pos=0.0000 115.0000
 		file_size=94.0000 56.0000
@@ -638,7 +638,7 @@ sprites{
 			}
 		}
 	}
-	preparing1{
+	preparing_01{
 		file=Skutterchuck.png
 		file_pos=95.0000 115.0000
 		file_size=86.0000 56.0000
@@ -660,7 +660,7 @@ sprites{
 			}
 		}
 	}
-	preparing2{
+	preparing_02{
 		file=Skutterchuck.png
 		file_pos=182.0000 115.0000
 		file_size=85.0000 56.0000
@@ -682,7 +682,7 @@ sprites{
 			}
 		}
 	}
-	shaking1{
+	shaking_01{
 		file=Skutterchuck.png
 		file_pos=0.0000 0.0000
 		file_size=86.0000 56.0000
@@ -705,7 +705,7 @@ sprites{
 			}
 		}
 	}
-	shaking2{
+	shaking_02{
 		file=Skutterchuck.png
 		file_pos=0.0000 0.0000
 		file_size=86.0000 56.0000
@@ -728,7 +728,7 @@ sprites{
 			}
 		}
 	}
-	shaking3{
+	shaking_03{
 		file=Skutterchuck.png
 		file_pos=0.0000 172.0000
 		file_size=74.0000 56.0000
@@ -753,7 +753,7 @@ sprites{
 			}
 		}
 	}
-	shaking4{
+	shaking_04{
 		file=Skutterchuck.png
 		file_pos=75.0000 172.0000
 		file_size=53.0000 56.0000
@@ -778,7 +778,7 @@ sprites{
 			}
 		}
 	}
-	stunned1{
+	stunned_01{
 		file=Skutterchuck.png
 		file_pos=129.0000 172.0000
 		file_size=34.0000 56.0000
@@ -801,7 +801,7 @@ sprites{
 			}
 		}
 	}
-	stunned2{
+	stunned_02{
 		file=Skutterchuck.png
 		file_pos=129.0000 172.0000
 		file_size=34.0000 56.0000
@@ -824,7 +824,7 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	walking_01{
 		file=Skutterchuck.png
 		file_pos=0.0000 57.0000
 		file_size=91.0000 56.0000
@@ -846,7 +846,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
+	walking_02{
 		file=Skutterchuck.png
 		file_pos=92.0000 57.0000
 		file_size=95.0000 57.0000
@@ -868,7 +868,7 @@ sprites{
 			}
 		}
 	}
-	walking3{
+	walking_03{
 		file=Skutterchuck.png
 		file_pos=0.0000 57.0000
 		file_size=91.0000 56.0000
@@ -891,7 +891,7 @@ sprites{
 			}
 		}
 	}
-	walking4{
+	walking_04{
 		file=Skutterchuck.png
 		file_pos=92.0000 57.0000
 		file_size=95.0000 56.0000
@@ -919,3 +919,4 @@ body_parts{
 	body
 	nodule
 }
+engine_version=0.25.0

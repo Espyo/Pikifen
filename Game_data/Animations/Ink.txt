@@ -1,41 +1,42 @@
 animations{
-	default{
+	main{
 		frames{
-			1{
+			main_01{
 				duration=0.0800
 			}
-			2{
+			main_02{
 				duration=0.0800
 			}
-			3{
+			main_03{
 				duration=0.0800
 			}
-			4{
+			main_04{
 				duration=0.0800
 			}
 		}
 	}
 }
 sprites{
-	1{
+	main_01{
 		file=Ink.png
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	2{
+	main_02{
 		file=Ink.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	3{
+	main_03{
 		file=Ink.png
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 	}
-	4{
+	main_04{
 		file=Ink.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 }
 body_parts
+engine_version=0.25.0

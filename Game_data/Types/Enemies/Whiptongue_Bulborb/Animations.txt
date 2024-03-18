@@ -1,107 +1,41 @@
 animations{
-	idling{
-		frames{
-			idling{
-				duration=0.0000
-			}
-		}
-	}
-	walking{
-		frames{
-			idling{
-				duration=0.1000
-			}
-			walking1{
-				duration=0.1000
-			}
-			walking2{
-				duration=0.1000
-			}
-			walking1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			walking3{
-				duration=0.1000
-			}
-			walking4{
-				duration=0.1000
-			}
-			walking3{
-				duration=0.1000
-			}
-		}
-	}
-	sniffing{
-		frames{
-			idling{
-				duration=0.3000
-			}
-			sniffing1{
-				duration=0.1000
-			}
-			sniffing2{
-				duration=0.1000
-			}
-			sniffing3{
-				duration=0.5000
-			}
-			sniffing2{
-				duration=0.1000
-			}
-			sniffing4{
-				duration=0.1000
-			}
-			sniffing5{
-				duration=0.5000
-			}
-			sniffing4{
-				duration=0.1000
-			}
-			sniffing1{
-				duration=0.1000
-			}
-		}
-	}
 	attacking{
 		hit_rate=40
 		frames{
 			idling{
 				duration=0.4000
 			}
-			attacking1{
+			attacking_01{
 				duration=0.4000
 			}
 			idling{
 				duration=0.1000
 			}
-			attacking1{
+			attacking_01{
 				duration=0.1000
 			}
-			attacking2{
+			attacking_02{
 				duration=0.1000
 			}
-			attacking3{
+			attacking_03{
 				duration=0.1000
 			}
-			attacking4{
+			attacking_04{
 				duration=0.1000
 			}
-			attacking5{
+			attacking_05{
 				duration=0.1000
 			}
-			attacking6{
+			attacking_06{
 				duration=0.1000
 			}
-			attacking7{
+			attacking_07{
 				duration=0.1000
 			}
-			attacking8{
+			attacking_08{
 				duration=0.1000
 			}
-			attacking9{
+			attacking_09{
 				duration=0.1000
 			}
 		}
@@ -111,85 +45,34 @@ animations{
 			idling{
 				duration=0.1000
 			}
-			chomping1{
+			chomping_01{
 				duration=0.2000
 			}
-			chomping2{
+			chomping_02{
 				duration=0.2000
 			}
-			chomping3{
+			chomping_03{
 				duration=0.2000
 			}
-			chomping2{
+			chomping_02{
 				duration=0.2000
 			}
-			chomping1{
-				duration=0.2000
-				sound=chew
-			}
-			chomping2{
-				duration=0.2000
-			}
-			chomping3{
-				duration=0.2000
-			}
-			chomping2{
-				duration=0.2000
-			}
-			chomping1{
+			chomping_01{
 				duration=0.2000
 				sound=chew
 			}
-		}
-	}
-	shaking{
-		hit_rate=90
-		frames{
-			idling{
-				duration=0.1000
+			chomping_02{
+				duration=0.2000
 			}
-			shaking1{
-				duration=0.1000
+			chomping_03{
+				duration=0.2000
 			}
-			idling{
-				duration=0.1000
+			chomping_02{
+				duration=0.2000
 			}
-			shaking1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			shaking1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			shaking1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			shaking2{
-				duration=0.1000
-			}
-			shaking3{
-				duration=0.3000
-				sound=shaking
-			}
-			shaking2{
-				duration=0.1000
-			}
-			shaking4{
-				duration=0.1000
-			}
-			shaking5{
-				duration=0.3000
-			}
-			shaking4{
-				duration=0.1000
+			chomping_01{
+				duration=0.2000
+				sound=chew
 			}
 		}
 	}
@@ -199,46 +82,835 @@ animations{
 			idling{
 				duration=0.1000
 			}
-			dying1{
+			dying_01{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.2000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.1000
 			}
-			dying3{
+			dying_03{
 				duration=0.1000
 			}
-			dying2{
+			dying_02{
 				duration=0.2000
 			}
-			dying1{
+			dying_01{
 				duration=0.1000
 			}
-			dying4{
+			dying_04{
 				duration=0.1000
 			}
-			dying5{
+			dying_05{
 				duration=0.1000
 			}
-			dying6{
+			dying_06{
 				duration=0.7000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+	shaking{
+		hit_rate=90
+		frames{
+			idling{
+				duration=0.1000
+			}
+			shaking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_02{
+				duration=0.1000
+			}
+			shaking_03{
+				duration=0.3000
+				sound=shaking
+			}
+			shaking_02{
+				duration=0.1000
+			}
+			shaking_04{
+				duration=0.1000
+			}
+			shaking_05{
+				duration=0.3000
+			}
+			shaking_04{
+				duration=0.1000
+			}
+		}
+	}
+	sniffing{
+		frames{
+			idling{
+				duration=0.3000
+			}
+			sniffing_01{
+				duration=0.1000
+			}
+			sniffing_02{
+				duration=0.1000
+			}
+			sniffing_03{
+				duration=0.5000
+			}
+			sniffing_02{
+				duration=0.1000
+			}
+			sniffing_04{
+				duration=0.1000
+			}
+			sniffing_05{
+				duration=0.5000
+			}
+			sniffing_04{
+				duration=0.1000
+			}
+			sniffing_01{
+				duration=0.1000
+			}
+		}
+	}
+	walking{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			walking_01{
+				duration=0.1000
+			}
+			walking_02{
+				duration=0.1000
+			}
+			walking_01{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			walking_03{
+				duration=0.1000
+			}
+			walking_04{
+				duration=0.1000
+			}
+			walking_03{
+				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
+	attacking_01{
+		file=Whiptongue_Bulborb.png
+		file_pos=0.0000 103.0000
+		file_size=166.0000 102.0000
+		offset=30.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=75.0000 -2.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_02{
+		file=Whiptongue_Bulborb.png
+		file_pos=167.0000 106.0000
+		file_size=156.0000 104.0000
+		offset=25.0000 -3.0000
+		hitboxes{
+			body{
+				coords=1.0000 -2.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 -9.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=104.0000 -9.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=104.0000 -9.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_03{
+		file=Whiptongue_Bulborb.png
+		file_pos=324.0000 115.0000
+		file_size=188.0000 104.0000
+		offset=41.0000 1.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=78.0000 2.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=93.0000 4.0000 -40.0000
+				height=80.0000
+				radius=37.0000
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=131.0000 -4.0000 -40.0000
+				height=80.0000
+				radius=8.0000
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_04{
+		file=Whiptongue_Bulborb.png
+		file_pos=516.0000 103.0000
+		file_size=239.0000 105.0000
+		offset=66.0000 1.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=80.2200 4.5900 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=90.0000 4.0000 -40.0000
+				height=80.0000
+				radius=33.0000
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=155.0000 4.0000 -40.0000
+				height=80.0000
+				radius=32.0000
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_05{
+		file=Whiptongue_Bulborb.png
+		file_pos=756.0000 107.0000
+		file_size=293.0000 108.0000
+		offset=93.0000 3.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=81.6300 9.1700 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=153.8500 31.3700 -40.0000
+				height=80.0000
+				radius=30.2900
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=212.1000 22.1000 -40.0000
+				height=80.0000
+				radius=32.4700
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_06{
+		file=Whiptongue_Bulborb.png
+		file_pos=0.0000 211.0000
+		file_size=260.0000 140.0000
+		offset=77.0000 19.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=79.5100 7.4100 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=147.1100 28.5700 -40.0000
+				height=80.0000
+				radius=25.1900
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=183.2600 62.8900 -40.0000
+				height=80.0000
+				radius=27.3600
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_07{
+		file=Whiptongue_Bulborb.png
+		file_pos=261.0000 220.0000
+		file_size=216.0000 114.0000
+		offset=55.0000 6.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=84.0000 14.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=143.7000 9.0800 -40.0000
+				height=80.0000
+				radius=20.0800
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=151.4300 30.4400 -40.0000
+				height=80.0000
+				radius=22.2700
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_08{
+		file=Whiptongue_Bulborb.png
+		file_pos=478.0000 220.0000
+		file_size=185.0000 103.0000
+		offset=40.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=78.1000 -6.6900 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=119.0600 -27.4400 -40.0000
+				height=80.0000
+				radius=10.4500
+				type=1
+				value=15.0000
+			}
+			tongue2{
+				coords=126.2000 -17.1100 -40.0000
+				height=80.0000
+				radius=11.5600
+				type=1
+				value=15.0000
+			}
+		}
+	}
+	attacking_09{
+		file=Whiptongue_Bulborb.png
+		file_pos=664.0000 216.0000
+		file_size=177.0000 104.0000
+		offset=36.0000 1.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=80.2200 -0.7000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=116.6900 -6.0000 0.0000
+				height=128.0000
+				radius=4.9300
+				type=2
+				value=0.5000
+			}
+			tongue2{
+				coords=120.8300 -8.7900 0.0000
+				height=128.0000
+				radius=4.5600
+				type=2
+				value=0.5000
+			}
+		}
+	}
+	chomping_01{
+		file=Whiptongue_Bulborb.png
+		file_pos=842.0000 216.0000
+		file_size=166.0000 102.0000
+		offset=31.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=114.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=114.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	chomping_02{
+		file=Whiptongue_Bulborb.png
+		file_pos=0.0000 352.0000
+		file_size=164.0000 102.0000
+		offset=29.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=67.4500 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	chomping_03{
+		file=Whiptongue_Bulborb.png
+		file_pos=165.0000 352.0000
+		file_size=160.0000 102.0000
+		offset=27.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=64.9100 0.0800 0.0000
+				height=128.0000
+				radius=29.4600
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=104.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=104.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_01{
+		file=Whiptongue_Bulborb.png
+		file_pos=666.0000 321.0000
+		file_size=163.0000 102.0000
+		offset=29.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Whiptongue_Bulborb.png
+		file_pos=830.0000 321.0000
+		file_size=144.0000 102.0000
+		offset=21.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=56.1900 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=91.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=91.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Whiptongue_Bulborb.png
+		file_pos=830.0000 321.0000
+		file_size=144.0000 102.0000
+		offset=23.0000 0.0000
+		hitboxes{
+			body{
+				coords=3.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=58.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=93.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=93.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Whiptongue_Bulborb.png
+		file_pos=0.0000 455.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_05{
+		file=Whiptongue_Bulborb.png
+		file_pos=172.0000 455.0000
+		file_size=177.0000 102.0000
+		offset=38.0000 0.0000
+		hitboxes{
+			body{
+				coords=5.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=80.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=120.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=120.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_06{
+		file=Whiptongue_Bulborb.png
+		file_pos=350.0000 440.0000
+		file_size=185.0000 102.0000
+		offset=40.0000 0.0000
+		hitboxes{
+			body{
+				coords=8.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=2
+				value=0.8000
+			}
+			head{
+				coords=91.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			tongue1{
+				coords=130.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=130.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	idling{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.0000 0.0000
@@ -277,14 +949,14 @@ sprites{
 			}
 		}
 	}
-	walking1{
+	shaking_01{
 		file=Whiptongue_Bulborb.png
-		file_pos=172.0000 0.0000
-		file_size=171.0000 105.0000
-		offset=33.0000 3.0000
+		file_pos=0.0000 0.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 2.0000
 		hitboxes{
 			body{
-				coords=0.0000 2.0000 0.0000
+				coords=1.0000 2.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=0
@@ -292,7 +964,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			head{
-				coords=75.0000 1.0000 0.0000
+				coords=75.0000 2.0000 0.0000
 				height=128.0000
 				radius=32.0000
 				type=0
@@ -300,14 +972,14 @@ sprites{
 				can_pikmin_latch=true
 			}
 			tongue1{
-				coords=110.0000 3.0000 0.0000
+				coords=110.0000 2.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			tongue2{
-				coords=110.0000 3.0000 0.0000
+				coords=110.0000 2.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
@@ -315,771 +987,7 @@ sprites{
 			}
 		}
 	}
-	walking2{
-		file=Whiptongue_Bulborb.png
-		file_pos=344.0000 0.0000
-		file_size=171.0000 114.0000
-		offset=33.0000 6.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=75.0000 9.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 10.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 10.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	walking3{
-		file=Whiptongue_Bulborb.png
-		file_pos=172.0000 0.0000
-		file_size=171.0000 105.0000
-		offset=33.0000 -3.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 -2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=75.0000 -1.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 -3.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 -3.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	walking4{
-		file=Whiptongue_Bulborb.png
-		file_pos=344.0000 0.0000
-		file_size=171.0000 114.0000
-		offset=33.0000 -6.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 -0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=75.0000 -9.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 -10.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 -10.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sniffing1{
-		file=Whiptongue_Bulborb.png
-		file_pos=516.0000 0.0000
-		file_size=166.0000 102.0000
-		offset=30.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sniffing2{
-		file=Whiptongue_Bulborb.png
-		file_pos=683.0000 0.0000
-		file_size=162.0000 102.0000
-		offset=31.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=108.0000 -7.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=108.0000 -7.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sniffing3{
-		file=Whiptongue_Bulborb.png
-		file_pos=846.0000 0.0000
-		file_size=162.0000 106.0000
-		offset=31.0000 -2.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 -6.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=102.0000 -16.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=102.0000 -16.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sniffing4{
-		file=Whiptongue_Bulborb.png
-		file_pos=683.0000 0.0000
-		file_size=162.0000 102.0000
-		offset=31.0000 0.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=108.0000 7.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=108.0000 7.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sniffing5{
-		file=Whiptongue_Bulborb.png
-		file_pos=846.0000 0.0000
-		file_size=162.0000 106.0000
-		offset=31.0000 2.0000
-		scale=1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 6.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=102.0000 16.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=102.0000 16.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	attacking1{
-		file=Whiptongue_Bulborb.png
-		file_pos=0.0000 103.0000
-		file_size=166.0000 102.0000
-		offset=30.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=75.0000 -2.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 -3.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 -3.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	attacking2{
-		file=Whiptongue_Bulborb.png
-		file_pos=167.0000 106.0000
-		file_size=156.0000 104.0000
-		offset=25.0000 -3.0000
-		hitboxes{
-			body{
-				coords=1.0000 -2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 -9.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=104.0000 -9.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=104.0000 -9.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	attacking3{
-		file=Whiptongue_Bulborb.png
-		file_pos=324.0000 115.0000
-		file_size=188.0000 104.0000
-		offset=41.0000 1.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=78.0000 2.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=93.0000 4.0000 -40.0000
-				height=80.0000
-				radius=37.0000
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=131.0000 -4.0000 -40.0000
-				height=80.0000
-				radius=8.0000
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking4{
-		file=Whiptongue_Bulborb.png
-		file_pos=516.0000 103.0000
-		file_size=239.0000 105.0000
-		offset=66.0000 1.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=80.2200 4.5900 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=90.0000 4.0000 -40.0000
-				height=80.0000
-				radius=33.0000
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=155.0000 4.0000 -40.0000
-				height=80.0000
-				radius=32.0000
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking5{
-		file=Whiptongue_Bulborb.png
-		file_pos=756.0000 107.0000
-		file_size=293.0000 108.0000
-		offset=93.0000 3.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=81.6300 9.1700 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=153.8500 31.3700 -40.0000
-				height=80.0000
-				radius=30.2900
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=212.1000 22.1000 -40.0000
-				height=80.0000
-				radius=32.4700
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking6{
-		file=Whiptongue_Bulborb.png
-		file_pos=0.0000 211.0000
-		file_size=260.0000 140.0000
-		offset=77.0000 19.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=79.5100 7.4100 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=147.1100 28.5700 -40.0000
-				height=80.0000
-				radius=25.1900
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=183.2600 62.8900 -40.0000
-				height=80.0000
-				radius=27.3600
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking7{
-		file=Whiptongue_Bulborb.png
-		file_pos=261.0000 220.0000
-		file_size=216.0000 114.0000
-		offset=55.0000 6.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=84.0000 14.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=143.7000 9.0800 -40.0000
-				height=80.0000
-				radius=20.0800
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=151.4300 30.4400 -40.0000
-				height=80.0000
-				radius=22.2700
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking8{
-		file=Whiptongue_Bulborb.png
-		file_pos=478.0000 220.0000
-		file_size=185.0000 103.0000
-		offset=40.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=78.1000 -6.6900 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=119.0600 -27.4400 -40.0000
-				height=80.0000
-				radius=10.4500
-				type=1
-				value=15.0000
-			}
-			tongue2{
-				coords=126.2000 -17.1100 -40.0000
-				height=80.0000
-				radius=11.5600
-				type=1
-				value=15.0000
-			}
-		}
-	}
-	attacking9{
-		file=Whiptongue_Bulborb.png
-		file_pos=664.0000 216.0000
-		file_size=177.0000 104.0000
-		offset=36.0000 1.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=80.2200 -0.7000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=116.6900 -6.0000 0.0000
-				height=128.0000
-				radius=4.9300
-				type=2
-				value=0.5000
-			}
-			tongue2{
-				coords=120.8300 -8.7900 0.0000
-				height=128.0000
-				radius=4.5600
-				type=2
-				value=0.5000
-			}
-		}
-	}
-	chomping1{
-		file=Whiptongue_Bulborb.png
-		file_pos=842.0000 216.0000
-		file_size=166.0000 102.0000
-		offset=31.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=114.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=114.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping2{
-		file=Whiptongue_Bulborb.png
-		file_pos=0.0000 352.0000
-		file_size=164.0000 102.0000
-		offset=29.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=67.4500 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	chomping3{
-		file=Whiptongue_Bulborb.png
-		file_pos=165.0000 352.0000
-		file_size=160.0000 102.0000
-		offset=27.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
-			}
-			head{
-				coords=64.9100 0.0800 0.0000
-				height=128.0000
-				radius=29.4600
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			tongue1{
-				coords=104.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=104.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	shaking2{
+	shaking_02{
 		file=Whiptongue_Bulborb.png
 		file_pos=326.0000 335.0000
 		file_size=171.0000 102.0000
@@ -1121,7 +1029,7 @@ sprites{
 			}
 		}
 	}
-	shaking3{
+	shaking_03{
 		file=Whiptongue_Bulborb.png
 		file_pos=498.0000 324.0000
 		file_size=167.0000 115.0000
@@ -1163,7 +1071,7 @@ sprites{
 			}
 		}
 	}
-	shaking4{
+	shaking_04{
 		file=Whiptongue_Bulborb.png
 		file_pos=326.0000 335.0000
 		file_size=171.0000 102.0000
@@ -1206,7 +1114,7 @@ sprites{
 			}
 		}
 	}
-	shaking5{
+	shaking_05{
 		file=Whiptongue_Bulborb.png
 		file_pos=498.0000 324.0000
 		file_size=167.0000 115.0000
@@ -1249,230 +1157,14 @@ sprites{
 			}
 		}
 	}
-	dying1{
+	sniffing_01{
 		file=Whiptongue_Bulborb.png
-		file_pos=666.0000 321.0000
-		file_size=163.0000 102.0000
-		offset=29.0000 0.0000
+		file_pos=516.0000 0.0000
+		file_size=166.0000 102.0000
+		offset=30.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying2{
-		file=Whiptongue_Bulborb.png
-		file_pos=830.0000 321.0000
-		file_size=144.0000 102.0000
-		offset=21.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=52.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=56.1900 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=91.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=91.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying3{
-		file=Whiptongue_Bulborb.png
-		file_pos=830.0000 321.0000
-		file_size=144.0000 102.0000
-		offset=23.0000 0.0000
-		hitboxes{
-			body{
-				coords=3.0000 0.0000 0.0000
-				height=128.0000
-				radius=52.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=58.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=93.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=93.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying4{
-		file=Whiptongue_Bulborb.png
-		file_pos=0.0000 455.0000
-		file_size=171.0000 102.0000
-		offset=33.0000 0.0000
-		hitboxes{
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=70.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=110.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying5{
-		file=Whiptongue_Bulborb.png
-		file_pos=172.0000 455.0000
-		file_size=177.0000 102.0000
-		offset=38.0000 0.0000
-		hitboxes{
-			body{
-				coords=5.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=80.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=120.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=120.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	dying6{
-		file=Whiptongue_Bulborb.png
-		file_pos=350.0000 440.0000
-		file_size=185.0000 102.0000
-		offset=40.0000 0.0000
-		hitboxes{
-			body{
-				coords=8.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=2
-				value=0.8000
-			}
-			head{
-				coords=91.0000 0.0000 0.0000
-				height=128.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			tongue1{
-				coords=130.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			tongue2{
-				coords=130.0000 0.0000 0.0000
-				height=128.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	shaking1{
-		file=Whiptongue_Bulborb.png
-		file_pos=0.0000 0.0000
-		file_size=171.0000 102.0000
-		offset=33.0000 2.0000
-		hitboxes{
-			body{
-				coords=1.0000 2.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=0
@@ -1480,7 +1172,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			head{
-				coords=75.0000 2.0000 0.0000
+				coords=70.0000 0.0000 0.0000
 				height=128.0000
 				radius=32.0000
 				type=0
@@ -1488,14 +1180,322 @@ sprites{
 				can_pikmin_latch=true
 			}
 			tongue1{
-				coords=110.0000 2.0000 0.0000
+				coords=110.0000 0.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			tongue2{
-				coords=110.0000 2.0000 0.0000
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sniffing_02{
+		file=Whiptongue_Bulborb.png
+		file_pos=683.0000 0.0000
+		file_size=162.0000 102.0000
+		offset=31.0000 0.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=108.0000 -7.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=108.0000 -7.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sniffing_03{
+		file=Whiptongue_Bulborb.png
+		file_pos=846.0000 0.0000
+		file_size=162.0000 106.0000
+		offset=31.0000 -2.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 -6.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=102.0000 -16.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=102.0000 -16.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sniffing_04{
+		file=Whiptongue_Bulborb.png
+		file_pos=683.0000 0.0000
+		file_size=162.0000 102.0000
+		offset=31.0000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=108.0000 7.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=108.0000 7.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sniffing_05{
+		file=Whiptongue_Bulborb.png
+		file_pos=846.0000 0.0000
+		file_size=162.0000 106.0000
+		offset=31.0000 2.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=70.0000 6.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=102.0000 16.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=102.0000 16.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_01{
+		file=Whiptongue_Bulborb.png
+		file_pos=172.0000 0.0000
+		file_size=171.0000 105.0000
+		offset=33.0000 3.0000
+		hitboxes{
+			body{
+				coords=0.0000 2.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=75.0000 1.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_02{
+		file=Whiptongue_Bulborb.png
+		file_pos=344.0000 0.0000
+		file_size=171.0000 114.0000
+		offset=33.0000 6.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=75.0000 9.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_03{
+		file=Whiptongue_Bulborb.png
+		file_pos=172.0000 0.0000
+		file_size=171.0000 105.0000
+		offset=33.0000 -3.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 -2.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=75.0000 -1.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_04{
+		file=Whiptongue_Bulborb.png
+		file_pos=344.0000 0.0000
+		file_size=171.0000 114.0000
+		offset=33.0000 -6.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 -0.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			head{
+				coords=75.0000 -9.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			tongue1{
+				coords=110.0000 -10.0000 0.0000
+				height=128.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			tongue2{
+				coords=110.0000 -10.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2

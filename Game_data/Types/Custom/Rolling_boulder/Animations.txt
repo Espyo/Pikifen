@@ -1,48 +1,4 @@
 animations{
-	rolling{
-		frames{
-			rolling4{
-				duration=0.1000
-			}
-			rolling5{
-				duration=0.1000
-			}
-			rolling6{
-				duration=0.1000
-			}
-			rolling1{
-				duration=0.1000
-			}
-			rolling2{
-				duration=0.1000
-			}
-			rolling3{
-				duration=0.1000
-			}
-		}
-	}
-	growing{
-		frames{
-			growing1{
-				duration=0.0500
-			}
-			growing2{
-				duration=0.0500
-			}
-			growing3{
-				duration=0.0500
-			}
-			growing4{
-				duration=0.0500
-			}
-			growing5{
-				duration=0.0500
-			}
-			growing6{
-				duration=0.0500
-			}
-		}
-	}
 	destroyed{
 		frames{
 			destroyed{
@@ -50,104 +6,52 @@ animations{
 			}
 		}
 	}
+	growing{
+		frames{
+			growing_01{
+				duration=0.0500
+			}
+			growing_02{
+				duration=0.0500
+			}
+			growing_03{
+				duration=0.0500
+			}
+			growing_04{
+				duration=0.0500
+			}
+			growing_05{
+				duration=0.0500
+			}
+			growing_06{
+				duration=0.0500
+			}
+		}
+	}
+	rolling{
+		frames{
+			rolling_04{
+				duration=0.1000
+			}
+			rolling_05{
+				duration=0.1000
+			}
+			rolling_06{
+				duration=0.1000
+			}
+			rolling_01{
+				duration=0.1000
+			}
+			rolling_02{
+				duration=0.1000
+			}
+			rolling_03{
+				duration=0.1000
+			}
+		}
+	}
 }
 sprites{
-	rolling1{
-		file=Boulder.png
-		file_pos=0.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 -0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	rolling2{
-		file=Boulder.png
-		file_pos=65.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	rolling3{
-		file=Boulder.png
-		file_pos=130.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	rolling4{
-		file=Boulder.png
-		file_pos=195.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	rolling5{
-		file=Boulder.png
-		file_pos=260.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	rolling6{
-		file=Boulder.png
-		file_pos=325.0000 0.0000
-		file_size=64.0000 64.0000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=32.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
 	destroyed{
 		file=Boulder.png
 		file_pos=0.0000 0.0000
@@ -164,7 +68,7 @@ sprites{
 			}
 		}
 	}
-	growing1{
+	growing_01{
 		file=Boulder.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
@@ -181,7 +85,7 @@ sprites{
 			}
 		}
 	}
-	growing2{
+	growing_02{
 		file=Boulder.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
@@ -198,7 +102,7 @@ sprites{
 			}
 		}
 	}
-	growing3{
+	growing_03{
 		file=Boulder.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
@@ -215,7 +119,7 @@ sprites{
 			}
 		}
 	}
-	growing4{
+	growing_04{
 		file=Boulder.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
@@ -232,7 +136,7 @@ sprites{
 			}
 		}
 	}
-	growing5{
+	growing_05{
 		file=Boulder.png
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
@@ -249,7 +153,7 @@ sprites{
 			}
 		}
 	}
-	growing6{
+	growing_06{
 		file=Boulder.png
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
@@ -266,7 +170,104 @@ sprites{
 			}
 		}
 	}
+	rolling_01{
+		file=Boulder.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 -0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
+	rolling_02{
+		file=Boulder.png
+		file_pos=65.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
+	rolling_03{
+		file=Boulder.png
+		file_pos=130.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
+	rolling_04{
+		file=Boulder.png
+		file_pos=195.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
+	rolling_05{
+		file=Boulder.png
+		file_pos=260.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
+	rolling_06{
+		file=Boulder.png
+		file_pos=325.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			rock{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=1
+				value=60.0000
+				hazards=crush
+				knockback=2.0000
+			}
+		}
+	}
 }
 body_parts{
 	rock
 }
+engine_version=0.25.0

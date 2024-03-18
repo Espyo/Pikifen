@@ -1,94 +1,94 @@
 animations{
 	bouncing{
 		frames{
-			spraying1{
+			spraying_01{
 				duration=0.1000
 			}
-			spraying2{
+			spraying_02{
 				duration=0.1000
 			}
-			spraying3{
+			spraying_03{
 				duration=0.1000
 			}
-			spraying4{
+			spraying_04{
 				duration=0.1000
 			}
-			spraying1{
+			spraying_01{
 				duration=0.1000
 			}
-			spraying2{
+			spraying_02{
 				duration=0.1000
 			}
-			spraying3{
+			spraying_03{
 				duration=0.1000
 			}
-			spraying4{
+			spraying_04{
 				duration=0.1000
 			}
-			spraying1{
+			spraying_01{
 				duration=0.1000
 			}
-			spraying2{
+			spraying_02{
 				duration=0.1000
 			}
-			spraying3{
+			spraying_03{
 				duration=0.1000
 			}
-			spraying4{
+			spraying_04{
 				duration=0.1000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			idling2{
+			idling_02{
 				duration=0.1000
 			}
-			idling3{
+			idling_03{
 				duration=0.1000
 			}
 		}
 	}
 }
 sprites{
-	idling1{
+	idling_01{
 		file=Geyser.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	idling2{
+	idling_02{
 		file=Geyser.png
 		file_pos=49.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	idling3{
+	idling_03{
 		file=Geyser.png
 		file_pos=98.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	spraying1{
+	spraying_01{
 		file=Geyser.png
 		file_pos=147.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	spraying2{
+	spraying_02{
 		file=Geyser.png
 		file_pos=196.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	spraying3{
+	spraying_03{
 		file=Geyser.png
 		file_pos=245.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	spraying4{
+	spraying_04{
 		file=Geyser.png
 		file_pos=294.0000 0.0000
 		file_size=48.0000 48.0000
 	}
 }
 body_parts
-engine_version=0.23.2
+engine_version=0.25.0

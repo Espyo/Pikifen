@@ -1,21 +1,4 @@
 animations{
-	broken{
-		frames{
-			broken{
-				duration=0.1000
-			}
-		}
-	}
-	broken_shaking{
-		frames{
-			broken2{
-				duration=0.0600
-			}
-			broken3{
-				duration=0.0600
-			}
-		}
-	}
 	destroyed{
 		frames{
 			destroyed{
@@ -23,72 +6,42 @@ animations{
 			}
 		}
 	}
-	healthy{
+	stage_1_idling{
 		frames{
-			healthy{
+			stage_1_01{
 				duration=0.1000
 			}
 		}
 	}
-	healthy_shaking{
+	stage_1_shaking{
 		frames{
-			healthy2{
+			stage_1_02{
 				duration=0.0600
 			}
-			healthy3{
+			stage_1_03{
+				duration=0.0600
+			}
+		}
+	}
+	stage_2_idling{
+		frames{
+			stage_2_01{
+				duration=0.1000
+			}
+		}
+	}
+	stage_2_shaking{
+		frames{
+			stage_2_02{
+				duration=0.0600
+			}
+			stage_2_03{
 				duration=0.0600
 			}
 		}
 	}
 }
 sprites{
-	broken{
-		file=Crystal.png
-		file_pos=101.0000 0.0000
-		file_size=100.0000 100.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			crystal{
-				coords=0.0000 0.0000 0.0000
-				height=100.0000
-				radius=25.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	broken2{
-		file=Crystal.png
-		file_pos=101.0000 0.0000
-		file_size=100.0000 100.0000
-		offset=0.7000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			crystal{
-				coords=0.0000 0.0000 0.0000
-				height=100.0000
-				radius=25.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	broken3{
-		file=Crystal.png
-		file_pos=101.0000 0.0000
-		file_size=100.0000 100.0000
-		offset=-0.7000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			crystal{
-				coords=0.0000 0.0000 0.0000
-				height=100.0000
-				radius=25.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
 	destroyed{
 		file=Crystal_nodule.png
 		file_pos=0.0000 0.0000
@@ -104,7 +57,7 @@ sprites{
 			}
 		}
 	}
-	healthy{
+	stage_1_01{
 		file=Crystal.png
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
@@ -119,7 +72,7 @@ sprites{
 			}
 		}
 	}
-	healthy2{
+	stage_1_02{
 		file=Crystal.png
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
@@ -135,9 +88,56 @@ sprites{
 			}
 		}
 	}
-	healthy3{
+	stage_1_03{
 		file=Crystal.png
 		file_pos=0.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=-0.7000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_2_01{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_2_02{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=0.7000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_2_03{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
 		file_size=100.0000 100.0000
 		offset=-0.7000 0.0000
 		scale=0.5000 0.5000
@@ -155,3 +155,4 @@ sprites{
 body_parts{
 	crystal
 }
+engine_version=0.25.0

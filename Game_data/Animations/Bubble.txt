@@ -1,14 +1,14 @@
 animations{
-	default{
+	main{
 		frames{
-			1{
+			main{
 				duration=0.0000
 			}
 		}
 	}
 }
 sprites{
-	1{
+	main{
 		file=Bubble.png
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
@@ -16,3 +16,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0

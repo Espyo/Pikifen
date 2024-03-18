@@ -6,23 +6,23 @@ animations{
 			}
 		}
 	}
-	idling_broken{
+	stage_1_idling{
 		frames{
-			idling_broken{
+			stage_1_idling{
 				duration=0.1000
 			}
 		}
 	}
-	idling_healthy{
+	stage_2_idling{
 		frames{
-			idling_healthy{
+			stage_2_idling{
 				duration=0.1000
 			}
 		}
 	}
-	idling_very_broken{
+	stage_3_idling{
 		frames{
-			idling_very_broken{
+			stage_3_idling{
 				duration=0.1000
 			}
 		}
@@ -41,28 +41,10 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_broken{
-		file=Egg.png
-		file_pos=25.0000 0.0000
-		file_size=24.0000 32.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=18.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	idling_healthy{
+	stage_1_idling{
 		file=Egg.png
 		file_pos=0.0000 0.0000
 		file_size=24.0000 32.0000
@@ -73,12 +55,24 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_very_broken{
+	stage_2_idling{
+		file=Egg.png
+		file_pos=25.0000 0.0000
+		file_size=24.0000 32.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stage_3_idling{
 		file=Egg.png
 		file_pos=50.0000 0.0000
 		file_size=24.0000 32.0000
@@ -89,8 +83,6 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -98,3 +90,4 @@ sprites{
 body_parts{
 	body
 }
+engine_version=0.25.0

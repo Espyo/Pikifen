@@ -1,99 +1,99 @@
 animations{
 	bumped_blue{
 		frames{
-			bumping1_blue{
+			bumping_01_blue{
 				duration=0.1000
 			}
-			bumping2_blue{
+			bumping_02_blue{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1_blue{
+			bumping_01_blue{
 				duration=0.1000
 			}
-			idling_blue{
+			idling_01_blue{
 				duration=0.7000
 			}
 		}
 	}
 	bumped_red{
 		frames{
-			bumping1_red{
+			bumping_01_red{
 				duration=0.1000
 			}
-			bumping2_red{
+			bumping_02_red{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1_red{
+			bumping_01_red{
 				duration=0.1000
 			}
-			idling_red{
+			idling_01_red{
 				duration=0.7000
 			}
 		}
 	}
 	bumped_rock{
 		frames{
-			bumping1_rock{
+			bumping_01_rock{
 				duration=0.1000
 			}
-			bumping2_rock{
+			bumping_02_rock{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1_rock{
+			bumping_01_rock{
 				duration=0.1000
 			}
-			idling_rock{
+			idling_01_rock{
 				duration=0.7000
 			}
 		}
 	}
 	bumped_winged{
 		frames{
-			bumping1_winged{
+			bumping_01_winged{
 				duration=0.1000
 			}
-			bumping2_winged{
+			bumping_02_winged{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1_winged{
+			bumping_01_winged{
 				duration=0.1000
 			}
-			idling_winged{
+			idling_01_winged{
 				duration=0.7000
 			}
 		}
 	}
 	bumped_yellow{
 		frames{
-			bumping1_yellow{
+			bumping_01_yellow{
 				duration=0.1000
 			}
-			bumping2_yellow{
+			bumping_02_yellow{
 				duration=0.1000
 				sound=bumped
 			}
-			bumping1_yellow{
+			bumping_01_yellow{
 				duration=0.1000
 			}
-			idling_yellow{
+			idling_01_yellow{
 				duration=0.7000
 			}
 		}
 	}
 	closing_blue{
 		frames{
-			closing1_blue{
+			closing_01_blue{
 				duration=0.1000
 			}
-			closing2_blue{
+			closing_02_blue{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4_blue{
+			closing_04_blue{
 				duration=0.1000
 			}
 			closed_blue{
@@ -103,14 +103,14 @@ animations{
 	}
 	closing_red{
 		frames{
-			closing1_red{
+			closing_01_red{
 				duration=0.1000
 			}
-			closing2_red{
+			closing_02_red{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4_red{
+			closing_04_red{
 				duration=0.1000
 			}
 			closed_red{
@@ -120,14 +120,14 @@ animations{
 	}
 	closing_rock{
 		frames{
-			closing1_rock{
+			closing_01_rock{
 				duration=0.1000
 			}
-			closing2_rock{
+			closing_02_rock{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4_rock{
+			closing_04_rock{
 				duration=0.1000
 			}
 			closed_rock{
@@ -137,14 +137,14 @@ animations{
 	}
 	closing_winged{
 		frames{
-			closing1_winged{
+			closing_01_winged{
 				duration=0.1000
 			}
-			closing2_winged{
+			closing_02_winged{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4_winged{
+			closing_04_winged{
 				duration=0.1000
 			}
 			closed_winged{
@@ -154,14 +154,14 @@ animations{
 	}
 	closing_yellow{
 		frames{
-			closing1_yellow{
+			closing_01_yellow{
 				duration=0.1000
 			}
-			closing2_yellow{
+			closing_02_yellow{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing4_yellow{
+			closing_04_yellow{
 				duration=0.1000
 			}
 			closed_yellow{
@@ -171,382 +171,382 @@ animations{
 	}
 	dying_blue{
 		frames{
-			dying1_blue{
+			dying_01_blue{
 				duration=0.1500
 			}
-			dying2_blue{
+			dying_02_blue{
 				duration=0.1500
 			}
-			dying1_blue{
+			dying_01_blue{
 				duration=0.1500
 			}
-			dying2_blue{
+			dying_02_blue{
 				duration=0.1500
 			}
-			dying1_blue{
+			dying_01_blue{
 				duration=0.1500
 			}
-			dying2_blue{
+			dying_02_blue{
 				duration=0.1500
 				sound=dying
 			}
-			dying3_blue{
+			dying_03_blue{
 				duration=0.1500
 				sound=rustling
 			}
-			dying4_blue{
+			dying_04_blue{
 				duration=0.1500
 			}
-			dying5_blue{
+			dying_05_blue{
 				duration=0.1500
 			}
-			dying6_blue{
+			dying_06_blue{
 				duration=0.1500
 			}
-			dying7_blue{
+			dying_07_blue{
 				duration=0.1500
 			}
 		}
 	}
 	dying_red{
 		frames{
-			dying1_red{
+			dying_01_red{
 				duration=0.1500
 			}
-			dying2_red{
+			dying_02_red{
 				duration=0.1500
 			}
-			dying1_red{
+			dying_01_red{
 				duration=0.1500
 			}
-			dying2_red{
+			dying_02_red{
 				duration=0.1500
 			}
-			dying1_red{
+			dying_01_red{
 				duration=0.1500
 			}
-			dying2_red{
+			dying_02_red{
 				duration=0.1500
 				sound=dying
 			}
-			dying3_red{
+			dying_03_red{
 				duration=0.1500
 				sound=rustling
 			}
-			dying4_red{
+			dying_04_red{
 				duration=0.1500
 			}
-			dying5_red{
+			dying_05_red{
 				duration=0.1500
 			}
-			dying6_red{
+			dying_06_red{
 				duration=0.1500
 			}
-			dying7_red{
+			dying_07_red{
 				duration=0.1500
 			}
 		}
 	}
 	dying_rock{
 		frames{
-			dying1_rock{
+			dying_01_rock{
 				duration=0.1500
 			}
-			dying2_rock{
+			dying_02_rock{
 				duration=0.1500
 			}
-			dying1_rock{
+			dying_01_rock{
 				duration=0.1500
 			}
-			dying2_rock{
+			dying_02_rock{
 				duration=0.1500
 			}
-			dying1_rock{
+			dying_01_rock{
 				duration=0.1500
 			}
-			dying2_rock{
+			dying_02_rock{
 				duration=0.1500
 				sound=dying
 			}
-			dying3_rock{
+			dying_03_rock{
 				duration=0.1500
 				sound=rustling
 			}
-			dying4_rock{
+			dying_04_rock{
 				duration=0.1500
 			}
-			dying5_rock{
+			dying_05_rock{
 				duration=0.1500
 			}
-			dying6_rock{
+			dying_06_rock{
 				duration=0.1500
 			}
-			dying7_rock{
+			dying_07_rock{
 				duration=0.1500
 			}
 		}
 	}
 	dying_winged{
 		frames{
-			dying1_winged{
+			dying_01_winged{
 				duration=0.1500
 			}
-			dying2_winged{
+			dying_02_winged{
 				duration=0.1000
 			}
-			dying1_winged{
+			dying_01_winged{
 				duration=0.1000
 			}
-			dying2_winged{
+			dying_02_winged{
 				duration=0.1000
 			}
-			dying1_winged{
+			dying_01_winged{
 				duration=0.1000
 			}
-			dying2_winged{
+			dying_02_winged{
 				duration=0.1000
 				sound=dying
 			}
-			dying3_winged{
+			dying_03_winged{
 				duration=0.1000
 				sound=rustling
 			}
-			dying4_winged{
+			dying_04_winged{
 				duration=0.1000
 			}
-			dying5_winged{
+			dying_05_winged{
 				duration=0.1000
 			}
-			dying6_winged{
+			dying_06_winged{
 				duration=0.1000
 			}
-			dying7_winged{
+			dying_07_winged{
 				duration=0.1000
 			}
 		}
 	}
 	dying_yellow{
 		frames{
-			dying1_yellow{
+			dying_01_yellow{
 				duration=0.1500
 			}
-			dying2_yellow{
+			dying_02_yellow{
 				duration=0.1500
 			}
-			dying1_yellow{
+			dying_01_yellow{
 				duration=0.1500
 			}
-			dying2_yellow{
+			dying_02_yellow{
 				duration=0.1500
 			}
-			dying1_yellow{
+			dying_01_yellow{
 				duration=0.1500
 			}
-			dying2_yellow{
+			dying_02_yellow{
 				duration=0.1500
 				sound=dying
 			}
-			dying3_yellow{
+			dying_03_yellow{
 				duration=0.1500
 				sound=rustling
 			}
-			dying4_yellow{
+			dying_04_yellow{
 				duration=0.1500
 			}
-			dying5_yellow{
+			dying_05_yellow{
 				duration=0.1500
 			}
-			dying6_yellow{
+			dying_06_yellow{
 				duration=0.1500
 			}
-			dying7_yellow{
+			dying_07_yellow{
 				duration=0.1500
 			}
 		}
 	}
 	idling_blue{
 		frames{
-			idling_blue{
+			idling_01_blue{
 				duration=0.2500
 			}
-			idling2_blue{
+			idling_02_blue{
 				duration=0.2500
 			}
-			idling_blue{
+			idling_01_blue{
 				duration=0.2500
 			}
-			idling3_blue{
+			idling_03_blue{
 				duration=0.2500
 			}
 		}
 	}
 	idling_red{
 		frames{
-			idling_red{
+			idling_01_red{
 				duration=0.2500
 			}
-			idling2_red{
+			idling_02_red{
 				duration=0.2500
 			}
-			idling_red{
+			idling_01_red{
 				duration=0.2500
 			}
-			idling3_red{
+			idling_03_red{
 				duration=0.2500
 			}
 		}
 	}
 	idling_rock{
 		frames{
-			idling_rock{
+			idling_01_rock{
 				duration=0.2500
 			}
-			idling2_rock{
+			idling_02_rock{
 				duration=0.2500
 			}
-			idling_rock{
+			idling_01_rock{
 				duration=0.2500
 			}
-			idling3_rock{
+			idling_03_rock{
 				duration=0.2500
 			}
 		}
 	}
 	idling_winged{
 		frames{
-			idling_winged{
+			idling_01_winged{
 				duration=0.2500
 			}
-			idling2_winged{
+			idling_02_winged{
 				duration=0.2500
 			}
-			idling_winged{
+			idling_01_winged{
 				duration=0.2500
 			}
-			idling3_winged{
+			idling_03_winged{
 				duration=0.2500
 			}
 		}
 	}
 	idling_yellow{
 		frames{
-			idling_yellow{
+			idling_01_yellow{
 				duration=0.2500
 			}
-			idling2_yellow{
+			idling_02_yellow{
 				duration=0.2500
 			}
-			idling_yellow{
+			idling_01_yellow{
 				duration=0.2500
 			}
-			idling3_yellow{
+			idling_03_yellow{
 				duration=0.2500
 			}
 		}
 	}
 	opening_blue{
 		frames{
-			closing4_blue{
+			closing_04_blue{
 				duration=0.1000
 			}
-			closing3_blue{
+			closing_03_blue{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2_blue{
+			closing_02_blue{
 				duration=0.1000
 			}
-			closing1_blue{
+			closing_01_blue{
 				duration=0.1000
 			}
-			idling_blue{
+			idling_01_blue{
 				duration=0.1000
 			}
 		}
 	}
 	opening_red{
 		frames{
-			closing4_red{
+			closing_04_red{
 				duration=0.1000
 			}
-			closing3_red{
+			closing_03_red{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2_red{
+			closing_02_red{
 				duration=0.1000
 			}
-			closing1_red{
+			closing_01_red{
 				duration=0.1000
 			}
-			idling_red{
+			idling_01_red{
 				duration=0.1000
 			}
 		}
 	}
 	opening_rock{
 		frames{
-			closing4_rock{
+			closing_04_rock{
 				duration=0.1000
 			}
-			closing3_rock{
+			closing_03_rock{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2_rock{
+			closing_02_rock{
 				duration=0.1000
 			}
-			closing1_rock{
+			closing_01_rock{
 				duration=0.1000
 			}
-			idling_rock{
+			idling_01_rock{
 				duration=0.1000
 			}
 		}
 	}
 	opening_winged{
 		frames{
-			closing4_winged{
+			closing_04_winged{
 				duration=0.1000
 			}
-			closing3_winged{
+			closing_03_winged{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2_winged{
+			closing_02_winged{
 				duration=0.1000
 			}
-			closing1_winged{
+			closing_01_winged{
 				duration=0.1000
 			}
-			idling_winged{
+			idling_01_winged{
 				duration=0.1000
 			}
 		}
 	}
 	opening_yellow{
 		frames{
-			closing4_yellow{
+			closing_04_yellow{
 				duration=0.1000
 			}
-			closing3_yellow{
+			closing_03_yellow{
 				duration=0.1000
 				sound=rustling_short
 			}
-			closing2_yellow{
+			closing_02_yellow{
 				duration=0.1000
 			}
-			closing1_yellow{
+			closing_01_yellow{
 				duration=0.1000
 			}
-			idling_yellow{
+			idling_01_yellow{
 				duration=0.1000
 			}
 		}
 	}
 	spitting_blue{
 		frames{
-			closing4_blue{
+			closing_04_blue{
 				duration=0.1000
 			}
 			closed_blue{
@@ -557,7 +557,7 @@ animations{
 	}
 	spitting_red{
 		frames{
-			closing4_red{
+			closing_04_red{
 				duration=0.1000
 			}
 			closed_red{
@@ -568,7 +568,7 @@ animations{
 	}
 	spitting_rock{
 		frames{
-			closing4_rock{
+			closing_04_rock{
 				duration=0.1000
 			}
 			closed_rock{
@@ -579,7 +579,7 @@ animations{
 	}
 	spitting_winged{
 		frames{
-			closing4_winged{
+			closing_04_winged{
 				duration=0.1000
 			}
 			closed_winged{
@@ -590,7 +590,7 @@ animations{
 	}
 	spitting_yellow{
 		frames{
-			closing4_yellow{
+			closing_04_yellow{
 				duration=0.1000
 			}
 			closed_yellow{
@@ -601,7 +601,7 @@ animations{
 	}
 }
 sprites{
-	bumping1_blue{
+	bumping_01_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
@@ -617,7 +617,7 @@ sprites{
 			}
 		}
 	}
-	bumping1_red{
+	bumping_01_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -633,7 +633,7 @@ sprites{
 			}
 		}
 	}
-	bumping1_rock{
+	bumping_01_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
@@ -649,7 +649,7 @@ sprites{
 			}
 		}
 	}
-	bumping1_winged{
+	bumping_01_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
@@ -665,7 +665,7 @@ sprites{
 			}
 		}
 	}
-	bumping1_yellow{
+	bumping_01_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
@@ -681,7 +681,7 @@ sprites{
 			}
 		}
 	}
-	bumping2_blue{
+	bumping_02_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
@@ -697,7 +697,7 @@ sprites{
 			}
 		}
 	}
-	bumping2_red{
+	bumping_02_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -713,7 +713,7 @@ sprites{
 			}
 		}
 	}
-	bumping2_rock{
+	bumping_02_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
@@ -729,7 +729,7 @@ sprites{
 			}
 		}
 	}
-	bumping2_winged{
+	bumping_02_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
@@ -745,7 +745,7 @@ sprites{
 			}
 		}
 	}
-	bumping2_yellow{
+	bumping_02_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
@@ -836,7 +836,7 @@ sprites{
 			}
 		}
 	}
-	closing1_blue{
+	closing_01_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
@@ -851,7 +851,7 @@ sprites{
 			}
 		}
 	}
-	closing1_red{
+	closing_01_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -866,7 +866,7 @@ sprites{
 			}
 		}
 	}
-	closing1_rock{
+	closing_01_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
@@ -881,7 +881,7 @@ sprites{
 			}
 		}
 	}
-	closing1_winged{
+	closing_01_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
@@ -896,7 +896,7 @@ sprites{
 			}
 		}
 	}
-	closing1_yellow{
+	closing_01_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
@@ -911,7 +911,7 @@ sprites{
 			}
 		}
 	}
-	closing2_blue{
+	closing_02_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 326.0000
 		file_size=122.0000 162.0000
@@ -926,7 +926,7 @@ sprites{
 			}
 		}
 	}
-	closing2_red{
+	closing_02_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
@@ -941,7 +941,7 @@ sprites{
 			}
 		}
 	}
-	closing2_rock{
+	closing_02_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 489.0000
 		file_size=122.0000 162.0000
@@ -956,7 +956,7 @@ sprites{
 			}
 		}
 	}
-	closing2_winged{
+	closing_02_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 652.0000
 		file_size=122.0000 162.0000
@@ -971,7 +971,7 @@ sprites{
 			}
 		}
 	}
-	closing2_yellow{
+	closing_02_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 163.0000
 		file_size=122.0000 162.0000
@@ -986,7 +986,7 @@ sprites{
 			}
 		}
 	}
-	closing3_blue{
+	closing_03_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1001,7 +1001,7 @@ sprites{
 			}
 		}
 	}
-	closing3_red{
+	closing_03_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1016,7 +1016,7 @@ sprites{
 			}
 		}
 	}
-	closing3_rock{
+	closing_03_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1031,7 +1031,7 @@ sprites{
 			}
 		}
 	}
-	closing3_winged{
+	closing_03_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1046,7 +1046,7 @@ sprites{
 			}
 		}
 	}
-	closing3_yellow{
+	closing_03_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1061,7 +1061,7 @@ sprites{
 			}
 		}
 	}
-	closing4_blue{
+	closing_04_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1076,7 +1076,7 @@ sprites{
 			}
 		}
 	}
-	closing4_red{
+	closing_04_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1091,7 +1091,7 @@ sprites{
 			}
 		}
 	}
-	closing4_rock{
+	closing_04_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1106,7 +1106,7 @@ sprites{
 			}
 		}
 	}
-	closing4_winged{
+	closing_04_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1121,7 +1121,7 @@ sprites{
 			}
 		}
 	}
-	closing4_yellow{
+	closing_04_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1136,7 +1136,7 @@ sprites{
 			}
 		}
 	}
-	dying1_blue{
+	dying_01_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1152,7 +1152,7 @@ sprites{
 			}
 		}
 	}
-	dying1_red{
+	dying_01_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1168,7 +1168,7 @@ sprites{
 			}
 		}
 	}
-	dying1_rock{
+	dying_01_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1184,7 +1184,7 @@ sprites{
 			}
 		}
 	}
-	dying1_winged{
+	dying_01_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1200,7 +1200,7 @@ sprites{
 			}
 		}
 	}
-	dying1_yellow{
+	dying_01_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1216,7 +1216,7 @@ sprites{
 			}
 		}
 	}
-	dying2_blue{
+	dying_02_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1232,7 +1232,7 @@ sprites{
 			}
 		}
 	}
-	dying2_red{
+	dying_02_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1248,7 +1248,7 @@ sprites{
 			}
 		}
 	}
-	dying2_rock{
+	dying_02_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1264,7 +1264,7 @@ sprites{
 			}
 		}
 	}
-	dying2_winged{
+	dying_02_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1280,7 +1280,7 @@ sprites{
 			}
 		}
 	}
-	dying2_yellow{
+	dying_02_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1296,7 +1296,7 @@ sprites{
 			}
 		}
 	}
-	dying3_blue{
+	dying_03_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1312,7 +1312,7 @@ sprites{
 			}
 		}
 	}
-	dying3_red{
+	dying_03_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1328,7 +1328,7 @@ sprites{
 			}
 		}
 	}
-	dying3_rock{
+	dying_03_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1344,7 +1344,7 @@ sprites{
 			}
 		}
 	}
-	dying3_winged{
+	dying_03_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1360,7 +1360,7 @@ sprites{
 			}
 		}
 	}
-	dying3_yellow{
+	dying_03_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=542.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1376,7 +1376,7 @@ sprites{
 			}
 		}
 	}
-	dying4_blue{
+	dying_04_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 326.0000
 		file_size=102.0000 162.0000
@@ -1392,7 +1392,7 @@ sprites{
 			}
 		}
 	}
-	dying4_red{
+	dying_04_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
@@ -1408,7 +1408,7 @@ sprites{
 			}
 		}
 	}
-	dying4_rock{
+	dying_04_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 489.0000
 		file_size=102.0000 162.0000
@@ -1424,7 +1424,7 @@ sprites{
 			}
 		}
 	}
-	dying4_winged{
+	dying_04_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 652.0000
 		file_size=102.0000 162.0000
@@ -1440,7 +1440,7 @@ sprites{
 			}
 		}
 	}
-	dying4_yellow{
+	dying_04_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=439.0000 163.0000
 		file_size=102.0000 162.0000
@@ -1456,7 +1456,7 @@ sprites{
 			}
 		}
 	}
-	dying5_blue{
+	dying_05_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 326.0000
 		file_size=122.0000 162.0000
@@ -1472,7 +1472,7 @@ sprites{
 			}
 		}
 	}
-	dying5_red{
+	dying_05_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
@@ -1488,7 +1488,7 @@ sprites{
 			}
 		}
 	}
-	dying5_rock{
+	dying_05_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 489.0000
 		file_size=122.0000 162.0000
@@ -1504,7 +1504,7 @@ sprites{
 			}
 		}
 	}
-	dying5_winged{
+	dying_05_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 652.0000
 		file_size=122.0000 162.0000
@@ -1520,7 +1520,7 @@ sprites{
 			}
 		}
 	}
-	dying5_yellow{
+	dying_05_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=316.0000 163.0000
 		file_size=122.0000 162.0000
@@ -1536,7 +1536,7 @@ sprites{
 			}
 		}
 	}
-	dying6_blue{
+	dying_06_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
@@ -1552,7 +1552,7 @@ sprites{
 			}
 		}
 	}
-	dying6_red{
+	dying_06_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -1568,7 +1568,7 @@ sprites{
 			}
 		}
 	}
-	dying6_rock{
+	dying_06_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
@@ -1584,7 +1584,7 @@ sprites{
 			}
 		}
 	}
-	dying6_winged{
+	dying_06_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
@@ -1600,7 +1600,7 @@ sprites{
 			}
 		}
 	}
-	dying6_yellow{
+	dying_06_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
@@ -1616,7 +1616,7 @@ sprites{
 			}
 		}
 	}
-	dying7_blue{
+	dying_07_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
@@ -1632,7 +1632,7 @@ sprites{
 			}
 		}
 	}
-	dying7_red{
+	dying_07_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
@@ -1648,7 +1648,7 @@ sprites{
 			}
 		}
 	}
-	dying7_rock{
+	dying_07_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
@@ -1664,7 +1664,7 @@ sprites{
 			}
 		}
 	}
-	dying7_winged{
+	dying_07_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
@@ -1680,7 +1680,7 @@ sprites{
 			}
 		}
 	}
-	dying7_yellow{
+	dying_07_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
@@ -1696,7 +1696,82 @@ sprites{
 			}
 		}
 	}
-	idling2_blue{
+	idling_01_blue{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_01_red{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_01_rock{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 489.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_01_winged{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 652.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_01_yellow{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_02_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
@@ -1712,7 +1787,7 @@ sprites{
 			}
 		}
 	}
-	idling2_red{
+	idling_02_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -1728,7 +1803,7 @@ sprites{
 			}
 		}
 	}
-	idling2_rock{
+	idling_02_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
@@ -1744,7 +1819,7 @@ sprites{
 			}
 		}
 	}
-	idling2_winged{
+	idling_02_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
@@ -1760,7 +1835,7 @@ sprites{
 			}
 		}
 	}
-	idling2_yellow{
+	idling_02_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
@@ -1776,7 +1851,7 @@ sprites{
 			}
 		}
 	}
-	idling3_blue{
+	idling_03_blue{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
@@ -1792,7 +1867,7 @@ sprites{
 			}
 		}
 	}
-	idling3_red{
+	idling_03_red{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
@@ -1808,7 +1883,7 @@ sprites{
 			}
 		}
 	}
-	idling3_rock{
+	idling_03_rock{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
@@ -1824,7 +1899,7 @@ sprites{
 			}
 		}
 	}
-	idling3_winged{
+	idling_03_winged{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
@@ -1840,87 +1915,12 @@ sprites{
 			}
 		}
 	}
-	idling3_yellow{
+	idling_03_yellow{
 		file=Queen_Candypop_Bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
 		scale=0.9900 1.0100
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=40.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling_blue{
-		file=Queen_Candypop_Bud.png
-		file_pos=0.0000 326.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=40.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling_red{
-		file=Queen_Candypop_Bud.png
-		file_pos=0.0000 0.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=40.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling_rock{
-		file=Queen_Candypop_Bud.png
-		file_pos=0.0000 489.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=40.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling_winged{
-		file=Queen_Candypop_Bud.png
-		file_pos=0.0000 652.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=40.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling_yellow{
-		file=Queen_Candypop_Bud.png
-		file_pos=0.0000 163.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
 		hitboxes{
 			receptacle{
 				coords=0.0000 0.0000 0.0000

@@ -2,33 +2,33 @@ animations{
 	blowing{
 		loop_frame=3
 		frames{
-			attack2{
+			attacking_02{
 				duration=0.1000
 			}
-			attack1{
+			attacking_01{
 				duration=0.1000
 			}
-			attack6{
+			attacking_06{
 				duration=0.1000
 				signal=0
 			}
-			attack7{
+			attacking_07{
 				duration=0.1000
 			}
-			attack8{
+			attacking_08{
 				duration=0.1000
 			}
 		}
 	}
 	blowing_end{
 		frames{
-			attack6{
+			attacking_06{
 				duration=0.2000
 			}
-			attack1{
+			attacking_01{
 				duration=0.2000
 			}
-			idling1{
+			idling_01{
 				duration=0.3000
 			}
 		}
@@ -36,176 +36,176 @@ animations{
 	dying{
 		loop_frame=41
 		frames{
-			attack3{
+			attacking_03{
 				duration=0.1000
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			attack5{
+			attacking_05{
 				duration=0.1000
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			attack5{
+			attacking_05{
 				duration=0.1000
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			attack5{
+			attacking_05{
 				duration=0.1000
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			attack5{
+			attacking_05{
 				duration=0.3000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
 			dying_pre{
 				duration=0.1000
 			}
-			dying01{
+			dying_01{
 				duration=0.1000
 			}
-			dying02{
+			dying_02{
 				duration=0.0800
 				signal=0
 			}
-			dying03{
+			dying_03{
 				duration=0.0800
 			}
-			dying04{
+			dying_04{
 				duration=0.0800
 			}
-			dying05{
+			dying_05{
 				duration=0.0800
 			}
-			dying06{
+			dying_06{
 				duration=0.0800
 			}
-			dying07{
+			dying_07{
 				duration=0.0800
 			}
-			dying08{
+			dying_08{
 				duration=0.0800
 			}
-			dying09{
+			dying_09{
 				duration=0.0800
 			}
-			dying10{
+			dying_10{
 				duration=0.0700
 			}
-			dying11{
+			dying_11{
 				duration=0.0700
 			}
-			dying12{
+			dying_12{
 				duration=0.0700
 			}
-			dying13{
+			dying_13{
 				duration=0.0600
 			}
-			dying14{
+			dying_14{
 				duration=0.0600
 			}
-			dying15{
+			dying_15{
 				duration=0.0600
 			}
-			dying16{
+			dying_16{
 				duration=0.0600
 			}
-			dying17{
+			dying_17{
 				duration=0.0600
 			}
-			dying18{
+			dying_18{
 				duration=0.0600
 			}
-			dying19{
+			dying_19{
 				duration=0.0600
 			}
-			dying20{
+			dying_20{
 				duration=0.0600
 			}
-			dying21{
+			dying_21{
 				duration=0.0600
 			}
-			dying22{
+			dying_22{
 				duration=0.0700
 			}
-			dying23{
+			dying_23{
 				duration=0.0700
 			}
-			dying24{
+			dying_24{
 				duration=0.0800
 			}
-			dying25{
+			dying_25{
 				duration=0.0800
 			}
-			dying26{
+			dying_26{
 				duration=0.0800
 			}
-			dying27{
+			dying_27{
 				duration=0.1000
 			}
-			dying28{
+			dying_28{
 				duration=0.1000
 			}
-			dying29{
+			dying_29{
 				duration=0.1000
 				signal=1
 			}
-			dying30{
+			dying_30{
 				duration=0.2000
 			}
-			dying31{
+			dying_31{
 				duration=0.6000
 			}
 		}
 	}
 	falling{
 		frames{
-			falling1{
+			falling_01{
 				duration=0.0800
 			}
-			falling2{
+			falling_02{
 				duration=0.0800
 			}
 		}
 	}
 	getting_up{
 		frames{
-			grounded1{
+			grounded_01{
 				duration=0.3000
 			}
 			grounded_stretch{
 				duration=0.2000
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.3000
 			}
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
-			shaking2{
+			shaking_02{
 				duration=0.1000
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1000
 			}
-			shaking4{
+			shaking_04{
 				duration=0.1000
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.3000
 			}
 		}
@@ -216,44 +216,44 @@ animations{
 			grounded_landing{
 				duration=0.0800
 			}
-			grounded1{
+			grounded_01{
 				duration=0.3000
 			}
-			grounded2{
+			grounded_02{
 				duration=0.3000
 			}
-			grounded1{
+			grounded_01{
 				duration=0.3000
 			}
-			grounded3{
+			grounded_03{
 				duration=0.3000
 			}
 		}
 	}
 	idling{
 		frames{
-			idling1{
+			idling_01{
 				duration=0.1200
 			}
-			idling2{
+			idling_02{
 				duration=0.1200
 			}
-			idling3{
+			idling_03{
 				duration=0.1200
 			}
-			idling2{
+			idling_02{
 				duration=0.1200
 			}
-			idling1{
+			idling_01{
 				duration=0.1200
 			}
-			idling4{
+			idling_04{
 				duration=0.1200
 			}
-			idling5{
+			idling_05{
 				duration=0.1200
 			}
-			idling4{
+			idling_04{
 				duration=0.1000
 			}
 		}
@@ -261,63 +261,63 @@ animations{
 	inhaling{
 		loop_frame=3
 		frames{
-			attack1{
+			attacking_01{
 				duration=0.1000
 			}
-			attack2{
+			attacking_02{
 				duration=0.1600
 			}
-			attack3{
+			attacking_03{
 				duration=0.1600
 			}
-			attack4{
+			attacking_04{
 				duration=0.1000
 			}
-			attack5{
+			attacking_05{
 				duration=0.1000
 			}
 		}
 	}
 	shaking{
 		frames{
-			shaking1{
+			shaking_01{
 				duration=0.2000
 			}
-			idling1{
+			idling_01{
 				duration=0.1300
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.1000
 			}
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
-			shaking2{
+			shaking_02{
 				duration=0.1000
 			}
-			shaking1{
+			shaking_01{
 				duration=0.1000
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1000
 			}
-			shaking4{
+			shaking_04{
 				duration=0.1000
 			}
-			shaking3{
+			shaking_03{
 				duration=0.1000
 			}
-			idling1{
+			idling_01{
 				duration=0.4000
 			}
 		}
 	}
 }
 sprites{
-	attack1{
+	attacking_01{
 		file=Puffy_Blowhog.png
 		file_pos=0.0000 231.0000
 		file_size=360.0000 230.0000
@@ -348,7 +348,7 @@ sprites{
 			}
 		}
 	}
-	attack2{
+	attacking_02{
 		file=Puffy_Blowhog.png
 		file_pos=361.0000 231.0000
 		file_size=360.0000 230.0000
@@ -379,7 +379,7 @@ sprites{
 			}
 		}
 	}
-	attack3{
+	attacking_03{
 		file=Puffy_Blowhog.png
 		file_pos=722.0000 231.0000
 		file_size=360.0000 230.0000
@@ -410,7 +410,7 @@ sprites{
 			}
 		}
 	}
-	attack4{
+	attacking_04{
 		file=Puffy_Blowhog.png
 		file_pos=1083.0000 231.0000
 		file_size=360.0000 230.0000
@@ -441,7 +441,7 @@ sprites{
 			}
 		}
 	}
-	attack5{
+	attacking_05{
 		file=Puffy_Blowhog.png
 		file_pos=1083.0000 231.0000
 		file_size=360.0000 230.0000
@@ -473,7 +473,7 @@ sprites{
 			}
 		}
 	}
-	attack6{
+	attacking_06{
 		file=Puffy_Blowhog.png
 		file_pos=1444.0000 231.0000
 		file_size=374.0000 230.0000
@@ -504,7 +504,7 @@ sprites{
 			}
 		}
 	}
-	attack7{
+	attacking_07{
 		file=Puffy_Blowhog.png
 		file_pos=1819.0000 231.0000
 		file_size=387.0000 230.0000
@@ -538,7 +538,7 @@ sprites{
 			}
 		}
 	}
-	attack8{
+	attacking_08{
 		file=Puffy_Blowhog.png
 		file_pos=1819.0000 231.0000
 		file_size=387.0000 230.0000
@@ -572,7 +572,7 @@ sprites{
 			}
 		}
 	}
-	dying01{
+	dying_01{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -601,7 +601,7 @@ sprites{
 			}
 		}
 	}
-	dying02{
+	dying_02{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -631,7 +631,7 @@ sprites{
 			}
 		}
 	}
-	dying03{
+	dying_03{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -661,7 +661,7 @@ sprites{
 			}
 		}
 	}
-	dying04{
+	dying_04{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -692,7 +692,7 @@ sprites{
 			}
 		}
 	}
-	dying05{
+	dying_05{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -723,7 +723,7 @@ sprites{
 			}
 		}
 	}
-	dying06{
+	dying_06{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -754,7 +754,7 @@ sprites{
 			}
 		}
 	}
-	dying07{
+	dying_07{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -785,7 +785,7 @@ sprites{
 			}
 		}
 	}
-	dying08{
+	dying_08{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -816,7 +816,7 @@ sprites{
 			}
 		}
 	}
-	dying09{
+	dying_09{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -847,7 +847,7 @@ sprites{
 			}
 		}
 	}
-	dying10{
+	dying_10{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -878,7 +878,7 @@ sprites{
 			}
 		}
 	}
-	dying11{
+	dying_11{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -909,7 +909,7 @@ sprites{
 			}
 		}
 	}
-	dying12{
+	dying_12{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -940,7 +940,7 @@ sprites{
 			}
 		}
 	}
-	dying13{
+	dying_13{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -971,7 +971,7 @@ sprites{
 			}
 		}
 	}
-	dying14{
+	dying_14{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1002,7 +1002,7 @@ sprites{
 			}
 		}
 	}
-	dying15{
+	dying_15{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1033,7 +1033,7 @@ sprites{
 			}
 		}
 	}
-	dying16{
+	dying_16{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1064,7 +1064,7 @@ sprites{
 			}
 		}
 	}
-	dying17{
+	dying_17{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1095,7 +1095,7 @@ sprites{
 			}
 		}
 	}
-	dying18{
+	dying_18{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1126,7 +1126,7 @@ sprites{
 			}
 		}
 	}
-	dying19{
+	dying_19{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1157,7 +1157,7 @@ sprites{
 			}
 		}
 	}
-	dying20{
+	dying_20{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1188,7 +1188,7 @@ sprites{
 			}
 		}
 	}
-	dying21{
+	dying_21{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1219,7 +1219,7 @@ sprites{
 			}
 		}
 	}
-	dying22{
+	dying_22{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1250,7 +1250,7 @@ sprites{
 			}
 		}
 	}
-	dying23{
+	dying_23{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1281,7 +1281,7 @@ sprites{
 			}
 		}
 	}
-	dying24{
+	dying_24{
 		file=Puffy_Blowhog.png
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
@@ -1312,7 +1312,7 @@ sprites{
 			}
 		}
 	}
-	dying25{
+	dying_25{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1342,7 +1342,7 @@ sprites{
 			}
 		}
 	}
-	dying26{
+	dying_26{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1372,7 +1372,7 @@ sprites{
 			}
 		}
 	}
-	dying27{
+	dying_27{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1402,7 +1402,7 @@ sprites{
 			}
 		}
 	}
-	dying28{
+	dying_28{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1432,7 +1432,7 @@ sprites{
 			}
 		}
 	}
-	dying29{
+	dying_29{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1462,7 +1462,7 @@ sprites{
 			}
 		}
 	}
-	dying30{
+	dying_30{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1491,7 +1491,7 @@ sprites{
 			}
 		}
 	}
-	dying31{
+	dying_31{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1550,7 +1550,7 @@ sprites{
 			}
 		}
 	}
-	falling1{
+	falling_01{
 		file=Puffy_Blowhog.png
 		file_pos=735.0000 462.0000
 		file_size=345.0000 230.0000
@@ -1581,7 +1581,7 @@ sprites{
 			}
 		}
 	}
-	falling2{
+	falling_02{
 		file=Puffy_Blowhog.png
 		file_pos=735.0000 462.0000
 		file_size=345.0000 230.0000
@@ -1613,7 +1613,7 @@ sprites{
 			}
 		}
 	}
-	grounded1{
+	grounded_01{
 		file=Puffy_Blowhog.png
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
@@ -1644,7 +1644,7 @@ sprites{
 			}
 		}
 	}
-	grounded2{
+	grounded_02{
 		file=Puffy_Blowhog.png
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
@@ -1676,7 +1676,7 @@ sprites{
 			}
 		}
 	}
-	grounded3{
+	grounded_03{
 		file=Puffy_Blowhog.png
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
@@ -1772,7 +1772,7 @@ sprites{
 			}
 		}
 	}
-	idling1{
+	idling_01{
 		file=Puffy_Blowhog.png
 		file_pos=0.0000 0.0000
 		file_size=360.0000 230.0000
@@ -1803,7 +1803,7 @@ sprites{
 			}
 		}
 	}
-	idling2{
+	idling_02{
 		file=Puffy_Blowhog.png
 		file_pos=361.0000 0.0000
 		file_size=360.0000 230.0000
@@ -1835,7 +1835,7 @@ sprites{
 			}
 		}
 	}
-	idling3{
+	idling_03{
 		file=Puffy_Blowhog.png
 		file_pos=722.0000 0.0000
 		file_size=360.0000 230.0000
@@ -1867,7 +1867,7 @@ sprites{
 			}
 		}
 	}
-	idling4{
+	idling_04{
 		file=Puffy_Blowhog.png
 		file_pos=1083.0000 0.0000
 		file_size=360.0000 230.0000
@@ -1899,7 +1899,7 @@ sprites{
 			}
 		}
 	}
-	idling5{
+	idling_05{
 		file=Puffy_Blowhog.png
 		file_pos=1444.0000 0.0000
 		file_size=358.0000 230.0000
@@ -1931,7 +1931,7 @@ sprites{
 			}
 		}
 	}
-	shaking1{
+	shaking_01{
 		file=Puffy_Blowhog.png
 		file_pos=0.0000 462.0000
 		file_size=370.0000 224.0000
@@ -1962,7 +1962,7 @@ sprites{
 			}
 		}
 	}
-	shaking2{
+	shaking_02{
 		file=Puffy_Blowhog.png
 		file_pos=371.0000 461.0000
 		file_size=363.0000 220.0000
@@ -1997,7 +1997,7 @@ sprites{
 			}
 		}
 	}
-	shaking3{
+	shaking_03{
 		file=Puffy_Blowhog.png
 		file_pos=0.0000 462.0000
 		file_size=370.0000 224.0000
@@ -2029,7 +2029,7 @@ sprites{
 			}
 		}
 	}
-	shaking4{
+	shaking_04{
 		file=Puffy_Blowhog.png
 		file_pos=371.0000 461.0000
 		file_size=363.0000 220.0000
@@ -2071,4 +2071,4 @@ body_parts{
 	head
 	wind
 }
-engine_version=0.23.2
+engine_version=0.25.0

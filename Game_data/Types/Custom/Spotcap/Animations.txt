@@ -6,23 +6,23 @@ animations{
 			}
 		}
 	}
-	idling_1{
+	idling_01{
 		frames{
-			idling_1{
+			idling_01{
 				duration=0.1000
 			}
 		}
 	}
-	idling_2{
+	idling_02{
 		frames{
-			idling_2{
+			idling_02{
 				duration=0.1000
 			}
 		}
 	}
-	idling_3{
+	idling_03{
 		frames{
-			idling_3{
+			idling_03{
 				duration=0.1000
 			}
 		}
@@ -40,12 +40,10 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_1{
+	idling_01{
 		file=Spotcaps.png
 		file_pos=0.0000 309.0000
 		file_size=50.0000 50.0000
@@ -57,12 +55,10 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_2{
+	idling_02{
 		file=Spotcaps.png
 		file_pos=51.0000 309.0000
 		file_size=50.0000 50.0000
@@ -73,12 +69,10 @@ sprites{
 				radius=25.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	idling_3{
+	idling_03{
 		file=Spotcaps.png
 		file_pos=102.0000 309.0000
 		file_size=50.0000 50.0000
@@ -89,8 +83,6 @@ sprites{
 				radius=25.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -98,3 +90,4 @@ sprites{
 body_parts{
 	hit
 }
+engine_version=0.25.0

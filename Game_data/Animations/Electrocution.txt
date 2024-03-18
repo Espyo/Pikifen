@@ -1,23 +1,23 @@
 animations{
-	default{
+	main{
 		frames{
-			1{
+			main_01{
 				duration=0.0700
 			}
-			2{
+			main_02{
 				duration=0.0700
 			}
 		}
 	}
 }
 sprites{
-	1{
+	main_01{
 		file=Electrocution.png
 		file_pos=0.0000 0.0000
 		file_size=60.0000 60.0000
 		scale=0.5000 0.5000
 	}
-	2{
+	main_02{
 		file=Electrocution.png
 		file_pos=61.0000 0.0000
 		file_size=60.0000 60.0000
@@ -25,3 +25,4 @@ sprites{
 	}
 }
 body_parts
+engine_version=0.25.0
