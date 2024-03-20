@@ -1,0 +1,222 @@
+animations{
+	idling_0{
+		frames{
+			idling_0{
+				duration=0.1000
+			}
+		}
+	}
+	idling_1{
+		frames{
+			idling_1{
+				duration=0.1000
+			}
+		}
+	}
+	idling_2{
+		frames{
+			idling_2{
+				duration=0.1000
+			}
+		}
+	}
+	idling_3{
+		frames{
+			idling_3{
+				duration=0.1000
+			}
+		}
+	}
+	idling_4{
+		frames{
+			idling_4{
+				duration=0.1000
+			}
+		}
+	}
+	idling_5{
+		frames{
+			idling_5{
+				duration=0.1000
+			}
+		}
+	}
+	idling_6{
+		frames{
+			idling_6{
+				duration=0.1000
+			}
+		}
+	}
+	idling_7{
+		frames{
+			idling_7{
+				duration=0.1000
+			}
+		}
+	}
+	idling_8{
+		frames{
+			idling_8{
+				duration=0.1000
+			}
+		}
+	}
+	idling_9{
+		frames{
+			idling_9{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_0{
+		file=Chocolate_Bar.png
+		file_pos=797.0000 83.0000
+		file_size=1.0000 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_1{
+		file=Chocolate_Bar.png
+		file_pos=760.0000 0.0000
+		file_size=44.0000 124.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_2{
+		file=Chocolate_Bar.png
+		file_pos=715.0000 0.0000
+		file_size=44.0000 124.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_3{
+		file=Chocolate_Bar.png
+		file_pos=630.0000 0.0000
+		file_size=84.0000 124.0000
+		offset=20.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_4{
+		file=Chocolate_Bar.png
+		file_pos=545.0000 0.0000
+		file_size=84.0000 124.0000
+		offset=20.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_5{
+		file=Chocolate_Bar.png
+		file_pos=460.0000 0.0000
+		file_size=84.0000 124.0000
+		offset=20.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_6{
+		file=Chocolate_Bar.png
+		file_pos=375.0000 0.0000
+		file_size=84.0000 124.0000
+		offset=20.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_7{
+		file=Chocolate_Bar.png
+		file_pos=250.0000 0.0000
+		file_size=124.0000 124.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_8{
+		file=Chocolate_Bar.png
+		file_pos=125.0000 0.0000
+		file_size=124.0000 124.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_9{
+		file=Chocolate_Bar.png
+		file_pos=0.0000 0.0000
+		file_size=124.0000 124.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hit
+}
+engine_version=0.25.0

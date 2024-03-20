@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Soda_Cap.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+	}
+}
+body_parts
+engine_version=0.25.0

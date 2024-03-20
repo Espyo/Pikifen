@@ -347,8 +347,8 @@ vertexes{
 	v=960.0000 -2112.0000
 	v=192.0000 -2560.0000
 	v=192.0000 -2880.0000
-	v=1440.0000 -2880.0000
-	v=1440.0000 -2560.0000
+	v=1536.0000 -2880.0000
+	v=1536.0000 -2560.0000
 	v=192.0000 -2944.0000
 	v=192.0000 -3296.0000
 	v=1568.0000 -3296.0000
@@ -12767,7 +12767,7 @@ mobs{
 	}
 	Treasure{
 		type=Billiards Ball
-		p=544.0000 -2720.0000
+		p=464.0000 -2720.0000
 	}
 	Drop{
 		type=Nectar
@@ -13622,15 +13622,15 @@ mobs{
 	}
 	Treasure{
 		type=Fidget Spinner
-		p=816.0000 -2720.0000
+		p=848.0000 -2720.0000
 	}
 	Treasure{
 		type=Jigsaw Puzzle Piece
-		p=1056.0000 -2720.0000
+		p=976.0000 -2720.0000
 	}
 	Treasure{
 		type=Yo-yo
-		p=1280.0000 -2720.0000
+		p=1392.0000 -2720.0000
 	}
 	Bouncer{
 		type=Geyser
@@ -13804,6 +13804,22 @@ mobs{
 	Custom{
 		type=Automatic gate
 		p=1920.0000 -1088.0000
+	}
+	Pile{
+		type=Chocolate Bar
+		p=624.0000 -2720.0000
+	}
+	Resource{
+		type=Chocolate Square
+		p=752.0000 -2720.0000
+	}
+	Treasure{
+		type=Soda Cap
+		p=1088.0000 -2720.0000
+	}
+	Treasure{
+		type=Yarn Ball
+		p=1216.0000 -2720.0000
 	}
 }
 path_stops{

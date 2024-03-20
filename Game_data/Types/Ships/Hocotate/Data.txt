@@ -12,5 +12,5 @@ pikmin_types = Purple Pikmin; White Pikmin
 pushable = false
 pushes = true
 pushes_softly = true
-radius = 70
+radius = 50
 receptacle_offset = 40 0

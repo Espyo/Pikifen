@@ -1,0 +1,12 @@
+name = Soda Cap
+description = Some sort of lid with ridges.
+
+can_walk_on_others = true
+height = 16
+max_carriers = 6
+points = 100
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 32
+weight = 2

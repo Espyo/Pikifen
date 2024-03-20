@@ -1,0 +1,16 @@
+name = Chocolate Square
+description = Some sort of delicious square.
+
+can_walk_on_others = true
+carrying_destination = ship
+custom_category_name = Treasure
+delivery_result = add_points
+height = 16
+max_carriers = 2
+point_amount = 50
+pushable = true
+pushes = false
+radius = 20
+return_to_pile_on_vanish = false
+vanish_on_drop = false
+weight = 1

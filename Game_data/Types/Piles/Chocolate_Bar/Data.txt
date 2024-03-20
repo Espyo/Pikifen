@@ -1,0 +1,19 @@
+name = Chocolate Bar
+description = A pile of chocolate square treasures.
+
+can_drop_multiple = true
+contents = Chocolate Square
+custom_category_name = Treasure
+delete_when_finished = true
+health_per_resource = 40
+height = 16
+hide_when_empty = true
+max_amount = 9
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 58
+show_amount = true
+show_health = false
+size_animation_suffixes = _0;_1;_2;_3;_4;_5;_6;_7;_8;_9
+target_type = explodable_pikmin_obstacle

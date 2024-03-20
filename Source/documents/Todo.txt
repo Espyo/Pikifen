@@ -70,6 +70,8 @@ Next tasks (roughly sorted most important first)
                 Rocks crumbling (clog being destroyed)
                 Crystal shattering
                 x Leaves rustling (vegetation)
+                Harmless ding (when Pikmin smack a reinforced wall)
+                Chocolate snapping off
                 Explosion
                 Ambiance sounds
         Recreate the following sounds, as per user feedback
@@ -87,7 +89,36 @@ Next tasks (roughly sorted most important first)
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
-    Make Rock Pikmin colors darker (thanks Nataly171)
+    Demo content
+        A tall grass mob
+        Add more treasures
+            Nuggets
+        Sounds really need a makeover...
+        More particles
+        Mobs for decorative pebbles, stones, and sticks
+        Pellet Posies should regrow
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
+            In general, they could all stand to be slightly easier, and to take longer to react to things
+            Shake hitboxes last way too long across the board
+            Red Bulborb could be a smidge tougher
+            For the dumples, longer startup lag and endlag
+            Dweevil should be slower
+            Skutterchuck should wait a bit before throwing, and should throw bomb rocks
+            Do _something_ to the Yellow Wollywog
+            Puffy Blowhog should have a lower territory radius
+            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
+        Leaders that get knocked backwards need more invulnerability time
+        Leaders should be a bit faster
+        Leader damage from enemies should be standardized
+        Leaf Pikmin should be able to follow leaders in walking
+        Water Dumples should wander around a small bit
+        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        There should be some petal particle effects when a Pikmin loses their maturity
+        Bitter sprays should last for a short time
+        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+        Add some randomness to the pitch of mob sounds?
+        Add Helodity's Plasm Wraith
+        Make Rock Pikmin colors darker (thanks Nataly171)
     Find some way of making content sharing easier
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
@@ -169,37 +200,8 @@ Next tasks (roughly sorted most important first)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
         Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
-    Demo content
-        Ice Pikmin
-        Glow Pikmin
-        A tall grass mob
-        Add more treasures
-            Ball of yarn treasure
-            Shizakipiki Soda bottle cap
-        Sounds really need a makeover...
-        Mobs for decorative pebbles, stones, and sticks
-        Pellet Posies should regrow
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
-            In general, they could all stand to be slightly easier, and to take longer to react to things
-            Shake hitboxes last way too long across the board
-            Red Bulborb could be a smidge tougher
-            For the dumples, longer startup lag and endlag
-            Dweevil should be slower
-            Skutterchuck should wait a bit before throwing, and should throw bomb rocks
-            Do _something_ to the Yellow Wollywog
-            Puffy Blowhog should have a lower territory radius
-            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
-        Leaders that get knocked backwards need more invulnerability time
-        Leaders should be a bit faster
-        Leader damage from enemies should be standardized
-        Leaf Pikmin should be able to follow leaders in walking
-        Water Dumples should wander around a small bit
-        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
-        There should be some petal particle effects when a Pikmin loses their maturity
-        Bitter sprays should last for a short time
-        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
-        Add some randomness to the pitch of mob sounds?
-        Add Helodity's Plasm Wraith
+    Ice Pikmin
+    Glow Pikmin
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Give sprites a "tint" property
     Mob rotation should have acceleration too
@@ -274,8 +276,9 @@ Next tasks (roughly sorted most important first)
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    Check what Pikmin 3 Deluxe added, and gather ideas of things to implement from there
-        Dismissing should either dismiss everyone, or keep the current standby type
+    Check what Pikmin 3 Deluxe and Pikmin 4 added, and gather ideas of things to implement from there
+        Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
+        Whistling workers will either bring them to you right away, bring the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
         When switching to a leader, all nearby idle Pikmin should be called over too
     An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Enemy revival
@@ -854,6 +857,15 @@ Misc things (so I don't forget)
 
 Tasks for later on (I might never implement these)
     ...An AI opponent in 2-player mode? It would help me test...
+        It should decide on a strategy according to what its largest needs are, what's closest, etc., with a bit of randomness to the mix
+        Strategies
+            Grow more Pikmin
+            Gather idle Pikmin (including returning to base)
+            Work on an objective
+            Rescue suffering Pikmin
+            Meddle with another team
+            Hunt for goodies
+            Defend its base, or otherwise stop another team from doing something really bad
     Mechanics
         The ability for enemies to eat other enemies
         The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?

@@ -1,0 +1,12 @@
+name = Yarn Ball
+description = Some sort of bundle of string.
+
+can_walk_on_others = true
+height = 128
+max_carriers = 20
+points = 200
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 58
+weight = 10
