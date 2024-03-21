@@ -590,10 +590,6 @@ void control_binds_menu_state::populate_binds() {
             restore_button->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
-            
-            cur_y +=
-                CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
-                CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
                 
         }
         

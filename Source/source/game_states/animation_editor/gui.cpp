@@ -856,13 +856,11 @@ void animation_editor::process_gui_panel_animation() {
         if(saveable_tree_node("animation", "Frame list")) {
         
             frame* frame_ptr = nullptr;
-            if(cur_anim) {
-                if(cur_frame_nr == INVALID && !cur_anim->frames.empty()) {
-                    cur_frame_nr = 0;
-                }
-                if(cur_frame_nr != INVALID) {
-                    frame_ptr = &(cur_anim->frames[cur_frame_nr]);
-                }
+            if(cur_frame_nr == INVALID && !cur_anim->frames.empty()) {
+                cur_frame_nr = 0;
+            }
+            if(cur_frame_nr != INVALID) {
+                frame_ptr = &(cur_anim->frames[cur_frame_nr]);
             }
             
             //Current frame text.

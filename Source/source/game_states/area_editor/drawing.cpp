@@ -708,32 +708,37 @@ void area_editor::draw_canvas() {
         }
         
         //Draw children of this mob.
-        for(size_t c = 0; c < m_ptr->type->children.size(); ++c) {
-            mob_type::child_struct* child_info =
-                &m_ptr->type->children[c];
-            mob_type::spawn_struct* spawn_info =
-                get_spawn_info_from_child_info(m_ptr->type, child_info);
-            if(!spawn_info) continue;
-            
-            point c_pos =
-                m_ptr->pos + rotate_point(spawn_info->coords_xy, m_ptr->angle);
-            mob_type* c_type =
-                game.mob_categories.find_mob_type(spawn_info->mob_type_name);
-            if(!c_type) continue;
-            
-            if(c_type->rectangular_dim.x != 0) {
-                float c_rot = m_ptr->angle + spawn_info->angle;
-                draw_rotated_rectangle(
-                    c_pos, c_type->rectangular_dim,
-                    c_rot, color, 1.0f / game.cam.zoom
-                );
-            } else {
-                al_draw_circle(
-                    c_pos.x, c_pos.y, c_type->radius,
-                    color, 1.0f / game.cam.zoom
-                );
+        if(m_ptr->type) {
+            for(size_t c = 0; c < m_ptr->type->children.size(); ++c) {
+                mob_type::child_struct* child_info =
+                    &m_ptr->type->children[c];
+                mob_type::spawn_struct* spawn_info =
+                    get_spawn_info_from_child_info(m_ptr->type, child_info);
+                if(!spawn_info) continue;
+                
+                point c_pos =
+                    m_ptr->pos +
+                    rotate_point(spawn_info->coords_xy, m_ptr->angle);
+                mob_type* c_type =
+                    game.mob_categories.find_mob_type(
+                        spawn_info->mob_type_name
+                    );
+                if(!c_type) continue;
+                
+                if(c_type->rectangular_dim.x != 0) {
+                    float c_rot = m_ptr->angle + spawn_info->angle;
+                    draw_rotated_rectangle(
+                        c_pos, c_type->rectangular_dim,
+                        c_rot, color, 1.0f / game.cam.zoom
+                    );
+                } else {
+                    al_draw_circle(
+                        c_pos.x, c_pos.y, c_type->radius,
+                        color, 1.0f / game.cam.zoom
+                    );
+                }
+                
             }
-            
         }
         
         al_draw_filled_circle(

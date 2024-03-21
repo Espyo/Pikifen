@@ -418,17 +418,15 @@ void mob::tick_horizontal_movement_physics(
         new_pos.x = pos.x + delta_t* move_speed.x;
         new_pos.y = pos.y + delta_t* move_speed.y;
         float new_z = z;
-        sector* new_ground_sector = ground_sector;
         
         //Get the sector the mob will be on.
         sector* new_center_sector = get_sector(new_pos, nullptr, true);
+        sector* new_ground_sector = new_center_sector;
         sector* step_sector = new_center_sector;
         
         if(!new_center_sector) {
             //Out of bounds. No movement.
             return;
-        } else {
-            new_ground_sector = new_center_sector;
         }
         if (z + GEOMETRY::STEP_HEIGHT < new_center_sector->z) {
             //We can't walk onto this sector. Refuse the move.

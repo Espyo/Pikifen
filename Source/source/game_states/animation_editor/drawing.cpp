@@ -86,7 +86,6 @@ void animation_editor::draw_canvas() {
     
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         grid_opacity = 0.0f;
-        draw_hitboxes = false;
         draw_mob_radius = false;
         draw_leader_silhouette = false;
         

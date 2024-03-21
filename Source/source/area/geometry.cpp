@@ -711,14 +711,25 @@ TRIANGULATION_ERRORS get_polys(
             
         //Trace! For the outer poly, we're going counter-clockwise,
         //while for the inner ones, it's clockwise.
-        trace_edges(
-            first_v_ptr, s_ptr, !is_outer,
-            &new_poly->vertexes,
-            &edges_left, &polygon_edges_so_far
-        );
-        
+        TRIANGULATION_ERRORS trace_result =
+            trace_edges(
+                first_v_ptr, s_ptr, !is_outer,
+                &new_poly->vertexes,
+                &edges_left, &polygon_edges_so_far
+            );
+            
         //Add this polygon to the polygon tree.
-        polys->insert_child(new_poly);
+        bool inserted = false;
+        if(trace_result == TRIANGULATION_NO_ERROR) {
+            inserted = polys->insert_child(new_poly);
+        } else {
+            result = trace_result;
+        }
+        
+        if(!inserted) {
+            //Failed to insert... Clean up.
+            delete new_poly;
+        }
         
         doing_first_polygon = false;
     }
