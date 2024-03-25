@@ -16,6 +16,7 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../load.h"
+#include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
 
 
@@ -365,6 +366,7 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     cur_sprite->offset = s->offset;
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
+    cur_sprite->tint = s->tint;
 }
 
 
@@ -1144,6 +1146,9 @@ bool animation_editor::save_animation_database() {
         }
         if(s_ptr->angle != 0.0) {
             sprite_node->add(new data_node("angle", f2s(s_ptr->angle)));
+        }
+        if(s_ptr->tint != COLOR_WHITE) {
+            sprite_node->add(new data_node("tint", c2s(s_ptr->tint)));
         }
         
         if(

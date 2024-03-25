@@ -2009,6 +2009,10 @@ void mob::get_sprite_bitmap_effects(
         info->rotation += angle + s_ptr->angle;
         info->scale.x *= s_ptr->scale.x;
         info->scale.y *= s_ptr->scale.y;
+        info->tint_color.r *= s_ptr->tint.r;
+        info->tint_color.g *= s_ptr->tint.g;
+        info->tint_color.b *= s_ptr->tint.b;
+        info->tint_color.a *= s_ptr->tint.a;
     }
     
     //Status effects.

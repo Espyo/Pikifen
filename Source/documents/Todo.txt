@@ -4,7 +4,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 Current tasks (tasks being worked on, but not yet committed)
     Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
-        Run make analyze
         Use #pragma region in header files?
         Constants for enums and flags have inconsistent styles
             Bitmasks should use a typedef called bitmask8, bitmask16, etc.
@@ -54,6 +53,7 @@ Next tasks (roughly sorted most important first)
                 x Water fountain
                 x Boulder rolling
                 x Burrowing sound
+                Dwarf Bulborb screaming
                 Enemy spirit floating
             Other mobs
                 Onion/ship beam
@@ -84,127 +84,13 @@ Next tasks (roughly sorted most important first)
         A couple of gameplay songs
         Boss
         Results screen
+        Helodity's tropical song
+        Other people's songs
     Boss music logic needs some tweaks
         A way for the song to start right away, so that songs with intros can slam instead of slowly fading in
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
-    Demo content
-        A tall grass mob
-        Add more treasures
-            Nuggets
-        Sounds really need a makeover...
-        More particles
-        Mobs for decorative pebbles, stones, and sticks
-        Pellet Posies should regrow
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
-            In general, they could all stand to be slightly easier, and to take longer to react to things
-            Shake hitboxes last way too long across the board
-            Red Bulborb could be a smidge tougher
-            For the dumples, longer startup lag and endlag
-            Dweevil should be slower
-            Skutterchuck should wait a bit before throwing, and should throw bomb rocks
-            Do _something_ to the Yellow Wollywog
-            Puffy Blowhog should have a lower territory radius
-            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
-        Leaders that get knocked backwards need more invulnerability time
-        Leaders should be a bit faster
-        Leader damage from enemies should be standardized
-        Leaf Pikmin should be able to follow leaders in walking
-        Water Dumples should wander around a small bit
-        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
-        There should be some petal particle effects when a Pikmin loses their maturity
-        Bitter sprays should last for a short time
-        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
-        Add some randomness to the pitch of mob sounds?
-        Add Helodity's Plasm Wraith
-        Make Rock Pikmin colors darker (thanks Nataly171)
-    Find some way of making content sharing easier
-        Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-        A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
-            This should be able to figure out a dependency tree
-        Current problems
-            When makers want to share their content, they have to fish its requirements from several folders
-            When players want to install content, they have to place it in the right folders
-    A way for the user to set a background texture for the animation editor instead of the plain green
-    
-    --- Future ---
-    Some tweaks to the HUD
-        Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
-        Prefer populating corners over populating sides/bottom/top
-        Fade some elements (or all?) when the mouse is on them
-            This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
-        Remove some of the elements?
-            Stuff like a leader's health might not be necessary if it's full
-        A mission's data should control how each HUD element displays its information
-            Number of things the player's achieved vs. number of things remaining
-            Display a slash and an out-of-total count vs. not displaying it
-        The visible portion of the score ruler in a mission's HUD should be like 1/3 of the amount of points between the initial amount and platinum. This way the bar still has to move left as the player gets points, but the next medals are comfortably within view instead of being at unfathomably long distances off to the right
-        When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
-        Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies
-        Show how close you are to concocting a new spray
-    Other menu improvements
-        Add the help menu to the main menu
-        Onion menu
-            A series of icon-only buttons on the left side (though tooltips should still work)
-                Store all -- sets the numbers to store all the Pikmin you have of the applicable Onions
-                Call max -- sets the numbers to call as many Pikmin from the Onion as possible, in equal amounts for each available type in the Onion
-                The player input to toggle changing all types together
-            [NEEDS BRAINSTORMING] Maybe make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types. But how will this work for mouse control?
-        Pause menu
-            Add the options menu and stats menu
-            The layout should probably be like:
-                      [Restart] [Finish]
-                   [Options] [Help] [Stats]
-                [Continue]             [Quit]
-        The ability to load TTF fonts
-        [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
-        Allow the player to drag their mouse on the scrollbar GUI item
-    The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
-        Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
-    Controls improvements
-        Controls manager
-            Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
-                Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
-                Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
-            Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
-            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
-            If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
-            Allow for button combinations
-                Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
-            Implement a screen stack system, with push&pop
-                If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
-                If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
-                If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
-                Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
-            Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
-            Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
-        Controls menu
-            In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
-                Then in the multiplayer setup screen, the player only picks what control scheme each player uses
-                It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
-                    Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a controller button to confirm, and a controller button to cancel
-            For controller inputs, write the controller's name somewhere on-screen?
-            If the player assigns an input that is already assigned to something else, it should give a warning
-            If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
-            When you set a leader move direction/group swarm direction/cursor direction, show a pop-up asking if you want to set all four automatically
-        Maker tools should be like controls, in that they should be able to be bound to any input, and use the same general system
-        Screenshot and framerate should also be like controls instead of being fixed keys
-        Add controls for menu shortcut page left, menu shortcut page right, and menu shortcut special
-            Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, the "menu special" action should toggle select-all (thanks Nataly171)
-        Save the controls in the options file inside a block, and possibly at the end of the options file
-        Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
-        Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
-        If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
-        If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
-        Current leader should move slower if the analog stick is not held all the way
-        Make it so a player can control their leader via mouse cursor
-        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
-    Ice Pikmin
-    Glow Pikmin
-    Allow any animation to interpolate the transformations (rotation, scale, etc.)
-    Give sprites a "tint" property
-    Mob rotation should have acceleration too
     General graphic file improvements
         Leader and Pikmin portrait images should
             Be a group, and then have a mask applied on top to fit the grid rectangle
@@ -276,6 +162,126 @@ Next tasks (roughly sorted most important first)
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
+    New mobs
+        A tall grass mob
+        Nuggets
+        Add Helodity's Plasm Wraith
+        Mobs for decorative pebbles, stones, and sticks
+    More particles
+        Dust particles while walking
+        There should be some petal particle effects when a Pikmin loses their maturity
+        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+        More across the board
+    Other demo content changes
+        Pellet Posies should regrow
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
+            In general, they could all stand to be slightly easier, and to take longer to react to things
+            Shake hitboxes last way too long across the board
+            Red Bulborb could be a smidge tougher
+            For the dumples, longer startup lag and endlag
+            Dweevil should be slower
+            Skutterchuck should wait a bit before throwing, and should throw bomb rocks
+            Do _something_ to the Yellow Wollywog
+            Puffy Blowhog should have a lower territory radius
+            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
+            Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
+        Leaders that get knocked backwards need more invulnerability time
+        Leaders should be a bit faster
+        Leader damage from enemies should be standardized
+        Leaf Pikmin should be able to follow leaders in walking
+        Water Dumples should wander around a small bit
+        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
+        Bitter sprays should last for a short time
+        Add some randomness to the pitch of mob sounds?
+        Make Rock Pikmin colors darker (thanks Nataly171)
+    Find some way of making content sharing easier
+        Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
+        A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
+            This should be able to figure out a dependency tree
+        Current problems
+            When makers want to share their content, they have to fish its requirements from several folders
+            When players want to install content, they have to place it in the right folders
+    A way for the user to set a background texture for the animation editor instead of the plain green
+    
+    --- Future ---
+    Some tweaks to the HUD
+        Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
+        Prefer populating corners over populating sides/bottom/top
+        Fade some elements (or all?) when the mouse is on them
+            This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
+        Remove some of the elements?
+            Stuff like a leader's health might not be necessary if it's full
+        A mission's data should control how each HUD element displays its information
+            Number of things the player's achieved vs. number of things remaining
+            Display a slash and an out-of-total count vs. not displaying it
+        The visible portion of the score ruler in a mission's HUD should be like 1/3 of the amount of points between the initial amount and platinum. This way the bar still has to move left as the player gets points, but the next medals are comfortably within view instead of being at unfathomably long distances off to the right
+        When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
+        Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies
+        Show how close you are to concocting a new spray
+    Other menu improvements
+        Add the help menu to the main menu
+            The tooltip for it should mention it's also in the pause menu so players don't feel pressured to learn everything now before jumping in
+        Onion menu
+            A series of icon-only buttons on the left side (though tooltips should still work)
+                Store all -- sets the numbers to store all the Pikmin you have of the applicable Onions
+                Call max -- sets the numbers to call as many Pikmin from the Onion as possible, in equal amounts for each available type in the Onion
+                The player input to toggle changing all types together
+            [NEEDS BRAINSTORMING] Maybe make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types. But how will this work for mouse control?
+        Pause menu
+            Add the options menu and stats menu
+                The tooltips for the options button in the main menu should mention it's also in the pause menu so players don't feel pressured to adjusting everything perfectly now before jumping in
+            The layout should probably be like:
+                      [Restart] [Finish]
+                   [Options] [Help] [Stats]
+                [Continue]             [Quit]
+        The ability to load TTF fonts
+        [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
+        Allow the player to drag their mouse on the scrollbar GUI item
+    The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
+        Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
+    Controls improvements
+        Controls manager
+            Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
+                Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
+                Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
+            Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
+            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
+            If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
+            Allow for button combinations
+                Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
+            Implement a screen stack system, with push&pop
+                If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
+                If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
+                If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+                Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
+            Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
+            Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
+        Controls menu
+            In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                Then in the multiplayer setup screen, the player only picks what control scheme each player uses
+                It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
+                    Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a controller button to confirm, and a controller button to cancel
+            For controller inputs, write the controller's name somewhere on-screen?
+            If the player assigns an input that is already assigned to something else, it should give a warning
+            If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
+            When you set a leader move direction/group swarm direction/cursor direction, show a pop-up asking if you want to set all four automatically
+        Maker tools should be like controls, in that they should be able to be bound to any input, and use the same general system
+        Screenshot and framerate should also be like controls instead of being fixed keys
+        Add controls for menu shortcut page left, menu shortcut page right, and menu shortcut special
+            Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, the "menu special" action should toggle select-all (thanks Nataly171)
+        Save the controls in the options file inside a block, and possibly at the end of the options file
+        Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
+        Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
+        If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
+        If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
+        Current leader should move slower if the analog stick is not held all the way
+        Make it so a player can control their leader via mouse cursor
+        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
+    Ice Pikmin
+    Glow Pikmin
+    Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    Mob rotation should have acceleration too
     Check what Pikmin 3 Deluxe and Pikmin 4 added, and gather ideas of things to implement from there
         Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
         Whistling workers will either bring them to you right away, bring the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
@@ -283,7 +289,6 @@ Next tasks (roughly sorted most important first)
     An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
-    The ability for Blue Pikmin to rescue drowning Pikmin
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
@@ -623,12 +628,10 @@ Misc things (so I don't forget)
                 When shaking the screen, the multiplier of the amount to shake should be trauma^2 or trauma^3 so it's smooth
                 Don't offset the camera negatively, but use something like offsetX = maxOffset * shake_mult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shake_mult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
-        Dust particles while walking
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         If a Pikmin type has black as the color, the idle glow needs to... not be black
-        When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
             Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
@@ -796,7 +799,6 @@ Misc things (so I don't forget)
     Demo game content to add
         Enemies
             Scuttlebug?
-            A completely original enemy
         Areas
             A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
             Helodity's Turbulent Tundra?
@@ -870,6 +872,7 @@ Tasks for later on (I might never implement these)
         The ability for enemies to eat other enemies
         The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
         Make it so players can request all Pikmin to come to the landing site by interacting with the ship?
+        The ability for Blue Pikmin to rescue drowning Pikmin
         Nighttime (what enemies can spawn at night, their changes, etc.)
             Change the HUD icon to a moon
         Random enemy spawning
@@ -964,8 +967,6 @@ Tasks for later on (I might never implement these)
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
-    Other details
-        Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     When al_clear_keyboard_state is available, use that instead of game.controls.release_all()
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)

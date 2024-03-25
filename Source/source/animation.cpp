@@ -564,10 +564,6 @@ sprite::sprite(
     parent_bmp(b),
     file_pos(b_pos),
     file_size(b_size),
-    scale(point(1.0, 1.0)),
-    angle(0),
-    top_angle(0),
-    top_visible(true),
     bitmap(
         b ?
         al_create_sub_bitmap(b, b_pos.x, b_pos.y, b_size.x, b_size.y) :
@@ -592,6 +588,7 @@ sprite::sprite(const sprite &s2) :
     offset(s2.offset),
     scale(s2.scale),
     angle(s2.angle),
+    tint(s2.tint),
     top_pos(s2.top_pos),
     top_size(s2.top_size),
     top_angle(s2.top_angle),
@@ -650,6 +647,7 @@ sprite &sprite::operator=(const sprite &s2) {
         offset = s2.offset;
         scale = s2.scale;
         angle = s2.angle;
+        tint = s2.tint;
         top_pos = s2.top_pos;
         top_size = s2.top_size;
         top_angle = s2.top_angle;
@@ -845,6 +843,12 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 )->get_value_or_default("1 1")
             );
         new_s->angle = s2f(sprite_node->get_child_by_name("angle")->value);
+        new_s->tint =
+            s2c(
+                sprite_node->get_child_by_name("tint")->get_value_or_default(
+                    "255 255 255 255"
+                )
+            );
         new_s->file = sprite_node->get_child_by_name("file")->value;
         new_s->set_bitmap(
             new_s->file, new_s->file_pos, new_s->file_size,

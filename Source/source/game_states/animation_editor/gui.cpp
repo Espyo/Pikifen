@@ -2493,6 +2493,17 @@ void animation_editor::process_gui_panel_sprite_transform() {
         "", WIDGET_EXPLANATION_SLIDER
     );
     
+    //Sprite tint color.
+    if(
+        ImGui::ColorEdit4(
+            "Tint color", (float*) &cur_sprite->tint,
+            ImGuiColorEditFlags_NoInputs
+        )
+    ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip("Color to tint it by. White makes it look normal.");
+    
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     

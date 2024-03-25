@@ -94,6 +94,9 @@ public:
     //Angle to rotate the image by.
     float angle = 0.0f;
 
+    //Tint the image with this color.
+    ALLEGRO_COLOR tint = COLOR_WHITE;
+
     //X&Y of the Pikmin's top (left/bud/flower).
     point top_pos;
 

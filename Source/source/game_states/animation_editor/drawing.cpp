@@ -347,7 +347,7 @@ void animation_editor::draw_comparison() {
         if(comparison_tint) {
             tint = al_map_rgb(255, 128, 0);
         } else {
-            tint = COLOR_WHITE;
+            tint = comparison_sprite->tint;
         }
         draw_bitmap(
             comparison_sprite->bitmap,
@@ -688,7 +688,7 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
         ) {
             tint = al_map_rgb(0, 128, 255);
         } else {
-            tint = COLOR_WHITE;
+            tint = s->tint;
         }
         draw_bitmap(
             s->bitmap, s->offset,
