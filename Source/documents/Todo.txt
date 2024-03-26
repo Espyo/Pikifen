@@ -113,7 +113,6 @@ Next tasks (roughly sorted most important first)
         Add the Inkscape noise filter to more sprites? Or even a different filter
         Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
-        The leaf and bud graphics are pretty ugly -- they use chunky outlines
         Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
         Throwing animation needs to be reworked
             Pikmin hands are below the head in the pose where the butt is facing the camera
