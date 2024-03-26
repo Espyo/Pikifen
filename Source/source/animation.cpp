@@ -391,7 +391,7 @@ animation_instance::animation_instance(const animation_instance &ai2) :
     cur_anim(ai2.cur_anim),
     anim_db(ai2.anim_db) {
     
-    start();
+    to_start();
 }
 
 
@@ -409,7 +409,7 @@ animation_instance &animation_instance::operator=(
         anim_db = ai2.anim_db;
     }
     
-    start();
+    to_start();
     
     return *this;
 }
@@ -418,12 +418,80 @@ animation_instance &animation_instance::operator=(
 /**
  * @brief Returns the sprite of the current frame of animation.
  *
- * @return The sprite.
+ * @param cur_sprite_ptr If not nullptr, the current sprite is returned here.
+ * @param next_sprite_ptr If not nullptr, the next sprite in the animation is
+ * returned here.
+ * @param interpolation_factor If not nullptr, the interpolation factor (0 to 1)
+ * between the current sprite and the next one is returned here.
  */
-sprite* animation_instance::get_cur_sprite() const {
-    if(!cur_anim) return nullptr;
-    if(cur_frame_index == INVALID) return nullptr;
-    return cur_anim->frames[cur_frame_index].sprite_ptr;
+void animation_instance::get_sprite_data(
+    sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
+    float* interpolation_factor
+) const {
+    if(!valid_frame()) {
+        if(cur_sprite_ptr) *cur_sprite_ptr = nullptr;
+        if(next_sprite_ptr) *next_sprite_ptr = nullptr;
+        if(interpolation_factor) *interpolation_factor = 0.0f;
+        return;
+    }
+    
+    frame* cur_frame_ptr = &cur_anim->frames[cur_frame_index];
+    //First, the basics -- the current sprite.
+    if(cur_sprite_ptr) {
+        *cur_sprite_ptr = cur_frame_ptr->sprite_ptr;
+    }
+    
+    //Now only bother with interpolation data if we actually need it.
+    if(!next_sprite_ptr && !interpolation_factor) return;
+    
+    if(!cur_frame_ptr->interpolate) {
+        //This frame doesn't even interpolate.
+        if(next_sprite_ptr) *next_sprite_ptr = cur_frame_ptr->sprite_ptr;
+        if(interpolation_factor) *interpolation_factor = 0.0f;
+        return;
+    }
+    
+    //Get the next sprite.
+    size_t next_frame_index = get_next_frame_index();
+    frame* next_frame_ptr = &cur_anim->frames[next_frame_index];
+    
+    if(next_sprite_ptr) *next_sprite_ptr = next_frame_ptr->sprite_ptr;
+    
+    //Get the interpolation factor.
+    if(interpolation_factor) {
+        if(cur_frame_ptr->duration == 0.0f) {
+            *interpolation_factor = 0.0f;
+        } else {
+            *interpolation_factor =
+                cur_frame_time /
+                cur_frame_ptr->duration;
+        }
+    }
+}
+
+
+/**
+ * @brief Returns the index of the next frame of animation, the one after
+ * the current one.
+ *
+ * @param reached_end If not nullptr, true is returned here if we've reached
+ * the end and the next frame loops back to the beginning.
+ * @return The index, or INVALID on error.
+ */
+size_t animation_instance::get_next_frame_index(bool* reached_end) const {
+    if(reached_end) *reached_end = false;
+    if(!cur_anim) return INVALID;
+    
+    if(cur_frame_index < cur_anim->frames.size() - 1) {
+        return cur_frame_index + 1;
+    } else {
+        if(reached_end) *reached_end = true;
+        if(cur_anim->loop_frame < cur_anim->frames.size()) {
+            return cur_anim->loop_frame;
+        } else {
+            return 0;
+        }
+    }
 }
 
 
@@ -448,12 +516,13 @@ void animation_instance::skip_ahead_randomly() {
 
 
 /**
- * @brief Starts or restarts the animation.
- * It's called automatically when the animation is set.
+ * @brief Clears everything.
  */
-void animation_instance::start() {
+void animation_instance::clear() {
+    cur_anim = nullptr;
+    anim_db = nullptr;
     cur_frame_time = 0;
-    cur_frame_index = 0;
+    cur_frame_index = INVALID;
 }
 
 
@@ -486,12 +555,7 @@ bool animation_instance::tick(
     //goes over an entire frame, and lands 2 or more frames ahead.
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
-        cur_frame_index++;
-        if(cur_frame_index >= n_frames) {
-            reached_end = true;
-            cur_frame_index =
-                (cur_anim->loop_frame >= n_frames) ? 0 : cur_anim->loop_frame;
-        }
+        cur_frame_index = get_next_frame_index(&reached_end);
         cur_frame = &cur_anim->frames[cur_frame_index];
         if(cur_frame->signal != INVALID && signals) {
             signals->push_back(cur_frame->signal);
@@ -506,23 +570,49 @@ bool animation_instance::tick(
 
 
 /**
+ * @brief Sets the animation state to the beginning.
+ * It's called automatically when the animation is first set.
+ */
+void animation_instance::to_start() {
+    cur_frame_time = 0;
+    cur_frame_index = 0;
+}
+
+
+/**
+ * @brief Returns whether or not the animation instance is in a state where
+ * it can show a valid frame.
+ *
+ * @return Whether it's in a valid state.
+ */
+bool animation_instance::valid_frame() const {
+    if(!cur_anim) return false;
+    if(cur_frame_index >= cur_anim->frames.size()) return false;
+    return true;
+}
+
+
+/**
  * @brief Constructs a new frame object.
  *
  * @param sn Name of the sprite.
  * @param si Index of the sprite in the animation database.
  * @param sp Pointer to the sprite.
  * @param d Duration.
+ * @param in Whether to interpolate between this frame's transformation data
+ * and the next's.
  * @param snd Sound name.
  * @param s Signal.
  */
 frame::frame(
     const string &sn, const size_t si, sprite* sp, const float d,
-    const string &snd, const size_t s
+    const bool in, const string &snd, const size_t s
 ) :
     sprite_name(sn),
     sprite_index(si),
     sprite_ptr(sp),
     duration(d),
+    interpolate(in),
     sound(snd),
     signal(s) {
     
@@ -719,6 +809,105 @@ void sprite::set_bitmap(
 }
 
 
+/**
+ * @brief Returns the final transformation data for a "basic" sprite effect.
+ * i.e. the translation, angle, scale, and tint. This makes use of
+ * interpolation between two frames if applicable.
+ *
+ * @param base_pos Base position of the translation.
+ * @param base_angle Base angle of the rotation.
+ * @param base_angle_cos_cache If you have a cached value for the base angle's
+ * cosine, write it here. Otherwise use LARGE_FLOAT.
+ * @param base_angle_sin_cache If you have a cached value for the base angle's
+ * sine, write it here. Otherwise use LARGE_FLOAT.
+ * @param cur_s_ptr The current sprite.
+ * @param next_s_ptr The next sprite, if any.
+ * @param interpolation_factor Amount to interpolate the two sprites by, if any.
+ * Ranges from 0 to 1.
+ * @param eff_trans If not nullptr, the final translation is returned here.
+ * @param eff_angle If not nullptr, the final rotation angle is returned here.
+ * @param eff_scale If not nullptr, the final scale is returned here.
+ * @param eff_tint If not nullptr, the final tint color is returned here.
+ */
+void get_sprite_basic_effects(
+    const point &base_pos, float base_angle,
+    float base_angle_cos_cache, float base_angle_sin_cache,
+    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
+    point* eff_trans, float* eff_angle,
+    point* eff_scale, ALLEGRO_COLOR* eff_tint
+) {
+    if(base_angle_cos_cache == LARGE_FLOAT) {
+        base_angle_cos_cache = cos(base_angle);
+    }
+    if(base_angle_sin_cache == LARGE_FLOAT) {
+        base_angle_sin_cache = sin(base_angle);
+    }
+    
+    if(eff_trans) {
+        eff_trans->x =
+            base_pos.x +
+            base_angle_cos_cache * cur_s_ptr->offset.x -
+            base_angle_sin_cache * cur_s_ptr->offset.y;
+        eff_trans->y =
+            base_pos.y +
+            base_angle_sin_cache * cur_s_ptr->offset.x +
+            base_angle_cos_cache * cur_s_ptr->offset.y;
+    }
+    if(eff_angle) {
+        *eff_angle = base_angle + cur_s_ptr->angle;
+    }
+    if(eff_scale) {
+        *eff_scale = cur_s_ptr->scale;
+    }
+    if(eff_tint) {
+        *eff_tint = cur_s_ptr->tint;
+    }
+    
+    if(next_s_ptr && interpolation_factor > 0.0f) {
+        point next_trans(
+            base_pos.x +
+            base_angle_cos_cache * next_s_ptr->offset.x -
+            base_angle_sin_cache * next_s_ptr->offset.y,
+            base_pos.y +
+            base_angle_sin_cache * next_s_ptr->offset.x +
+            base_angle_cos_cache * next_s_ptr->offset.y
+        );
+        float next_angle = base_angle + next_s_ptr->angle;
+        point next_scale = next_s_ptr->scale;
+        ALLEGRO_COLOR next_tint = next_s_ptr->tint;
+        
+        if(eff_trans) {
+            *eff_trans =
+                interpolate_point(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *eff_trans, next_trans
+                );
+        }
+        if(eff_angle) {
+            *eff_angle =
+                interpolate_angle(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *eff_angle, next_angle
+                );
+        }
+        if(eff_scale) {
+            *eff_scale =
+                interpolate_point(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *eff_scale, next_scale
+                );
+        }
+        if(eff_tint) {
+            *eff_tint =
+                interpolate_color(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *eff_tint, next_tint
+                );
+        }
+    }
+}
+
+
 
 /**
  * @brief Loads the animations from a file.
@@ -892,6 +1081,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                     s_pos,
                     (s_pos == INVALID) ? nullptr : adb.sprites[s_pos],
                     s2f(frame_node->get_child_by_name("duration")->value),
+                    s2b(frame_node->get_child_by_name("interpolate")->value),
                     frame_node->get_child_by_name("sound")->value,
                     (signal_str.empty() ? INVALID : s2i(signal_str))
                 )
@@ -903,9 +1093,11 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 anim_node->name,
                 frames,
                 s2i(anim_node->get_child_by_name("loop_frame")->value),
-                s2i(anim_node->get_child_by_name(
+                s2i(
+                    anim_node->get_child_by_name(
                         "hit_rate"
-                    )->get_value_or_default("100"))
+                    )->get_value_or_default("100")
+                )
             )
         );
     }

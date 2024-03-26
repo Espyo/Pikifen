@@ -614,8 +614,8 @@ void animation_editor::process_gui_panel_animation() {
     
     //Current animation text.
     size_t cur_anim_nr = INVALID;
-    if(cur_anim) {
-        cur_anim_nr = anims.find_animation(cur_anim->name);
+    if(cur_anim_i.cur_anim) {
+        cur_anim_nr = anims.find_animation(cur_anim_i.cur_anim->name);
     }
     ImGui::Text(
         "Current animation: %s / %i",
@@ -632,12 +632,12 @@ void animation_editor::process_gui_panel_animation() {
         )
     ) {
         if(!anims.animations.empty()) {
-            if(!cur_anim) {
+            if(!cur_anim_i.cur_anim) {
                 pick_animation(anims.animations[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        (int) anims.find_animation(cur_anim->name),
+                        (int) anims.find_animation(cur_anim_i.cur_anim->name),
                         -1,
                         (int) anims.animations.size()
                     );
@@ -651,7 +651,11 @@ void animation_editor::process_gui_panel_animation() {
     
     //Change current animation button.
     string anim_button_name =
-        (cur_anim ? cur_anim->name : NONE_OPTION) + "##anim";
+        (
+            cur_anim_i.cur_anim ?
+            cur_anim_i.cur_anim->name :
+            NONE_OPTION
+        ) + "##anim";
     ImVec2 anim_button_size(
         -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
     );
@@ -700,12 +704,12 @@ void animation_editor::process_gui_panel_animation() {
         )
     ) {
         if(!anims.animations.empty()) {
-            if(!cur_anim) {
+            if(!cur_anim_i.cur_anim) {
                 pick_animation(anims.animations[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        (int) anims.find_animation(cur_anim->name),
+                        (int) anims.find_animation(cur_anim_i.cur_anim->name),
                         1,
                         (int) anims.animations.size()
                     );
@@ -720,7 +724,7 @@ void animation_editor::process_gui_panel_animation() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    if(cur_anim) {
+    if(cur_anim_i.cur_anim) {
     
         //Delete animation button.
         if(
@@ -730,12 +734,11 @@ void animation_editor::process_gui_panel_animation() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            string cur_anim_name = cur_anim->name;
+            string cur_anim_name = cur_anim_i.cur_anim->name;
             size_t nr = anims.find_animation(cur_anim_name);
             anims.animations.erase(anims.animations.begin() + nr);
             if(anims.animations.empty()) {
-                cur_anim = nullptr;
-                cur_frame_nr = INVALID;
+                cur_anim_i.clear();
             } else {
                 nr = std::min(nr, anims.animations.size() - 1);
                 pick_animation(anims.animations[nr]->name, "", false);
@@ -750,7 +753,7 @@ void animation_editor::process_gui_panel_animation() {
         
     }
     
-    if(cur_anim) {
+    if(cur_anim_i.cur_anim) {
     
         if(anims.animations.size() > 1) {
         
@@ -772,7 +775,7 @@ void animation_editor::process_gui_panel_animation() {
             //Import animation popup.
             vector<string> import_anim_names;
             for(size_t a = 0; a < anims.animations.size(); ++a) {
-                if(anims.animations[a] == cur_anim) continue;
+                if(anims.animations[a] == cur_anim_i.cur_anim) continue;
                 import_anim_names.push_back(anims.animations[a]->name);
             }
             string picked_anim;
@@ -795,7 +798,7 @@ void animation_editor::process_gui_panel_animation() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            duplicate_string(cur_anim->name, rename_anim_name);
+            duplicate_string(cur_anim_i.cur_anim->name, rename_anim_name);
             ImGui::OpenPopup("renameAnim");
         }
         set_tooltip(
@@ -804,18 +807,20 @@ void animation_editor::process_gui_panel_animation() {
         
         //Rename animation popup.
         if(input_popup("renameAnim", "New name:", &rename_anim_name)) {
-            rename_animation(cur_anim, rename_anim_name);
+            rename_animation(cur_anim_i.cur_anim, rename_anim_name);
         }
         
         //Animation data node.
         if(saveable_tree_node("animation", "Animation data")) {
         
             //Loop frame value.
-            int loop_frame = (int) cur_anim->loop_frame + 1;
+            int loop_frame = (int) cur_anim_i.cur_anim->loop_frame + 1;
             if(
                 ImGui::DragInt(
                     "Loop frame", &loop_frame, 0.1f, 1,
-                    cur_anim->frames.empty() ? 1 : (int) cur_anim->frames.size()
+                    cur_anim_i.cur_anim->frames.empty() ?
+                    1 :
+                    (int) cur_anim_i.cur_anim->frames.size()
                 )
             ) {
                 changes_mgr.mark_as_changed();
@@ -828,15 +833,17 @@ void animation_editor::process_gui_panel_animation() {
             loop_frame =
                 clamp(
                     loop_frame, 1,
-                    cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
+                    cur_anim_i.cur_anim->frames.empty() ?
+                    1 :
+                    cur_anim_i.cur_anim->frames.size()
                 );
-            cur_anim->loop_frame = loop_frame - 1;
+            cur_anim_i.cur_anim->loop_frame = loop_frame - 1;
             
             //Hit rate slider.
-            int hit_rate = cur_anim->hit_rate;
+            int hit_rate = cur_anim_i.cur_anim->hit_rate;
             if(ImGui::SliderInt("Hit rate", &hit_rate, 0, 100)) {
                 changes_mgr.mark_as_changed();
-                cur_anim->hit_rate = hit_rate;
+                cur_anim_i.cur_anim->hit_rate = hit_rate;
             }
             set_tooltip(
                 "If this attack can knock back Pikmin, this indicates "
@@ -856,18 +863,23 @@ void animation_editor::process_gui_panel_animation() {
         if(saveable_tree_node("animation", "Frame list")) {
         
             frame* frame_ptr = nullptr;
-            if(cur_frame_nr == INVALID && !cur_anim->frames.empty()) {
-                cur_frame_nr = 0;
+            if(
+                cur_anim_i.cur_frame_index == INVALID &&
+                !cur_anim_i.cur_anim->frames.empty()
+            ) {
+                cur_anim_i.cur_frame_index = 0;
+                cur_anim_i.cur_frame_time = 0.0f;
             }
-            if(cur_frame_nr != INVALID) {
-                frame_ptr = &(cur_anim->frames[cur_frame_nr]);
+            if(cur_anim_i.valid_frame()) {
+                frame_ptr =
+                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index]);
             }
             
             //Current frame text.
             ImGui::Text(
                 "Current frame: %s / %i",
-                frame_ptr ? i2s(cur_frame_nr + 1).c_str() : "--",
-                (int) cur_anim->frames.size()
+                frame_ptr ? i2s(cur_anim_i.cur_frame_index + 1).c_str() : "--",
+                (int) cur_anim_i.cur_anim->frames.size()
             );
             
             if(frame_ptr) {
@@ -896,15 +908,16 @@ void animation_editor::process_gui_panel_animation() {
                     )
                 ) {
                     anim_playing = false;
-                    if(!cur_anim->frames.empty()) {
-                        if(cur_frame_nr == INVALID) {
-                            cur_frame_nr = 0;
-                        } else if(cur_frame_nr == 0) {
-                            cur_frame_nr =
-                                cur_anim->frames.size() - 1;
+                    if(!cur_anim_i.cur_anim->frames.empty()) {
+                        if(cur_anim_i.cur_frame_index == INVALID) {
+                            cur_anim_i.cur_frame_index = 0;
+                        } else if(cur_anim_i.cur_frame_index == 0) {
+                            cur_anim_i.cur_frame_index =
+                                cur_anim_i.cur_anim->frames.size() - 1;
                         } else {
-                            cur_frame_nr--;
+                            cur_anim_i.cur_frame_index--;
                         }
+                        cur_anim_i.cur_frame_time = 0.0f;
                     }
                 }
                 set_tooltip(
@@ -921,16 +934,17 @@ void animation_editor::process_gui_panel_animation() {
                     )
                 ) {
                     anim_playing = false;
-                    if(!cur_anim->frames.empty()) {
+                    if(!cur_anim_i.cur_anim->frames.empty()) {
                         if(
-                            cur_frame_nr ==
-                            cur_anim->frames.size() - 1 ||
-                            cur_frame_nr == INVALID
+                            cur_anim_i.cur_frame_index ==
+                            cur_anim_i.cur_anim->frames.size() - 1 ||
+                            cur_anim_i.cur_frame_index == INVALID
                         ) {
-                            cur_frame_nr = 0;
+                            cur_anim_i.cur_frame_index = 0;
                         } else {
-                            cur_frame_nr++;
+                            cur_anim_i.cur_frame_index++;
                         }
+                        cur_anim_i.cur_frame_time = 0.0f;
                     }
                 }
                 set_tooltip(
@@ -948,25 +962,38 @@ void animation_editor::process_gui_panel_animation() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                if(cur_frame_nr < cur_anim->loop_frame) {
+                if(
+                    cur_anim_i.cur_frame_index <
+                    cur_anim_i.cur_anim->loop_frame
+                ) {
                     //Let the loop frame stay the same.
-                    cur_anim->loop_frame++;
+                    cur_anim_i.cur_anim->loop_frame++;
                 }
                 anim_playing = false;
-                if(cur_frame_nr != INVALID) {
-                    cur_frame_nr++;
-                    cur_anim->frames.insert(
-                        cur_anim->frames.begin() + cur_frame_nr,
-                        frame(cur_anim->frames[cur_frame_nr - 1])
+                if(cur_anim_i.cur_frame_index != INVALID) {
+                    cur_anim_i.cur_frame_index++;
+                    cur_anim_i.cur_frame_time = 0.0f;
+                    cur_anim_i.cur_anim->frames.insert(
+                        cur_anim_i.cur_anim->frames.begin() +
+                        cur_anim_i.cur_frame_index,
+                        frame(
+                            cur_anim_i.cur_anim->frames[
+                                cur_anim_i.cur_frame_index - 1
+                            ]
+                        )
                     );
                 } else {
-                    cur_anim->frames.push_back(frame());
-                    cur_frame_nr = 0;
+                    cur_anim_i.cur_anim->frames.push_back(frame());
+                    cur_anim_i.cur_frame_index = 0;
+                    cur_anim_i.cur_frame_time = 0.0f;
                     set_best_frame_sprite();
                 }
-                frame_ptr = &(cur_anim->frames[cur_frame_nr]);
+                frame_ptr =
+                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index]);
                 changes_mgr.mark_as_changed();
-                set_status("Added frame #" + i2s(cur_frame_nr + 1) + ".");
+                set_status(
+                    "Added frame #" + i2s(cur_anim_i.cur_frame_index + 1) + "."
+                );
             }
             set_tooltip(
                 "Add a new frame after the curret one, by copying "
@@ -984,30 +1011,46 @@ void animation_editor::process_gui_panel_animation() {
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
-                    if(cur_frame_nr < cur_anim->loop_frame) {
+                    if(
+                        cur_anim_i.cur_frame_index <
+                        cur_anim_i.cur_anim->loop_frame
+                    ) {
                         //Let the loop frame stay the same.
-                        cur_anim->loop_frame--;
+                        cur_anim_i.cur_anim->loop_frame--;
                     }
                     if(
-                        cur_frame_nr == cur_anim->loop_frame &&
-                        cur_anim->loop_frame == cur_anim->frames.size() - 1
+                        cur_anim_i.cur_frame_index ==
+                        cur_anim_i.cur_anim->loop_frame &&
+                        cur_anim_i.cur_anim->loop_frame ==
+                        cur_anim_i.cur_anim->frames.size() - 1
                     ) {
                         //Stop the loop frame from going out of bounds.
-                        cur_anim->loop_frame--;
+                        cur_anim_i.cur_anim->loop_frame--;
                     }
                     anim_playing = false;
-                    size_t deleted_frame_nr = cur_frame_nr;
-                    if(cur_frame_nr != INVALID) {
-                        cur_anim->frames.erase(
-                            cur_anim->frames.begin() + cur_frame_nr
+                    size_t deleted_frame_nr = cur_anim_i.cur_frame_index;
+                    if(cur_anim_i.cur_frame_index != INVALID) {
+                        cur_anim_i.cur_anim->frames.erase(
+                            cur_anim_i.cur_anim->frames.begin() +
+                            cur_anim_i.cur_frame_index
                         );
-                        if(cur_anim->frames.empty()) {
-                            cur_frame_nr = INVALID;
+                        if(cur_anim_i.cur_anim->frames.empty()) {
+                            cur_anim_i.cur_frame_index = INVALID;
                             frame_ptr = nullptr;
-                        } else if(cur_frame_nr >= cur_anim->frames.size()) {
-                            cur_frame_nr = cur_anim->frames.size() - 1;
-                            frame_ptr = &(cur_anim->frames[cur_frame_nr]);
+                        } else if(
+                            cur_anim_i.cur_frame_index >=
+                            cur_anim_i.cur_anim->frames.size()
+                        ) {
+                            cur_anim_i.cur_frame_index =
+                                cur_anim_i.cur_anim->frames.size() - 1;
+                            frame_ptr =
+                                &(
+                                    cur_anim_i.cur_anim->frames[
+                                        cur_anim_i.cur_frame_index
+                                    ]
+                                );
                         }
+                        cur_anim_i.cur_frame_time = 0.0f;
                         changes_mgr.mark_as_changed();
                         set_status(
                             "Deleted frame #" + i2s(deleted_frame_nr + 1) + "."
@@ -1032,6 +1075,10 @@ void animation_editor::process_gui_panel_animation() {
                         "Sprite", &frame_ptr->sprite_name, sprite_names, 15
                     )
                 ) {
+                    frame_ptr->sprite_index =
+                        anims.find_sprite(frame_ptr->sprite_name);
+                    frame_ptr->sprite_ptr =
+                        anims.sprites[frame_ptr->sprite_index];
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
@@ -1049,6 +1096,20 @@ void animation_editor::process_gui_panel_animation() {
                 set_tooltip(
                     "How long this frame lasts for, in seconds.",
                     "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Interpolate checkbox.
+                if(
+                    ImGui::Checkbox("Interpolate", &frame_ptr->interpolate)
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "If true, the transformation data (sprite translation,\n"
+                    "sprite rotation, etc.) on this frame will smoothly\n"
+                    "interpolate until it meets the transformation\n"
+                    "data of the next frame.\n"
+                    "This does not affect the bitmap or hitboxes."
                 );
                 
                 //Signal checkbox.
@@ -1134,9 +1195,16 @@ void animation_editor::process_gui_panel_animation() {
                 
                 //Apply duration to all button.
                 if(ImGui::Button("Apply duration to all frames")) {
-                    float d = cur_anim->frames[cur_frame_nr].duration;
-                    for(size_t i = 0; i < cur_anim->frames.size(); ++i) {
-                        cur_anim->frames[i].duration = d;
+                    float d =
+                        cur_anim_i.cur_anim->frames[
+                            cur_anim_i.cur_frame_index
+                        ].duration;
+                    for(
+                        size_t i = 0;
+                        i < cur_anim_i.cur_anim->frames.size();
+                        ++i
+                    ) {
+                        cur_anim_i.cur_anim->frames[i].duration = d;
                     }
                     changes_mgr.mark_as_changed();
                     set_status(
@@ -1363,9 +1431,8 @@ void animation_editor::process_gui_panel_main() {
             "Animations"
         )
     ) {
-        if(!cur_anim && !anims.animations.empty()) {
-            cur_anim = anims.animations[0];
-            if(cur_anim->frames.size()) cur_frame_nr = 0;
+        if(!cur_anim_i.cur_anim && !anims.animations.empty()) {
+            pick_animation(anims.animations[0]->name, "", false);
         }
         change_state(EDITOR_STATE_ANIMATION);
     }
@@ -2664,11 +2731,18 @@ void animation_editor::process_gui_status_bar() {
         );
     }
     
-    if(!showing_coords && state == EDITOR_STATE_ANIMATION) {
+    if(
+        !showing_coords &&
+        state == EDITOR_STATE_ANIMATION &&
+        cur_anim_i.valid_frame()
+    ) {
         if(is_cursor_in_timeline()) {
             cur_time = get_cursor_timeline_time();
         } else {
-            cur_time = cur_anim->get_time(cur_frame_nr, cur_frame_time);
+            cur_time =
+                cur_anim_i.cur_anim->get_time(
+                    cur_anim_i.cur_frame_index, cur_anim_i.cur_frame_time
+                );
         }
         
         showing_time = true;
@@ -2678,7 +2752,7 @@ void animation_editor::process_gui_status_bar() {
     if(showing_time) {
         ImGui::SameLine();
         ImGui::Text(
-            "%s",
+            "%ss",
             box_string(f2s(cur_time), 7).c_str()
         );
     }

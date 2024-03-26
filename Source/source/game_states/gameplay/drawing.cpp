@@ -624,7 +624,8 @@ void gameplay_state::draw_ingame_text() {
         
         //Maker tool -- draw hitboxes.
         if(game.maker_tools.hitboxes) {
-            sprite* s = mob_ptr->get_cur_sprite();
+            sprite* s;
+            mob_ptr->get_sprite_data(&s, nullptr, nullptr);
             if(s) {
                 for(size_t h = 0; h < s->hitboxes.size(); ++h) {
                     hitbox* h_ptr = &s->hitboxes[h];
@@ -653,7 +654,8 @@ void gameplay_state::draw_ingame_text() {
         //Maker tool -- draw collision.
         if(game.maker_tools.collision) {
             if(mob_ptr->type->pushes_with_hitboxes) {
-                sprite* s = mob_ptr->get_cur_sprite();
+                sprite* s;
+                mob_ptr->get_sprite_data(&s, nullptr, nullptr);
                 if(s) {
                     for(size_t h = 0; h < s->hitboxes.size(); ++h) {
                         hitbox* h_ptr = &s->hitboxes[h];

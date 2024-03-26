@@ -393,7 +393,7 @@ void mob::apply_status_effect(
     }
     
     if(s->freezes_animation) {
-        forced_sprite = get_cur_sprite();
+        get_sprite_data(&forced_sprite, nullptr, nullptr);
     }
 }
 
@@ -1397,12 +1397,18 @@ void mob::do_attack_effects(
 void mob::draw_limb() {
     if(!parent) return;
     if(!parent->limb_anim.anim_db) return;
-    sprite* sprite_to_use = parent->limb_anim.get_cur_sprite();
-    if(!sprite_to_use) return;
+    sprite* limb_cur_s_ptr;
+    sprite* limb_next_s_ptr;
+    float limb_interpolation_factor;
+    parent->limb_anim.get_sprite_data(
+        &limb_cur_s_ptr, &limb_next_s_ptr, &limb_interpolation_factor
+    );
+    if(!limb_cur_s_ptr) return;
     
     bitmap_effect_info eff;
     get_sprite_bitmap_effects(
-        sprite_to_use, &eff,
+        limb_cur_s_ptr, limb_next_s_ptr, limb_interpolation_factor,
+        &eff,
         SPRITE_BITMAP_EFFECT_STANDARD |
         SPRITE_BITMAP_EFFECT_STATUS |
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
@@ -1451,12 +1457,12 @@ void mob::draw_limb() {
     
     eff.translation = (parent_end + child_end) / 2.0;
     eff.scale.x =
-        length / al_get_bitmap_width(sprite_to_use->bitmap);
+        length / al_get_bitmap_width(limb_cur_s_ptr->bitmap);
     eff.scale.y =
-        parent->limb_thickness / al_get_bitmap_height(sprite_to_use->bitmap);
+        parent->limb_thickness / al_get_bitmap_height(limb_cur_s_ptr->bitmap);
     eff.rotation = p2c_angle;
     
-    draw_bitmap_with_effects(sprite_to_use->bitmap, eff);
+    draw_bitmap_with_effects(limb_cur_s_ptr->bitmap, eff);
 }
 
 
@@ -1465,13 +1471,16 @@ void mob::draw_limb() {
  * This is a generic function, and can be overwritten by child classes.
  */
 void mob::draw_mob() {
-    sprite* s_ptr = get_cur_sprite();
-    
-    if(!s_ptr) return;
+    sprite* cur_s_ptr;
+    sprite* next_s_ptr;
+    float interpolation_factor;
+    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    if(!cur_s_ptr) return;
     
     bitmap_effect_info eff;
     get_sprite_bitmap_effects(
-        s_ptr, &eff,
+        cur_s_ptr, next_s_ptr, interpolation_factor,
+        &eff,
         SPRITE_BITMAP_EFFECT_STANDARD |
         SPRITE_BITMAP_EFFECT_STATUS |
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
@@ -1480,7 +1489,7 @@ void mob::draw_mob() {
         SPRITE_BITMAP_EFFECT_CARRY
     );
     
-    draw_bitmap_with_effects(s_ptr->bitmap, eff);
+    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
 }
 
 
@@ -1710,7 +1719,8 @@ point mob::get_chase_target(float* z) const {
 hitbox* mob::get_closest_hitbox(
     const point &p, const size_t h_type, dist* d
 ) const {
-    sprite* s = get_cur_sprite();
+    sprite* s;
+    get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
     hitbox* closest_hitbox = nullptr;
     float closest_hitbox_dist = 0;
@@ -1736,16 +1746,33 @@ hitbox* mob::get_closest_hitbox(
 
 
 /**
- * @brief Returns the current sprite of animation.
+ * @brief Returns data for figuring out the state of the current sprite
+ * of animation.
  *
  * Normally, this returns the current animation's current sprite,
  * but it can return a forced sprite (e.g. from a status effect that
  * freezes animations).
  *
- * @return The sprite.
+ * @param cur_sprite_ptr If not nullptr, the current frame's sprite is
+ * returned here.
+ * @param next_sprite_ptr If not nullptr, the next frame's sprite is
+ * returned here.
+ * @param interpolation_factor If not nullptr, the interpolation factor
+ * (0 to 1) between the two is returned here.
  */
-sprite* mob::get_cur_sprite() const {
-    return forced_sprite ? forced_sprite : anim.get_cur_sprite();
+void mob::get_sprite_data(
+    sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
+    float* interpolation_factor
+) const {
+    if(forced_sprite) {
+        if(cur_sprite_ptr) *cur_sprite_ptr = forced_sprite;
+        if(next_sprite_ptr) *next_sprite_ptr = forced_sprite;
+        if(interpolation_factor) *interpolation_factor = 0.0f;
+    } else {
+        anim.get_sprite_data(
+            cur_sprite_ptr, next_sprite_ptr, interpolation_factor
+        );
+    }
 }
 
 
@@ -1880,7 +1907,8 @@ mob_type::vulnerability_struct mob::get_hazard_vulnerability(
  * @return The hitbox.
  */
 hitbox* mob::get_hitbox(const size_t nr) const {
-    sprite* s = get_cur_sprite();
+    sprite* s;
+    get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
     if(s->hitboxes.empty()) return nullptr;
     return &s->hitboxes[nr];
@@ -1988,31 +2016,38 @@ float mob::get_speed_multiplier() const {
  * at the present moment, for normal mob drawing routines.
  *
  * @param s_ptr Sprite to get info about.
+ * @param next_s_ptr Next sprite in the animation, if any.
+ * @param interpolation_factor If we're meant to interpolate from the current
+ * sprite to the next, specify the interpolation factor (0 to 1) here.
  * @param info Struct to fill the info with.
  * @param effects What effects to use. Use SPRITE_BITMAP_EFFECTS for this.
  */
 void mob::get_sprite_bitmap_effects(
-    sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
+    sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
+    bitmap_effect_info* info, uint16_t effects
 ) const {
 
     //Animation, position, angle, etc.
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_STANDARD)) {
-        info->translation +=
-            point(
-                pos.x +
-                angle_cos * s_ptr->offset.x -
-                angle_sin * s_ptr->offset.y,
-                pos.y +
-                angle_sin * s_ptr->offset.x +
-                angle_cos * s_ptr->offset.y
-            );
-        info->rotation += angle + s_ptr->angle;
-        info->scale.x *= s_ptr->scale.x;
-        info->scale.y *= s_ptr->scale.y;
-        info->tint_color.r *= s_ptr->tint.r;
-        info->tint_color.g *= s_ptr->tint.g;
-        info->tint_color.b *= s_ptr->tint.b;
-        info->tint_color.a *= s_ptr->tint.a;
+        point eff_trans;
+        float eff_angle;
+        point eff_scale;
+        ALLEGRO_COLOR eff_tint;
+        
+        get_sprite_basic_effects(
+            pos, angle, angle_cos, angle_sin,
+            s_ptr, next_s_ptr, interpolation_factor,
+            &eff_trans, &eff_angle, &eff_scale, &eff_tint
+        );
+        
+        info->translation += eff_trans;
+        info->rotation += eff_angle;
+        info->scale.x *= eff_scale.x;
+        info->scale.y *= eff_scale.y;
+        info->tint_color.r *= eff_tint.r;
+        info->tint_color.g *= eff_tint.g;
+        info->tint_color.b *= eff_tint.b;
+        info->tint_color.a *= eff_tint.a;
     }
     
     //Status effects.
@@ -2306,7 +2341,8 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
     for(size_t st = 0; st < this->statuses.size(); ++st) {
         status_type* t = this->statuses[st].type;
         if(t->overlay_animation.empty()) continue;
-        sprite* sp = t->overlay_anim_instance.get_cur_sprite();
+        sprite* sp;
+        t->overlay_anim_instance.get_sprite_data(&sp, nullptr, nullptr);
         if(!sp) return nullptr;
         *bmp_scale = t->overlay_anim_mob_scale;
         return sp->bitmap;
@@ -2482,9 +2518,10 @@ bool mob::is_off_camera() const {
     if(parent) return false;
     
     float sprite_bound = 0;
-    sprite* sprite = anim.get_cur_sprite();
-    if(sprite) {
-        point sprite_size = sprite->file_size;
+    sprite* s_ptr;
+    anim.get_sprite_data(&s_ptr, nullptr, nullptr);
+    if(s_ptr) {
+        point sprite_size = s_ptr->file_size;
         sprite_bound =
             std::max(
                 sprite_size.x / 2.0,
@@ -2862,7 +2899,7 @@ void mob::set_animation(
             !has_flag(options, START_ANIMATION_NO_RESTART) ||
             anim.cur_frame_index >= anim.cur_anim->frames.size()
         ) {
-            anim.start();
+            anim.to_start();
         }
     }
     

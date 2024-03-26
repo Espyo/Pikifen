@@ -131,14 +131,8 @@ private:
     //Is the comparison sprite mode tinting the sprites?
     bool comparison_tint = true;
     
-    //Current animation.
-    animation* cur_anim = nullptr;
-    
-    //Index number of the current frame of animation.
-    size_t cur_frame_nr = INVALID;
-    
-    //Time spent in the current frame of animation.
-    float cur_frame_time = 0.0f;
+    //Animation instance, for when the user is editing animations.
+    animation_instance cur_anim_i;
     
     //Current hitbox.
     hitbox* cur_hitbox = nullptr;
@@ -152,7 +146,7 @@ private:
     //Current maturity to display on the Pikmin's top.
     unsigned char cur_maturity = 0;
     
-    //Current sprite.
+    //Current sprite, for when the user is editing sprites.
     sprite* cur_sprite = nullptr;
     
     //Keep the aspect ratio when resizing the current sprite?

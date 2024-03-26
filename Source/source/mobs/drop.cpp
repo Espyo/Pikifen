@@ -37,12 +37,16 @@ drop::drop(const point &pos, drop_type* type, const float angle) :
  * the process of vanishing.
  */
 void drop::draw_mob() {
-    sprite* s_ptr = get_cur_sprite();
-    if(!s_ptr) return;
+    sprite* cur_s_ptr;
+    sprite* next_s_ptr;
+    float interpolation_factor;
+    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    if(!cur_s_ptr) return;
     
     bitmap_effect_info eff;
     get_sprite_bitmap_effects(
-        s_ptr, &eff,
+        cur_s_ptr, next_s_ptr, interpolation_factor,
+        &eff,
         SPRITE_BITMAP_EFFECT_STANDARD |
         SPRITE_BITMAP_EFFECT_STATUS |
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
@@ -52,7 +56,7 @@ void drop::draw_mob() {
     
     eff.scale *= cur_scale;
     
-    draw_bitmap_with_effects(s_ptr->bitmap, eff);
+    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
 }
 
 

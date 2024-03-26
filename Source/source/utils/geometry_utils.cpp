@@ -1107,6 +1107,36 @@ void get_transformed_rectangle_bounding_box(
 
 
 /**
+ * @brief Returns the interpolation between two angles, given a number
+ * in an interval.
+ *
+ * @param input The input number.
+ * @param input_start Start of the interval the input number falls on,
+ * inclusive. The closer to input_start, the closer the output is to
+ * output_start.
+ * @param input_end End of the interval the number falls on, inclusive.
+ * @param output_start Angle on the starting tip of the interpolation.
+ * @param output_end Angle on the ending tip of the interpolation.
+ * @return The interpolated angle.
+ */
+float interpolate_angle(
+    const float input, const float input_start, const float input_end,
+    const float &output_start, const float &output_end
+) {
+    float angle_cw_diff = get_angle_cw_diff(output_start, output_end);
+    float angle_delta;
+    if(angle_cw_diff < TAU / 2.0f) {
+        angle_delta = angle_cw_diff;
+    } else {
+        angle_delta = -(TAU - angle_cw_diff);
+    }
+    return
+        output_start +
+        interpolate_number(input, input_start, input_end, 0, angle_delta);
+}
+
+
+/**
  * @brief Returns the interpolation between two points, given a number
  * in an interval.
  *

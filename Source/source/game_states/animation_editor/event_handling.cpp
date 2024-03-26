@@ -450,10 +450,12 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  */
 void animation_editor::handle_lmb_drag_in_timeline() {
     float cursor_time = get_cursor_timeline_time();
-    size_t old_frame_nr = cur_frame_nr;
-    cur_anim->get_frame_and_time(cursor_time, &cur_frame_nr, &cur_frame_time);
-    if(cur_frame_nr != old_frame_nr) {
-        frame* f = &cur_anim->frames[cur_frame_nr];
+    size_t old_frame_nr = cur_anim_i.cur_frame_index;
+    cur_anim_i.cur_anim->get_frame_and_time(
+        cursor_time, &cur_anim_i.cur_frame_index, &cur_anim_i.cur_frame_time
+    );
+    if(cur_anim_i.cur_frame_index != old_frame_nr) {
+        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
         if(f->sound_idx != INVALID) {
             play_sound(f->sound_idx);
         }

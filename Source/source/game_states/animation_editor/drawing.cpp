@@ -57,13 +57,12 @@ void animation_editor::draw_canvas() {
     al_clear_to_color(al_map_rgb(128, 144, 128));
     
     sprite* s = nullptr;
-    if(state == EDITOR_STATE_ANIMATION) {
-        if(cur_frame_nr != INVALID) {
-            string name =
-                cur_anim->frames[cur_frame_nr].sprite_name;
-            size_t s_pos = anims.find_sprite(name);
-            if(s_pos != INVALID) s = anims.sprites[s_pos];
-        }
+    
+    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
+        string name =
+            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index].sprite_name;
+        size_t s_pos = anims.find_sprite(name);
+        if(s_pos != INVALID) s = anims.sprites[s_pos];
         
     } else if(
         state == EDITOR_STATE_SPRITE || state == EDITOR_STATE_TOP ||
@@ -462,27 +461,29 @@ void animation_editor::draw_side_view_sprite(const sprite* s) {
  * @brief Draws a timeline for the current animation.
  */
 void animation_editor::draw_timeline() {
-    if(!cur_anim || cur_anim->frames.empty()) return;
+    if(!cur_anim_i.valid_frame()) return;
     
     //Some initial calculations.
     float anim_total_duration = 0;
     float anim_cur_time = 0;
     float anim_loop_time = 0;
-    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
-        float f_dur = cur_anim->frames[f].duration;
+    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); ++f) {
+        float f_dur = cur_anim_i.cur_anim->frames[f].duration;
         
-        if(f < cur_frame_nr) {
+        if(f < cur_anim_i.cur_frame_index) {
             anim_cur_time += f_dur;
-        } else if(f == cur_frame_nr) {
-            anim_cur_time += cur_frame_time;
+        } else if(f == cur_anim_i.cur_frame_index) {
+            anim_cur_time += cur_anim_i.cur_frame_time;
         }
         
-        if(f < cur_anim->loop_frame) {
+        if(f < cur_anim_i.cur_anim->loop_frame) {
             anim_loop_time += f_dur;
         }
         
         anim_total_duration += f_dur;
     }
+    if(anim_total_duration == 0.0f) return;
+    
     float scale =
         (canvas_br.x - canvas_tl.x - ANIM_EDITOR::TIMELINE_PADDING * 2.0f) /
         anim_total_duration;
@@ -504,10 +505,10 @@ void animation_editor::draw_timeline() {
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
     float frame_rectangle_bottom =
         canvas_br.y - ANIM_EDITOR::TIMELINE_PADDING;
-    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); ++f) {
         float end_x =
             frame_rectangles_cur_x +
-            cur_anim->frames[f].duration * scale;
+            cur_anim_i.cur_anim->frames[f].duration * scale;
         ALLEGRO_COLOR color =
             f % 2 == 0 ?
             al_map_rgb(128, 132, 128) :
@@ -680,23 +681,40 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
     }
     
     if(s->bitmap) {
+        point coords;
+        float angle;
+        point scale;
         ALLEGRO_COLOR tint;
+        
+        sprite* next_s = nullptr;
+        float interpolation_factor = 0.0f;
+        
+        if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
+            cur_anim_i.get_sprite_data(
+                nullptr, &next_s, &interpolation_factor
+            );
+        }
+        
+        get_sprite_basic_effects(
+            point(), 0, LARGE_FLOAT, LARGE_FLOAT,
+            s, next_s, interpolation_factor,
+            &coords, &angle, &scale, &tint
+        );
+        
         if(
             state == EDITOR_STATE_SPRITE_TRANSFORM &&
             comparison && comparison_tint &&
             comparison_sprite && comparison_sprite->bitmap
         ) {
             tint = al_map_rgb(0, 128, 255);
-        } else {
-            tint = s->tint;
         }
         draw_bitmap(
-            s->bitmap, s->offset,
+            s->bitmap, coords,
             point(
-                s->file_size.x * s->scale.x,
-                s->file_size.y * s->scale.y
+                s->file_size.x * scale.x,
+                s->file_size.y * scale.y
             ),
-            s->angle, tint
+            angle, tint
         );
     }
     

@@ -27,16 +27,16 @@ using std::vector;
 struct point {
 
     //--- Members ---
-
+    
     //X coordinate.
     float x = 0.0f;
-
+    
     //Y coordinate.
     float y = 0.0f;
     
-
+    
     //--- Function declarations ---
-
+    
     point(const float x, const float y);
     point();
     const point operator +(const point &p) const;
@@ -59,7 +59,7 @@ struct point {
 
 /**
  * @brief A distance.
- * 
+ *
  * Basically this is just a number, but for optimization's sake,
  * this number is actually the distance SQUARED.
  * It's faster to compare two squared distances than square-rooting them both,
@@ -72,10 +72,10 @@ struct point {
  */
 struct dist {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
+    
     dist(const point &p1, const point &p2);
     explicit dist(const float d = 0.0f);
     dist &operator =(const float d);
@@ -97,13 +97,13 @@ public:
     void operator -=(const dist &d2);
     float to_float();
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     //Distance squared. Most operations are based on this number.
     float distance_squared = 0.0f;
-
+    
     //Square root of the distance squared. Only used if necessary.
     float normal_distance = 0.0f;
     
@@ -172,6 +172,10 @@ float get_point_sign(
 void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, const float angle,
     point* min_coords, point* max_coords
+);
+float interpolate_angle(
+    const float input, const float input_start, const float input_end,
+    const float &output_start, const float &output_end
 );
 point interpolate_point(
     const float input, const float input_start, const float input_end,

@@ -588,7 +588,7 @@ void init_essentials() {
 /**
  * @brief Initializes things regarding Allegro events, like the queue,
  * timer, etc.
- * 
+ *
  * @param logic_timer The game logic timer.
  * @param logic_queue Queue of game logic events.
  */
@@ -1624,5 +1624,5 @@ void init_single_animation(
     );
     anim.database = load_animation_database_from_file(&file);
     anim.instance.cur_anim = anim.database.animations[0];
-    anim.instance.start();
+    anim.instance.to_start();
 }

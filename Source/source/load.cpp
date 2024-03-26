@@ -1182,7 +1182,7 @@ void load_liquids(const bool load_resources) {
                     animation_instance(&new_l->anim_db);
                 new_l->anim_instance.cur_anim =
                     new_l->anim_db.animations[0];
-                new_l->anim_instance.start();
+                new_l->anim_instance.to_start();
             }
         }
         
@@ -1896,7 +1896,7 @@ void load_status_types(const bool load_resources) {
                         animation_instance(&new_t->overlay_anim_db);
                     new_t->overlay_anim_instance.cur_anim =
                         new_t->overlay_anim_db.animations[0];
-                    new_t->overlay_anim_instance.start();
+                    new_t->overlay_anim_instance.to_start();
                 }
             }
         }

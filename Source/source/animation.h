@@ -71,53 +71,53 @@ public:
     
     //Name of the sprite.
     string name;
-
+    
     //Parent bitmap, normally a spritesheet.
     ALLEGRO_BITMAP* parent_bmp = nullptr;
-
+    
     //File name where the parent bitmap is at.
     string file;
-
+    
     //Top-left corner of the sprite inside the image file.
     point file_pos;
-
+    
     //Size of the sprite inside the image file.
     point file_size;
-
+    
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
     point offset;
-
+    
     //Scale multiplier.
     point scale = point(1.0, 1.0);
-
+    
     //Angle to rotate the image by.
     float angle = 0.0f;
-
+    
     //Tint the image with this color.
     ALLEGRO_COLOR tint = COLOR_WHITE;
-
+    
     //X&Y of the Pikmin's top (left/bud/flower).
     point top_pos;
-
+    
     //W&H of the Pikmin's top.
     point top_size = point(5.5, 10);
-
+    
     //Angle of the Pikmin's top.
     float top_angle = 0.0f;
-
+    
     //Does this sprite even have a visible Pikmin top?
     bool top_visible = true;
-
+    
     //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
     ALLEGRO_BITMAP* bitmap = nullptr;
-
+    
     //List of hitboxes on this frame.
     vector<hitbox> hitboxes;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = nullptr,
         const vector<hitbox> &h = vector<hitbox>()
@@ -138,7 +138,7 @@ public:
         const point &new_file_pos, const point &new_file_size,
         data_node* node = nullptr
     );
-
+    
 };
 
 
@@ -150,39 +150,42 @@ public:
 class frame {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Name of the sprite to use in this frame.
     string sprite_name;
-
+    
     //Index of the sprite. Cache for performance.
     size_t sprite_index = INVALID;
-
+    
     //Pointer to the sprite. Cache for performance.
     sprite* sprite_ptr = nullptr;
-
+    
     //How long this frame lasts for, in seconds.
     float duration = 0.0f;
-
+    
+    //Interpolate transformation data between this frame and the next.
+    bool interpolate = false;
+    
     //Sound to play, if any. This is a sound info block in the mob's data.
     string sound;
-
+    
     //Index of the sound to play, or INVALID. Cache for performance.
     size_t sound_idx = INVALID;
-
+    
     //Signal to send, if any. INVALID = none.
     size_t signal = INVALID;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit frame(
         const string &sn = "", const size_t si = INVALID,
         sprite* sp = nullptr, const float d = 0.1,
-        const string &snd = "", const size_t s = INVALID
+        const bool in = false, const string &snd = "", const size_t s = INVALID
     );
-
+    
 };
 
 
@@ -197,21 +200,21 @@ public:
     
     //Name of the animation.
     string name;
-
+    
     //List of frames.
     vector<frame> frames;
-
+    
     //The animation loops back to this frame when it reaches the end.
     size_t loop_frame = 0;
-
+    
     //If this animation represents an attack that can miss,
     //this represents the successful hit rate.
     //100 means it cannot miss and/or is a normal animation.
     unsigned char hit_rate = 100;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit animation(
         const string &name = "",
         const vector<frame> &frames = vector<frame>(),
@@ -224,40 +227,42 @@ public:
         const float t, size_t* frame_nr, float* frame_time
     );
     float get_time(const size_t frame_nr, const float frame_time);
-
+    
 };
 
 
 /**
  * @brief A database of animations, sprites, and body parts.
+ *
+ * Basically, an animation file.
  */
 class animation_database {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //List of known animations.
     vector<animation*> animations;
-
+    
     //List of known sprites.
     vector<sprite*> sprites;
-
+    
     //List of known body parts.
     vector<body_part*> body_parts;
-
+    
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
-
+    
     //Version of the engine this animation database was built in.
     string engine_version;
-
+    
     //Maximum span of the hitboxes. Cache for performance.
     float max_span = 0.0f;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit animation_database(
         const vector<animation*> &a = vector<animation*>(),
         const vector<sprite*>    &s = vector<sprite*>(),
@@ -284,36 +289,42 @@ public:
 class animation_instance {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //The animation currently running.
     animation* cur_anim = nullptr;
-
+    
     //The database this belongs to.
     animation_database* anim_db = nullptr;
-
+    
     //Time passed on the current frame.
     float cur_frame_time = 0.0f;
-
-    //Index of the current frame of animation.
-    size_t cur_frame_index = 0;
     
-
+    //Index of the current frame of animation, or INVALID for none.
+    size_t cur_frame_index = INVALID;
+    
+    
     //--- Function declarations ---
-
+    
     explicit animation_instance(animation_database* anim_db = nullptr);
     animation_instance(const animation_instance &ai2);
     animation_instance &operator=(const animation_instance &ai2);
-    void start();
+    void clear();
+    void to_start();
     void skip_ahead_randomly();
     bool tick(
         const float delta_t,
         vector<size_t>* signals = nullptr,
         vector<size_t>* sounds = nullptr
     );
-    sprite* get_cur_sprite() const;
-
+    bool valid_frame() const;
+    void get_sprite_data(
+        sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
+        float* interpolation_factor
+    ) const;
+    size_t get_next_frame_index(bool* reached_end = nullptr) const;
+    
 };
 
 
@@ -334,6 +345,13 @@ struct single_animation_suite {
 
 
 
+void get_sprite_basic_effects(
+    const point &base_pos, float base_angle,
+    float base_angle_cos_cache, float base_angle_sin_cache,
+    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
+    point* eff_trans, float* eff_angle,
+    point* eff_scale, ALLEGRO_COLOR* eff_tint
+);
 animation_database load_animation_database_from_file(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

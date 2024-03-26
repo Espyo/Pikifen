@@ -420,31 +420,31 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     }
     
     //Now, rebuild the spots. Let's draw wheels from the center, for now.
-
+    
     /**
      * @brief Initial spot.
      */
     struct alpha_spot {
-
+    
         //--- Members ---
-
+        
         //Position of the spot.
         point pos;
-
+        
         //How far away it is from the rightmost spot.
         dist distance_to_rightmost;
-
-
+        
+        
         //--- Function definitions ---
-
+        
         /**
          * @brief Constructs a new alpha spot object.
-         * 
+         *
          * @param p The position.
          */
         explicit alpha_spot(const point &p) :
             pos(p) { }
-        
+            
     };
     
     vector<alpha_spot> alpha_spots;
@@ -1176,7 +1176,7 @@ mob* create_mob(
             
             if(anim_to_use) {
                 p_info->limb_anim.cur_anim = anim_to_use;
-                p_info->limb_anim.start();
+                p_info->limb_anim.to_start();
             } else {
                 game.errors.report(
                     "Object \"" + new_mob->type->name + "\", child object of "

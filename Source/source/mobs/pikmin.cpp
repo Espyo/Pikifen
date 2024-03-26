@@ -112,13 +112,17 @@ bool pikmin::can_receive_status(status_type* s) const {
  * @brief Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
 void pikmin::draw_mob() {
-    sprite* s_ptr = get_cur_sprite();
-    if(!s_ptr) return;
+    sprite* cur_s_ptr;
+    sprite* next_s_ptr;
+    float interpolation_factor;
+    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    if(!cur_s_ptr) return;
     
     //The Pikmin itself.
     bitmap_effect_info mob_eff;
     get_sprite_bitmap_effects(
-        s_ptr, &mob_eff,
+        cur_s_ptr, next_s_ptr, interpolation_factor,
+        &mob_eff,
         SPRITE_BITMAP_EFFECT_STATUS |
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
         SPRITE_BITMAP_EFFECT_HEIGHT |
@@ -126,7 +130,8 @@ void pikmin::draw_mob() {
     );
     bitmap_effect_info pik_sprite_eff = mob_eff;
     get_sprite_bitmap_effects(
-        s_ptr, &pik_sprite_eff,
+        cur_s_ptr, next_s_ptr, interpolation_factor,
+        &pik_sprite_eff,
         SPRITE_BITMAP_EFFECT_STANDARD
     );
     
@@ -139,10 +144,10 @@ void pikmin::draw_mob() {
         mob_eff.glow_color = COLOR_WHITE;
     }
     
-    draw_bitmap_with_effects(s_ptr->bitmap, pik_sprite_eff);
+    draw_bitmap_with_effects(cur_s_ptr->bitmap, pik_sprite_eff);
     
     //Top.
-    if(s_ptr->top_visible) {
+    if(cur_s_ptr->top_visible) {
         bitmap_effect_info top_eff = mob_eff;
         ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
         //To get the height effect to work, we'll need to scale the translation
@@ -153,13 +158,13 @@ void pikmin::draw_mob() {
         //will be more than enough.
         float avg_scale = (top_eff.scale.x + top_eff.scale.y) / 2.0f;
         top_eff.translation +=
-            pos + rotate_point(s_ptr->top_pos, angle) * avg_scale;
+            pos + rotate_point(cur_s_ptr->top_pos, angle) * avg_scale;
         top_eff.scale.x *=
-            s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
+            cur_s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
         top_eff.scale.y *=
-            s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
+            cur_s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
         top_eff.rotation +=
-            angle + s_ptr->top_angle;
+            angle + cur_s_ptr->top_angle;
         top_eff.glow_color =
             map_gray(0);
             

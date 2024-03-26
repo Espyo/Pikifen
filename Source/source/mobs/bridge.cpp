@@ -231,7 +231,7 @@ void bridge::draw_component(mob* m) {
     
     bitmap_effect_info eff;
     m->get_sprite_bitmap_effects(
-        nullptr, &eff,
+        nullptr, nullptr, 0.0f, &eff,
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS
     );
     

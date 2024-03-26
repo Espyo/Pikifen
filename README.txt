@@ -33,11 +33,12 @@ Discord server: https://discord.gg/qbhz4u3
 2. Notable features
 ===============
     * Replicates most of the standard Pikmin gameplay.
+    * Unique features like weather conditions, complex missions, and more.
     * Content that can be edited via text files, or just replacing the image and sound files.
-    * Intuitive and deep editso, such as an area editor and animation editor.
+    * Intuitive and deep editors, such as an area editor, animation editor, and more.
     * Scripting for custom objects.
     * Tools to help with debugging custom content.
-    * A comprehensive manual to help with making content.
+    * A comprehensive but easy-to-follow manual to help with making content.
     * Customizable control schemes.
     * Low system requirements, no special permissions to run, no need to install, and less than 30 MB when extracted.
     * Filled with quality-of-life features and details, both for gameplay and for content-making.

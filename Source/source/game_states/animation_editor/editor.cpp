@@ -156,26 +156,15 @@ void animation_editor::do_logic() {
     
     if(
         anim_playing && state == EDITOR_STATE_ANIMATION &&
-        cur_anim && cur_frame_nr != INVALID
+        cur_anim_i.valid_frame()
     ) {
-        frame* f = &cur_anim->frames[cur_frame_nr];
+        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
         if(f->duration != 0) {
-            cur_frame_time += game.delta_t;
+            vector<size_t> frame_sounds;
+            cur_anim_i.tick(game.delta_t, nullptr, &frame_sounds);
             
-            while(cur_frame_time > f->duration) {
-                cur_frame_time = cur_frame_time - f->duration;
-                cur_frame_nr++;
-                if(cur_frame_nr >= cur_anim->frames.size()) {
-                    cur_frame_nr =
-                        (
-                            cur_anim->loop_frame >=
-                            cur_anim->frames.size()
-                        ) ? 0 : cur_anim->loop_frame;
-                }
-                f = &cur_anim->frames[cur_frame_nr];
-                if(f->sound_idx != INVALID) {
-                    play_sound(f->sound_idx);
-                }
+            for(size_t s = 0; s < frame_sounds.size(); ++s) {
+                play_sound(frame_sounds[s]);
             }
         } else {
             anim_playing = false;
@@ -214,14 +203,14 @@ void animation_editor::draw_canvas_imgui_callback(
  * @return The time.
  */
 float animation_editor::get_cursor_timeline_time() {
-    if(!cur_anim || cur_anim->frames.empty()) {
+    if(!cur_anim_i.valid_frame()) {
         return 0.0f;
     }
     float anim_x1 = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvas_br.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
     float mouse_x = game.mouse_cursor.s_pos.x - anim_x1;
     mouse_x = clamp(mouse_x, 0.0f, anim_w);
-    return cur_anim->get_duration() * (mouse_x / anim_w);
+    return cur_anim_i.cur_anim->get_duration() * (mouse_x / anim_w);
 }
 
 
@@ -299,9 +288,9 @@ string animation_editor::get_path_short_name(const string &p) const {
 void animation_editor::import_animation_data(const string &name) {
     animation* a = anims.animations[anims.find_animation(name)];
     
-    cur_anim->frames = a->frames;
-    cur_anim->hit_rate = a->hit_rate;
-    cur_anim->loop_frame = a->loop_frame;
+    cur_anim_i.cur_anim->frames = a->frames;
+    cur_anim_i.cur_anim->hit_rate = a->hit_rate;
+    cur_anim_i.cur_anim->loop_frame = a->loop_frame;
     
     changes_mgr.mark_as_changed();
 }
@@ -447,10 +436,9 @@ void animation_editor::load_animation_database(
     }
     anims = load_animation_database_from_file(&file);
     
+    cur_anim_i.clear();
     anim_playing = false;
-    cur_anim = nullptr;
     cur_sprite = nullptr;
-    cur_frame_nr = INVALID;
     cur_hitbox = nullptr;
     cur_hitbox_nr = 0;
     
@@ -579,9 +567,9 @@ void animation_editor::pick_animation(
         changes_mgr.mark_as_changed();
         set_status("Created animation \"" + name + "\".");
     }
-    cur_anim = anims.animations[anims.find_animation(name)];
-    cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
-    cur_frame_time = 0;
+    cur_anim_i.clear();
+    cur_anim_i.anim_db = &anims;
+    cur_anim_i.cur_anim = anims.animations[anims.find_animation(name)];
 }
 
 
@@ -691,17 +679,10 @@ void animation_editor::press_mob_radius_button() {
  * @brief Code to run when the play animation button widget is pressed.
  */
 void animation_editor::press_play_animation_button() {
-    if(cur_anim->frames.empty()) {
+    if(!cur_anim_i.valid_frame()) {
         anim_playing = false;
     } else {
         anim_playing = !anim_playing;
-        if(
-            !cur_anim->frames.empty() &&
-            cur_frame_nr == INVALID
-        ) {
-            cur_frame_nr = 0;
-        }
-        cur_frame_time = 0;
         if(anim_playing) {
             set_status("Animation playback started.");
         } else {
@@ -765,9 +746,9 @@ void animation_editor::press_zoom_and_pos_reset_button() {
 void animation_editor::press_zoom_everything_button() {
 
     sprite* s_ptr = cur_sprite;
-    if(!s_ptr && cur_anim && cur_frame_nr != INVALID) {
+    if(!s_ptr && cur_anim_i.valid_frame()) {
         string name =
-            cur_anim->frames[cur_frame_nr].sprite_name;
+            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index].sprite_name;
         size_t s_pos = anims.find_sprite(name);
         if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
     }
@@ -1114,6 +1095,11 @@ bool animation_editor::save_animation_database() {
             frame_node->add(
                 new data_node("duration", f2s(f_ptr->duration))
             );
+            if(f_ptr->interpolate) {
+                frame_node->add(
+                    new data_node("interpolate", b2s(f_ptr->interpolate))
+                );
+            }
             if(f_ptr->signal != INVALID) {
                 frame_node->add(
                     new data_node("signal", i2s(f_ptr->signal))
@@ -1338,14 +1324,14 @@ void animation_editor::set_best_frame_sprite() {
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
             size_t score = 0;
             if(
-                str_to_lower(cur_anim->name) ==
+                str_to_lower(cur_anim_i.cur_anim->name) ==
                 str_to_lower(anims.sprites[s]->name)
             ) {
                 score = 9999;
             } else {
                 score =
                     get_matching_string_starts(
-                        str_to_lower(cur_anim->name),
+                        str_to_lower(cur_anim_i.cur_anim->name),
                         str_to_lower(anims.sprites[s]->name)
                     ).size();
             }
@@ -1379,12 +1365,11 @@ void animation_editor::set_best_frame_sprite() {
     }
     
     //Finally, set the frame info then.
-    cur_anim->frames[cur_frame_nr].sprite_index =
-        final_sprite_idx;
-    cur_anim->frames[cur_frame_nr].sprite_ptr =
-        anims.sprites[final_sprite_idx];
-    cur_anim->frames[cur_frame_nr].sprite_name =
-        anims.sprites[final_sprite_idx]->name;
+    frame* cur_frame_ptr =
+        &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
+    cur_frame_ptr->sprite_index = final_sprite_idx;
+    cur_frame_ptr->sprite_ptr = anims.sprites[final_sprite_idx];
+    cur_frame_ptr->sprite_name = anims.sprites[final_sprite_idx]->name;
 }
 
 

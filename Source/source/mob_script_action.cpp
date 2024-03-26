@@ -1844,7 +1844,7 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
     
     data.m->parent->limb_anim.cur_anim =
         data.m->parent->limb_anim.anim_db->animations[a];
-    data.m->parent->limb_anim.start();
+    data.m->parent->limb_anim.to_start();
     
 }
 
