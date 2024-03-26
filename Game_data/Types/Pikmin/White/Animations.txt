@@ -71,6 +71,7 @@ animations{
 		frames{
 			mob_landing{
 				duration=0.0700
+				interpolate=true
 			}
 			grabbing{
 				duration=0.4000

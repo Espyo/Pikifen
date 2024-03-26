@@ -3,45 +3,59 @@ animations{
 		frames{
 			tense_01{
 				duration=0.1000
+				interpolate=true
 			}
 			tense_02{
 				duration=0.7000
+				interpolate=true
 			}
 			tense_01{
 				duration=0.5000
+				interpolate=true
 			}
 			idling{
 				duration=0.3000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.3000
+				interpolate=true
 			}
 			opening_01{
 				duration=0.1000
@@ -52,40 +66,30 @@ animations{
 		}
 	}
 	dying_02{
-		loop_frame=10
+		loop_frame=5
 		frames{
 			opening_02{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_01{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_02{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_03{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_04{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_05{
-				duration=0.4000
-			}
-			crumbling_06{
-				duration=0.4000
-			}
-			crumbling_07{
-				duration=0.4000
-			}
-			crumbling_08{
-				duration=0.4000
-			}
-			crumbling_09{
-				duration=0.4000
-			}
-			crumbling_10{
-				duration=0.4000
+				duration=0.8000
 			}
 		}
 	}
@@ -97,40 +101,31 @@ animations{
 		}
 	}
 	limb_dying{
-		loop_frame=10
+		loop_frame=5
 		frames{
 			limb{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			limb_crumbling_01{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			limb_crumbling_02{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			limb_crumbling_03{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			limb_crumbling_04{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			limb_crumbling_05{
-				duration=0.4000
-			}
-			limb_crumbling_06{
-				duration=0.4000
-			}
-			limb_crumbling_07{
-				duration=0.4000
-			}
-			limb_crumbling_08{
-				duration=0.4000
-			}
-			limb_crumbling_09{
-				duration=0.4000
-			}
-			limb_crumbling_10{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 		}
 	}
@@ -152,24 +147,31 @@ animations{
 		frames{
 			idling{
 				duration=0.3000
+				interpolate=true
 			}
 			resting_01{
 				duration=0.1000
+				interpolate=true
 			}
 			resting_02{
 				duration=0.1000
+				interpolate=true
 			}
 			resting_03{
 				duration=1.0000
+				interpolate=true
 			}
 			resting_02{
 				duration=0.1000
+				interpolate=true
 			}
 			resting_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -178,55 +180,100 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
-				duration=0.2000
+				duration=0.1000
+				interpolate=true
 			}
 			shaking_03{
-				duration=0.5000
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_04{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_04{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_04{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_04{
+				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.0500
+				interpolate=true
 				sound=shaking
 			}
-			shaking_04{
-				duration=0.0500
-			}
 			shaking_05{
 				duration=0.0500
+				interpolate=true
 			}
 			shaking_06{
+				duration=0.0500
+				interpolate=true
+			}
+			shaking_07{
 				duration=0.1000
+				interpolate=true
+			}
+			shaking_06{
+				duration=0.0500
+				interpolate=true
 			}
 			shaking_05{
 				duration=0.0500
-			}
-			shaking_04{
-				duration=0.0500
-			}
-			shaking_07{
-				duration=0.0500
+				interpolate=true
 			}
 			shaking_08{
 				duration=0.0500
+				interpolate=true
 			}
 			shaking_09{
 				duration=0.0500
+				interpolate=true
 			}
 			shaking_10{
+				duration=0.0500
+				interpolate=true
+			}
+			shaking_11{
 				duration=0.1000
+				interpolate=true
+			}
+			shaking_10{
+				duration=0.0500
+				interpolate=true
 			}
 			shaking_09{
 				duration=0.0500
-			}
-			shaking_08{
-				duration=0.0500
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0500
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.5000
+				interpolate=true
 			}
 		}
 	}
@@ -276,49 +323,6 @@ sprites{
 	}
 	crumbling_02{
 		file=Beady_Long_Legs.png
-		file_pos=0.0000 143.0000
-		file_size=278.0000 142.0000
-		tint=255 255 255 231
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_03{
-		file=Beady_Long_Legs.png
 		file_pos=279.0000 143.0000
 		file_size=278.0000 142.0000
 		tint=255 255 255 207
@@ -360,50 +364,7 @@ sprites{
 			}
 		}
 	}
-	crumbling_04{
-		file=Beady_Long_Legs.png
-		file_pos=279.0000 143.0000
-		file_size=278.0000 142.0000
-		tint=255 255 255 183
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_05{
+	crumbling_03{
 		file=Beady_Long_Legs.png
 		file_pos=558.0000 143.0000
 		file_size=210.0000 142.0000
@@ -446,50 +407,7 @@ sprites{
 			}
 		}
 	}
-	crumbling_06{
-		file=Beady_Long_Legs.png
-		file_pos=558.0000 143.0000
-		file_size=210.0000 142.0000
-		tint=255 255 255 135
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_07{
+	crumbling_04{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 286.0000
 		file_size=210.0000 142.0000
@@ -532,97 +450,11 @@ sprites{
 			}
 		}
 	}
-	crumbling_08{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 286.0000
-		file_size=210.0000 142.0000
-		tint=255 255 255 87
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_09{
+	crumbling_05{
 		file=Beady_Long_Legs.png
 		file_pos=211.0000 286.0000
 		file_size=210.0000 142.0000
 		tint=255 255 255 63
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_10{
-		file=Beady_Long_Legs.png
-		file_pos=211.0000 286.0000
-		file_size=210.0000 142.0000
-		tint=255 255 255 39
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -790,49 +622,6 @@ sprites{
 	}
 	limb_crumbling_02{
 		file=Beady_Long_Legs.png
-		file_pos=0.0000 454.0000
-		file_size=234.0000 24.0000
-		tint=255 255 255 231
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	limb_crumbling_03{
-		file=Beady_Long_Legs.png
 		file_pos=235.0000 454.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 207
@@ -874,50 +663,7 @@ sprites{
 			}
 		}
 	}
-	limb_crumbling_04{
-		file=Beady_Long_Legs.png
-		file_pos=235.0000 454.0000
-		file_size=234.0000 24.0000
-		tint=255 255 255 183
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	limb_crumbling_05{
+	limb_crumbling_03{
 		file=Beady_Long_Legs.png
 		file_pos=470.0000 454.0000
 		file_size=234.0000 24.0000
@@ -960,50 +706,7 @@ sprites{
 			}
 		}
 	}
-	limb_crumbling_06{
-		file=Beady_Long_Legs.png
-		file_pos=470.0000 454.0000
-		file_size=234.0000 24.0000
-		tint=255 255 255 135
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	limb_crumbling_07{
+	limb_crumbling_04{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 479.0000
 		file_size=234.0000 24.0000
@@ -1046,97 +749,11 @@ sprites{
 			}
 		}
 	}
-	limb_crumbling_08{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 479.0000
-		file_size=234.0000 24.0000
-		tint=255 255 255 87
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	limb_crumbling_09{
+	limb_crumbling_05{
 		file=Beady_Long_Legs.png
 		file_pos=235.0000 479.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 63
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	limb_crumbling_10{
-		file=Beady_Long_Legs.png
-		file_pos=235.0000 479.0000
-		file_size=234.0000 24.0000
-		tint=255 255 255 39
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 132.0000
@@ -1523,6 +1140,49 @@ sprites{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
+		angle=5.8899
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=0
+				value=1.0000
+			}
+			front_right{
+				coords=6.5800 2.5900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=2.9400 -5.9500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-2.3800 5.3900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-5.8800 -3.4300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_05{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
 		angle=0.3600
 		hitboxes{
 			body{
@@ -1565,7 +1225,7 @@ sprites{
 			}
 		}
 	}
-	shaking_05{
+	shaking_06{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
@@ -1611,7 +1271,7 @@ sprites{
 			}
 		}
 	}
-	shaking_06{
+	shaking_07{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
@@ -1657,7 +1317,7 @@ sprites{
 			}
 		}
 	}
-	shaking_07{
+	shaking_08{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
@@ -1702,7 +1362,7 @@ sprites{
 			}
 		}
 	}
-	shaking_08{
+	shaking_09{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
@@ -1748,7 +1408,7 @@ sprites{
 			}
 		}
 	}
-	shaking_09{
+	shaking_10{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
@@ -1794,7 +1454,7 @@ sprites{
 			}
 		}
 	}
-	shaking_10{
+	shaking_11{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000

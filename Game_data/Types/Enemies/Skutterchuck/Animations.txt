@@ -7,42 +7,55 @@ animations{
 			}
 			dying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1200
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1200
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1400
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1400
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1600
+				interpolate=true
 			}
 			dying_03{
 				duration=0.2400
@@ -52,6 +65,7 @@ animations{
 			}
 			dying_05{
 				duration=0.0500
+				interpolate=true
 			}
 			dying_06{
 				duration=0.5000
@@ -171,36 +185,47 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0900
+				interpolate=true
 			}
 			idling_01{
 				duration=0.0900
@@ -229,42 +254,55 @@ animations{
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_01{
 				duration=0.0700
+				interpolate=true
 			}
 			stunned_02{
 				duration=0.3000

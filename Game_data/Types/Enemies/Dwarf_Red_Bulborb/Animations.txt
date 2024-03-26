@@ -19,8 +19,12 @@ animations{
 	}
 	crushed{
 		frames{
-			crushed{
-				duration=1.0000
+			crushed_02{
+				duration=0.0100
+				interpolate=true
+			}
+			crushed_01{
+				duration=0.9900
 			}
 		}
 	}
@@ -167,18 +171,23 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.1500
+				interpolate=true
 			}
 			idling{
 				duration=0.1500
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1500
+				interpolate=true
 			}
 			idling{
 				duration=0.1500
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1500
+				interpolate=true
 			}
 			idling{
 				duration=0.2000
@@ -395,12 +404,35 @@ sprites{
 			}
 		}
 	}
-	crushed{
+	crushed_01{
 		file=Red_Bulborb.png
 		file_pos=295.0000 358.0000
 		file_size=159.0000 163.0000
 		offset=6.0000 0.0000
 		scale=0.3000 0.3000
+		hitboxes{
+			body{
+				coords=6.0000 0.0000 0.0000
+				height=32.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crushed_02{
+		file=Red_Bulborb.png
+		file_pos=295.0000 358.0000
+		file_size=159.0000 163.0000
+		offset=6.0000 0.0000
+		scale=0.4000 0.4000
 		hitboxes{
 			body{
 				coords=6.0000 0.0000 0.0000

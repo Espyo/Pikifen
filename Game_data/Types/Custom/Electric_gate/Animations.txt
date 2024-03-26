@@ -23,12 +23,15 @@ animations{
 		frames{
 			stage_1_shaking_01{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_1_shaking_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_1_idling_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}
@@ -49,12 +52,15 @@ animations{
 		frames{
 			stage_2_shaking_01{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_2_shaking_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_2_idling_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}
@@ -75,12 +81,15 @@ animations{
 		frames{
 			stage_3_shaking_01{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_3_shaking_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_3_idling_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}

@@ -3,27 +3,35 @@ animations{
 		frames{
 			idling_01{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_02{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_03{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_04{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_05{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_06{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_07{
 				duration=0.1100
+				interpolate=true
 			}
 			idling_08{
 				duration=0.1100
+				interpolate=true
 			}
 		}
 	}
@@ -85,7 +93,7 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
-		scale=0.5030 0.5030
+		scale=0.5060 0.5060
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -187,7 +195,7 @@ sprites{
 		file_pos=282.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
-		scale=0.5030 0.5030
+		scale=0.5060 0.5060
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -289,7 +297,7 @@ sprites{
 		file_pos=564.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
-		scale=0.5030 0.5030
+		scale=0.5060 0.5060
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -391,7 +399,7 @@ sprites{
 		file_pos=846.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
-		scale=0.5030 0.5030
+		scale=0.5060 0.5060
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000

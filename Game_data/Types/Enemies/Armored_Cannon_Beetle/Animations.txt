@@ -145,19 +145,24 @@ animations{
 		frames{
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_01{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
+				interpolate=true
 				sound=dying
 			}
 			dying_04{
 				duration=1.0000
+				interpolate=true
 			}
 		}
 	}

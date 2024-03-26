@@ -17,9 +17,11 @@ animations{
 		frames{
 			stage_1_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_1_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}
@@ -34,9 +36,11 @@ animations{
 		frames{
 			stage_2_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_2_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}
@@ -51,9 +55,11 @@ animations{
 		frames{
 			stage_3_02{
 				duration=0.0600
+				interpolate=true
 			}
 			stage_3_03{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}

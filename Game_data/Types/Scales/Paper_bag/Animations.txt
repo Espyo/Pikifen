@@ -4,63 +4,83 @@ animations{
 		frames{
 			up_01{
 				duration=0.0800
+				interpolate=true
 			}
 			up_02{
 				duration=0.0800
+				interpolate=true
 			}
 			up_03{
 				duration=0.0800
+				interpolate=true
 			}
 			up_04{
 				duration=0.0800
+				interpolate=true
 			}
 			up_01{
 				duration=0.0800
+				interpolate=true
 			}
 			up_02{
 				duration=0.0800
+				interpolate=true
 			}
 			up_03{
 				duration=0.0800
+				interpolate=true
 			}
 			up_04{
 				duration=0.0800
+				interpolate=true
 			}
 			up_01{
 				duration=0.0800
+				interpolate=true
 			}
 			up_02{
 				duration=0.0800
+				interpolate=true
 			}
 			up_03{
 				duration=0.0800
+				interpolate=true
 			}
 			up_04{
 				duration=0.0800
+				interpolate=true
 			}
 			down_01{
 				duration=0.0800
+				interpolate=true
 			}
 			down_02{
 				duration=0.0800
+				interpolate=true
 			}
 			down_03{
 				duration=0.0800
+				interpolate=true
 			}
 			down_04{
 				duration=0.0800
+				interpolate=true
 			}
 			down_01{
 				duration=0.0800
+				interpolate=true
 			}
 			down_02{
 				duration=0.0800
+				interpolate=true
 			}
 			down_03{
 				duration=0.0800
+				interpolate=true
 			}
 			down_04{
 				duration=0.0800
+				interpolate=true
 			}
 			down_01{
 				duration=0.0800

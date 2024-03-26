@@ -6,18 +6,23 @@ animations{
 			}
 			exploding_01{
 				duration=0.0500
+				interpolate=true
 			}
 			exploding_02{
 				duration=0.0500
+				interpolate=true
 			}
 			exploding_03{
 				duration=0.0500
+				interpolate=true
 			}
 			exploding_04{
 				duration=0.0500
+				interpolate=true
 			}
 			exploding_05{
 				duration=0.0500
+				interpolate=true
 			}
 			exploding_06{
 				duration=0.0500
@@ -67,123 +72,163 @@ animations{
 		frames{
 			primed_01{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_02{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_01{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_02{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_01{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_02{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_01{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_02{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_01{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_02{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_03{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_04{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_03{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_04{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_03{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_04{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_03{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_04{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_03{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_04{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_05{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_06{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_05{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_06{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_05{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_06{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_05{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_06{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_05{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_06{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_07{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_08{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_07{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_08{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_07{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_08{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_07{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_08{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_07{
 				duration=0.1000
+				interpolate=true
 			}
 			primed_08{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -191,7 +236,7 @@ animations{
 sprites{
 	exploding_01{
 		file=Bomb_rock.png
-		file_pos=138.0000 98.0000
+		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
 		angle=0.0873
 		hitboxes{
@@ -242,7 +287,7 @@ sprites{
 	}
 	exploding_03{
 		file=Bomb_rock.png
-		file_pos=207.0000 29.0000
+		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
 		scale=2.1000 2.1000
 		angle=0.2618
@@ -268,10 +313,11 @@ sprites{
 	}
 	exploding_04{
 		file=Bomb_rock.png
-		file_pos=207.0000 29.0000
+		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
 		scale=2.2000 2.2000
 		angle=0.3491
+		tint=255 255 255 192
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -294,10 +340,11 @@ sprites{
 	}
 	exploding_05{
 		file=Bomb_rock.png
-		file_pos=138.0000 98.0000
+		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
 		scale=2.2500 2.2500
 		angle=0.4363
+		tint=255 255 255 128
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -320,10 +367,11 @@ sprites{
 	}
 	exploding_06{
 		file=Bomb_rock.png
-		file_pos=207.0000 98.0000
+		file_pos=138.0000 29.0000
 		file_size=68.0000 68.0000
 		scale=2.2800 2.2800
 		angle=0.5236
+		tint=255 255 255 64
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000

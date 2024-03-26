@@ -136,21 +136,27 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.2000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1500

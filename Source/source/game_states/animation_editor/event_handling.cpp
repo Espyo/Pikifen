@@ -111,7 +111,10 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
+    if(
+        key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE) ||
+        key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)
+    ) {
         press_play_animation_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {

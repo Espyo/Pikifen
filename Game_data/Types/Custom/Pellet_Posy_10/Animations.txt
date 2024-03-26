@@ -32,15 +32,19 @@ animations{
 		frames{
 			idling_01_blue{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_blue{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_03_blue{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_blue{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -48,15 +52,19 @@ animations{
 		frames{
 			idling_01_red{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_red{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_03_red{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_red{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -64,15 +72,19 @@ animations{
 		frames{
 			idling_01_rock{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_rock{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_03_rock{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_rock{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -80,15 +92,19 @@ animations{
 		frames{
 			idling_01_winged{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_winged{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_03_winged{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_winged{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -96,15 +112,19 @@ animations{
 		frames{
 			idling_01_yellow{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_yellow{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_03_yellow{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_yellow{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -116,15 +136,19 @@ animations{
 			}
 			sapling_02{
 				duration=0.3000
+				interpolate=true
 			}
 			sapling_03{
 				duration=0.3000
+				interpolate=true
 			}
 			sapling_04{
 				duration=0.3000
+				interpolate=true
 			}
 			sapling_03{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -132,15 +156,19 @@ animations{
 		frames{
 			sprout_01{
 				duration=0.3000
+				interpolate=true
 			}
 			sprout_02{
 				duration=0.3000
+				interpolate=true
 			}
 			sprout_03{
 				duration=0.3000
+				interpolate=true
 			}
 			sprout_02{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}

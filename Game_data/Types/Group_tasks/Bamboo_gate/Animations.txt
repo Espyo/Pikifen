@@ -10,27 +10,35 @@ animations{
 		frames{
 			open_01{
 				duration=0.2000
+				interpolate=true
 			}
 			open_02{
 				duration=0.3000
+				interpolate=true
 			}
 			open_03{
 				duration=0.7000
+				interpolate=true
 			}
 			open_02{
 				duration=0.3000
+				interpolate=true
 			}
 			open_01{
 				duration=0.2000
+				interpolate=true
 			}
 			open_04{
 				duration=0.3000
+				interpolate=true
 			}
 			open_05{
 				duration=0.7000
+				interpolate=true
 			}
 			open_04{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -38,15 +46,19 @@ animations{
 		frames{
 			rattling_01{
 				duration=0.0750
+				interpolate=true
 			}
 			closed{
 				duration=0.0750
+				interpolate=true
 			}
 			rattling_02{
 				duration=0.0750
+				interpolate=true
 			}
 			closed{
 				duration=0.0750
+				interpolate=true
 			}
 		}
 	}

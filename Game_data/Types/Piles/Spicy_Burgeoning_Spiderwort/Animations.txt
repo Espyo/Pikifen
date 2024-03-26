@@ -3,15 +3,19 @@ animations{
 		frames{
 			idling_0_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_0_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_0_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_0_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -19,15 +23,19 @@ animations{
 		frames{
 			idling_1_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_1_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_1_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_1_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -35,15 +43,19 @@ animations{
 		frames{
 			idling_2_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_2_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_2_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_2_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -51,15 +63,19 @@ animations{
 		frames{
 			idling_3_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_3_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_3_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_3_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -67,15 +83,19 @@ animations{
 		frames{
 			idling_4_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_4_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_4_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_4_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -83,15 +103,19 @@ animations{
 		frames{
 			idling_5_01{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_5_02{
 				duration=0.2000
+				interpolate=true
 			}
 			idling_5_03{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_5_02{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}

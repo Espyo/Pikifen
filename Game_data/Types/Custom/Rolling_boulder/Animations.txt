@@ -9,22 +9,15 @@ animations{
 	growing{
 		frames{
 			growing_01{
-				duration=0.0500
+				duration=0.1000
+				interpolate=true
 			}
 			growing_02{
-				duration=0.0500
+				duration=0.1000
+				interpolate=true
 			}
 			growing_03{
-				duration=0.0500
-			}
-			growing_04{
-				duration=0.0500
-			}
-			growing_05{
-				duration=0.0500
-			}
-			growing_06{
-				duration=0.0500
+				duration=0.1000
 			}
 		}
 	}
@@ -72,23 +65,6 @@ sprites{
 		file=Boulder.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
-		scale=0.2500 0.2500
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 -0.0000
-				height=16.0000
-				radius=8.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	growing_02{
-		file=Boulder.png
-		file_pos=0.0000 0.0000
-		file_size=64.0000 64.0000
 		scale=0.3500 0.3500
 		hitboxes{
 			rock{
@@ -102,24 +78,7 @@ sprites{
 			}
 		}
 	}
-	growing_03{
-		file=Boulder.png
-		file_pos=65.0000 0.0000
-		file_size=64.0000 64.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=32.0000
-				radius=16.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	growing_04{
+	growing_02{
 		file=Boulder.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
@@ -136,24 +95,7 @@ sprites{
 			}
 		}
 	}
-	growing_05{
-		file=Boulder.png
-		file_pos=130.0000 0.0000
-		file_size=64.0000 64.0000
-		scale=0.7500 0.7500
-		hitboxes{
-			rock{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=24.0000
-				type=1
-				value=60.0000
-				hazards=crush
-				knockback=2.0000
-			}
-		}
-	}
-	growing_06{
+	growing_03{
 		file=Boulder.png
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000

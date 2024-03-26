@@ -3,28 +3,36 @@ animations{
 		frames{
 			bumped_01{
 				duration=0.1400
+				interpolate=true
 			}
 			idling{
 				duration=0.1400
+				interpolate=true
 				sound=bumped
 			}
 			bumped_02{
 				duration=0.1400
+				interpolate=true
 			}
 			idling{
 				duration=0.1400
+				interpolate=true
 			}
 			bumped_01{
 				duration=0.1400
+				interpolate=true
 			}
 			idling{
 				duration=0.1400
+				interpolate=true
 			}
 			bumped_02{
 				duration=0.1400
+				interpolate=true
 			}
 			idling{
 				duration=0.5000
+				interpolate=true
 			}
 		}
 	}

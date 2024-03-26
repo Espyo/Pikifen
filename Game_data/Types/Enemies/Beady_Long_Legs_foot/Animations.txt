@@ -1,39 +1,29 @@
 animations{
 	dying{
-		loop_frame=10
+		loop_frame=5
 		frames{
 			idling{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_01{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_02{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_03{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_04{
-				duration=0.4000
+				duration=0.8000
+				interpolate=true
 			}
 			crumbling_05{
-				duration=0.4000
-			}
-			crumbling_06{
-				duration=0.4000
-			}
-			crumbling_07{
-				duration=0.4000
-			}
-			crumbling_08{
-				duration=0.4000
-			}
-			crumbling_09{
-				duration=0.4000
-			}
-			crumbling_10{
-				duration=0.4000
+				duration=0.8000
 			}
 		}
 	}
@@ -72,21 +62,6 @@ sprites{
 	}
 	crumbling_02{
 		file=Beady_Long_Legs.png
-		file_pos=498.0000 286.0000
-		file_size=75.0000 75.0000
-		tint=255 255 255 231
-		hitboxes{
-			foot{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=37.5000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_03{
-		file=Beady_Long_Legs.png
 		file_pos=574.0000 286.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 207
@@ -100,22 +75,7 @@ sprites{
 			}
 		}
 	}
-	crumbling_04{
-		file=Beady_Long_Legs.png
-		file_pos=574.0000 286.0000
-		file_size=75.0000 75.0000
-		tint=255 255 255 183
-		hitboxes{
-			foot{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=37.5000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_05{
+	crumbling_03{
 		file=Beady_Long_Legs.png
 		file_pos=650.0000 286.0000
 		file_size=75.0000 75.0000
@@ -130,22 +90,7 @@ sprites{
 			}
 		}
 	}
-	crumbling_06{
-		file=Beady_Long_Legs.png
-		file_pos=650.0000 286.0000
-		file_size=75.0000 75.0000
-		tint=255 255 255 135
-		hitboxes{
-			foot{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=37.5000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_07{
+	crumbling_04{
 		file=Beady_Long_Legs.png
 		file_pos=422.0000 362.0000
 		file_size=75.0000 75.0000
@@ -160,41 +105,11 @@ sprites{
 			}
 		}
 	}
-	crumbling_08{
-		file=Beady_Long_Legs.png
-		file_pos=422.0000 362.0000
-		file_size=75.0000 75.0000
-		tint=255 255 255 87
-		hitboxes{
-			foot{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=37.5000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_09{
+	crumbling_05{
 		file=Beady_Long_Legs.png
 		file_pos=498.0000 362.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 63
-		hitboxes{
-			foot{
-				coords=0.0000 0.0000 0.0000
-				height=64.0000
-				radius=37.5000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	crumbling_10{
-		file=Beady_Long_Legs.png
-		file_pos=498.0000 362.0000
-		file_size=75.0000 75.0000
-		tint=255 255 255 39
 		hitboxes{
 			foot{
 				coords=0.0000 0.0000 0.0000

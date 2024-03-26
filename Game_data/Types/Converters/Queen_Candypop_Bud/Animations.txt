@@ -3,16 +3,20 @@ animations{
 		frames{
 			bumping_01_blue{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02_blue{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01_blue{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01_blue{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -20,16 +24,20 @@ animations{
 		frames{
 			bumping_01_red{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02_red{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01_red{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01_red{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -37,16 +45,20 @@ animations{
 		frames{
 			bumping_01_rock{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02_rock{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01_rock{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01_rock{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -54,16 +66,20 @@ animations{
 		frames{
 			bumping_01_winged{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02_winged{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01_winged{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01_winged{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -71,16 +87,20 @@ animations{
 		frames{
 			bumping_01_yellow{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02_yellow{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01_yellow{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01_yellow{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -173,35 +193,45 @@ animations{
 		frames{
 			dying_01_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_blue{
 				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03_blue{
 				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_05_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_06_blue{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_07_blue{
 				duration=0.1500
@@ -212,35 +242,45 @@ animations{
 		frames{
 			dying_01_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_red{
 				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03_red{
 				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_05_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_06_red{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_07_red{
 				duration=0.1500
@@ -251,35 +291,45 @@ animations{
 		frames{
 			dying_01_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_rock{
 				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03_rock{
 				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_05_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_06_rock{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_07_rock{
 				duration=0.1500
@@ -290,38 +340,48 @@ animations{
 		frames{
 			dying_01_winged{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_01_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_02_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_01_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_02_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_05_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_06_winged{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			dying_07_winged{
-				duration=0.1000
+				duration=0.1500
 			}
 		}
 	}
@@ -329,35 +389,45 @@ animations{
 		frames{
 			dying_01_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02_yellow{
 				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03_yellow{
 				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_05_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_06_yellow{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_07_yellow{
 				duration=0.1500
@@ -368,15 +438,19 @@ animations{
 		frames{
 			idling_01_blue{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02_blue{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01_blue{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03_blue{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}
@@ -384,15 +458,19 @@ animations{
 		frames{
 			idling_01_red{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02_red{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01_red{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03_red{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}
@@ -400,15 +478,19 @@ animations{
 		frames{
 			idling_01_rock{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02_rock{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01_rock{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03_rock{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}
@@ -416,15 +498,19 @@ animations{
 		frames{
 			idling_01_winged{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02_winged{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01_winged{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03_winged{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}
@@ -432,15 +518,19 @@ animations{
 		frames{
 			idling_01_yellow{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02_yellow{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01_yellow{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03_yellow{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}

@@ -59,6 +59,7 @@ animations{
 		frames{
 			lunging_hit{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}

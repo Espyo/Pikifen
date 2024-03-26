@@ -684,7 +684,12 @@ void animation_editor::press_play_animation_button() {
     } else {
         anim_playing = !anim_playing;
         if(anim_playing) {
-            set_status("Animation playback started.");
+            if(is_shift_pressed) {
+                cur_anim_i.to_start();
+                set_status("Animation playback started from the beginning.");
+            } else {
+                set_status("Animation playback started.");
+            }
         } else {
             set_status("Animation playback stopped.");
         }

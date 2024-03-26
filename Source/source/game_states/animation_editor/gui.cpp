@@ -894,7 +894,8 @@ void animation_editor::process_gui_panel_animation() {
                     press_play_animation_button();
                 }
                 set_tooltip(
-                    "Play or pause the animation.",
+                    "Play or pause the animation.\n"
+                    "Hold Shift to start from the beginning.",
                     "Spacebar"
                 );
                 

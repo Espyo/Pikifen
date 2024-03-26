@@ -19,7 +19,7 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=5
+		loop_frame=14
 		frames{
 			idling_01{
 				duration=0.1000
@@ -28,15 +28,51 @@ animations{
 				duration=0.1000
 			}
 			dying_02{
-				duration=0.7000
+				duration=0.1000
+				interpolate=true
 			}
 			dying_03{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1500
+				interpolate=true
+			}
+			dying_02{
 				duration=0.2000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.3000
 			}
 			dying_04{
-				duration=0.1000
+				duration=0.2000
 			}
 			dying_05{
+				duration=0.1000
+			}
+			dying_06{
 				duration=1.0000
 			}
 		}
@@ -144,15 +180,19 @@ animations{
 		frames{
 			idling_01{
 				duration=0.1000
+				interpolate=true
 			}
 			struggling_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01{
 				duration=0.1000
+				interpolate=true
 			}
 			struggling_02{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -276,6 +316,28 @@ sprites{
 	}
 	dying_03{
 		file=Yellow_Wollywog.png
+		file_pos=297.0000 329.0000
+		file_size=80.0000 82.0000
+		offset=2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+			damage{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Yellow_Wollywog.png
 		file_pos=378.0000 329.0000
 		file_size=85.0000 97.0000
 		offset=0.0000 -3.0000
@@ -296,7 +358,7 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_05{
 		file=Yellow_Wollywog.png
 		file_pos=213.0000 410.0000
 		file_size=81.0000 105.0000
@@ -317,7 +379,7 @@ sprites{
 			}
 		}
 	}
-	dying_05{
+	dying_06{
 		file=Yellow_Wollywog.png
 		file_pos=295.0000 427.0000
 		file_size=93.0000 102.0000

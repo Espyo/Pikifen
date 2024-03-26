@@ -3,15 +3,19 @@ animations{
 		frames{
 			bouncing_01{
 				duration=0.0600
+				interpolate=true
 			}
 			idling{
 				duration=0.0600
+				interpolate=true
 			}
 			bouncing_02{
 				duration=0.0600
+				interpolate=true
 			}
 			idling{
 				duration=0.0600
+				interpolate=true
 			}
 		}
 	}

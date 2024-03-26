@@ -3,16 +3,20 @@ animations{
 		frames{
 			bumping_01{
 				duration=0.1000
+				interpolate=true
 			}
 			bumping_02{
 				duration=0.1000
+				interpolate=true
 				sound=bumped
 			}
 			bumping_01{
 				duration=0.1000
+				interpolate=true
 			}
 			idling_01{
 				duration=0.7000
+				interpolate=true
 			}
 		}
 	}
@@ -37,35 +41,45 @@ animations{
 		frames{
 			dying_01{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_01{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1500
+				interpolate=true
 				sound=dying
 			}
 			dying_03{
 				duration=0.1500
+				interpolate=true
 				sound=rustling
 			}
 			dying_04{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_05{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_06{
 				duration=0.1500
+				interpolate=true
 			}
 			dying_07{
 				duration=0.1500
@@ -76,15 +90,19 @@ animations{
 		frames{
 			idling_01{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_02{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_01{
 				duration=0.2500
+				interpolate=true
 			}
 			idling_03{
 				duration=0.2500
+				interpolate=true
 			}
 		}
 	}

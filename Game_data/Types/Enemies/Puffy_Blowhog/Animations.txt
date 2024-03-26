@@ -14,9 +14,11 @@ animations{
 			}
 			attacking_07{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_08{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -34,31 +36,38 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=41
+		loop_frame=42
 		frames{
 			attacking_03{
 				duration=0.1000
 			}
 			attacking_04{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_05{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_04{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_05{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_04{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_05{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_04{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_05{
 				duration=0.3000
@@ -71,97 +80,130 @@ animations{
 			}
 			dying_01{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
 				duration=0.0800
+				interpolate=true
 				signal=0
 			}
 			dying_03{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_04{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_05{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_06{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_07{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_08{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_09{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_10{
 				duration=0.0700
+				interpolate=true
 			}
 			dying_11{
 				duration=0.0700
+				interpolate=true
 			}
 			dying_12{
 				duration=0.0700
+				interpolate=true
 			}
 			dying_13{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_14{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_15{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_16{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_17{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_18{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_19{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_20{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_21{
 				duration=0.0600
+				interpolate=true
 			}
 			dying_22{
 				duration=0.0700
+				interpolate=true
 			}
 			dying_23{
 				duration=0.0700
+				interpolate=true
 			}
 			dying_24{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_25{
-				duration=0.0800
+				duration=0.0010
 			}
 			dying_26{
 				duration=0.0800
+				interpolate=true
 			}
 			dying_27{
-				duration=0.1000
+				duration=0.0800
+				interpolate=true
 			}
 			dying_28{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_29{
 				duration=0.1000
-				signal=1
+				interpolate=true
 			}
 			dying_30{
-				duration=0.2000
+				duration=0.1000
+				interpolate=true
+				signal=1
 			}
 			dying_31{
+				duration=0.2000
+				interpolate=true
+			}
+			dying_32{
 				duration=0.6000
 			}
 		}
@@ -170,9 +212,11 @@ animations{
 		frames{
 			falling_01{
 				duration=0.0800
+				interpolate=true
 			}
 			falling_02{
 				duration=0.0800
+				interpolate=true
 			}
 		}
 	}
@@ -180,6 +224,7 @@ animations{
 		frames{
 			grounded_01{
 				duration=0.3000
+				interpolate=true
 			}
 			grounded_stretch{
 				duration=0.2000
@@ -218,15 +263,19 @@ animations{
 			}
 			grounded_01{
 				duration=0.3000
+				interpolate=true
 			}
 			grounded_02{
 				duration=0.3000
+				interpolate=true
 			}
 			grounded_01{
 				duration=0.3000
+				interpolate=true
 			}
 			grounded_03{
 				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -234,27 +283,35 @@ animations{
 		frames{
 			idling_01{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_02{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_03{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_02{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_01{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_04{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_05{
 				duration=0.1200
+				interpolate=true
 			}
 			idling_04{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -272,9 +329,11 @@ animations{
 			}
 			attacking_04{
 				duration=0.1000
+				interpolate=true
 			}
 			attacking_05{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -1314,9 +1373,10 @@ sprites{
 	}
 	dying_25{
 		file=Puffy_Blowhog.png
-		file_pos=1917.0000 462.0000
-		file_size=73.0000 32.0000
+		file_pos=1442.0000 462.0000
+		file_size=474.0000 230.0000
 		offset=429.6636 -86.7465
+		scale=0.2000 0.2000
 		angle=5.9345
 		hitboxes{
 			body{
@@ -1346,6 +1406,36 @@ sprites{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
+		offset=429.6636 -86.7465
+		angle=5.9345
+		hitboxes{
+			body{
+				coords=415.0883 -82.4987 0.0000
+				height=128.0000
+				radius=17.8748
+				type=2
+				value=1.0000
+			}
+			head{
+				coords=440.0023 -89.4868 0.0000
+				height=128.0000
+				radius=14.7037
+				type=2
+				value=1.0000
+			}
+			wind{
+				coords=400.0000 0.0000 -100.0000
+				height=100.0000
+				radius=100.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_27{
+		file=Puffy_Blowhog.png
+		file_pos=1917.0000 462.0000
+		file_size=73.0000 32.0000
 		offset=286.6436 -44.9266
 		angle=6.1791
 		hitboxes{
@@ -1372,7 +1462,7 @@ sprites{
 			}
 		}
 	}
-	dying_27{
+	dying_28{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1402,7 +1492,7 @@ sprites{
 			}
 		}
 	}
-	dying_28{
+	dying_29{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1432,7 +1522,7 @@ sprites{
 			}
 		}
 	}
-	dying_29{
+	dying_30{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1462,7 +1552,7 @@ sprites{
 			}
 		}
 	}
-	dying_30{
+	dying_31{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
@@ -1491,7 +1581,7 @@ sprites{
 			}
 		}
 	}
-	dying_31{
+	dying_32{
 		file=Puffy_Blowhog.png
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
