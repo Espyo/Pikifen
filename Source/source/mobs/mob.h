@@ -248,7 +248,7 @@ public:
     parent_info_struct* parent = nullptr;
     
     //Miscellanous flags. Use MOB_FLAG_*.
-    uint16_t flags = 0;
+    bitmask_16 flags = 0;
     
     //-Interactions with other mobs-
     
@@ -439,7 +439,7 @@ public:
     );
     void chase(
         const point &coords, const float coords_z,
-        const unsigned char flags = 0,
+        const bitmask_8 flags = 0,
         const float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
@@ -490,7 +490,7 @@ public:
     
     void get_sprite_bitmap_effects(
         sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-        bitmap_effect_info* info, uint16_t effects
+        bitmap_effect_info* info, bitmask_16 effects
     ) const;
     
     string print_state_history() const;

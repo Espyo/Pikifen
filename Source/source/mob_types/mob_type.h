@@ -385,12 +385,12 @@ public:
     MOB_TARGET_TYPES target_type = MOB_TARGET_TYPE_NONE;
     
     //What types of targets this mob can hunt down.
-    uint16_t huntable_targets =
+    bitmask_16 huntable_targets =
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY;
         
     //What types of targets this mob can hurt.
-    uint16_t hurtable_targets =
+    bitmask_16 hurtable_targets =
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY |
         MOB_TARGET_TYPE_FRAGILE;

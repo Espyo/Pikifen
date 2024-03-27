@@ -603,7 +603,19 @@ struct mob_action_run_data {
 };
 
 
+/**
+ * @brief Function that runs a mob action's logic.
+ * 
+ * The first parameter is the data to run with.
+ */
 typedef void (mob_action_code)(mob_action_run_data &data);
+
+/**
+ * @brief Function to run when a mob action is loaded from a script.
+ * 
+ * The first parameter is the action call data.
+ * Returns whether it loaded successfully.
+ */
 typedef bool (mob_action_load_code)(mob_action_call &call);
 
 

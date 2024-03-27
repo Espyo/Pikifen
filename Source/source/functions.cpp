@@ -309,14 +309,14 @@ void crash(const string &reason, const string &info, const int exit_status) {
  * edge offset effect or not.
  *
  * @param e_ptr Edge to check.
- * @param affected_sector If there should be an effect,
- * this is the affected sector, i.e. the one getting the smoothing.
- * @param unaffected_sector If there should be an effect,
- * this is the unaffected sector, i.e. the lower one.
+ * @param out_affected_sector If there should be an effect, the affected sector,
+ * i.e. the one getting the smoothing, is returned here.
+ * @param out_unaffected_sector If there should be an effect, the
+ * unaffected sector, i.e. the lower one, is returned here.
  * @return Whether it has ledge smoothing.
  */
 bool does_edge_have_ledge_smoothing(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 ) {
     //Never-smooth walls don't have the effect.
     if(e_ptr->ledge_smoothing_length <= 0.0f) return false;
@@ -326,8 +326,8 @@ bool does_edge_have_ledge_smoothing(
         e_ptr->sectors[1]->is_bottomless_pit
     ) {
         //If 0 exists but 1 doesn't.
-        *affected_sector = e_ptr->sectors[0];
-        *unaffected_sector = e_ptr->sectors[1];
+        *out_affected_sector = e_ptr->sectors[0];
+        *out_unaffected_sector = e_ptr->sectors[1];
         return true;
         
     } else if(
@@ -335,19 +335,19 @@ bool does_edge_have_ledge_smoothing(
         e_ptr->sectors[0]->is_bottomless_pit
     ) {
         //If 1 exists but 0 doesn't.
-        *affected_sector = e_ptr->sectors[1];
-        *unaffected_sector = e_ptr->sectors[0];
+        *out_affected_sector = e_ptr->sectors[1];
+        *out_unaffected_sector = e_ptr->sectors[0];
         return true;
         
     } else {
         //Return whichever one is the tallest.
         if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
-            *affected_sector = e_ptr->sectors[0];
-            *unaffected_sector = e_ptr->sectors[1];
+            *out_affected_sector = e_ptr->sectors[0];
+            *out_unaffected_sector = e_ptr->sectors[1];
             return true;
         } else if(e_ptr->sectors[1]->z > e_ptr->sectors[0]->z) {
-            *affected_sector = e_ptr->sectors[1];
-            *unaffected_sector = e_ptr->sectors[0];
+            *out_affected_sector = e_ptr->sectors[1];
+            *out_unaffected_sector = e_ptr->sectors[0];
             return true;
         } else {
             return false;
@@ -362,14 +362,14 @@ bool does_edge_have_ledge_smoothing(
  * edge offset effect or not.
  *
  * @param e_ptr Edge to check.
- * @param affected_sector If there should be an effect, this is the
- * affected sector, i.e. the one with the liquid.
- * @param unaffected_sector If there should be an effect, this is the
- * unaffected sector, i.e. the one without the liquid.
+ * @param out_affected_sector If there should be an effect, the affected sector,
+ * i.e. the one with the liquid, is returned here.
+ * @param out_unaffected_sector If there should be an effect, the
+ * unaffected sector, i.e. the one without the liquid, is returned here.
  * @return Whether it has a liquid limit.
  */
 bool does_edge_have_liquid_limit(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 ) {
     //Check if the sectors exist.
     if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
@@ -386,12 +386,12 @@ bool does_edge_have_liquid_limit(
     
     //Return edges with liquid on one side only.
     if(has_liquid[0] && !has_liquid[1]) {
-        *affected_sector = e_ptr->sectors[0];
-        *unaffected_sector = e_ptr->sectors[1];
+        *out_affected_sector = e_ptr->sectors[0];
+        *out_unaffected_sector = e_ptr->sectors[1];
         return true;
     } else if(has_liquid[1] && !has_liquid[0]) {
-        *affected_sector = e_ptr->sectors[1];
-        *unaffected_sector = e_ptr->sectors[0];
+        *out_affected_sector = e_ptr->sectors[1];
+        *out_unaffected_sector = e_ptr->sectors[0];
         return true;
     } else {
         return false;
@@ -404,14 +404,14 @@ bool does_edge_have_liquid_limit(
  * edge offset effect or not.
  *
  * @param e_ptr Edge to check.
- * @param affected_sector If there should be an effect, this is the
- * affected sector, i.e. the one getting shaded.
- * @param unaffected_sector If there should be an effect, this is the
- * unaffected sector, i.e. the one casting the shadow.
+ * @param out_affected_sector If there should be an effect, the affected sector,
+ * i.e. the one getting shaded, is returned here.
+ * @param out_unaffected_sector If there should be an effect, the
+ * unaffected sector, i.e. the one casting the shadow, is returned here.
  * @return Whether it has a wall shadow.
  */
 bool does_edge_have_wall_shadow(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 ) {
     //Never-cast walls don't cast.
     if(e_ptr->wall_shadow_length <= 0.0f) return false;
@@ -426,11 +426,11 @@ bool does_edge_have_wall_shadow(
     
     //We can already save which one is highest.
     if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
-        *unaffected_sector = e_ptr->sectors[0];
-        *affected_sector = e_ptr->sectors[1];
+        *out_unaffected_sector = e_ptr->sectors[0];
+        *out_affected_sector = e_ptr->sectors[1];
     } else {
-        *unaffected_sector = e_ptr->sectors[1];
-        *affected_sector = e_ptr->sectors[0];
+        *out_unaffected_sector = e_ptr->sectors[1];
+        *out_affected_sector = e_ptr->sectors[0];
     }
     
     if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
@@ -439,8 +439,8 @@ bool does_edge_have_wall_shadow(
     } else {
         //Auto shadow length.
         return
-            (*unaffected_sector)->z >
-            (*affected_sector)->z + GEOMETRY::STEP_HEIGHT;
+            (*out_unaffected_sector)->z >
+            (*out_affected_sector)->z + GEOMETRY::STEP_HEIGHT;
     }
 }
 

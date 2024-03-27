@@ -141,7 +141,7 @@ struct chase_info_struct {
     CHASE_STATES state = CHASE_STATE_STOPPED;
 
     //Flags that control how to chase. Use CHASE_FLAG_*.
-    unsigned char flags = 0;
+    bitmask_8 flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.
     point offset;

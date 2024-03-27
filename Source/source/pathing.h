@@ -181,7 +181,7 @@ struct path_follow_settings {
     float final_target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
     //Some flags. Use PATH_FOLLOW_FLAG_*.
-    unsigned char flags = 0;
+    bitmask_8 flags = 0;
     
     //Invulnerabilities of the mob/carriers.
     vector<hazard*> invulnerabilities;
@@ -218,7 +218,7 @@ struct path_stop {
     float radius = PATHS::MIN_STOP_RADIUS;
     
     //Flags. Use PATH_STOP_FLAGS.
-    uint8_t flags = 0;
+    bitmask_8 flags = 0;
     
     //Its label, if any.
     string label;

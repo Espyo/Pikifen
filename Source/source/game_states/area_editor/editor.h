@@ -624,7 +624,7 @@ private:
     OCTEE_MODES octee_mode = OCTEE_MODE_OFFSET;
     
     //When drawing a path, use these stop flags.
-    uint8_t path_drawing_flags = 0;
+    bitmask_8 path_drawing_flags = 0;
     
     //When drawing a path, use this label.
     string path_drawing_label;

@@ -1043,7 +1043,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
 void mob::chase(
     point* orig_coords, float* orig_z,
     const point &offset, const float offset_z,
-    const unsigned char flags,
+    const bitmask_8 flags,
     const float target_distance, const float speed, const float acceleration
 ) {
     chase_info.orig_coords = orig_coords;
@@ -2024,7 +2024,7 @@ float mob::get_speed_multiplier() const {
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    bitmap_effect_info* info, uint16_t effects
+    bitmap_effect_info* info, bitmask_16 effects
 ) const {
 
     //Animation, position, angle, etc.

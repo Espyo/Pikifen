@@ -25,6 +25,12 @@
 using std::size_t;
 using std::string;
 
+
+typedef uint8_t bitmask_8;
+typedef uint16_t bitmask_16;
+typedef uint32_t bitmask_32;
+
+
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resouce (.rc) file.
 constexpr unsigned char VERSION_MAJOR = 0;

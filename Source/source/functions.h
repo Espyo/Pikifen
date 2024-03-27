@@ -108,11 +108,30 @@ enum WIPE_FOLDER_RESULTS {
      game.config.swarm_task_range : game.config.idle_task_range)
 
 
-//Function that checks if an edge should use a given edge offset effect.
+/**
+ * @brief Function that checks if an edge should use a given edge offset effect.
+ * 
+ * The first parameter is the edge to check.
+ * The second parameter is where the affected sector gets returned to.
+ * The third parameter is where the unaffected sector gets returned to.
+ * Returns whether it should receive the effect.
+ */
 typedef bool (*offset_effect_checker_ptr)(edge*, sector**, sector**);
-//Function that returns an edge's edge offset effect color.
+
+/**
+ * @brief Function that returns an edge's edge offset effect color.
+ * 
+ * The first parameter is the edge to check.
+ * Returns the color.
+ */
 typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
-//Function that returns an edge's edge offset effect length.
+
+/**
+ * @brief Function that returns an edge's edge offset effect length.
+ * 
+ * The first parameter is the edge to check.
+ * Returns the length.
+ */
 typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 
@@ -125,13 +144,13 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
 bool does_edge_have_ledge_smoothing(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 );
 bool does_edge_have_liquid_limit(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 );
 bool does_edge_have_wall_shadow(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 );
 void draw_edge_offset_on_buffer(
     const vector<edge_offset_cache> &caches, size_t e_idx

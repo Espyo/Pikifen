@@ -30,6 +30,13 @@ class mob_type;
 class mob_state;
 class hitbox;
 
+/**
+ * @brief Function to run custom mob actions with.
+ * 
+ * The first parameter is the mob running the action.
+ * The second parameter depends on the function.
+ * The third parameter depends on the function.
+ */
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
 const unsigned char STATE_HISTORY_SIZE = 3;

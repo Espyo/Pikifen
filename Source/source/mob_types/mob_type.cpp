@@ -833,7 +833,7 @@ void load_mob_type_from_file(
                 huntable_targets_node
             );
         } else {
-            mt->huntable_targets |= (uint16_t) v;
+            mt->huntable_targets |= (bitmask_16) v;
         }
     }
     
@@ -850,7 +850,7 @@ void load_mob_type_from_file(
                 hurtable_targets_node
             );
         } else {
-            mt->hurtable_targets |= (uint16_t) v;
+            mt->hurtable_targets |= (bitmask_16) v;
         }
     }
     

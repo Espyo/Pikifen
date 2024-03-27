@@ -36,6 +36,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
+#include "const.h"
 #include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 
@@ -185,7 +186,7 @@ struct sfx_source_config_struct {
     //--- Members ---
 
     //Flags. Use SFX_FLAGS.
-    uint8_t flags = 0;
+    bitmask_8 flags = 0;
     
     //How it should stack with other playbacks.
     SFX_STACK_MODES stack_mode = SFX_STACK_NORMAL;

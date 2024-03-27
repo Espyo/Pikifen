@@ -3295,7 +3295,7 @@ void area_editor::process_gui_panel_mission() {
         if(fail_flags_changed) {
             register_change("mission fail conditions change");
             game.cur_area_data.mission.fail_conditions =
-                (uint8_t) fail_flags;
+                (bitmask_8) fail_flags;
         }
         
         vector<MISSION_FAIL_CONDITIONS> active_conditions;
