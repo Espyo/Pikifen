@@ -41,7 +41,7 @@ enum SECTOR_TYPES {
 /**
  * @brief Info about a sector's texture.
  */
-struct sector_texture_info {
+struct sector_texture_t {
 
     //--- Members ---
     
@@ -93,7 +93,7 @@ struct sector {
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
     
     //Information about its texture.
-    sector_texture_info texture_info;
+    sector_texture_t texture_info;
     
     //Is this sector meant to fade textures from neighboring sectors?
     bool fade = false;

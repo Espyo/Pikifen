@@ -58,7 +58,7 @@ public:
     /**
      * @brief Info about a mob's reach.
      */
-    struct reach_struct {
+    struct reach_t {
     
         //--- Members ---
         
@@ -82,7 +82,7 @@ public:
     /**
      * @brief Info about how a mob spawns another.
      */
-    struct spawn_struct {
+    struct spawn_t {
     
         //--- Members ---
         
@@ -121,7 +121,7 @@ public:
     /**
      * @brief Info about how a mob can be a child of another.
      */
-    struct child_struct {
+    struct child_t {
     
         //--- Members ---
         
@@ -194,7 +194,7 @@ public:
      * @brief Info on a widget to present in the area editor,
      * to better help users set the properties of a mob instance.
      */
-    struct area_editor_prop_struct {
+    struct area_editor_prop_t {
     
         //--- Members ---
         
@@ -227,7 +227,7 @@ public:
     /**
      * @brief Info on how vulnerable the object is to a certain source.
      */
-    struct vulnerability_struct {
+    struct vulnerability_t {
     
         //--- Members ---
         
@@ -245,7 +245,7 @@ public:
     /**
      * @brief Info on a sound effect this mob can emit.
      */
-    struct sfx_struct {
+    struct sfx_t {
     
         //--- Members ---
         
@@ -259,7 +259,7 @@ public:
         SFX_TYPE type = SFX_TYPE_WORLD_POS;
         
         //Configuration.
-        sfx_source_config_struct config;
+        sfx_source_config_t config;
         
     };
     
@@ -301,7 +301,7 @@ public:
     float blackout_radius = -1.0f;
     
     //List of sounds it can play.
-    vector<sfx_struct> sounds;
+    vector<sfx_t> sounds;
     
     //- Movement -
     
@@ -373,7 +373,7 @@ public:
     float territory_radius = 0.0f;
     
     //Information on all of its "reaches".
-    vector<reach_struct> reaches;
+    vector<reach_t> reaches;
     
     //After it takes this much damage, it sends an "itch" event to the FSM.
     float itch_damage = 0.0f;
@@ -385,12 +385,12 @@ public:
     MOB_TARGET_TYPES target_type = MOB_TARGET_TYPE_NONE;
     
     //What types of targets this mob can hunt down.
-    bitmask_16 huntable_targets =
+    bitmask_16_t huntable_targets =
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY;
         
     //What types of targets this mob can hurt.
-    bitmask_16 hurtable_targets =
+    bitmask_16_t hurtable_targets =
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY |
         MOB_TARGET_TYPE_FRAGILE;
@@ -430,10 +430,10 @@ public:
     //Interactions with other objects
     
     //Information on everything it can spawn.
-    vector<spawn_struct> spawns;
+    vector<spawn_t> spawns;
     
     //Information on its children mobs.
-    vector<child_struct> children;
+    vector<child_t> children;
     
     //Does this mob have a group of other mobs following it (e.g. leader)?
     bool has_group = false;
@@ -444,16 +444,16 @@ public:
     float default_vulnerability = 1.0f;
     
     //For every hazard, multiply damage taken by this much.
-    map<hazard*, vulnerability_struct> hazard_vulnerabilities;
+    map<hazard*, vulnerability_t> hazard_vulnerabilities;
     
     //What sort of spike damage it causes, if any.
     spike_damage_type* spike_damage = nullptr;
     
     //For every type of spike damage, multiply damage taken by this much.
-    map<spike_damage_type*, vulnerability_struct> spike_damage_vulnerabilities;
+    map<spike_damage_type*, vulnerability_t> spike_damage_vulnerabilities;
     
     //For every type of status, multiply damage taken by this much.
-    map<status_type*, vulnerability_struct> status_vulnerabilities;
+    map<status_type*, vulnerability_t> status_vulnerabilities;
     
     //- Editor info -
     
@@ -461,7 +461,7 @@ public:
     string area_editor_tips;
     
     //Widgets to show on the area editor, to help parametrize each mob.
-    vector<area_editor_prop_struct> area_editor_props;
+    vector<area_editor_prop_t> area_editor_props;
     
     //Can the player choose to place one of these in the area editor?
     bool appears_in_area_editor = true;

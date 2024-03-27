@@ -119,7 +119,7 @@ void pikmin::draw_mob() {
     if(!cur_s_ptr) return;
     
     //The Pikmin itself.
-    bitmap_effect_info mob_eff;
+    bitmap_effect_t mob_eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &mob_eff,
@@ -128,7 +128,7 @@ void pikmin::draw_mob() {
         SPRITE_BITMAP_EFFECT_HEIGHT |
         SPRITE_BITMAP_EFFECT_DELIVERY
     );
-    bitmap_effect_info pik_sprite_eff = mob_eff;
+    bitmap_effect_t pik_sprite_eff = mob_eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &pik_sprite_eff,
@@ -148,7 +148,7 @@ void pikmin::draw_mob() {
     
     //Top.
     if(cur_s_ptr->top_visible) {
-        bitmap_effect_info top_eff = mob_eff;
+        bitmap_effect_t top_eff = mob_eff;
         ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
         //To get the height effect to work, we'll need to scale the translation
         //too, otherwise the top will detach from the Pikmin visually as
@@ -173,7 +173,7 @@ void pikmin::draw_mob() {
     
     //Idle glow.
     if(is_idle) {
-        bitmap_effect_info idle_eff = pik_sprite_eff;
+        bitmap_effect_t idle_eff = pik_sprite_eff;
         idle_eff.translation = pos;
         idle_eff.scale.x =
             (game.config.standard_pikmin_radius * 8) /
@@ -505,7 +505,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         size_t dying_sfx_idx =
             pik_type->sfx_data_idxs[PIKMIN_SOUND_DYING];
         if(dying_sfx_idx != INVALID) {
-            mob_type::sfx_struct* dying_sfx =
+            mob_type::sfx_t* dying_sfx =
                 &type->sounds[dying_sfx_idx];
             game.audio.create_world_pos_sfx_source(
                 dying_sfx->sample,

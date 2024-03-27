@@ -371,7 +371,7 @@ int game_class::start() {
     dummy_mob_state = new mob_state("dummy");
     
     if(maker_tools.use_perf_mon) {
-        perf_mon = new performance_monitor_struct();
+        perf_mon = new performance_monitor_t();
     }
     
     if(

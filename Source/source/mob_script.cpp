@@ -110,7 +110,7 @@ void easy_fsm_creator::new_state(const string &name, const size_t id) {
  *
  * @param code Function with said code.
  */
-void easy_fsm_creator::run(custom_action_code code) {
+void easy_fsm_creator::run(custom_action_code_t code) {
     cur_event->actions.push_back(new mob_action_call(code));
 }
 

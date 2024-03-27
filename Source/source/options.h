@@ -115,7 +115,7 @@ extern const float DEF_ZOOM_MID_LEVEL;
 /**
  * @brief Game options.
  */
-struct options_struct {
+struct options_t {
 
     //--- Members ---
     

@@ -39,7 +39,7 @@ bridge_type::bridge_type() :
         "Changing its max health changes how long Pikmin "
         "work on it for, or how many fragments are needed.";
         
-    area_editor_prop_struct aep_chunks;
+    area_editor_prop_t aep_chunks;
     aep_chunks.name = "Chunks";
     aep_chunks.var = "chunks";
     aep_chunks.type = AEMP_INT;

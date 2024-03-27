@@ -88,7 +88,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     cur_leader_ptr &&
                     close_to_nest_to_open
                 ) {
-                    onion_menu = new onion_menu_struct(
+                    onion_menu = new onion_menu_t(
                         close_to_nest_to_open,
                         cur_leader_ptr
                     );
@@ -254,7 +254,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(!is_down) return;
             
             pause_menu =
-                new pause_menu_struct(
+                new pause_menu_t(
                 action.action_type_id == PLAYER_ACTION_RADAR
             );
             paused = true;
@@ -406,7 +406,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 game.cam.target_zoom = game.config.zoom_min_level;
             }
             
-            sfx_source_config_struct cam_sfx_config;
+            sfx_source_config_t cam_sfx_config;
             cam_sfx_config.stack_mode = SFX_STACK_NEVER;
             game.audio.create_ui_sfx_source(
                 game.sys_assets.sfx_camera,

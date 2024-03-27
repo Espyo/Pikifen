@@ -1725,7 +1725,7 @@ void load_statistics() {
     stats_file.load_file(STATISTICS_FILE_PATH, true, false, true);
     if(!stats_file.file_was_opened) return;
     
-    statistics_struct &s = game.statistics;
+    statistics_t &s = game.statistics;
     
     reader_setter rs(&stats_file);
     rs.set("startups",               s.startups);

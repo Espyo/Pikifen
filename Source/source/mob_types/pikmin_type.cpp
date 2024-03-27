@@ -53,15 +53,15 @@ pikmin_type::pikmin_type() :
     weight = 1;
     show_health = false;
     
-    mob_type::reach_struct idle_attack_reach;
+    mob_type::reach_t idle_attack_reach;
     idle_attack_reach.angle_1 = TAU;
     idle_attack_reach.radius_1 = game.config.idle_task_range;
     reaches.push_back(idle_attack_reach);
-    mob_type::reach_struct swarm_attack_reach;
+    mob_type::reach_t swarm_attack_reach;
     swarm_attack_reach.angle_1 = TAU;
     swarm_attack_reach.radius_1 = game.config.swarm_task_range;
     reaches.push_back(swarm_attack_reach);
-    mob_type::reach_struct chase_reach;
+    mob_type::reach_t chase_reach;
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = game.config.pikmin_chase_range;
     reaches.push_back(chase_reach);
@@ -82,7 +82,7 @@ pikmin_type::pikmin_type() :
         MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE |
         MOB_TARGET_TYPE_FRAGILE;
         
-    area_editor_prop_struct aep_maturity;
+    area_editor_prop_t aep_maturity;
     aep_maturity.name = "Maturity";
     aep_maturity.var = "maturity";
     aep_maturity.type = AEMP_NUMBER_LIST;
@@ -93,7 +93,7 @@ pikmin_type::pikmin_type() :
     aep_maturity.tooltip = "The Pikmin's starting maturity.";
     area_editor_props.push_back(aep_maturity);
     
-    area_editor_prop_struct aep_sprout;
+    area_editor_prop_t aep_sprout;
     aep_sprout.name = "Sprout";
     aep_sprout.var = "sprout";
     aep_sprout.type = AEMP_BOOL;
@@ -103,7 +103,7 @@ pikmin_type::pikmin_type() :
         "false if it spawns as an idle Pikmin.";
     area_editor_props.push_back(aep_sprout);
     
-    area_editor_prop_struct aep_follow_link;
+    area_editor_prop_t aep_follow_link;
     aep_sprout.name = "Follow link as leader";
     aep_sprout.var = "follow_link_as_leader";
     aep_sprout.type = AEMP_BOOL;

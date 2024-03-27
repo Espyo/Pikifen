@@ -116,7 +116,7 @@ enum WIPE_FOLDER_RESULTS {
  * The third parameter is where the unaffected sector gets returned to.
  * Returns whether it should receive the effect.
  */
-typedef bool (*offset_effect_checker_ptr)(edge*, sector**, sector**);
+typedef bool (*offset_effect_checker_t)(edge*, sector**, sector**);
 
 /**
  * @brief Function that returns an edge's edge offset effect color.
@@ -124,7 +124,7 @@ typedef bool (*offset_effect_checker_ptr)(edge*, sector**, sector**);
  * The first parameter is the edge to check.
  * Returns the color.
  */
-typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
+typedef ALLEGRO_COLOR (*offset_effect_color_getter_t)(edge*);
 
 /**
  * @brief Function that returns an edge's edge offset effect length.
@@ -132,7 +132,7 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
  * The first parameter is the edge to check.
  * Returns the length.
  */
-typedef float (*offset_effect_length_getter_ptr)(edge*);
+typedef float (*offset_effect_length_getter_t)(edge*);
 
 
 bool are_walls_between(
@@ -163,9 +163,9 @@ mob* get_closest_mob_to_cursor();
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter,
+    offset_effect_checker_t checker,
+    offset_effect_length_getter_t length_getter,
+    offset_effect_color_getter_t color_getter,
     float* out_angle, float* out_length, ALLEGRO_COLOR* out_color,
     float* out_elbow_angle, float* out_elbow_length
 );
@@ -190,7 +190,7 @@ void get_next_edge(
 );
 void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
-    const edge* ignore, offset_effect_checker_ptr edge_checker,
+    const edge* ignore, offset_effect_checker_t edge_checker,
     edge** out_edge, float* out_angle, float* out_diff,
     float* out_base_shadow_angle,
     bool* out_shadow_cw
@@ -272,9 +272,9 @@ void update_offset_effect_buffer(
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,
     unordered_set<vertex*> vertexes_to_update,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter
+    offset_effect_checker_t checker,
+    offset_effect_length_getter_t length_getter,
+    offset_effect_color_getter_t color_getter
 );
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
 WIPE_FOLDER_RESULTS wipe_folder(

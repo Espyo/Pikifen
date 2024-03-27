@@ -46,7 +46,7 @@ public:
     onion_type* oni_type = nullptr;
     
     //Nest data.
-    pikmin_nest_struct* nest = nullptr;
+    pikmin_nest_t* nest = nullptr;
     
     //Is this Onion currently activated?
     bool activated = true;

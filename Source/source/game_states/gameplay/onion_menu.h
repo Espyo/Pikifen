@@ -33,7 +33,7 @@ extern const size_t TYPES_PER_PAGE;
 /**
  * @brief Info about a given Pikmin type in an Onion menu.
  */
-struct onion_menu_type_struct {
+struct onion_menu_type_t {
 
     //--- Members ---
 
@@ -52,7 +52,7 @@ struct onion_menu_type_struct {
 
     //--- Function declarations ---
     
-    onion_menu_type_struct(const size_t idx, pikmin_type* pik_type);
+    onion_menu_type_t(const size_t idx, pikmin_type* pik_type);
 
 };
 
@@ -62,20 +62,20 @@ struct onion_menu_type_struct {
  * the player.
  *
  */
-struct onion_menu_struct {
+struct onion_menu_t {
 
 public:
 
     //--- Members ---
 
     //Pointer to the struct with nest information.
-    pikmin_nest_struct* n_ptr = nullptr;
+    pikmin_nest_t* n_ptr = nullptr;
 
     //Pointer to the leader responsible.
     leader* l_ptr = nullptr;
 
     //Information on every type's management.
-    vector<onion_menu_type_struct> types;
+    vector<onion_menu_type_t> types;
 
     //GUI manager.
     gui_manager gui;
@@ -93,7 +93,7 @@ public:
     size_t nr_pages = 0;
 
     //Pikmin types currently on-screen. Cache for convenience.
-    vector<onion_menu_type_struct*> on_screen_types;
+    vector<onion_menu_type_t*> on_screen_types;
 
     //List of GUI items for the Onion icons. Cache for convenience.
     vector<gui_item*> onion_icon_items;
@@ -152,8 +152,8 @@ public:
 
     //--- Function declarations ---
 
-    onion_menu_struct(pikmin_nest_struct* n_ptr, leader* l_ptr);
-    ~onion_menu_struct();
+    onion_menu_t(pikmin_nest_t* n_ptr, leader* l_ptr);
+    ~onion_menu_t();
     void add_all_to_group();
     void add_all_to_onion();
     void add_to_group(const size_t type_idx);

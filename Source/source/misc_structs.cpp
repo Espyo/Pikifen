@@ -135,7 +135,7 @@ const string NAMES[N_MAKER_TOOLS] = {
  *
  * @param file File to load from.
  */
-void asset_file_names_struct::load(data_node* file) {
+void asset_file_names_t::load(data_node* file) {
     reader_setter grs(file->get_child_by_name("graphics"));
     
     grs.set("area_name_font", bmp_area_name_font);
@@ -228,7 +228,7 @@ void bmp_manager::clear() {
  *
  * @param it Iterator from the map for the bitmap.
  */
-void bmp_manager::detach(map<string, bmp_info>::iterator it) {
+void bmp_manager::detach(map<string, bmp_t>::iterator it) {
     if(it == list.end()) return;
     
     it->second.calls--;
@@ -289,7 +289,7 @@ ALLEGRO_BITMAP* bmp_manager::get(
     if(list.find(name) == list.end()) {
         ALLEGRO_BITMAP* b =
             load_bmp(base_dir + "/" + name, node, report_errors);
-        list[name] = bmp_info(b);
+        list[name] = bmp_t(b);
         total_calls++;
         return b;
     } else {
@@ -326,7 +326,7 @@ long bmp_manager::get_total_calls() const {
  *
  * @param b The bitmap.
  */
-bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
+bmp_manager::bmp_t::bmp_t(ALLEGRO_BITMAP* b) :
     b(b),
     calls(1) {
     
@@ -338,7 +338,7 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
  *
  * @param new_pos Coordinates to place the camera at.
  */
-void camera_info::set_pos(const point &new_pos) {
+void camera_t::set_pos(const point &new_pos) {
     pos = new_pos;
     target_pos = new_pos;
 }
@@ -349,7 +349,7 @@ void camera_info::set_pos(const point &new_pos) {
  *
  * @param new_zoom Zoom to set to.
  */
-void camera_info::set_zoom(const float new_zoom) {
+void camera_t::set_zoom(const float new_zoom) {
     zoom = new_zoom;
     target_zoom = new_zoom;
 }
@@ -360,7 +360,7 @@ void camera_info::set_zoom(const float new_zoom) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void camera_info::tick(const float delta_t) {
+void camera_t::tick(const float delta_t) {
     pos.x +=
         (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     pos.y +=
@@ -374,7 +374,7 @@ void camera_info::tick(const float delta_t) {
  * @brief Updates the camera's visibility box,
  * based on the screen_to_world_transform transformation.
  */
-void camera_info::update_box() {
+void camera_t::update_box() {
     box[0] = point(0, 0);
     box[1] = point(game.win_w, game.win_h);
     al_transform_coordinates(
@@ -728,7 +728,7 @@ float keyframe_interpolator::get(const float t) {
 /**
  * @brief Constructs a new maker tools info object.
  */
-maker_tools_info::maker_tools_info() :
+maker_tools_t::maker_tools_t() :
     enabled(true),
     area_image_padding(32.0f),
     area_image_shadows(true),
@@ -760,7 +760,7 @@ maker_tools_info::maker_tools_info() :
  * @brief Resets the states of the tools so that players can play without any
  * tool affecting the experience.
  */
-void maker_tools_info::reset_for_gameplay() {
+void maker_tools_t::reset_for_gameplay() {
     change_speed = false;
     collision = false;
     geometry_info = false;
@@ -776,7 +776,7 @@ void maker_tools_info::reset_for_gameplay() {
 /**
  * @brief Hides the OS mouse in the game window.
  */
-void mouse_cursor_struct::hide() const {
+void mouse_cursor_t::hide() const {
     al_hide_mouse_cursor(game.display);
 }
 
@@ -784,7 +784,7 @@ void mouse_cursor_struct::hide() const {
 /**
  * @brief Initializes everything.
  */
-void mouse_cursor_struct::init() {
+void mouse_cursor_t::init() {
     hide();
     reset();
     
@@ -802,7 +802,7 @@ void mouse_cursor_struct::init() {
 /**
  * @brief Resets the cursor's state.
  */
-void mouse_cursor_struct::reset() {
+void mouse_cursor_t::reset() {
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
     game.mouse_cursor.s_pos.x = al_get_mouse_state_axis(&mouse_state, 0);
@@ -819,7 +819,7 @@ void mouse_cursor_struct::reset() {
 /**
  * @brief Shows the OS mouse in the game window.
  */
-void mouse_cursor_struct::show() const {
+void mouse_cursor_t::show() const {
     al_show_mouse_cursor(game.display);
 }
 
@@ -831,7 +831,7 @@ void mouse_cursor_struct::show() const {
  * @param screen_to_world_transform Transformation to use to get the
  * screen coordinates.
  */
-void mouse_cursor_struct::update_pos(
+void mouse_cursor_t::update_pos(
     const ALLEGRO_EVENT &ev,
     ALLEGRO_TRANSFORM &screen_to_world_transform
 ) {
@@ -854,7 +854,7 @@ void mouse_cursor_struct::update_pos(
  * @param angle Angle compared to the center.
  * @param magnitude Magnitude from the center.
  */
-void movement_struct::get_info(
+void movement_t::get_info(
     point* coords, float* angle, float* magnitude
 ) const {
     *coords = point(right - left, down - up);
@@ -871,7 +871,7 @@ void movement_struct::get_info(
 /**
  * @brief Resets the information.
  */
-void movement_struct::reset() {
+void movement_t::reset() {
     right = 0.0f;
     up = 0.0f;
     left = 0.0f;
@@ -883,7 +883,7 @@ void movement_struct::reset() {
 /**
  * @brief Draws the notification on-screen.
  */
-void notification_struct::draw() const {
+void notification_t::draw() const {
     if(visibility == 0.0f) return;
     
     float scale = ease(EASE_OUT, visibility);
@@ -966,7 +966,7 @@ void notification_struct::draw() const {
  *
  * @return The visibility.
  */
-float notification_struct::get_visibility() const {
+float notification_t::get_visibility() const {
     return visibility;
 }
 
@@ -974,7 +974,7 @@ float notification_struct::get_visibility() const {
 /**
  * @brief Resets the whole thing.
  */
-void notification_struct::reset() {
+void notification_t::reset() {
     enabled = true;
     input.type = INPUT_TYPE_NONE;
     text.clear();
@@ -990,7 +990,7 @@ void notification_struct::reset() {
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
-void notification_struct::set_contents(
+void notification_t::set_contents(
     const player_input &input, const string &text, const point &pos
 ) {
     this->input = input;
@@ -1004,7 +1004,7 @@ void notification_struct::set_contents(
  *
  * @param enabled Whether it's enabled or not.
  */
-void notification_struct::set_enabled(const bool enabled) {
+void notification_t::set_enabled(const bool enabled) {
     this->enabled = enabled;
 }
 
@@ -1014,7 +1014,7 @@ void notification_struct::set_enabled(const bool enabled) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void notification_struct::tick(const float delta_t) {
+void notification_t::tick(const float delta_t) {
     if(enabled) {
         visibility += NOTIFICATION::FADE_SPEED * delta_t;
     } else {
@@ -1027,7 +1027,7 @@ void notification_struct::tick(const float delta_t) {
 /**
  * @brief Constructs a new performance monitor struct object.
  */
-performance_monitor_struct::performance_monitor_struct() :
+performance_monitor_t::performance_monitor_t() :
     cur_state(PERF_MON_STATE_LOADING),
     paused(false),
     cur_state_start_time(0.0),
@@ -1043,7 +1043,7 @@ performance_monitor_struct::performance_monitor_struct() :
  *
  * @param state New state.
  */
-void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
+void performance_monitor_t::enter_state(const PERF_MON_STATES state) {
     if(paused) return;
     
     cur_state = state;
@@ -1059,7 +1059,7 @@ void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
 /**
  * @brief Finishes the latest measurement.
  */
-void performance_monitor_struct::finish_measurement() {
+void performance_monitor_t::finish_measurement() {
     if(paused) return;
     
     //Check if we were measuring something.
@@ -1093,7 +1093,7 @@ void performance_monitor_struct::finish_measurement() {
 /**
  * @brief Leaves the current state of the monitoring process.
  */
-void performance_monitor_struct::leave_state() {
+void performance_monitor_t::leave_state() {
     if(paused) return;
     
     cur_page.duration = al_get_time() - cur_state_start_time;
@@ -1155,7 +1155,7 @@ void performance_monitor_struct::leave_state() {
 /**
  * @brief Resets all of the performance monitor's information.
  */
-void performance_monitor_struct::reset() {
+void performance_monitor_t::reset() {
     area_name.clear();
     cur_state = PERF_MON_STATE_LOADING;
     paused = false;
@@ -1174,7 +1174,7 @@ void performance_monitor_struct::reset() {
 /**
  * @brief Saves a log file with all known stats, if there is anything to save.
  */
-void performance_monitor_struct::save_log() {
+void performance_monitor_t::save_log() {
     if(loading_page.measurements.empty()) {
         //Nothing to save.
         return;
@@ -1239,7 +1239,7 @@ void performance_monitor_struct::save_log() {
  *
  * @param name Name of the area.
  */
-void performance_monitor_struct::set_area_name(const string &name) {
+void performance_monitor_t::set_area_name(const string &name) {
     area_name = name;
 }
 
@@ -1249,7 +1249,7 @@ void performance_monitor_struct::set_area_name(const string &name) {
  *
  * @param paused Pause value.
  */
-void performance_monitor_struct::set_paused(const bool paused) {
+void performance_monitor_t::set_paused(const bool paused) {
     this->paused = paused;
 }
 
@@ -1259,7 +1259,7 @@ void performance_monitor_struct::set_paused(const bool paused) {
  *
  * @param name Name of the measurement.
  */
-void performance_monitor_struct::start_measurement(const string &name) {
+void performance_monitor_t::start_measurement(const string &name) {
     if(paused) return;
     
     //Check if we were already measuring something.
@@ -1280,7 +1280,7 @@ void performance_monitor_struct::start_measurement(const string &name) {
  *
  * @param s String to write to.
  */
-void performance_monitor_struct::page::write(string &s) {
+void performance_monitor_t::page::write(string &s) {
     //Get the total measured time.
     double total_measured_time = 0.0;
     for(size_t m = 0; m < measurements.size(); ++m) {
@@ -1312,7 +1312,7 @@ void performance_monitor_struct::page::write(string &s) {
  * @param dur How long it lasted for, in seconds.
  * @param total How long the entire procedure lasted for.
  */
-void performance_monitor_struct::page::write_measurement(
+void performance_monitor_t::page::write_measurement(
     string &str, const string &name, const double dur, const float total
 ) {
     float perc = dur / total * 100.0;
@@ -1910,7 +1910,7 @@ void timer::tick(const float delta_t) {
 /**
  * @brief Constructs a new whistle struct object.
  */
-whistle_struct::whistle_struct() :
+whistle_t::whistle_t() :
     radius(0.0f),
     fade_radius(0.0f),
     fade_timer(WHISTLE::FADE_TIME),
@@ -1953,7 +1953,7 @@ whistle_struct::whistle_struct() :
 /**
  * @brief Stuff to do when a leader starts whistling.
  */
-void whistle_struct::start_whistling() {
+void whistle_t::start_whistling() {
     for(unsigned char d = 0; d < 6; ++d) {
         dot_radius[d] = -1;
     }
@@ -1966,7 +1966,7 @@ void whistle_struct::start_whistling() {
 /**
  * @brief Stuff to do when a leader stops whistling.
  */
-void whistle_struct::stop_whistling() {
+void whistle_t::stop_whistling() {
     whistling = false;
     fade_timer.start();
     fade_radius = radius;
@@ -1982,7 +1982,7 @@ void whistle_struct::stop_whistling() {
  * @param whistle_range How far the whistle can reach from the cursor center.
  * @param leader_to_cursor_dist Distance between the leader and the cursor.
  */
-void whistle_struct::tick(
+void whistle_t::tick(
     const float delta_t, const point &center,
     const float whistle_range, const float leader_to_cursor_dist
 ) {

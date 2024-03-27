@@ -82,7 +82,7 @@ enum PAUSE_MENU_PAGES {
  * the player.
  *
  */
-struct pause_menu_struct {
+struct pause_menu_t {
 
 public:
 
@@ -161,8 +161,8 @@ public:
 
     //--- Function declarations ---
 
-    explicit pause_menu_struct(bool start_on_radar);
-    ~pause_menu_struct();
+    explicit pause_menu_t(bool start_on_radar);
+    ~pause_menu_t();
     void draw();
     void handle_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
@@ -236,7 +236,7 @@ private:
     ALLEGRO_TRANSFORM radar_screen_to_world_transform;
 
     //Radar camera information.
-    camera_info radar_cam;
+    camera_t radar_cam;
 
     //Location of the radar cursor, in world coordinates.
     point radar_cursor;
@@ -299,7 +299,7 @@ private:
     PATH_RESULTS go_here_path_result = PATH_RESULT_NOT_CALCULATED;
 
     //Pan speed and amount.
-    movement_struct radar_pan;
+    movement_t radar_pan;
 
     //Whether the radar zoom-in input is pressed.
     bool radar_zoom_in = false;

@@ -613,7 +613,7 @@ void animation_editor::pick_sprite(
  */
 void animation_editor::play_sound(size_t sound_idx) {
     if(!loaded_mob_type) return;
-    mob_type::sfx_struct* sfx_data = &loaded_mob_type->sounds[sound_idx];
+    mob_type::sfx_t* sfx_data = &loaded_mob_type->sounds[sound_idx];
     if(!sfx_data->sample) return;
     game.audio.create_ui_sfx_source(
         sfx_data->sample,

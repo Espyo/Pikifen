@@ -37,15 +37,15 @@ const size_t TYPES_PER_PAGE = 5;
  * @param n_ptr Pointer to the nest information struct.
  * @param l_ptr Leader responsible.
  */
-onion_menu_struct::onion_menu_struct(
-    pikmin_nest_struct* n_ptr, leader* l_ptr
+onion_menu_t::onion_menu_t(
+    pikmin_nest_t* n_ptr, leader* l_ptr
 ) :
     n_ptr(n_ptr),
     l_ptr(l_ptr) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         types.push_back(
-            onion_menu_type_struct(t, n_ptr->nest_type->pik_types[t])
+            onion_menu_type_t(t, n_ptr->nest_type->pik_types[t])
         );
     }
     
@@ -190,7 +190,7 @@ onion_menu_struct::onion_menu_struct(
         gui_item* onion_icon = new gui_item(false);
         onion_icon->on_draw =
         [this, t, onion_icon] (const point & center, const point & size) {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             if(t_ptr->pik_type->bmp_onion_icon) {
                 float juicy_grow_amount = onion_icon->get_juice_value();
                 draw_bitmap_in_box(
@@ -221,7 +221,7 @@ onion_menu_struct::onion_menu_struct(
         onion_button->can_auto_repeat = true;
         onion_button->on_get_tooltip =
         [this, t] () {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             return "Store one " + t_ptr->pik_type->name + " inside.";
         };
         gui.add_item(onion_button, id);
@@ -256,7 +256,7 @@ onion_menu_struct::onion_menu_struct(
         onion_amount_text->on_draw =
             [this, t, onion_amount_text]
         (const point & center, const point & size) {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             
             size_t real_onion_amount =
                 this->n_ptr->get_amount_by_type(t_ptr->pik_type);
@@ -298,7 +298,7 @@ onion_menu_struct::onion_menu_struct(
         gui_item* group_icon = new gui_item(false);
         group_icon->on_draw =
         [this, t, group_icon] (const point & center, const point & size) {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             float juicy_grow_amount = group_icon->get_juice_value();
             if(t_ptr->pik_type->bmp_icon) {
                 draw_bitmap_in_box(
@@ -329,7 +329,7 @@ onion_menu_struct::onion_menu_struct(
         group_button->can_auto_repeat = true;
         group_button->on_get_tooltip =
         [this, t] () {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             return "Call one " + t_ptr->pik_type->name + " to the group.";
         };
         gui.add_item(group_button, id);
@@ -364,7 +364,7 @@ onion_menu_struct::onion_menu_struct(
         group_amount_text->on_draw =
             [this, t, group_amount_text]
         (const point & center, const point & size) {
-            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            onion_menu_type_t* t_ptr = this->on_screen_types[t];
             
             size_t real_group_amount =
                 this->l_ptr->group->get_amount_by_type(t_ptr->pik_type);
@@ -518,7 +518,7 @@ onion_menu_struct::onion_menu_struct(
 /**
  * @brief Destroys the Onion menu struct object.
  */
-onion_menu_struct::~onion_menu_struct() {
+onion_menu_t::~onion_menu_t() {
     gui.destroy();
 }
 
@@ -526,7 +526,7 @@ onion_menu_struct::~onion_menu_struct() {
 /**
  * @brief Adds one Pikmin of each type from Onion to the group, if possible.
  */
-void onion_menu_struct::add_all_to_group() {
+void onion_menu_t::add_all_to_group() {
     for(size_t t = 0; t < types.size(); ++t) {
         add_to_group(t);
     }
@@ -536,7 +536,7 @@ void onion_menu_struct::add_all_to_group() {
 /**
  * @brief Adds one Pikmin of each type from the group to the Onion, if possible.
  */
-void onion_menu_struct::add_all_to_onion() {
+void onion_menu_t::add_all_to_onion() {
     for(size_t t = 0; t < types.size(); ++t) {
         add_to_onion(t);
     }
@@ -548,7 +548,7 @@ void onion_menu_struct::add_all_to_onion() {
  *
  * @param type_idx Index of the Onion's Pikmin type.
  */
-void onion_menu_struct::add_to_group(const size_t type_idx) {
+void onion_menu_t::add_to_group(const size_t type_idx) {
     size_t real_onion_amount =
         n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
@@ -597,7 +597,7 @@ void onion_menu_struct::add_to_group(const size_t type_idx) {
  *
  * @param type_idx Index of the Onion's Pikmin type.
  */
-void onion_menu_struct::add_to_onion(const size_t type_idx) {
+void onion_menu_t::add_to_onion(const size_t type_idx) {
     size_t real_group_amount =
         l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
@@ -630,7 +630,7 @@ void onion_menu_struct::add_to_onion(const size_t type_idx) {
  * @brief Confirms the player's changes, and sets up the Pikmin to climb up the
  * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
  */
-void onion_menu_struct::confirm() {
+void onion_menu_t::confirm() {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t].delta > 0) {
             n_ptr->request_pikmin(t, types[t].delta, l_ptr);
@@ -648,7 +648,7 @@ void onion_menu_struct::confirm() {
  *
  * @param page Index of the new page.
  */
-void onion_menu_struct::go_to_page(const size_t page) {
+void onion_menu_t::go_to_page(const size_t page) {
     this->page = page;
     grow_buttons();
     update();
@@ -658,7 +658,7 @@ void onion_menu_struct::go_to_page(const size_t page) {
 /**
  * @brief Makes the Onion and group buttons juicy grow.
  */
-void onion_menu_struct::grow_buttons() {
+void onion_menu_t::grow_buttons() {
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
         onion_icon_items[t]->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_ICON
@@ -687,7 +687,7 @@ void onion_menu_struct::grow_buttons() {
  *
  * @param ev Event to handle.
  */
-void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+void onion_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     if(!closing) gui.handle_event(ev);
 }
 
@@ -697,7 +697,7 @@ void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void onion_menu_struct::handle_player_action(const player_action &action) {
+void onion_menu_t::handle_player_action(const player_action &action) {
     gui.handle_player_action(action);
 }
 
@@ -707,7 +707,7 @@ void onion_menu_struct::handle_player_action(const player_action &action) {
  *
  * @param item The item.
  */
-void onion_menu_struct::make_gui_item_red(gui_item* item) {
+void onion_menu_t::make_gui_item_red(gui_item* item) {
     red_items[item] = ONION_MENU::RED_TEXT_DURATION;
 }
 
@@ -715,7 +715,7 @@ void onion_menu_struct::make_gui_item_red(gui_item* item) {
 /**
  * @brief Starts the closing process.
  */
-void onion_menu_struct::start_closing() {
+void onion_menu_t::start_closing() {
     closing = true;
     closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     gui.start_animation(
@@ -733,7 +733,7 @@ void onion_menu_struct::start_closing() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void onion_menu_struct::tick(const float delta_t) {
+void onion_menu_t::tick(const float delta_t) {
 
     //Correct the amount of wanted group members, if they are invalid.
     int total_delta = 0;
@@ -828,7 +828,7 @@ void onion_menu_struct::tick(const float delta_t) {
 /**
  * @brief Toggles the "select all" mode.
  */
-void onion_menu_struct::toggle_select_all() {
+void onion_menu_t::toggle_select_all() {
     select_all = !select_all;
     
     update();
@@ -838,7 +838,7 @@ void onion_menu_struct::toggle_select_all() {
 /**
  * @brief Updates some things about the Onion's state, especially caches.
  */
-void onion_menu_struct::update() {
+void onion_menu_t::update() {
     //Reset the on-screen types.
     on_screen_types.clear();
     
@@ -943,7 +943,7 @@ void onion_menu_struct::update() {
  * @param idx Index of the Pikmin type in the nest object.
  * @param pik_type The Pikmin type.
  */
-onion_menu_type_struct::onion_menu_type_struct(
+onion_menu_type_t::onion_menu_type_t(
     const size_t idx, pikmin_type* pik_type
 ) :
     type_idx(idx),

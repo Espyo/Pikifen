@@ -29,7 +29,7 @@ using std::size_t;
  *
  * @param pos The spot's relative coordinates.
  */
-carrier_spot_struct::carrier_spot_struct(const point &pos) :
+carrier_spot_t::carrier_spot_t(const point &pos) :
     pos(pos) {
     
 }
@@ -41,7 +41,7 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
  * @param m The mob this info belongs to.
  * @param destination Where to deliver the mob.
  */
-carry_info_struct::carry_info_struct(
+carry_t::carry_t(
     mob* m, const CARRY_DESTINATIONS destination
 ) :
     m(m),
@@ -61,7 +61,7 @@ carry_info_struct::carry_info_struct(
         } else {
             p = m->type->custom_carry_spots[c];
         }
-        spot_info.push_back(carrier_spot_struct(p));
+        spot_info.push_back(carrier_spot_t(p));
     }
 }
 
@@ -72,7 +72,7 @@ carry_info_struct::carry_info_struct(
  *
  * @return Whether it can fly.
  */
-bool carry_info_struct::can_fly() const {
+bool carry_t::can_fly() const {
     for(size_t c = 0; c < spot_info.size(); ++c) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
@@ -90,7 +90,7 @@ bool carry_info_struct::can_fly() const {
  *
  * @return The invulnerabilities.
  */
-vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
+vector<hazard*> carry_t::get_carrier_invulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<mob_type*> carrier_types;
     for(size_t c = 0; c < spot_info.size(); ++c) {
@@ -109,7 +109,7 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
  *
  * @return The speed.
  */
-float carry_info_struct::get_speed() const {
+float carry_t::get_speed() const {
     if(cur_n_carriers == 0) {
         return 0;
     }
@@ -118,7 +118,7 @@ float carry_info_struct::get_speed() const {
     
     //Begin by obtaining the average walking speed of the carriers.
     for(size_t s = 0; s < spot_info.size(); ++s) {
-        const carrier_spot_struct* s_ptr = &spot_info[s];
+        const carrier_spot_t* s_ptr = &spot_info[s];
         
         if(s_ptr->state != CARRY_SPOT_USED) continue;
         
@@ -152,7 +152,7 @@ float carry_info_struct::get_speed() const {
  *
  * @return Whether it is empty.
  */
-bool carry_info_struct::is_empty() const {
+bool carry_t::is_empty() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         if(spot_info[s].state != CARRY_SPOT_FREE) return false;
     }
@@ -165,7 +165,7 @@ bool carry_info_struct::is_empty() const {
  *
  * @return Whether it is full.
  */
-bool carry_info_struct::is_full() const {
+bool carry_t::is_full() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         if(spot_info[s].state == CARRY_SPOT_FREE) return false;
     }
@@ -181,7 +181,7 @@ bool carry_info_struct::is_full() const {
  *
  * @param angle Angle to rotate to.
  */
-void carry_info_struct::rotate_points(const float angle) {
+void carry_t::rotate_points(const float angle) {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
@@ -200,7 +200,7 @@ void carry_info_struct::rotate_points(const float angle) {
  *
  * @param m Mob this circling info struct belongs to.
  */
-circling_info_struct::circling_info_struct(mob* m) :
+circling_t::circling_t(mob* m) :
     m(m) {
     
 }
@@ -209,7 +209,7 @@ circling_info_struct::circling_info_struct(mob* m) :
 /**
  * @brief Constructs a new delivery info struct object.
  */
-delivery_info_struct::delivery_info_struct() :
+delivery_t::delivery_t() :
     color(game.config.carrying_color_move) {
 }
 
@@ -219,7 +219,7 @@ delivery_info_struct::delivery_info_struct() :
  *
  * @param leader_ptr Mob this group info struct belongs to.
  */
-group_info_struct::group_info_struct(mob* leader_ptr) :
+group_t::group_t(mob* leader_ptr) :
     anchor(leader_ptr->pos),
     transform(game.identity_transform) {
 }
@@ -232,7 +232,7 @@ group_info_struct::group_info_struct(mob* leader_ptr) :
  * @param move_backwards If true, go through the list backwards.
  * @return Whether it succeeded.
  */
-bool group_info_struct::change_standby_type(const bool move_backwards) {
+bool group_t::change_standby_type(const bool move_backwards) {
     return get_next_standby_type(move_backwards, &cur_standby_type);
 }
 
@@ -241,7 +241,7 @@ bool group_info_struct::change_standby_type(const bool move_backwards) {
  * @brief Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
-void group_info_struct::change_standby_type_if_needed() {
+void group_t::change_standby_type_if_needed() {
     for(size_t m = 0; m < members.size(); ++m) {
         if(members[m]->subgroup_type_ptr == cur_standby_type) {
             //Never mind, there is a member of this subgroup type.
@@ -259,7 +259,7 @@ void group_info_struct::change_standby_type_if_needed() {
  * @param type Type to check.
  * @return The amount.
  */
-size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
+size_t group_t::get_amount_by_type(const mob_type* type) const {
     size_t amount = 0;
     for(size_t m = 0; m < members.size(); ++m) {
         if(members[m]->type == type) {
@@ -275,7 +275,7 @@ size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
  *
  * @return The average position.
  */
-point group_info_struct::get_average_member_pos() const {
+point group_t::get_average_member_pos() const {
     point avg;
     for(size_t m = 0; m < members.size(); ++m) {
         avg += members[m]->pos;
@@ -291,7 +291,7 @@ point group_info_struct::get_average_member_pos() const {
  * @param include_leader If not nullptr, include the group leader mob.
  * @return The list of invulnerabilities.
  */
-vector<hazard*> group_info_struct::get_group_invulnerabilities(
+vector<hazard*> group_t::get_group_invulnerabilities(
     mob* include_leader
 ) const {
     //Get all types to save on the amount of hazard checks.
@@ -315,7 +315,7 @@ vector<hazard*> group_info_struct::get_group_invulnerabilities(
  * @param new_type The new type is returned here.
  * @return Whether it succeeded.
  */
-bool group_info_struct::get_next_standby_type(
+bool group_t::get_next_standby_type(
     const bool move_backwards, subgroup_type** new_type
 ) {
 
@@ -390,7 +390,7 @@ bool group_info_struct::get_next_standby_type(
  * @param spot_idx Index of the spot to check.
  * @return The offset.
  */
-point group_info_struct::get_spot_offset(const size_t spot_idx) const {
+point group_t::get_spot_offset(const size_t spot_idx) const {
     point res = spots[spot_idx].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
@@ -405,7 +405,7 @@ point group_info_struct::get_spot_offset(const size_t spot_idx) const {
  * @param affected_mob_ptr If this initialization is because a new mob entered
  * or left the group, this should point to said mob.
  */
-void group_info_struct::init_spots(mob* affected_mob_ptr) {
+void group_t::init_spots(mob* affected_mob_ptr) {
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -581,7 +581,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
  * @brief Assigns each mob a new spot, given how close each one of them is to
  * each spot.
  */
-void group_info_struct::reassign_spots() {
+void group_t::reassign_spots() {
     for(size_t m = 0; m < members.size(); ++m) {
         members[m]->group_spot_idx = INVALID;
     }
@@ -615,7 +615,7 @@ void group_info_struct::reassign_spots() {
  * @param leading_type The subgroup type that will be at the front of
  * the group.
  */
-void group_info_struct::sort(subgroup_type* leading_type) {
+void group_t::sort(subgroup_type* leading_type) {
 
     for(size_t m = 0; m < members.size(); ++m) {
         members[m]->group_spot_idx = INVALID;
@@ -663,7 +663,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
 /**
  * @brief Clears the information.
  */
-void hold_info_struct::clear() {
+void hold_t::clear() {
     m = nullptr;
     hitbox_idx = INVALID;
     offset_dist = 0;
@@ -678,7 +678,7 @@ void hold_info_struct::clear() {
  * @param out_z The Z coordinate is returned here.
  * @return The (X and Y) coordinates.
  */
-point hold_info_struct::get_final_pos(float* out_z) const {
+point hold_t::get_final_pos(float* out_z) const {
     if(!m) return point();
     
     hitbox* h_ptr = nullptr;
@@ -720,7 +720,7 @@ point hold_info_struct::get_final_pos(float* out_z) const {
  *
  * @param m The parent mob.
  */
-parent_info_struct::parent_info_struct(mob* m) :
+parent_t::parent_t(mob* m) :
     m(m) {
     
 }
@@ -732,7 +732,7 @@ parent_info_struct::parent_info_struct(mob* m) :
  * @param m Mob this path info struct belongs to.
  * @param settings Settings about how the path should be followed.
  */
-path_info_struct::path_info_struct(
+path_t::path_t(
     mob* m,
     const path_follow_settings &settings
 ) :
@@ -753,7 +753,7 @@ path_info_struct::path_info_struct(
  * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
-bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* out_reason) {
+bool path_t::check_blockage(PATH_BLOCK_REASONS* out_reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_idx > 0 &&
@@ -781,8 +781,8 @@ bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* out_reason) {
  * @param m_ptr Nest mob responsible.
  * @param type Type of nest.
  */
-pikmin_nest_struct::pikmin_nest_struct(
-    mob* m_ptr, pikmin_nest_type_struct* type
+pikmin_nest_t::pikmin_nest_t(
+    mob* m_ptr, pikmin_nest_type_t* type
 ) :
     m_ptr(m_ptr),
     nest_type(type) {
@@ -802,7 +802,7 @@ pikmin_nest_struct::pikmin_nest_struct(
  * @param type_idx Index of the Pikmin type, from the types this nest manages.
  * @return Whether a Pikmin spawned.
  */
-bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
+bool pikmin_nest_t::call_pikmin(mob* m_ptr, const size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
@@ -853,7 +853,7 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
         checkpoints.push_back(leg_hole_bp_idx);
         checkpoints.push_back(leg_foot_bp_idx);
         new_pikmin->track_info =
-            new track_info_struct(
+            new track_t(
             m_ptr, checkpoints, nest_type->pikmin_exit_speed
         );
         new_pikmin->leader_to_return_to = calling_leader;
@@ -871,7 +871,7 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
  * @param type Type to check.
  * @return The amount.
  */
-size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
+size_t pikmin_nest_t::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         if(nest_type->pik_types[t] == type) {
@@ -891,7 +891,7 @@ size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
  *
  * @param svr Script var reader to use.
  */
-void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
+void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
     string pikmin_inside_var;
     
     if(svr.get("pikmin_inside", pikmin_inside_var)) {
@@ -918,7 +918,7 @@ void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
  * @param amount How many to call out.
  * @param l_ptr Leader responsible.
  */
-void pikmin_nest_struct::request_pikmin(
+void pikmin_nest_t::request_pikmin(
     const size_t type_idx, const size_t amount, leader* l_ptr
 ) {
     call_queue[type_idx] += amount;
@@ -933,7 +933,7 @@ void pikmin_nest_struct::request_pikmin(
  *
  * @param p_ptr Pikmin to store.
  */
-void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
+void pikmin_nest_t::store_pikmin(pikmin* p_ptr) {
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         if(p_ptr->type == nest_type->pik_types[t]) {
             pikmin_inside[t][p_ptr->maturity]++;
@@ -950,7 +950,7 @@ void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pikmin_nest_struct::tick(const float delta_t) {
+void pikmin_nest_t::tick(const float delta_t) {
     if(calling_leader && calling_leader->to_delete) {
         calling_leader = nullptr;
     }
@@ -993,7 +993,7 @@ void pikmin_nest_struct::tick(const float delta_t) {
  *
  * @param file File to read from.
  */
-void pikmin_nest_type_struct::load_properties(
+void pikmin_nest_type_t::load_properties(
     data_node* file
 ) {
     reader_setter rs(file);
@@ -1046,7 +1046,7 @@ void pikmin_nest_type_struct::load_properties(
  * @param checkpoints List of checkpoints (body part indexes) to cross.
  * @param ride_speed Speed to ride at, in ratio per second.
  */
-track_info_struct::track_info_struct(
+track_t::track_t(
     mob* m, const vector<size_t> &checkpoints, const float ride_speed
 ) :
     m(m),
@@ -1136,9 +1136,9 @@ mob* create_mob(
     };
     
     for(size_t c = 0; c < type->children.size(); ++c) {
-        mob_type::child_struct* child_info =
+        mob_type::child_t* child_info =
             &type->children[c];
-        mob_type::spawn_struct* spawn_info =
+        mob_type::spawn_t* spawn_info =
             get_spawn_info_from_child_info(m_ptr->type, &type->children[c]);
             
         if(!spawn_info) {
@@ -1154,7 +1154,7 @@ mob* create_mob(
         
         if(!new_mob) continue;
         
-        parent_info_struct* p_info = new parent_info_struct(m_ptr);
+        parent_t* p_info = new parent_t(m_ptr);
         new_mob->parent = p_info;
         p_info->handle_damage = child_info->handle_damage;
         p_info->relay_damage = child_info->relay_damage;
@@ -1359,8 +1359,8 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
  * @param child_info Child info to check.
  * @return The spawn info, or nullptr if not found.
  */
-mob_type::spawn_struct* get_spawn_info_from_child_info(
-    mob_type* type, const mob_type::child_struct* child_info
+mob_type::spawn_t* get_spawn_info_from_child_info(
+    mob_type* type, const mob_type::child_t* child_info
 ) {
     for(size_t s = 0; s < type->spawns.size(); ++s) {
         if(type->spawns[s].name == child_info->spawn_name) {

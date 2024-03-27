@@ -92,7 +92,7 @@ const string STATUS_GUI_FILE_PATH =
  * @param start_on_radar True if the page to start on should be the radar,
  * false if it should be the system page.
  */
-pause_menu_struct::pause_menu_struct(bool start_on_radar) {
+pause_menu_t::pause_menu_t(bool start_on_radar) {
     
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
@@ -185,7 +185,7 @@ pause_menu_struct::pause_menu_struct(bool start_on_radar) {
 /**
  * @brief Destroys the pause menu struct object.
  */
-pause_menu_struct::~pause_menu_struct() {
+pause_menu_t::~pause_menu_t() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
         if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits.size(); ++t) {
@@ -232,7 +232,7 @@ pause_menu_struct::~pause_menu_struct() {
  * @param text Text.
  * @param color Text color.
  */
-void pause_menu_struct::add_bullet(
+void pause_menu_t::add_bullet(
     list_gui_item* list, const string &text,
     const ALLEGRO_COLOR &color
 ) {
@@ -270,7 +270,7 @@ void pause_menu_struct::add_bullet(
  * @param is_single True if this is a box with a single row.
  * @param is_totals True if this is the totals box.
  */
-void pause_menu_struct::add_pikmin_status_line(
+void pause_menu_t::add_pikmin_status_line(
     list_gui_item* list,
     pikmin_type* pik_type,
     const string &group_text,
@@ -506,7 +506,7 @@ void pause_menu_struct::add_pikmin_status_line(
  * cursor, if applicable, and stores the results in go_here_path and
  * go_here_path_result.
  */
-void pause_menu_struct::calculate_go_here_path() {
+void pause_menu_t::calculate_go_here_path() {
     radar_cursor_leader = nullptr;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
@@ -563,7 +563,7 @@ void pause_menu_struct::calculate_go_here_path() {
  * outright, based on the player's confirmation question preferences.
  *
  */
-void pause_menu_struct::confirm_or_leave() {
+void pause_menu_t::confirm_or_leave() {
     bool do_confirmation = false;
     switch(game.options.leaving_confirmation_mode) {
     case LEAVING_CONFIRMATION_NEVER: {
@@ -654,7 +654,7 @@ void pause_menu_struct::confirm_or_leave() {
  * @param cur_gui Pointer to the current page's GUI manager.
  * @return The button.
  */
-button_gui_item* pause_menu_struct::create_page_button(
+button_gui_item* pause_menu_t::create_page_button(
     PAUSE_MENU_PAGES target_page, bool left,
     gui_manager* cur_gui
 ) {
@@ -706,7 +706,7 @@ button_gui_item* pause_menu_struct::create_page_button(
  * @param cur_page Page that these creations belong to.
  * @param cur_gui Pointer to the current page's GUI manager.
  */
-void pause_menu_struct::create_page_buttons(
+void pause_menu_t::create_page_buttons(
     PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui
 ) {
     size_t cur_page_idx =
@@ -756,7 +756,7 @@ void pause_menu_struct::create_page_buttons(
 /**
  * @brief Draws the pause menu.
  */
-void pause_menu_struct::draw() {
+void pause_menu_t::draw() {
     gui.draw();
     radar_gui.draw();
     status_gui.draw();
@@ -776,7 +776,7 @@ void pause_menu_struct::draw() {
  * the texture we've drawn so far for this path, so that the effect is seamless
  * between segments.
  */
-void pause_menu_struct::draw_go_here_segment(
+void pause_menu_t::draw_go_here_segment(
     const point &start, const point &end,
     const ALLEGRO_COLOR &color, float* texture_point
 ) {
@@ -829,7 +829,7 @@ void pause_menu_struct::draw_go_here_segment(
  * @param center Center coordinates of the radar on-screen.
  * @param size Width and height of the radar on-screen.
  */
-void pause_menu_struct::draw_radar(
+void pause_menu_t::draw_radar(
     const point &center, const point &size
 ) {
     //Setup.
@@ -1257,7 +1257,7 @@ void pause_menu_struct::draw_radar(
  * limit in that dimension.
  * @param text Text to draw.
  */
-void pause_menu_struct::draw_tidbit(
+void pause_menu_t::draw_tidbit(
     const ALLEGRO_FONT* const font, const point &where,
     const point &max_size, const string &text
 ) {
@@ -1306,7 +1306,7 @@ void pause_menu_struct::draw_tidbit(
  *
  * @param list List item to fill.
  */
-void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
+void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
         if(
             has_flag(
@@ -1347,7 +1347,7 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
  *
  * @param list List item to fill.
  */
-void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
+void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
     switch(game.cur_area_data.mission.grading_mode) {
     case MISSION_GRADING_POINTS: {
         add_bullet(
@@ -1455,7 +1455,7 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
  *
  * @return The status.
  */
-string pause_menu_struct::get_mission_goal_status() {
+string pause_menu_t::get_mission_goal_status() {
     float percentage = 0.0f;
     int cur =
         game.mission_goals[game.cur_area_data.mission.goal]->
@@ -1478,7 +1478,7 @@ string pause_menu_struct::get_mission_goal_status() {
  *
  * @param ev Event to handle.
  */
-void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+void pause_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
     radar_gui.handle_event(ev);
     status_gui.handle_event(ev);
@@ -1549,7 +1549,7 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void pause_menu_struct::handle_player_action(const player_action &action) {
+void pause_menu_t::handle_player_action(const player_action &action) {
     if(opening_lockout_timer > 0.0f) {
         //Don't accept inputs shortly after the menu opens.
         //This helps errant inputs from before the menu bleeding into the menu
@@ -1657,7 +1657,7 @@ void pause_menu_struct::handle_player_action(const player_action &action) {
 /**
  * @brief Initializes the leaving confirmation page.
  */
-void pause_menu_struct::init_confirmation_page() {
+void pause_menu_t::init_confirmation_page() {
     data_node gui_file(PAUSE_MENU::CONFIRMATION_GUI_FILE_PATH);
     
     //Menu items.
@@ -1746,7 +1746,7 @@ void pause_menu_struct::init_confirmation_page() {
 /**
  * @brief Initializes the help page.
  */
-void pause_menu_struct::init_help_page() {
+void pause_menu_t::init_help_page() {
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
@@ -1945,7 +1945,7 @@ void pause_menu_struct::init_help_page() {
 /**
  * @brief Initializes the pause menu's main menu.
  */
-void pause_menu_struct::init_main_pause_menu() {
+void pause_menu_t::init_main_pause_menu() {
     //Menu items.
     gui.register_coords("header",           50,  5, 52,  6);
     gui.register_coords("left_page",        12,  5, 20,  6);
@@ -2131,7 +2131,7 @@ void pause_menu_struct::init_main_pause_menu() {
 /**
  * @brief Initializes the mission page.
  */
-void pause_menu_struct::init_mission_page() {
+void pause_menu_t::init_mission_page() {
     data_node gui_file(PAUSE_MENU::MISSION_GUI_FILE_PATH);
     
     //Menu items.
@@ -2257,7 +2257,7 @@ void pause_menu_struct::init_mission_page() {
 /**
  * @brief Initializes the radar page.
  */
-void pause_menu_struct::init_radar_page() {
+void pause_menu_t::init_radar_page() {
     data_node gui_file(PAUSE_MENU::RADAR_GUI_FILE_PATH);
     
     //Assets.
@@ -2530,7 +2530,7 @@ void pause_menu_struct::init_radar_page() {
 /**
  * @brief Initializes the status page.
  */
-void pause_menu_struct::init_status_page() {
+void pause_menu_t::init_status_page() {
     data_node gui_file(PAUSE_MENU::STATUS_GUI_FILE_PATH);
     
     //Menu items.
@@ -2709,7 +2709,7 @@ void pause_menu_struct::init_status_page() {
  *
  * @param amount How much to pan by.
  */
-void pause_menu_struct::pan_radar(point amount) {
+void pause_menu_t::pan_radar(point amount) {
     point delta = amount / radar_cam.zoom;
     radar_cam.pos += delta;
     radar_cam.pos.x =
@@ -2724,7 +2724,7 @@ void pause_menu_struct::pan_radar(point amount) {
  *
  * @param category Category of tidbits to use.
  */
-void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
+void pause_menu_t::populate_help_tidbits(const HELP_CATEGORIES category) {
     vector<tidbit> &tidbit_list = tidbits[category];
     
     switch(category) {
@@ -2781,7 +2781,7 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
 /**
  * @brief When the player confirms their action in the radar.
  */
-void pause_menu_struct::radar_confirm() {
+void pause_menu_t::radar_confirm() {
     calculate_go_here_path();
     
     if(radar_cursor_leader) {
@@ -2809,7 +2809,7 @@ void pause_menu_struct::radar_confirm() {
  *
  * @param cur_gui The currently active GUI manager.
  */
-void pause_menu_struct::start_closing(gui_manager* cur_gui) {
+void pause_menu_t::start_closing(gui_manager* cur_gui) {
     cur_gui->start_animation(
         GUI_MANAGER_ANIM_CENTER_TO_UP,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
@@ -2828,7 +2828,7 @@ void pause_menu_struct::start_closing(gui_manager* cur_gui) {
 /**
  * @brief Starts the process of leaving the gameplay state.
  */
-void pause_menu_struct::start_leaving_gameplay() {
+void pause_menu_t::start_leaving_gameplay() {
     if(
         leave_target == LEAVE_TO_END &&
         has_flag(
@@ -2850,7 +2850,7 @@ void pause_menu_struct::start_leaving_gameplay() {
  * @param new_page The new page to switch to.
  * @param left Is the new page to the left of the current one, or the right?
  */
-void pause_menu_struct::switch_page(
+void pause_menu_t::switch_page(
     gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
 ) {
     gui_manager* new_gui = nullptr;
@@ -2892,7 +2892,7 @@ void pause_menu_struct::switch_page(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pause_menu_struct::tick(const float delta_t) {
+void pause_menu_t::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
     radar_gui.tick(delta_t);
@@ -2976,7 +2976,7 @@ void pause_menu_struct::tick(const float delta_t) {
  * @param radar_center Coordinates of the radar's center.
  * @param radar_size Dimensions of the radar.
  */
-void pause_menu_struct::update_radar_transformations(
+void pause_menu_t::update_radar_transformations(
     const point &radar_center, const point &radar_size
 ) {
     world_to_radar_screen_transform = game.identity_transform;
@@ -2999,7 +2999,7 @@ void pause_menu_struct::update_radar_transformations(
  *
  * @param amount How much to zoom by.
  */
-void pause_menu_struct::zoom_radar(float amount) {
+void pause_menu_t::zoom_radar(float amount) {
     float delta = amount * radar_cam.zoom;
     radar_cam.zoom += delta;
     radar_cam.zoom =
@@ -3017,7 +3017,7 @@ void pause_menu_struct::zoom_radar(float amount) {
  * @param radar_center Coordinates of the radar's center.
  * @param radar_size Dimensions of the radar.
  */
-void pause_menu_struct::zoom_radar_with_mouse(
+void pause_menu_t::zoom_radar_with_mouse(
     float amount, const point &radar_center, const point &radar_size
 ) {
     //Keep a backup of the old cursor coordinates.

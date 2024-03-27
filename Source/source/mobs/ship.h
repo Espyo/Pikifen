@@ -38,7 +38,7 @@ public:
     ship_type* shi_type = nullptr;
     
     //Nest data.
-    pikmin_nest_struct* nest = nullptr;
+    pikmin_nest_t* nest = nullptr;
     
     //Time left until the next tractor beam ring is spat out.
     timer next_tractor_beam_ring_timer = timer(SHIP::TRACTOR_BEAM_EMIT_RATE);

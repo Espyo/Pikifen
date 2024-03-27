@@ -23,11 +23,11 @@
 ship_type::ship_type() :
     mob_type(MOB_CATEGORY_SHIPS) {
     
-    nest = new pikmin_nest_type_struct();
+    nest = new pikmin_nest_type_t();
     
     target_type = MOB_TARGET_TYPE_NONE;
     
-    area_editor_prop_struct aep_pik_inside;
+    area_editor_prop_t aep_pik_inside;
     aep_pik_inside.name = "Pikmin inside";
     aep_pik_inside.var = "pikmin_inside";
     aep_pik_inside.type = AEMP_TEXT;

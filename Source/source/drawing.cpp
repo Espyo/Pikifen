@@ -204,7 +204,7 @@ void draw_bitmap_in_box(
  * @param effects Effects to use.
  */
 void draw_bitmap_with_effects(
-    ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
+    ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
 ) {
 
     if(!bmp) {
@@ -1454,7 +1454,7 @@ void draw_sector_texture(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_texture_info* texture_info_to_use =
+        sector_texture_t* texture_info_to_use =
             &texture_sector[t]->texture_info;
             
         //Texture transformations.
@@ -1549,7 +1549,7 @@ void draw_sector_texture(
  * @param m Mob that has this status effect.
  * @param effects List of bitmap effects to use.
  */
-void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects) {
+void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     

@@ -633,7 +633,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Initializes the HUD.
  */
 void gameplay_state::init_hud() {
-    hud = new hud_struct();
+    hud = new hud_t();
 }
 
 
@@ -702,7 +702,7 @@ void gameplay_state::load() {
     //Initialize some important things.
     size_t n_spray_types = game.spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) {
-        spray_stats.push_back(spray_stats_struct());
+        spray_stats.push_back(spray_stats_t());
     }
     
     area_time_passed = 0.0f;
@@ -1346,7 +1346,7 @@ void gameplay_state::update_transformations() {
  * @param speaker_icon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
+msg_box_t::msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {
     
     string message = unescape_string(text);
@@ -1378,7 +1378,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * @brief Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
  */
-void msg_box_info::advance() {
+void msg_box_t::advance() {
     if(
         transition_timer > 0.0f ||
         misinput_protection_timer > 0.0f ||
@@ -1411,7 +1411,7 @@ void msg_box_info::advance() {
 /**
  * @brief Closes the message box, even if it is still writing something.
  */
-void msg_box_info::close() {
+void msg_box_t::close() {
     if(!transition_in && transition_timer > 0.0f) return;
     transition_in = false;
     transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1423,7 +1423,7 @@ void msg_box_info::close() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void msg_box_info::tick(const float delta_t) {
+void msg_box_t::tick(const float delta_t) {
     size_t tokens_in_section = 0;
     for(size_t l = 0; l < 3; ++l) {
         size_t line_idx = cur_section * 3 + l;

@@ -1528,7 +1528,7 @@ void save_screenshot() {
  */
 void save_statistics() {
     data_node stats_file("", "");
-    const statistics_struct &s = game.statistics;
+    const statistics_t &s = game.statistics;
     
 #define save(n, v) stats_file.add(new data_node(n, v))
     
@@ -1932,7 +1932,7 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
         game.states.gameplay->msg_box =
-            new msg_box_info(final_text, speaker_bmp);
+            new msg_box_t(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME

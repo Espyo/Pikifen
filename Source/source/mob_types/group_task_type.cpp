@@ -24,7 +24,7 @@ group_task_type::group_task_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     
-    area_editor_prop_struct aep_power_goal;
+    area_editor_prop_t aep_power_goal;
     aep_power_goal.name = "Power goal";
     aep_power_goal.var = "power_goal";
     aep_power_goal.type = AEMP_INT;

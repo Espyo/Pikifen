@@ -49,7 +49,7 @@ class mob;
 /**
  * @brief Info on a carrying spot around a mob's perimeter.
  */
-struct carrier_spot_struct {
+struct carrier_spot_t {
 
     //--- Members ---
 
@@ -65,7 +65,7 @@ struct carrier_spot_struct {
 
     //--- Function declarations ---
 
-    explicit carrier_spot_struct(const point &pos);
+    explicit carrier_spot_t(const point &pos);
 
 };
 
@@ -73,7 +73,7 @@ struct carrier_spot_struct {
 /**
  * @brief Info on how the mob should be carried.
  */
-struct carry_info_struct {
+struct carry_t {
 
     //--- Members ---
 
@@ -84,7 +84,7 @@ struct carry_info_struct {
     CARRY_DESTINATIONS destination = CARRY_DESTINATION_SHIP;
 
     //Information about each carrier spot.
-    vector<carrier_spot_struct> spot_info;
+    vector<carrier_spot_t> spot_info;
 
     //Current carrying strength. Cache for performance.
     float cur_carrying_strength = 0.0f;
@@ -119,7 +119,7 @@ struct carry_info_struct {
 
     //--- Function declarations ---
 
-    carry_info_struct(mob* m, const CARRY_DESTINATIONS destination);
+    carry_t(mob* m, const CARRY_DESTINATIONS destination);
     bool is_empty() const;
     bool is_full() const;
     vector<hazard*> get_carrier_invulnerabilities() const;
@@ -133,7 +133,7 @@ struct carry_info_struct {
 /**
  * @brief Info on what point the mob is chasing after.
  */
-struct chase_info_struct {
+struct chase_t {
 
     //--- Members ---
 
@@ -141,7 +141,7 @@ struct chase_info_struct {
     CHASE_STATES state = CHASE_STATE_STOPPED;
 
     //Flags that control how to chase. Use CHASE_FLAG_*.
-    bitmask_8 flags = 0;
+    bitmask_8_t flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.
     point offset;
@@ -174,7 +174,7 @@ struct chase_info_struct {
  * @brief Info about what mob or point that this mob is circling around,
  * if any.
  */
-struct circling_info_struct {
+struct circling_t {
 
     //--- Members ---
 
@@ -205,7 +205,7 @@ struct circling_info_struct {
 
     //--- Function declarations ---
 
-    explicit circling_info_struct(mob* m);
+    explicit circling_t(mob* m);
 
 };
 
@@ -213,7 +213,7 @@ struct circling_info_struct {
 /**
  * @brief Info on a mob that's being delivered to an Onion, ship, etc.
  */
-struct delivery_info_struct {
+struct delivery_t {
 
     //--- Members ---
 
@@ -232,7 +232,7 @@ struct delivery_info_struct {
 
     //--- Function declarations ---
 
-    delivery_info_struct();
+    delivery_t();
 
 };
 
@@ -244,7 +244,7 @@ struct delivery_info_struct {
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct group_info_struct {
+struct group_t {
 
     //--- Misc. declarations ---
 
@@ -313,7 +313,7 @@ struct group_info_struct {
 
     //--- Function declarations ---
 
-    explicit group_info_struct(mob* leader_ptr);
+    explicit group_t(mob* leader_ptr);
     void init_spots(mob* affected_mob_ptr = nullptr);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
@@ -335,7 +335,7 @@ struct group_info_struct {
  * @brief Info about how this mob is currently being held by
  * another, if it is.
  */
-struct hold_info_struct {
+struct hold_t {
 
     //--- Members ---
 
@@ -536,7 +536,7 @@ struct mob_type_lists {
 /**
  * @brief Info about this mob's parent, if any.
  */
-struct parent_info_struct {
+struct parent_t {
 
     //--- Members ---
 
@@ -585,7 +585,7 @@ struct parent_info_struct {
 
     //--- Function declarations ---
 
-    explicit parent_info_struct(mob* m);
+    explicit parent_t(mob* m);
 
 };
 
@@ -594,7 +594,7 @@ struct parent_info_struct {
  * @brief Info on how to travel through the path graph that
  * the mob currently intends to travel.
  */
-struct path_info_struct {
+struct path_t {
 
     //--- Members ---
 
@@ -619,7 +619,7 @@ struct path_info_struct {
 
     //--- Function declarations ---
 
-    path_info_struct(
+    path_t(
         mob* m,
         const path_follow_settings &settings
     );
@@ -632,7 +632,7 @@ struct path_info_struct {
  * @brief Info that a mob type may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct pikmin_nest_type_struct {
+struct pikmin_nest_type_t {
 
     //--- Members ---
 
@@ -660,7 +660,7 @@ struct pikmin_nest_type_struct {
  * @brief Info that a mob may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct pikmin_nest_struct {
+struct pikmin_nest_t {
 
 public:
 
@@ -670,7 +670,7 @@ public:
     mob* m_ptr = nullptr;
 
     //Pointer to the type of nest.
-    pikmin_nest_type_struct* nest_type = nullptr;
+    pikmin_nest_type_t* nest_type = nullptr;
 
     //How many Pikmin are inside, per type, per maturity.
     vector<vector<size_t> > pikmin_inside;
@@ -687,7 +687,7 @@ public:
 
     //--- Function declarations ---
 
-    pikmin_nest_struct(mob* m_ptr, pikmin_nest_type_struct* type);
+    pikmin_nest_t(mob* m_ptr, pikmin_nest_type_t* type);
     bool call_pikmin(mob* m_ptr, const size_t type_idx);
     size_t get_amount_by_type(const pikmin_type* type);
     void read_script_vars(const script_var_reader &svr);
@@ -704,7 +704,7 @@ public:
  * @brief Info about the track mob that a mob is currently
  * riding. Includes things like current progress.
  */
-struct track_info_struct {
+struct track_t {
     
     //--- Members ---
 
@@ -727,7 +727,7 @@ struct track_info_struct {
 
     //--- Function declarations ---
     
-    track_info_struct(
+    track_t(
         mob* m, const vector<size_t> &checkpoints, const float speed
     );
     
@@ -748,8 +748,8 @@ string get_error_message_mob_info(mob* m);
 vector<hazard*> get_mob_type_list_invulnerabilities(
     const unordered_set<mob_type*> &types
 );
-mob_type::spawn_struct* get_spawn_info_from_child_info(
-    mob_type* type, const mob_type::child_struct* child_info
+mob_type::spawn_t* get_spawn_info_from_child_info(
+    mob_type* type, const mob_type::child_t* child_info
 );
 MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str);
 MOB_TEAMS string_to_team_nr(const string &team_str);

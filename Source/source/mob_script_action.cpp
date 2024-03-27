@@ -45,7 +45,7 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) {
  *
  * @param code The function to run.
  */
-mob_action_call::mob_action_call(custom_action_code code) :
+mob_action_call::mob_action_call(custom_action_code_t code) :
     code(code) {
     
     for(size_t a = 0; a < game.mob_actions.size(); ++a) {

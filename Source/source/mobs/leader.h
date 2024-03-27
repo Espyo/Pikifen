@@ -143,7 +143,7 @@ public:
     bool check_throw_ok() const;
     void dismiss();
     bool order_pikmin_to_onion(
-        const pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
+        const pikmin_type* type, pikmin_nest_t* n_ptr, const size_t amount
     );
     void queue_throw();
     void signal_swarm_start() const;

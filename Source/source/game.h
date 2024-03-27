@@ -100,7 +100,7 @@ public:
     //--- Members ---
 
     //List of asset file names.
-    asset_file_names_struct asset_file_names;
+    asset_file_names_t asset_file_names;
     
     //Audio.
     audio_manager audio;
@@ -112,7 +112,7 @@ public:
     ALLEGRO_BITMAP* bmp_error = nullptr;
     
     //Player 1's camera.
-    camera_info cam;
+    camera_t cam;
     
     //Game's configuration.
     game_config config;
@@ -124,7 +124,7 @@ public:
     double cur_frame_process_time = 0.0f;
     
     //Info about the maker tools.
-    maker_tools_info maker_tools;
+    maker_tools_t maker_tools;
     
     //Data about the area that's currently being used.
     area_data cur_area_data;
@@ -196,7 +196,7 @@ public:
     mob_type_lists mob_types;
     
     //Mouse cursor information.
-    mouse_cursor_struct mouse_cursor;
+    mouse_cursor_t mouse_cursor;
     
     //Database of all mission fail conditions.
     vector<mission_fail*> mission_fail_conds;
@@ -208,10 +208,10 @@ public:
     vector<mission_score_criterion*> mission_score_criteria;
     
     //User options.
-    options_struct options;
+    options_t options;
     
     //Performance monitor.
-    performance_monitor_struct* perf_mon = nullptr;
+    performance_monitor_t* perf_mon = nullptr;
     
     //Database of all sector types and their names.
     enum_name_database sector_types;
@@ -232,7 +232,7 @@ public:
     game_state_list states;
     
     //List of lifetime statistics.
-    statistics_struct statistics;
+    statistics_t statistics;
     
     //List of status types.
     map<string, status_type*> status_types;

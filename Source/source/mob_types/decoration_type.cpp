@@ -23,7 +23,7 @@ decoration_type::decoration_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     
-    area_editor_prop_struct aep_random_anim_delay;
+    area_editor_prop_t aep_random_anim_delay;
     aep_random_anim_delay.name = "Random animation delay";
     aep_random_anim_delay.var = "random_animation_delay";
     aep_random_anim_delay.type = AEMP_BOOL;
@@ -33,7 +33,7 @@ decoration_type::decoration_type() :
         "this property makes this decoration use it or not.";
     area_editor_props.push_back(aep_random_anim_delay);
     
-    area_editor_prop_struct aep_random_tint;
+    area_editor_prop_t aep_random_tint;
     aep_random_tint.name = "Random tint";
     aep_random_tint.var = "random_tint";
     aep_random_tint.type = AEMP_BOOL;
@@ -43,7 +43,7 @@ decoration_type::decoration_type() :
         "this property makes this decoration use it or not.";
     area_editor_props.push_back(aep_random_tint);
     
-    area_editor_prop_struct aep_random_scale;
+    area_editor_prop_t aep_random_scale;
     aep_random_scale.name = "Random scale";
     aep_random_scale.var = "random_scale";
     aep_random_scale.type = AEMP_BOOL;
@@ -53,7 +53,7 @@ decoration_type::decoration_type() :
         "this property makes this decoration use it or not.";
     area_editor_props.push_back(aep_random_scale);
     
-    area_editor_prop_struct aep_random_rotation;
+    area_editor_prop_t aep_random_rotation;
     aep_random_rotation.name = "Random rotation";
     aep_random_rotation.var = "random_rotation";
     aep_random_rotation.type = AEMP_BOOL;

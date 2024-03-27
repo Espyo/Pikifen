@@ -1266,7 +1266,7 @@ void gameplay_state::do_menu_logic() {
     if(game.maker_tools.info_lock && game.maker_tools.path_info) {
         if(game.maker_tools.info_lock->path_info) {
         
-            path_info_struct* path = game.maker_tools.info_lock->path_info;
+            path_t* path = game.maker_tools.info_lock->path_info;
             string result_str = path_result_to_string(path->result);
             
             string stops_str =
@@ -1692,7 +1692,7 @@ void gameplay_state::process_mob_reaches(
         
     if(!obir_ev && !opir_ev) return;
     
-    mob_type::reach_struct* r_ptr =
+    mob_type::reach_t* r_ptr =
         &m_ptr->type->reaches[m_ptr->near_reach];
         
     dist d_between = m_ptr->get_distance_between(m2_ptr, &d);

@@ -167,7 +167,7 @@ void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
     if(m->delivery_info) {
         delete m->delivery_info;
     }
-    m->delivery_info = new delivery_info_struct();
+    m->delivery_info = new delivery_t();
     if(m->carry_info->intended_pik_type) {
         m->delivery_info->color = m->carry_info->intended_pik_type->main_color;
         m->delivery_info->intended_pik_type = m->carry_info->intended_pik_type;

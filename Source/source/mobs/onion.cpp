@@ -67,7 +67,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     mob(pos, type, angle),
     oni_type(type) {
     
-    nest = new pikmin_nest_struct(this, oni_type->nest);
+    nest = new pikmin_nest_t(this, oni_type->nest);
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
@@ -116,7 +116,7 @@ void onion::draw_mob() {
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_info eff;
+    bitmap_effect_t eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,

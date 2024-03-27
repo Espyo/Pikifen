@@ -51,7 +51,7 @@ public:
     //--- Members ---
 
     //Nest data.
-    pikmin_nest_type_struct* nest = nullptr;
+    pikmin_nest_type_t* nest = nullptr;
 
     //Can a leader heal at this ship?
     bool can_heal = false;

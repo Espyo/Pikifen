@@ -581,9 +581,9 @@ void gameplay_state::draw_debug_tools() {
         cur_leader_ptr->group->anchor.x,
         cur_leader_ptr->group->anchor.y,
         3.0f,
-        cur_leader_ptr->group->mode == group_info_struct::MODE_SHUFFLE ?
+        cur_leader_ptr->group->mode == group_t::MODE_SHUFFLE ?
         al_map_rgba(0, 255, 0, 192) :
-        cur_leader_ptr->group->mode == group_info_struct::MODE_FOLLOW_BACK ?
+        cur_leader_ptr->group->mode == group_t::MODE_FOLLOW_BACK ?
         al_map_rgba(255, 255, 0, 192) :
         al_map_rgba(255, 0, 0, 192),
         2.0f
@@ -714,7 +714,7 @@ void gameplay_state::draw_ingame_text() {
         game.maker_tools.path_info &&
         game.maker_tools.info_lock->path_info
     ) {
-        path_info_struct* path = game.maker_tools.info_lock->path_info;
+        path_t* path = game.maker_tools.info_lock->path_info;
         point target_pos =
             has_flag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
             path->settings.target_mob->pos :

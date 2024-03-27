@@ -150,22 +150,22 @@ public:
     //-Complex states-
     
     //Information about what it is chasing after.
-    chase_info_struct chase_info;
+    chase_t chase_info;
     
     //Information about the path it is following, if any.
-    path_info_struct* path_info = nullptr;
+    path_t* path_info = nullptr;
     
     //Information about the mob/point it's circling, if any.
-    circling_info_struct* circling_info = nullptr;
+    circling_t* circling_info = nullptr;
     
     //Riding a track. If nullptr, the mob is not riding on any track.
-    track_info_struct* track_info = nullptr;
+    track_t* track_info = nullptr;
     
     //Info on how this mob should be carried. Uncarriable if nullptr.
-    carry_info_struct* carry_info = nullptr;
+    carry_t* carry_info = nullptr;
     
     //Onion delivery info. If nullptr, the mob is not being delivered.
-    delivery_info_struct* delivery_info = nullptr;
+    delivery_t* delivery_info = nullptr;
     
     //-Physical space-
     
@@ -245,10 +245,10 @@ public:
     hazard* on_hazard = nullptr;
     
     //If this mob is a sub-mob, this points to the parent mob.
-    parent_info_struct* parent = nullptr;
+    parent_t* parent = nullptr;
     
     //Miscellanous flags. Use MOB_FLAG_*.
-    bitmask_16 flags = 0;
+    bitmask_16_t flags = 0;
     
     //-Interactions with other mobs-
     
@@ -256,7 +256,7 @@ public:
     vector<mob*> links;
     
     //If it's being held by another mob, the information is kept here.
-    hold_info_struct holder;
+    hold_t holder;
     
     //List of mobs it is holding.
     vector<mob*> holding;
@@ -288,7 +288,7 @@ public:
     subgroup_type* subgroup_type_ptr = nullptr;
     
     //Info on the group this mob is a leader of, if any.
-    group_info_struct* group = nullptr;
+    group_t* group = nullptr;
     
     //-Animation-
     
@@ -405,7 +405,7 @@ public:
     void release(mob* m);
     bool can_hurt(mob* m) const;
     bool can_hunt(mob* m) const;
-    mob_type::vulnerability_struct get_hazard_vulnerability(
+    mob_type::vulnerability_t get_hazard_vulnerability(
         hazard* h_ptr
     ) const;
     bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
@@ -417,7 +417,7 @@ public:
     void release_chomped_pikmin();
     void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;
-    mob* spawn(const mob_type::spawn_struct* info, mob_type* type_ptr = nullptr);
+    mob* spawn(const mob_type::spawn_t* info, mob_type* type_ptr = nullptr);
     void start_dying();
     void finish_dying();
     void respawn();
@@ -439,7 +439,7 @@ public:
     );
     void chase(
         const point &coords, const float coords_z,
-        const bitmask_8 flags = 0,
+        const bitmask_8_t flags = 0,
         const float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
@@ -490,7 +490,7 @@ public:
     
     void get_sprite_bitmap_effects(
         sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-        bitmap_effect_info* info, bitmask_16 effects
+        bitmap_effect_t* info, bitmask_16_t effects
     ) const;
     
     string print_state_history() const;

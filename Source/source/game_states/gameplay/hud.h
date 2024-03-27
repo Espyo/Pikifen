@@ -53,7 +53,7 @@ enum BUBBLE_RELATIONS {
 /**
  * @brief Holds information about the in-game HUD.
  */
-struct hud_struct {
+struct hud_t {
 
     //--- Misc. declarations ---
 
@@ -186,8 +186,8 @@ struct hud_struct {
 
     //--- Function declarations ---
 
-    hud_struct();
-    ~hud_struct();
+    hud_t();
+    ~hud_t();
     void tick(const float delta_t);
     
 private:

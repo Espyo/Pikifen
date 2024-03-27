@@ -759,7 +759,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     
     for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); ++p) {
     
-        mob_type::area_editor_prop_struct* p_ptr =
+        mob_type::area_editor_prop_t* p_ptr =
             &m_ptr->type->area_editor_props[p];
             
         string value;
@@ -3295,7 +3295,7 @@ void area_editor::process_gui_panel_mission() {
         if(fail_flags_changed) {
             register_change("mission fail conditions change");
             game.cur_area_data.mission.fail_conditions =
-                (bitmask_8) fail_flags;
+                (bitmask_8_t) fail_flags;
         }
         
         vector<MISSION_FAIL_CONDITIONS> active_conditions;

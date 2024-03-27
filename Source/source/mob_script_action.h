@@ -608,7 +608,7 @@ struct mob_action_run_data {
  * 
  * The first parameter is the data to run with.
  */
-typedef void (mob_action_code)(mob_action_run_data &data);
+typedef void (mob_action_code_t)(mob_action_run_data &data);
 
 /**
  * @brief Function to run when a mob action is loaded from a script.
@@ -616,7 +616,7 @@ typedef void (mob_action_code)(mob_action_run_data &data);
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
-typedef bool (mob_action_load_code)(mob_action_call &call);
+typedef bool (mob_action_load_code_t)(mob_action_call &call);
 
 
 /**
@@ -633,10 +633,10 @@ struct mob_action {
     string name;
     
     //Code to run.
-    mob_action_code* code = nullptr;
+    mob_action_code_t* code = nullptr;
     
     //Extra logic to run when this action is loaded from a script file.
-    mob_action_load_code* extra_load_logic = nullptr;
+    mob_action_load_code_t* extra_load_logic = nullptr;
     
     //Parameters that it can take.
     vector<mob_action_param> parameters;
@@ -656,7 +656,7 @@ struct mob_action_call {
     mob_action* action = nullptr;
     
     //Custom code to run, if any.
-    custom_action_code code = nullptr;
+    custom_action_code_t code = nullptr;
     
     //Arguments to use.
     vector<string> args;
@@ -677,7 +677,7 @@ struct mob_action_call {
     //--- Function declarations ---
     
     explicit mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
-    explicit mob_action_call(custom_action_code code);
+    explicit mob_action_call(custom_action_code_t code);
     bool load_from_data_node(data_node* dn, mob_type* mt);
     bool run(mob* m, void* custom_data_1, void* custom_data_2);
     

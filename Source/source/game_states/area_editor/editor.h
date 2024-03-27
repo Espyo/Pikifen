@@ -206,9 +206,9 @@ private:
     };
     
     /**
-     * @brief Info pertaining a sector split operation.
+     * @brief Info pertaining to a sector split operation.
      */
-    struct sector_split_info_struct {
+    struct sector_split_t {
     
         //--- Members ---
         
@@ -624,7 +624,7 @@ private:
     OCTEE_MODES octee_mode = OCTEE_MODE_OFFSET;
     
     //When drawing a path, use these stop flags.
-    bitmask_8 path_drawing_flags = 0;
+    bitmask_8_t path_drawing_flags = 0;
     
     //When drawing a path, use this label.
     string path_drawing_label;
@@ -735,7 +735,7 @@ private:
     bool reference_keep_aspect_ratio = true;
     
     //Info about the current sector split operation.
-    sector_split_info_struct sector_split_info;
+    sector_split_t sector_split_info;
     
     //Currently selected edges.
     set<edge*> selected_edges;

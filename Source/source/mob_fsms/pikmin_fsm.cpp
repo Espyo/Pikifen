@@ -1880,9 +1880,9 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     size_t throw_sfx_idx =
         pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_THROWN];
     if(throw_sfx_idx != INVALID) {
-        mob_type::sfx_struct* throw_sfx =
+        mob_type::sfx_t* throw_sfx =
             &pik_ptr->type->sounds[throw_sfx_idx];
-        sfx_source_config_struct throw_sfx_config;
+        sfx_source_config_t throw_sfx_config;
         throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
         game.audio.create_mob_sfx_source(
             throw_sfx->sample,
@@ -2384,7 +2384,7 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     checkpoints.push_back((pik_ptr->temp_i * 2) + 1);
     checkpoints.push_back(pik_ptr->temp_i * 2);
     
-    pik_ptr->track_info = new track_info_struct(
+    pik_ptr->track_info = new track_t(
         oni_ptr, checkpoints, oni_ptr->oni_type->nest->pikmin_enter_speed
     );
     
@@ -2673,7 +2673,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     
     size_t closest_spot = INVALID;
     dist closest_spot_dist;
-    carrier_spot_struct* closest_spot_ptr = nullptr;
+    carrier_spot_t* closest_spot_ptr = nullptr;
     point closest_spot_offset;
     
     //If this is the first Pikmin to go to the carriable mob, rotate
@@ -2688,7 +2688,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     }
     
     for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
-        carrier_spot_struct* spot_ptr =
+        carrier_spot_t* spot_ptr =
             &carriable_mob->carry_info->spot_info[s];
         if(spot_ptr->state != CARRY_SPOT_FREE) continue;
         
@@ -2784,7 +2784,7 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
     pikmin* pik_ptr = (pikmin*) m;
-    pikmin_nest_struct* nest_ptr = (pikmin_nest_struct*) info1;
+    pikmin_nest_t* nest_ptr = (pikmin_nest_t*) info1;
     
     //Pick a leg at random.
     pik_ptr->temp_i =
@@ -3776,7 +3776,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         checkpoints.push_back(c);
     }
     m->track_info =
-        new track_info_struct(
+        new track_t(
         tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
     );
     
@@ -4005,7 +4005,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     }
     
     if(p->invuln_period.time_left > 0) return;
-    mob_type::vulnerability_struct vuln = p->get_hazard_vulnerability(h);
+    mob_type::vulnerability_t vuln = p->get_hazard_vulnerability(h);
     if(vuln.damage_mult == 0.0f) return;
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {

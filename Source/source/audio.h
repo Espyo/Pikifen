@@ -181,12 +181,12 @@ enum MIX_TRACK_TYPES {
 /**
  * @brief Configuration about a given sound effect source.
  */
-struct sfx_source_config_struct {
+struct sfx_source_config_t {
 
     //--- Members ---
 
     //Flags. Use SFX_FLAGS.
-    bitmask_8 flags = 0;
+    bitmask_8_t flags = 0;
     
     //How it should stack with other playbacks.
     SFX_STACK_MODES stack_mode = SFX_STACK_NORMAL;
@@ -221,7 +221,7 @@ struct sfx_source_config_struct {
  * Typically this is tied to a mob, but it could also just be an
  * abstract source. All sound playback needs to come from a source.
  */
-struct sfx_source_struct {
+struct sfx_source_t {
 
     //--- Members ---
 
@@ -232,7 +232,7 @@ struct sfx_source_struct {
     SFX_TYPE type = SFX_TYPE_WORLD_GLOBAL;
     
     //Configuration.
-    sfx_source_config_struct config;
+    sfx_source_config_t config;
     
     //Position in the game world, if applicable.
     point pos;
@@ -250,7 +250,7 @@ struct sfx_source_struct {
  * @brief An instance of a sound effect's playback.
  * This needs to be emitted from a sound source.
  */
-struct sfx_playback_struct {
+struct sfx_playback_t {
 
     //--- Members ---
 
@@ -370,7 +370,7 @@ private:
     /**
      * @brief Info about an audio sample.
      */
-    struct sample_info {
+    struct sample_t {
 
         //--- Members ---
 
@@ -383,7 +383,7 @@ private:
 
         //--- Function declarations ---
 
-        explicit sample_info(ALLEGRO_SAMPLE* s = nullptr);
+        explicit sample_t(ALLEGRO_SAMPLE* s = nullptr);
     };
 
 
@@ -393,7 +393,7 @@ private:
     string base_dir;
 
     //List of loaded samples.
-    map<string, sample_info> list;
+    map<string, sample_t> list;
 
     //Total sum of calls. Useful for debugging.
     long total_calls = 0;
@@ -401,7 +401,7 @@ private:
 
     //--- Function declarations ---
 
-    void detach(map<string, sample_info>::iterator it);
+    void detach(map<string, sample_t>::iterator it);
     
 };
 
@@ -434,7 +434,7 @@ private:
     /**
      * @brief Info about an audio stream.
      */
-    struct stream_info {
+    struct stream_t {
 
         //--- Members ---
 
@@ -447,7 +447,7 @@ private:
 
         //--- Function declarations ---
 
-        explicit stream_info(ALLEGRO_AUDIO_STREAM* s = nullptr);
+        explicit stream_t(ALLEGRO_AUDIO_STREAM* s = nullptr);
     };
 
 
@@ -457,7 +457,7 @@ private:
     string base_dir;
 
     //List of loaded samples.
-    map<string, stream_info> list;
+    map<string, stream_t> list;
 
     //Total sum of calls. Useful for debugging.
     long total_calls = 0;
@@ -465,7 +465,7 @@ private:
 
     //--- Function declarations ---
 
-    void detach(map<string, stream_info>::iterator it);
+    void detach(map<string, stream_t>::iterator it);
     
 };
 
@@ -494,25 +494,25 @@ public:
     audio_manager();
     size_t create_ui_sfx_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_struct &config = sfx_source_config_struct()
+        const sfx_source_config_t &config = sfx_source_config_t()
     );
     size_t create_mob_sfx_source(
         ALLEGRO_SAMPLE* sample,
         mob* m_ptr,
-        const sfx_source_config_struct &config = sfx_source_config_struct()
+        const sfx_source_config_t &config = sfx_source_config_t()
     );
     size_t create_world_ambiance_sfx_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_struct &config = sfx_source_config_struct()
+        const sfx_source_config_t &config = sfx_source_config_t()
     );
     size_t create_world_global_sfx_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_struct &config = sfx_source_config_struct()
+        const sfx_source_config_t &config = sfx_source_config_t()
     );
     size_t create_world_pos_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const point &pos,
-        const sfx_source_config_struct &config = sfx_source_config_struct()
+        const sfx_source_config_t &config = sfx_source_config_t()
     );
     bool destroy_sfx_source(size_t source_id);
     void destroy();
@@ -565,10 +565,10 @@ private:
     map<size_t, mob*> mob_sources;
     
     //All sound effect sources.
-    map<size_t, sfx_source_struct> sources;
+    map<size_t, sfx_source_t> sources;
     
     //All sound effects being played right now.
-    vector<sfx_playback_struct> playbacks;
+    vector<sfx_playback_t> playbacks;
     
     //Status for things that affect mix tracks this frame.
     vector<bool> mix_statuses;
@@ -588,11 +588,11 @@ private:
     size_t create_sfx_source(
         ALLEGRO_SAMPLE* sample,
         SFX_TYPE type,
-        const sfx_source_config_struct &config,
+        const sfx_source_config_t &config,
         const point &pos
     );
     bool destroy_sfx_playback(size_t playback_idx);
-    sfx_source_struct* get_source(size_t source_id);
+    sfx_source_t* get_source(size_t source_id);
     void start_song_track(
         song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
     );

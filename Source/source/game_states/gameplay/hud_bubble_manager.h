@@ -57,7 +57,7 @@ public:
     /**
      * @brief Represents a bubble GUI item.
      */
-    struct bubble_info {
+    struct bubble_t {
 
         //--- Members ---
 
@@ -84,7 +84,7 @@ public:
          * 
          * @param bubble The bubble GUI item.
          */
-        explicit bubble_info(gui_item* bubble = nullptr) :
+        explicit bubble_t(gui_item* bubble = nullptr) :
             bubble(bubble) {
         }
         
@@ -147,7 +147,7 @@ public:
             return;
         }
         
-        typename map<size_t, bubble_info>::iterator match_it;
+        typename map<size_t, bubble_t>::iterator match_it;
         gui_item* match_ptr = nullptr;
         point match_pos;
         point match_size;
@@ -297,7 +297,7 @@ public:
     * this is the icon for the second leader, this value is 1 (0-indexed).
     */
     void register_bubble(const size_t number, gui_item* bubble) {
-        bubbles[number] = bubble_info(bubble);
+        bubbles[number] = bubble_t(bubble);
     }
     
     /**
@@ -340,7 +340,7 @@ private:
     //--- Members ---
 
     //List of all registered bubble GUI items.
-    map<size_t, bubble_info> bubbles;
+    map<size_t, bubble_t> bubbles;
 
     //Time left in the current transition, or 0 if none.
     float transition_timer = 0.0f;

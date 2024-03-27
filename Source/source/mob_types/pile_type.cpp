@@ -25,7 +25,7 @@ pile_type::pile_type() :
     
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
-    area_editor_prop_struct aep_amount;
+    area_editor_prop_t aep_amount;
     aep_amount.name = "Amount";
     aep_amount.var = "amount";
     aep_amount.type = AEMP_TEXT;

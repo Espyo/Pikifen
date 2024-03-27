@@ -402,7 +402,7 @@ void load_mob_type_from_file(
             );
             
         } else {
-            mob_type::vulnerability_struct &vuln =
+            mob_type::vulnerability_t &vuln =
                 mt->hazard_vulnerabilities[&(hazard_it->second)];
             vuln.damage_mult = percentage / 100.0f;
             if(!status_name.empty()) {
@@ -526,7 +526,7 @@ void load_mob_type_from_file(
     size_t n_reaches = reaches_node->get_nr_of_children();
     for(size_t r = 0; r < n_reaches; ++r) {
     
-        mob_type::reach_struct new_reach;
+        mob_type::reach_t new_reach;
         new_reach.name = reaches_node->get_child(r)->name;
         vector<string> r_strings = split(reaches_node->get_child(r)->value);
         
@@ -554,7 +554,7 @@ void load_mob_type_from_file(
     
         data_node* spawn_node = spawns_node->get_child(s);
         reader_setter spawn_rs(spawn_node);
-        mob_type::spawn_struct new_spawn;
+        mob_type::spawn_t new_spawn;
         string coords_str;
         
         new_spawn.name = spawn_node->name;
@@ -581,7 +581,7 @@ void load_mob_type_from_file(
     
         data_node* child_node = children_node->get_child(c);
         reader_setter child_rs(child_node);
-        mob_type::child_struct new_child;
+        mob_type::child_t new_child;
         
         string limb_draw_method;
         string hold_rotation_method;
@@ -664,7 +664,7 @@ void load_mob_type_from_file(
     
         data_node* sfx_node = sfxs_node->get_child(s);
         reader_setter sfx_rs(sfx_node);
-        mob_type::sfx_struct new_sfx;
+        mob_type::sfx_t new_sfx;
         
         string file_str;
         data_node* file_node;
@@ -750,7 +750,7 @@ void load_mob_type_from_file(
         string list_str;
         data_node* type_node = nullptr;
         
-        mob_type::area_editor_prop_struct new_prop;
+        mob_type::area_editor_prop_t new_prop;
         new_prop.name = prop_node->name;
         
         prop_rs.set("var", new_prop.var);
@@ -833,7 +833,7 @@ void load_mob_type_from_file(
                 huntable_targets_node
             );
         } else {
-            mt->huntable_targets |= (bitmask_16) v;
+            mt->huntable_targets |= (bitmask_16_t) v;
         }
     }
     
@@ -850,7 +850,7 @@ void load_mob_type_from_file(
                 hurtable_targets_node
             );
         } else {
-            mt->hurtable_targets |= (bitmask_16) v;
+            mt->hurtable_targets |= (bitmask_16_t) v;
         }
     }
     

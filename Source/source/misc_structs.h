@@ -141,7 +141,7 @@ enum STRING_TOKEN_TYPES {
 /**
  * @brief List of file names of system assets.
  */
-struct asset_file_names_struct {
+struct asset_file_names_t {
 
     //--- Members ---
     
@@ -326,7 +326,7 @@ struct asset_file_names_struct {
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.
  */
-struct camera_info {
+struct camera_t {
 
     //--- Members ---
     
@@ -473,7 +473,7 @@ struct timer {
 /**
  * @brief Info about all of the maker tools.
  */
-struct maker_tools_info {
+struct maker_tools_t {
 
     //--- Members ---
     
@@ -552,7 +552,7 @@ struct maker_tools_info {
     
     //--- Function declarations ---
     
-    maker_tools_info();
+    maker_tools_t();
     void reset_for_gameplay();
     
 };
@@ -561,7 +561,7 @@ struct maker_tools_info {
 /**
  * @brief Info about the operative system's mouse cursor.
  */
-struct mouse_cursor_struct {
+struct mouse_cursor_t {
 
     //--- Members ---
     
@@ -648,7 +648,7 @@ struct bmp_manager {
     /**
      * @brief Info about a bitmap.
      */
-    struct bmp_info {
+    struct bmp_t {
     
         //--- Members ---
         
@@ -661,7 +661,7 @@ struct bmp_manager {
         
         //--- Function declarations ---
         
-        explicit bmp_info(ALLEGRO_BITMAP* b = nullptr);
+        explicit bmp_t(ALLEGRO_BITMAP* b = nullptr);
     };
     
     
@@ -671,7 +671,7 @@ struct bmp_manager {
     string base_dir;
     
     //List of loaded bitmaps.
-    map<string, bmp_info> list;
+    map<string, bmp_t> list;
     
     //Total sum of calls. Useful for debugging.
     long total_calls = 0;
@@ -679,7 +679,7 @@ struct bmp_manager {
     
     //--- Function declarations ---
     
-    void detach(map<string, bmp_info>::iterator it);
+    void detach(map<string, bmp_t>::iterator it);
     
 };
 
@@ -721,7 +721,7 @@ struct font_list {
  * @brief Info about where the player wants a leader
  * (or something else) to go, based on the player's inputs.
  */
-struct movement_struct {
+struct movement_t {
 
     //--- Members ---
     
@@ -1026,7 +1026,7 @@ struct fade_manager {
  * This is stuff like a note above the leader telling the player
  * what button to press to do something, like plucking.
  */
-struct notification_struct {
+struct notification_t {
 
     public:
     
@@ -1105,7 +1105,7 @@ struct spike_damage_type {
  * @brief Info on how a bitmap should be drawn, in regards to
  * translation, rotation, coloring, etc.
  */
-struct bitmap_effect_info {
+struct bitmap_effect_t {
 
     //--- Members ---
     
@@ -1173,13 +1173,13 @@ enum PERF_MON_STATES {
  * @brief Info about how long certain things took. Useful for makers
  * to monitor performance with.
  */
-struct performance_monitor_struct {
+struct performance_monitor_t {
 
     public:
     
     //--- Function declarations ---
     
-    performance_monitor_struct();
+    performance_monitor_t();
     void set_area_name(const string &name);
     void set_paused(const bool paused);
     void enter_state(const PERF_MON_STATES mode);
@@ -1245,22 +1245,22 @@ struct performance_monitor_struct {
     string cur_measurement_name;
     
     //Page of information about the current working info.
-    performance_monitor_struct::page cur_page;
+    performance_monitor_t::page cur_page;
     
     //How many frames of gameplay have been sampled.
     size_t frame_samples = 0;
     
     //Page of information about the loading process.
-    performance_monitor_struct::page loading_page;
+    performance_monitor_t::page loading_page;
     
     //Page of information about the average frame.
-    performance_monitor_struct::page frame_avg_page;
+    performance_monitor_t::page frame_avg_page;
     
     //Page of information about the fastest frame.
-    performance_monitor_struct::page frame_fastest_page;
+    performance_monitor_t::page frame_fastest_page;
     
     //Page of information about the slowest frame.
-    performance_monitor_struct::page frame_slowest_page;
+    performance_monitor_t::page frame_slowest_page;
     
 };
 
@@ -1336,7 +1336,7 @@ struct subgroup_type_manager {
  * @brief Info about the current amount of sprays and ingredients
  * for the available spray types.
  */
-struct spray_stats_struct {
+struct spray_stats_t {
 
     //--- Members ---
     
@@ -1352,7 +1352,7 @@ struct spray_stats_struct {
 /**
  * @brief Info about the engine's lifetime statistics.
  */
-struct statistics_struct {
+struct statistics_t {
 
     //--- Members ---
     
@@ -1444,7 +1444,7 @@ struct edge_offset_cache {
 /**
  * @brief Info about the current whistle usage.
  */
-struct whistle_struct {
+struct whistle_t {
 
     //--- Members ---
     
@@ -1484,7 +1484,7 @@ struct whistle_struct {
     
     //--- Function declarations ---
     
-    whistle_struct();
+    whistle_t();
     void start_whistling();
     void stop_whistling();
     void tick(

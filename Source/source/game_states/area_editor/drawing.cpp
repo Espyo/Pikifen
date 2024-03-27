@@ -710,9 +710,9 @@ void area_editor::draw_canvas() {
         //Draw children of this mob.
         if(m_ptr->type) {
             for(size_t c = 0; c < m_ptr->type->children.size(); ++c) {
-                mob_type::child_struct* child_info =
+                mob_type::child_t* child_info =
                     &m_ptr->type->children[c];
-                mob_type::spawn_struct* spawn_info =
+                mob_type::spawn_t* spawn_info =
                     get_spawn_info_from_child_info(m_ptr->type, child_info);
                 if(!spawn_info) continue;
                 
@@ -1492,7 +1492,7 @@ void area_editor::draw_canvas() {
         /**
          * @brief Info about a split.
          */
-        struct split_info {
+        struct split_t {
         
             //--- Members ---
             
@@ -1515,7 +1515,7 @@ void area_editor::draw_canvas() {
              * @param l1r Line 1 intersection point.
              * @param l2r Line 2 intersection point.
              */
-            split_info(
+            split_t(
                 sector* s1, sector* s2, const float l1r, const float l2r
             ) {
                 sector_ptrs[0] = s1;
@@ -1525,7 +1525,7 @@ void area_editor::draw_canvas() {
             }
             
         };
-        vector<split_info> splits;
+        vector<split_t> splits;
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
             float l1r = 0;
@@ -1550,7 +1550,7 @@ void area_editor::draw_canvas() {
                 )
             ) {
                 splits.push_back(
-                    split_info(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
+                    split_t(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
                 );
             }
         }
@@ -1558,17 +1558,17 @@ void area_editor::draw_canvas() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (const split_info & i1, const split_info & i2) -> bool {
+            [] (const split_t & i1, const split_t & i2) -> bool {
                 return i1.l2r < i2.l2r;
             }
             );
             
             splits.insert(
                 splits.begin(),
-                split_info(cs_left_sector, cs_left_sector, 0, 0)
+                split_t(cs_left_sector, cs_left_sector, 0, 0)
             );
             splits.push_back(
-                split_info(cs_right_sector, cs_right_sector, 1, 1)
+                split_t(cs_right_sector, cs_right_sector, 1, 1)
             );
             
             for(size_t s = 1; s < splits.size(); ++s) {

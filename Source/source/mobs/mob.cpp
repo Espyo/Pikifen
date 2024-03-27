@@ -191,7 +191,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     }
     
     if(type->has_group) {
-        group = new group_info_struct(this);
+        group = new group_t(this);
     }
 }
 
@@ -558,7 +558,7 @@ void mob::arachnorb_plan_logic(
  * @param destination Where to carry it.
  */
 void mob::become_carriable(const CARRY_DESTINATIONS destination) {
-    carry_info = new carry_info_struct(this, destination);
+    carry_info = new carry_t(this, destination);
 }
 
 
@@ -815,7 +815,7 @@ bool mob::calculate_damage(
         if(!attack_h->hazards.empty()) {
             float max_vulnerability = 0.0f;
             for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
-                mob_type::vulnerability_struct vuln =
+                mob_type::vulnerability_t vuln =
                     victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
                     std::max(vuln.damage_mult, max_vulnerability);
@@ -1043,7 +1043,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
 void mob::chase(
     point* orig_coords, float* orig_z,
     const point &offset, const float offset_z,
-    const bitmask_8 flags,
+    const bitmask_8_t flags,
     const float target_distance, const float speed, const float acceleration
 ) {
     chase_info.orig_coords = orig_coords;
@@ -1139,7 +1139,7 @@ void mob::circle_around(
     const float speed, const bool can_free_move
 ) {
     if(!circling_info) {
-        circling_info = new circling_info_struct(this);
+        circling_info = new circling_t(this);
     }
     circling_info->circling_mob = m;
     circling_info->circling_point = p;
@@ -1375,7 +1375,7 @@ void mob::do_attack_effects(
     if(!useless) {
         //Play the sound.
         
-        sfx_source_config_struct attack_sfx_config;
+        sfx_source_config_t attack_sfx_config;
         attack_sfx_config.gain = 0.6f;
         game.audio.create_world_pos_sfx_source(
             game.sys_assets.sfx_attack,
@@ -1405,7 +1405,7 @@ void mob::draw_limb() {
     );
     if(!limb_cur_s_ptr) return;
     
-    bitmap_effect_info eff;
+    bitmap_effect_t eff;
     get_sprite_bitmap_effects(
         limb_cur_s_ptr, limb_next_s_ptr, limb_interpolation_factor,
         &eff,
@@ -1477,7 +1477,7 @@ void mob::draw_mob() {
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_info eff;
+    bitmap_effect_t eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -1616,7 +1616,7 @@ bool mob::follow_path(
     
     //Establish the mob's path-following information.
     //This also generates the path to take.
-    path_info = new path_info_struct(this, final_settings);
+    path_info = new path_t(this, final_settings);
     
     if(
         has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
@@ -1885,10 +1885,10 @@ void mob::get_group_spot_info(
  * @param h_ptr The hazard to check.
  * @return The vulnerability info.
  */
-mob_type::vulnerability_struct mob::get_hazard_vulnerability(
+mob_type::vulnerability_t mob::get_hazard_vulnerability(
     hazard* h_ptr
 ) const {
-    mob_type::vulnerability_struct vuln;
+    mob_type::vulnerability_t vuln;
     vuln.damage_mult = type->default_vulnerability;
     
     auto v = type->hazard_vulnerabilities.find(h_ptr);
@@ -2024,7 +2024,7 @@ float mob::get_speed_multiplier() const {
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    bitmap_effect_info* info, bitmask_16 effects
+    bitmap_effect_t* info, bitmask_16_t effects
 ) const {
 
     //Animation, position, angle, etc.
@@ -2666,7 +2666,7 @@ void mob::move_to_path_end(const float speed, const float acceleration) {
 size_t mob::play_sound(size_t sfx_data_idx) {
     if(sfx_data_idx >= type->sounds.size()) return 0;
     
-    mob_type::sfx_struct* sfx = &type->sounds[sfx_data_idx];
+    mob_type::sfx_t* sfx = &type->sounds[sfx_data_idx];
     
     switch(sfx->type) {
     case SFX_TYPE_WORLD_GLOBAL: {
@@ -3032,7 +3032,7 @@ void mob::set_var(const string &name, const string &value) {
  * name in the information structure. If not nullptr, uses this instead.
  * @return The new mob.
  */
-mob* mob::spawn(const mob_type::spawn_struct* info, mob_type* type_ptr) {
+mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
     //First, find the mob.
     if(!type_ptr) {
         type_ptr = game.mob_categories.find_mob_type(info->mob_type_name);
@@ -3689,7 +3689,7 @@ void mob::tick_misc_logic(const float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        group_info_struct::MODES old_mode = group->mode;
+        group_t::MODES old_mode = group->mode;
         bool is_holding = !holding.empty();
         bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >
@@ -3700,16 +3700,16 @@ void mob::tick_misc_logic(const float delta_t) {
             
         //Find what mode we're in on this frame.
         if(is_swarming) {
-            group->mode = group_info_struct::MODE_SWARM;
+            group->mode = group_t::MODE_SWARM;
         } else if(is_holding || is_far_from_group) {
-            group->mode = group_info_struct::MODE_FOLLOW_BACK;
+            group->mode = group_t::MODE_FOLLOW_BACK;
         } else {
-            group->mode = group_info_struct::MODE_SHUFFLE;
+            group->mode = group_t::MODE_SHUFFLE;
         }
         
         //Change things depending on the mode.
         switch(group->mode) {
-        case group_info_struct::MODE_FOLLOW_BACK: {
+        case group_t::MODE_FOLLOW_BACK: {
     
             //Follow the leader's back.
             group->anchor_angle = angle + TAU / 2.0f;
@@ -3726,7 +3726,7 @@ void mob::tick_misc_logic(const float delta_t) {
             );
             break;
             
-        } case group_info_struct::MODE_SHUFFLE: {
+        } case group_t::MODE_SHUFFLE: {
     
             //Casually shuffle with the leader, if needed.
             point mov;
@@ -3752,7 +3752,7 @@ void mob::tick_misc_logic(const float delta_t) {
             );
             break;
             
-        } case group_info_struct::MODE_SWARM: {
+        } case group_t::MODE_SWARM: {
     
             //Swarming.
             group->anchor_angle = game.states.gameplay->swarm_angle;
@@ -3787,8 +3787,8 @@ void mob::tick_misc_logic(const float delta_t) {
         }
         
         if(
-            old_mode != group_info_struct::MODE_SHUFFLE &&
-            group->mode == group_info_struct::MODE_SHUFFLE
+            old_mode != group_t::MODE_SHUFFLE &&
+            group->mode == group_t::MODE_SHUFFLE
         ) {
             //Started shuffling. Since it's a "casual" formation, we should
             //reassign the spots so Pikmin don't have to keep their order from
@@ -3860,7 +3860,7 @@ void mob::tick_script(const float delta_t) {
                         get_angle(pos, focus->pos)
                     );
                     
-                mob_type::reach_struct* r_ptr =
+                mob_type::reach_t* r_ptr =
                     &type->reaches[far_reach];
                 if(
                     (

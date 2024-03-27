@@ -222,7 +222,7 @@ bool gui_item::activate(const point &cursor_pos) {
         this == manager->back_item ?
         game.sys_assets.sfx_menu_back :
         game.sys_assets.sfx_menu_activate;
-    sfx_source_config_struct activate_sfx_config;
+    sfx_source_config_t activate_sfx_config;
     activate_sfx_config.gain = 0.75f;
     game.audio.create_ui_sfx_source(sample, activate_sfx_config);
     
@@ -1081,7 +1081,7 @@ void gui_manager::set_selected_item(gui_item* item, bool silent) {
     }
     
     if(selected_item && !silent) {
-        sfx_source_config_struct select_sfx_config;
+        sfx_source_config_t select_sfx_config;
         select_sfx_config.gain = 0.5f;
         select_sfx_config.speed_deviation = 0.1f;
         select_sfx_config.stack_min_pos = 0.01f;

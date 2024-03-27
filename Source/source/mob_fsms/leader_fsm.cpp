@@ -1433,7 +1433,7 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         size_t name_call_sfx_idx =
             lea_ptr->lea_type->sfx_data_idxs[LEADER_SOUND_NAME_CALL];
         if(name_call_sfx_idx != INVALID) {
-            mob_type::sfx_struct* name_call_sfx =
+            mob_type::sfx_t* name_call_sfx =
                 &m->type->sounds[name_call_sfx_idx];
             game.audio.create_world_global_sfx_source(
                 name_call_sfx->sample,
@@ -1589,7 +1589,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->release(holding_ptr);
     
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
-    sfx_source_config_struct throw_sfx_config;
+    sfx_source_config_t throw_sfx_config;
     throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
     game.audio.create_mob_sfx_source(
         game.sys_assets.sfx_throw,
@@ -1904,7 +1904,7 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
-    movement_struct* mov = (movement_struct*) info1;
+    movement_t* mov = (movement_t*) info1;
     point final_coords;
     float dummy_angle;
     float dummy_magnitude;
@@ -2280,7 +2280,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         checkpoints.push_back(c);
     }
     m->track_info =
-        new track_info_struct(
+        new track_t(
         tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
     );
     
@@ -2443,7 +2443,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
-    mob_type::vulnerability_struct vuln = m->get_hazard_vulnerability(h);
+    mob_type::vulnerability_t vuln = m->get_hazard_vulnerability(h);
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); ++e) {

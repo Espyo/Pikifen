@@ -93,7 +93,7 @@ enum BIG_MESSAGES {
 };
 
 
-struct msg_box_info;
+struct msg_box_t;
 
 
 /**
@@ -148,7 +148,7 @@ public:
     float gameplay_time_passed = 0.0f;
 
     //Information about the in-game HUD.
-    hud_struct* hud = nullptr;
+    hud_t* hud = nullptr;
 
     //Position of the last enemy killed. LARGE_FLOAT for none.
     point last_enemy_killed_pos;
@@ -178,13 +178,13 @@ public:
     mob_lists mobs;
 
     //Information about the message box currently active on player 1, if any.
-    msg_box_info* msg_box = nullptr;
+    msg_box_t* msg_box = nullptr;
 
     //ID of the next mob to be created.
     size_t next_mob_id = 0;
 
     //Current notification.
-    notification_struct notification;
+    notification_t notification;
 
     //Manager of all particles.
     particle_manager particles;
@@ -205,7 +205,7 @@ public:
     size_t selected_spray = 0;
 
     //How many of each spray/ingredients player 1 has.
-    vector<spray_stats_struct> spray_stats;
+    vector<spray_stats_t> spray_stats;
 
     //All types of subgroups.
     subgroup_type_manager subgroup_types;
@@ -235,7 +235,7 @@ public:
     bool went_to_results = false;
 
     //Information about player 1's whistle.
-    whistle_struct whistle;
+    whistle_t whistle;
 
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_remaining_mob_ids;
@@ -384,7 +384,7 @@ private:
     interactable* close_to_interactable_to_use = nullptr;
 
     //Points to a nest-like object close enough for player 1 to open, if any.
-    pikmin_nest_struct* close_to_nest_to_open = nullptr;
+    pikmin_nest_t* close_to_nest_to_open = nullptr;
     
     //Points to a Pikmin close enough for player 1 to pluck, if any.
     pikmin* close_to_pikmin_to_pluck = nullptr;
@@ -396,7 +396,7 @@ private:
     float cursor_height_diff_light = 0.0f;
 
     //Movement of player 1's cursor via non-mouse means.
-    movement_struct cursor_movement;
+    movement_t cursor_movement;
 
     //Is input enabled, for reasons outside the ready_for_input variable?
     bool is_input_allowed = false;
@@ -405,13 +405,13 @@ private:
     ALLEGRO_BITMAP* lightmap_bmp = nullptr;
 
     //Movement of player 1's leader.
-    movement_struct leader_movement;
+    movement_t leader_movement;
 
     //Information about the current Onion menu, if any.
-    onion_menu_struct* onion_menu = nullptr;
+    onion_menu_t* onion_menu = nullptr;
 
     //Information about the current pause menu, if any.
-    pause_menu_struct* pause_menu = nullptr;
+    pause_menu_t* pause_menu = nullptr;
 
     //Is the gameplay paused?
     bool paused = false;
@@ -431,7 +431,7 @@ private:
     bool swarm_cursor = false;
 
     //Reach of player 1's swarm.
-    movement_struct swarm_movement;
+    movement_t swarm_movement;
     
 
     //--- Function declarations ---
@@ -491,7 +491,7 @@ private:
 /**
  * @brief Info about the current on-screen message box, if any.
  */
-struct msg_box_info {
+struct msg_box_t {
 
     //--- Members ---
     
@@ -537,7 +537,7 @@ struct msg_box_info {
     
     //--- Function declarations ---
     
-    msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);
+    msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon);
     void advance();
     void close();
     void tick(const float delta_t);

@@ -68,7 +68,7 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 /**
  * @brief Constructs a new HUD struct object.
  */
-hud_struct::hud_struct() :
+hud_t::hud_t() :
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
     standby_icon_mgr(&gui),
@@ -1450,7 +1450,7 @@ hud_struct::hud_struct() :
 /**
  * @brief Destroys the HUD struct object.
  */
-hud_struct::~hud_struct() {
+hud_t::~hud_t() {
     game.bitmaps.detach(bmp_bubble);
     game.bitmaps.detach(bmp_counter_bubble_field);
     game.bitmaps.detach(bmp_counter_bubble_group);
@@ -1472,7 +1472,7 @@ hud_struct::~hud_struct() {
  * @param primary True if it's the primary HUD item,
  * false if it's the secondary.
  */
-void hud_struct::create_mission_fail_cond_items(const bool primary) {
+void hud_t::create_mission_fail_cond_items(const bool primary) {
     MISSION_FAIL_CONDITIONS cond =
         primary ?
         (MISSION_FAIL_CONDITIONS)
@@ -1690,7 +1690,7 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
  * @param which Which spray icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
+void hud_t::draw_spray_icon(BUBBLE_RELATIONS which) {
     if(!game.states.gameplay->cur_leader_ptr) return;
     
     point final_center;
@@ -1714,7 +1714,7 @@ void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
  * @param which Which standby icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
+void hud_t::draw_standby_icon(BUBBLE_RELATIONS which) {
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
@@ -1751,7 +1751,7 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void hud_struct::tick(const float delta_t) {
+void hud_t::tick(const float delta_t) {
     //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
         leader* l_ptr = nullptr;

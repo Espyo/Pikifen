@@ -37,7 +37,7 @@ class hitbox;
  * The second parameter depends on the function.
  * The third parameter depends on the function.
  */
-typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
+typedef void (*custom_action_code_t)(mob* m, void* info1, void* info2);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 
@@ -437,7 +437,7 @@ public:
     void new_state(const string &name, const size_t id);
     void new_event(const MOB_EV_TYPES type);
     void change_state(const string &new_state);
-    void run(custom_action_code code);
+    void run(custom_action_code_t code);
     vector<mob_state*> finish();
     
 private:

@@ -264,7 +264,7 @@ void leader::dismiss() {
     /**
      * @brief Info about a group subgroup when being dismissed.
      */
-    struct subgroup_dismiss_info {
+    struct subgroup_dismiss_t {
     
         //--- Members ---
         
@@ -278,7 +278,7 @@ void leader::dismiss() {
         point center;
         
     };
-    vector<subgroup_dismiss_info> subgroups_info;
+    vector<subgroup_dismiss_t> subgroups_info;
     
     //Go through all subgroups and populate the vector of data.
     subgroup_type* first_type =
@@ -301,7 +301,7 @@ void leader::dismiss() {
                 if(m_ptr->subgroup_type_ptr != cur_type) continue;
                 
                 if(!subgroup_exists) {
-                    subgroups_info.push_back(subgroup_dismiss_info());
+                    subgroups_info.push_back(subgroup_dismiss_t());
                     subgroup_exists = true;
                 }
                 
@@ -344,7 +344,7 @@ void leader::dismiss() {
      * We place the first subgroup, then some padding, then the next group,
      * etc. For every subgroup we place, we must update the thickness.
      */
-    struct row_info {
+    struct row_t {
     
         //--- Members ---
         
@@ -363,7 +363,7 @@ void leader::dismiss() {
         
         //--- Function definitions ---
         
-        row_info() {
+        row_t() {
             dist_between_center = 0;
             thickness = 0;
             angle_occupation = 0;
@@ -372,8 +372,8 @@ void leader::dismiss() {
     };
     
     bool done = false;
-    vector<row_info> rows;
-    row_info cur_row;
+    vector<row_t> rows;
+    row_t cur_row;
     cur_row.dist_between_center = LEADER::DISMISS_SUBGROUP_DISTANCE;
     size_t cur_row_idx = 0;
     size_t cur_subgroup_idx = 0;
@@ -589,7 +589,7 @@ void leader::draw_mob() {
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_info eff;
+    bitmap_effect_t eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -608,7 +608,7 @@ void leader::draw_mob() {
         );
         
         if(spark_s && spark_s->bitmap) {
-            bitmap_effect_info spark_eff = eff;
+            bitmap_effect_t spark_eff = eff;
             point size(
                 al_get_bitmap_width(cur_s_ptr->bitmap) * eff.scale.x,
                 al_get_bitmap_height(cur_s_ptr->bitmap) * eff.scale.y
@@ -660,7 +660,7 @@ void leader::get_group_spot_info(
         return;
     }
     
-    group_info_struct* leader_group_ptr = following_group->group;
+    group_t* leader_group_ptr = following_group->group;
     
     float distance =
         following_group->radius +
@@ -696,7 +696,7 @@ void leader::get_group_spot_info(
  * to fulfill the order entirely.
  */
 bool leader::order_pikmin_to_onion(
-    const pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
+    const pikmin_type* type, pikmin_nest_t* n_ptr, const size_t amount
 ) {
     //Find Pikmin of that type.
     vector<std::pair<dist, pikmin*>> candidates;
@@ -826,7 +826,7 @@ void leader::start_whistling() {
     size_t whistling_sfx_idx =
         lea_type->sfx_data_idxs[LEADER_SOUND_WHISTLING];
     if(whistling_sfx_idx != INVALID) {
-        mob_type::sfx_struct* whistling_sfx =
+        mob_type::sfx_t* whistling_sfx =
             &type->sounds[whistling_sfx_idx];
         whistle_sfx_source_id =
             game.audio.create_world_pos_sfx_source(

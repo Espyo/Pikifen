@@ -68,7 +68,7 @@ ship::ship(const point &pos, ship_type* type, float angle) :
     };
     next_tractor_beam_ring_timer.start();
     
-    nest = new pikmin_nest_struct(this, shi_type->nest);
+    nest = new pikmin_nest_t(this, shi_type->nest);
     
     control_point_final_pos += pos;
     receptacle_final_pos += pos;

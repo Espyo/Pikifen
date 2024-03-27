@@ -23,7 +23,7 @@ scale_type::scale_type() :
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;
     
-    area_editor_prop_struct aep_goal;
+    area_editor_prop_t aep_goal;
     aep_goal.name = "Goal weight";
     aep_goal.var = "goal_number";
     aep_goal.type = AEMP_INT;

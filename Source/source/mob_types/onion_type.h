@@ -40,7 +40,7 @@ public:
     //--- Members ---
 
     //Nest data.
-    pikmin_nest_type_struct* nest = nullptr;
+    pikmin_nest_type_t* nest = nullptr;
     
     //Sound data index for the pop sound. Cache for performance.
     size_t sfx_pop_idx = INVALID;

@@ -169,7 +169,7 @@ const float DEF_ZOOM_MID_LEVEL = 1.4f;
  *
  * @param file File to read from.
  */
-void options_struct::load(data_node* file) {
+void options_t::load(data_node* file) {
     reader_setter rs(file);
     
     /* Load control binds. Format of a bind:
@@ -343,7 +343,7 @@ void options_struct::load(data_node* file) {
  *
  * @param file File to write to.
  */
-void options_struct::save(data_node* file) const {
+void options_t::save(data_node* file) const {
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     

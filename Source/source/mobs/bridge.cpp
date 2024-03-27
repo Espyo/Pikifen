@@ -229,7 +229,7 @@ bool bridge::check_health() {
 void bridge::draw_component(mob* m) {
     if(m->links.empty() || !m->links[0]) return;
     
-    bitmap_effect_info eff;
+    bitmap_effect_t eff;
     m->get_sprite_bitmap_effects(
         nullptr, nullptr, 0.0f, &eff,
         SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS

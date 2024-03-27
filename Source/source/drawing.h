@@ -146,7 +146,7 @@ void draw_bitmap_in_box(
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_with_effects(
-    ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
+    ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
 );
 void draw_button(
     const point &center, const point &size, const string &text,
@@ -227,7 +227,7 @@ void draw_scaled_text(
     const point &where, const point &scale,
     const int flags, const TEXT_VALIGN_MODES valign, const string &text
 );
-void draw_status_effect_bmp(const mob* m, bitmap_effect_info &effects);
+void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects);
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,

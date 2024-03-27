@@ -178,7 +178,7 @@ struct mission_data {
     );
     
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
-    bitmask_8 fail_conditions = 0;
+    bitmask_8_t fail_conditions = 0;
     
     //Amount for the "reach too few Pikmin" mission fail condition.
     size_t fail_too_few_pik_amount = 0;
@@ -226,10 +226,10 @@ struct mission_data {
     int points_per_enemy_point = 0;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8 point_loss_data = 0;
+    bitmask_8_t point_loss_data = 0;
     
     //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8 point_hud_data = 255;
+    bitmask_8_t point_hud_data = 255;
     
     //Starting number of points.
     int starting_points = 0;

@@ -26,9 +26,9 @@ using std::size_t;
 using std::string;
 
 
-typedef uint8_t bitmask_8;
-typedef uint16_t bitmask_16;
-typedef uint32_t bitmask_32;
+typedef uint8_t bitmask_8_t;
+typedef uint16_t bitmask_16_t;
+typedef uint32_t bitmask_32_t;
 
 
 //Engine version stuff. For every release, update these numbers, and
