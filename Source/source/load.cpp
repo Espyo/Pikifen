@@ -210,18 +210,18 @@ void load_area(
             )->get_child_by_name("e", e);
         edge* new_edge = new edge();
         
-        vector<string> s_nrs = split(edge_data->get_child_by_name("s")->value);
-        if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
+        vector<string> s_idxs = split(edge_data->get_child_by_name("s")->value);
+        if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
         for(size_t s = 0; s < 2; ++s) {
-            if(s_nrs[s] == "-1") new_edge->sector_nrs[s] = INVALID;
-            else new_edge->sector_nrs[s] = s2i(s_nrs[s]);
+            if(s_idxs[s] == "-1") new_edge->sector_idxs[s] = INVALID;
+            else new_edge->sector_idxs[s] = s2i(s_idxs[s]);
         }
         
-        vector<string> v_nrs = split(edge_data->get_child_by_name("v")->value);
-        if(v_nrs.size() < 2) v_nrs.insert(v_nrs.end(), 2, "0");
+        vector<string> v_idxs = split(edge_data->get_child_by_name("v")->value);
+        if(v_idxs.size() < 2) v_idxs.insert(v_idxs.end(), 2, "0");
         
-        new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
-        new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
+        new_edge->vertex_idxs[0] = s2i(v_idxs[0]);
+        new_edge->vertex_idxs[1] = s2i(v_idxs[1]);
         
         data_node* shadow_length =
             edge_data->get_child_by_name("shadow_length");
@@ -427,7 +427,7 @@ void load_area(
         game.cur_area_data.mob_generators[f]->links.push_back(
             game.cur_area_data.mob_generators[s]
         );
-        game.cur_area_data.mob_generators[f]->link_nrs.push_back(s);
+        game.cur_area_data.mob_generators[f]->link_idxs.push_back(s);
     }
     
     if(game.perf_mon) {
@@ -684,12 +684,12 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     if(data.goal == MISSION_GOAL_END_MANUALLY) {
         disable_flag(
             data.fail_conditions,
-            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     } else {
         enable_flag(
             data.fail_conditions,
-            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     }
     
@@ -697,17 +697,17 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     if(
         !has_flag(
             data.fail_conditions,
-            get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         data.points_per_sec_left = 0;
         disable_flag(
             data.point_hud_data,
-            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
         disable_flag(
             data.point_loss_data,
-            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
     }
 }

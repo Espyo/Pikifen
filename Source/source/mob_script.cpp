@@ -325,12 +325,12 @@ mob_event* mob_fsm::get_event(const MOB_EV_TYPES type) const {
 
 
 /**
- * @brief Returns the number of the specified state.
+ * @brief Returns the index of the specified state.
  *
  * @param name The state's name.
- * @return The number, or INVALID if it doesn't exist.
+ * @return The index, or INVALID if it doesn't exist.
  */
-size_t mob_fsm::get_state_nr(const string &name) const {
+size_t mob_fsm::get_state_idx(const string &name) const {
     for(size_t s = 0; s < m->type->states.size(); ++s) {
         if(m->type->states[s]->name == name) {
             return s;
@@ -468,22 +468,22 @@ mob_event* mob_state::get_event(const MOB_EV_TYPES type) const {
 
 /**
  * @brief Fixes some things in the list of states.
- * For instance, state-switching actions that use a name instead of a number.
+ * For instance, state-switching actions that use a name instead of an index.
  *
  * @param states The vector of states.
  * @param starting_state Name of the starting state for the mob.
  * @param mt Mob type these states belong to.
- * @return The number of the starting state.
+ * @return The index of the starting state.
  */
 size_t fix_states(
     vector<mob_state*> &states, const string &starting_state, const mob_type* mt
 ) {
-    size_t starting_state_nr = INVALID;
+    size_t starting_state_idx = INVALID;
     
     //Fix actions that change the state that are using a string.
     for(size_t s = 0; s < states.size(); ++s) {
         mob_state* state = states[s];
-        if(state->name == starting_state) starting_state_nr = s;
+        if(state->name == starting_state) starting_state_idx = s;
         
         for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
             mob_event* ev = state->events[e];
@@ -494,20 +494,20 @@ size_t fix_states(
                 
                 if(call->action->type == MOB_ACTION_SET_STATE) {
                     string state_name = call->args[0];
-                    size_t state_nr = 0;
+                    size_t state_idx = 0;
                     bool found_state = false;
                     
                     if(is_number(state_name)) continue;
                     
-                    for(; state_nr < states.size(); ++state_nr) {
-                        if(states[state_nr]->name == state_name) {
+                    for(; state_idx < states.size(); ++state_idx) {
+                        if(states[state_idx]->name == state_name) {
                             found_state = true;
                             break;
                         }
                     }
                     
                     if(!found_state) {
-                        state_nr = INVALID;
+                        state_idx = INVALID;
                         game.errors.report(
                             "State \"" + state->name +
                             "\" of the mob type \"" + mt->name + "\" has an "
@@ -517,13 +517,13 @@ size_t fix_states(
                         );
                     }
                     
-                    call->args[0] = i2s(state_nr);
+                    call->args[0] = i2s(state_idx);
                     
                 }
             }
         }
     }
-    return starting_state_nr;
+    return starting_state_idx;
 }
 
 

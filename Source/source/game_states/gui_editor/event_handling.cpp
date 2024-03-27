@@ -147,24 +147,24 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             cur_item = INVALID;
             
         } else {
-            size_t cur_item_index = INVALID;
+            size_t cur_item_idx = INVALID;
             for(size_t i = 0; i < clicked_items.size(); ++i) {
                 if(cur_item == clicked_items[i]) {
-                    cur_item_index = i;
+                    cur_item_idx = i;
                     break;
                 }
             }
             
-            if(cur_item_index == INVALID) {
-                cur_item_index = 0;
+            if(cur_item_idx == INVALID) {
+                cur_item_idx = 0;
             } else {
-                cur_item_index =
+                cur_item_idx =
                     sum_and_wrap(
-                        (int) cur_item_index, 1,
+                        (int) cur_item_idx, 1,
                         (int) clicked_items.size()
                     );
             }
-            cur_item = clicked_items[cur_item_index];
+            cur_item = clicked_items[cur_item_idx];
             must_focus_on_cur_item = true;
         }
     }

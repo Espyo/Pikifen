@@ -1062,7 +1062,7 @@ void pause_menu_struct::draw_radar(
         case PATH_RESULT_PATH_WITH_SINGLE_STOP:
         case PATH_RESULT_PATH_WITH_OBSTACLES: {
     
-            size_t first_stop = l_ptr->path_info->cur_path_stop_nr;
+            size_t first_stop = l_ptr->path_info->cur_path_stop_idx;
             if(first_stop >= l_ptr->path_info->path.size()) continue;
             
             draw_go_here_segment(
@@ -1311,7 +1311,7 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(f)
+                get_idx_bitmask(f)
             )
         ) {
             mission_fail* cond = game.mission_fail_conds[f];
@@ -1412,7 +1412,7 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
             if(
                 has_flag(
                     game.cur_area_data.mission.point_loss_data,
-                    get_index_bitmask(c)
+                    get_idx_bitmask(c)
                 )
             ) {
                 loss_notes.push_back("    " + c_ptr->get_name());
@@ -2060,7 +2060,7 @@ void pause_menu_struct::init_main_pause_menu() {
         bool as_fail =
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+                get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
             game.cur_area_data.type == AREA_TYPE_SIMPLE ?
@@ -2833,7 +2833,7 @@ void pause_menu_struct::start_leaving_gameplay() {
         leave_target == LEAVE_TO_END &&
         has_flag(
             game.cur_area_data.mission.fail_conditions,
-            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
         game.states.gameplay->mission_fail_reason =

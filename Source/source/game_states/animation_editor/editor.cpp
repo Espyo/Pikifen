@@ -158,7 +158,7 @@ void animation_editor::do_logic() {
         anim_playing && state == EDITOR_STATE_ANIMATION &&
         cur_anim_i.valid_frame()
     ) {
-        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
+        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
         if(f->duration != 0) {
             vector<size_t> frame_sounds;
             cur_anim_i.tick(game.delta_t, nullptr, &frame_sounds);
@@ -440,7 +440,7 @@ void animation_editor::load_animation_database(
     anim_playing = false;
     cur_sprite = nullptr;
     cur_hitbox = nullptr;
-    cur_hitbox_nr = 0;
+    cur_hitbox_idx = 0;
     
     animation_exists_on_disk = true;
     can_save = true;
@@ -497,7 +497,7 @@ void animation_editor::load_animation_database(
     }
     
     //Top bitmap.
-    for(unsigned char t = 0; t < N_MATURITIES; ++t) {
+    for(unsigned char t = 0; t < NR_MATURITIES; ++t) {
         if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
             al_destroy_bitmap(top_bmp[t]);
             top_bmp[t] = nullptr;
@@ -522,7 +522,7 @@ void animation_editor::load_animation_database(
             load_bmp(data.get_child_by_name("top_flower")->value, &data);
     }
     
-    if(loaded_mob_type) anims.fill_sound_index_caches(loaded_mob_type);
+    if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
     
     if(should_update_history) {
         update_history(file_path);
@@ -753,7 +753,7 @@ void animation_editor::press_zoom_everything_button() {
     sprite* s_ptr = cur_sprite;
     if(!s_ptr && cur_anim_i.valid_frame()) {
         string name =
-            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index].sprite_name;
+            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_name;
         size_t s_pos = anims.find_sprite(name);
         if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
     }
@@ -1371,8 +1371,8 @@ void animation_editor::set_best_frame_sprite() {
     
     //Finally, set the frame info then.
     frame* cur_frame_ptr =
-        &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
-    cur_frame_ptr->sprite_index = final_sprite_idx;
+        &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
+    cur_frame_ptr->sprite_idx = final_sprite_idx;
     cur_frame_ptr->sprite_ptr = anims.sprites[final_sprite_idx];
     cur_frame_ptr->sprite_name = anims.sprites[final_sprite_idx]->name;
 }
@@ -1551,12 +1551,12 @@ void animation_editor::unload() {
 void animation_editor::update_cur_hitbox() {
     if(cur_sprite->hitboxes.empty()) {
         cur_hitbox = nullptr;
-        cur_hitbox_nr = INVALID;
+        cur_hitbox_idx = INVALID;
         return;
     }
     
-    cur_hitbox_nr = std::min(cur_hitbox_nr, cur_sprite->hitboxes.size() - 1);
-    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+    cur_hitbox_idx = std::min(cur_hitbox_idx, cur_sprite->hitboxes.size() - 1);
+    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_idx];
 }
 
 

@@ -375,13 +375,13 @@ void leader::dismiss() {
     vector<row_info> rows;
     row_info cur_row;
     cur_row.dist_between_center = LEADER::DISMISS_SUBGROUP_DISTANCE;
-    size_t cur_row_nr = 0;
-    size_t cur_subgroup_nr = 0;
+    size_t cur_row_idx = 0;
+    size_t cur_subgroup_idx = 0;
     
     while(!done && !subgroups_info.empty()) {
         float new_thickness =
             std::max(
-                cur_row.thickness, subgroups_info[cur_subgroup_nr].radius * 2
+                cur_row.thickness, subgroups_info[cur_subgroup_idx].radius * 2
             );
             
         float new_angle_occupation = 0;
@@ -411,7 +411,7 @@ void leader::dismiss() {
         }
         new_angle_occupation +=
             linear_dist_to_angular(
-                subgroups_info[cur_subgroup_nr].radius * 2.0,
+                subgroups_info[cur_subgroup_idx].radius * 2.0,
                 cur_row.dist_between_center +
                 new_thickness / 2.0f
             );
@@ -422,19 +422,19 @@ void leader::dismiss() {
             cur_row.thickness = new_thickness;
             cur_row.angle_occupation = new_angle_occupation;
             
-            cur_row.subgroups.push_back(cur_subgroup_nr);
-            cur_subgroup_nr++;
+            cur_row.subgroups.push_back(cur_subgroup_idx);
+            cur_subgroup_idx++;
         }
         
         if(
             new_angle_occupation > LEADER::DISMISS_ANGLE_RANGE ||
-            cur_subgroup_nr == subgroups_info.size()
+            cur_subgroup_idx == subgroups_info.size()
         ) {
             //This subgroup doesn't fit. It'll have to be put in the next row.
             //Or this is the last subgroup, and the row needs to be committed.
             
             rows.push_back(cur_row);
-            cur_row_nr++;
+            cur_row_idx++;
             cur_row.dist_between_center +=
                 cur_row.thickness + LEADER::DISMISS_SUBGROUP_DISTANCE;
             cur_row.subgroups.clear();
@@ -442,7 +442,7 @@ void leader::dismiss() {
             cur_row.angle_occupation = 0;
         }
         
-        if(cur_subgroup_nr == subgroups_info.size()) done = true;
+        if(cur_subgroup_idx == subgroups_info.size()) done = true;
     }
     
     //Now that we know which subgroups go into which row,
@@ -452,12 +452,12 @@ void leader::dismiss() {
         float cur_angle = start_angle;
         
         for(size_t s = 0; s < rows[r].subgroups.size(); ++s) {
-            size_t s_nr = rows[r].subgroups[s];
+            size_t s_idx = rows[r].subgroups[s];
             float subgroup_angle = cur_angle;
             
             cur_angle +=
                 linear_dist_to_angular(
-                    subgroups_info[s_nr].radius * 2.0,
+                    subgroups_info[s_idx].radius * 2.0,
                     rows[r].dist_between_center + rows[r].thickness / 2.0
                 );
             if(s < rows[r].subgroups.size() - 1) {
@@ -471,11 +471,11 @@ void leader::dismiss() {
             //Center the subgroup's angle.
             subgroup_angle +=
                 linear_dist_to_angular(
-                    subgroups_info[s_nr].radius,
+                    subgroups_info[s_idx].radius,
                     rows[r].dist_between_center + rows[r].thickness / 2.0
                 );
                 
-            subgroups_info[s_nr].center =
+            subgroups_info[s_idx].center =
                 angle_to_coordinates(
                     base_angle + subgroup_angle,
                     rows[r].dist_between_center + rows[r].thickness / 2.0f
@@ -486,24 +486,24 @@ void leader::dismiss() {
     
     //Now, dismiss!
     for(size_t s = 0; s < subgroups_info.size(); ++s) {
-        cur_row_nr = 0;
-        size_t cur_row_spot_nr = 0;
+        cur_row_idx = 0;
+        size_t cur_row_spot_idx = 0;
         size_t cur_row_spots = 1;
         
         for(size_t m = 0; m < subgroups_info[s].members.size(); ++m) {
         
             point destination;
             
-            if(cur_row_nr == 0) {
+            if(cur_row_idx == 0) {
                 destination = subgroups_info[s].center;
             } else {
                 float member_angle =
-                    ((float) cur_row_spot_nr / cur_row_spots) * TAU;
+                    ((float) cur_row_spot_idx / cur_row_spots) * TAU;
                 destination =
                     subgroups_info[s].center +
                     angle_to_coordinates(
                         member_angle,
-                        cur_row_nr * game.config.standard_pikmin_radius * 2 *
+                        cur_row_idx * game.config.standard_pikmin_radius * 2 *
                         LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
@@ -514,11 +514,11 @@ void leader::dismiss() {
                     randomf(-5.0, 5.0)
                 );
                 
-            cur_row_spot_nr++;
-            if(cur_row_spot_nr == cur_row_spots) {
-                cur_row_nr++;
-                cur_row_spot_nr = 0;
-                if(cur_row_nr == 1) {
+            cur_row_spot_idx++;
+            if(cur_row_spot_idx == cur_row_spots) {
+                cur_row_idx++;
+                cur_row_spot_idx = 0;
+                if(cur_row_idx == 1) {
                     cur_row_spots = 6;
                 } else {
                     cur_row_spots += 6;
@@ -1047,7 +1047,7 @@ void change_to_next_leader(
 ) {
     if(game.states.gameplay->available_leaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
-        game.states.gameplay->cur_leader_nr = INVALID;
+        game.states.gameplay->cur_leader_idx = INVALID;
         game.states.gameplay->cur_leader_ptr = nullptr;
         game.states.gameplay->update_closest_group_members();
         return;
@@ -1080,9 +1080,9 @@ void change_to_next_leader(
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    int new_leader_nr = (int) game.states.gameplay->cur_leader_nr;
+    int new_leader_idx = (int) game.states.gameplay->cur_leader_idx;
     if(keep_idx) {
-        forward ? new_leader_nr-- : new_leader_nr++;
+        forward ? new_leader_idx-- : new_leader_idx++;
     }
     leader* new_leader_ptr = nullptr;
     bool searching = true;
@@ -1091,13 +1091,13 @@ void change_to_next_leader(
     bool success = false;
     
     while(searching) {
-        new_leader_nr =
+        new_leader_idx =
             sum_and_wrap(
-                new_leader_nr,
+                new_leader_idx,
                 (forward ? 1 : -1),
                 (int) game.states.gameplay->available_leaders.size()
             );
-        new_leader_ptr = game.states.gameplay->available_leaders[new_leader_nr];
+        new_leader_ptr = game.states.gameplay->available_leaders[new_leader_idx];
         
         if(new_leader_ptr == original_leader_ptr) {
             //Back to the original; stop trying.
@@ -1118,15 +1118,15 @@ void change_to_next_leader(
     
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
-        game.states.gameplay->cur_leader_nr =
+        game.states.gameplay->cur_leader_idx =
             sum_and_wrap(
-                new_leader_nr,
+                new_leader_idx,
                 (forward ? 1 : -1),
                 (int) game.states.gameplay->available_leaders.size()
             );
         game.states.gameplay->cur_leader_ptr =
             game.states.gameplay->
-            available_leaders[game.states.gameplay->cur_leader_nr];
+            available_leaders[game.states.gameplay->cur_leader_idx];
             
         game.states.gameplay->cur_leader_ptr->fsm.set_state(
             LEADER_STATE_ACTIVE

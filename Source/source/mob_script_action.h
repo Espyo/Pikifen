@@ -782,7 +782,7 @@ bool start_chomping(mob_action_call &call);
 bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
 
-void report_enum_error(mob_action_call &call, const size_t arg_nr);
+void report_enum_error(mob_action_call &call, const size_t arg_idx);
 };
 
 

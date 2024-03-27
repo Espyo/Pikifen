@@ -177,20 +177,20 @@ private:
         //Is this node on top of an existing vertex? This points to it if so.
         vertex* on_vertex = nullptr;
         
-        //on_vertex's vertex number.
-        size_t on_vertex_nr = INVALID;
+        //on_vertex's vertex index.
+        size_t on_vertex_idx = INVALID;
         
         //Is this node on top of an existing edge? This points to it if so.
         edge* on_edge = nullptr;
         
-        //on_edge's edge number.
-        size_t on_edge_nr = INVALID;
+        //on_edge's edge index.
+        size_t on_edge_idx = INVALID;
         
         //Is this node just on top of a sector? This points to it if so.
         sector* on_sector = nullptr;
         
-        //on_sector's sector number.
-        size_t on_sector_nr = INVALID;
+        //on_sector's sector index.
+        size_t on_sector_idx = INVALID;
         
         //Is on_vertex a new vertex, created during the sector creation?
         bool is_new_vertex = false;
@@ -504,7 +504,7 @@ private:
     point cross_section_z_window_end;
     
     //When showing a hazard in the list, this is the index of the current one.
-    size_t cur_hazard_nr = INVALID;
+    size_t cur_hazard_idx = INVALID;
     
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
@@ -515,20 +515,20 @@ private:
     //Time left to update the cursor snap position for heavy snap modes.
     timer cursor_snap_timer = timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL);
     
-    //Debug tool -- show the edge numbers?
-    bool debug_edge_nrs = false;
+    //Debug tool -- show the edge indexes?
+    bool debug_edge_idxs = false;
     
-    //Debug tool -- show the sector numbers?
-    bool debug_sector_nrs = false;
+    //Debug tool -- show the sector indexes?
+    bool debug_sector_idxs = false;
     
-    //Debug tool -- show the path numbers?
-    bool debug_path_nrs = false;
+    //Debug tool -- show the path indexes?
+    bool debug_path_idxs = false;
     
     //Debug tool -- show the triangulation?
     bool debug_triangulation = false;
     
-    //Debug tool -- show the vertex numbers?
-    bool debug_vertex_nrs = false;
+    //Debug tool -- show the vertex indexes?
+    bool debug_vertex_idxs = false;
     
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;

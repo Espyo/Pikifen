@@ -47,8 +47,8 @@ public:
     //Type of Pikmin it will convert to right now.
     pikmin_type* current_type = nullptr;
 
-    //If it cycles between types, this is the number of the current type.
-    size_t current_type_nr = 0;
+    //If it cycles between types, this is the index of the current type.
+    size_t current_type_idx = 0;
 
     //Time left before it cycles to the next type.
     timer type_change_timer;

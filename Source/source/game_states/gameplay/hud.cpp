@@ -1758,7 +1758,7 @@ void hud_struct::tick(const float delta_t) {
         if(l < game.states.gameplay->available_leaders.size()) {
             size_t l_idx =
                 (size_t) sum_and_wrap(
-                    (int) game.states.gameplay->cur_leader_nr,
+                    (int) game.states.gameplay->cur_leader_idx,
                     (int) l,
                     (int) game.states.gameplay->available_leaders.size()
                 );

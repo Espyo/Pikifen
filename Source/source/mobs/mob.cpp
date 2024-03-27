@@ -228,7 +228,7 @@ void mob::add_to_group(mob* new_member) {
     
     //Find a spot.
     group->init_spots(new_member);
-    new_member->group_spot_index = group->spots.size() - 1;
+    new_member->group_spot_idx = group->spots.size() - 1;
     
     if(!group->cur_standby_type) {
         if(
@@ -662,7 +662,7 @@ bool mob::calculate_carrying_destination(
             decide_carry_pikmin_type(available_types, added, removed);
             
         //Figure out where that type's Onion is.
-        size_t closest_onion_nr = INVALID;
+        size_t closest_onion_idx = INVALID;
         dist closest_onion_dist;
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
@@ -681,15 +681,15 @@ bool mob::calculate_carrying_destination(
             if(!has_type) continue;
             
             dist d(pos, o_ptr->pos);
-            if(closest_onion_nr == INVALID || d < closest_onion_dist) {
+            if(closest_onion_idx == INVALID || d < closest_onion_dist) {
                 closest_onion_dist = d;
-                closest_onion_nr = o;
+                closest_onion_idx = o;
             }
         }
         
         //Finally, set the destination data.
         *target_type = decided_type;
-        *target_mob = game.states.gameplay->mobs.onions[closest_onion_nr];
+        *target_mob = game.states.gameplay->mobs.onions[closest_onion_idx];
         *target_point = (*target_mob)->pos;
         
         return true;
@@ -1114,7 +1114,7 @@ void mob::chomp(mob* m, const hitbox* hitbox_info) {
         m, hitbox_info, &h_offset_dist, &h_offset_angle, &v_offset_dist
     );
     hold(
-        m, hitbox_info->body_part_index,
+        m, hitbox_info->body_part_idx,
         h_offset_dist, h_offset_angle, v_offset_dist,
         true, HOLD_ROTATION_METHOD_NEVER
     );
@@ -1563,8 +1563,8 @@ bool mob::follow_path(
     //Some setup before we begin.
     if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
         was_blocked = path_info->block_reason != PATH_BLOCK_REASON_NONE;
-        if(path_info->cur_path_stop_nr < path_info->path.size()) {
-            old_next_stop = path_info->path[path_info->cur_path_stop_nr];
+        if(path_info->cur_path_stop_idx < path_info->path.size()) {
+            old_next_stop = path_info->path[path_info->cur_path_stop_idx];
         }
     }
     
@@ -1628,13 +1628,13 @@ bool mob::follow_path(
             if(path_info->path[s] == old_next_stop) {
                 //If before, the mob was already heading towards this stop,
                 //then just continue the new journey from there.
-                path_info->cur_path_stop_nr = s;
+                path_info->cur_path_stop_idx = s;
                 break;
             }
         }
     }
     
-    if(path_info->path.size() >= 2 && path_info->cur_path_stop_nr > 0) {
+    if(path_info->path.size() >= 2 && path_info->cur_path_stop_idx > 0) {
         if(path_info->check_blockage(&path_info->block_reason)) {
             fsm.run_event(MOB_EV_PATH_BLOCKED);
         }
@@ -1651,7 +1651,7 @@ bool mob::follow_path(
     } else if(!path_info->path.empty()) {
         //Head to the first stop.
         path_stop* next_stop =
-            path_info->path[path_info->cur_path_stop_nr];
+            path_info->path[path_info->cur_path_stop_idx];
         float next_stop_z = z;
         if(
             has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
@@ -2358,7 +2358,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
  */
 void mob::handle_status_effect_gain(status_type* sta_type) {
     if(sta_type->state_change_type == STATUS_STATE_CHANGE_CUSTOM) {
-        size_t nr = fsm.get_state_nr(sta_type->state_change_name);
+        size_t nr = fsm.get_state_idx(sta_type->state_change_name);
         if(nr != INVALID) {
             fsm.set_state(nr);
         }
@@ -2475,7 +2475,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
  * @brief Starts holding the specified mob.
  *
  * @param m  Mob to start holding.
- * @param hitbox_nr Number of the hitbox to hold on. INVALID for mob center.
+ * @param hitbox_idx Index of the hitbox to hold on. INVALID for mob center.
  * @param offset_dist Distance from the hitbox/body center. 1 is full radius.
  * @param offset_angle Hitbox/body angle from which the mob will be held.
  * @param vertical_dist Ratio of distance from the hitbox/body's bottom.
@@ -2484,14 +2484,14 @@ bool mob::has_clear_line(const mob* target_mob) const {
  * @param rotation_method How should the held mob rotate?
  */
 void mob::hold(
-    mob* m, const size_t hitbox_nr,
+    mob* m, const size_t hitbox_idx,
     const float offset_dist, const float offset_angle,
     const float vertical_dist,
     const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
-    m->holder.hitbox_nr = hitbox_nr;
+    m->holder.hitbox_idx = hitbox_idx;
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
     m->holder.vertical_dist = vertical_dist;
@@ -2857,25 +2857,25 @@ void mob::send_message(mob* receiver, string &msg) const {
 /**
  * @brief Sets the mob's animation.
  *
- * @param nr Animation number.
- * It's the animation instance number from the database.
+ * @param nr Animation index.
+ * It's the animation instance index from the database.
  * @param pre_named If true, the animation has already been named in-engine.
  * @param options Options to start the new animation with.
  */
 void mob::set_animation(
-    const size_t nr, const bool pre_named, const START_ANIMATION_OPTIONS options
+    const size_t idx, const bool pre_named, const START_ANIMATION_OPTIONS options
 ) {
-    if(nr >= type->anims.animations.size()) return;
+    if(idx >= type->anims.animations.size()) return;
     
-    size_t final_nr;
+    size_t final_idx;
     if(pre_named) {
-        if(anim.anim_db->pre_named_conversions.size() <= nr) return;
-        final_nr = anim.anim_db->pre_named_conversions[nr];
+        if(anim.anim_db->pre_named_conversions.size() <= idx) return;
+        final_idx = anim.anim_db->pre_named_conversions[idx];
     } else {
-        final_nr = nr;
+        final_idx = idx;
     }
     
-    if(final_nr == INVALID) {
+    if(final_idx == INVALID) {
         game.errors.report(
             "Mob (" + get_error_message_mob_info(this) +
             ") tried to switch from " +
@@ -2884,20 +2884,20 @@ void mob::set_animation(
                 "no animation"
             ) +
             " to a non-existent one (with the internal"
-            " number of " + i2s(nr) + ")!"
+            " number of " + i2s(idx) + ")!"
         );
         return;
     }
     
-    animation* new_anim = anim.anim_db->animations[final_nr];
+    animation* new_anim = anim.anim_db->animations[final_idx];
     anim.cur_anim = new_anim;
     
     if(new_anim->frames.empty()) {
-        anim.cur_frame_index = INVALID;
+        anim.cur_frame_idx = INVALID;
     } else {
         if(
             !has_flag(options, START_ANIMATION_NO_RESTART) ||
-            anim.cur_frame_index >= anim.cur_anim->frames.size()
+            anim.cur_frame_idx >= anim.cur_anim->frames.size()
         ) {
             anim.to_start();
         }
@@ -3491,9 +3491,9 @@ void mob::tick_brain(const float delta_t) {
                 path_info->block_reason == PATH_BLOCK_REASON_NONE
             ) {
             
-                path_info->cur_path_stop_nr++;
+                path_info->cur_path_stop_idx++;
                 
-                if(path_info->cur_path_stop_nr < path_info->path.size()) {
+                if(path_info->cur_path_stop_idx < path_info->path.size()) {
                     //Reached a regular stop while traversing the path.
                     //Think about going to the next, if possible.
                     if(path_info->check_blockage(&path_info->block_reason)) {
@@ -3502,7 +3502,7 @@ void mob::tick_brain(const float delta_t) {
                     } else {
                         //All good. Head to the next stop.
                         path_stop* next_stop =
-                            path_info->path[path_info->cur_path_stop_nr];
+                            path_info->path[path_info->cur_path_stop_idx];
                         float next_stop_z = z;
                         if(
                             (
@@ -3525,7 +3525,7 @@ void mob::tick_brain(const float delta_t) {
                     }
                     
                 } else if(
-                    path_info->cur_path_stop_nr == path_info->path.size()
+                    path_info->cur_path_stop_idx == path_info->path.size()
                 ) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
@@ -3534,7 +3534,7 @@ void mob::tick_brain(const float delta_t) {
                     );
                     
                 } else if(
-                    path_info->cur_path_stop_nr == path_info->path.size() + 1
+                    path_info->cur_path_stop_idx == path_info->path.size() + 1
                 ) {
                     //Reached the path's goal.
                     chase_info.state = CHASE_STATE_FINISHED;
@@ -3974,11 +3974,11 @@ bool mob::tick_track_ride() {
         
     if(track_info->cur_cp_progress >= 1.0f) {
         //Next checkpoint.
-        track_info->cur_cp_nr++;
+        track_info->cur_cp_idx++;
         track_info->cur_cp_progress -= 1.0f;
         
         if(
-            track_info->cur_cp_nr ==
+            track_info->cur_cp_idx ==
             track_info->checkpoints.size() - 1
         ) {
             stop_track_ride();
@@ -3989,11 +3989,11 @@ bool mob::tick_track_ride() {
     //Teleport to the right spot.
     hitbox* cur_cp =
         track_info->m->get_hitbox(
-            track_info->checkpoints[track_info->cur_cp_nr]
+            track_info->checkpoints[track_info->cur_cp_idx]
         );
     hitbox* next_cp =
         track_info->m->get_hitbox(
-            track_info->checkpoints[track_info->cur_cp_nr + 1]
+            track_info->checkpoints[track_info->cur_cp_idx + 1]
         );
     point cur_cp_pos =
         cur_cp->get_cur_pos(track_info->m->pos, track_info->m->angle);
@@ -4036,17 +4036,17 @@ void mob::unfocus_from_mob() {
 
 
 /**
- * @brief Returns the number of an animation, given a base animation number and
- * group number.
+ * @brief Returns the index of an animation, given a base animation index and
+ * group index.
  *
- * @param base_anim_nr Base animation number.
- * @param group_nr Group it belongs to.
- * @param base_anim_total Total number of base animations.
- * @return The number.
+ * @param base_anim_idx Base animation index.
+ * @param group_idx Group it belongs to.
+ * @param base_anim_total Total index of base animations.
+ * @return The index.
  */
-size_t mob_with_anim_groups::get_animation_nr_from_base_and_group(
-    const size_t base_anim_nr, const size_t group_nr,
+size_t mob_with_anim_groups::get_animation_idx_from_base_and_group(
+    const size_t base_anim_idx, const size_t group_idx,
     const size_t base_anim_total
 ) const {
-    return group_nr * base_anim_total + base_anim_nr;
+    return group_idx * base_anim_total + base_anim_idx;
 }

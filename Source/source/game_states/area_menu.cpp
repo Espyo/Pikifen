@@ -256,7 +256,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             get_player_description(&mission);
             
         for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
-            if(has_flag(mission.fail_conditions, get_index_bitmask(f))) {
+            if(has_flag(mission.fail_conditions, get_idx_bitmask(f))) {
                 mission_fail* cond = game.mission_fail_conds[f];
                 add_bullet(
                     fail_list,
@@ -323,7 +323,7 @@ void area_menu_state::change_info(const size_t area_idx) {
                 if(
                     has_flag(
                         mission.point_loss_data,
-                        get_index_bitmask(c)
+                        get_idx_bitmask(c)
                     )
                 ) {
                     loss_notes.push_back("    " + c_ptr->get_name());

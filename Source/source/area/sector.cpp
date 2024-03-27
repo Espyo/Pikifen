@@ -34,16 +34,16 @@ sector::~sector() {
  * @brief Adds an edge to the sector's list of edges, if it's not there already.
  *
  * @param e_ptr Edge to add.
- * @param e_nr Index number of the edge to add.
+ * @param e_idx Index number of the edge to add.
  */
-void sector::add_edge(edge* e_ptr, const size_t e_nr) {
+void sector::add_edge(edge* e_ptr, const size_t e_idx) {
     for(size_t i = 0; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             return;
         }
     }
     edges.push_back(e_ptr);
-    edge_nrs.push_back(e_nr);
+    edge_idxs.push_back(e_idx);
 }
 
 
@@ -289,7 +289,7 @@ void sector::remove_edge(const edge* e_ptr) {
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            edge_nrs.erase(edge_nrs.begin() + i);
+            edge_idxs.erase(edge_idxs.begin() + i);
             return;
         }
     }
@@ -300,15 +300,15 @@ void sector::remove_edge(const edge* e_ptr) {
  * @brief Returns which sector the specified point belongs to.
  *
  * @param p Coordinates of the point.
- * @param sector_nr If not nullptr, the number of the sector on the
- * area map is placed here. The number will not be set if the search
+ * @param sector_idx If not nullptr, the index of the sector on the
+ * area map is placed here. The index will not be set if the search
  * is using the blockmap.
  * @param use_blockmap If true, use the blockmap to search.
  * This provides faster results, but the blockmap must be built.
  * @return The sector.
  */
 sector* get_sector(
-    const point &p, size_t* sector_nr, const bool use_blockmap
+    const point &p, size_t* sector_idx, const bool use_blockmap
 ) {
 
     if(use_blockmap) {
@@ -348,13 +348,13 @@ sector* get_sector(
                 continue;
             }
             if(s_ptr->is_point_in_sector(p)) {
-                if(sector_nr) *sector_nr = s;
+                if(sector_idx) *sector_idx = s;
                 return s_ptr;
             }
             
         }
         
-        if(sector_nr) *sector_nr = INVALID;
+        if(sector_idx) *sector_idx = INVALID;
         return nullptr;
         
     }

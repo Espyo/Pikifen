@@ -82,7 +82,7 @@ enum WIPE_FOLDER_RESULTS {
     }
 
 //Returns the bitmask corresponding to a certain index. Useful for flags.
-#define get_index_bitmask(i) (1 << i)
+#define get_idx_bitmask(i) (1 << i)
 
 //Returns the previous element in a vector,
 //but if it's the first, it retrieves the last.

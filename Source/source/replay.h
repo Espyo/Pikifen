@@ -163,7 +163,7 @@ public:
         const vector<treasure*> &treasure_list,
         const vector<onion*> &onion_list,
         const vector<mob*> &obstacle_list,
-        const size_t cur_leader_nr
+        const size_t cur_leader_idx
     );
     void clear();
     void finish_recording();
@@ -177,8 +177,8 @@ private:
     //List of mobs in the previous state.
     vector<mob*> prev_state_mobs;
     
-    //Number of the previous leader.
-    size_t prev_leader_nr = INVALID;
+    //Index of the previous leader.
+    size_t prev_leader_idx = INVALID;
     
 };
 

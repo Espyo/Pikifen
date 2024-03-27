@@ -39,7 +39,7 @@ hitbox::hitbox(
     const float z, const float height, const float radius
 ) :
     body_part_name(bpn),
-    body_part_index(bpi),
+    body_part_idx(bpi),
     body_part_ptr(bpp),
     pos(pos),
     z(z),

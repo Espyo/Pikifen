@@ -117,7 +117,7 @@ struct sector {
     point scroll;
     
     //Index number of the edges that make up this sector.
-    vector<size_t> edge_nrs;
+    vector<size_t> edge_idxs;
     
     //Edges that make up this sector.
     vector<edge*> edges;
@@ -132,7 +132,7 @@ struct sector {
     //--- Function declarations ---
     
     ~sector();
-    void add_edge(edge* e_ptr, const size_t e_nr);
+    void add_edge(edge* e_ptr, const size_t e_idx);
     void calculate_bounding_box();
     void clone(sector* destination) const;
     vertex* get_rightmost_vertex() const;
@@ -149,7 +149,7 @@ struct sector {
 
 
 sector* get_sector(
-    const point &p, size_t* sector_nr, const bool use_blockmap
+    const point &p, size_t* sector_idx, const bool use_blockmap
 );
 
 #endif //ifndef SECTOR_INCLUDED

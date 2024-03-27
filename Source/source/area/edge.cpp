@@ -25,7 +25,7 @@
  * @param v2 Its second vertex.
  */
 edge::edge(size_t v1, size_t v2) {
-    vertex_nrs[0] = v1; vertex_nrs[1] = v2;
+    vertex_idxs[0] = v1; vertex_idxs[1] = v2;
 }
 
 
@@ -117,10 +117,10 @@ bool edge::is_valid() const {
  * @brief Removes the edge from its sectors, but doesn't mark
  * the sectors as "none".
  *
- * @return The edge number.
+ * @return The edge index.
  */
 size_t edge::remove_from_sectors() {
-    size_t e_nr = INVALID;
+    size_t e_idx = INVALID;
     for(unsigned char s = 0; s < 2; ++s) {
         sector* s_ptr = sectors[s];
         if(!s_ptr) continue;
@@ -128,16 +128,16 @@ size_t edge::remove_from_sectors() {
             edge* e_ptr = s_ptr->edges[e];
             if(e_ptr == this) {
                 s_ptr->edges.erase(s_ptr->edges.begin() + e);
-                auto nr_it = s_ptr->edge_nrs.begin() + e;
-                e_nr = *nr_it;
-                s_ptr->edge_nrs.erase(nr_it);
+                auto nr_it = s_ptr->edge_idxs.begin() + e;
+                e_idx = *nr_it;
+                s_ptr->edge_idxs.erase(nr_it);
                 break;
             }
         }
         sectors[s] = nullptr;
-        sector_nrs[s] = INVALID;
+        sector_idxs[s] = INVALID;
     }
-    return e_nr;
+    return e_idx;
 }
 
 
@@ -145,10 +145,10 @@ size_t edge::remove_from_sectors() {
  * @brief Removes the edge from its vertexes, but doesn't mark
  * the vertexes as "none".
  *
- * @return The edge number.
+ * @return The edge index.
  */
 size_t edge::remove_from_vertexes() {
-    size_t e_nr = INVALID;
+    size_t e_idx = INVALID;
     for(unsigned char v = 0; v < 2; ++v) {
         vertex* v_ptr = vertexes[v];
         if(!v_ptr) continue;
@@ -156,16 +156,16 @@ size_t edge::remove_from_vertexes() {
             edge* e_ptr = v_ptr->edges[e];
             if(e_ptr == this) {
                 v_ptr->edges.erase(v_ptr->edges.begin() + e);
-                auto nr_it = v_ptr->edge_nrs.begin() + e;
-                e_nr = *nr_it;
-                v_ptr->edge_nrs.erase(nr_it);
+                auto nr_it = v_ptr->edge_idxs.begin() + e;
+                e_idx = *nr_it;
+                v_ptr->edge_idxs.erase(nr_it);
                 break;
             }
         }
         vertexes[v] = nullptr;
-        vertex_nrs[v] = INVALID;
+        vertex_idxs[v] = INVALID;
     }
-    return e_nr;
+    return e_idx;
 }
 
 
@@ -175,9 +175,9 @@ size_t edge::remove_from_vertexes() {
  */
 void edge::swap_vertexes() {
     std::swap(vertexes[0], vertexes[1]);
-    std::swap(vertex_nrs[0], vertex_nrs[1]);
+    std::swap(vertex_idxs[0], vertex_idxs[1]);
     std::swap(sectors[0], sectors[1]);
-    std::swap(sector_nrs[0], sector_nrs[1]);
+    std::swap(sector_idxs[0], sector_idxs[1]);
 }
 
 
@@ -186,23 +186,23 @@ void edge::swap_vertexes() {
  *
  * @param from Sector to transfer from.
  * @param to Sector to transfer to.
- * @param to_nr Number of the sector to transfer to.
- * @param edge_nr Number of the current edge.
+ * @param to_idx Index of the sector to transfer to.
+ * @param edge_idx Index of the current edge.
  */
 void edge::transfer_sector(
-    sector* from, sector* to, const size_t to_nr, const size_t edge_nr
+    sector* from, sector* to, const size_t to_idx, const size_t edge_idx
 ) {
-    size_t index = get_side_with_sector(from);
+    size_t idx = get_side_with_sector(from);
     engine_assert(
-        index != INVALID,
-        i2s(to_nr)
+        idx != INVALID,
+        i2s(to_idx)
     );
     
-    sectors[index] = to;
-    sector_nrs[index] = to_nr;
+    sectors[idx] = to;
+    sector_idxs[idx] = to_idx;
     
     if(from) from->remove_edge(this);
-    if(to) to->add_edge(this, edge_nr);
+    if(to) to->add_edge(this, edge_idx);
 }
 
 

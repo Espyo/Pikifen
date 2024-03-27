@@ -287,13 +287,13 @@ void polygon::cut() {
         }
         
         //Insert the new bridge after this vertex.
-        size_t insertion_vertex_nr;
+        size_t insertion_vertex_idx;
         if(bridges.size() == 1) {
             //No bridges found, just use this vertex.
-            insertion_vertex_nr = bridges[0];
+            insertion_vertex_idx = bridges[0];
         } else {
             //Find where to insert.
-            insertion_vertex_nr = bridges.back();
+            insertion_vertex_idx = bridges.back();
             float new_bridge_angle =
                 get_angle_cw_diff(
                     get_angle(
@@ -315,7 +315,7 @@ void polygon::cut() {
                         0.0f
                     );
                 if(a < new_bridge_angle) {
-                    insertion_vertex_nr = bridges[v];
+                    insertion_vertex_idx = bridges[v];
                     break;
                 }
             }
@@ -337,16 +337,16 @@ void polygon::cut() {
         size_t n_after = child_ptr->vertexes.size() - iv;
         //Finally, make the bridge.
         vertexes.insert(
-            vertexes.begin() + insertion_vertex_nr + 1,
+            vertexes.begin() + insertion_vertex_idx + 1,
             it, child_ptr->vertexes.end()
         );
         vertexes.insert(
-            vertexes.begin() + insertion_vertex_nr + 1 + n_after,
+            vertexes.begin() + insertion_vertex_idx + 1 + n_after,
             child_ptr->vertexes.begin(), it
         );
         //This last one closes the inner polygon.
         vertexes.insert(
-            vertexes.begin() + insertion_vertex_nr + 1 + n_after + iv,
+            vertexes.begin() + insertion_vertex_idx + 1 + n_after + iv,
             start
         );
         
@@ -357,7 +357,7 @@ void polygon::cut() {
         //and one on the bottom-left, united by the central vertex.
         if(start != best_vertex) {
             vertexes.insert(
-                vertexes.begin() + insertion_vertex_nr + 1 + n_after + iv + 1,
+                vertexes.begin() + insertion_vertex_idx + 1 + n_after + iv + 1,
                 best_vertex
             );
         }

@@ -1703,7 +1703,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fix_states(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engine_assert(
@@ -3108,7 +3108,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
                 &h_offset_dist, &h_offset_angle, &v_offset_dist
             );
             m2_ptr->hold(
-                too_ptr, info->h2->body_part_index,
+                too_ptr, info->h2->body_part_idx,
                 h_offset_dist, h_offset_angle, v_offset_dist,
                 true, HOLD_ROTATION_METHOD_FACE_HOLDER
             );

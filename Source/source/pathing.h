@@ -263,7 +263,7 @@ struct path_link {
     path_stop* end_ptr = nullptr;
     
     //Index number of the path stop at the end.
-    size_t end_nr = 0;
+    size_t end_idx = 0;
     
     //Type. Used for special restrictions and behaviors.
     PATH_LINK_TYPES type = PATH_LINK_TYPE_NORMAL;
@@ -277,7 +277,7 @@ struct path_link {
 
     //--- Function declarations ---
 
-    path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr);
+    path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_idx);
     void calculate_dist(const path_stop* start_ptr);
     void clone(path_link* destination) const;
     bool is_one_way() const;

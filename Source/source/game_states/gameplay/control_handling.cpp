@@ -286,9 +286,9 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     game.spray_types.size() == 1 ||
                     game.spray_types.size() == 2
                 ) {
-                    size_t spray_nr = 0;
+                    size_t spray_idx = 0;
                     cur_leader_ptr->fsm.run_event(
-                        LEADER_EV_SPRAY, (void*) &spray_nr
+                        LEADER_EV_SPRAY, (void*) &spray_idx
                     );
                 }
             }
@@ -301,9 +301,9 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             if(cur_leader_ptr) {
                 if(game.spray_types.size() == 2) {
-                    size_t spray_nr = 1;
+                    size_t spray_idx = 1;
                     cur_leader_ptr->fsm.run_event(
-                        LEADER_EV_SPRAY, (void*) &spray_nr
+                        LEADER_EV_SPRAY, (void*) &spray_idx
                     );
                 }
             }
@@ -528,9 +528,9 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding[0];
             
-            pikmin* closest_members[N_MATURITIES];
-            dist closest_dists[N_MATURITIES];
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
+            pikmin* closest_members[NR_MATURITIES];
+            dist closest_dists[NR_MATURITIES];
+            for(size_t m = 0; m < NR_MATURITIES; ++m) {
                 closest_members[m] = nullptr;
             }
             
@@ -563,7 +563,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                             action.action_type_id ==
                             PLAYER_ACTION_NEXT_MATURITY ? 1 : -1
                         ),
-                        N_MATURITIES
+                        NR_MATURITIES
                     );
                     
                 //Back to the start?

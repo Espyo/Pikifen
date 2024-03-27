@@ -127,7 +127,7 @@ public:
     bool closest_group_member_distant = false;
 
     //Index of player 1's current leader, in the array of available leaders.
-    size_t cur_leader_nr = 0;
+    size_t cur_leader_idx = 0;
 
     //Pointer to player 1's leader. Cache for convenience.
     leader* cur_leader_ptr = nullptr;
@@ -360,7 +360,7 @@ public:
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
-    void change_spray_count(const size_t type_nr, signed int amount);
+    void change_spray_count(const size_t type_idx, signed int amount);
     size_t get_amount_of_field_pikmin(const pikmin_type* filter = nullptr);
     size_t get_amount_of_group_pikmin(const pikmin_type* filter = nullptr);
     size_t get_amount_of_idle_pikmin(const pikmin_type* filter = nullptr);

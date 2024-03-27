@@ -157,7 +157,7 @@ public:
     string sprite_name;
     
     //Index of the sprite. Cache for performance.
-    size_t sprite_index = INVALID;
+    size_t sprite_idx = INVALID;
     
     //Pointer to the sprite. Cache for performance.
     sprite* sprite_ptr = nullptr;
@@ -204,7 +204,7 @@ public:
     //List of frames.
     vector<frame> frames;
     
-    //The animation loops back to this frame when it reaches the end.
+    //The animation loops back to this frame index when it reaches the end.
     size_t loop_frame = 0;
     
     //If this animation represents an attack that can miss,
@@ -224,9 +224,9 @@ public:
     animation &operator=(const animation &a2);
     float get_duration();
     void get_frame_and_time(
-        const float t, size_t* frame_nr, float* frame_time
+        const float t, size_t* frame_idx, float* frame_time
     );
-    float get_time(const size_t frame_nr, const float frame_time);
+    float get_time(const size_t frame_idx, const float frame_time);
     
 };
 
@@ -275,7 +275,7 @@ public:
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, const data_node* file
     );
-    void fill_sound_index_caches(mob_type* mt_ptr);
+    void fill_sound_idx_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
     void sort_alphabetically();
     void destroy();
@@ -302,7 +302,7 @@ public:
     float cur_frame_time = 0.0f;
     
     //Index of the current frame of animation, or INVALID for none.
-    size_t cur_frame_index = INVALID;
+    size_t cur_frame_idx = INVALID;
     
     
     //--- Function declarations ---
@@ -323,7 +323,7 @@ public:
         sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
         float* interpolation_factor
     ) const;
-    size_t get_next_frame_index(bool* reached_end = nullptr) const;
+    size_t get_next_frame_idx(bool* reached_end = nullptr) const;
     
 };
 

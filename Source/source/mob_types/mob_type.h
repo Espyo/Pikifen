@@ -409,14 +409,14 @@ public:
     //The states, events and actions. Basically, the FSM.
     vector<mob_state*> states;
     
-    //Number of the state a mob starts at.
-    size_t first_state_nr = INVALID;
+    //Index of the state a mob starts at.
+    size_t first_state_idx = INVALID;
     
     //Name of the state to go to on death.
     string death_state_name;
     
-    //Number of the state to go to on death.
-    size_t death_state_nr = INVALID;
+    //Index of the state to go to on death.
+    size_t death_state_idx = INVALID;
     
     //States that ignore the death event.
     vector<string> states_ignoring_death;

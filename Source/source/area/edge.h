@@ -34,13 +34,13 @@ struct edge {
     vertex* vertexes[2] = { nullptr, nullptr };
     
     //Index of the vertexes that make up the edge.
-    size_t vertex_nrs[2] = { INVALID, INVALID };
+    size_t vertex_idxs[2] = { INVALID, INVALID };
     
     //Sectors on each side of the edge.
     sector* sectors[2] = { nullptr, nullptr };
     
     //Index of the sectors on each side of the edge.
-    size_t sector_nrs[2] = { INVALID, INVALID };
+    size_t sector_idxs[2] = { INVALID, INVALID };
     
     //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
     float wall_shadow_length = LARGE_FLOAT;
@@ -57,7 +57,7 @@ struct edge {
     
     //--- Function declarations ---
     
-    explicit edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
+    explicit edge(size_t v1_idx = INVALID, size_t v2_idx = INVALID);
     void clone(edge* destination) const;
     sector* get_other_sector(const sector* v_ptr) const;
     vertex* get_other_vertex(const vertex* v_ptr) const;
@@ -68,7 +68,7 @@ struct edge {
     size_t remove_from_vertexes();
     void swap_vertexes();
     void transfer_sector(
-        sector* from, sector* to, const size_t to_nr, const size_t edge_nr
+        sector* from, sector* to, const size_t to_idx, const size_t edge_idx
     );
     
 };

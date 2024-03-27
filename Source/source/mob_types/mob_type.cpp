@@ -33,7 +33,7 @@ using std::string;
 
 namespace MOB_TYPE {
 
-//ID of the default, "idling" animation, in an animation database.
+//Index of the default "idling" animation in an animation database.
 const size_t ANIM_IDLING = 0;
 
 //The default acceleration of a mob type.
@@ -858,7 +858,7 @@ void load_mob_type_from_file(
         data_node anim_file = load_data_file(folder + "/Animations.txt");
         mt->anims = load_animation_database_from_file(&anim_file);
         mt->anims.fix_body_part_pointers();
-        mt->anims.fill_sound_index_caches(mt);
+        mt->anims.fill_sound_idx_caches(mt);
         
         data_node script_file;
         script_file.load_file(folder + "/Script.txt", true, true);
@@ -896,11 +896,11 @@ void load_mob_type_from_file(
             
             for(size_t s = 0; s < mt->states.size(); ++s) {
                 if(mt->states[s]->name == first_state_name) {
-                    mt->first_state_nr = s;
+                    mt->first_state_idx = s;
                     break;
                 }
             }
-            if(mt->first_state_nr == INVALID) {
+            if(mt->first_state_idx == INVALID) {
                 game.errors.report(
                     "Unknown state \"" + first_state_name + "\" "
                     "to set as the first state!",
@@ -911,11 +911,11 @@ void load_mob_type_from_file(
             if(!mt->death_state_name.empty()) {
                 for(size_t s = 0; s < mt->states.size(); ++s) {
                     if(mt->states[s]->name == mt->death_state_name) {
-                        mt->death_state_nr = s;
+                        mt->death_state_idx = s;
                         break;
                     }
                 }
-                if(mt->death_state_nr == INVALID) {
+                if(mt->death_state_idx == INVALID) {
                     game.errors.report(
                         "Unknown state \"" + mt->death_state_name + "\" "
                         "to set as the death state!",

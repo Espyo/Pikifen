@@ -59,7 +59,7 @@ constexpr ALLEGRO_COLOR COLOR_TRANSPARENT_WHITE = { 1.0f, 1.0f, 1.0f, 0.5f };
 //they fit here in and of themselves.
 
 //Number of Pikmin maturities.
-constexpr size_t N_MATURITIES = 3;
+constexpr size_t NR_MATURITIES = 3;
 
 //Maximum number of players that can play the game.
 constexpr size_t MAX_PLAYERS = 4;

@@ -529,7 +529,7 @@ void area_editor::draw_canvas() {
             }
         }
         
-        if(debug_sector_nrs) {
+        if(debug_sector_idxs) {
             point middle(
                 (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
                 (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
@@ -546,9 +546,9 @@ void area_editor::draw_canvas() {
                     middle.y + sin(angle + TAU / 4) * 4
                 ),
                 (
-                    e_ptr->sector_nrs[0] == INVALID ?
+                    e_ptr->sector_idxs[0] == INVALID ?
                     "-" :
-                    i2s(e_ptr->sector_nrs[0])
+                    i2s(e_ptr->sector_idxs[0])
                 ),
                 1
             );
@@ -560,15 +560,15 @@ void area_editor::draw_canvas() {
                     middle.y + sin(angle - TAU / 4) * 4
                 ),
                 (
-                    e_ptr->sector_nrs[1] == INVALID ?
+                    e_ptr->sector_idxs[1] == INVALID ?
                     "-" :
-                    i2s(e_ptr->sector_nrs[1])
+                    i2s(e_ptr->sector_idxs[1])
                 ),
                 2
             );
         }
         
-        if(debug_edge_nrs) {
+        if(debug_edge_idxs) {
             point middle(
                 (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
                 (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
@@ -615,7 +615,7 @@ void area_editor::draw_canvas() {
                 al_map_rgba(80, 160, 255, edges_opacity * 255)
             );
             
-            if(debug_vertex_nrs) {
+            if(debug_vertex_idxs) {
                 draw_debug_text(
                     al_map_rgb(192, 192, 255),
                     point(v_ptr->x, v_ptr->y), i2s(v)
@@ -879,7 +879,7 @@ void area_editor::draw_canvas() {
                 );
             }
             
-            if(debug_path_nrs) {
+            if(debug_path_idxs) {
                 draw_debug_text(
                     al_map_rgb(80, 192, 192), s_ptr->pos, i2s(s)
                 );
@@ -975,7 +975,7 @@ void area_editor::draw_canvas() {
                     }
                 }
                 
-                if(debug_path_nrs && (one_way || s < s_ptr->links[l]->end_nr)) {
+                if(debug_path_idxs && (one_way || s < s_ptr->links[l]->end_idx)) {
                     point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
                     draw_debug_text(
                         al_map_rgb(96, 104, 224),

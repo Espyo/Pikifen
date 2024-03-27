@@ -126,7 +126,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     
     //Fetch the arguments, and check if any of them are not allowed.
     for(size_t w = 0; w < words.size(); ++w) {
-        size_t param_nr = std::min(w, action->parameters.size() - 1);
+        size_t param_idx = std::min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
         if(is_var && words[w].size() >= 2 && words[w][1] == '$') {
@@ -136,11 +136,11 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
         }
         
         if(is_var) {
-            if(action->parameters[param_nr].force_const) {
+            if(action->parameters[param_idx].force_const) {
                 game.errors.report(
                     "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
-                    action->parameters[param_nr].name + "\" can only be "
+                    action->parameters[param_idx].name + "\" can only be "
                     "constant!",
                     dn
                 );
@@ -403,13 +403,13 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::hold_focus(mob_action_call &call) {
-    size_t p_nr = call.mt->anims.find_body_part(call.args[0]);
-    if(p_nr == INVALID) {
+    size_t p_idx = call.mt->anims.find_body_part(call.args[0]);
+    if(p_idx == INVALID) {
         call.custom_error =
             "Unknown body part \"" + call.args[0] + "\"!";
         return false;
     }
-    call.args[0] = i2s(p_nr);
+    call.args[0] = i2s(p_idx);
     return true;
 }
 
@@ -523,16 +523,16 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
  * @brief Reports an error of an unknown enum value.
  *
  * @param call Mob action call that called this.
- * @param arg_nr Index number of the argument that is an enum.
+ * @param arg_idx Index number of the argument that is an enum.
  */
 void mob_action_loaders::report_enum_error(
-    mob_action_call &call, const size_t arg_nr
+    mob_action_call &call, const size_t arg_idx
 ) {
-    size_t param_nr = std::min(arg_nr, call.action->parameters.size() - 1);
+    size_t param_idx = std::min(arg_idx, call.action->parameters.size() - 1);
     call.custom_error =
-        "The parameter \"" + call.action->parameters[param_nr].name + "\" "
+        "The parameter \"" + call.action->parameters[param_idx].name + "\" "
         "does not know what the value \"" +
-        call.args[arg_nr] + "\" means!";
+        call.args[arg_idx] + "\" means!";
 }
 
 

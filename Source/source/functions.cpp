@@ -2180,16 +2180,16 @@ WIPE_FOLDER_RESULTS wipe_folder(
 /**
  * @brief Given a string, representing a long line of text, it automatically
  * adds line breaks along the text in order to break it up into smaller lines,
- * such that no line exceeds the number of characters in n_chars_per_line
+ * such that no line exceeds the number of characters in nr_chars_per_line
  * (if possible). Lines are only split at space characters.
  * This is a naive approach, in that it doesn't care about font size.
  *
  * @param s Input string.
- * @param n_chars_per_line Number of characters that a line cannot exceed,
+ * @param nr_chars_per_line Number of characters that a line cannot exceed,
  * unless it's impossible to split.
  * @return The wrapped string.
  */
-string word_wrap(const string &s, const size_t n_chars_per_line) {
+string word_wrap(const string &s, const size_t nr_chars_per_line) {
     string result;
     string word_in_queue;
     size_t cur_line_width = 0;
@@ -2208,7 +2208,7 @@ string word_wrap(const string &s, const size_t n_chars_per_line) {
             }
             size_t width_after_word = cur_line_width + 1 + word_in_queue.size();
             bool broke_due_to_length = false;
-            if(width_after_word > n_chars_per_line && !result.empty()) {
+            if(width_after_word > nr_chars_per_line && !result.empty()) {
                 //The current word doesn't fit in the current line. Break.
                 result.push_back('\n');
                 cur_line_width = 0;

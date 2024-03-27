@@ -35,8 +35,8 @@ struct vertex {
     //Y coordinate.
     float y = 0.0f;
     
-    //Index number of the edges around it.
-    vector<size_t> edge_nrs;
+    //Index number of the edges connected to it.
+    vector<size_t> edge_idxs;
     
     //Edges around it.
     vector<edge*> edges;
@@ -45,7 +45,7 @@ struct vertex {
     //--- Function declarations ---
     
     explicit vertex(float x = 0.0f, float y = 0.0f);
-    void add_edge(edge* e_ptr, const size_t e_nr);
+    void add_edge(edge* e_ptr, const size_t e_idx);
     edge* get_edge_by_neighbor(const vertex* neighbor) const;
     bool has_edge(const edge* e_ptr) const;
     bool is_2nd_degree_neighbor(

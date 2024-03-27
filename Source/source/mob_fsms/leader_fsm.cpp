@@ -1254,7 +1254,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fix_states(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engine_assert(
@@ -1409,16 +1409,16 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     }
     
     //Update pointers and such.
-    size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
+    size_t new_leader_idx = game.states.gameplay->cur_leader_idx;
     for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); ++l) {
         if(game.states.gameplay->available_leaders[l] == lea_ptr) {
-            new_leader_nr = l;
+            new_leader_idx = l;
             break;
         }
     }
     
     game.states.gameplay->cur_leader_ptr = lea_ptr;
-    game.states.gameplay->cur_leader_nr = new_leader_nr;
+    game.states.gameplay->cur_leader_idx = new_leader_idx;
     lea_ptr->active = true;
     
     //Check if we're in the middle of loading or of an interlude. If so
@@ -2079,14 +2079,14 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
  * @brief When a leader uses a spray.
  *
  * @param m The mob.
- * @param info1 Pointer to a size_t with the spray's ID number.
+ * @param info1 Pointer to a size_t with the spray's index.
  * @param info2 Unused.
  */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
-    size_t spray_nr = *((size_t*) info1);
-    spray_type &spray_type_ref = game.spray_types[spray_nr];
+    size_t spray_idx = *((size_t*) info1);
+    spray_type &spray_type_ref = game.spray_types[spray_idx];
     
-    if(game.states.gameplay->spray_stats[spray_nr].nr_sprays == 0) {
+    if(game.states.gameplay->spray_stats[spray_idx].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
         return;
     }
@@ -2148,7 +2148,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     for(auto &am : affected_mobs) {
         am->fsm.run_event(
-            MOB_EV_TOUCHED_SPRAY, (void*) &game.spray_types[spray_nr]
+            MOB_EV_TOUCHED_SPRAY, (void*) &game.spray_types[spray_idx]
         );
     }
     
@@ -2169,7 +2169,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     game.audio.create_mob_sfx_source(game.sys_assets.sfx_spray, m);
     
-    game.states.gameplay->change_spray_count(spray_nr, -1);
+    game.states.gameplay->change_spray_count(spray_idx, -1);
     
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);

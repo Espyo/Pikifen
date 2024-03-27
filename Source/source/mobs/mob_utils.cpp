@@ -387,11 +387,11 @@ bool group_info_struct::get_next_standby_type(
  * @brief Returns a point's offset from the anchor,
  * given the current group transformation.
  *
- * @param spot_index Index of the spot to check.
+ * @param spot_idx Index of the spot to check.
  * @return The offset.
  */
-point group_info_struct::get_spot_offset(const size_t spot_index) const {
-    point res = spots[spot_index].pos;
+point group_info_struct::get_spot_offset(const size_t spot_idx) const {
+    point res = spots[spot_idx].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
 }
@@ -552,26 +552,26 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     if(old_mobs.size() < spots.size()) {
         for(size_t m = 0; m < old_mobs.size(); ++m) {
             spots[m].mob_ptr = old_mobs[m];
-            spots[m].mob_ptr->group_spot_index = m;
+            spots[m].mob_ptr->group_spot_idx = m;
         }
         spots[old_mobs.size()].mob_ptr = affected_mob_ptr;
-        affected_mob_ptr->group_spot_index = old_mobs.size();
+        affected_mob_ptr->group_spot_idx = old_mobs.size();
         
     } else if(old_mobs.size() > spots.size()) {
         for(size_t m = 0, s = 0; m < old_mobs.size(); ++m) {
             if(old_mobs[m] == affected_mob_ptr) {
-                old_mobs[m]->group_spot_index = INVALID;
+                old_mobs[m]->group_spot_idx = INVALID;
                 continue;
             }
             spots[s].mob_ptr = old_mobs[m];
-            spots[s].mob_ptr->group_spot_index = s;
+            spots[s].mob_ptr->group_spot_idx = s;
             ++s;
         }
         
     } else {
         for(size_t m = 0; m < old_mobs.size(); ++m) {
             spots[m].mob_ptr = old_mobs[m];
-            spots[m].mob_ptr->group_spot_index = m;
+            spots[m].mob_ptr->group_spot_idx = m;
         }
     }
 }
@@ -583,7 +583,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
  */
 void group_info_struct::reassign_spots() {
     for(size_t m = 0; m < members.size(); ++m) {
-        members[m]->group_spot_index = INVALID;
+        members[m]->group_spot_idx = INVALID;
     }
     
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -593,7 +593,7 @@ void group_info_struct::reassign_spots() {
         
         for(size_t m = 0; m < members.size(); ++m) {
             mob* m_ptr = members[m];
-            if(m_ptr->group_spot_index != INVALID) continue;
+            if(m_ptr->group_spot_idx != INVALID) continue;
             
             dist d(m_ptr->pos, spot_pos);
             
@@ -603,7 +603,7 @@ void group_info_struct::reassign_spots() {
             }
         }
         
-        if(closest_mob) closest_mob->group_spot_index = s;
+        if(closest_mob) closest_mob->group_spot_idx = s;
     }
 }
 
@@ -618,7 +618,7 @@ void group_info_struct::reassign_spots() {
 void group_info_struct::sort(subgroup_type* leading_type) {
 
     for(size_t m = 0; m < members.size(); ++m) {
-        members[m]->group_spot_index = INVALID;
+        members[m]->group_spot_idx = INVALID;
     }
     
     subgroup_type* cur_type = leading_type;
@@ -633,7 +633,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
         for(size_t m = 0; m < members.size(); ++m) {
             mob* m_ptr = members[m];
             if(m_ptr->subgroup_type_ptr != cur_type) continue;
-            if(m_ptr->group_spot_index != INVALID) continue;
+            if(m_ptr->group_spot_idx != INVALID) continue;
             
             dist d(m_ptr->pos, spot_pos);
             
@@ -651,7 +651,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
                 game.states.gameplay->subgroup_types.get_next_type(cur_type);
         } else {
             spots[cur_spot].mob_ptr = closest_member;
-            closest_member->group_spot_index = cur_spot;
+            closest_member->group_spot_idx = cur_spot;
             cur_spot++;
         }
         
@@ -665,7 +665,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
  */
 void hold_info_struct::clear() {
     m = nullptr;
-    hitbox_nr = INVALID;
+    hitbox_idx = INVALID;
     offset_dist = 0;
     offset_angle = 0;
     vertical_dist = 0;
@@ -682,8 +682,8 @@ point hold_info_struct::get_final_pos(float* final_z) const {
     if(!m) return point();
     
     hitbox* h_ptr = nullptr;
-    if(hitbox_nr != INVALID) {
-        h_ptr = m->get_hitbox(hitbox_nr);
+    if(hitbox_idx != INVALID) {
+        h_ptr = m->get_hitbox(hitbox_idx);
     }
     
     point final_pos;
@@ -756,11 +756,11 @@ path_info_struct::path_info_struct(
 bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
     if(
         path.size() >= 2 &&
-        cur_path_stop_nr > 0 &&
-        cur_path_stop_nr < path.size()
+        cur_path_stop_idx > 0 &&
+        cur_path_stop_idx < path.size()
     ) {
-        path_stop* cur_stop = path[cur_path_stop_nr - 1];
-        path_stop* next_stop = path[cur_path_stop_nr];
+        path_stop* cur_stop = path[cur_path_stop_idx - 1];
+        path_stop* next_stop = path[cur_path_stop_idx];
         
         return
             !can_traverse_path_link(
@@ -788,7 +788,7 @@ pikmin_nest_struct::pikmin_nest_struct(
     nest_type(type) {
     
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
-        pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
+        pikmin_inside.push_back(vector<size_t>(NR_MATURITIES, 0));
         call_queue.push_back(0);
     }
 }
@@ -810,9 +810,9 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
         return false;
     }
     
-    for(size_t m = 0; m < N_MATURITIES; ++m) {
+    for(size_t m = 0; m < NR_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
-        size_t cur_m = N_MATURITIES - m - 1;
+        size_t cur_m = NR_MATURITIES - m - 1;
         
         if(pikmin_inside[type_idx][cur_m] == 0) continue;
         
@@ -875,7 +875,7 @@ size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         if(nest_type->pik_types[t] == type) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; ++m) {
                 amount += pikmin_inside[t][m];
             }
             break;
@@ -899,7 +899,7 @@ void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
         size_t word = 0;
         
         for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; ++m) {
                 if(word < pikmin_inside_vars.size()) {
                     pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
                     word++;
@@ -1091,7 +1091,7 @@ float calculate_mob_max_span(
  * @param code_after_creation Code to run right after the mob is created,
  * if any. This is run before any scripting takes place.
  * @param first_state_override If this is INVALID, use the first state
- * number defined in the mob's FSM struct, or the standard first state number.
+ * index defined in the mob's FSM struct, or the standard first state index.
  * Otherwise, use this.
  * @return The new mob.
  */
@@ -1128,7 +1128,7 @@ mob* create_mob(
             first_state_override :
             m_ptr->fsm.first_state_override != INVALID ?
             m_ptr->fsm.first_state_override :
-            type->first_state_nr
+            type->first_state_idx
         )
     ) {
         //If something went wrong, give it some dummy state.

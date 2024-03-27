@@ -72,7 +72,7 @@ public:
     string body_part_name;
     
     //Index of the body part. Cache for performance.
-    size_t body_part_index;
+    size_t body_part_idx;
     
     //Pointer to the body part. Cache for performance.
     body_part* body_part_ptr = nullptr;

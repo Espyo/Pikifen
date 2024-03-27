@@ -321,16 +321,16 @@ public:
     bool can_carry_tools = true;
 
     //How long it takes to evolve in maturity, as a sprout.
-    float sprout_evolution_time[N_MATURITIES] = { 0.0f, 0.0f, 0.0f };
+    float sprout_evolution_time[NR_MATURITIES] = { 0.0f, 0.0f, 0.0f };
 
     //Top (leaf/bud/flower) bitmap for each maturity.
-    ALLEGRO_BITMAP* bmp_top[N_MATURITIES] = { nullptr, nullptr, nullptr };
+    ALLEGRO_BITMAP* bmp_top[NR_MATURITIES] = { nullptr, nullptr, nullptr };
 
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon = nullptr;
 
     //Standby maturity icons.
-    ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES] = { nullptr, nullptr, nullptr };
+    ALLEGRO_BITMAP* bmp_maturity_icon[NR_MATURITIES] = { nullptr, nullptr, nullptr };
 
     //Icon for its Onion.
     ALLEGRO_BITMAP* bmp_onion_icon = nullptr;

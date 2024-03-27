@@ -36,7 +36,7 @@ const unsigned char DEF_DIFFICULTY = 0;
 
 
 /**
- * @brief Checks to see if all numbers match their pointers,
+ * @brief Checks to see if all indexes match their pointers,
  * for the various edges, vertexes, etc.
  *
  * This is merely a debugging tool. Aborts execution if any of the pointers
@@ -46,11 +46,11 @@ void area_data::check_stability() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
         engine_assert(
-            v_ptr->edges.size() == v_ptr->edge_nrs.size(),
-            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_nrs.size())
+            v_ptr->edges.size() == v_ptr->edge_idxs.size(),
+            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_idxs.size())
         );
         for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]], "");
+            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_idxs[e]], "");
         }
     }
     
@@ -58,7 +58,7 @@ void area_data::check_stability() {
         edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; ++v) {
             engine_assert(
-                e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]], ""
+                e_ptr->vertexes[v] == vertexes[e_ptr->vertex_idxs[v]], ""
             );
         }
         
@@ -66,22 +66,22 @@ void area_data::check_stability() {
             sector* s_ptr = e_ptr->sectors[s];
             if(
                 s_ptr == nullptr &&
-                e_ptr->sector_nrs[s] == INVALID
+                e_ptr->sector_idxs[s] == INVALID
             ) {
                 continue;
             }
-            engine_assert(s_ptr == sectors[e_ptr->sector_nrs[s]], "");
+            engine_assert(s_ptr == sectors[e_ptr->sector_idxs[s]], "");
         }
     }
     
     for(size_t s = 0; s < sectors.size(); ++s) {
         sector* s_ptr = sectors[s];
         engine_assert(
-            s_ptr->edges.size() == s_ptr->edge_nrs.size(),
-            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_nrs.size())
+            s_ptr->edges.size() == s_ptr->edge_idxs.size(),
+            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_idxs.size())
         );
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]], "");
+            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_idxs[e]], "");
         }
     }
 }
@@ -236,33 +236,33 @@ void area_data::clone(area_data &other) {
         ov_ptr->x = v_ptr->x;
         ov_ptr->y = v_ptr->y;
         ov_ptr->edges.reserve(v_ptr->edges.size());
-        ov_ptr->edge_nrs.reserve(v_ptr->edge_nrs.size());
+        ov_ptr->edge_idxs.reserve(v_ptr->edge_idxs.size());
         for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-            size_t nr = v_ptr->edge_nrs[e];
+            size_t nr = v_ptr->edge_idxs[e];
             ov_ptr->edges.push_back(other.edges[nr]);
-            ov_ptr->edge_nrs.push_back(nr);
+            ov_ptr->edge_idxs.push_back(nr);
         }
     }
     
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         edge* oe_ptr = other.edges[e];
-        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_nrs[0]];
-        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_nrs[1]];
-        oe_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[0];
-        oe_ptr->vertex_nrs[1] = e_ptr->vertex_nrs[1];
-        if(e_ptr->sector_nrs[0] == INVALID) {
+        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_idxs[0]];
+        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_idxs[1]];
+        oe_ptr->vertex_idxs[0] = e_ptr->vertex_idxs[0];
+        oe_ptr->vertex_idxs[1] = e_ptr->vertex_idxs[1];
+        if(e_ptr->sector_idxs[0] == INVALID) {
             oe_ptr->sectors[0] = nullptr;
         } else {
-            oe_ptr->sectors[0] = other.sectors[e_ptr->sector_nrs[0]];
+            oe_ptr->sectors[0] = other.sectors[e_ptr->sector_idxs[0]];
         }
-        if(e_ptr->sector_nrs[1] == INVALID) {
+        if(e_ptr->sector_idxs[1] == INVALID) {
             oe_ptr->sectors[1] = nullptr;
         } else {
-            oe_ptr->sectors[1] = other.sectors[e_ptr->sector_nrs[1]];
+            oe_ptr->sectors[1] = other.sectors[e_ptr->sector_idxs[1]];
         }
-        oe_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
-        oe_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
+        oe_ptr->sector_idxs[0] = e_ptr->sector_idxs[0];
+        oe_ptr->sector_idxs[1] = e_ptr->sector_idxs[1];
         e_ptr->clone(oe_ptr);
     }
     
@@ -274,20 +274,20 @@ void area_data::clone(area_data &other) {
         os_ptr->texture_info.bitmap =
             game.textures.get(s_ptr->texture_info.file_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
-        os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
+        os_ptr->edge_idxs.reserve(s_ptr->edge_idxs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            size_t nr = s_ptr->edge_nrs[e];
+            size_t nr = s_ptr->edge_idxs[e];
             os_ptr->edges.push_back(other.edges[nr]);
-            os_ptr->edge_nrs.push_back(nr);
+            os_ptr->edge_idxs.push_back(nr);
         }
         os_ptr->triangles.reserve(s_ptr->triangles.size());
         for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
             triangle* t_ptr = &s_ptr->triangles[t];
             os_ptr->triangles.push_back(
                 triangle(
-                    other.vertexes[find_vertex_nr(t_ptr->points[0])],
-                    other.vertexes[find_vertex_nr(t_ptr->points[1])],
-                    other.vertexes[find_vertex_nr(t_ptr->points[2])]
+                    other.vertexes[find_vertex_idx(t_ptr->points[0])],
+                    other.vertexes[find_vertex_idx(t_ptr->points[1])],
+                    other.vertexes[find_vertex_idx(t_ptr->points[2])]
                 )
             );
         }
@@ -302,9 +302,9 @@ void area_data::clone(area_data &other) {
     }
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         mob_gen* om_ptr = other.mob_generators[m];
-        for(size_t l = 0; l < om_ptr->link_nrs.size(); ++l) {
+        for(size_t l = 0; l < om_ptr->link_idxs.size(); ++l) {
             om_ptr->links.push_back(
-                other.mob_generators[om_ptr->link_nrs[l]]
+                other.mob_generators[om_ptr->link_idxs[l]]
             );
         }
     }
@@ -319,8 +319,8 @@ void area_data::clone(area_data &other) {
             path_link* new_link =
                 new path_link(
                 os_ptr,
-                other.path_stops[s_ptr->links[l]->end_nr],
-                s_ptr->links[l]->end_nr
+                other.path_stops[s_ptr->links[l]->end_idx],
+                s_ptr->links[l]->end_idx
             );
             s_ptr->links[l]->clone(new_link);
             new_link->distance = s_ptr->links[l]->distance;
@@ -391,11 +391,11 @@ void area_data::clone(area_data &other) {
     other.problems.lone_edges.clear();
     other.problems.lone_edges.reserve(problems.lone_edges.size());
     for(const auto &s : problems.non_simples) {
-        size_t nr = find_sector_nr(s.first);
+        size_t nr = find_sector_idx(s.first);
         other.problems.non_simples[other.sectors[nr]] = s.second;
     }
     for(const edge* e : problems.lone_edges) {
-        size_t nr = find_edge_nr(e);
+        size_t nr = find_edge_idx(e);
         other.problems.lone_edges.insert(other.edges[nr]);
     }
 }
@@ -404,8 +404,8 @@ void area_data::clone(area_data &other) {
 /**
  * @brief Connects an edge to a sector.
  *
- * This adds the sector and its number to the edge's
- * lists, and adds the edge and its number to the sector's.
+ * This adds the sector and its index to the edge's
+ * lists, and adds the edge and its index to the sector's.
  *
  * @param e_ptr Edge to connect.
  * @param s_ptr Sector to connect.
@@ -418,9 +418,9 @@ void area_data::connect_edge_to_sector(
         e_ptr->sectors[side]->remove_edge(e_ptr);
     }
     e_ptr->sectors[side] = s_ptr;
-    e_ptr->sector_nrs[side] = find_sector_nr(s_ptr);
+    e_ptr->sector_idxs[side] = find_sector_idx(s_ptr);
     if(s_ptr) {
-        s_ptr->add_edge(e_ptr, find_edge_nr(e_ptr));
+        s_ptr->add_edge(e_ptr, find_edge_idx(e_ptr));
     }
 }
 
@@ -428,8 +428,8 @@ void area_data::connect_edge_to_sector(
 /**
  * @brief Connects an edge to a vertex.
  *
- * This adds the vertex and its number to the edge's
- * lists, and adds the edge and its number to the vertex's.
+ * This adds the vertex and its index to the edge's
+ * lists, and adds the edge and its index to the vertex's.
  *
  * @param e_ptr Edge to connect.
  * @param v_ptr Vertex to connect.
@@ -442,24 +442,24 @@ void area_data::connect_edge_to_vertex(
         e_ptr->vertexes[endpoint]->remove_edge(e_ptr);
     }
     e_ptr->vertexes[endpoint] = v_ptr;
-    e_ptr->vertex_nrs[endpoint] = find_vertex_nr(v_ptr);
-    v_ptr->add_edge(e_ptr, find_edge_nr(e_ptr));
+    e_ptr->vertex_idxs[endpoint] = find_vertex_idx(v_ptr);
+    v_ptr->add_edge(e_ptr, find_edge_idx(e_ptr));
 }
 
 
 
 /**
  * @brief Connects the edges of a sector that link to it into the
- * edge_nrs vector.
+ * edge_idxs vector.
  *
  * @param s_ptr The sector.
  */
 void area_data::connect_sector_edges(sector* s_ptr) {
-    s_ptr->edge_nrs.clear();
+    s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         if(e_ptr->sectors[0] == s_ptr || e_ptr->sectors[1] == s_ptr) {
-            s_ptr->edge_nrs.push_back(e);
+            s_ptr->edge_idxs.push_back(e);
         }
     }
     fix_sector_pointers(s_ptr);
@@ -467,16 +467,16 @@ void area_data::connect_sector_edges(sector* s_ptr) {
 
 
 /**
- * @brief Connects the edges that link to it into the edge_nrs vector.
+ * @brief Connects the edges that link to it into the edge_idxs vector.
  *
  * @param v_ptr The vertex.
  */
 void area_data::connect_vertex_edges(vertex* v_ptr) {
-    v_ptr->edge_nrs.clear();
+    v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         if(e_ptr->vertexes[0] == v_ptr || e_ptr->vertexes[1] == v_ptr) {
-            v_ptr->edge_nrs.push_back(e);
+            v_ptr->edge_idxs.push_back(e);
         }
     }
     fix_vertex_pointers(v_ptr);
@@ -484,13 +484,13 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
 
 
 /**
- * @brief Scans the list of edges and retrieves the number of
+ * @brief Scans the list of edges and retrieves the index of
  * the specified edge.
  *
  * @param e_ptr Edge to find.
- * @return The number, or INVALID if not found.
+ * @return The index, or INVALID if not found.
  */
-size_t area_data::find_edge_nr(const edge* e_ptr) const {
+size_t area_data::find_edge_idx(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e] == e_ptr) return e;
     }
@@ -499,13 +499,13 @@ size_t area_data::find_edge_nr(const edge* e_ptr) const {
 
 
 /**
- * @brief Scans the list of mob generators and retrieves the number of
+ * @brief Scans the list of mob generators and retrieves the index of
  * the specified mob generator.
  *
  * @param m_ptr Mob to find.
- * @return The number, or INVALID if not found.
+ * @return The index, or INVALID if not found.
  */
-size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
+size_t area_data::find_mob_gen_idx(const mob_gen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         if(mob_generators[m] == m_ptr) return m;
     }
@@ -514,13 +514,13 @@ size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
 
 
 /**
- * @brief Scans the list of sectors and retrieves the number of
+ * @brief Scans the list of sectors and retrieves the index of
  * the specified sector.
  *
  * @param s_ptr Sector to find.
- * @return The number, or INVALID if not found.
+ * @return The index, or INVALID if not found.
  */
-size_t area_data::find_sector_nr(const sector* s_ptr) const {
+size_t area_data::find_sector_idx(const sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); ++s) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -529,13 +529,13 @@ size_t area_data::find_sector_nr(const sector* s_ptr) const {
 
 
 /**
- * @brief Scans the list of vertexes and retrieves the number of
+ * @brief Scans the list of vertexes and retrieves the index of
  * the specified vertex.
  *
  * @param v_ptr Vertex to find.
- * @return The number, or INVALID if not found.
+ * @return The index, or INVALID if not found.
  */
-size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
+size_t area_data::find_vertex_idx(const vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         if(vertexes[v] == v_ptr) return v;
     }
@@ -544,26 +544,26 @@ size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
 
 
 /**
- * @brief Fixes the sector and vertex numbers in an edge,
+ * @brief Fixes the sector and vertex indexes in an edge,
  * making them match the correct sectors and vertexes,
  * based on the existing sector and vertex pointers.
  *
- * @param e_ptr Edge to fix the numbers of.
+ * @param e_ptr Edge to fix the indexes of.
  */
-void area_data::fix_edge_nrs(edge* e_ptr) {
+void area_data::fix_edge_idxs(edge* e_ptr) {
     for(size_t s = 0; s < 2; ++s) {
         if(!e_ptr->sectors[s]) {
-            e_ptr->sector_nrs[s] = INVALID;
+            e_ptr->sector_idxs[s] = INVALID;
         } else {
-            e_ptr->sector_nrs[s] = find_sector_nr(e_ptr->sectors[s]);
+            e_ptr->sector_idxs[s] = find_sector_idx(e_ptr->sectors[s]);
         }
     }
     
     for(size_t v = 0; v < 2; ++v) {
         if(!e_ptr->vertexes[v]) {
-            e_ptr->vertex_nrs[v] = INVALID;
+            e_ptr->vertex_idxs[v] = INVALID;
         } else {
-            e_ptr->vertex_nrs[v] = find_vertex_nr(e_ptr->vertexes[v]);
+            e_ptr->vertex_idxs[v] = find_vertex_idx(e_ptr->vertexes[v]);
         }
     }
 }
@@ -572,7 +572,7 @@ void area_data::fix_edge_nrs(edge* e_ptr) {
 /**
  * @brief Fixes the sector and vertex pointers of an edge,
  * making them point to the correct sectors and vertexes,
- * based on the existing sector and vertex numbers.
+ * based on the existing sector and vertex indexes.
  *
  * @param e_ptr Edge to fix the pointers of.
  */
@@ -580,36 +580,36 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
     e_ptr->sectors[0] = nullptr;
     e_ptr->sectors[1] = nullptr;
     for(size_t s = 0; s < 2; ++s) {
-        size_t s_nr = e_ptr->sector_nrs[s];
-        e_ptr->sectors[s] = (s_nr == INVALID ? nullptr : sectors[s_nr]);
+        size_t s_idx = e_ptr->sector_idxs[s];
+        e_ptr->sectors[s] = (s_idx == INVALID ? nullptr : sectors[s_idx]);
     }
     
     e_ptr->vertexes[0] = nullptr;
     e_ptr->vertexes[1] = nullptr;
     for(size_t v = 0; v < 2; ++v) {
-        size_t v_nr = e_ptr->vertex_nrs[v];
-        e_ptr->vertexes[v] = (v_nr == INVALID ? nullptr : vertexes[v_nr]);
+        size_t v_idx = e_ptr->vertex_idxs[v];
+        e_ptr->vertexes[v] = (v_idx == INVALID ? nullptr : vertexes[v_idx]);
     }
 }
 
 
 /**
- * @brief Fixes the path stop numbers in a path stop's links,
+ * @brief Fixes the path stop indexes in a path stop's links,
  * making them match the correct path stops,
  * based on the existing path stop pointers.
  *
- * @param s_ptr Path stop to fix the numbers of.
+ * @param s_ptr Path stop to fix the indexes of.
  */
-void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
+void area_data::fix_path_stop_idxs(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
         path_link* l_ptr = s_ptr->links[l];
-        l_ptr->end_nr = INVALID;
+        l_ptr->end_idx = INVALID;
         
         if(!l_ptr->end_ptr) continue;
         
         for(size_t s = 0; s < path_stops.size(); ++s) {
             if(l_ptr->end_ptr == path_stops[s]) {
-                l_ptr->end_nr = s;
+                l_ptr->end_idx = s;
                 break;
             }
         }
@@ -620,7 +620,7 @@ void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
 /**
  * @brief Fixes the path stop pointers in a path stop's links,
  * making them point to the correct path stops,
- * based on the existing path stop numbers.
+ * based on the existing path stop indexes.
  *
  * @param s_ptr Path stop to fix the pointers of.
  */
@@ -629,25 +629,25 @@ void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
         path_link* l_ptr = s_ptr->links[l];
         l_ptr->end_ptr = nullptr;
         
-        if(l_ptr->end_nr == INVALID) continue;
-        if(l_ptr->end_nr >= path_stops.size()) continue;
+        if(l_ptr->end_idx == INVALID) continue;
+        if(l_ptr->end_idx >= path_stops.size()) continue;
         
-        l_ptr->end_ptr = path_stops[l_ptr->end_nr];
+        l_ptr->end_ptr = path_stops[l_ptr->end_idx];
     }
 }
 
 
 /**
- * @brief Fixes the edge numbers in a sector,
+ * @brief Fixes the edge indexes in a sector,
  * making them match the correct edges,
  * based on the existing edge pointers.
  *
- * @param s_ptr Sector to fix the numbers of.
+ * @param s_ptr Sector to fix the indexes of.
  */
-void area_data::fix_sector_nrs(sector* s_ptr) {
-    s_ptr->edge_nrs.clear();
+void area_data::fix_sector_idxs(sector* s_ptr) {
+    s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        s_ptr->edge_nrs.push_back(find_edge_nr(s_ptr->edges[e]));
+        s_ptr->edge_idxs.push_back(find_edge_idx(s_ptr->edges[e]));
     }
 }
 
@@ -655,30 +655,30 @@ void area_data::fix_sector_nrs(sector* s_ptr) {
 /**
  * @brief Fixes the edge pointers in a sector,
  * making them point to the correct edges,
- * based on the existing edge numbers.
+ * based on the existing edge indexes.
  *
  * @param s_ptr Sector to fix the pointers of.
  */
 void area_data::fix_sector_pointers(sector* s_ptr) {
     s_ptr->edges.clear();
-    for(size_t e = 0; e < s_ptr->edge_nrs.size(); ++e) {
-        size_t e_nr = s_ptr->edge_nrs[e];
-        s_ptr->edges.push_back(e_nr == INVALID ? nullptr : edges[e_nr]);
+    for(size_t e = 0; e < s_ptr->edge_idxs.size(); ++e) {
+        size_t e_idx = s_ptr->edge_idxs[e];
+        s_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
     }
 }
 
 
 /**
- * @brief Fixes the edge numbers in a vertex,
+ * @brief Fixes the edge indexes in a vertex,
  * making them match the correct edges,
  * based on the existing edge pointers.
  *
- * @param v_ptr Vertex to fix the numbers of.
+ * @param v_ptr Vertex to fix the indexes of.
  */
-void area_data::fix_vertex_nrs(vertex* v_ptr) {
-    v_ptr->edge_nrs.clear();
+void area_data::fix_vertex_idxs(vertex* v_ptr) {
+    v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-        v_ptr->edge_nrs.push_back(find_edge_nr(v_ptr->edges[e]));
+        v_ptr->edge_idxs.push_back(find_edge_idx(v_ptr->edges[e]));
     }
 }
 
@@ -686,15 +686,15 @@ void area_data::fix_vertex_nrs(vertex* v_ptr) {
 /**
  * @brief Fixes the edge pointers in a vertex,
  * making them point to the correct edges,
- * based on the existing edge numbers.
+ * based on the existing edge indexes.
  *
  * @param v_ptr Vertex to fix the pointers of.
  */
 void area_data::fix_vertex_pointers(vertex* v_ptr) {
     v_ptr->edges.clear();
-    for(size_t e = 0; e < v_ptr->edge_nrs.size(); ++e) {
-        size_t e_nr = v_ptr->edge_nrs[e];
-        v_ptr->edges.push_back(e_nr == INVALID ? nullptr : edges[e_nr]);
+    for(size_t e = 0; e < v_ptr->edge_idxs.size(); ++e) {
+        size_t e_idx = v_ptr->edge_idxs[e];
+        v_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
     }
 }
 
@@ -951,25 +951,25 @@ vertex* area_data::new_vertex() {
 
 
 /**
- * @brief Removes an edge from the list, and updates all IDs referencing it.
+ * @brief Removes an edge from the list, and updates all indexes after it.
  *
- * @param e_nr Index number of the edge to remove.
+ * @param e_idx Index number of the edge to remove.
  */
-void area_data::remove_edge(const size_t e_nr) {
-    edges.erase(edges.begin() + e_nr);
+void area_data::remove_edge(const size_t e_idx) {
+    edges.erase(edges.begin() + e_idx);
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
         for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
             if(
-                v_ptr->edge_nrs[e] != INVALID &&
-                v_ptr->edge_nrs[e] > e_nr
+                v_ptr->edge_idxs[e] != INVALID &&
+                v_ptr->edge_idxs[e] > e_idx
             ) {
-                v_ptr->edge_nrs[e]--;
+                v_ptr->edge_idxs[e]--;
             } else {
                 //This should never happen.
                 engine_assert(
-                    v_ptr->edge_nrs[e] != e_nr,
-                    i2s(v_ptr->edge_nrs[e]) + " " + i2s(e_nr)
+                    v_ptr->edge_idxs[e] != e_idx,
+                    i2s(v_ptr->edge_idxs[e]) + " " + i2s(e_idx)
                 );
             }
         }
@@ -978,15 +978,15 @@ void area_data::remove_edge(const size_t e_nr) {
         sector* s_ptr = sectors[s];
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
             if(
-                s_ptr->edge_nrs[e] != INVALID &&
-                s_ptr->edge_nrs[e] > e_nr
+                s_ptr->edge_idxs[e] != INVALID &&
+                s_ptr->edge_idxs[e] > e_idx
             ) {
-                s_ptr->edge_nrs[e]--;
+                s_ptr->edge_idxs[e]--;
             } else {
                 //This should never happen.
                 engine_assert(
-                    s_ptr->edge_nrs[e] != e_nr,
-                    i2s(s_ptr->edge_nrs[e]) + " " + i2s(e_nr)
+                    s_ptr->edge_idxs[e] != e_idx,
+                    i2s(s_ptr->edge_idxs[e]) + " " + i2s(e_idx)
                 );
             }
         }
@@ -995,7 +995,7 @@ void area_data::remove_edge(const size_t e_nr) {
 
 
 /**
- * @brief Removes an edge from the list, and updates all IDs referencing it.
+ * @brief Removes an edge from the list, and updates all indexes after it.
  *
  * @param e_ptr Pointer of the edge to remove.
  */
@@ -1010,25 +1010,25 @@ void area_data::remove_edge(const edge* e_ptr) {
 
 
 /**
- * @brief Removes a sector from the list, and updates all IDs referencing it.
+ * @brief Removes a sector from the list, and updates all indexes after it.
  *
- * @param s_nr Index number of the sector to remove.
+ * @param s_idx Index number of the sector to remove.
  */
-void area_data::remove_sector(const size_t s_nr) {
-    sectors.erase(sectors.begin() + s_nr);
+void area_data::remove_sector(const size_t s_idx) {
+    sectors.erase(sectors.begin() + s_idx);
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
         edge* e_ptr = game.cur_area_data.edges[e];
         for(size_t s = 0; s < 2; ++s) {
             if(
-                e_ptr->sector_nrs[s] != INVALID &&
-                e_ptr->sector_nrs[s] > s_nr
+                e_ptr->sector_idxs[s] != INVALID &&
+                e_ptr->sector_idxs[s] > s_idx
             ) {
-                e_ptr->sector_nrs[s]--;
+                e_ptr->sector_idxs[s]--;
             } else {
                 //This should never happen.
                 engine_assert(
-                    e_ptr->sector_nrs[s] != s_nr,
-                    i2s(e_ptr->sector_nrs[s]) + " " + i2s(s_nr)
+                    e_ptr->sector_idxs[s] != s_idx,
+                    i2s(e_ptr->sector_idxs[s]) + " " + i2s(s_idx)
                 );
             }
         }
@@ -1037,7 +1037,7 @@ void area_data::remove_sector(const size_t s_nr) {
 
 
 /**
- * @brief Removes a sector from the list, and updates all IDs referencing it.
+ * @brief Removes a sector from the list, and updates all indexes after it.
  *
  * @param s_ptr Pointer of the sector to remove.
  */
@@ -1052,25 +1052,25 @@ void area_data::remove_sector(const sector* s_ptr) {
 
 
 /**
- * @brief Removes a vertex from the list, and updates all IDs referencing it.
+ * @brief Removes a vertex from the list, and updates all indexes after it.
  *
- * @param v_nr Index number of the vertex to remove.
+ * @param v_idx Index number of the vertex to remove.
  */
-void area_data::remove_vertex(const size_t v_nr) {
-    vertexes.erase(vertexes.begin() + v_nr);
+void area_data::remove_vertex(const size_t v_idx) {
+    vertexes.erase(vertexes.begin() + v_idx);
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; ++v) {
             if(
-                e_ptr->vertex_nrs[v] != INVALID &&
-                e_ptr->vertex_nrs[v] > v_nr
+                e_ptr->vertex_idxs[v] != INVALID &&
+                e_ptr->vertex_idxs[v] > v_idx
             ) {
-                e_ptr->vertex_nrs[v]--;
+                e_ptr->vertex_idxs[v]--;
             } else {
                 //This should never happen.
                 engine_assert(
-                    e_ptr->vertex_nrs[v] != v_nr,
-                    i2s(e_ptr->vertex_nrs[v]) + " " + i2s(v_nr)
+                    e_ptr->vertex_idxs[v] != v_idx,
+                    i2s(e_ptr->vertex_idxs[v]) + " " + i2s(v_idx)
                 );
             }
         }
@@ -1079,7 +1079,7 @@ void area_data::remove_vertex(const size_t v_nr) {
 
 
 /**
- * @brief Removes a vertex from the list, and updates all IDs referencing it.
+ * @brief Removes a vertex from the list, and updates all indexes after it.
  *
  * @param v_ptr Pointer of the vertex to remove.
  */
@@ -1222,7 +1222,7 @@ void mob_gen::clone(mob_gen* destination, const bool include_position) const {
     if(include_position) destination->pos = pos;
     destination->type = type;
     destination->vars = vars;
-    destination->link_nrs = link_nrs;
+    destination->link_idxs = link_idxs;
     destination->stored_inside = stored_inside;
 }
 

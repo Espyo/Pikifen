@@ -3058,8 +3058,8 @@ bool area_editor::save_area(const bool to_backup) {
         edges_node->add(edge_node);
         string s_str;
         for(size_t s = 0; s < 2; ++s) {
-            if(e_ptr->sector_nrs[s] == INVALID) s_str += "-1";
-            else s_str += i2s(e_ptr->sector_nrs[s]);
+            if(e_ptr->sector_idxs[s] == INVALID) s_str += "-1";
+            else s_str += i2s(e_ptr->sector_idxs[s]);
             s_str += " ";
         }
         s_str.erase(s_str.size() - 1);
@@ -3067,7 +3067,7 @@ bool area_editor::save_area(const bool to_backup) {
         edge_node->add(
             new data_node(
                 "v",
-                i2s(e_ptr->vertex_nrs[0]) + " " + i2s(e_ptr->vertex_nrs[1])
+                i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1])
             )
         );
         
@@ -3233,9 +3233,9 @@ bool area_editor::save_area(const bool to_backup) {
         }
         
         string links_str;
-        for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
+        for(size_t l = 0; l < m_ptr->link_idxs.size(); ++l) {
             if(l > 0) links_str += " ";
-            links_str += i2s(m_ptr->link_nrs[l]);
+            links_str += i2s(m_ptr->link_idxs[l]);
         }
         
         if(!links_str.empty()) {
@@ -3284,7 +3284,7 @@ bool area_editor::save_area(const bool to_backup) {
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
-            string link_data = i2s(l_ptr->end_nr);
+            string link_data = i2s(l_ptr->end_idx);
             if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
             }
@@ -3458,7 +3458,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             data_file.add(
@@ -3471,7 +3471,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
             )
         ) {
             data_file.add(
@@ -3484,7 +3484,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             )
         ) {
             data_file.add(
@@ -3497,7 +3497,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+                get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             )
         ) {
             data_file.add(
@@ -3510,7 +3510,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+                get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
             data_file.add(
@@ -3523,7 +3523,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             data_file.add(
@@ -4588,7 +4588,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
         }
         );
         on_vertex = merge_vertexes[0].second;
-        on_vertex_nr = game.cur_area_data.find_vertex_nr(on_vertex);
+        on_vertex_idx = game.cur_area_data.find_vertex_idx(on_vertex);
     }
     
     if(on_vertex) {
@@ -4599,7 +4599,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
         on_edge = ae_ptr->get_edge_under_point(mouse_click);
         
         if(on_edge) {
-            on_edge_nr = game.cur_area_data.find_edge_nr(on_edge);
+            on_edge_idx = game.cur_area_data.find_edge_idx(on_edge);
             snapped_spot =
                 get_closest_point_in_line_seg(
                     point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),
@@ -4608,7 +4608,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
                 );
                 
         } else {
-            on_sector = get_sector(mouse_click, &on_sector_nr, false);
+            on_sector = get_sector(mouse_click, &on_sector_idx, false);
             
         }
     }

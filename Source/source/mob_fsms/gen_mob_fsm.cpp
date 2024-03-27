@@ -213,8 +213,8 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
-    if(m->type->death_state_nr == INVALID) return;
-    m->fsm.set_state(m->type->death_state_nr, info1, info2);
+    if(m->type->death_state_idx == INVALID) return;
+    m->fsm.set_state(m->type->death_state_idx, info1, info2);
 }
 
 

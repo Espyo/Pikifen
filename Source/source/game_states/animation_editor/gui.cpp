@@ -175,7 +175,7 @@ void animation_editor::process_gui_hitbox_hazards() {
     //Hitbox hazards node.
     if(saveable_tree_node("hitbox", "Hazards")) {
     
-        static int selected_hazard_nr = 0;
+        static int selected_hazard_idx = 0;
         
         //Hitbox hazard addition button.
         if(
@@ -213,7 +213,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                     cur_hitbox->hazards_str += ";";
                 }
                 cur_hitbox->hazards_str += picked_hazard;
-                selected_hazard_nr = (int) list.size();
+                selected_hazard_idx = (int) list.size();
                 changes_mgr.mark_as_changed();
                 set_status(
                     "Added hazard \"" + picked_hazard + "\" to the hitbox."
@@ -222,7 +222,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         }
         
         //Hitbox hazard removal button.
-        if(selected_hazard_nr >= 0 && !cur_hitbox->hazards_str.empty()) {
+        if(selected_hazard_idx >= 0 && !cur_hitbox->hazards_str.empty()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -233,20 +233,20 @@ void animation_editor::process_gui_hitbox_hazards() {
             ) {
                 vector<string> list =
                     semicolon_list_to_vector(cur_hitbox->hazards_str);
-                if(selected_hazard_nr < (int) list.size()) {
-                    string hazard_name = list[selected_hazard_nr];
+                if(selected_hazard_idx < (int) list.size()) {
+                    string hazard_name = list[selected_hazard_idx];
                     cur_hitbox->hazards_str.clear();
                     for(size_t h = 0; h < list.size(); ++h) {
-                        if(h == (size_t) selected_hazard_nr) continue;
+                        if(h == (size_t) selected_hazard_idx) continue;
                         cur_hitbox->hazards_str += list[h] + ";";
                     }
                     if(!cur_hitbox->hazards_str.empty()) {
                         //Delete the trailing semicolon.
                         cur_hitbox->hazards_str.pop_back();
                     }
-                    selected_hazard_nr =
+                    selected_hazard_idx =
                         std::min(
-                            selected_hazard_nr, (int) list.size() - 2
+                            selected_hazard_idx, (int) list.size() - 2
                         );
                     changes_mgr.mark_as_changed();
                     set_status(
@@ -263,7 +263,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         
         //Hitbox hazard list.
         ImGui::ListBox(
-            "Hazards", &selected_hazard_nr,
+            "Hazards", &selected_hazard_idx,
             semicolon_list_to_vector(cur_hitbox->hazards_str),
             4
         );
@@ -613,13 +613,13 @@ void animation_editor::process_gui_panel_animation() {
     panel_title("ANIMATIONS");
     
     //Current animation text.
-    size_t cur_anim_nr = INVALID;
+    size_t cur_anim_idx = INVALID;
     if(cur_anim_i.cur_anim) {
-        cur_anim_nr = anims.find_animation(cur_anim_i.cur_anim->name);
+        cur_anim_idx = anims.find_animation(cur_anim_i.cur_anim->name);
     }
     ImGui::Text(
         "Current animation: %s / %i",
-        (cur_anim_nr == INVALID ? "--" : i2s(cur_anim_nr + 1).c_str()),
+        (cur_anim_idx == INVALID ? "--" : i2s(cur_anim_idx + 1).c_str()),
         (int) anims.animations.size()
     );
     
@@ -635,13 +635,13 @@ void animation_editor::process_gui_panel_animation() {
             if(!cur_anim_i.cur_anim) {
                 pick_animation(anims.animations[0]->name, "", false);
             } else {
-                size_t new_nr =
+                size_t new_idx =
                     sum_and_wrap(
                         (int) anims.find_animation(cur_anim_i.cur_anim->name),
                         -1,
                         (int) anims.animations.size()
                     );
-                pick_animation(anims.animations[new_nr]->name, "", false);
+                pick_animation(anims.animations[new_idx]->name, "", false);
             }
         }
     }
@@ -707,13 +707,13 @@ void animation_editor::process_gui_panel_animation() {
             if(!cur_anim_i.cur_anim) {
                 pick_animation(anims.animations[0]->name, "", false);
             } else {
-                size_t new_nr =
+                size_t new_idx =
                     sum_and_wrap(
                         (int) anims.find_animation(cur_anim_i.cur_anim->name),
                         1,
                         (int) anims.animations.size()
                     );
-                pick_animation(anims.animations[new_nr]->name, "", false);
+                pick_animation(anims.animations[new_idx]->name, "", false);
             }
         }
     }
@@ -864,21 +864,21 @@ void animation_editor::process_gui_panel_animation() {
         
             frame* frame_ptr = nullptr;
             if(
-                cur_anim_i.cur_frame_index == INVALID &&
+                cur_anim_i.cur_frame_idx == INVALID &&
                 !cur_anim_i.cur_anim->frames.empty()
             ) {
-                cur_anim_i.cur_frame_index = 0;
+                cur_anim_i.cur_frame_idx = 0;
                 cur_anim_i.cur_frame_time = 0.0f;
             }
             if(cur_anim_i.valid_frame()) {
                 frame_ptr =
-                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index]);
+                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
             }
             
             //Current frame text.
             ImGui::Text(
                 "Current frame: %s / %i",
-                frame_ptr ? i2s(cur_anim_i.cur_frame_index + 1).c_str() : "--",
+                frame_ptr ? i2s(cur_anim_i.cur_frame_idx + 1).c_str() : "--",
                 (int) cur_anim_i.cur_anim->frames.size()
             );
             
@@ -910,13 +910,13 @@ void animation_editor::process_gui_panel_animation() {
                 ) {
                     anim_playing = false;
                     if(!cur_anim_i.cur_anim->frames.empty()) {
-                        if(cur_anim_i.cur_frame_index == INVALID) {
-                            cur_anim_i.cur_frame_index = 0;
-                        } else if(cur_anim_i.cur_frame_index == 0) {
-                            cur_anim_i.cur_frame_index =
+                        if(cur_anim_i.cur_frame_idx == INVALID) {
+                            cur_anim_i.cur_frame_idx = 0;
+                        } else if(cur_anim_i.cur_frame_idx == 0) {
+                            cur_anim_i.cur_frame_idx =
                                 cur_anim_i.cur_anim->frames.size() - 1;
                         } else {
-                            cur_anim_i.cur_frame_index--;
+                            cur_anim_i.cur_frame_idx--;
                         }
                         cur_anim_i.cur_frame_time = 0.0f;
                     }
@@ -937,13 +937,13 @@ void animation_editor::process_gui_panel_animation() {
                     anim_playing = false;
                     if(!cur_anim_i.cur_anim->frames.empty()) {
                         if(
-                            cur_anim_i.cur_frame_index ==
+                            cur_anim_i.cur_frame_idx ==
                             cur_anim_i.cur_anim->frames.size() - 1 ||
-                            cur_anim_i.cur_frame_index == INVALID
+                            cur_anim_i.cur_frame_idx == INVALID
                         ) {
-                            cur_anim_i.cur_frame_index = 0;
+                            cur_anim_i.cur_frame_idx = 0;
                         } else {
-                            cur_anim_i.cur_frame_index++;
+                            cur_anim_i.cur_frame_idx++;
                         }
                         cur_anim_i.cur_frame_time = 0.0f;
                     }
@@ -964,36 +964,36 @@ void animation_editor::process_gui_panel_animation() {
                 )
             ) {
                 if(
-                    cur_anim_i.cur_frame_index <
+                    cur_anim_i.cur_frame_idx <
                     cur_anim_i.cur_anim->loop_frame
                 ) {
                     //Let the loop frame stay the same.
                     cur_anim_i.cur_anim->loop_frame++;
                 }
                 anim_playing = false;
-                if(cur_anim_i.cur_frame_index != INVALID) {
-                    cur_anim_i.cur_frame_index++;
+                if(cur_anim_i.cur_frame_idx != INVALID) {
+                    cur_anim_i.cur_frame_idx++;
                     cur_anim_i.cur_frame_time = 0.0f;
                     cur_anim_i.cur_anim->frames.insert(
                         cur_anim_i.cur_anim->frames.begin() +
-                        cur_anim_i.cur_frame_index,
+                        cur_anim_i.cur_frame_idx,
                         frame(
                             cur_anim_i.cur_anim->frames[
-                                cur_anim_i.cur_frame_index - 1
+                                cur_anim_i.cur_frame_idx - 1
                             ]
                         )
                     );
                 } else {
                     cur_anim_i.cur_anim->frames.push_back(frame());
-                    cur_anim_i.cur_frame_index = 0;
+                    cur_anim_i.cur_frame_idx = 0;
                     cur_anim_i.cur_frame_time = 0.0f;
                     set_best_frame_sprite();
                 }
                 frame_ptr =
-                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index]);
+                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
                 changes_mgr.mark_as_changed();
                 set_status(
-                    "Added frame #" + i2s(cur_anim_i.cur_frame_index + 1) + "."
+                    "Added frame #" + i2s(cur_anim_i.cur_frame_idx + 1) + "."
                 );
             }
             set_tooltip(
@@ -1013,14 +1013,14 @@ void animation_editor::process_gui_panel_animation() {
                     )
                 ) {
                     if(
-                        cur_anim_i.cur_frame_index <
+                        cur_anim_i.cur_frame_idx <
                         cur_anim_i.cur_anim->loop_frame
                     ) {
                         //Let the loop frame stay the same.
                         cur_anim_i.cur_anim->loop_frame--;
                     }
                     if(
-                        cur_anim_i.cur_frame_index ==
+                        cur_anim_i.cur_frame_idx ==
                         cur_anim_i.cur_anim->loop_frame &&
                         cur_anim_i.cur_anim->loop_frame ==
                         cur_anim_i.cur_anim->frames.size() - 1
@@ -1029,32 +1029,32 @@ void animation_editor::process_gui_panel_animation() {
                         cur_anim_i.cur_anim->loop_frame--;
                     }
                     anim_playing = false;
-                    size_t deleted_frame_nr = cur_anim_i.cur_frame_index;
-                    if(cur_anim_i.cur_frame_index != INVALID) {
+                    size_t deleted_frame_idx = cur_anim_i.cur_frame_idx;
+                    if(cur_anim_i.cur_frame_idx != INVALID) {
                         cur_anim_i.cur_anim->frames.erase(
                             cur_anim_i.cur_anim->frames.begin() +
-                            cur_anim_i.cur_frame_index
+                            cur_anim_i.cur_frame_idx
                         );
                         if(cur_anim_i.cur_anim->frames.empty()) {
-                            cur_anim_i.cur_frame_index = INVALID;
+                            cur_anim_i.cur_frame_idx = INVALID;
                             frame_ptr = nullptr;
                         } else if(
-                            cur_anim_i.cur_frame_index >=
+                            cur_anim_i.cur_frame_idx >=
                             cur_anim_i.cur_anim->frames.size()
                         ) {
-                            cur_anim_i.cur_frame_index =
+                            cur_anim_i.cur_frame_idx =
                                 cur_anim_i.cur_anim->frames.size() - 1;
                             frame_ptr =
                                 &(
                                     cur_anim_i.cur_anim->frames[
-                                        cur_anim_i.cur_frame_index
+                                        cur_anim_i.cur_frame_idx
                                     ]
                                 );
                         }
                         cur_anim_i.cur_frame_time = 0.0f;
                         changes_mgr.mark_as_changed();
                         set_status(
-                            "Deleted frame #" + i2s(deleted_frame_nr + 1) + "."
+                            "Deleted frame #" + i2s(deleted_frame_idx + 1) + "."
                         );
                     }
                 }
@@ -1076,10 +1076,10 @@ void animation_editor::process_gui_panel_animation() {
                         "Sprite", &frame_ptr->sprite_name, sprite_names, 15
                     )
                 ) {
-                    frame_ptr->sprite_index =
+                    frame_ptr->sprite_idx =
                         anims.find_sprite(frame_ptr->sprite_name);
                     frame_ptr->sprite_ptr =
-                        anims.sprites[frame_ptr->sprite_index];
+                        anims.sprites[frame_ptr->sprite_idx];
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
@@ -1155,7 +1155,7 @@ void animation_editor::process_gui_panel_animation() {
                             frame_ptr->sound.clear();
                         }
                         changes_mgr.mark_as_changed();
-                        anims.fill_sound_index_caches(loaded_mob_type);
+                        anims.fill_sound_idx_caches(loaded_mob_type);
                     }
                     set_tooltip(
                         "Whether a sound should play when this frame starts."
@@ -1181,7 +1181,7 @@ void animation_editor::process_gui_panel_animation() {
                                 15
                             )
                         ) {
-                            anims.fill_sound_index_caches(loaded_mob_type);
+                            anims.fill_sound_idx_caches(loaded_mob_type);
                             changes_mgr.mark_as_changed();
                         }
                         set_tooltip(
@@ -1198,7 +1198,7 @@ void animation_editor::process_gui_panel_animation() {
                 if(ImGui::Button("Apply duration to all frames")) {
                     float d =
                         cur_anim_i.cur_anim->frames[
-                            cur_anim_i.cur_frame_index
+                            cur_anim_i.cur_frame_idx
                         ].duration;
                     for(
                         size_t i = 0;
@@ -1535,13 +1535,13 @@ void animation_editor::process_gui_panel_sprite() {
     panel_title("SPRITES");
     
     //Current sprite text.
-    size_t cur_sprite_nr = INVALID;
+    size_t cur_sprite_idx = INVALID;
     if(cur_sprite) {
-        cur_sprite_nr = anims.find_sprite(cur_sprite->name);
+        cur_sprite_idx = anims.find_sprite(cur_sprite->name);
     }
     ImGui::Text(
         "Current sprite: %s / %i",
-        (cur_sprite_nr == INVALID ? "--" : i2s(cur_sprite_nr + 1).c_str()),
+        (cur_sprite_idx == INVALID ? "--" : i2s(cur_sprite_idx + 1).c_str()),
         (int) anims.sprites.size()
     );
     
@@ -1557,13 +1557,13 @@ void animation_editor::process_gui_panel_sprite() {
             if(!cur_sprite) {
                 pick_sprite(anims.sprites[0]->name, "", false);
             } else {
-                size_t new_nr =
+                size_t new_idx =
                     sum_and_wrap(
                         (int) anims.find_sprite(cur_sprite->name),
                         -1,
                         (int) anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_nr]->name, "", false);
+                pick_sprite(anims.sprites[new_idx]->name, "", false);
             }
         }
     }
@@ -1619,13 +1619,13 @@ void animation_editor::process_gui_panel_sprite() {
             if(!cur_sprite) {
                 pick_sprite(anims.sprites[0]->name, "", false);
             } else {
-                size_t new_nr =
+                size_t new_idx =
                     sum_and_wrap(
                         (int) anims.find_sprite(cur_sprite->name),
                         1,
                         (int) anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_nr]->name, "", false);
+                pick_sprite(anims.sprites[new_idx]->name, "", false);
             }
         }
     }
@@ -1651,7 +1651,7 @@ void animation_editor::process_gui_panel_sprite() {
             if(anims.sprites.empty()) {
                 cur_sprite = nullptr;
                 cur_hitbox = nullptr;
-                cur_hitbox_nr = INVALID;
+                cur_hitbox_idx = INVALID;
             } else {
                 nr = std::min(nr, anims.sprites.size() - 1);
                 pick_sprite(anims.sprites[nr]->name, "", false);
@@ -2022,14 +2022,14 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(cur_sprite->hitboxes.size()) {
             if(!cur_hitbox) {
                 cur_hitbox = &cur_sprite->hitboxes[0];
-                cur_hitbox_nr = 0;
+                cur_hitbox_idx = 0;
             } else {
-                cur_hitbox_nr =
+                cur_hitbox_idx =
                     sum_and_wrap(
-                        (int) cur_hitbox_nr, -1,
+                        (int) cur_hitbox_idx, -1,
                         (int) cur_sprite->hitboxes.size()
                     );
-                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_idx];
             }
         }
     }
@@ -2047,16 +2047,16 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         )
     ) {
         if(cur_sprite->hitboxes.size()) {
-            if(cur_hitbox_nr == INVALID) {
+            if(cur_hitbox_idx == INVALID) {
                 cur_hitbox = &cur_sprite->hitboxes[0];
-                cur_hitbox_nr = 0;
+                cur_hitbox_idx = 0;
             } else {
-                cur_hitbox_nr =
+                cur_hitbox_idx =
                     sum_and_wrap(
-                        (int) cur_hitbox_nr, 1,
+                        (int) cur_hitbox_idx, 1,
                         (int) cur_sprite->hitboxes.size()
                     );
-                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_idx];
             }
         }
     }
@@ -2432,7 +2432,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         
         //Toggle maturity button.
         if(ImGui::Button("Toggle maturity")) {
-            cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
+            cur_maturity = sum_and_wrap(cur_maturity, 1, NR_MATURITIES);
         }
         set_tooltip(
             "View a different maturity top."
@@ -2742,7 +2742,7 @@ void animation_editor::process_gui_status_bar() {
         } else {
             cur_time =
                 cur_anim_i.cur_anim->get_time(
-                    cur_anim_i.cur_frame_index, cur_anim_i.cur_frame_time
+                    cur_anim_i.cur_frame_idx, cur_anim_i.cur_frame_time
                 );
         }
         

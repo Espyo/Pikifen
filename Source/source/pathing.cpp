@@ -37,12 +37,12 @@ const float MIN_STOP_RADIUS = 16.0f;
  *
  * @param start_ptr The path stop at the start of this link.
  * @param end_ptr The path stop at the end of this link.
- * @param end_nr Index number of the path stop at the end of this link.
+ * @param end_idx Index number of the path stop at the end of this link.
  */
-path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
+path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_idx) :
     start_ptr(start_ptr),
     end_ptr(end_ptr),
-    end_nr(end_nr) {
+    end_idx(end_idx) {
     
 }
 

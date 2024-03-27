@@ -30,7 +30,7 @@ using std::vector;
  *
  * @param name Name, should be unique.
  * @param frames List of frames.
- * @param loop_frame Loop frame number.
+ * @param loop_frame Loop frame index.
  * @param hit_rate If this has an attack, this is the chance of hitting.
  * 0 - 100.
  */
@@ -92,17 +92,17 @@ float animation::get_duration() {
 
 
 /**
- * @brief Returns the frame number, and time within that frame,
+ * @brief Returns the frame index, and time within that frame,
  * that matches the specified time.
  *
  * @param t Time to check.
- * @param frame_nr The frame number is returned here.
+ * @param frame_idx The frame index is returned here.
  * @param frame_time The time within the frame is returned here.
  */
 void animation::get_frame_and_time(
-    const float t, size_t* frame_nr, float* frame_time
+    const float t, size_t* frame_idx, float* frame_time
 ) {
-    *frame_nr = 0;
+    *frame_idx = 0;
     *frame_time = 0.0f;
     
     if(frames.empty() || t <= 0.0f) {
@@ -121,7 +121,7 @@ void animation::get_frame_and_time(
         }
     }
     
-    *frame_nr = clamp(f, 0, frames.size() - 1);
+    *frame_idx = clamp(f, 0, frames.size() - 1);
     *frame_time = t - prev_duration_so_far;
 }
 
@@ -130,20 +130,20 @@ void animation::get_frame_and_time(
  * @brief Returns the total time since the animation start, when given a frame
  * and the current time in the current frame.
  *
- * @param frame_nr Current frame number.
+ * @param frame_idx Current frame index.
  * @param frame_time Time in the current frame.
  * @return The time.
  */
-float animation::get_time(const size_t frame_nr, const float frame_time) {
-    if(frame_nr == INVALID) {
+float animation::get_time(const size_t frame_idx, const float frame_time) {
+    if(frame_idx == INVALID) {
         return 0.0f;
     }
-    if(frame_nr >= frames.size()) {
+    if(frame_idx >= frames.size()) {
         return get_duration();
     }
     
     float cur_time = 0.0f;
-    for(size_t f = 0; f < frame_nr; ++f) {
+    for(size_t f = 0; f < frame_idx; ++f) {
         cur_time += frames[f].duration;
     }
     cur_time += frame_time;
@@ -196,13 +196,13 @@ void animation_database::calculate_max_span() {
  * e.g.: The game wants there to be an "idle" animation,
  * a "walk" animation, etc.
  * Because we are NOT looking up with strings, if we want more than 20FPS,
- * we need a way to convert from a numeric ID
+ * we need a way to convert from a numeric index
  * (one that stands for walking, one for idling, etc.)
- * into the corresponding number on the animation file.
+ * into the corresponding index on the animation file.
  * This is where this comes in.
  *
  * @param conversions A vector of size_t and strings.
- * The size_t is the hardcoded ID (probably in some constant or enum).
+ * The size_t is the hardcoded index (probably in some constant or enum).
  * The string is the name of the animation in the animation file.
  * @param file File from where these animations were loaded. Used to
  * report errors.
@@ -214,7 +214,7 @@ void animation_database::create_conversions(
     
     if(conversions.empty()) return;
     
-    //First, find the highest number.
+    //First, find the highest index.
     size_t highest = conversions[0].first;
     for(size_t c = 1; c < conversions.size(); ++c) {
         highest = std::max(highest, conversions[c].first);
@@ -259,7 +259,7 @@ void animation_database::destroy() {
  *
  * @param mt_ptr Mob type with the sound data.
  */
-void animation_database::fill_sound_index_caches(mob_type* mt_ptr) {
+void animation_database::fill_sound_idx_caches(mob_type* mt_ptr) {
     for(size_t a = 0; a < animations.size(); ++a) {
         animation* a_ptr = animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
@@ -331,7 +331,7 @@ void animation_database::fix_body_part_pointers() {
             for(size_t b = 0; b < body_parts.size(); ++b) {
                 body_part* b_ptr = body_parts[b];
                 if(b_ptr->name == h_ptr->body_part_name) {
-                    h_ptr->body_part_index = b;
+                    h_ptr->body_part_idx = b;
                     h_ptr->body_part_ptr = b_ptr;
                     break;
                 }
@@ -364,7 +364,7 @@ void animation_database::sort_alphabetically() {
         for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
             frame* f_ptr = &(a_ptr->frames[f]);
             
-            f_ptr->sprite_index = find_sprite(f_ptr->sprite_name);
+            f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
         }
     }
 }
@@ -435,7 +435,7 @@ void animation_instance::get_sprite_data(
         return;
     }
     
-    frame* cur_frame_ptr = &cur_anim->frames[cur_frame_index];
+    frame* cur_frame_ptr = &cur_anim->frames[cur_frame_idx];
     //First, the basics -- the current sprite.
     if(cur_sprite_ptr) {
         *cur_sprite_ptr = cur_frame_ptr->sprite_ptr;
@@ -452,8 +452,8 @@ void animation_instance::get_sprite_data(
     }
     
     //Get the next sprite.
-    size_t next_frame_index = get_next_frame_index();
-    frame* next_frame_ptr = &cur_anim->frames[next_frame_index];
+    size_t next_frame_idx = get_next_frame_idx();
+    frame* next_frame_ptr = &cur_anim->frames[next_frame_idx];
     
     if(next_sprite_ptr) *next_sprite_ptr = next_frame_ptr->sprite_ptr;
     
@@ -478,12 +478,12 @@ void animation_instance::get_sprite_data(
  * the end and the next frame loops back to the beginning.
  * @return The index, or INVALID on error.
  */
-size_t animation_instance::get_next_frame_index(bool* reached_end) const {
+size_t animation_instance::get_next_frame_idx(bool* reached_end) const {
     if(reached_end) *reached_end = false;
     if(!cur_anim) return INVALID;
     
-    if(cur_frame_index < cur_anim->frames.size() - 1) {
-        return cur_frame_index + 1;
+    if(cur_frame_idx < cur_anim->frames.size() - 1) {
+        return cur_frame_idx + 1;
     } else {
         if(reached_end) *reached_end = true;
         if(cur_anim->loop_frame < cur_anim->frames.size()) {
@@ -522,7 +522,7 @@ void animation_instance::clear() {
     cur_anim = nullptr;
     anim_db = nullptr;
     cur_frame_time = 0;
-    cur_frame_index = INVALID;
+    cur_frame_idx = INVALID;
 }
 
 
@@ -541,7 +541,7 @@ bool animation_instance::tick(
     if(!cur_anim) return false;
     size_t n_frames = cur_anim->frames.size();
     if(n_frames == 0) return false;
-    frame* cur_frame = &cur_anim->frames[cur_frame_index];
+    frame* cur_frame = &cur_anim->frames[cur_frame_idx];
     if(cur_frame->duration == 0) {
         return true;
     }
@@ -555,8 +555,8 @@ bool animation_instance::tick(
     //goes over an entire frame, and lands 2 or more frames ahead.
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
-        cur_frame_index = get_next_frame_index(&reached_end);
-        cur_frame = &cur_anim->frames[cur_frame_index];
+        cur_frame_idx = get_next_frame_idx(&reached_end);
+        cur_frame = &cur_anim->frames[cur_frame_idx];
         if(cur_frame->signal != INVALID && signals) {
             signals->push_back(cur_frame->signal);
         }
@@ -575,7 +575,7 @@ bool animation_instance::tick(
  */
 void animation_instance::to_start() {
     cur_frame_time = 0;
-    cur_frame_index = 0;
+    cur_frame_idx = 0;
 }
 
 
@@ -587,7 +587,7 @@ void animation_instance::to_start() {
  */
 bool animation_instance::valid_frame() const {
     if(!cur_anim) return false;
-    if(cur_frame_index >= cur_anim->frames.size()) return false;
+    if(cur_frame_idx >= cur_anim->frames.size()) return false;
     return true;
 }
 
@@ -609,7 +609,7 @@ frame::frame(
     const bool in, const string &snd, const size_t s
 ) :
     sprite_name(sn),
-    sprite_index(si),
+    sprite_idx(si),
     sprite_ptr(sp),
     duration(d),
     interpolate(in),

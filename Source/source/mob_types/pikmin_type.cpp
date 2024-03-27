@@ -30,7 +30,7 @@ const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
 }
 
 
-const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
+const float DEFAULT_SPROUT_EVOLUTION_TIME[NR_MATURITIES] =
 { 2 * 60, 2 * 60, 3 * 60 };
 
 
@@ -41,7 +41,7 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN) {
     
-    for(size_t m = 0; m < N_MATURITIES; ++m) {
+    for(size_t m = 0; m < NR_MATURITIES; ++m) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
         bmp_top[m] = nullptr;
         bmp_maturity_icon[m] = nullptr;

@@ -663,7 +663,7 @@ void update_offset_effect_buffer(
         }
         
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            edges.insert(s_ptr->edge_nrs[e]);
+            edges.insert(s_ptr->edge_idxs[e]);
         }
     }
     
@@ -720,7 +720,7 @@ void update_offset_effect_caches (
 ) {
     unordered_set<size_t> edges_to_update;
     for(vertex* v : vertexes_to_update) {
-        edges_to_update.insert(v->edge_nrs.begin(), v->edge_nrs.end());
+        edges_to_update.insert(v->edge_idxs.begin(), v->edge_idxs.end());
     }
     
     for(size_t e : edges_to_update) {

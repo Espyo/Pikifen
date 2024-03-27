@@ -32,16 +32,16 @@ vertex::vertex(float x, float y) :
  * @brief Adds an edge to the vertex's list of edges, if it's not there already.
  *
  * @param e_ptr Edge to add.
- * @param e_nr Index number of the edge to add.
+ * @param e_idx Index number of the edge to add.
  */
-void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
+void vertex::add_edge(edge* e_ptr, const size_t e_idx) {
     for(size_t i = 0; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             return;
         }
     }
     edges.push_back(e_ptr);
-    edge_nrs.push_back(e_nr);
+    edge_idxs.push_back(e_idx);
 }
 
 
@@ -163,7 +163,7 @@ void vertex::remove_edge(const edge* e_ptr) {
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            edge_nrs.erase(edge_nrs.begin() + i);
+            edge_idxs.erase(edge_idxs.begin() + i);
             return;
         }
     }

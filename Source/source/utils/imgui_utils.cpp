@@ -60,22 +60,22 @@ bool ImGui::Combo(
 ) {
 
     string items_str;
-    int item_nr = -1;
+    int item_idx = -1;
     for(size_t i = 0; i < items.size(); ++i) {
         items_str += items[i] + '\0';
         if(*current_item == items[i]) {
-            item_nr = (int) i;
+            item_idx = (int) i;
         }
     }
     
     bool result =
         ImGui::Combo(
-            label.c_str(), &item_nr, items_str.c_str(),
+            label.c_str(), &item_idx, items_str.c_str(),
             popup_max_height_in_items
         );
         
-    if(item_nr >= 0 && item_nr < (int) items.size()) {
-        *current_item = items[item_nr];
+    if(item_idx >= 0 && item_idx < (int) items.size()) {
+        *current_item = items[item_idx];
     } else {
         *current_item = "";
     }

@@ -152,7 +152,7 @@ void pile::update() {
         anim_amount_nr = clamp(anim_amount_nr, 0, n_groups - 1);
     }
     set_animation(
-        get_animation_nr_from_base_and_group(
+        get_animation_idx_from_base_and_group(
             PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
         ),
         true,

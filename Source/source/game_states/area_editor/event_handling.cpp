@@ -28,27 +28,27 @@ using std::set;
  */
 void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
-        debug_edge_nrs = !debug_edge_nrs;
-        if(debug_edge_nrs) {
-            set_status("Enabled debug edge number display.");
+        debug_edge_idxs = !debug_edge_idxs;
+        if(debug_edge_idxs) {
+            set_status("Enabled debug edge index display.");
         } else {
-            set_status("Disabled debug edge number display.");
+            set_status("Disabled debug edge index display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
-        debug_sector_nrs = !debug_sector_nrs;
-        if(debug_sector_nrs) {
-            set_status("Enabled debug sector number display.");
+        debug_sector_idxs = !debug_sector_idxs;
+        if(debug_sector_idxs) {
+            set_status("Enabled debug sector index display.");
         } else {
-            set_status("Disabled debug sector number display.");
+            set_status("Disabled debug sector index display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F3)) {
-        debug_vertex_nrs = !debug_vertex_nrs;
-        if(debug_vertex_nrs) {
-            set_status("Enabled debug vertex number display.");
+        debug_vertex_idxs = !debug_vertex_idxs;
+        if(debug_vertex_idxs) {
+            set_status("Enabled debug vertex index display.");
         } else {
-            set_status("Disabled debug vertex number display.");
+            set_status("Disabled debug vertex index display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F4)) {
@@ -60,11 +60,11 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F5)) {
-        debug_path_nrs = !debug_path_nrs;
-        if(debug_path_nrs) {
-            set_status("Enabled debug path number display.");
+        debug_path_idxs = !debug_path_idxs;
+        if(debug_path_idxs) {
+            set_status("Enabled debug path index display.");
         } else {
-            set_status("Disabled debug path number display.");
+            set_status("Disabled debug path index display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Y, true)) {
@@ -864,8 +864,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             register_change("Object link creation");
             
             m_ptr->links.push_back(target);
-            m_ptr->link_nrs.push_back(
-                game.cur_area_data.find_mob_gen_nr(target)
+            m_ptr->link_idxs.push_back(
+                game.cur_area_data.find_mob_gen_idx(target)
             );
             
             homogenize_selected_mobs();
@@ -928,7 +928,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             } else {
                 register_change("Object link deletion");
                 m_ptr->links.erase(m_ptr->links.begin() + link_i);
-                m_ptr->link_nrs.erase(m_ptr->link_nrs.begin() + link_i);
+                m_ptr->link_idxs.erase(m_ptr->link_idxs.begin() + link_i);
             }
             
             homogenize_selected_mobs();
@@ -1064,8 +1064,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     if(l2) {
                         l2->type = path_drawing_type;
                     }
-                    game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
-                    game.cur_area_data.fix_path_stop_nrs(next_stop);
+                    game.cur_area_data.fix_path_stop_idxs(path_drawing_stop_1);
+                    game.cur_area_data.fix_path_stop_idxs(next_stop);
                     next_stop->calculate_dists_plus_neighbors();
                     set_status("Created path link.");
                     

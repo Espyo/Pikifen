@@ -80,7 +80,7 @@ void converter_fsm::create_fsm(mob_type* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fix_states(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engine_assert(
@@ -102,12 +102,12 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
     
     con_ptr->set_animation(
-        con_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
+        con_ptr->get_animation_idx_from_base_and_group(
+            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         ),
         true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
     );
-    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_IDLING;
+    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_IDLING;
     con_ptr->type_change_timer.start();
 }
 
@@ -123,11 +123,11 @@ void converter_fsm::bumped(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
     
     con_ptr->set_animation(
-        con_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, con_ptr->current_type_nr
+        con_ptr->get_animation_idx_from_base_and_group(
+            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         )
     );
-    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPED;
+    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_BUMPED;
     con_ptr->type_change_timer.stop();
     con_ptr->auto_conversion_timer.stop();
 }
@@ -233,11 +233,11 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
 void converter_fsm::open(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
     con_ptr->set_animation(
-        con_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
+        con_ptr->get_animation_idx_from_base_and_group(
+            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         )
     );
-    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_OPENING;
+    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_OPENING;
 }
 
 
@@ -290,11 +290,11 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
     
     con_ptr->set_animation(
-        con_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
+        con_ptr->get_animation_idx_from_base_and_group(
+            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         )
     );
-    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_SPITTING;
+    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_SPITTING;
     con_ptr->spew();
 }
 
@@ -310,9 +310,9 @@ void converter_fsm::start_dying(mob* m, void* info1, void* info2) {
     converter* con_ptr = (converter*) m;
     
     con_ptr->set_animation(
-        con_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
+        con_ptr->get_animation_idx_from_base_and_group(
+            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         )
     );
-    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_DYING;
+    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_DYING;
 }

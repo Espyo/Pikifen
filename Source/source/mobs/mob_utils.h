@@ -325,7 +325,7 @@ struct group_info_struct {
     bool get_next_standby_type(
         const bool move_backwards, subgroup_type** new_type
     );
-    point get_spot_offset(const size_t spot_index) const;
+    point get_spot_offset(const size_t spot_idx) const;
     void reassign_spots();
     bool change_standby_type(const bool move_backwards);
 };
@@ -342,9 +342,9 @@ struct hold_info_struct {
     //Points to the mob holding the current one, if any.
     mob* m = nullptr;
 
-    //ID of the hitbox the mob is attached to.
+    //Index of the hitbox the mob is attached to.
     //If INVALID, it's attached to the mob center.
-    size_t hitbox_nr = INVALID;
+    size_t hitbox_idx = INVALID;
 
     //Ratio of distance from the hitbox/body center. 1 is the full radius.
     float offset_dist = 0.0f;
@@ -605,7 +605,7 @@ struct path_info_struct {
     vector<path_stop*> path;
 
     //Index of the current stop in the projected carrying path.
-    size_t cur_path_stop_nr = 0;
+    size_t cur_path_stop_idx = 0;
 
     //Result of the path calculation.
     PATH_RESULTS result = PATH_RESULT_NOT_CALCULATED;
@@ -715,7 +715,7 @@ struct track_info_struct {
     vector<size_t> checkpoints;
 
     //Current checkpoint of the track. This is the last checkpoint crossed.
-    size_t cur_cp_nr = 0;
+    size_t cur_cp_idx = 0;
 
     //Progress within the current checkpoint. 0 means at the checkpoint.
     //1 means it's at the next checkpoint.

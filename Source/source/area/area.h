@@ -106,7 +106,7 @@ struct mob_gen {
     string vars;
     
     //Indexes of linked objects.
-    vector<size_t> link_nrs;
+    vector<size_t> link_idxs;
     
     //Index to the mob storing this one inside, if any.
     size_t stored_inside = INVALID;
@@ -283,17 +283,17 @@ struct area_data {
     void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
     void connect_sector_edges(sector* s_ptr);
     void connect_vertex_edges(vertex* v_ptr);
-    size_t find_edge_nr(const edge* e_ptr) const;
-    size_t find_mob_gen_nr(const mob_gen* m_ptr) const;
-    size_t find_sector_nr(const sector* s_ptr) const;
-    size_t find_vertex_nr(const vertex* v_ptr) const;
-    void fix_edge_nrs(edge* e_ptr);
+    size_t find_edge_idx(const edge* e_ptr) const;
+    size_t find_mob_gen_idx(const mob_gen* m_ptr) const;
+    size_t find_sector_idx(const sector* s_ptr) const;
+    size_t find_vertex_idx(const vertex* v_ptr) const;
+    void fix_edge_idxs(edge* e_ptr);
     void fix_edge_pointers(edge* e_ptr);
-    void fix_path_stop_nrs(path_stop* s_ptr);
+    void fix_path_stop_idxs(path_stop* s_ptr);
     void fix_path_stop_pointers(path_stop* s_ptr);
-    void fix_sector_nrs(sector* s_ptr);
+    void fix_sector_idxs(sector* s_ptr);
     void fix_sector_pointers(sector* s_ptr);
-    void fix_vertex_nrs(vertex* v_ptr);
+    void fix_vertex_idxs(vertex* v_ptr);
     void fix_vertex_pointers(vertex* v_ptr);
     void generate_blockmap();
     void generate_edges_blockmap(const vector<edge*> &edges);
@@ -302,11 +302,11 @@ struct area_data {
     edge* new_edge();
     sector* new_sector();
     vertex* new_vertex();
-    void remove_vertex(const size_t v_nr);
+    void remove_vertex(const size_t v_idx);
     void remove_vertex(const vertex* v_ptr);
-    void remove_edge(const size_t e_nr);
+    void remove_edge(const size_t e_idx);
     void remove_edge(const edge* e_ptr);
-    void remove_sector(const size_t s_nr);
+    void remove_sector(const size_t s_idx);
     void remove_sector(const sector* s_ptr);
     void clear();
     

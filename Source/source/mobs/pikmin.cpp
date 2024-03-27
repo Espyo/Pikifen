@@ -241,7 +241,7 @@ void pikmin::get_group_spot_info(
     
     *final_spot =
         following_group->group->anchor +
-        following_group->group->get_spot_offset(group_spot_index);
+        following_group->group->get_spot_offset(group_spot_idx);
     *final_dist = 5.0f;
 }
 
@@ -358,7 +358,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
 void pikmin::increase_maturity(const int amount) {
     int old_maturity = maturity;
     int new_maturity = maturity + amount;
-    maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
+    maturity = clamp(new_maturity, 0, NR_MATURITIES - 1);
     if(maturity > old_maturity) {
         game.statistics.pikmin_blooms++;
     }
@@ -381,7 +381,7 @@ void pikmin::latch(mob* m, const hitbox* h) {
         this, h, &h_offset_dist, &h_offset_angle, &v_offset_dist
     );
     m->hold(
-        this, h->body_part_index, h_offset_dist, h_offset_angle, v_offset_dist,
+        this, h->body_part_idx, h_offset_dist, h_offset_angle, v_offset_dist,
         true,
         HOLD_ROTATION_METHOD_NEVER //pikmin_fsm::prepare_to_attack handles it.
     );
@@ -436,7 +436,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
     bool follow_link_var;
     
     if(svr.get("maturity", maturity_var)) {
-        maturity = clamp(maturity_var, 0, N_MATURITIES - 1);
+        maturity = clamp(maturity_var, 0, NR_MATURITIES - 1);
     }
     if(svr.get("sprout", sprout_var)) {
         if(sprout_var) {

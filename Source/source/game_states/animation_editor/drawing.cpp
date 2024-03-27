@@ -60,7 +60,7 @@ void animation_editor::draw_canvas() {
     
     if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
         string name =
-            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index].sprite_name;
+            cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_name;
         size_t s_pos = anims.find_sprite(name);
         if(s_pos != INVALID) s = anims.sprites[s_pos];
         
@@ -202,7 +202,7 @@ void animation_editor::draw_canvas() {
                 }
                 
                 if(
-                    cur_hitbox_nr == (size_t) h &&
+                    cur_hitbox_idx == (size_t) h &&
                     state == EDITOR_STATE_HITBOXES
                 ) {
                     hitbox_outline_thickness =
@@ -470,9 +470,9 @@ void animation_editor::draw_timeline() {
     for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); ++f) {
         float f_dur = cur_anim_i.cur_anim->frames[f].duration;
         
-        if(f < cur_anim_i.cur_frame_index) {
+        if(f < cur_anim_i.cur_frame_idx) {
             anim_cur_time += f_dur;
-        } else if(f == cur_anim_i.cur_frame_index) {
+        } else if(f == cur_anim_i.cur_frame_idx) {
             anim_cur_time += cur_anim_i.cur_frame_time;
         }
         

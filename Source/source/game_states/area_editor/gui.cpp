@@ -357,54 +357,54 @@ void area_editor::process_gui_menu_bar() {
             //Debug menu.
             if(ImGui::BeginMenu("Debug")) {
             
-                //Show edge numbers item.
+                //Show edge indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show edge numbers", "F1", &debug_edge_nrs
+                        "Show edge indexes", "F1", &debug_edge_idxs
                     )
                 ) {
-                    if(debug_edge_nrs) {
-                        set_status("Enabled debug edge number display.");
+                    if(debug_edge_idxs) {
+                        set_status("Enabled debug edge index display.");
                     } else {
-                        set_status("Disabled debug edge number display.");
+                        set_status("Disabled debug edge index display.");
                     }
                 }
                 set_tooltip(
-                    "Shows what number each edge is.\n"
+                    "Shows what index each edge is.\n"
                     "Mostly useful for debugging the engine."
                 );
                 
-                //Show sector numbers item.
+                //Show sector indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show sector numbers", "F2", &debug_sector_nrs
+                        "Show sector indexes", "F2", &debug_sector_idxs
                     )
                 ) {
-                    if(debug_sector_nrs) {
-                        set_status("Enabled debug sector number display.");
+                    if(debug_sector_idxs) {
+                        set_status("Enabled debug sector index display.");
                     } else {
-                        set_status("Disabled debug sector number display.");
+                        set_status("Disabled debug sector index display.");
                     }
                 }
                 set_tooltip(
-                    "Shows the sector number on either side of an edge.\n"
+                    "Shows the sector index on either side of an edge.\n"
                     "Mostly useful for debugging the engine."
                 );
                 
-                //Show vertex numbers item.
+                //Show vertex indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show vertex numbers", "F3", &debug_vertex_nrs
+                        "Show vertex indexes", "F3", &debug_vertex_idxs
                     )
                 ) {
-                    if(debug_vertex_nrs) {
-                        set_status("Enabled debug vertex number display.");
+                    if(debug_vertex_idxs) {
+                        set_status("Enabled debug vertex index display.");
                     } else {
-                        set_status("Disabled debug vertex number display.");
+                        set_status("Disabled debug vertex index display.");
                     }
                 }
                 set_tooltip(
-                    "Shows what number each vertex is.\n"
+                    "Shows what index each vertex is.\n"
                     "Mostly useful for debugging the engine."
                 );
                 
@@ -425,20 +425,20 @@ void area_editor::process_gui_menu_bar() {
                     "Mostly useful for debugging the engine."
                 );
                 
-                //Show path numbers item.
+                //Show path indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show path numbers", "F5", &debug_path_nrs
+                        "Show path indexes", "F5", &debug_path_idxs
                     )
                 ) {
-                    if(debug_path_nrs) {
-                        set_status("Enabled debug path number display.");
+                    if(debug_path_idxs) {
+                        set_status("Enabled debug path index display.");
                     } else {
-                        set_status("Disabled debug path number display.");
+                        set_status("Disabled debug path index display.");
                     }
                 }
                 set_tooltip(
-                    "Shows what number each path stop is.\n"
+                    "Shows what index each path stop is.\n"
                     "Mostly useful for debugging the engine."
                 );
                 
@@ -832,10 +832,10 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
         } case AEMP_NUMBER_LIST: {
     
-            int item_nr = s2i(value);
-            if(ImGui::Combo(p_ptr->name, &item_nr, p_ptr->value_list, 15)) {
+            int item_idx = s2i(value);
+            if(ImGui::Combo(p_ptr->name, &item_idx, p_ptr->value_list, 15)) {
                 register_change("object script vars change");
-                value = i2s(item_nr);
+                value = i2s(item_idx);
             }
             
             break;
@@ -1935,7 +1935,7 @@ void area_editor::process_gui_panel_info() {
             } else if(
                 has_flag(
                     game.cur_area_data.mission.fail_conditions,
-                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                    get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 has_time_limit = true;
@@ -2998,13 +2998,13 @@ void area_editor::process_gui_panel_mission() {
         ImGui::CheckboxFlags(
             "End from pause menu",
             &fail_flags,
-            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
         ImGui::EndDisabled();
         if(pause_menu_end_is_fail) {
             enable_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+                get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
                 "Since reaching the mission goal automatically ends the\n"
@@ -3015,7 +3015,7 @@ void area_editor::process_gui_panel_mission() {
         } else {
             disable_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+                get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
                 "The current mission goal is \"end whenever you want\", so\n"
@@ -3027,11 +3027,11 @@ void area_editor::process_gui_panel_mission() {
         if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             disable_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             disable_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             ImGui::BeginDisabled();
         }
@@ -3039,14 +3039,14 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Reach the time limit",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
         fail_flags_changed |= time_limit_changed;
         if(
             time_limit_changed &&
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             day_duration_needs_update = true;
@@ -3068,7 +3068,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             //Time limit values.
@@ -3094,7 +3094,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Reach too few Pikmin",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             );
         set_tooltip(
             "The mission ends as a fail if the total Pikmin count reaches\n"
@@ -3108,7 +3108,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             ImGui::Indent();
@@ -3136,7 +3136,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Reach too many Pikmin",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
             );
         set_tooltip(
             "The mission ends as a fail if the total Pikmin count reaches\n"
@@ -3146,7 +3146,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
             )
         ) {
             ImGui::Indent();
@@ -3174,7 +3174,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Lose Pikmin",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             );
         set_tooltip(
             "The mission ends as a fail if a certain amount of Pikmin die."
@@ -3183,7 +3183,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+                get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             )
         ) {
             //Pikmin deaths value.
@@ -3209,7 +3209,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Take damage",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
+                get_idx_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
             );
         set_tooltip(
             "The mission ends as a fail if any leader loses any health."
@@ -3220,7 +3220,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Lose leaders",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+                get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             );
         set_tooltip(
             "The mission ends as a fail if a certain amount of leaders get\n"
@@ -3233,7 +3233,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(
+                get_idx_bitmask(
                     MISSION_FAIL_COND_LOSE_LEADERS
                 )
             )
@@ -3261,7 +3261,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::CheckboxFlags(
                 "Kill enemies",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+                get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             );
         set_tooltip(
             "The mission ends as a fail if a certain amount of\n"
@@ -3271,7 +3271,7 @@ void area_editor::process_gui_panel_mission() {
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+                get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
             //Enemy kills value.
@@ -3303,7 +3303,7 @@ void area_editor::process_gui_panel_mission() {
             if(
                 has_flag(
                     game.cur_area_data.mission.fail_conditions,
-                    get_index_bitmask(c)
+                    get_idx_bitmask(c)
                 )
             ) {
                 active_conditions.push_back((MISSION_FAIL_CONDITIONS) c);
@@ -3501,7 +3501,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofpb", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3517,7 +3517,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpb", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3554,7 +3554,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofpd", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3570,7 +3570,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpd", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3589,7 +3589,7 @@ void area_editor::process_gui_panel_mission() {
             if(
                 has_flag(
                     game.cur_area_data.mission.fail_conditions,
-                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                    get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 //Points per second of time left value.
@@ -3614,7 +3614,7 @@ void area_editor::process_gui_panel_mission() {
                     if(
                         ImGui::CheckboxFlags(
                             "0 points on fail##zpofsl", &flags,
-                            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+                            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
                         )
                     ) {
                         register_change("mission grading change");
@@ -3630,7 +3630,7 @@ void area_editor::process_gui_panel_mission() {
                     if(
                         ImGui::CheckboxFlags(
                             "Use in HUD counter##uihsl", &flags,
-                            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+                            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
                         )
                     ) {
                         register_change("mission grading change");
@@ -3668,7 +3668,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofsp", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3684,7 +3684,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihsp", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3724,7 +3724,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpoftp", &flags,
-                        get_index_bitmask(
+                        get_idx_bitmask(
                             MISSION_SCORE_CRITERIA_TREASURE_POINTS
                         )
                     )
@@ -3742,7 +3742,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihtp", &flags,
-                        get_index_bitmask(
+                        get_idx_bitmask(
                             MISSION_SCORE_CRITERIA_TREASURE_POINTS
                         )
                     )
@@ -3782,7 +3782,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofep", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3798,7 +3798,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihep", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -4129,7 +4129,7 @@ void area_editor::process_gui_panel_mob() {
                 if((*selected_mobs.begin())->links.size() == 1) {
                     register_change("Object link deletion");
                     m_ptr->links.erase(m_ptr->links.begin());
-                    m_ptr->link_nrs.erase(m_ptr->link_nrs.begin());
+                    m_ptr->link_idxs.erase(m_ptr->link_idxs.begin());
                     homogenize_selected_mobs();
                 } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
                     sub_state = EDITOR_SUB_STATE_NONE;
@@ -5173,7 +5173,7 @@ void area_editor::process_gui_panel_sector() {
         //Sector hazards node.
         if(saveable_tree_node("layout", "Hazards")) {
         
-            static int selected_hazard_nr = 0;
+            static int selected_hazard_idx = 0;
             
             //Sector hazard addition button.
             if(
@@ -5214,7 +5214,7 @@ void area_editor::process_gui_panel_sector() {
                     }
                     s_ptr->hazards_str += picked_hazard;
                     s_ptr->hazards.push_back(&(game.hazards[picked_hazard]));
-                    selected_hazard_nr = (int) list.size();
+                    selected_hazard_idx = (int) list.size();
                     set_status(
                         "Added hazard \"" + picked_hazard +
                         "\" to the sector."
@@ -5224,7 +5224,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector hazard removal button.
             if(
-                selected_hazard_nr >= 0 &&
+                selected_hazard_idx >= 0 &&
                 !(*selected_sectors.begin())->hazards_str.empty()
             ) {
                 ImGui::SameLine();
@@ -5237,13 +5237,13 @@ void area_editor::process_gui_panel_sector() {
                 ) {
                     vector<string> list =
                         semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(selected_hazard_nr < (int) list.size()) {
+                    if(selected_hazard_idx < (int) list.size()) {
                         register_change("sector hazard removal");
-                        string hazard_name = list[selected_hazard_nr];
+                        string hazard_name = list[selected_hazard_idx];
                         s_ptr->hazards_str.clear();
                         s_ptr->hazards.clear();
                         for(size_t h = 0; h < list.size(); ++h) {
-                            if(h == (size_t) selected_hazard_nr) continue;
+                            if(h == (size_t) selected_hazard_idx) continue;
                             s_ptr->hazards_str += list[h] + ";";
                             s_ptr->hazards.push_back(&(game.hazards[list[h]]));
                         }
@@ -5251,9 +5251,9 @@ void area_editor::process_gui_panel_sector() {
                             //Delete the trailing semicolon.
                             s_ptr->hazards_str.pop_back();
                         }
-                        selected_hazard_nr =
+                        selected_hazard_idx =
                             std::min(
-                                selected_hazard_nr, (int) list.size() - 2
+                                selected_hazard_idx, (int) list.size() - 2
                             );
                         set_status(
                             "Removed hazard \"" + hazard_name +
@@ -5272,7 +5272,7 @@ void area_editor::process_gui_panel_sector() {
                 !(*selected_sectors.begin())->hazards_str.empty()
             ) {
                 ImGui::ListBox(
-                    "Hazards", &selected_hazard_nr,
+                    "Hazards", &selected_hazard_idx,
                     semicolon_list_to_vector(s_ptr->hazards_str),
                     4
                 );

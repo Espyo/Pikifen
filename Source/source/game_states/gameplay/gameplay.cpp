@@ -114,25 +114,25 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
- * @param type_nr Number of the spray type.
+ * @param type_idx Index number of the spray type.
  * @param amount Amount to change by.
  */
 void gameplay_state::change_spray_count(
-    const size_t type_nr, signed int amount
+    const size_t type_idx, signed int amount
 ) {
-    spray_stats[type_nr].nr_sprays =
+    spray_stats[type_idx].nr_sprays =
         std::max(
-            (signed int) spray_stats[type_nr].nr_sprays + amount,
+            (signed int) spray_stats[type_idx].nr_sprays + amount,
             (signed int) 0
         );
         
     gui_item* spray_hud_item = nullptr;
     if(game.spray_types.size() > 2) {
-        if(selected_spray == type_nr) {
+        if(selected_spray == type_idx) {
             spray_hud_item = hud->spray_1_amount;
         }
     } else {
-        if(type_nr == 0) {
+        if(type_idx == 0) {
             spray_hud_item = hud->spray_1_amount;
         } else {
             spray_hud_item = hud->spray_2_amount;
@@ -472,7 +472,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
             if(filter && o_ptr->oni_type->nest->pik_types[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; ++m) {
                 total += o_ptr->nest->pikmin_inside[t][m];
             }
         }
@@ -490,7 +490,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
             if(filter && s_ptr->shi_type->nest->pik_types[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; ++m) {
                 total += s_ptr->nest->pikmin_inside[t][m];
             }
         }
@@ -536,9 +536,9 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     mob* result = nullptr;
     
     //Closest members so far for each maturity.
-    dist closest_dists[N_MATURITIES];
-    mob* closest_ptrs[N_MATURITIES];
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+    dist closest_dists[NR_MATURITIES];
+    mob* closest_ptrs[NR_MATURITIES];
+    for(unsigned char m = 0; m < NR_MATURITIES; ++m) {
         closest_ptrs[m] = nullptr;
     }
     
@@ -566,7 +566,7 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     
     //Now, try to get the one with the highest maturity within reach.
     dist closest_dist;
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+    for(unsigned char m = 0; m < NR_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
         if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
         result = closest_ptrs[2 - m];
@@ -577,7 +577,7 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     if(!result) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
-        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+        for(unsigned char m = 0; m < NR_MATURITIES; ++m) {
             if(!closest_ptrs[m]) continue;
             
             if(!result || closest_dists[m] < closest_dist) {
@@ -792,18 +792,18 @@ void gameplay_state::load() {
     }
     
     //Mob links.
-    //Because mobs can create other mobs when loaded, mob gen number X
-    //does not necessarily correspond to mob number X. Hence, we need
+    //Because mobs can create other mobs when loaded, mob gen index X
+    //does not necessarily correspond to mob index X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
-    //to link the mobs by (generator) number.
+    //to link the mobs by (generator) index.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
         mob* mob_ptr = mobs_per_gen[m];
         if(!mob_ptr) continue;
         
-        for(size_t l = 0; l < gen_ptr->link_nrs.size(); ++l) {
-            size_t link_target_gen_nr = gen_ptr->link_nrs[l];
-            mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_nr];
+        for(size_t l = 0; l < gen_ptr->link_idxs.size(); ++l) {
+            size_t link_target_gen_idx = gen_ptr->link_idxs[l];
+            mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_idx];
             mob_ptr->links.push_back(link_target_mob_ptr);
         }
     }
@@ -851,7 +851,7 @@ void gameplay_state::load() {
     //update the available list.
     update_available_leaders();
     
-    cur_leader_nr = INVALID;
+    cur_leader_idx = INVALID;
     cur_leader_ptr = nullptr;
     starting_nr_of_leaders = mobs.leaders.size();
     
@@ -1033,7 +1033,7 @@ void gameplay_state::load() {
         vector<mob*> obstacles; //TODO
         gameplay_replay.add_state(
             leaders, pikmin_list, enemies, treasures, onions, obstacles,
-            cur_leader_nr
+            cur_leader_idx
         );
     }
     );
@@ -1115,7 +1115,7 @@ void gameplay_state::unload() {
         hud = nullptr;
     }
     
-    cur_leader_nr = INVALID;
+    cur_leader_idx = INVALID;
     cur_leader_ptr = nullptr;
     
     close_to_interactable_to_use = nullptr;
@@ -1208,7 +1208,7 @@ void gameplay_state::update_available_leaders() {
     
     //Sort it so that it follows the expected leader order.
     //If there are multiple leaders of the same type, leaders with a lower
-    //mob ID number come first.
+    //mob index number come first.
     std::sort(
         available_leaders.begin(), available_leaders.end(),
     [] (const leader * l1, const leader * l2) -> bool {
@@ -1228,7 +1228,7 @@ void gameplay_state::update_available_leaders() {
     //Update the current leader's index, which could've changed.
     for(size_t l = 0; l < available_leaders.size(); ++l) {
         if(available_leaders[l] == cur_leader_ptr) {
-            cur_leader_nr = l;
+            cur_leader_idx = l;
             break;
         }
     }

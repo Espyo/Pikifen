@@ -39,7 +39,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fix_states(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engine_assert(
@@ -110,15 +110,15 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
-            size_t type_nr = res_ptr->res_type->spray_to_concoct;
-            game.states.gameplay->spray_stats[type_nr].nr_ingredients++;
+            size_t type_idx = res_ptr->res_type->spray_to_concoct;
+            game.states.gameplay->spray_stats[type_idx].nr_ingredients++;
             if(
-                game.states.gameplay->spray_stats[type_nr].nr_ingredients >=
-                game.spray_types[type_nr].ingredients_needed
+                game.states.gameplay->spray_stats[type_idx].nr_ingredients >=
+                game.spray_types[type_idx].ingredients_needed
             ) {
-                game.states.gameplay->spray_stats[type_nr].nr_ingredients -=
-                    game.spray_types[type_nr].ingredients_needed;
-                game.states.gameplay->change_spray_count(type_nr, 1);
+                game.states.gameplay->spray_stats[type_idx].nr_ingredients -=
+                    game.spray_types[type_idx].ingredients_needed;
+                game.states.gameplay->change_spray_count(type_idx, 1);
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB:

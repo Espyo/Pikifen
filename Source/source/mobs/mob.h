@@ -215,7 +215,7 @@ public:
     //How long it's been alive for.
     float time_alive = 0.0f;
     
-    //Incremental ID. Used for minor things.
+    //Incremental ID. Used for misc. things.
     size_t id = 0;
     
     //-General state-
@@ -282,7 +282,7 @@ public:
     mob* following_group = nullptr;
     
     //Index of this mob's spot in the leader's group spots.
-    size_t group_spot_index = INVALID;
+    size_t group_spot_idx = INVALID;
     
     //The current subgroup type.
     subgroup_type* subgroup_type_ptr = nullptr;
@@ -397,7 +397,7 @@ public:
     void unfocus_from_mob();
     void leave_group();
     void hold(
-        mob* m, const size_t hitbox_nr,
+        mob* m, const size_t hitbox_idx,
         const float offset_dist, const float offset_angle,
         const float vertical_dist,
         const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
@@ -553,13 +553,13 @@ public:
     //--- Members ---
     
     //Index number of its current base animation.
-    size_t cur_base_anim_nr = INVALID;
+    size_t cur_base_anim_idx = INVALID;
     
     
     //--- Function declarations ---
     
-    size_t get_animation_nr_from_base_and_group(
-        const size_t base_anim_nr, const size_t group_nr,
+    size_t get_animation_idx_from_base_and_group(
+        const size_t base_anim_idx, const size_t group_idx,
         const size_t base_anim_total
     ) const;
     

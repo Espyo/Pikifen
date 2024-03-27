@@ -946,7 +946,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 if(
                     !has_flag(
                         game.cur_area_data.mission.point_hud_data,
-                        get_index_bitmask(c)
+                        get_idx_bitmask(c)
                     )
                 ) {
                     continue;
@@ -1270,7 +1270,7 @@ void gameplay_state::do_menu_logic() {
             string result_str = path_result_to_string(path->result);
             
             string stops_str =
-                box_string(i2s(path->cur_path_stop_nr + 1), 3) +
+                box_string(i2s(path->cur_path_stop_idx + 1), 3) +
                 "/" +
                 box_string(i2s(path->path.size()), 3);
                 
@@ -1464,7 +1464,7 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(f)
+                get_idx_bitmask(f)
             )
         ) {
             if(game.mission_fail_conds[f]->is_met(this)) {
@@ -2054,10 +2054,10 @@ void gameplay_state::process_mob_touches(
                 if(
                     (
                         m_ptr->holder.m == m2_ptr &&
-                        m_ptr->holder.hitbox_nr == h2
+                        m_ptr->holder.hitbox_idx == h2
                     ) || (
                         m2_ptr->holder.m == m_ptr &&
-                        m2_ptr->holder.hitbox_nr == h1
+                        m2_ptr->holder.hitbox_idx == h1
                     )
                 ) {
                     //Mobs held by a hitbox are obviously touching it.
@@ -2184,7 +2184,7 @@ void gameplay_state::process_mob_touches(
                     find(
                         m2_ptr->chomp_body_parts.begin(),
                         m2_ptr->chomp_body_parts.end(),
-                        h2_ptr->body_part_index
+                        h2_ptr->body_part_idx
                     ) !=
                     m2_ptr->chomp_body_parts.end()
                 ) {

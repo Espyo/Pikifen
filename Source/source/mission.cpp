@@ -2241,7 +2241,7 @@ int mission_score_criterion_sec_left::get_multiplier(
     if(
         has_flag(
             mission->fail_conditions,
-            get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         return mission->points_per_sec_left;

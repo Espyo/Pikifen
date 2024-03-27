@@ -541,13 +541,13 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
             
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
             
-                if(m2_ptr->link_nrs[l] > m_idx) {
-                    m2_ptr->link_nrs[l]--;
+                if(m2_ptr->link_idxs[l] > m_idx) {
+                    m2_ptr->link_idxs[l]--;
                 }
                 
                 if(m2_ptr->links[l] == sm) {
                     m2_ptr->links.erase(m2_ptr->links.begin() + l);
-                    m2_ptr->link_nrs.erase(m2_ptr->link_nrs.begin() + l);
+                    m2_ptr->link_idxs.erase(m2_ptr->link_idxs.begin() + l);
                 }
             }
             
@@ -620,7 +620,7 @@ void area_editor::delete_path_stops(const set<path_stop*> &which) {
     }
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        game.cur_area_data.fix_path_stop_nrs(game.cur_area_data.path_stops[s]);
+        game.cur_area_data.fix_path_stop_idxs(game.cur_area_data.path_stops[s]);
     }
 }
 
@@ -1868,9 +1868,9 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
         e_ptr->transfer_sector(
             small_sector, main_sector,
             main_sector ?
-            game.cur_area_data.find_sector_nr(main_sector) :
+            game.cur_area_data.find_sector_idx(main_sector) :
             INVALID,
-            game.cur_area_data.find_edge_nr(e_ptr)
+            game.cur_area_data.find_edge_idx(e_ptr)
         );
     }
     
@@ -2499,9 +2499,9 @@ path_stop* area_editor::split_path_link(
     new_stop_ptr->add_link(old_end_ptr, normal_link);
     
     //Fix the dangling path stop numbers in the links, and other properties.
-    game.cur_area_data.fix_path_stop_nrs(old_start_ptr);
-    game.cur_area_data.fix_path_stop_nrs(old_end_ptr);
-    game.cur_area_data.fix_path_stop_nrs(new_stop_ptr);
+    game.cur_area_data.fix_path_stop_idxs(old_start_ptr);
+    game.cur_area_data.fix_path_stop_idxs(old_end_ptr);
+    game.cur_area_data.fix_path_stop_idxs(new_stop_ptr);
     
     old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
     new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;

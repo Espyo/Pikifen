@@ -235,28 +235,28 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
                 if(clicked_hitboxes.empty()) {
                     cur_hitbox = nullptr;
-                    cur_hitbox_nr = INVALID;
+                    cur_hitbox_idx = INVALID;
                     
                 } else {
-                    size_t cur_hitbox_nr_index = INVALID;
+                    size_t cur_hitbox_idx_idx = INVALID;
                     for(size_t i = 0; i < clicked_hitboxes.size(); ++i) {
-                        if(cur_hitbox_nr == clicked_hitboxes[i]) {
-                            cur_hitbox_nr_index = i;
+                        if(cur_hitbox_idx == clicked_hitboxes[i]) {
+                            cur_hitbox_idx_idx = i;
                             break;
                         }
                     }
                     
-                    if(cur_hitbox_nr_index == INVALID) {
-                        cur_hitbox_nr_index = 0;
+                    if(cur_hitbox_idx_idx == INVALID) {
+                        cur_hitbox_idx_idx = 0;
                     } else {
-                        cur_hitbox_nr_index =
+                        cur_hitbox_idx_idx =
                             sum_and_wrap(
-                                (int) cur_hitbox_nr_index, 1,
+                                (int) cur_hitbox_idx_idx, 1,
                                 (int) clicked_hitboxes.size()
                             );
                     }
-                    cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
-                    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+                    cur_hitbox_idx = clicked_hitboxes[cur_hitbox_idx_idx];
+                    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_idx];
                 }
             }
         }
@@ -453,12 +453,12 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  */
 void animation_editor::handle_lmb_drag_in_timeline() {
     float cursor_time = get_cursor_timeline_time();
-    size_t old_frame_nr = cur_anim_i.cur_frame_index;
+    size_t old_frame_idx = cur_anim_i.cur_frame_idx;
     cur_anim_i.cur_anim->get_frame_and_time(
-        cursor_time, &cur_anim_i.cur_frame_index, &cur_anim_i.cur_frame_time
+        cursor_time, &cur_anim_i.cur_frame_idx, &cur_anim_i.cur_frame_time
     );
-    if(cur_anim_i.cur_frame_index != old_frame_nr) {
-        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_index];
+    if(cur_anim_i.cur_frame_idx != old_frame_idx) {
+        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
         if(f->sound_idx != INVALID) {
             play_sound(f->sound_idx);
         }

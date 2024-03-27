@@ -37,7 +37,7 @@ replay::replay() {
  * @param treasure_list List of treasures.
  * @param onion_list List of Onions.
  * @param obstacle_list List of mobs that represent obstacles.
- * @param cur_leader_nr Index number of the current leader.
+ * @param cur_leader_idx Index number of the current leader.
  */
 void replay::add_state(
     const vector<leader*> &leader_list,
@@ -46,7 +46,7 @@ void replay::add_state(
     const vector<treasure*> &treasure_list,
     const vector<onion*> &onion_list,
     const vector<mob*> &obstacle_list,
-    const size_t cur_leader_nr
+    const size_t cur_leader_idx
 ) {
     states.push_back(replay_state());
     replay_state* new_state_ptr = &(states[states.size() - 1]);
@@ -101,10 +101,10 @@ void replay::add_state(
         }
     }
     
-    if(cur_leader_nr != prev_leader_nr) {
-        replay_event ev(REPLAY_EVENT_LEADER_SWITCHED, cur_leader_nr);
+    if(cur_leader_idx != prev_leader_idx) {
+        replay_event ev(REPLAY_EVENT_LEADER_SWITCHED, cur_leader_idx);
         new_state_ptr->events.push_back(ev);
-        prev_leader_nr = cur_leader_nr;
+        prev_leader_idx = cur_leader_idx;
     }
     
     new_state_ptr->elements.reserve(
@@ -155,7 +155,7 @@ void replay::add_state(
  */
 void replay::clear() {
     states.clear();
-    prev_leader_nr = INVALID;
+    prev_leader_idx = INVALID;
     prev_state_mobs.clear();
 }
 

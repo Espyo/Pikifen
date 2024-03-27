@@ -395,7 +395,7 @@ public:
 
     explicit mob_fsm(mob* m = nullptr);
     mob_event* get_event(const MOB_EV_TYPES type) const;
-    size_t get_state_nr(const string &name) const;
+    size_t get_state_idx(const string &name) const;
     void run_event(
         const MOB_EV_TYPES type,
         void* custom_data_1 = nullptr, void* custom_data_2 = nullptr

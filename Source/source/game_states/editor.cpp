@@ -2230,21 +2230,21 @@ void editor::picker_info::process() {
             }
         }
         
-        size_t cat_index = INVALID;
+        size_t cat_idx = INVALID;
         for(size_t c = 0; c < category_names.size(); ++c) {
             if(category_names[c] == items[i].category) {
-                cat_index = c;
+                cat_idx = c;
                 break;
             }
         }
         
-        if(cat_index == INVALID) {
+        if(cat_idx == INVALID) {
             category_names.push_back(items[i].category);
             final_items.push_back(vector<picker_item>());
-            cat_index = category_names.size() - 1;
+            cat_idx = category_names.size() - 1;
         }
         
-        final_items[cat_index].push_back(items[i]);
+        final_items[cat_idx].push_back(items[i]);
     }
     
     auto try_make_new = [this] () {

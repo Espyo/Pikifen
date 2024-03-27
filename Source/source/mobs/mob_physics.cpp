@@ -326,7 +326,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
  * for the purposes of movement physics calculations.
  *
  * @param e_ptr Pointer to the edge in question.
- * @param wall_sector Number of the sector that actually makes a wall
+ * @param wall_sector Side index of the sector that actually makes a wall
  * (i.e. the highest).
  * @param move_angle Angle at which the mob is going to move.
  * @param slide_angle Holds the calculated slide angle.

@@ -53,7 +53,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     bool lost =
         has_flag(
             game.cur_area_data.mission.point_loss_data,
-            get_index_bitmask(criterion)
+            get_idx_bitmask(criterion)
         ) &&
         !goal_was_cleared;
         
@@ -256,7 +256,7 @@ void results_state::load() {
         bool lost =
             has_flag(
                 game.cur_area_data.mission.point_loss_data,
-                get_index_bitmask(c)
+                get_idx_bitmask(c)
             ) &&
             !goal_was_cleared;
             
