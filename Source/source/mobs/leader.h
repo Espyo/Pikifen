@@ -157,7 +157,7 @@ public:
     void update_throw_variables();
     bool can_receive_status(status_type* s) const override;
     void get_group_spot_info(
-        point* final_spot, float* final_dist
+        point* out_spot, float* out_dist
     ) const override;
     void draw_mob() override;
     

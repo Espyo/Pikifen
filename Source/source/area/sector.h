@@ -149,7 +149,7 @@ struct sector {
 
 
 sector* get_sector(
-    const point &p, size_t* sector_idx, const bool use_blockmap
+    const point &p, size_t* out_sector_idx, const bool use_blockmap
 );
 
 #endif //ifndef SECTOR_INCLUDED

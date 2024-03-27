@@ -225,24 +225,24 @@ float pikmin::get_base_speed() const {
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
  *
- * @param final_spot The final coordinates are returned here.
- * @param final_dist The final distance to those coordinates is returned here.
+ * @param out_spot The final coordinates are returned here.
+ * @param out_dist The final distance to those coordinates is returned here.
  */
 void pikmin::get_group_spot_info(
-    point* final_spot, float* final_dist
+    point* out_spot, float* out_dist
 ) const {
-    final_spot->x = 0.0f;
-    final_spot->y = 0.0f;
-    *final_dist = 0.0f;
+    out_spot->x = 0.0f;
+    out_spot->y = 0.0f;
+    *out_dist = 0.0f;
     
     if(!following_group || !following_group->group) {
         return;
     }
     
-    *final_spot =
+    *out_spot =
         following_group->group->anchor +
         following_group->group->get_spot_offset(group_spot_idx);
-    *final_dist = 5.0f;
+    *out_dist = 5.0f;
 }
 
 

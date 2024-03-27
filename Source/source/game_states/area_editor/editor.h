@@ -913,7 +913,7 @@ private:
     ) const;
     edge* get_closest_edge_to_angle(
         vertex* v_ptr, const float angle, const bool clockwise,
-        float* closest_edge_angle
+        float* out_closest_edge_angle
     ) const;
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
@@ -933,7 +933,9 @@ private:
         std::pair<mob_gen*, mob_gen*>* data1,
         std::pair<mob_gen*, mob_gen*>* data2
     ) const;
-    mob_gen* get_mob_under_point(const point &p, size_t* idx = nullptr) const;
+    mob_gen* get_mob_under_point(
+        const point &p, size_t* out_idx = nullptr
+    ) const;
     bool get_path_link_under_point(
         const point &p, path_link** link1, path_link** link2
     ) const;

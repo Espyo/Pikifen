@@ -106,7 +106,7 @@ public:
     void draw_mob() override;
     float get_base_speed() const override;
     void get_group_spot_info(
-        point* final_spot, float* final_dist
+        point* out_spot, float* out_dist
     ) const override;
     void handle_status_effect_gain(status_type* s) override;
     void handle_status_effect_loss(status_type* s) override;

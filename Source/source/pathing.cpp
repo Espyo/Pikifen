@@ -387,12 +387,12 @@ void path_stop::remove_link(const path_stop* other_stop) {
  *
  * @param stop_ptr Stop to check.
  * @param settings Settings about how the path should be followed.
- * @param reason If not nullptr, the reason is returned here.
+ * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether it can be taken.
  */
 bool can_take_path_stop(
     path_stop* stop_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* reason
+    PATH_BLOCK_REASONS* out_reason
 ) {
     sector* sector_ptr = stop_ptr->sector_ptr;
     if(!sector_ptr) {
@@ -402,12 +402,12 @@ bool can_take_path_stop(
         sector_ptr = get_sector(stop_ptr->pos, nullptr, false);
         if(!sector_ptr) {
             //It's really the void. Nothing that can be done here then.
-            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            if(out_reason) *out_reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
     
-    return can_take_path_stop(stop_ptr, settings, sector_ptr, reason);
+    return can_take_path_stop(stop_ptr, settings, sector_ptr, out_reason);
 }
 
 
@@ -417,39 +417,39 @@ bool can_take_path_stop(
  * @param stop_ptr Stop to check.
  * @param settings Settings about how the path should be followed.
  * @param sector_ptr Pointer to the sector this stop is on.
- * @param reason If not nullptr, the reason is returned here.
+ * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether it can take it.
  */
 bool can_take_path_stop(
     const path_stop* stop_ptr, const path_follow_settings &settings,
-    sector* sector_ptr, PATH_BLOCK_REASONS* reason
+    sector* sector_ptr, PATH_BLOCK_REASONS* out_reason
 ) {
     //Check if the end stop has limitations based on the stop flags.
     if(
         has_flag(stop_ptr->flags, PATH_STOP_SCRIPT_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)
     ) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
+        if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
         return false;
     }
     if(
         has_flag(stop_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)
     ) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
+        if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
         return false;
     }
     if(
         has_flag(stop_ptr->flags, PATH_STOP_AIRBORNE_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
     ) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
+        if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
         return false;
     }
     
     //Check if the travel is limited to stops with a certain label.
     if(!settings.label.empty() && stop_ptr->label != settings.label) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
+        if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
         return false;
     }
     
@@ -478,7 +478,7 @@ bool can_take_path_stop(
                 }
             }
             if(!invulnerable) {
-                if(reason) *reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
+                if(out_reason) *out_reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
                 return false;
             }
         }
@@ -494,21 +494,21 @@ bool can_take_path_stop(
  *
  * @param link_ptr Link to check.
  * @param settings Settings about how the path should be followed.
- * @param reason If not nullptr, the reason is returned here.
+ * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether it can traverse it.
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* reason
+    PATH_BLOCK_REASONS* out_reason
 ) {
-    if(reason) *reason = PATH_BLOCK_REASON_NONE;
+    if(out_reason) *out_reason = PATH_BLOCK_REASON_NONE;
     
     //Check if there's an obstacle in the way.
     if(
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
         link_ptr->blocked_by_obstacle
     ) {
-        if(reason) *reason = PATH_BLOCK_REASON_OBSTACLE;
+        if(out_reason) *out_reason = PATH_BLOCK_REASON_OBSTACLE;
         return false;
     }
     
@@ -521,7 +521,7 @@ bool can_traverse_path_link(
         start_sector = get_sector(link_ptr->start_ptr->pos, nullptr, false);
         if(!start_sector) {
             //It's really the void. Nothing that can be done here then.
-            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            if(out_reason) *out_reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
@@ -530,7 +530,7 @@ bool can_traverse_path_link(
         //Same as above.
         end_sector = get_sector(link_ptr->end_ptr->pos, nullptr, false);
         if(!end_sector) {
-            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            if(out_reason) *out_reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
@@ -544,7 +544,7 @@ bool can_traverse_path_link(
             !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
             (end_sector->z - start_sector->z) > GEOMETRY::STEP_HEIGHT
         ) {
-            if(reason) *reason = PATH_BLOCK_REASON_UP_LEDGE;
+            if(out_reason) *out_reason = PATH_BLOCK_REASON_UP_LEDGE;
             return false;
         }
         break;
@@ -552,7 +552,7 @@ bool can_traverse_path_link(
     }
     
     //Check if there's any problem with the stop.
-    if(!can_take_path_stop(link_ptr->end_ptr, settings, end_sector, reason)) {
+    if(!can_take_path_stop(link_ptr->end_ptr, settings, end_sector, out_reason)) {
         return false;
     }
     
@@ -598,18 +598,19 @@ void depth_first_search(
 /**
  * @brief Uses Dijkstra's algorithm to get the shortest path between two nodes.
  *
- * @param final_path The stops to visit, in order, are returned here.
+ * @param out_path The stops to visit, in order, are returned here.
  * @param start_node Start node.
  * @param end_node End node.
  * @param settings Settings about how the path should be followed.
- * @param total_dist If not nullptr, place the total path distance here.
+ * @param out_total_dist If not nullptr, the total path distance is
+ * returned here.
  * @return The operation's result.
  */
 PATH_RESULTS dijkstra(
-    vector<path_stop*> &final_path,
+    vector<path_stop*> &out_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
-    float* total_dist
+    float* out_total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
     
@@ -657,22 +658,22 @@ PATH_RESULTS dijkstra(
         
             //Construct the path.
             float td = data[end_node].first;
-            final_path.clear();
-            final_path.push_back(end_node);
+            out_path.clear();
+            out_path.push_back(end_node);
             path_stop* next = data[end_node].second;
             while(next) {
-                final_path.insert(final_path.begin(), next);
+                out_path.insert(out_path.begin(), next);
                 next = data[next].second;
             }
             
-            if(final_path.size() < 2) {
+            if(out_path.size() < 2) {
                 //If we can't work our way back to the start node, that means
                 //the end node is not in the same graph as the start node.
                 in_graph = false;
                 break;
             } else {
                 //Success!
-                if(total_dist) *total_dist = td;
+                if(out_total_dist) *out_total_dist = td;
                 return PATH_RESULT_NORMAL_PATH;
             }
             
@@ -712,10 +713,10 @@ PATH_RESULTS dijkstra(
         enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
         PATH_RESULTS new_result =
             dijkstra(
-                final_path,
+                out_path,
                 start_node, end_node,
                 new_settings,
-                total_dist
+                out_total_dist
             );
         if(new_result == PATH_RESULT_NORMAL_PATH) {
             //If we only managed to succeed with this ignore-obstacle attempt,
@@ -727,8 +728,8 @@ PATH_RESULTS dijkstra(
     }
     
     //Nothing that can be done. No path.
-    final_path.clear();
-    if(total_dist) *total_dist = 0;
+    out_path.clear();
+    if(out_total_dist) *out_total_dist = 0;
     if(!in_graph) {
         return PATH_RESULT_END_STOP_UNREACHABLE;
     } else {
@@ -745,23 +746,25 @@ PATH_RESULTS dijkstra(
  * @param end End coordinates.
  * @param settings Settings about how the path should be followed.
  * @param full_path The stops to visit, in order, are returned here, if any.
- * @param total_dist If not nullptr, place the total path distance here.
- * @param start_stop If not nullptr, the closest stop to the start is
+ * @param out_total_dist If not nullptr, the total path distance is
  * returned here.
- * @param end_stop If not nullptr, the closest stop to the end is returned here.
+ * @param out_start_stop If not nullptr, the closest stop to the start is
+ * returned here.
+ * @param out_end_stop If not nullptr, the closest stop to the end is
+ * returned here.
  * @return The operation's result.
  */
 PATH_RESULTS get_path(
     const point &start, const point &end,
     const path_follow_settings &settings,
-    vector<path_stop*> &full_path, float* total_dist,
-    path_stop** start_stop, path_stop** end_stop
+    vector<path_stop*> &full_path, float* out_total_dist,
+    path_stop** out_start_stop, path_stop** out_end_stop
 ) {
 
     full_path.clear();
     
     if(game.cur_area_data.path_stops.empty()) {
-        if(total_dist) *total_dist = 0.0f;
+        if(out_total_dist) *out_total_dist = 0.0f;
         return PATH_RESULT_DIRECT_NO_STOPS;
     }
     
@@ -818,16 +821,16 @@ PATH_RESULTS get_path(
         }
     }
     
-    if(start_stop) *start_stop = closest_to_start;
-    if(end_stop) *end_stop = closest_to_end;
+    if(out_start_stop) *out_start_stop = closest_to_start;
+    if(out_end_stop) *out_end_stop = closest_to_end;
     
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
     dist start_to_end_dist(start_to_use, end_to_use);
     if(start_to_end_dist <= closest_to_start_dist) {
-        if(total_dist) {
-            *total_dist = start_to_end_dist.to_float();
+        if(out_total_dist) {
+            *out_total_dist = start_to_end_dist.to_float();
         }
         return PATH_RESULT_DIRECT;
     }
@@ -836,9 +839,9 @@ PATH_RESULTS get_path(
     //that means this is the only stop in the path.
     if(closest_to_start == closest_to_end) {
         full_path.push_back(closest_to_start);
-        if(total_dist) {
-            *total_dist = closest_to_start_dist;
-            *total_dist += closest_to_end_dist;
+        if(out_total_dist) {
+            *out_total_dist = closest_to_start_dist;
+            *out_total_dist += closest_to_end_dist;
         }
         return PATH_RESULT_PATH_WITH_SINGLE_STOP;
     }
@@ -853,13 +856,13 @@ PATH_RESULTS get_path(
         dijkstra(
             full_path,
             closest_to_start, closest_to_end,
-            settings, total_dist
+            settings, out_total_dist
         );
         
-    if(total_dist && !full_path.empty()) {
-        *total_dist +=
+    if(out_total_dist && !full_path.empty()) {
+        *out_total_dist +=
             dist(start_to_use, full_path[0]->pos).to_float();
-        *total_dist +=
+        *out_total_dist +=
             dist(full_path[full_path.size() - 1]->pos, end_to_use).to_float();
     }
     

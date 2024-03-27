@@ -292,7 +292,7 @@ public:
     ) const = 0;
     virtual string get_end_reason(mission_data* mission) const = 0;
     virtual bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const = 0;
     virtual string get_hud_label(gameplay_state* gameplay) const = 0;
     virtual bool has_hud_content() const = 0;
@@ -319,7 +319,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -346,7 +346,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -373,7 +373,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -400,7 +400,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -427,7 +427,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -454,7 +454,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -481,7 +481,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -508,7 +508,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label(gameplay_state* gameplay) const override;
     bool has_hud_content() const override;
@@ -536,7 +536,7 @@ public:
     ) const = 0;
     virtual string get_end_reason(mission_data* mission) const = 0;
     virtual bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const = 0;
     virtual string get_hud_label() const = 0;
     virtual bool is_met(gameplay_state* gameplay) const = 0;
@@ -563,7 +563,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
@@ -590,7 +590,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
@@ -617,7 +617,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
@@ -644,7 +644,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
@@ -671,7 +671,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
@@ -698,7 +698,7 @@ public:
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* out_cam_pos, float* out_cam_zoom
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;

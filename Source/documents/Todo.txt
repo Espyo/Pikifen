@@ -4,7 +4,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 Current tasks (tasks being worked on, but not yet committed)
     Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
-        All "out" parameters should have "out" in the name
         Use #pragma region in header files?
         Constants for enums and flags have inconsistent styles
             Bitmasks should use a typedef called bitmask8, bitmask16, etc.

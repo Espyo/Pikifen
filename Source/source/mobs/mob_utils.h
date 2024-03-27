@@ -365,7 +365,7 @@ struct hold_info_struct {
     //--- Function declarations ---
 
     void clear();
-    point get_final_pos(float* final_z) const;
+    point get_final_pos(float* out_z) const;
 
 };
 
@@ -623,7 +623,7 @@ struct path_info_struct {
         mob* m,
         const path_follow_settings &settings
     );
-    bool check_blockage(PATH_BLOCK_REASONS* reason = nullptr);
+    bool check_blockage(PATH_BLOCK_REASONS* out_reason = nullptr);
 
 };
 

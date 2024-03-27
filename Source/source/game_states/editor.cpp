@@ -2552,13 +2552,14 @@ void editor::transformation_widget::draw(
  * @param handles Return the location of all nine translation and scale
  * handles here.
  * @param radius Return the angle handle's radius here.
- * @param transform If not nullptr, return the transformation used here.
+ * @param out_transform If not nullptr, the transformation used is
+ * returned here.
  * The transformation will only rotate and translate, not scale.
  */
 void editor::transformation_widget::get_locations(
     const point* const center, const point* const size,
     const float* const angle, point* handles, float* radius,
-    ALLEGRO_TRANSFORM* transform
+    ALLEGRO_TRANSFORM* out_transform
 ) const {
     point size_to_use(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
     if(size) size_to_use = *size;
@@ -2595,7 +2596,7 @@ void editor::transformation_widget::get_locations(
         *radius = diameter / 2.0f;
     }
     
-    if(transform) *transform = transform_to_use;
+    if(out_transform) *out_transform = transform_to_use;
 }
 
 

@@ -646,15 +646,15 @@ size_t leader::get_dismiss_rows(const size_t n_members) const {
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
  *
- * @param final_spot The final coordinates are returned here.
- * @param final_dist The final distance to those coordinates is returned here.
+ * @param out_spot The final coordinates are returned here.
+ * @param out_dist The final distance to those coordinates is returned here.
  */
 void leader::get_group_spot_info(
-    point* final_spot, float* final_dist
+    point* out_spot, float* out_dist
 ) const {
-    final_spot->x = 0.0f;
-    final_spot->y = 0.0f;
-    *final_dist = 0.0f;
+    out_spot->x = 0.0f;
+    out_spot->y = 0.0f;
+    *out_dist = 0.0f;
     
     if(!following_group || !following_group->group) {
         return;
@@ -678,8 +678,8 @@ void leader::get_group_spot_info(
         }
     }
     
-    *final_spot = following_group->pos;
-    *final_dist = distance;
+    *out_spot = following_group->pos;
+    *out_dist = distance;
 }
 
 

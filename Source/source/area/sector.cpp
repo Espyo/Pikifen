@@ -300,15 +300,15 @@ void sector::remove_edge(const edge* e_ptr) {
  * @brief Returns which sector the specified point belongs to.
  *
  * @param p Coordinates of the point.
- * @param sector_idx If not nullptr, the index of the sector on the
- * area map is placed here. The index will not be set if the search
+ * @param out_sector_idx If not nullptr, the index of the sector on the
+ * area map is returned here. The index will not be set if the search
  * is using the blockmap.
  * @param use_blockmap If true, use the blockmap to search.
  * This provides faster results, but the blockmap must be built.
  * @return The sector.
  */
 sector* get_sector(
-    const point &p, size_t* sector_idx, const bool use_blockmap
+    const point &p, size_t* out_sector_idx, const bool use_blockmap
 ) {
 
     if(use_blockmap) {
@@ -348,13 +348,13 @@ sector* get_sector(
                 continue;
             }
             if(s_ptr->is_point_in_sector(p)) {
-                if(sector_idx) *sector_idx = s;
+                if(out_sector_idx) *out_sector_idx = s;
                 return s_ptr;
             }
             
         }
         
-        if(sector_idx) *sector_idx = INVALID;
+        if(out_sector_idx) *out_sector_idx = INVALID;
         return nullptr;
         
     }

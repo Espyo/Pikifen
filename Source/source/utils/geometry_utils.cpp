@@ -536,14 +536,14 @@ bool bbox_check(
  * second squared.
  * @param req_speed_xy The required X and Y speed is returned here.
  * @param req_speed_z The required Z speed is returned here.
- * @param final_h_angle The final horizontal angle is returned here
- * (if not nullptr).
+ * @param out_h_angle If not nullptr, the final horizontal angle is
+ * returned here.
  */
 void calculate_throw(
     const point &start_xy, const float start_z,
     const point &target_xy, const float target_z,
     const float max_h, const float gravity,
-    point* req_speed_xy, float* req_speed_z, float* final_h_angle
+    point* req_speed_xy, float* req_speed_z, float* out_h_angle
 ) {
 
     if(target_z - start_z > max_h) {
@@ -592,8 +592,8 @@ void calculate_throw(
     *req_speed_xy = angle_to_coordinates(h_angle, h_speed);
     
     //Return the final horizontal angle, if needed.
-    if(final_h_angle) {
-        *final_h_angle = h_angle;
+    if(out_h_angle) {
+        *out_h_angle = h_angle;
     }
 }
 
@@ -605,16 +605,16 @@ void calculate_throw(
  * @param radius Radius of the circle.
  * @param line_p1 Starting point of the line segment.
  * @param line_p2 Ending point of the line segment.
- * @param lix If not nullptr, the line intersection's X coordinate is
+ * @param out_lix If not nullptr, the line intersection's X coordinate is
  * returned here.
- * @param liy If not nullptr, the line intersection's Y coordinate is
+ * @param out_liy If not nullptr, the line intersection's Y coordinate is
  * returned here.
  * @return Whether they intersect.
  */
 bool circle_intersects_line_seg(
     const point &circle, const float radius,
     const point &line_p1, const point &line_p2,
-    float* lix, float* liy
+    float* out_lix, float* out_liy
 ) {
 
     //Code by
@@ -644,8 +644,8 @@ bool circle_intersects_line_seg(
                 y >= std::min(line_p1.y, line_p2.y) &&
                 y <= std::max(line_p1.y, line_p2.y)
             ) {
-                if(lix) *lix = x;
-                if(liy) *liy = y;
+                if(out_lix) *out_lix = x;
+                if(out_liy) *out_liy = y;
                 return true;
             }
         }
@@ -663,8 +663,9 @@ bool circle_intersects_line_seg(
  * @param rectangle Central coordinates of the rectangle.
  * @param rect_dim Dimensions of the rectangle.
  * @param rect_angle Angle the rectangle is facing.
- * @param overlap_dist If not nullptr, the amount of overlap is returned here.
- * @param rectangle_side_angle If not nullptr, the angle of the side of the
+ * @param out_overlap_dist If not nullptr, the amount of overlap is
+ * returned here.
+ * @param out_rectangle_side_angle If not nullptr, the angle of the side of the
  * rectangle that the circle is on, aligned to the sides of the rectangle, is
  * returned here.
  * @return Whether they intersect.
@@ -673,7 +674,7 @@ bool circle_intersects_rectangle(
     const point &circle, const float radius,
     const point &rectangle, const point &rect_dim,
     const float rect_angle,
-    float* overlap_dist, float* rectangle_side_angle
+    float* out_overlap_dist, float* out_rectangle_side_angle
 ) {
     point circle_rel_pos = circle - rectangle;
     circle_rel_pos = rotate_point(circle_rel_pos, -rect_angle);
@@ -717,15 +718,15 @@ bool circle_intersects_rectangle(
     }
     
     float d = dist(circle_rel_pos, nearest).to_float();
-    if(overlap_dist) {
+    if(out_overlap_dist) {
         if(inside_x && inside_y) {
-            *overlap_dist = d + radius;
+            *out_overlap_dist = d + radius;
         } else {
-            *overlap_dist = radius - d;
+            *out_overlap_dist = radius - d;
         }
     }
     
-    if(rectangle_side_angle) {
+    if(out_rectangle_side_angle) {
         float angle;
         if(inside_x && inside_y) {
             angle = get_angle(circle_rel_pos, nearest);
@@ -734,7 +735,7 @@ bool circle_intersects_rectangle(
         }
         
         angle = (float) floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
-        *rectangle_side_angle = angle + rect_angle;
+        *out_rectangle_side_angle = angle + rect_angle;
     }
     
     if(inside_x && inside_y) {
@@ -753,15 +754,15 @@ bool circle_intersects_rectangle(
  * @param b Ending point of the first line segment.
  * @param c Starting point of the second line segment.
  * @param d Ending point of the second line segment.
- * @param intersection_tl If not nullptr, and if there is an intersection,
+ * @param out_intersection_tl If not nullptr, and if there is an intersection,
  * return the top-left corner of the intersection here.
- * @param intersection_br If not nullptr, and if there is an intersection,
+ * @param out_intersection_br If not nullptr, and if there is an intersection,
  * return the bottom-right corner of the intersection here.
  * @return Whether they intersect.
  */
 bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
-    point* intersection_tl, point* intersection_br
+    point* out_intersection_tl, point* out_intersection_br
 ) {
     point min1(std::min(a.x, b.x), std::min(a.y, b.y));
     point max1(std::max(a.x, b.x), std::max(a.y, b.y));
@@ -777,8 +778,8 @@ bool collinear_line_segs_intersect(
     }
     
     if(i_tl.x <= i_br.x && i_tl.y <= i_br.y) {
-        if(intersection_tl) *intersection_tl = i_tl;
-        if(intersection_br) *intersection_br = i_br;
+        if(out_intersection_tl) *out_intersection_tl = i_tl;
+        if(out_intersection_br) *out_intersection_br = i_br;
         return true;
     }
     
@@ -890,12 +891,13 @@ float get_angle_smallest_dif(const float a1, const float a2) {
  * @param l1 Starting point of the line segment.
  * @param l2 Ending point of the line segment.
  * @param p Reference point.
- * @param segment_ratio If not nullptr, the ratio from l1 to l2 is returned here.
- * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
+ * @param out_segment_ratio If not nullptr, the ratio from l1 to l2 is
+ * returned here. Between 0 and 1, it belongs to the line segment.
+ * If not, it doesn't.
  * @return The closest point.
  */
 point get_closest_point_in_line_seg(
-    const point &l1, const point &l2, const point &p, float* segment_ratio
+    const point &l1, const point &l2, const point &p, float* out_segment_ratio
 ) {
 
     //Code by http://stackoverflow.com/a/3122532
@@ -913,7 +915,7 @@ point get_closest_point_in_line_seg(
         
     float r = l1_to_p_dot_l1_to_l2 / l1_to_l2_squared;
     
-    if(segment_ratio) *segment_ratio = r;
+    if(out_segment_ratio) *out_segment_ratio = r;
     
     return point(l1.x + l1_to_l2.x * r, l1.y + l1_to_l2.y * r);
 }
@@ -928,18 +930,18 @@ point get_closest_point_in_line_seg(
  * @param rect_center Center of the rectangle.
  * @param rect_dim Width and height of the rectangle.
  * @param rect_angle Angle of the rectangle.
- * @param is_inside If not nullptr, returns whether or not the reference point
- * is inside the rectangle.
+ * @param out_is_inside If not nullptr, whether or not the reference point
+ * is inside the rectangle is returned here.
  * @return The closest point.
  */
 point get_closest_point_in_rotated_rectangle(
     const point &p,
     const point &rect_center, const point &rect_dim, const float rect_angle,
-    bool* is_inside
+    bool* out_is_inside
 ) {
     point closest_point;
     point perimeter = rect_dim / 2.0f;
-    if(is_inside) *is_inside = false;
+    if(out_is_inside) *out_is_inside = false;
     
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
@@ -978,7 +980,7 @@ point get_closest_point_in_rotated_rectangle(
     } else {
         //Inside.
         closest_point = delta_p;
-        if(is_inside) *is_inside = true;
+        if(out_is_inside) *out_is_inside = true;
     }
     
     //Now, transform back.
@@ -1393,22 +1395,22 @@ bool line_segs_are_collinear(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param final_l1r If not nullptr and they intersect, returns the distance from
- * the start of line 1 in which the intersection happens.
+ * @param out_final_l1r If not nullptr and they intersect, the distance from
+ * the start of line 1 in which the intersection happens is returned here.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
- * @param final_l2r Same as final_l1r, but for line 2.
+ * @param out_final_l2r Same as out_l1r, but for line 2.
  * @return Whether they intersect.
  */
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
+    float* out_final_l1r, float* out_final_l2r
 ) {
     float l1r = 0.0f;
     float l2r = 0.0f;
     bool result = lines_intersect(l1p1, l1p2, l2p1, l2p2, &l1r, &l2r);
     
-    if(final_l1r) *final_l1r = l1r;
-    if(final_l2r) *final_l2r = l2r;
+    if(out_final_l1r) *out_final_l1r = l1r;
+    if(out_final_l2r) *out_final_l2r = l2r;
     
     if(result) {
         //Return whether they intersect at the segments.
@@ -1428,22 +1430,22 @@ bool line_segs_intersect(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param intersection Return the intersection point here, if not nullptr.
+ * @param out_intersection If not null, return the intersection point here.
  * @return Whether they intersect.
  */
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
+    point* out_intersection
 ) {
     float r;
-    if(intersection) {
-        intersection->x = 0.0f;
-        intersection->y = 0.0f;
+    if(out_intersection) {
+        out_intersection->x = 0.0f;
+        out_intersection->y = 0.0f;
     }
     if(!line_segs_intersect(l1p1, l1p2, l2p1, l2p2, &r, nullptr)) return false;
-    if(intersection) {
-        intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
-        intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    if(out_intersection) {
+        out_intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        out_intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     return true;
 }
@@ -1469,16 +1471,16 @@ float linear_dist_to_angular(const float linear_dist, const float radius) {
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param final_l1r If not nullptr and they intersect, returns the distance from
+ * @param out_l1r If not nullptr and they intersect, returns the distance from
  * the start of line 1 in which the intersection happens.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
- * @param final_l2r Same as final_l1r, but for line 2.
+ * @param out_l2r Same as out_l1r, but for line 2.
  * @return Whether they intersect.
  */
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
+    float* out_l1r, float* out_l2r
 ) {
     float div =
         (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
@@ -1487,18 +1489,18 @@ bool lines_intersect(
     if(div != 0.0f) {
         //They intersect.
         
-        if(final_l1r) {
+        if(out_l1r) {
             //Calculate the intersection distance from the start of line 1.
-            *final_l1r =
+            *out_l1r =
                 (
                     (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
                     (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
                 ) / div;
         }
         
-        if(final_l2r) {
+        if(out_l2r) {
             //Calculate the intersection distance from the start of line 2.
-            *final_l2r =
+            *out_l2r =
                 (
                     (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
                     (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
@@ -1510,8 +1512,8 @@ bool lines_intersect(
     } else {
         //They don't intersect.
         
-        if(final_l1r) *final_l1r = 0.0f;
-        if(final_l2r) *final_l2r = 0.0f;
+        if(out_l1r) *out_l1r = 0.0f;
+        if(out_l2r) *out_l2r = 0.0f;
         
         return false;
         
@@ -1527,18 +1529,18 @@ bool lines_intersect(
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param final_point If not nullptr and they intersect,
- * returns the coordinates of where it happens.
+ * @param out_point If not nullptr and they intersect,
+ * the coordinates of where it happens is returned here.
  * @return Whether they intersect.
  */
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
-    point* final_point
+    point* out_point
 ) {
-    if(final_point) {
-        final_point->x = 0.0f;
-        final_point->y = 0.0f;
+    if(out_point) {
+        out_point->x = 0.0f;
+        out_point->y = 0.0f;
     }
     
     float r = 0.0f;
@@ -1546,9 +1548,9 @@ bool lines_intersect(
         return false;
     }
     
-    if(final_point) {
-        final_point->x = l1p1.x + (l1p2.x - l1p1.x) * r;
-        final_point->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    if(out_point) {
+        out_point->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        out_point->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     
     return true;
@@ -1705,15 +1707,16 @@ bool rectangles_intersect(
  * @param rect2 Center coordinates of the second rectangle.
  * @param rect_dim2 Dimensions of the second rectangle.
  * @param rect_angle2 Angle the second rectangle is facing.
- * @param overlap_dist If not nullptr, the amount of overlap is returned here.
- * @param overlap_angle If not nullptr, the direction that rectangle 1 would
+ * @param out_overlap_dist If not nullptr, the amount of overlap is
+ * returned here.
+ * @param out_overlap_angle If not nullptr, the direction that rectangle 1 would
  * push rectangle 2 away with is returned here.
  * @return Whether they intersect.
  */
 bool rectangles_intersect(
     const point &rect1, const point &rect_dim1, const float rect_angle1,
     const point &rect2, const point &rect_dim2, const float rect_angle2,
-    float* overlap_dist, float* overlap_angle
+    float* out_overlap_dist, float* out_overlap_angle
 ) {
     //Start by getting the vertexes of the rectangles.
     point tl(-rect_dim1.x / 2.0f, -rect_dim1.y / 2.0f);
@@ -1791,11 +1794,11 @@ bool rectangles_intersect(
         normal *= -1;
     }
     
-    if(overlap_dist) {
-        *overlap_dist = min_overlap;
+    if(out_overlap_dist) {
+        *out_overlap_dist = min_overlap;
     }
-    if(overlap_angle) {
-        *overlap_angle = get_angle(point(0, 0), normal);
+    if(out_overlap_angle) {
+        *out_overlap_angle = get_angle(point(0, 0), normal);
     }
     
     return true;

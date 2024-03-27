@@ -1224,7 +1224,8 @@ void audio_stream_manager::detach(const ALLEGRO_AUDIO_STREAM* s) {
  * @brief Returns the specified audio stream, by name.
  *
  * @param name Name of the audio stream to get.
- * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file
+ * doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The stream.
  */
@@ -1355,7 +1356,8 @@ void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
  * @brief Returns the specified sound sample, by name.
  *
  * @param name Name of the sound sample to get.
- * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file
+ * doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The sample.
  */

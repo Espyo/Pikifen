@@ -240,15 +240,16 @@ void draw_sector_edge_offsets(
  * will be affected by the effect, and which won't.
  * @param length_getter Function that returns the length of the effect.
  * @param color_getter Function that returns the color of the effect.
- * @param final_angle The angle of the tip of this end of the effect's
- * "rectangle".
- * @param final_length The length of the tip of this end of the effect's
- * "rectangle".
- * @param final_color The color at this end of the effect's "rectangle".
- * @param final_elbow_angle The angle that the elbow must finish at.
- * 0 if no elbow is needed.
- * @param final_elbow_length The length of the line at the end of the elbow.
- * 0 if no elbow is needed.
+ * @param out_angle The angle of the tip of this end of the effect's
+ * "rectangle" is returned here.
+ * @param out_length The length of the tip of this end of the effect's
+ * "rectangle" is returned here.
+ * @param out_color The color at this end of the effect's "rectangle" is
+ * returned here.
+ * @param out_elbow_angle The angle that the elbow must finish at is
+ * returned here. 0 if no elbow is needed.
+ * @param out_elbow_length The length of the line at the end of the elbow
+ * is returned here. 0 if no elbow is needed.
  */
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
@@ -256,12 +257,12 @@ void get_edge_offset_edge_info(
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter,
-    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
-    float* final_elbow_angle, float* final_elbow_length
+    float* out_angle, float* out_length, ALLEGRO_COLOR* out_color,
+    float* out_elbow_angle, float* out_elbow_length
 ) {
-    *final_elbow_angle = 0.0f;
-    *final_elbow_length = 0.0f;
-    *final_color = color_getter(e_ptr);
+    *out_elbow_angle = 0.0f;
+    *out_elbow_length = 0.0f;
+    *out_color = color_getter(e_ptr);
     
     float base_effect_length = length_getter(e_ptr);
     float base_effect_angle =
@@ -319,13 +320,13 @@ void get_edge_offset_edge_info(
             e_ptr, next_eff_edge, end_vertex,
             base_effect_angle, next_eff_edge_base_effect_angle,
             mid_effect_length,
-            final_angle, final_length
+            out_angle, out_length
         );
         
-        *final_color =
+        *out_color =
             interpolate_color(
                 0.5, 0, 1,
-                *final_color,
+                *out_color,
                 color_getter(next_eff_edge)
             );
             
@@ -336,8 +337,8 @@ void get_edge_offset_edge_info(
         //Next edge has an effect that goes in the same direction,
         //and that edge imposes over our effect.
         //As such, skew our effect inwards to align with that edge.
-        *final_angle = next_eff_edge_angle;
-        *final_length = base_effect_length / sin(next_eff_edge_diff);
+        *out_angle = next_eff_edge_angle;
+        *out_length = base_effect_length / sin(next_eff_edge_diff);
         
     } else if(
         !next_eff_edge
@@ -346,13 +347,13 @@ void get_edge_offset_edge_info(
         //this end. Shrinking it to 0 will make effects of edges where there's
         //nothing on both sides disappear, which may mislead the user. So
         //instead just make it a fraction of the usual size.
-        *final_angle = base_effect_angle;
-        *final_length = base_effect_length / 5.0f;
+        *out_angle = base_effect_angle;
+        *out_length = base_effect_length / 5.0f;
         
     } else {
         //We can draw our end of the effect forward without a care.
-        *final_angle = base_effect_angle;
-        *final_length = base_effect_length;
+        *out_angle = base_effect_angle;
+        *out_length = base_effect_length;
         
         if(next_eff_edge_effect_cw != edge_effect_cw) {
             //On this end there is a neighboring effect we'll want to connect
@@ -365,9 +366,9 @@ void get_edge_offset_edge_info(
             float mid_effect_length =
                 (base_effect_length + next_edge_base_effect_length) / 2.0f;
                 
-            *final_length = mid_effect_length;
-            *final_elbow_length = mid_effect_length;
-            *final_elbow_angle =
+            *out_length = mid_effect_length;
+            *out_elbow_length = mid_effect_length;
+            *out_elbow_angle =
                 end_idx == 0 ?
                 next_eff_edge_angle +
                 get_angle_cw_diff(
@@ -377,10 +378,10 @@ void get_edge_offset_edge_info(
                 get_angle_cw_diff(
                     edge_process_angle, next_eff_edge_angle
                 ) / 2.0f;
-            *final_color =
+            *out_color =
                 interpolate_color(
                     0.5, 0, 1,
-                    *final_color,
+                    *out_color,
                     color_getter(next_eff_edge)
                 );
                 
@@ -392,8 +393,8 @@ void get_edge_offset_edge_info(
             //angle, we'll need to implement an elbow between them so they
             //can be connected. This edge will be in charge of drawing the full
             //elbow.
-            *final_elbow_angle = next_eff_edge_angle;
-            *final_elbow_length = base_effect_length;
+            *out_elbow_angle = next_eff_edge_angle;
+            *out_elbow_length = base_effect_length;
         }
         
     }
@@ -424,16 +425,16 @@ void get_edge_offset_edge_info(
  * is projected.
  * @param base_effect_angle2 Same as base_effect_angle1, but for edge 2.
  * @param effect_length Length of either effect.
- * @param final_angle The angle from the common vertex to the
- * intersection point.
- * @param final_length The length from the common vertex to the
- * intersection point.
+ * @param out_angle The angle from the common vertex to the
+ * intersection point is returned here.
+ * @param out_length The length from the common vertex to the
+ * intersection point is returned here.
  */
 void get_edge_offset_intersection(
     const edge* e1, const edge* e2, const vertex* common_vertex,
     const float base_effect_angle1, const float base_effect_angle2,
     const float effect_length,
-    float* final_angle, float* final_length
+    float* out_angle, float* out_length
 ) {
     vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
     float base_cos1 = cos(base_effect_angle1);
@@ -482,13 +483,13 @@ void get_edge_offset_intersection(
         );
         coordinates_to_angle(
             p - point(common_vertex->x, common_vertex->y),
-            final_angle, final_length
+            out_angle, out_length
         );
     } else {
         //Okay, they don't really intersect. This should never happen... Maybe
         //a floating point imperfection? Oh well, let's go for a failsafe.
-        *final_angle = 0.0f;
-        *final_length = 0.0f;
+        *out_angle = 0.0f;
+        *out_length = 0.0f;
     }
 }
 
@@ -502,13 +503,13 @@ void get_edge_offset_intersection(
  * @param clockwise True to check in a clockwise direction,
  * false for counter-clockwise.
  * @param ignore Edge to ignore while checking, if any.
- * @param final_edge The found edge is returned here, or nullptr.
- * @param final_angle Angle of the found edge.
- * @param final_diff Difference in angle between the two.
+ * @param out_edge The found edge is returned here, or nullptr.
+ * @param out_angle The angle of the found edge is returned here.
+ * @param out_diff The difference in angle between the two is returned here.
  */
 void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
-    const edge* ignore, edge** final_edge, float* final_angle, float* final_diff
+    const edge* ignore, edge** out_edge, float* out_angle, float* out_diff
 ) {
     edge* best_edge = nullptr;
     float best_edge_diff = 0.0f;
@@ -540,9 +541,9 @@ void get_next_edge(
         }
     }
     
-    *final_edge = best_edge;
-    *final_angle = best_edge_angle;
-    *final_diff = best_edge_diff;
+    *out_edge = best_edge;
+    *out_angle = best_edge_angle;
+    *out_diff = best_edge_diff;
 }
 
 
@@ -558,18 +559,19 @@ void get_next_edge(
  * @param ignore Edge to ignore while checking, if any.
  * @param edge_checker Function that returns whether or not a given edge
  * should use the effect.
- * @param final_edge The found edge is returned here, or nullptr.
- * @param final_angle Angle of the found edge.
- * @param final_diff Difference in angle between the two.
- * @param final_base_effect_angle The base effect angle of the found edge.
- * @param final_effect_cw Is the effect cast clockwise?
+ * @param out_edge The found edge is returned here, or nullptr.
+ * @param out_angle The angle of the found edge is returned here.
+ * @param out_diff The difference in angle between the two is returned here.
+ * @param out_base_effect_angle The base effect angle of the found edge
+ * is returned here.
+ * @param out_effect_cw Whether the effect is cast clockwise is returned here.
  */
 void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
     const edge* ignore, offset_effect_checker_ptr edge_checker,
-    edge** final_edge, float* final_angle, float* final_diff,
-    float* final_base_effect_angle,
-    bool* final_effect_cw
+    edge** out_edge, float* out_angle, float* out_diff,
+    float* out_base_effect_angle,
+    bool* out_effect_cw
 ) {
     edge* best_edge = nullptr;
     float best_edge_diff = 0;
@@ -616,15 +618,15 @@ void get_next_offset_effect_edge(
         }
     }
     
-    *final_edge = best_edge;
-    *final_diff = best_edge_diff;
-    *final_angle = best_edge_angle;
-    *final_effect_cw = best_edge_effect_cw;
+    *out_edge = best_edge;
+    *out_diff = best_edge_diff;
+    *out_angle = best_edge_angle;
+    *out_effect_cw = best_edge_effect_cw;
     if(best_edge_effect_cw) {
-        *final_base_effect_angle =
+        *out_base_effect_angle =
             normalize_angle(best_edge_angle + TAU / 4.0f);
     } else {
-        *final_base_effect_angle =
+        *out_base_effect_angle =
             normalize_angle(best_edge_angle - TAU / 4.0f);
     }
 }

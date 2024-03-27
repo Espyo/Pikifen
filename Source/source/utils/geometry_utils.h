@@ -127,22 +127,22 @@ void calculate_throw(
     const point &start_xy, const float start_z,
     const point &target_xy, const float target_z,
     const float max_h, const float gravity,
-    point* req_speed_xy, float* req_speed_z, float* final_h_angle
+    point* req_speed_xy, float* req_speed_z, float* out_h_angle
 );
 bool circle_intersects_line_seg(
     const point &circle, const float cr,
     const point &line_p1, const point &line_p2,
-    float* lix = nullptr, float* liy = nullptr
+    float* out_lix = nullptr, float* out_liy = nullptr
 );
 bool circle_intersects_rectangle(
     const point &circle, const float cr,
     const point &rectangle, const point &rect_dim,
     const float rect_angle,
-    float* overlap_dist = nullptr, float* rectangle_side_angle = nullptr
+    float* out_overlap_dist = nullptr, float* out_rectangle_side_angle = nullptr
 );
 bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
-    point* intersection_tl = nullptr, point* intersection_br = nullptr
+    point* out_intersection_tl = nullptr, point* out_intersection_br = nullptr
 );
 void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
@@ -155,12 +155,12 @@ float get_angle_cw_diff(float a1, float a2);
 float get_angle_smallest_dif(const float a1, const float a2);
 point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p,
-    float* segment_ratio = nullptr
+    float* out_segment_ratio = nullptr
 );
 point get_closest_point_in_rotated_rectangle(
     const point &p,
     const point &rect_center, const point &rect_dim, const float rect_angle,
-    bool* is_inside
+    bool* out_is_inside
 );
 void get_miter_points(
     const point &a, const point &b, const point &c, const float thickness,
@@ -202,21 +202,21 @@ bool line_seg_intersects_rotated_rectangle(
 );
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
+    float* out_final_l1r, float* out_final_l2r
 );
 bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
+    point* out_intersection
 );
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
+    float* out_l1r, float* out_l2r
 );
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
-    point* final_point
+    point* out_point
 );
 void move_point(
     const point &start, const point &target,
@@ -241,7 +241,7 @@ bool rectangles_intersect(
     const float rect_angle1,
     const point &rect2, const point &rect_dim2,
     const float rect_angle2,
-    float* overlap_dist = nullptr, float* overlap_angle = nullptr
+    float* out_overlap_dist = nullptr, float* out_overlap_angle = nullptr
 );
 point resize_to_box_keeping_aspect_ratio(
     const point &original_size,

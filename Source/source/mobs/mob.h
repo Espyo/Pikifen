@@ -377,8 +377,8 @@ public:
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, const hitbox* hitbox_info);
     void get_sprite_data(
-        sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
-        float* interpolation_factor
+        sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+        float* out_interpolation_factor
     ) const;
     void get_hitbox_hold_point(
         const mob* mob_to_hold, const hitbox* h_ptr,
@@ -458,7 +458,7 @@ public:
     void face(
         const float new_angle, point* new_pos, const bool instantly = false
     );
-    point get_chase_target(float* z = nullptr) const;
+    point get_chase_target(float* out_z = nullptr) const;
     virtual float get_base_speed() const;
     float get_speed_multiplier() const;
     
@@ -474,7 +474,7 @@ public:
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
     virtual bool can_receive_status(status_type* s) const;
     virtual void get_group_spot_info(
-        point* final_spot, float* final_dist
+        point* out_spot, float* out_dist
     ) const;
     virtual bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,

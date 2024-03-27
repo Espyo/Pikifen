@@ -1693,15 +1693,15 @@ float mob::get_base_speed() const {
 /**
  * @brief Returns the actual location of the movement target.
  *
- * @param z If not nullptr, the Z coordinate is returned here.
+ * @param out_z If not nullptr, the Z coordinate is returned here.
  * @return The (X and Y) coordinates of the target.
  */
-point mob::get_chase_target(float* z) const {
+point mob::get_chase_target(float* out_z) const {
     point p = chase_info.offset;
     if(chase_info.orig_coords) p += (*chase_info.orig_coords);
-    if(z) {
-        *z = chase_info.offset_z;
-        if(chase_info.orig_z) (*z) += (*chase_info.orig_z);
+    if(out_z) {
+        *out_z = chase_info.offset_z;
+        if(chase_info.orig_z) (*out_z) += (*chase_info.orig_z);
     }
     return p;
 }
@@ -1753,24 +1753,24 @@ hitbox* mob::get_closest_hitbox(
  * but it can return a forced sprite (e.g. from a status effect that
  * freezes animations).
  *
- * @param cur_sprite_ptr If not nullptr, the current frame's sprite is
+ * @param out_cur_sprite_ptr If not nullptr, the current frame's sprite is
  * returned here.
- * @param next_sprite_ptr If not nullptr, the next frame's sprite is
+ * @param out_next_sprite_ptr If not nullptr, the next frame's sprite is
  * returned here.
- * @param interpolation_factor If not nullptr, the interpolation factor
+ * @param out_interpolation_factor If not nullptr, the interpolation factor
  * (0 to 1) between the two is returned here.
  */
 void mob::get_sprite_data(
-    sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
-    float* interpolation_factor
+    sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+    float* out_interpolation_factor
 ) const {
     if(forced_sprite) {
-        if(cur_sprite_ptr) *cur_sprite_ptr = forced_sprite;
-        if(next_sprite_ptr) *next_sprite_ptr = forced_sprite;
-        if(interpolation_factor) *interpolation_factor = 0.0f;
+        if(out_cur_sprite_ptr) *out_cur_sprite_ptr = forced_sprite;
+        if(out_next_sprite_ptr) *out_next_sprite_ptr = forced_sprite;
+        if(out_interpolation_factor) *out_interpolation_factor = 0.0f;
     } else {
         anim.get_sprite_data(
-            cur_sprite_ptr, next_sprite_ptr, interpolation_factor
+            out_cur_sprite_ptr, out_next_sprite_ptr, out_interpolation_factor
         );
     }
 }
@@ -1866,15 +1866,15 @@ bool mob::get_fraction_numbers_info(
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
  *
- * @param final_spot The final coordinates are returned here.
- * @param final_dist The final distance to those coordinates is returned here.
+ * @param out_spot The final coordinates are returned here.
+ * @param out_dist The final distance to those coordinates is returned here.
  */
 void mob::get_group_spot_info(
-    point* final_spot, float* final_dist
+    point* out_spot, float* out_dist
 ) const {
-    final_spot->x = 0.0f;
-    final_spot->y = 0.0f;
-    *final_dist = 0.0f;
+    out_spot->x = 0.0f;
+    out_spot->y = 0.0f;
+    *out_dist = 0.0f;
 }
 
 

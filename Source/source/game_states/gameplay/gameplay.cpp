@@ -1343,7 +1343,8 @@ void gameplay_state::update_transformations() {
  * @brief Constructs a new message box info object.
  *
  * @param text Text to display.
- * @param speaker_icon Bitmap representing who is talking, if not nullptr.
+ * @param speaker_icon If not nullptr, use this bitmap to represent who
+ * is talking.
  */
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {

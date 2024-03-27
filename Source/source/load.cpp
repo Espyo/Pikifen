@@ -765,7 +765,8 @@ void load_asset_file_names() {
  * @brief Loads an audio stream from the game's content.
  *
  * @param file_name Name of the file to load.
- * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file
+ * doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The stream.
  */
@@ -1431,7 +1432,8 @@ void load_options() {
  * @brief Loads an audio sample from the game's content.
  *
  * @param file_name Name of the file to load.
- * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param node If not nullptr, blame this data node if the file
+ * doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The sample.
  */

@@ -418,36 +418,37 @@ animation_instance &animation_instance::operator=(
 /**
  * @brief Returns the sprite of the current frame of animation.
  *
- * @param cur_sprite_ptr If not nullptr, the current sprite is returned here.
- * @param next_sprite_ptr If not nullptr, the next sprite in the animation is
+ * @param out_cur_sprite_ptr If not nullptr, the current sprite is
  * returned here.
- * @param interpolation_factor If not nullptr, the interpolation factor (0 to 1)
- * between the current sprite and the next one is returned here.
+ * @param out_next_sprite_ptr If not nullptr, the next sprite in the animation
+ * is returned here.
+ * @param out_interpolation_factor If not nullptr, the interpolation factor
+ * (0 to 1) between the current sprite and the next one is returned here.
  */
 void animation_instance::get_sprite_data(
-    sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
-    float* interpolation_factor
+    sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+    float* out_interpolation_factor
 ) const {
     if(!valid_frame()) {
-        if(cur_sprite_ptr) *cur_sprite_ptr = nullptr;
-        if(next_sprite_ptr) *next_sprite_ptr = nullptr;
-        if(interpolation_factor) *interpolation_factor = 0.0f;
+        if(out_cur_sprite_ptr) *out_cur_sprite_ptr = nullptr;
+        if(out_next_sprite_ptr) *out_next_sprite_ptr = nullptr;
+        if(out_interpolation_factor) *out_interpolation_factor = 0.0f;
         return;
     }
     
     frame* cur_frame_ptr = &cur_anim->frames[cur_frame_idx];
     //First, the basics -- the current sprite.
-    if(cur_sprite_ptr) {
-        *cur_sprite_ptr = cur_frame_ptr->sprite_ptr;
+    if(out_cur_sprite_ptr) {
+        *out_cur_sprite_ptr = cur_frame_ptr->sprite_ptr;
     }
     
     //Now only bother with interpolation data if we actually need it.
-    if(!next_sprite_ptr && !interpolation_factor) return;
+    if(!out_next_sprite_ptr && !out_interpolation_factor) return;
     
     if(!cur_frame_ptr->interpolate) {
         //This frame doesn't even interpolate.
-        if(next_sprite_ptr) *next_sprite_ptr = cur_frame_ptr->sprite_ptr;
-        if(interpolation_factor) *interpolation_factor = 0.0f;
+        if(out_next_sprite_ptr) *out_next_sprite_ptr = cur_frame_ptr->sprite_ptr;
+        if(out_interpolation_factor) *out_interpolation_factor = 0.0f;
         return;
     }
     
@@ -455,14 +456,14 @@ void animation_instance::get_sprite_data(
     size_t next_frame_idx = get_next_frame_idx();
     frame* next_frame_ptr = &cur_anim->frames[next_frame_idx];
     
-    if(next_sprite_ptr) *next_sprite_ptr = next_frame_ptr->sprite_ptr;
+    if(out_next_sprite_ptr) *out_next_sprite_ptr = next_frame_ptr->sprite_ptr;
     
     //Get the interpolation factor.
-    if(interpolation_factor) {
+    if(out_interpolation_factor) {
         if(cur_frame_ptr->duration == 0.0f) {
-            *interpolation_factor = 0.0f;
+            *out_interpolation_factor = 0.0f;
         } else {
-            *interpolation_factor =
+            *out_interpolation_factor =
                 cur_frame_time /
                 cur_frame_ptr->duration;
         }
@@ -474,18 +475,18 @@ void animation_instance::get_sprite_data(
  * @brief Returns the index of the next frame of animation, the one after
  * the current one.
  *
- * @param reached_end If not nullptr, true is returned here if we've reached
+ * @param out_reached_end If not nullptr, true is returned here if we've reached
  * the end and the next frame loops back to the beginning.
  * @return The index, or INVALID on error.
  */
-size_t animation_instance::get_next_frame_idx(bool* reached_end) const {
-    if(reached_end) *reached_end = false;
+size_t animation_instance::get_next_frame_idx(bool* out_reached_end) const {
+    if(out_reached_end) *out_reached_end = false;
     if(!cur_anim) return INVALID;
     
     if(cur_frame_idx < cur_anim->frames.size() - 1) {
         return cur_frame_idx + 1;
     } else {
-        if(reached_end) *reached_end = true;
+        if(out_reached_end) *out_reached_end = true;
         if(cur_anim->loop_frame < cur_anim->frames.size()) {
             return cur_anim->loop_frame;
         } else {
@@ -760,8 +761,8 @@ sprite &sprite::operator=(const sprite &s2) {
  * @param new_file_name File name of the bitmap.
  * @param new_file_pos Top-left coordinates of the sub-bitmap inside the bitmap.
  * @param new_file_size Dimensions of the sub-bitmap.
- * @param node If not nullptr, this will be used to report an error with, in case
- * something happens.
+ * @param node If not nullptr, this will be used to report an error with,
+ * in case something happens.
  */
 void sprite::set_bitmap(
     const string &new_file_name,
@@ -824,17 +825,21 @@ void sprite::set_bitmap(
  * @param next_s_ptr The next sprite, if any.
  * @param interpolation_factor Amount to interpolate the two sprites by, if any.
  * Ranges from 0 to 1.
- * @param eff_trans If not nullptr, the final translation is returned here.
- * @param eff_angle If not nullptr, the final rotation angle is returned here.
- * @param eff_scale If not nullptr, the final scale is returned here.
- * @param eff_tint If not nullptr, the final tint color is returned here.
+ * @param out_eff_trans If not nullptr, the final translation is
+ * returned here.
+ * @param out_eff_angle If not nullptr, the final rotation angle is
+ * returned here.
+ * @param out_eff_scale If not nullptr, the final scale is
+ * returned here.
+ * @param out_eff_tint If not nullptr, the final tint color is
+ * returned here.
  */
 void get_sprite_basic_effects(
     const point &base_pos, float base_angle,
     float base_angle_cos_cache, float base_angle_sin_cache,
     sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* eff_trans, float* eff_angle,
-    point* eff_scale, ALLEGRO_COLOR* eff_tint
+    point* out_eff_trans, float* out_eff_angle,
+    point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 ) {
     if(base_angle_cos_cache == LARGE_FLOAT) {
         base_angle_cos_cache = cos(base_angle);
@@ -843,24 +848,24 @@ void get_sprite_basic_effects(
         base_angle_sin_cache = sin(base_angle);
     }
     
-    if(eff_trans) {
-        eff_trans->x =
+    if(out_eff_trans) {
+        out_eff_trans->x =
             base_pos.x +
             base_angle_cos_cache * cur_s_ptr->offset.x -
             base_angle_sin_cache * cur_s_ptr->offset.y;
-        eff_trans->y =
+        out_eff_trans->y =
             base_pos.y +
             base_angle_sin_cache * cur_s_ptr->offset.x +
             base_angle_cos_cache * cur_s_ptr->offset.y;
     }
-    if(eff_angle) {
-        *eff_angle = base_angle + cur_s_ptr->angle;
+    if(out_eff_angle) {
+        *out_eff_angle = base_angle + cur_s_ptr->angle;
     }
-    if(eff_scale) {
-        *eff_scale = cur_s_ptr->scale;
+    if(out_eff_scale) {
+        *out_eff_scale = cur_s_ptr->scale;
     }
-    if(eff_tint) {
-        *eff_tint = cur_s_ptr->tint;
+    if(out_eff_tint) {
+        *out_eff_tint = cur_s_ptr->tint;
     }
     
     if(next_s_ptr && interpolation_factor > 0.0f) {
@@ -876,32 +881,32 @@ void get_sprite_basic_effects(
         point next_scale = next_s_ptr->scale;
         ALLEGRO_COLOR next_tint = next_s_ptr->tint;
         
-        if(eff_trans) {
-            *eff_trans =
+        if(out_eff_trans) {
+            *out_eff_trans =
                 interpolate_point(
                     interpolation_factor, 0.0f, 1.0f,
-                    *eff_trans, next_trans
+                    *out_eff_trans, next_trans
                 );
         }
-        if(eff_angle) {
-            *eff_angle =
+        if(out_eff_angle) {
+            *out_eff_angle =
                 interpolate_angle(
                     interpolation_factor, 0.0f, 1.0f,
-                    *eff_angle, next_angle
+                    *out_eff_angle, next_angle
                 );
         }
-        if(eff_scale) {
-            *eff_scale =
+        if(out_eff_scale) {
+            *out_eff_scale =
                 interpolate_point(
                     interpolation_factor, 0.0f, 1.0f,
-                    *eff_scale, next_scale
+                    *out_eff_scale, next_scale
                 );
         }
-        if(eff_tint) {
-            *eff_tint =
+        if(out_eff_tint) {
+            *out_eff_tint =
                 interpolate_color(
                     interpolation_factor, 0.0f, 1.0f,
-                    *eff_tint, next_tint
+                    *out_eff_tint, next_tint
                 );
         }
     }

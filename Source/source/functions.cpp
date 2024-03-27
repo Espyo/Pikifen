@@ -58,14 +58,14 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s) {
  * @param p2 Second point.
  * @param ignore_walls_below_z Any walls whose sector Zs are below
  * this value get ignored. Use -FLT_MAX to not ignore any wall.
- * @param impassable_walls If not nullptr, true will be returned here if
+ * @param out_impassable_walls If not nullptr, true will be returned here if
  * any of the walls are impassable, i.e. the void or "blocking"-type
  * sectors. False otherwise.
  * @return Whether there are walls between.
  */
 bool are_walls_between(
     const point &p1, const point &p2,
-    float ignore_walls_below_z, bool* impassable_walls
+    float ignore_walls_below_z, bool* out_impassable_walls
 ) {
     point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
     point bb_br(std::max(p1.x, p1.x), std::max(p2.y, p2.y));
@@ -78,7 +78,7 @@ bool are_walls_between(
         )
     ) {
         //Somehow out of bounds.
-        if(impassable_walls) *impassable_walls = true;
+        if(out_impassable_walls) *out_impassable_walls = true;
         return true;
     }
     
@@ -96,12 +96,12 @@ bool are_walls_between(
         for(size_t s = 0; s < 2; ++s) {
             if(!e_ptr->sectors[s]) {
                 //No sectors means there's out-of-bounds geometry in the way.
-                if(impassable_walls) *impassable_walls = true;
+                if(out_impassable_walls) *out_impassable_walls = true;
                 return true;
             }
             if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
                 //If a blocking sector is in the way, no clear line.
-                if(impassable_walls) *impassable_walls = true;
+                if(out_impassable_walls) *out_impassable_walls = true;
                 return true;
             }
         }
@@ -118,12 +118,12 @@ bool are_walls_between(
         ) {
             //The walls are more than stepping height in difference.
             //So it's a genuine wall in the way.
-            if(impassable_walls) *impassable_walls = false;
+            if(out_impassable_walls) *out_impassable_walls = false;
             return true;
         }
     }
     
-    if(impassable_walls) *impassable_walls = false;
+    if(out_impassable_walls) *out_impassable_walls = false;
     return false;
 }
 
@@ -450,16 +450,17 @@ bool does_edge_have_wall_shadow(
  *
  * @param folder_name Name of the folder.
  * @param folders If true, only read folders. If false, only read files.
- * @param folder_found If not nullptr, returns whether the folder was found or not.
+ * @param out_folder_found If not nullptr, whether the folder was
+ * found or not is returned here.
  * @return The vector.
  */
 vector<string> folder_to_vector(
-    string folder_name, const bool folders, bool* folder_found
+    string folder_name, const bool folders, bool* out_folder_found
 ) {
     vector<string> v;
     
     if(folder_name.empty()) {
-        if(folder_found) *folder_found = false;
+        if(out_folder_found) *out_folder_found = false;
         return v;
     }
     
@@ -469,7 +470,7 @@ vector<string> folder_to_vector(
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_name.c_str());
     if(!folder || !al_open_directory(folder)) {
-        if(folder_found) *folder_found = false;
+        if(out_folder_found) *out_folder_found = false;
         return v;
     }
     
@@ -503,7 +504,7 @@ vector<string> folder_to_vector(
         return str_to_lower(s1) < str_to_lower(s2);
     });
     
-    if(folder_found) *folder_found = true;
+    if(out_folder_found) *out_folder_found = true;
     return v;
 }
 
@@ -773,19 +774,20 @@ float get_liquid_limit_length(edge* e_ptr) {
  *
  * @param font The text's font.
  * @param text The text.
- * @param ret_w The width gets returned here, if not nullptr.
- * @param ret_h The height gets returned here, if not nullptr.
+ * @param out_ret_w If not nullptr, the width is returned here.
+ * @param out_ret_h If not nullptr, the height is returned here.
  */
 void get_multiline_text_dimensions(
-    const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
+    const ALLEGRO_FONT* const font, const string &text,
+    int* out_ret_w, int* out_ret_h
 ) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     
-    if(ret_h) *ret_h = std::max(0, (int) ((fh + 1) * n_lines) - 1);
+    if(out_ret_h) *out_ret_h = std::max(0, (int) ((fh + 1) * n_lines) - 1);
     
-    if(ret_w) {
+    if(out_ret_w) {
         int largest_w = 0;
         for(size_t l = 0; l < lines.size(); ++l) {
             largest_w =
@@ -794,7 +796,7 @@ void get_multiline_text_dimensions(
                 );
         }
         
-        *ret_w = largest_w;
+        *out_ret_w = largest_w;
     }
 }
 
@@ -1284,10 +1286,10 @@ ALLEGRO_COLOR s2c(const string &s) {
  * @brief Converts a string to a point.
  *
  * @param s String to convert.
- * @param z If not nullptr, the third word is placed here.
+ * @param out_z If not nullptr, the third word is returned here.
  * @return The (X and Y) coordinates.
  */
-point s2p(const string &s, float* z) {
+point s2p(const string &s, float* out_z) {
     vector<string> words = split(s);
     point p;
     if(words.size() >= 1) {
@@ -1296,8 +1298,8 @@ point s2p(const string &s, float* z) {
     if(words.size() >= 2) {
         p.y = s2f(words[1]);
     }
-    if(z && words.size() >= 3) {
-        *z = s2f(words[2]);
+    if(out_z && words.size() >= 3) {
+        *out_z = s2f(words[2]);
     }
     return p;
 }

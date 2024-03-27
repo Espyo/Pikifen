@@ -320,10 +320,10 @@ public:
     );
     bool valid_frame() const;
     void get_sprite_data(
-        sprite** cur_sprite_ptr, sprite** next_sprite_ptr,
-        float* interpolation_factor
+        sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+        float* out_interpolation_factor
     ) const;
-    size_t get_next_frame_idx(bool* reached_end = nullptr) const;
+    size_t get_next_frame_idx(bool* out_reached_end = nullptr) const;
     
 };
 
@@ -349,8 +349,8 @@ void get_sprite_basic_effects(
     const point &base_pos, float base_angle,
     float base_angle_cos_cache, float base_angle_sin_cache,
     sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* eff_trans, float* eff_angle,
-    point* eff_scale, ALLEGRO_COLOR* eff_tint
+    point* out_eff_trans, float* out_eff_angle,
+    point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
 animation_database load_animation_database_from_file(data_node* frames_node);
 

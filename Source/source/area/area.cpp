@@ -1267,26 +1267,26 @@ tree_shadow::~tree_shadow() {
  * given its path.
  *
  * @param requested_area_path Relative path to the requested area.
- * @param final_area_folder_name The area's folder name is returned here,
- * if not nullptr.
- * @param final_area_type The area's type is returned here, if not nullptr.
+ * @param out_area_folder_name If not nullptr, the area's folder name is
+ * returned here.
+ * @param out_area_type If not nullptr, the area's type is returned here.
  */
 void get_area_info_from_path(
     const string &requested_area_path,
-    string* final_area_folder_name,
-    AREA_TYPES* final_area_type
+    string* out_area_folder_name,
+    AREA_TYPES* out_area_type
 ) {
-    if(final_area_folder_name) *final_area_folder_name = requested_area_path;
-    if(final_area_type) *final_area_type = AREA_TYPE_SIMPLE;
+    if(out_area_folder_name) *out_area_folder_name = requested_area_path;
+    if(out_area_type) *out_area_type = AREA_TYPE_SIMPLE;
     
     vector<string> parts = split(requested_area_path, "/");
     
     if(parts.size() <= 1) return;
     
-    if(final_area_folder_name) *final_area_folder_name = parts.back();
-    if(final_area_type) {
+    if(out_area_folder_name) *out_area_folder_name = parts.back();
+    if(out_area_type) {
         if(parts[parts.size() - 2] == "Mission") {
-            *final_area_type = AREA_TYPE_MISSION;
+            *out_area_type = AREA_TYPE_MISSION;
         }
     }
 }

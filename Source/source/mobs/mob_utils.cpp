@@ -675,10 +675,10 @@ void hold_info_struct::clear() {
 /**
  * @brief Returns the final coordinates this mob should be at.
  *
- * @param final_z The Z coordinate is returned here.
+ * @param out_z The Z coordinate is returned here.
  * @return The (X and Y) coordinates.
  */
-point hold_info_struct::get_final_pos(float* final_z) const {
+point hold_info_struct::get_final_pos(float* out_z) const {
     if(!m) return point();
     
     hitbox* h_ptr = nullptr;
@@ -698,7 +698,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
                 offset_angle + m->angle,
                 offset_dist * h_ptr->radius
             );
-        *final_z = m->z + h_ptr->z + (h_ptr->height * vertical_dist);
+        *out_z = m->z + h_ptr->z + (h_ptr->height * vertical_dist);
     } else {
         //Body center.
         final_pos = m->pos;
@@ -708,7 +708,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
                 offset_angle + m->angle,
                 offset_dist * m->radius
             );
-        *final_z = m->z + (m->height * vertical_dist);
+        *out_z = m->z + (m->height * vertical_dist);
     }
     
     return final_pos;
@@ -750,10 +750,10 @@ path_info_struct::path_info_struct(
 /**
  * @brief Calculates whether or not the way forward is currently blocked.
  *
- * @param reason If not nullptr, the reason is returned here.
+ * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
-bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
+bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* out_reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_idx > 0 &&
@@ -766,11 +766,11 @@ bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
             !can_traverse_path_link(
                 cur_stop->get_link(next_stop),
                 settings,
-                reason
+                out_reason
             );
     }
     
-    if(reason) *reason = PATH_BLOCK_REASON_NONE;
+    if(out_reason) *out_reason = PATH_BLOCK_REASON_NONE;
     return false;
 }
 

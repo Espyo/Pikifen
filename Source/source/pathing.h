@@ -321,31 +321,31 @@ struct path_manager {
 
 bool can_take_path_stop(
     path_stop* stop_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* reason = nullptr
+    PATH_BLOCK_REASONS* out_reason = nullptr
 );
 bool can_take_path_stop(
     const path_stop* stop_ptr, const path_follow_settings &settings,
-    sector* sector_ptr, PATH_BLOCK_REASONS* reason = nullptr
+    sector* sector_ptr, PATH_BLOCK_REASONS* out_reason = nullptr
 );
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* reason = nullptr
+    PATH_BLOCK_REASONS* out_reason = nullptr
 );
 void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
 );
 PATH_RESULTS dijkstra(
-    vector<path_stop*> &final_path,
+    vector<path_stop*> &out_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
-    float* total_dist
+    float* out_total_dist
 );
 PATH_RESULTS get_path(
     const point &start, const point &end,
     const path_follow_settings &settings,
-    vector<path_stop*> &full_path, float* total_dist,
-    path_stop** start_stop, path_stop** end_stop
+    vector<path_stop*> &full_path, float* out_total_dist,
+    path_stop** out_start_stop, path_stop** out_end_stop
 );
 string path_block_reason_to_string(PATH_BLOCK_REASONS reason);
 string path_result_to_string(PATH_RESULTS result);

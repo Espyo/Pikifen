@@ -118,7 +118,7 @@ typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 bool are_walls_between(
     const point &p1, const point &p2,
-    float ignore_walls_below_z = -FLT_MAX, bool* impassable_walls = nullptr
+    float ignore_walls_below_z = -FLT_MAX, bool* out_impassable_walls = nullptr
 );
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
@@ -137,7 +137,7 @@ void draw_edge_offset_on_buffer(
     const vector<edge_offset_cache> &caches, size_t e_idx
 );
 vector<string> folder_to_vector(
-    string folder_name, const bool folders, bool* folder_found = nullptr
+    string folder_name, const bool folders, bool* out_folder_found = nullptr
 );
 string get_current_time(const bool filename_friendly);
 mob* get_closest_mob_to_cursor();
@@ -147,14 +147,14 @@ void get_edge_offset_edge_info(
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter,
-    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
-    float* final_elbow_angle, float* final_elbow_length
+    float* out_angle, float* out_length, ALLEGRO_COLOR* out_color,
+    float* out_elbow_angle, float* out_elbow_length
 );
 void get_edge_offset_intersection(
     const edge* e1, const edge* e2, const vertex* common_vertex,
     const float base_shadow_angle1, const float base_shadow_angle2,
     const float shadow_length,
-    float* final_angle, float* final_length
+    float* out_angle, float* out_length
 );
 string get_key_name(const int keycode, const bool condensed);
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
@@ -162,18 +162,19 @@ ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);
 float get_liquid_limit_length(edge* e_ptr);
 void get_multiline_text_dimensions(
-    const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
+    const ALLEGRO_FONT* const font, const string &text,
+    int* out_ret_w, int* out_ret_h
 );
 void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
-    const edge* ignore, edge** final_edge, float* final_angle, float* final_diff
+    const edge* ignore, edge** out_edge, float* out_angle, float* out_diff
 );
 void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
     const edge* ignore, offset_effect_checker_ptr edge_checker,
-    edge** final_edge, float* final_angle, float* final_diff,
-    float* final_base_shadow_angle,
-    bool* final_shadow_cw
+    edge** out_edge, float* out_angle, float* out_diff,
+    float* out_base_shadow_angle,
+    bool* out_shadow_cw
 );
 string get_subtitle_or_mission_goal(
     const string &subtitle, const AREA_TYPES area_type,
@@ -266,7 +267,7 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR s2c(const string &s);
 string p2s(const point &p, const float* z = nullptr);
-point s2p(const string &s, float* z = nullptr);
+point s2p(const string &s, float* out_z = nullptr);
 
 
 /**

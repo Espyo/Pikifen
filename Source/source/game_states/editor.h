@@ -297,7 +297,7 @@ protected:
         void get_locations(
             const point* const center, const point* const size,
             const float* const angle, point* points, float* radius,
-            ALLEGRO_TRANSFORM* transform
+            ALLEGRO_TRANSFORM* out_transform
         ) const;
         
     };

@@ -315,8 +315,8 @@ struct area_data {
 
 void get_area_info_from_path(
     const string &requested_area_path,
-    string* final_area_folder_name,
-    AREA_TYPES* final_area_type
+    string* out_area_folder_name,
+    AREA_TYPES* out_area_type
 );
 string get_base_area_folder_path(
     const AREA_TYPES type, const bool from_game_data

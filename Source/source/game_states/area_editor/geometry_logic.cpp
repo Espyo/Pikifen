@@ -1243,13 +1243,13 @@ void area_editor::get_affected_sectors(
  * @param v_ptr Pointer to the vertex.
  * @param angle Angle coming into the vertex.
  * @param clockwise Return the closest edge clockwise?
- * @param closest_edge_angle If not nullptr, the angle the edge makes into its
- * other vertex is returned here.
+ * @param out_closest_edge_angle If not nullptr, the angle the edge makes
+ * into its other vertex is returned here.
  * @return The closest edge.
  */
 edge* area_editor::get_closest_edge_to_angle(
     vertex* v_ptr, const float angle, const bool clockwise,
-    float* closest_edge_angle
+    float* out_closest_edge_angle
 ) const {
     edge* best_edge = nullptr;
     float best_angle_diff = 0;
@@ -1277,8 +1277,8 @@ edge* area_editor::get_closest_edge_to_angle(
         }
     }
     
-    if(closest_edge_angle) {
-        *closest_edge_angle = best_edge_angle;
+    if(out_closest_edge_angle) {
+        *out_closest_edge_angle = best_edge_angle;
     }
     return best_edge;
 }
@@ -1595,15 +1595,16 @@ bool area_editor::get_mob_link_under_point(
 
 
 /**
- * @brief Returns the mob currently under the specified point, or nullptr if none.
+ * @brief Returns the mob currently under the specified point,
+ * or nullptr if none.
  *
  * @param p The point to check against.
- * @param idx If not nullptr, the mob index is returned here.
+ * @param out_idx If not nullptr, the mob index is returned here.
  * If no mob matches, INVALID is returned instead.
  * @return The mob.
  */
 mob_gen* area_editor::get_mob_under_point(
-    const point &p, size_t* idx
+    const point &p, size_t* out_idx
 ) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
@@ -1611,12 +1612,12 @@ mob_gen* area_editor::get_mob_under_point(
         if(
             dist(m_ptr->pos, p) <= get_mob_gen_radius(m_ptr)
         ) {
-            if(idx) *idx = m;
+            if(out_idx) *out_idx = m;
             return m_ptr;
         }
     }
     
-    if(idx) *idx = INVALID;
+    if(out_idx) *out_idx = INVALID;
     return nullptr;
 }
 
