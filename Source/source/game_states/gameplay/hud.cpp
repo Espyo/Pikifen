@@ -1451,16 +1451,16 @@ hud_t::hud_t() :
  * @brief Destroys the HUD struct object.
  */
 hud_t::~hud_t() {
-    game.bitmaps.detach(bmp_bubble);
-    game.bitmaps.detach(bmp_counter_bubble_field);
-    game.bitmaps.detach(bmp_counter_bubble_group);
-    game.bitmaps.detach(bmp_counter_bubble_standby);
-    game.bitmaps.detach(bmp_counter_bubble_total);
-    game.bitmaps.detach(bmp_day_bubble);
-    game.bitmaps.detach(bmp_distant_pikmin_marker);
-    game.bitmaps.detach(bmp_hard_bubble);
-    game.bitmaps.detach(bmp_no_pikmin_bubble);
-    game.bitmaps.detach(bmp_sun);
+    game.bitmaps.free(bmp_bubble);
+    game.bitmaps.free(bmp_counter_bubble_field);
+    game.bitmaps.free(bmp_counter_bubble_group);
+    game.bitmaps.free(bmp_counter_bubble_standby);
+    game.bitmaps.free(bmp_counter_bubble_total);
+    game.bitmaps.free(bmp_day_bubble);
+    game.bitmaps.free(bmp_distant_pikmin_marker);
+    game.bitmaps.free(bmp_hard_bubble);
+    game.bitmaps.free(bmp_no_pikmin_bubble);
+    game.bitmaps.free(bmp_sun);
     
 }
 

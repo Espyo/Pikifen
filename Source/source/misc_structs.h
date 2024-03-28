@@ -593,99 +593,6 @@ struct mouse_cursor_t {
 
 
 /**
- * @brief Bitmap manager.
- *
- * When you have the likes of an animation, every
- * frame in it is normally a sub-bitmap of the same
- * parent bitmap.
- * Naturally, loading from the disk and storing
- * in memory the same parent bitmap for every single
- * frame would be unbelievable catastrophical, so
- * that is why the bitmap manager was created.
- *
- * Whenever a frame of animation is being loaded,
- * it asks the bitmap manager to retrieve the
- * parent bitmap from memory. If the parent bitmap
- * has never been loaded, it gets loaded now.
- * When the next frame comes, and requests the
- * parent bitmap, the manager just returns the one already
- * loaded.
- * All the while, the manager is keeping track
- * of how many frames are referencing this parent bitmap.
- * When one of them doesn't need it any more, it sends
- * a detach request (e.g.: when a frame is changed
- * in the animation editor, the entire bitmap
- * is destroyed and another is created).
- * This decreases the counter by one.
- * When the counter reaches 0, that means no frame
- * is needing the parent bitmap, so it gets destroyed.
- * If some other frame needs it, it'll be loaded from
- * the disk again.
- * Finally, it should be noted that animation frames
- * are not the only thing using the bitmap manager.
- */
-struct bmp_manager {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    explicit bmp_manager(const string &base_dir);
-    ALLEGRO_BITMAP* get(
-        const string &name, data_node* node = nullptr,
-        const bool report_errors = true
-    );
-    void detach(const ALLEGRO_BITMAP* bmp);
-    void detach(const string &name);
-    void clear();
-    long get_total_calls() const;
-    size_t get_list_size() const;
-    
-    private:
-    
-    //--- Misc. declarations ---
-    
-    /**
-     * @brief Info about a bitmap.
-     */
-    struct bmp_t {
-    
-        //--- Members ---
-        
-        //Bitmap pointer.
-        ALLEGRO_BITMAP* b = nullptr;
-        
-        //How many calls it has.
-        size_t calls = 1;
-        
-        
-        //--- Function declarations ---
-        
-        explicit bmp_t(ALLEGRO_BITMAP* b = nullptr);
-    };
-    
-    
-    //--- Members ---
-    
-    //Base directory that this manager works on.
-    string base_dir;
-    
-    //List of loaded bitmaps.
-    map<string, bmp_t> list;
-    
-    //Total sum of calls. Useful for debugging.
-    long total_calls = 0;
-    
-    
-    //--- Function declarations ---
-    
-    void detach(map<string, bmp_t>::iterator it);
-    
-};
-
-
-
-/**
  * @brief List of fonts used in the game.
  */
 struct font_list {
@@ -1492,6 +1399,270 @@ struct whistle_t {
         const float whistle_range, const float leader_to_cursor_dist
     );
     
+};
+
+
+/**
+ * @brief Asset manager.
+ *
+ * When you have the likes of an animation, every
+ * frame in it is normally a sub-bitmap of the same
+ * parent bitmap.
+ * Naturally, loading from the disk and storing
+ * in memory the same parent bitmap for every single
+ * frame would be unbelievable catastrophical, so
+ * that is why the asset manager was created.
+ *
+ * Whenever a frame of animation is being loaded,
+ * it asks the asset manager to retrieve the
+ * parent bitmap from memory. If the parent bitmap
+ * has never been loaded, it gets loaded now.
+ * When the next frame comes, and requests the
+ * parent bitmap, the manager just returns the one already
+ * loaded.
+ * All the while, the manager is keeping track
+ * of how many frames are referencing this parent bitmap.
+ * When one of them doesn't need it any more, it sends
+ * a free request (e.g.: when a frame is changed
+ * in the animation editor, the entire bitmap
+ * is destroyed and another is created).
+ * This decreases the counter by one.
+ * When the counter reaches 0, that means no frame
+ * is needing the parent bitmap, so it gets destroyed.
+ * If some other frame needs it, it'll be loaded from
+ * the disk again.
+ * This manager can also handle other types of asset, like audio samples.
+ * 
+ * @tparam asset_t Asset type.
+ */
+template<typename asset_t>
+class asset_manager {
+
+public:
+    
+    //--- Function definitions ---
+    
+    /**
+     * @brief Constructs a new asset manager object.
+     * 
+     * @param base_dir Base directory its files belong to.
+     */
+    explicit asset_manager(const string &base_dir) : base_dir(base_dir) {}
+
+    /**
+     * @brief Returns the specified asset, by name.
+     * 
+     * @param name Name of the asset to get.
+     * @param node If not nullptr, blame this data node if the file
+     * doesn't exist.
+     * @param report_errors Only issues errors if this is true.
+     * @return The asset
+     */
+    asset_t get(
+        const string &name, data_node* node = nullptr,
+        const bool report_errors = true
+    ) {
+        if(name.empty()) return do_load("", node, report_errors);
+
+        if(list.find(name) == list.end()) {
+            asset_t asset_ptr =
+                do_load(base_dir + "/" + name, node, report_errors);
+            list[name] = asset_use_t(asset_ptr);
+            total_uses++;
+            return asset_ptr;
+        } else {
+            list[name].uses++;
+            total_uses++;
+            return list[name].ptr;
+        }
+    }
+
+    /**
+     * @brief Frees one use of the asset. If the asset has no more calls,
+     * it's automatically cleared.
+     * 
+     * @param ptr Asset to free.
+     */
+    void free(const asset_t ptr) {
+        if(!ptr) return;
+        auto it = list.begin();
+        for(; it != list.end(); ++it) {
+            if(it->second.ptr == ptr) break;
+        }
+        free(it);
+    }
+
+    /**
+     * @brief Frees one use of the asset. If the asset has no more calls,
+     * it's automatically cleared.
+     * 
+     * @param ptr Name of the asset to free.
+     */
+    void free(const string &name) {
+        if(name.empty()) return;
+        free(list.find(name));
+    }
+
+    /**
+     * @brief Unloads all assets loaded and clears the list.
+     */
+    void clear() {
+        for(auto &asset : list) {
+            do_unload(asset.second.ptr);
+        }
+        list.clear();
+        total_uses = 0;
+    }
+
+    /**
+     * @brief Returns the total number of uses. Used for debugging.
+     * 
+     * @return The amount.
+     */
+    long get_total_uses() const {
+        return total_uses;
+    }
+
+    /**
+     * @brief Returns the size of the list. Used for debugging.
+     * 
+     * @return The size.
+     */
+    size_t get_list_size() const {
+        return list.size();
+    }
+
+protected:
+
+    //--- Misc. declarations ---
+
+    virtual asset_t do_load(
+        const string& path, data_node* node, const bool report_errors
+    ) = 0;
+    virtual void do_unload(asset_t asset) = 0;
+    
+    /**
+     * @brief Info about an asset.
+     */
+    struct asset_use_t {
+    
+        //--- Members ---
+        
+        //Asset pointer.
+        asset_t ptr = nullptr;
+        
+        //How many uses it has.
+        size_t uses = 1;
+        
+        
+        //--- Function declarations ---
+        
+        explicit asset_use_t(asset_t ptr = nullptr) : ptr(ptr) {}
+    };
+    
+    
+    //--- Members ---
+    
+    //Base directory that this manager works on.
+    string base_dir;
+    
+    //List of loaded assets.
+    map<string, asset_use_t> list;
+    
+    //Total sum of uses. Useful for debugging.
+    long total_uses = 0;
+    
+    
+    //--- Function definitions ---
+    
+    /**
+     * @brief Frees one use of the asset. If the asset has no more calls,
+     * it's automatically cleared.
+     * 
+     * @param it Iterator of the asset from the list.
+     */
+    void free(typename map<string, asset_use_t>::iterator it) {
+        if(it == list.end()) return;
+        it->second.uses--;
+        total_uses--;
+        if(it->second.uses == 0) {
+            do_unload(it->second.ptr);
+        }
+        list.erase(it);
+    }
+    
+};
+
+
+/**
+ * @brief Audio stream manager. See asset_manager.
+ */
+class audio_stream_manager : public asset_manager<ALLEGRO_AUDIO_STREAM*> {
+
+public:
+
+    //--- Function definitions ---
+
+    audio_stream_manager(const string& base_dir) : asset_manager(base_dir) {}
+
+
+protected:
+
+    //--- Function declarations ---
+
+    ALLEGRO_AUDIO_STREAM* do_load(
+        const string& path, data_node* node, const bool report_errors
+    ) override;
+    void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
+
+};
+
+
+/**
+ * @brief Bitmap manager. See asset_manager.
+ */
+class bitmap_manager : public asset_manager<ALLEGRO_BITMAP*> {
+
+public:
+
+    //--- Function definitions ---
+
+    bitmap_manager(const string& base_dir) : asset_manager(base_dir) {}
+
+
+protected:
+
+    //--- Function declarations ---
+
+    ALLEGRO_BITMAP* do_load(
+        const string& path, data_node* node, const bool report_errors
+    ) override;
+    void do_unload(ALLEGRO_BITMAP* asset) override;
+
+};
+
+
+/**
+ * @brief Sound effect sample manager. See asset_manager.
+ */
+class sfx_sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
+
+public:
+
+    //--- Function definitions ---
+
+    sfx_sample_manager(const string& base_dir) : asset_manager(base_dir) {}
+
+
+protected:
+
+    //--- Function declarations ---
+
+    ALLEGRO_SAMPLE* do_load(
+        const string& path, data_node* node, const bool report_errors
+    ) override;
+    void do_unload(ALLEGRO_SAMPLE* asset) override;
+
 };
 
 

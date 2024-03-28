@@ -106,7 +106,7 @@ public:
     audio_manager audio;
     
     //Manager of all main bitmaps (not floor textures).
-    bmp_manager bitmaps = bmp_manager("");
+    bitmap_manager bitmaps = bitmap_manager("");
     
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error = nullptr;
@@ -247,7 +247,7 @@ public:
     string team_names[N_MOB_TEAMS];
     
     //Manager of all floor texture bitmaps.
-    bmp_manager textures = bmp_manager(TEXTURES_FOLDER_NAME);
+    bitmap_manager textures = bitmap_manager("");
     
     //How much time has passed since the program booted.
     float time_passed = 0.0f;

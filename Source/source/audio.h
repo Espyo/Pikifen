@@ -37,6 +37,7 @@
 #include <allegro5/allegro_audio.h>
 
 #include "const.h"
+#include "misc_structs.h"
 #include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 
@@ -338,134 +339,6 @@ struct song {
     
     //Any notes, like origin, artist, etc.
     string notes;
-    
-};
-
-
-/**
- * @brief Audio sample manager.
- * See bitmap manager.
- */
-struct sfx_sample_manager {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    explicit sfx_sample_manager(const string &base_dir);
-    ALLEGRO_SAMPLE* get(
-        const string &name, data_node* node = nullptr,
-        const bool report_errors = true
-    );
-    void detach(const ALLEGRO_SAMPLE* s);
-    void detach(const string &name);
-    void clear();
-    long get_total_calls() const;
-    size_t get_list_size() const;
-    
-    private:
-    
-    //--- Misc. declarations ---
-    
-    /**
-     * @brief Info about an audio sample.
-     */
-    struct sample_t {
-    
-        //--- Members ---
-        
-        //Sample pointer.
-        ALLEGRO_SAMPLE* s = nullptr;
-        
-        //How many calls it has.
-        size_t calls = 1;
-        
-        
-        //--- Function declarations ---
-        
-        explicit sample_t(ALLEGRO_SAMPLE* s = nullptr);
-    };
-    
-    
-    //--- Members ---
-    
-    //Base directory that this manager works on.
-    string base_dir;
-    
-    //List of loaded samples.
-    map<string, sample_t> list;
-    
-    //Total sum of calls. Useful for debugging.
-    long total_calls = 0;
-    
-    
-    //--- Function declarations ---
-    
-    void detach(map<string, sample_t>::iterator it);
-    
-};
-
-
-/**
- * @brief Streamed audio manager.
- * See bitmap manager.
- */
-struct audio_stream_manager {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    explicit audio_stream_manager(const string &base_dir);
-    ALLEGRO_AUDIO_STREAM* get(
-        const string &name, data_node* node = nullptr,
-        const bool report_errors = true
-    );
-    void detach(const ALLEGRO_AUDIO_STREAM* s);
-    void detach(const string &name);
-    void clear();
-    long get_total_calls() const;
-    size_t get_list_size() const;
-    
-    private:
-    
-    //--- Misc. declarations ---
-    
-    /**
-     * @brief Info about an audio stream.
-     */
-    struct stream_t {
-    
-        //--- Members ---
-        
-        //Stream pointer.
-        ALLEGRO_AUDIO_STREAM* s = nullptr;
-        
-        //How many calls it has.
-        size_t calls = 1;
-        
-        
-        //--- Function declarations ---
-        
-        explicit stream_t(ALLEGRO_AUDIO_STREAM* s = nullptr);
-    };
-    
-    
-    //--- Members ---
-    
-    //Base directory that this manager works on.
-    string base_dir;
-    
-    //List of loaded samples.
-    map<string, stream_t> list;
-    
-    //Total sum of calls. Useful for debugging.
-    long total_calls = 0;
-    
-    
-    //--- Function declarations ---
-    
-    void detach(map<string, stream_t>::iterator it);
     
 };
 

@@ -2060,7 +2060,7 @@ void unload_custom_particle_generators() {
         g != game.custom_particle_generators.end();
         ++g
     ) {
-        game.bitmaps.detach(g->second.base_particle.bitmap);
+        game.bitmaps.free(g->second.base_particle.bitmap);
     }
     game.custom_particle_generators.clear();
 }
@@ -2090,53 +2090,53 @@ void unload_liquids() {
  * @brief Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
-    game.bitmaps.detach(game.sys_assets.bmp_bright_circle);
-    game.bitmaps.detach(game.sys_assets.bmp_bright_ring);
-    game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
-    game.bitmaps.detach(game.sys_assets.bmp_button_box);
-    game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
-    game.bitmaps.detach(game.sys_assets.bmp_checkbox_no_check);
-    game.bitmaps.detach(game.sys_assets.bmp_cursor);
-    game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);
-    game.bitmaps.detach(game.sys_assets.bmp_focus_box);
-    game.bitmaps.detach(game.sys_assets.bmp_icon);
-    game.bitmaps.detach(game.sys_assets.bmp_idle_glow);
-    game.bitmaps.detach(game.sys_assets.bmp_key_box);
-    game.bitmaps.detach(game.sys_assets.bmp_leader_silhouette_side);
-    game.bitmaps.detach(game.sys_assets.bmp_leader_silhouette_top);
-    game.bitmaps.detach(game.sys_assets.bmp_medal_bronze);
-    game.bitmaps.detach(game.sys_assets.bmp_medal_gold);
-    game.bitmaps.detach(game.sys_assets.bmp_medal_none);
-    game.bitmaps.detach(game.sys_assets.bmp_medal_platinum);
-    game.bitmaps.detach(game.sys_assets.bmp_medal_silver);
-    game.bitmaps.detach(game.sys_assets.bmp_mission_clear);
-    game.bitmaps.detach(game.sys_assets.bmp_mission_fail);
-    game.bitmaps.detach(game.sys_assets.bmp_more);
-    game.bitmaps.detach(game.sys_assets.bmp_mouse_cursor);
-    game.bitmaps.detach(game.sys_assets.bmp_notification);
-    game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
-    game.bitmaps.detach(game.sys_assets.bmp_player_input_icons);
-    game.bitmaps.detach(game.sys_assets.bmp_random);
-    game.bitmaps.detach(game.sys_assets.bmp_rock);
-    game.bitmaps.detach(game.sys_assets.bmp_shadow);
-    game.bitmaps.detach(game.sys_assets.bmp_smack);
-    game.bitmaps.detach(game.sys_assets.bmp_smoke);
-    game.bitmaps.detach(game.sys_assets.bmp_sparkle);
-    game.bitmaps.detach(game.sys_assets.bmp_spotlight);
-    game.bitmaps.detach(game.sys_assets.bmp_swarm_arrow);
-    game.bitmaps.detach(game.sys_assets.bmp_throw_invalid);
-    game.bitmaps.detach(game.sys_assets.bmp_throw_preview);
-    game.bitmaps.detach(game.sys_assets.bmp_throw_preview_dashed);
-    game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
+    game.bitmaps.free(game.sys_assets.bmp_bright_circle);
+    game.bitmaps.free(game.sys_assets.bmp_bright_ring);
+    game.bitmaps.free(game.sys_assets.bmp_bubble_box);
+    game.bitmaps.free(game.sys_assets.bmp_button_box);
+    game.bitmaps.free(game.sys_assets.bmp_checkbox_check);
+    game.bitmaps.free(game.sys_assets.bmp_checkbox_no_check);
+    game.bitmaps.free(game.sys_assets.bmp_cursor);
+    game.bitmaps.free(game.sys_assets.bmp_enemy_spirit);
+    game.bitmaps.free(game.sys_assets.bmp_focus_box);
+    game.bitmaps.free(game.sys_assets.bmp_icon);
+    game.bitmaps.free(game.sys_assets.bmp_idle_glow);
+    game.bitmaps.free(game.sys_assets.bmp_key_box);
+    game.bitmaps.free(game.sys_assets.bmp_leader_silhouette_side);
+    game.bitmaps.free(game.sys_assets.bmp_leader_silhouette_top);
+    game.bitmaps.free(game.sys_assets.bmp_medal_bronze);
+    game.bitmaps.free(game.sys_assets.bmp_medal_gold);
+    game.bitmaps.free(game.sys_assets.bmp_medal_none);
+    game.bitmaps.free(game.sys_assets.bmp_medal_platinum);
+    game.bitmaps.free(game.sys_assets.bmp_medal_silver);
+    game.bitmaps.free(game.sys_assets.bmp_mission_clear);
+    game.bitmaps.free(game.sys_assets.bmp_mission_fail);
+    game.bitmaps.free(game.sys_assets.bmp_more);
+    game.bitmaps.free(game.sys_assets.bmp_mouse_cursor);
+    game.bitmaps.free(game.sys_assets.bmp_notification);
+    game.bitmaps.free(game.sys_assets.bmp_pikmin_spirit);
+    game.bitmaps.free(game.sys_assets.bmp_player_input_icons);
+    game.bitmaps.free(game.sys_assets.bmp_random);
+    game.bitmaps.free(game.sys_assets.bmp_rock);
+    game.bitmaps.free(game.sys_assets.bmp_shadow);
+    game.bitmaps.free(game.sys_assets.bmp_smack);
+    game.bitmaps.free(game.sys_assets.bmp_smoke);
+    game.bitmaps.free(game.sys_assets.bmp_sparkle);
+    game.bitmaps.free(game.sys_assets.bmp_spotlight);
+    game.bitmaps.free(game.sys_assets.bmp_swarm_arrow);
+    game.bitmaps.free(game.sys_assets.bmp_throw_invalid);
+    game.bitmaps.free(game.sys_assets.bmp_throw_preview);
+    game.bitmaps.free(game.sys_assets.bmp_throw_preview_dashed);
+    game.bitmaps.free(game.sys_assets.bmp_wave_ring);
     
-    game.audio.samples.detach(game.sys_assets.sfx_attack);
-    game.audio.samples.detach(game.sys_assets.sfx_camera);
-    game.audio.samples.detach(game.sys_assets.sfx_menu_activate);
-    game.audio.samples.detach(game.sys_assets.sfx_menu_back);
-    game.audio.samples.detach(game.sys_assets.sfx_menu_select);
-    game.audio.samples.detach(game.sys_assets.sfx_spray);
-    game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
-    game.audio.samples.detach(game.sys_assets.sfx_throw);
+    game.audio.samples.free(game.sys_assets.sfx_attack);
+    game.audio.samples.free(game.sys_assets.sfx_camera);
+    game.audio.samples.free(game.sys_assets.sfx_menu_activate);
+    game.audio.samples.free(game.sys_assets.sfx_menu_back);
+    game.audio.samples.free(game.sys_assets.sfx_menu_select);
+    game.audio.samples.free(game.sys_assets.sfx_spray);
+    game.audio.samples.free(game.sys_assets.sfx_switch_pikmin);
+    game.audio.samples.free(game.sys_assets.sfx_throw);
 }
 
 
@@ -2145,9 +2145,9 @@ void unload_misc_resources() {
  */
 void unload_songs() {
     for(auto &s : game.audio.songs) {
-        game.audio.streams.detach(s.second.main_track);
+        game.audio.streams.free(s.second.main_track);
         for(auto &t : s.second.mix_tracks) {
-            game.audio.streams.detach(t.second);
+            game.audio.streams.free(t.second);
         }
     }
     game.audio.songs.clear();
@@ -2167,7 +2167,7 @@ void unload_spike_damage_types() {
  */
 void unload_spray_types() {
     for(size_t s = 0; s < game.spray_types.size(); ++s) {
-        game.bitmaps.detach(game.spray_types[s].bmp_spray);
+        game.bitmaps.free(game.spray_types[s].bmp_spray);
     }
     game.spray_types.clear();
 }

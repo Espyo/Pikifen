@@ -257,14 +257,14 @@ void pikmin_type::load_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
-    game.bitmaps.detach(bmp_icon);
-    game.bitmaps.detach(bmp_maturity_icon[0]);
-    game.bitmaps.detach(bmp_maturity_icon[1]);
-    game.bitmaps.detach(bmp_maturity_icon[2]);
-    game.bitmaps.detach(bmp_top[0]);
-    game.bitmaps.detach(bmp_top[1]);
-    game.bitmaps.detach(bmp_top[2]);
+    game.bitmaps.free(bmp_icon);
+    game.bitmaps.free(bmp_maturity_icon[0]);
+    game.bitmaps.free(bmp_maturity_icon[1]);
+    game.bitmaps.free(bmp_maturity_icon[2]);
+    game.bitmaps.free(bmp_top[0]);
+    game.bitmaps.free(bmp_top[1]);
+    game.bitmaps.free(bmp_top[2]);
     if(bmp_onion_icon) {
-        game.bitmaps.detach(bmp_onion_icon);
+        game.bitmaps.free(bmp_onion_icon);
     }
 }

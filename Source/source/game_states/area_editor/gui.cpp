@@ -1308,7 +1308,7 @@ void area_editor::process_gui_panel_details() {
                     //New image, delete the old one.
                     register_change("tree shadow file change");
                     if(selected_shadow->bitmap != game.bmp_error) {
-                        game.textures.detach(selected_shadow->file_name);
+                        game.textures.free(selected_shadow->file_name);
                     }
                     selected_shadow->bitmap =
                         game.textures.get(

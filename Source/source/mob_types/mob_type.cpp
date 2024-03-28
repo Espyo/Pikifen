@@ -1097,6 +1097,11 @@ void load_mob_types(mob_category* category, bool load_resources) {
  * since they never got loaded in the first place.
  */
 void unload_mob_type(mob_type* mt, const bool unload_resources) {
+    for(size_t s = 0; s < mt->sounds.size(); ++s) {
+        ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
+        if(!s) continue;
+        game.audio.samples.free(s_ptr);
+    }
     if(unload_resources) {
         mt->anims.destroy();
         unload_script(mt);

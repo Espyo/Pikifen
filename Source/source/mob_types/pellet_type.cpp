@@ -94,5 +94,5 @@ void pellet_type::load_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void pellet_type::unload_resources() {
-    game.bitmaps.detach(bmp_number);
+    game.bitmaps.free(bmp_number);
 }

@@ -774,7 +774,7 @@ void sprite::set_bitmap(
         bitmap = nullptr;
     }
     if(new_file_name != file && parent_bmp) {
-        game.bitmaps.detach(file);
+        game.bitmaps.free(file);
         parent_bmp = nullptr;
     }
     

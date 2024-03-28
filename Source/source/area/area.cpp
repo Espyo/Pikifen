@@ -119,7 +119,7 @@ void area_data::clear() {
     bmap.clear();
     
     if(bg_bmp) {
-        game.bitmaps.detach(bg_bmp);
+        game.bitmaps.free(bg_bmp);
         bg_bmp = nullptr;
     }
     if(thumbnail) {
@@ -192,7 +192,7 @@ void area_data::clone(area_data &other) {
     other.clear();
     
     if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        game.bitmaps.detach(other.bg_bmp_file_name);
+        game.bitmaps.free(other.bg_bmp_file_name);
     }
     other.bg_bmp_file_name = bg_bmp_file_name;
     if(other.bg_bmp_file_name.empty()) {
@@ -1258,7 +1258,7 @@ tree_shadow::tree_shadow(
  *
  */
 tree_shadow::~tree_shadow() {
-    game.textures.detach(file_name);
+    game.textures.free(file_name);
 }
 
 

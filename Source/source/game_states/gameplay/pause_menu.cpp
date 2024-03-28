@@ -190,7 +190,7 @@ pause_menu_t::~pause_menu_t() {
         if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits.size(); ++t) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.bitmaps.detach(tidbits[(HELP_CATEGORY) c][t].image);
+                game.bitmaps.free(tidbits[(HELP_CATEGORY) c][t].image);
             }
         }
     }
@@ -203,15 +203,15 @@ pause_menu_t::~pause_menu_t() {
     help_gui.destroy();
     confirmation_gui.destroy();
     
-    game.bitmaps.detach(bmp_radar_cursor);
-    game.bitmaps.detach(bmp_radar_pikmin);
-    game.bitmaps.detach(bmp_radar_treasure);
-    game.bitmaps.detach(bmp_radar_enemy);
-    game.bitmaps.detach(bmp_radar_leader_bubble);
-    game.bitmaps.detach(bmp_radar_onion_skeleton);
-    game.bitmaps.detach(bmp_radar_onion_bulb);
-    game.bitmaps.detach(bmp_radar_ship);
-    game.bitmaps.detach(bmp_radar_path);
+    game.bitmaps.free(bmp_radar_cursor);
+    game.bitmaps.free(bmp_radar_pikmin);
+    game.bitmaps.free(bmp_radar_treasure);
+    game.bitmaps.free(bmp_radar_enemy);
+    game.bitmaps.free(bmp_radar_leader_bubble);
+    game.bitmaps.free(bmp_radar_onion_skeleton);
+    game.bitmaps.free(bmp_radar_onion_bulb);
+    game.bitmaps.free(bmp_radar_ship);
+    game.bitmaps.free(bmp_radar_path);
     bmp_radar_cursor = nullptr;
     bmp_radar_pikmin = nullptr;
     bmp_radar_treasure = nullptr;

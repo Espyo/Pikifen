@@ -126,5 +126,5 @@ void leader_type::load_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void leader_type::unload_resources() {
-    game.bitmaps.detach(bmp_icon);
+    game.bitmaps.free(bmp_icon);
 }

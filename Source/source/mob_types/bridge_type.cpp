@@ -109,7 +109,7 @@ void bridge_type::load_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
-    game.textures.detach(main_texture_file_name);
-    game.textures.detach(left_rail_texture_file_name);
-    game.textures.detach(right_rail_texture_file_name);
+    game.textures.free(main_texture_file_name);
+    game.textures.free(left_rail_texture_file_name);
+    game.textures.free(right_rail_texture_file_name);
 }

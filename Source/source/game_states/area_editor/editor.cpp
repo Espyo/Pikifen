@@ -242,7 +242,7 @@ void area_editor::clear_current_area() {
     clear_area_textures();
     
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
-        game.textures.detach(game.cur_area_data.tree_shadows[s]->file_name);
+        game.textures.free(game.cur_area_data.tree_shadows[s]->file_name);
     }
     
     game.cam.set_pos(point());
@@ -4478,7 +4478,7 @@ void area_editor::update_reference() {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
-    game.textures.detach(s_ptr->texture_info.file_name);
+    game.textures.free(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
     s_ptr->texture_info.bitmap = game.textures.get(file_name);
 }
@@ -4642,5 +4642,5 @@ area_editor::texture_suggestion::texture_suggestion(
  * @brief Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    game.textures.detach(name);
+    game.textures.free(name);
 }

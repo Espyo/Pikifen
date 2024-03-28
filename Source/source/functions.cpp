@@ -182,7 +182,7 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != game.bmp_error
         ) {
-            game.textures.detach(s_ptr->texture_info.file_name);
+            game.textures.free(s_ptr->texture_info.file_name);
             s_ptr->texture_info.bitmap = nullptr;
         }
     }
@@ -230,7 +230,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         i2s(game.states.gameplay->mobs.all.size()) + ". Particle count: " +
         i2s(game.states.gameplay->particles.get_count()) + ".\n" +
         "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
-        i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
+        i2s(game.bitmaps.get_total_uses()) + " total uses).\n" +
         "  Current area: ";
         
     if(!game.cur_area_data.name.empty()) {

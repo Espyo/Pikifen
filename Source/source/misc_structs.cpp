@@ -197,139 +197,52 @@ void asset_file_names_t::load(data_node* file) {
 
 
 /**
- * @brief Constructs a new bmp manager object.
+ * @brief Loads an audio stream for the manager.
  *
- * @param base_dir Base directory its files belong to.
+ * @param name Name of the audio stream to load.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The audio stream.
  */
-bmp_manager::bmp_manager(const string &base_dir) :
-    base_dir(base_dir),
-    total_calls(0) {
-    
+ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
+    const string& path, data_node* node, const bool report_errors
+) {
+    return load_audio_stream(path, node, report_errors);
 }
 
 
 /**
- * @brief Deletes all bitmaps loaded and clears the list.
+ * @brief Unloads an audio stream for the manager.
+ * 
+ * @param asset Audio stream to unload.
  */
-void bmp_manager::clear() {
-    for(auto &b : list) {
-        if(b.second.b != game.bmp_error) {
-            al_destroy_bitmap(b.second.b);
-        }
-    }
-    list.clear();
-    total_calls = 0;
+void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
+    al_destroy_audio_stream(asset);
 }
 
 
 /**
- * @brief Marks a bitmap to have one less call.
- * If it has 0 calls, it's automatically cleared.
+ * @brief Loads a bitmap for the manager.
  *
- * @param it Iterator from the map for the bitmap.
- */
-void bmp_manager::detach(map<string, bmp_t>::iterator it) {
-    if(it == list.end()) return;
-    
-    it->second.calls--;
-    total_calls--;
-    if(it->second.calls == 0) {
-        if(it->second.b != game.bmp_error) {
-            al_destroy_bitmap(it->second.b);
-        }
-        list.erase(it);
-    }
-}
-
-
-/**
- * @brief Marks a bitmap to have one less call.
- * If it has 0 calls, it's automatically cleared.
- *
- * @param name Bitmap's file name.
- */
-void bmp_manager::detach(const string &name) {
-    if(name.empty()) return;
-    detach(list.find(name));
-}
-
-
-/**
- * @brief Marks a bitmap to have one less call.
- * If it has 0 calls, it's automatically cleared.
- *
- * @param bmp Bitmap to detach.
- */
-void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
-    if(!bmp || bmp == game.bmp_error) return;
-    
-    auto it = list.begin();
-    for(; it != list.end(); ++it) {
-        if(it->second.b == bmp) break;
-    }
-    
-    detach(it);
-}
-
-
-/**
- * @brief Returns the specified bitmap, by name.
- *
- * @param name Name of the bitmap to get.
+ * @param name Name of the bitmap to load.
  * @param node If not nullptr, blame this data node if the file doesn't exist.
  * @param report_errors Only issues errors if this is true.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* bmp_manager::get(
-    const string &name, data_node* node,
-    const bool report_errors
+ALLEGRO_BITMAP* bitmap_manager::do_load(
+    const string& path, data_node* node, const bool report_errors
 ) {
-    if(name.empty()) return load_bmp("", node, report_errors);
-    
-    if(list.find(name) == list.end()) {
-        ALLEGRO_BITMAP* b =
-            load_bmp(base_dir + "/" + name, node, report_errors);
-        list[name] = bmp_t(b);
-        total_calls++;
-        return b;
-    } else {
-        list[name].calls++;
-        total_calls++;
-        return list[name].b;
-    }
-};
-
-
-/**
- * @brief Returns the size of the list. Used for debugging.
- *
- * @return The size.
- */
-size_t bmp_manager::get_list_size() const {
-    return list.size();
-}
-
-
-
-/**
- * @brief Returns the total number of calls. Used for debugging.
- *
- * @return The amount.
- */
-long bmp_manager::get_total_calls() const {
-    return total_calls;
+    return load_bmp(path, node, report_errors);
 }
 
 
 /**
- * @brief Constructs a new bitmap info object.
- *
- * @param b The bitmap.
+ * @brief Unloads a bitmap for the manager.
+ * 
+ * @param asset Bitmap to unload.
  */
-bmp_manager::bmp_t::bmp_t(ALLEGRO_BITMAP* b) :
-    b(b),
-    calls(1) {
-    
+void bitmap_manager::do_unload(ALLEGRO_BITMAP* asset) {
+    al_destroy_bitmap(asset);
 }
 
 
@@ -1719,6 +1632,31 @@ bool script_var_reader::get(const string &name, point &dest) const {
     }
     dest = s2p(v->second);
     return true;
+}
+
+
+/**
+ * @brief Loads an audio sample for the manager.
+ *
+ * @param name Name of the audio sample to load.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param report_errors Only issues errors if this is true.
+ * @return The audio sample.
+ */
+ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
+    const string& path, data_node* node, const bool report_errors
+) {
+    return load_sample(path, node, report_errors);
+}
+
+
+/**
+ * @brief Unloads an audio sample for the manager.
+ * 
+ * @param asset Audio sample to unload.
+ */
+void sfx_sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
+    al_destroy_sample(asset);
 }
 
 
