@@ -21,7 +21,7 @@
 converter_type::converter_type() :
     mob_type(MOB_CATEGORY_CONVERTERS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     converter_fsm::create_fsm(this);
 }

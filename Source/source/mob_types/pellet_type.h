@@ -17,7 +17,7 @@
 
 
 //Pellet object states.
-enum PELLET_STATES {
+enum PELLET_STATE {
     
     //Idle, waiting to move.
     PELLET_STATE_IDLE_WAITING,

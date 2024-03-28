@@ -377,7 +377,7 @@ void stats_menu_state::populate_stats_list() {
         if(record.is_platinum(mission)) {
             mission_platinums++;
         }
-        if(mission.grading_mode == MISSION_GRADING_POINTS) {
+        if(mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
             mission_scores += record.score;
         }
     }

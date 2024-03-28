@@ -22,7 +22,7 @@
 bouncer_type::bouncer_type() :
     mob_type(MOB_CATEGORY_BOUNCERS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     walkable = true;
     
     area_editor_tips =
@@ -66,9 +66,9 @@ void bouncer_type::load_properties(data_node* file) {
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); ++r) {
             if(riders_str_words[r] == "pikmin") {
-                enable_flag(riders, BOUNCER_RIDER_PIKMIN);
+                enable_flag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {
-                enable_flag(riders, BOUNCER_RIDER_LEADERS);
+                enable_flag(riders, BOUNCER_RIDER_FLAG_LEADERS);
             } else {
                 game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",

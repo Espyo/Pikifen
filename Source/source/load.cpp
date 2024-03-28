@@ -38,7 +38,7 @@ using std::set;
  */
 void load_area(
     const string &requested_area_folder_name,
-    const AREA_TYPES requested_area_type,
+    const AREA_TYPE requested_area_type,
     const bool load_for_editor, const bool from_backup
 ) {
     if(game.perf_mon) {
@@ -281,7 +281,7 @@ void load_area(
         if(new_type == INVALID) {
             new_type = SECTOR_TYPE_NORMAL;
         }
-        new_sector->type = (SECTOR_TYPES) new_type;
+        new_sector->type = (SECTOR_TYPE) new_type;
         new_sector->is_bottomless_pit =
             s2b(
                 sector_data->get_child_by_name(
@@ -465,7 +465,7 @@ void load_area(
                 s_ptr, nullptr, s2i(link_data_parts[0])
             );
             if(link_data_parts.size() >= 2) {
-                l_struct->type = (PATH_LINK_TYPES) s2i(link_data_parts[1]);
+                l_struct->type = (PATH_LINK_TYPE) s2i(link_data_parts[1]);
             }
             
             s_ptr->links.push_back(l_struct);
@@ -595,10 +595,10 @@ void load_area(
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->triangles.clear();
-        TRIANGULATION_ERRORS res =
+        TRIANGULATION_ERROR res =
             triangulate_sector(s_ptr, &lone_edges, false);
             
-        if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
+        if(res != TRIANGULATION_ERROR_NONE && load_for_editor) {
             game.cur_area_data.problems.non_simples[s_ptr] = res;
             game.cur_area_data.problems.lone_edges.insert(
                 lone_edges.begin(), lone_edges.end()
@@ -629,7 +629,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     reader_setter rs(node);
     string goal_str;
     string required_mobs_str;
-    int mission_grading_mode_int = MISSION_GRADING_GOAL;
+    int mission_grading_mode_int = MISSION_GRADING_MODE_GOAL;
     
     rs.set("mission_goal", goal_str);
     rs.set("mission_goal_amount", data.goal_amount);
@@ -664,7 +664,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     data.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.mission_goals.size(); ++g) {
         if(game.mission_goals[g]->get_name() == goal_str) {
-            data.goal = (MISSION_GOALS) g;
+            data.goal = (MISSION_GOAL) g;
             break;
         }
     }
@@ -678,7 +678,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
             s2i(mission_required_mobs_strs[m])
         );
     }
-    data.grading_mode = (MISSION_GRADING_MODES) mission_grading_mode_int;
+    data.grading_mode = (MISSION_GRADING_MODE) mission_grading_mode_int;
     
     //Automatically turn the pause menu fail condition on/off for convenience.
     if(data.goal == MISSION_GOAL_END_MANUALLY) {
@@ -918,8 +918,8 @@ void load_custom_particle_generators(const bool load_resources) {
         new_pg.angle_deviation = deg_to_rad(new_pg.angle_deviation);
         
         new_pg.id =
-            (MOB_PARTICLE_GENERATOR_IDS) (
-                MOB_PARTICLE_GENERATOR_STATUS +
+            (MOB_PARTICLE_GENERATOR_ID) (
+                MOB_PARTICLE_GENERATOR_ID_STATUS +
                 game.custom_particle_generators.size()
             );
             
@@ -1218,7 +1218,7 @@ void load_maker_tools() {
         
         for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
             if(tool_name == MAKER_TOOLS::NAMES[t]) {
-                game.maker_tools.keys[k] = (MAKER_TOOL_TYPES) t;
+                game.maker_tools.keys[k] = (MAKER_TOOL_TYPE) t;
             }
         }
     }
@@ -1492,7 +1492,7 @@ void load_songs() {
         
         for(size_t m = 0; m < n_mix_tracks; ++m) {
             data_node* mix_track_node = mix_tracks_node->get_child(m);
-            MIX_TRACK_TYPES trigger = N_MIX_TRACK_TYPES;
+            MIX_TRACK_TYPE trigger = N_MIX_TRACK_TYPES;
             
             if(mix_track_node->name == "enemy") {
                 trigger = MIX_TRACK_TYPE_ENEMY;
@@ -1822,25 +1822,25 @@ void load_status_types(const bool load_resources) {
         
         new_t->affects = 0;
         if(affects_pikmin_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_PIKMIN);
+            enable_flag(new_t->affects, STATUS_AFFECTS_FLAG_PIKMIN);
         }
         if(affects_leaders_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_LEADERS);
+            enable_flag(new_t->affects, STATUS_AFFECTS_FLAG_LEADERS);
         }
         if(affects_enemies_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_ENEMIES);
+            enable_flag(new_t->affects, STATUS_AFFECTS_FLAG_ENEMIES);
         }
         if(affects_others_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_OTHERS);
+            enable_flag(new_t->affects, STATUS_AFFECTS_FLAG_OTHERS);
         }
         
         if(reapply_rule_node) {
             if(reapply_rule_str == "keep_time") {
-                new_t->reapply_rule = STATUS_REAPPLY_KEEP_TIME;
+                new_t->reapply_rule = STATUS_REAPPLY_RULE_KEEP_TIME;
             } else if(reapply_rule_str == "reset_time") {
-                new_t->reapply_rule = STATUS_REAPPLY_RESET_TIME;
+                new_t->reapply_rule = STATUS_REAPPLY_RULE_RESET_TIME;
             } else if(reapply_rule_str == "add_time") {
-                new_t->reapply_rule = STATUS_REAPPLY_ADD_TIME;
+                new_t->reapply_rule = STATUS_REAPPLY_RULE_ADD_TIME;
             } else {
                 game.errors.report(
                     "Unknown reapply rule \"" +

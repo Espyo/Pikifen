@@ -83,7 +83,7 @@ vector<mob_state*> easy_fsm_creator::finish() {
  *
  * @param type Type of event.
  */
-void easy_fsm_creator::new_event(const MOB_EV_TYPES type) {
+void easy_fsm_creator::new_event(const MOB_EV type) {
     commit_event();
     cur_event = new mob_event(type);
     cur_state->events[type] = cur_event;
@@ -185,7 +185,7 @@ mob_event::mob_event(
     }
     
     for(size_t a = 0; a < this->actions.size(); ++a) {
-        this->actions[a]->parent_event = (MOB_EV_TYPES) type;
+        this->actions[a]->parent_event = (MOB_EV) type;
     }
 }
 
@@ -196,7 +196,7 @@ mob_event::mob_event(
  * @param t The event type.
  * @param a Its actions.
  */
-mob_event::mob_event(const MOB_EV_TYPES t, const vector<mob_action_call*> &a) :
+mob_event::mob_event(const MOB_EV t, const vector<mob_action_call*> &a) :
     type(t),
     actions(a) {
     
@@ -319,7 +319,7 @@ mob_fsm::mob_fsm(mob* m) {
  * @param type The event's type.
  * @return The event.
  */
-mob_event* mob_fsm::get_event(const MOB_EV_TYPES type) const {
+mob_event* mob_fsm::get_event(const MOB_EV type) const {
     return cur_state->events[type];
 }
 
@@ -348,7 +348,7 @@ size_t mob_fsm::get_state_idx(const string &name) const {
  * @param custom_data_2 Custom argument #2 to pass to the code.
  */
 void mob_fsm::run_event(
-    const MOB_EV_TYPES type, void* custom_data_1, void* custom_data_2
+    const MOB_EV type, void* custom_data_1, void* custom_data_2
 ) {
     mob_event* e = get_event(type);
     if(e) {
@@ -461,7 +461,7 @@ mob_state::mob_state(const string &name, const size_t id) :
  * @param type The event's type.
  * @return The event.
  */
-mob_event* mob_state::get_event(const MOB_EV_TYPES type) const {
+mob_event* mob_state::get_event(const MOB_EV type) const {
     return events[type];
 }
 
@@ -675,7 +675,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         
         //Connect all new events to the state.
         for(size_t e = 0; e < new_events.size(); ++e) {
-            MOB_EV_TYPES ev_type = new_events[e]->type;
+            MOB_EV ev_type = new_events[e]->type;
             
             if(state_ptr->events[ev_type]) {
                 //Event already exists. Add the new actions, only.

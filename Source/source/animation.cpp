@@ -964,7 +964,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             cur_hitbox.body_part_name =
                 hitbox_node->name;
             cur_hitbox.type =
-                (HITBOX_TYPES)
+                (HITBOX_TYPE)
                 s2i(hitbox_node->get_child_by_name("type")->value);
             cur_hitbox.value =
                 s2f(

@@ -24,7 +24,7 @@
 treasure_type::treasure_type() :
     mob_type(MOB_CATEGORY_TREASURES) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     treasure_fsm::create_fsm(this);
 }

@@ -118,7 +118,7 @@ void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
  *
  * @param new_state The new state.
  */
-void animation_editor::change_state(const EDITOR_STATES new_state) {
+void animation_editor::change_state(const EDITOR_STATE new_state) {
     comparison = false;
     comparison_sprite = nullptr;
     state = new_state;

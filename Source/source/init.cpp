@@ -158,126 +158,126 @@ void init_controls() {
     //They must be registered in the same order as the action types enum.
     
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NONE,
+        PLAYER_ACTION_TYPE_NONE,
         PLAYER_ACTION_CAT_NONE,
         "---", "", "", ""
     );
     
     //MAIN.
     game.controls.add_player_action_type(
-        PLAYER_ACTION_UP,
+        PLAYER_ACTION_TYPE_UP,
         PLAYER_ACTION_CAT_MAIN,
         "Up",
         "Move up.",
         "move_up", "k_23"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_LEFT,
+        PLAYER_ACTION_TYPE_LEFT,
         PLAYER_ACTION_CAT_MAIN,
         "Left",
         "Move left.",
         "move_left", "k_1"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_DOWN,
+        PLAYER_ACTION_TYPE_DOWN,
         PLAYER_ACTION_CAT_MAIN,
         "Down",
         "Move down.",
         "move_down", "k_19"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RIGHT,
+        PLAYER_ACTION_TYPE_RIGHT,
         PLAYER_ACTION_CAT_MAIN,
         "Right",
         "Move right.",
         "move_right", "k_4"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_THROW,
+        PLAYER_ACTION_TYPE_THROW,
         PLAYER_ACTION_CAT_MAIN,
         "Throw",
         "Throw a Pikmin.",
         "throw", "mb_1"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_WHISTLE,
+        PLAYER_ACTION_TYPE_WHISTLE,
         PLAYER_ACTION_CAT_MAIN,
         "Whistle",
         "Whistle around the cursor.",
         "whistle", "mb_2"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_TYPE,
+        PLAYER_ACTION_TYPE_NEXT_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Next Pikmin",
         "Change to the next Pikmin type in the group.",
         "next_type", "mwd"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_TYPE,
+        PLAYER_ACTION_TYPE_PREV_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Prev. Pikmin",
         "Change to the previous Pikmin type in the group.",
         "prev_type", "mwu"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_LEADER,
+        PLAYER_ACTION_TYPE_NEXT_LEADER,
         PLAYER_ACTION_CAT_MAIN,
         "Next leader",
         "Change to the next leader.",
         "next_leader", "k_215"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_CURSOR,
+        PLAYER_ACTION_TYPE_GROUP_CURSOR,
         PLAYER_ACTION_CAT_MAIN,
         "Swarm to cursor",
         "Swarm all Pikmin towards the cursor.",
         "swarm_cursor", "k_75"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_DISMISS,
+        PLAYER_ACTION_TYPE_DISMISS,
         PLAYER_ACTION_CAT_MAIN,
         "Dismiss",
         "Dismiss all Pikmin.",
         "dismiss", "k_217"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY_1,
+        PLAYER_ACTION_TYPE_USE_SPRAY_1,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray 1",
         "Use the spray in slot 1.",
         "use_spray_1", "k_18"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY_2,
+        PLAYER_ACTION_TYPE_USE_SPRAY_2,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray 2",
         "Use the spray in slot 2.",
         "use_spray_2", "k_6"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY,
+        PLAYER_ACTION_TYPE_USE_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray",
         "Use the currently selected spray.",
         "use_spray", "k_18"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_SPRAY,
+        PLAYER_ACTION_TYPE_NEXT_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Next spray",
         "Change to the next spray.",
         "next_spray", "k_5"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_SPRAY,
+        PLAYER_ACTION_TYPE_PREV_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Prev. spray",
         "Change to the previous spray.",
         "prev_spray", "k_17"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PAUSE,
+        PLAYER_ACTION_TYPE_PAUSE,
         PLAYER_ACTION_CAT_MAIN,
         "Pause",
         "Pause the game.",
@@ -286,77 +286,77 @@ void init_controls() {
     
     //Menus.
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_UP,
+        PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
         "Navigate up in a menu.",
         "menu_up", "k_84"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_LEFT,
+        PLAYER_ACTION_TYPE_MENU_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Menu left",
         "Navigate left in a menu.",
         "menu_left", "k_82"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_DOWN,
+        PLAYER_ACTION_TYPE_MENU_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Menu down",
         "Navigate down in a menu.",
         "menu_down", "k_85"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_RIGHT,
+        PLAYER_ACTION_TYPE_MENU_RIGHT,
         PLAYER_ACTION_CAT_MENUS,
         "Menu right",
         "Navigate right in a menu.",
         "menu_right", "k_83"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_OK,
+        PLAYER_ACTION_TYPE_MENU_OK,
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
         "menu_ok", "k_67"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_RIGHT,
+        PLAYER_ACTION_TYPE_RADAR_RIGHT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan right",
         "Pans the radar to the right.",
         "menu_radar_right", "k_4"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_UP,
+        PLAYER_ACTION_TYPE_RADAR_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan up",
         "Pans the radar upward.",
         "menu_radar_up", "k_23"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_LEFT,
+        PLAYER_ACTION_TYPE_RADAR_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan left",
         "Pans the radar to the left.",
         "menu_radar_left", "k_1"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_DOWN,
+        PLAYER_ACTION_TYPE_RADAR_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan down",
         "Pans the radar downward.",
         "menu_radar_down", "k_19"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_ZOOM_IN,
+        PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom in",
         "Zooms the radar in.",
         "menu_radar_zoom_in", "k_18"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR_ZOOM_OUT,
+        PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom out",
         "Zooms the radar out.",
@@ -365,154 +365,154 @@ void init_controls() {
     
     //Advanced.
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_UP,
+        PLAYER_ACTION_TYPE_CURSOR_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor up",
         "Move the cursor up. Useful if it's not mouse-controlled.",
         "cursor_up", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_LEFT,
+        PLAYER_ACTION_TYPE_CURSOR_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor left",
         "Move the cursor left. Useful if it's not mouse-controlled.",
         "cursor_left", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_DOWN,
+        PLAYER_ACTION_TYPE_CURSOR_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor down",
         "Move the cursor down. Useful if it's not mouse-controlled.",
         "cursor_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_RIGHT,
+        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor right",
         "Move the cursor right. Useful if it's not mouse-controlled.",
         "cursor_right", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_UP,
+        PLAYER_ACTION_TYPE_GROUP_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm up",
         "Swarm all Pikmin up.",
         "swarm_up", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_LEFT,
+        PLAYER_ACTION_TYPE_GROUP_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm left",
         "Swarm all Pikmin left.",
         "swarm_left", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_DOWN,
+        PLAYER_ACTION_TYPE_GROUP_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm down",
         "Swarm all Pikmin down.",
         "swarm_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_RIGHT,
+        PLAYER_ACTION_TYPE_GROUP_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm right",
         "Swarm all Pikmin right.",
         "swarm_right", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_LEADER,
+        PLAYER_ACTION_TYPE_PREV_LEADER,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. leader",
         "Change to the previous leader.",
         "prev_leader", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CHANGE_ZOOM,
+        PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_CAT_ADVANCED,
         "Change zoom",
         "Change the current zoom level.",
         "change_zoom", "k_3"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_ZOOM_IN,
+        PLAYER_ACTION_TYPE_ZOOM_IN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom in",
         "Change to a closer zoom level.",
         "zoom_in", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_ZOOM_OUT,
+        PLAYER_ACTION_TYPE_ZOOM_OUT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom out",
         "Change to a farther zoom level.",
         "zoom_out", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_MATURITY,
+        PLAYER_ACTION_TYPE_NEXT_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Next maturity",
         "Change to a Pikmin of the next maturity.",
         "next_maturity", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_MATURITY,
+        PLAYER_ACTION_TYPE_PREV_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. maturity",
         "Change to a Pikmin of the previous maturity.",
         "prev_maturity", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_LIE_DOWN,
+        PLAYER_ACTION_TYPE_LIE_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Lie down",
         "Lie down so Pikmin can carry you.",
         "lie_down", "k_26"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_A,
+        PLAYER_ACTION_TYPE_CUSTOM_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",
         "Custom action A, if the current leader supports it.",
         "custom_a", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_B,
+        PLAYER_ACTION_TYPE_CUSTOM_B,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom B",
         "Custom action B, if the current leader supports it.",
         "custom_b", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_C,
+        PLAYER_ACTION_TYPE_CUSTOM_C,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom C",
         "Custom action C, if the current leader supports it.",
         "custom_c", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RADAR,
+        PLAYER_ACTION_TYPE_RADAR,
         PLAYER_ACTION_CAT_ADVANCED,
         "Radar",
         "Open or close the radar.",
         "radar", "k_64"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_BACK,
+        PLAYER_ACTION_TYPE_MENU_BACK,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
         "menu_back", "k_59"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_PAGE_LEFT,
+        PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - left page",
         "Go to the page to the left in a menu.",
         "menu_page_left", "k_17"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_PAGE_RIGHT,
+        PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - right page",
         "Go to the page to the right in a menu.",
@@ -524,7 +524,7 @@ void init_controls() {
     //If the options are loaded successfully, these binds are overwritten.
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
-    for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
+    for(size_t a = 0; a < N_PLAYER_ACTION_TYPES; ++a) {
         string def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
@@ -697,16 +697,16 @@ void init_misc() {
         );
         
     //Some maker tool defaults that are convenient to have on.
-    game.maker_tools.keys[10] = MAKER_TOOL_AREA_IMAGE;
-    game.maker_tools.keys[11] = MAKER_TOOL_CHANGE_SPEED;
-    game.maker_tools.keys[12] = MAKER_TOOL_TELEPORT;
-    game.maker_tools.keys[13] = MAKER_TOOL_HURT_MOB;
-    game.maker_tools.keys[14] = MAKER_TOOL_NEW_PIKMIN;
-    game.maker_tools.keys[15] = MAKER_TOOL_MOB_INFO;
-    game.maker_tools.keys[16] = MAKER_TOOL_GEOMETRY_INFO;
-    game.maker_tools.keys[17] = MAKER_TOOL_HITBOXES;
-    game.maker_tools.keys[18] = MAKER_TOOL_COLLISION;
-    game.maker_tools.keys[19] = MAKER_TOOL_HUD;
+    game.maker_tools.keys[10] = MAKER_TOOL_TYPE_AREA_IMAGE;
+    game.maker_tools.keys[11] = MAKER_TOOL_TYPE_CHANGE_SPEED;
+    game.maker_tools.keys[12] = MAKER_TOOL_TYPE_TELEPORT;
+    game.maker_tools.keys[13] = MAKER_TOOL_TYPE_HURT_MOB;
+    game.maker_tools.keys[14] = MAKER_TOOL_TYPE_NEW_PIKMIN;
+    game.maker_tools.keys[15] = MAKER_TOOL_TYPE_MOB_INFO;
+    game.maker_tools.keys[16] = MAKER_TOOL_TYPE_GEOMETRY_INFO;
+    game.maker_tools.keys[17] = MAKER_TOOL_TYPE_HITBOXES;
+    game.maker_tools.keys[18] = MAKER_TOOL_TYPE_COLLISION;
+    game.maker_tools.keys[19] = MAKER_TOOL_TYPE_HUD;
     
     game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
     game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
@@ -726,7 +726,7 @@ void init_misc_databases() {
     );
     
     //Mission goals.
-    //Order matters, and should match MISSION_GOALS.
+    //Order matters, and should match MISSION_GOAL.
     game.mission_goals.push_back(
         new mission_goal_end_manually()
     );
@@ -747,7 +747,7 @@ void init_misc_databases() {
     );
     
     //Mission fail conditions.
-    //Order matters, and should match MISSION_FAIL_CONDITIONS.
+    //Order matters, and should match MISSION_FAIL_COND.
     game.mission_fail_conds.push_back(
         new mission_fail_time_limit()
     );

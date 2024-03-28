@@ -27,7 +27,7 @@ class mob;
 
 
 //Types of particle. This controls their behavior and appearance.
-enum PARTICLE_TYPES {
+enum PARTICLE_TYPE {
 
     //A simple square.
     PARTICLE_TYPE_SQUARE,
@@ -54,7 +54,7 @@ enum PARTICLE_TYPES {
 
 
 //Particle priorities.
-enum PARTICLE_PRIORITIES {
+enum PARTICLE_PRIORITY {
 
     //Low priority. Might be deleted to make way for most others.
     PARTICLE_PRIORITY_LOW,
@@ -69,23 +69,23 @@ enum PARTICLE_PRIORITIES {
 
 
 //IDs for specific types of particle generators.
-enum MOB_PARTICLE_GENERATOR_IDS {
+enum MOB_PARTICLE_GENERATOR_ID {
     
     //None.
-    MOB_PARTICLE_GENERATOR_NONE,
+    MOB_PARTICLE_GENERATOR_ID_NONE,
     
     //Custom particle generator issued by the script.
-    MOB_PARTICLE_GENERATOR_SCRIPT,
+    MOB_PARTICLE_GENERATOR_ID_SCRIPT,
     
     //Trail effect left behind by a throw.
-    MOB_PARTICLE_GENERATOR_THROW,
+    MOB_PARTICLE_GENERATOR_ID_THROW,
     
     //Ring-shaped wave when going in water.
-    MOB_PARTICLE_GENERATOR_WAVE_RING,
+    MOB_PARTICLE_GENERATOR_ID_WAVE_RING,
     
     //Specific status effects are numbered starting on this.
     //So make sure this is the last on the enum.
-    MOB_PARTICLE_GENERATOR_STATUS,
+    MOB_PARTICLE_GENERATOR_ID_STATUS,
     
 };
 
@@ -103,7 +103,7 @@ struct particle {
     //Behavior stats.
     
     //Type.
-    PARTICLE_TYPES type;
+    PARTICLE_TYPE type;
     
     //How long its lifespan is.
     float duration = 0.0f;
@@ -144,16 +144,16 @@ struct particle {
     
     //Priority. If we reached the particle limit, only spawn
     //this particle if it can replace a lower-priority one.
-    PARTICLE_PRIORITIES priority;
+    PARTICLE_PRIORITY priority;
     
 
     //--- Function declarations ---
     
     explicit particle(
-        const PARTICLE_TYPES type = PARTICLE_TYPE_BITMAP,
+        const PARTICLE_TYPE type = PARTICLE_TYPE_BITMAP,
         const point &pos = point(), const float z = 0.0f,
         const float size = 0.0f,
-        const float duration = 0.0f, const PARTICLE_PRIORITIES priority =
+        const float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_HIGH
     );
     void tick(const float delta_t);
@@ -222,7 +222,7 @@ public:
     //--- Members ---
 
     //Optional ID, if you need to identify it later on.
-    MOB_PARTICLE_GENERATOR_IDS id = MOB_PARTICLE_GENERATOR_NONE;
+    MOB_PARTICLE_GENERATOR_ID id = MOB_PARTICLE_GENERATOR_ID_NONE;
     
     //All particles created are based on this one.
     particle base_particle;

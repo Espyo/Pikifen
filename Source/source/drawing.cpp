@@ -269,7 +269,7 @@ void draw_button(
         font, color,
         center,
         point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, true,
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, true,
         text
     );
     
@@ -309,7 +309,7 @@ void draw_button(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODES valign,
+    const int flags, const TEXT_VALIGN_MODE valign,
     const point &max_size, const bool scale_past_max, const string &text
 ) {
 
@@ -346,9 +346,9 @@ void draw_compressed_scaled_text(
     
     float final_text_height = normal_text_size.y * final_scale.y;
     float valign_offset =
-        valign == TEXT_VALIGN_CENTER ?
+        valign == TEXT_VALIGN_MODE_CENTER ?
         final_text_height / 2.0f :
-        valign == TEXT_VALIGN_BOTTOM ?
+        valign == TEXT_VALIGN_MODE_BOTTOM ?
         final_text_height :
         0.0f;
         
@@ -383,7 +383,7 @@ void draw_compressed_scaled_text(
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
     const point &max_size, const string &text
 ) {
     if(max_size.x == 0 && max_size.y == 0) return;
@@ -408,9 +408,9 @@ void draw_compressed_text(
     }
     
     float valign_offset =
-        valign == TEXT_VALIGN_CENTER ?
+        valign == TEXT_VALIGN_MODE_CENTER ?
         final_text_height / 2.0f :
-        valign == TEXT_VALIGN_BOTTOM ?
+        valign == TEXT_VALIGN_MODE_BOTTOM ?
         final_text_height :
         0.0f;
         
@@ -548,14 +548,14 @@ void draw_fraction(
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, value_nr_y),
         point(value_nr_scale, value_nr_scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, (i2s(value_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(value_nr).c_str())
     );
     
     float bar_y = bottom.y - font_h * 2;
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, bar_y),
         point(scale, scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, "-"
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, "-"
     );
     
     float req_nr_y = bottom.y - font_h;
@@ -564,7 +564,7 @@ void draw_fraction(
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, req_nr_y),
         point(req_nr_scale, req_nr_scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, (i2s(requirement_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(requirement_nr).c_str())
     );
 }
 
@@ -809,7 +809,7 @@ void draw_loading_screen(
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
                     game.fonts.area_name, COLOR_GOLD,
-                    point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                    point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                     text
                 );
             } al_set_target_backbuffer(game.display);
@@ -839,7 +839,7 @@ void draw_loading_screen(
                 draw_text_lines(
                     game.fonts.area_name, al_map_rgb(224, 224, 224),
                     point(),
-                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                     subtext
                 );
                 
@@ -1229,8 +1229,8 @@ void draw_player_input_icon(
         change_alpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
         
     //Start by getting the icon's info for drawing.
-    PLAYER_INPUT_ICON_SHAPES shape;
-    PLAYER_INPUT_ICON_SPRITES bitmap_sprite;
+    PLAYER_INPUT_ICON_SHAPE shape;
+    PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
     get_player_input_icon_info(
         i, condensed,
@@ -1305,7 +1305,7 @@ void draw_player_input_icon(
             where.y
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER,
+        TEXT_VALIGN_MODE_CENTER,
         point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
             (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
@@ -1386,7 +1386,7 @@ void draw_rounded_rectangle(
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODES valign, const string &text
+    const int flags, const TEXT_VALIGN_MODE valign, const string &text
 ) {
 
     ALLEGRO_TRANSFORM scale_transform, old_transform;
@@ -1611,7 +1611,7 @@ void draw_string_tokens(
                 text_font, COLOR_WHITE,
                 point(caret, where.y),
                 point(x_scale * scale.x, y_scale * scale.y),
-                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                 tokens[t].content
             );
             break;
@@ -1653,19 +1653,19 @@ void draw_string_tokens(
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const int flags,
-    const TEXT_VALIGN_MODES valign, const string &text
+    const TEXT_VALIGN_MODE valign, const string &text
 ) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     float top;
     
-    if(valign == TEXT_VALIGN_TOP) {
+    if(valign == TEXT_VALIGN_MODE_TOP) {
         top = where.y;
     } else {
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = (int) n_lines * fh + (int) (n_lines - 1);
-        if(valign == TEXT_VALIGN_CENTER) {
+        if(valign == TEXT_VALIGN_MODE_CENTER) {
             top = where.y - total_height / 2;
         } else {
             top = where.y - total_height;
@@ -1845,8 +1845,8 @@ void draw_textured_box(
  */
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
-    PLAYER_INPUT_ICON_SHAPES* shape,
-    PLAYER_INPUT_ICON_SPRITES* bitmap_sprite,
+    PLAYER_INPUT_ICON_SHAPE* shape,
+    PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
 ) {
     *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
@@ -2055,8 +2055,8 @@ float get_player_input_icon_width(
     const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
     const float max_bitmap_height
 ) {
-    PLAYER_INPUT_ICON_SHAPES shape;
-    PLAYER_INPUT_ICON_SPRITES bitmap_sprite;
+    PLAYER_INPUT_ICON_SHAPE shape;
+    PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
     get_player_input_icon_info(
         i, condensed,

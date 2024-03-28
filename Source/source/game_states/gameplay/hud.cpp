@@ -252,7 +252,7 @@ hud_t::hud_t() :
         if(!game.options.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
         player_input i =
-            game.controls.find_bind(PLAYER_ACTION_NEXT_LEADER).input;
+            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.fonts.slim, i, true, center, size);
     };
@@ -381,7 +381,7 @@ hud_t::hud_t() :
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.fonts.counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size, i2s(game.states.gameplay->day)
         );
     };
@@ -392,20 +392,20 @@ hud_t::hud_t() :
     gui_item* standby_icon = new gui_item();
     standby_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_CURRENT);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_CURRENT);
     };
     gui.add_item(standby_icon, "standby_icon");
-    standby_icon_mgr.register_bubble(BUBBLE_CURRENT, standby_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_RELATION_CURRENT, standby_icon);
     
     
     //Next standby subgroup icon.
     gui_item* standby_next_icon = new gui_item();
     standby_next_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_NEXT);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_NEXT);
     };
     gui.add_item(standby_next_icon, "standby_next_icon");
-    standby_icon_mgr.register_bubble(BUBBLE_NEXT, standby_next_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_RELATION_NEXT, standby_next_icon);
     
     
     //Next standby subgroup input.
@@ -425,7 +425,7 @@ hud_t::hud_t() :
             return;
         }
         player_input i =
-            game.controls.find_bind(PLAYER_ACTION_NEXT_TYPE).input;
+            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
@@ -439,10 +439,10 @@ hud_t::hud_t() :
     gui_item* standby_prev_icon = new gui_item();
     standby_prev_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_PREVIOUS);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_PREVIOUS);
     };
     gui.add_item(standby_prev_icon, "standby_prev_icon");
-    standby_icon_mgr.register_bubble(BUBBLE_PREVIOUS, standby_prev_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_RELATION_PREVIOUS, standby_prev_icon);
     
     
     //Previous standby subgroup input.
@@ -467,7 +467,7 @@ hud_t::hud_t() :
             return;
         }
         player_input i =
-            game.controls.find_bind(PLAYER_ACTION_PREV_TYPE).input;
+            game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
@@ -487,10 +487,10 @@ hud_t::hud_t() :
         
         ALLEGRO_BITMAP* standby_mat_bmp = nullptr;
         mob* closest =
-            game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
+            game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT];
             
         if(l_ptr->group->cur_standby_type && closest) {
-            SUBGROUP_TYPE_CATEGORIES c =
+            SUBGROUP_TYPE_CATEGORY c =
                 l_ptr->group->cur_standby_type->get_category();
                 
             switch(c) {
@@ -582,7 +582,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
@@ -620,7 +620,7 @@ hud_t::hud_t() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -658,7 +658,7 @@ hud_t::hud_t() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + field_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -696,7 +696,7 @@ hud_t::hud_t() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + total_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -711,7 +711,7 @@ hud_t::hud_t() :
         draw_compressed_text(
             game.fonts.counter,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
-            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
+            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "x"
         );
     };
     gui.add_item(counters_x, "counters_x");
@@ -725,7 +725,7 @@ hud_t::hud_t() :
             if(!game.states.gameplay->cur_leader_ptr) return;
             draw_compressed_text(
                 game.fonts.counter, COLOR_WHITE,
-                center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "/"
+                center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "/"
             );
         };
         gui.add_item(counter_slash, "counters_slash_" + i2s(s + 1));
@@ -736,10 +736,10 @@ hud_t::hud_t() :
     gui_item* spray_1_icon = new gui_item();
     spray_1_icon->on_draw =
     [this] (const point & center, const point & size) {
-        draw_spray_icon(BUBBLE_CURRENT);
+        draw_spray_icon(BUBBLE_RELATION_CURRENT);
     };
     gui.add_item(spray_1_icon, "spray_1_icon");
-    spray_icon_mgr.register_bubble(BUBBLE_CURRENT, spray_1_icon);
+    spray_icon_mgr.register_bubble(BUBBLE_RELATION_CURRENT, spray_1_icon);
     
     
     //Spray 1 amount.
@@ -761,7 +761,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
         );
@@ -789,9 +789,9 @@ hud_t::hud_t() :
         
         player_input i;
         if(game.spray_types.size() > 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY).input;
+            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY).input;
         } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY_1).input;
+            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_1).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
         
@@ -841,7 +841,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
         );
@@ -867,7 +867,7 @@ hud_t::hud_t() :
         
         player_input i;
         if(game.spray_types.size() == 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY_2).input;
+            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_2).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
         
@@ -883,10 +883,10 @@ hud_t::hud_t() :
     gui_item* prev_spray_icon = new gui_item();
     prev_spray_icon->on_draw =
     [this] (const point & center, const point & size) {
-        draw_spray_icon(BUBBLE_PREVIOUS);
+        draw_spray_icon(BUBBLE_RELATION_PREVIOUS);
     };
     gui.add_item(prev_spray_icon, "spray_prev_icon");
-    spray_icon_mgr.register_bubble(BUBBLE_PREVIOUS, prev_spray_icon);
+    spray_icon_mgr.register_bubble(BUBBLE_RELATION_PREVIOUS, prev_spray_icon);
     
     
     //Previous spray input.
@@ -909,7 +909,7 @@ hud_t::hud_t() :
         
         player_input i;
         if(game.spray_types.size() >= 3) {
-            i = game.controls.find_bind(PLAYER_ACTION_PREV_SPRAY).input;
+            i = game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_SPRAY).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
         
@@ -925,10 +925,10 @@ hud_t::hud_t() :
     gui_item* next_spray_icon = new gui_item();
     next_spray_icon->on_draw =
     [this] (const point & center, const point & size) {
-        draw_spray_icon(BUBBLE_NEXT);
+        draw_spray_icon(BUBBLE_RELATION_NEXT);
     };
     gui.add_item(next_spray_icon, "spray_next_icon");
-    spray_icon_mgr.register_bubble(BUBBLE_NEXT, next_spray_icon);
+    spray_icon_mgr.register_bubble(BUBBLE_RELATION_NEXT, next_spray_icon);
     
     
     //Next spray input.
@@ -951,7 +951,7 @@ hud_t::hud_t() :
         
         player_input i;
         if(game.spray_types.size() >= 3) {
-            i = game.controls.find_bind(PLAYER_ACTION_NEXT_SPRAY).input;
+            i = game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_SPRAY).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
         
@@ -1017,7 +1017,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     goal_cur_label_text
                 );
@@ -1048,7 +1048,7 @@ hud_t::hud_t() :
                     game.fonts.counter, COLOR_WHITE,
                     center,
                     point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     text
                 );
@@ -1064,7 +1064,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     "Goal"
                 );
@@ -1091,7 +1091,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.fonts.counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     text
                 );
@@ -1106,7 +1106,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.fonts.counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     "/"
                 );
@@ -1122,7 +1122,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
                     game.mission_goals[game.cur_area_data.mission.goal]->
                     get_name()
@@ -1136,7 +1136,7 @@ hud_t::hud_t() :
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
         game.cur_area_data.mission.point_hud_data != 0
     ) {
     
@@ -1162,7 +1162,7 @@ hud_t::hud_t() :
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x + size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 "Score:"
             );
@@ -1180,7 +1180,7 @@ hud_t::hud_t() :
                 game.fonts.counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 i2s(game.states.gameplay->mission_score)
             );
@@ -1196,7 +1196,7 @@ hud_t::hud_t() :
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x - size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 "pts"
             );
@@ -1473,11 +1473,11 @@ hud_t::~hud_t() {
  * false if it's the secondary.
  */
 void hud_t::create_mission_fail_cond_items(const bool primary) {
-    MISSION_FAIL_CONDITIONS cond =
+    MISSION_FAIL_COND cond =
         primary ?
-        (MISSION_FAIL_CONDITIONS)
+        (MISSION_FAIL_COND)
         game.cur_area_data.mission.fail_hud_primary_cond :
-        (MISSION_FAIL_CONDITIONS)
+        (MISSION_FAIL_COND)
         game.cur_area_data.mission.fail_hud_secondary_cond;
         
     //Mission fail condition bubble.
@@ -1537,7 +1537,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 game.mission_fail_conds[cond]->
                 get_hud_label(game.states.gameplay)
@@ -1570,7 +1570,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
                 game.fonts.counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 text
             );
@@ -1596,7 +1596,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 "Fail"
             );
@@ -1625,7 +1625,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.fonts.counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 text
             );
@@ -1645,7 +1645,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.fonts.counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 "/"
             );
@@ -1666,7 +1666,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
                 "Fail: " +
                 game.mission_fail_conds[cond]->get_name()
@@ -1690,7 +1690,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
  * @param which Which spray icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_t::draw_spray_icon(BUBBLE_RELATIONS which) {
+void hud_t::draw_spray_icon(BUBBLE_RELATION which) {
     if(!game.states.gameplay->cur_leader_ptr) return;
     
     point final_center;
@@ -1714,7 +1714,7 @@ void hud_t::draw_spray_icon(BUBBLE_RELATIONS which) {
  * @param which Which standby icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_t::draw_standby_icon(BUBBLE_RELATIONS which) {
+void hud_t::draw_standby_icon(BUBBLE_RELATION which) {
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
@@ -1731,7 +1731,7 @@ void hud_t::draw_standby_icon(BUBBLE_RELATIONS which) {
     
     if(
         game.states.gameplay->closest_group_member_distant &&
-        which == BUBBLE_CURRENT
+        which == BUBBLE_RELATION_CURRENT
     ) {
         draw_bitmap_in_box(
             bmp_distant_pikmin_marker,
@@ -1797,7 +1797,7 @@ void hud_t::tick(const float delta_t) {
         
         if(cur_leader_ptr) {
             switch(s) {
-            case BUBBLE_PREVIOUS: {
+            case BUBBLE_RELATION_PREVIOUS: {
                 subgroup_type* prev_type;
                 cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
                 subgroup_type* next_type;
@@ -1810,11 +1810,11 @@ void hud_t::tick(const float delta_t) {
                 }
                 break;
             }
-            case BUBBLE_CURRENT: {
+            case BUBBLE_RELATION_CURRENT: {
                 type = cur_leader_ptr->group->cur_standby_type;
                 break;
             }
-            case BUBBLE_NEXT: {
+            case BUBBLE_RELATION_NEXT: {
                 subgroup_type* next_type;
                 cur_leader_ptr->group->get_next_standby_type(false, &next_type);
                 if(next_type != cur_leader_ptr->group->cur_standby_type) {
@@ -1826,7 +1826,7 @@ void hud_t::tick(const float delta_t) {
         }
         
         if(cur_leader_ptr && type && member) {
-            SUBGROUP_TYPE_CATEGORIES cat = type->get_category();
+            SUBGROUP_TYPE_CATEGORY cat = type->get_category();
             
             switch(cat) {
             case SUBGROUP_TYPE_CATEGORY_LEADER: {
@@ -1840,7 +1840,7 @@ void hud_t::tick(const float delta_t) {
             }
         }
         
-        if(!icon && s == BUBBLE_CURRENT) {
+        if(!icon && s == BUBBLE_RELATION_CURRENT) {
             icon = bmp_no_pikmin_bubble;
         }
         
@@ -1856,7 +1856,7 @@ void hud_t::tick(const float delta_t) {
         top_spray_idx = 0;
     }
     spray_icon_mgr.update(
-        BUBBLE_CURRENT,
+        BUBBLE_RELATION_CURRENT,
         top_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[top_spray_idx],
         top_spray_idx == INVALID ? nullptr :
@@ -1873,7 +1873,7 @@ void hud_t::tick(const float delta_t) {
             );
     }
     spray_icon_mgr.update(
-        BUBBLE_PREVIOUS,
+        BUBBLE_RELATION_PREVIOUS,
         prev_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[prev_spray_idx],
         prev_spray_idx == INVALID ? nullptr :
@@ -1890,7 +1890,7 @@ void hud_t::tick(const float delta_t) {
             );
     }
     spray_icon_mgr.update(
-        BUBBLE_NEXT,
+        BUBBLE_RELATION_NEXT,
         next_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[next_spray_idx],
         next_spray_idx == INVALID ? nullptr :

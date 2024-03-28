@@ -77,148 +77,148 @@ protected:
     //--- Misc. declarations ---
     
     //Editor icons.
-    enum EDITOR_ICONS {
+    enum EDITOR_ICON {
     
         //Save.
-        ICON_SAVE,
+        EDITOR_ICON_SAVE,
         
         //Save.
-        ICON_SAVE_UNSAVED,
+        EDITOR_ICON_SAVE_UNSAVED,
         
         //Load.
-        ICON_LOAD,
+        EDITOR_ICON_LOAD,
         
         //Quit.
-        ICON_QUIT,
+        EDITOR_ICON_QUIT,
         
         //Toggle hitboxes.
-        ICON_HITBOXES,
+        EDITOR_ICON_HITBOXES,
         
         //Toggle reference image.
-        ICON_REFERENCE,
+        EDITOR_ICON_REFERENCE,
         
         //Info.
-        ICON_INFO,
+        EDITOR_ICON_INFO,
         
         //Gameplay.
-        ICON_GAMEPLAY,
+        EDITOR_ICON_GAMEPLAY,
         
         //Resize.
-        ICON_RESIZE,
+        EDITOR_ICON_RESIZE,
         
         //Play/pause.
-        ICON_PLAY_PAUSE,
+        EDITOR_ICON_PLAY_PAUSE,
         
         //Stop.
-        ICON_STOP,
+        EDITOR_ICON_STOP,
         
         //Next.
-        ICON_NEXT,
+        EDITOR_ICON_NEXT,
         
         //Previous.
-        ICON_PREVIOUS,
+        EDITOR_ICON_PREVIOUS,
         
         //Add.
-        ICON_ADD,
+        EDITOR_ICON_ADD,
         
         //Remove.
-        ICON_REMOVE,
+        EDITOR_ICON_REMOVE,
         
         //Move to the right.
-        ICON_MOVE_RIGHT,
+        EDITOR_ICON_MOVE_RIGHT,
         
         //Move to the left.
-        ICON_MOVE_LEFT,
+        EDITOR_ICON_MOVE_LEFT,
         
         //Select none.
-        ICON_SELECT_NONE,
+        EDITOR_ICON_SELECT_NONE,
         
         //Duplicate.
-        ICON_DUPLICATE,
+        EDITOR_ICON_DUPLICATE,
         
         //Add a stop.
-        ICON_ADD_STOP,
+        EDITOR_ICON_ADD_STOP,
         
         //Add a link.
-        ICON_ADD_LINK,
+        EDITOR_ICON_ADD_LINK,
         
         //Add a one-way link.
-        ICON_ADD_1W_LINK,
+        EDITOR_ICON_ADD_1W_LINK,
         
         //Remove a stop.
-        ICON_REMOVE_STOP,
+        EDITOR_ICON_REMOVE_STOP,
         
         //Remove a link.
-        ICON_REMOVE_LINK,
+        EDITOR_ICON_REMOVE_LINK,
         
         //Add a circular sector.
-        ICON_ADD_CIRCLE_SECTOR,
+        EDITOR_ICON_ADD_CIRCLE_SECTOR,
         
         //Vertexes.
-        ICON_VERTEXES,
+        EDITOR_ICON_VERTEXES,
         
         //Edges.
-        ICON_EDGES,
+        EDITOR_ICON_EDGES,
         
         //Sectors.
-        ICON_SECTORS,
+        EDITOR_ICON_SECTORS,
         
         //Mobs.
-        ICON_MOBS,
+        EDITOR_ICON_MOBS,
         
         //Paths.
-        ICON_PATHS,
+        EDITOR_ICON_PATHS,
         
         //Details.
-        ICON_DETAILS,
+        EDITOR_ICON_DETAILS,
         
         //Review.
-        ICON_REVIEW,
+        EDITOR_ICON_REVIEW,
         
         //Tools.
-        ICON_TOOLS,
+        EDITOR_ICON_TOOLS,
         
         //Options.
-        ICON_OPTIONS,
+        EDITOR_ICON_OPTIONS,
         
         //Undo (and redo, when mirrored).
-        ICON_UNDO,
+        EDITOR_ICON_UNDO,
         
         //Grid.
-        ICON_GRID,
+        EDITOR_ICON_GRID,
         
         //Mob radius.
-        ICON_MOB_RADIUS,
+        EDITOR_ICON_MOB_RADIUS,
         
         //Leader silhouette.
-        ICON_LEADER_SILHOUETTE,
+        EDITOR_ICON_LEADER_SILHOUETTE,
         
         //Animations.
-        ICON_ANIMATIONS,
+        EDITOR_ICON_ANIMATIONS,
         
         //Sprites.
-        ICON_SPRITES,
+        EDITOR_ICON_SPRITES,
         
         //Body parts.
-        ICON_BODY_PARTS,
+        EDITOR_ICON_BODY_PARTS,
         
         //Play.
-        ICON_PLAY,
+        EDITOR_ICON_PLAY,
         
         //Snap to grid.
-        ICON_SNAP_GRID,
+        EDITOR_ICON_SNAP_GRID,
         
         //Snap to vertexes.
-        ICON_SNAP_VERTEXES,
+        EDITOR_ICON_SNAP_VERTEXES,
         
         //Snap to edges.
-        ICON_SNAP_EDGES,
+        EDITOR_ICON_SNAP_EDGES,
         
         //Snap to nothing.
-        ICON_SNAP_NOTHING,
+        EDITOR_ICON_SNAP_NOTHING,
         
         //Search.
-        ICON_SEARCH,
+        EDITOR_ICON_SEARCH,
         
         //Total amount of editor icons.
         N_EDITOR_ICONS
@@ -226,7 +226,7 @@ protected:
     };
     
     //Types of explanations for widgets that need them.
-    enum WIDGET_EXPLANATIONS {
+    enum WIDGET_EXPLANATION {
     
         //None.
         WIDGET_EXPLANATION_NONE,
@@ -637,7 +637,7 @@ protected:
     void set_status(const string &text = "", const bool error = false);
     void set_tooltip(
         const string &explanation, const string &shortcut = "",
-        const WIDGET_EXPLANATIONS widget_explanation = WIDGET_EXPLANATION_NONE
+        const WIDGET_EXPLANATION widget_explanation = WIDGET_EXPLANATION_NONE
     );
     point snap_point_to_axis(const point &p, const point &anchor);
     point snap_point_to_grid(const point &p, const float grid_interval);

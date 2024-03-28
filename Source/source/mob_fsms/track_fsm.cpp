@@ -59,7 +59,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_PIKMIN) &&
+        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -67,7 +67,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_TRACK);
         
     } else if(
-        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_LEADERS) &&
+        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
@@ -91,6 +91,6 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
  */
 void track_fsm::spawn(mob* m, void* info1, void* info2) {
     m->set_animation(
-        TRACK_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        TRACK_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }

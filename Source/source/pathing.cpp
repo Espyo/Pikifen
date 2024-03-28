@@ -264,7 +264,7 @@ path_stop::~path_stop() {
  * @param normal Normal link? False means one-way link.
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
-    PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
+    PATH_LINK_TYPE link_type = PATH_LINK_TYPE_NORMAL;
     
     path_link* old_link_data = get_link(other_stop);
     if(!old_link_data) {
@@ -392,7 +392,7 @@ void path_stop::remove_link(const path_stop* other_stop) {
  */
 bool can_take_path_stop(
     path_stop* stop_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* out_reason
+    PATH_BLOCK_REASON* out_reason
 ) {
     sector* sector_ptr = stop_ptr->sector_ptr;
     if(!sector_ptr) {
@@ -422,25 +422,25 @@ bool can_take_path_stop(
  */
 bool can_take_path_stop(
     const path_stop* stop_ptr, const path_follow_settings &settings,
-    sector* sector_ptr, PATH_BLOCK_REASONS* out_reason
+    sector* sector_ptr, PATH_BLOCK_REASON* out_reason
 ) {
     //Check if the end stop has limitations based on the stop flags.
     if(
-        has_flag(stop_ptr->flags, PATH_STOP_SCRIPT_ONLY) &&
+        has_flag(stop_ptr->flags, PATH_STOP_FLAG_SCRIPT_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)
     ) {
         if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
         return false;
     }
     if(
-        has_flag(stop_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY) &&
+        has_flag(stop_ptr->flags, PATH_STOP_FLAG_LIGHT_LOAD_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)
     ) {
         if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
         return false;
     }
     if(
-        has_flag(stop_ptr->flags, PATH_STOP_AIRBORNE_ONLY) &&
+        has_flag(stop_ptr->flags, PATH_STOP_FLAG_AIRBORNE_ONLY) &&
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
     ) {
         if(out_reason) *out_reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
@@ -499,7 +499,7 @@ bool can_take_path_stop(
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
-    PATH_BLOCK_REASONS* out_reason
+    PATH_BLOCK_REASON* out_reason
 ) {
     if(out_reason) *out_reason = PATH_BLOCK_REASON_NONE;
     
@@ -606,7 +606,7 @@ void depth_first_search(
  * returned here.
  * @return The operation's result.
  */
-PATH_RESULTS dijkstra(
+PATH_RESULT dijkstra(
     vector<path_stop*> &out_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
@@ -711,7 +711,7 @@ PATH_RESULTS dijkstra(
         //Let's try again, this time ignoring obstacles.
         path_follow_settings new_settings = settings;
         enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
-        PATH_RESULTS new_result =
+        PATH_RESULT new_result =
             dijkstra(
                 out_path,
                 start_node, end_node,
@@ -754,7 +754,7 @@ PATH_RESULTS dijkstra(
  * returned here.
  * @return The operation's result.
  */
-PATH_RESULTS get_path(
+PATH_RESULT get_path(
     const point &start, const point &end,
     const path_follow_settings &settings,
     vector<path_stop*> &full_path, float* out_total_dist,
@@ -852,7 +852,7 @@ PATH_RESULTS get_path(
     //This means traversing fewer nodes when figuring out the shortest path.
     
     //Calculate the path.
-    PATH_RESULTS result =
+    PATH_RESULT result =
         dijkstra(
             full_path,
             closest_to_start, closest_to_end,
@@ -876,7 +876,7 @@ PATH_RESULTS get_path(
  * @param reason Reason to convert.
  * @return The string.
  */
-string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
+string path_block_reason_to_string(PATH_BLOCK_REASON reason) {
     switch(reason) {
     case PATH_BLOCK_REASON_NONE: {
         return "None";
@@ -921,7 +921,7 @@ string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
  * @param result Result to convert.
  * @return The string.
  */
-string path_result_to_string(PATH_RESULTS result) {
+string path_result_to_string(PATH_RESULT result) {
     switch(result) {
     case PATH_RESULT_NORMAL_PATH: {
         return "Normal open path";

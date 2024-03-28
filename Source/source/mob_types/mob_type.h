@@ -147,7 +147,7 @@ public:
         float hold_offset_angle = 0.0f;
         
         //Method by which the parent should hold the child.
-        HOLD_ROTATION_METHODS hold_rotation_method = HOLD_ROTATION_METHOD_NEVER;
+        HOLD_ROTATION_METHOD hold_rotation_method = HOLD_ROTATION_METHOD_NEVER;
         
         //Should the child handle damage?
         bool handle_damage = false;
@@ -186,7 +186,7 @@ public:
         float limb_child_offset = 0.0f;
         
         //Method by which the limb should be drawn.
-        LIMB_DRAW_METHODS limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+        LIMB_DRAW_METHOD limb_draw_method = LIMB_DRAW_METHOD_ABOVE_BOTH;
         
     };
     
@@ -205,7 +205,7 @@ public:
         string var;
         
         //What type of content this var has.
-        AEMP_TYPES type = AEMP_TEXT;
+        AEMP_TYPE type = AEMP_TYPE_TEXT;
         
         //Default value.
         string def_value;
@@ -382,21 +382,21 @@ public:
     float itch_time = 0.0f;
     
     //Other mobs decide if they can/want to hurt it by this target type.
-    MOB_TARGET_TYPES target_type = MOB_TARGET_TYPE_NONE;
+    MOB_TARGET_FLAG target_type = MOB_TARGET_FLAG_NONE;
     
     //What types of targets this mob can hunt down.
     bitmask_16_t huntable_targets =
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY;
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_ENEMY;
         
     //What types of targets this mob can hurt.
     bitmask_16_t hurtable_targets =
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_FRAGILE;
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_FRAGILE;
         
     //Its initial team.
-    MOB_TEAMS starting_team = MOB_TEAM_NONE;
+    MOB_TEAM starting_team = MOB_TEAM_NONE;
     
     //Custom behavior callbacks.
     void(*draw_mob_callback)(mob* m) = nullptr;
@@ -480,7 +480,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit mob_type(MOB_CATEGORIES category_id);
+    explicit mob_type(MOB_CATEGORY category_id);
     virtual ~mob_type();
     virtual void load_properties(data_node* file);
     virtual void load_resources(data_node* file);

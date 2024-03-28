@@ -16,19 +16,19 @@
 
 
 //Flags for what sorts of mob can ride on a track.
-enum TRACK_RIDERS {
+enum TRACK_RIDER_FLAG {
 
     //Pikmin.
-    TRACK_RIDER_PIKMIN = 1,
+    TRACK_RIDER_FLAG_PIKMIN = 1 << 0,
     
     //Leaders.
-    TRACK_RIDER_LEADERS = 2,
+    TRACK_RIDER_FLAG_LEADERS = 1 << 1,
 
 };
 
 
 //Poses that a mob riding on a track can take.
-enum TRACK_RIDING_POSES {
+enum TRACK_RIDING_POSE {
 
     //Stopped.
     TRACK_RIDING_POSE_STOPPED,
@@ -43,7 +43,7 @@ enum TRACK_RIDING_POSES {
 
 
 //Track object animations.
-enum TRACK_ANIMATIONS {
+enum TRACK_ANIM {
 
     //Idling.
     TRACK_ANIM_IDLING,
@@ -52,7 +52,7 @@ enum TRACK_ANIMATIONS {
 
 
 //Track object states.
-enum TRACK_STATES {
+enum TRACK_STATE {
     
     //Idling.
     TRACK_STATE_IDLING,
@@ -74,10 +74,10 @@ public:
     //--- Members ---
 
     //Flags representing possible riders.
-    unsigned char riders = TRACK_RIDER_PIKMIN;
+    unsigned char riders = TRACK_RIDER_FLAG_PIKMIN;
 
     //Pose that riders must take.
-    TRACK_RIDING_POSES riding_pose = TRACK_RIDING_POSE_STOPPED;
+    TRACK_RIDING_POSE riding_pose = TRACK_RIDING_POSE_STOPPED;
 
     //How quickly riders ride the track, in ratio per second.
     float ride_speed = 0.5f;

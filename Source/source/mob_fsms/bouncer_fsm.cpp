@@ -86,7 +86,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_PIKMIN) &&
+        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -94,7 +94,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_LEADERS) &&
+        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
@@ -102,7 +102,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_PIKMIN) &&
+        has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->path_info &&
         has_flag(
             toucher->path_info->settings.flags,
@@ -166,6 +166,6 @@ void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
  */
 void bouncer_fsm::set_idling_animation(mob* m, void* info1, void* info2) {
     m->set_animation(
-        BOUNCER_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        BOUNCER_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }

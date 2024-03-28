@@ -15,7 +15,7 @@
 
 
 //Poses that Pikmin working on a group task can take.
-enum GROUP_TASK_PIKMIN_POSES {
+enum GROUP_TASK_PIKMIN_POSE {
 
     //Stopped.
     GROUP_TASK_PIKMIN_POSE_STOPPED,
@@ -33,7 +33,7 @@ enum GROUP_TASK_PIKMIN_POSES {
 
 
 //Methods by which a Pikmin can contribute to a group task.
-enum GROUP_TASK_CONTRIBUTION_METHODS {
+enum GROUP_TASK_CONTRIBUTION {
     
     //Each Pikmin contributes by 1.
     GROUP_TASK_CONTRIBUTION_NORMAL,
@@ -85,10 +85,10 @@ public:
     float worker_pikmin_angle = 0.0f;
 
     //Pose that worker Pikmin should take.
-    GROUP_TASK_PIKMIN_POSES worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
+    GROUP_TASK_PIKMIN_POSE worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
 
     //How each worker Pikmin contributes to the power.
-    GROUP_TASK_CONTRIBUTION_METHODS contribution_method = GROUP_TASK_CONTRIBUTION_NORMAL;
+    GROUP_TASK_CONTRIBUTION contribution_method = GROUP_TASK_CONTRIBUTION_NORMAL;
 
     //How much to increase the mob's speed relative to the current power.
     float speed_bonus = 1.0f;

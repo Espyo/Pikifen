@@ -97,7 +97,7 @@ bullet_point_gui_item::bullet_point_gui_item(
             this->font, this->color,
             point(item_x_start + text_x_offset, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, text_space, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, text_space, true,
             this->text
         );
         if(selected) {
@@ -161,7 +161,7 @@ check_gui_item::check_gui_item(
             this->font, this->color,
             point(center.x - size.x * 0.45, center.y),
             point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
             point(size.x * 0.90, size.y), true, this->text
         );
         
@@ -285,49 +285,49 @@ float gui_item::get_juice_value() {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_ICON: {
         float anim_ratio =
             1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_ICON_MULT;
     }
     default: {
@@ -443,7 +443,7 @@ void gui_item::remove_child(gui_item* item) {
  *
  * @param type Type of juice animation.
  */
-void gui_item::start_juice_animation(JUICE_TYPES type) {
+void gui_item::start_juice_animation(JUICE_TYPE type) {
     juice_type = type;
     switch(type) {
     case JUICE_TYPE_GROW_TEXT_LOW:
@@ -619,12 +619,12 @@ bool gui_manager::get_item_draw_info(
             
             final_center.x =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, start_center.x, final_center.x
                 );
             final_center.y =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, start_center.y, final_center.y
                 );
             break;
@@ -641,12 +641,12 @@ bool gui_manager::get_item_draw_info(
             
             final_center.x =
                 interpolate_number(
-                    ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_IN, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.x, end_center.x
                 );
             final_center.y =
                 interpolate_number(
-                    ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_IN, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y, end_center.y
                 );
             break;
@@ -654,7 +654,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
             final_center.y =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y - game.win_h, final_center.y
                 );
             break;
@@ -662,7 +662,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
             final_center.y =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y, final_center.y - game.win_h
                 );
             break;
@@ -670,7 +670,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
             final_center.y =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y + game.win_h, final_center.y
                 );
             break;
@@ -678,7 +678,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
             final_center.y =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y, final_center.y + game.win_h
                 );
             break;
@@ -686,7 +686,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
             final_center.x =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.x - game.win_w, final_center.x
                 );
             break;
@@ -694,7 +694,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
             final_center.x =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.x, final_center.x - game.win_w
                 );
             break;
@@ -702,7 +702,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
             final_center.x =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.x + game.win_w, final_center.x
                 );
             break;
@@ -710,7 +710,7 @@ bool gui_manager::get_item_draw_info(
         } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
             final_center.x =
                 interpolate_number(
-                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.x, final_center.x + game.win_w
                 );
             break;
@@ -814,36 +814,36 @@ bool gui_manager::handle_player_action(const player_action &action) {
     bool button_recognized = true;
     
     switch(action.action_type_id) {
-    case PLAYER_ACTION_MENU_RIGHT:
-    case PLAYER_ACTION_MENU_UP:
-    case PLAYER_ACTION_MENU_LEFT:
-    case PLAYER_ACTION_MENU_DOWN: {
+    case PLAYER_ACTION_TYPE_MENU_RIGHT:
+    case PLAYER_ACTION_TYPE_MENU_UP:
+    case PLAYER_ACTION_TYPE_MENU_LEFT:
+    case PLAYER_ACTION_TYPE_MENU_DOWN: {
 
         //Selecting a different item with the arrow keys.
-        size_t pressed = PLAYER_ACTION_NONE;
+        size_t pressed = PLAYER_ACTION_TYPE_NONE;
         
         switch(action.action_type_id) {
-        case PLAYER_ACTION_MENU_RIGHT: {
+        case PLAYER_ACTION_TYPE_MENU_RIGHT: {
             if(!right_pressed && is_down) {
-                pressed = PLAYER_ACTION_MENU_RIGHT;
+                pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
             }
             right_pressed = is_down;
             break;
-        } case PLAYER_ACTION_MENU_UP: {
+        } case PLAYER_ACTION_TYPE_MENU_UP: {
             if(!up_pressed && is_down) {
-                pressed = PLAYER_ACTION_MENU_UP;
+                pressed = PLAYER_ACTION_TYPE_MENU_UP;
             }
             up_pressed = is_down;
             break;
-        } case PLAYER_ACTION_MENU_LEFT: {
+        } case PLAYER_ACTION_TYPE_MENU_LEFT: {
             if(!left_pressed && is_down) {
-                pressed = PLAYER_ACTION_MENU_LEFT;
+                pressed = PLAYER_ACTION_TYPE_MENU_LEFT;
             }
             left_pressed = is_down;
             break;
-        } case PLAYER_ACTION_MENU_DOWN: {
+        } case PLAYER_ACTION_TYPE_MENU_DOWN: {
             if(!down_pressed && is_down) {
-                pressed = PLAYER_ACTION_MENU_DOWN;
+                pressed = PLAYER_ACTION_TYPE_MENU_DOWN;
             }
             down_pressed = is_down;
             break;
@@ -852,7 +852,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         }
         }
         
-        if(pressed == PLAYER_ACTION_NONE) break;
+        if(pressed == PLAYER_ACTION_TYPE_NONE) break;
         
         if(!selected_item) {
             for(size_t i = 0; i < items.size(); ++i) {
@@ -876,15 +876,15 @@ bool gui_manager::handle_player_action(const player_action &action) {
         float direction = 0.0f;
         
         switch(pressed) {
-        case PLAYER_ACTION_MENU_DOWN: {
+        case PLAYER_ACTION_TYPE_MENU_DOWN: {
             direction = TAU * 0.25f;
             break;
         }
-        case PLAYER_ACTION_MENU_LEFT: {
+        case PLAYER_ACTION_TYPE_MENU_LEFT: {
             direction = TAU * 0.50f;
             break;
         }
-        case PLAYER_ACTION_MENU_UP: {
+        case PLAYER_ACTION_TYPE_MENU_UP: {
             direction = TAU * 0.75f;
             break;
         }
@@ -943,7 +943,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         
         break;
         
-    } case PLAYER_ACTION_MENU_OK: {
+    } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(
             is_down &&
             selected_item &&
@@ -959,7 +959,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         }
         break;
         
-    } case PLAYER_ACTION_MENU_BACK: {
+    } case PLAYER_ACTION_TYPE_MENU_BACK: {
         if(is_down && back_item && back_item->is_responsive()) {
             back_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
         }
@@ -1108,7 +1108,7 @@ void gui_manager::show_items() {
  * @param duration Total duration of the animation.
  */
 void gui_manager::start_animation(
-    const GUI_MANAGER_ANIMS type, const float duration
+    const GUI_MANAGER_ANIM type, const float duration
 ) {
     anim_type = type;
     anim_timer.start(duration);
@@ -1384,7 +1384,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 0 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size,
             false,
             "<"
@@ -1398,7 +1398,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 1 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size,
             false,
             ">"
@@ -1410,7 +1410,7 @@ picker_gui_item::picker_gui_item(
             game.fonts.standard, COLOR_WHITE,
             point(center.x - size.x * 0.40, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
             point(size.x * 0.80, size.y),
             true,
             this->base_text + this->option
@@ -1443,10 +1443,10 @@ picker_gui_item::picker_gui_item(
     
     on_menu_dir_button =
     [this] (const size_t button_id) -> bool{
-        if(button_id == PLAYER_ACTION_MENU_RIGHT) {
+        if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
             on_next();
             return true;
-        } else if(button_id == PLAYER_ACTION_MENU_LEFT) {
+        } else if(button_id == PLAYER_ACTION_TYPE_MENU_LEFT) {
             on_previous();
             return true;
         }
@@ -1590,7 +1590,7 @@ text_gui_item::text_gui_item(
                 this->font, this->color,
                 point(text_x, text_y),
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                this->flags, TEXT_VALIGN_CENTER, size, true,
+                this->flags, TEXT_VALIGN_MODE_CENTER, size, true,
                 this->text
             );
             
@@ -1628,7 +1628,7 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
             game.fonts.standard, COLOR_WHITE,
             center,
             point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size,
             false,
             cur_text
         );

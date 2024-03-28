@@ -232,7 +232,7 @@ void bridge::draw_component(mob* m) {
     bitmap_effect_t eff;
     m->get_sprite_bitmap_effects(
         nullptr, nullptr, 0.0f, &eff,
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
     );
     
     bridge* bri_ptr = (bridge*) m->links[0];

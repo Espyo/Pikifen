@@ -36,16 +36,16 @@ extern const float UNNECESSARY_ITEMS_FADE_OUT_SPEED;
 
 
 //Types of bubble GUI items that refer to a previous, current, and next thing.
-enum BUBBLE_RELATIONS {
+enum BUBBLE_RELATION {
     
     //Previous.
-    BUBBLE_PREVIOUS = 0,
+    BUBBLE_RELATION_PREVIOUS,
     
     //Current item.
-    BUBBLE_CURRENT = 1,
+    BUBBLE_RELATION_CURRENT,
     
     //Next.
-    BUBBLE_NEXT = 2,
+    BUBBLE_RELATION_NEXT,
     
 };
 
@@ -195,8 +195,8 @@ private:
     //--- Function declarations ---
     
     void create_mission_fail_cond_items(const bool primary);
-    void draw_standby_icon(BUBBLE_RELATIONS which);
-    void draw_spray_icon(BUBBLE_RELATIONS which);
+    void draw_standby_icon(BUBBLE_RELATION which);
+    void draw_spray_icon(BUBBLE_RELATION which);
     
 };
 

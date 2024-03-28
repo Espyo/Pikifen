@@ -163,7 +163,7 @@ void area_data::clear() {
     mission.fail_leaders_kod = 1;
     mission.fail_enemies_killed = 1;
     mission.fail_time_limit = MISSION::DEF_TIME_LIMIT;
-    mission.grading_mode = MISSION_GRADING_GOAL;
+    mission.grading_mode = MISSION_GRADING_MODE_GOAL;
     mission.points_per_pikmin_born = 0;
     mission.points_per_pikmin_death = 0;
     mission.points_per_sec_left = 0;
@@ -1274,7 +1274,7 @@ tree_shadow::~tree_shadow() {
 void get_area_info_from_path(
     const string &requested_area_path,
     string* out_area_folder_name,
-    AREA_TYPES* out_area_type
+    AREA_TYPE* out_area_type
 ) {
     if(out_area_folder_name) *out_area_folder_name = requested_area_path;
     if(out_area_type) *out_area_type = AREA_TYPE_SIMPLE;
@@ -1302,7 +1302,7 @@ void get_area_info_from_path(
  * @return The folder path.
  */
 string get_base_area_folder_path(
-    const AREA_TYPES type, const bool from_game_data
+    const AREA_TYPE type, const bool from_game_data
 ) {
     string result =
         from_game_data ?

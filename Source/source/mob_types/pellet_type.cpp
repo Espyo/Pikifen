@@ -23,7 +23,7 @@
 pellet_type::pellet_type() :
     mob_type(MOB_CATEGORY_PELLETS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     pellet_fsm::create_fsm(this);
 }

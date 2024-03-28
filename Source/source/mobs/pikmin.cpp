@@ -104,7 +104,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
  * @return Whether it can receive it.
  */
 bool pikmin::can_receive_status(status_type* s) const {
-    return has_flag(s->affects, STATUS_AFFECTS_PIKMIN);
+    return has_flag(s->affects, STATUS_AFFECTS_FLAG_PIKMIN);
 }
 
 
@@ -123,16 +123,16 @@ void pikmin::draw_mob() {
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &mob_eff,
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY
     );
     bitmap_effect_t pik_sprite_eff = mob_eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &pik_sprite_eff,
-        SPRITE_BITMAP_EFFECT_STANDARD
+        SPRITE_BMP_EFFECT_FLAG_STANDARD
     );
     
     bool is_idle =
@@ -464,7 +464,7 @@ void pikmin::start_throw_trail() {
     throw_p.color = change_alpha(type->main_color, 128);
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
-    pg.id = MOB_PARTICLE_GENERATOR_THROW;
+    pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
     particle_generators.push_back(pg);
 }
 

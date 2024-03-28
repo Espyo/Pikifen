@@ -23,12 +23,12 @@
 pile_type::pile_type() :
     mob_type(MOB_CATEGORY_PILES) {
     
-    target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
+    target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     
     area_editor_prop_t aep_amount;
     aep_amount.name = "Amount";
     aep_amount.var = "amount";
-    aep_amount.type = AEMP_TEXT;
+    aep_amount.type = AEMP_TYPE_TEXT;
     aep_amount.def_value = "";
     aep_amount.tooltip =
         "How many resources this pile starts with, or leave empty for the max.";

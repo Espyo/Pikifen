@@ -249,7 +249,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     
     //Update the numbers and such.
     m->carry_info->spot_info[pik_ptr->temp_i].pik_ptr = pik_ptr;
-    m->carry_info->spot_info[pik_ptr->temp_i].state = CARRY_SPOT_USED;
+    m->carry_info->spot_info[pik_ptr->temp_i].state = CARRY_SPOT_STATE_USED;
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
@@ -325,7 +325,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     
     //Update the numbers and such.
     m->carry_info->spot_info[pik_ptr->temp_i].pik_ptr = nullptr;
-    m->carry_info->spot_info[pik_ptr->temp_i].state = CARRY_SPOT_FREE;
+    m->carry_info->spot_info[pik_ptr->temp_i].state = CARRY_SPOT_STATE_FREE;
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
     

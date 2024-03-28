@@ -36,7 +36,7 @@ const string SONG_NAME = "menus";
 void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     if(
         game.cur_area_data.type != AREA_TYPE_MISSION ||
-        game.cur_area_data.mission.grading_mode != MISSION_GRADING_POINTS
+        game.cur_area_data.mission.grading_mode != MISSION_GRADING_MODE_POINTS
     ) {
         return;
     }
@@ -49,7 +49,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     
     bool goal_was_cleared =
         game.states.gameplay->mission_fail_reason ==
-        (MISSION_FAIL_CONDITIONS) INVALID;
+        (MISSION_FAIL_COND) INVALID;
     bool lost =
         has_flag(
             game.cur_area_data.mission.point_loss_data,
@@ -127,7 +127,7 @@ void results_state::continue_playing() {
     game.fade_mgr.start_fade(false, [] () {
         game.states.gameplay->after_hours = true;
         game.states.gameplay->mission_fail_reason =
-            (MISSION_FAIL_CONDITIONS) INVALID;
+            (MISSION_FAIL_COND) INVALID;
         game.change_state(game.states.gameplay, true, false);
         game.states.gameplay->enter();
     });
@@ -225,7 +225,7 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void results_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        AREA_TYPES area_type = game.cur_area_data.type;
+        AREA_TYPE area_type = game.cur_area_data.type;
         game.unload_loaded_state(game.states.gameplay);
         if(game.states.area_ed->quick_play_area_path.empty()) {
             game.states.area_menu->area_type = area_type;
@@ -243,7 +243,7 @@ void results_state::leave() {
 void results_state::load() {
     bool goal_was_cleared =
         game.states.gameplay->mission_fail_reason ==
-        (MISSION_FAIL_CONDITIONS) INVALID;
+        (MISSION_FAIL_COND) INVALID;
         
     //Calculate score things.
     final_mission_score = game.cur_area_data.mission.starting_points;
@@ -303,7 +303,7 @@ void results_state::load() {
         is_new_record = true;
     } else if(old_record_clear == goal_was_cleared) {
         if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+            game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
             old_record_score < final_mission_score
         ) {
             is_new_record = true;
@@ -430,11 +430,11 @@ void results_state::load() {
         }
         
         //Medal reason text, if any.
-        MISSION_MEDALS medal = MISSION_MEDAL_NONE;
+        MISSION_MEDAL medal = MISSION_MEDAL_NONE;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
         switch(game.cur_area_data.mission.grading_mode) {
-        case MISSION_GRADING_POINTS: {
+        case MISSION_GRADING_MODE_POINTS: {
             medal_reason = "Got " + i2s(final_mission_score) + " points";
             if(
                 final_mission_score >=
@@ -470,7 +470,7 @@ void results_state::load() {
                 medal_reason_color = al_map_rgba(200, 200, 200, 192);
             }
             break;
-        } case MISSION_GRADING_GOAL: {
+        } case MISSION_GRADING_MODE_GOAL: {
             if(goal_was_cleared) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason = "Reached the goal!";
@@ -481,7 +481,7 @@ void results_state::load() {
                 medal_reason_color = al_map_rgba(200, 200, 200, 192);
             }
             break;
-        } case MISSION_GRADING_PARTICIPATION: {
+        } case MISSION_GRADING_MODE_PARTICIPATION: {
             medal = MISSION_MEDAL_PLATINUM;
             medal_reason = "Played the mission!";
             medal_reason_color = al_map_rgba(145, 226, 210, 192);
@@ -562,7 +562,7 @@ void results_state::load() {
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+            game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
             old_record_clear &&
             !goal_was_cleared &&
             old_record_score < final_mission_score
@@ -715,7 +715,7 @@ void results_state::load() {
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS
     ) {
         add_stat(
             "Final score:",

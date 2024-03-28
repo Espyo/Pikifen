@@ -28,7 +28,7 @@ bridge_type::bridge_type() :
     pushes = false;
     casts_shadow = false;
     can_block_paths = true;
-    target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
+    target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     starting_team = MOB_TEAM_OBSTACLE;
     
     area_editor_tips =
@@ -42,7 +42,7 @@ bridge_type::bridge_type() :
     area_editor_prop_t aep_chunks;
     aep_chunks.name = "Chunks";
     aep_chunks.var = "chunks";
-    aep_chunks.type = AEMP_INT;
+    aep_chunks.type = AEMP_TYPE_INT;
     aep_chunks.def_value = "10";
     aep_chunks.min_value = 1;
     aep_chunks.max_value = 50;

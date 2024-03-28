@@ -189,8 +189,8 @@ pause_menu_t::~pause_menu_t() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
         if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits.size(); ++t) {
-            if(tidbits[(HELP_CATEGORIES) c][t].image) {
-                game.bitmaps.detach(tidbits[(HELP_CATEGORIES) c][t].image);
+            if(tidbits[(HELP_CATEGORY) c][t].image) {
+                game.bitmaps.detach(tidbits[(HELP_CATEGORY) c][t].image);
             }
         }
     }
@@ -566,14 +566,14 @@ void pause_menu_t::calculate_go_here_path() {
 void pause_menu_t::confirm_or_leave() {
     bool do_confirmation = false;
     switch(game.options.leaving_confirmation_mode) {
-    case LEAVING_CONFIRMATION_NEVER: {
+    case LEAVING_CONFIRMATION_MODE_NEVER: {
         do_confirmation = false;
         break;
-    } case LEAVING_CONFIRMATION_1_MIN: {
+    } case LEAVING_CONFIRMATION_MODE_1_MIN: {
         do_confirmation =
             game.states.gameplay->gameplay_time_passed >= 60.0f;
         break;
-    } case LEAVING_CONFIRMATION_ALWAYS: {
+    } case LEAVING_CONFIRMATION_MODE_ALWAYS: {
         do_confirmation = true;
         break;
     } case N_LEAVING_CONFIRMATION_MODES: {
@@ -583,12 +583,12 @@ void pause_menu_t::confirm_or_leave() {
     
     if(do_confirmation) {
         switch(leave_target) {
-        case LEAVE_TO_RETRY: {
+        case GAMEPLAY_LEAVE_TARGET_RETRY: {
             confirmation_explanation_text->text =
                 "If you retry, you will LOSE all of your progress "
                 "and start over. Are you sure you want to retry?";
             break;
-        } case LEAVE_TO_END: {
+        } case GAMEPLAY_LEAVE_TARGET_END: {
             confirmation_explanation_text->text =
                 "If you end now, you will stop playing and will go to the "
                 "results menu.";
@@ -606,7 +606,7 @@ void pause_menu_t::confirm_or_leave() {
                         "even though you may still get a medal from it.";
                     if(
                         game.cur_area_data.mission.grading_mode ==
-                        MISSION_GRADING_POINTS
+                        MISSION_GRADING_MODE_POINTS
                     ) {
                         confirmation_explanation_text->text +=
                             " Note that since you fail the mission, you may "
@@ -619,7 +619,7 @@ void pause_menu_t::confirm_or_leave() {
             confirmation_explanation_text->text +=
                 " Are you sure you want to end?";
             break;
-        } case LEAVE_TO_AREA_SELECT: {
+        } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
             confirmation_explanation_text->text =
                 "If you quit, you will LOSE all of your progress and instantly "
                 "stop playing. Are you sure you want to quit?";
@@ -655,7 +655,7 @@ void pause_menu_t::confirm_or_leave() {
  * @return The button.
  */
 button_gui_item* pause_menu_t::create_page_button(
-    PAUSE_MENU_PAGES target_page, bool left,
+    PAUSE_MENU_PAGE target_page, bool left,
     gui_manager* cur_gui
 ) {
     string page_name;
@@ -707,7 +707,7 @@ button_gui_item* pause_menu_t::create_page_button(
  * @param cur_gui Pointer to the current page's GUI manager.
  */
 void pause_menu_t::create_page_buttons(
-    PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui
+    PAUSE_MENU_PAGE cur_page, gui_manager* cur_gui
 ) {
     size_t cur_page_idx =
         std::distance(
@@ -728,7 +728,7 @@ void pause_menu_t::create_page_buttons(
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         player_input i =
-            game.controls.find_bind(PLAYER_ACTION_MENU_PAGE_LEFT).input;
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.fonts.slim, i, true, center, size);
     };
@@ -745,7 +745,7 @@ void pause_menu_t::create_page_buttons(
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         player_input i =
-            game.controls.find_bind(PLAYER_ACTION_MENU_PAGE_RIGHT).input;
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.fonts.slim, i, true, center, size);
     };
@@ -1178,7 +1178,7 @@ void pause_menu_t::draw_radar(
             north_ind_center.y + 4.0f
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER,
+        TEXT_VALIGN_MODE_CENTER,
         point(12.0f, 12.0f),
         "N"
     );
@@ -1208,7 +1208,7 @@ void pause_menu_t::draw_radar(
     draw_compressed_text(
         game.fonts.standard, PAUSE_MENU::RADAR_HIGHEST_COLOR,
         area_name_center, ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER, area_name_size,
+        TEXT_VALIGN_MODE_CENTER, area_name_size,
         game.cur_area_data.name
     );
     
@@ -1349,7 +1349,7 @@ void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
  */
 void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
     switch(game.cur_area_data.mission.grading_mode) {
-    case MISSION_GRADING_POINTS: {
+    case MISSION_GRADING_MODE_POINTS: {
         add_bullet(
             list,
             "Your medal depends on your score:"
@@ -1428,7 +1428,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
             }
         }
         break;
-    } case MISSION_GRADING_GOAL: {
+    } case MISSION_GRADING_MODE_GOAL: {
         add_bullet(
             list,
             "You get a platinum medal if you clear the goal."
@@ -1438,7 +1438,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
             "You get no medal if you fail."
         );
         break;
-    } case MISSION_GRADING_PARTICIPATION: {
+    } case MISSION_GRADING_MODE_PARTICIPATION: {
         add_bullet(
             list,
             "You get a platinum medal just by playing the mission."
@@ -1562,37 +1562,37 @@ void pause_menu_t::handle_player_action(const player_action &action) {
     
     if(radar_gui.responsive) {
         switch(action.action_type_id) {
-        case PLAYER_ACTION_RADAR: {
+        case PLAYER_ACTION_TYPE_RADAR: {
             if(action.value >= 0.5f) {
                 start_closing(&radar_gui);
                 handled_by_radar = true;
             }
             break;
-        } case PLAYER_ACTION_RADAR_RIGHT: {
+        } case PLAYER_ACTION_TYPE_RADAR_RIGHT: {
             radar_pan.right = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_RADAR_UP: {
+        } case PLAYER_ACTION_TYPE_RADAR_UP: {
             radar_pan.up = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_RADAR_LEFT: {
+        } case PLAYER_ACTION_TYPE_RADAR_LEFT: {
             radar_pan.left = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_RADAR_DOWN: {
+        } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
             radar_pan.down = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_RADAR_ZOOM_IN: {
+        } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {
             radar_zoom_in = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_RADAR_ZOOM_OUT: {
+        } case PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT: {
             radar_zoom_out = action.value;
             handled_by_radar = true;
             break;
-        } case PLAYER_ACTION_MENU_OK: {
+        } case PLAYER_ACTION_TYPE_MENU_OK: {
             radar_confirm();
             handled_by_radar = true;
             break;
@@ -1612,11 +1612,11 @@ void pause_menu_t::handle_player_action(const player_action &action) {
         confirmation_gui.handle_player_action(action);
         
         switch(action.action_type_id) {
-        case PLAYER_ACTION_MENU_PAGE_LEFT:
-        case PLAYER_ACTION_MENU_PAGE_RIGHT: {
+        case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
+        case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
             if(action.value >= 0.5f) {
                 gui_manager* cur_gui = &gui;
-                PAUSE_MENU_PAGES cur_page = PAUSE_MENU_PAGE_SYSTEM;
+                PAUSE_MENU_PAGE cur_page = PAUSE_MENU_PAGE_SYSTEM;
                 if(radar_gui.responsive) {
                     cur_gui = &radar_gui;
                     cur_page = PAUSE_MENU_PAGE_RADAR;
@@ -1635,7 +1635,7 @@ void pause_menu_t::handle_player_action(const player_action &action) {
                 size_t new_page_idx =
                     sum_and_wrap(
                         cur_page_idx,
-                        action.action_type_id == PLAYER_ACTION_MENU_PAGE_LEFT ?
+                        action.action_type_id == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
                         -1 :
                         1,
                         pages.size()
@@ -1643,7 +1643,7 @@ void pause_menu_t::handle_player_action(const player_action &action) {
                 switch_page(
                     cur_gui,
                     pages[new_page_idx],
-                    action.action_type_id == PLAYER_ACTION_MENU_PAGE_LEFT
+                    action.action_type_id == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT
                 );
             }
             
@@ -1760,7 +1760,7 @@ void pause_menu_t::init_help_page() {
         data_node* category_node =
             tidbits_node->get_child_by_name(category_node_names[c]);
         size_t n_tidbits = category_node->get_nr_of_children();
-        vector<tidbit> &category_tidbits = tidbits[(HELP_CATEGORIES) c];
+        vector<tidbit> &category_tidbits = tidbits[(HELP_CATEGORY) c];
         category_tidbits.reserve(n_tidbits);
         for(size_t t = 0; t < n_tidbits; ++t) {
             vector<string> parts =
@@ -2030,7 +2030,7 @@ void pause_menu_t::init_main_pause_menu() {
     );
     retry_button->on_activate =
     [this] (const point &) {
-        leave_target = LEAVE_TO_RETRY;
+        leave_target = GAMEPLAY_LEAVE_TARGET_RETRY;
         confirm_or_leave();
     };
     retry_button->on_get_tooltip =
@@ -2052,7 +2052,7 @@ void pause_menu_t::init_main_pause_menu() {
     );
     end_button->on_activate =
     [this] (const point &) {
-        leave_target = LEAVE_TO_END;
+        leave_target = GAMEPLAY_LEAVE_TARGET_END;
         confirm_or_leave();
     };
     end_button->on_get_tooltip =
@@ -2101,7 +2101,7 @@ void pause_menu_t::init_main_pause_menu() {
     );
     quit_button->on_activate =
     [this] (const point &) {
-        leave_target = LEAVE_TO_AREA_SELECT;
+        leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
         confirm_or_leave();
     };
     quit_button->on_get_tooltip =
@@ -2724,7 +2724,7 @@ void pause_menu_t::pan_radar(point amount) {
  *
  * @param category Category of tidbits to use.
  */
-void pause_menu_t::populate_help_tidbits(const HELP_CATEGORIES category) {
+void pause_menu_t::populate_help_tidbits(const HELP_CATEGORY category) {
     vector<tidbit> &tidbit_list = tidbits[category];
     
     switch(category) {
@@ -2830,7 +2830,7 @@ void pause_menu_t::start_closing(gui_manager* cur_gui) {
  */
 void pause_menu_t::start_leaving_gameplay() {
     if(
-        leave_target == LEAVE_TO_END &&
+        leave_target == GAMEPLAY_LEAVE_TARGET_END &&
         has_flag(
             game.cur_area_data.mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
@@ -2851,7 +2851,7 @@ void pause_menu_t::start_leaving_gameplay() {
  * @param left Is the new page to the left of the current one, or the right?
  */
 void pause_menu_t::switch_page(
-    gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
+    gui_manager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
 ) {
     gui_manager* new_gui = nullptr;
     switch(new_page) {

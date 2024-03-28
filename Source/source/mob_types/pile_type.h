@@ -20,7 +20,7 @@
 
 
 //Pile object animations.
-enum PILE_ANIMATIONS {
+enum PILE_ANIM {
 
     //Idling.
     PILE_ANIM_IDLING,
@@ -32,7 +32,7 @@ enum PILE_ANIMATIONS {
 
 
 //Pile object states.
-enum PILE_STATES {
+enum PILE_STATE {
     
     //Idling.
     PILE_STATE_IDLING,

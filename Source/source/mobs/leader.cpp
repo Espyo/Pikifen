@@ -195,7 +195,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
  * @return Whether it can receive the status.
  */
 bool leader::can_receive_status(status_type* s) const {
-    return has_flag(s->affects, STATUS_AFFECTS_LEADERS);
+    return has_flag(s->affects, STATUS_AFFECTS_FLAG_LEADERS);
 }
 
 
@@ -593,12 +593,12 @@ void leader::draw_mob() {
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
-        SPRITE_BITMAP_EFFECT_STANDARD |
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY |
-        SPRITE_BITMAP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY |
+        SPRITE_BMP_EFFECT_CARRY
     );
     
     if(invuln_period.time_left > 0.0f) {
@@ -812,7 +812,7 @@ void leader::start_throw_trail() {
     throw_p.color = change_alpha(type->main_color, 128);
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
-    pg.id = MOB_PARTICLE_GENERATOR_THROW;
+    pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
     particle_generators.push_back(pg);
 }
 
@@ -969,7 +969,7 @@ void leader::update_throw_variables() {
     if(!holding.empty()) {
         throwee = holding[0];
     } else if(game.states.gameplay->cur_leader_ptr == this) {
-        throwee = game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
+        throwee = game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT];
     }
     
     if(!throwee) {
@@ -1151,14 +1151,14 @@ bool grab_closest_group_member() {
     if(!game.states.gameplay->cur_leader_ptr) return false;
     
     //Check if there is even a closest group member.
-    if(!game.states.gameplay->closest_group_member[BUBBLE_CURRENT]) {
+    if(!game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]) {
         return false;
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
     mob_event* grabbed_ev =
         game.states.gameplay->
-        closest_group_member[BUBBLE_CURRENT]->fsm.get_event(
+        closest_group_member[BUBBLE_RELATION_CURRENT]->fsm.get_event(
             MOB_EV_GRABBED_BY_FRIEND
         );
     mob_event* grabber_ev =
@@ -1172,7 +1172,7 @@ bool grab_closest_group_member() {
     //Check if there's anything in the way.
     if(
         !game.states.gameplay->cur_leader_ptr->has_clear_line(
-            game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
+            game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]
         )
     ) {
         return false;
@@ -1181,10 +1181,10 @@ bool grab_closest_group_member() {
     //Run the grabbing logic then.
     grabber_ev->run(
         game.states.gameplay->cur_leader_ptr,
-        (void*) game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
+        (void*) game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]
     );
     grabbed_ev->run(
-        game.states.gameplay->closest_group_member[BUBBLE_CURRENT],
+        game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT],
         (void*) game.states.gameplay->cur_leader_ptr
     );
     

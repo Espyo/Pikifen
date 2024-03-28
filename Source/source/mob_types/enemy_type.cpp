@@ -20,14 +20,14 @@
 enemy_type::enemy_type() :
     mob_type(MOB_CATEGORY_ENEMIES) {
     
-    target_type = MOB_TARGET_TYPE_ENEMY;
+    target_type = MOB_TARGET_FLAG_ENEMY;
     huntable_targets =
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_PLAYER;
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_PLAYER;
     hurtable_targets =
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_FRAGILE;
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_FRAGILE;
         
     starting_team = MOB_TEAM_ENEMY_1;
     

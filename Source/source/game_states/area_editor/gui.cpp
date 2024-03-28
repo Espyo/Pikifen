@@ -265,7 +265,7 @@ void area_editor::process_gui_load_dialog() {
     },
     [this](const string &name) {
         string folder_name;
-        AREA_TYPES type;
+        AREA_TYPE type;
         get_area_info_from_path(
             name,
             &folder_name,
@@ -770,7 +770,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         }
         
         switch(p_ptr->type) {
-        case AEMP_TEXT: {
+        case AEMP_TYPE_TEXT: {
     
             string value_s = value;
             if(ImGui::InputText(p_ptr->name.c_str(), &value_s)) {
@@ -780,7 +780,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_INT: {
+        } case AEMP_TYPE_INT: {
     
             int value_i = s2i(value);
             if(
@@ -795,7 +795,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_DECIMAL: {
+        } case AEMP_TYPE_DECIMAL: {
     
             float value_f = s2f(value);
             if(
@@ -810,7 +810,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_BOOL: {
+        } case AEMP_TYPE_BOOL: {
     
             bool value_b = s2b(value);
             if(ImGui::Checkbox(p_ptr->name.c_str(), &value_b)) {
@@ -820,7 +820,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_LIST: {
+        } case AEMP_TYPE_LIST: {
     
             string value_s = value;
             if(ImGui::Combo(p_ptr->name, &value_s, p_ptr->value_list, 15)) {
@@ -830,7 +830,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_NUMBER_LIST: {
+        } case AEMP_TYPE_NR_LIST: {
     
             int item_idx = s2i(value);
             if(ImGui::Combo(p_ptr->name, &item_idx, p_ptr->value_list, 15)) {
@@ -848,7 +848,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             (p_ptr->tooltip.empty() ? "" : "\n") +
             "(Variable name: \"" + p_ptr->var + "\".)",
             "",
-            (p_ptr->type == AEMP_INT || p_ptr->type == AEMP_DECIMAL) ?
+            (p_ptr->type == AEMP_TYPE_INT || p_ptr->type == AEMP_TYPE_DECIMAL) ?
             WIDGET_EXPLANATION_DRAG :
             WIDGET_EXPLANATION_NONE
         );
@@ -1061,7 +1061,7 @@ void area_editor::process_gui_options_dialog() {
                 ""
             )
         );
-        game.options.area_editor_view_mode = (VIEW_MODES) view_mode;
+        game.options.area_editor_view_mode = (VIEW_MODE) view_mode;
         
         ImGui::Unindent();
         
@@ -1224,7 +1224,7 @@ void area_editor::process_gui_panel_details() {
             if(
                 ImGui::ImageButton(
                     "newShadowButton",
-                    editor_icons[ICON_ADD],
+                    editor_icons[EDITOR_ICON_ADD],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -1242,7 +1242,7 @@ void area_editor::process_gui_panel_details() {
                 if(
                     ImGui::ImageButton(
                         "delShadowButton",
-                        editor_icons[ICON_REMOVE],
+                        editor_icons[EDITOR_ICON_REMOVE],
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
@@ -1263,7 +1263,7 @@ void area_editor::process_gui_panel_details() {
                 
                 //Browse for tree shadow texture button.
                 if(ImGui::Button("...")) {
-                    FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+                    FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
                     vector<string> f =
                         prompt_file_dialog_locked_to_folder(
                             TEXTURES_FOLDER_PATH,
@@ -1276,17 +1276,17 @@ void area_editor::process_gui_panel_details() {
                         );
                         
                     switch(result) {
-                    case FILE_DIALOG_RES_WRONG_FOLDER: {
+                    case FILE_DIALOG_RESULT_WRONG_FOLDER: {
                         //File doesn't belong to the folder.
                         set_status(
                             "The chosen image is not in the textures folder!",
                             true
                         );
                         break;
-                    } case FILE_DIALOG_RES_CANCELED: {
+                    } case FILE_DIALOG_RESULT_CANCELED: {
                         //User canceled.
                         break;
-                    } case FILE_DIALOG_RES_SUCCESS: {
+                    } case FILE_DIALOG_RESULT_SUCCESS: {
                         selected_shadow->file_name = f[0];
                         set_status("Picked an image successfully.");
                         break;
@@ -1849,8 +1849,8 @@ void area_editor::process_gui_panel_info() {
             ImGui::ImageButton(
                 "previewSongButton",
                 can_stop_previewing ?
-                editor_icons[ICON_STOP] :
-                editor_icons[ICON_PLAY],
+                editor_icons[EDITOR_ICON_STOP] :
+                editor_icons[EDITOR_ICON_PLAY],
                 ImVec2(ImGui::GetTextLineHeight(), ImGui::GetTextLineHeight())
             )
         ) {
@@ -2097,7 +2097,7 @@ void area_editor::process_gui_panel_info() {
         
         //Browse for background image button.
         if(ImGui::Button("...")) {
-            FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+            FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
             vector<string> f =
                 prompt_file_dialog_locked_to_folder(
                     TEXTURES_FOLDER_PATH,
@@ -2109,17 +2109,17 @@ void area_editor::process_gui_panel_info() {
                 );
                 
             switch(result) {
-            case FILE_DIALOG_RES_WRONG_FOLDER: {
+            case FILE_DIALOG_RESULT_WRONG_FOLDER: {
                 //File doesn't belong to the folder.
                 set_status(
                     "The chosen image is not in the textures folder!",
                     true
                 );
                 break;
-            } case FILE_DIALOG_RES_CANCELED: {
+            } case FILE_DIALOG_RESULT_CANCELED: {
                 //User canceled.
                 break;
-            } case FILE_DIALOG_RES_SUCCESS: {
+            } case FILE_DIALOG_RESULT_SUCCESS: {
                 bg_file_name = f[0];
                 set_status("Picked an image successfully.");
                 break;
@@ -2295,7 +2295,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 "newSectorButton",
-                editor_icons[ICON_ADD],
+                editor_icons[EDITOR_ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -2312,7 +2312,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 "newCircleButton",
-                editor_icons[ICON_ADD_CIRCLE_SECTOR],
+                editor_icons[EDITOR_ICON_ADD_CIRCLE_SECTOR],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -2331,7 +2331,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     "delEdgesButton",
-                    editor_icons[ICON_REMOVE],
+                    editor_icons[EDITOR_ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -2352,15 +2352,15 @@ void area_editor::process_gui_panel_layout() {
         string sel_filter_description;
         switch(selection_filter) {
         case SELECTION_FILTER_VERTEXES: {
-            sel_filter_bmp = editor_icons[ICON_VERTEXES];
+            sel_filter_bmp = editor_icons[EDITOR_ICON_VERTEXES];
             sel_filter_description = "vertexes only";
             break;
         } case SELECTION_FILTER_EDGES: {
-            sel_filter_bmp = editor_icons[ICON_EDGES];
+            sel_filter_bmp = editor_icons[EDITOR_ICON_EDGES];
             sel_filter_description = "edges + vertexes";
             break;
         } case SELECTION_FILTER_SECTORS: {
-            sel_filter_bmp = editor_icons[ICON_SECTORS];
+            sel_filter_bmp = editor_icons[EDITOR_ICON_SECTORS];
             sel_filter_description = "sectors + edges + vertexes";
             break;
         } case N_SELECTION_FILTERS: {
@@ -2395,7 +2395,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     "clearSelButton",
-                    editor_icons[ICON_SELECT_NONE],
+                    editor_icons[EDITOR_ICON_SELECT_NONE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -2518,7 +2518,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "layoutButton",
-            editor_icons[ICON_SECTORS],
+            editor_icons[EDITOR_ICON_SECTORS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             24.0f,
             "Layout"
@@ -2534,7 +2534,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "mobsButton",
-            editor_icons[ICON_MOBS],
+            editor_icons[EDITOR_ICON_MOBS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             24.0f,
             "Objects"
@@ -2550,7 +2550,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "pathsButton",
-            editor_icons[ICON_PATHS],
+            editor_icons[EDITOR_ICON_PATHS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             24.0f,
             "Paths"
@@ -2569,7 +2569,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "detailsButton",
-            editor_icons[ICON_DETAILS],
+            editor_icons[EDITOR_ICON_DETAILS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             12.0f,
             "Details"
@@ -2585,7 +2585,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "infoButton",
-            editor_icons[ICON_INFO],
+            editor_icons[EDITOR_ICON_INFO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             12.0f,
             "Info"
@@ -2601,7 +2601,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "gameplayButton",
-            editor_icons[ICON_GAMEPLAY],
+            editor_icons[EDITOR_ICON_GAMEPLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             12.0f,
             "Gameplay settings"
@@ -2620,7 +2620,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "reviewButton",
-            editor_icons[ICON_REVIEW],
+            editor_icons[EDITOR_ICON_REVIEW],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             8.0f,
             "Review"
@@ -2636,7 +2636,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "toolsButton",
-            editor_icons[ICON_TOOLS],
+            editor_icons[EDITOR_ICON_TOOLS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             8.0f,
             "Tools"
@@ -2679,7 +2679,7 @@ void area_editor::process_gui_panel_mission() {
             register_change("mission requirements change");
             game.cur_area_data.mission.goal_mob_idxs.clear();
             game.cur_area_data.mission.goal_amount = 1;
-            game.cur_area_data.mission.goal = (MISSION_GOALS) mission_goal;
+            game.cur_area_data.mission.goal = (MISSION_GOAL) mission_goal;
             if(
                 game.cur_area_data.mission.goal ==
                 MISSION_GOAL_TIMED_SURVIVAL
@@ -3298,7 +3298,7 @@ void area_editor::process_gui_panel_mission() {
                 (bitmask_8_t) fail_flags;
         }
         
-        vector<MISSION_FAIL_CONDITIONS> active_conditions;
+        vector<MISSION_FAIL_COND> active_conditions;
         for(size_t c = 0; c < game.mission_fail_conds.size(); ++c) {
             if(
                 has_flag(
@@ -3306,7 +3306,7 @@ void area_editor::process_gui_panel_mission() {
                     get_idx_bitmask(c)
                 )
             ) {
-                active_conditions.push_back((MISSION_FAIL_CONDITIONS) c);
+                active_conditions.push_back((MISSION_FAIL_COND) c);
             }
         }
         
@@ -3442,7 +3442,7 @@ void area_editor::process_gui_panel_mission() {
         if(ImGui::RadioButton("Points", &mode, 0)) {
             register_change("mission grading change");
             game.cur_area_data.mission.grading_mode =
-                (MISSION_GRADING_MODES) mode;
+                (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
             "The player's final grade depends on how many points they\n"
@@ -3455,7 +3455,7 @@ void area_editor::process_gui_panel_mission() {
         if(ImGui::RadioButton("Goal", &mode, 1)) {
             register_change("mission grading change");
             game.cur_area_data.mission.grading_mode =
-                (MISSION_GRADING_MODES) mode;
+                (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
             "The player's final grade depends on whether they have reached\n"
@@ -3468,14 +3468,14 @@ void area_editor::process_gui_panel_mission() {
         if(ImGui::RadioButton("Participation", &mode, 2)) {
             register_change("mission grading change");
             game.cur_area_data.mission.grading_mode =
-                (MISSION_GRADING_MODES) mode;
+                (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
             "The player's final grade depends on whether they have played\n"
             "the mission (platinum) or not (nothing)."
         );
         
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
+        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
         
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
@@ -4100,7 +4100,7 @@ void area_editor::process_gui_panel_mob() {
         if(
             ImGui::ImageButton(
                 "newLinkButton",
-                editor_icons[ICON_ADD],
+                editor_icons[EDITOR_ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -4122,7 +4122,7 @@ void area_editor::process_gui_panel_mob() {
             if(
                 ImGui::ImageButton(
                     "delLinkButton",
-                    editor_icons[ICON_REMOVE],
+                    editor_icons[EDITOR_ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -4293,7 +4293,7 @@ void area_editor::process_gui_panel_mobs() {
         if(
             ImGui::ImageButton(
                 "newMobButton",
-                editor_icons[ICON_ADD],
+                editor_icons[EDITOR_ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -4312,7 +4312,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     "delMobButtonn",
-                    editor_icons[ICON_REMOVE],
+                    editor_icons[EDITOR_ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -4328,7 +4328,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     "dupMobButton",
-                    editor_icons[ICON_DUPLICATE],
+                    editor_icons[EDITOR_ICON_DUPLICATE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -4389,7 +4389,7 @@ void area_editor::process_gui_panel_path_link() {
     int type_i = l_ptr->type;
     if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
         register_change("path link type change");
-        l_ptr->type = (PATH_LINK_TYPES) type_i;
+        l_ptr->type = (PATH_LINK_TYPE) type_i;
     }
     set_tooltip(
         "What type of link this is."
@@ -4425,7 +4425,7 @@ void area_editor::process_gui_panel_path_stop() {
         ImGui::CheckboxFlags(
             "Script use only",
             &flags_i,
-            PATH_STOP_SCRIPT_ONLY
+            PATH_STOP_FLAG_SCRIPT_ONLY
         )
     ) {
         s_ptr->flags = flags_i;
@@ -4439,7 +4439,7 @@ void area_editor::process_gui_panel_path_stop() {
         ImGui::CheckboxFlags(
             "Light load only",
             &flags_i,
-            PATH_STOP_LIGHT_LOAD_ONLY
+            PATH_STOP_FLAG_LIGHT_LOAD_ONLY
         )
     ) {
         s_ptr->flags = flags_i;
@@ -4454,7 +4454,7 @@ void area_editor::process_gui_panel_path_stop() {
         ImGui::CheckboxFlags(
             "Airborne only",
             &flags_i,
-            PATH_STOP_AIRBORNE_ONLY
+            PATH_STOP_FLAG_AIRBORNE_ONLY
         )
     ) {
         s_ptr->flags = flags_i;
@@ -4521,7 +4521,7 @@ void area_editor::process_gui_panel_paths() {
         
         int type_i = path_drawing_type;
         if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
-            path_drawing_type = (PATH_LINK_TYPES) type_i;
+            path_drawing_type = (PATH_LINK_TYPE) type_i;
         }
         set_tooltip(
             "What type of link to draw."
@@ -4541,7 +4541,7 @@ void area_editor::process_gui_panel_paths() {
             ImGui::CheckboxFlags(
                 "Script use only",
                 &flags_i,
-                PATH_STOP_SCRIPT_ONLY
+                PATH_STOP_FLAG_SCRIPT_ONLY
             )
         ) {
             path_drawing_flags = flags_i;
@@ -4555,7 +4555,7 @@ void area_editor::process_gui_panel_paths() {
             ImGui::CheckboxFlags(
                 "Light load only",
                 &flags_i,
-                PATH_STOP_LIGHT_LOAD_ONLY
+                PATH_STOP_FLAG_LIGHT_LOAD_ONLY
             )
         ) {
             path_drawing_flags = flags_i;
@@ -4570,7 +4570,7 @@ void area_editor::process_gui_panel_paths() {
             ImGui::CheckboxFlags(
                 "Airborne only",
                 &flags_i,
-                PATH_STOP_AIRBORNE_ONLY
+                PATH_STOP_FLAG_AIRBORNE_ONLY
             )
         ) {
             path_drawing_flags = flags_i;
@@ -4614,7 +4614,7 @@ void area_editor::process_gui_panel_paths() {
         if(
             ImGui::ImageButton(
                 "newPathButton",
-                editor_icons[ICON_ADD],
+                editor_icons[EDITOR_ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -4635,7 +4635,7 @@ void area_editor::process_gui_panel_paths() {
             if(
                 ImGui::ImageButton(
                     "delPathButton",
-                    editor_icons[ICON_REMOVE],
+                    editor_icons[EDITOR_ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -5179,7 +5179,7 @@ void area_editor::process_gui_panel_sector() {
             if(
                 ImGui::ImageButton(
                     "addHazardButton",
-                    editor_icons[ICON_ADD],
+                    editor_icons[EDITOR_ICON_ADD],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
@@ -5231,7 +5231,7 @@ void area_editor::process_gui_panel_sector() {
                 if(
                     ImGui::ImageButton(
                         "remHazardButton",
-                        editor_icons[ICON_REMOVE],
+                        editor_icons[EDITOR_ICON_REMOVE],
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
@@ -5306,13 +5306,13 @@ void area_editor::process_gui_panel_sector() {
                 size_t t = 0; t < game.sector_types.get_nr_of_items(); ++t
             ) {
                 types_list.push_back(
-                    game.sector_types.get_name((SECTOR_TYPES) t)
+                    game.sector_types.get_name((SECTOR_TYPE) t)
                 );
             }
             int sector_type = s_ptr->type;
             if(ImGui::Combo("Type", &sector_type, types_list, 15)) {
                 register_change("sector type change");
-                s_ptr->type = (SECTOR_TYPES) sector_type;
+                s_ptr->type = (SECTOR_TYPE) sector_type;
             }
             set_tooltip(
                 "What type of sector this is."
@@ -5531,7 +5531,7 @@ void area_editor::process_gui_panel_sector() {
                     "3"
                 );
                 
-                octee_mode = (OCTEE_MODES) octee_mode_int;
+                octee_mode = (OCTEE_MODE) octee_mode_int;
                 
                 ImGui::Unindent();
                 
@@ -5787,7 +5787,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "quitButton",
-            editor_icons[ICON_QUIT],
+            editor_icons[EDITOR_ICON_QUIT],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -5804,7 +5804,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton",
-            editor_icons[ICON_LOAD],
+            editor_icons[EDITOR_ICON_LOAD],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -5822,8 +5822,8 @@ void area_editor::process_gui_toolbar() {
         ImGui::ImageButton(
             "saveButton",
             changes_mgr.has_unsaved_changes() ?
-            editor_icons[ICON_SAVE_UNSAVED] :
-            editor_icons[ICON_SAVE],
+            editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
+            editor_icons[EDITOR_ICON_SAVE],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -5839,7 +5839,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "playButton",
-            editor_icons[ICON_PLAY],
+            editor_icons[EDITOR_ICON_PLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -5857,7 +5857,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "undoButton",
-            editor_icons[ICON_UNDO],
+            editor_icons[EDITOR_ICON_UNDO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f),
             ImVec2(1.0f, 1.0f),
@@ -5884,7 +5884,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "redoButton",
-            editor_icons[ICON_UNDO],
+            editor_icons[EDITOR_ICON_UNDO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(1.0f, 0.0f),
             ImVec2(0.0f, 1.0f),
@@ -5914,7 +5914,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "refToggleButton",
-                editor_icons[ICON_REFERENCE],
+                editor_icons[EDITOR_ICON_REFERENCE],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -5945,20 +5945,20 @@ void area_editor::process_gui_toolbar() {
     ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
     switch(game.options.area_editor_snap_mode) {
-    case SNAP_GRID: {
-        snap_mode_bmp = editor_icons[ICON_SNAP_GRID];
+    case SNAP_MODE_GRID: {
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
         snap_mode_description = "grid. Holding Shift disables snapping.";
         break;
-    } case SNAP_VERTEXES: {
-        snap_mode_bmp = editor_icons[ICON_SNAP_VERTEXES];
+    } case SNAP_MODE_VERTEXES: {
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_VERTEXES];
         snap_mode_description = "vertexes. Holding Shift disables snapping.";
         break;
-    } case SNAP_EDGES: {
-        snap_mode_bmp = editor_icons[ICON_SNAP_EDGES];
+    } case SNAP_MODE_EDGES: {
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_EDGES];
         snap_mode_description = "edges. Holding Shift disables snapping.";
         break;
-    } case SNAP_NOTHING: {
-        snap_mode_bmp = editor_icons[ICON_SNAP_NOTHING];
+    } case SNAP_MODE_NOTHING: {
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_NOTHING];
         snap_mode_description = "off. Holding Shift snaps to grid.";
         break;
     } case N_SNAP_MODES: {
@@ -5988,7 +5988,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "layoutButton",
-                editor_icons[ICON_SECTORS],
+                editor_icons[EDITOR_ICON_SECTORS],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -6004,7 +6004,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "mobsButton",
-                editor_icons[ICON_MOBS],
+                editor_icons[EDITOR_ICON_MOBS],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -6020,7 +6020,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "pathsButton",
-                editor_icons[ICON_PATHS],
+                editor_icons[EDITOR_ICON_PATHS],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -6036,7 +6036,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "detailsButton",
-                editor_icons[ICON_DETAILS],
+                editor_icons[EDITOR_ICON_DETAILS],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -6052,7 +6052,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "previewButton",
-                editor_icons[ICON_REVIEW],
+                editor_icons[EDITOR_ICON_REVIEW],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {

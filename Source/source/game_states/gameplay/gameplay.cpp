@@ -257,7 +257,7 @@ void gameplay_state::enter() {
     last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
-    mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
+    mission_fail_reason = (MISSION_FAIL_COND) INVALID;
     goal_indicator_ratio = 0.0f;
     fail_1_indicator_ratio = 0.0f;
     fail_2_indicator_ratio = 0.0f;
@@ -655,16 +655,16 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     save_statistics();
     
     switch(target) {
-    case LEAVE_TO_RETRY: {
+    case GAMEPLAY_LEAVE_TARGET_RETRY: {
         game.change_state(game.states.gameplay);
         break;
-    } case LEAVE_TO_END: {
+    } case GAMEPLAY_LEAVE_TARGET_END: {
         went_to_results = true;
         //Change state, but don't unload this one, since the player
         //may pick the "keep playing" option in the results screen.
         game.change_state(game.states.results, false);
         break;
-    } case LEAVE_TO_AREA_SELECT: {
+    } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.states.area_ed->quick_play_area_path.empty()) {
             game.states.area_menu->area_type = game.cur_area_data.type;
             game.change_state(game.states.area_menu);
@@ -740,7 +740,7 @@ void gameplay_state::load() {
     
     //Load the area.
     string area_folder_name;
-    AREA_TYPES area_type;
+    AREA_TYPE area_type;
     get_area_info_from_path(
         path_of_area_to_load, &area_folder_name, &area_type
     );
@@ -1246,9 +1246,9 @@ void gameplay_state::update_available_leaders() {
  * Sets to nullptr if there is no member of that subgroup available.
  */
 void gameplay_state::update_closest_group_members() {
-    closest_group_member[BUBBLE_PREVIOUS] = nullptr;
-    closest_group_member[BUBBLE_CURRENT] = nullptr;
-    closest_group_member[BUBBLE_NEXT] = nullptr;
+    closest_group_member[BUBBLE_RELATION_PREVIOUS] = nullptr;
+    closest_group_member[BUBBLE_RELATION_CURRENT] = nullptr;
+    closest_group_member[BUBBLE_RELATION_NEXT] = nullptr;
     closest_group_member_distant = false;
     
     if(!cur_leader_ptr) return;
@@ -1262,12 +1262,12 @@ void gameplay_state::update_closest_group_members() {
     cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
     
     if(prev_type) {
-        closest_group_member[BUBBLE_PREVIOUS] =
+        closest_group_member[BUBBLE_RELATION_PREVIOUS] =
             get_closest_group_member(prev_type);
     }
     
     if(cur_leader_ptr->group->cur_standby_type) {
-        closest_group_member[BUBBLE_CURRENT] =
+        closest_group_member[BUBBLE_RELATION_CURRENT] =
             get_closest_group_member(cur_leader_ptr->group->cur_standby_type);
     }
     
@@ -1275,12 +1275,12 @@ void gameplay_state::update_closest_group_members() {
     cur_leader_ptr->group->get_next_standby_type(false, &next_type);
     
     if(next_type) {
-        closest_group_member[BUBBLE_NEXT] =
+        closest_group_member[BUBBLE_RELATION_NEXT] =
             get_closest_group_member(next_type);
     }
     
     //Update whether the current subgroup type's closest member is distant.
-    if(!closest_group_member[BUBBLE_CURRENT]) {
+    if(!closest_group_member[BUBBLE_RELATION_CURRENT]) {
         return;
     }
     
@@ -1291,7 +1291,7 @@ void gameplay_state::update_closest_group_members() {
         !cur_leader_ptr->ground_sector->hazards.empty()
     ) {
         if(
-            !closest_group_member[BUBBLE_CURRENT]->
+            !closest_group_member[BUBBLE_RELATION_CURRENT]->
             is_resistant_to_hazards(
                 cur_leader_ptr->ground_sector->hazards
             )
@@ -1304,7 +1304,7 @@ void gameplay_state::update_closest_group_members() {
     
     if(
         dist(
-            closest_group_member[BUBBLE_CURRENT]->pos,
+            closest_group_member[BUBBLE_RELATION_CURRENT]->pos,
             cur_leader_ptr->pos
         ) >
         game.config.group_member_grab_range

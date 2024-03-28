@@ -58,7 +58,7 @@ extern const float SWARM_ARROW_SPEED;
 
 
 //Types of interludes -- stuff before or after gameplay proper in the area.
-enum INTERLUDES {
+enum INTERLUDE {
 
     //None.
     INTERLUDE_NONE,
@@ -73,7 +73,7 @@ enum INTERLUDES {
 
 
 //Types of big messages -- text that appears in large letters on-screen.
-enum BIG_MESSAGES {
+enum BIG_MESSAGE {
     
     //None.
     BIG_MESSAGE_NONE,
@@ -280,7 +280,7 @@ public:
     size_t enemy_points_total = 0;
 
     //Reason for mission fail, if any. INVALID for none.
-    MISSION_FAIL_CONDITIONS mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
+    MISSION_FAIL_COND mission_fail_reason = (MISSION_FAIL_COND) INVALID;
 
     //Current mission score, for use in the HUD.
     int mission_score = 0;
@@ -334,13 +334,13 @@ public:
     float score_indicator = 0.0f;
 
     //Current interlude, if any.
-    INTERLUDES cur_interlude = INTERLUDE_NONE;
+    INTERLUDE cur_interlude = INTERLUDE_NONE;
 
     //Time passed in the current interlude.
     float interlude_time = 0.0f;
 
     //Current big message, if any.
-    BIG_MESSAGES cur_big_msg = BIG_MESSAGE_NONE;
+    BIG_MESSAGE cur_big_msg = BIG_MESSAGE_NONE;
 
     //Time passed in the current big message.
     float big_msg_time = 0.0f;
@@ -468,7 +468,7 @@ private:
     void handle_player_action(const player_action &action);
     void init_hud();
     bool is_mission_clear_met();
-    bool is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason);
+    bool is_mission_fail_met(MISSION_FAIL_COND* reason);
     void load_game_content();
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(

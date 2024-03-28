@@ -31,8 +31,8 @@
  * of higher ones.
  */
 particle::particle(
-    const PARTICLE_TYPES type, const point &pos, const float z,
-    const float size, const float duration, const PARTICLE_PRIORITIES priority
+    const PARTICLE_TYPE type, const point &pos, const float z,
+    const float size, const float duration, const PARTICLE_PRIORITY priority
 ) :
     type(type),
     duration(duration),

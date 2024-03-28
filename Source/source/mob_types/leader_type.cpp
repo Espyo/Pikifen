@@ -35,16 +35,16 @@ leader_type::leader_type() :
     
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
-    target_type = MOB_TARGET_TYPE_PLAYER;
+    target_type = MOB_TARGET_FLAG_PLAYER;
     has_group = true;
     huntable_targets =
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY;
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_ENEMY;
     hurtable_targets =
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
-        MOB_TARGET_TYPE_FRAGILE;
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_FLAG_FRAGILE;
         
     for(size_t s = 0; s < N_LEADER_SOUNDS; ++s) {
         sfx_data_idxs[s] = INVALID;

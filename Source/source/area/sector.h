@@ -27,7 +27,7 @@ using std::string;
 
 
 //Types of sector.
-enum SECTOR_TYPES {
+enum SECTOR_TYPE {
 
     //Normal sector.
     SECTOR_TYPE_NORMAL,
@@ -78,7 +78,7 @@ struct sector {
     //--- Members ---
     
     //Its type.
-    SECTOR_TYPES type = SECTOR_TYPE_NORMAL;
+    SECTOR_TYPE type = SECTOR_TYPE_NORMAL;
     
     //Is it a bottomless pit?
     bool is_bottomless_pit = false;

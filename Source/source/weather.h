@@ -24,7 +24,7 @@ using std::vector;
 
 
 //Types of precipitation.
-enum PRECIPITATION_TYPES {
+enum PRECIPITATION_TYPE {
 
     //None.
     PRECIPITATION_TYPE_NONE,
@@ -77,7 +77,7 @@ public:
     vector<std::pair<int, ALLEGRO_COLOR> > fog_color;
     
     //Precipitation type, if any.
-    PRECIPITATION_TYPES precipitation_type = PRECIPITATION_TYPE_NONE;
+    PRECIPITATION_TYPE precipitation_type = PRECIPITATION_TYPE_NONE;
     
     
     //--- Function declarations ---
@@ -87,7 +87,7 @@ public:
         const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
         const vector<std::pair<int, unsigned char> > &ss,
         const vector<std::pair<int, unsigned char> > &bs,
-        const PRECIPITATION_TYPES pt
+        const PRECIPITATION_TYPE pt
     );
     unsigned char get_blackout_strength();
     ALLEGRO_COLOR get_daylight_color();

@@ -28,22 +28,22 @@
 
 
 //Possible results for the player interacting with a file dialog.
-enum FILE_DIALOG_RESULTS {
+enum FILE_DIALOG_RESULT {
 
     //Successful operation.
-    FILE_DIALOG_RES_SUCCESS,
+    FILE_DIALOG_RESULT_SUCCESS,
     
     //The option picked is not in the expected folder.
-    FILE_DIALOG_RES_WRONG_FOLDER,
+    FILE_DIALOG_RESULT_WRONG_FOLDER,
     
     //The player cancelled the dialog.
-    FILE_DIALOG_RES_CANCELED,
+    FILE_DIALOG_RESULT_CANCELED,
 
 };
 
 
 //Possible results for a folder wipe operation.
-enum WIPE_FOLDER_RESULTS {
+enum WIPE_FOLDER_RESULT {
     
     //Wipe successful.
     WIPE_FOLDER_RESULT_OK,
@@ -196,8 +196,8 @@ void get_next_offset_effect_edge(
     bool* out_shadow_cw
 );
 string get_subtitle_or_mission_goal(
-    const string &subtitle, const AREA_TYPES area_type,
-    const MISSION_GOALS goal
+    const string &subtitle, const AREA_TYPE area_type,
+    const MISSION_GOAL goal
 );
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
@@ -227,7 +227,7 @@ vector<string> prompt_file_dialog(
 );
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
-    const string &patterns, const int mode, FILE_DIALOG_RESULTS* result
+    const string &patterns, const int mode, FILE_DIALOG_RESULT* result
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 void report_fatal_error(const string &s, const data_node* dn = nullptr);
@@ -277,7 +277,7 @@ void update_offset_effect_caches (
     offset_effect_color_getter_t color_getter
 );
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
-WIPE_FOLDER_RESULTS wipe_folder(
+WIPE_FOLDER_RESULT wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 );
 string word_wrap(const string &s, const size_t n_chars_per_line);

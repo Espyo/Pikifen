@@ -160,7 +160,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
  */
 void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(
-        SHIP_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        SHIP_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 

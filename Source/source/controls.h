@@ -28,176 +28,176 @@ using std::vector;
 
 
 //List of player action types.
-enum PLAYER_ACTION_TYPES {
+enum PLAYER_ACTION_TYPE {
 
     //None.
-    PLAYER_ACTION_NONE,
+    PLAYER_ACTION_TYPE_NONE,
     
     //Main.
     
     //Move right.
-    PLAYER_ACTION_RIGHT,
+    PLAYER_ACTION_TYPE_RIGHT,
     
     //Move up.
-    PLAYER_ACTION_UP,
+    PLAYER_ACTION_TYPE_UP,
     
     //Move left.
-    PLAYER_ACTION_LEFT,
+    PLAYER_ACTION_TYPE_LEFT,
     
     //Move down.
-    PLAYER_ACTION_DOWN,
+    PLAYER_ACTION_TYPE_DOWN,
     
     //Throw.
-    PLAYER_ACTION_THROW,
+    PLAYER_ACTION_TYPE_THROW,
     
     //Whistle.
-    PLAYER_ACTION_WHISTLE,
+    PLAYER_ACTION_TYPE_WHISTLE,
     
     //Swap to next standby type.
-    PLAYER_ACTION_NEXT_TYPE,
+    PLAYER_ACTION_TYPE_NEXT_TYPE,
     
     //Swap to previous standby type.
-    PLAYER_ACTION_PREV_TYPE,
+    PLAYER_ACTION_TYPE_PREV_TYPE,
     
     //Swap to next leader.
-    PLAYER_ACTION_NEXT_LEADER,
+    PLAYER_ACTION_TYPE_NEXT_LEADER,
     
     //Swarm group towards cursor.
-    PLAYER_ACTION_GROUP_CURSOR,
+    PLAYER_ACTION_TYPE_GROUP_CURSOR,
     
     //Dismiss.
-    PLAYER_ACTION_DISMISS,
+    PLAYER_ACTION_TYPE_DISMISS,
     
     //Use spray #1.
-    PLAYER_ACTION_USE_SPRAY_1,
+    PLAYER_ACTION_TYPE_USE_SPRAY_1,
     
     //Use spray #2.
-    PLAYER_ACTION_USE_SPRAY_2,
+    PLAYER_ACTION_TYPE_USE_SPRAY_2,
     
     //Use currently selected spray.
-    PLAYER_ACTION_USE_SPRAY,
+    PLAYER_ACTION_TYPE_USE_SPRAY,
     
     //Swap to next spray.
-    PLAYER_ACTION_NEXT_SPRAY,
+    PLAYER_ACTION_TYPE_NEXT_SPRAY,
     
     //Swap to previous spray.
-    PLAYER_ACTION_PREV_SPRAY,
+    PLAYER_ACTION_TYPE_PREV_SPRAY,
     
     //Pause.
-    PLAYER_ACTION_PAUSE,
+    PLAYER_ACTION_TYPE_PAUSE,
     
     //Menus.
     
     //Menu navigation right.
-    PLAYER_ACTION_MENU_RIGHT,
+    PLAYER_ACTION_TYPE_MENU_RIGHT,
     
     //Menu navigation up.
-    PLAYER_ACTION_MENU_UP,
+    PLAYER_ACTION_TYPE_MENU_UP,
     
     //Menu navigation left.
-    PLAYER_ACTION_MENU_LEFT,
+    PLAYER_ACTION_TYPE_MENU_LEFT,
     
     //Menu navigation down.
-    PLAYER_ACTION_MENU_DOWN,
+    PLAYER_ACTION_TYPE_MENU_DOWN,
     
     //Menu navigation OK.
-    PLAYER_ACTION_MENU_OK,
+    PLAYER_ACTION_TYPE_MENU_OK,
     
     //Radar pan right.
-    PLAYER_ACTION_RADAR_RIGHT,
+    PLAYER_ACTION_TYPE_RADAR_RIGHT,
     
     //Radar pan up.
-    PLAYER_ACTION_RADAR_UP,
+    PLAYER_ACTION_TYPE_RADAR_UP,
     
     //Radar pan left.
-    PLAYER_ACTION_RADAR_LEFT,
+    PLAYER_ACTION_TYPE_RADAR_LEFT,
     
     //Radar pan down.
-    PLAYER_ACTION_RADAR_DOWN,
+    PLAYER_ACTION_TYPE_RADAR_DOWN,
     
     //Radar zoom in.
-    PLAYER_ACTION_RADAR_ZOOM_IN,
+    PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
     
     //Radar zoom out.
-    PLAYER_ACTION_RADAR_ZOOM_OUT,
+    PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT,
     
     //Advanced.
     
     //Move cursor right.
-    PLAYER_ACTION_CURSOR_RIGHT,
+    PLAYER_ACTION_TYPE_CURSOR_RIGHT,
     
     //Move cursor up.
-    PLAYER_ACTION_CURSOR_UP,
+    PLAYER_ACTION_TYPE_CURSOR_UP,
     
     //Move cursor left.
-    PLAYER_ACTION_CURSOR_LEFT,
+    PLAYER_ACTION_TYPE_CURSOR_LEFT,
     
     //Move cursor down.
-    PLAYER_ACTION_CURSOR_DOWN,
+    PLAYER_ACTION_TYPE_CURSOR_DOWN,
     
     //Swarm group right.
-    PLAYER_ACTION_GROUP_RIGHT,
+    PLAYER_ACTION_TYPE_GROUP_RIGHT,
     
     //Swarm group up.
-    PLAYER_ACTION_GROUP_UP,
+    PLAYER_ACTION_TYPE_GROUP_UP,
     
     //Swarm group left.
-    PLAYER_ACTION_GROUP_LEFT,
+    PLAYER_ACTION_TYPE_GROUP_LEFT,
     
     //Swarm group down.
-    PLAYER_ACTION_GROUP_DOWN,
+    PLAYER_ACTION_TYPE_GROUP_DOWN,
     
     //Swap to previous leader.
-    PLAYER_ACTION_PREV_LEADER,
+    PLAYER_ACTION_TYPE_PREV_LEADER,
     
     //Change zoom level.
-    PLAYER_ACTION_CHANGE_ZOOM,
+    PLAYER_ACTION_TYPE_CHANGE_ZOOM,
     
     //Zoom in.
-    PLAYER_ACTION_ZOOM_IN,
+    PLAYER_ACTION_TYPE_ZOOM_IN,
     
     //Zoom out.
-    PLAYER_ACTION_ZOOM_OUT,
+    PLAYER_ACTION_TYPE_ZOOM_OUT,
     
     //Swap to next standby type maturity.
-    PLAYER_ACTION_NEXT_MATURITY,
+    PLAYER_ACTION_TYPE_NEXT_MATURITY,
     
     //Swap to previous standby type maturity.
-    PLAYER_ACTION_PREV_MATURITY,
+    PLAYER_ACTION_TYPE_PREV_MATURITY,
     
     //Lie down.
-    PLAYER_ACTION_LIE_DOWN,
+    PLAYER_ACTION_TYPE_LIE_DOWN,
     
     //Custom A.
-    PLAYER_ACTION_CUSTOM_A,
+    PLAYER_ACTION_TYPE_CUSTOM_A,
     
     //Custom B.
-    PLAYER_ACTION_CUSTOM_B,
+    PLAYER_ACTION_TYPE_CUSTOM_B,
     
     //Custom C.
-    PLAYER_ACTION_CUSTOM_C,
+    PLAYER_ACTION_TYPE_CUSTOM_C,
     
     //Toggle the radar.
-    PLAYER_ACTION_RADAR,
+    PLAYER_ACTION_TYPE_RADAR,
     
     //Menu navigation back.
-    PLAYER_ACTION_MENU_BACK,
+    PLAYER_ACTION_TYPE_MENU_BACK,
     
     //Menu navigation page to the left.
-    PLAYER_ACTION_MENU_PAGE_LEFT,
+    PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
     
     //Menu navigation page to the right.
-    PLAYER_ACTION_MENU_PAGE_RIGHT,
+    PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
     
     
     //Total amount of player action types.
-    N_PLAYER_ACTIONS,
+    N_PLAYER_ACTION_TYPES,
 
 };
 
 
 //Categories of player action types.
-enum PLAYER_ACTION_CATEGORIES {
+enum PLAYER_ACTION_CAT {
     
     //None.
     PLAYER_ACTION_CAT_NONE,
@@ -222,10 +222,10 @@ struct player_action_type {
     //--- Members ---
 
     //ID of the action type.
-    PLAYER_ACTION_TYPES id = PLAYER_ACTION_NONE;
+    PLAYER_ACTION_TYPE id = PLAYER_ACTION_TYPE_NONE;
     
     //Category, for use in stuff like the options menu.
-    PLAYER_ACTION_CATEGORIES category = PLAYER_ACTION_CAT_NONE;
+    PLAYER_ACTION_CAT category = PLAYER_ACTION_CAT_NONE;
     
     //Name, for use in the options menu.
     string name;
@@ -252,8 +252,8 @@ public:
     //--- Function declarations ---
 
     void add_player_action_type(
-        const PLAYER_ACTION_TYPES id,
-        const PLAYER_ACTION_CATEGORIES category,
+        const PLAYER_ACTION_TYPE id,
+        const PLAYER_ACTION_CAT category,
         const string &name,
         const string &description,
         const string &internal_name,
@@ -263,13 +263,13 @@ public:
     vector<control_bind> &binds();
     string input_to_str(const player_input &b) const;
     control_bind find_bind(
-        const PLAYER_ACTION_TYPES action_type_id
+        const PLAYER_ACTION_TYPE action_type_id
     ) const;
     control_bind find_bind(
         const string &action_type_name
     ) const;
     float get_player_action_type_value(
-        PLAYER_ACTION_TYPES player_action_type_id
+        PLAYER_ACTION_TYPE player_action_type_id
     );
     player_input str_to_input(const string &s) const;
     player_input allegro_event_to_input(const ALLEGRO_EVENT &ev) const;

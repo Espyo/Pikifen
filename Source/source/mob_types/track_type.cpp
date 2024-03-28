@@ -22,7 +22,7 @@
 track_type::track_type() :
     mob_type(MOB_CATEGORY_TRACKS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     track_fsm::create_fsm(this);
 }
@@ -63,9 +63,9 @@ void track_type::load_properties(data_node* file) {
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); ++r) {
             if(riders_str_words[r] == "pikmin") {
-                enable_flag(riders, TRACK_RIDER_PIKMIN);
+                enable_flag(riders, TRACK_RIDER_FLAG_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {
-                enable_flag(riders, TRACK_RIDER_LEADERS);
+                enable_flag(riders, TRACK_RIDER_FLAG_LEADERS);
             } else {
                 game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",

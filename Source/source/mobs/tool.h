@@ -19,13 +19,13 @@
 
 
 //Flags that control how it can be held.
-enum HOLDABILITY_FLAGS {
+enum HOLDABILITY_FLAG {
     
     //The mob can be held by Pikmin.
-    HOLDABLE_BY_PIKMIN = 1,
+    HOLDABILITY_FLAG_PIKMIN = 1 << 0,
     
     //The mob can be held by enemies.
-    HOLDABLE_BY_ENEMIES = 2,
+    HOLDABILITY_FLAG_ENEMIES = 1 << 1,
     
 };
 

@@ -210,7 +210,7 @@ void area_editor::cancel_layout_moving() {
  *
  * @param new_state The new state.
  */
-void area_editor::change_state(const EDITOR_STATES new_state) {
+void area_editor::change_state(const EDITOR_STATE new_state) {
     clear_selection();
     state = new_state;
     sub_state = EDITOR_SUB_STATE_NONE;
@@ -277,7 +277,7 @@ void area_editor::clear_current_area() {
  */
 void area_editor::clear_layout_drawing() {
     drawing_nodes.clear();
-    drawing_line_result = DRAWING_LINE_OK;
+    drawing_line_result = DRAWING_LINE_RESULT_OK;
     sector_split_info.useless_split_part_2_checkpoint = INVALID;
 }
 
@@ -387,7 +387,7 @@ void area_editor::close_options_dialog() {
  */
 void area_editor::create_area(
     const string &requested_area_folder_name,
-    const AREA_TYPES requested_area_type
+    const AREA_TYPE requested_area_type
 ) {
     clear_current_area();
     
@@ -550,7 +550,7 @@ void area_editor::create_mob_under_cursor() {
  */
 void area_editor::create_or_load_area(
     const string &requested_area_folder_name,
-    const AREA_TYPES requested_area_type
+    const AREA_TYPE requested_area_type
 ) {
     string file_to_check =
         get_base_area_folder_path(requested_area_type, true) +
@@ -601,7 +601,7 @@ void area_editor::delete_current_area() {
         non_important_files.clear();
         non_important_files.push_back(AREA_DATA_FILE_NAME);
         non_important_files.push_back(AREA_GEOMETRY_FILE_NAME);
-        WIPE_FOLDER_RESULTS result =
+        WIPE_FOLDER_RESULT result =
             wipe_folder(
                 get_base_area_folder_path(game.cur_area_data.type, true) +
                 "/" + game.cur_area_data.folder_name,
@@ -919,7 +919,7 @@ void area_editor::draw_canvas_imgui_callback(
  * @param error The triangulation error.
  */
 void area_editor::emit_triangulation_error_status_bar_message(
-    const TRIANGULATION_ERRORS error
+    const TRIANGULATION_ERROR error
 ) {
     switch(error) {
     case TRIANGULATION_ERROR_LONE_EDGES: {
@@ -946,7 +946,7 @@ void area_editor::emit_triangulation_error_status_bar_message(
             true
         );
         break;
-    } case TRIANGULATION_NO_ERROR: {
+    } case TRIANGULATION_ERROR_NONE: {
         break;
     }
     }
@@ -1456,7 +1456,7 @@ string area_editor::get_path_short_name(const string &p) const {
  *
  * @return The evaluation result.
  */
-area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
+area_editor::SECTOR_SPLIT_RESULT area_editor::get_sector_split_evaluation() {
     sector_split_info.traversed_edges[0].clear();
     sector_split_info.traversed_edges[1].clear();
     sector_split_info.traversed_vertexes[0].clear();
@@ -1482,7 +1482,7 @@ area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
     
     if(sector_split_info.traversed_edges[0].empty()) {
         //Something went wrong.
-        return SECTOR_SPLIT_INVALID;
+        return SECTOR_SPLIT_RESULT_INVALID;
     }
     
     if(sector_split_info.traversed_edges[1].empty()) {
@@ -1493,10 +1493,10 @@ area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
         //one of them is in an inner sector.
         //If the user were to split in this way, the sector would still be
         //in one piece, except with a disallowed gash. Cancel.
-        return SECTOR_SPLIT_USELESS;
+        return SECTOR_SPLIT_RESULT_USELESS;
     }
     
-    return SECTOR_SPLIT_OK;
+    return SECTOR_SPLIT_RESULT_OK;
 }
 
 
@@ -1748,33 +1748,33 @@ void area_editor::goto_problem() {
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
     switch(drawing_line_result) {
-    case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
+    case DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX: {
         break;
-    } case DRAWING_LINE_ALONG_EDGE: {
+    } case DRAWING_LINE_RESULT_ALONG_EDGE: {
         set_status(
             "That line is drawn on top of an edge!",
             true
         );
         break;
-    } case DRAWING_LINE_CROSSES_DRAWING: {
+    } case DRAWING_LINE_RESULT_CROSSES_DRAWING: {
         set_status(
             "That line crosses other lines in the drawing!",
             true
         );
         break;
-    } case DRAWING_LINE_CROSSES_EDGES: {
+    } case DRAWING_LINE_RESULT_CROSSES_EDGES: {
         set_status(
             "That line crosses existing edges!",
             true
         );
         break;
-    } case DRAWING_LINE_WAYWARD_SECTOR: {
+    } case DRAWING_LINE_RESULT_WAYWARD_SECTOR: {
         set_status(
             "That line goes out of the sector you're drawing on!",
             true
         );
         break;
-    } case DRAWING_LINE_OK: {
+    } case DRAWING_LINE_RESULT_OK: {
         break;
     }
     }
@@ -1830,7 +1830,7 @@ void area_editor::load() {
     
     if(!quick_play_area_path.empty()) {
         string folder_name;
-        AREA_TYPES type;
+        AREA_TYPE type;
         get_area_info_from_path(
             quick_play_area_path,
             &folder_name,
@@ -1843,7 +1843,7 @@ void area_editor::load() {
         
     } else if(!auto_load_area.empty()) {
         string folder_name;
-        AREA_TYPES type;
+        AREA_TYPE type;
         get_area_info_from_path(
             auto_load_area,
             &folder_name,
@@ -1870,7 +1870,7 @@ void area_editor::load() {
  */
 void area_editor::load_area(
     const string &requested_area_folder_name,
-    const AREA_TYPES requested_area_type,
+    const AREA_TYPE requested_area_type,
     const bool from_backup, const bool should_update_history
 ) {
     string new_area_name = requested_area_folder_name;
@@ -2014,7 +2014,7 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 void area_editor::pick_area(
     const string &name, const string &category, const bool is_new
 ) {
-    AREA_TYPES type = AREA_TYPE_SIMPLE;
+    AREA_TYPE type = AREA_TYPE_SIMPLE;
     if(category == "Mission") {
         type = AREA_TYPE_MISSION;
     }
@@ -2044,7 +2044,7 @@ void area_editor::pick_texture(
     }
     
     if(final_name == "Browse...") {
-        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+        FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
                 TEXTURES_FOLDER_PATH,
@@ -2056,14 +2056,14 @@ void area_editor::pick_texture(
             );
             
         switch(result) {
-        case FILE_DIALOG_RES_WRONG_FOLDER: {
+        case FILE_DIALOG_RESULT_WRONG_FOLDER: {
             //File doesn't belong to the folder.
             set_status("The chosen image is not in the textures folder!", true);
             return;
-        } case FILE_DIALOG_RES_CANCELED: {
+        } case FILE_DIALOG_RESULT_CANCELED: {
             //User canceled.
             return;
-        } case FILE_DIALOG_RES_SUCCESS: {
+        } case FILE_DIALOG_RESULT_SUCCESS: {
             final_name = f[0];
             set_status("Picked an image successfully.");
             break;
@@ -2693,11 +2693,11 @@ void area_editor::press_selection_filter_button() {
     clear_selection();
     if(!is_shift_pressed) {
         selection_filter =
-            (SELECTION_FILTERS)
+            (SELECTION_FILTER)
             sum_and_wrap(selection_filter, 1, N_SELECTION_FILTERS);
     } else {
         selection_filter =
-            (SELECTION_FILTERS)
+            (SELECTION_FILTER)
             sum_and_wrap(selection_filter, -1, N_SELECTION_FILTERS);
     }
     
@@ -2727,26 +2727,26 @@ void area_editor::press_selection_filter_button() {
 void area_editor::press_snap_mode_button() {
     if(!is_shift_pressed) {
         game.options.area_editor_snap_mode =
-            (area_editor::SNAP_MODES)
+            (area_editor::SNAP_MODE)
             sum_and_wrap(game.options.area_editor_snap_mode, 1, N_SNAP_MODES);
     } else {
         game.options.area_editor_snap_mode =
-            (area_editor::SNAP_MODES)
+            (area_editor::SNAP_MODE)
             sum_and_wrap(game.options.area_editor_snap_mode, -1, N_SNAP_MODES);
     }
     
     string final_status_text = "Set snap mode to ";
     switch(game.options.area_editor_snap_mode) {
-    case SNAP_GRID: {
+    case SNAP_MODE_GRID: {
         final_status_text += "grid";
         break;
-    } case SNAP_VERTEXES: {
+    } case SNAP_MODE_VERTEXES: {
         final_status_text += "vertexes";
         break;
-    } case SNAP_EDGES: {
+    } case SNAP_MODE_EDGES: {
         final_status_text += "edges";
         break;
-    } case SNAP_NOTHING: {
+    } case SNAP_MODE_NOTHING: {
         final_status_text += "nothing";
         break;
     } case N_SNAP_MODES: {
@@ -3555,7 +3555,7 @@ bool area_editor::save_area(const bool to_backup) {
                 i2s(game.cur_area_data.mission.grading_mode)
             )
         );
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
+        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
             if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
                 data_file.add(
                     new data_node(

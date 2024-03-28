@@ -20,7 +20,7 @@
 
 
 //Ship object animations.
-enum SHIP_ANIMATIONS {
+enum SHIP_ANIM {
 
     //Idling.
     SHIP_ANIM_IDLING,
@@ -29,7 +29,7 @@ enum SHIP_ANIMATIONS {
 
 
 //Ship object states.
-enum SHIP_STATES {
+enum SHIP_STATE {
     
     //Idling.
     SHIP_STATE_IDLING,

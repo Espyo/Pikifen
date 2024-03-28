@@ -24,7 +24,7 @@ extern const float DEF_WHISTLE_RANGE;
 
 
 //Leader object states.
-enum LEADER_STATES {
+enum LEADER_STATE {
 
     //Idling.
     LEADER_STATE_IDLING,
@@ -139,7 +139,7 @@ enum LEADER_STATES {
 
 
 //Leader object animations.
-enum LEADER_ANIMATIONS {
+enum LEADER_ANIM {
 
     //Idling.
     LEADER_ANIM_IDLING,
@@ -184,7 +184,7 @@ enum LEADER_ANIMATIONS {
 
 
 //Leader object sounds.
-enum LEADER_SOUNDS {
+enum LEADER_SOUND {
 
     //Dismissing their group.
     LEADER_SOUND_DISMISSING,

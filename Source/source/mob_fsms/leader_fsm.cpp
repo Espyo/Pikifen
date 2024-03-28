@@ -1590,7 +1590,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
     sfx_source_config_t throw_sfx_config;
-    throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
+    throw_sfx_config.stack_mode = SFX_STACK_MODE_OVERRIDE;
     game.audio.create_mob_sfx_source(
         game.sys_assets.sfx_throw,
         leader_ptr,
@@ -1613,7 +1613,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
 void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
     m->set_animation(
-        LEADER_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        LEADER_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -1627,7 +1627,7 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
     m->set_animation(
-        LEADER_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        LEADER_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -1853,7 +1853,7 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed.x = m->speed.y = 0;
     
-    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
+    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
     if(m == game.states.gameplay->cur_leader_ptr) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -1875,7 +1875,7 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
     
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
-        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
+        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 
@@ -2355,7 +2355,7 @@ void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
     //Remove the throw particle generator.
-    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
+    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
 
 
@@ -2459,7 +2459,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         for(size_t g = 0; g < m->particle_generators.size(); ++g) {
             if(
                 m->particle_generators[g].id ==
-                MOB_PARTICLE_GENERATOR_WAVE_RING
+                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
             ) {
                 already_generating = true;
                 break;
@@ -2475,7 +2475,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
             p.size_grow_speed = m->radius * 4;
             particle_generator pg(0.3, p, 1);
             pg.follow_mob = m;
-            pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
+            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
     }

@@ -48,19 +48,19 @@ extern const string STATUS_GUI_FILE_PATH;
 enum GAMEPLAY_LEAVE_TARGET {
 
     //Leave in order to retry the area.
-    LEAVE_TO_RETRY,
+    GAMEPLAY_LEAVE_TARGET_RETRY,
     
     //Leave in order to end the exploration/mission.
-    LEAVE_TO_END,
+    GAMEPLAY_LEAVE_TARGET_END,
     
     //Leave in order to go to the area selection.
-    LEAVE_TO_AREA_SELECT,
+    GAMEPLAY_LEAVE_TARGET_AREA_SELECT,
 
 };
 
 
 //Pages.
-enum PAUSE_MENU_PAGES {
+enum PAUSE_MENU_PAGE {
 
     //System.
     PAUSE_MENU_PAGE_SYSTEM,
@@ -89,7 +89,7 @@ public:
     //--- Misc. declarations ---
 
     //Categories of help page tidbits.
-    enum HELP_CATEGORIES {
+    enum HELP_CATEGORY {
 
         //Gameplay basics tidbits.
         HELP_CATEGORY_GAMEPLAY1,
@@ -112,7 +112,7 @@ public:
     };
 
     //Types of spots for each Go Here drawn path segment.
-    enum GO_HERE_SEGMENT_SPOTS {
+    enum GO_HERE_SEGMENT_SPOT {
         
         //The selected leader.
         GO_HERE_SEGMENT_SPOT_LEADER,
@@ -212,16 +212,16 @@ private:
     list_gui_item* pikmin_list = nullptr;
 
     //All tidbits in the help page.
-    map<HELP_CATEGORIES, vector<tidbit> > tidbits;
+    map<HELP_CATEGORY, vector<tidbit> > tidbits;
 
     //Currently shown help tidbit, if any.
     tidbit* cur_tidbit = nullptr;
 
     //Where the player intends to go by leaving.
-    GAMEPLAY_LEAVE_TARGET leave_target = LEAVE_TO_AREA_SELECT;
+    GAMEPLAY_LEAVE_TARGET leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
 
     //Pages available, in order.
-    vector<PAUSE_MENU_PAGES> pages;
+    vector<PAUSE_MENU_PAGE> pages;
 
     //Z of the lowest sector.
     float lowest_sector_z = 0.0f;
@@ -296,7 +296,7 @@ private:
     vector<path_stop*> go_here_path;
 
     //Go Here path result.
-    PATH_RESULTS go_here_path_result = PATH_RESULT_NOT_CALCULATED;
+    PATH_RESULT go_here_path_result = PATH_RESULT_NOT_CALCULATED;
 
     //Pan speed and amount.
     movement_t radar_pan;
@@ -329,9 +329,9 @@ private:
     void calculate_go_here_path();
     void confirm_or_leave();
     button_gui_item* create_page_button(
-        PAUSE_MENU_PAGES target_page, bool left, gui_manager* cur_gui
+        PAUSE_MENU_PAGE target_page, bool left, gui_manager* cur_gui
     );
-    void create_page_buttons(PAUSE_MENU_PAGES cur_page, gui_manager* cur_gui);
+    void create_page_buttons(PAUSE_MENU_PAGE cur_page, gui_manager* cur_gui);
     void draw_go_here_segment(
         const point &start, const point &end,
         const ALLEGRO_COLOR &color, float* texture_point
@@ -351,12 +351,12 @@ private:
     void init_mission_page();
     void init_status_page();
     void pan_radar(point amount);
-    void populate_help_tidbits(const HELP_CATEGORIES category);
+    void populate_help_tidbits(const HELP_CATEGORY category);
     void radar_confirm();
     void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();
     void switch_page(
-        gui_manager* cur_gui, PAUSE_MENU_PAGES new_page, bool left
+        gui_manager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
     );
     void update_radar_transformations(
         const point &radar_center, const point &radar_size

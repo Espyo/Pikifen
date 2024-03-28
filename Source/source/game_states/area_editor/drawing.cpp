@@ -839,11 +839,11 @@ void area_editor::draw_canvas() {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             bool highlighted = highlighted_path_stop == s_ptr;
             ALLEGRO_COLOR color;
-            if(has_flag(s_ptr->flags, PATH_STOP_SCRIPT_ONLY)) {
+            if(has_flag(s_ptr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
                 color = al_map_rgba(187, 102, 34, 224);
-            } else if(has_flag(s_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY)) {
+            } else if(has_flag(s_ptr->flags, PATH_STOP_FLAG_LIGHT_LOAD_ONLY)) {
                 color = al_map_rgba(102, 170, 34, 224);
-            } else if(has_flag(s_ptr->flags, PATH_STOP_AIRBORNE_ONLY)) {
+            } else if(has_flag(s_ptr->flags, PATH_STOP_FLAG_AIRBORNE_ONLY)) {
                 color = al_map_rgba(187, 102, 153, 224);
             } else {
                 color = al_map_rgb(88, 177, 177);
@@ -1110,7 +1110,7 @@ void area_editor::draw_canvas() {
                         AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
                         AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
                     ),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     letter
                 );
             }
@@ -1214,7 +1214,7 @@ void area_editor::draw_canvas() {
                     AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
                     AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
                 ),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 letter
             );
         }
@@ -1673,7 +1673,7 @@ void area_editor::draw_canvas() {
                             line_y
                         ),
                         point(1, 1),
-                        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, i2s(z)
+                        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, i2s(z)
                     );
                 }
             }
@@ -1692,7 +1692,7 @@ void area_editor::draw_canvas() {
                         cross_section_window_end.y
                     ) * 0.5
                 ),
-                point(1, 1), ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                point(1, 1), ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 "Please cross\nsome edges."
             );
             
@@ -1830,7 +1830,7 @@ void area_editor::draw_debug_text(
             AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom,
             AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom
         ),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
         text
     );
     

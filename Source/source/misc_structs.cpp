@@ -681,7 +681,7 @@ void fade_manager::tick(const float delta_t) {
 keyframe_interpolator::keyframe_interpolator(const float initial_value) {
     keyframe_times.push_back(0.0f);
     keyframe_values.push_back(initial_value);
-    keyframe_eases.push_back(EASE_NONE);
+    keyframe_eases.push_back(EASE_METHOD_NONE);
 }
 
 
@@ -693,7 +693,7 @@ keyframe_interpolator::keyframe_interpolator(const float initial_value) {
  * @param ease Easing method, if any.
  */
 void keyframe_interpolator::add(
-    const float t, const float value, const EASING_METHODS ease
+    const float t, const float value, const EASING_METHOD ease
 ) {
     keyframe_times.push_back(t);
     keyframe_values.push_back(value);
@@ -751,7 +751,7 @@ maker_tools_t::maker_tools_t() :
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
     for(size_t k = 0; k < 20; ++k) {
-        keys[k] = MAKER_TOOL_NONE;
+        keys[k] = MAKER_TOOL_TYPE_NONE;
     }
 }
 
@@ -886,7 +886,7 @@ void movement_t::reset() {
 void notification_t::draw() const {
     if(visibility == 0.0f) return;
     
-    float scale = ease(EASE_OUT, visibility);
+    float scale = ease(EASE_METHOD_OUT, visibility);
     
     ALLEGRO_TRANSFORM tra, old_tra;
     al_identity_transform(&tra);
@@ -948,7 +948,7 @@ void notification_t::draw() const {
             (text_box_y1 + text_box_y2) * 0.5
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER,
+        TEXT_VALIGN_MODE_CENTER,
         point(
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1
@@ -1043,7 +1043,7 @@ performance_monitor_t::performance_monitor_t() :
  *
  * @param state New state.
  */
-void performance_monitor_t::enter_state(const PERF_MON_STATES state) {
+void performance_monitor_t::enter_state(const PERF_MON_STATE state) {
     if(paused) return;
     
     cur_state = state;
@@ -1788,7 +1788,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
  * @return The type, or nullptr if not found.
  */
 subgroup_type* subgroup_type_manager::get_type(
-    const SUBGROUP_TYPE_CATEGORIES category,
+    const SUBGROUP_TYPE_CATEGORY category,
     const mob_type* specific_type
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
@@ -1813,7 +1813,7 @@ subgroup_type* subgroup_type_manager::get_type(
  * @param icon If not nullptr, use this icon to represent this subgroup.
  */
 void subgroup_type_manager::register_type(
-    const SUBGROUP_TYPE_CATEGORIES category,
+    const SUBGROUP_TYPE_CATEGORY category,
     mob_type* specific_type,
     ALLEGRO_BITMAP* icon
 ) {

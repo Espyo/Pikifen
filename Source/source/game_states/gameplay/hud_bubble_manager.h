@@ -20,7 +20,7 @@ using std::map;
 
 
 //Methods for a HUD bubble to move.
-enum HUD_BUBBLE_MOVE_METHODS {
+enum HUD_BUBBLE_MOVE_METHOD {
     
     //In a straight line.
     HUD_BUBBLE_MOVE_METHOD_STRAIGHT,
@@ -100,7 +100,7 @@ public:
     float transition_duration = 0.0f;
 
     //How to move the bubbles around during a transition.
-    HUD_BUBBLE_MOVE_METHODS move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
+    HUD_BUBBLE_MOVE_METHOD move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     
 
     //--- Function definitions ---
@@ -202,7 +202,7 @@ public:
                 (pos->y + match_pos.y) / 2.0f
             );
             float mov_ratio =
-                ease(EASE_IN_OUT_BACK, 1.0f - transition_anim_ratio);
+                ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transition_anim_ratio);
             float pivot_dist =
                 dist(*pos, match_pivot).to_float();
                 
@@ -212,7 +212,7 @@ public:
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     *pos =
                         interpolate_point(
-                            ease(EASE_OUT, 1.0f - transition_anim_ratio),
+                            ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
                             *pos, match_pos
                         );
@@ -230,7 +230,7 @@ public:
                 }
                 *size =
                     interpolate_point(
-                        ease(EASE_OUT, 1.0f - transition_anim_ratio),
+                        ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
                         *size, match_size
                     );
@@ -241,7 +241,7 @@ public:
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     *pos =
                         interpolate_point(
-                            ease(EASE_OUT, 1.0f - transition_anim_ratio),
+                            ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
                             match_pos, *pos
                         );
@@ -259,7 +259,7 @@ public:
                 }
                 *size =
                     interpolate_point(
-                        ease(EASE_OUT, 1.0f - transition_anim_ratio),
+                        ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
                         match_size, *size
                     );
@@ -271,11 +271,11 @@ public:
             
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Fade out.
-                *size *= ease(EASE_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
+                *size *= ease(EASE_METHOD_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
                 
             } else {
                 //Second half of the animation. Fade in.
-                *size *= ease(EASE_OUT, 1 - transition_anim_ratio * 2.0f);
+                *size *= ease(EASE_METHOD_OUT, 1 - transition_anim_ratio * 2.0f);
                 
             }
         }

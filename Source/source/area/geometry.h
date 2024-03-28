@@ -47,10 +47,10 @@ extern const float SMOOTHING_MAX_LENGTH;
 
 
 //Possible errors after a triangulation operation.
-enum TRIANGULATION_ERRORS {
+enum TRIANGULATION_ERROR {
 
     //No error occured.
-    TRIANGULATION_NO_ERROR,
+    TRIANGULATION_ERROR_NONE,
     
     //Invalid arguments provided.
     TRIANGULATION_ERROR_INVALID_ARGS,
@@ -132,7 +132,7 @@ struct geometry_problems {
     //--- Members ---
     
     //Non-simple sectors found, and their reason for being broken.
-    map<sector*, TRIANGULATION_ERRORS> non_simples;
+    map<sector*, TRIANGULATION_ERROR> non_simples;
     
     //List of lone edges found.
     unordered_set<edge*> lone_edges;
@@ -154,7 +154,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &p, const vector<vertex*> &all_vertexes,
     const float merge_radius
 );
-TRIANGULATION_ERRORS get_polys(
+TRIANGULATION_ERROR get_polys(
     sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
 );
 bool get_polys_is_outer(
@@ -168,16 +168,16 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
 );
-TRIANGULATION_ERRORS trace_edges(
+TRIANGULATION_ERROR trace_edges(
     vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
     vector<vertex*>* vertexes,
     unordered_set<edge*>* unvisited_edges,
     unordered_set<edge*>* polygon_edges_so_far
 );
-TRIANGULATION_ERRORS triangulate_polygon(
+TRIANGULATION_ERROR triangulate_polygon(
     polygon* poly, vector<triangle>* triangles
 );
-TRIANGULATION_ERRORS triangulate_sector(
+TRIANGULATION_ERROR triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 );
 

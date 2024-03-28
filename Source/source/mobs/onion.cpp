@@ -93,7 +93,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     
     set_animation(
         MOB_TYPE::ANIM_IDLING, true,
-        START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -120,11 +120,11 @@ void onion::draw_mob() {
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
-        SPRITE_BITMAP_EFFECT_STANDARD |
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY
     );
     
     eff.tint_color.a *= (seethrough / 255.0f);

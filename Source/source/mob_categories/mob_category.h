@@ -26,7 +26,7 @@ using std::vector;
 
 
 //Mob categories. Sorted by what types of mobs to load first.
-enum MOB_CATEGORIES {
+enum MOB_CATEGORY {
     
     //None.
     MOB_CATEGORY_NONE,
@@ -115,7 +115,7 @@ public:
     string name;
 
     //ID of the mob category.
-    MOB_CATEGORIES id = MOB_CATEGORY_NONE;
+    MOB_CATEGORY id = MOB_CATEGORY_NONE;
 
     //Name used when referring to objects of this category in plural.
     string plural_name;
@@ -130,7 +130,7 @@ public:
     //--- Function declarations ---
 
     mob_category(
-        const MOB_CATEGORIES id, const string &name, const string &plural_name,
+        const MOB_CATEGORY id, const string &name, const string &plural_name,
         const string &folder, const ALLEGRO_COLOR editor_color
     );
     virtual ~mob_category() = default;
@@ -159,12 +159,12 @@ public:
     
     //--- Function declarations ---
 
-    void register_category(MOB_CATEGORIES nr, mob_category* category);
+    void register_category(MOB_CATEGORY nr, mob_category* category);
     mob_type* find_mob_type(const string &name) const;
     mob_type* find_mob_type_from_folder_name(
         const mob_category* cat, const string &name
     ) const;
-    mob_category* get(const MOB_CATEGORIES id) const;
+    mob_category* get(const MOB_CATEGORY id) const;
     mob_category* get_from_folder_name(const string &name) const;
     mob_category* get_from_name(const string &name) const;
     mob_category* get_from_pname(const string &pname) const;

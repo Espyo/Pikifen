@@ -155,7 +155,7 @@ onion_menu_t::onion_menu_t(
             color,
             center,
             point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size, true,
             "Field: " +
             i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta)
@@ -283,7 +283,7 @@ onion_menu_t::onion_menu_t(
                 color,
                 center,
                 point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true, i2s(real_onion_amount - t_ptr->delta)
             );
         };
@@ -391,7 +391,7 @@ onion_menu_t::onion_menu_t(
                 color,
                 center,
                 point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true, i2s(real_group_amount + t_ptr->delta)
             );
         };

@@ -71,43 +71,43 @@ extern const float RINGS_INTERVAL;
 
 
 //List of maker tools.
-enum MAKER_TOOL_TYPES {
+enum MAKER_TOOL_TYPE {
 
     //None.
-    MAKER_TOOL_NONE,
+    MAKER_TOOL_TYPE_NONE,
     
     //Create an image of the whole area.
-    MAKER_TOOL_AREA_IMAGE,
+    MAKER_TOOL_TYPE_AREA_IMAGE,
     
     //Change gameplay speed.
-    MAKER_TOOL_CHANGE_SPEED,
+    MAKER_TOOL_TYPE_CHANGE_SPEED,
     
     //Show collision box.
-    MAKER_TOOL_COLLISION,
+    MAKER_TOOL_TYPE_COLLISION,
     
     //Geometry info beneath mouse cursor.
-    MAKER_TOOL_GEOMETRY_INFO,
+    MAKER_TOOL_TYPE_GEOMETRY_INFO,
     
     //Show hitboxes.
-    MAKER_TOOL_HITBOXES,
+    MAKER_TOOL_TYPE_HITBOXES,
     
     //Toggle HUD visibility.
-    MAKER_TOOL_HUD,
+    MAKER_TOOL_TYPE_HUD,
     
     //Hurt mob beneath mouse cursor.
-    MAKER_TOOL_HURT_MOB,
+    MAKER_TOOL_TYPE_HURT_MOB,
     
     //Get info on the mob beneath mouse cursor.
-    MAKER_TOOL_MOB_INFO,
+    MAKER_TOOL_TYPE_MOB_INFO,
     
     //Create a new Pikmin beneath mouse cursor.
-    MAKER_TOOL_NEW_PIKMIN,
+    MAKER_TOOL_TYPE_NEW_PIKMIN,
     
     //Show path info.
-    MAKER_TOOL_PATH_INFO,
+    MAKER_TOOL_TYPE_PATH_INFO,
     
     //Teleport to mouse cursor.
-    MAKER_TOOL_TELEPORT,
+    MAKER_TOOL_TYPE_TELEPORT,
     
     //Total amount of maker tools.
     N_MAKER_TOOLS,
@@ -121,7 +121,7 @@ extern const string NAMES[N_MAKER_TOOLS];
 
 
 //Types of string token.
-enum STRING_TOKEN_TYPES {
+enum STRING_TOKEN {
 
     //None.
     STRING_TOKEN_NONE,
@@ -424,7 +424,7 @@ struct string_token {
     //--- Members ---
     
     //Type of token.
-    STRING_TOKEN_TYPES type = STRING_TOKEN_CHAR;
+    STRING_TOKEN type = STRING_TOKEN_CHAR;
     
     //Its content.
     string content;
@@ -532,7 +532,7 @@ struct maker_tools_t {
     timer info_print_timer;
     
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
-    MAKER_TOOL_TYPES keys[20];
+    MAKER_TOOL_TYPE keys[20];
     
     //When we last spawned a Pikmin, what was its type?
     pikmin_type* last_pikmin_type = nullptr;
@@ -1138,7 +1138,7 @@ struct keyframe_interpolator {
     //--- Function declarations ---
     
     float get(const float t);
-    void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
+    void add(const float t, const float value, EASING_METHOD ease = EASE_METHOD_NONE);
     explicit keyframe_interpolator(const float initial_value);
     
     private:
@@ -1152,13 +1152,13 @@ struct keyframe_interpolator {
     vector<float> keyframe_values;
     
     //Keyframe easing methods.
-    vector<EASING_METHODS> keyframe_eases;
+    vector<EASING_METHOD> keyframe_eases;
     
 };
 
 
 //Performance monitor states.
-enum PERF_MON_STATES {
+enum PERF_MON_STATE {
 
     //Measuring loading times.
     PERF_MON_STATE_LOADING,
@@ -1182,7 +1182,7 @@ struct performance_monitor_t {
     performance_monitor_t();
     void set_area_name(const string &name);
     void set_paused(const bool paused);
-    void enter_state(const PERF_MON_STATES mode);
+    void enter_state(const PERF_MON_STATE mode);
     void leave_state();
     void start_measurement(const string &name);
     void finish_measurement();
@@ -1230,7 +1230,7 @@ struct performance_monitor_t {
     string area_name;
     
     //Current state.
-    PERF_MON_STATES cur_state = PERF_MON_STATE_LOADING;
+    PERF_MON_STATE cur_state = PERF_MON_STATE_LOADING;
     
     //Is the monitoring currently paused?
     bool paused = false;
@@ -1278,7 +1278,7 @@ struct subgroup_type {
     
     //--- Function declarations ---
     
-    SUBGROUP_TYPE_CATEGORIES get_category() const { return category; }
+    SUBGROUP_TYPE_CATEGORY get_category() const { return category; }
     ALLEGRO_BITMAP* get_icon() const { return icon; }
     
 private:
@@ -1288,7 +1288,7 @@ private:
     //--- Members ---
     
     //Category this subgroup type belongs to.
-    SUBGROUP_TYPE_CATEGORIES category = SUBGROUP_TYPE_CATEGORY_LEADER;
+    SUBGROUP_TYPE_CATEGORY category = SUBGROUP_TYPE_CATEGORY_LEADER;
     
     //Specific mob type it refers to.
     mob_type* specific_type = nullptr;
@@ -1309,12 +1309,12 @@ struct subgroup_type_manager {
     //--- Function declarations ---
     
     void register_type(
-        const SUBGROUP_TYPE_CATEGORIES category,
+        const SUBGROUP_TYPE_CATEGORY category,
         mob_type* specific_type = nullptr,
         ALLEGRO_BITMAP* icon = nullptr
     );
     subgroup_type* get_type(
-        const SUBGROUP_TYPE_CATEGORIES category,
+        const SUBGROUP_TYPE_CATEGORY category,
         const mob_type* specific_type = nullptr
     ) const;
     subgroup_type* get_first_type() const;

@@ -65,27 +65,27 @@ pikmin_type::pikmin_type() :
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = game.config.pikmin_chase_range;
     reaches.push_back(chase_reach);
-    target_type = MOB_TARGET_TYPE_PLAYER;
+    target_type = MOB_TARGET_FLAG_PLAYER;
     huntable_targets =
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
-        MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE |
-        MOB_TARGET_TYPE_PIKMIN_OBSTACLE |
-        MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE;
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_FLAG_STRONG_PLAIN_OBSTACLE |
+        MOB_TARGET_FLAG_PIKMIN_OBSTACLE |
+        MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE;
     hurtable_targets =
-        MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_ENEMY |
-        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
-        MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE |
-        MOB_TARGET_TYPE_PIKMIN_OBSTACLE |
-        MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE |
-        MOB_TARGET_TYPE_FRAGILE;
+        MOB_TARGET_FLAG_PLAYER |
+        MOB_TARGET_FLAG_ENEMY |
+        MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_FLAG_STRONG_PLAIN_OBSTACLE |
+        MOB_TARGET_FLAG_PIKMIN_OBSTACLE |
+        MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE |
+        MOB_TARGET_FLAG_FRAGILE;
         
     area_editor_prop_t aep_maturity;
     aep_maturity.name = "Maturity";
     aep_maturity.var = "maturity";
-    aep_maturity.type = AEMP_NUMBER_LIST;
+    aep_maturity.type = AEMP_TYPE_NR_LIST;
     aep_maturity.def_value = "2";
     aep_maturity.value_list.push_back("Leaf");
     aep_maturity.value_list.push_back("Bud");
@@ -96,7 +96,7 @@ pikmin_type::pikmin_type() :
     area_editor_prop_t aep_sprout;
     aep_sprout.name = "Sprout";
     aep_sprout.var = "sprout";
-    aep_sprout.type = AEMP_BOOL;
+    aep_sprout.type = AEMP_TYPE_BOOL;
     aep_sprout.def_value = "false";
     aep_sprout.tooltip =
         "True if this Pikmin spawns as a sprout, "
@@ -106,7 +106,7 @@ pikmin_type::pikmin_type() :
     area_editor_prop_t aep_follow_link;
     aep_sprout.name = "Follow link as leader";
     aep_sprout.var = "follow_link_as_leader";
-    aep_sprout.type = AEMP_BOOL;
+    aep_sprout.type = AEMP_TYPE_BOOL;
     aep_sprout.def_value = "false";
     aep_sprout.tooltip =
         "True if this Pikmin should follow its linked object, "

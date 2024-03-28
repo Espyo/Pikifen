@@ -1883,7 +1883,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
         mob_type::sfx_t* throw_sfx =
             &pik_ptr->type->sounds[throw_sfx_idx];
         sfx_source_config_t throw_sfx_config;
-        throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
+        throw_sfx_config.stack_mode = SFX_STACK_MODE_OVERRIDE;
         game.audio.create_mob_sfx_source(
             throw_sfx->sample,
             m,
@@ -1988,7 +1988,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     
     m->set_animation(
-        PIKMIN_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        PIKMIN_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -2008,7 +2008,7 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     ((pikmin*) m)->is_seed_or_sprout = true;
     m->set_animation(
-        PIKMIN_ANIM_SPROUT, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        PIKMIN_ANIM_SPROUT, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -2529,7 +2529,7 @@ void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
 void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) (m->focused_mob);
     
-    if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_PIKMIN)) {
+    if(!has_flag(too_ptr->holdability_flags, HOLDABILITY_FLAG_PIKMIN)) {
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         return;
     }
@@ -2572,7 +2572,7 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     if(!p->carrying_mob) return;
     
     p->carrying_mob->carry_info->spot_info[p->temp_i].state =
-        CARRY_SPOT_FREE;
+        CARRY_SPOT_STATE_FREE;
     p->carrying_mob->carry_info->spot_info[p->temp_i].pik_ptr =
         nullptr;
         
@@ -2690,7 +2690,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
         carrier_spot_t* spot_ptr =
             &carriable_mob->carry_info->spot_info[s];
-        if(spot_ptr->state != CARRY_SPOT_FREE) continue;
+        if(spot_ptr->state != CARRY_SPOT_STATE_FREE) continue;
         
         point spot_offset =
             rotate_point(spot_ptr->pos, carriable_mob->angle);
@@ -2708,7 +2708,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     
     pik_ptr->focus_on_mob(carriable_mob);
     pik_ptr->temp_i = closest_spot;
-    closest_spot_ptr->state = CARRY_SPOT_RESERVED;
+    closest_spot_ptr->state = CARRY_SPOT_STATE_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
     
     pik_ptr->chase(
@@ -2899,7 +2899,7 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
         //This Pikmin can't carry tools. Forget it.
         return;
     }
-    if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_PIKMIN)) {
+    if(!has_flag(too_ptr->holdability_flags, HOLDABILITY_FLAG_PIKMIN)) {
         //Can't hold this. Forget it.
         return;
     }
@@ -3188,7 +3188,7 @@ void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
     
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
-        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
+        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 
@@ -3816,7 +3816,7 @@ void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
-    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
+    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
 
 
@@ -3983,7 +3983,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         for(size_t g = 0; g < m->particle_generators.size(); ++g) {
             if(
                 m->particle_generators[g].id ==
-                MOB_PARTICLE_GENERATOR_WAVE_RING
+                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
             ) {
                 already_generating = true;
                 break;
@@ -3999,7 +3999,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
             par.size_grow_speed = m->radius * 4;
             particle_generator pg(0.3, par, 1);
             pg.follow_mob = m;
-            pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
+            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
     }
@@ -4056,7 +4056,7 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) * (m->holding.begin());
     if(
         !too_ptr->too_type->can_be_hotswapped &&
-        has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)
+        has_flag(too_ptr->holdability_flags, HOLDABILITY_FLAG_ENEMIES)
     ) {
         //This tool can't be hotswapped... The Pikmin has to get chomped.
         pikmin_fsm::release_tool(m, nullptr, nullptr);

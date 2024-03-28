@@ -77,7 +77,7 @@ extern const string SONG_NAME;
 
 
 //Pages of the main menu.
-enum MAIN_MENU_PAGES {
+enum MAIN_MENU_PAGE {
 
     //Main page.
     MAIN_MENU_PAGE_MAIN,
@@ -92,7 +92,7 @@ enum MAIN_MENU_PAGES {
 
 
 //Pages of the options menu.
-enum OPTIONS_MENU_PAGES {
+enum OPTIONS_MENU_PAGE {
 
     //Top-level page.
     OPTIONS_MENU_PAGE_TOP,
@@ -113,7 +113,7 @@ public:
     //--- Members ---
     
     //What page to load when it is created.
-    MAIN_MENU_PAGES page_to_load = MAIN_MENU_PAGE_MAIN;
+    MAIN_MENU_PAGE page_to_load = MAIN_MENU_PAGE_MAIN;
     
     
     //--- Function declarations ---
@@ -383,7 +383,7 @@ public:
     //--- Members ---
     
     //What page to load when it is created.
-    OPTIONS_MENU_PAGES page_to_load = OPTIONS_MENU_PAGE_TOP;
+    OPTIONS_MENU_PAGE page_to_load = OPTIONS_MENU_PAGE_TOP;
     
     
     //--- Function declarations ---
@@ -425,7 +425,7 @@ private:
     gui_manager misc_gui;
     
     //Auto-throw picker widget.
-    options_menu_picker_gui_item<AUTO_THROW_MODES>* auto_throw_picker = nullptr;
+    options_menu_picker_gui_item<AUTO_THROW_MODE>* auto_throw_picker = nullptr;
     
     //Resolution picker widget.
     options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker = nullptr;
@@ -437,7 +437,7 @@ private:
     options_menu_picker_gui_item<float>* cursor_cam_weight_picker = nullptr;
     
     //Leaving confirmation picker widget.
-    options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>*
+    options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODE>*
     leaving_confirmation_picker = nullptr;
     
     //Master volume picker widget.
@@ -515,7 +515,7 @@ private:
     vector<vector<control_bind> > binds_per_action_type;
     
     //Current player action type.
-    PLAYER_ACTION_TYPES cur_action_type = PLAYER_ACTION_NONE;
+    PLAYER_ACTION_TYPE cur_action_type = PLAYER_ACTION_TYPE_NONE;
     
     //Current global bind index we're working with.
     size_t cur_bind_idx = 0;
@@ -524,13 +524,13 @@ private:
     //--- Function declarations ---
     
     void choose_input(
-        const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
+        const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
     );
     void delete_bind(
-        const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
+        const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
     );
     void populate_binds();
-    void restore_defaults(const PLAYER_ACTION_TYPES action_type);
+    void restore_defaults(const PLAYER_ACTION_TYPE action_type);
     void leave();
     
 };
@@ -546,7 +546,7 @@ public:
     //--- Members ---
     
     //Type of area that the menu is dealing with.
-    AREA_TYPES area_type = AREA_TYPE_SIMPLE;
+    AREA_TYPE area_type = AREA_TYPE_SIMPLE;
     
     
     //--- Function declarations ---

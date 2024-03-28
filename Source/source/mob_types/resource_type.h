@@ -21,7 +21,7 @@
 
 
 //Resource object animations.
-enum RESOURCE_ANIMATIONS {
+enum RESOURCE_ANIM {
 
     //Idling.
     RESOURCE_ANIM_IDLING,
@@ -30,7 +30,7 @@ enum RESOURCE_ANIMATIONS {
 
 
 //Results when a resource is successfully delivered.
-enum RESOURCE_DELIVERY_RESULTS {
+enum RESOURCE_DELIVERY_RESULT {
 
     //Damage the mob it got delivered to.
     RESOURCE_DELIVERY_RESULT_DAMAGE_MOB,
@@ -48,7 +48,7 @@ enum RESOURCE_DELIVERY_RESULTS {
 
 
 //Resource object states.
-enum RESOURCE_STATES {
+enum RESOURCE_STATE {
     
     //Waiting.
     RESOURCE_STATE_IDLE_WAITING,
@@ -94,10 +94,10 @@ public:
     float vanish_delay = 0.0f;
 
     //Carry destination.
-    CARRY_DESTINATIONS carrying_destination = CARRY_DESTINATION_SHIP;
+    CARRY_DESTINATION carrying_destination = CARRY_DESTINATION_SHIP;
 
     //Result when successfully delivered.
-    RESOURCE_DELIVERY_RESULTS delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
+    RESOURCE_DELIVERY_RESULT delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
 
     //If it damages the mob it was carried to, this is the damage amount.
     float damage_mob_amount = 1.0f;

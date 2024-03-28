@@ -5,8 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
         Use #pragma region in header files?
-        Constants for enums and flags have inconsistent styles
-            Bitmasks should use a typedef called bitmask8, bitmask16, etc.
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -149,10 +147,8 @@ Next tasks (roughly sorted most important first)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
     Misc. graphical improvements
-        Improve and standardize the names of animations, sprites, and body parts
         Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
         Cloaking Burrow-nit, the Dumples, "inked" use a lot of sprites that can just recycle previous ones and use in-engine transformations
-        Gates should have a different appearance depending on how damaged they are
         Yellow Wollywog should close its eyes when shaking
         Candypop Buds should squash when they close
         Treasures should have sparkle particles
@@ -163,6 +159,7 @@ Next tasks (roughly sorted most important first)
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New mobs
+        Burrowing Snagret
         A tall grass mob
         Nuggets
         Add Helodity's Plasm Wraith

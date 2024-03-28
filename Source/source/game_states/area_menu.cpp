@@ -207,7 +207,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             !record_exists ?
             "(None)" :
             area_mission_data[area_idx].grading_mode ==
-            MISSION_GRADING_POINTS ?
+            MISSION_GRADING_MODE_POINTS ?
             amount_str(score, "point") :
             "";
         cur_stamp =
@@ -220,7 +220,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             cur_medal = nullptr;
         } else {
             switch(area_mission_data[area_idx].grading_mode) {
-            case MISSION_GRADING_POINTS: {
+            case MISSION_GRADING_MODE_POINTS: {
                 if(score >= area_mission_data[area_idx].platinum_req) {
                     cur_medal = game.sys_assets.bmp_medal_platinum;
                 } else if(score >= area_mission_data[area_idx].gold_req) {
@@ -233,12 +233,12 @@ void area_menu_state::change_info(const size_t area_idx) {
                     cur_medal = game.sys_assets.bmp_medal_none;
                 }
                 break;
-            } case MISSION_GRADING_GOAL: {
+            } case MISSION_GRADING_MODE_GOAL: {
                 if(area_records[area_idx].clear) {
                     cur_medal = game.sys_assets.bmp_medal_platinum;
                 }
                 break;
-            } case MISSION_GRADING_PARTICIPATION: {
+            } case MISSION_GRADING_MODE_PARTICIPATION: {
                 cur_medal = game.sys_assets.bmp_medal_platinum;
                 break;
             }
@@ -270,7 +270,7 @@ void area_menu_state::change_info(const size_t area_idx) {
         }
         
         switch(mission.grading_mode) {
-        case MISSION_GRADING_POINTS: {
+        case MISSION_GRADING_MODE_POINTS: {
             add_bullet(
                 grading_list,
                 "Your medal depends on your score:"
@@ -340,7 +340,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             }
             break;
         }
-        case MISSION_GRADING_GOAL: {
+        case MISSION_GRADING_MODE_GOAL: {
             add_bullet(
                 grading_list,
                 "You get a platinum medal if you clear the goal."
@@ -351,7 +351,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             );
             break;
         }
-        case MISSION_GRADING_PARTICIPATION: {
+        case MISSION_GRADING_MODE_PARTICIPATION: {
             add_bullet(
                 grading_list,
                 "You get a platinum medal just by playing the mission."
@@ -694,7 +694,7 @@ void area_menu_state::init_gui_main() {
                 [this, a] (const point & center, const point & size) {
                     ALLEGRO_BITMAP* medal_bmp = nullptr;
                     switch(area_mission_data[a].grading_mode) {
-                    case MISSION_GRADING_POINTS: {
+                    case MISSION_GRADING_MODE_POINTS: {
                         int score = area_records[a].score;
                         if(score >= area_mission_data[a].platinum_req) {
                             medal_bmp = game.sys_assets.bmp_medal_platinum;
@@ -706,12 +706,12 @@ void area_menu_state::init_gui_main() {
                             medal_bmp = game.sys_assets.bmp_medal_bronze;
                         }
                         break;
-                    } case MISSION_GRADING_GOAL: {
+                    } case MISSION_GRADING_MODE_GOAL: {
                         if(area_records[a].clear) {
                             medal_bmp = game.sys_assets.bmp_medal_platinum;
                         }
                         break;
-                    } case MISSION_GRADING_PARTICIPATION: {
+                    } case MISSION_GRADING_MODE_PARTICIPATION: {
                         medal_bmp = game.sys_assets.bmp_medal_platinum;
                     }
                     }

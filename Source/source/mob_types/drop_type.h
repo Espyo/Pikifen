@@ -20,7 +20,7 @@
 
 
 //Drop object animations.
-enum DROP_ANIMATIONS {
+enum DROP_ANIM {
 
     //Idling.
     DROP_ANIM_IDLING,
@@ -38,7 +38,7 @@ enum DROP_ANIMATIONS {
 
 
 //Possible drop consumers.
-enum DROP_CONSUMERS {
+enum DROP_CONSUMER {
 
     //Pikmin.
     DROP_CONSUMER_PIKMIN,
@@ -50,7 +50,7 @@ enum DROP_CONSUMERS {
 
 
 //Possible drop consumption effects.
-enum DROP_EFFECTS {
+enum DROP_EFFECT {
 
     //Maturate a Pikmin.
     DROP_EFFECT_MATURATE,
@@ -65,7 +65,7 @@ enum DROP_EFFECTS {
 
 
 //Drop object states.
-enum DROP_STATES {
+enum DROP_STATE {
     
     //Idling.
     DROP_STATE_IDLING,
@@ -95,10 +95,10 @@ public:
     //--- Members ---
 
     //What sorts of mobs can consume this drop.
-    DROP_CONSUMERS consumer = DROP_CONSUMER_PIKMIN;
+    DROP_CONSUMER consumer = DROP_CONSUMER_PIKMIN;
 
     //Effects upon consumption.
-    DROP_EFFECTS effect = DROP_EFFECT_MATURATE;
+    DROP_EFFECT effect = DROP_EFFECT_MATURATE;
 
     //How many doses does this drop have? i.e. how many mobs can it serve?
     size_t total_doses = 1;

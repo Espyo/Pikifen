@@ -190,7 +190,7 @@ void replay::load_from_file(const string &file_name) {
         for(size_t e = 0; e < n_elements; ++e) {
             s_ptr->elements.push_back(
                 replay_element(
-                    (REPLAY_ELEMENT_TYPES) al_fgetc(file),
+                    (REPLAY_ELEMENT) al_fgetc(file),
                     point(al_fread32be(file), al_fread32be(file))
                 )
             );
@@ -203,7 +203,7 @@ void replay::load_from_file(const string &file_name) {
             for(size_t e = 0; e < n_events; ++e) {
                 s_ptr->events.push_back(
                     replay_event(
-                        (REPLAY_EVENT_TYPES) al_fgetc(file),
+                        (REPLAY_EVENT) al_fgetc(file),
                         al_fread32be(file)
                     )
                 );
@@ -250,7 +250,7 @@ void replay::save_to_file(const string &file_name) const {
  * @param pos Its coordinates.
  */
 replay_element::replay_element(
-    const REPLAY_ELEMENT_TYPES type, const point &pos
+    const REPLAY_ELEMENT type, const point &pos
 ) :
     type(type),
     pos(pos) {
@@ -265,7 +265,7 @@ replay_element::replay_element(
  * @param data Any numerical data this event needs.
  */
 replay_event::replay_event(
-    const REPLAY_EVENT_TYPES type, const size_t data
+    const REPLAY_EVENT type, const size_t data
 ) :
     type(type),
     data(data) {

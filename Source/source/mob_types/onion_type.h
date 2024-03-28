@@ -18,7 +18,7 @@
 
 
 //Onion object states.
-enum ONION_STATES {
+enum ONION_STATE {
     
     //Idling.
     ONION_STATE_IDLING,

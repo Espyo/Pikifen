@@ -22,7 +22,7 @@ using std::vector;
 
 
 //Types of hitboxes.
-enum HITBOX_TYPES {
+enum HITBOX_TYPE {
 
     //Can be hurt by "attack"-type hitboxes.
     HITBOX_TYPE_NORMAL,
@@ -90,7 +90,7 @@ public:
     float radius = 32.0f;
     
     //Type of hitbox.
-    HITBOX_TYPES type = HITBOX_TYPE_NORMAL;
+    HITBOX_TYPE type = HITBOX_TYPE_NORMAL;
     
     //String representing the list of hazards.
     string hazards_str;

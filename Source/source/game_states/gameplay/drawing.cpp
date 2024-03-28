@@ -136,9 +136,9 @@ void gameplay_state::do_game_drawing(
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.world_to_screen_transform);
     ALLEGRO_COLOR cursor_color = game.config.no_pikmin_color;
-    if(closest_group_member[BUBBLE_CURRENT]) {
+    if(closest_group_member[BUBBLE_RELATION_CURRENT]) {
         cursor_color =
-            closest_group_member[BUBBLE_CURRENT]->type->main_color;
+            closest_group_member[BUBBLE_RELATION_CURRENT]->type->main_color;
     }
     if(cur_leader_ptr && game.maker_tools.hud) {
         cursor_color =
@@ -287,12 +287,12 @@ void gameplay_state::draw_big_msg() {
         
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
         ki_y.add(TEXT_START_T, game.win_h * (-0.2f));
-        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_IN);
-        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
+        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
+        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
         ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
         keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
         ki_s.add(TEXT_SHRINK_T, TEXT_INITIAL_SCALE * 1.4f);
-        ki_s.add(1.0f, 0.0f, EASE_IN);
+        ki_s.add(1.0f, 0.0f, EASE_METHOD_IN);
         
         float scale = ki_s.get(t);
         
@@ -308,7 +308,7 @@ void gameplay_state::draw_big_msg() {
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
-                TEXT_VALIGN_CENTER,
+                TEXT_VALIGN_MODE_CENTER,
                 string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c])
             );
         }
@@ -320,7 +320,7 @@ void gameplay_state::draw_big_msg() {
         const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DUR;
         
         keyframe_interpolator ki_s(0.0f);
-        ki_s.add(TEXT_GROW_STOP_T, 4.0f, EASE_OUT_ELASTIC);
+        ki_s.add(TEXT_GROW_STOP_T, 4.0f, EASE_METHOD_OUT_ELASTIC);
         ki_s.add(1.0f, 4.4f);
         keyframe_interpolator ki_a(1.0f);
         ki_a.add(TEXT_GROW_STOP_T, 1.0f);
@@ -335,7 +335,7 @@ void gameplay_state::draw_big_msg() {
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             point(scale, scale),
             ALLEGRO_ALIGN_CENTER,
-            TEXT_VALIGN_CENTER,
+            TEXT_VALIGN_MODE_CENTER,
             GAMEPLAY::BIG_MSG_GO_TEXT
         );
         break;
@@ -358,10 +358,10 @@ void gameplay_state::draw_big_msg() {
             (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
             
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
-        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_IN);
-        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
+        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
+        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
         keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
-        ki_s.add(1.0f, TEXT_INITIAL_SCALE * 1.4f, EASE_IN);
+        ki_s.add(1.0f, TEXT_INITIAL_SCALE * 1.4f, EASE_METHOD_IN);
         keyframe_interpolator ki_a(1.0f);
         ki_a.add(TEXT_FADE_T, 1.0f);
         ki_a.add(1.0f, 0.0f);
@@ -380,7 +380,7 @@ void gameplay_state::draw_big_msg() {
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
-                TEXT_VALIGN_CENTER,
+                TEXT_VALIGN_MODE_CENTER,
                 string(1, TEXT[c])
             );
         }
@@ -485,11 +485,11 @@ void gameplay_state::draw_debug_tools() {
     
     point clean_stick_coords;
     clean_stick_coords.x =
-        game.controls.get_player_action_type_value(PLAYER_ACTION_RIGHT) -
-        game.controls.get_player_action_type_value(PLAYER_ACTION_LEFT);
+        game.controls.get_player_action_type_value(PLAYER_ACTION_TYPE_RIGHT) -
+        game.controls.get_player_action_type_value(PLAYER_ACTION_TYPE_LEFT);
     clean_stick_coords.y =
-        game.controls.get_player_action_type_value(PLAYER_ACTION_DOWN) -
-        game.controls.get_player_action_type_value(PLAYER_ACTION_UP);
+        game.controls.get_player_action_type_value(PLAYER_ACTION_TYPE_DOWN) -
+        game.controls.get_player_action_type_value(PLAYER_ACTION_TYPE_UP);
     float clean_stick_angle;
     float clean_stick_mag;
     coordinates_to_angle(
@@ -997,7 +997,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             point(count_offset, count_offset),
             point(1.0f, 1.0f),
             ALLEGRO_ALIGN_LEFT,
-            TEXT_VALIGN_TOP,
+            TEXT_VALIGN_MODE_TOP,
             i2s(n_standby_pikmin)
         );
     }
@@ -1170,7 +1170,7 @@ void gameplay_state::draw_message_box() {
     int line_height = al_get_font_line_height(game.fonts.standard);
     float box_height = line_height * 4;
     float offset =
-        box_height * ease(EASE_IN, transition_ratio);
+        box_height * ease(EASE_METHOD_IN, transition_ratio);
         
     //Draw a rectangle to darken gameplay.
     al_draw_filled_rectangle(
@@ -1212,7 +1212,7 @@ void gameplay_state::draw_message_box() {
     //Draw the button to advance, if it's time.
     draw_player_input_icon(
         game.fonts.slim,
-        game.controls.find_bind(PLAYER_ACTION_THROW).input,
+        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
         true,
         point(
             game.win_w - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f),
@@ -1274,10 +1274,10 @@ void gameplay_state::draw_message_box() {
                     this_token_anim_time / MSG_BOX::TOKEN_ANIM_DURATION;
                 x +=
                     MSG_BOX::TOKEN_ANIM_X_AMOUNT *
-                    ease(EASE_UP_AND_DOWN_ELASTIC, ratio);
+                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
                 y +=
                     MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
-                    ease(EASE_UP_AND_DOWN_ELASTIC, ratio);
+                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
                 alpha = ratio * 255;
             }
             
@@ -1298,7 +1298,7 @@ void gameplay_state::draw_message_box() {
                     game.fonts.standard, map_alpha(alpha),
                     point(x, y),
                     point(x_scale, 1.0f),
-                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                     cur_token.content
                 );
                 break;
@@ -1402,7 +1402,7 @@ void gameplay_state::draw_system_stuff() {
         );
         draw_text_lines(
             game.fonts.builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-            point(8, 8), 0, TEXT_VALIGN_TOP, game.maker_tools.info_print_text
+            point(8, 8), 0, TEXT_VALIGN_MODE_TOP, game.maker_tools.info_print_text
         );
     }
     
@@ -1921,25 +1921,25 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             c.mob_limb_ptr = mob_ptr;
             
             switch(method) {
-            case LIMB_DRAW_BELOW_BOTH: {
+            case LIMB_DRAW_METHOD_BELOW_BOTH: {
                 c.z = std::min(mob_ptr->z, mob_ptr->parent->m->z);
                 break;
-            } case LIMB_DRAW_BELOW_CHILD: {
+            } case LIMB_DRAW_METHOD_BELOW_CHILD: {
                 c.z = mob_ptr->z;
                 break;
-            } case LIMB_DRAW_BELOW_PARENT: {
+            } case LIMB_DRAW_METHOD_BELOW_PARENT: {
                 c.z = mob_ptr->parent->m->z;
                 break;
-            } case LIMB_DRAW_ABOVE_PARENT: {
+            } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
                 c.z =
                     mob_ptr->parent->m->z +
                     mob_ptr->parent->m->height +
                     0.001;
                 break;
-            } case LIMB_DRAW_ABOVE_CHILD: {
+            } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
                 c.z = mob_ptr->z + mob_ptr->height + 0.001;
                 break;
-            } case LIMB_DRAW_ABOVE_BOTH: {
+            } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
                 c.z =
                     std::max(
                         mob_ptr->parent->m->z +

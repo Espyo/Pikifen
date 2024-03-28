@@ -2097,11 +2097,11 @@ bool mission_goal_timed_survival::is_mob_applicable(
  */
 bool mission_record::is_platinum(const mission_data &mission) {
     switch(mission.grading_mode) {
-    case MISSION_GRADING_POINTS: {
+    case MISSION_GRADING_MODE_POINTS: {
         return score >= mission.platinum_req;
-    } case MISSION_GRADING_GOAL: {
+    } case MISSION_GRADING_MODE_GOAL: {
         return clear;
-    } case MISSION_GRADING_PARTICIPATION: {
+    } case MISSION_GRADING_MODE_PARTICIPATION: {
         return !date.empty();
     }
     }

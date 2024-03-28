@@ -68,19 +68,19 @@ public:
     //--- Misc. declarations ---
     
     //Ways for the cursor to snap.
-    enum SNAP_MODES {
+    enum SNAP_MODE {
     
         //Snap to grid.
-        SNAP_GRID,
+        SNAP_MODE_GRID,
         
         //Snap to vertexes.
-        SNAP_VERTEXES,
+        SNAP_MODE_VERTEXES,
         
         //Snap to edges.
-        SNAP_EDGES,
+        SNAP_MODE_EDGES,
         
         //Snap to nothing.
-        SNAP_NOTHING,
+        SNAP_MODE_NOTHING,
         
         //Total amount of snap modes.
         N_SNAP_MODES,
@@ -88,7 +88,7 @@ public:
     };
     
     //Ways for the area to be viewed in-editor.
-    enum VIEW_MODES {
+    enum VIEW_MODE {
     
         //Textures.
         VIEW_MODE_TEXTURES,
@@ -236,44 +236,44 @@ private:
     };
     
     //Possible results after a line drawing operation.
-    enum DRAWING_LINE_RESULTS {
+    enum DRAWING_LINE_RESULT {
     
         //No error.
-        DRAWING_LINE_OK,
+        DRAWING_LINE_RESULT_OK,
         
         //Hit an existing edge or vertex when drawing a new sector.
-        DRAWING_LINE_HIT_EDGE_OR_VERTEX,
+        DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX,
         
         //Trying to draw along an existing edge.
-        DRAWING_LINE_ALONG_EDGE,
+        DRAWING_LINE_RESULT_ALONG_EDGE,
         
         //Crosses exsting edges.
-        DRAWING_LINE_CROSSES_EDGES,
+        DRAWING_LINE_RESULT_CROSSES_EDGES,
         
         //Crosses previous parts of the drawing.
-        DRAWING_LINE_CROSSES_DRAWING,
+        DRAWING_LINE_RESULT_CROSSES_DRAWING,
         
         //Goes towards a sector different from the working sector.
-        DRAWING_LINE_WAYWARD_SECTOR,
+        DRAWING_LINE_RESULT_WAYWARD_SECTOR,
         
     };
     
     //Possible errors for a sector split operation.
-    enum SECTOR_SPLIT_RESULTS {
+    enum SECTOR_SPLIT_RESULT {
     
         //Ok to split.
-        SECTOR_SPLIT_OK,
+        SECTOR_SPLIT_RESULT_OK,
         
         //The split is invalid.
-        SECTOR_SPLIT_INVALID,
+        SECTOR_SPLIT_RESULT_INVALID,
         
         //That wouldn't split in any useful way. e.g. Slice through a donut.
-        SECTOR_SPLIT_USELESS,
+        SECTOR_SPLIT_RESULT_USELESS,
         
     };
     
-    //Types of problems in the area.
-    enum EDITOR_PROBLEM_TYPES {
+    //Types of problems in the area (Editor Problem Type).
+    enum EPT {
     
         //None found so far.
         EPT_NONE_YET,
@@ -347,7 +347,7 @@ private:
     };
     
     //Editor states.
-    enum EDITOR_STATES {
+    enum EDITOR_STATE {
     
         //Main menu.
         EDITOR_STATE_MAIN,
@@ -379,7 +379,7 @@ private:
     };
     
     //Editor sub-states.
-    enum EDITOR_SUB_STATES {
+    enum EDITOR_SUB_STATE {
     
         //None.
         EDITOR_SUB_STATE_NONE,
@@ -426,7 +426,7 @@ private:
     };
     
     //On-canvas texture effect editing modes.
-    enum OCTEE_MODES {
+    enum OCTEE_MODE {
     
         //Editing texture offset.
         OCTEE_MODE_OFFSET,
@@ -440,7 +440,7 @@ private:
     };
     
     //Filters for selecting.
-    enum SELECTION_FILTERS {
+    enum SELECTION_FILTER {
     
         //Select sectors, edges, and vertexes.
         SELECTION_FILTER_SECTORS,
@@ -457,7 +457,7 @@ private:
     };
     
     //Layout editing panel modes.
-    enum LAYOUT_MODES {
+    enum LAYOUT_MODE {
     
         //Sector info.
         LAYOUT_MODE_SECTORS,
@@ -534,7 +534,7 @@ private:
     vector<layout_drawing_node> drawing_nodes;
     
     //Result of the current drawing line.
-    DRAWING_LINE_RESULTS drawing_line_result = DRAWING_LINE_OK;
+    DRAWING_LINE_RESULT drawing_line_result = DRAWING_LINE_RESULT_OK;
     
     //Currently highlighted edge, if any.
     edge* highlighted_edge = nullptr;
@@ -561,7 +561,7 @@ private:
     mob_type* last_mob_type = nullptr;
     
     //Are we editing sectors or edges?
-    LAYOUT_MODES layout_mode = LAYOUT_MODE_SECTORS;
+    LAYOUT_MODE layout_mode = LAYOUT_MODE_SECTORS;
     
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
@@ -621,7 +621,7 @@ private:
     point octee_orig_scale;
     
     //Current on-canvas texture effect edit mode.
-    OCTEE_MODES octee_mode = OCTEE_MODE_OFFSET;
+    OCTEE_MODE octee_mode = OCTEE_MODE_OFFSET;
     
     //When drawing a path, use these stop flags.
     bitmask_8_t path_drawing_flags = 0;
@@ -633,7 +633,7 @@ private:
     bool path_drawing_normals = true;
     
     //When drawing a path, use this type.
-    PATH_LINK_TYPES path_drawing_type = PATH_LINK_TYPE_NORMAL;
+    PATH_LINK_TYPE path_drawing_type = PATH_LINK_TYPE_NORMAL;
     
     //First stop of the next link when drawing a path.
     path_stop* path_drawing_stop_1 = nullptr;
@@ -654,7 +654,7 @@ private:
     path_follow_settings path_preview_settings;
     
     //Result of the path preview's calculation.
-    PATH_RESULTS path_preview_result = PATH_RESULT_NOT_CALCULATED;
+    PATH_RESULT path_preview_result = PATH_RESULT_NOT_CALCULATED;
     
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
@@ -690,7 +690,7 @@ private:
     path_stop* problem_path_stop_ptr = nullptr;
     
     //Type of the current problem found in the review panel.
-    EDITOR_PROBLEM_TYPES problem_type = EPT_NONE_YET;
+    EPT problem_type = EPT_NONE_YET;
     
     //Pointer to the problematic sector, if any.
     sector* problem_sector_ptr = nullptr;
@@ -777,7 +777,7 @@ private:
     point selection_end;
     
     //Current selection filter.
-    SELECTION_FILTERS selection_filter = SELECTION_FILTER_SECTORS;
+    SELECTION_FILTER selection_filter = SELECTION_FILTER_SECTORS;
     
     //Has the user agreed to homogenize the selection?
     bool selection_homogenized = false;
@@ -857,7 +857,7 @@ private:
     void cancel_layout_drawing();
     void cancel_layout_moving();
     float calculate_preview_path();
-    void change_state(const EDITOR_STATES new_state);
+    void change_state(const EDITOR_STATE new_state);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -875,11 +875,11 @@ private:
     void copy_sector_properties();
     void create_area(
         const string &requested_area_folder_name,
-        const AREA_TYPES requested_area_type
+        const AREA_TYPE requested_area_type
     );
     void create_or_load_area(
         const string &requested_area_folder_name,
-        const AREA_TYPES requested_area_type
+        const AREA_TYPE requested_area_type
     );
     void create_drawing_vertexes();
     void create_mob_under_cursor();
@@ -892,7 +892,7 @@ private:
     void delete_path_stops(const set<path_stop*> &which);
     void do_sector_split();
     void emit_triangulation_error_status_bar_message(
-        const TRIANGULATION_ERRORS error
+        const TRIANGULATION_ERROR error
     );
     void find_problems();
     void finish_circle_sector();
@@ -941,7 +941,7 @@ private:
     ) const;
     string get_path_short_name(const string &p) const;
     path_stop* get_path_stop_under_point(const point &p) const;
-    SECTOR_SPLIT_RESULTS get_sector_split_evaluation();
+    SECTOR_SPLIT_RESULT get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;
     vertex* get_vertex_under_point(const point &p) const;
     void go_to_undo_history_point(size_t p);
@@ -954,7 +954,7 @@ private:
     void homogenize_selected_sectors();
     void load_area(
         const string &requested_area_folder_name,
-        const AREA_TYPES requested_area_type,
+        const AREA_TYPE requested_area_type,
         const bool from_backup, const bool should_update_history
     );
     void load_backup();

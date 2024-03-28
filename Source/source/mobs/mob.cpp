@@ -351,14 +351,14 @@ void mob::apply_status_effect(
             //Already exists. What do we do with the time left?
             
             switch(s->reapply_rule) {
-            case STATUS_REAPPLY_KEEP_TIME: {
+            case STATUS_REAPPLY_RULE_KEEP_TIME: {
                 break;
             }
-            case STATUS_REAPPLY_RESET_TIME: {
+            case STATUS_REAPPLY_RULE_RESET_TIME: {
                 this->statuses[ms].time_left = s->auto_remove_time;
                 break;
             }
-            case STATUS_REAPPLY_ADD_TIME: {
+            case STATUS_REAPPLY_RULE_ADD_TIME: {
                 this->statuses[ms].time_left += s->auto_remove_time;
                 break;
             }
@@ -491,7 +491,7 @@ void mob::arachnorb_head_turn_logic() {
  * @param goal What its goal is.
  */
 void mob::arachnorb_plan_logic(
-    const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal
+    const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
     float max_step_distance = s2f(vars["max_step_distance"]);
     float max_turn_angle = deg_to_rad(s2f(vars["max_turn_angle"]));
@@ -507,7 +507,7 @@ void mob::arachnorb_plan_logic(
     float amount_to_turn = 0;
     
     switch(goal) {
-    case MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME: {
+    case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME: {
         amount_to_turn = get_angle_cw_diff(angle, get_angle(pos, home));
         if(amount_to_turn > TAU / 2)  amount_to_turn -= TAU;
         if(amount_to_turn < -TAU / 2) amount_to_turn += TAU;
@@ -518,15 +518,15 @@ void mob::arachnorb_plan_logic(
         }
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD: {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD: {
         amount_to_move = max_step_distance;
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN: {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN: {
         amount_to_turn = randomf(min_turn_angle, TAU * 0.25);
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN: {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN: {
         amount_to_turn = randomf(-TAU * 0.25, -min_turn_angle);
         break;
         
@@ -557,7 +557,7 @@ void mob::arachnorb_plan_logic(
  *
  * @param destination Where to carry it.
  */
-void mob::become_carriable(const CARRY_DESTINATIONS destination) {
+void mob::become_carriable(const CARRY_DESTINATION destination) {
     carry_info = new carry_t(this, destination);
 }
 
@@ -569,7 +569,7 @@ void mob::become_uncarriable() {
     if(!carry_info) return;
     
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
-        if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
+        if(carry_info->spot_info[p].state != CARRY_SPOT_STATE_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(
                 MOB_EV_FOCUSED_MOB_UNAVAILABLE
             );
@@ -912,7 +912,7 @@ bool mob::can_hunt(mob* v) const {
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
     //Mobs that do not participate in combat whatsoever cannot be hunted down.
-    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    if(v->type->target_type == MOB_TARGET_FLAG_NONE) return false;
     
     //Invisible mobs cannot be seen, so they can't be hunted down.
     if(v->has_invisibility_status) return false;
@@ -937,7 +937,7 @@ bool mob::can_hurt(mob* v) const {
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
     //Mobs that do not participate in combat whatsoever cannot be hurt.
-    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    if(v->type->target_type == MOB_TARGET_FLAG_NONE) return false;
     
     //Mobs that are invulnerable cannot be hurt.
     if(v->invuln_period.time_left > 0) return false;
@@ -966,7 +966,7 @@ bool mob::can_hurt(mob* v) const {
  * @return Whether it can receive the status.
  */
 bool mob::can_receive_status(status_type* s) const {
-    return has_flag(s->affects, STATUS_AFFECTS_OTHERS);
+    return has_flag(s->affects, STATUS_AFFECTS_FLAG_OTHERS);
 }
 
 
@@ -1101,7 +1101,7 @@ void mob::chase(
 void mob::chomp(mob* m, const hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
         tool* too_ptr = (tool*) m;
-        if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)) {
+        if(!has_flag(too_ptr->holdability_flags, HOLDABILITY_FLAG_ENEMIES)) {
             //Enemies can't chomp this tool right now.
             return;
         }
@@ -1174,7 +1174,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
     for(size_t p = 0; p < type->max_carriers; ++p) {
         pikmin* pik_ptr = nullptr;
         
-        if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
+        if(carry_info->spot_info[p].state != CARRY_SPOT_STATE_USED) continue;
         
         pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
         
@@ -1409,11 +1409,11 @@ void mob::draw_limb() {
     get_sprite_bitmap_effects(
         limb_cur_s_ptr, limb_next_s_ptr, limb_interpolation_factor,
         &eff,
-        SPRITE_BITMAP_EFFECT_STANDARD |
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY
     );
     
     point parent_end;
@@ -1481,12 +1481,12 @@ void mob::draw_mob() {
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
-        SPRITE_BITMAP_EFFECT_STANDARD |
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY |
-        SPRITE_BITMAP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY |
+        SPRITE_BMP_EFFECT_CARRY
     );
     
     draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
@@ -2020,7 +2020,7 @@ float mob::get_speed_multiplier() const {
  * @param interpolation_factor If we're meant to interpolate from the current
  * sprite to the next, specify the interpolation factor (0 to 1) here.
  * @param info Struct to fill the info with.
- * @param effects What effects to use. Use SPRITE_BITMAP_EFFECTS for this.
+ * @param effects What effects to use. Use SPRITE_BMP_EFFECT_FLAG for this.
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
@@ -2028,7 +2028,7 @@ void mob::get_sprite_bitmap_effects(
 ) const {
 
     //Animation, position, angle, etc.
-    if(has_flag(effects, SPRITE_BITMAP_EFFECT_STANDARD)) {
+    if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
         point eff_trans;
         float eff_angle;
         point eff_scale;
@@ -2051,7 +2051,7 @@ void mob::get_sprite_bitmap_effects(
     }
     
     //Status effects.
-    if(has_flag(effects, SPRITE_BITMAP_EFFECT_STATUS)) {
+    if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_STATUS)) {
         size_t n_glow_colors = 0;
         ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
         
@@ -2098,14 +2098,14 @@ void mob::get_sprite_bitmap_effects(
     }
     
     //Sector brightness tint.
-    if(has_flag(effects, SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS)) {
+    if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
         info->tint_color.r *= (center_sector->brightness / 255.0);
         info->tint_color.g *= (center_sector->brightness / 255.0);
         info->tint_color.b *= (center_sector->brightness / 255.0);
     }
     
     //Height effect.
-    if(has_flag(effects, SPRITE_BITMAP_EFFECT_HEIGHT)) {
+    if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_HEIGHT)) {
         if(height_effect_pivot != LARGE_FLOAT) {
             float height_effect_scale = 1.0;
             //First, check for the mob being in the air.
@@ -2128,7 +2128,7 @@ void mob::get_sprite_bitmap_effects(
     
     //Being delivered.
     if(
-        has_flag(effects, SPRITE_BITMAP_EFFECT_DELIVERY) &&
+        has_flag(effects, SPRITE_BMP_EFFECT_DELIVERY) &&
         delivery_info &&
         focused_mob
     ) {
@@ -2178,7 +2178,7 @@ void mob::get_sprite_bitmap_effects(
                         delivery_info->anim_time_ratio_left, 0.0, 0.4,
                         0.0f, 1.0f
                     );
-                new_scale = ease(EASE_OUT, new_scale);
+                new_scale = ease(EASE_METHOD_OUT, new_scale);
                 
                 point target_pos = focused_mob->pos;
                 
@@ -2194,7 +2194,7 @@ void mob::get_sprite_bitmap_effects(
                         delivery_info->anim_time_ratio_left, 0.0, 0.4,
                         1.0f, 0.0f
                     );
-                absorb_ratio = ease(EASE_IN, absorb_ratio);
+                absorb_ratio = ease(EASE_METHOD_IN, absorb_ratio);
                 new_offset += end_offset * absorb_ratio;
             }
             
@@ -2266,7 +2266,7 @@ void mob::get_sprite_bitmap_effects(
     
     //Damage squash and stretch.
     if(
-        has_flag(effects, SPRITE_BITMAP_EFFECT_DAMAGE) &&
+        has_flag(effects, SPRITE_BMP_EFFECT_DAMAGE) &&
         damage_squash_time > 0.0f
     ) {
         float damage_squash_time_ratio =
@@ -2280,7 +2280,7 @@ void mob::get_sprite_bitmap_effects(
                 );
             damage_scale_y =
                 ease(
-                    EASE_UP_AND_DOWN,
+                    EASE_METHOD_UP_AND_DOWN,
                     damage_scale_y
                 );
             damage_scale_y *= MOB::DAMAGE_SQUASH_AMOUNT;
@@ -2292,7 +2292,7 @@ void mob::get_sprite_bitmap_effects(
                 );
             damage_scale_y =
                 ease(
-                    EASE_UP_AND_DOWN,
+                    EASE_METHOD_UP_AND_DOWN,
                     damage_scale_y
                 );
             damage_scale_y *= -MOB::DAMAGE_SQUASH_AMOUNT;
@@ -2304,7 +2304,7 @@ void mob::get_sprite_bitmap_effects(
     
     //Carry sway.
     if(
-        has_flag(effects, SPRITE_BITMAP_EFFECT_CARRY) &&
+        has_flag(effects, SPRITE_BMP_EFFECT_CARRY) &&
         carry_info
     ) {
         if(carry_info->is_moving) {
@@ -2487,7 +2487,7 @@ void mob::hold(
     mob* m, const size_t hitbox_idx,
     const float offset_dist, const float offset_angle,
     const float vertical_dist,
-    const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
+    const bool above_holder, const HOLD_ROTATION_METHOD rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -2733,7 +2733,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
     string team_var;
     
     if(svr.get("team", team_var)) {
-        MOB_TEAMS team_nr = string_to_team_nr(team_var);
+        MOB_TEAM team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
             game.errors.report(
                 "Unknown team name \"" + team_var +
@@ -2818,7 +2818,7 @@ void mob::release_stored_mobs() {
  *
  * @param id ID of particle generators to remove.
  */
-void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id) {
+void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id) {
     for(size_t g = 0; g < particle_generators.size();) {
         if(particle_generators[g].id == id) {
             particle_generators.erase(particle_generators.begin() + g);
@@ -2863,7 +2863,7 @@ void mob::send_message(mob* receiver, string &msg) const {
  * @param options Options to start the new animation with.
  */
 void mob::set_animation(
-    const size_t idx, const bool pre_named, const START_ANIMATION_OPTIONS options
+    const size_t idx, const bool pre_named, const START_ANIM_OPTION options
 ) {
     if(idx >= type->anims.animations.size()) return;
     
@@ -2896,16 +2896,16 @@ void mob::set_animation(
         anim.cur_frame_idx = INVALID;
     } else {
         if(
-            !has_flag(options, START_ANIMATION_NO_RESTART) ||
+            !has_flag(options, START_ANIM_OPTION_NO_RESTART) ||
             anim.cur_frame_idx >= anim.cur_anim->frames.size()
         ) {
             anim.to_start();
         }
     }
     
-    if(options == START_ANIMATION_RANDOM_TIME) {
+    if(options == START_ANIM_OPTION_RANDOM_TIME) {
         anim.skip_ahead_randomly();
-    } else if(options == START_ANIMATION_RANDOM_TIME_ON_SPAWN) {
+    } else if(options == START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN) {
         if(time_alive == 0.0f) {
             anim.skip_ahead_randomly();
         }
@@ -2921,7 +2921,7 @@ void mob::set_animation(
  * @param options Options to start the new animation with.
  */
 void mob::set_animation(
-    const string &name, const START_ANIMATION_OPTIONS options
+    const string &name, const START_ANIM_OPTION options
 ) {
     size_t idx = anim.anim_db->find_animation(name);
     if(idx != INVALID) {
@@ -3689,7 +3689,7 @@ void mob::tick_misc_logic(const float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        group_t::MODES old_mode = group->mode;
+        group_t::MODE old_mode = group->mode;
         bool is_holding = !holding.empty();
         bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >

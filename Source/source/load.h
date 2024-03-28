@@ -25,7 +25,7 @@ using std::string;
 
 void load_area(
     const string &requested_area_folder_name,
-    const AREA_TYPES requested_area_type,
+    const AREA_TYPE requested_area_type,
     const bool load_for_editor, const bool from_backup
 );
 void load_area_mission_data(data_node* node, mission_data &data);

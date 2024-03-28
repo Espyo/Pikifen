@@ -683,11 +683,11 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  * @param polys Return the polygons here.
  * @return An error code.
  */
-TRIANGULATION_ERRORS get_polys(
+TRIANGULATION_ERROR get_polys(
     sector* s_ptr, polygon* polys
 ) {
     if(!s_ptr || !polys) return TRIANGULATION_ERROR_INVALID_ARGS;
-    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
     
     bool doing_first_polygon = true;
     
@@ -711,7 +711,7 @@ TRIANGULATION_ERRORS get_polys(
             
         //Trace! For the outer poly, we're going counter-clockwise,
         //while for the inner ones, it's clockwise.
-        TRIANGULATION_ERRORS trace_result =
+        TRIANGULATION_ERROR trace_result =
             trace_edges(
                 first_v_ptr, s_ptr, !is_outer,
                 &new_poly->vertexes,
@@ -720,7 +720,7 @@ TRIANGULATION_ERRORS get_polys(
             
         //Add this polygon to the polygon tree.
         bool inserted = false;
-        if(trace_result == TRIANGULATION_NO_ERROR) {
+        if(trace_result == TRIANGULATION_ERROR_NONE) {
             inserted = polys->insert_child(new_poly);
         } else {
             result = trace_result;
@@ -956,7 +956,7 @@ bool is_vertex_ear(
  * to the polygon so far.
  * @return An error code.
  */
-TRIANGULATION_ERRORS trace_edges(
+TRIANGULATION_ERROR trace_edges(
     vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
     vector<vertex*>* vertexes,
     unordered_set<edge*>* unvisited_edges,
@@ -978,7 +978,7 @@ TRIANGULATION_ERRORS trace_edges(
     
     edge* first_e_ptr = nullptr;
     
-    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
     bool poly_done = false;
     
     //Trace around, vertex by vertex, until we're done.
@@ -1114,11 +1114,11 @@ TRIANGULATION_ERRORS trace_edges(
  * @param triangles The final list of triangles is returned here.
  * @return An error code.
  */
-TRIANGULATION_ERRORS triangulate_polygon(
+TRIANGULATION_ERROR triangulate_polygon(
     polygon* poly, vector<triangle>* triangles
 ) {
 
-    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
     vector<vertex*> vertexes_left = poly->vertexes;
     vector<size_t> ears;
     vector<size_t> convex_vertexes;
@@ -1182,7 +1182,7 @@ TRIANGULATION_ERRORS triangulate_polygon(
  * lone edges, if they are there.
  * @return An error code.
  */
-TRIANGULATION_ERRORS triangulate_sector(
+TRIANGULATION_ERROR triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 ) {
 
@@ -1221,8 +1221,8 @@ TRIANGULATION_ERRORS triangulate_sector(
      *     +---------------------+
      */
     
-    TRIANGULATION_ERRORS result = get_polys(s_ptr, &root);
-    if(result != TRIANGULATION_NO_ERROR) {
+    TRIANGULATION_ERROR result = get_polys(s_ptr, &root);
+    if(result != TRIANGULATION_ERROR_NONE) {
         root.destroy();
         return result;
     }
@@ -1256,9 +1256,9 @@ TRIANGULATION_ERRORS triangulate_sector(
     //Transforming the polygons into triangles.
     s_ptr->triangles.clear();
     for(size_t p = 0; p < root.children.size(); ++p) {
-        TRIANGULATION_ERRORS poly_result =
+        TRIANGULATION_ERROR poly_result =
             triangulate_polygon(root.children[p], &s_ptr->triangles);
-        if(poly_result != TRIANGULATION_NO_ERROR) {
+        if(poly_result != TRIANGULATION_ERROR_NONE) {
             result = poly_result;
         }
     }

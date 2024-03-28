@@ -16,7 +16,7 @@
 
 
 //Treasure object states.
-enum TREASURE_STATES {
+enum TREASURE_STATE {
     
     //Waiting.
     TREASURE_STATE_IDLE_WAITING,

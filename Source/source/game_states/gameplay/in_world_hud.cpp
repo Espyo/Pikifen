@@ -88,7 +88,7 @@ void in_world_fraction::draw() {
         float timer_ratio =
             1 - (transition_timer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
-        size_mult = ease(EASE_OUT, timer_ratio) * 0.5 + 0.5;
+        size_mult = ease(EASE_METHOD_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
@@ -104,7 +104,7 @@ void in_world_fraction::draw() {
     if(grow_juice_timer > 0.0f) {
         float anim_ratio =
             1 - (grow_juice_timer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
-        anim_ratio = ease(EASE_UP_AND_DOWN, anim_ratio);
+        anim_ratio = ease(EASE_METHOD_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::GROW_JUICE_AMOUNT * anim_ratio;
     }
     
@@ -120,7 +120,7 @@ void in_world_fraction::draw() {
         float anim_ratio =
             1.0f -
             (req_met_juice_timer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
-        anim_ratio = ease(EASE_UP_AND_DOWN, anim_ratio);
+        anim_ratio = ease(EASE_METHOD_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::REQ_MET_GROW_JUICE_AMOUNT * anim_ratio;
     } else {
         final_color = color;
@@ -145,7 +145,7 @@ void in_world_fraction::draw() {
             game.fonts.standard,
             final_color, pos,
             point(size_mult, size_mult),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, i2s(value_number)
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, i2s(value_number)
         );
     }
 }
@@ -266,7 +266,7 @@ void in_world_health_wheel::draw() {
             1.0f -
             (transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
-        size_mult = ease(EASE_OUT, timer_ratio) * 0.5 + 0.5;
+        size_mult = ease(EASE_METHOD_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {

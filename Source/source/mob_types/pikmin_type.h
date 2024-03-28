@@ -28,7 +28,7 @@ extern const float DEF_KNOCKED_DOWN_WHISTLE_BONUS;
 
 
 //Pikmin object states.
-enum PIKMIN_STATES {
+enum PIKMIN_STATE {
 
     //In group, chasing.
     PIKMIN_STATE_IN_GROUP_CHASING,
@@ -181,7 +181,7 @@ enum PIKMIN_STATES {
 
 
 //Pikmin object animations.
-enum PIKMIN_ANIMATIONS {
+enum PIKMIN_ANIM {
 
     //Idling.
     PIKMIN_ANIM_IDLING,
@@ -235,7 +235,7 @@ enum PIKMIN_ANIMATIONS {
 
 
 //Pikmin object sounds.
-enum PIKMIN_SOUNDS {
+enum PIKMIN_SOUND {
     
     //Attack.
     PIKMIN_SOUND_ATTACK,
@@ -274,7 +274,7 @@ enum PIKMIN_SOUNDS {
 
 
 //Pikmin type attack methods.
-enum PIKMIN_ATTACK_METHODS {
+enum PIKMIN_ATTACK {
     //Latches on and attacks.
     PIKMIN_ATTACK_LATCH,
     
@@ -306,7 +306,7 @@ public:
     float max_throw_height = 260.0f;
 
     //What the main method of attack is.
-    PIKMIN_ATTACK_METHODS attack_method = PIKMIN_ATTACK_LATCH;
+    PIKMIN_ATTACK attack_method = PIKMIN_ATTACK_LATCH;
 
     //How long it stays on the floor for after knocked down, if left alone.
     float knocked_down_duration = PIKMIN_TYPE::DEF_KNOCKED_DOWN_DURATION;

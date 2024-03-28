@@ -36,7 +36,7 @@ extern const float EXIT_MIN_SIZE;
 
 
 //Possible goals in a mission.
-enum MISSION_GOALS {
+enum MISSION_GOAL {
 
     //The player plays until they end from the pause menu.
     MISSION_GOAL_END_MANUALLY,
@@ -60,7 +60,7 @@ enum MISSION_GOALS {
 
 
 //Possible ways to fail at a mission.
-enum MISSION_FAIL_CONDITIONS {
+enum MISSION_FAIL_COND {
 
     //Reaching the time limit.
     MISSION_FAIL_COND_TIME_LIMIT,
@@ -90,7 +90,7 @@ enum MISSION_FAIL_CONDITIONS {
 
 
 //Possible types of mission medal.
-enum MISSION_MEDALS {
+enum MISSION_MEDAL {
 
     //None.
     MISSION_MEDAL_NONE,
@@ -111,16 +111,16 @@ enum MISSION_MEDALS {
 
 
 //Possible ways of grading the player for a mission.
-enum MISSION_GRADING_MODES {
+enum MISSION_GRADING_MODE {
 
     //Based on points in different criteria.
-    MISSION_GRADING_POINTS,
+    MISSION_GRADING_MODE_POINTS,
     
     //Based on whether the player reached the goal or not.
-    MISSION_GRADING_GOAL,
+    MISSION_GRADING_MODE_GOAL,
     
     //Based on whether the player played or not.
-    MISSION_GRADING_PARTICIPATION,
+    MISSION_GRADING_MODE_PARTICIPATION,
     
 };
 
@@ -157,7 +157,7 @@ struct mission_data {
     //--- Members ---
     
     //Mission goal.
-    MISSION_GOALS goal = MISSION_GOAL_END_MANUALLY;
+    MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
     
     //Does the mission goal require all relevant items, or just specific ones?
     bool goal_all_mobs = true;
@@ -205,7 +205,7 @@ struct mission_data {
     size_t fail_hud_secondary_cond = INVALID;
     
     //Mission grading mode.
-    MISSION_GRADING_MODES grading_mode = MISSION_GRADING_GOAL;
+    MISSION_GRADING_MODE grading_mode = MISSION_GRADING_MODE_GOAL;
     
     //Mission point multiplier for each Pikmin born.
     int points_per_pikmin_born = 0;

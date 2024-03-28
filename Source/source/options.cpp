@@ -48,8 +48,8 @@ const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
 const bool DEF_AREA_EDITOR_SHOW_TERRITORY = false;
 
 //Default value for the area editor snap mode.
-const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE =
-    area_editor::SNAP_GRID;
+const area_editor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE =
+    area_editor::SNAP_MODE_GRID;
     
 //Default value for the area editor snap threshold.
 const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
@@ -58,11 +58,11 @@ const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 
 //Default value for the area editor view mode.
-const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE =
+const area_editor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
     
 //Default value for the auto-throw mode.
-const AUTO_THROW_MODES DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
+const AUTO_THROW_MODE DEF_AUTO_THROW_MODE = AUTO_THROW_MODE_OFF;
 
 //Default value for the cursor camera weight.
 const float DEF_CURSOR_CAM_WEIGHT = 0.0f;
@@ -110,8 +110,8 @@ const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
 
 //Default value for the pause menu leaving confirmation mode.
-const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE =
-    LEAVING_CONFIRMATION_ALWAYS;
+const LEAVING_CONFIRMATION_MODE DEF_LEAVING_CONFIRMATION_MODE =
+    LEAVING_CONFIRMATION_MODE_ALWAYS;
     
 //Default value for the master sound volume.
 const float DEF_MASTER_VOLUME = 0.8f;
@@ -189,7 +189,7 @@ void options_t::load(data_node* file) {
     const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+        for(size_t b = 0; b < N_PLAYER_ACTION_TYPES; ++b) {
             string internal_name = player_action_types[b].internal_name;
             if(internal_name.empty()) continue;
             data_node* control_node =
@@ -283,25 +283,25 @@ void options_t::load(data_node* file) {
     rs.set("world_sfx_volume", world_sfx_volume);
     
     auto_throw_mode =
-        (AUTO_THROW_MODES)
+        (AUTO_THROW_MODE)
         std::min(
             auto_throw_mode_c,
             (unsigned char) (N_AUTO_THROW_MODES - 1)
         );
     area_editor_snap_mode =
-        (area_editor::SNAP_MODES)
+        (area_editor::SNAP_MODE)
         std::min(
             editor_snap_mode_c,
             (unsigned char) (area_editor::N_SNAP_MODES - 1)
         );
     area_editor_view_mode =
-        (area_editor::VIEW_MODES)
+        (area_editor::VIEW_MODE)
         std::min(
             editor_view_mode_c,
             (unsigned char) (area_editor::N_VIEW_MODES - 1)
         );
     leaving_confirmation_mode =
-        (LEAVING_CONFIRMATION_MODES)
+        (LEAVING_CONFIRMATION_MODE)
         std::min(
             leaving_confirmation_mode_c,
             (unsigned char) (N_LEAVING_CONFIRMATION_MODES - 1)
@@ -351,7 +351,7 @@ void options_t::save(data_node* file) const {
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
-        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+        for(size_t b = 0; b < N_PLAYER_ACTION_TYPES; ++b) {
             string internal_name = player_action_types[b].internal_name;
             if(internal_name.empty()) continue;
             grouped_controls[prefix + internal_name].clear();
@@ -365,7 +365,7 @@ void options_t::save(data_node* file) const {
             if(all_binds[b].player_nr != p) continue;
             string name = "p" + i2s(p + 1) + "_";
             
-            for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
+            for(size_t a = 0; a < N_PLAYER_ACTION_TYPES; ++a) {
                 if(player_action_types[a].internal_name.empty()) continue;
                 
                 if(all_binds[b].action_type_id == player_action_types[a].id) {

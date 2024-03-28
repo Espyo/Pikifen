@@ -102,10 +102,10 @@ mob* mob::get_mob_to_walk_on() const {
  *
  * @param new_pos Position to check.
  * @param intersecting_edges List of edges it is intersecting with.
- * @return H_MOVE_OK if everything is okay, H_MOVE_FAIL if movement is
+ * @return H_MOVE_RESULT_OK if everything is okay, H_MOVE_RESULT_FAIL if movement is
  * impossible.
  */
-H_MOVE_RESULTS mob::get_movement_edge_intersections(
+H_MOVE_RESULT mob::get_movement_edge_intersections(
     const point &new_pos, vector<edge*>* intersecting_edges
 ) const {
     //Before checking the edges, let's consult the blockmap and look at
@@ -128,7 +128,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         )
     ) {
         //Somehow out of bounds. No movement.
-        return H_MOVE_FAIL;
+        return H_MOVE_RESULT_FAIL;
     }
     
     //Go through each edge, and figure out if it is a valid wall for our mob.
@@ -151,7 +151,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
             //If we're on the edge of out-of-bounds geometry,
             //block entirely.
-            return H_MOVE_FAIL;
+            return H_MOVE_RESULT_FAIL;
         }
         
         for(unsigned char s = 0; s < 2; ++s) {
@@ -201,7 +201,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         intersecting_edges->push_back(e_ptr);
     }
     
-    return H_MOVE_OK;
+    return H_MOVE_RESULT_OK;
 }
 
 
@@ -212,11 +212,11 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
  * @param delta_t How long the frame's tick is, in seconds.
  * @param move_speed_mult Movement speed is multiplied by this.
  * @param move_speed The calculated move speed is placed in this struct.
- * @return H_MOVE_OK on normal movement, H_MOVE_TELEPORTED if the mob's X
- * and Y have been set and movement logic can be skipped, and H_MOVE_FAIL if
+ * @return H_MOVE_RESULT_OK on normal movement, H_MOVE_RESULT_TELEPORTED if the mob's X
+ * and Y have been set and movement logic can be skipped, and H_MOVE_RESULT_FAIL if
  * movement is entirely impossible this frame.
  */
-H_MOVE_RESULTS mob::get_physics_horizontal_movement(
+H_MOVE_RESULT mob::get_physics_horizontal_movement(
     const float delta_t, const float move_speed_mult, point* move_speed
 ) {
     //Held by another mob.
@@ -237,7 +237,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 
             if(!sec) {
                 //No sector, invalid teleport. No move.
-                return H_MOVE_FAIL;
+                return H_MOVE_RESULT_FAIL;
             }
             
             z = chase_info.offset_z;
@@ -253,7 +253,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             if(!has_flag(chase_info.flags, CHASE_FLAG_TELEPORTS_CONSTANTLY)) {
                 chase_info.state = CHASE_STATE_FINISHED;
             }
-            return H_MOVE_TELEPORTED;
+            return H_MOVE_RESULT_TELEPORTED;
             
         } else {
         
@@ -317,7 +317,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         (*move_speed) += standing_on_mob->walkable_moved;
     }
     
-    return H_MOVE_OK;
+    return H_MOVE_RESULT_OK;
 }
 
 
@@ -330,10 +330,10 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
  * (i.e. the highest).
  * @param move_angle Angle at which the mob is going to move.
  * @param slide_angle Holds the calculated slide angle.
- * @return H_MOVE_OK on success, H_MOVE_FAIL if the mob can't
+ * @return H_MOVE_RESULT_OK on success, H_MOVE_RESULT_FAIL if the mob can't
  * slide against this wall.
  */
-H_MOVE_RESULTS mob::get_wall_slide_angle(
+H_MOVE_RESULT mob::get_wall_slide_angle(
     const edge* e_ptr, unsigned char wall_sector, const float move_angle,
     float* slide_angle
 ) const {
@@ -363,7 +363,7 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
         //If the difference between the movement and the wall's
         //normal is this, that means we came FROM the wall.
         //No way! There has to be an edge that makes more sense.
-        return H_MOVE_FAIL;
+        return H_MOVE_RESULT_FAIL;
     }
     
     //If we were to slide on this edge, this would be
@@ -376,7 +376,7 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
         *slide_angle = wall_normal - TAU / 4;
     }
     
-    return H_MOVE_OK;
+    return H_MOVE_RESULT_OK;
 }
 
 
@@ -436,7 +436,7 @@ void mob::tick_horizontal_movement_physics(
         vector<edge*> intersecting_edges;
         if(
             get_movement_edge_intersections(new_pos, &intersecting_edges) ==
-            H_MOVE_FAIL
+            H_MOVE_RESULT_FAIL
         ) {
             return;
         }
@@ -530,7 +530,7 @@ void mob::tick_horizontal_movement_physics(
                 if(
                     get_wall_slide_angle(
                         e_ptr, wall_sector, move_angle, &tentative_slide_angle
-                    ) == H_MOVE_FAIL
+                    ) == H_MOVE_RESULT_FAIL
                 ) {
                     continue;
                 }
@@ -619,15 +619,15 @@ void mob::tick_physics(const float delta_t) {
     tick_rotation_physics(delta_t, move_speed_mult);
     
     //What type of horizontal movement is this?
-    H_MOVE_RESULTS h_mov_type =
+    H_MOVE_RESULT h_mov_type =
         get_physics_horizontal_movement(delta_t, move_speed_mult, &move_speed);
         
     switch (h_mov_type) {
-    case H_MOVE_FAIL: {
+    case H_MOVE_RESULT_FAIL: {
         return;
-    } case H_MOVE_TELEPORTED: {
+    } case H_MOVE_RESULT_TELEPORTED: {
         break;
-    } case H_MOVE_OK: {
+    } case H_MOVE_RESULT_OK: {
         //Horizontal movement time!
         tick_horizontal_movement_physics(
             delta_t, move_speed, &touched_wall
@@ -638,7 +638,7 @@ void mob::tick_physics(const float delta_t) {
     
     //Vertical movement.
     tick_vertical_movement_physics(
-        delta_t, pre_move_ground_z, h_mov_type == H_MOVE_TELEPORTED
+        delta_t, pre_move_ground_z, h_mov_type == H_MOVE_RESULT_TELEPORTED
     );
     
     //Walk on top of another mob, if possible.

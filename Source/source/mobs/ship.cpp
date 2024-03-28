@@ -125,7 +125,7 @@ void ship::draw_mob() {
         
         float ring_scale =
             interpolate_number(
-                ease(EASE_IN, ring_anim_ratio),
+                ease(EASE_METHOD_IN, ring_anim_ratio),
                 0.0f, 1.0f,
                 1.0f, 0.3f
             );

@@ -20,7 +20,7 @@
 
 
 //Types of areas that can be played.
-enum AREA_TYPES {
+enum AREA_TYPE {
 
     //A simple area with no goal.
     AREA_TYPE_SIMPLE,
@@ -179,7 +179,7 @@ struct area_data {
     //--- Members ---
     
     //Type of area.
-    AREA_TYPES type = AREA_TYPE_SIMPLE;
+    AREA_TYPE type = AREA_TYPE_SIMPLE;
     
     //Name of the folder with this area's data.
     string folder_name;
@@ -316,10 +316,10 @@ struct area_data {
 void get_area_info_from_path(
     const string &requested_area_path,
     string* out_area_folder_name,
-    AREA_TYPES* out_area_type
+    AREA_TYPE* out_area_type
 );
 string get_base_area_folder_path(
-    const AREA_TYPES type, const bool from_game_data
+    const AREA_TYPE type, const bool from_game_data
 );
 
 #endif //ifndef AREA_INCLUDED

@@ -42,7 +42,7 @@ carrier_spot_t::carrier_spot_t(const point &pos) :
  * @param destination Where to deliver the mob.
  */
 carry_t::carry_t(
-    mob* m, const CARRY_DESTINATIONS destination
+    mob* m, const CARRY_DESTINATION destination
 ) :
     m(m),
     destination(destination) {
@@ -120,7 +120,7 @@ float carry_t::get_speed() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         const carrier_spot_t* s_ptr = &spot_info[s];
         
-        if(s_ptr->state != CARRY_SPOT_USED) continue;
+        if(s_ptr->state != CARRY_SPOT_STATE_USED) continue;
         
         pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
         max_speed += p_ptr->get_base_speed() * p_ptr->get_speed_multiplier();
@@ -154,7 +154,7 @@ float carry_t::get_speed() const {
  */
 bool carry_t::is_empty() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
-        if(spot_info[s].state != CARRY_SPOT_FREE) return false;
+        if(spot_info[s].state != CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
 }
@@ -167,7 +167,7 @@ bool carry_t::is_empty() const {
  */
 bool carry_t::is_full() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
-        if(spot_info[s].state == CARRY_SPOT_FREE) return false;
+        if(spot_info[s].state == CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
 }
@@ -753,7 +753,7 @@ path_t::path_t(
  * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
-bool path_t::check_blockage(PATH_BLOCK_REASONS* out_reason) {
+bool path_t::check_blockage(PATH_BLOCK_REASON* out_reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_idx > 0 &&
@@ -1272,7 +1272,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                         m2_ptr->carry_info->spot_info[c].pik_ptr =
                             nullptr;
                         m2_ptr->carry_info->spot_info[c].state =
-                            CARRY_SPOT_FREE;
+                            CARRY_SPOT_STATE_FREE;
                     }
                 }
             }
@@ -1377,27 +1377,27 @@ mob_type::spawn_t* get_spawn_info_from_child_info(
  * @param type_str Text representation of the target type.
  * @return The type, or INVALID if invalid.
  */
-MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str) {
+MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str) {
     if(type_str == "none") {
-        return MOB_TARGET_TYPE_NONE;
+        return MOB_TARGET_FLAG_NONE;
     } else if(type_str == "player") {
-        return MOB_TARGET_TYPE_PLAYER;
+        return MOB_TARGET_FLAG_PLAYER;
     } else if(type_str == "enemy") {
-        return MOB_TARGET_TYPE_ENEMY;
+        return MOB_TARGET_FLAG_ENEMY;
     } else if(type_str == "weak_plain_obstacle") {
-        return MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE;
+        return MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE;
     } else if(type_str == "strong_plain_obstacle") {
-        return MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE;
+        return MOB_TARGET_FLAG_STRONG_PLAIN_OBSTACLE;
     } else if(type_str == "pikmin_obstacle") {
-        return MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
+        return MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     } else if(type_str == "explodable") {
-        return MOB_TARGET_TYPE_EXPLODABLE;
+        return MOB_TARGET_FLAG_EXPLODABLE;
     } else if(type_str == "explodable_pikmin_obstacle") {
-        return MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE;
+        return MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE;
     } else if(type_str == "fragile") {
-        return MOB_TARGET_TYPE_FRAGILE;
+        return MOB_TARGET_FLAG_FRAGILE;
     }
-    return (MOB_TARGET_TYPES) INVALID;
+    return (MOB_TARGET_FLAG) INVALID;
 }
 
 
@@ -1407,11 +1407,11 @@ MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str) {
  * @param team_str Text representation of the team.
  * @return The team, or INVALID if invalid.
  */
-MOB_TEAMS string_to_team_nr(const string &team_str) {
+MOB_TEAM string_to_team_nr(const string &team_str) {
     for(size_t t = 0; t < N_MOB_TEAMS; ++t) {
         if(team_str == game.team_internal_names[t]) {
-            return (MOB_TEAMS) t;
+            return (MOB_TEAM) t;
         }
     }
-    return (MOB_TEAMS) INVALID;
+    return (MOB_TEAM) INVALID;
 }

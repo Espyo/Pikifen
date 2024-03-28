@@ -27,16 +27,16 @@ using std::vector;
 
 
 //Modes for the auto-throw feature.
-enum AUTO_THROW_MODES {
+enum AUTO_THROW_MODE {
 
     //Off.
-    AUTO_THROW_OFF,
+    AUTO_THROW_MODE_OFF,
     
     //Hold input to auto-throw.
-    AUTO_THROW_HOLD,
+    AUTO_THROW_MODE_HOLD,
     
     //Press input to toggle auto-throw.
-    AUTO_THROW_TOGGLE,
+    AUTO_THROW_MODE_TOGGLE,
     
     //Total amount of auto-throw modes.
     N_AUTO_THROW_MODES,
@@ -45,16 +45,16 @@ enum AUTO_THROW_MODES {
 
 
 //Modes for the pause menu leaving confirmation question.
-enum LEAVING_CONFIRMATION_MODES {
+enum LEAVING_CONFIRMATION_MODE {
 
     //Never ask.
-    LEAVING_CONFIRMATION_NEVER,
+    LEAVING_CONFIRMATION_MODE_NEVER,
     
     //Ask if it's been over a minute of gameplay.
-    LEAVING_CONFIRMATION_1_MIN,
+    LEAVING_CONFIRMATION_MODE_1_MIN,
     
     //Always ask.
-    LEAVING_CONFIRMATION_ALWAYS,
+    LEAVING_CONFIRMATION_MODE_ALWAYS,
     
     //Total amount of leaving confirmation modes.
     N_LEAVING_CONFIRMATION_MODES,
@@ -72,11 +72,11 @@ extern const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO;
 extern const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
-extern const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE;
+extern const area_editor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE;
 extern const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
 extern const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
-extern const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
-extern const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
+extern const area_editor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE;
+extern const AUTO_THROW_MODE DEF_AUTO_THROW_MODE;
 extern const float DEF_CURSOR_CAM_WEIGHT;
 extern const float DEF_CURSOR_SPEED;
 extern const bool DEF_DRAW_CURSOR_TRAIL;
@@ -92,7 +92,7 @@ extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
 extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
 extern const float DEF_JOYSTICK_MAX_DEADZONE;
-extern const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE;
+extern const LEAVING_CONFIRMATION_MODE DEF_LEAVING_CONFIRMATION_MODE;
 extern const float DEF_MASTER_VOLUME;
 extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
@@ -147,7 +147,7 @@ struct options_t {
     bool area_editor_show_territory = OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY;
     
     //Snap mode to use.
-    area_editor::SNAP_MODES area_editor_snap_mode = OPTIONS::DEF_AREA_EDITOR_SNAP_MODE;
+    area_editor::SNAP_MODE area_editor_snap_mode = OPTIONS::DEF_AREA_EDITOR_SNAP_MODE;
     
     //Snap when the cursor is this close to a vertex/edge.
     size_t area_editor_snap_threshold = OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD;
@@ -156,10 +156,10 @@ struct options_t {
     size_t area_editor_undo_limit = OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT;
     
     //View mode to use.
-    area_editor::VIEW_MODES area_editor_view_mode = OPTIONS::DEF_AREA_EDITOR_VIEW_MODE;
+    area_editor::VIEW_MODE area_editor_view_mode = OPTIONS::DEF_AREA_EDITOR_VIEW_MODE;
     
     //Auto-throw mode.
-    AUTO_THROW_MODES auto_throw_mode = OPTIONS::DEF_AUTO_THROW_MODE;
+    AUTO_THROW_MODE auto_throw_mode = OPTIONS::DEF_AUTO_THROW_MODE;
     
     //Cursor camera movement weight.
     float cursor_cam_weight = OPTIONS::DEF_CURSOR_CAM_WEIGHT;
@@ -219,7 +219,7 @@ struct options_t {
     float joystick_min_deadzone = OPTIONS::DEF_JOYSTICK_MIN_DEADZONE;
     
     //Pause menu leaving confirmation question mode.
-    LEAVING_CONFIRMATION_MODES leaving_confirmation_mode = OPTIONS::DEF_LEAVING_CONFIRMATION_MODE;
+    LEAVING_CONFIRMATION_MODE leaving_confirmation_mode = OPTIONS::DEF_LEAVING_CONFIRMATION_MODE;
     
     //Master sound volume (0 - 1).
     float master_volume = OPTIONS::DEF_MASTER_VOLUME;

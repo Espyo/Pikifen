@@ -29,7 +29,7 @@ using std::set;
  *
  * @param type Type of mob action call.
  */
-mob_action_call::mob_action_call(MOB_ACTION_TYPES type) {
+mob_action_call::mob_action_call(MOB_ACTION type) {
 
     for(size_t a = 0; a < game.mob_actions.size(); ++a) {
         if(game.mob_actions[a].type == type) {
@@ -219,13 +219,13 @@ bool mob_action_call::run(
  */
 bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
     if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME);
     } else if(call.args[0] == "forward") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD);
     } else if(call.args[0] == "cw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN);
     } else if(call.args[0] == "ccw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -242,15 +242,15 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
  */
 bool mob_action_loaders::calculate(mob_action_call &call) {
     if(call.args[2] == "+") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_SUM);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_SUM);
     } else if(call.args[2] == "-") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_SUBTRACT);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_SUBTRACT);
     } else if(call.args[2] == "*") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_MULTIPLY);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_MULTIPLY);
     } else if(call.args[2] == "/") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_DIVIDE);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_DIVIDE);
     } else if(call.args[2] == "%") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_MODULO);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_MODULO);
     } else {
         report_enum_error(call, 2);
         return false;
@@ -267,11 +267,11 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
  */
 bool mob_action_loaders::focus(mob_action_call &call) {
     if(call.args[0] == "link") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_LINK);
+        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_LINK);
     } else if(call.args[0] == "parent") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_PARENT);
+        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_PARENT);
     } else if(call.args[0] == "trigger") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_TRIGGER);
+        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_TRIGGER);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -288,9 +288,9 @@ bool mob_action_loaders::focus(mob_action_call &call) {
  */
 bool mob_action_loaders::get_area_info(mob_action_call &call) {
     if(call.args[1] == "day_minutes") {
-        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_DAY_MINUTES);
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES);
     } else if(call.args[1] == "field_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN);
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN);
     } else {
         call.custom_error =
             "Unknown info type \"" + call.args[0] + "\"! "
@@ -310,19 +310,19 @@ bool mob_action_loaders::get_area_info(mob_action_call &call) {
  */
 bool mob_action_loaders::get_event_info(mob_action_call &call) {
     if(call.args[1] == "body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_BODY_PART);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART);
     } else if(call.args[1] == "frame_signal") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL);
     } else if(call.args[1] == "hazard") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_HAZARD);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_HAZARD);
     } else if (call.args[1] == "input_name") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_INPUT_NAME);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME);
     } else if (call.args[1] == "input_value") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_INPUT_VALUE);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE);
     } else if(call.args[1] == "message") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_MESSAGE);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE);
     } else if(call.args[1] == "other_body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART);
+        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART);
     } else {
         call.custom_error =
             "Unknown info type \"" + call.args[1] + "\"! "
@@ -354,37 +354,37 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
     }
     
     if(call.args[2] == "angle") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_ANGLE);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE);
     } else if(call.args[2] == "chomped_pikmin") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN);
     } else if(call.args[2] == "focus_distance") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE);
     } else if(call.args[2] == "group_task_power") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER);
     } else if(call.args[2] == "health") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_HEALTH);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH);
     } else if(call.args[2] == "health_ratio") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO);
     } else if(call.args[2] == "id") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_ID);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_ID);
     } else if(call.args[2] == "latched_pikmin") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN);
     } else if(call.args[2] == "latched_pikmin_weight") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT);
     } else if(call.args[2] == "mob_category") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY);
     } else if(call.args[2] == "mob_type") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_MOB_TYPE);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE);
     } else if(call.args[2] == "state") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_STATE);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_STATE);
     } else if(call.args[2] == "weight") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_WEIGHT);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT);
     } else if(call.args[2] == "x") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_X);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_X);
     } else if(call.args[2] == "y") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_Y);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Y);
     } else if(call.args[2] == "z") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_Z);
+        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Z);
     } else {
         call.custom_error =
             "Unknown info type \"" + call.args[0] + "\"! "
@@ -449,17 +449,17 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
  */
 bool mob_action_loaders::move_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_foot_logic") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC);
     } else if(call.args[0] == "away_from_focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS);
     } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_FOCUS);
     } else if(call.args[0] == "focused_mob_position") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_FOCUS_POS);
     } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_HOME);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_HOME);
     } else if(call.args[0] == "linked_mob_average") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
+        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -553,13 +553,13 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
     
     for(size_t a = 1; a < call.args.size(); ++a) {
         if(call.args[a] == "no_restart") {
-            call.args[a] = i2s(START_ANIMATION_NO_RESTART);
+            call.args[a] = i2s(START_ANIM_OPTION_NO_RESTART);
         } else if(call.args[a] == "random_time") {
-            call.args[a] = i2s(START_ANIMATION_RANDOM_TIME);
+            call.args[a] = i2s(START_ANIM_OPTION_RANDOM_TIME);
         } else if(call.args[a] == "random_time_on_spawn") {
-            call.args[a] = i2s(START_ANIMATION_RANDOM_TIME_ON_SPAWN);
+            call.args[a] = i2s(START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN);
         } else {
-            call.args[a] = i2s(START_ANIMATION_NORMAL);
+            call.args[a] = i2s(START_ANIM_OPTION_NORMAL);
         }
     }
     
@@ -594,9 +594,9 @@ bool mob_action_loaders::set_far_reach(mob_action_call &call) {
 bool mob_action_loaders::set_holdable(mob_action_call &call) {
     for(size_t a = 0; a < call.args.size(); ++a) {
         if(call.args[a] == "pikmin") {
-            call.args[a] = i2s(HOLDABLE_BY_PIKMIN);
+            call.args[a] = i2s(HOLDABILITY_FLAG_PIKMIN);
         } else if(call.args[a] == "enemies") {
-            call.args[a] = i2s(HOLDABLE_BY_ENEMIES);
+            call.args[a] = i2s(HOLDABILITY_FLAG_ENEMIES);
         } else {
             report_enum_error(call, a);
             return false;
@@ -668,9 +668,9 @@ bool mob_action_loaders::spawn(mob_action_call &call) {
  */
 bool mob_action_loaders::stabilize_z(mob_action_call &call) {
     if(call.args[0] == "lowest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_LOWEST);
+        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_TYPE_LOWEST);
     } else if(call.args[0] == "highest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_HIGHEST);
+        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -726,11 +726,11 @@ bool mob_action_loaders::start_particles(mob_action_call &call) {
  */
 bool mob_action_loaders::turn_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_head_logic") {
-        call.args[0] = i2s(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
+        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC);
     } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_TURN_FOCUSED_MOB);
+        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_FOCUSED_MOB);
     } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_TURN_HOME);
+        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_HOME);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -750,7 +750,7 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
  */
 mob_action_param::mob_action_param(
     const string &name,
-    const MOB_ACTION_PARAM_TYPE type,
+    const MOB_ACTION_PARAM type,
     const bool force_const,
     const bool is_extras
 ):
@@ -792,7 +792,7 @@ void mob_action_runners::add_health(mob_action_run_data &data) {
  */
 void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
     data.m->arachnorb_plan_logic(
-        (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES) s2i(data.args[0])
+        (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
     );
 }
 
@@ -804,25 +804,25 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
-    MOB_ACTION_CALCULATE_TYPES op =
-        (MOB_ACTION_CALCULATE_TYPES) s2i(data.args[2]);
+    MOB_ACTION_CALCULATE_TYPE op =
+        (MOB_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
     float rhs = s2f(data.args[3]);
     float result = 0;
     
     switch(op) {
-    case MOB_ACTION_CALCULATE_SUM: {
+    case MOB_ACTION_CALCULATE_TYPE_SUM: {
         result = lhs + rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_SUBTRACT: {
+    } case MOB_ACTION_CALCULATE_TYPE_SUBTRACT: {
         result = lhs - rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_MULTIPLY: {
+    } case MOB_ACTION_CALCULATE_TYPE_MULTIPLY: {
         result = lhs * rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_DIVIDE: {
+    } case MOB_ACTION_CALCULATE_TYPE_DIVIDE: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -830,7 +830,7 @@ void mob_action_runners::calculate(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_CALCULATE_MODULO: {
+    } case MOB_ACTION_CALCULATE_TYPE_MODULO: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -902,22 +902,22 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
-    MOB_ACTION_FOCUS_TYPES t = (MOB_ACTION_FOCUS_TYPES) s2i(data.args[0]);
+    MOB_ACTION_FOCUS_TYPE t = (MOB_ACTION_FOCUS_TYPE) s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_FOCUS_LINK: {
+    case MOB_ACTION_FOCUS_TYPE_LINK: {
         if(!data.m->links.empty() && data.m->links[0]) {
             data.m->focus_on_mob(data.m->links[0]);
         }
         break;
         
-    } case MOB_ACTION_FOCUS_PARENT: {
+    } case MOB_ACTION_FOCUS_TYPE_PARENT: {
         if(data.m->parent) {
             data.m->focus_on_mob(data.m->parent->m);
         }
         break;
         
-    } case MOB_ACTION_FOCUS_TRIGGER: {
+    } case MOB_ACTION_FOCUS_TYPE_TRIGGER: {
         mob* trigger = get_trigger_mob(data);
         if(trigger) {
             data.m->focus_on_mob(trigger);
@@ -1039,15 +1039,15 @@ void mob_action_runners::get_angle(mob_action_run_data &data) {
  */
 void mob_action_runners::get_area_info(mob_action_run_data &data) {
     string* var = &(data.m->vars[data.args[0]]);
-    MOB_ACTION_GET_AREA_INFO_TYPES t =
-        (MOB_ACTION_GET_AREA_INFO_TYPES) s2i(data.args[1]);
+    MOB_ACTION_GET_AREA_INFO_TYPE t =
+        (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
         
     switch (t) {
-    case MOB_ACTION_GET_AREA_INFO_DAY_MINUTES: {
+    case MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
         *var = i2s(game.states.gameplay->day_minutes);
         break;
         
-    } case MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN: {
+    } case MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN: {
         *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
         break;
         
@@ -1110,11 +1110,11 @@ void mob_action_runners::get_distance(mob_action_run_data &data) {
  */
 void mob_action_runners::get_event_info(mob_action_run_data &data) {
     string* var = &(data.m->vars[data.args[0]]);
-    MOB_ACTION_GET_EV_INFO_TYPES t =
-        (MOB_ACTION_GET_EV_INFO_TYPES) s2i(data.args[1]);
+    MOB_ACTION_GET_EV_INFO_TYPE t =
+        (MOB_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
         
     switch (t) {
-    case MOB_ACTION_GET_EV_INFO_BODY_PART: {
+    case MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
         if (
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
@@ -1137,13 +1137,13 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
         if (data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*)(data.custom_data_1)));
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_HAZARD: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_HAZARD: {
         if (
             data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
             data.call->parent_event == MOB_EV_LEFT_HAZARD
@@ -1152,7 +1152,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_INPUT_NAME: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME: {
         if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
             *var =
                 game.controls.get_player_action_type_internal_name(
@@ -1161,19 +1161,19 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_INPUT_VALUE: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
         if (data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
             *var = f2s(((player_action*) (data.custom_data_1))->value);
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_MESSAGE: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
         if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = *((string*)(data.custom_data_1));
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART: {
+    } case MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART: {
         if (
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
@@ -1233,8 +1233,8 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
     mob* target_mob = nullptr;
-    MOB_ACTION_GET_INFO_TARGET_TYPES tt =
-        (MOB_ACTION_GET_INFO_TARGET_TYPES) s2i(data.args[1]);
+    MOB_ACTION_GET_INFO_TARGET tt =
+        (MOB_ACTION_GET_INFO_TARGET) s2i(data.args[1]);
         
     switch(tt) {
     case MOB_ACTION_GET_INFO_TARGET_SELF: {
@@ -1252,19 +1252,19 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
     if(!target_mob) return;
     
     string* var = &(data.m->vars[data.args[0]]);
-    MOB_ACTION_GET_MOB_INFO_TYPES t =
-        (MOB_ACTION_GET_MOB_INFO_TYPES) s2i(data.args[2]);
+    MOB_ACTION_GET_MOB_INFO_TYPE t =
+        (MOB_ACTION_GET_MOB_INFO_TYPE) s2i(data.args[2]);
         
     switch (t) {
-    case MOB_ACTION_GET_MOB_INFO_ANGLE: {
+    case MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE: {
         *var = f2s(rad_to_deg(target_mob->angle));
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
         *var = i2s(target_mob->chomping_mobs.size());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
         if (target_mob->focused_mob) {
             float d =
                 dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
@@ -1272,60 +1272,60 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
         if(target_mob->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
             *var = f2s(((group_task*)target_mob)->get_power());
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_HEALTH: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH: {
         *var = i2s(target_mob->health);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
         *var = f2s(target_mob->health / target_mob->max_health);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_ID: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_ID: {
         *var = i2s(target_mob->id);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN: {
         *var = i2s(target_mob->get_latched_pikmin_amount());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT: {
         *var = i2s(target_mob->get_latched_pikmin_weight());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
         *var = target_mob->type->category->name;
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_MOB_TYPE: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
         *var = target_mob->type->name;
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_STATE: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {
         *var = target_mob->fsm.cur_state->name;
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_WEIGHT: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
         if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
             scale* s_ptr = (scale*)(target_mob);
             *var = i2s(s_ptr->calculate_cur_weight());
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_X: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_X: {
         *var = f2s(target_mob->pos.x);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_Y: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_Y: {
         *var = f2s(target_mob->pos.y);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_Z: {
+    } case MOB_ACTION_GET_MOB_INFO_TYPE_Z: {
         *var = f2s(target_mob->z);
         break;
     }
@@ -1378,8 +1378,8 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
  */
 void mob_action_runners::if_function(mob_action_run_data &data) {
     string lhs = data.args[0];
-    MOB_ACTION_IF_OPERATOR_TYPES op =
-        (MOB_ACTION_IF_OPERATOR_TYPES) s2i(data.args[1]);
+    MOB_ACTION_IF_OP op =
+        (MOB_ACTION_IF_OP) s2i(data.args[1]);
     string rhs = vector_tail_to_string(data.args, 2);
     
     switch(op) {
@@ -1488,10 +1488,10 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::move_to_target(mob_action_run_data &data) {
-    MOB_ACTION_MOVE_TYPES t = (MOB_ACTION_MOVE_TYPES) s2i(data.args[0]);
+    MOB_ACTION_MOVE_TYPE t = (MOB_ACTION_MOVE_TYPE) s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB: {
+    case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
         if(data.m->focused_mob) {
             float a = get_angle(data.m->pos, data.m->focused_mob->pos);
             point offset = point(2000, 0);
@@ -1502,7 +1502,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_FOCUSED_MOB: {
+    } case MOB_ACTION_MOVE_TYPE_FOCUS: {
         if(data.m->focused_mob) {
             data.m->chase(&data.m->focused_mob->pos, &data.m->focused_mob->z);
         } else {
@@ -1510,7 +1510,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_FOCUSED_MOB_POS: {
+    } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
         if(data.m->focused_mob) {
             data.m->chase(data.m->focused_mob->pos, data.m->focused_mob->z);
         } else {
@@ -1518,15 +1518,15 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_HOME: {
+    } case MOB_ACTION_MOVE_TYPE_HOME: {
         data.m->chase(data.m->home, data.m->z);
         break;
         
-    } case MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC: {
+    } case MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC: {
         data.m->arachnorb_foot_move_logic();
         break;
         
-    } case MOB_ACTION_MOVE_LINKED_MOB_AVERAGE: {
+    } case MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE: {
         if(data.m->links.empty()) {
             return;
         }
@@ -1697,9 +1697,9 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
-    START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL;
+    START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL;
     if(data.args.size() > 1) {
-        options = (START_ANIMATION_OPTIONS) s2i(data.args[1]);
+        options = (START_ANIM_OPTION) s2i(data.args[1]);
     }
     
     data.m->set_animation(s2i(data.args[0]), false, options);
@@ -1931,7 +1931,7 @@ void mob_action_runners::set_tangible(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::set_team(mob_action_run_data &data) {
-    data.m->team = (MOB_TEAMS) s2i(data.args[0]);
+    data.m->team = (MOB_TEAM) s2i(data.args[0]);
 }
 
 
@@ -1986,21 +1986,21 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     }
     
     float best_match_z = data.m->links[0]->z;
-    MOB_ACTION_STABILIZE_Z_TYPES t =
-        (MOB_ACTION_STABILIZE_Z_TYPES) s2i(data.args[0]);
+    MOB_ACTION_STABILIZE_Z_TYPE t =
+        (MOB_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
         
     for(size_t l = 1; l < data.m->links.size(); ++l) {
     
         if(!data.m->links[l]) continue;
         
         switch(t) {
-        case MOB_ACTION_STABILIZE_Z_HIGHEST: {
+        case MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
             if(data.m->links[l]->z > best_match_z) {
                 best_match_z = data.m->links[l]->z;
             }
             break;
             
-        } case MOB_ACTION_STABILIZE_Z_LOWEST: {
+        } case MOB_ACTION_STABILIZE_Z_TYPE_LOWEST: {
             if(data.m->links[l]->z < best_match_z) {
                 best_match_z = data.m->links[l]->z;
             }
@@ -2063,7 +2063,7 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
     if(data.args.size() > 3) offset_z = s2f(data.args[3]);
     
     particle_generator pg = game.custom_particle_generators[data.args[0]];
-    pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
+    pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     pg.follow_mob = data.m;
     pg.follow_angle = &data.m->angle;
     pg.follow_pos_offset = point(offset_x, offset_y);
@@ -2112,7 +2112,7 @@ void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::stop_particles(mob_action_run_data &data) {
-    data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+    data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
 }
 
 
@@ -2279,20 +2279,20 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::turn_to_target(mob_action_run_data &data) {
-    MOB_ACTION_TURN_TYPES t = (MOB_ACTION_TURN_TYPES) s2i(data.args[0]);
+    MOB_ACTION_TURN_TYPE t = (MOB_ACTION_TURN_TYPE) s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC: {
+    case MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC: {
         data.m->arachnorb_head_turn_logic();
         break;
         
-    } case MOB_ACTION_TURN_FOCUSED_MOB: {
+    } case MOB_ACTION_TURN_TYPE_FOCUSED_MOB: {
         if(data.m->focused_mob) {
             data.m->face(0, &data.m->focused_mob->pos);
         }
         break;
         
-    } case MOB_ACTION_TURN_HOME: {
+    } case MOB_ACTION_TURN_TYPE_HOME: {
         data.m->face(get_angle(data.m->pos, data.m->home), nullptr);
         break;
         

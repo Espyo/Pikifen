@@ -37,8 +37,8 @@
  * control bind.
  */
 void controls_mediator::add_player_action_type(
-    const PLAYER_ACTION_TYPES id,
-    const PLAYER_ACTION_CATEGORIES category,
+    const PLAYER_ACTION_TYPE id,
+    const PLAYER_ACTION_CAT category,
     const string &name, const string &description, const string &internal_name,
     const string &default_bind_str
 ) {
@@ -143,7 +143,7 @@ vector<control_bind> &controls_mediator::binds() {
  * @return The bind.
  */
 control_bind controls_mediator::find_bind(
-    const PLAYER_ACTION_TYPES action_type_id
+    const PLAYER_ACTION_TYPE action_type_id
 ) const {
     for(size_t b = 0; b < mgr.binds.size(); b++) {
         if(mgr.binds[b].action_type_id == action_type_id) {
@@ -210,7 +210,7 @@ string controls_mediator::get_player_action_type_internal_name(
  * @return The value.
  */
 float controls_mediator::get_player_action_type_value(
-    PLAYER_ACTION_TYPES player_action_type_id
+    PLAYER_ACTION_TYPE player_action_type_id
 ) {
     return mgr.action_type_values[(int) player_action_type_id];
 }
@@ -408,7 +408,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
         }
         
         switch(id) {
-        case MAKER_TOOL_AREA_IMAGE: {
+        case MAKER_TOOL_TYPE_AREA_IMAGE: {
             ALLEGRO_BITMAP* bmp = draw_to_bitmap();
             string file_name =
                 USER_DATA_FOLDER_PATH + "/Area_" +
@@ -424,35 +424,35 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
             break;
             
-        } case MAKER_TOOL_CHANGE_SPEED: {
+        } case MAKER_TOOL_TYPE_CHANGE_SPEED: {
             game.maker_tools.change_speed =
                 !game.maker_tools.change_speed;
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_COLLISION: {
+        } case MAKER_TOOL_TYPE_COLLISION: {
             game.maker_tools.collision =
                 !game.maker_tools.collision;
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_GEOMETRY_INFO: {
+        } case MAKER_TOOL_TYPE_GEOMETRY_INFO: {
             game.maker_tools.geometry_info =
                 !game.maker_tools.geometry_info;
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_HITBOXES: {
+        } case MAKER_TOOL_TYPE_HITBOXES: {
             game.maker_tools.hitboxes =
                 !game.maker_tools.hitboxes;
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_HUD: {
+        } case MAKER_TOOL_TYPE_HUD: {
             game.maker_tools.hud = !game.maker_tools.hud;
             break;
             
-        } case MAKER_TOOL_HURT_MOB: {
+        } case MAKER_TOOL_TYPE_HURT_MOB: {
             mob* m = get_closest_mob_to_cursor();
             if(m) {
                 m->set_health(
@@ -462,7 +462,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_MOB_INFO: {
+        } case MAKER_TOOL_TYPE_MOB_INFO: {
             mob* m = get_closest_mob_to_cursor();
             mob* prev_lock_mob = game.maker_tools.info_lock;
             game.maker_tools.info_lock =
@@ -473,7 +473,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_NEW_PIKMIN: {
+        } case MAKER_TOOL_TYPE_NEW_PIKMIN: {
             if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
                 pikmin_type* new_pikmin_type =
                     game.mob_types.pikmin.begin()->second;
@@ -499,12 +499,12 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
             break;
             
-        } case MAKER_TOOL_PATH_INFO: {
+        } case MAKER_TOOL_TYPE_PATH_INFO: {
             game.maker_tools.path_info = !game.maker_tools.path_info;
             game.maker_tools.used_helping_tools = true;
             break;
             
-        } case MAKER_TOOL_TELEPORT: {
+        } case MAKER_TOOL_TYPE_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor.w_pos, nullptr, true);
             if(mouse_sector && cur_leader_ptr) {

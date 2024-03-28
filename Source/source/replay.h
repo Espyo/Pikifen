@@ -30,7 +30,7 @@ using std::vector;
 
 
 //Types of elements in a replay.
-enum REPLAY_ELEMENT_TYPES {
+enum REPLAY_ELEMENT {
 
     //A leader.
     REPLAY_ELEMENT_LEADER,
@@ -54,7 +54,7 @@ enum REPLAY_ELEMENT_TYPES {
 
 
 //Types of events that can happen in a replay.
-enum REPLAY_EVENT_TYPES {
+enum REPLAY_EVENT {
 
     //A replay element was added.
     REPLAY_EVENT_ADDED,
@@ -77,7 +77,7 @@ struct replay_element {
     //--- Members ---
     
     //Type of element this represents.
-    REPLAY_ELEMENT_TYPES type = REPLAY_ELEMENT_LEADER;
+    REPLAY_ELEMENT type = REPLAY_ELEMENT_LEADER;
     
     //Its current position.
     point pos;
@@ -85,7 +85,7 @@ struct replay_element {
     
     //--- Function declarations ---
     
-    replay_element(const REPLAY_ELEMENT_TYPES type, const point &pos);
+    replay_element(const REPLAY_ELEMENT type, const point &pos);
     
 };
 
@@ -100,7 +100,7 @@ struct replay_event {
     //--- Members ---
     
     //Type of event.
-    REPLAY_EVENT_TYPES type = REPLAY_EVENT_ADDED;
+    REPLAY_EVENT type = REPLAY_EVENT_ADDED;
     
     //Informational data about the event.
     size_t data = 0;
@@ -109,7 +109,7 @@ struct replay_event {
     //--- Function declarations ---
     
     replay_event(
-        const REPLAY_EVENT_TYPES type, const size_t data
+        const REPLAY_EVENT type, const size_t data
     );
     
 };

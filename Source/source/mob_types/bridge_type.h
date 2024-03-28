@@ -18,7 +18,7 @@
 
 
 //Bridge object animations.
-enum BRIDGE_ANIMATIONS {
+enum BRIDGE_ANIM {
     
     //Idling.
     BRIDGE_ANIM_IDLING,
@@ -30,7 +30,7 @@ enum BRIDGE_ANIMATIONS {
 
 
 //Bridge object states.
-enum BRIDGE_STATES {
+enum BRIDGE_STATE {
 
     //Idling.
     BRIDGE_STATE_IDLING,

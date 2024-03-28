@@ -926,7 +926,7 @@ void editor::load() {
 void editor::load_custom_mob_cat_types(const bool is_area_editor) {
     //Load.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORIES) c);
+        mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORY) c);
         vector<string> type_names;
         c_ptr->get_type_names(type_names);
         
@@ -1269,7 +1269,7 @@ bool editor::process_gui_mob_type_widgets(
     bool search_button_pressed =
         ImGui::ImageButton(
             "searchButton",
-            editor_icons[ICON_SEARCH],
+            editor_icons[EDITOR_ICON_SEARCH],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
         );
@@ -1597,7 +1597,7 @@ void editor::set_status(const string &text, const bool error) {
  */
 void editor::set_tooltip(
     const string &explanation, const string &shortcut,
-    const WIDGET_EXPLANATIONS widget_explanation
+    const WIDGET_EXPLANATION widget_explanation
 ) {
     if(!game.options.editor_show_tooltips) {
         return;

@@ -21,7 +21,7 @@
 drop_type::drop_type() :
     mob_type(MOB_CATEGORY_DROPS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     height = 8.0f;
     
     drop_fsm::create_fsm(this);

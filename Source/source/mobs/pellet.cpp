@@ -28,7 +28,7 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     become_carriable(CARRY_DESTINATION_ONION);
     
     set_animation(
-        MOB_TYPE::ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+        MOB_TYPE::ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
 }
 
@@ -47,12 +47,12 @@ void pellet::draw_mob() {
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
-        SPRITE_BITMAP_EFFECT_STANDARD |
-        SPRITE_BITMAP_EFFECT_STATUS |
-        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
-        SPRITE_BITMAP_EFFECT_HEIGHT |
-        SPRITE_BITMAP_EFFECT_DELIVERY |
-        SPRITE_BITMAP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY |
+        SPRITE_BMP_EFFECT_CARRY
     );
     
     eff.scale.x *= radius * 2.0 / al_get_bitmap_width(cur_s_ptr->bitmap);

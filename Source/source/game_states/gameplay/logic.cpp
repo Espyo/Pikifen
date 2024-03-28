@@ -245,7 +245,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
             "Get up",
             point(
                 cur_leader_ptr->pos.x,
@@ -259,11 +259,11 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     if(
         !notification_done &&
         cur_leader_ptr->auto_throwing &&
-        game.options.auto_throw_mode == AUTO_THROW_TOGGLE
+        game.options.auto_throw_mode == AUTO_THROW_MODE_TOGGLE
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_THROW).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
             "Stop throwing",
             point(
                 cur_leader_ptr->pos.x,
@@ -280,7 +280,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
             "Stop",
             point(
                 cur_leader_ptr->pos.x,
@@ -297,7 +297,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
             "Stop",
             point(
                 cur_leader_ptr->pos.x,
@@ -330,7 +330,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
                 closest_d = d;
                 notification.set_enabled(true);
                 notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_THROW).input,
+                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
                     "Repair suit",
                     point(
                         close_to_ship_to_heal->pos.x,
@@ -357,7 +357,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
                         close_to_interactable_to_use->int_type->prompt_text,
                         point(
                             close_to_interactable_to_use->pos.x,
@@ -380,7 +380,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
                 close_to_pikmin_to_pluck = p;
                 notification.set_enabled(true);
                 notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_THROW).input,
+                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
                     "Pluck",
                     point(
                         p->pos.x,
@@ -405,7 +405,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
                         "Check",
                         point(
                             close_to_nest_to_open->m_ptr->pos.x,
@@ -429,7 +429,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
                         "Check",
                         point(
                             close_to_nest_to_open->m_ptr->pos.x,
@@ -500,7 +500,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     
     update_closest_group_members();
     if(!cur_leader_ptr->holding.empty()) {
-        closest_group_member[BUBBLE_CURRENT] = cur_leader_ptr->holding[0];
+        closest_group_member[BUBBLE_RELATION_CURRENT] = cur_leader_ptr->holding[0];
     }
     
     float old_swarm_magnitude = swarm_magnitude;
@@ -1429,7 +1429,7 @@ void gameplay_state::do_menu_logic() {
         if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_interlude = INTERLUDE_NONE;
             delta_t_mult = 1.0f;
-            leave(LEAVE_TO_END);
+            leave(GAMEPLAY_LEAVE_TARGET_END);
         }
         break;
     }
@@ -1459,7 +1459,7 @@ bool gameplay_state::is_mission_clear_met() {
  * @param reason The reason gets returned here, if any.
  * @return Whether a failure condition is met.
  */
-bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
+bool gameplay_state::is_mission_fail_met(MISSION_FAIL_COND* reason) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
         if(
             has_flag(
@@ -1468,7 +1468,7 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
             )
         ) {
             if(game.mission_fail_conds[f]->is_met(this)) {
-                *reason = (MISSION_FAIL_CONDITIONS) f;
+                *reason = (MISSION_FAIL_COND) f;
                 return true;
             }
         }

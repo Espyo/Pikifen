@@ -407,11 +407,11 @@ void options_menu_state::init_gui_controls_page() {
     
     //Auto-throw mode.
     auto_throw_picker =
-        new options_menu_picker_gui_item<AUTO_THROW_MODES>(
+        new options_menu_picker_gui_item<AUTO_THROW_MODE>(
         "Auto-throw: ",
         &game.options.auto_throw_mode,
         OPTIONS::DEF_AUTO_THROW_MODE,
-    {AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE},
+    {AUTO_THROW_MODE_OFF, AUTO_THROW_MODE_HOLD, AUTO_THROW_MODE_TOGGLE},
     {"Off", "Hold input", "Input toggles"}
     );
     auto_throw_picker->preset_descriptions = {
@@ -628,13 +628,13 @@ void options_menu_state::init_gui_misc_page() {
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =
-        new options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>(
+        new options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODE>(
         "Leave confirm: ",
         &game.options.leaving_confirmation_mode,
     OPTIONS::DEF_LEAVING_CONFIRMATION_MODE, {
-        LEAVING_CONFIRMATION_ALWAYS,
-        LEAVING_CONFIRMATION_1_MIN,
-        LEAVING_CONFIRMATION_NEVER
+        LEAVING_CONFIRMATION_MODE_ALWAYS,
+        LEAVING_CONFIRMATION_MODE_1_MIN,
+        LEAVING_CONFIRMATION_MODE_NEVER
     },
     {"Always", "After 1min", "Never"}
     );

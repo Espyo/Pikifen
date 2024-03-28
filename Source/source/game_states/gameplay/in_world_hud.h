@@ -38,7 +38,7 @@ extern const float TRANSITION_OUT_DURATION;
 
 
 //In-world HUD item transitions.
-enum IN_WORLD_HUD_TRANSITIONS {
+enum IN_WORLD_HUD_TRANSITION {
 
     //Not transitioning.
     IN_WORLD_HUD_TRANSITION_NONE,
@@ -70,7 +70,7 @@ public:
     mob* m = nullptr;
     
     //Current transition.
-    IN_WORLD_HUD_TRANSITIONS transition = IN_WORLD_HUD_TRANSITION_IN;
+    IN_WORLD_HUD_TRANSITION transition = IN_WORLD_HUD_TRANSITION_IN;
     
     //Time left in the current transition, if any.
     float transition_timer = 0.0f;

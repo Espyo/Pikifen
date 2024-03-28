@@ -32,7 +32,7 @@ class hitbox;
 
 /**
  * @brief Function to run custom mob actions with.
- * 
+ *
  * The first parameter is the mob running the action.
  * The second parameter depends on the function.
  * The third parameter depends on the function.
@@ -42,8 +42,8 @@ typedef void (*custom_action_code_t)(mob* m, void* info1, void* info2);
 const unsigned char STATE_HISTORY_SIZE = 3;
 
 //Types of script events.
-enum MOB_EV_TYPES {
-    
+enum MOB_EV {
+
     //"Special" events.
     
     //Unknown.
@@ -317,27 +317,27 @@ enum MOB_EV_TYPES {
 class mob_event {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Type of event.
-    MOB_EV_TYPES type = MOB_EV_UNKNOWN;
+    MOB_EV type = MOB_EV_UNKNOWN;
     
     //Actions to run.
     vector<mob_action_call*> actions;
     
-
+    
     //--- Function declarations ---
     
     mob_event(
         const data_node* node, const vector<mob_action_call*> &actions
     );
     explicit mob_event(
-        const MOB_EV_TYPES t,
+        const MOB_EV t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()
     );
     void run(mob* m, void* custom_data_1 = nullptr, void* custom_data_2 = nullptr);
-
+    
 };
 
 
@@ -348,9 +348,9 @@ public:
 class mob_state {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Name of the state.
     string name;
     
@@ -360,14 +360,14 @@ public:
     //List of events to handle in this state.
     mob_event* events[N_MOB_EVENTS];
     
-
+    
     //--- Function declarations ---
-
+    
     explicit mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
     mob_state(const string &name, const size_t id);
-    mob_event* get_event(const MOB_EV_TYPES type) const;
-
+    mob_event* get_event(const MOB_EV type) const;
+    
 };
 
 
@@ -379,9 +379,9 @@ public:
 class mob_fsm {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Mob that this FSM belongs to.
     mob* m = nullptr;
     
@@ -397,20 +397,20 @@ public:
     //If this is INVALID, use the mob type's first state nr. Else, use this.
     size_t first_state_override = INVALID;
     
-
+    
     //--- Function declarations ---
-
+    
     explicit mob_fsm(mob* m = nullptr);
-    mob_event* get_event(const MOB_EV_TYPES type) const;
+    mob_event* get_event(const MOB_EV type) const;
     size_t get_state_idx(const string &name) const;
     void run_event(
-        const MOB_EV_TYPES type,
+        const MOB_EV type,
         void* custom_data_1 = nullptr, void* custom_data_2 = nullptr
     );
     bool set_state(
         const size_t new_state, void* info1 = nullptr, void* info2 = nullptr
     );
-
+    
 };
 
 
@@ -431,19 +431,19 @@ public:
 class easy_fsm_creator {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     void new_state(const string &name, const size_t id);
-    void new_event(const MOB_EV_TYPES type);
+    void new_event(const MOB_EV type);
     void change_state(const string &new_state);
     void run(custom_action_code_t code);
     vector<mob_state*> finish();
     
 private:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //List of registered states.
     vector<mob_state*> states;
     
@@ -453,9 +453,9 @@ private:
     //Event currently being staged.
     mob_event* cur_event = nullptr;
     
-
+    
     //--- Function declarations ---
-
+    
     void commit_state();
     void commit_event();
     
@@ -468,7 +468,7 @@ private:
 struct hitbox_interaction {
 
     //--- Members ---
-
+    
     //Mob that touched our mob.
     mob* mob2 = nullptr;
     
@@ -478,7 +478,7 @@ struct hitbox_interaction {
     //Hitbox of the other mob.
     hitbox* h2 = nullptr;
     
-
+    
     //--- Function declarations ---
     
     explicit hitbox_interaction(

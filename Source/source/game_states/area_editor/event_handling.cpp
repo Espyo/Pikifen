@@ -530,13 +530,13 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 check_drawing_line(hotspot);
                 
                 bool needs_reverse = false;
-                if(drawing_line_result == DRAWING_LINE_HIT_EDGE_OR_VERTEX) {
+                if(drawing_line_result == DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX) {
                     //Instead of throwing an error, let's swap the order around.
                     needs_reverse = true;
-                    drawing_line_result = DRAWING_LINE_OK;
+                    drawing_line_result = DRAWING_LINE_RESULT_OK;
                 }
                 
-                if(drawing_line_result != DRAWING_LINE_OK) {
+                if(drawing_line_result != DRAWING_LINE_RESULT_OK) {
                     handle_line_error();
                     
                 } else if(
@@ -563,14 +563,14 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     ) {
                         //Split the sector.
                         setup_sector_split();
-                        SECTOR_SPLIT_RESULTS result =
+                        SECTOR_SPLIT_RESULT result =
                             get_sector_split_evaluation();
                         switch(result) {
-                        case SECTOR_SPLIT_OK: {
+                        case SECTOR_SPLIT_RESULT_OK: {
                             do_sector_split();
                             break;
                             
-                        } case SECTOR_SPLIT_INVALID: {
+                        } case SECTOR_SPLIT_RESULT_INVALID: {
                             rollback_to_prepared_state(
                                 sector_split_info.pre_split_area_data
                             );
@@ -586,7 +586,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             );
                             break;
                             
-                        } case SECTOR_SPLIT_USELESS: {
+                        } case SECTOR_SPLIT_RESULT_USELESS: {
                             rollback_to_prepared_state(
                                 sector_split_info.pre_split_area_data
                             );

@@ -372,8 +372,7 @@ string str_to_upper(string s) {
  * @param units How many units of time in total.
  * @param suffix1 Suffix for the first portion. Can be empty.
  * @param suffix2 Suffix for the second portion. Can be empty.
- * @param flags Flags to change behavior with.
- * Use the TIME_TO_STR_FLAGS bitmask.
+ * @param flags Flags to change behavior with. Use TIME_TO_STR_FLAG.
  * @return The time string.
  */
 string time_to_str2(
@@ -415,8 +414,7 @@ string time_to_str2(
  * @param suffix1 Suffix for the first portion. Can be empty.
  * @param suffix2 Suffix for the second portion. Can be empty.
  * @param suffix3 Suffix for the third portion. Can be empty.
- * @param flags Flags to change behavior with.
- * Use the TIME_TO_STR_FLAGS bitmask.
+ * @param flags Flags to change behavior with. Use TIME_TO_STR_FLAG.
  * @return The time string.
  */
 string time_to_str3(

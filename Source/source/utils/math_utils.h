@@ -23,37 +23,37 @@ constexpr float TAU = (float)M_PI * 2.0f;
 
 
 //Methods for easing numbers.
-enum EASING_METHODS {
+enum EASING_METHOD {
     
     //No easing. AKA linear interpolation.
-    EASE_NONE,
+    EASE_METHOD_NONE,
 
     //Eased as it goes in, then gradually goes out normally.
-    EASE_IN,
+    EASE_METHOD_IN,
     
     //Gradually goes in normally, then eased as it goes out.
-    EASE_OUT,
+    EASE_METHOD_OUT,
     
     //Goes backwards before going in.
-    EASE_IN_BACK,
+    EASE_METHOD_IN_BACK,
     
     //Overshoots at the end then finishes.
-    EASE_OUT_BACK,
+    EASE_METHOD_OUT_BACK,
     
     //Combines in back with out back.
-    EASE_IN_OUT_BACK,
+    EASE_METHOD_IN_OUT_BACK,
     
     //Springs backwards before going in.
-    EASE_IN_ELASTIC,
+    EASE_METHOD_IN_ELASTIC,
     
     //Near the end, it overshoots and then springs to normal.
-    EASE_OUT_ELASTIC,
+    EASE_METHOD_OUT_ELASTIC,
     
     //Goes up to 1, then back down to 0, in a sine-wave.
-    EASE_UP_AND_DOWN,
+    EASE_METHOD_UP_AND_DOWN,
     
     //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
-    EASE_UP_AND_DOWN_ELASTIC,
+    EASE_METHOD_UP_AND_DOWN_ELASTIC,
     
 };
 
@@ -68,7 +68,7 @@ enum EASING_METHODS {
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float clamp(const float number, const float minimum, const float maximum);
-float ease(const EASING_METHODS method, float n);
+float ease(const EASING_METHOD method, float n);
 uint32_t hash_nr(const unsigned int input);
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
 float inch_towards(float start, float target, float max_step);

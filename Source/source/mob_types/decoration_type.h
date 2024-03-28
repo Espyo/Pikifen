@@ -18,7 +18,7 @@
 
 
 //Decoration object animations.
-enum DECORATION_ANIMATIONS {
+enum DECORATION_ANIM {
     
     //Idling.
     DECORATION_ANIM_IDLING,
@@ -30,7 +30,7 @@ enum DECORATION_ANIMATIONS {
 
 
 //Decoration object states.
-enum DECORATION_STATES {
+enum DECORATION_STATE {
 
     //Idling.
     DECORATION_STATE_IDLING,

@@ -33,7 +33,7 @@ using std::string;
  * this color.
  */
 mob_category::mob_category(
-    const MOB_CATEGORIES id, const string &name, const string &plural_name,
+    const MOB_CATEGORY id, const string &name, const string &plural_name,
     const string &folder, const ALLEGRO_COLOR editor_color
 ) :
     name(name),
@@ -99,7 +99,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
  * @param id ID of the category.
  * @return The category, or nullptr on error.
  */
-mob_category* mob_category_manager::get(const MOB_CATEGORIES id) const {
+mob_category* mob_category_manager::get(const MOB_CATEGORY id) const {
     if(id >= categories.size()) return nullptr;
     return categories[id];
 }
@@ -159,7 +159,7 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) const {
  * @param category Pointer to its data.
  */
 void mob_category_manager::register_category(
-    MOB_CATEGORIES nr,
+    MOB_CATEGORY nr,
     mob_category* category
 ) {
     if(nr >= categories.size()) {

@@ -78,69 +78,69 @@ enum SFX_TYPE {
     
     //UI sound effect, that persists through pausing the gameplay.
     SFX_TYPE_UI,
-
+    
 };
 
 
 //Ways to handle sound effect playback stacking.
-enum SFX_STACK_MODES {
+enum SFX_STACK_MODE {
 
     //Stack like normal. Maybe with a minimum time threshold.
-    SFX_STACK_NORMAL,
+    SFX_STACK_MODE_NORMAL,
     
     //Any new playback overrides any existing one, forcing them to stop.
-    SFX_STACK_OVERRIDE,
+    SFX_STACK_MODE_OVERRIDE,
     
     //New playback is forbidden if other playbacks exist.
-    SFX_STACK_NEVER,
-
+    SFX_STACK_MODE_NEVER,
+    
 };
 
 
 //Flags for sound effects.
-enum SFX_FLAGS {
+enum SFX_FLAG {
 
     //Normally, sources are destroyed when playback ends. This keeps them.
-    SFX_FLAG_KEEP_ON_PLAYBACK_END = 0x01,
+    SFX_FLAG_KEEP_ON_PLAYBACK_END = 1 << 0,
     
     //Normally, playbacks stop when the source is destroyed. This keeps them.
-    SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY = 0x02,
+    SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY = 1 << 1,
     
     //Normally, creating a sound source emits a playback. This prevents that.
-    SFX_FLAG_DONT_EMIT_ON_CREATION = 0x04,
+    SFX_FLAG_DONT_EMIT_ON_CREATION = 1 << 2,
     
     //Loops. You probably want one of the other "keep" flags too.
-    SFX_FLAG_LOOP = 0x08,
-
+    SFX_FLAG_LOOP = 1 << 3,
+    
 };
 
 
 //Possible states for a playback.
-enum SFX_PLAYBACK_STATES {
+enum SFX_PLAYBACK_STATE {
 
     //Playing like normal.
-    SFX_PLAYBACK_PLAYING,
+    SFX_PLAYBACK_STATE_PLAYING,
     
     //In the process of fading out to pause.
-    SFX_PLAYBACK_PAUSING,
+    SFX_PLAYBACK_STATE_PAUSING,
     
     //Paused.
-    SFX_PLAYBACK_PAUSED,
+    SFX_PLAYBACK_STATE_PAUSED,
     
     //In the process of fading in to unpause.
-    SFX_PLAYBACK_UNPAUSING,
+    SFX_PLAYBACK_STATE_UNPAUSING,
     
     //In the process of fading out to stop.
-    SFX_PLAYBACK_STOPPING,
+    SFX_PLAYBACK_STATE_STOPPING,
     
     //Finished playing and needs to be destroyed.
-    SFX_PLAYBACK_DESTROYED,
-
+    SFX_PLAYBACK_STATE_DESTROYED,
+    
 };
 
 
 //Possible states for a song.
-enum SONG_STATES {
+enum SONG_STATE {
 
     //In the process of fading in as it starts.
     SONG_STATE_STARTING,
@@ -162,13 +162,13 @@ enum SONG_STATES {
     
     //Not playing.
     SONG_STATE_STOPPED,
-
+    
 };
 
 
 //Ways for a music track to be a part of the mix.
-enum MIX_TRACK_TYPES {
-    
+enum MIX_TRACK_TYPE {
+
     //Enemy nearby.
     MIX_TRACK_TYPE_ENEMY,
     
@@ -184,12 +184,12 @@ enum MIX_TRACK_TYPES {
 struct sfx_source_config_t {
 
     //--- Members ---
-
-    //Flags. Use SFX_FLAGS.
+    
+    //Flags. Use SFX_FLAG.
     bitmask_8_t flags = 0;
     
     //How it should stack with other playbacks.
-    SFX_STACK_MODES stack_mode = SFX_STACK_NORMAL;
+    SFX_STACK_MODE stack_mode = SFX_STACK_MODE_NORMAL;
     
     //Minimum time of other playbacks before stacking. Avoid 0 (always stack).
     float stack_min_pos = AUDIO::DEF_STACK_MIN_POS;
@@ -211,7 +211,7 @@ struct sfx_source_config_t {
     
     //Interval between emissions of the sound. 0 means it plays once.
     float interval = 0.0f;
-
+    
 };
 
 
@@ -224,7 +224,7 @@ struct sfx_source_config_t {
 struct sfx_source_t {
 
     //--- Members ---
-
+    
     //Allegro sound sample that it plays.
     ALLEGRO_SAMPLE* sample = nullptr;
     
@@ -242,7 +242,7 @@ struct sfx_source_t {
     
     //Does it need to be deleted?
     bool destroyed = false;
-
+    
 };
 
 
@@ -253,7 +253,7 @@ struct sfx_source_t {
 struct sfx_playback_t {
 
     //--- Members ---
-
+    
     //The source of the sound effect.
     size_t source_id = 0;
     
@@ -261,7 +261,7 @@ struct sfx_playback_t {
     ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = nullptr;
     
     //State.
-    SFX_PLAYBACK_STATES state = SFX_PLAYBACK_PLAYING;
+    SFX_PLAYBACK_STATE state = SFX_PLAYBACK_STATE_PLAYING;
     
     //Current gain.
     float gain = 1.0f;
@@ -283,7 +283,7 @@ struct sfx_playback_t {
     
     //Position before pausing.
     unsigned int pre_pause_pos = 0;
-
+    
 };
 
 
@@ -299,7 +299,7 @@ struct sfx_playback_t {
 struct song {
 
     //--- Members ---
-
+    
     //Internal name.
     string name;
     
@@ -307,7 +307,7 @@ struct song {
     ALLEGRO_AUDIO_STREAM* main_track = nullptr;
     
     //Other tracks to mix in with the main track.
-    map<MIX_TRACK_TYPES, ALLEGRO_AUDIO_STREAM*> mix_tracks;
+    map<MIX_TRACK_TYPE, ALLEGRO_AUDIO_STREAM*> mix_tracks;
     
     //Current gain.
     float gain = 0.0f;
@@ -316,7 +316,7 @@ struct song {
     float stop_point = 0.0f;
     
     //State.
-    SONG_STATES state = SONG_STATE_STOPPED;
+    SONG_STATE state = SONG_STATE_STOPPED;
     
     //Loop region start point, in seconds.
     double loop_start = 0;
@@ -338,7 +338,7 @@ struct song {
     
     //Any notes, like origin, artist, etc.
     string notes;
-
+    
 };
 
 
@@ -348,10 +348,10 @@ struct song {
  */
 struct sfx_sample_manager {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
+    
     explicit sfx_sample_manager(const string &base_dir);
     ALLEGRO_SAMPLE* get(
         const string &name, data_node* node = nullptr,
@@ -363,44 +363,44 @@ public:
     long get_total_calls() const;
     size_t get_list_size() const;
     
-private:
-
+    private:
+    
     //--- Misc. declarations ---
-
+    
     /**
      * @brief Info about an audio sample.
      */
     struct sample_t {
-
+    
         //--- Members ---
-
+        
         //Sample pointer.
         ALLEGRO_SAMPLE* s = nullptr;
-
+        
         //How many calls it has.
         size_t calls = 1;
         
-
+        
         //--- Function declarations ---
-
+        
         explicit sample_t(ALLEGRO_SAMPLE* s = nullptr);
     };
-
-
+    
+    
     //--- Members ---
-
+    
     //Base directory that this manager works on.
     string base_dir;
-
+    
     //List of loaded samples.
     map<string, sample_t> list;
-
+    
     //Total sum of calls. Useful for debugging.
     long total_calls = 0;
     
-
+    
     //--- Function declarations ---
-
+    
     void detach(map<string, sample_t>::iterator it);
     
 };
@@ -412,10 +412,10 @@ private:
  */
 struct audio_stream_manager {
 
-public:
-
+    public:
+    
     //--- Function declarations ---
-
+    
     explicit audio_stream_manager(const string &base_dir);
     ALLEGRO_AUDIO_STREAM* get(
         const string &name, data_node* node = nullptr,
@@ -427,44 +427,44 @@ public:
     long get_total_calls() const;
     size_t get_list_size() const;
     
-private:
-
+    private:
+    
     //--- Misc. declarations ---
-
+    
     /**
      * @brief Info about an audio stream.
      */
     struct stream_t {
-
+    
         //--- Members ---
-
+        
         //Stream pointer.
         ALLEGRO_AUDIO_STREAM* s = nullptr;
-
+        
         //How many calls it has.
         size_t calls = 1;
         
-
+        
         //--- Function declarations ---
-
+        
         explicit stream_t(ALLEGRO_AUDIO_STREAM* s = nullptr);
     };
-
-
+    
+    
     //--- Members ---
-
+    
     //Base directory that this manager works on.
     string base_dir;
-
+    
     //List of loaded samples.
     map<string, stream_t> list;
-
+    
     //Total sum of calls. Useful for debugging.
     long total_calls = 0;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     void detach(map<string, stream_t>::iterator it);
     
 };
@@ -476,21 +476,21 @@ private:
 class audio_manager {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Manager of samples.
     sfx_sample_manager samples;
-
+    
     //Manager of streams.
     audio_stream_manager streams;
-
+    
     //Loaded songs.
     map<string, song> songs;
     
-
+    
     //--- Function declarations ---
-
+    
     audio_manager();
     size_t create_ui_sfx_source(
         ALLEGRO_SAMPLE* sample,
@@ -524,7 +524,7 @@ public:
         float master_volume, float world_sfx_volume, float music_volume,
         float ambiance_volume, float ui_sfx_volume
     );
-    void mark_mix_track_status(MIX_TRACK_TYPES track_type);
+    void mark_mix_track_status(MIX_TRACK_TYPE track_type);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(const string &name, bool from_start = true);
@@ -539,16 +539,16 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Master mixer.
     ALLEGRO_MIXER* master_mixer = nullptr;
-
+    
     //General in-world sound effect mixer.
     ALLEGRO_MIXER* world_sfx_mixer = nullptr;
-
+    
     //Music mixer.
     ALLEGRO_MIXER* music_mixer = nullptr;
-
+    
     //In-world ambiance sound effect mixer.
     ALLEGRO_MIXER* world_ambiance_sfx_mixer = nullptr;
     
@@ -582,9 +582,9 @@ private:
     //Bottom-right camera coordinates.
     point cam_br;
     
-
+    
     //--- Function declarations ---
-
+    
     size_t create_sfx_source(
         ALLEGRO_SAMPLE* sample,
         SFX_TYPE type,

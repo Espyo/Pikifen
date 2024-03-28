@@ -50,7 +50,7 @@ const float DEF_ROTATION_SPEED = 630.0f;
  *
  * @param category_id The ID of the category it belongs to.
  */
-mob_type::mob_type(MOB_CATEGORIES category_id) :
+mob_type::mob_type(MOB_CATEGORY category_id) :
     category(game.mob_categories.get(category_id)),
     custom_category_name(category->name) {
     
@@ -425,7 +425,7 @@ void load_mob_type_from_file(
     }
     
     if(team_node) {
-        MOB_TEAMS t = string_to_team_nr(team_str);
+        MOB_TEAM t = string_to_team_nr(team_str);
         if(t != INVALID) {
             mt->starting_team = t;
         } else {
@@ -618,17 +618,17 @@ void load_mob_type_from_file(
         
         if(limb_draw_node) {
             if(limb_draw_method == "below_both") {
-                new_child.limb_draw_method = LIMB_DRAW_BELOW_BOTH;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_BOTH;
             } else if(limb_draw_method == "below_child") {
-                new_child.limb_draw_method = LIMB_DRAW_BELOW_CHILD;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_CHILD;
             } else if(limb_draw_method == "below_parent") {
-                new_child.limb_draw_method = LIMB_DRAW_BELOW_PARENT;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_PARENT;
             } else if(limb_draw_method == "above_parent") {
-                new_child.limb_draw_method = LIMB_DRAW_ABOVE_PARENT;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_PARENT;
             } else if(limb_draw_method == "above_child") {
-                new_child.limb_draw_method = LIMB_DRAW_ABOVE_CHILD;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_CHILD;
             } else if(limb_draw_method == "above_both") {
-                new_child.limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_BOTH;
             } else {
                 game.errors.report(
                     "Unknow limb draw method \"" +
@@ -710,11 +710,11 @@ void load_mob_type_from_file(
         
         if(stack_mode_node) {
             if(stack_mode_str == "normal") {
-                new_sfx.config.stack_mode = SFX_STACK_NORMAL;
+                new_sfx.config.stack_mode = SFX_STACK_MODE_NORMAL;
             } else if(stack_mode_str == "override") {
-                new_sfx.config.stack_mode = SFX_STACK_OVERRIDE;
+                new_sfx.config.stack_mode = SFX_STACK_MODE_OVERRIDE;
             } else if(stack_mode_str == "never") {
-                new_sfx.config.stack_mode = SFX_STACK_NEVER;
+                new_sfx.config.stack_mode = SFX_STACK_MODE_NEVER;
             } else {
                 game.errors.report(
                     "Unknow sound effect stack mode \"" +
@@ -769,17 +769,17 @@ void load_mob_type_from_file(
         }
         
         if(type_str == "text") {
-            new_prop.type = AEMP_TEXT;
+            new_prop.type = AEMP_TYPE_TEXT;
         } else if(type_str == "int") {
-            new_prop.type = AEMP_INT;
+            new_prop.type = AEMP_TYPE_INT;
         } else if(type_str == "decimal") {
-            new_prop.type = AEMP_DECIMAL;
+            new_prop.type = AEMP_TYPE_DECIMAL;
         } else if(type_str == "bool") {
-            new_prop.type = AEMP_BOOL;
+            new_prop.type = AEMP_TYPE_BOOL;
         } else if(type_str == "list") {
-            new_prop.type = AEMP_LIST;
+            new_prop.type = AEMP_TYPE_LIST;
         } else if(type_str == "number_list") {
-            new_prop.type = AEMP_NUMBER_LIST;
+            new_prop.type = AEMP_TYPE_NR_LIST;
         } else {
             game.errors.report(
                 "Unknown area editor property type \"" + type_str + "\"!",
@@ -791,7 +791,7 @@ void load_mob_type_from_file(
             std::swap(new_prop.min_value, new_prop.max_value);
         }
         
-        if(new_prop.type == AEMP_LIST || new_prop.type == AEMP_NUMBER_LIST) {
+        if(new_prop.type == AEMP_TYPE_LIST || new_prop.type == AEMP_TYPE_NR_LIST) {
             if(list_str.empty()) {
                 game.errors.report(
                     "For this area editor property type, you need to specify "
@@ -808,7 +808,7 @@ void load_mob_type_from_file(
     }
     
     if(target_type_node) {
-        MOB_TARGET_TYPES target_type_value =
+        MOB_TARGET_FLAG target_type_value =
             string_to_mob_target_type(target_type_str);
         if(target_type_value == INVALID) {
             game.errors.report(
@@ -959,7 +959,7 @@ void load_mob_types(bool load_resources) {
             continue;
         }
         
-        mob_category* category = game.mob_categories.get((MOB_CATEGORIES) c);
+        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(game.perf_mon) {
             game.perf_mon->start_measurement(
                 "Object types -- " + category->name
@@ -1117,7 +1117,7 @@ void unload_mob_types(const bool unload_resources) {
     game.config.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = game.mob_categories.get((MOB_CATEGORIES) c);
+        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         unload_mob_types(category, unload_resources);
     }
 }

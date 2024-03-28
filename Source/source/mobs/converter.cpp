@@ -76,7 +76,7 @@ void converter::change_type() {
             cur_base_anim_idx, N_CONVERTER_ANIMS, current_type_idx
         ),
         true,
-        START_ANIMATION_NO_RESTART
+        START_ANIM_OPTION_NO_RESTART
     );
     
     type_change_timer.start();

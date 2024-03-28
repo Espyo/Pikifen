@@ -64,7 +64,7 @@ private:
     //--- Misc. declarations ---
     
     //Editor states.
-    enum EDITOR_STATES {
+    enum EDITOR_STATE {
     
         //Main menu.
         EDITOR_STATE_MAIN,
@@ -213,7 +213,7 @@ private:
     //--- Function declarations ---
     
     void center_camera_on_sprite_bitmap(const bool instant);
-    void change_state(const EDITOR_STATES new_state);
+    void change_state(const EDITOR_STATE new_state);
     void close_load_dialog();
     void close_options_dialog();
     float get_cursor_timeline_time();

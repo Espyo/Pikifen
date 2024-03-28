@@ -21,12 +21,12 @@
 decoration_type::decoration_type() :
     mob_type(MOB_CATEGORY_DECORATIONS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     area_editor_prop_t aep_random_anim_delay;
     aep_random_anim_delay.name = "Random animation delay";
     aep_random_anim_delay.var = "random_animation_delay";
-    aep_random_anim_delay.type = AEMP_BOOL;
+    aep_random_anim_delay.type = AEMP_TYPE_BOOL;
     aep_random_anim_delay.def_value = "true";
     aep_random_anim_delay.tooltip =
         "If this decoration type can have a random animation delay,\n"
@@ -36,7 +36,7 @@ decoration_type::decoration_type() :
     area_editor_prop_t aep_random_tint;
     aep_random_tint.name = "Random tint";
     aep_random_tint.var = "random_tint";
-    aep_random_tint.type = AEMP_BOOL;
+    aep_random_tint.type = AEMP_TYPE_BOOL;
     aep_random_tint.def_value = "true";
     aep_random_tint.tooltip =
         "If this decoration type can have a random color tint,\n"
@@ -46,7 +46,7 @@ decoration_type::decoration_type() :
     area_editor_prop_t aep_random_scale;
     aep_random_scale.name = "Random scale";
     aep_random_scale.var = "random_scale";
-    aep_random_scale.type = AEMP_BOOL;
+    aep_random_scale.type = AEMP_TYPE_BOOL;
     aep_random_scale.def_value = "true";
     aep_random_scale.tooltip =
         "If this decoration type can have a random scale,\n"
@@ -56,7 +56,7 @@ decoration_type::decoration_type() :
     area_editor_prop_t aep_random_rotation;
     aep_random_rotation.name = "Random rotation";
     aep_random_rotation.var = "random_rotation";
-    aep_random_rotation.type = AEMP_BOOL;
+    aep_random_rotation.type = AEMP_TYPE_BOOL;
     aep_random_rotation.def_value = "true";
     aep_random_rotation.tooltip =
         "If this decoration type can have a random scale,\n"

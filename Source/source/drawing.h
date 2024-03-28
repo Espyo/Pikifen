@@ -42,7 +42,7 @@ extern const float NOTIFICATION_PADDING;
 
 
 //Possible shapes for a player input icon.
-enum PLAYER_INPUT_ICON_SHAPES {
+enum PLAYER_INPUT_ICON_SHAPE {
 
     //Doesn't really have a shape, but instead draws a bitmap.
     PLAYER_INPUT_ICON_SHAPE_BITMAP,
@@ -58,7 +58,7 @@ enum PLAYER_INPUT_ICON_SHAPES {
 
 //Player input icon spritesheet sprites.
 //The order matches what's in the spritesheet.
-enum PLAYER_INPUT_ICON_SPRITES {
+enum PLAYER_INPUT_ICON_SPRITE {
 
     //Left mouse button.
     PLAYER_INPUT_ICON_SPRITE_LMB,
@@ -115,16 +115,16 @@ enum PLAYER_INPUT_ICON_SPRITES {
 
 
 //Ways to vertically align text when rendering it.
-enum TEXT_VALIGN_MODES {
+enum TEXT_VALIGN_MODE {
     
     //Align to the top.
-    TEXT_VALIGN_TOP,
+    TEXT_VALIGN_MODE_TOP,
     
     //Align to the center.
-    TEXT_VALIGN_CENTER,
+    TEXT_VALIGN_MODE_CENTER,
     
     //Align to the bottom.
-    TEXT_VALIGN_BOTTOM,
+    TEXT_VALIGN_MODE_BOTTOM,
     
 };
 
@@ -157,12 +157,12 @@ void draw_button(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODES valign,
+    const int flags, const TEXT_VALIGN_MODE valign,
     const point &max_size, const bool scale_past_max, const string &text
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
     const point &max_size, const string &text
 );
 void draw_equilateral_triangle(
@@ -225,7 +225,7 @@ void draw_mob_shadow(
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODES valign, const string &text
+    const int flags, const TEXT_VALIGN_MODE valign, const string &text
 );
 void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects);
 void draw_string_tokens(
@@ -236,7 +236,7 @@ void draw_string_tokens(
 );
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
     const string &text
 );
 void draw_textured_box(
@@ -245,8 +245,8 @@ void draw_textured_box(
 );
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
-    PLAYER_INPUT_ICON_SHAPES* shape,
-    PLAYER_INPUT_ICON_SPRITES* bitmap_sprite,
+    PLAYER_INPUT_ICON_SHAPE* shape,
+    PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
 );
 float get_player_input_icon_width(

@@ -17,7 +17,7 @@
 
 
 //Types of script action.
-enum MOB_ACTION_TYPES {
+enum MOB_ACTION {
 
     //Unknown.
     MOB_ACTION_UNKNOWN,
@@ -281,55 +281,55 @@ enum MOB_ACTION_TYPES {
 
 
 //Arachnorb plan logic action sub-types.
-enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES {
+enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
 
     //Plan to go home.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME,
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME,
     
     //Plan to move forward.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD,
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD,
     
     //Plan a clockwise turn.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN,
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN,
     
     //Plan a counter-clockwise turn.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN,
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN,
     
 };
 
 
 //Turn action sub-types.
-enum MOB_ACTION_TURN_TYPES {
+enum MOB_ACTION_TURN_TYPE {
 
     //Logic for an arachnorb's head to turn.
-    MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC,
+    MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC,
     
     //Turn towards the focused mob.
-    MOB_ACTION_TURN_FOCUSED_MOB,
+    MOB_ACTION_TURN_TYPE_FOCUSED_MOB,
     
     //Turn towards home.
-    MOB_ACTION_TURN_HOME,
+    MOB_ACTION_TURN_TYPE_HOME,
     
 };
 
 
 //Focus action sub-types.
-enum MOB_ACTION_FOCUS_TYPES {
+enum MOB_ACTION_FOCUS_TYPE {
 
     //Focus on linked object.
-    MOB_ACTION_FOCUS_LINK,
+    MOB_ACTION_FOCUS_TYPE_LINK,
     
     //Focus on parent.
-    MOB_ACTION_FOCUS_PARENT,
+    MOB_ACTION_FOCUS_TYPE_PARENT,
     
     //Focus on the mob that triggered the event.
-    MOB_ACTION_FOCUS_TRIGGER,
+    MOB_ACTION_FOCUS_TYPE_TRIGGER,
     
 };
 
 
 //If action operator types.
-enum MOB_ACTION_IF_OPERATOR_TYPES {
+enum MOB_ACTION_IF_OP {
 
     //Check if two values are equal.
     MOB_ACTION_IF_OP_EQUAL,
@@ -353,7 +353,7 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
 
 
 //Get info action target types.
-enum MOB_ACTION_GET_INFO_TARGET_TYPES {
+enum MOB_ACTION_GET_INFO_TARGET {
 
     //Gets info about itself.
     MOB_ACTION_GET_INFO_TARGET_SELF,
@@ -368,157 +368,157 @@ enum MOB_ACTION_GET_INFO_TARGET_TYPES {
 
 
 //Get area info action info types.
-enum MOB_ACTION_GET_AREA_INFO_TYPES {
+enum MOB_ACTION_GET_AREA_INFO_TYPE {
 
     //Get time of day, in minutes.
-    MOB_ACTION_GET_AREA_INFO_DAY_MINUTES,
+    MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES,
     
     //Get number of Pikmin on the field.
-    MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN,
+    MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN,
     
 };
 
 
 //Get event info action info types.
-enum MOB_ACTION_GET_EV_INFO_TYPES {
+enum MOB_ACTION_GET_EV_INFO_TYPE {
 
     //Get body part that triggered the event.
-    MOB_ACTION_GET_EV_INFO_BODY_PART,
+    MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART,
     
     //Get frame signal that triggered the event.
-    MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL,
+    MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL,
     
     //Get name of hazard that triggered the event.
-    MOB_ACTION_GET_EV_INFO_HAZARD,
+    MOB_ACTION_GET_EV_INFO_TYPE_HAZARD,
     
     //Get the name of the input that triggered the event.
-    MOB_ACTION_GET_EV_INFO_INPUT_NAME,
+    MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME,
     
     //Get the value of the input that triggered the event.
-    MOB_ACTION_GET_EV_INFO_INPUT_VALUE,
+    MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE,
     
     //Get message that triggered the event.
-    MOB_ACTION_GET_EV_INFO_MESSAGE,
+    MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE,
     
     //Get the other body part that triggered the event.
-    MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART,
+    MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
 };
 
 
 //Get mob info action info types.
-enum MOB_ACTION_GET_MOB_INFO_TYPES {
+enum MOB_ACTION_GET_MOB_INFO_TYPE {
 
     //Get angle.
-    MOB_ACTION_GET_MOB_INFO_ANGLE,
+    MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE,
     
     //Get amount of chomped Pikmin.
-    MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN,
+    MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN,
     
     //Get distance towards focused mob.
-    MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE,
+    MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE,
     
     //Get total power on the group task.
-    MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER,
+    MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER,
     
     //Get health.
-    MOB_ACTION_GET_MOB_INFO_HEALTH,
+    MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH,
     
     //Get health ratio.
-    MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO,
+    MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO,
     
     //Get the numerical ID.
-    MOB_ACTION_GET_MOB_INFO_ID,
+    MOB_ACTION_GET_MOB_INFO_TYPE_ID,
     
     //Get amount of latched Pikmin.
-    MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN,
+    MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN,
     
     //Get total weight of latched Pikmin.
-    MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT,
+    MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
     
     //Get category of mob that triggered the event.
-    MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY,
+    MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY,
     
     //Get type of mob that triggered the event.
-    MOB_ACTION_GET_MOB_INFO_MOB_TYPE,
+    MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE,
     
     //Get name of current state.
-    MOB_ACTION_GET_MOB_INFO_STATE,
+    MOB_ACTION_GET_MOB_INFO_TYPE_STATE,
     
     //Get current weight on top of it.
-    MOB_ACTION_GET_MOB_INFO_WEIGHT,
+    MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT,
     
     //Get X.
-    MOB_ACTION_GET_MOB_INFO_X,
+    MOB_ACTION_GET_MOB_INFO_TYPE_X,
     
     //Get Y.
-    MOB_ACTION_GET_MOB_INFO_Y,
+    MOB_ACTION_GET_MOB_INFO_TYPE_Y,
     
     //Get Z.
-    MOB_ACTION_GET_MOB_INFO_Z,
+    MOB_ACTION_GET_MOB_INFO_TYPE_Z,
     
 };
 
 
 //Moving action sub-types.
-enum MOB_ACTION_MOVE_TYPES {
+enum MOB_ACTION_MOVE_TYPE {
 
     //Move away from focused mob.
-    MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB,
+    MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS,
     
     //Move towards focused mob.
-    MOB_ACTION_MOVE_FOCUSED_MOB,
+    MOB_ACTION_MOVE_TYPE_FOCUS,
     
     //Move towards the position the focus mob is on right now.
-    MOB_ACTION_MOVE_FOCUSED_MOB_POS,
+    MOB_ACTION_MOVE_TYPE_FOCUS_POS,
     
     //Move towards home.
-    MOB_ACTION_MOVE_HOME,
+    MOB_ACTION_MOVE_TYPE_HOME,
     
     //Follow arachnorb foot movement logic.
-    MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC,
+    MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC,
     
     //Move towards the average spot of the linked mobs.
-    MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
+    MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE,
     
 };
 
 
 //Calculate action sub-types.
-enum MOB_ACTION_CALCULATE_TYPES {
+enum MOB_ACTION_CALCULATE_TYPE {
 
     //Sum two numbers.
-    MOB_ACTION_CALCULATE_SUM,
+    MOB_ACTION_CALCULATE_TYPE_SUM,
     
     //Subtract one number from another.
-    MOB_ACTION_CALCULATE_SUBTRACT,
+    MOB_ACTION_CALCULATE_TYPE_SUBTRACT,
     
     //Multiply two numbers.
-    MOB_ACTION_CALCULATE_MULTIPLY,
+    MOB_ACTION_CALCULATE_TYPE_MULTIPLY,
     
     //Divide one number by another.
-    MOB_ACTION_CALCULATE_DIVIDE,
+    MOB_ACTION_CALCULATE_TYPE_DIVIDE,
     
     //Get the modulo of a number with another.
-    MOB_ACTION_CALCULATE_MODULO,
+    MOB_ACTION_CALCULATE_TYPE_MODULO,
     
 };
 
 
 //Stabilize Z action sub-types.
-enum MOB_ACTION_STABILIZE_Z_TYPES {
+enum MOB_ACTION_STABILIZE_Z_TYPE {
 
     //Stabilize towards highest Z.
-    MOB_ACTION_STABILIZE_Z_HIGHEST,
+    MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST,
     
     //Stabilize towards lowest z.
-    MOB_ACTION_STABILIZE_Z_LOWEST,
+    MOB_ACTION_STABILIZE_Z_TYPE_LOWEST,
     
 };
 
 
 //Types of variables that a parameter can use.
-enum MOB_ACTION_PARAM_TYPE {
+enum MOB_ACTION_PARAM {
 
     //Signed integer.
     MOB_ACTION_PARAM_INT,
@@ -549,7 +549,7 @@ struct mob_action_param {
     string name;
     
     //Type of variable it's meant to hold.
-    MOB_ACTION_PARAM_TYPE type = MOB_ACTION_PARAM_STRING;
+    MOB_ACTION_PARAM type = MOB_ACTION_PARAM_STRING;
     
     //If true, it must be a constant value. Else, it can also be a var.
     bool force_const = false;
@@ -562,7 +562,7 @@ struct mob_action_param {
     
     mob_action_param(
         const string &name,
-        const MOB_ACTION_PARAM_TYPE type,
+        const MOB_ACTION_PARAM type,
         const bool force_const,
         const bool is_extras
     );
@@ -605,14 +605,14 @@ struct mob_action_run_data {
 
 /**
  * @brief Function that runs a mob action's logic.
- * 
+ *
  * The first parameter is the data to run with.
  */
 typedef void (mob_action_code_t)(mob_action_run_data &data);
 
 /**
  * @brief Function to run when a mob action is loaded from a script.
- * 
+ *
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
@@ -627,7 +627,7 @@ struct mob_action {
     //--- Members ---
     
     //Type of mob action.
-    MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN;
+    MOB_ACTION type = MOB_ACTION_UNKNOWN;
     
     //Name.
     string name;
@@ -668,7 +668,7 @@ struct mob_action_call {
     string custom_error;
     
     //Event the action belongs to.
-    MOB_EV_TYPES parent_event = MOB_EV_UNKNOWN;
+    MOB_EV parent_event = MOB_EV_UNKNOWN;
     
     //Mob type that owns these calls.
     mob_type* mt = nullptr;
@@ -676,7 +676,7 @@ struct mob_action_call {
     
     //--- Function declarations ---
     
-    explicit mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
+    explicit mob_action_call(MOB_ACTION type = MOB_ACTION_UNKNOWN);
     explicit mob_action_call(custom_action_code_t code);
     bool load_from_data_node(data_node* dn, mob_type* mt);
     bool run(mob* m, void* custom_data_1, void* custom_data_2);

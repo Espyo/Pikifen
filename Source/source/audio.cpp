@@ -20,7 +20,7 @@ namespace AUDIO {
 
 //Default min stack pos. Let's use a value higher than 0, since if for any
 //reason the same sound plays multiple times at once, they are actually
-//stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
+//stopped under the SFX_STACK_MODE_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
 
 //Change speed for a mix track's gain, measured in amount per second.
@@ -226,8 +226,8 @@ void audio_manager::destroy() {
  */
 bool audio_manager::destroy_sfx_playback(size_t playback_idx) {
     sfx_playback_t* playback_ptr = &playbacks[playback_idx];
-    if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
-    playback_ptr->state = SFX_PLAYBACK_DESTROYED;
+    if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) return false;
+    playback_ptr->state = SFX_PLAYBACK_STATE_DESTROYED;
     
     sfx_source_t* source_ptr = get_source(playback_ptr->source_id);
     
@@ -300,7 +300,7 @@ bool audio_manager::emit(size_t source_id) {
     float lowest_stacking_playback_pos = FLT_MAX;
     if(
         source_ptr->config.stack_min_pos > 0.0f ||
-        source_ptr->config.stack_mode == SFX_STACK_NEVER
+        source_ptr->config.stack_mode == SFX_STACK_MODE_NEVER
     ) {
         for(size_t p = 0; p < playbacks.size(); ++p) {
             sfx_playback_t* playback = &playbacks[p];
@@ -325,7 +325,7 @@ bool audio_manager::emit(size_t source_id) {
             return false;
         }
         if(
-            source_ptr->config.stack_mode == SFX_STACK_NEVER &&
+            source_ptr->config.stack_mode == SFX_STACK_MODE_NEVER &&
             lowest_stacking_playback_pos < FLT_MAX
         ) {
             //Can't emit. This would stack the sounds.
@@ -334,7 +334,7 @@ bool audio_manager::emit(size_t source_id) {
     }
     
     //Check if other playbacks exist and if we need to stop them.
-    if(source_ptr->config.stack_mode == SFX_STACK_OVERRIDE) {
+    if(source_ptr->config.stack_mode == SFX_STACK_MODE_OVERRIDE) {
         for(size_t p = 0; p < playbacks.size(); ++p) {
             sfx_playback_t* playback = &playbacks[p];
             sfx_source_t* p_source_ptr = get_source(playback->source_id);
@@ -454,7 +454,7 @@ void audio_manager::handle_world_pause() {
     //Pause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_t* playback_ptr = &playbacks[p];
-        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+        if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) {
             continue;
         }
         
@@ -466,7 +466,7 @@ void audio_manager::handle_world_pause() {
             source_ptr->type == SFX_TYPE_WORLD_POS ||
             source_ptr->type == SFX_TYPE_WORLD_AMBIANCE
         ) {
-            playback_ptr->state = SFX_PLAYBACK_PAUSING;
+            playback_ptr->state = SFX_PLAYBACK_STATE_PAUSING;
         }
     }
     
@@ -490,7 +490,7 @@ void audio_manager::handle_world_unpause() {
     //Unpause playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_t* playback_ptr = &playbacks[p];
-        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+        if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) {
             continue;
         }
         
@@ -502,7 +502,7 @@ void audio_manager::handle_world_unpause() {
             source_ptr->type == SFX_TYPE_WORLD_POS ||
             source_ptr->type == SFX_TYPE_WORLD_AMBIANCE
         ) {
-            playback_ptr->state = SFX_PLAYBACK_UNPAUSING;
+            playback_ptr->state = SFX_PLAYBACK_STATE_UNPAUSING;
             al_set_sample_instance_playing(
                 playback_ptr->allegro_sample_instance,
                 true
@@ -603,7 +603,7 @@ void audio_manager::init(
  *
  * @param track_type Track type to mark.
  */
-void audio_manager::mark_mix_track_status(MIX_TRACK_TYPES track_type) {
+void audio_manager::mark_mix_track_status(MIX_TRACK_TYPE track_type) {
     mix_statuses[track_type] = true;
 }
 
@@ -798,9 +798,9 @@ void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
  */
 bool audio_manager::stop_sfx_playback(size_t playback_idx) {
     sfx_playback_t* playback_ptr = &playbacks[playback_idx];
-    if(playback_ptr->state == SFX_PLAYBACK_STOPPING) return false;
-    if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
-    playback_ptr->state = SFX_PLAYBACK_STOPPING;
+    if(playback_ptr->state == SFX_PLAYBACK_STATE_STOPPING) return false;
+    if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) return false;
+    playback_ptr->state = SFX_PLAYBACK_STATE_STOPPING;
     return true;
 }
 
@@ -846,13 +846,13 @@ void audio_manager::tick(float delta_t) {
     //Update playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_t* playback_ptr = &playbacks[p];
-        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) continue;
+        if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) continue;
         
         if(
             !al_get_sample_instance_playing(
                 playback_ptr->allegro_sample_instance
             ) &&
-            playback_ptr->state != SFX_PLAYBACK_PAUSED
+            playback_ptr->state != SFX_PLAYBACK_STATE_PAUSED
         ) {
             //Finished playing entirely.
             destroy_sfx_playback(p);
@@ -877,12 +877,12 @@ void audio_manager::tick(float delta_t) {
                 );
                 
             //Pausing and unpausing.
-            if(playback_ptr->state == SFX_PLAYBACK_PAUSING) {
+            if(playback_ptr->state == SFX_PLAYBACK_STATE_PAUSING) {
                 playback_ptr->state_gain_mult -=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
                 if(playback_ptr->state_gain_mult <= 0.0f) {
                     playback_ptr->state_gain_mult = 0.0f;
-                    playback_ptr->state = SFX_PLAYBACK_PAUSED;
+                    playback_ptr->state = SFX_PLAYBACK_STATE_PAUSED;
                     playback_ptr->pre_pause_pos =
                         al_get_sample_instance_position(
                             playback_ptr->allegro_sample_instance
@@ -892,17 +892,17 @@ void audio_manager::tick(float delta_t) {
                         false
                     );
                 }
-            } else if(playback_ptr->state == SFX_PLAYBACK_UNPAUSING) {
+            } else if(playback_ptr->state == SFX_PLAYBACK_STATE_UNPAUSING) {
                 playback_ptr->state_gain_mult +=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
                 if(playback_ptr->state_gain_mult >= 1.0f) {
                     playback_ptr->state_gain_mult = 1.0f;
-                    playback_ptr->state = SFX_PLAYBACK_PLAYING;
+                    playback_ptr->state = SFX_PLAYBACK_STATE_PLAYING;
                 }
             }
             
             //Stopping.
-            if(playback_ptr->state == SFX_PLAYBACK_STOPPING) {
+            if(playback_ptr->state == SFX_PLAYBACK_STATE_STOPPING) {
                 playback_ptr->state_gain_mult -=
                     AUDIO::PLAYBACK_STOP_GAIN_SPEED * delta_t;
                 if(playback_ptr->state_gain_mult <= 0.0f) {
@@ -917,7 +917,7 @@ void audio_manager::tick(float delta_t) {
     
     //Delete destroyed playbacks.
     for(size_t p = 0; p < playbacks.size();) {
-        if(playbacks[p].state == SFX_PLAYBACK_DESTROYED) {
+        if(playbacks[p].state == SFX_PLAYBACK_STATE_DESTROYED) {
             playbacks.erase(playbacks.begin() + p);
         } else {
             ++p;
@@ -1026,7 +1026,7 @@ void audio_manager::tick(float delta_t) {
                 continue;
             }
             
-            auto track_it = song_ptr->mix_tracks.find((MIX_TRACK_TYPES) m);
+            auto track_it = song_ptr->mix_tracks.find((MIX_TRACK_TYPE) m);
             if(track_it == song_ptr->mix_tracks.end()) continue;
             
             al_set_audio_stream_gain(

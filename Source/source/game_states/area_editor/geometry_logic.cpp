@@ -100,7 +100,7 @@ float area_editor::calculate_preview_path() {
  * @param pos Position the user is trying to finish the line on.
  */
 void area_editor::check_drawing_line(const point &pos) {
-    drawing_line_result = DRAWING_LINE_OK;
+    drawing_line_result = DRAWING_LINE_RESULT_OK;
     
     if(drawing_nodes.empty()) {
         return;
@@ -115,7 +115,7 @@ void area_editor::check_drawing_line(const point &pos) {
         (!drawing_nodes[0].on_edge && !drawing_nodes[0].on_vertex) &&
         (tentative_node.on_edge || tentative_node.on_vertex)
     ) {
-        drawing_line_result = DRAWING_LINE_HIT_EDGE_OR_VERTEX;
+        drawing_line_result = DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX;
         return;
     }
     
@@ -124,28 +124,28 @@ void area_editor::check_drawing_line(const point &pos) {
         tentative_node.on_edge &&
         tentative_node.on_edge == prev_node->on_edge
     ) {
-        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_RESULT_ALONG_EDGE;
         return;
     }
     if(
         tentative_node.on_vertex &&
         tentative_node.on_vertex->has_edge(prev_node->on_edge)
     ) {
-        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_RESULT_ALONG_EDGE;
         return;
     }
     if(
         prev_node->on_vertex &&
         prev_node->on_vertex->has_edge(tentative_node.on_edge)
     ) {
-        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_RESULT_ALONG_EDGE;
         return;
     }
     if(
         tentative_node.on_vertex &&
         tentative_node.on_vertex->is_neighbor(prev_node->on_vertex)
     ) {
-        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_RESULT_ALONG_EDGE;
         return;
     }
     
@@ -166,7 +166,7 @@ void area_editor::check_drawing_line(const point &pos) {
                     prev_node->snapped_spot, pos, ep1, ep2
                 )
             ) {
-                drawing_line_result = DRAWING_LINE_ALONG_EDGE;
+                drawing_line_result = DRAWING_LINE_RESULT_ALONG_EDGE;
                 return;
             }
         }
@@ -208,7 +208,7 @@ void area_editor::check_drawing_line(const point &pos) {
                 nullptr, nullptr
             )
         ) {
-            drawing_line_result = DRAWING_LINE_CROSSES_EDGES;
+            drawing_line_result = DRAWING_LINE_RESULT_CROSSES_EDGES;
             return;
         }
     }
@@ -231,7 +231,7 @@ void area_editor::check_drawing_line(const point &pos) {
                     AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Only a problem if this isn't the user's drawing finish.
-                    drawing_line_result = DRAWING_LINE_CROSSES_DRAWING;
+                    drawing_line_result = DRAWING_LINE_RESULT_CROSSES_DRAWING;
                     return;
                 }
             }
@@ -244,7 +244,7 @@ void area_editor::check_drawing_line(const point &pos) {
                 drawing_nodes[drawing_nodes.size() - 2].snapped_spot
             )
         ) {
-            drawing_line_result = DRAWING_LINE_CROSSES_DRAWING;
+            drawing_line_result = DRAWING_LINE_RESULT_CROSSES_DRAWING;
             return;
         }
     }
@@ -286,7 +286,7 @@ void area_editor::check_drawing_line(const point &pos) {
         sector* latest_sector = get_sector_under_point(latest_sector_point);
         
         if(latest_sector != working_sector) {
-            drawing_line_result = DRAWING_LINE_WAYWARD_SECTOR;
+            drawing_line_result = DRAWING_LINE_RESULT_WAYWARD_SECTOR;
             return;
         }
     }
@@ -714,7 +714,7 @@ void area_editor::find_problems() {
             problem_description =
                 "An unknown error has occured with the sector.";
             break;
-        } case TRIANGULATION_NO_ERROR: {
+        } case TRIANGULATION_ERROR_NONE: {
             problem_description.clear();
             break;
         }
@@ -1151,7 +1151,7 @@ void area_editor::find_problems() {
     //Mission is graded by points, but with no active criterioa.
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS
     ) {
         bool has_any_criterion = false;
         for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
@@ -2270,14 +2270,14 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  * @return The snapped point.
  */
 point area_editor::snap_point(const point &p, const bool ignore_selected) {
-    SNAP_MODES mode_to_use = game.options.area_editor_snap_mode;
+    SNAP_MODE mode_to_use = game.options.area_editor_snap_mode;
     point final_point = p;
     
     if(is_shift_pressed) {
-        if(game.options.area_editor_snap_mode == SNAP_NOTHING) {
-            mode_to_use = SNAP_GRID;
+        if(game.options.area_editor_snap_mode == SNAP_MODE_NOTHING) {
+            mode_to_use = SNAP_MODE_GRID;
         } else {
-            mode_to_use = SNAP_NOTHING;
+            mode_to_use = SNAP_MODE_NOTHING;
         }
     }
     
@@ -2294,7 +2294,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
     }
     
     switch(mode_to_use) {
-    case SNAP_GRID: {
+    case SNAP_MODE_GRID: {
         return
             snap_point_to_grid(
                 final_point,
@@ -2302,7 +2302,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
             );
         break;
         
-    } case SNAP_VERTEXES: {
+    } case SNAP_MODE_VERTEXES: {
         if(cursor_snap_timer.time_left > 0.0f) {
             return cursor_snap_cache;
         }
@@ -2347,7 +2347,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         
         break;
         
-    } case SNAP_EDGES: {
+    } case SNAP_MODE_EDGES: {
         if(cursor_snap_timer.time_left > 0.0f) {
             return cursor_snap_cache;
         }
@@ -2404,7 +2404,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         
         break;
         
-    } case SNAP_NOTHING: {
+    } case SNAP_MODE_NOTHING: {
     } case N_SNAP_MODES: {
         break;
         
@@ -2489,7 +2489,7 @@ path_stop* area_editor::split_path_link(
     //Delete the old links.
     path_stop* old_start_ptr = l1->start_ptr;
     path_stop* old_end_ptr = l1->end_ptr;
-    PATH_LINK_TYPES old_link_type = l1->type;
+    PATH_LINK_TYPE old_link_type = l1->type;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
@@ -2527,16 +2527,16 @@ path_stop* area_editor::split_path_link(
 void area_editor::update_affected_sectors(
     const unordered_set<sector*> &affected_sectors
 ) {
-    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
+    TRIANGULATION_ERROR last_triangulation_error = TRIANGULATION_ERROR_NONE;
     
     for(sector* s_ptr : affected_sectors) {
         if(!s_ptr) continue;
         
         set<edge*> triangulation_lone_edges;
-        TRIANGULATION_ERRORS triangulation_error =
+        TRIANGULATION_ERROR triangulation_error =
             triangulate_sector(s_ptr, &triangulation_lone_edges, true);
             
-        if(triangulation_error == TRIANGULATION_NO_ERROR) {
+        if(triangulation_error == TRIANGULATION_ERROR_NONE) {
             auto it = game.cur_area_data.problems.non_simples.find(s_ptr);
             if(it != game.cur_area_data.problems.non_simples.end()) {
                 game.cur_area_data.problems.non_simples.erase(it);
@@ -2554,7 +2554,7 @@ void area_editor::update_affected_sectors(
         s_ptr->calculate_bounding_box();
     }
     
-    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
+    if(last_triangulation_error != TRIANGULATION_ERROR_NONE) {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     

@@ -22,12 +22,12 @@
 group_task_type::group_task_type() :
     mob_type(MOB_CATEGORY_GROUP_TASKS) {
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     area_editor_prop_t aep_power_goal;
     aep_power_goal.name = "Power goal";
     aep_power_goal.var = "power_goal";
-    aep_power_goal.type = AEMP_INT;
+    aep_power_goal.type = AEMP_TYPE_INT;
     aep_power_goal.def_value = i2s(power_goal);
     aep_power_goal.tooltip = "Pikmin power required for the task's goal.";
     area_editor_props.push_back(aep_power_goal);

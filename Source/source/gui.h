@@ -46,7 +46,7 @@ extern const float JUICY_GROW_TEXT_MEDIUM_MULT;
 
 
 //Animations for the GUI manager to animate its items with.
-enum GUI_MANAGER_ANIMS {
+enum GUI_MANAGER_ANIM {
 
     //None.
     GUI_MANAGER_ANIM_NONE,
@@ -98,7 +98,7 @@ public:
     //--- Misc. declarations ---
     
     //Juicy animation types for GUI items.
-    enum JUICE_TYPES {
+    enum JUICE_TYPE {
     
         //None.
         JUICE_TYPE_NONE,
@@ -166,7 +166,7 @@ public:
     bool can_auto_repeat = false;
     
     //Type of the current juice animation.
-    JUICE_TYPES juice_type = JUICE_TYPE_NONE;
+    JUICE_TYPE juice_type = JUICE_TYPE_NONE;
     
     //Timer that controls the current juice animation.
     float juice_timer = 0.0f;
@@ -213,7 +213,7 @@ public:
     bool is_responsive();
     bool is_visible();
     void remove_child(gui_item* item);
-    void start_juice_animation(JUICE_TYPES type);
+    void start_juice_animation(JUICE_TYPE type);
     
 };
 
@@ -523,7 +523,7 @@ public:
     void set_selected_item(gui_item* item, bool silent = false);
     void show_items();
     void start_animation(
-        const GUI_MANAGER_ANIMS type, const float duration
+        const GUI_MANAGER_ANIM type, const float duration
     );
     bool was_last_input_mouse();
     void destroy();
@@ -569,7 +569,7 @@ private:
     float auto_repeat_next_activation = 0.0f;
     
     //Type of the current animation, if any.
-    GUI_MANAGER_ANIMS anim_type = GUI_MANAGER_ANIM_NONE;
+    GUI_MANAGER_ANIM anim_type = GUI_MANAGER_ANIM_NONE;
     
     //Timer for the current animation.
     timer anim_timer;

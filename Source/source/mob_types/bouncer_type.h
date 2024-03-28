@@ -16,19 +16,19 @@
 
 
 //Flags for what sorts of mobs can ride on a bouncer.
-enum BOUNCER_RIDERS {
+enum BOUNCER_RIDER_FLAG {
 
     //Pikmin.
-    BOUNCER_RIDER_PIKMIN = 1,
+    BOUNCER_RIDER_FLAG_PIKMIN = 1 << 0,
     
     //Leaders.
-    BOUNCER_RIDER_LEADERS = 2,
+    BOUNCER_RIDER_FLAG_LEADERS = 1 << 1,
     
 };
 
 
 //Poses for riders to take.
-enum BOUNCER_RIDING_POSES {
+enum BOUNCER_RIDING_POSE {
 
     //Stopped. Basically the idling pose.
     BOUNCER_RIDING_POSE_STOPPED,
@@ -40,7 +40,7 @@ enum BOUNCER_RIDING_POSES {
 
 
 //Bouncer object animations.
-enum BOUNCER_ANIMATIONS {
+enum BOUNCER_ANIM {
 
     //Idling.
     BOUNCER_ANIM_IDLING,
@@ -52,7 +52,7 @@ enum BOUNCER_ANIMATIONS {
 
 
 //Bouncer object states.
-enum BOUNCER_STATES {
+enum BOUNCER_STATE {
     
     //Idling.
     BOUNCER_STATE_IDLING,
@@ -77,10 +77,10 @@ public:
     //--- Members ---
 
     //Flags representing which mobs can ride on it.
-    unsigned char riders = BOUNCER_RIDER_PIKMIN;
+    unsigned char riders = BOUNCER_RIDER_FLAG_PIKMIN;
     
     //Pose that riders should take.
-    BOUNCER_RIDING_POSES riding_pose = BOUNCER_RIDING_POSE_STOPPED;
+    BOUNCER_RIDING_POSE riding_pose = BOUNCER_RIDING_POSE_STOPPED;
     
 
     //--- Function declarations ---

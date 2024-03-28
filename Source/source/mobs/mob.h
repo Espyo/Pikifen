@@ -274,7 +274,7 @@ public:
     size_t chomp_max = 0;
     
     //Mob's team (who it can damage).
-    MOB_TEAMS team = MOB_TEAM_NONE;
+    MOB_TEAM team = MOB_TEAM_NONE;
     
     //-Group-
     
@@ -342,11 +342,11 @@ public:
     void set_animation(
         const size_t nr,
         const bool pre_named = true,
-        const START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL
+        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL
     );
     void set_animation(
         const string &name,
-        const START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL
+        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL
     );
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
@@ -355,7 +355,7 @@ public:
     void set_rectangular_dim(const point &rectangular_dim);
     void set_can_block_paths(const bool blocks);
     
-    void become_carriable(const CARRY_DESTINATIONS destination);
+    void become_carriable(const CARRY_DESTINATION destination);
     void become_uncarriable();
     
     void apply_attack_damage(
@@ -400,7 +400,7 @@ public:
         mob* m, const size_t hitbox_idx,
         const float offset_dist, const float offset_angle,
         const float vertical_dist,
-        const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
+        const bool above_holder, const HOLD_ROTATION_METHOD rotation_method
     );
     void release(mob* m);
     bool can_hurt(mob* m) const;
@@ -463,14 +463,14 @@ public:
     float get_speed_multiplier() const;
     
     void arachnorb_head_turn_logic();
-    void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal);
+    void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorb_foot_move_logic();
     
     void apply_status_effect(
         status_type* s, const bool given_by_parent, const bool from_hazard
     );
     void delete_old_status_effects();
-    void remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id);
+    void remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
     virtual bool can_receive_status(status_type* s) const;
     virtual void get_group_spot_info(
@@ -510,13 +510,13 @@ protected:
         mob* added, mob* removed
     ) const;
     mob* get_mob_to_walk_on() const;
-    H_MOVE_RESULTS get_movement_edge_intersections(
+    H_MOVE_RESULT get_movement_edge_intersections(
         const point &new_pos, vector<edge*>* intersecting_edges
     ) const;
-    H_MOVE_RESULTS get_physics_horizontal_movement(
+    H_MOVE_RESULT get_physics_horizontal_movement(
         const float delta_t, const float move_speed_mult, point* move_speed
     );
-    H_MOVE_RESULTS get_wall_slide_angle(
+    H_MOVE_RESULT get_wall_slide_angle(
         const edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
     ) const;

@@ -23,13 +23,13 @@ using std::vector;
 
 
 //Flags for the time-to-string functions. This is a bitmask.
-enum TIME_TO_STR_FLAGS {
+enum TIME_TO_STR_FLAG {
     
     //If true, leading zeros will not appear.
-    TIME_TO_STR_FLAG_NO_LEADING_ZEROS = 1,
+    TIME_TO_STR_FLAG_NO_LEADING_ZEROS = 1 << 0,
     
     //If true, leading portions to the left that are just zeros will not appear.
-    TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS = 2,
+    TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS = 1 << 1,
     
 };
 

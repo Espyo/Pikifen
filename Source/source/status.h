@@ -24,25 +24,25 @@ using std::string;
 
 
 //Flags that control what sorts of mob a status effect affects.
-enum STATUS_AFFECTS_FLAGS {
+enum STATUS_AFFECTS_FLAG {
 
     //Affects Pikmin.
-    STATUS_AFFECTS_PIKMIN = 1,
+    STATUS_AFFECTS_FLAG_PIKMIN = 1 << 0,
     
     //Affects enemies.
-    STATUS_AFFECTS_ENEMIES = 2,
+    STATUS_AFFECTS_FLAG_ENEMIES = 1 << 1,
     
     //Affects leaders.
-    STATUS_AFFECTS_LEADERS = 4,
+    STATUS_AFFECTS_FLAG_LEADERS = 1 << 2,
     
     //Affects other mobs.
-    STATUS_AFFECTS_OTHERS = 8,
+    STATUS_AFFECTS_FLAG_OTHERS = 1 << 4,
     
 };
 
 
 //What mob script state the status effect changes to.
-enum STATUS_STATE_CHANGES {
+enum STATUS_STATE_CHANGE {
 
     //None.
     STATUS_STATE_CHANGE_NONE,
@@ -63,16 +63,16 @@ enum STATUS_STATE_CHANGES {
 
 
 //Rule to follow when re-applying a status effect.
-enum STATUS_REAPPLY_RULES {
+enum STATUS_REAPPLY_RULE {
 
     //Keep the same auto-remove time as before.
-    STATUS_REAPPLY_KEEP_TIME,
+    STATUS_REAPPLY_RULE_KEEP_TIME,
     
     //Reset the auto-remove time.
-    STATUS_REAPPLY_RESET_TIME,
+    STATUS_REAPPLY_RULE_RESET_TIME,
     
     //Add more time to the auto-remove time.
-    STATUS_REAPPLY_ADD_TIME,
+    STATUS_REAPPLY_RULE_ADD_TIME,
     
 };
 
@@ -115,7 +115,7 @@ struct status_type {
     float auto_remove_time = 0.0f;
     
     //Rule to follow when re-applying the status effect.
-    STATUS_REAPPLY_RULES reapply_rule = STATUS_REAPPLY_KEEP_TIME;
+    STATUS_REAPPLY_RULE reapply_rule = STATUS_REAPPLY_RULE_KEEP_TIME;
     
     //Health addition/subtraction per second.
     float health_change = 0.0f;
@@ -127,7 +127,7 @@ struct status_type {
     int maturity_change_amount = 0;
     
     //How the affected mob's state changes, if it does at all.
-    STATUS_STATE_CHANGES state_change_type = STATUS_STATE_CHANGE_NONE;
+    STATUS_STATE_CHANGE state_change_type = STATUS_STATE_CHANGE_NONE;
     
     //Name of the mob state to change to, if any.
     string state_change_name;

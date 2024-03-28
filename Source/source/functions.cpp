@@ -811,8 +811,8 @@ void get_multiline_text_dimensions(
  * @return The subtitle or goal.
  */
 string get_subtitle_or_mission_goal(
-    const string &subtitle, const AREA_TYPES area_type,
-    const MISSION_GOALS goal
+    const string &subtitle, const AREA_TYPE area_type,
+    const MISSION_GOAL goal
 ) {
     if(subtitle.empty() && area_type == AREA_TYPE_MISSION) {
         return game.mission_goals[goal]->get_name();
@@ -1161,9 +1161,9 @@ vector<string> prompt_file_dialog(
  * @brief Creates and opens an Allegro native file dialog, but confines
  * the results to a specific folder.
  *
- * The result pointer returns FILE_DIALOG_RES_SUCCESS on success,
- * FILE_DIALOG_RES_WRONG_FOLDER if the one or more choices do not belong to
- * the specified folder, and FILE_DIALOG_RES_CANCELED if the user canceled.
+ * The result pointer returns FILE_DIALOG_RESULT_SUCCESS on success,
+ * FILE_DIALOG_RESULT_WRONG_FOLDER if the one or more choices do not belong to
+ * the specified folder, and FILE_DIALOG_RESULT_CANCELED if the user canceled.
  * The list of choices that are returned only have the file name, not the
  * rest of the path. Choices can also be contained inside subfolders of the
  * specified folder.
@@ -1177,13 +1177,13 @@ vector<string> prompt_file_dialog(
  */
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
-    const string &patterns, const int mode, FILE_DIALOG_RESULTS* result
+    const string &patterns, const int mode, FILE_DIALOG_RESULT* result
 ) {
     vector<string> f =
         prompt_file_dialog(folder + "/", title, patterns, mode);
         
     if(f.empty() || f[0].empty()) {
-        *result = FILE_DIALOG_RES_CANCELED;
+        *result = FILE_DIALOG_RESULT_CANCELED;
         return vector<string>();
     }
     
@@ -1191,7 +1191,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
         size_t folder_pos = f[0].find(folder);
         if(folder_pos == string::npos) {
             //This isn't in the specified folder!
-            *result = FILE_DIALOG_RES_WRONG_FOLDER;
+            *result = FILE_DIALOG_RESULT_WRONG_FOLDER;
             return vector<string>();
         } else {
             f[fi] =
@@ -1199,7 +1199,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
         }
     }
     
-    *result = FILE_DIALOG_RES_SUCCESS;
+    *result = FILE_DIALOG_RESULT_SUCCESS;
     return f;
 }
 
@@ -2104,7 +2104,7 @@ string vector_tail_to_string(const vector<string> &v, const size_t pos) {
  * @param non_important_files List of files that can be deleted.
  * @return An error code.
  */
-WIPE_FOLDER_RESULTS wipe_folder(
+WIPE_FOLDER_RESULT wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 ) {
     ALLEGRO_FS_ENTRY* folder =

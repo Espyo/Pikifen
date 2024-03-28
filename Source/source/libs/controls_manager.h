@@ -23,7 +23,7 @@ using std::vector;
 
 
 //Possible types of inputs.
-enum INPUT_TYPES {
+enum INPUT_TYPE {
 
     //None.
     INPUT_TYPE_NONE,
@@ -69,7 +69,7 @@ struct player_input {
     //--- Members ---
 
     //Type of input.
-    INPUT_TYPES type = INPUT_TYPE_NONE;
+    INPUT_TYPE type = INPUT_TYPE_NONE;
 
     //Device number. i.e. the game controller number.
     int device_nr = 0;

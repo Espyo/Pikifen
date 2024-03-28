@@ -573,7 +573,7 @@ void gui_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "quitButton",
-            editor_icons[ICON_QUIT],
+            editor_icons[EDITOR_ICON_QUIT],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -590,7 +590,7 @@ void gui_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton",
-            editor_icons[ICON_LOAD],
+            editor_icons[EDITOR_ICON_LOAD],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -608,8 +608,8 @@ void gui_editor::process_gui_toolbar() {
         ImGui::ImageButton(
             "saveButton",
             changes_mgr.has_unsaved_changes() ?
-            editor_icons[ICON_SAVE_UNSAVED] :
-            editor_icons[ICON_SAVE],
+            editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
+            editor_icons[EDITOR_ICON_SAVE],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -624,10 +624,10 @@ void gui_editor::process_gui_toolbar() {
     ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
     if(game.options.gui_editor_snap) {
-        snap_mode_bmp = editor_icons[ICON_SNAP_GRID];
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
         snap_mode_description = "grid. Holding Shift disables snapping.";
     } else {
-        snap_mode_bmp = editor_icons[ICON_SNAP_NOTHING];
+        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_NOTHING];
         snap_mode_description = "nothing. Holding Shift snaps to grid.";
     }
     

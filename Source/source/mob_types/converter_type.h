@@ -24,7 +24,7 @@
  * The first bunch of animations are for the first type, the second bunch
  * are for the second type, etc.
  */
-enum CONVERTER_ANIMATIONS {
+enum CONVERTER_ANIM {
 
     //Idling.
     CONVERTER_ANIM_IDLING,
@@ -51,7 +51,7 @@ enum CONVERTER_ANIMATIONS {
 
 
 //Converter object states.
-enum CONVERTER_STATES {
+enum CONVERTER_STATE {
     
     //Idling.
     CONVERTER_STATE_IDLING,

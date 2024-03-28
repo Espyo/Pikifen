@@ -24,12 +24,12 @@ onion_type::onion_type() :
     
     nest = new pikmin_nest_type_t();
     
-    target_type = MOB_TARGET_TYPE_NONE;
+    target_type = MOB_TARGET_FLAG_NONE;
     
     area_editor_prop_t aep_pik_inside;
     aep_pik_inside.name = "Pikmin inside";
     aep_pik_inside.var = "pikmin_inside";
-    aep_pik_inside.type = AEMP_TEXT;
+    aep_pik_inside.type = AEMP_TYPE_TEXT;
     aep_pik_inside.def_value = "";
     aep_pik_inside.tooltip =
         "How many Pikmin are inside. One word per maturity.\n"
