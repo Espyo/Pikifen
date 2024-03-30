@@ -136,13 +136,13 @@ script {
             set_timer 2
         }
         on_leave {
+            stop_particles
             stop_sound $sfx_id
         }
         on_frame_signal {
             start_particles blowhog_wind 400 0 -80
         }
         on_timer {
-            stop_particles
             set_state blowing_end
         }
     }

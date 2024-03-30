@@ -170,6 +170,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     id(game.states.gameplay->next_mob_id),
     health(type->max_health),
     max_health(type->max_health),
+    itch_time(type->itch_time),
     anim(&type->anims),
     max_span(type->max_span) {
     

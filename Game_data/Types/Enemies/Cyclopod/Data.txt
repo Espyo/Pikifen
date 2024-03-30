@@ -1,0 +1,54 @@
+name = Cyclopod
+description = A gormless underwater creature. Its only means of defense, spinning, is also what leaves it vulnerable.
+
+acceleration = 60
+can_hunt = player; enemy
+can_walk_on_others = true
+custom_category_name = Enemy, small and peaceful
+drops_corpse = true
+height = 128
+itch_damage = 50
+itch_time = 12
+max_carriers = 14
+max_health = 750
+move_speed = 140
+pikmin_seeds = 6
+points = 50
+pushable = true
+pushes = true
+pushes_softly = true
+radius = 24
+rotation_speed = 160
+target_type = enemy
+terrain_radius = 40
+territory_radius = 200
+weight = 7
+
+reaches {
+    search = 200 180
+}
+
+sounds {
+    swish {
+        file = Swish.ogg
+        speed = 110
+        speed_deviation = 5
+        stack_min_pos = 0.001
+    }
+    stretch {
+        file = Stretch.ogg
+        speed = 120
+        volume = 50
+    }
+    cuckoo {
+        file = Cuckoo.ogg
+        speed = 75
+        volume = 15
+    }
+    slosh {
+        file = Slosh.ogg
+        speed_deviation = 10
+        stack_min_pos = 1
+        volume = 50
+    }
+}

@@ -50,7 +50,7 @@ extern const size_t FRAMERATE_HISTORY_SIZE;
 struct game_state_list {
 
     //--- Members ---
-
+    
     //Animation editor.
     animation_editor* animation_ed = nullptr;
     
@@ -80,8 +80,8 @@ struct game_state_list {
     
     //Area results menu.
     results_state* results = nullptr;
-
-
+    
+    
     //--- Function declarations ---
     
     void init();
@@ -96,9 +96,9 @@ struct game_state_list {
 class game_class {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //List of asset file names.
     asset_file_names_t asset_file_names;
     
@@ -247,7 +247,7 @@ public:
     string team_names[N_MOB_TEAMS];
     
     //Manager of all floor texture bitmaps.
-    bitmap_manager textures = bitmap_manager("");
+    bitmap_manager textures = bitmap_manager(TEXTURES_FOLDER_NAME);
     
     //How much time has passed since the program booted.
     float time_passed = 0.0f;
@@ -276,9 +276,9 @@ public:
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;
     
-
+    
     //--- Function declarations ---
-
+    
     game_class();
     void change_state(
         game_state* new_state,
@@ -293,7 +293,7 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Current game state: main menu, gameplay, etc.
     game_state* cur_state = nullptr;
     

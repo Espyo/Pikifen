@@ -1,0 +1,368 @@
+first_state = idling
+death_state = dying
+
+init {
+    get_mob_info home_x self x
+    get_mob_info home_y self y
+    set_var flee_counter 0
+    set_var can_find false
+    set_var underwater false
+}
+
+script {
+    idling {
+        on_enter {
+            set_animation idling random_time_on_spawn
+            set_timer 2.5
+        }
+        on_damage {
+            set_state fleeing_start
+        }
+        on_touch_opponent {
+            set_state fleeing_start
+        }
+        on_timer {
+            set_state looking
+        }
+        on_itch {
+            set_state shaking_start
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+                set_state returning_start
+            end_if
+        }
+    }
+
+    looking {
+        on_enter {
+            set_animation looking
+            set_var can_find false
+            set_near_reach search
+        }
+        on_animation_end {
+            get_random_decimal angle 0 360
+            turn_to_relative $angle
+            set_state idling
+        }
+        on_frame_signal {
+            set_var can_find true
+        }
+        on_opponent_in_reach {
+            if $can_find = true
+                set_state fleeing_start
+            end_if
+        }
+        on_damage {
+            set_state fleeing_start
+        }
+        on_touch_opponent {
+            set_state fleeing_start
+        }
+        on_itch {
+            set_state shaking_start
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+                set_state returning_start
+            end_if
+        }
+    }
+
+    fleeing_start {
+        on_enter {
+            set_animation moving_start
+        }
+        on_animation_end {
+            set_state fleeing
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    fleeing {
+        on_enter {
+            set_animation moving
+            set_timer 0.01
+            set_var flee_counter 0
+        }
+        on_timer {
+            get_random_decimal x -200 200
+            calculate x $home_x + $x
+            get_random_decimal y -200 200
+            calculate y $home_y + $y
+            move_to_absolute $x $y
+
+            calculate flee_counter $flee_counter + 1
+            if $flee_counter = 10
+                set_state stopping
+                set_state idling
+            else
+                set_timer 0.5
+            end_if
+        }
+        on_itch {
+            set_state stop_to_shake
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+                set_state returning
+            end_if
+        }
+        on_frame_signal {
+            get_event_info signal frame_signal
+            if $signal = 0
+                if $underwater = true
+                    play_sound slosh
+                end_if
+            else
+                if $underwater = true
+                    start_particles bubble_placement_small
+                else
+                    start_particles dust_explosion_small
+                end_if
+            end_if
+        }
+    }
+
+    returning_start {
+        on_enter {
+            set_animation moving_start
+        }
+        on_animation_end {
+            set_state returning
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    returning {
+        on_enter {
+            set_animation moving
+            move_to_absolute $home_x $home_y
+        }
+        on_frame_signal {
+            get_event_info signal frame_signal
+            if $signal = 0
+                if $underwater = true
+                    play_sound slosh
+                end_if
+            else
+                if $underwater = true
+                    start_particles bubble_placement_small
+                else
+                    start_particles dust_explosion_small
+                end_if
+            end_if
+        }
+        on_reach_destination {
+            stop
+            set_state stopping
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    stopping {
+        on_enter {
+            stop
+            set_animation moving_stop
+        }
+        on_animation_end {
+            set_state idling
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    stop_to_shake {
+        on_enter {
+            stop
+            set_animation moving_stop
+        }
+        on_animation_end {
+            set_state shaking_start
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    shaking_start {
+        on_enter {
+            set_animation coiling
+            set_timer 1.5
+        }
+        on_timer {
+            set_state attack
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    attack {
+        on_enter {
+            set_animation attacking
+            if $underwater = true
+                start_particles bubble_explosion_small_continuous
+            end_if
+            set_timer 3
+        }
+        on_timer {
+            set_state attack_stop
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    attack_stop {
+        on_enter {
+            set_animation dizzy
+            stop_particles
+            set_timer 4
+        }
+        on_timer {
+            set_state recovering
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+
+    recovering {
+        on_enter {
+            set_animation recovering
+        }
+        on_animation_end {
+            set_state idling
+        }
+        on_touch_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info hazard hazard
+            if $hazard = water
+                set_var underwater false
+            end_if
+        }
+    }
+    
+    dying {
+        on_enter {
+            start_dying
+            if $underwater = true
+                start_particles bubble_explosion_small
+            end_if
+            set_animation dying
+        }
+        on_animation_end {
+            finish_dying
+        }
+    }
+    
+}

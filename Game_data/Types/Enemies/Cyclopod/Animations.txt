@@ -1,0 +1,1700 @@
+animations{
+	attacking{
+		loop_frame=3
+		frames{
+			attacking_01{
+				duration=0.1000
+			}
+			attacking_02{
+				duration=0.1000
+			}
+			attacking_03{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_04{
+				duration=0.0800
+				interpolate=true
+			}
+			attacking_05{
+				duration=0.0800
+				interpolate=true
+				sound=swish
+			}
+			attacking_06{
+				duration=0.0800
+				interpolate=true
+			}
+			attacking_07{
+				duration=0.0800
+				interpolate=true
+				sound=swish
+			}
+		}
+	}
+	coiling{
+		loop_frame=5
+		frames{
+			coiling_01{
+				duration=0.1000
+			}
+			coiling_02{
+				duration=0.1000
+			}
+			coiling_03{
+				duration=0.1000
+			}
+			coiling_04{
+				duration=0.1000
+			}
+			coiling_05{
+				duration=0.1000
+				sound=stretch
+			}
+			coiling_06{
+				duration=0.0800
+				interpolate=true
+			}
+			coiling_07{
+				duration=0.0800
+				interpolate=true
+			}
+		}
+	}
+	dizzy{
+		loop_frame=3
+		frames{
+			dizzy_01{
+				duration=0.1600
+				interpolate=true
+			}
+			dizzy_02{
+				duration=0.1700
+				interpolate=true
+			}
+			dizzy_03{
+				duration=0.2000
+				interpolate=true
+			}
+			dizzy_04{
+				duration=0.1300
+				sound=cuckoo
+			}
+			dizzy_05{
+				duration=0.1300
+			}
+			dizzy_06{
+				duration=0.1300
+			}
+			dizzy_07{
+				duration=0.1300
+			}
+			dizzy_08{
+				duration=0.1300
+			}
+			dizzy_09{
+				duration=0.1300
+			}
+		}
+	}
+	dying{
+		loop_frame=15
+		frames{
+			recovering_02{
+				duration=0.0800
+			}
+			dying_01{
+				duration=0.0800
+				sound=swish
+			}
+			dying_02{
+				duration=0.1000
+			}
+			dying_03{
+				duration=0.5000
+			}
+			dying_04{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_04{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_06{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_05{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_06{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_05{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_06{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_07{
+				duration=0.4000
+			}
+			dying_08{
+				duration=0.9000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_03{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_04{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_05{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_04{
+				duration=0.1500
+				interpolate=true
+			}
+		}
+	}
+	looking{
+		frames{
+			looking_01{
+				duration=0.1500
+			}
+			looking_02{
+				duration=0.1500
+			}
+			looking_03{
+				duration=0.4000
+			}
+			looking_04{
+				duration=0.2000
+			}
+			looking_05{
+				duration=0.1500
+			}
+			looking_06{
+				duration=0.1500
+			}
+			looking_07{
+				duration=0.2000
+				signal=0
+			}
+			looking_08{
+				duration=0.3500
+			}
+			looking_09{
+				duration=0.1500
+			}
+			looking_10{
+				duration=0.1500
+			}
+			idling_01{
+				duration=0.1500
+			}
+		}
+	}
+	moving{
+		frames{
+			moving_01{
+				duration=0.1000
+				interpolate=true
+				signal=0
+			}
+			moving_02{
+				duration=0.1000
+				interpolate=true
+				signal=1
+			}
+			moving_03{
+				duration=0.1000
+				interpolate=true
+				signal=1
+			}
+			moving_04{
+				duration=0.1000
+				interpolate=true
+				signal=1
+			}
+			moving_05{
+				duration=0.1000
+				interpolate=true
+				signal=1
+			}
+		}
+	}
+	moving_start{
+		frames{
+			moving_start_01{
+				duration=0.1200
+			}
+			moving_start_02{
+				duration=0.1200
+			}
+			moving_start_03{
+				duration=0.1200
+			}
+			moving_start_04{
+				duration=0.1200
+			}
+		}
+	}
+	moving_stop{
+		frames{
+			moving_start_04{
+				duration=0.1000
+			}
+			moving_start_03{
+				duration=0.1000
+			}
+			moving_start_02{
+				duration=0.1000
+			}
+			moving_start_01{
+				duration=0.1000
+			}
+		}
+	}
+	recovering{
+		frames{
+			dizzy_01{
+				duration=0.2000
+			}
+			recovering_01{
+				duration=0.2000
+			}
+			recovering_02{
+				duration=0.8000
+				interpolate=true
+				sound=stretch
+			}
+			recovering_03{
+				duration=0.0800
+			}
+			recovering_04{
+				duration=0.0800
+			}
+			idling_01{
+				duration=0.2000
+			}
+		}
+	}
+}
+sprites{
+	attacking_01{
+		file=Cyclopod.png
+		file_pos=0.0000 726.0000
+		file_size=91.0000 120.0000
+		offset=0.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_02{
+		file=Cyclopod.png
+		file_pos=92.0000 726.0000
+		file_size=97.0000 120.0000
+		offset=0.0000 5.0000
+		angle=0.2094
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_03{
+		file=Cyclopod.png
+		file_pos=190.0000 726.0000
+		file_size=105.0000 120.0000
+		offset=-0.4451 6.1473
+		angle=0.8378
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=58.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=6.0000
+				wither_chance=30
+			}
+		}
+	}
+	attacking_04{
+		file=Cyclopod.png
+		file_pos=190.0000 726.0000
+		file_size=105.0000 120.0000
+		offset=-4.6117 4.0132
+		angle=1.5708
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=58.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=6.0000
+				wither_chance=30
+			}
+		}
+	}
+	attacking_05{
+		file=Cyclopod.png
+		file_pos=190.0000 726.0000
+		file_size=105.0000 120.0000
+		offset=-4.7304 -5.0089
+		angle=3.1416
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=58.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=6.0000
+				wither_chance=30
+			}
+		}
+	}
+	attacking_06{
+		file=Cyclopod.png
+		file_pos=190.0000 726.0000
+		file_size=105.0000 120.0000
+		offset=4.6478 -4.6527
+		angle=4.7124
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=58.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=6.0000
+				wither_chance=30
+			}
+		}
+	}
+	attacking_07{
+		file=Cyclopod.png
+		file_pos=190.0000 726.0000
+		file_size=105.0000 120.0000
+		offset=4.5291 4.6068
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=58.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=6.0000
+				wither_chance=30
+			}
+		}
+	}
+	coiling_01{
+		file=Cyclopod.png
+		file_pos=0.0000 605.0000
+		file_size=115.0000 120.0000
+		offset=7.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_02{
+		file=Cyclopod.png
+		file_pos=116.0000 605.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_03{
+		file=Cyclopod.png
+		file_pos=232.0000 605.0000
+		file_size=106.0000 120.0000
+		offset=4.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_04{
+		file=Cyclopod.png
+		file_pos=339.0000 605.0000
+		file_size=95.0000 120.0000
+		offset=-2.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_05{
+		file=Cyclopod.png
+		file_pos=435.0000 605.0000
+		file_size=87.0000 120.0000
+		offset=-1.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_06{
+		file=Cyclopod.png
+		file_pos=523.0000 605.0000
+		file_size=80.0000 120.0000
+		offset=0.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	coiling_07{
+		file=Cyclopod.png
+		file_pos=523.0000 605.0000
+		file_size=80.0000 120.0000
+		offset=0.0000 4.0000
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_01{
+		file=Cyclopod.png
+		file_pos=0.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.3212 -2.5033
+		angle=4.5814
+		hitboxes{
+			body{
+				coords=1.0361 -0.3313 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_02{
+		file=Cyclopod.png
+		file_pos=0.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.5845 1.1834
+		angle=5.8355
+		hitboxes{
+			body{
+				coords=1.0361 -0.3313 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_03{
+		file=Cyclopod.png
+		file_pos=0.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.8478 0.3934
+		hitboxes{
+			body{
+				coords=1.0361 -0.3313 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_04{
+		file=Cyclopod.png
+		file_pos=107.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.5845 0.6567
+		hitboxes{
+			body{
+				coords=12.6227 3.3553 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_05{
+		file=Cyclopod.png
+		file_pos=214.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=1.1112 1.1834
+		hitboxes{
+			body{
+				coords=8.6728 6.7786 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_06{
+		file=Cyclopod.png
+		file_pos=321.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.0578 1.9734
+		hitboxes{
+			body{
+				coords=-2.1238 8.0953 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_07{
+		file=Cyclopod.png
+		file_pos=428.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=0.8478 1.4467
+		hitboxes{
+			body{
+				coords=-7.1271 -2.7013 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_08{
+		file=Cyclopod.png
+		file_pos=535.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=1.3745 2.2367
+		hitboxes{
+			body{
+				coords=0.2462 -10.8646 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dizzy_09{
+		file=Cyclopod.png
+		file_pos=642.0000 847.0000
+		file_size=106.0000 120.0000
+		offset=2.1645 1.7100
+		hitboxes{
+			body{
+				coords=7.6194 -6.9146 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_01{
+		file=Cyclopod.png
+		file_pos=0.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=38.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Cyclopod.png
+		file_pos=126.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Cyclopod.png
+		file_pos=252.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Cyclopod.png
+		file_pos=252.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=1.0000 5.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_05{
+		file=Cyclopod.png
+		file_pos=378.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_06{
+		file=Cyclopod.png
+		file_pos=378.0000 1089.0000
+		file_size=125.0000 120.0000
+		offset=1.0000 5.0000
+		hitboxes{
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_07{
+		file=Cyclopod.png
+		file_pos=504.0000 1089.0000
+		file_size=102.0000 120.0000
+		offset=-1.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_08{
+		file=Cyclopod.png
+		file_pos=607.0000 1089.0000
+		file_size=84.0000 120.0000
+		offset=-2.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_01{
+		file=Cyclopod.png
+		file_pos=0.0000 0.0000
+		file_size=114.0000 120.0000
+		offset=8.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_02{
+		file=Cyclopod.png
+		file_pos=115.0000 0.0000
+		file_size=114.0000 120.0000
+		offset=9.0000 5.5000
+		angle=0.0175
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_03{
+		file=Cyclopod.png
+		file_pos=230.0000 0.0000
+		file_size=114.0000 120.0000
+		offset=10.0000 4.5000
+		angle=0.0175
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_04{
+		file=Cyclopod.png
+		file_pos=345.0000 0.0000
+		file_size=114.0000 120.0000
+		offset=5.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_05{
+		file=Cyclopod.png
+		file_pos=460.0000 0.0000
+		file_size=114.0000 120.0000
+		offset=3.5000 4.0000
+		angle=6.2657
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_01{
+		file=Cyclopod.png
+		file_pos=0.0000 121.0000
+		file_size=115.0000 120.0000
+		offset=9.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 -2.8817 0.0000
+				height=128.0000
+				radius=26.8817
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_02{
+		file=Cyclopod.png
+		file_pos=116.0000 121.0000
+		file_size=115.0000 120.0000
+		offset=9.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 -8.6768 0.0000
+				height=128.0000
+				radius=30.2881
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_03{
+		file=Cyclopod.png
+		file_pos=232.0000 121.0000
+		file_size=115.0000 120.0000
+		offset=9.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 -13.7887 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_04{
+		file=Cyclopod.png
+		file_pos=348.0000 121.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 5.0000
+		hitboxes{
+			body{
+				coords=5.9525 -14.6833 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_05{
+		file=Cyclopod.png
+		file_pos=464.0000 121.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 4.0000
+		hitboxes{
+			body{
+				coords=11.5756 -7.0154 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_06{
+		file=Cyclopod.png
+		file_pos=0.0000 242.0000
+		file_size=115.0000 120.0000
+		offset=9.0000 4.0000
+		hitboxes{
+			body{
+				coords=12.8536 0.3969 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_07{
+		file=Cyclopod.png
+		file_pos=116.0000 242.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 4.0000
+		hitboxes{
+			body{
+				coords=9.5308 7.2980 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_08{
+		file=Cyclopod.png
+		file_pos=232.0000 242.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 5.0000
+		hitboxes{
+			body{
+				coords=6.2081 11.3875 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_09{
+		file=Cyclopod.png
+		file_pos=348.0000 242.0000
+		file_size=115.0000 120.0000
+		offset=9.0000 5.0000
+		hitboxes{
+			body{
+				coords=2.8853 0.9081 0.0000
+				height=128.0000
+				radius=32.0773
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	looking_10{
+		file=Cyclopod.png
+		file_pos=464.0000 242.0000
+		file_size=115.0000 120.0000
+		offset=8.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.8406 2.8889 0.0000
+				height=128.0000
+				radius=26.5181
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_01{
+		file=Cyclopod.png
+		file_pos=0.0000 484.0000
+		file_size=128.0000 120.0000
+		offset=-16.0000 5.0000
+		hitboxes{
+			body{
+				coords=6.2081 0.0000 0.0000
+				height=128.0000
+				radius=34.2498
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_02{
+		file=Cyclopod.png
+		file_pos=129.0000 484.0000
+		file_size=128.0000 120.0000
+		offset=-15.0000 5.0000
+		hitboxes{
+			body{
+				coords=6.2081 0.0000 0.0000
+				height=128.0000
+				radius=34.2498
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_03{
+		file=Cyclopod.png
+		file_pos=258.0000 484.0000
+		file_size=128.0000 120.0000
+		offset=-16.0000 5.0000
+		hitboxes{
+			body{
+				coords=6.2081 0.0000 0.0000
+				height=128.0000
+				radius=34.2498
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_04{
+		file=Cyclopod.png
+		file_pos=387.0000 484.0000
+		file_size=128.0000 120.0000
+		offset=-16.0000 4.0000
+		hitboxes{
+			body{
+				coords=6.2081 0.0000 0.0000
+				height=128.0000
+				radius=34.2498
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_05{
+		file=Cyclopod.png
+		file_pos=516.0000 484.0000
+		file_size=128.0000 120.0000
+		offset=-15.0000 4.0000
+		hitboxes{
+			body{
+				coords=6.2081 0.0000 0.0000
+				height=128.0000
+				radius=34.2498
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_start_01{
+		file=Cyclopod.png
+		file_pos=0.0000 363.0000
+		file_size=115.0000 120.0000
+		offset=7.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_start_02{
+		file=Cyclopod.png
+		file_pos=116.0000 363.0000
+		file_size=99.0000 120.0000
+		offset=0.0000 3.0000
+		hitboxes{
+			body{
+				coords=2.8614 0.0000 0.0000
+				height=128.0000
+				radius=26.8614
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_start_03{
+		file=Cyclopod.png
+		file_pos=216.0000 363.0000
+		file_size=97.0000 120.0000
+		offset=-10.0000 2.0000
+		hitboxes{
+			body{
+				coords=6.0283 -1.1367 0.0000
+				height=128.0000
+				radius=28.7026
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	moving_start_04{
+		file=Cyclopod.png
+		file_pos=314.0000 363.0000
+		file_size=122.0000 120.0000
+		offset=-15.0000 3.0000
+		hitboxes{
+			body{
+				coords=5.4413 0.0000 0.0000
+				height=128.0000
+				radius=31.9495
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	recovering_01{
+		file=Cyclopod.png
+		file_pos=0.0000 968.0000
+		file_size=99.0000 120.0000
+		offset=0.5000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	recovering_02{
+		file=Cyclopod.png
+		file_pos=100.0000 968.0000
+		file_size=87.0000 120.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	recovering_03{
+		file=Cyclopod.png
+		file_pos=100.0000 968.0000
+		file_size=87.0000 120.0000
+		offset=0.0000 5.0000
+		scale=0.9500 0.9500
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	recovering_04{
+		file=Cyclopod.png
+		file_pos=188.0000 968.0000
+		file_size=102.0000 120.0000
+		offset=2.0000 5.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+	attack
+}
+engine_version=0.25.0

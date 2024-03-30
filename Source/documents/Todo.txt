@@ -11,6 +11,7 @@ Next tasks (roughly sorted most important first)
     lockpick man's resize bug
 
     --- 0.26 ---
+    Helodity's performance improvements
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Revamp sounds
         Candidate list of all needed sounds, for now
@@ -193,6 +194,7 @@ Next tasks (roughly sorted most important first)
         Add some randomness to the pitch of mob sounds?
         Make Rock Pikmin colors darker (thanks Nataly171)
     Find some way of making content sharing easier
+        Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
             This should be able to figure out a dependency tree
@@ -594,7 +596,6 @@ Small tasks (for when I'm feeling lazy)
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
-        Some struct names end with struct, others don't
     
     
 Misc things (so I don't forget)
