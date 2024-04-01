@@ -9,8 +9,7 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
-#ifndef GEOMETRY_UTILS_INCLUDED
-#define GEOMETRY_UTILS_INCLUDED
+#pragma once
 
 #define _USE_MATH_DEFINES
 #include <cstddef>
@@ -248,5 +247,3 @@ point resize_to_box_keeping_aspect_ratio(
     const point &box_size
 );
 point rotate_point(const point &coords, const float angle);
-
-#endif //ifndef GEOMETRY_UTILS_INCLUDED

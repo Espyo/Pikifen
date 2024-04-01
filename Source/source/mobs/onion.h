@@ -8,8 +8,7 @@
  * Header for the Onion class and Onion-related functions.
  */
 
-#ifndef ONION_INCLUDED
-#define ONION_INCLUDED
+#pragma once
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -85,6 +84,3 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 };
-
-
-#endif //ifndef ONION_INCLUDED

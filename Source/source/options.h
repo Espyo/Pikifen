@@ -8,8 +8,7 @@
  * Header for the game options class and related functions.
  */
 
-#ifndef OPTIONS_INCLUDED
-#define OPTIONS_INCLUDED
+#pragma once
 
 #include <cstddef>
 #include <map>
@@ -273,6 +272,3 @@ struct options_t {
     void save(data_node* file) const;
     
 };
-
-
-#endif //ifndef OPTIONS_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the menus.
  */
 
-#ifndef MENUS_INCLUDED
-#define MENUS_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -728,6 +727,3 @@ private:
     void update_runtime_value_text();
     
 };
-
-
-#endif //ifndef MENUS_INCLUDED

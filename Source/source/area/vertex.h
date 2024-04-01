@@ -8,8 +8,7 @@
  * Header for the edge vertex class and related functions.
  */
 
-#ifndef VERTEX_INCLUDED
-#define VERTEX_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -58,6 +57,3 @@ struct vertex {
     void remove_edge(const edge* e_ptr);
     
 };
-
-
-#endif //ifndef VERTEX_INCLUDED

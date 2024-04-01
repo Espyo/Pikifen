@@ -8,8 +8,7 @@
  * Header for the ship class and ship-related functions.
  */
 
-#ifndef SHIP_INCLUDED
-#define SHIP_INCLUDED
+#pragma once
 
 #include "mob.h"
 
@@ -73,6 +72,3 @@ public:
     void tick_class_specifics(const float delta_t) override;
     
 };
-
-
-#endif //ifndef SHIP_INCLUDED

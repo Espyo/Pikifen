@@ -8,8 +8,7 @@
  * Header for the Onion type class and Onion type-related functions.
  */
 
-#ifndef ONION_TYPE_INCLUDED
-#define ONION_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "../mobs/mob_utils.h"
@@ -55,6 +54,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef ONION_TYPE_INCLUDED

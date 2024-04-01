@@ -8,8 +8,7 @@
  * Header for the group task class and group task-related functions.
  */
 
-#ifndef GROUP_TASK_INCLUDED
-#define GROUP_TASK_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -105,6 +104,3 @@ private:
     void update_spot_absolute_positions();
     
 };
-
-
-#endif //ifndef GROUP_TASK_INCLUDED

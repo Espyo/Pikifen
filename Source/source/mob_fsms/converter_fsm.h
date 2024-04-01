@@ -8,8 +8,7 @@
  * Header for the converter finite state machine logic.
  */
 
-#ifndef CONVERTER_FSM_INCLUDED
-#define CONVERTER_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -32,6 +31,3 @@ void open_or_spit(mob* m, void* info1, void* info2);
 void spew(mob* m, void* info1, void* info2);
 void start_dying(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef CONVERTER_FSM_INCLUDED

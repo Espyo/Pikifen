@@ -8,8 +8,7 @@
  * Header for the scale type class and scale type-related functions.
  */
 
-#ifndef SCALE_TYPE_INCLUDED
-#define SCALE_TYPE_INCLUDED
+#pragma once
 
 #include "mob_type.h"
 
@@ -33,6 +32,3 @@ public:
     void load_properties(data_node* file) override;
     
 };
-
-
-#endif //ifndef SCALE_TYPE_INCLUDED

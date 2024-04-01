@@ -8,8 +8,7 @@
  * Header for the drop mob category class.
  */
 
-#ifndef DROP_CATEGORY_INCLUDED
-#define DROP_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef DROP_CATEGORY_INCLUDED

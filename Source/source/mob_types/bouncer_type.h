@@ -8,8 +8,7 @@
  * Header for the bouncer type class and bouncer type-related functions.
  */
 
-#ifndef BOUNCER_TYPE_INCLUDED
-#define BOUNCER_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "mob_type.h"
@@ -90,6 +89,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef BOUNCER_TYPE_INCLUDED

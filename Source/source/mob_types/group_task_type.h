@@ -8,8 +8,7 @@
  * Header for the group task type class and group task type-related functions.
  */
 
-#ifndef GROUP_TASK_TYPE_INCLUDED
-#define GROUP_TASK_TYPE_INCLUDED
+#pragma once
 
 #include "mob_type.h"
 
@@ -103,6 +102,3 @@ public:
     void load_properties(data_node* file) override;
     
 };
-
-
-#endif //ifndef GROUP_TASK_TYPE_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the scale class and scale-related functions.
  */
 
-#ifndef SCALE_INCLUDED
-#define SCALE_INCLUDED
+#pragma once
 
 #include "mob.h"
 
@@ -44,6 +43,3 @@ public:
     void read_script_vars(const script_var_reader &svr) override;
     
 };
-
-
-#endif //ifndef SCALE_INCLUDED

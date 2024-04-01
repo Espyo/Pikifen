@@ -8,8 +8,7 @@
  * Header for the treasure class and treasure-related functions.
  */
 
-#ifndef TREASURE_INCLUDED
-#define TREASURE_INCLUDED
+#pragma once
 
 #include "../mob_types/treasure_type.h"
 #include "mob.h"
@@ -51,6 +50,3 @@ public:
     treasure(const point &pos, treasure_type* type, const float angle);
     
 };
-
-
-#endif //ifndef TREASURE_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the Pikmin mob category class.
  */
 
-#ifndef PIKMIN_CATEGORY_INCLUDED
-#define PIKMIN_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef PIKMIN_CATEGORY_INCLUDED

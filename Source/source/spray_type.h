@@ -8,8 +8,7 @@
  * Header for the spray type and spray type-related functions.
  */
 
-#ifndef SPRAY_TYPE_INCLUDED
-#define SPRAY_TYPE_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -70,6 +69,3 @@ public:
     bool buries_pikmin = false;
     
 };
-
-
-#endif //ifndef SPRAY_TYPE_INCLUDED

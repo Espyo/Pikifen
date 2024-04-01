@@ -8,8 +8,7 @@
  * Header for the backtrace functions.
  */
 
-#ifndef BACKTRACE_INCLUDED
-#define BACKTRACE_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -210,5 +209,3 @@ vector<string> get_backtrace() {
 
 
 #endif
-
-#endif //ifndef BACKTRACE_INCLUDED

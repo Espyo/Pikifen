@@ -8,8 +8,7 @@
  * Header for the track mob category class.
  */
 
-#ifndef TRACK_CATEGORY_INCLUDED
-#define TRACK_CATEGORY_INCLUDED
+#pragma once
 
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
@@ -41,6 +40,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef TRACK_CATEGORY_INCLUDED

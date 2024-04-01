@@ -8,8 +8,7 @@
  * Header for the ship finite state machine logic.
  */
 
-#ifndef SHIP_FSM_INCLUDED
-#define SHIP_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -24,6 +23,3 @@ void receive_mob(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
 void start_delivery(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef SHIP_FSM_INCLUDED

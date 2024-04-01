@@ -8,8 +8,7 @@
  * Header for the weather class and weather-related functions.
  */
 
-#ifndef WEATHER_INCLUDED
-#define WEATHER_INCLUDED
+#pragma once
 
 #include <map>
 #include <string>
@@ -146,7 +145,3 @@ private:
     }
     
 };
-
-
-
-#endif //ifndef WEATHER_INCLUDED

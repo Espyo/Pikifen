@@ -8,8 +8,7 @@
  * Header for the generic mob finite state machine logic.
  */
 
-#ifndef GEN_MOB_FSM_INCLUDED
-#define GEN_MOB_FSM_INCLUDED
+#pragma once
 
 #include "../mobs/mob.h"
 
@@ -35,6 +34,3 @@ void start_being_delivered(mob* m, void* info1, void* info2);
 void touch_hazard(mob* m, void* info1, void* info2);
 void touch_spray(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef GEN_MOB_FSM_INCLUDED

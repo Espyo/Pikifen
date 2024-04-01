@@ -8,8 +8,7 @@
  * Header for the tool class and tool-related functions.
  */
 
-#ifndef TOOL_INCLUDED
-#define TOOL_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -55,6 +54,3 @@ public:
     tool(const point &pos, tool_type* type, const float angle);
     
 };
-
-
-#endif //ifndef TOOL_INCLUDED

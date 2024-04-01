@@ -9,9 +9,7 @@
  * in-game HUD-related functions.
  */
 
-#ifndef HUD_INCLUDED
-#define HUD_INCLUDED
-
+#pragma once
 
 #include "../../gui.h"
 #include "hud_bubble_manager.h"
@@ -199,7 +197,3 @@ private:
     void draw_spray_icon(BUBBLE_RELATION which);
     
 };
-
-
-
-#endif //ifndef HUD_INCLUDED

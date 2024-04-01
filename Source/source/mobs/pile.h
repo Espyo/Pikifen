@@ -8,8 +8,7 @@
  * Header for the pile class and pile-related functions.
  */
 
-#ifndef PILE_INCLUDED
-#define PILE_INCLUDED
+#pragma once
 
 #include "../mob_types/pile_type.h"
 #include "mob.h"
@@ -55,6 +54,3 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 };
-
-
-#endif //ifndef PILE_INCLUDED

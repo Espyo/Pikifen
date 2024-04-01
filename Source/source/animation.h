@@ -8,8 +8,7 @@
  * Header for the animation-related classes and functions.
  */
 
-#ifndef ANIMATION_INCLUDED
-#define ANIMATION_INCLUDED
+#pragma once
 
 #include <map>
 #include <string>
@@ -353,5 +352,3 @@ void get_sprite_basic_effects(
     point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
 animation_database load_animation_database_from_file(data_node* frames_node);
-
-#endif //ifndef ANIMATION_INCLUDED

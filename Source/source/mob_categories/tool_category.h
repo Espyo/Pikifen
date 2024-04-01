@@ -8,8 +8,7 @@
  * Header for the tool mob category class.
  */
 
-#ifndef TOOL_CATEGORY_INCLUDED
-#define TOOL_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef TOOL_CATEGORY_INCLUDED

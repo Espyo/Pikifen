@@ -8,8 +8,7 @@
  * Header for the leader class and leader-related functions.
  */
 
-#ifndef LEADER_INCLUDED
-#define LEADER_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -185,5 +184,3 @@ void change_to_next_leader(
     const bool forward, const bool force_success, const bool keep_idx
 );
 bool grab_closest_group_member();
-
-#endif //ifndef LEADER_INCLUDED

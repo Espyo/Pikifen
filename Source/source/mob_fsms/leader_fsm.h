@@ -8,8 +8,7 @@
  * Header for the leader finite state machine logic.
  */
 
-#ifndef LEADER_FSM_INCLUDED
-#define LEADER_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -79,6 +78,3 @@ void update_in_group_chasing(mob* m, void* info1, void* info2);
 void whistle(                mob* m, void* info1, void* info2);
 void whistled_while_riding(  mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef LEADER_FSM_INCLUDED

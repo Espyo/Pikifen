@@ -8,8 +8,7 @@
  * Header for the hitbox class and hitbox-related functions.
  */
 
-#ifndef HITBOX_INCLUDED
-#define HITBOX_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -135,6 +134,3 @@ public:
     ) const;
     
 };
-
-
-#endif //ifndef HITBOX_INCLUDED

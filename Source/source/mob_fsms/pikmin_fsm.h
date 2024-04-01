@@ -8,8 +8,7 @@
  * Header for the Pikmin finite state machine logic.
  */
 
-#ifndef PIKMIN_FSM_INCLUDED
-#define PIKMIN_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -111,6 +110,3 @@ void whistled_while_holding(   mob* m, void* info1, void* info2);
 void whistled_while_riding(    mob* m, void* info1, void* info2);
 void work_on_group_task(       mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef PIKMIN_FSM_INCLUDED

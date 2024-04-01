@@ -9,8 +9,7 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
-#ifndef IMGUI_UTILS_INCLUDED
-#define IMGUI_UTILS_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -51,6 +50,3 @@ void Reset();
 void SetupCentering(const int upcoming_items_width);
 
 };
-
-
-#endif //ifndef IMGUI_UTILS_INCLUDED

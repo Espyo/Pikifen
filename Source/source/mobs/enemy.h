@@ -8,8 +8,7 @@
  * Header for the enemy class and enemy-related functions.
  */
 
-#ifndef ENEMY_INCLUDED
-#define ENEMY_INCLUDED
+#pragma once
 
 #include "../mob_types/enemy_type.h"
 #include "mob.h"
@@ -44,6 +43,3 @@ public:
     void start_dying_class_specifics() override;
     
 };
-
-
-#endif //ifndef ENEMY_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the bouncer mob category class.
  */
 
-#ifndef BOUNCER_CATEGORY_INCLUDED
-#define BOUNCER_CATEGORY_INCLUDED
+#pragma once
 
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
@@ -41,6 +40,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef BOUNCER_CATEGORY_INCLUDED

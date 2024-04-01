@@ -8,8 +8,7 @@
  * Header for the particle class and particle-related functions.
  */
 
-#ifndef PARTICLE_INCLUDED
-#define PARTICLE_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -300,6 +299,3 @@ private:
     float emission_timer;
     
 };
-
-
-#endif //ifndef PARTICLE_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the pellet class and pellet-related functions.
  */
 
-#ifndef PELLET_INCLUDED
-#define PELLET_INCLUDED
+#pragma once
 
 #include "../mob_types/pellet_type.h"
 #include "../mob_types/pikmin_type.h"
@@ -38,6 +37,3 @@ public:
     void draw_mob() override;
     
 };
-
-
-#endif //ifndef PELLET_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the drawing-related functions.
  */
 
-#ifndef DRAWING_INCLUDED
-#define DRAWING_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -253,6 +252,3 @@ float get_player_input_icon_width(
     const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
     const float max_bitmap_height = 0
 );
-
-
-#endif //ifndef DRAWING_INCLUDED

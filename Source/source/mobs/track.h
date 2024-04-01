@@ -8,8 +8,7 @@
  * Header for the track class and track-related functions.
  */
 
-#ifndef TRACK_INCLUDED
-#define TRACK_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -35,6 +34,3 @@ public:
     track(const point &pos, track_type* type, const float angle);
     
 };
-
-
-#endif //ifndef TRACK_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the pile mob category class.
  */
 
-#ifndef PILE_CATEGORY_INCLUDED
-#define PILE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef PILE_CATEGORY_INCLUDED

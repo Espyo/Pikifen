@@ -8,8 +8,7 @@
  * Header for the mob category classes and mob category-related functions.
  */
 
-#ifndef MOB_CATEGORY_INCLUDED
-#define MOB_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -201,6 +200,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef MOB_CATEGORY_INCLUDED

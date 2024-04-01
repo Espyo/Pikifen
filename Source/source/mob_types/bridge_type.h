@@ -8,8 +8,7 @@
  * Header for the bridge type class and bridge type-related functions.
  */
 
-#ifndef BRIDGE_TYPE_INCLUDED
-#define BRIDGE_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -87,6 +86,3 @@ public:
     void unload_resources() override;
     
 };
-
-
-#endif //ifndef BRIDGE_TYPE_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the general editor-related functions.
  */
 
-#ifndef EDITOR_INCLUDED
-#define EDITOR_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -665,6 +664,3 @@ protected:
     virtual void handle_rmb_up(const ALLEGRO_EVENT &ev);
     
 };
-
-
-#endif //ifndef EDITOR_INCLUDED

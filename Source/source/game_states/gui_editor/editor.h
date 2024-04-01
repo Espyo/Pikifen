@@ -8,8 +8,7 @@
  * Header for the general GUI editor-related functions.
  */
 
-#ifndef GUI_EDITOR_INCLUDED
-#define GUI_EDITOR_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -161,6 +160,3 @@ private:
     void reset_cam(const bool instantaneous);
     
 };
-
-
-#endif //ifndef GUI_EDITOR_INCLUDED

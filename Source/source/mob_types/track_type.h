@@ -8,8 +8,7 @@
  * Header for the track type class and track type-related functions.
  */
 
-#ifndef TRACK_TYPE_INCLUDED
-#define TRACK_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "mob_type.h"
@@ -94,6 +93,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef TRACK_TYPE_INCLUDED

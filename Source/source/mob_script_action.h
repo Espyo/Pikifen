@@ -10,8 +10,7 @@
  */
 
 
-#ifndef MOB_SCRIPT_ACTION_INCLUDED
-#define MOB_SCRIPT_ACTION_INCLUDED
+#pragma once
 
 #include "mob_script.h"
 
@@ -805,6 +804,3 @@ mob* get_trigger_mob(mob_action_run_data &data);
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );
-
-
-#endif //ifndef MOB_SCRIPT_ACTION_INCLUDED

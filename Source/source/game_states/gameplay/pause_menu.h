@@ -8,8 +8,7 @@
  * Header for the pause menu class and related functions.
  */
 
-#ifndef PAUSE_MENU_INCLUDED
-#define PAUSE_MENU_INCLUDED
+#pragma once
 
 #include <map>
 
@@ -367,6 +366,3 @@ private:
     );
     
 };
-
-
-#endif //ifndef PAUSE_MENU_INCLUDED

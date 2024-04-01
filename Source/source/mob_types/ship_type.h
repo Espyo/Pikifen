@@ -8,8 +8,7 @@
  * Header for the ship type class and ship type-related functions.
  */
 
-#ifndef SHIP_TYPE_INCLUDED
-#define SHIP_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -75,6 +74,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef SHIP_TYPE_INCLUDED

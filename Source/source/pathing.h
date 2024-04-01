@@ -8,8 +8,7 @@
  * Header for the paths, path-finding, and related functions.
  */
 
-#ifndef PATHING_H_INCLUDED
-#define PATHING_H_INCLUDED
+#pragma once
 
 #include <map>
 #include <string>
@@ -349,6 +348,3 @@ PATH_RESULT get_path(
 );
 string path_block_reason_to_string(PATH_BLOCK_REASON reason);
 string path_result_to_string(PATH_RESULT result);
-
-
-#endif //ifndef PATHING_H_INCLUDED

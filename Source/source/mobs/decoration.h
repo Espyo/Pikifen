@@ -8,8 +8,7 @@
  * Header for the decoration class and decoration-related functions.
  */
 
-#ifndef DECORATION_INCLUDED
-#define DECORATION_INCLUDED
+#pragma once
 
 #include "../mob_types/decoration_type.h"
 #include "mob.h"
@@ -48,6 +47,3 @@ public:
     void read_script_vars(const script_var_reader &svr) override;
     
 };
-
-
-#endif //ifndef DECORATION_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the Onion finite state machine logic.
  */
 
-#ifndef ONION_FSM_INCLUDED
-#define ONION_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -22,6 +21,3 @@ void create_fsm(mob_type* typ);
 
 void receive_mob(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef ONION_FSM_INCLUDED

@@ -9,8 +9,7 @@
  * interactable type-related functions.
  */
 
-#ifndef INTERACTABLE_TYPE_INCLUDED
-#define INTERACTABLE_TYPE_INCLUDED
+#pragma once
 
 #include "mob_type.h"
 
@@ -38,6 +37,3 @@ public:
     void load_properties(data_node* file) override;
     
 };
-
-
-#endif //ifndef INTERACTABLE_TYPE_INCLUDED

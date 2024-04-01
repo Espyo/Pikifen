@@ -8,8 +8,7 @@
  * Header for the tool type class and tool type-related functions.
  */
 
-#ifndef TOOL_TYPE_INCLUDED
-#define TOOL_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "mob_type.h"
@@ -53,6 +52,3 @@ public:
     void load_resources(data_node* file) override;
     
 };
-
-
-#endif //ifndef TOOL_TYPE_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the drop class and drop-related functions.
  */
 
-#ifndef DROP_INCLUDED
-#define DROP_INCLUDED
+#pragma once
 
 #include "../mob_types/drop_type.h"
 #include "mob.h"
@@ -50,6 +49,3 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 };
-
-
-#endif //ifndef DROP_INCLUDED

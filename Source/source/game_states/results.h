@@ -8,8 +8,7 @@
  * Header for the exploration/mission results game state.
  */
 
-#ifndef RESULTS_INCLUDED
-#define RESULTS_INCLUDED
+#pragma once
 
 #include "game_state.h"
 #include "../gui.h"
@@ -69,6 +68,3 @@ private:
     void retry_area();
     
 };
-
-
-#endif //ifndef RESULTS_INCLUDED

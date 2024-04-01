@@ -8,8 +8,7 @@
  * Header for the interactable mob category class.
  */
 
-#ifndef INTERACTABLE_CATEGORY_INCLUDED
-#define INTERACTABLE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef INTERACTABLE_CATEGORY_INCLUDED

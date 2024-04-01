@@ -9,8 +9,7 @@
  * and related functions.
  */
 
-#ifndef GAME_CONFIG_INCLUDED
-#define GAME_CONFIG_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -195,6 +194,3 @@ struct game_config {
     void load(data_node* file);
     
 };
-
-
-#endif //ifndef GAME_CONFIG_INCLUDED

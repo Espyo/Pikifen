@@ -8,8 +8,7 @@
  * Header for the code debugging tools.
  */
 
-#ifndef CODE_DEBUG_INCLUDED
-#define CODE_DEBUG_INCLUDED
+#pragma once
 
 /**
  * @brief Memory allocation and memory leak debug.
@@ -78,5 +77,3 @@ extern unsigned int code_debug_benchmark_iterations;
 void code_debug_benchmark_start_measuring();
 double code_debug_benchmark_end_measuring();
 double code_debug_benchmark_get_avg_duration();
-
-#endif //ifndef CODE_DEBUG_INCLUDED

@@ -9,8 +9,7 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
-#ifndef ALLEGRO_UTILS_INCLUDED
-#define ALLEGRO_UTILS_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -27,5 +26,3 @@ void set_combined_clipping_rectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
 );
-
-#endif //ifndef ALLEGRO_UTILS_INCLUDED

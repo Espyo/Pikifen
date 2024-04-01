@@ -8,8 +8,7 @@
  * Header for the class that holds everything about the game.
  */
 
-#ifndef GAME_INCLUDED
-#define GAME_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -317,5 +316,3 @@ private:
 
 
 extern game_class game;
-
-#endif //ifndef GAME_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the resource finite state machine logic.
  */
 
-#ifndef RESOURCE_FSM_INCLUDED
-#define RESOURCE_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -29,6 +28,3 @@ void start_being_delivered(mob* m, void* info1, void* info2);
 void start_waiting(mob* m, void* info1, void* info2);
 void vanish(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef RESOURCE_FSM_INCLUDED

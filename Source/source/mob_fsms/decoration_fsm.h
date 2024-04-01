@@ -8,8 +8,7 @@
  * Header for the decoration finite state machine logic.
  */
 
-#ifndef DECORATION_FSM_INCLUDED
-#define DECORATION_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -24,6 +23,3 @@ void be_bumped(mob* m, void* info1, void* info2);
 void become_idle(mob* m, void* info1, void* info2);
 void check_bump(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef DECORATION_FSM_INCLUDED

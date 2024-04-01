@@ -8,8 +8,7 @@
  * Header for the bouncer finite state machine logic.
  */
 
-#ifndef BOUNCER_FSM_INCLUDED
-#define BOUNCER_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -24,6 +23,3 @@ void handle_mob(mob* m, void* info1, void* info2);
 void set_bouncing_animation(mob* m, void* info1, void* info2);
 void set_idling_animation(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef BOUNCER_FSM_INCLUDED

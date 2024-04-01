@@ -8,8 +8,7 @@
  * Header for the group task mob category class.
  */
 
-#ifndef GROUP_TASK_CATEGORY_INCLUDED
-#define GROUP_TASK_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -44,6 +43,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef GROUP_TASK_CATEGORY_INCLUDED

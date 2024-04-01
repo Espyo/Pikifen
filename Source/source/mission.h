@@ -8,8 +8,7 @@
  * Header for the mission class and related functions.
  */
 
-#ifndef MISSION_INCLUDED
-#define MISSION_INCLUDED
+#pragma once
 
 #include <string>
 #include <unordered_set>
@@ -832,6 +831,3 @@ public:
     ) const override;
     
 };
-
-
-#endif //ifndef MISSION_INCLUDED

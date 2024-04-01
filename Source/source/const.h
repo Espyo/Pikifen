@@ -8,8 +8,7 @@
  * Globally used constants.
  */
 
-#ifndef CONST_INCLUDED
-#define CONST_INCLUDED
+#pragma once
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -224,5 +223,3 @@ const string PERFORMANCE_LOG_FILE_PATH =
 //Relative path to the file with the lifetime statistics.
 const string STATISTICS_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Statistics.txt";
-
-#endif //ifndef CONST_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the converter mob category class.
  */
 
-#ifndef CONVERTER_CATEGORY_INCLUDED
-#define CONVERTER_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -44,6 +43,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef CONVERTER_CATEGORY_INCLUDED

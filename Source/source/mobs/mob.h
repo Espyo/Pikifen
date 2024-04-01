@@ -8,8 +8,7 @@
  * Header for the mob class and mob-related functions.
  */
 
-#ifndef MOB_INCLUDED
-#define MOB_INCLUDED
+#pragma once
 
 #include <float.h>
 #include <map>
@@ -564,6 +563,3 @@ public:
     ) const;
     
 };
-
-
-#endif //ifndef MOB_INCLUDED

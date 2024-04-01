@@ -8,8 +8,7 @@
  * Header for the pellet mob category class.
  */
 
-#ifndef PELLET_CATEGORY_INCLUDED
-#define PELLET_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef PELLET_CATEGORY_INCLUDED

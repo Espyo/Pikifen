@@ -8,8 +8,7 @@
  * Header for the treasure type class and treasure type-related functions.
  */
 
-#ifndef TREASURE_TYPE_INCLUDED
-#define TREASURE_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "mob_type.h"
@@ -62,6 +61,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef TREASURE_TYPE_INCLUDED

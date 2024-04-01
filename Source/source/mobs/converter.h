@@ -8,8 +8,7 @@
  * Header for the converter class and converter-related functions.
  */
 
-#ifndef CONVERTER_INCLUDED
-#define CONVERTER_INCLUDED
+#pragma once
 
 #include "../mob_types/converter_type.h"
 #include "mob.h"
@@ -74,6 +73,3 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 };
-
-
-#endif //ifndef CONVERTER_INCLUDED

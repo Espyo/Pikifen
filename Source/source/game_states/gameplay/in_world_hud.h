@@ -9,8 +9,7 @@
  * in-world HUD related functions.
  */
 
-#ifndef IN_WORLD_HUD_INCLUDED
-#define IN_WORLD_HUD_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -151,6 +150,3 @@ public:
     void tick(const float delta_t) override;
     
 };
-
-
-#endif //ifndef IN_WORLD_HUD_INCLUDED

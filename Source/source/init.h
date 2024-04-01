@@ -8,8 +8,7 @@
  * Header for program initializer and deinitializer functions.
  */
 
-#ifndef INIT_INCLUDED
-#define INIT_INCLUDED
+#pragma once
 
 #include "animation.h"
 #include "libs/data_file.h"
@@ -34,5 +33,3 @@ void destroy_allegro();
 void destroy_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void destroy_misc();
 void destroy_mob_categories();
-
-#endif //ifndef INIT_INCLUDED

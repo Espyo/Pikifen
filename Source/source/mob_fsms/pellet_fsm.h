@@ -8,8 +8,7 @@
  * Header for the pellet finite state machine logic.
  */
 
-#ifndef PELLET_FSM_INCLUDED
-#define PELLET_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -22,6 +21,3 @@ void create_fsm(mob_type* typ);
 
 void stand_still(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef PELLET_FSM_INCLUDED

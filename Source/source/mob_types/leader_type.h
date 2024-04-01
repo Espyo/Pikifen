@@ -8,8 +8,7 @@
  * Header for the leader type class and leader type-related functions.
  */
 
-#ifndef LEADER_TYPE_INCLUDED
-#define LEADER_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -240,6 +239,3 @@ public:
     void unload_resources() override;
     
 };
-
-
-#endif //ifndef LEADER_TYPE_INCLUDED

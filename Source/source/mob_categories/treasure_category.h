@@ -8,8 +8,7 @@
  * Header for the treasure mob category class.
  */
 
-#ifndef TREASURE_CATEGORY_INCLUDED
-#define TREASURE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef TREASURE_CATEGORY_INCLUDED

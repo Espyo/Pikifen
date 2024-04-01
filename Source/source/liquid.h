@@ -8,8 +8,7 @@
  * Header for the liquid class and liquid-related functions.
  */
 
-#ifndef LIQUID_INCLUDED
-#define LIQUID_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -58,6 +57,3 @@ struct liquid {
     unsigned char surface_alpha = 255;
     
 };
-
-
-#endif //ifndef LIQUID_INCLUDED

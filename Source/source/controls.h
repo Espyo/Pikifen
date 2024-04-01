@@ -10,8 +10,7 @@
  * and the controls manager.
  */
 
-#ifndef CONTROLS_INCLUDED
-#define CONTROLS_INCLUDED
+#pragma once
 
 #include <functional>
 #include <string>
@@ -290,6 +289,3 @@ private:
     controls_manager mgr;
     
 };
-
-
-#endif //ifndef CONTROLS_INCLUDED

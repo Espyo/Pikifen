@@ -8,8 +8,7 @@
  * Header for area geometry-related functions.
  */
 
-#ifndef GEOMETRY_INCLUDED
-#define GEOMETRY_INCLUDED
+#pragma once
 
 #include <map>
 #include <set>
@@ -180,5 +179,3 @@ TRIANGULATION_ERROR triangulate_polygon(
 TRIANGULATION_ERROR triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 );
-
-#endif //ifndef GEOMETRY_INCLUDED

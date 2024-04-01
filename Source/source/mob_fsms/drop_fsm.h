@@ -8,8 +8,7 @@
  * Header for the drop finite state machine logic.
  */
 
-#ifndef DROP_FSM_INCLUDED
-#define DROP_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -26,6 +25,3 @@ void set_bumped_anim(mob* m, void* info1, void* info2);
 void set_falling_anim(mob* m, void* info1, void* info2);
 void set_idling_anim(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef DROP_FSM_INCLUDED

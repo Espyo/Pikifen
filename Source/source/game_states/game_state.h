@@ -9,8 +9,7 @@
  * game state-related functions.
  */
 
-#ifndef GAME_STATE_INCLUDED
-#define GAME_STATE_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -44,6 +43,3 @@ public:
     virtual string get_name() const = 0;
     
 };
-
-
-#endif //ifndef GAME_STATE_INCLUDED

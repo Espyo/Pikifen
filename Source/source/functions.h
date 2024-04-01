@@ -8,8 +8,7 @@
  * Globally used functions.
  */
 
-#ifndef FUNCTIONS_INCLUDED
-#define FUNCTIONS_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -325,5 +324,3 @@ bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
 #if defined(_WIN32)
 string strsignal(const int signum);
 #endif //#if defined(_WIN32)
-
-#endif //ifndef FUNCTIONS_INCLUDED

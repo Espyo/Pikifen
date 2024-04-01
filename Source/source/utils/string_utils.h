@@ -9,8 +9,7 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
-#ifndef STRING_UTILS_INCLUDED
-#define STRING_UTILS_INCLUDED
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -76,5 +75,3 @@ string time_to_str3(
     const uint8_t flags = 0
 );
 string trim_spaces(const string &s, const bool left_only = false);
-
-#endif //ifndef STRING_UTILS_INCLUDED

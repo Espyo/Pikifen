@@ -8,8 +8,7 @@
  * Header for the bridge mob category class.
  */
 
-#ifndef BRIDGE_CATEGORY_INCLUDED
-#define BRIDGE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -42,6 +41,3 @@ public:
     void erase_mob(mob* m) override;
     void clear_types() override;
 };
-
-
-#endif //ifndef BRIDGE_CATEGORY_INCLUDED

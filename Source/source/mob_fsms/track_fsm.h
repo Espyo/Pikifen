@@ -8,8 +8,7 @@
  * Header for the track finite state machine logic.
  */
 
-#ifndef TRACK_FSM_INCLUDED
-#define TRACK_FSM_INCLUDED
+#pragma once
 
 #include "../mob_types/mob_type.h"
 
@@ -23,6 +22,3 @@ void create_fsm(mob_type* typ);
 void on_touched(mob* m, void* info1, void* info2);
 void spawn(mob* m, void* info1, void* info2);
 }
-
-
-#endif //ifndef TRACK_FSM_INCLUDED

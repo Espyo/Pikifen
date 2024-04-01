@@ -8,8 +8,7 @@
  * Header for the resource class and resource-related functions.
  */
 
-#ifndef RESOURCE_INCLUDED
-#define RESOURCE_INCLUDED
+#pragma once
 
 #include "../mob_types/resource_type.h"
 #include "mob.h"
@@ -39,6 +38,3 @@ public:
     resource(const point &pos, resource_type* type, const float angle);
     
 };
-
-
-#endif //ifndef RESOURCE_INCLUDED

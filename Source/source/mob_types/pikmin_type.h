@@ -8,8 +8,7 @@
  * Header for the Pikmin type class and Pikmin type-related functions.
  */
 
-#ifndef PIKMIN_TYPE_INCLUDED
-#define PIKMIN_TYPE_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -348,6 +347,3 @@ public:
     void unload_resources() override;
     
 };
-
-
-#endif //ifndef PIKMIN_TYPE_INCLUDED

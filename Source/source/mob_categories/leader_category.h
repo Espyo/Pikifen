@@ -8,8 +8,7 @@
  * Header for the leader mob category class.
  */
 
-#ifndef LEADER_CATEGORY_INCLUDED
-#define LEADER_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef LEADER_CATEGORY_INCLUDED

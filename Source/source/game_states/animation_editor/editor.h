@@ -8,8 +8,7 @@
  * Header for the general animation editor-related functions.
  */
 
-#ifndef ANIMATION_EDITOR_INCLUDED
-#define ANIMATION_EDITOR_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -318,6 +317,3 @@ private:
     void reset_cam_zoom();
     
 };
-
-
-#endif //ifndef ANIMATION_EDITOR_INCLUDED

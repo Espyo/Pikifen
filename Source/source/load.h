@@ -8,8 +8,7 @@
  * Header for data loading and unloading functions.
  */
 
-#ifndef LOAD_INCLUDED
-#define LOAD_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -77,6 +76,3 @@ void unload_spike_damage_types();
 void unload_spray_types();
 void unload_status_types(const bool unload_resources);
 void unload_weather();
-
-
-#endif //ifndef LOAD_INCLUDED

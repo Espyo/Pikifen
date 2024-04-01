@@ -8,8 +8,7 @@
  * Header for the mob type class and mob type-related functions.
  */
 
-#ifndef MOB_TYPE_INCLUDED
-#define MOB_TYPE_INCLUDED
+#pragma once
 
 #include <functional>
 #include <map>
@@ -532,6 +531,3 @@ void load_mob_type_from_file(
 );
 void unload_mob_types(const bool unload_resources);
 void unload_mob_types(mob_category* category, const bool unload_resources);
-
-
-#endif //ifndef MOB_TYPE_INCLUDED

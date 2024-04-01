@@ -8,8 +8,7 @@
  * Header for the control manager class and control manager related functions.
  */
 
-#ifndef CONTROL_MANAGER_INCLUDED
-#define CONTROL_MANAGER_INCLUDED
+#pragma once
 
 #include <map>
 #include <string>
@@ -202,6 +201,3 @@ private:
     void handle_clean_input(const player_input &input, bool add_directly);
     
 };
-
-
-#endif //ifndef CONTROL_MANAGER_INCLUDED

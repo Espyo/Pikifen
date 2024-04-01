@@ -8,9 +8,7 @@
  * Header for the gameplay-class utility classes and functions.
  */
 
-#ifndef GAMEPLAY_UTILS_INCLUDED
-#define GAMEPLAY_UTILS_INCLUDED
-
+#pragma once
 
 #include "../../utils/geometry_utils.h"
 #include "../../mob_script.h"
@@ -56,6 +54,3 @@ struct pending_intermob_event {
     }
     
 };
-
-
-#endif //ifndef GAMEPLAY_UTILS_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the mob utility classes and functions.
  */
 
-#ifndef MOB_UTILS_INCLUDED
-#define MOB_UTILS_INCLUDED
+#pragma once
 
 #include <unordered_set>
 #include <vector>
@@ -753,6 +752,3 @@ mob_type::spawn_t* get_spawn_info_from_child_info(
 );
 MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str);
 MOB_TEAM string_to_team_nr(const string &team_str);
-
-
-#endif //ifndef MOB_UTILS_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the Onion menu class and related functions.
  */
 
-#ifndef ONION_MENU_INCLUDED
-#define ONION_MENU_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -181,6 +180,3 @@ private:
     void update();
     
 };
-
-
-#endif //ifndef ONION_MENU_INCLUDED

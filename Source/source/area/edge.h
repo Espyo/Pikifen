@@ -8,8 +8,7 @@
  * Header for the sector edge class and related functions.
  */
 
-#ifndef EDGE_INCLUDED
-#define EDGE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro_color.h>
 
@@ -95,6 +94,3 @@ struct edge_intersection {
     bool contains(const edge* e);
     
 };
-
-
-#endif //ifndef EDGE_INCLUDED

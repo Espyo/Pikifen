@@ -37,8 +37,7 @@
  *   }
  */
 
-#ifndef DATA_FILE_INCLUDED
-#define DATA_FILE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -146,6 +145,3 @@ private:
     static string trim_spaces(const string &s, const bool left_only = false);
     
 };
-
-
-#endif //ifndef DATA_FILE_INCLUDED

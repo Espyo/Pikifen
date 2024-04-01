@@ -8,9 +8,7 @@
  * Header for all enums related to mobs.
  */
 
-#ifndef MOB_ENUMS_INCLUDED
-#define MOB_ENUMS_INCLUDED
-
+#pragma once
 
 //Area editor mob property types.
 enum AEMP_TYPE {
@@ -349,6 +347,3 @@ enum SUBGROUP_TYPE_CATEGORY {
     SUBGROUP_TYPE_CATEGORY_TOOL,
     
 };
-
-
-#endif //ifndef MOB_ENUMS_INCLUDED

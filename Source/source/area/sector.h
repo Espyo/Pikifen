@@ -8,9 +8,7 @@
  * Header for the sector class and related functions.
  */
 
-#ifndef SECTOR_INCLUDED
-#define SECTOR_INCLUDED
-
+#pragma once
 
 #include <functional>
 #include <string>
@@ -151,5 +149,3 @@ struct sector {
 sector* get_sector(
     const point &p, size_t* out_sector_idx, const bool use_blockmap
 );
-
-#endif //ifndef SECTOR_INCLUDED

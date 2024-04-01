@@ -8,8 +8,7 @@
  * Header for the enemy mob category class.
  */
 
-#ifndef ENEMY_CATEGORY_INCLUDED
-#define ENEMY_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef ENEMY_CATEGORY_INCLUDED

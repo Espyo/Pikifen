@@ -8,8 +8,7 @@
  * Header for the general area editor-related functions.
  */
 
-#ifndef AREA_EDITOR_INCLUDED
-#define AREA_EDITOR_INCLUDED
+#pragma once
 
 #include <deque>
 
@@ -1125,6 +1124,3 @@ private:
     void reset_cam_zoom();
     
 };
-
-
-#endif //ifndef AREA_EDITOR_INCLUDED

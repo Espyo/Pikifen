@@ -8,8 +8,7 @@
  * Header for the pile type class and pile type-related functions.
  */
 
-#ifndef PILE_TYPE_INCLUDED
-#define PILE_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -91,6 +90,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef PILE_TYPE_INCLUDED

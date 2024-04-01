@@ -8,8 +8,7 @@
  * Header for the particle class and particle-related functions.
  */
 
-#ifndef REPLAY_INCLUDED
-#define REPLAY_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -181,6 +180,3 @@ private:
     size_t prev_leader_idx = INVALID;
     
 };
-
-
-#endif //ifndef REPLAY_INCLUDED

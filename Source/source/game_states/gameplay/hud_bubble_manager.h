@@ -9,8 +9,7 @@
  * in-game HUD "bubble manager"-related functions.
  */
 
-#ifndef HUD_BUBBLE_MANAGER_INCLUDED
-#define HUD_BUBBLE_MANAGER_INCLUDED
+#pragma once
 
 #include <map>
 
@@ -349,6 +348,3 @@ private:
     bool transition_is_setup = false;
     
 };
-
-
-#endif //ifndef HUD_BUBBLE_MANAGER_INCLUDED

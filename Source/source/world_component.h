@@ -8,8 +8,7 @@
  * Header for the world component class.
  */
 
-#ifndef WORLD_COMPONENT_INCLUDED
-#define WORLD_COMPONENT_INCLUDED
+#pragma once
 
 #include <cstdio>
 
@@ -51,6 +50,3 @@ public:
     size_t nr = 0;
     
 };
-
-
-#endif //ifndef WORLD_COMPONENT_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the bouncer class and bouncer-related functions.
  */
 
-#ifndef BOUNCER_INCLUDED
-#define BOUNCER_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -35,6 +34,3 @@ public:
     bouncer(const point &pos, bouncer_type* type, const float angle);
     
 };
-
-
-#endif //ifndef BOUNCER_INCLUDED

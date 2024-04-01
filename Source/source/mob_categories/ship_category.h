@@ -8,8 +8,7 @@
  * Header for the ship mob category class.
  */
 
-#ifndef SHIP_CATEGORY_INCLUDED
-#define SHIP_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef SHIP_CATEGORY_INCLUDED

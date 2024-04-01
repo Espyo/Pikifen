@@ -27,8 +27,7 @@
  * the manager being in charge of logic.
  */
 
-#ifndef AUDIO_INCLUDED
-#define AUDIO_INCLUDED
+#pragma once
 
 #include <map>
 #include <string>
@@ -474,6 +473,3 @@ private:
     void update_playback_target_gain_and_pan(size_t playback_idx);
     
 };
-
-
-#endif //ifndef AUDIO_INCLUDED

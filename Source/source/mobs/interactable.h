@@ -8,8 +8,7 @@
  * Header for the interactable class and interactable-related functions.
  */
 
-#ifndef INTERACTABLE_INCLUDED
-#define INTERACTABLE_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -35,6 +34,3 @@ public:
     interactable(const point &pos, interactable_type* type, const float angle);
     
 };
-
-
-#endif //ifndef INTERACTABLE_INCLUDED

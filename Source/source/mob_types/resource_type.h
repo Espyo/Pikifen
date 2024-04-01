@@ -8,8 +8,7 @@
  * Header for the resource type class and resource type-related functions.
  */
 
-#ifndef RESOURCE_TYPE_INCLUDED
-#define RESOURCE_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -116,6 +115,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef RESOURCE_TYPE_INCLUDED

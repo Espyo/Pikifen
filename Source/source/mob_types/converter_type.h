@@ -8,8 +8,7 @@
  * Header for the converter type class and converter type-related functions.
  */
 
-#ifndef CONVERTER_TYPE_INCLUDED
-#define CONVERTER_TYPE_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -117,6 +116,3 @@ public:
     anim_conversion_vector get_anim_conversions() const override;
     
 };
-
-
-#endif //ifndef CONVERTER_TYPE_INCLUDED

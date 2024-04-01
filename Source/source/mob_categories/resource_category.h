@@ -8,8 +8,7 @@
  * Header for the resource mob category class.
  */
 
-#ifndef RESOURCE_CATEGORY_INCLUDED
-#define RESOURCE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef RESOURCE_CATEGORY_INCLUDED

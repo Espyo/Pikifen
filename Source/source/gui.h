@@ -10,8 +10,7 @@
  * which is the GUI library used for the editors.
  */
 
-#ifndef GUI_INCLUDED
-#define GUI_INCLUDED
+#pragma once
 
 #include <functional>
 #include <map>
@@ -578,6 +577,3 @@ private:
     bool visible = true;
     
 };
-
-
-#endif //ifndef GUI_MANAGER_INCLUDED

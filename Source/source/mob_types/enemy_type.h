@@ -8,8 +8,7 @@
  * Header for the enemy type class and enemy type-related functions.
  */
 
-#ifndef ENEMY_TYPE_INCLUDED
-#define ENEMY_TYPE_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -53,6 +52,3 @@ public:
     void load_properties(data_node* file) override;
     
 };
-
-
-#endif //ifndef ENEMY_TYPE_INCLUDED

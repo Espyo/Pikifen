@@ -8,8 +8,7 @@
  * Header for the decoration mob category class.
  */
 
-#ifndef DECORATION_CATEGORY_INCLUDED
-#define DECORATION_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef DECORATION_CATEGORY_INCLUDED

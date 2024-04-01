@@ -10,8 +10,7 @@
  */
 
 
-#ifndef MOB_EV_INCLUDED
-#define MOB_EV_INCLUDED
+#pragma once
 
 #include <vector>
 
@@ -494,6 +493,3 @@ size_t fix_states(
 );
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 void unload_script(mob_type* mt);
-
-
-#endif //ifndef MOB_EV_INCLUDED

@@ -8,8 +8,7 @@
  * Header for the area class and related functions.
  */
 
-#ifndef AREA_INCLUDED
-#define AREA_INCLUDED
+#pragma once
 
 #include <memory>
 
@@ -321,5 +320,3 @@ void get_area_info_from_path(
 string get_base_area_folder_path(
     const AREA_TYPE type, const bool from_game_data
 );
-
-#endif //ifndef AREA_INCLUDED

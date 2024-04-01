@@ -8,8 +8,7 @@
  * Header for the scale mob category class.
  */
 
-#ifndef SCALE_CATEGORY_INCLUDED
-#define SCALE_CATEGORY_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -43,6 +42,3 @@ public:
     void clear_types() override;
     
 };
-
-
-#endif //ifndef SCALE_CATEGORY_INCLUDED

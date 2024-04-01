@@ -9,8 +9,7 @@
  * too simple to warrant their own files.
  */
 
-#ifndef MISC_STRUCTS_INCLUDED
-#define MISC_STRUCTS_INCLUDED
+#pragma once
 
 #include <functional>
 #include <map>
@@ -1432,26 +1431,26 @@ struct whistle_t {
  * If some other frame needs it, it'll be loaded from
  * the disk again.
  * This manager can also handle other types of asset, like audio samples.
- * 
+ *
  * @tparam asset_t Asset type.
  */
 template<typename asset_t>
 class asset_manager {
 
 public:
-    
+
     //--- Function definitions ---
     
     /**
      * @brief Constructs a new asset manager object.
-     * 
+     *
      * @param base_dir Base directory its files belong to.
      */
     explicit asset_manager(const string &base_dir) : base_dir(base_dir) {}
-
+    
     /**
      * @brief Returns the specified asset, by name.
-     * 
+     *
      * @param name Name of the asset to get.
      * @param node If not nullptr, blame this data node if the file
      * doesn't exist.
@@ -1463,7 +1462,7 @@ public:
         const bool report_errors = true
     ) {
         if(name.empty()) return do_load("", node, report_errors);
-
+        
         if(list.find(name) == list.end()) {
             asset_t asset_ptr =
                 do_load(base_dir + "/" + name, node, report_errors);
@@ -1476,11 +1475,11 @@ public:
             return list[name].ptr;
         }
     }
-
+    
     /**
      * @brief Frees one use of the asset. If the asset has no more calls,
      * it's automatically cleared.
-     * 
+     *
      * @param ptr Asset to free.
      */
     void free(const asset_t ptr) {
@@ -1491,18 +1490,18 @@ public:
         }
         free(it);
     }
-
+    
     /**
      * @brief Frees one use of the asset. If the asset has no more calls,
      * it's automatically cleared.
-     * 
+     *
      * @param ptr Name of the asset to free.
      */
     void free(const string &name) {
         if(name.empty()) return;
         free(list.find(name));
     }
-
+    
     /**
      * @brief Unloads all assets loaded and clears the list.
      */
@@ -1513,31 +1512,31 @@ public:
         list.clear();
         total_uses = 0;
     }
-
+    
     /**
      * @brief Returns the total number of uses. Used for debugging.
-     * 
+     *
      * @return The amount.
      */
     long get_total_uses() const {
         return total_uses;
     }
-
+    
     /**
      * @brief Returns the size of the list. Used for debugging.
-     * 
+     *
      * @return The size.
      */
     size_t get_list_size() const {
         return list.size();
     }
-
+    
 protected:
 
     //--- Misc. declarations ---
-
+    
     virtual asset_t do_load(
-        const string& path, data_node* node, const bool report_errors
+        const string &path, data_node* node, const bool report_errors
     ) = 0;
     virtual void do_unload(asset_t asset) = 0;
     
@@ -1578,7 +1577,7 @@ protected:
     /**
      * @brief Frees one use of the asset. If the asset has no more calls,
      * it's automatically cleared.
-     * 
+     *
      * @param it Iterator of the asset from the list.
      */
     void free(typename map<string, asset_use_t>::iterator it) {
@@ -1602,19 +1601,19 @@ class audio_stream_manager : public asset_manager<ALLEGRO_AUDIO_STREAM*> {
 public:
 
     //--- Function definitions ---
-
-    audio_stream_manager(const string& base_dir) : asset_manager(base_dir) {}
-
-
+    
+    audio_stream_manager(const string &base_dir) : asset_manager(base_dir) {}
+    
+    
 protected:
 
     //--- Function declarations ---
-
+    
     ALLEGRO_AUDIO_STREAM* do_load(
-        const string& path, data_node* node, const bool report_errors
+        const string &path, data_node* node, const bool report_errors
     ) override;
     void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
-
+    
 };
 
 
@@ -1626,19 +1625,19 @@ class bitmap_manager : public asset_manager<ALLEGRO_BITMAP*> {
 public:
 
     //--- Function definitions ---
-
-    bitmap_manager(const string& base_dir) : asset_manager(base_dir) {}
-
-
+    
+    bitmap_manager(const string &base_dir) : asset_manager(base_dir) {}
+    
+    
 protected:
 
     //--- Function declarations ---
-
+    
     ALLEGRO_BITMAP* do_load(
-        const string& path, data_node* node, const bool report_errors
+        const string &path, data_node* node, const bool report_errors
     ) override;
     void do_unload(ALLEGRO_BITMAP* asset) override;
-
+    
 };
 
 
@@ -1650,20 +1649,17 @@ class sfx_sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
 public:
 
     //--- Function definitions ---
-
-    sfx_sample_manager(const string& base_dir) : asset_manager(base_dir) {}
-
-
+    
+    sfx_sample_manager(const string &base_dir) : asset_manager(base_dir) {}
+    
+    
 protected:
 
     //--- Function declarations ---
-
+    
     ALLEGRO_SAMPLE* do_load(
-        const string& path, data_node* node, const bool report_errors
+        const string &path, data_node* node, const bool report_errors
     ) override;
     void do_unload(ALLEGRO_SAMPLE* asset) override;
-
+    
 };
-
-
-#endif //ifndef MISC_STRUCTS_INCLUDED

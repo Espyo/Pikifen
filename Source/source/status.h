@@ -8,8 +8,7 @@
  * Header for the status effect classes and status effect-related functions.
  */
 
-#ifndef STATUS_INCLUDED
-#define STATUS_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -218,7 +217,3 @@ struct status {
     void tick(const float delta_t);
     
 };
-
-
-
-#endif //ifndef STATUS_INCLUDED

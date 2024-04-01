@@ -8,8 +8,7 @@
  * Header for the hazard class and hazard-related functions.
  */
 
-#ifndef HAZARD_INCLUDED
-#define HAZARD_INCLUDED
+#pragma once
 
 #include <allegro5/allegro.h>
 
@@ -52,6 +51,3 @@ struct hazard {
     liquid* associated_liquid = nullptr;
     
 };
-
-
-#endif //ifndef HAZARD_INCLUDED

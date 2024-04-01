@@ -8,8 +8,7 @@
  * Header for the bridge class and bridge-related functions.
  */
 
-#ifndef BRIDGE_INCLUDED
-#define BRIDGE_INCLUDED
+#pragma once
 
 #include "../mob_types/bridge_type.h"
 #include "mob.h"
@@ -83,6 +82,3 @@ public:
     void setup();
     
 };
-
-
-#endif //ifndef BRIDGE_INCLUDED

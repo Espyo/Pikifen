@@ -205,7 +205,7 @@ void asset_file_names_t::load(data_node* file) {
  * @return The audio stream.
  */
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
-    const string& path, data_node* node, const bool report_errors
+    const string &path, data_node* node, const bool report_errors
 ) {
     return load_audio_stream(path, node, report_errors);
 }
@@ -213,7 +213,7 @@ ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
 
 /**
  * @brief Unloads an audio stream for the manager.
- * 
+ *
  * @param asset Audio stream to unload.
  */
 void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
@@ -230,7 +230,7 @@ void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* bitmap_manager::do_load(
-    const string& path, data_node* node, const bool report_errors
+    const string &path, data_node* node, const bool report_errors
 ) {
     return load_bmp(path, node, report_errors);
 }
@@ -238,11 +238,13 @@ ALLEGRO_BITMAP* bitmap_manager::do_load(
 
 /**
  * @brief Unloads a bitmap for the manager.
- * 
+ *
  * @param asset Bitmap to unload.
  */
 void bitmap_manager::do_unload(ALLEGRO_BITMAP* asset) {
-    al_destroy_bitmap(asset);
+    if(asset != game.bmp_error) {
+        al_destroy_bitmap(asset);
+    }
 }
 
 
@@ -1644,7 +1646,7 @@ bool script_var_reader::get(const string &name, point &dest) const {
  * @return The audio sample.
  */
 ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
-    const string& path, data_node* node, const bool report_errors
+    const string &path, data_node* node, const bool report_errors
 ) {
     return load_sample(path, node, report_errors);
 }
@@ -1652,7 +1654,7 @@ ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
 
 /**
  * @brief Unloads an audio sample for the manager.
- * 
+ *
  * @param asset Audio sample to unload.
  */
 void sfx_sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {

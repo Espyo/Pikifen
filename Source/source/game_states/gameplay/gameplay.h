@@ -9,8 +9,7 @@
  * gameplay state-related functions.
  */
 
-#ifndef GAMEPLAY_INCLUDED
-#define GAMEPLAY_INCLUDED
+#pragma once
 
 #include "../../controls.h"
 #include "../../mobs/interactable.h"
@@ -543,6 +542,3 @@ struct msg_box_t {
     void tick(const float delta_t);
     
 };
-
-
-#endif //ifndef GAMEPLAY_INCLUDED

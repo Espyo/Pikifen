@@ -8,8 +8,7 @@
  * Header for the pellet type class and pellet type-related functions.
  */
 
-#ifndef PELLET_TYPE_INCLUDED
-#define PELLET_TYPE_INCLUDED
+#pragma once
 
 #include "../libs/data_file.h"
 #include "mob_type.h"
@@ -77,6 +76,3 @@ public:
     void unload_resources() override;
     
 };
-
-
-#endif //ifndef PELLET_TYPE_INCLUDED
