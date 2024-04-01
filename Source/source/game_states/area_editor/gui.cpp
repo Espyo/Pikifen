@@ -16,6 +16,8 @@
 #include "../../game.h"
 #include "../../libs/imgui/imgui_impl_allegro5.h"
 #include "../../libs/imgui/imgui_stdlib.h"
+#include "../../utils/allegro_utils.h"
+#include "../../utils/general_utils.h"
 #include "../../utils/imgui_utils.h"
 #include "../../utils/string_utils.h"
 
@@ -1272,7 +1274,7 @@ void area_editor::process_gui_panel_details() {
                             "*.png",
                             ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
                             ALLEGRO_FILECHOOSER_PICTURES,
-                            &result
+                            &result, game.display
                         );
                         
                     switch(result) {
@@ -2030,7 +2032,8 @@ void area_editor::process_gui_panel_info() {
                     "use as the thumbnail.",
                     "*.jpg;*.png",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                    ALLEGRO_FILECHOOSER_PICTURES
+                    ALLEGRO_FILECHOOSER_PICTURES,
+                    game.display
                 );
                 
             if(!f.empty() && !f[0].empty()) {
@@ -2105,7 +2108,7 @@ void area_editor::process_gui_panel_info() {
                     "*.*",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
                     ALLEGRO_FILECHOOSER_PICTURES,
-                    &result
+                    &result, game.display
                 );
                 
             switch(result) {
@@ -5604,7 +5607,8 @@ void area_editor::process_gui_panel_tools() {
                     "Please choose the bitmap to use for a reference.",
                     "*.*",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                    ALLEGRO_FILECHOOSER_PICTURES
+                    ALLEGRO_FILECHOOSER_PICTURES,
+                    game.display
                 );
                 
             if(!f.empty() && !f[0].empty()) {

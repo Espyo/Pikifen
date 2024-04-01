@@ -19,6 +19,7 @@
 #include "../../mobs/group_task.h"
 #include "../../mobs/pikmin.h"
 #include "../../mobs/tool.h"
+#include "../../utils/general_utils.h"
 #include "../../utils/string_utils.h"
 
 

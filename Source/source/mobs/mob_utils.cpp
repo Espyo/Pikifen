@@ -16,6 +16,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mob_script_action.h"
+#include "../utils/general_utils.h"
 #include "../utils/string_utils.h"
 #include "mob.h"
 

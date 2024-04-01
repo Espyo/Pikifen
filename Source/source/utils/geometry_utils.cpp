@@ -10,12 +10,14 @@
  */
 
 #include <algorithm>
+#include <cfloat>
 #include <cmath>
 #include <math.h>
 #include <vector>
 
 #include "geometry_utils.h"
 #include "math_utils.h"
+#include "string_utils.h"
 
 using std::vector;
 
@@ -1627,6 +1629,18 @@ point normalize_vector(const point &v) {
 
 
 /**
+ * @brief Converts a point to a string.
+ *
+ * @param p Point to convert.
+ * @param z If not nullptr, add a third word which is this Z coordinate.
+ * @return The string.
+ */
+string p2s(const point &p, const float* z) {
+    return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
+}
+
+
+/**
  * @brief Returns whether three given points are collinear or not.
  *
  * @param a First point.
@@ -1850,4 +1864,139 @@ point rotate_point(const point &coords, const float angle) {
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     return point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);
+}
+
+
+/**
+ * @brief Converts a string to a point.
+ *
+ * @param s String to convert.
+ * @param out_z If not nullptr, the third word is returned here.
+ * @return The (X and Y) coordinates.
+ */
+point s2p(const string &s, float* out_z) {
+    vector<string> words = split(s);
+    point p;
+    if(words.size() >= 1) {
+        p.x = s2f(words[0]);
+    }
+    if(words.size() >= 2) {
+        p.y = s2f(words[1]);
+    }
+    if(out_z && words.size() >= 3) {
+        *out_z = s2f(words[2]);
+    }
+    return p;
+}
+
+
+/**
+ * @brief Given a list of items, chooses which item comes next
+ * geometrically in the specified direction. Useful for menus with
+ * several buttons the player can select multidirectionally in.
+ * Also, it loops around.
+ *
+ * @param item_coordinates Vector with the center coordinates of all items.
+ * @param selected_item Index of the selected item.
+ * @param direction Angle specifying the direction.
+ * @param loop_region Width and height of the loop region.
+ * @return The next item's index in the list.
+ */
+size_t select_next_item_directionally(
+    const vector<point> &item_coordinates, const size_t selected_item,
+    const float direction, const point &loop_region
+) {
+    const float MIN_BLINDSPOT_ANGLE = TAU * 0.17;
+    const float MAX_BLINDSPOT_ANGLE = TAU * 0.33;
+    
+    float normalized_dir = normalize_angle(direction);
+    const point &sel_coords = item_coordinates[selected_item];
+    float best_score = FLT_MAX;
+    size_t best_item = selected_item;
+    
+    //Check each item that isn't the current one.
+    for(size_t i = 0; i < item_coordinates.size(); ++i) {
+    
+        if(i == selected_item) continue;
+        
+        point i_base_coords = item_coordinates[i];
+        
+        //Get the standard coordinates for this item, and make them relative.
+        point i_coords = i_base_coords;
+        i_coords = i_coords - sel_coords;
+        
+        //Rotate the coordinates such that the specified direction
+        //lands to the right.
+        i_coords = rotate_point(i_coords, -normalized_dir);
+        
+        //Check if it's between the blind spot angles.
+        //We get the same result whether the Y is positive or negative,
+        //so let's simplify things and make it positive.
+        float rel_angle =
+            get_angle(point(i_coords.x, fabs(i_coords.y)));
+        if(
+            rel_angle >= MIN_BLINDSPOT_ANGLE &&
+            rel_angle <= MAX_BLINDSPOT_ANGLE
+        ) {
+            //If so, never let this item be chosen, no matter what. This is
+            //useful to stop a list of items with no vertical variance from
+            //picking another item when the direction is up, for instance.
+            continue;
+        }
+        
+        if(i_coords.x > 0.0f) {
+            //If this item is in front of the selected one,
+            //give it a score like normal.
+            float score = i_coords.x + fabs(i_coords.y);
+            if(score < best_score) {
+                best_score = score;
+                best_item = i;
+            }
+            
+        } else {
+            //If the item is behind, we'll need to loop its coordinates
+            //and score those loop coordinates that land in front.
+            //Unfortunately, there's no way to know how the coordinates
+            //should be looped in order to land in front of the selected
+            //item, so we should just check all loop variations: above, below
+            //to the left, to the right, and combinations.
+            
+            for(char c = -1; c < 2; ++c) {
+                for(char r = -1; r < 2; ++r) {
+                
+                    //If it's the same "screen" as the regular one,
+                    //forget it, since we already checked above.
+                    if(c == 0 && r == 0) {
+                        continue;
+                    }
+                    
+                    //Get the coordinates in this parallel region, and make
+                    //them relative.
+                    i_coords = i_base_coords;
+                    i_coords.x += loop_region.x * c;
+                    i_coords.y += loop_region.y * r;
+                    i_coords = i_coords - sel_coords;
+                    
+                    //Rotate the coordinates such that the specified direction
+                    //lands to the right.
+                    i_coords = rotate_point(i_coords, -normalized_dir);
+                    
+                    //If these coordinates are behind the selected item,
+                    //they cannot be selected.
+                    if(i_coords.x < 0.0f) {
+                        continue;
+                    }
+                    
+                    //Finally, figure out if this is the new best item.
+                    float score = i_coords.x + fabs(i_coords.y);
+                    if(score < best_score) {
+                        best_score = score;
+                        best_item = i;
+                    }
+                }
+            }
+        }
+    }
+    
+    return best_item;
 }

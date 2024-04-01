@@ -15,6 +15,7 @@
 #include "functions.h"
 #include "game.h"
 #include "misc_structs.h"
+#include "utils/allegro_utils.h"
 #include "utils/string_utils.h"
 
 

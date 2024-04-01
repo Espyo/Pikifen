@@ -16,6 +16,7 @@
 #include "../../game.h"
 #include "../../libs/imgui/imgui_impl_allegro5.h"
 #include "../../libs/imgui/imgui_stdlib.h"
+#include "../../utils/allegro_utils.h"
 #include "../../utils/imgui_utils.h"
 #include "../../utils/string_utils.h"
 
@@ -376,7 +377,7 @@ void animation_editor::process_gui_load_dialog() {
                 prompt_file_dialog(
                     last_file_opened,
                     "Please choose an animation data file to load or create.",
-                    "*.txt", 0
+                    "*.txt", 0, game.display
                 );
                 
             if(!f.empty() && !f[0].empty()) {
@@ -1871,7 +1872,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
                 "*.png",
                 ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
                 ALLEGRO_FILECHOOSER_PICTURES,
-                &result
+                &result, game.display
             );
             
         switch(result) {

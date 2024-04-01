@@ -16,6 +16,8 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mob_fsms/pikmin_fsm.h"
+#include "../utils/allegro_utils.h"
+#include "../utils/general_utils.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 #include "mob.h"

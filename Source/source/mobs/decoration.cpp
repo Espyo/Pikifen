@@ -12,6 +12,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../utils/allegro_utils.h"
 
 
 /**

@@ -245,6 +245,23 @@ int s2i(const string &s) {
 
 
 /**
+ * @brief Returns a vector with all items inside a semicolon-separated list.
+ *
+ * @param s The string containing the list.
+ * @param sep Separator to use, in case you need something else.
+ * Default is semicolon.
+ * @return The vector.
+ */
+vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
+    vector<string> parts = split(s, sep);
+    for(size_t p = 0; p < parts.size(); ++p) {
+        parts[p] = trim_spaces(parts[p]);
+    }
+    return parts;
+}
+
+
+/**
  * @brief Splits a string into several substrings, by the specified delimiter.
  *
  * @param text The string to split.
@@ -494,4 +511,61 @@ string trim_spaces(const string &s, const bool left_only) {
     }
     
     return orig;
+}
+
+
+/**
+ * @brief Given a string, representing a long line of text, it automatically
+ * adds line breaks along the text in order to break it up into smaller lines,
+ * such that no line exceeds the number of characters in nr_chars_per_line
+ * (if possible). Lines are only split at space characters.
+ * This is a naive approach, in that it doesn't care about font size.
+ *
+ * @param s Input string.
+ * @param nr_chars_per_line Number of characters that a line cannot exceed,
+ * unless it's impossible to split.
+ * @return The wrapped string.
+ */
+string word_wrap(const string &s, const size_t nr_chars_per_line) {
+    string result;
+    string word_in_queue;
+    size_t cur_line_width = 0;
+    for(size_t c = 0; c < s.size() + 1; ++c) {
+    
+        if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
+            //Keep building the current word.
+            
+            word_in_queue.push_back(s[c]);
+            
+        } else {
+            //Finished the current word.
+            
+            if(word_in_queue.empty()) {
+                continue;
+            }
+            size_t width_after_word = cur_line_width + 1 + word_in_queue.size();
+            bool broke_due_to_length = false;
+            if(width_after_word > nr_chars_per_line && !result.empty()) {
+                //The current word doesn't fit in the current line. Break.
+                result.push_back('\n');
+                cur_line_width = 0;
+                broke_due_to_length = true;
+            }
+            
+            if(cur_line_width > 0) {
+                result.push_back(' ');
+                cur_line_width++;
+            }
+            result += word_in_queue;
+            cur_line_width += word_in_queue.size();
+            word_in_queue.clear();
+            
+            if(s[c] == '\n' && !broke_due_to_length) {
+                //A real line break character. Break.
+                result.push_back('\n');
+                cur_line_width = 0;
+            }
+        }
+    }
+    return result;
 }

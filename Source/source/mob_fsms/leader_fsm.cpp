@@ -19,6 +19,7 @@
 #include "../mobs/drop.h"
 #include "../mobs/leader.h"
 #include "../mobs/track.h"
+#include "../utils/general_utils.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 

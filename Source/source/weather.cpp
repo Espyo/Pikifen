@@ -12,6 +12,7 @@
 
 #include "functions.h"
 #include "game.h"
+#include "utils/allegro_utils.h"
 #include "utils/math_utils.h"
 
 

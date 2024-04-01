@@ -20,6 +20,7 @@
 #include "../mobs/pikmin.h"
 #include "../mobs/ship.h"
 #include "../spray_type.h"
+#include "../utils/general_utils.h"
 
 
 /**

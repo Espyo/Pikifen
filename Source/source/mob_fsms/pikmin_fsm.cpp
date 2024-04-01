@@ -21,6 +21,7 @@
 #include "../mobs/pikmin.h"
 #include "../mobs/tool.h"
 #include "../mobs/track.h"
+#include "../utils/general_utils.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 

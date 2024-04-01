@@ -10,9 +10,9 @@
 
 #include "converter_type.h"
 
-#include "../functions.h"
 #include "../game.h"
 #include "../mob_fsms/converter_fsm.h"
+#include "../utils/string_utils.h"
 
 
 /**

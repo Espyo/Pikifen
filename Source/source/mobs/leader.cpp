@@ -16,6 +16,8 @@
 #include "../drawing.h"
 #include "../functions.h"
 #include "../game.h"
+#include "../utils/allegro_utils.h"
+#include "../utils/general_utils.h"
 
 namespace LEADER {
 

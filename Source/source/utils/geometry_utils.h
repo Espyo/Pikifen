@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 
+using std::string;
 using std::vector;
 
 
@@ -230,6 +231,7 @@ bool points_are_collinear(
 void project_vertexes(
     const vector<point> &v, const point axis, float* min, float* max
 );
+string p2s(const point &p, const float* z = nullptr);
 float rad_to_deg(const float deg);
 bool rectangles_intersect(
     const point &tl1, const point &br1,
@@ -247,3 +249,8 @@ point resize_to_box_keeping_aspect_ratio(
     const point &box_size
 );
 point rotate_point(const point &coords, const float angle);
+point s2p(const string &s, float* out_z = nullptr);
+size_t select_next_item_directionally(
+    const vector<point> &item_coordinates, const size_t selected_item,
+    const float direction, const point &loop_region
+);

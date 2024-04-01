@@ -21,6 +21,7 @@
 #include "../load.h"
 #include "../mob_categories/mob_category.h"
 #include "../mob_types/mob_type.h"
+#include "../utils/allegro_utils.h"
 #include "../utils/imgui_utils.h"
 #include "../utils/string_utils.h"
 

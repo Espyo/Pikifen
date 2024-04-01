@@ -49,6 +49,8 @@
 #include "mob_categories/track_category.h"
 #include "mob_categories/treasure_category.h"
 #include "mob_script.h"
+#include "utils/allegro_utils.h"
+#include "utils/general_utils.h"
 #include "utils/string_utils.h"
 
 

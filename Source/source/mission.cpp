@@ -13,6 +13,7 @@
 #include "functions.h"
 #include "game.h"
 #include "game_states/area_editor/editor.h"
+#include "utils/general_utils.h"
 #include "utils/string_utils.h"
 
 

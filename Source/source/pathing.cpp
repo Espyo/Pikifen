@@ -13,6 +13,7 @@
 #include "functions.h"
 #include "game.h"
 #include "mobs/mob_utils.h"
+#include "utils/general_utils.h"
 
 
 using std::map;

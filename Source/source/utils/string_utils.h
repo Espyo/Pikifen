@@ -56,6 +56,9 @@ string replace_all(
 bool s2b(const string &s);
 double s2f(const string &s);
 int s2i(const string &s);
+vector<string> semicolon_list_to_vector(
+    const string &s, const string &sep = ";"
+);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false
@@ -75,3 +78,4 @@ string time_to_str3(
     const uint8_t flags = 0
 );
 string trim_spaces(const string &s, const bool left_only = false);
+string word_wrap(const string &s, const size_t n_chars_per_line);

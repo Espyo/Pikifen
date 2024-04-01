@@ -19,6 +19,8 @@
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_script_action.h"
 #include "../mobs/bridge.h"
+#include "../utils/allegro_utils.h"
+#include "../utils/general_utils.h"
 #include "../utils/string_utils.h"
 #include "enemy_type.h"
 #include "leader_type.h"

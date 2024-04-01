@@ -8,8 +8,8 @@
  * Struct that holds the game's configuration, and related functions.
  */
 
-#include "functions.h"
 #include "game_config.h"
+#include "utils/string_utils.h"
 
 
 namespace GAME_CONFIG {

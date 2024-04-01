@@ -19,6 +19,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
+#include "utils/allegro_utils.h"
 
 
 /**

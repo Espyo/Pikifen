@@ -21,6 +21,8 @@
 #include "mobs/group_task.h"
 #include "mobs/pile.h"
 #include "mobs/scale.h"
+#include "utils/allegro_utils.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 

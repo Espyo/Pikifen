@@ -19,6 +19,7 @@
 #include "geometry.h"
 
 #include "../functions.h"
+#include "../utils/general_utils.h"
 #include "../utils/geometry_utils.h"
 #include "vertex.h"
 

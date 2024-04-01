@@ -24,6 +24,7 @@
 #include "../../mobs/converter.h"
 #include "../../mobs/pile.h"
 #include "../../mobs/resource.h"
+#include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
 
 

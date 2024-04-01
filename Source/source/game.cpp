@@ -19,6 +19,8 @@
 #include "init.h"
 #include "libs/imgui/imgui_impl_allegro5.h"
 #include "load.h"
+#include "utils/allegro_utils.h"
+#include "utils/general_utils.h"
 
 
 namespace GAME {
