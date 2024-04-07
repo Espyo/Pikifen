@@ -1,8 +1,13 @@
 positions{
-	animation_editor=50.0000 59.0000 60.0000 10.0000
-	area_editor=50.0000 71.0000 60.0000 10.0000
-	gui_editor=50.0000 81.5000 50.0000 7.0000
+	animation_editor=58.0000 59.0000 60.0000 10.0000
+	area_editor=56.0000 71.0000 60.0000 10.0000
+	gui_editor=54.0000 81.5000 60.0000 7.0000
 	back=9.0000 91.0000 14.0000 6.0000
 	more=91.0000 91.0000 14.0000 6.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
+}
+icons_to_the_left{
+	animation_editor=false
+	area_editor=false
+	gui_editor=false
 }

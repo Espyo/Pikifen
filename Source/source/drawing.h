@@ -40,6 +40,52 @@ extern const float NOTIFICATION_PADDING;
 }
 
 
+//Icons for the menu buttons.
+enum MENU_ICON {
+    //Main menu play button.
+    MENU_ICON_PLAY,
+    
+    //Main menu make button.
+    MENU_ICON_MAKE,
+    
+    //Main menu options button.
+    MENU_ICON_OPTIONS,
+    
+    //Main menu statistics button.
+    MENU_ICON_STATISTICS,
+    
+    //Main menu quit button.
+    MENU_ICON_QUIT,
+    
+    //Main menu simple areas button.
+    MENU_ICON_SIMPLE_AREAS,
+    
+    //Main menu missions button.
+    MENU_ICON_MISSIONS,
+    
+    //Main menu animation editor button.
+    MENU_ICON_ANIM_EDITOR,
+    
+    //Main menu area editor button.
+    MENU_ICON_AREA_EDITOR,
+    
+    //Main menu GUI editor button.
+    MENU_ICON_GUI_EDITOR,
+    
+    //Options menu controls button.
+    MENU_ICON_CONTROLS,
+    
+    //Options menu graphics button.
+    MENU_ICON_GRAPHICS,
+    
+    //Options menu audio button.
+    MENU_ICON_AUDIO,
+    
+    //Options menu misc. button.
+    MENU_ICON_OPTIONS_MISC,
+};
+
+
 //Possible shapes for a player input icon.
 enum PLAYER_INPUT_ICON_SHAPE {
 
@@ -51,7 +97,7 @@ enum PLAYER_INPUT_ICON_SHAPE {
     
     //Circle/ellipse shape, representing buttons.
     PLAYER_INPUT_ICON_SHAPE_ROUNDED,
-
+    
 };
 
 
@@ -109,13 +155,13 @@ enum PLAYER_INPUT_ICON_SPRITE {
     
     //Game controller stick right.
     PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
-
+    
 };
 
 
 //Ways to vertically align text when rendering it.
 enum TEXT_VALIGN_MODE {
-    
+
     //Align to the top.
     TEXT_VALIGN_MODE_TOP,
     
@@ -196,6 +242,10 @@ void draw_liquid(
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
+);
+void draw_menu_button_icon(
+    MENU_ICON icon, const point &button_center, const point &button_size,
+    bool left_side
 );
 void draw_mouse_cursor(const ALLEGRO_COLOR &color);
 void draw_player_input_icon(

@@ -1,8 +1,8 @@
 positions{
-	play=50.0000 58.0000 60.0000 12.0000
-	make=50.0000 72.0000 60.0000 12.0000
-	options=31.0000 83.0000 34.0000 6.0000
-	stats=69.0000 83.0000 34.0000 6.0000
+	play=42.0000 58.0000 44.0000 12.0000
+	make=58.0000 72.0000 44.0000 12.0000
+	options=29.0000 83.0000 34.0000 6.0000
+	stats=71.0000 83.0000 34.0000 6.0000
 	exit=91.0000 91.0000 14.0000 6.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
 }
@@ -31,4 +31,11 @@ logo{
 		OO.......OOOOOO..OO...OO...OOOOOO..OO......OOOOOO..OO....OOOO
 		OO.......OOOOOO..OO....OO..OOOOOO..OO......OOOOOO..OO....OOOO
 	}
+}
+icons_to_the_left{
+	play=true
+	make=false
+	options=true
+	statistics=false
+	quit=false
 }

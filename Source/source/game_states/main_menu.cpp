@@ -194,14 +194,27 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void main_menu_state::init_gui_main_page() {
-
     data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
     
+    //Button icon positions.
+    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    
+#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
+                                 get_value_or_default(def))
+    
+    bool play_icon_left = icon_left("play", "true");
+    bool make_icon_left = icon_left("make", "false");
+    bool options_icon_left = icon_left("options", "true");
+    bool stats_icon_left = icon_left("statistics", "false");
+    bool quit_icon_left = icon_left("quit", "false");
+    
+#undef icon_left
+    
     //Menu items.
-    main_gui.register_coords("play",    50, 58, 60, 12);
-    main_gui.register_coords("make",    50, 72, 60, 12);
-    main_gui.register_coords("options", 31, 83, 34,  6);
-    main_gui.register_coords("stats",   69, 83, 34,  6);
+    main_gui.register_coords("play",    42, 58, 44, 12);
+    main_gui.register_coords("make",    58, 72, 44, 12);
+    main_gui.register_coords("options", 29, 83, 34,  6);
+    main_gui.register_coords("stats",   71, 83, 34,  6);
     main_gui.register_coords("exit",    91, 91, 14,  6);
     main_gui.register_coords("tooltip", 50, 96, 96,  4);
     main_gui.read_coords(gui_file.get_child_by_name("positions"));
@@ -209,23 +222,35 @@ void main_menu_state::init_gui_main_page() {
     //Play button.
     button_gui_item* play_button =
         new button_gui_item("Play", game.fonts.area_name);
+    play_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_PLAY, center, size, play_icon_left
+        );
+        draw_button(
+            center, size,
+            play_button->text, play_button->font,
+            play_button->color, play_button->selected,
+            play_button->get_juice_value()
+        );
+    };
     play_button->on_activate =
     [this] (const point &) {
         main_gui.responsive = false;
         main_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             MAIN_MENU::HUD_MOVE_TIME
         );
         if(game.statistics.area_entries == 0) {
             tutorial_gui.responsive = true;
             tutorial_gui.start_animation(
-                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
                 MAIN_MENU::HUD_MOVE_TIME
             );
         } else {
             play_gui.responsive = true;
             play_gui.start_animation(
-                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
                 MAIN_MENU::HUD_MOVE_TIME
             );
         }
@@ -237,6 +262,18 @@ void main_menu_state::init_gui_main_page() {
     //Make button.
     button_gui_item* make_button =
         new button_gui_item("Make", game.fonts.area_name);
+    make_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_MAKE, center, size, make_icon_left
+        );
+        draw_button(
+            center, size,
+            make_button->text, make_button->font,
+            make_button->color, make_button->selected,
+            make_button->get_juice_value()
+        );
+    };
     make_button->on_activate =
     [this] (const point &) {
         main_gui.responsive = false;
@@ -257,6 +294,18 @@ void main_menu_state::init_gui_main_page() {
     //Options button.
     button_gui_item* options_button =
         new button_gui_item("Options", game.fonts.area_name);
+    options_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_OPTIONS, center, size, options_icon_left
+        );
+        draw_button(
+            center, size,
+            options_button->text, options_button->font,
+            options_button->color, options_button->selected,
+            options_button->get_juice_value()
+        );
+    };
     options_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -271,6 +320,18 @@ void main_menu_state::init_gui_main_page() {
     //Statistics button.
     button_gui_item* stats_button =
         new button_gui_item("Statistics", game.fonts.area_name);
+    stats_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_STATISTICS, center, size, stats_icon_left
+        );
+        draw_button(
+            center, size,
+            stats_button->text, stats_button->font,
+            stats_button->color, stats_button->selected,
+            stats_button->get_juice_value()
+        );
+    };
     stats_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -284,6 +345,20 @@ void main_menu_state::init_gui_main_page() {
     //Exit button.
     main_gui.back_item =
         new button_gui_item("Exit", game.fonts.area_name);
+    main_gui.back_item->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_QUIT, center, size, quit_icon_left
+        );
+        draw_button(
+            center, size,
+            ((button_gui_item*) main_gui.back_item)->text,
+            ((button_gui_item*) main_gui.back_item)->font,
+            ((button_gui_item*) main_gui.back_item)->color,
+            main_gui.back_item->selected,
+            main_gui.back_item->get_juice_value()
+        );
+    };
     main_gui.back_item->on_activate =
     [] (const point &) {
         save_statistics();
@@ -316,10 +391,22 @@ void main_menu_state::init_gui_main_page() {
 void main_menu_state::init_gui_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
     
+    //Button icon positions.
+    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    
+#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
+                                 get_value_or_default(def))
+    
+    bool anim_editor_icon_left = icon_left("animation_editor", "false");
+    bool area_editor_icon_left = icon_left("area_editor", "false");
+    bool gui_editor_icon_left = icon_left("gui_editor", "false");
+    
+#undef icon_left
+    
     //Menu items.
-    make_gui.register_coords("animation_editor", 50, 59,   60, 10);
-    make_gui.register_coords("area_editor",      50, 71,   60, 10);
-    make_gui.register_coords("gui_editor",       50, 81.5, 50,  7);
+    make_gui.register_coords("animation_editor", 58, 59,   60, 10);
+    make_gui.register_coords("area_editor",      56, 71,   60, 10);
+    make_gui.register_coords("gui_editor",       54, 81.5, 60,  7);
     make_gui.register_coords("back",              9, 91,   14,  6);
     make_gui.register_coords("more",             91, 91,   14,  6);
     make_gui.register_coords("tooltip",          50, 96,   96,  4);
@@ -328,6 +415,18 @@ void main_menu_state::init_gui_make_page() {
     //Animation editor button.
     button_gui_item* anim_ed_button =
         new button_gui_item("Animation editor", game.fonts.area_name);
+    anim_ed_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_ANIM_EDITOR, center, size, anim_editor_icon_left
+        );
+        draw_button(
+            center, size,
+            anim_ed_button->text, anim_ed_button->font,
+            anim_ed_button->color, anim_ed_button->selected,
+            anim_ed_button->get_juice_value()
+        );
+    };
     anim_ed_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -341,6 +440,18 @@ void main_menu_state::init_gui_make_page() {
     //Area editor button.
     button_gui_item* area_ed_button =
         new button_gui_item("Area editor", game.fonts.area_name);
+    area_ed_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_AREA_EDITOR, center, size, area_editor_icon_left
+        );
+        draw_button(
+            center, size,
+            area_ed_button->text, area_ed_button->font,
+            area_ed_button->color, area_ed_button->selected,
+            area_ed_button->get_juice_value()
+        );
+    };
     area_ed_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -354,6 +465,18 @@ void main_menu_state::init_gui_make_page() {
     //GUI editor button.
     button_gui_item* gui_ed_button =
         new button_gui_item("GUI editor", game.fonts.area_name);
+    gui_ed_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_GUI_EDITOR, center, size, gui_editor_icon_left
+        );
+        draw_button(
+            center, size,
+            gui_ed_button->text, gui_ed_button->font,
+            gui_ed_button->color, gui_ed_button->selected,
+            gui_ed_button->get_juice_value()
+        );
+    };
     gui_ed_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -415,9 +538,20 @@ void main_menu_state::init_gui_make_page() {
 void main_menu_state::init_gui_play_page() {
     data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
     
+    //Button icon positions.
+    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    
+#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
+                                 get_value_or_default(def))
+    
+    bool simple_areas_icon_left = icon_left("simple_areas", "true");
+    bool missions_icon_left = icon_left("missions", "true");
+    
+#undef icon_left
+    
     //Menu items.
-    play_gui.register_coords("simple",  50, 60, 60, 12.5);
-    play_gui.register_coords("mission", 50, 78, 60, 12.5);
+    play_gui.register_coords("simple",  42, 60, 60, 12.5);
+    play_gui.register_coords("mission", 44, 78, 60, 12.5);
     play_gui.register_coords("back",     9, 91, 14,    6);
     play_gui.register_coords("tooltip", 50, 96, 96,    4);
     play_gui.read_coords(gui_file.get_child_by_name("positions"));
@@ -425,6 +559,18 @@ void main_menu_state::init_gui_play_page() {
     //Play a simple area button.
     button_gui_item* simple_button =
         new button_gui_item("Simple areas", game.fonts.area_name);
+    simple_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_SIMPLE_AREAS, center, size, simple_areas_icon_left
+        );
+        draw_button(
+            center, size,
+            simple_button->text, simple_button->font,
+            simple_button->color, simple_button->selected,
+            simple_button->get_juice_value()
+        );
+    };
     simple_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -439,6 +585,18 @@ void main_menu_state::init_gui_play_page() {
     //Play a mission area button.
     button_gui_item* mission_button =
         new button_gui_item("Missions", game.fonts.area_name);
+    mission_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_MISSIONS, center, size, missions_icon_left
+        );
+        draw_button(
+            center, size,
+            mission_button->text, mission_button->font,
+            mission_button->color, mission_button->selected,
+            mission_button->get_juice_value()
+        );
+    };
     mission_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
@@ -461,12 +619,12 @@ void main_menu_state::init_gui_play_page() {
     [this] (const point &) {
         play_gui.responsive = false;
         play_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME
         );
         main_gui.responsive = true;
         main_gui.start_animation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             MAIN_MENU::HUD_MOVE_TIME
         );
     };

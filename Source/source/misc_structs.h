@@ -221,6 +221,9 @@ struct asset_file_names_t {
     //Silver medal.
     string bmp_medal_silver = "Medal_silver.png";
     
+    //Icons for menu buttons.
+    string bmp_menu_icons = "Menu_icons.png";
+    
     //Mission clear stamp.
     string bmp_mission_clear = "Mission_clear.png";
     
@@ -799,6 +802,9 @@ struct system_asset_list {
     
     //Silver mission medal.
     ALLEGRO_BITMAP* bmp_medal_silver = nullptr;
+    
+    //Icons for menu buttons.
+    ALLEGRO_BITMAP* bmp_menu_icons = nullptr;
     
     //Mission clear stamp.
     ALLEGRO_BITMAP* bmp_mission_clear = nullptr;

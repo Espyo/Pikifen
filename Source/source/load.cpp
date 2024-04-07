@@ -1257,6 +1257,8 @@ void load_misc_graphics() {
     al_set_display_icon(game.display, game.sys_assets.bmp_icon);
     
     //Graphics.
+    game.sys_assets.bmp_menu_icons =
+        game.bitmaps.get(game.asset_file_names.bmp_menu_icons);
     game.sys_assets.bmp_bright_circle =
         game.bitmaps.get(game.asset_file_names.bmp_bright_circle);
     game.sys_assets.bmp_bright_ring =
@@ -1293,6 +1295,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bmp_medal_platinum);
     game.sys_assets.bmp_medal_silver =
         game.bitmaps.get(game.asset_file_names.bmp_medal_silver);
+    game.sys_assets.bmp_menu_icons =
+        game.bitmaps.get(game.asset_file_names.bmp_menu_icons);
     game.sys_assets.bmp_mission_clear =
         game.bitmaps.get(game.asset_file_names.bmp_mission_clear);
     game.sys_assets.bmp_mission_fail =
@@ -2111,6 +2115,7 @@ void unload_misc_resources() {
     game.bitmaps.free(game.sys_assets.bmp_medal_none);
     game.bitmaps.free(game.sys_assets.bmp_medal_platinum);
     game.bitmaps.free(game.sys_assets.bmp_medal_silver);
+    game.bitmaps.free(game.sys_assets.bmp_menu_icons);
     game.bitmaps.free(game.sys_assets.bmp_mission_clear);
     game.bitmaps.free(game.sys_assets.bmp_mission_fail);
     game.bitmaps.free(game.sys_assets.bmp_more);

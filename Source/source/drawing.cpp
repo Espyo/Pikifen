@@ -1037,6 +1037,43 @@ void draw_loading_screen(
 
 
 /**
+ * @brief Draws the icon for a menu button.
+ *
+ * @param icon Icon ID.
+ * @param button_center Center coordinates of the button.
+ * @param button_size Dimensions of the button.
+ * @param left_side If true, place the icon to the left side of the button.
+ * If false, place it to the right.
+ */
+void draw_menu_button_icon(
+    MENU_ICON icon, const point &button_center, const point &button_size,
+    bool left_side
+) {
+    //All icons are square, and in a row, so the spritesheet height works.
+    int icon_size =
+        al_get_bitmap_height(game.sys_assets.bmp_menu_icons);
+    ALLEGRO_BITMAP* bmp =
+        al_create_sub_bitmap(
+            game.sys_assets.bmp_menu_icons,
+            (icon_size + 1) * (int) icon, 0,
+            icon_size, icon_size
+        );
+    point icon_center(
+        left_side ?
+        button_center.x - button_size.x * 0.5 + button_size.y * 0.5 :
+        button_center.x + button_size.x * 0.5 - button_size.y * 0.5,
+        button_center.y
+    );
+    draw_bitmap_in_box(
+        bmp, icon_center,
+        point(button_size.y, button_size.y),
+        true
+    );
+    al_destroy_bitmap(bmp);
+}
+
+
+/**
  * @brief Draws a mob's shadow.
  *
  * @param center Center of the mob.

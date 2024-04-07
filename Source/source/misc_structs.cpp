@@ -163,6 +163,7 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("medal_none", bmp_medal_none);
     grs.set("medal_platinum", bmp_medal_platinum);
     grs.set("medal_silver", bmp_medal_silver);
+    grs.set("menu_icons", bmp_menu_icons);
     grs.set("mission_clear", bmp_mission_clear);
     grs.set("mission_fail", bmp_mission_fail);
     grs.set("more", bmp_more);

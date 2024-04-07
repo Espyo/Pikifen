@@ -56,7 +56,7 @@ const string TOP_GUI_FILE_PATH =
  * @brief Constructs a new options menu state object.
  */
 options_menu_state::options_menu_state() {
-    
+
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
@@ -664,6 +664,21 @@ void options_menu_state::init_gui_misc_page() {
  * @brief Initializes the top-level menu GUI.
  */
 void options_menu_state::init_gui_top_page() {
+    data_node gui_file(OPTIONS_MENU::TOP_GUI_FILE_PATH);
+    
+    //Button icon positions.
+    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    
+#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
+                                 get_value_or_default(def))
+    
+    bool controls_icon_left = icon_left("controls", "true");
+    bool graphics_icon_left = icon_left("graphics", "true");
+    bool audio_icon_left = icon_left("audio", "true");
+    bool misc_icon_left = icon_left("misc", "true");
+    
+#undef icon_left
+    
     //Menu items.
     top_gui.register_coords("back",     12,  5,   20,  6);
     top_gui.register_coords("header",   50, 10,   50,  6);
@@ -673,10 +688,7 @@ void options_menu_state::init_gui_top_page() {
     top_gui.register_coords("misc",     50, 72.5, 60, 10);
     top_gui.register_coords("advanced", 87, 86,   22,  8);
     top_gui.register_coords("tooltip",  50, 96,   96,  4);
-    top_gui.read_coords(
-        data_node(OPTIONS_MENU::TOP_GUI_FILE_PATH).
-        get_child_by_name("positions")
-    );
+    top_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Back button.
     top_gui.back_item =
@@ -700,6 +712,18 @@ void options_menu_state::init_gui_top_page() {
     //Controls options button.
     button_gui_item* controls_button =
         new button_gui_item("Controls", game.fonts.standard);
+    controls_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_CONTROLS, center, size, controls_icon_left
+        );
+        draw_button(
+            center, size,
+            controls_button->text, controls_button->font,
+            controls_button->color, controls_button->selected,
+            controls_button->get_juice_value()
+        );
+    };
     controls_button->on_activate =
     [this] (const point &) {
         top_gui.responsive = false;
@@ -720,6 +744,18 @@ void options_menu_state::init_gui_top_page() {
     //Graphics options button.
     button_gui_item* graphics_button =
         new button_gui_item("Graphics", game.fonts.standard);
+    graphics_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_GRAPHICS, center, size, graphics_icon_left
+        );
+        draw_button(
+            center, size,
+            graphics_button->text, graphics_button->font,
+            graphics_button->color, graphics_button->selected,
+            graphics_button->get_juice_value()
+        );
+    };
     graphics_button->on_activate =
     [this] (const point &) {
         top_gui.responsive = false;
@@ -740,6 +776,18 @@ void options_menu_state::init_gui_top_page() {
     //Audio options button.
     button_gui_item* audio_button =
         new button_gui_item("Audio", game.fonts.standard);
+    audio_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_AUDIO, center, size, audio_icon_left
+        );
+        draw_button(
+            center, size,
+            audio_button->text, audio_button->font,
+            audio_button->color, audio_button->selected,
+            audio_button->get_juice_value()
+        );
+    };
     audio_button->on_activate =
     [this] (const point &) {
         top_gui.responsive = false;
@@ -760,6 +808,18 @@ void options_menu_state::init_gui_top_page() {
     //Misc. options button.
     button_gui_item* misc_button =
         new button_gui_item("Misc.", game.fonts.standard);
+    misc_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_OPTIONS_MISC, center, size, misc_icon_left
+        );
+        draw_button(
+            center, size,
+            misc_button->text, misc_button->font,
+            misc_button->color, misc_button->selected,
+            misc_button->get_juice_value()
+        );
+    };
     misc_button->on_activate =
     [this] (const point &) {
         top_gui.responsive = false;
