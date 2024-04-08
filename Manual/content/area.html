@@ -22,10 +22,10 @@
 
     <h3 id="concepts">Key concepts</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/polygon_overlap.png" alt="A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).">
-      <p>A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).</p>
-    </div>
+      <figcaption>A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).</figcaption>
+    </figure>
     
     <p>Before you go on, you should know the following concepts:</p>
 
@@ -98,10 +98,10 @@
 
     <h3 id="moving-vertexes">Moving vertexes</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/moving_vertexes.png" alt="Moving the last edge to stretch out the sector.">
-      <p>Moving the last edge to stretch out the sector.</p>
-    </div>
+      <figcaption>Moving the last edge to stretch out the sector.</figcaption>
+    </figure>
     
     <p>The default sector works for a grassy plain, but is a bit small for our forest, so let's make it larger by dragging the vertexes outward. Vertexes are represented by blue dots. You can only edit the geometry in the "Layout" mode, so from the main menu panel, click the layout mode's button.</p>
 
@@ -118,10 +118,10 @@
 
     <h3 id="new-sector">Creating a new sector</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/new_sector.png" alt="Creating a new sector, one click away from finishing.">
-      <p>Creating a new sector, one click away from finishing.</p>
-    </div>
+      <figcaption>Creating a new sector, one click away from finishing.</figcaption>
+    </figure>
     
     <p>Let's create a rock in the middle of the area. This will be represented by a new sector.</p>
     
@@ -143,10 +143,10 @@
 
     <h3 id="adding-vertexes">Adding and removing vertexes</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/adding_vertexes.png" alt="The rock, after adding some vertexes.">
-      <p>The rock, after adding some vertexes.</p>
-    </div>
+      <figcaption>The rock, after adding some vertexes.</figcaption>
+    </figure>
     
     <p>Our rock doesn't look very natural, so let's fix that by making it smoother. For that, we'll need new vertexes.</p>
     
@@ -159,10 +159,10 @@
 
     <h3 id="sector-texture">Sector texture</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/sector_texture.png" alt="Changing the rock sector's texture to a stone pattern.">
-      <p>Changing the rock sector's texture to a stone pattern.</p>
-    </div>
+      <figcaption>Changing the rock sector's texture to a stone pattern.</figcaption>
+    </figure>
     
     <p>Because you've created the rock sector inside the grassy plain sector, it will have the same grassy texture. Let's change that.</p>
     
@@ -188,10 +188,10 @@
 
     <h3 id="stitching">Stitching sectors</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/smaller_rock.png" alt="The smaller rock connected to the main one.">
-      <p>The smaller rock connected to the main one.</p>
-    </div>
+      <figcaption>The smaller rock connected to the main one.</figcaption>
+    </figure>
     
     <p>Let's create a smaller rock that's connected to the existing rock. Create a new sector, isolated, to the north of the central sector. Set its texture, and set its height to 100, so the new rock is also shorter than the big rock. To close off the gap between the two rocks, you'll want to stitch the sectors together.</p>
     
@@ -206,10 +206,10 @@
 
     <h3 id="blending-textures">Blending ground textures</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/texture_blend.png" alt="Blending the two ground textures.">
-      <p>Blending the two ground textures.</p>
-    </div>
+      <figcaption>Blending the two ground textures.</figcaption>
+    </figure>
     
     <p>The ground looks a bit bland. Let's add a patch of dirt in the corner. Draw a triangular sector hugging the southwest corner of the area by spitting the ground sector using one line, from its western edge to its southern edge. Set the triangle's texture to dirt (e.g. <code>Dirt.jpg</code>). But because the dirt and grass textures are so different, you'll see a clear split where one texture starts and the other begins. Let's smoothen this out.</p>
     
@@ -226,10 +226,10 @@
 
     <h3 id="out-of-bounds">Out of bounds</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/outer_sector.png" alt="The outer sector, as well as a fading sector to fade into the void.">
-      <p>The outer sector, as well as a fading sector to fade into the void.</p>
-    </div>
+      <figcaption>The outer sector, as well as a fading sector to fade into the void.</figcaption>
+    </figure>
     
     <p>In the <i>Pikmin</i> games, there is the area you play in, and some geometry outside that is too high to reach. If you don't include this outer section, your area will just be connected to the void, which looks bad. After you create this "out of bounds" sector, you can also add a blending sector between it and the void proper so its texture fades out into the void.</p>
     
@@ -244,10 +244,10 @@
 
     <h3 id="ramps">Ramps</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/ramp.png" alt="The ramp leading up to the big rock.">
-      <p>The ramp leading up to the big rock.</p>
-    </div>
+      <figcaption>The ramp leading up to the big rock.</figcaption>
+    </figure>
     
     <p>Let's create a ramp to reach the top of our big rock.</p>
     
@@ -260,10 +260,10 @@
 
     <h3 id="mobs">Objects</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/objects.png" alt="The Onion and 10 Red Pikmin, near Olimar.">
-      <p>The Onion and 10 Red Pikmin, near Olimar.</p>
-    </div>
+      <figcaption>The Onion and 10 Red Pikmin, near Olimar.</figcaption>
+    </figure>
     
     <p>From the main menu panel, you can enter the "Objects" mode to place objects and edit their properties. The area we created already comes with a leader, but let's add an Onion and few Pikmin.</p>
     
@@ -289,10 +289,10 @@
 
     <h3 id="linked-mobs">Linked objects</h3>
 
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/object_links.png" alt="The bridge object linking to the dummy object.">
-      <p>The bridge object linking to the dummy object.</p>
-    </div>
+      <figcaption>The bridge object linking to the dummy object.</figcaption>
+    </figure>
 
     <p>Let's add a bridge to get on top of the rock. Simply place a wooden bridge object on the floor to the rock's west.</p>
 
@@ -311,10 +311,10 @@
 
     <h3 id="water">Adding water</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/water.png" alt="The pond of water, with a texture fader around it.">
-      <p>The pond of water, with a texture fader around it.</p>
-    </div>
+      <figcaption>The pond of water, with a texture fader around it.</figcaption>
+    </figure>
     
     <p>Let's place a small pond at the northwest corner.</p>
 
@@ -327,10 +327,10 @@
 
     <h3 id="paths">Carrying paths</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/carrying_paths.png" alt="Some carrying paths all laid out.">
-      <p>Some carrying paths all laid out.</p>
-    </div>
+      <figcaption>Some carrying paths all laid out.</figcaption>
+    </figure>
     
     <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid walls. First of all, from the main menu panel, enter the "Paths" mode.</p>
     
@@ -357,10 +357,10 @@
 
     <h3 id="tree-shadows">Tree shadows</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <img src="../images/tree_shadow.png" alt="The standard tree shadow on top of the area.">
-      <p>The standard tree shadow on top of the area.</p>
-    </div>
+      <figcaption>The standard tree shadow on top of the area.</figcaption>
+    </figure>
     
     <p>One important detail to add to most outdoor areas is the shadows the trees and leaves cast onto the floor. Because they sway left and right, and also change opacity in real-time, they cannot be baked into the textures of the area, and instead need to be their own thing. You can only edit tree shadows in the "Details" mode, accessible from the main menu panel.</p>
 
@@ -409,18 +409,18 @@
       <li><b>Making a circular sector</b>: You can't draw actual circles, since those don't have lines, but you can get close by drawing a polygon with a lot of same-length lines. Instead of painstakingly drawing out the lines, you can click the button next to the new sector creation button to start the process of drawing a circular sector. Start by specifying the center of the circle, then its radius, and finally, how smooth it is.</li>
     </ul>
 
-    <div class="box">
+    <figure>
       <img src="../images/delete_sector.png" alt="How to delete a sector by crushing it.">
-      <p>How to delete a sector by crushing it.</p>
-    </div>
-    <div class="box">
+      <figcaption>How to delete a sector by crushing it.</figcaption>
+    </figure>
+    <figure>
       <img src="../images/unstitch_pull.png" alt="How to unstitch a sector by pulling the vertexes apart.">
-      <p>How to unstitch a sector by pulling the vertexes apart.</p>
-    </div>
-    <div class="box">
+      <figcaption>How to unstitch a sector by pulling the vertexes apart.</figcaption>
+    </figure>
+    <figure>
       <img src="../images/unstitch_aux.png" alt="How to unstitch a sector with an auxiliary sector.">
-      <p>How to unstitch a sector with an auxiliary sector.</p>
-    </div>
+      <figcaption>How to unstitch a sector with an auxiliary sector.</figcaption>
+    </figure>
 
     <h2 id="advanced">Advanced</h2>
     
@@ -488,10 +488,10 @@
 
     <p>The "Find errors" feature might detect some of the more common problems you may get yourself into, but don't rely on it for everything.</p>
     
-    <div class="box">
+    <figure>
       <img src="../images/inside_out_sector.png" alt="Don't turn a sector inside-out like this.">
-      <p>Don't turn a sector inside-out like this.</p>
-    </div>
+      <figcaption>Don't turn a sector inside-out like this.</figcaption>
+    </figure>
     
     <h2 id="troubleshooting">Troubleshooting</h2>
     
@@ -502,10 +502,10 @@
       <li>If when you select one sector you realize two sectors get selected, that might be because it's still just the one sector, but you ended up dividing its geometry into two separate polygons, or "sub-sectors". Nothing is wrong with this per se, but you might be better off creating a new sector inside one of the sub-sectors, or just splitting one of the sub-sectors, and try to fill it out entirely using your new sector. That way both polygons will have one clearly defined sector each.</li>
     </ul>
 
-    <div class="box">
+    <figure>
       <img src="../images/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
-      <p>Splitting a sector like this can cause it two divide into two sub-sectors.</p>
-    </div>
+      <figcaption>Splitting a sector like this can cause it two divide into two sub-sectors.</figcaption>
+    </figure>
 
     <h2 id="controls">Controls</h2>
 

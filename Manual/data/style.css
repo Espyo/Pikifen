@@ -33,6 +33,7 @@ h4 {
 code, pre {
   background-color: #d0d0d0;
   font-family: monospace;
+  overflow-x: scroll;
   padding-left: 2px;
   padding-right: 2px;
 }
@@ -54,6 +55,21 @@ td, th {
 
 th {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+figure {
+  border: 1px solid black;
+  display: inline-block;
+  font-size: 70%;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 12px;
+  padding: 5px;
+  width: 300px;
+}
+
+figure img {
+  width: 300px;
 }
 
 #header {
@@ -86,28 +102,9 @@ th {
   margin: 0px;
 }
 
-.box {
-  border: 1px solid black;
-  display: inline-block;
-  font-size: 70%;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 12px;
-  padding: 5px;
-  width: 300px;
-}
-
-.box-right {
+.fig-right {
   clear: right;
   float: right;
-}
-
-.box img {
-  width: 290px;
-}
-
-.box p {
-  margin: 0px;
 }
 
 .code-faded {

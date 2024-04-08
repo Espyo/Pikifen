@@ -50,7 +50,7 @@
 
     <h3 id="state">Making a state</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -59,7 +59,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
     
     <p>We'll need to start the script with a state. Let's think of the most "normal" state for a Bulborb, to serve as a starting point. That would probably be the sleeping state, right? Most Bulborbs we see in the games are asleep when first met, so it makes sense to start here.</p>
     
@@ -74,7 +74,7 @@ script {
 
     <h3 id="event">Looking out for an event</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -85,7 +85,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>Now let's see, in this state, there's not much the Bulborb can do except wake up. Let's make it so that it wakes up when a Pikmin or leader touches it.</p>
     
@@ -100,7 +100,7 @@ script {
 
     <h3 id="action">Performing an action</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -116,7 +116,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>Let's assume that you already have animations for the Bulborb &ndash; these include waking up, walking, biting, going back to sleep, etc. What we want now is for the Bulborb to wake up. Visually, we want its animation to change from the one where it is sleeping to the one where it wakes up and gets on its feet.</p>
     
@@ -133,7 +133,7 @@ script {
     
     <h3 id="on-enter">On enter</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -153,7 +153,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <dl>
       <dt><b>If you're running actions before changing a state, consider running those actions inside the state's <code>on_enter</code> event.</b></dt>
@@ -164,7 +164,7 @@ script {
     
     <h3 id="on-anim-end">On animation end</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -179,7 +179,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>Ok, now that the Red Bulborb can enter the "waking up" animation, what should it do while in it? Well, it shouldn't really be willing to fight, should it? It <i>is</i> still getting up, so it's not ready for that. In fact, it should do anything while in this state except finish getting up. As soon as it finishes though, it should probably look around for whatever woke it up.</p>
     
@@ -194,7 +194,7 @@ script {
 
     <h3 id="moving">Moving</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -218,7 +218,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>In the "examining" state, we can set its animation to make it look around left and right in search of what prey to catch. Later on, we'll make it detect Pikmin nearby, but for now, if nothing catches its interest by the time it finishes its animation, it should head back home (the spawn point) and fall asleep. You might find it weird why the Bulborb would try to go home right after waking up, but remember that we can use the "examining" state elsewhere too, like after it finished eating all Pikmin, or has wandered too far.</p>
     
@@ -233,7 +233,7 @@ script {
 
     <h3 id="reach">Reach and chasing</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -263,7 +263,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>What about moving towards a Pikmin? In the examining state, in the event that it spots a Pikmin, it should move towards it to try to eat it, right? But let's think about what it means to "spot a Pikmin".</p>
     
@@ -284,7 +284,7 @@ script {
 
     <h3 id="attacking">Attacking</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 script {
@@ -323,7 +323,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <p>In the "chasing" state, our Bulborb is in pursuit. It's got its sights locked on to the Pikmin, and is always moving in its direction. On the event that it gets near (remember to update the "reach"!), it should go for a bite.</p>
     
@@ -342,7 +342,7 @@ script {
 
     <h3 id="vars">Variables</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 init {
@@ -364,7 +364,7 @@ script {
     <span class="code-faded">(...)</span>
 }
 </pre>
-    </div>
+    </figure>
 
     <p>The Red Bulborb lunges. But did it capture any Pikmin? We actually need to know this in order to decide if the creature should start chomping, or if it should flop to the ground.</p>
     
@@ -387,7 +387,7 @@ script {
 
     <h3 id="conditions">Conditions</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 <span class="code-faded">(...)</span>
@@ -411,7 +411,7 @@ script {
     <span class="code-faded">(...)</span>
 }
 </pre>
-    </div>
+    </figure>
 
     <p>Now to actually decide what to do after the lunge. The creature's behavior splits into two here: <i>if</i> it caught something, it should change to a chomping state, <i>else</i>, it should flop to the ground. This conditional logic can be written in the script.</p>
     
@@ -431,7 +431,7 @@ script {
 
     <h3 id="death">Death</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 death_state = dying
@@ -449,7 +449,7 @@ script {
     }
 }
 </pre>
-    </div>
+    </figure>
 
     <dl>
       <dt><b>When an object reaches 0 health, the script automatically jumps to a death state.</b></dt>
@@ -462,7 +462,7 @@ script {
 
     <h3 id="timers">Timers</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 <span class="code-faded">(...)</span>
@@ -489,7 +489,7 @@ script {
     <span class="code-faded">(...)</span>
 }
 </pre>
-    </div>
+    </figure>
 
     <p>Remember earlier when the idea of having the Bulborb wake up due to a biological timer came up? Let's implement that. Let's say that every time the Bulborb falls asleep, its biological clock sets an alarm for 20 seconds, at which point, it will wake up on its own, look around, and if there's nothing going on, fall asleep again.</p>
     
@@ -509,7 +509,7 @@ script {
     
     <h3 id="script-props">Script-related properties</h3>
     
-    <div class="box box-right">
+    <figure class="fig-right">
       <p>After this section, your script should look like:</p>
 <pre>
 first_state = sleeping
@@ -547,7 +547,7 @@ reaches {
     chase = 250 360
 }
 </pre>
-    </div>
+    </figure>
 
     <p>In order for the engine to get a grip on this script, we'll need to specify a few more things. After this section, it's all up to you to finish the Red Bulborb however you like!</p>
     
