@@ -115,7 +115,6 @@ Next tasks (roughly sorted most important first)
             Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
             Add a reference Olimar image in all of them
             I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
-                Check if premultiplied alpha fixes this problem
             Search for "data:image/" for leftover image files in the SVG files
             Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
@@ -124,12 +123,7 @@ Next tasks (roughly sorted most important first)
         Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
         Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
-        Throwing animation needs to be reworked
-            Pikmin hands are below the head in the pose where the butt is facing the camera
-            It's nearly impossible to tell what body part is in what angle, in a given sprite
         Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
-        Stems should be visible, at least the starting part
-        Feet are sometimes little nubs, sometimes spiky
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
             If necessary, seeds should have their own animation
         The "grabbing_near" sprite is unused for all bar Bulbmin

@@ -167,8 +167,8 @@ animations{
 sprites{
 	attacking{
 		file=Purple_Pikmin.png
-		file_pos=210.0000 35.0000
-		file_size=28.0000 34.0000
+		file_pos=210.0000 37.0000
+		file_size=28.0000 36.0000
 		offset=3.5000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -194,7 +194,7 @@ sprites{
 	}
 	grabbing{
 		file=Purple_Pikmin.png
-		file_pos=136.0000 35.0000
+		file_pos=136.0000 37.0000
 		file_size=30.0000 36.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -220,8 +220,8 @@ sprites{
 	}
 	grabbing_far{
 		file=Purple_Pikmin.png
-		file_pos=167.0000 35.0000
-		file_size=42.0000 34.0000
+		file_pos=167.0000 37.0000
+		file_size=42.0000 36.0000
 		offset=-3.0000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -247,8 +247,8 @@ sprites{
 	}
 	grabbing_near{
 		file=Purple_Pikmin.png
-		file_pos=210.0000 35.0000
-		file_size=28.0000 34.0000
+		file_pos=210.0000 37.0000
+		file_size=28.0000 36.0000
 		offset=3.5000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -355,8 +355,8 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=24.0000 36.0000
 		scale=0.8000 0.8000
-		top_visible=false
-		top_pos=-8.4500 0.0000
+		top_visible=true
+		top_pos=-4.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
@@ -535,7 +535,7 @@ sprites{
 	}
 	thrown_03{
 		file=Purple_Pikmin.png
-		file_pos=66.0000 35.0000
+		file_pos=66.0000 37.0000
 		file_size=32.0000 36.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -561,7 +561,7 @@ sprites{
 	}
 	thrown_04{
 		file=Purple_Pikmin.png
-		file_pos=99.0000 35.0000
+		file_pos=99.0000 37.0000
 		file_size=36.0000 36.0000
 		scale=0.5000 0.5000
 		top_visible=true

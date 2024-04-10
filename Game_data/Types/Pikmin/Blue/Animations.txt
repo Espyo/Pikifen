@@ -167,7 +167,7 @@ animations{
 sprites{
 	attacking{
 		file=Blue_Pikmin.png
-		file_pos=206.0000 29.0000
+		file_pos=206.0000 31.0000
 		file_size=26.0000 22.0000
 		offset=3.5000 0.0000
 		scale=0.5000 0.5000
@@ -247,7 +247,7 @@ sprites{
 	}
 	grabbing_near{
 		file=Blue_Pikmin.png
-		file_pos=206.0000 29.0000
+		file_pos=206.0000 31.0000
 		file_size=26.0000 22.0000
 		offset=3.5000 0.0000
 		scale=0.5000 0.5000
@@ -484,8 +484,8 @@ sprites{
 	}
 	thrown_01{
 		file=Blue_Pikmin.png
-		file_pos=0.0000 21.0000
-		file_size=28.0000 22.0000
+		file_pos=0.0000 31.0000
+		file_size=28.0000 20.0000
 		scale=0.5000 0.5000
 		top_visible=false
 		top_pos=0.0000 0.0000
@@ -510,7 +510,7 @@ sprites{
 	}
 	thrown_02{
 		file=Blue_Pikmin.png
-		file_pos=29.0000 29.0000
+		file_pos=29.0000 31.0000
 		file_size=34.0000 20.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -536,7 +536,7 @@ sprites{
 	}
 	thrown_03{
 		file=Blue_Pikmin.png
-		file_pos=64.0000 29.0000
+		file_pos=64.0000 31.0000
 		file_size=32.0000 20.0000
 		scale=0.5000 0.5000
 		top_visible=true

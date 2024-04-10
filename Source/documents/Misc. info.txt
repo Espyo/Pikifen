@@ -410,6 +410,8 @@ Bag of notes (useful stuff)
             ...
         Why not use gcc -fanalyzer?
             Currently it doesn't work properly for C++. The idea is to have it working by GCC 14
+        Why not use premultiplied alpha?
+            The difference is very tiny, and it would complicate the codebase
     Possible optimizations
         Create a Resource class, and make Texture and Sound inherit from it?
             Here's an idea to save on loading times and resource usage: when an area is unloaded, its resources stay in memory, even if they are all marked as having 0 uses. Then, when loading a new area, for resources that are already loaded, simply point to them. This saves on loading times. Then, save a list of new requested resources. Unload all of the unused resources, to save on memory, and then load the new ones.
