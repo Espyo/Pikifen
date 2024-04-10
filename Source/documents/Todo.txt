@@ -144,9 +144,6 @@ Next tasks (roughly sorted most important first)
         Arms outstretched (add the group task logic too)
     Leader animation improvements
         More frames, for more fluidity
-        Helmet shine (thanks wandering_s_)
-        Eyes shouldn't be bland vertical lines (thanks wandering_s_)
-        More oval-shaped helmets (thanks wandering_s_)
     Leader missing animations
         Idling (bobbing a bit so they aren't static)
         Bored

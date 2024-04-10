@@ -235,7 +235,7 @@ sprites{
 	}
 	half_lying{
 		file=Olimar.png
-		file_pos=130.0000 0.0000
+		file_pos=195.0000 0.0000
 		file_size=82.0000 64.0000
 		offset=-5.0000 0.0000
 		scale=0.5000 0.5000
@@ -303,7 +303,7 @@ sprites{
 	}
 	lying{
 		file=Olimar.png
-		file_pos=213.0000 0.0000
+		file_pos=278.0000 0.0000
 		file_size=100.0000 64.0000
 		offset=-12.0000 0.0000
 		scale=0.5000 0.5000
@@ -371,9 +371,9 @@ sprites{
 	}
 	walking_02{
 		file=Olimar.png
-		file_pos=65.0000 0.0000
+		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
-		scale=0.5000 -0.5000
+		scale=0.5000 0.5000
 		hitboxes{
 			fist{
 				coords=10.0000 10.0000 0.0000
