@@ -854,6 +854,17 @@ void animation_editor::process_gui_panel_animation() {
                 "", WIDGET_EXPLANATION_SLIDER
             );
             
+            //Animation information text.
+            ImGui::TextDisabled("(Animation info)");
+            string anim_info_str =
+                "Total duration: " + f2s(cur_anim_i.cur_anim->get_duration()) + "s";
+            if(cur_anim_i.cur_anim->loop_frame != 0) {
+                anim_info_str +=
+                    "\nLoop segment duration: " +
+                    f2s(cur_anim_i.cur_anim->get_loop_duration()) + "s";
+            }
+            set_tooltip(anim_info_str);
+            
             ImGui::TreePop();
         }
         

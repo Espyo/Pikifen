@@ -222,6 +222,7 @@ public:
     animation(const animation &a2);
     animation &operator=(const animation &a2);
     float get_duration();
+    float get_loop_duration();
     void get_frame_and_time(
         const float t, size_t* frame_idx, float* frame_time
     );

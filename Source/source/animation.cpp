@@ -128,6 +128,20 @@ void animation::get_frame_and_time(
 
 
 /**
+ * @brief Returns the total duration of the loop segment of the animation.
+ *
+ * @return The duration.
+ */
+float animation::get_loop_duration() {
+    float duration = 0.0f;
+    for(size_t f = loop_frame; f < frames.size(); ++f) {
+        duration += frames[f].duration;
+    }
+    return duration;
+}
+
+
+/**
  * @brief Returns the total time since the animation start, when given a frame
  * and the current time in the current frame.
  *
