@@ -16,7 +16,36 @@ animations{
 	drinking{
 		frames{
 			crouching{
-				duration=1.0000
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_01{
+				duration=0.1250
+				interpolate=true
+			}
+			crouching{
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_02{
+				duration=0.1250
+				interpolate=true
+			}
+			crouching{
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_01{
+				duration=0.1250
+				interpolate=true
+			}
+			crouching{
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_02{
+				duration=0.1250
+				interpolate=true
 			}
 		}
 	}
@@ -36,8 +65,21 @@ animations{
 	}
 	idling{
 		frames{
-			idling{
-				duration=0.0000
+			idling_01{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_03{
+				duration=0.1700
+				interpolate=true
 			}
 		}
 	}
@@ -50,8 +92,13 @@ animations{
 	}
 	lying{
 		frames{
-			lying{
-				duration=0.0000
+			lying_01{
+				duration=0.5000
+				interpolate=true
+			}
+			lying_02{
+				duration=0.5000
+				interpolate=true
 			}
 		}
 	}
@@ -66,9 +113,17 @@ animations{
 	picking_up{
 		frames{
 			crouching{
-				duration=0.1000
+				duration=0.2000
+				interpolate=true
 			}
-			idling{
+			picking_up{
+				duration=0.2000
+				interpolate=true
+			}
+			crouching{
+				duration=0.0100
+			}
+			idling_01{
 				duration=0.1000
 			}
 		}
@@ -78,7 +133,7 @@ animations{
 			sprout_01{
 				duration=0.2000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 		}
@@ -95,15 +150,20 @@ animations{
 			crouching{
 				duration=1.5000
 			}
-			idling{
+			idling_01{
 				duration=1.0000
 			}
 		}
 	}
 	sliding{
 		frames{
-			sliding{
-				duration=1.0000
+			sliding_01{
+				duration=0.1000
+				interpolate=true
+			}
+			sliding_02{
+				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -111,15 +171,19 @@ animations{
 		frames{
 			sprout_01{
 				duration=0.2000
+				interpolate=true
 			}
 			sprout_02{
 				duration=0.2000
+				interpolate=true
 			}
 			sprout_01{
 				duration=0.2000
+				interpolate=true
 			}
 			sprout_03{
 				duration=0.2000
+				interpolate=true
 			}
 		}
 	}
@@ -141,13 +205,13 @@ animations{
 	}
 	walking{
 		frames{
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 			walking_02{
 				duration=0.1000
 			}
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 			walking_01{
@@ -165,6 +229,60 @@ sprites{
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=12.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	drinking_01{
+		file=Rock_Pikmin.png
+		file_pos=13.0000 60.0000
+		file_size=35.0000 26.0000
+		offset=4.5000 0.0000
+		scale=0.5500 0.4500
+		top_visible=true
+		top_pos=12.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	drinking_02{
+		file=Rock_Pikmin.png
+		file_pos=13.0000 60.0000
+		file_size=35.0000 26.0000
+		offset=3.5000 0.0000
+		scale=0.4500 0.5500
+		top_visible=true
+		top_pos=11.5000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=3.1416
 		hitboxes{
@@ -237,13 +355,67 @@ sprites{
 			}
 		}
 	}
-	idling{
+	idling_01{
 		file=Rock_Pikmin.png
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_02{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		offset=0.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_03{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		offset=-0.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-3.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
@@ -320,7 +492,7 @@ sprites{
 			}
 		}
 	}
-	lying{
+	lying_01{
 		file=Rock_Pikmin.png
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
@@ -342,6 +514,60 @@ sprites{
 				coords=3.5000 0.0000 0.0000
 				height=24.0000
 				radius=10.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lying_02{
+		file=Rock_Pikmin.png
+		file_pos=154.0000 0.0000
+		file_size=82.0000 52.0000
+		offset=-3.0000 0.0000
+		scale=0.5500 0.5500
+		top_visible=true
+		top_pos=-23.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-23.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=3.5000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	picking_up{
+		file=Rock_Pikmin.png
+		file_pos=13.0000 60.0000
+		file_size=35.0000 26.0000
+		offset=5.5000 0.0000
+		scale=0.6000 0.5000
+		top_visible=true
+		top_pos=15.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=0
 				value=1.0000
 			}
@@ -373,7 +599,7 @@ sprites{
 			}
 		}
 	}
-	sliding{
+	sliding_01{
 		file=Rock_Pikmin.png
 		file_pos=103.0000 0.0000
 		file_size=50.0000 52.0000
@@ -381,6 +607,33 @@ sprites{
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=-19.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-19.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sliding_02{
+		file=Rock_Pikmin.png
+		file_pos=103.0000 0.0000
+		file_size=50.0000 52.0000
+		offset=-7.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-20.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
@@ -432,7 +685,7 @@ sprites{
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.5000 0.0000
+		top_pos=-5.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
@@ -458,7 +711,7 @@ sprites{
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-3.5000 0.0000
+		top_pos=-3.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
