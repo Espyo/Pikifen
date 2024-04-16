@@ -353,3 +353,8 @@ void get_sprite_basic_effects(
     point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
 animation_database load_animation_database_from_file(data_node* frames_node);
+void get_sprite_basic_top_effects(
+    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
+    point* out_eff_trans, float* out_eff_angle,
+    point* out_eff_size
+);

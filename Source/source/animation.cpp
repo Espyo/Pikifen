@@ -1127,3 +1127,64 @@ animation_database load_animation_database_from_file(data_node* file_node) {
     adb.calculate_max_span();
     return adb;
 }
+
+
+/**
+ * @brief Returns the final transformation data for a Pikmin top's "basic"
+ * sprite effect. i.e. the translation, angle, scale, and tint.
+ * This makes use of interpolation between two frames if applicable.
+ *
+ * @param cur_s_ptr The current sprite.
+ * @param next_s_ptr The next sprite, if any.
+ * @param interpolation_factor Amount to interpolate the two sprites by, if any.
+ * Ranges from 0 to 1.
+ * @param out_eff_trans If not nullptr, the top's final translation is
+ * returned here.
+ * @param out_eff_angle If not nullptr, the top's final rotation angle is
+ * returned here.
+ * @param out_eff_size If not nullptr, the top's final size is
+ * returned here.
+ */
+void get_sprite_basic_top_effects(
+    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
+    point* out_eff_trans, float* out_eff_angle,
+    point* out_eff_size
+) {
+    if(out_eff_trans) {
+        *out_eff_trans = cur_s_ptr->top_pos;
+    }
+    if(out_eff_angle) {
+        *out_eff_angle = cur_s_ptr->top_angle;
+    }
+    if(out_eff_size) {
+        *out_eff_size = cur_s_ptr->top_size;
+    }
+    
+    if(next_s_ptr && interpolation_factor > 0.0f) {
+        point next_trans = next_s_ptr->top_pos;
+        float next_angle = next_s_ptr->top_angle;
+        point next_size = next_s_ptr->top_size;
+        
+        if(out_eff_trans) {
+            *out_eff_trans =
+                interpolate_point(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *out_eff_trans, next_trans
+                );
+        }
+        if(out_eff_angle) {
+            *out_eff_angle =
+                interpolate_angle(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *out_eff_angle, next_angle
+                );
+        }
+        if(out_eff_size) {
+            *out_eff_size =
+                interpolate_point(
+                    interpolation_factor, 0.0f, 1.0f,
+                    *out_eff_size, next_size
+                );
+        }
+    }
+}

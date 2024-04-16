@@ -681,20 +681,19 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
         draw_comparison();
     }
     
+    sprite* next_s = nullptr;
+    float interpolation_factor = 0.0f;
+    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
+        cur_anim_i.get_sprite_data(
+            nullptr, &next_s, &interpolation_factor
+        );
+    }
+    
     if(s->bitmap) {
         point coords;
         float angle;
         point scale;
         ALLEGRO_COLOR tint;
-        
-        sprite* next_s = nullptr;
-        float interpolation_factor = 0.0f;
-        
-        if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
-            cur_anim_i.get_sprite_data(
-                nullptr, &next_s, &interpolation_factor
-            );
-        }
         
         get_sprite_basic_effects(
             point(), 0, LARGE_FLOAT, LARGE_FLOAT,
@@ -723,11 +722,14 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
         s->top_visible && loaded_mob_type
         && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     ) {
-        draw_bitmap(
-            top_bmp[cur_maturity],
-            s->top_pos, s->top_size,
-            s->top_angle
+        point coords;
+        float angle;
+        point size;
+        get_sprite_basic_top_effects(
+            s, next_s, interpolation_factor,
+            &coords, &angle, &size
         );
+        draw_bitmap(top_bmp[cur_maturity], coords, size, angle);
     }
     
     if(comparison_above) {

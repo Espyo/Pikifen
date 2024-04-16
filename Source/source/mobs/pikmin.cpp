@@ -150,8 +150,15 @@ void pikmin::draw_mob() {
     
     //Top.
     if(cur_s_ptr->top_visible) {
+        point top_coords;
+        float top_angle;
+        point top_size;
         bitmap_effect_t top_eff = mob_eff;
         ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
+        get_sprite_basic_top_effects(
+            cur_s_ptr, next_s_ptr, interpolation_factor,
+            &top_coords, &top_angle, &top_size
+        );
         //To get the height effect to work, we'll need to scale the translation
         //too, otherwise the top will detach from the Pikmin visually as
         //the Pikmin falls into a pit. The "right" scale is a bit of a guess
@@ -160,13 +167,13 @@ void pikmin::draw_mob() {
         //will be more than enough.
         float avg_scale = (top_eff.scale.x + top_eff.scale.y) / 2.0f;
         top_eff.translation +=
-            pos + rotate_point(cur_s_ptr->top_pos, angle) * avg_scale;
+            pos + rotate_point(top_coords, angle) * avg_scale;
         top_eff.scale.x *=
-            cur_s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
+            top_size.x / al_get_bitmap_width(top_bmp);
         top_eff.scale.y *=
-            cur_s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
+            top_size.y / al_get_bitmap_height(top_bmp);
         top_eff.rotation +=
-            angle + cur_s_ptr->top_angle;
+            angle + top_angle;
         top_eff.glow_color =
             map_gray(0);
             
