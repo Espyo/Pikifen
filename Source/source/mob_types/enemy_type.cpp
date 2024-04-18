@@ -40,7 +40,7 @@ enemy_type::enemy_type() :
  *
  * @param file File to read from.
  */
-void enemy_type::load_properties(data_node* file) {
+void enemy_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("allow_ground_attacks", allow_ground_attacks);

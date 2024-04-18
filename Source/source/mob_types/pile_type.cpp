@@ -57,7 +57,7 @@ anim_conversion_vector pile_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void pile_type::load_properties(data_node* file) {
+void pile_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string contents_str;

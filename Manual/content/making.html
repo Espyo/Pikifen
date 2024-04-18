@@ -23,7 +23,7 @@
 
     <h2 id="data-file">Data file</h2>
 
-    <p>Data files usually contain information about how some content or engine feature works. They are actually just everyday text files, with a <a href="glossary.html#F">file name</a> ending in <code>.txt</code>, though with a specific format. The engine reads a data file one line at a time. The most basic type of line is a simple property and its value. The property's name comes first, followed by an equals sign, and then the value. Data files may also contain blocks, which in turn can contain properties or blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</p>
+    <p>Data files usually contain information about how some content or engine feature works. They are actually just everyday text files, with a <a href="glossary.html#F">file name</a> ending in <code>.txt</code>, though with a specific format. The engine reads a data file one line at a time. The most basic type of line is a simple property and its value. The property's name comes first, followed by an equals sign, and then the value. Data files may also contain blocks, which in turn can contain properties or other blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</p>
     
     <p>Example:</p>
     
@@ -37,7 +37,33 @@ block {
     
     <p>It is good practice to <a href="http://en.wikipedia.org/wiki/Indentation_style">indent</a> the lines inside a block. The deeper the block, the deeper the indentation. The engine ignores any spaces or tabs before the first word in the line, so add as many as you want. The engine will also not read empty lines. As a final note, the engine will not read lines that have two slashes before the first word. Meaning that something like <code>//This is a comment.</code> will not be read. You can use these comments to explain or label parts of the file to make it easier to understand.</p>
     
-    <p><b>Warning</b>: avoid Window's "Notepad" program to edit these data files, since they usually show up broken or all in a single line. Try something like <a href="https://notepad-plus-plus.org">Notepad++</a> instead.</p>
+    <p><b>Warning</b>: avoid Windows's "Notepad" program to edit these data files, since they usually show up broken or all in a single line. Try something like <a href="https://notepad-plus-plus.org">Notepad++</a> instead.</p>
+
+    <h2 id="content-props">Content properties</h2>
+
+    <p>Most pieces of content have a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files:</p>
+
+    <ul>
+      <li>
+        Almost always mandatory:
+        <ul>
+          <li><b><code>name</code></b>: The content's name, like "Red Pikmin", "Lava", "Ultra-Spicy Spray", etc. Almost all pieces of content require this property.</li>
+        </ul>
+      </li>
+      <li>
+        Optional:
+        <ul>
+          <li><b><code>description</code></b>: A basic description of the content, suitable for both players and makers (even if players may not see it most of the time).</li>
+          <li><b><code>tags</code></b>: A list of tags, separated by semicolon, e.g. <code>Colorful;Advanced;Gimmick</code>. What exactly this entails, and what tags are recommended varies with the type of content. While many types of content do not use it right now, they could end up using it in the future so it's a good idea to fill this in.</li>
+          <li><b><code>maker</code></b>: Name or nickname of the person or persons who made this content. If this content is based off of something, like a port of The Impact Site's theme song, this property still refers to who created the <i>Pikifen</i> content; credits for the original creation can be added in the <code>notes</code> property.</li>
+          <li><b><code>version</code></b>: Version name or number, e.g. <code>1.2.3</code>. It's a good idea to increase this whenever you create a new version.</li>
+          <li><b><code>engine_version</code></b>: Version of <i>Pikifen</i> that this content was made for. In a way, this is also the most recent version of the engine that this content is known to run in. The engine may use this information to port content that was made in an older version. This information is also automatically filled in for content created via one of the in-game editors.</li>
+          <li><b><code>maker_notes</code></b>: Any notes about the content that other makers should know about, like a special way to use it, any precautions, etc.</li>
+          <li><b><code>notes</code></b>: General notes about the content.</li>
+          <li><b><code>license</code></b>: The content's license. If left blank, it defaults to <i>Pikifen</i>'s license.</li>
+        </ul>
+      </li>
+    </ul>
 
     <h2 id="tutorials">Tutorials</h2>
     

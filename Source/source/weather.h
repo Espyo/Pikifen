@@ -16,6 +16,8 @@
 
 #include <allegro5/allegro.h>
 
+#include "content.h"
+
 
 using std::size_t;
 using std::string;
@@ -48,14 +50,11 @@ enum PRECIPITATION_TYPE {
  * but on a cloudy day, everything is darker
  * and grayer).
  */
-class weather {
+class weather : public content {
 
 public:
 
     //--- Members ---
-    
-    //Name of this weather type.
-    string name;
     
     //Daylight color table for specific times of day, in minutes.
     vector<std::pair<int, ALLEGRO_COLOR> > daylight;
@@ -92,6 +91,7 @@ public:
     ALLEGRO_COLOR get_daylight_color();
     ALLEGRO_COLOR get_fog_color();
     float get_sun_strength();
+    void load_from_data_node(data_node* node);
     
 private:
 

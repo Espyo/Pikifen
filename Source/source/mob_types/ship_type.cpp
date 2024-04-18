@@ -68,7 +68,7 @@ anim_conversion_vector ship_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void ship_type::load_properties(data_node* file) {
+void ship_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("can_heal", can_heal);
@@ -85,7 +85,7 @@ void ship_type::load_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void ship_type::load_resources(data_node* file) {
+void ship_type::load_cat_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.

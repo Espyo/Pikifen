@@ -2218,10 +2218,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Notes input.
-        string notes = game.cur_area_data.notes;
+        string notes = game.cur_area_data.maker_notes;
         if(ImGui::InputText("Maker notes", &notes)) {
             register_change("area notes change");
-            game.cur_area_data.notes = notes;
+            game.cur_area_data.maker_notes = notes;
         }
         set_tooltip(
             "Extra notes or comments about the area for other makers to see."
@@ -2506,9 +2506,7 @@ void area_editor::process_gui_panel_main() {
     //Area name text.
     ImGui::Text("Area folder: %s", game.cur_area_data.folder_name.c_str());
     set_tooltip(
-        "Full folder path: " +
-        get_base_area_folder_path(game.cur_area_data.type, true) + "/" +
-        game.cur_area_data.folder_name + "\n"
+        "Full folder path: " + game.cur_area_data.path + "\n"
         "Full user data folder path: " +
         get_base_area_folder_path(game.cur_area_data.type, false) + "/" +
         game.cur_area_data.folder_name + "\n"

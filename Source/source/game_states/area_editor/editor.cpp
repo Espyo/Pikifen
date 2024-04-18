@@ -459,16 +459,16 @@ void area_editor::create_area(
     //Set its name and type and whatnot.
     game.cur_area_data.name = requested_area_folder_name;
     game.cur_area_data.folder_name = requested_area_folder_name;
+    game.cur_area_data.path =
+        get_base_area_folder_path(requested_area_type, true) + "/" +
+        requested_area_folder_name;
     game.cur_area_data.type = requested_area_type;
     
     //Finish up.
     clear_undo_history();
     update_undo_history();
     area_exists_on_disk = false;
-    update_history(
-        get_base_area_folder_path(requested_area_type, true) + "/" +
-        requested_area_folder_name
-    );
+    update_history(game.cur_area_data.path);
     save_options(); //Save the history in the options.
     
     set_status(
@@ -604,8 +604,7 @@ void area_editor::delete_current_area() {
         non_important_files.push_back(AREA_GEOMETRY_FILE_NAME);
         WIPE_FOLDER_RESULT result =
             wipe_folder(
-                get_base_area_folder_path(game.cur_area_data.type, true) +
-                "/" + game.cur_area_data.folder_name,
+                game.cur_area_data.path,
                 non_important_files
             );
             
@@ -1418,15 +1417,13 @@ string area_editor::get_name() const {
 
 
 /**
- * @brief Returns the name of the currently opened folder.
+ * @brief Returns the path to the currently opened folder.
  *
- * @return The name, or an empty string if none.
+ * @return The path, or an empty string if none.
  */
 string area_editor::get_opened_folder_path() const {
     if(!game.cur_area_data.folder_name.empty()) {
-        return
-            get_base_area_folder_path(game.cur_area_data.type, true) + "/" +
-            game.cur_area_data.folder_name;
+        return game.cur_area_data.path;
     } else {
         return "";
     }
@@ -2396,9 +2393,7 @@ void area_editor::press_paste_texture_button() {
  */
 void area_editor::press_quick_play_button() {
     if(!save_area(false)) return;
-    quick_play_area_path =
-        get_base_area_folder_path(game.cur_area_data.type, true) +
-        "/" + game.cur_area_data.folder_name;
+    quick_play_area_path = game.cur_area_data.path;
     quick_play_cam_pos = game.cam.pos;
     quick_play_cam_z = game.cam.zoom;
     leave();
@@ -3330,17 +3325,11 @@ bool area_editor::save_area(const bool to_backup) {
     //Now, the data file.
     data_node data_file("", "");
     
-    data_file.add(
-        new data_node("name", game.cur_area_data.name)
-    );
+    //Content metadata.
+    game.cur_area_data.save_to_data_node(&data_file);
+    
     data_file.add(
         new data_node("subtitle", game.cur_area_data.subtitle)
-    );
-    data_file.add(
-        new data_node("description", game.cur_area_data.description)
-    );
-    data_file.add(
-        new data_node("tags", game.cur_area_data.tags)
     );
     data_file.add(
         new data_node(
@@ -3371,18 +3360,6 @@ bool area_editor::save_area(const bool to_backup) {
     );
     data_file.add(
         new data_node("day_time_speed", i2s(game.cur_area_data.day_time_speed))
-    );
-    data_file.add(
-        new data_node("maker", game.cur_area_data.maker)
-    );
-    data_file.add(
-        new data_node("version", game.cur_area_data.version)
-    );
-    data_file.add(
-        new data_node("engine_version", game.cur_area_data.engine_version)
-    );
-    data_file.add(
-        new data_node("notes", game.cur_area_data.notes)
     );
     data_file.add(
         new data_node("spray_amounts", game.cur_area_data.spray_amounts)
@@ -3682,18 +3659,17 @@ bool area_editor::save_area(const bool to_backup) {
     
     
     //Finally, save.
+    string base_folder;
     string geometry_file_name;
     string data_file_name;
     if(to_backup) {
-        string base_folder =
+        base_folder =
             get_base_area_folder_path(game.cur_area_data.type, false) +
             "/" + game.cur_area_data.folder_name;
         geometry_file_name = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
         data_file_name = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
     } else {
-        string base_folder =
-            get_base_area_folder_path(game.cur_area_data.type, true) +
-            "/" + game.cur_area_data.folder_name;
+        base_folder = game.cur_area_data.path;
         geometry_file_name = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
         data_file_name = base_folder + "/" + AREA_DATA_FILE_NAME;
     }
@@ -3706,8 +3682,7 @@ bool area_editor::save_area(const bool to_backup) {
             "Could not save the area!",
             (
                 "An error occured while saving the area to the folder \"" +
-                get_base_area_folder_path(game.cur_area_data.type, true) +
-                "/" + game.cur_area_data.folder_name + "\". "
+                base_folder + "\". "
                 "Make sure that the folder exists and it is not read-only, "
                 "and try again."
             ).c_str(),

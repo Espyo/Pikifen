@@ -17,6 +17,7 @@
 #include <allegro5/allegro_image.h>
 
 #include "const.h"
+#include "content.h"
 #include "hitbox.h"
 #include "libs/data_file.h"
 
@@ -236,7 +237,7 @@ public:
  *
  * Basically, an animation file.
  */
-class animation_database {
+class animation_database : public content {
 
 public:
 
@@ -254,9 +255,6 @@ public:
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
     
-    //Version of the engine this animation database was built in.
-    string engine_version;
-    
     //Maximum span of the hitboxes. Cache for performance.
     float max_span = 0.0f;
     
@@ -269,7 +267,7 @@ public:
         const vector<body_part*> &b = vector<body_part*>()
     );
     size_t find_animation(const string &name) const;
-    size_t find_sprite(   const string &name) const;
+    size_t find_sprite(const string &name) const;
     size_t find_body_part(const string &name) const;
     void calculate_max_span();
     void create_conversions(
@@ -277,6 +275,8 @@ public:
     );
     void fill_sound_idx_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
+    void load_from_data_node(data_node* node);
+    void save_to_data_node(data_node* node, bool save_top_data);
     void sort_alphabetically();
     void destroy();
     
@@ -352,7 +352,6 @@ void get_sprite_basic_effects(
     point* out_eff_trans, float* out_eff_angle,
     point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
-animation_database load_animation_database_from_file(data_node* frames_node);
 void get_sprite_basic_top_effects(
     sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
     point* out_eff_trans, float* out_eff_angle,

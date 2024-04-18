@@ -19,16 +19,16 @@
 class scale_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Default weight number that must be met to reach a goal. 0 for none.
     size_t goal_number = 0;
     
-
+    
     //--- Function declarations ---
     
     scale_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     
 };

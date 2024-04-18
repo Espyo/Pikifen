@@ -977,43 +977,6 @@ struct notification_t {
 
 
 /**
- * @brief Type of spike damage.
- * When a mob is attacked, it can instantly deal some damage to the mob
- * that attacked it.
- */
-struct spike_damage_type {
-
-    //--- Members ---
-    
-    //Name of the type. "Poison", "Ice", etc.
-    string name;
-    
-    //Amount of damage to cause, either in absolute HP or max HP ratio.
-    float damage = 0.0f;
-    
-    //If true, damage is only dealt if the victim is eaten. e.g. White Pikmin.
-    bool ingestion_only = false;
-    
-    //If true, the damage var represents max HP ratio. If false, absolute HP.
-    bool is_damage_ratio = false;
-    
-    //Particle generator to use to generate particles, if any.
-    particle_generator* particle_gen = nullptr;
-    
-    //Offset the particles by this much, horizontally.
-    point particle_offset_pos;
-    
-    //Offset the particles by this much, vertically.
-    float particle_offset_z = 0.0f;
-    
-    //Apply this status effect when the spike damage is applied.
-    status_type* status_to_apply = nullptr;
-    
-};
-
-
-
-/**
  * @brief Info on how a bitmap should be drawn, in regards to
  * translation, rotation, coloring, etc.
  */

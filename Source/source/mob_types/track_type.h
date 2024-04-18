@@ -22,7 +22,7 @@ enum TRACK_RIDER_FLAG {
     
     //Leaders.
     TRACK_RIDER_FLAG_LEADERS = 1 << 1,
-
+    
 };
 
 
@@ -37,7 +37,7 @@ enum TRACK_RIDING_POSE {
     
     //Sliding.
     TRACK_RIDING_POSE_SLIDING,
-
+    
 };
 
 
@@ -46,13 +46,13 @@ enum TRACK_ANIM {
 
     //Idling.
     TRACK_ANIM_IDLING,
-
+    
 };
 
 
 //Track object states.
 enum TRACK_STATE {
-    
+
     //Idling.
     TRACK_STATE_IDLING,
     
@@ -69,27 +69,27 @@ enum TRACK_STATE {
 class track_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Flags representing possible riders.
     unsigned char riders = TRACK_RIDER_FLAG_PIKMIN;
-
+    
     //Pose that riders must take.
     TRACK_RIDING_POSE riding_pose = TRACK_RIDING_POSE_STOPPED;
-
+    
     //How quickly riders ride the track, in ratio per second.
     float ride_speed = 0.5f;
     
     //Can the ride be cancelled if the rider is whistled?
     bool cancellable_with_whistle = false;
     
-
+    
     //--- Function declarations ---
     
     track_type();
-    void load_properties(data_node* file) override;
-    void load_resources(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
+    void load_cat_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

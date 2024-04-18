@@ -18,13 +18,13 @@
 
 //Decoration object animations.
 enum DECORATION_ANIM {
-    
+
     //Idling.
     DECORATION_ANIM_IDLING,
     
     //Bumped against.
     DECORATION_ANIM_BUMPED,
-
+    
 };
 
 
@@ -49,26 +49,26 @@ enum DECORATION_STATE {
 class decoration_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Maximum amount it can deviate the tint by, for every color component.
     ALLEGRO_COLOR tint_random_maximum = COLOR_EMPTY;
-
+    
     //Maximum amount it can deviate the scale by.
     float scale_random_variation = 0.0f;
-
+    
     //Maximum amount it can deviate the rotation by.
     float rotation_random_variation = 0.0f;
-
+    
     //Should it skip to a random point of the animation when it starts?
     bool random_animation_delay = false;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     decoration_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

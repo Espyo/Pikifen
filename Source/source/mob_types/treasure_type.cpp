@@ -47,7 +47,7 @@ anim_conversion_vector treasure_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void treasure_type::load_properties(data_node* file) {
+void treasure_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("points", points);

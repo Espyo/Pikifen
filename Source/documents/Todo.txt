@@ -17,10 +17,12 @@ Current tasks (tasks being worked on, but not yet committed)
     Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
         Use #pragma region in header files?
+    Update to Dear ImGui v1.90.5
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     lockpick man's resize bug
+    Looks like editing some sprites' scales and then trying to preview an interpolated animation makes things weird
 
     --- 0.26 ---
     Helodity's performance improvements
@@ -206,6 +208,10 @@ Next tasks (roughly sorted most important first)
         Current problems
             When makers want to share their content, they have to fish its requirements from several folders
             When players want to install content, they have to place it in the right folders
+        Make assets inherit from the plain_content class
+        Move area loading to area_data::load_from_data_node
+        Add metadata editing to the animation and GUI editors, as well as the missing metadata from the area editor
+        Add the new common content properties to everything in the engine
     A way for the user to set a background texture for the animation editor instead of the plain green
     
     --- Future ---

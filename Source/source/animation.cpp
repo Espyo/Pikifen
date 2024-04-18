@@ -357,6 +357,408 @@ void animation_database::fix_body_part_pointers() {
 
 
 /**
+ * @brief Loads animation database data from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void animation_database::load_from_data_node(data_node* node) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+    
+    //Body parts.
+    data_node* body_parts_node = node->get_child_by_name("body_parts");
+    size_t n_body_parts = body_parts_node->get_nr_of_children();
+    for(size_t b = 0; b < n_body_parts; ++b) {
+    
+        data_node* body_part_node = body_parts_node->get_child(b);
+        
+        body_part* cur_body_part = new body_part(body_part_node->name);
+        body_parts.push_back(cur_body_part);
+    }
+    
+    //Sprites.
+    data_node* sprites_node = node->get_child_by_name("sprites");
+    size_t n_sprites = sprites_node->get_nr_of_children();
+    for(size_t s = 0; s < n_sprites; ++s) {
+    
+        data_node* sprite_node = sprites_node->get_child(s);
+        vector<hitbox> hitboxes;
+        
+        data_node* hitboxes_node =
+            sprite_node->get_child_by_name("hitboxes");
+        size_t n_hitboxes = hitboxes_node->get_nr_of_children();
+        
+        for(size_t h = 0; h < n_hitboxes; ++h) {
+        
+            data_node* hitbox_node =
+                hitboxes_node->get_child(h);
+            hitbox cur_hitbox = hitbox();
+            
+            cur_hitbox.pos =
+                s2p(
+                    hitbox_node->get_child_by_name("coords")->value,
+                    &cur_hitbox.z
+                );
+            cur_hitbox.height =
+                s2f(hitbox_node->get_child_by_name("height")->value);
+            cur_hitbox.radius =
+                s2f(hitbox_node->get_child_by_name("radius")->value);
+            cur_hitbox.body_part_name =
+                hitbox_node->name;
+            cur_hitbox.type =
+                (HITBOX_TYPE)
+                s2i(hitbox_node->get_child_by_name("type")->value);
+            cur_hitbox.value =
+                s2f(
+                    hitbox_node->get_child_by_name("value")->value
+                );
+            cur_hitbox.can_pikmin_latch =
+                s2b(
+                    hitbox_node->get_child_by_name(
+                        "can_pikmin_latch"
+                    )->get_value_or_default("false")
+                );
+            cur_hitbox.knockback_outward =
+                s2b(
+                    hitbox_node->get_child_by_name(
+                        "knockback_outward"
+                    )->get_value_or_default("false")
+                );
+            cur_hitbox.knockback_angle =
+                s2f(hitbox_node->get_child_by_name("knockback_angle")->value);
+            cur_hitbox.knockback =
+                s2f(
+                    hitbox_node->get_child_by_name(
+                        "knockback"
+                    )->get_value_or_default("0")
+                );
+            cur_hitbox.wither_chance =
+                s2i(
+                    hitbox_node->get_child_by_name("wither_chance")->value
+                );
+                
+            data_node* hazards_node =
+                hitbox_node->get_child_by_name("hazards");
+            cur_hitbox.hazards_str = hazards_node->value;
+            vector<string> hazards_strs =
+                semicolon_list_to_vector(cur_hitbox.hazards_str);
+            for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
+                string hazard_name = hazards_strs[hs];
+                if(game.hazards.find(hazard_name) == game.hazards.end()) {
+                    game.errors.report(
+                        "Unknown hazard \"" + hazard_name + "\"!",
+                        hazards_node
+                    );
+                } else {
+                    cur_hitbox.hazards.push_back(
+                        &(game.hazards[hazard_name])
+                    );
+                }
+            }
+            
+            
+            hitboxes.push_back(cur_hitbox);
+            
+        }
+        
+        sprite* new_s =
+            new sprite(
+            sprite_node->name,
+            nullptr,
+            s2p(sprite_node->get_child_by_name("file_pos")->value),
+            s2p(sprite_node->get_child_by_name("file_size")->value),
+            hitboxes
+        );
+        sprites.push_back(new_s);
+        
+        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
+        new_s->scale =
+            s2p(
+                sprite_node->get_child_by_name(
+                    "scale"
+                )->get_value_or_default("1 1")
+            );
+        new_s->angle = s2f(sprite_node->get_child_by_name("angle")->value);
+        new_s->tint =
+            s2c(
+                sprite_node->get_child_by_name("tint")->get_value_or_default(
+                    "255 255 255 255"
+                )
+            );
+        new_s->file = sprite_node->get_child_by_name("file")->value;
+        new_s->set_bitmap(
+            new_s->file, new_s->file_pos, new_s->file_size,
+            sprite_node->get_child_by_name("file")
+        );
+        new_s->top_visible =
+            s2b(
+                sprite_node->get_child_by_name("top_visible")->value
+            );
+        new_s->top_pos =
+            s2p(sprite_node->get_child_by_name("top_pos")->value);
+        new_s->top_size =
+            s2p(sprite_node->get_child_by_name("top_size")->value);
+        new_s->top_angle =
+            s2f(
+                sprite_node->get_child_by_name("top_angle")->value
+            );
+    }
+    
+    //Animations.
+    data_node* anims_node = node->get_child_by_name("animations");
+    size_t n_anims = anims_node->get_nr_of_children();
+    for(size_t a = 0; a < n_anims; ++a) {
+    
+        data_node* anim_node = anims_node->get_child(a);
+        vector<frame> frames;
+        
+        data_node* frames_node =
+            anim_node->get_child_by_name("frames");
+        size_t n_frames =
+            frames_node->get_nr_of_children();
+            
+        for(size_t f = 0; f < n_frames; ++f) {
+            data_node* frame_node = frames_node->get_child(f);
+            size_t s_pos = find_sprite(frame_node->name);
+            string signal_str =
+                frame_node->get_child_by_name("signal")->value;
+            frames.push_back(
+                frame(
+                    frame_node->name,
+                    s_pos,
+                    (s_pos == INVALID) ? nullptr : sprites[s_pos],
+                    s2f(frame_node->get_child_by_name("duration")->value),
+                    s2b(frame_node->get_child_by_name("interpolate")->value),
+                    frame_node->get_child_by_name("sound")->value,
+                    (signal_str.empty() ? INVALID : s2i(signal_str))
+                )
+            );
+        }
+        
+        animations.push_back(
+            new animation(
+                anim_node->name,
+                frames,
+                s2i(anim_node->get_child_by_name("loop_frame")->value),
+                s2i(
+                    anim_node->get_child_by_name(
+                        "hit_rate"
+                    )->get_value_or_default("100")
+                )
+            )
+        );
+    }
+    
+    //Finish up.
+    calculate_max_span();
+}
+
+
+/**
+ * @brief Saves the animation database data to a data node.
+ *
+ * @param node Data node to save to.
+ * @param save_top_data Whether to save the Pikmin top's data.
+ */
+void animation_database::save_to_data_node(
+    data_node* node, bool save_top_data
+) {
+    //Content metadata.
+    save_metadata_to_data_node(node);
+    
+    //Animations.
+    data_node* animations_node = new data_node("animations", "");
+    node->add(animations_node);
+    
+    for(size_t a = 0; a < animations.size(); ++a) {
+        data_node* anim_node = new data_node(animations[a]->name, "");
+        animations_node->add(anim_node);
+        
+        if(animations[a]->loop_frame > 0) {
+            anim_node->add(
+                new data_node(
+                    "loop_frame", i2s(animations[a]->loop_frame)
+                )
+            );
+        }
+        if(animations[a]->hit_rate != 100) {
+            anim_node->add(
+                new data_node("hit_rate", i2s(animations[a]->hit_rate))
+            );
+        }
+        data_node* frames_node = new data_node("frames", "");
+        anim_node->add(frames_node);
+        
+        for(
+            size_t f = 0; f < animations[a]->frames.size();
+            ++f
+        ) {
+            frame* f_ptr = &animations[a]->frames[f];
+            
+            data_node* frame_node =
+                new data_node(f_ptr->sprite_name, "");
+            frames_node->add(frame_node);
+            
+            frame_node->add(
+                new data_node("duration", f2s(f_ptr->duration))
+            );
+            if(f_ptr->interpolate) {
+                frame_node->add(
+                    new data_node("interpolate", b2s(f_ptr->interpolate))
+                );
+            }
+            if(f_ptr->signal != INVALID) {
+                frame_node->add(
+                    new data_node("signal", i2s(f_ptr->signal))
+                );
+            }
+            if(!f_ptr->sound.empty() && f_ptr->sound != NONE_OPTION) {
+                frame_node->add(
+                    new data_node("sound", f_ptr->sound)
+                );
+            }
+        }
+    }
+    
+    //Sprites.
+    data_node* sprites_node = new data_node("sprites", "");
+    node->add(sprites_node);
+    
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        sprite* s_ptr = sprites[s];
+        data_node* sprite_node = new data_node(sprites[s]->name, "");
+        sprites_node->add(sprite_node);
+        
+        sprite_node->add(new data_node("file",      s_ptr->file));
+        sprite_node->add(new data_node("file_pos",  p2s(s_ptr->file_pos)));
+        sprite_node->add(new data_node("file_size", p2s(s_ptr->file_size)));
+        if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
+            sprite_node->add(new data_node("offset", p2s(s_ptr->offset)));
+        }
+        if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
+            sprite_node->add(new data_node("scale", p2s(s_ptr->scale)));
+        }
+        if(s_ptr->angle != 0.0) {
+            sprite_node->add(new data_node("angle", f2s(s_ptr->angle)));
+        }
+        if(s_ptr->tint != COLOR_WHITE) {
+            sprite_node->add(new data_node("tint", c2s(s_ptr->tint)));
+        }
+        
+        if(save_top_data) {
+            sprite_node->add(
+                new data_node("top_visible", b2s(s_ptr->top_visible))
+            );
+            sprite_node->add(
+                new data_node("top_pos", p2s(s_ptr->top_pos))
+            );
+            sprite_node->add(
+                new data_node("top_size", p2s(s_ptr->top_size))
+            );
+            sprite_node->add(
+                new data_node("top_angle", f2s(s_ptr->top_angle))
+            );
+        }
+        
+        if(!s_ptr->hitboxes.empty()) {
+            data_node* hitboxes_node =
+                new data_node("hitboxes", "");
+            sprite_node->add(hitboxes_node);
+            
+            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+                hitbox* h_ptr = &s_ptr->hitboxes[h];
+                
+                data_node* hitbox_node =
+                    new data_node(h_ptr->body_part_name, "");
+                hitboxes_node->add(hitbox_node);
+                
+                hitbox_node->add(
+                    new data_node("coords", p2s(h_ptr->pos, &h_ptr->z))
+                );
+                hitbox_node->add(
+                    new data_node("height", f2s(h_ptr->height))
+                );
+                hitbox_node->add(
+                    new data_node("radius", f2s(h_ptr->radius))
+                );
+                hitbox_node->add(
+                    new data_node("type", i2s(h_ptr->type))
+                );
+                hitbox_node->add(
+                    new data_node("value", f2s(h_ptr->value))
+                );
+                if(
+                    h_ptr->type == HITBOX_TYPE_NORMAL &&
+                    h_ptr->can_pikmin_latch
+                ) {
+                    hitbox_node->add(
+                        new data_node(
+                            "can_pikmin_latch", b2s(h_ptr->can_pikmin_latch)
+                        )
+                    );
+                }
+                if(!h_ptr->hazards_str.empty()) {
+                    hitbox_node->add(
+                        new data_node("hazards", h_ptr->hazards_str)
+                    );
+                }
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback_outward
+                ) {
+                    hitbox_node->add(
+                        new data_node(
+                            "knockback_outward",
+                            b2s(h_ptr->knockback_outward)
+                        )
+                    );
+                }
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback_angle != 0
+                ) {
+                    hitbox_node->add(
+                        new data_node(
+                            "knockback_angle", f2s(h_ptr->knockback_angle)
+                        )
+                    );
+                }
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback != 0
+                ) {
+                    hitbox_node->add(
+                        new data_node("knockback", f2s(h_ptr->knockback))
+                    );
+                }
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->wither_chance > 0
+                ) {
+                    hitbox_node->add(
+                        new data_node(
+                            "wither_chance", i2s(h_ptr->wither_chance)
+                        )
+                    );
+                }
+            }
+        }
+    }
+    
+    //Body parts.
+    data_node* body_parts_node = new data_node("body_parts", "");
+    node->add(body_parts_node);
+    
+    for(size_t b = 0; b < body_parts.size(); ++b) {
+        data_node* body_part_node =
+            new data_node(body_parts[b]->name, "");
+        body_parts_node->add(body_part_node);
+        
+    }
+}
+
+
+/**
  * @brief Sorts all animations and sprites alphabetically,
  * making them more organized.
  */
@@ -925,207 +1327,6 @@ void get_sprite_basic_effects(
                 );
         }
     }
-}
-
-
-
-/**
- * @brief Loads the animations from a file.
- *
- * @param file_node File to load from.
- * @return The database.
- */
-animation_database load_animation_database_from_file(data_node* file_node) {
-    animation_database adb;
-    
-    //Body parts.
-    data_node* body_parts_node = file_node->get_child_by_name("body_parts");
-    size_t n_body_parts = body_parts_node->get_nr_of_children();
-    for(size_t b = 0; b < n_body_parts; ++b) {
-    
-        data_node* body_part_node = body_parts_node->get_child(b);
-        
-        body_part* cur_body_part = new body_part(body_part_node->name);
-        adb.body_parts.push_back(cur_body_part);
-    }
-    
-    //Sprites.
-    data_node* sprites_node = file_node->get_child_by_name("sprites");
-    size_t n_sprites = sprites_node->get_nr_of_children();
-    for(size_t s = 0; s < n_sprites; ++s) {
-    
-        data_node* sprite_node = sprites_node->get_child(s);
-        vector<hitbox> hitboxes;
-        
-        data_node* hitboxes_node =
-            sprite_node->get_child_by_name("hitboxes");
-        size_t n_hitboxes = hitboxes_node->get_nr_of_children();
-        
-        for(size_t h = 0; h < n_hitboxes; ++h) {
-        
-            data_node* hitbox_node =
-                hitboxes_node->get_child(h);
-            hitbox cur_hitbox = hitbox();
-            
-            cur_hitbox.pos =
-                s2p(
-                    hitbox_node->get_child_by_name("coords")->value,
-                    &cur_hitbox.z
-                );
-            cur_hitbox.height =
-                s2f(hitbox_node->get_child_by_name("height")->value);
-            cur_hitbox.radius =
-                s2f(hitbox_node->get_child_by_name("radius")->value);
-            cur_hitbox.body_part_name =
-                hitbox_node->name;
-            cur_hitbox.type =
-                (HITBOX_TYPE)
-                s2i(hitbox_node->get_child_by_name("type")->value);
-            cur_hitbox.value =
-                s2f(
-                    hitbox_node->get_child_by_name("value")->value
-                );
-            cur_hitbox.can_pikmin_latch =
-                s2b(
-                    hitbox_node->get_child_by_name(
-                        "can_pikmin_latch"
-                    )->get_value_or_default("false")
-                );
-            cur_hitbox.knockback_outward =
-                s2b(
-                    hitbox_node->get_child_by_name(
-                        "knockback_outward"
-                    )->get_value_or_default("false")
-                );
-            cur_hitbox.knockback_angle =
-                s2f(hitbox_node->get_child_by_name("knockback_angle")->value);
-            cur_hitbox.knockback =
-                s2f(
-                    hitbox_node->get_child_by_name(
-                        "knockback"
-                    )->get_value_or_default("0")
-                );
-            cur_hitbox.wither_chance =
-                s2i(
-                    hitbox_node->get_child_by_name("wither_chance")->value
-                );
-                
-            data_node* hazards_node =
-                hitbox_node->get_child_by_name("hazards");
-            cur_hitbox.hazards_str = hazards_node->value;
-            vector<string> hazards_strs =
-                semicolon_list_to_vector(cur_hitbox.hazards_str);
-            for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
-                string hazard_name = hazards_strs[hs];
-                if(game.hazards.find(hazard_name) == game.hazards.end()) {
-                    game.errors.report(
-                        "Unknown hazard \"" + hazard_name + "\"!",
-                        hazards_node
-                    );
-                } else {
-                    cur_hitbox.hazards.push_back(
-                        &(game.hazards[hazard_name])
-                    );
-                }
-            }
-            
-            
-            hitboxes.push_back(cur_hitbox);
-            
-        }
-        
-        sprite* new_s =
-            new sprite(
-            sprite_node->name,
-            nullptr,
-            s2p(sprite_node->get_child_by_name("file_pos")->value),
-            s2p(sprite_node->get_child_by_name("file_size")->value),
-            hitboxes
-        );
-        adb.sprites.push_back(new_s);
-        
-        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
-        new_s->scale =
-            s2p(
-                sprite_node->get_child_by_name(
-                    "scale"
-                )->get_value_or_default("1 1")
-            );
-        new_s->angle = s2f(sprite_node->get_child_by_name("angle")->value);
-        new_s->tint =
-            s2c(
-                sprite_node->get_child_by_name("tint")->get_value_or_default(
-                    "255 255 255 255"
-                )
-            );
-        new_s->file = sprite_node->get_child_by_name("file")->value;
-        new_s->set_bitmap(
-            new_s->file, new_s->file_pos, new_s->file_size,
-            sprite_node->get_child_by_name("file")
-        );
-        new_s->top_visible =
-            s2b(
-                sprite_node->get_child_by_name("top_visible")->value
-            );
-        new_s->top_pos =
-            s2p(sprite_node->get_child_by_name("top_pos")->value);
-        new_s->top_size =
-            s2p(sprite_node->get_child_by_name("top_size")->value);
-        new_s->top_angle =
-            s2f(
-                sprite_node->get_child_by_name("top_angle")->value
-            );
-    }
-    
-    //Animations.
-    data_node* anims_node = file_node->get_child_by_name("animations");
-    size_t n_anims = anims_node->get_nr_of_children();
-    for(size_t a = 0; a < n_anims; ++a) {
-    
-        data_node* anim_node = anims_node->get_child(a);
-        vector<frame> frames;
-        
-        data_node* frames_node =
-            anim_node->get_child_by_name("frames");
-        size_t n_frames =
-            frames_node->get_nr_of_children();
-            
-        for(size_t f = 0; f < n_frames; ++f) {
-            data_node* frame_node = frames_node->get_child(f);
-            size_t s_pos = adb.find_sprite(frame_node->name);
-            string signal_str =
-                frame_node->get_child_by_name("signal")->value;
-            frames.push_back(
-                frame(
-                    frame_node->name,
-                    s_pos,
-                    (s_pos == INVALID) ? nullptr : adb.sprites[s_pos],
-                    s2f(frame_node->get_child_by_name("duration")->value),
-                    s2b(frame_node->get_child_by_name("interpolate")->value),
-                    frame_node->get_child_by_name("sound")->value,
-                    (signal_str.empty() ? INVALID : s2i(signal_str))
-                )
-            );
-        }
-        
-        adb.animations.push_back(
-            new animation(
-                anim_node->name,
-                frames,
-                s2i(anim_node->get_child_by_name("loop_frame")->value),
-                s2i(
-                    anim_node->get_child_by_name(
-                        "hit_rate"
-                    )->get_value_or_default("100")
-                )
-            )
-        );
-    }
-    
-    adb.engine_version = file_node->get_child_by_name("engine_version")->value;
-    
-    adb.calculate_max_span();
-    return adb;
 }
 
 

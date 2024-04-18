@@ -34,7 +34,7 @@ enum BOUNCER_RIDING_POSE {
     
     //Somersaulting.
     BOUNCER_RIDING_POSE_SOMERSAULT,
-
+    
 };
 
 
@@ -46,13 +46,13 @@ enum BOUNCER_ANIM {
     
     //Bouncing something.
     BOUNCER_ANIM_BOUNCING,
-
+    
 };
 
 
 //Bouncer object states.
 enum BOUNCER_STATE {
-    
+
     //Idling.
     BOUNCER_STATE_IDLING,
     
@@ -72,20 +72,20 @@ enum BOUNCER_STATE {
 class bouncer_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Flags representing which mobs can ride on it.
     unsigned char riders = BOUNCER_RIDER_FLAG_PIKMIN;
     
     //Pose that riders should take.
     BOUNCER_RIDING_POSE riding_pose = BOUNCER_RIDING_POSE_STOPPED;
     
-
+    
     //--- Function declarations ---
     
     bouncer_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

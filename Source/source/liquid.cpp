@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Liquid class and liquid-related functions.
+ */
+
+#include "liquid.h"
+
+#include "game.h"
+#include "load.h"
+#include "misc_structs.h"
+#include "utils/string_utils.h"
+
+
+using std::string;
+using std::vector;
+
+/**
+ * @brief Loads liquid data from a data node.
+ *
+ * @param node Data node to load from.
+ * @param load_resources If true, things like bitmaps and the like will
+ * be loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void liquid::load_from_data_node(data_node* node, bool load_resources) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+    
+    //Standard data.
+    reader_setter rs(node);
+    string animation_str;
+    
+    rs.set("animation", animation_str);
+    rs.set("color", main_color);
+    rs.set("radar_color", radar_color);
+    rs.set("surface_1_speed", surface_speed[0]);
+    rs.set("surface_2_speed", surface_speed[1]);
+    rs.set("surface_alpha", surface_alpha);
+    
+    if(load_resources) {
+        data_node anim_file =
+            load_data_file(ANIMATIONS_FOLDER_PATH + "/" + animation_str);
+            
+        anim_db.load_from_data_node(&anim_file);
+        if(!anim_db.animations.empty()) {
+            anim_instance = animation_instance(&anim_db);
+            anim_instance.cur_anim = anim_db.animations[0];
+            anim_instance.to_start();
+        }
+    }
+}

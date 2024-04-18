@@ -24,7 +24,7 @@ enum RESOURCE_ANIM {
 
     //Idling.
     RESOURCE_ANIM_IDLING,
-
+    
 };
 
 
@@ -42,13 +42,13 @@ enum RESOURCE_DELIVERY_RESULT {
     
     //The Pikmin stay on that spot.
     RESOURCE_DELIVERY_RESULT_STAY,
-
+    
 };
 
 
 //Resource object states.
 enum RESOURCE_STATE {
-    
+
     //Waiting.
     RESOURCE_STATE_IDLE_WAITING,
     
@@ -80,38 +80,38 @@ enum RESOURCE_STATE {
 class resource_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Should it vanish when the Pikmin carrying it drops it?
     bool vanish_on_drop = false;
-
+    
     //Should it return to the pile it came from when it vanishes?
     bool return_to_pile_on_vanish = false;
-
+    
     //How long before it vanishes, after being dropped.
     float vanish_delay = 0.0f;
-
+    
     //Carry destination.
     CARRY_DESTINATION carrying_destination = CARRY_DESTINATION_SHIP;
-
+    
     //Result when successfully delivered.
     RESOURCE_DELIVERY_RESULT delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
-
+    
     //If it damages the mob it was carried to, this is the damage amount.
     float damage_mob_amount = 1.0f;
-
+    
     //If it concocts a spray when delivered, this is the spray type index.
     size_t spray_to_concoct = INVALID;
     
     //If it adds points when delivered, this is the amount.
     float point_amount = 1.0f;
     
-
+    
     //--- Function declarations ---
     
     resource_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

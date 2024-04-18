@@ -27,7 +27,7 @@
     <p>To create a hazard, simply specify the following properties in its file:</p>
 
     <ul>
-      <li><b><code>name</code></b>: Its internal name; the name you will refer it by in other files.</li>
+      <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
       <li><b><code>color</code></b>: A color that represents the hazard, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to empty.</li>
       <li><b><code>radar_color</code></b>: Color to use for this liquid in the radar, in the format <code>r g b</code> or <code>r g b a</code>. In-game, it'll be slightly tinted with the terrain elevation color. Defaults to empty.</li>
       <li><b><code>status</code></b>: Status effects to apply to any Pikmin that is not invulnerable. This list is separated by semicolons (;).</li>
@@ -43,7 +43,7 @@
     <p>Each liquid has the following properties:</p>
 
     <ul>
-      <li><b><code>name</code></b>: Its internal name; the name you will refer it by in other files.</li>
+      <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
       <li><b><code>color</code></b>: Color of the liquid, in the format <code>r g b</code> or <code>r g b a</code>. In-game, the terrain below the liquid's surface will be tinted with this color. Defaults to black.</li>
       <li><b><code>animation</code></b>: <a href="glossary.html#F">File name</a> of the animation <a href="making.html#data-file">data file</a> in <code>Game_data/Animations</code>. The water's surface will have this animated texture on it. <b>Note</b>: Since the sprites used for the animation are tiled over and over across the water's surface, you will not be able to have multiple frames of animation in the same image file. When <a href="animation.html">making its animation</a>, make sure to have each frame on its own file.</li>
       <li><b><code>surface_1_speed</code></b>: Liquids have the surface animation drawn twice, one layer on top of the other. The fact that they scroll at different speeds is what gives the full surface a dynamic look. This property sets the scrolling speed of the top layer, in pixels per second. Defaults to 10.</li>

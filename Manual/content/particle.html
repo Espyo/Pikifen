@@ -43,9 +43,10 @@
 
     <h2 id="generator">Generator properties</h2>
     
-    <p>In the data file, you must specify the <b><code>name</code></b> property; this is the particle generator's internal name, and the name you will refer to it by in scripts. Afterwards, you can specify the following properties to make it generate particles.</p>
+    <p>In the data file, you can specify the following properties to make it generate particles.</p>
     
     <ul>
+      <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
       <li><b><code>emission_interval</code></b>: A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once. Defaults to 0.</li>
       <li><b><code>interval_deviation</code></b>: The time between every every emission is deviated randomly by this amount. Defaults to 0.</li>
       <li><b><code>number</code></b>: Number of particles to spawn. Every bunch of particles generated contains X of them. Defaults to 1.</li>

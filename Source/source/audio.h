@@ -36,6 +36,7 @@
 #include <allegro5/allegro_audio.h>
 
 #include "const.h"
+#include "content.h"
 #include "misc_structs.h"
 #include "libs/data_file.h"
 #include "utils/geometry_utils.h"
@@ -296,12 +297,9 @@ struct sfx_playback_t {
  * responsible for setting the right statuses to true. Then the audio manager
  * is responsible for fading them in and out as necessary.
  */
-struct song {
+struct song : public content {
 
     //--- Members ---
-    
-    //Internal name.
-    string name;
     
     //The main track. Other tracks can be mixed on top of this if applicable.
     ALLEGRO_AUDIO_STREAM* main_track = nullptr;
@@ -327,18 +325,10 @@ struct song {
     //Display name.
     string title;
     
-    //Pikifen maker who made the song content, not necessarily the audio.
-    string maker;
     
-    //Optional version number.
-    string version;
+    //--- Function declarations ---
     
-    //Tags, separated by semicolon, if any.
-    string tags;
-    
-    //Any notes, like origin, artist, etc.
-    string notes;
-    
+    void load_from_data_node(data_node* node);
 };
 
 

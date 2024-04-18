@@ -46,7 +46,7 @@ anim_conversion_vector resource_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void resource_type::load_properties(data_node* file) {
+void resource_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string carrying_destination_str;

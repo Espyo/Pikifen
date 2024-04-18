@@ -17,7 +17,7 @@
 
 //Pellet object states.
 enum PELLET_STATE {
-    
+
     //Idle, waiting to move.
     PELLET_STATE_IDLE_WAITING,
     
@@ -48,30 +48,30 @@ enum PELLET_STATE {
 class pellet_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Type of Pikmin this pellet relates to.
     pikmin_type* pik_type = nullptr;
-
+    
     //Number on the pellet, and hence, its weight.
     size_t number = 0;
-
+    
     //Number of seeds given out if the pellet's taken to a matching Onion.
     size_t match_seeds = 0;
-
+    
     //Number of seeds given out if the pellet's taken to a non-matching Onion.
     size_t non_match_seeds = 0;
     
     //Bitmap to use to represent the number on the pellet.
     ALLEGRO_BITMAP* bmp_number = nullptr;
     
-
+    
     //--- Function declarations ---
     
     pellet_type();
-    void load_properties(data_node* file) override;
-    void load_resources(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
+    void load_cat_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

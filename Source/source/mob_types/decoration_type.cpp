@@ -85,7 +85,7 @@ anim_conversion_vector decoration_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void decoration_type::load_properties(data_node* file) {
+void decoration_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("random_animation_delay", random_animation_delay);

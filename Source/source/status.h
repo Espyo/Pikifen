@@ -16,6 +16,7 @@
 #include <allegro5/allegro_image.h>
 
 #include "animation.h"
+#include "content.h"
 #include "particle.h"
 
 
@@ -85,12 +86,11 @@ enum STATUS_REAPPLY_RULE {
  * can even slowly kill the mob unless they're cleared out, like
  * Pikmin on fire or drowning.
  */
-struct status_type {
+class status_type : public content {
+
+public:
 
     //--- Members ---
-    
-    //Name of the status type.
-    string name;
     
     //Flags indicating what sorts of mobs it affects.
     unsigned char affects = 0;
@@ -187,6 +187,14 @@ struct status_type {
     
     //Replace with this other status effect, when its time is over.
     status_type* replacement_on_timeout = nullptr;
+    
+    //Replacement name. Used during loading.
+    string replacement_on_timeout_str;
+    
+    
+    //--- Function declarations ---
+    
+    void load_from_data_node(data_node* node, bool load_resources);
     
 };
 

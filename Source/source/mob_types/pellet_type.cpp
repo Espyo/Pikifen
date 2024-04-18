@@ -46,7 +46,7 @@ anim_conversion_vector pellet_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void pellet_type::load_properties(data_node* file) {
+void pellet_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string pik_type_str;
@@ -78,7 +78,7 @@ void pellet_type::load_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void pellet_type::load_resources(data_node* file) {
+void pellet_type::load_cat_resources(data_node* file) {
     reader_setter rs(file);
     
     string number_image_str;

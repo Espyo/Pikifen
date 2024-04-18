@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "../content.h"
 #include "../mission.h"
 #include "../pathing.h"
 #include "../weather.h"
@@ -173,7 +174,7 @@ struct tree_shadow {
  * This structure is so that the sectors know how to communicate with
  * the edges, the edges with the vertexes, etc.
  */
-struct area_data {
+struct area_data : public content {
 
     //--- Members ---
     
@@ -219,35 +220,14 @@ struct area_data {
     //Tint the background with this color.
     ALLEGRO_COLOR bg_color = COLOR_BLACK;
     
-    //Name of the area. This is not the internal name.
-    string name;
-    
     //Area subtitle, if any.
     string subtitle;
     
-    //Area description, if any.
-    string description;
-    
-    //Area tags, separated by semicolon, if any.
-    std::shared_ptr<ALLEGRO_BITMAP> thumbnail = nullptr;
-    
     //Thumbnail, if any.
-    string tags;
+    std::shared_ptr<ALLEGRO_BITMAP> thumbnail = nullptr;
     
     //Area difficulty, if applicable. Goes from 1 to 5.
     unsigned char difficulty = AREA::DEF_DIFFICULTY;
-    
-    //Who made this area.
-    string maker;
-    
-    //Optional version number.
-    string version;
-    
-    //Any notes from the person who made it, for other makers to see.
-    string notes;
-    
-    //Version of the engine this area was built in.
-    string engine_version;
     
     //String representing the starting amounts of each spray.
     string spray_amounts;
@@ -297,6 +277,7 @@ struct area_data {
     void generate_blockmap();
     void generate_edges_blockmap(const vector<edge*> &edges);
     size_t get_nr_path_links();
+    void load_from_data_node(data_node* node);
     void load_thumbnail(const string &thumbnail_path);
     edge* new_edge();
     sector* new_sector();
@@ -307,6 +288,7 @@ struct area_data {
     void remove_edge(const edge* e_ptr);
     void remove_sector(const size_t s_idx);
     void remove_sector(const sector* s_ptr);
+    void save_to_data_node(data_node* node);
     void clear();
     
 };

@@ -175,7 +175,7 @@ enum PIKMIN_STATE {
     
     //Total amount of Pikmin object states.
     N_PIKMIN_STATES
-
+    
 };
 
 
@@ -229,13 +229,13 @@ enum PIKMIN_ANIM {
     
     //Sliding.
     PIKMIN_ANIM_SLIDING,
-
+    
 };
 
 
 //Pikmin object sounds.
 enum PIKMIN_SOUND {
-    
+
     //Attack.
     PIKMIN_SOUND_ATTACK,
     
@@ -268,7 +268,7 @@ enum PIKMIN_SOUND {
     
     //Total amount.
     N_PIKMIN_SOUNDS,
-
+    
 };
 
 
@@ -292,57 +292,57 @@ enum PIKMIN_ATTACK {
 class pikmin_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //How many Pikmin they are worth when carrying.
     float carry_strength = 1.0f;
-
+    
     //How many Pikmin they are worth when pushing.
     float push_strength = 1.0f;
-
+    
     //Maximum height that the peak of their throw arc can reach.
     float max_throw_height = 260.0f;
-
+    
     //What the main method of attack is.
     PIKMIN_ATTACK attack_method = PIKMIN_ATTACK_LATCH;
-
+    
     //How long it stays on the floor for after knocked down, if left alone.
     float knocked_down_duration = PIKMIN_TYPE::DEF_KNOCKED_DOWN_DURATION;
-
+    
     //A whistled Pikmin that got knocked down loses this much in lie-down time.
     float knocked_down_whistle_bonus = PIKMIN_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
-
+    
     //Whether it can fly or not.
     bool can_fly = false;
-
+    
     //Whether it can carry tool-type objects or not.
     bool can_carry_tools = true;
-
+    
     //How long it takes to evolve in maturity, as a sprout.
     float sprout_evolution_time[NR_MATURITIES] = { 0.0f, 0.0f, 0.0f };
-
+    
     //Top (leaf/bud/flower) bitmap for each maturity.
     ALLEGRO_BITMAP* bmp_top[NR_MATURITIES] = { nullptr, nullptr, nullptr };
-
+    
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon = nullptr;
-
+    
     //Standby maturity icons.
     ALLEGRO_BITMAP* bmp_maturity_icon[NR_MATURITIES] = { nullptr, nullptr, nullptr };
-
+    
     //Icon for its Onion.
     ALLEGRO_BITMAP* bmp_onion_icon = nullptr;
-
+    
     //Sound data index for each sound. Cache for performance.
     size_t sfx_data_idxs[N_PIKMIN_SOUNDS];
     
-
+    
     //--- Function declarations ---
     
     pikmin_type();
-    void load_properties(data_node* file) override;
-    void load_resources(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
+    void load_cat_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

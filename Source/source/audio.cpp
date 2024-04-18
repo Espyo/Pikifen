@@ -13,6 +13,7 @@
 #include "audio.h"
 
 #include "functions.h"
+#include "game.h"
 #include "load.h"
 #include "utils/general_utils.h"
 
@@ -1147,4 +1148,55 @@ void audio_manager::update_volumes(
     
     ui_sfx_volume = clamp(ui_sfx_volume, 0.0f, 1.0f);
     al_set_mixer_gain(ui_sfx_mixer, ui_sfx_volume);
+}
+
+
+/**
+ * @brief Loads song data from a data node.
+ * 
+ * @param node Data node to load from.
+ */
+void song::load_from_data_node(data_node* node) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+
+    //Standard data.
+    reader_setter rs(node);
+
+    string main_track_str;
+    data_node* main_track_node = nullptr;
+    
+    rs.set("main_track", main_track_str, &main_track_node);
+    rs.set("loop_start", loop_start);
+    rs.set("loop_end", loop_end);
+    rs.set("title", title);
+    
+    main_track =
+        game.audio.streams.get(main_track_str, main_track_node);
+        
+    data_node* mix_tracks_node = node->get_child_by_name("mix_tracks");
+    size_t n_mix_tracks = mix_tracks_node->get_nr_of_children();
+    
+    for(size_t m = 0; m < n_mix_tracks; ++m) {
+        data_node* mix_track_node = mix_tracks_node->get_child(m);
+        MIX_TRACK_TYPE trigger = N_MIX_TRACK_TYPES;
+        
+        if(mix_track_node->name == "enemy") {
+            trigger = MIX_TRACK_TYPE_ENEMY;
+        } else {
+            game.errors.report(
+                "Unknown mix track trigger \"" +
+                mix_track_node->name +
+                "\"!", mix_track_node
+            );
+            continue;
+        }
+        
+        mix_tracks[trigger] =
+            game.audio.streams.get(mix_track_node->value, mix_track_node);
+    }
+    
+    if(loop_end < loop_start) {
+        loop_start = 0.0f;
+    }
 }

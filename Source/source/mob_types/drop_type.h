@@ -32,7 +32,7 @@ enum DROP_ANIM {
     
     //Bumped against.
     DROP_ANIM_BUMPED,
-
+    
 };
 
 
@@ -44,7 +44,7 @@ enum DROP_CONSUMER {
     
     //Leaders.
     DROP_CONSUMER_LEADERS,
-
+    
 };
 
 
@@ -59,13 +59,13 @@ enum DROP_EFFECT {
     
     //Give a status effect.
     DROP_EFFECT_GIVE_STATUS,
-
+    
 };
 
 
 //Drop object states.
 enum DROP_STATE {
-    
+
     //Idling.
     DROP_STATE_IDLING,
     
@@ -90,35 +90,35 @@ enum DROP_STATE {
 class drop_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //What sorts of mobs can consume this drop.
     DROP_CONSUMER consumer = DROP_CONSUMER_PIKMIN;
-
+    
     //Effects upon consumption.
     DROP_EFFECT effect = DROP_EFFECT_MATURATE;
-
+    
     //How many doses does this drop have? i.e. how many mobs can it serve?
     size_t total_doses = 1;
-
+    
     //If the consumption effect increases something, this specifies the amount.
     int increase_amount = 2;
-
+    
     //If it increases a spray type count, this specifies the spray type index.
     size_t spray_type_to_increase = INVALID;
-
+    
     //If it gives a status effect, this points to the status type.
     status_type* status_to_give = nullptr;
     
     //How quickly it shrinks. Aesthetic only.
     float shrink_speed = 40.0f;
     
-
+    
     //--- Function declarations ---
     
     drop_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

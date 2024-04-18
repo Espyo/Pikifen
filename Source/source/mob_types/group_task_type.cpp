@@ -39,7 +39,7 @@ group_task_type::group_task_type() :
  *
  * @param file File to read from.
  */
-void group_task_type::load_properties(data_node* file) {
+void group_task_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string contribution_method_str;

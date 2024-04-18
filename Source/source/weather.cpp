@@ -14,6 +14,7 @@
 #include "game.h"
 #include "utils/allegro_utils.h"
 #include "utils/math_utils.h"
+#include "utils/string_utils.h"
 
 
 /**
@@ -38,12 +39,12 @@ weather::weather(
     const vector<std::pair<int, unsigned char> > &bs,
     const PRECIPITATION_TYPE pt
 ) :
-    name(n),
     daylight(dl),
     sun_strength(ss),
     blackout_strength(bs),
     precipitation_type(pt) {
     
+    name = n;
 }
 
 
@@ -137,5 +138,80 @@ float weather::get_sun_strength() {
             255.0f;
     } else {
         return 1.0f;
+    }
+}
+
+
+/**
+ * @brief Loads weather data from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void weather::load_from_data_node(data_node* node) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+    
+    //Standard data.
+    reader_setter rs(node);
+    
+    rs.set("fog_near", fog_near);
+    rs.set("fog_far", fog_far);
+    
+    fog_near = std::max(fog_near, 0.0f);
+    fog_far = std::max(fog_far, fog_near);
+    
+    //Lighting.
+    vector<std::pair<int, string> > lighting_table =
+        get_weather_table(node->get_child_by_name("lighting"));
+        
+    for(size_t p = 0; p < lighting_table.size(); ++p) {
+        daylight.push_back(
+            std::make_pair(
+                lighting_table[p].first,
+                s2c(lighting_table[p].second)
+            )
+        );
+    }
+    
+    //Sun's strength.
+    vector<std::pair<int, string> > sun_strength_table =
+        get_weather_table(node->get_child_by_name("sun_strength"));
+        
+    for(size_t p = 0; p < sun_strength_table.size(); ++p) {
+        sun_strength.push_back(
+            std::make_pair(
+                sun_strength_table[p].first,
+                s2i(sun_strength_table[p].second)
+            )
+        );
+    }
+    
+    //Blackout effect's strength.
+    vector<std::pair<int, string> > blackout_strength_table =
+        get_weather_table(
+            node->get_child_by_name("blackout_strength")
+        );
+        
+    for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
+        blackout_strength.push_back(
+            std::make_pair(
+                blackout_strength_table[p].first,
+                s2i(blackout_strength_table[p].second)
+            )
+        );
+    }
+    
+    //Fog.
+    vector<std::pair<int, string> > fog_color_table =
+        get_weather_table(
+            node->get_child_by_name("fog_color")
+        );
+    for(size_t p = 0; p < fog_color_table.size(); ++p) {
+        fog_color.push_back(
+            std::make_pair(
+                fog_color_table[p].first,
+                s2c(fog_color_table[p].second)
+            )
+        );
     }
 }

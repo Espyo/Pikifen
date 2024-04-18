@@ -30,7 +30,7 @@ interactable_type::interactable_type() :
  *
  * @param file File to read from.
  */
-void interactable_type::load_properties(data_node* file) {
+void interactable_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("prompt_text", prompt_text);

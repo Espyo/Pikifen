@@ -18,13 +18,13 @@
 
 //Bridge object animations.
 enum BRIDGE_ANIM {
-    
+
     //Idling.
     BRIDGE_ANIM_IDLING,
     
     //Destroyed.
     BRIDGE_ANIM_DESTROYED,
-
+    
 };
 
 
@@ -52,36 +52,36 @@ enum BRIDGE_STATE {
 class bridge_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Texture used for the main bridge floor.
     ALLEGRO_BITMAP* bmp_main_texture = nullptr;
-
+    
     //Texture used for the left rail.
     ALLEGRO_BITMAP* bmp_left_rail_texture = nullptr;
-
+    
     //Texture used for the right rail.
     ALLEGRO_BITMAP* bmp_right_rail_texture = nullptr;
-
+    
     //File name of the main texture.
     string main_texture_file_name;
-
+    
     //File name of the left rail texture.
     string left_rail_texture_file_name;
-
+    
     //File name of the right rail texture.
     string right_rail_texture_file_name;
     
     //Width of each rail.
     float rail_width = 16.0f;
     
-
+    
     //--- Function declarations ---
     
     bridge_type();
-    void load_properties(data_node* file) override;
-    void load_resources(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
+    void load_cat_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

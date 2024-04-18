@@ -72,7 +72,7 @@ anim_conversion_vector bridge_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void bridge_type::load_properties(data_node* file) {
+void bridge_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("rail_width", rail_width);
@@ -84,7 +84,7 @@ void bridge_type::load_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void bridge_type::load_resources(data_node* file) {
+void bridge_type::load_cat_resources(data_node* file) {
     reader_setter rs(file);
     
     rs.set("main_texture", main_texture_file_name);

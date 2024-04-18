@@ -126,17 +126,12 @@ void area_data::clear() {
         thumbnail = nullptr;
     }
     
+    reset_metadata();
     name.clear();
-    folder_name.clear();
+    path.clear();
     type = AREA_TYPE_SIMPLE;
     subtitle.clear();
-    description.clear();
-    tags.clear();
     difficulty = AREA::DEF_DIFFICULTY;
-    maker.clear();
-    version.clear();
-    notes.clear();
-    engine_version.clear();
     spray_amounts.clear();
     song_name.clear();
     weather_name.clear();
@@ -341,7 +336,8 @@ void area_data::clone(area_data &other) {
     }
     
     other.type = type;
-    other.folder_name = folder_name;
+    other.name = name;
+    other.path = path;
     other.name = name;
     other.subtitle = subtitle;
     other.description = description;
@@ -349,7 +345,7 @@ void area_data::clone(area_data &other) {
     other.difficulty = difficulty;
     other.maker = maker;
     other.version = version;
-    other.notes = notes;
+    other.maker_notes = maker_notes;
     other.spray_amounts = spray_amounts;
     other.song_name = song_name;
     other.weather_name = weather_name;
@@ -892,6 +888,19 @@ size_t area_data::get_nr_path_links() {
 
 
 /**
+ * @brief Loads area data from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void area_data::load_from_data_node(data_node* node) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+    
+    //TODO move the rest of the area loading process here.
+}
+
+
+/**
  * @brief Loads the thumbnail image from the disk and updates the
  * thumbnail class member.
  *
@@ -1090,6 +1099,19 @@ void area_data::remove_vertex(const vertex* v_ptr) {
             return;
         }
     }
+}
+
+
+/**
+ * @brief Saves the area data to a data node.
+ *
+ * @param node Data node to save to.
+ */
+void area_data::save_to_data_node(data_node* node) {
+    //Content metadata.
+    save_metadata_to_data_node(node);
+    
+    //TODO move the rest of the area saving process here.
 }
 
 
@@ -1299,6 +1321,7 @@ void get_area_info_from_path(
  *
  * @param type Type of area.
  * @param from_game_data If true, get the folder in the game data folder.
+ * If false, get it from the user data folder.
  * @return The folder path.
  */
 string get_base_area_folder_path(

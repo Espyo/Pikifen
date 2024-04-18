@@ -46,7 +46,7 @@ anim_conversion_vector drop_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void drop_type::load_properties(data_node* file) {
+void drop_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string consumer_str;

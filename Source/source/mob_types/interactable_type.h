@@ -21,19 +21,19 @@
 class interactable_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Text to display above the mob, prompting the player on what to do.
     string prompt_text;
     
     //How close the leader must be before the player can interact with it.
     float trigger_range = 64.0f;
     
-
+    
     //--- Function declarations ---
-
+    
     interactable_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     
 };

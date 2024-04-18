@@ -18,7 +18,7 @@
 
 //Onion object states.
 enum ONION_STATE {
-    
+
     //Idling.
     ONION_STATE_IDLING,
     
@@ -37,7 +37,7 @@ class onion_type : public mob_type {
 public:
 
     //--- Members ---
-
+    
     //Nest data.
     pikmin_nest_type_t* nest = nullptr;
     
@@ -46,11 +46,11 @@ public:
     
     
     //--- Function declarations ---
-
+    
     onion_type();
     ~onion_type();
-    void load_properties(data_node* file) override;
-    void load_resources(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
+    void load_cat_resources(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

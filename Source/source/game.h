@@ -28,6 +28,7 @@
 #include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"
+#include "spike_damage.h"
 
 
 namespace GAME {

@@ -16,6 +16,8 @@
 #include <vector>
 
 #include "const.h"
+#include "content.h"
+#include "libs/data_file.h"
 
 
 using std::string;
@@ -34,12 +36,9 @@ struct status_type;
  * this is not necessarily the case. A hazard is just an abstract danger,
  * not an object that emits said danger.
  */
-struct hazard {
+struct hazard : public content {
 
     //--- Members ---
-    
-    //Name of the hazard.
-    string name;
     
     //Color that best represents this hazard.
     ALLEGRO_COLOR main_color = COLOR_EMPTY;
@@ -49,5 +48,10 @@ struct hazard {
     
     //If it's got an associated liquid, this points to it.
     liquid* associated_liquid = nullptr;
+
+
+    //--- Function declarations ---
+
+    void load_from_data_node(data_node* node);
     
 };

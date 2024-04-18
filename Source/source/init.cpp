@@ -1620,11 +1620,11 @@ void init_single_animation(
     data_node* anim_def_file, const string &name,
     single_animation_suite &anim
 ) {
-    data_node file(
+    anim.database.path =
         ANIMATIONS_FOLDER_PATH + "/" +
-        anim_def_file->get_child_by_name(name)->value
-    );
-    anim.database = load_animation_database_from_file(&file);
+        anim_def_file->get_child_by_name(name)->value;
+    data_node file(anim.database.path);
+    anim.database.load_from_data_node(&file);
     anim.instance.cur_anim = anim.database.animations[0];
     anim.instance.to_start();
 }

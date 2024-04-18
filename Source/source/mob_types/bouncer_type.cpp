@@ -51,7 +51,7 @@ anim_conversion_vector bouncer_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void bouncer_type::load_properties(data_node* file) {
+void bouncer_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     string riders_str;

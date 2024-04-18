@@ -16,7 +16,7 @@
 
 //Treasure object states.
 enum TREASURE_STATE {
-    
+
     //Waiting.
     TREASURE_STATE_IDLE_WAITING,
     
@@ -47,17 +47,17 @@ enum TREASURE_STATE {
 class treasure_type : public mob_type {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //How many points it is worth.
     size_t points = 10;
     
-
+    
     //--- Function declarations ---
     
     treasure_type();
-    void load_properties(data_node* file) override;
+    void load_cat_properties(data_node* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

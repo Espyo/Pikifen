@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "animation.h"
+#include "content.h"
 
 
 using std::string;
@@ -31,12 +32,9 @@ using std::string;
  * A hazard can be associated with a liquid. It's the way the
  * engine has to know if a sector is to be shown as a liquid or not.
  */
-struct liquid {
+struct liquid : public content {
 
     //--- Members ---
-    
-    //Name of this liquid.
-    string name;
     
     //Color that best represents this liquid.
     ALLEGRO_COLOR main_color = COLOR_EMPTY;
@@ -55,5 +53,10 @@ struct liquid {
     
     //Opacity of the surface.
     unsigned char surface_alpha = 255;
+
+
+    //--- Function declarations ---
+
+    void load_from_data_node(data_node* node, bool load_resources);
     
 };

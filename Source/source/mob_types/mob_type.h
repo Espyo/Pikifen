@@ -18,12 +18,14 @@
 #include "../animation.h"
 #include "../audio.h"
 #include "../const.h"
+#include "../content.h"
 #include "../misc_structs.h"
 #include "../mob_categories/mob_category.h"
 #include "../mob_script.h"
 #include "../status.h"
 #include "../libs/data_file.h"
 #include "../mobs/mob_enums.h"
+#include "../spike_damage.h"
 
 
 using std::size_t;
@@ -48,7 +50,7 @@ extern const float DEF_ROTATION_SPEED;
  * to create more generic mob types,
  * like some teleporter pad, or a door.
  */
-class mob_type {
+class mob_type : public content {
 
 public:
 
@@ -267,12 +269,6 @@ public:
     
     //- Basic information -
     
-    //Its full name.
-    string name;
-    
-    //Blurb-like description. Mostly used for gameplay, not content-making.
-    string description;
-    
     //Name of the folder its data is on.
     string folder_name;
     
@@ -481,8 +477,11 @@ public:
     
     explicit mob_type(MOB_CATEGORY category_id);
     virtual ~mob_type();
-    virtual void load_properties(data_node* file);
-    virtual void load_resources(data_node* file);
+    void load_from_data_node(
+        data_node* node, bool load_resources, const string &folder
+    );
+    virtual void load_cat_properties(data_node* file);
+    virtual void load_cat_resources(data_node* file);
     virtual anim_conversion_vector get_anim_conversions() const;
     virtual void unload_resources();
     void add_carrying_states();
@@ -525,9 +524,5 @@ public:
 void create_special_mob_types();
 void load_mob_types(mob_category* category, bool load_resources);
 void load_mob_types(bool load_resources);
-void load_mob_type_from_file(
-    mob_type* mt, data_node &file, const bool load_resources,
-    const string &folder
-);
 void unload_mob_types(const bool unload_resources);
 void unload_mob_types(mob_category* category, const bool unload_resources);

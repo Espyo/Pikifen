@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the spray type and spray type-related functions.
+ * Header for the spray type class and spray type-related functions.
  */
 
 #pragma once
@@ -14,6 +14,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "content.h"
 #include "status.h"
 
 
@@ -25,14 +26,11 @@ using std::vector;
  * @brief A spray type. It decides how the spray behaves,
  * what status effect it causes, and some other values.
  */
-class spray_type {
+class spray_type : public content {
 
 public:
 
     //--- Members ---
-    
-    //Name of the spray type.
-    string name;
     
     //What the spray does.
     vector<status_type*> effects;
@@ -68,4 +66,8 @@ public:
     //Does it bury Pikmin?
     bool buries_pikmin = false;
     
+    //--- Function declarations ---
+
+    void load_from_data_node(data_node* node, bool load_resources);
+
 };

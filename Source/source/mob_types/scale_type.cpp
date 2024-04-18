@@ -38,7 +38,7 @@ scale_type::scale_type() :
  *
  * @param file File to read from.
  */
-void scale_type::load_properties(data_node* file) {
+void scale_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("goal_number", goal_number);

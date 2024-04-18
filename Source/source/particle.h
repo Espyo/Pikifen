@@ -15,6 +15,7 @@
 #include <allegro5/allegro.h>
 
 #include "const.h"
+#include "content.h"
 #include "utils/geometry_utils.h"
 #include "world_component.h"
 
@@ -214,7 +215,7 @@ private:
  * @brief Base class for the particle generator.
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
-struct particle_generator {
+struct particle_generator : public content {
 
 public:
 
@@ -290,6 +291,7 @@ public:
     void tick(const float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
     void reset();
+    void load_from_data_node(data_node* node, bool load_resources);
     
 private:
     

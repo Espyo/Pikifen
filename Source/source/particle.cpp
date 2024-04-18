@@ -280,6 +280,84 @@ void particle_generator::emit(particle_manager &manager) {
 
 
 /**
+ * @brief Loads particle generator data from a data node.
+ * 
+ * @param node Data node to load from.
+ * @param load_resources If true, things like bitmaps and the like will
+ * be loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void particle_generator::load_from_data_node(
+    data_node* node, bool load_resources
+) {
+    //Content metadata.
+    load_metadata_from_data_node(node);
+
+    //Standard data.
+    reader_setter grs(node);
+    data_node* p_node = node->get_child_by_name("base");
+    reader_setter prs(p_node);
+    
+    float emission_interval_float = 0.0f;
+    size_t number_int = 1;
+    string bitmap_str;
+    data_node* bitmap_node = nullptr;
+    
+    grs.set("emission_interval", emission_interval_float);
+    grs.set("number", number_int);
+    
+    prs.set("bitmap", bitmap_str, &bitmap_node);
+    prs.set("duration", base_particle.duration);
+    prs.set("friction", base_particle.friction);
+    prs.set("gravity", base_particle.gravity);
+    prs.set("size_grow_speed", base_particle.size_grow_speed);
+    prs.set("size", base_particle.size);
+    prs.set("speed", base_particle.speed);
+    prs.set("color", base_particle.color);
+    
+    if(bitmap_node) {
+        if(load_resources) {
+            base_particle.bitmap =
+                game.bitmaps.get(
+                    bitmap_str, bitmap_node
+                );
+        }
+        base_particle.type = PARTICLE_TYPE_BITMAP;
+    } else {
+        base_particle.type = PARTICLE_TYPE_CIRCLE;
+    }
+    
+    base_particle.time = base_particle.duration;
+    base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
+    
+    emission_interval = emission_interval_float;
+    number = number_int;
+    
+    grs.set("interval_deviation", interval_deviation);
+    grs.set("number_deviation", number_deviation);
+    grs.set("duration_deviation", duration_deviation);
+    grs.set("friction_deviation", friction_deviation);
+    grs.set("gravity_deviation", gravity_deviation);
+    grs.set("size_deviation", size_deviation);
+    grs.set("pos_deviation", pos_deviation);
+    grs.set("speed_deviation", speed_deviation);
+    grs.set("angle", angle);
+    grs.set("angle_deviation", angle_deviation);
+    grs.set("total_speed", total_speed);
+    grs.set("total_speed_deviation", total_speed_deviation);
+    
+    angle = deg_to_rad(angle);
+    angle_deviation = deg_to_rad(angle_deviation);
+    
+    id =
+        (MOB_PARTICLE_GENERATOR_ID) (
+            MOB_PARTICLE_GENERATOR_ID_STATUS +
+            game.custom_particle_generators.size()
+        );
+}
+
+
+/**
  * @brief Resets data about the particle generator, to make it ready to
  * be used. Call this when copying from another generator.
  */
