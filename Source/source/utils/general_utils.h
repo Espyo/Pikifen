@@ -13,6 +13,9 @@
 #include <string>
 #include <vector>
 
+#include "geometry_utils.h"
+#include "math_utils.h"
+
 using std::string;
 using std::vector;
 
@@ -36,6 +39,70 @@ using std::vector;
 
 //Returns whether a bit is on or not in a bitmask.
 #define has_flag(flags, flag) ((flags & flag) > 0)
+
+
+
+/**
+ * @brief A struct that makes it simpler to obtain data
+ * for a given simple keyframe animation based on interpolation.
+ */
+struct keyframe_interpolator {
+
+    public:
+    
+    //--- Function declarations ---
+    
+    float get(const float t);
+    void add(
+        const float t, const float value, EASING_METHOD ease = EASE_METHOD_NONE
+    );
+    explicit keyframe_interpolator(const float initial_value);
+    
+    private:
+    
+    //--- Members ---
+    
+    //Keyframe times.
+    vector<float> keyframe_times;
+    
+    //Keyframe values.
+    vector<float> keyframe_values;
+    
+    //Keyframe easing methods.
+    vector<EASING_METHOD> keyframe_eases;
+    
+};
+
+
+
+/**
+ * @brief Info about where the player wants a leader
+ * (or something else) to go, based on the player's inputs.
+ */
+struct movement_t {
+
+    //--- Members ---
+    
+    //Amount to the east.
+    float right = 0.0f;
+    
+    //Amount to the north.
+    float up = 0.0f;
+    
+    //Amount to the west.
+    float left = 0.0f;
+    
+    //Amount to the south.
+    float down = 0.0f;
+    
+    
+    //--- Function declarations ---
+    
+    void get_info(point* coords, float* angle, float* magnitude) const;
+    void reset();
+    
+};
+
 
 
 string get_current_time(const bool filename_friendly);

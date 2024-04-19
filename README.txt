@@ -20,13 +20,13 @@ Discord server: https://discord.gg/qbhz4u3
 ===============
 1. Overview
 ===============
-    Pikifen (formerly known as the Pikmin fangame engine) is an engine capable of creating and playing Pikmin fan content. It is an open-source engine, currently under development, and can handle gameplay similar to the Pikmin games, in that it allows leaders to whistle and throw Pikmin, allows Pikmin to carry objects, etc. Although the idea is for fans to create their own content (enemies, areas, etc.) so the engine can read it and turn it into something playable, the project also comes with some pre-packaged content, which makes it possible for people who download it to experiment with its features right away.
+    Pikifen (formerly known as the Pikmin fangame engine) is an engine capable of creating and playing Pikmin fan content. Think of it like a "Pikmin Maker". It is an open-source engine, currently under development, and can do gameplay similar to the Pikmin games, in that it allows leaders to whistle and throw Pikmin, allows Pikmin to carry objects, etc. Although the idea is for fans to create their own content (enemies, areas, etc.) so the engine can read it and turn it into something playable, the project also comes with some pre-packaged content, which makes it possible for people who download it to experiment with its features right away.
     
     The reason for its creation was to make it possible for fans to make their own Pikmin fan content and to be able to play on it, by requiring only assets and data, while the engine itself handles all of the more complicated parts like the physics and artificial intelligence. Its most recent version, in alpha, is available for download with the methods in section 3 of this readme file. The engine can run on Windows, Linux, and Mac. Being a PC game, it is played using a keyboard, mouse, and/or a controller.
     
     The game playable by the engine has a 2-dimensional look, and is seen from an orthographic top-down view, although it is still a 3-dimensional game, in that height and gravity exist. The mechanics attempt to mimic those found in the Pikmin games, although not always to the same degree. They can be different because it's easier that way, it's better for the engine's flexibility, or because it's not possible to fully replicate what happens in the canon games.
     
-    Depending on the area the player selects, they can either explore around freely without a care, or they must complete a mission, usually with some goal, fail conditions, and scoring criteria. More game modes and ways of playing will be added in the future. Since it is still in development, some features may be fully implemented, missing entirely, or working incorrectly.
+    Depending on the area the player selects, they can either explore around freely without a care, or they must complete a mission, usually with some goal, fail conditions, and scoring criteria. More game modes and ways of playing will be added in the future. Since it is still in development, different features may be fully implemented, missing entirely, or working incorrectly.
 
 
 ===============
@@ -34,14 +34,15 @@ Discord server: https://discord.gg/qbhz4u3
 ===============
     * Replicates most of the standard Pikmin gameplay.
     * Unique features like weather conditions, complex missions, and more.
-    * Content that can be edited via text files, or just replacing the image and sound files.
+    * Content that can be edited via text files, or by just replacing the image and sound files.
     * Intuitive and deep editors, such as an area editor, animation editor, and more.
-    * Scripting for custom objects.
+    * Scripting for custom objects using a finite state machine.
     * Tools to help with debugging custom content.
     * A comprehensive but easy-to-follow manual to help with making content.
     * Customizable control schemes.
-    * Low system requirements, no special permissions to run, no need to install, and less than 30 MB when extracted.
+    * Low system requirements, no special permissions to run, no need to install, and less than 50 MB when extracted.
     * Filled with quality-of-life features and details, both for gameplay and for content-making.
+    * Organized codebase with very few external dependencies.
     * Made almost entirely from scratch, as free and open-source software, for Windows, Linux, and Mac.
 
 
@@ -50,7 +51,7 @@ Discord server: https://discord.gg/qbhz4u3
 ===============
     Upgrading from an older version
         If you are upgrading from an older version of the engine, you should extract it into a new folder and use that one instead. If you do this, remember to copy over the "User_data" folder from the previous version, if you care about your settings and personal backups. If you have any custom-made content you want to keep, copy that too, and remember to also follow any instructions noted in the changelog, inside the included manual.
-        If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, or keeping old files that the new version doesn't use and end up wasting space.
+        If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, as well as keeping old files that the new version doesn't use and end up wasting space.
     
     Windows
         The latest version available for download for Windows is shown at the top of the GitHub releases page: https://github.com/Espyo/Pikifen/releases The download is a compressed (zipped) file, which should be simple to extract. Just unzip everything onto a folder, and double-click Pikifen.exe from the folder to start running. If you have downloaded a zip file in hopes of just playing the engine, but can't find any Pikifen.exe file to double-click, then check if there's a "Source" folder. If there is, you've downloaded the wrong zip file. Use the one in the https://github.com/Espyo/Pikifen/releases page.
@@ -84,6 +85,6 @@ Discord server: https://discord.gg/qbhz4u3
     
     Pikifen and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.
-    Pikmin® is a trademark of Nintendo®. May contain content taken directly from official sources; said content belongs to Nintendo®.
+    Pikmin® is a trademark of Nintendo®.
     
     That said, we highly recommend you buy the official games, as fan creations cannot possibly replace the experience the real games bring!

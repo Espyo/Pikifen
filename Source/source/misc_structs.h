@@ -627,36 +627,6 @@ struct font_list {
 
 
 /**
- * @brief Info about where the player wants a leader
- * (or something else) to go, based on the player's inputs.
- */
-struct movement_t {
-
-    //--- Members ---
-    
-    //Amount to the east.
-    float right = 0.0f;
-    
-    //Amount to the north.
-    float up = 0.0f;
-    
-    //Amount to the west.
-    float left = 0.0f;
-    
-    //Amount to the south.
-    float down = 0.0f;
-    
-    
-    //--- Function declarations ---
-    
-    void get_info(point* coords, float* angle, float* magnitude) const;
-    void reset();
-    
-};
-
-
-
-/**
  * @brief This structure makes reading values in data files
  * and setting them to variables much easier.
  * On the set functions, specify the name of the child and the variable.
@@ -998,36 +968,6 @@ struct bitmap_effect_t {
     
     //Re-draws the bitmap on top, in additive blend, with this color.
     ALLEGRO_COLOR glow_color = COLOR_BLACK;
-    
-};
-
-
-/**
- * @brief A struct that makes it simpler to obtain data
- * for a given simple keyframe animation based on interpolation.
- */
-struct keyframe_interpolator {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    float get(const float t);
-    void add(const float t, const float value, EASING_METHOD ease = EASE_METHOD_NONE);
-    explicit keyframe_interpolator(const float initial_value);
-    
-    private:
-    
-    //--- Members ---
-    
-    //Keyframe times.
-    vector<float> keyframe_times;
-    
-    //Keyframe values.
-    vector<float> keyframe_values;
-    
-    //Keyframe easing methods.
-    vector<EASING_METHOD> keyframe_eases;
     
 };
 
