@@ -17,7 +17,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Some sounds that should use the new looping feature are instead just a long sustained sound
     Code cleanup
         Use #pragma region in header files?
-    Update to Dear ImGui v1.90.5
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -140,6 +139,7 @@ Next tasks (roughly sorted most important first)
         Shaking after leaving the water
         Carrying (walking while carrying)
             Note that there is currently a "grabbing" (unused) and a "carrying" animation
+            Also use it for when they're carrying tools
         Celebrating
         Crushed
         Climbing (add the track logic too)
