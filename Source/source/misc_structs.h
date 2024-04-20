@@ -1353,7 +1353,8 @@ public:
     /**
      * @brief Constructs a new asset manager object.
      *
-     * @param base_dir Base directory its files belong to.
+     * @param base_dir Base folder path its files belong to,
+     * relative to the program root folder.
      */
     explicit asset_manager(const string &base_dir) : base_dir(base_dir) {}
     
@@ -1471,7 +1472,8 @@ protected:
     
     //--- Members ---
     
-    //Base directory that this manager works on.
+    //Base folder path that this manager works on,
+    //relative to the program root folder.
     string base_dir;
     
     //List of loaded assets.

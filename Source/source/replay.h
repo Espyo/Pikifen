@@ -166,8 +166,8 @@ public:
     );
     void clear();
     void finish_recording();
-    void load_from_file(const string &file_name);
-    void save_to_file(const string &file_name) const;
+    void load_from_file(const string &file_path);
+    void save_to_file(const string &file_path) const;
     
 private:
 

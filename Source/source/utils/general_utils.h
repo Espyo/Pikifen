@@ -105,7 +105,7 @@ struct movement_t {
 
 
 
-string get_current_time(const bool filename_friendly);
+string get_current_time(const bool file_name_friendly);
 string sanitize_file_name(const string &s);
 string standardize_path(const string &path);
 string vector_tail_to_string(const vector<string> &v, const size_t pos);

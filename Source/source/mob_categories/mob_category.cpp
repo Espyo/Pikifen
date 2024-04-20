@@ -28,18 +28,19 @@ using std::string;
  * @param id This category's ID.
  * @param name Standard category name, in singular.
  * @param plural_name Standard category name, in plural.
- * @param folder Name of the folder where the mob types for this category are.
+ * @param folder_name Name of the folder where the mob types for this
+ * category are.
  * @param editor_color In the area editor, objects of this category get
  * this color.
  */
 mob_category::mob_category(
     const MOB_CATEGORY id, const string &name, const string &plural_name,
-    const string &folder, const ALLEGRO_COLOR editor_color
+    const string &folder_name, const ALLEGRO_COLOR editor_color
 ) :
     name(name),
     id(id),
     plural_name(plural_name),
-    folder(MOB_TYPES_FOLDER_PATH + "/" + folder),
+    folder_path(MOB_TYPES_FOLDER_PATH + "/" + folder_name),
     editor_color(editor_color) {
     
 }
@@ -74,7 +75,7 @@ mob_type* mob_category_manager::find_mob_type(const string &name) const {
 
 
 /**
- * @brief Finds a mob type given its folder's name in the Game data folder.
+ * @brief Finds a mob type given its folder's name in the game data folder.
  *
  * @param cat Category the mob is in.
  * @param name Name of the folder.
@@ -115,7 +116,7 @@ mob_category* mob_category_manager::get_from_folder_name(
     const string &name
 ) const {
     for(size_t n = 0; n < categories.size(); ++n) {
-        if(categories[n]->folder == name) return categories[n];
+        if(categories[n]->folder_path == name) return categories[n];
     }
     game.errors.report(
         "Mob category with the folder name \"" + name + "\" not found!"

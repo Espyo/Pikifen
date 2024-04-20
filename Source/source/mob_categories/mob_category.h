@@ -26,7 +26,7 @@ using std::vector;
 
 //Mob categories. Sorted by what types of mobs to load first.
 enum MOB_CATEGORY {
-    
+
     //None.
     MOB_CATEGORY_NONE,
     
@@ -107,30 +107,30 @@ class mob_type;
 class mob_category {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //Name of the mob category.
     string name;
-
+    
     //ID of the mob category.
     MOB_CATEGORY id = MOB_CATEGORY_NONE;
-
+    
     //Name used when referring to objects of this category in plural.
     string plural_name;
-
-    //Folder name for this category.
-    string folder;
-
+    
+    //Path to the folder for this category, relative to the program root folder.
+    string folder_path;
+    
     //Color used to represent objects of this category in the area editor.
     ALLEGRO_COLOR editor_color = COLOR_WHITE;
     
-
+    
     //--- Function declarations ---
-
+    
     mob_category(
         const MOB_CATEGORY id, const string &name, const string &plural_name,
-        const string &folder, const ALLEGRO_COLOR editor_color
+        const string &folder_name, const ALLEGRO_COLOR editor_color
     );
     virtual ~mob_category() = default;
     virtual void get_type_names(vector<string> &list) const = 0;
@@ -154,10 +154,10 @@ public:
  */
 struct mob_category_manager {
 
-public:
+    public:
     
     //--- Function declarations ---
-
+    
     void register_category(MOB_CATEGORY nr, mob_category* category);
     mob_type* find_mob_type(const string &name) const;
     mob_type* find_mob_type_from_folder_name(
@@ -169,10 +169,10 @@ public:
     mob_category* get_from_pname(const string &pname) const;
     void clear();
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     //List of known mob categories.
     vector<mob_category*> categories;
     
@@ -185,9 +185,9 @@ private:
 class none_category : public mob_category {
 
 public:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     none_category();
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;

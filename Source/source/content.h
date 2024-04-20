@@ -26,10 +26,10 @@ class plain_content {
 public:
 
     //--- Members ---
-
-    //Relative path to the folder or file.
+    
+    //Path to the folder or file, relative to the program root folder.
     string path;
-
+    
 };
 
 

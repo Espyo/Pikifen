@@ -106,25 +106,25 @@ void movement_t::reset() {
 /**
  * @brief Returns a string representing the current date and time.
  *
- * @param filename_friendly If true, slashes become dashes,
+ * @param file_name_friendly If true, slashes become dashes,
  * and semicolons become dots.
  * @return The string.
  */
-string get_current_time(const bool filename_friendly) {
+string get_current_time(const bool file_name_friendly) {
     time_t tt;
     time(&tt);
     struct tm t = *localtime(&tt);
     return
         i2s(t.tm_year + 1900) +
-        (filename_friendly ? "-" : "/") +
+        (file_name_friendly ? "-" : "/") +
         leading_zero(t.tm_mon + 1) +
-        (filename_friendly ? "-" : "/") +
+        (file_name_friendly ? "-" : "/") +
         leading_zero(t.tm_mday) +
-        (filename_friendly ? "_" : " ") +
+        (file_name_friendly ? "_" : " ") +
         leading_zero(t.tm_hour) +
-        (filename_friendly ? "." : ":") +
+        (file_name_friendly ? "." : ":") +
         leading_zero(t.tm_min) +
-        (filename_friendly ? "." : ":") +
+        (file_name_friendly ? "." : ":") +
         leading_zero(t.tm_sec);
 }
 

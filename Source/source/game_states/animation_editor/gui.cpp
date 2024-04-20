@@ -316,7 +316,6 @@ void animation_editor::process_gui_load_dialog() {
             if(type) {
                 loaded_mob_type = type;
                 file_path =
-                    loaded_mob_type->category->folder + "/" +
                     loaded_mob_type->path + "/Animations.txt";
                 load_animation_database(true);
                 close_top_dialog();

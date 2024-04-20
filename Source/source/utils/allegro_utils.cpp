@@ -439,7 +439,7 @@ vector<string> prompt_file_dialog(
  * rest of the path. Choices can also be contained inside subfolders of the
  * specified folder.
  *
- * @param folder The folder to lock to, without the ending slash.
+ * @param folder_path The folder to lock to, without the ending slash.
  * @param title Title of the dialog.
  * @param patterns File name patterns to match, separated by semicolon.
  * @param mode al_create_native_file_dialog mode flags.
@@ -448,12 +448,12 @@ vector<string> prompt_file_dialog(
  * @return The user's choice(s).
  */
 vector<string> prompt_file_dialog_locked_to_folder(
-    const string &folder, const string &title,
+    const string &folder_path, const string &title,
     const string &patterns, const int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 ) {
     vector<string> f =
-        prompt_file_dialog(folder + "/", title, patterns, mode, display);
+        prompt_file_dialog(folder_path + "/", title, patterns, mode, display);
         
     if(f.empty() || f[0].empty()) {
         *result = FILE_DIALOG_RESULT_CANCELED;
@@ -461,14 +461,14 @@ vector<string> prompt_file_dialog_locked_to_folder(
     }
     
     for(size_t fi = 0; fi < f.size(); ++fi) {
-        size_t folder_pos = f[0].find(folder);
+        size_t folder_pos = f[0].find(folder_path);
         if(folder_pos == string::npos) {
             //This isn't in the specified folder!
             *result = FILE_DIALOG_RESULT_WRONG_FOLDER;
             return vector<string>();
         } else {
             f[fi] =
-                f[fi].substr(folder_pos + folder.size() + 1, string::npos);
+                f[fi].substr(folder_pos + folder_path.size() + 1, string::npos);
         }
     }
     

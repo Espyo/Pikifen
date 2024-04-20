@@ -29,7 +29,7 @@ const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
  * @brief Constructs a new empty data node object.
  */
 data_node::data_node() {
-    
+
 }
 
 
@@ -43,7 +43,7 @@ data_node::data_node(const data_node &dn2) :
     name(dn2.name),
     value(dn2.value),
     file_was_opened(dn2.file_was_opened),
-    file_name(dn2.file_name),
+    file_path(dn2.file_path),
     line_nr(dn2.line_nr) {
     
     for(size_t c = 0; c < dn2.children.size(); ++c) {
@@ -58,12 +58,12 @@ data_node::data_node(const data_node &dn2) :
 /**
  * @brief Constructs a new data node object from a file, given the file name.
  *
- * @param file_name Name of the file to load.
+ * @param file_path Name of the file to load.
  */
-data_node::data_node(const string &file_name) :
-    file_name(file_name) {
+data_node::data_node(const string &file_path) :
+    file_path(file_path) {
     
-    load_file(file_name);
+    load_file(file_path);
 }
 
 
@@ -116,7 +116,7 @@ size_t data_node::add(data_node* new_node) {
 data_node* data_node::create_dummy() {
     data_node* new_dummy_child = new data_node();
     new_dummy_child->line_nr = line_nr;
-    new_dummy_child->file_name = file_name;
+    new_dummy_child->file_path = file_path;
     new_dummy_child->file_was_opened = file_was_opened;
     dummy_children.push_back(new_dummy_child);
     return new_dummy_child;
@@ -330,7 +330,7 @@ string data_node::get_value_or_default(const string &def) const {
 /**
  * @brief Loads data from a file.
  *
- * @param file_name Name of the file to load.
+ * @param file_path Path to the file to load.
  * @param trim_values If true, spaces before and after the value will
  * be trimmed off.
  * @param names_only_after_root If true, any nodes that are not in the
@@ -340,15 +340,15 @@ string data_node::get_value_or_default(const string &def) const {
  * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
 void data_node::load_file(
-    const string &file_name, const bool trim_values,
+    const string &file_path, const bool trim_values,
     const bool names_only_after_root, const bool encrypted
 ) {
     vector<string> lines;
     
     file_was_opened = false;
-    this->file_name = file_name;
+    this->file_path = file_path;
     
-    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "r");
+    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "r");
     if(file) {
         bool is_first_line = true;
         file_was_opened = true;
@@ -439,7 +439,7 @@ size_t data_node::load_node(
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value.clear();
             new_child->file_was_opened = file_was_opened;
-            new_child->file_name = file_name;
+            new_child->file_path = file_path;
             new_child->line_nr = l + 1;
             l =
                 new_child->load_node(
@@ -470,7 +470,7 @@ size_t data_node::load_node(
         new_child->name = trim_spaces(n);
         new_child->value = v;
         new_child->file_was_opened = file_was_opened;
-        new_child->file_name = file_name;
+        new_child->file_path = file_path;
         new_child->line_nr = l + 1;
         children.push_back(new_child);
         
@@ -491,7 +491,7 @@ data_node &data_node::operator=(const data_node &dn2) {
         name = dn2.name;
         value = dn2.value;
         file_was_opened = dn2.file_was_opened;
-        file_name = dn2.file_name;
+        file_path = dn2.file_path;
         line_nr = dn2.line_nr;
         
         children.clear();
@@ -530,7 +530,7 @@ bool data_node::remove(data_node* node_to_remove) {
  * @brief Saves a node into a new text file. Line numbers are ignored.
  * If you don't provide a file name, it'll use the node's file name.
  *
- * @param file_name Name of the file to save.
+ * @param file_path Path to the file to save to.
  * @param children_only If true, only save the nodes inside this node.
  * @param include_empty_values If true, even nodes with an empty value
  * will be saved.
@@ -538,24 +538,24 @@ bool data_node::remove(data_node* node_to_remove) {
  * @return Whether it succeded.
  */
 bool data_node::save_file(
-    string file_name, const bool children_only,
+    string file_path, const bool children_only,
     const bool include_empty_values, const bool encrypted
 ) const {
 
-    if(file_name == "") file_name = this->file_name;
+    if(file_path == "") file_path = this->file_path;
     
     //Create any missing folders.
-    size_t next_slash_pos = file_name.find('/', 0);
+    size_t next_slash_pos = file_path.find('/', 0);
     while(next_slash_pos != string::npos) {
-        string path_so_far = file_name.substr(0, next_slash_pos);
+        string path_so_far = file_path.substr(0, next_slash_pos);
         if(!al_make_directory(path_so_far.c_str())) {
             return false;
         }
-        next_slash_pos = file_name.find('/', next_slash_pos + 1);
+        next_slash_pos = file_path.find('/', next_slash_pos + 1);
     }
     
     //Save the file.
-    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "w");
+    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "w");
     if(file) {
         if(children_only) {
             for(size_t c = 0; c < children.size(); ++c) {

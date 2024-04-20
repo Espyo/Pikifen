@@ -247,7 +247,7 @@ string animation_editor::get_opened_file_name() const {
 
 
 /**
- * @brief  Returns a file path, but shortened in such a way that only the text
+ * @brief Returns a file path, but shortened in such a way that only the text
  * file's name and brief context about its folder remain. If that's not
  * possible, it is returned as is, though its beginning may be cropped off
  * with ellipsis if it's too big.
@@ -512,9 +512,7 @@ void animation_editor::load_animation_database(
     ) {
         data_node data =
             load_data_file(
-                loaded_mob_type->category->folder + "/" +
-                file_path_parts[file_path_parts.size() - 2] +
-                "/Data.txt"
+                loaded_mob_type->path + "/Data.txt"
             );
         top_bmp[0] =
             load_bmp(data.get_child_by_name("top_leaf")->value, &data);
@@ -1066,7 +1064,7 @@ bool animation_editor::save_animation_database() {
     anims.sort_alphabetically();
     
     data_node file_node = data_node("", "");
-
+    
     anims.save_to_data_node(
         &file_node,
         loaded_mob_type && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN

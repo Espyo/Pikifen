@@ -875,13 +875,13 @@ void load_custom_particle_generators(const bool load_resources) {
 /**
  * @brief Loads a data file from the game's content.
  *
- * @param file_name Name of the file.
+ * @param file_path Path to the file, relative to the program root folder.
  */
-data_node load_data_file(const string &file_name) {
-    data_node n = data_node(file_name);
+data_node load_data_file(const string &file_path) {
+    data_node n = data_node(file_path);
     if(!n.file_was_opened) {
         game.errors.report(
-            "Could not open data file \"" + file_name + "\"!"
+            "Could not open data file \"" + file_path + "\"!"
         );
     }
     

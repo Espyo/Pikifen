@@ -63,30 +63,30 @@ extern const string UTF8_MAGIC_NUMBER;
 class data_node {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //The node's name.
     string name;
-
+    
     //The node's value.
     string value;
-
+    
     //True if the node or parent(s) was created from a file
     //that was opened successfuly.
     bool file_was_opened = false;
-
-    //Full file name of the file used to open this node or its parent(s).
-    string file_name;
-
+    
+    //File path of the file used to open this node or its parent(s), if any.
+    string file_path;
+    
     //Line on the text file this node's in.
     size_t line_nr = 0;
     
-
+    
     //--- Function declarations ---
-
+    
     data_node();
-    explicit data_node(const string &file_name);
+    explicit data_node(const string &file_path);
     data_node(const string &name, const string &value);
     data_node(const data_node &dn2);
     data_node &operator=(const data_node &dn2);
@@ -101,7 +101,7 @@ public:
     size_t add(data_node* new_node);
     bool remove(data_node* node_to_remove);
     void load_file(
-        const string &file_name,
+        const string &file_path,
         const bool trim_values = true,
         const bool names_only_after_root = false,
         const bool encrypted = false
@@ -112,7 +112,7 @@ public:
         const bool names_only_after_root = false
     );
     bool save_file(
-        string file_name = "", const bool children_only = true,
+        string file_path = "", const bool children_only = true,
         const bool include_empty_values = false,
         const bool encrypted = false
     ) const;
@@ -125,14 +125,14 @@ public:
 private:
 
     //--- Members ---
-
+    
     //List of children nodes.
     vector<data_node*> children;
     
     //Dummy children, returned upon error.
     vector<data_node*> dummy_children;
     
-
+    
     //--- Function declarations ---
     
     data_node* create_dummy();

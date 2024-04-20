@@ -129,6 +129,7 @@ void area_data::clear() {
     reset_metadata();
     name.clear();
     path.clear();
+    folder_name.clear();
     type = AREA_TYPE_SIMPLE;
     subtitle.clear();
     difficulty = AREA::DEF_DIFFICULTY;
@@ -1316,8 +1317,8 @@ void get_area_info_from_path(
 
 /**
  * @brief Returns the folder path where certain area folders are stored,
- * based on the type of area and whether it's to load from the game data folder
- * or the user data folder.
+ * relative to the program root folder. This is based on the type of area
+ * and whether it's to load from the game data folder or the user data folder.
  *
  * @param type Type of area.
  * @param from_game_data If true, get the folder in the game data folder.

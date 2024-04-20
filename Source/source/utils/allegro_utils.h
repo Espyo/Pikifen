@@ -31,13 +31,13 @@ enum FILE_DIALOG_RESULT {
     
     //The player cancelled the dialog.
     FILE_DIALOG_RESULT_CANCELED,
-
+    
 };
 
 
 //Possible results for a folder wipe operation.
 enum WIPE_FOLDER_RESULT {
-    
+
     //Wipe successful.
     WIPE_FOLDER_RESULT_OK,
     
@@ -81,7 +81,7 @@ vector<string> prompt_file_dialog(
     const string &patterns, const int mode, ALLEGRO_DISPLAY* display
 );
 vector<string> prompt_file_dialog_locked_to_folder(
-    const string &folder, const string &title,
+    const string &folder_path, const string &title,
     const string &patterns, const int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 );

@@ -171,11 +171,11 @@ void replay::finish_recording() {
 /**
  * @brief Loads replay data from a file in the disk.
  *
- * @param file_name Name of the file to load from.
+ * @param file_path Path to the file to load from.
  */
-void replay::load_from_file(const string &file_name) {
+void replay::load_from_file(const string &file_path) {
     clear();
-    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "rb");
+    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "rb");
     
     size_t n_states = al_fread32be(file);
     states.reserve(n_states);
@@ -216,10 +216,10 @@ void replay::load_from_file(const string &file_name) {
 /**
  * @brief Saves replay data to a file in the disk.
  *
- * @param file_name Name of the file to save to.
+ * @param file_path Path to the file to save to.
  */
-void replay::save_to_file(const string &file_name) const {
-    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "wb");
+void replay::save_to_file(const string &file_path) const {
+    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());
     for(size_t s = 0; s < states.size(); ++s) {

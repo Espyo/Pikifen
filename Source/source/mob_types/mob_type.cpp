@@ -204,7 +204,7 @@ void mob_type::load_cat_resources(data_node*) { }
 
 
 void mob_type::load_from_data_node(
-    data_node* node, bool load_resources, const string &folder
+    data_node* node, bool load_resources, const string &folder_path
 ) {
     //Content metadata.
     load_metadata_from_data_node(node);
@@ -802,14 +802,14 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(load_resources) {
-        anims.path = folder + "/Animations.txt";
+        anims.path = folder_path + "/Animations.txt";
         data_node anim_file = load_data_file(anims.path);
         anims.load_from_data_node(&anim_file);
         anims.fix_body_part_pointers();
         anims.fill_sound_idx_caches(this);
         
         data_node script_file;
-        script_file.load_file(folder + "/Script.txt", true, true);
+        script_file.load_file(folder_path + "/Script.txt", true, true);
         size_t old_n_states = states.size();
         
         data_node* death_state_name_node =
@@ -1070,18 +1070,22 @@ void load_mob_types(bool load_resources) {
  * so it loads faster.
  */
 void load_mob_types(mob_category* category, bool load_resources) {
-    if(category->folder.empty()) return;
+    if(category->folder_path.empty()) return;
     bool folder_found;
     vector<string> types =
-        folder_to_vector(category->folder, true, &folder_found);
+        folder_to_vector(category->folder_path, true, &folder_found);
     if(!folder_found) {
-        game.errors.report("Folder \"" + category->folder + "\" not found!");
+        game.errors.report(
+            "Mob category folder \"" + category->folder_path + "\" not found!"
+        );
     }
     
     for(size_t t = 0; t < types.size(); ++t) {
-        string type_folder_name = types[t];
-        string type_folder_path = category->folder + "/" + type_folder_name;
-        
+        string type_folder_name =
+            types[t];
+        string type_folder_path =
+            category->folder_path + "/" + type_folder_name;
+            
         data_node file(type_folder_path + "/Data.txt");
         if(!file.file_was_opened) continue;
         
