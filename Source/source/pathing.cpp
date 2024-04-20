@@ -8,6 +8,8 @@
  * Paths, path-finding, and related functions.
  */
 
+#include <algorithm>
+
 #include "pathing.h"
 
 #include "functions.h"

@@ -8,6 +8,8 @@
  * Weather class and weather-related functions.
  */
 
+#include <algorithm>
+
 #include "weather.h"
 
 #include "functions.h"

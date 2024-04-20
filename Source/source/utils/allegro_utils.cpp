@@ -10,6 +10,7 @@
  */
 
 #include <algorithm>
+#include <clocale>
 #include <vector>
 
 #include <allegro5/allegro_native_dialog.h>

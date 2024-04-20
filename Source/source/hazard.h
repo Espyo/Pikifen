@@ -25,7 +25,7 @@ using std::vector;
 
 
 struct liquid;
-struct status_type;
+class status_type;
 
 
 /**
@@ -48,10 +48,10 @@ struct hazard : public content {
     
     //If it's got an associated liquid, this points to it.
     liquid* associated_liquid = nullptr;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     void load_from_data_node(data_node* node);
     
 };

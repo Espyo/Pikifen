@@ -8,6 +8,14 @@
  * General-purpose utilities used throughout the project.
  */
 
+// Visual Studio warnings.
+#ifdef _MSC_VER
+// Disable warning about localtime being deprecated.
+#pragma warning(disable : 4996)
+#endif
+
+#include <time.h>
+
 #include "general_utils.h"
 
 #include "math_utils.h"

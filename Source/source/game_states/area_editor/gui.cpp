@@ -1732,7 +1732,7 @@ void area_editor::process_gui_panel_info() {
                 "Gimmick",
                 "Custom game mode",
             };
-            int gameplay_tag_idx;
+            int gameplay_tag_idx = -1;
             if(ImGui::Combo("Gameplay", &gameplay_tag_idx, gameplay_tags, 15)) {
                 new_tag = gameplay_tags[gameplay_tag_idx];
             }
@@ -1755,7 +1755,7 @@ void area_editor::process_gui_panel_info() {
                 "Tiles",
                 "Toys",
             };
-            int theme_tag_idx;
+            int theme_tag_idx = -1;
             if(ImGui::Combo("Theme", &theme_tag_idx, theme_tags, 15)) {
                 new_tag = theme_tags[theme_tag_idx];
             }
@@ -1765,8 +1765,9 @@ void area_editor::process_gui_panel_info() {
                 "Art",
                 "Technical",
                 "Troll",
+                "Tutorial",
             };
-            int misc_tag_idx;
+            int misc_tag_idx = -1;
             if(ImGui::Combo("Misc.", &misc_tag_idx, misc_tags, 15)) {
                 new_tag = misc_tags[misc_tag_idx];
             }
