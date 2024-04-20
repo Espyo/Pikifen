@@ -30,6 +30,9 @@ using std::vector;
 
 namespace AREA_EDITOR {
 
+//Color for blocking sectors in the "show blocking sectors" mode.
+const ALLEGRO_COLOR BLOCKING_COLOR = al_map_rgba(100, 32, 32, 192);
+
 //A comfortable distance, useful for many scenarios.
 const float COMFY_DIST = 32.0f;
 
@@ -74,6 +77,9 @@ const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
 
 //How long to tint the new sector's line(s) red for.
 const float NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
+
+//Color for non-blocking sectors in the "show blocking sectors" mode.
+const ALLEGRO_COLOR NON_BLOCKING_COLOR = al_map_rgba(64, 160, 64, 192);
 
 //Thickness to use when drawing a path link line.
 const float PATH_LINK_THICKNESS = 3.0f;
@@ -250,6 +256,7 @@ void area_editor::clear_current_area() {
     game.cam.set_zoom(1.0f);
     show_cross_section = false;
     show_cross_section_grid = false;
+    show_blocking_sectors = false;
     show_path_preview = false;
     path_preview.clear();
     //LARGE_FLOAT means they were never given a previous position.

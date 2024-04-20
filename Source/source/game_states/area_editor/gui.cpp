@@ -5099,6 +5099,34 @@ void area_editor::process_gui_panel_review() {
         
     }
     
+    //Tools node.
+    if(saveable_tree_node("review", "Tools")) {
+    
+        //Show blocking sectors checkbox.
+        ImGui::Checkbox("Show blocking sectors", &show_blocking_sectors);
+        set_tooltip(
+            "Show which sectors are blocking (red) and which\n"
+            "are not (green). Useful to make sure the radar works as\n"
+            "intended, and that players can't go or throw out-of-bounds."
+        );
+        
+        //Show height grid checkbox.
+        if(show_cross_section) {
+            ImGui::Indent();
+            ImGui::Checkbox("Show height grid", &show_cross_section_grid);
+            set_tooltip(
+                "Show a height grid in the cross-section window."
+            );
+            ImGui::Unindent();
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
     //Stats node.
     if(saveable_tree_node("main", "Stats")) {
     

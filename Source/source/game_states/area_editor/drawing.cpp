@@ -306,7 +306,7 @@ void area_editor::draw_canvas() {
         
         if(
             selected || !valid || view_heightmap ||
-            view_brightness || highlighted
+            view_brightness || show_blocking_sectors || highlighted
         ) {
             for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
             
@@ -314,6 +314,11 @@ void area_editor::draw_canvas() {
                 for(size_t v = 0; v < 3; ++v) {
                     if(!valid) {
                         av[v].color = al_map_rgba(160, 16, 16, 224);
+                    } else if(show_blocking_sectors) {
+                        av[v].color =
+                            s_ptr->type == SECTOR_TYPE_BLOCKING ?
+                            AREA_EDITOR::BLOCKING_COLOR :
+                            AREA_EDITOR::NON_BLOCKING_COLOR;
                     } else if(view_brightness) {
                         av[v].color =
                             al_map_rgba(
@@ -338,15 +343,15 @@ void area_editor::draw_canvas() {
                                 AREA_EDITOR::SELECTION_COLOR[2],
                                 selection_opacity * 0.5 * 255
                             );
-                    }
-                    if(highlighted && !selected) {
-                        av[v].color =
-                            al_map_rgba(
-                                highlight_color.r * 255,
-                                highlight_color.g * 255,
-                                highlight_color.b * 255,
-                                16
-                            );
+                        if(highlighted && !selected) {
+                            av[v].color =
+                                al_map_rgba(
+                                    highlight_color.r * 255,
+                                    highlight_color.g * 255,
+                                    highlight_color.b * 255,
+                                    16
+                                );
+                        }
                     }
                     av[v].u = 0;
                     av[v].v = 0;
@@ -1560,7 +1565,7 @@ void area_editor::draw_canvas() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (const split_t & i1, const split_t & i2) -> bool {
+            [] (const split_t  &i1, const split_t  &i2) -> bool {
                 return i1.l2r < i2.l2r;
             }
             );

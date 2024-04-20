@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -104,8 +104,6 @@ Next tasks (roughly sorted most important first)
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
-    Some way to make it clear for an area maker where the impassable sectors are, maybe a mode in the review panel?
-        Add this step to the area tips in the manual
     General graphic file improvements
         Leader and Pikmin portrait images should
             Be a group, and then have a mask applied on top to fit the grid rectangle
@@ -214,6 +212,26 @@ Next tasks (roughly sorted most important first)
         Move area loading to area_data::load_from_data_node
         Add the new common content properties to everything in the engine
     A way for the user to set a background texture for the animation editor instead of the plain green
+    Format the whole code with Astyle, once #563 is fixed
+        This setup seemed to work ok, or at least as a start:
+            "astyle.cmd_options": [
+                "--align-pointer=type",
+                "--align-reference=name",
+                "--convert-tabs",
+                "--fill-empty-lines",
+                "--indent-after-parens",
+                "--indent-continuation=1",
+                "--indent-col1-comments",
+                "--indent-preproc-define",
+                "--indent=spaces=4",
+                "--keep-one-line-blocks",
+                "--keep-one-line-statements",
+                "--min-conditional-indent=0",
+                "--mode=c",
+                "--pad-oper",
+                "--squeeze-lines=3",
+                "--style=java",
+            ],
     
     --- Future ---
     Some tweaks to the HUD
@@ -845,6 +863,7 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
+        A maker tool that lets you go frame-by-frame
         Maker tools should be bound to inputs in the same way the regular controls are, instead of being stuck in the number and F keys
     Code cleanup
         Switch angles to vectors?

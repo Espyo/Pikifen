@@ -24,6 +24,7 @@ using std::string;
 
 
 namespace AREA_EDITOR {
+extern const ALLEGRO_COLOR BLOCKING_COLOR;
 extern const float COMFY_DIST;
 extern const float CROSS_SECTION_POINT_RADIUS;
 extern const float CURSOR_SNAP_DISTANCE;
@@ -40,6 +41,7 @@ extern const float MIN_GRID_INTERVAL;
 extern const float MOB_LINK_THICKNESS;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float NEW_SECTOR_ERROR_TINT_DURATION;
+extern const ALLEGRO_COLOR NON_BLOCKING_COLOR;
 extern const float PATH_LINK_THICKNESS;
 extern const float PATH_PREVIEW_CHECKPOINT_RADIUS;
 extern const float PATH_PREVIEW_TIMER_DUR;
@@ -795,6 +797,9 @@ private:
     
     //Point where the selection started.
     point selection_start;
+    
+    //Show blocking vs. non-blocking sectors?
+    bool show_blocking_sectors = false;
     
     //Show the path stop closest to the cursor?
     bool show_closest_stop = false;
