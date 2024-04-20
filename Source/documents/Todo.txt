@@ -27,6 +27,7 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Helodity's performance improvements
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
+    Perform some optimizations
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -105,6 +106,7 @@ Next tasks (roughly sorted most important first)
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     Some way to make it clear for an area maker where the impassable sectors are, maybe a mode in the review panel?
+        Add this step to the area tips in the manual
     General graphic file improvements
         Leader and Pikmin portrait images should
             Be a group, and then have a mask applied on top to fit the grid rectangle
@@ -210,7 +212,6 @@ Next tasks (roughly sorted most important first)
             When players want to install content, they have to place it in the right folders
         Make assets inherit from the plain_content class
         Move area loading to area_data::load_from_data_node
-        Add metadata editing to the animation and GUI editors, as well as the missing metadata from the area editor
         Add the new common content properties to everything in the engine
     A way for the user to set a background texture for the animation editor instead of the plain green
     
@@ -290,7 +291,6 @@ Next tasks (roughly sorted most important first)
         Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
     Ice Pikmin
     Glow Pikmin
-    Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Mob rotation should have acceleration too
     Check what Pikmin 3 Deluxe and Pikmin 4 added, and gather ideas of things to implement from there
         Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)

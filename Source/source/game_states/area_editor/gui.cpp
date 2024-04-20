@@ -1704,7 +1704,8 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.description = description;
         }
         set_tooltip(
-            "A general description about the area, like how it works."
+            "A general description about the area, like what the player "
+            "does here."
         );
         
         //Add area tags button.
@@ -2205,7 +2206,10 @@ void area_editor::process_gui_panel_info() {
             register_change("area maker change");
             game.cur_area_data.maker = maker;
         }
-        set_tooltip("Name (or nickname) of who made this area. Optional.");
+        set_tooltip(
+            "Name (or nickname) of who made this area. "
+            "Optional."
+        );
         
         //Version input.
         string version = game.cur_area_data.version;
@@ -2218,14 +2222,26 @@ void area_editor::process_gui_panel_info() {
             "Optional."
         );
         
-        //Notes input.
-        string notes = game.cur_area_data.maker_notes;
-        if(ImGui::InputText("Maker notes", &notes)) {
-            register_change("area notes change");
-            game.cur_area_data.maker_notes = notes;
+        //Maker notes input.
+        string maker_notes = game.cur_area_data.maker_notes;
+        if(ImGui::InputText("Maker notes", &maker_notes)) {
+            register_change("area maker notes change");
+            game.cur_area_data.maker_notes = maker_notes;
         }
         set_tooltip(
-            "Extra notes or comments about the area for other makers to see."
+            "Extra notes or comments about the area for other makers to see. "
+            "Optional."
+        );
+        
+        //Notes input.
+        string notes = game.cur_area_data.notes;
+        if(ImGui::InputText("Notes", &notes)) {
+            register_change("area notes change");
+            game.cur_area_data.notes = notes;
+        }
+        set_tooltip(
+            "Extra notes or comments of any kind. "
+            "Optional."
         );
         
         ImGui::TreePop();

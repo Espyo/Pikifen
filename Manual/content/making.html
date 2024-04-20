@@ -41,7 +41,7 @@ block {
 
     <h2 id="content-props">Content properties</h2>
 
-    <p>Most pieces of content have a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files:</p>
+    <p>Most pieces of content have a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files. Please check the relevant content type's page in this manual since it may mention some special considerations you can or should have about these properties.</p>
 
     <ul>
       <li>
@@ -54,13 +54,12 @@ block {
         Optional:
         <ul>
           <li><b><code>description</code></b>: A basic description of the content, suitable for both players and makers (even if players may not see it most of the time).</li>
-          <li><b><code>tags</code></b>: A list of tags, separated by semicolon, e.g. <code>Colorful;Advanced;Gimmick</code>. What exactly this entails, and what tags are recommended varies with the type of content. While many types of content do not use it right now, they could end up using it in the future so it's a good idea to fill this in.</li>
+          <li><b><code>tags</code></b>: A list of tags, separated by semicolon, e.g. <code>Colorful;Advanced;Gimmick</code>. What exactly this entails, and what tags are recommended varies with the type of content. The idea is that when a player or a maker want to find some content that fits their needs, they can search for these tags.</li>
           <li><b><code>maker</code></b>: Name or nickname of the person or persons who made this content. If this content is based off of something, like a port of The Impact Site's theme song, this property still refers to who created the <i>Pikifen</i> content; credits for the original creation can be added in the <code>notes</code> property.</li>
           <li><b><code>version</code></b>: Version name or number, e.g. <code>1.2.3</code>. It's a good idea to increase this whenever you create a new version.</li>
           <li><b><code>engine_version</code></b>: Version of <i>Pikifen</i> that this content was made for. In a way, this is also the most recent version of the engine that this content is known to run in. The engine may use this information to port content that was made in an older version. This information is also automatically filled in for content created via one of the in-game editors.</li>
           <li><b><code>maker_notes</code></b>: Any notes about the content that other makers should know about, like a special way to use it, any precautions, etc.</li>
-          <li><b><code>notes</code></b>: General notes about the content.</li>
-          <li><b><code>license</code></b>: The content's license. If left blank, it defaults to <i>Pikifen</i>'s license.</li>
+          <li><b><code>notes</code></b>: Extra notes or comments of any kind. For example, the license if you want to or can give it one.</li>
         </ul>
       </li>
     </ul>

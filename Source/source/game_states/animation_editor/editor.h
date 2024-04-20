@@ -89,6 +89,9 @@ private:
         //Top editing.
         EDITOR_STATE_TOP,
         
+        //Info.
+        EDITOR_STATE_INFO,
+        
         //Tools.
         EDITOR_STATE_TOOLS,
         
@@ -286,6 +289,7 @@ private:
     void process_gui_options_dialog();
     void process_gui_panel_animation();
     void process_gui_panel_body_part();
+    void process_gui_panel_info();
     void process_gui_panel_main();
     void process_gui_panel_options();
     void process_gui_panel_sprite();

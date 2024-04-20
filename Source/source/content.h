@@ -41,41 +41,38 @@ class content : public plain_content {
 public:
 
     //--- Members ---
-
+    
     //Name.
     string name;
-
+    
     //Optional description.
     string description;
-
+    
     //Optional tags, separated by semicolon.
     string tags;
-
+    
     //Optional person(s) who made it.
     string maker;
-
+    
     //Optional version name or number.
     string version;
-
+    
     //Optional version of the engine it was made for.
     string engine_version;
-
+    
     //Optional notes for other makers to see.
     string maker_notes;
-
+    
     //Optional notes of any kind.
     string notes;
-
-    //Optional license.
-    string license;
-
-
+    
+    
 protected:
 
     //--- Function declarations ---
-
+    
     void load_metadata_from_data_node(data_node* node);
     void reset_metadata();
     void save_metadata_to_data_node(data_node* node) const;
-
+    
 };

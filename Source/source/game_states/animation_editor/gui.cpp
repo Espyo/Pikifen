@@ -158,6 +158,9 @@ void animation_editor::process_gui_control_panel() {
     } case EDITOR_STATE_TOP: {
         process_gui_panel_sprite_top();
         break;
+    } case EDITOR_STATE_INFO: {
+        process_gui_panel_info();
+        break;
     } case EDITOR_STATE_TOOLS: {
         process_gui_panel_tools();
         break;
@@ -1421,6 +1424,65 @@ void animation_editor::process_gui_panel_body_part() {
 
 
 /**
+ * @brief Processes the Dear ImGui animation database info control panel
+ * for this frame.
+ */
+void animation_editor::process_gui_panel_info() {
+    ImGui::BeginChild("info");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        change_state(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panel_title("INFO");
+    
+    //Version input.
+    string version = anims.version;
+    if(ImGui::InputText("Version", &version)) {
+        anims.version = version;
+    }
+    set_tooltip(
+        "Version of the file, preferably in the \"X.Y.Z\" format. "
+        "Optional."
+    );
+    
+    //Maker input.
+    string maker = anims.maker;
+    if(ImGui::InputText("Maker", &maker)) {
+        anims.maker = maker;
+    }
+    set_tooltip(
+        "Name (or nickname) of who made this file. "
+        "Optional."
+    );
+    
+    //Maker notes input.
+    string maker_notes = anims.maker_notes;
+    if(ImGui::InputText("Maker notes", &maker_notes)) {
+        anims.maker_notes = maker_notes;
+    }
+    set_tooltip(
+        "Extra notes or comments about the file for other makers to see. "
+        "Optional."
+    );
+    
+    //Notes input.
+    string notes = anims.notes;
+    if(ImGui::InputText("Notes", &notes)) {
+        anims.notes = notes;
+    }
+    set_tooltip(
+        "Extra notes or comments of any kind. "
+        "Optional."
+    );
+    
+    ImGui::EndChild();
+}
+
+
+/**
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void animation_editor::process_gui_panel_main() {
@@ -1489,6 +1551,22 @@ void animation_editor::process_gui_panel_main() {
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
+    
+    //Information button.
+    if(
+        ImGui::ImageButtonAndText(
+            "infoButton",
+            editor_icons[EDITOR_ICON_INFO],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            8.0f,
+            "Info"
+        )
+    ) {
+        change_state(EDITOR_STATE_INFO);
+    }
+    set_tooltip(
+        "Set the animation file's information here, if you want."
+    );
     
     //Tools button.
     if(

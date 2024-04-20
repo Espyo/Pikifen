@@ -29,7 +29,6 @@ void content::load_metadata_from_data_node(data_node* node) {
     rs.set("engine_version", engine_version);
     rs.set("maker_notes", maker_notes);
     rs.set("notes", notes);
-    rs.set("license", license);
 }
 
 
@@ -45,7 +44,6 @@ void content::reset_metadata() {
     engine_version.clear();
     maker_notes.clear();
     notes.clear();
-    license.clear();
 }
 
 
@@ -66,7 +64,6 @@ void content::save_metadata_to_data_node(data_node* node) const {
     saver_o("engine_version", engine_version);
     saver_o("maker_notes", maker_notes);
     saver_o("notes", notes);
-    saver_o("license", license);
 
 #undef saver_o
 #undef saver
