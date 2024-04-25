@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		frames{
@@ -30,21 +32,8 @@ animations{
 	}
 	drinking{
 		frames{
-			thrown_01{
-				duration=0.1250
-				interpolate=true
-			}
-			drinking_01{
-				duration=0.1250
-				interpolate=true
-			}
-			thrown_01{
-				duration=0.1250
-				interpolate=true
-			}
-			drinking_02{
-				duration=0.1250
-				interpolate=true
+			mid_bend{
+				duration=0.1000
 			}
 			thrown_01{
 				duration=0.1250
@@ -61,6 +50,25 @@ animations{
 			drinking_02{
 				duration=0.1250
 				interpolate=true
+			}
+			thrown_01{
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_01{
+				duration=0.1250
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.1250
+				interpolate=true
+			}
+			drinking_02{
+				duration=0.1250
+				interpolate=true
+			}
+			mid_bend{
+				duration=0.1000
 			}
 		}
 	}
@@ -130,6 +138,9 @@ animations{
 	}
 	picking_up{
 		frames{
+			mid_bend{
+				duration=0.1000
+			}
 			thrown_01{
 				duration=0.2000
 				interpolate=true
@@ -140,6 +151,9 @@ animations{
 			}
 			thrown_01{
 				duration=0.0100
+			}
+			mid_bend{
+				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
@@ -158,8 +172,14 @@ animations{
 	}
 	sighing{
 		frames{
+			mid_bend{
+				duration=0.1000
+			}
 			thrown_01{
 				duration=1.5000
+			}
+			mid_bend{
+				duration=0.1000
 			}
 			idling_01{
 				duration=1.0000
@@ -579,6 +599,32 @@ sprites{
 			}
 		}
 	}
+	mid_bend{
+		file=Red_Pikmin.png
+		file_pos=209.0000 0.0000
+		file_size=26.0000 20.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=7.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=7.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	mob_landing{
 		file=Red_Pikmin.png
 		file_pos=134.0000 31.0000
@@ -926,4 +972,3 @@ body_parts{
 	top
 	body
 }
-engine_version=0.25.0
