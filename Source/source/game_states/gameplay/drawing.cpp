@@ -460,7 +460,7 @@ void gameplay_state::draw_debug_tools() {
         RAW_STICK_VIEWER_X,
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 10,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 18,
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
@@ -477,7 +477,23 @@ void gameplay_state::draw_debug_tools() {
                 f2s(raw_stick_coords.y), 6
             )
         ).c_str()
-    );*/
+    );
+    al_draw_text(
+        game.fonts.builtin,
+        al_map_rgb(255, 64, 64),
+        RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
+        ALLEGRO_ALIGN_LEFT,
+        (
+            box_string(
+                (raw_stick_angle >= 0.0f ? " " : "") +
+                f2s(raw_stick_angle), 6
+            ) + " " + box_string(
+                (raw_stick_mag >= 0.0f ? " " : "") +
+                f2s(raw_stick_mag), 6
+            )
+        ).c_str()
+    );
+    */
     
     //Clean analog stick viewer.
     /*
@@ -546,7 +562,7 @@ void gameplay_state::draw_debug_tools() {
         CLEAN_STICK_VIEWER_X,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 10,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 18,
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
@@ -562,6 +578,22 @@ void gameplay_state::draw_debug_tools() {
             ) + " " + box_string(
                 (clean_stick_coords.y >= 0.0f ? " " : "") +
                 f2s(clean_stick_coords.y), 6
+            )
+        ).c_str()
+    );
+    al_draw_text(
+        game.fonts.builtin,
+        al_map_rgb(255, 64, 64),
+        CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE +
+        1 + 8,
+        ALLEGRO_ALIGN_LEFT,
+        (
+            box_string(
+                (clean_stick_angle >= 0.0f ? " " : "") +
+                f2s(clean_stick_angle), 6
+            ) + " " + box_string(
+                (clean_stick_mag >= 0.0f ? " " : "") +
+                f2s(clean_stick_mag), 6
             )
         ).c_str()
     );

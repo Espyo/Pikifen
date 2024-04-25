@@ -13,6 +13,8 @@
 
 #include "controls_manager.h"
 
+#include "analog_stick_cleaner.h"
+
 
 /**
  * @brief When a game controller stick input is received, it should be checked
@@ -23,37 +25,22 @@
  * @param input Input to clean.
  */
 void controls_manager::clean_stick(const player_input &input) {
-    //https://www.gamedeveloper.com/
-    //  disciplines/doing-thumbstick-dead-zones-right
-    //https://www.gamedeveloper.com/
-    //  design/interpreting-analog-sticks-in-inversus
-    
     raw_sticks[input.device_nr][input.stick_nr][input.axis_nr] =
         input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ?
         input.value :
         -input.value;
         
-    const float raw_x = raw_sticks[input.device_nr][input.stick_nr][0];
-    const float raw_y = raw_sticks[input.device_nr][input.stick_nr][1];
-    const float angle = (float) atan2(raw_y, raw_x);
+    float coords[2];
+    coords[0] = raw_sticks[input.device_nr][input.stick_nr][0];
+    coords[1] = raw_sticks[input.device_nr][input.stick_nr][1];
     
-    //Clamp the magnitude between the minimum and maximum allowed.
-    float magnitude = sqrt(raw_x * raw_x + raw_y * raw_y);
-    magnitude = std::max(magnitude, options.stick_min_deadzone);
-    magnitude = std::min(magnitude, options.stick_max_deadzone);
+    analog_stick_cleaner::settings_t cleanup_settings;
+    cleanup_settings.radial_inner_deadzone = options.stick_min_deadzone;
+    cleanup_settings.radial_outer_deadzone = options.stick_max_deadzone;
+    analog_stick_cleaner::clean(coords, cleanup_settings);
     
-    //Interpolate the magnitude.
-    magnitude =
-        (magnitude - options.stick_min_deadzone) /
-        (float) (options.stick_max_deadzone - options.stick_min_deadzone);
-        
-    magnitude = std::max(magnitude, 0.0f);
-    magnitude = std::min(magnitude, 1.0f);
-    
-    clean_sticks[input.device_nr][input.stick_nr][0] =
-        (float) cos(angle) * magnitude;
-    clean_sticks[input.device_nr][input.stick_nr][1] =
-        (float) sin(angle) * magnitude;
+    clean_sticks[input.device_nr][input.stick_nr][0] = coords[0];
+    clean_sticks[input.device_nr][input.stick_nr][1] = coords[1];
 }
 
 

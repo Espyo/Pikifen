@@ -274,7 +274,6 @@ Next tasks (roughly sorted most important first)
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
                 Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
-            Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
             If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
             Allow for button combinations
