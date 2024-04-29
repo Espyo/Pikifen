@@ -1104,6 +1104,10 @@ mob* create_mob(
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
     
+    if(m_ptr->type->walkable) {
+        game.states.gameplay->mobs.walkables.push_back(m_ptr);
+    }
+    
     if(code_after_creation) {
         code_after_creation(m_ptr);
     }
@@ -1302,6 +1306,15 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
             m_ptr
         )
     );
+    if(m_ptr->type->walkable) {
+        game.states.gameplay->mobs.walkables.erase(
+            find(
+                game.states.gameplay->mobs.walkables.begin(),
+                game.states.gameplay->mobs.walkables.end(),
+                m_ptr
+            )
+        );
+    }
     
     delete m_ptr;
 }

@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -15,6 +15,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Obstacles: Just walls and routing, maybe a shortcut or two via mob
             Textures: Marble-like stuff?, rocks, non-standard dirt and water, many loose leafs
     Some sounds that should use the new looping feature are instead just a long sustained sound
+        Exhaling, fountain, inhaling?, steam
     Code cleanup
         Use #pragma region in header files?
 
@@ -27,6 +28,14 @@ Next tasks (roughly sorted most important first)
     Helodity's performance improvements
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Perform some optimizations
+        process_mob_interactions takes up 77%
+            is_stored_inside_mob takes up 5%
+            process_mob_reaches takes up 14%
+            process_mob_misc_interactions takes up 23%
+                mob::get_distance_between takes up 8%
+                dist::operator<= takes up 10%
+            process_mob_touches takes up 2%
+            mob_fsm::get_event takes up 13%
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -288,6 +297,7 @@ Next tasks (roughly sorted most important first)
         Controls menu
             In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
                 Then in the multiplayer setup screen, the player only picks what control scheme each player uses
+                    Maybe a table for what control schemes apply to what players? This is because I, as player 1, could want keyboard and gamepad
                 It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
                     Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a controller button to confirm, and a controller button to cancel
             For controller inputs, write the controller's name somewhere on-screen?

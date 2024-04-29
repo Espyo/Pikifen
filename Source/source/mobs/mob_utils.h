@@ -444,6 +444,9 @@ struct mob_lists {
     //Resources.
     vector<resource*> resources;
     
+    //Mobs that can be walked on top of. Cache for performance.
+    vector<mob*> walkables;
+    
     //Scales.
     vector<scale*> scales;
     

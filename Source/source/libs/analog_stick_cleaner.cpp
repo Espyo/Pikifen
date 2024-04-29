@@ -120,12 +120,12 @@ void analog_stick_cleaner::process_angular_deadzones(
     //Get the basics.
     float radius, angle;
     to_polar(coords, angle, radius);
-    angle = std::fmod(angle + M_PI * 2, M_PI * 2);
+    angle = fmod(angle + M_PI * 2, M_PI * 2);
     
     //Start by finding the previous snap direction (i.e. the closest one
     //counter-clockwise), and the next snap direction (i.e. closest clockwise).
     int prev_snap_dir_idx =
-        (int) (std::floor(angle / M_PI_4) + 8) % 8;
+        (int) (floor(angle / M_PI_4) + 8) % 8;
     int next_snap_dir_idx =
         prev_snap_dir_idx + 1;
     float prev_snap_dir_angle =
@@ -229,8 +229,8 @@ void analog_stick_cleaner::process_radial_deadzones(
 void analog_stick_cleaner::to_cartesian(
     float coords[2], float angle, float radius
 ) {
-    coords[0] = (float) std::cos(angle) * radius;
-    coords[1] = (float) std::sin(angle) * radius;
+    coords[0] = (float) cos(angle) * radius;
+    coords[1] = (float) sin(angle) * radius;
 }
 
 
@@ -244,6 +244,6 @@ void analog_stick_cleaner::to_cartesian(
 void analog_stick_cleaner::to_polar(
     float coords[2], float &angle, float &radius
 ) {
-    angle = std::atan2(coords[1], coords[0]);
-    radius = std::sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
+    angle = atan2(coords[1], coords[0]);
+    radius = sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
 }

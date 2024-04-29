@@ -31,11 +31,8 @@ mob* mob::get_mob_to_walk_on() const {
     if(speed_z > 0.0f) return nullptr;
     
     mob* best_candidate = nullptr;
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
-        if(!m_ptr->type->walkable) {
-            continue;
-        }
+    for(size_t m = 0; m < game.states.gameplay->mobs.walkables.size(); ++m) {
+        mob* m_ptr = game.states.gameplay->mobs.walkables[m];
         if(m_ptr == this) {
             continue;
         }
