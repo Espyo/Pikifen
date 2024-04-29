@@ -174,7 +174,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     max_health(type->max_health),
     itch_time(type->itch_time),
     anim(&type->anims),
-    max_span(type->max_span) {
+    physical_span(type->physical_span) {
     
     game.states.gameplay->next_mob_id++;
     
@@ -2422,8 +2422,8 @@ bool mob::has_clear_line(const mob* target_mob) const {
         if(
             !rectangles_intersect(
                 bb_tl, bb_br,
-                m_ptr->pos - m_ptr->max_span,
-                m_ptr->pos + m_ptr->max_span
+                m_ptr->pos - m_ptr->physical_span,
+                m_ptr->pos + m_ptr->physical_span
             )
         ) {
             continue;
@@ -2980,10 +2980,10 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
  */
 void mob::set_radius(const float radius) {
     this->radius = radius;
-    max_span =
-        calculate_mob_max_span(
+    physical_span =
+        calculate_mob_physical_span(
             radius,
-            type->anims.max_span,
+            type->anims.hitbox_span,
             rectangular_dim
         );
 }
@@ -2996,10 +2996,10 @@ void mob::set_radius(const float radius) {
  */
 void mob::set_rectangular_dim(const point &rectangular_dim) {
     this->rectangular_dim = rectangular_dim;
-    max_span =
-        calculate_mob_max_span(
+    physical_span =
+        calculate_mob_physical_span(
             radius,
-            type->anims.max_span,
+            type->anims.hitbox_span,
             rectangular_dim
         );
 }

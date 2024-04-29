@@ -469,8 +469,9 @@ public:
     
     //- Caches -
     
-    //How far its hitboxes or radius can reach from the center.
-    float max_span = 0.0f;
+    //How far its radius or hitboxes reach from the center.
+    //Cache for performance.
+    float physical_span = 0.0f;
     
     
     //--- Function declarations ---

@@ -1058,26 +1058,28 @@ track_t::track_t(
 
 
 /**
- * @brief Calculates the maximum span that a mob can ever reach from its center.
+ * @brief Calculates the maximum physical span that a mob can ever reach
+ * from its center.
  *
  * @param radius The mob's radius.
- * @param anim_max_span Maximum span of its animation-related data.
+ * @param anim_hitbox_span Maximum span of its hitboxes data.
  * @param rectangular_dim Rectangular dimensions of the mob, if any.
  * @return The span.
  */
-float calculate_mob_max_span(
-    const float radius, const float anim_max_span, const point &rectangular_dim
+float calculate_mob_physical_span(
+    const float radius, const float anim_hitbox_span,
+    const point &rectangular_dim
 ) {
-    float max_span = std::max(radius, anim_max_span);
+    float final_span = std::max(radius, anim_hitbox_span);
     
     if(rectangular_dim.x != 0) {
-        max_span =
+        final_span =
             std::max(
-                max_span, dist(point(0, 0), rectangular_dim / 2.0).to_float()
+                final_span, dist(point(0, 0), rectangular_dim / 2.0).to_float()
             );
     }
     
-    return max_span;
+    return final_span;
 }
 
 

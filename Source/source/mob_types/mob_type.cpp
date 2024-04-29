@@ -884,10 +884,10 @@ void mob_type::load_from_data_node(
         anims.create_conversions(get_anim_conversions(), node);
     }
     
-    max_span =
-        calculate_mob_max_span(
+    physical_span =
+        calculate_mob_physical_span(
             radius,
-            (load_resources ? anims.max_span : 0),
+            (load_resources ? anims.hitbox_span : 0),
             rectangular_dim
         );
         
@@ -946,7 +946,7 @@ void create_special_mob_types() {
     bridge_component_type->appears_in_area_editor = false;
     bridge_component_type->casts_shadow = false;
     bridge_component_type->height = 8.0f;
-    bridge_component_type->max_span = 8.0f;
+    bridge_component_type->physical_span = 8.0f;
     bridge_component_type->radius = 8.0f;
     bridge_component_type->walkable = true;
     bridge_component_type->draw_mob_callback = bridge::draw_component;

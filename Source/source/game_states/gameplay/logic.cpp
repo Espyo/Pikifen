@@ -93,7 +93,7 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
     throw_dest_mob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
-        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->max_span)) {
+        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->physical_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -1503,7 +1503,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }
         
-        if(d <= m_ptr->max_span + m2_ptr->max_span) {
+        if(d <= m_ptr->physical_span + m2_ptr->physical_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
             process_mob_touches(m_ptr, m2_ptr, m, m2, d);

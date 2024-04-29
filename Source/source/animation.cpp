@@ -185,11 +185,11 @@ animation_database::animation_database(
 
 
 /**
- * @brief Calculates the maximum distance that any of its hitbox can reach.,
- * and stores it in the max_span variable.
+ * @brief Calculates the maximum distance that any of its hitbox can reach,
+ * and stores it in the hitbox_span variable.
  */
-void animation_database::calculate_max_span() {
-    max_span = 0.0f;
+void animation_database::calculate_hitbox_span() {
+    hitbox_span = 0.0f;
     for(size_t s = 0; s < sprites.size(); ++s) {
         sprite* s_ptr = sprites[s];
         for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
@@ -197,7 +197,7 @@ void animation_database::calculate_max_span() {
             
             float d = dist(point(0, 0), h_ptr->pos).to_float();
             d += h_ptr->radius;
-            max_span = std::max(max_span, d);
+            hitbox_span = std::max(hitbox_span, d);
         }
     }
 }
@@ -550,7 +550,7 @@ void animation_database::load_from_data_node(data_node* node) {
     }
     
     //Finish up.
-    calculate_max_span();
+    calculate_hitbox_span();
 }
 
 

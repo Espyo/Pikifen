@@ -256,7 +256,7 @@ public:
     vector<size_t> pre_named_conversions;
     
     //Maximum span of the hitboxes. Cache for performance.
-    float max_span = 0.0f;
+    float hitbox_span = 0.0f;
     
     
     //--- Function declarations ---
@@ -269,7 +269,7 @@ public:
     size_t find_animation(const string &name) const;
     size_t find_sprite(const string &name) const;
     size_t find_body_part(const string &name) const;
-    void calculate_max_span();
+    void calculate_hitbox_span();
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, const data_node* file
     );

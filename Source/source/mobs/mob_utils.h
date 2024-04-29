@@ -736,8 +736,9 @@ struct track_t {
 };
 
 
-float calculate_mob_max_span(
-    const float radius, const float anim_max_span, const point &rectangular_dim
+float calculate_mob_physical_span(
+    const float radius, const float anim_hitbox_span,
+    const point &rectangular_dim
 );
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
