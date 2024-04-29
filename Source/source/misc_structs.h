@@ -333,6 +333,7 @@ struct camera_t {
     //--- Members ---
     
     //Top-left and bottom-right world coordinates that this camera can see.
+    //These also include a margin of GAMEPLAY::CAMERA_BOX_MARGIN.
     point box[2];
     
     //Current position.

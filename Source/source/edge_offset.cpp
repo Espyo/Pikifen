@@ -638,8 +638,7 @@ void get_next_offset_effect_edge(
  * so that sectors may then sample from it to draw what effects they need.
  *
  * @param cam_tl Top-left corner of the camera boundaries.
- * The edges of any sector that is
- *   beyond these boundaries will be ignored.
+ * The edges of any sector that is beyond these boundaries will be ignored.
  * @param cam_br Same as cam_tl, but for the bottom-right boundaries.
  * @param caches List of caches to fetch edge info from.
  * @param buffer Buffer to draw to.
@@ -661,11 +660,51 @@ void update_offset_effect_buffer(
                 cam_tl, cam_br
             )
         ) {
-            //Off-camera.
+            //Sector is off-camera.
             continue;
         }
         
+        bool fully_on_camera = false;
+        if(
+            s_ptr->bbox[0].x > cam_tl.x &&
+            s_ptr->bbox[1].x < cam_br.x &&
+            s_ptr->bbox[0].y > cam_tl.y &&
+            s_ptr->bbox[1].y < cam_br.y
+        ) {
+            fully_on_camera = true;
+        }
+        
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            if(!fully_on_camera) {
+                //If the sector's fully on-camera, it's faster to not bother
+                //with the edge-by-edge check.
+                point edge_tl(
+                    std::min(
+                        s_ptr->edges[e]->vertexes[0]->x,
+                        s_ptr->edges[e]->vertexes[1]->x
+                    ),
+                    std::min(
+                        s_ptr->edges[e]->vertexes[0]->y,
+                        s_ptr->edges[e]->vertexes[1]->y
+                    )
+                );
+                point edge_br(
+                    std::max(
+                        s_ptr->edges[e]->vertexes[0]->x,
+                        s_ptr->edges[e]->vertexes[1]->x
+                    ),
+                    std::max(
+                        s_ptr->edges[e]->vertexes[0]->y,
+                        s_ptr->edges[e]->vertexes[1]->y
+                    )
+                );
+                
+                if(!rectangles_intersect(edge_tl, edge_br, cam_tl, cam_br)) {
+                    //Edge is off-camera.
+                    continue;
+                }
+            }
+            
             edges.insert(s_ptr->edge_idxs[e]);
         }
     }
