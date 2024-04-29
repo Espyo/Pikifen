@@ -197,7 +197,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
         group = new group_t(this);
     }
     
-    update_max_interaction_radius();
+    update_interaction_span();
 }
 
 
@@ -2000,31 +2000,32 @@ float mob::get_latched_pikmin_weight() const {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Recalculates the max distance a mob can interact with another mob.
+/**
+ * @brief Recalculates the max distance a mob can interact with another mob.
  */
-void mob::update_max_interaction_radius() {
-    float cur_max = physical_span;
+void mob::update_interaction_span() {
+    interaction_span = physical_span;
     
     if(far_reach != INVALID) {
-        cur_max = std::max(
-                      std::max(
-                          type->reaches[far_reach].radius_1,
-                          type->reaches[far_reach].radius_2
-                      ),
-                      physical_span
-                  );
+        interaction_span =
+            std::max(
+                std::max(
+                    type->reaches[far_reach].radius_1,
+                    type->reaches[far_reach].radius_2
+                ),
+                physical_span
+            );
     }
     if(near_reach != INVALID) {
-        cur_max = std::max(
-                      std::max(
-                          type->reaches[near_reach].radius_1,
-                          type->reaches[near_reach].radius_2
-                      ),
-                      physical_span
-                  );
+        interaction_span =
+            std::max(
+                std::max(
+                    type->reaches[near_reach].radius_1,
+                    type->reaches[near_reach].radius_2
+                ),
+                physical_span
+            );
     }
-    max_interaction_radius = cur_max;
 }
 
 
@@ -3016,6 +3017,7 @@ void mob::set_radius(const float radius) {
             type->anims.hitbox_span,
             rectangular_dim
         );
+    update_interaction_span();
 }
 
 
@@ -3032,6 +3034,7 @@ void mob::set_rectangular_dim(const point &rectangular_dim) {
             type->anims.hitbox_span,
             rectangular_dim
         );
+    update_interaction_span();
 }
 
 

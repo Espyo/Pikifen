@@ -3453,7 +3453,7 @@ void pikmin_fsm::set_bump_lock(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::set_idle_task_reach(mob* m, void* info1, void* info2) {
     m->near_reach = 0;
-    m->update_max_interaction_radius();
+    m->update_interaction_span();
 }
 
 
@@ -3466,7 +3466,7 @@ void pikmin_fsm::set_idle_task_reach(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::set_swarm_reach(mob* m, void* info1, void* info2) {
     m->near_reach = 1;
-    m->update_max_interaction_radius();
+    m->update_interaction_span();
 }
 
 

@@ -1499,9 +1499,12 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         
         dist d(m_ptr->pos, m2_ptr->pos);
         
-        if (d > m_ptr->max_interaction_radius + m2_ptr->max_span)
+        if (d > m_ptr->interaction_span + m2_ptr->physical_span) {
+            //The other mob is so far away that there is
+            //no interaction possible.
             continue;
-            
+        }
+        
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }

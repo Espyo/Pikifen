@@ -1724,7 +1724,7 @@ void mob_action_runners::set_can_block_paths(mob_action_run_data &data) {
  */
 void mob_action_runners::set_far_reach(mob_action_run_data &data) {
     data.m->far_reach = s2i(data.args[0]);
-    data.m->update_max_interaction_radius();
+    data.m->update_interaction_span();
 }
 
 
@@ -1858,7 +1858,7 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
  */
 void mob_action_runners::set_near_reach(mob_action_run_data &data) {
     data.m->near_reach = s2i(data.args[0]);
-    data.m->update_max_interaction_radius();
+    data.m->update_interaction_span();
 }
 
 
@@ -1868,7 +1868,7 @@ void mob_action_runners::set_near_reach(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::set_radius(mob_action_run_data &data) {
-    data.m->radius = s2f(data.args[0]);
+    data.m->set_radius(s2f(data.args[0]));
 }
 
 

@@ -326,8 +326,10 @@ public:
     //Cache for performance.
     float physical_span = 0.0f;
     
-    //Cached value of how far its hitboxes, radius, and reaches can reach from the center.
-    float max_interaction_radius;
+    //How far it can interact with another mob, from the center.
+    //This includes the physical span and the span of the reaches.
+    //Cache for performance.
+    float interaction_span;
     
     //It's invisible due to a status effect. Cache for performance.
     bool has_invisibility_status = false;
@@ -490,8 +492,7 @@ public:
     virtual void finish_dying_class_specifics();
     bool tick_track_ride();
     void stop_track_ride();
-    
-    void update_max_interaction_radius();
+    void update_interaction_span();
     
     //Drawing tools.
     void get_sprite_bitmap_effects(
