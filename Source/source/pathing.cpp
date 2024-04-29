@@ -598,19 +598,16 @@ void depth_first_search(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Uses A* to get the shortest path between two nodes.
- * Returns the operation's result.
- * out_path:
- *   The stops to visit, in order, are returned here.
- * start_node:
- *   Start node.
- * end_node:
- *   End node.
- * settings:
- *   Settings about how the path should be followed.
- * total_dist:
- *   If not NULL, place the total path distance here.
+/**
+ * @brief Uses A* to get the shortest path between two nodes.
+ *
+ * @param out_path The stops to visit, in order, are returned here.
+ * @param start_node Start node.
+ * @param end_node End node.
+ * @param settings Settings about how the path should be followed.
+ * @param out_total_dist If not nullptr, the total path distance is
+ * returned here.
+ * @return The operation's result.
  */
 PATH_RESULT a_star(
     vector<path_stop*> &out_path,
@@ -620,94 +617,95 @@ PATH_RESULT a_star(
 ) {
     //https://en.wikipedia.org/wiki/A*_search_algorithm
     
+    /**
+     * @brief Represents a node's data in the algorithm.
+     */
+    struct node_t {
+        //In the best known path to this node, this is the known
+        //distance from the start node to this one.
+        float since_start = FLT_MAX;
+        
+        //In the best known path to this node, this is the node that
+        //came before this one.
+        path_stop* prev = nullptr;
+        
+        //Estimated distance if the final path takes this node.
+        float estimated = FLT_MAX;
+    };
     
     //All nodes that we want to visit.
     unordered_set<path_stop*> to_visit;
-    //All nodes that we have already visited
-    unordered_set<path_stop*> visited;
+    //Data for all the nodes.
+    map<path_stop*, node_t> data;
     
-    //Distance from starting node + Estimated distance + previous stop on the best solution.
-    map<path_stop*, std::tuple<float, float, path_stop*>> data;
-    //Whether the end node is in the same graph as the start node or not.
-    bool in_graph = true;
-    
-    //Initialize the algorithm.
-    std::get<0>(data[start_node]) = 0;
+    //Part 1: Initialize the algorithm.
     to_visit.insert(start_node);
+    data[start_node].since_start = 0.0f;
+    data[start_node].estimated = 0.0f;
     
     //Start iterating.
     while(!to_visit.empty()) {
     
-        //Figure out what node to work on in this iteration.
-        path_stop* shortest_node = nullptr;
-        float shortest_node_dist = 0;
-        std::unordered_set<path_stop*>::iterator shortest_node_it =
-            to_visit.end();
-            
-        std::tuple<float, float, path_stop*> shortest_node_data;
+        //Part 2: Figure out what node to work on in this iteration.
+        path_stop* cur_node = nullptr;
+        float cur_node_dist = 0.0f;
+        node_t cur_node_data;
         
         for(auto u = to_visit.begin(); u != to_visit.end(); u++) {
-            std::tuple<float, float, path_stop*> d = data[*u];
-            float dist = std::get<0>(d) + std::get<1>(d);
+            node_t n = data[*u];
+            float est_dist = n.estimated;
             
-            if(!shortest_node || dist < shortest_node_dist) {
-                shortest_node = *u;
-                shortest_node_dist = dist;
-                shortest_node_data = d;
-                shortest_node_it = u;
+            if(!cur_node || est_dist < cur_node_dist) {
+                cur_node = *u;
+                cur_node_dist = est_dist;
+                cur_node_data = n;
             }
         }
         
-        //If the node we're processing is the end node, then
+        //Part 3: If the node we're processing is the end node, then
         //that's it, best path found!
-        if(shortest_node == end_node) {
+        if(cur_node == end_node) {
         
             //Construct the path.
-            float td = std::get<0>(data[end_node]);
+            float td = data[end_node].since_start;
             out_path.clear();
             out_path.push_back(end_node);
-            path_stop* next = std::get<2>(data[end_node]);
+            path_stop* next = data[end_node].prev;
             while(next) {
                 out_path.insert(out_path.begin(), next);
-                next = std::get<2>(data[next]);
+                next = data[next].prev;
             }
             
-            if(out_path.size() < 2) {
-                //If we can't work our way back to the start node, that means
-                //the end node is not in the same graph as the start node.
-                in_graph = false;
-                break;
-            } else {
-                //Success!
-                if(out_total_dist) *out_total_dist = td;
-                return PATH_RESULT_NORMAL_PATH;
-            }
+            if(out_total_dist) *out_total_dist = td;
+            return PATH_RESULT_NORMAL_PATH;
             
         }
         
-        //Stop whining at me about dereferencing null pointers
-        if(!shortest_node) continue;
-        
         //This node's been visited.
-        visited.insert(shortest_node);
-        to_visit.erase(shortest_node);
+        to_visit.erase(cur_node);
         
-        //Check the neighbors.
-        for(size_t l = 0; l < shortest_node->links.size(); ++l) {
-            path_link* l_ptr = shortest_node->links[l];
-            
-            //If this neighbor's been visited, forget it.
-            if(visited.find(l_ptr->end_ptr) != visited.end()) continue;
+        //Part 4: Check the neighbors.
+        for(size_t l = 0; l < cur_node->links.size(); ++l) {
+            path_link* l_ptr = cur_node->links[l];
+            path_stop* neighbor = l_ptr->end_ptr;
             
             //Can this link be traversed?
             if(!can_traverse_path_link(l_ptr, settings)) {
                 continue;
             }
             
-            to_visit.insert(l_ptr->end_ptr);
-            float cur_dist = std::get<0>(shortest_node_data) + l_ptr->distance;
-            float est_dist = dist(l_ptr->end_ptr->pos, end_node->pos).to_float();
-            data[l_ptr->end_ptr] = std::make_tuple(cur_dist, est_dist, (path_stop*)shortest_node);
+            float tentative_score =
+                data[cur_node].since_start + l_ptr->distance;
+                
+            if(tentative_score < data[neighbor].since_start) {
+                //Found a better path from the start to this neighbor.
+                data[neighbor].since_start = tentative_score;
+                data[neighbor].prev = cur_node;
+                data[neighbor].estimated =
+                    tentative_score +
+                    dist(neighbor->pos, end_node->pos).to_float();
+                to_visit.insert(neighbor);
+            }
         }
     }
     
@@ -736,11 +734,7 @@ PATH_RESULT a_star(
     //Nothing that can be done. No path.
     out_path.clear();
     if(out_total_dist) *out_total_dist = 0;
-    if(!in_graph) {
-        return PATH_RESULT_END_STOP_UNREACHABLE;
-    } else {
-        return PATH_RESULT_ERROR;
-    }
+    return PATH_RESULT_END_STOP_UNREACHABLE;
 }
 
 

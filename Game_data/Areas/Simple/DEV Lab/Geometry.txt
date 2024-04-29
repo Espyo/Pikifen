@@ -1,12 +1,12 @@
 vertexes{
 	v=3712.0000 -3392.0000
 	v=3712.0000 4112.0000
-	v=-4288.0000 4112.0000
-	v=-4288.0000 -3392.0000
-	v=-4224.0000 -3328.0000
+	v=-4544.0000 4096.0000
+	v=-4544.0000 -3408.0000
+	v=-4480.0000 -3344.0000
 	v=3648.0000 -3328.0000
 	v=3648.0000 4048.0000
-	v=-4224.0000 4048.0000
+	v=-4480.0000 4032.0000
 	v=-160.0000 -160.0000
 	v=160.0000 -160.0000
 	v=160.0000 160.0000
@@ -1235,8 +1235,8 @@ vertexes{
 	v=-1312.0000 1904.0000
 	v=-1472.0000 1600.0000
 	v=-1472.0000 2304.0000
-	v=-2176.0000 2304.0000
-	v=-2176.0000 1600.0000
+	v=-2240.0000 2304.0000
+	v=-2240.0000 1600.0000
 	v=-1664.0000 1728.0000
 	v=-2112.0000 1728.0000
 	v=-2112.0000 1984.0000
@@ -1263,40 +1263,40 @@ vertexes{
 	v=-2080.0000 2128.0000
 	v=-2096.0000 2144.0000
 	v=-2080.0000 2160.0000
-	v=-2240.0000 1600.0000
-	v=-2240.0000 2304.0000
-	v=-2880.0000 2304.0000
-	v=-2880.0000 1600.0000
-	v=-2304.0000 1728.0000
-	v=-2752.0000 1728.0000
-	v=-2560.0000 1984.0000
-	v=-2304.0000 2176.0000
-	v=-2368.0000 1792.0000
-	v=-2688.0000 1792.0000
-	v=-2688.0000 1920.0000
-	v=-2496.0000 1920.0000
-	v=-2496.0000 2112.0000
-	v=-2368.0000 2112.0000
-	v=-2688.0000 1984.0000
-	v=-2688.0000 2112.0000
+	v=-2304.0000 1600.0000
+	v=-2304.0000 2304.0000
+	v=-2944.0000 2304.0000
+	v=-2944.0000 1600.0000
+	v=-2368.0000 1728.0000
+	v=-2816.0000 1728.0000
+	v=-2624.0000 1984.0000
+	v=-2368.0000 2176.0000
+	v=-2432.0000 1792.0000
+	v=-2752.0000 1792.0000
+	v=-2752.0000 1920.0000
+	v=-2560.0000 1920.0000
 	v=-2560.0000 2112.0000
-	v=-2752.0000 2176.0000
+	v=-2432.0000 2112.0000
+	v=-2752.0000 1984.0000
+	v=-2752.0000 2112.0000
+	v=-2624.0000 2112.0000
+	v=-2816.0000 2176.0000
+	v=-2432.0000 1920.0000
+	v=-2432.0000 1984.0000
 	v=-2368.0000 1920.0000
 	v=-2368.0000 1984.0000
-	v=-2304.0000 1920.0000
-	v=-2304.0000 1984.0000
-	v=-2480.0000 1792.0000
-	v=-2480.0000 1728.0000
-	v=-2576.0000 1792.0000
-	v=-2576.0000 1728.0000
-	v=-2336.0000 1904.0000
-	v=-2336.0000 2000.0000
-	v=-2496.0000 1760.0000
+	v=-2544.0000 1792.0000
+	v=-2544.0000 1728.0000
+	v=-2640.0000 1792.0000
+	v=-2640.0000 1728.0000
+	v=-2400.0000 1904.0000
+	v=-2400.0000 2000.0000
 	v=-2560.0000 1760.0000
-	v=-2544.0000 1760.0000
-	v=-2528.0000 1744.0000
-	v=-2512.0000 1760.0000
-	v=-2528.0000 1776.0000
+	v=-2624.0000 1760.0000
+	v=-2608.0000 1760.0000
+	v=-2592.0000 1744.0000
+	v=-2576.0000 1760.0000
+	v=-2592.0000 1776.0000
 	v=-192.0000 2368.0000
 	v=-192.0000 2944.0000
 	v=-960.0000 2944.0000
@@ -1343,90 +1343,90 @@ vertexes{
 	v=-104.0000 1888.0000
 	v=-104.0000 1344.0000
 	v=-104.0000 1280.0000
-	v=-2944.0000 1600.0000
-	v=-3456.0000 1600.0000
-	v=-3456.0000 2304.0000
-	v=-2944.0000 2304.0000
-	v=-3072.0000 1792.0000
-	v=-3072.0000 2112.0000
-	v=-3328.0000 2112.0000
-	v=-3328.0000 1808.0000
-	v=-3392.0000 1808.0000
-	v=-3392.0000 2176.0000
-	v=-3008.0000 2176.0000
-	v=-3008.0000 1792.0000
-	v=-3040.0000 1808.0000
-	v=-3360.0000 1792.0000
-	v=-3360.0000 1744.0000
-	v=-3376.0000 1760.0000
-	v=-3360.0000 1776.0000
-	v=-3344.0000 1760.0000
-	v=-3328.0000 1984.0000
-	v=-3072.0000 1984.0000
-	v=-3328.0000 1920.0000
-	v=-3072.0000 1920.0000
-	v=-3296.0000 1920.0000
-	v=-3296.0000 1840.0000
-	v=-3248.0000 1792.0000
-	v=-3167.1440 1782.9778
-	v=-3104.0000 1920.0000
-	v=-3264.0000 1984.0000
-	v=-3200.0000 2048.0000
-	v=-3168.0000 2048.0000
-	v=-3104.0000 1984.0000
-	v=-3312.0000 1920.0000
-	v=-3312.0000 1840.0000
-	v=-3264.0000 1776.0000
-	v=-3152.0000 1760.0000
-	v=-3088.0000 1920.0000
-	v=-3088.0000 1984.0000
-	v=-3152.0000 2064.0000
-	v=-3216.0000 2064.0000
-	v=-3296.0000 1984.0000
+	v=-3008.0000 1600.0000
 	v=-3520.0000 1600.0000
 	v=-3520.0000 2304.0000
-	v=-4160.0000 2304.0000
-	v=-4160.0000 1600.0000
-	v=-3648.0000 1792.0000
-	v=-3968.0000 1792.0000
-	v=-3968.0000 2112.0000
-	v=-3664.0000 2112.0000
-	v=-3664.0000 2048.0000
-	v=-3904.0000 2048.0000
-	v=-3904.0000 1856.0000
-	v=-3648.0000 1856.0000
-	v=-3664.0000 1824.0000
-	v=-3648.0000 2080.0000
-	v=-3744.0000 1792.0000
-	v=-3808.0000 1728.0000
-	v=-3904.0000 1728.0000
-	v=-4000.0000 1792.0000
-	v=-4000.0000 2112.0000
-	v=-3936.0000 2176.0000
-	v=-3808.0000 2144.0000
-	v=-3744.0000 2112.0000
-	v=-4032.0000 1920.0000
-	v=-3712.0000 2048.0000
-	v=-3680.0000 1984.0000
-	v=-3680.0000 1952.0000
-	v=-3712.0000 1856.0000
-	v=-3680.0000 1856.0000
-	v=-3648.0000 1952.0000
-	v=-3648.0000 1984.0000
-	v=-3680.0000 2048.0000
+	v=-3008.0000 2304.0000
+	v=-3136.0000 1792.0000
+	v=-3136.0000 2112.0000
+	v=-3392.0000 2112.0000
+	v=-3392.0000 1808.0000
+	v=-3456.0000 1808.0000
+	v=-3456.0000 2176.0000
+	v=-3072.0000 2176.0000
+	v=-3072.0000 1792.0000
+	v=-3104.0000 1808.0000
+	v=-3424.0000 1792.0000
+	v=-3424.0000 1744.0000
+	v=-3440.0000 1760.0000
+	v=-3424.0000 1776.0000
+	v=-3408.0000 1760.0000
+	v=-3392.0000 1984.0000
+	v=-3136.0000 1984.0000
+	v=-3392.0000 1920.0000
+	v=-3136.0000 1920.0000
+	v=-3360.0000 1920.0000
+	v=-3360.0000 1840.0000
+	v=-3312.0000 1792.0000
+	v=-3231.1440 1782.9778
+	v=-3168.0000 1920.0000
+	v=-3328.0000 1984.0000
+	v=-3264.0000 2048.0000
+	v=-3232.0000 2048.0000
+	v=-3168.0000 1984.0000
+	v=-3376.0000 1920.0000
+	v=-3376.0000 1840.0000
+	v=-3328.0000 1776.0000
+	v=-3216.0000 1760.0000
+	v=-3152.0000 1920.0000
+	v=-3152.0000 1984.0000
+	v=-3216.0000 2064.0000
+	v=-3280.0000 2064.0000
+	v=-3360.0000 1984.0000
+	v=-3584.0000 1600.0000
+	v=-3584.0000 2304.0000
+	v=-4224.0000 2304.0000
+	v=-4224.0000 1600.0000
 	v=-3712.0000 1792.0000
-	v=-3776.0000 1696.0000
-	v=-3936.0000 1696.0000
-	v=-4032.0000 1760.0000
-	v=-4064.0000 1920.0000
-	v=-4032.0000 2144.0000
-	v=-3936.0000 2208.0000
-	v=-3776.0000 2176.0000
-	v=-3712.0000 2112.0000
-	v=-3616.0000 2064.0000
-	v=-3632.0000 2080.0000
-	v=-3616.0000 2096.0000
-	v=-3600.0000 2080.0000
+	v=-4032.0000 1792.0000
+	v=-4032.0000 2112.0000
+	v=-3728.0000 2112.0000
+	v=-3728.0000 2048.0000
+	v=-3968.0000 2048.0000
+	v=-3968.0000 1856.0000
+	v=-3712.0000 1856.0000
+	v=-3728.0000 1824.0000
+	v=-3712.0000 2080.0000
+	v=-3808.0000 1792.0000
+	v=-3872.0000 1728.0000
+	v=-3968.0000 1728.0000
+	v=-4064.0000 1792.0000
+	v=-4064.0000 2112.0000
+	v=-4000.0000 2176.0000
+	v=-3872.0000 2144.0000
+	v=-3808.0000 2112.0000
+	v=-4096.0000 1920.0000
+	v=-3776.0000 2048.0000
+	v=-3744.0000 1984.0000
+	v=-3744.0000 1952.0000
+	v=-3776.0000 1856.0000
+	v=-3744.0000 1856.0000
+	v=-3712.0000 1952.0000
+	v=-3712.0000 1984.0000
+	v=-3744.0000 2048.0000
+	v=-3776.0000 1792.0000
+	v=-3840.0000 1696.0000
+	v=-4000.0000 1696.0000
+	v=-4096.0000 1760.0000
+	v=-4128.0000 1920.0000
+	v=-4096.0000 2144.0000
+	v=-4000.0000 2208.0000
+	v=-3840.0000 2176.0000
+	v=-3776.0000 2112.0000
+	v=-3680.0000 2064.0000
+	v=-3696.0000 2080.0000
+	v=-3680.0000 2096.0000
+	v=-3664.0000 2080.0000
 	v=-1024.0000 2368.0000
 	v=-1024.0000 2944.0000
 	v=-1280.0000 2944.0000
@@ -1713,16 +1713,16 @@ vertexes{
 	v=-2096.0000 416.0000
 	v=-2080.0000 432.0000
 	v=-2064.0000 416.0000
-	v=-3088.0000 1840.0000
-	v=-3104.0000 1856.0000
-	v=-3232.0000 1920.0000
+	v=-3152.0000 1840.0000
+	v=-3168.0000 1856.0000
+	v=-3296.0000 1920.0000
+	v=-3296.0000 1792.0000
 	v=-3232.0000 1792.0000
-	v=-3168.0000 1792.0000
-	v=-3168.0000 1920.0000
-	v=-3200.0000 1808.0000
-	v=-3229.4082 1783.2776
-	v=-3199.3169 1800.3514
-	v=-3152.0000 1792.0000
+	v=-3232.0000 1920.0000
+	v=-3264.0000 1808.0000
+	v=-3293.4082 1783.2776
+	v=-3263.3169 1800.3514
+	v=-3216.0000 1792.0000
 	v=-960.0000 -1408.0000
 	v=-960.0000 -1216.0000
 	v=-1440.0000 -1216.0000
@@ -1735,6 +1735,14 @@ vertexes{
 	v=-1088.0000 -1264.0000
 	v=-1056.0000 -1344.0000
 	v=-1072.0000 -1408.0000
+	v=-1456.0000 928.0000
+	v=-1440.0000 912.0000
+	v=-1424.0000 928.0000
+	v=-1440.0000 944.0000
+	v=-1968.0000 928.0000
+	v=-1952.0000 912.0000
+	v=-1936.0000 928.0000
+	v=-1952.0000 944.0000
 }
 edges{
 	e{
@@ -9636,6 +9644,38 @@ edges{
 		s=427 428
 		v=1734 1735
 	}
+	e{
+		s=295 429
+		v=1739 1736
+	}
+	e{
+		s=295 429
+		v=1736 1737
+	}
+	e{
+		s=295 429
+		v=1737 1738
+	}
+	e{
+		s=295 429
+		v=1738 1739
+	}
+	e{
+		s=386 430
+		v=1743 1740
+	}
+	e{
+		s=386 430
+		v=1740 1741
+	}
+	e{
+		s=386 430
+		v=1741 1742
+	}
+	e{
+		s=386 430
+		v=1742 1743
+	}
 }
 sectors{
 	s{
@@ -11994,6 +12034,18 @@ sectors{
 		texture=Grass_light.jpg
 		texture_scale=0.7500 0.7500
 	}
+	s{
+		z=-100.0000
+		texture=Grass_light.jpg
+		texture_scale=0.7500 0.7500
+		texture_tint=83 83 83
+	}
+	s{
+		z=-100.0000
+		texture=Grass_light.jpg
+		texture_scale=0.7500 0.7500
+		texture_tint=83 83 83
+	}
 }
 mobs{
 	Leader{
@@ -13437,35 +13489,35 @@ mobs{
 	}
 	Custom{
 		type=Dummy
-		p=-2208.0000 1632.0000
+		p=-2272.0000 1632.0000
 	}
 	Bouncer{
 		type=Geyser
-		p=-2272.0000 1632.0000
+		p=-2336.0000 1632.0000
 		links=317
 	}
 	Resource{
 		type=Ceramic fragment red
-		p=-2336.0000 1952.0000
+		p=-2400.0000 1952.0000
 		links=320
 	}
 	Custom{
 		type=Carry target
-		p=-2528.0000 1760.0000
+		p=-2592.0000 1760.0000
 		angle=1.5708
 	}
 	Custom{
 		type=White bramble gate
-		p=-2400.0000 1760.0000
+		p=-2464.0000 1760.0000
 	}
 	Custom{
 		type=White bramble gate
-		p=-2528.0000 2048.0000
+		p=-2592.0000 2048.0000
 		angle=1.5708
 	}
 	Custom{
 		type=White bramble gate
-		p=-2720.0000 2048.0000
+		p=-2784.0000 2048.0000
 		angle=1.5708
 	}
 	Custom{
@@ -13551,12 +13603,22 @@ mobs{
 	}
 	Custom{
 		type=Dummy
-		p=-2912.0000 1632.0000
+		p=-2976.0000 1632.0000
 	}
 	Bouncer{
 		type=Geyser
-		p=-2976.0000 1632.0000
+		p=-3040.0000 1632.0000
 		links=341
+	}
+	Resource{
+		type=Ceramic fragment red
+		p=-3104.0000 1760.0000
+		links=344
+	}
+	Custom{
+		type=Carry target
+		p=-3424.0000 1760.0000
+		angle=1.5708
 	}
 	Resource{
 		type=Ceramic fragment red
@@ -13564,36 +13626,26 @@ mobs{
 		links=344
 	}
 	Custom{
-		type=Carry target
-		p=-3360.0000 1760.0000
-		angle=1.5708
-	}
-	Resource{
-		type=Ceramic fragment red
-		p=-2976.0000 1760.0000
-		links=344
-	}
-	Custom{
 		type=Dummy
-		p=-3488.0000 1632.0000
+		p=-3552.0000 1632.0000
 	}
 	Bouncer{
 		type=Geyser
-		p=-3552.0000 1632.0000
+		p=-3616.0000 1632.0000
 		links=346
 	}
 	Custom{
 		type=Clog
-		p=-3792.0000 1952.0000
+		p=-3856.0000 1952.0000
 	}
 	Resource{
 		type=Ceramic fragment red
-		p=-3616.0000 1824.0000
+		p=-3680.0000 1824.0000
 		links=350
 	}
 	Custom{
 		type=Carry target
-		p=-3616.0000 2080.0000
+		p=-3680.0000 2080.0000
 		angle=1.5708
 	}
 	Custom{
@@ -13874,12 +13926,12 @@ mobs{
 	}
 	Resource{
 		type=Ceramic fragment red
-		p=-3200.0000 1760.0000
+		p=-3264.0000 1760.0000
 		links=344
 	}
 	Resource{
 		type=Ceramic fragment red
-		p=-3136.0000 1760.0000
+		p=-3200.0000 1760.0000
 		links=344
 	}
 	Interactable{
@@ -13919,6 +13971,261 @@ mobs{
 	Enemy{
 		type=Cyclopod
 		p=-1280.0000 -1312.0000
+	}
+	Interactable{
+		type=Orb sign
+		p=-352.0000 448.0000
+		vars=text=Basic pathing test.
+	}
+	Interactable{
+		type=Orb sign
+		p=-800.0000 448.0000
+		vars=text=Basic shortest path test.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1056.0000 288.0000
+		vars=text=Basic one-way path test.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1312.0000 320.0000
+		vars=text=Basic one-way path test.
+	}
+	Interactable{
+		type=Orb sign
+		p=-2080.0000 192.0000
+		vars=text=Basic path stop radius test.
+	}
+	Interactable{
+		type=Orb sign
+		p=-288.0000 800.0000
+		vars=text=Tests that Pikmin don't take a script-only path.
+	}
+	Interactable{
+		type=Orb sign
+		p=-896.0000 640.0000
+		vars=text=Tests that Pikmin take or\ndon't take light-load-only paths.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1440.0000 768.0000
+		vars=text=Tests that Pikmin only go up ledges if they can fly.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1952.0000 800.0000
+		vars=text=Tests that Pikmin only go up ledges if they can fly.
+	}
+	Interactable{
+		type=Orb sign
+		p=-448.0000 1184.0000
+		vars=text=Tests that Pikmin don't take the script-only\nand ledge path.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1024.0000 1184.0000
+		vars=text=Tests that Pikmin only take the faster path\nif they're light load and can fly.
+	}
+	Interactable{
+		type=Orb sign
+		p=-608.0000 1664.0000
+		vars=text=Tests if Pikmin always take the fastest\navailable path, as it becomes available.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1632.0000 1856.0000
+		vars=text=Tests if Pikmin always take the fastest\navailable path, as it becomes available.
+	}
+	Interactable{
+		type=Orb sign
+		p=-2592.0000 1856.0000
+		vars=text=Tests if Pikmin default to the shortest\npath, and can take other paths as they're available.
+	}
+	Interactable{
+		type=Orb sign
+		p=-3264.0000 1664.0000
+		vars=text=Tests if Pikmin only take paths they're invulnerable to.
+	}
+	Interactable{
+		type=Orb sign
+		p=-3680.0000 1952.0000
+		vars=text=Tests if vulnerable Pikmin take a\npath if the vulnerability is gone.
+	}
+	Interactable{
+		type=Orb sign
+		p=-288.0000 2464.0000
+		vars=text=Tests if Pikmin respect one-ways\nas they go back and forth.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1088.0000 2720.0000
+		vars=text=Tests if Pikmin can take a\none-stop-only path.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1536.0000 2432.0000
+		vars=text=Tests if Pikmin will go directly\nif it's faster.
+	}
+	Interactable{
+		type=Orb sign
+		p=-1856.0000 2656.0000
+		vars=text=Tests that Pikmin can't reach\nunreachable stops.
+	}
+	Interactable{
+		type=Orb sign
+		p=-2176.0000 2560.0000
+		vars=text=Tests that Pikmin get stuck if there's\nno destination.
+	}
+	Interactable{
+		type=Orb sign
+		p=320.0000 320.0000
+		vars=text=Blocking sectors.
+	}
+	Interactable{
+		type=Orb sign
+		p=960.0000 192.0000
+		vars=text=Funky terrain collision tests.
+	}
+	Interactable{
+		type=Orb sign
+		p=1888.0000 320.0000
+		vars=text=Pikmin throw heights.
+	}
+	Interactable{
+		type=Orb sign
+		p=416.0000 704.0000
+		vars=text=Bottomless pits.
+	}
+	Interactable{
+		type=Orb sign
+		p=1024.0000 640.0000
+		vars=text=Hazardous floors.
+	}
+	Interactable{
+		type=Orb sign
+		p=288.0000 1120.0000
+		vars=text=Texture with measurements.
+	}
+	Interactable{
+		type=Orb sign
+		p=768.0000 1024.0000
+		vars=text=Texture with a lot of transformations.
+	}
+	Interactable{
+		type=Orb sign
+		p=928.0000 1120.0000
+		vars=text=Textures that fade.
+	}
+	Interactable{
+		type=Orb sign
+		p=1216.0000 1120.0000
+		vars=text=Textures that fade with a\nlot of transformations.
+	}
+	Interactable{
+		type=Orb sign
+		p=352.0000 1408.0000
+		vars=text=Disabled edge shadows.
+	}
+	Interactable{
+		type=Orb sign
+		p=672.0000 1408.0000
+		vars=text=Fixed edge shadow sizes.
+	}
+	Interactable{
+		type=Orb sign
+		p=1056.0000 1408.0000
+		vars=text=Fixed edge shadow colors.
+	}
+	Interactable{
+		type=Orb sign
+		p=1408.0000 1408.0000
+		vars=text=Different ledge smoothings.
+	}
+	Interactable{
+		type=Orb sign
+		p=1728.0000 1408.0000
+		vars=text=Colored ledge smoothings.
+	}
+	Interactable{
+		type=Orb sign
+		p=2784.0000 1568.0000
+		vars=text=Tricky shadow scenarios.
+	}
+	Interactable{
+		type=Orb sign
+		p=384.0000 1920.0000
+		vars=text=Gates with changed healths.
+	}
+	Interactable{
+		type=Orb sign
+		p=416.0000 2368.0000
+		vars=text=Objects stored inside others.
+	}
+	Interactable{
+		type=Orb sign
+		p=352.0000 2368.0000
+		vars=text=Pimin maturities.
+	}
+	Interactable{
+		type=Orb sign
+		p=768.0000 2144.0000
+		vars=text=Bridges built upwards.
+	}
+	Interactable{
+		type=Orb sign
+		p=1216.0000 2144.0000
+		vars=text=Bridges built downwards\nand across gaps.
+	}
+	Interactable{
+		type=Orb sign
+		p=1632.0000 2176.0000
+		vars=text=Bridges built across water gaps.
+	}
+	Interactable{
+		type=Orb sign
+		p=1824.0000 2336.0000
+		vars=text=Enemies eating bomb rocks.
+	}
+	Interactable{
+		type=Orb sign
+		p=384.0000 2528.0000
+		vars=text=Normal tree shadow.
+	}
+	Interactable{
+		type=Orb sign
+		p=704.0000 2528.0000
+		vars=text=Tree shadow with transformations.
+	}
+	Interactable{
+		type=Orb sign
+		p=1056.0000 2528.0000
+		vars=text=Sector-void-sector sandwich.
+	}
+	Interactable{
+		type=Orb sign
+		p=1280.0000 2528.0000
+		vars=text=Moving walkways.
+	}
+	Interactable{
+		type=Orb sign
+		p=384.0000 3072.0000
+		vars=text=Sector with a reused vertex.
+	}
+	Interactable{
+		type=Orb sign
+		p=608.0000 3072.0000
+		vars=text=Sector with two sub-sectors,\nseparated.
+	}
+	Interactable{
+		type=Orb sign
+		p=832.0000 3072.0000
+		vars=text=Sector with two sub-sectors,\nboth sandwiched.
+	}
+	Interactable{
+		type=Orb sign
+		p=1056.0000 3072.0000
+		vars=text=Sector with two sub-sectors,\nsharing a vertex.
 	}
 }
 path_stops{
@@ -14562,7 +14869,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2336.0000 1888.0000
+		pos=-2400.0000 1888.0000
 		flags=224
 		links{
 			nr=82
@@ -14570,7 +14877,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2336.0000 1760.0000
+		pos=-2400.0000 1760.0000
 		flags=224
 		links{
 			nr=81
@@ -14578,7 +14885,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2464.0000 1760.0000
+		pos=-2528.0000 1760.0000
 		flags=224
 		links{
 			nr=82
@@ -14586,7 +14893,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2592.0000 1760.0000
+		pos=-2656.0000 1760.0000
 		flags=224
 		links{
 			nr=85
@@ -14594,7 +14901,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2720.0000 1760.0000
+		pos=-2784.0000 1760.0000
 		flags=224
 		links{
 			nr=84
@@ -14602,7 +14909,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2720.0000 1952.0000
+		pos=-2784.0000 1952.0000
 		flags=224
 		links{
 			nr=85
@@ -14611,7 +14918,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2720.0000 2144.0000
+		pos=-2784.0000 2144.0000
 		flags=224
 		links{
 			nr=86
@@ -14619,7 +14926,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2528.0000 2144.0000
+		pos=-2592.0000 2144.0000
 		flags=224
 		links{
 			nr=87
@@ -14628,7 +14935,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2336.0000 2144.0000
+		pos=-2400.0000 2144.0000
 		flags=224
 		links{
 			nr=88
@@ -14636,7 +14943,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2336.0000 2016.0000
+		pos=-2400.0000 2016.0000
 		flags=224
 		links{
 			nr=89
@@ -14644,7 +14951,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2528.0000 1952.0000
+		pos=-2592.0000 1952.0000
 		flags=224
 		links{
 			nr=88
@@ -14652,7 +14959,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2528.0000 1760.0000
+		pos=-2592.0000 1760.0000
 		flags=32
 		links{
 			nr=83
@@ -14660,7 +14967,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-2336.0000 1952.0000
+		pos=-2400.0000 1952.0000
 		links{
 			nr=81
 			nr=90
@@ -14737,14 +15044,14 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3040.0000 1824.0000
+		pos=-3104.0000 1824.0000
 		flags=224
 		links{
 			nr=104
 		}
 	}
 	s{
-		pos=-3040.0000 1952.0000
+		pos=-3104.0000 1952.0000
 		flags=224
 		links{
 			nr=103
@@ -14753,7 +15060,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3040.0000 2144.0000
+		pos=-3104.0000 2144.0000
 		flags=224
 		links{
 			nr=104
@@ -14761,7 +15068,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3360.0000 2144.0000
+		pos=-3424.0000 2144.0000
 		flags=224
 		links{
 			nr=105
@@ -14769,7 +15076,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3360.0000 1952.0000
+		pos=-3424.0000 1952.0000
 		flags=224
 		links{
 			nr=106
@@ -14778,14 +15085,14 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3360.0000 1824.0000
+		pos=-3424.0000 1824.0000
 		flags=224
 		links{
 			nr=107
 		}
 	}
 	s{
-		pos=-3200.0000 1952.0000
+		pos=-3264.0000 1952.0000
 		flags=224
 		links{
 			nr=104
@@ -14794,14 +15101,14 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3680.0000 1824.0000
+		pos=-3744.0000 1824.0000
 		flags=224
 		links{
 			nr=111
 		}
 	}
 	s{
-		pos=-3936.0000 1824.0000
+		pos=-4000.0000 1824.0000
 		flags=224
 		links{
 			nr=110
@@ -14809,7 +15116,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3936.0000 2080.0000
+		pos=-4000.0000 2080.0000
 		flags=32
 		links{
 			nr=111
@@ -14817,7 +15124,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3680.0000 2080.0000
+		pos=-3744.0000 2080.0000
 		flags=224
 		links{
 			nr=112
@@ -15037,7 +15344,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-3200.0000 1824.0000
+		pos=-3264.0000 1824.0000
 		links{
 			nr=109
 		}
