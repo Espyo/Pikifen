@@ -946,6 +946,21 @@ void gameplay_state::load() {
         enemy_points_total += mobs.enemies[e]->ene_type->points;
     }
     
+    //Initialize the area's active cells.
+    float area_width =
+        game.cur_area_data.bmap.n_cols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    float area_height =
+        game.cur_area_data.bmap.n_rows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    size_t nr_area_cell_cols =
+        ceil(area_width / GEOMETRY::AREA_CELL_SIZE) + 1;
+    size_t nr_area_cell_rows =
+        ceil(area_height / GEOMETRY::AREA_CELL_SIZE) + 1;
+        
+    area_active_cells.clear();
+    area_active_cells.assign(
+        nr_area_cell_cols, vector<bool>(nr_area_cell_rows, false)
+    );
+    
     //Initialize some other things.
     path_mgr.handle_area_load();
     

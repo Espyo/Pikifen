@@ -227,6 +227,7 @@ void mob_type::load_from_data_node(
     data_node* team_node = nullptr;
     
     rs.set("acceleration", acceleration);
+    rs.set("always_active", always_active);
     rs.set("appears_in_area_editor", appears_in_area_editor);
     rs.set(
         "area_editor_recommend_links_from",

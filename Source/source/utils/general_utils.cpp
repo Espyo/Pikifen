@@ -14,6 +14,7 @@
 #pragma warning(disable : 4996)
 #endif
 
+#include <csignal>
 #include <time.h>
 
 #include "general_utils.h"

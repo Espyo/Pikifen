@@ -8,6 +8,7 @@
  * Analog stick cleaner class and related functions.
  */
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <cmath>
 

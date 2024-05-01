@@ -95,7 +95,7 @@ const string STATUS_GUI_FILE_PATH =
  * false if it should be the system page.
  */
 pause_menu_t::pause_menu_t(bool start_on_radar) {
-    
+
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
     pages.push_back(PAUSE_MENU_PAGE_STATUS);
@@ -1158,6 +1158,38 @@ void pause_menu_t::draw_radar(
         point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
         game.time_passed * TAU * 0.3f
     );
+    
+    //Debugging feature -- show area active cells.
+    /*
+    for(
+        size_t cell_x = 0;
+        cell_x < game.states.gameplay->area_active_cells.size();
+        ++cell_x
+    ) {
+        for(
+            size_t cell_y = 0;
+            cell_y < game.states.gameplay->area_active_cells[cell_x].size();
+            ++cell_y
+        ) {
+            float start_x =
+                game.cur_area_data.bmap.top_left_corner.x +
+                cell_x * GEOMETRY::AREA_CELL_SIZE;
+            float start_y =
+                game.cur_area_data.bmap.top_left_corner.y +
+                cell_y * GEOMETRY::AREA_CELL_SIZE;
+            al_draw_rectangle(
+                start_x + (1.0f / radar_cam.zoom),
+                start_y + (1.0f / radar_cam.zoom),
+                start_x + GEOMETRY::AREA_CELL_SIZE - (1.0f / radar_cam.zoom),
+                start_y + GEOMETRY::AREA_CELL_SIZE - (1.0f / radar_cam.zoom),
+                game.states.gameplay->area_active_cells[cell_x][cell_y] ?
+                al_map_rgb(32, 192, 32) :
+                al_map_rgb(192, 32, 32),
+                1.0f / radar_cam.zoom
+            );
+        }
+    }
+    */
     
     //Return to normal drawing.
     al_use_transform(&old_transform);

@@ -50,6 +50,7 @@ pikmin_type::pikmin_type() :
         sfx_data_idxs[s] = INVALID;
     }
     
+    always_active = true;
     weight = 1;
     show_health = false;
     

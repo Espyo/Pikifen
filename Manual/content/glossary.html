@@ -39,6 +39,10 @@
       <dd>See also: <a href="#P">Player action</a>.</dd>
     </dl>
     <dl>
+      <dt>Active</dt>
+      <dd>If an object is active that means it will be processed on the current frame. To save on performance, objects that are off-camera and too far from any Pikmin or leader (and also not marked as always-active) will become inactive, meaning they are essentially frozen in time.</dd>
+    </dl>
+    <dl>
       <dt>Animation</dt>
       <dd>A series of <a href="#F">frames</a> that change the way an object looks. When put together nicely, these make it look like the object is walking, growling, chomping, etc. Animations are independent of what the object is actually doing. For instance, it can be walking, but it could be frozen in appearance, which would make it appear to slide. That said, accurate animations are necessary for gameplay reasons, like <a href="#H">hitboxes</a>.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
@@ -232,6 +236,10 @@
     
     <h2 id="I">I</h2>
 
+    <dl>
+      <dt>Inactive</dt>
+      <dd>See <a href="#A">Active</a>.</dd>
+    </dl>
     <dl>
       <dt>Ingredient</dt>
       <dd>An ingredient for concocting a spray. In the canon games, these are berries. After a certain number of ingredients of a certain type are collected, the player gains one more dosage of a certain spray.</dd>

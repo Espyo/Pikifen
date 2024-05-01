@@ -29,6 +29,9 @@ using std::vector;
 
 namespace GEOMETRY {
 
+//Area active cells have this width and height.
+const float AREA_CELL_SIZE = 128;
+
 //Area blockmap blocks have this width and height.
 const float BLOCKMAP_BLOCK_SIZE = 128;
 

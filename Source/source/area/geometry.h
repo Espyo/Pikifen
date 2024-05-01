@@ -30,6 +30,7 @@ struct vertex;
 
 
 namespace GEOMETRY {
+extern const float AREA_CELL_SIZE;
 extern const float BLOCKMAP_BLOCK_SIZE;
 extern const unsigned char DEF_SECTOR_BRIGHTNESS;
 extern const float STEP_HEIGHT;

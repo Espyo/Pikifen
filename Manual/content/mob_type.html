@@ -80,6 +80,7 @@
 
     <ul>
       <li><b><code>acceleration</code></b>: How quickly the object reaches top speed when moving. This is in units per second per second. Defaults to 400.</li>
+      <li><b><code>always_active</code></b>: If true, this object is always <a href="glossary.html#A">active</a>. This is false by default, except for Pikmin and leaders, where it's true by default.</li>
       <li><b><code>blackout_radius</code></b>: How much light it emits during blackout weather conditions. 0 means no light, and is the default for decorations. -1 means it uses the object's own radius, which is the default.</li>
       <li><b><code>can_block_paths</code></b>: If set to <code>true</code>, this object blocks objects following the path it is on, like a closed gate or an unbuilt bridge. If the object finishes dying, it will stop blocking, though it can also start and stop blocking at will according to its script. Defaults to false.</li>
       <li><b><code>can_free_move</code></b>: If true, this object can move in any direction freely, without having to first turn there. It will also not face towards the direction it is going. Defaults to false.</li>

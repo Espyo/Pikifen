@@ -737,10 +737,15 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 cur_leader_ptr->chase_info.state == CHASE_STATE_CHASING;
         }
         
+        update_area_active_cells();
+        update_mob_is_active_flag();
+        
         size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
+            if(!m_ptr->is_active) continue;
+            
             m_ptr->tick(delta_t);
             if(!m_ptr->is_stored_inside_mob()) {
                 process_mob_interactions(m_ptr, m);
@@ -1479,6 +1484,59 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_COND* reason) {
 
 
 /**
+ * @brief Marks all area cells in a given region as active.
+ *
+ * @param top_left Top-left coordinates (in world coordinates)
+ * of the region.
+ * @param bottom_right Bottom-right coordinates (in world coordinates)
+ * of the region.
+ */
+void gameplay_state::mark_area_cells_active(
+    const point &top_left, const point &bottom_right
+) {
+    int from_x =
+        (top_left.x - game.cur_area_data.bmap.top_left_corner.x) /
+        GEOMETRY::AREA_CELL_SIZE;
+    int to_x =
+        (bottom_right.x - game.cur_area_data.bmap.top_left_corner.x) /
+        GEOMETRY::AREA_CELL_SIZE;
+    int from_y =
+        (top_left.y - game.cur_area_data.bmap.top_left_corner.y) /
+        GEOMETRY::AREA_CELL_SIZE;
+    int to_y =
+        (bottom_right.y - game.cur_area_data.bmap.top_left_corner.y) /
+        GEOMETRY::AREA_CELL_SIZE;
+        
+    mark_area_cells_active(from_x, to_x, from_y, to_y);
+}
+
+
+/**
+ * @brief Marks all area cells in a given region as active.
+ * All coordinates provided are automatically adjusted if out-of-bounds.
+ *
+ * @param from_x Starting column index of the cells, inclusive.
+ * @param to_x Ending column index of the cells, inclusive.
+ * @param from_y Starting row index of the cells, inclusive.
+ * @param to_y Ending row index of the cells, inclusive.
+ */
+void gameplay_state::mark_area_cells_active(
+    int from_x, int to_x, int from_y, int to_y
+) {
+    from_x = std::max(0, from_x);
+    to_x = std::min(to_x, (int) area_active_cells.size() - 1);
+    from_y = std::max(0, from_y);
+    to_y = std::min(to_y, (int) area_active_cells[0].size() - 1);
+    
+    for(int x = from_x; x <= to_x; ++x) {
+        for(int y = from_y; y <= to_y; ++y) {
+            area_active_cells[x][y] = true;
+        }
+    }
+}
+
+
+/**
  * @brief Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  *
@@ -1494,6 +1552,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs.all[m2];
+        if(!m2_ptr->is_active) continue;
         if(m2_ptr->to_delete) continue;
         if(m2_ptr->is_stored_inside_mob()) continue;
         
@@ -2260,6 +2319,74 @@ void gameplay_state::process_mob_touches(
                     
                 }
             }
+        }
+    }
+}
+
+
+/**
+ * @brief Updates the grid that represents which area cells are active
+ * for this frame.
+ */
+void gameplay_state::update_area_active_cells() {
+    //Initialize the grid to false.
+    for(size_t x = 0; x < area_active_cells.size(); ++x) {
+        for(size_t y = 0; y < area_active_cells[x].size(); ++y) {
+            area_active_cells[x][y] = false;
+        }
+    }
+    
+    //Mark the 3x3 region around Pikmin and leaders as active.
+    for(size_t p = 0; p < mobs.pikmin_list.size(); ++p) {
+        mark_area_cells_active(
+            mobs.pikmin_list[p]->pos - GEOMETRY::AREA_CELL_SIZE,
+            mobs.pikmin_list[p]->pos + GEOMETRY::AREA_CELL_SIZE
+        );
+    }
+    
+    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+        mark_area_cells_active(
+            mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
+            mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
+        );
+    }
+    
+    //Mark the region in-camera (plus padding) as active.
+    mark_area_cells_active(game.cam.box[0], game.cam.box[1]);
+}
+
+
+/**
+ * @brief Updates the "is_active" member variable of all mobs for this frame.
+ */
+void gameplay_state::update_mob_is_active_flag() {
+    for(size_t m = 0; m < mobs.all.size(); ++m) {
+        mob* m_ptr = mobs.all[m];
+        
+        if(m_ptr->type->always_active) {
+            m_ptr->is_active = true;
+            continue;
+        }
+        
+        int cell_x =
+            (m_ptr->pos.x - game.cur_area_data.bmap.top_left_corner.x) /
+            GEOMETRY::AREA_CELL_SIZE;
+        int cell_y =
+            (m_ptr->pos.y - game.cur_area_data.bmap.top_left_corner.y) /
+            GEOMETRY::AREA_CELL_SIZE;
+        if(
+            cell_x < 0 ||
+            cell_x >= (int) game.states.gameplay->area_active_cells.size()
+        ) {
+            m_ptr->is_active = false;
+        } else if(
+            cell_y < 0 ||
+            cell_y >= (int) game.states.gameplay->area_active_cells[0].size()
+        ) {
+            m_ptr->is_active = false;
+        } else {
+            m_ptr->is_active =
+                game.states.gameplay->area_active_cells[cell_x][cell_y];
         }
     }
 }

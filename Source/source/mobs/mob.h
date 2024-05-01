@@ -334,6 +334,9 @@ public:
     //It's invisible due to a status effect. Cache for performance.
     bool has_invisibility_status = false;
     
+    //Whether it's active this frame. Cache for performance.
+    bool is_active = false;
+    
     
     //--- Function declarations ---
     

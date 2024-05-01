@@ -393,6 +393,9 @@ public:
     //Its initial team.
     MOB_TEAM starting_team = MOB_TEAM_NONE;
     
+    //Whether it's always active, even off-camera.
+    bool always_active = false;
+    
     //Custom behavior callbacks.
     void(*draw_mob_callback)(mob* m) = nullptr;
     
