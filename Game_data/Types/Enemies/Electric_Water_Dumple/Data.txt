@@ -48,6 +48,7 @@ sounds {
     }
     electricity {
         file = Electricity.ogg
+        loop = true
         volume = 80
     }
 }

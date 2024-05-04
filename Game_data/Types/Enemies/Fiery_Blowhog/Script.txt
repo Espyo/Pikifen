@@ -87,6 +87,7 @@ script {
         on_frame_signal {
             get_event_info signal frame_signal
             stop_sound $sfx_id
+            stop_sound $sfx_id2
             if $signal = 0
                 play_sound exhaling sfx_id
                 play_sound flamethrower sfx_id2

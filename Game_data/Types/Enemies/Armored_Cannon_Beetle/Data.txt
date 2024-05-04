@@ -34,6 +34,7 @@ reaches {
 sounds {
     inhaling {
         file = Inhaling.ogg
+        loop = true
         volume = 50
     }
     spit {
@@ -54,6 +55,7 @@ sounds {
     }
     steam {
         file = Steam.ogg
+        loop = true
         volume = 40
     }
     dying {

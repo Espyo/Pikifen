@@ -33,13 +33,16 @@ reaches {
 sounds {
     inhaling {
         file = Inhaling.ogg
+        loop = true
         volume = 25
     }
     exhaling {
         file = Exhaling.ogg
+        loop = true
         volume = 20
     }
     flamethrower {
         file = Flamethrower.ogg
+        loop = true
     }
 }

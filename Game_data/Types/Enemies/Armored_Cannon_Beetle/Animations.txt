@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	bored{
 		frames{
@@ -38,7 +40,7 @@ animations{
 			}
 			idling_hot{
 				duration=0.3000
-				sound=steam
+				signal=0
 			}
 		}
 	}
@@ -336,6 +338,7 @@ animations{
 			spitting_02{
 				duration=0.1000
 				signal=0
+				sound=spit
 			}
 			spitting_01{
 				duration=0.1000
@@ -1687,4 +1690,3 @@ body_parts{
 	blowhole
 	shell
 }
-engine_version=0.25.0
