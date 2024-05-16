@@ -2485,7 +2485,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             process_gui_size_widgets(
                 "Size", cur_sprite->top_size, 0.01f,
-                top_keep_aspect_ratio, ANIM_EDITOR::TOP_MIN_SIZE
+                top_keep_aspect_ratio, false, ANIM_EDITOR::TOP_MIN_SIZE
             )
         ) {
             changes_mgr.mark_as_changed();
@@ -2601,10 +2601,8 @@ void animation_editor::process_gui_panel_sprite_transform() {
     //Sprite scale value.
     if(
         process_gui_size_widgets(
-            "Scale",
-            cur_sprite->scale,
-            0.005f,
-            cur_sprite_keep_aspect_ratio,
+            "Scale", cur_sprite->scale,
+            0.005f, cur_sprite_keep_aspect_ratio, cur_sprite_keep_area,
             -FLT_MAX
         )
     ) {
@@ -2634,9 +2632,20 @@ void animation_editor::process_gui_panel_sprite_transform() {
     }
     
     //Keep aspect ratio checkbox.
-    ImGui::Checkbox("Keep aspect ratio", &cur_sprite_keep_aspect_ratio);
-    ImGui::Unindent();
+    if(ImGui::Checkbox("Keep aspect ratio", &cur_sprite_keep_aspect_ratio)) {
+        cur_sprite_keep_area = false;
+    }
     set_tooltip("Keep the aspect ratio when resizing the sprite.");
+    
+    //Keep area checkbox.
+    if(ImGui::Checkbox("Keep area", &cur_sprite_keep_area)) {
+        cur_sprite_keep_aspect_ratio = false;
+    };
+    ImGui::Unindent();
+    set_tooltip(
+        "Keeps the same total area when resizing the sprite.\n"
+        "Useful for squash and stretch effects."
+    );
     
     //Sprite angle value.
     cur_sprite->angle = normalize_angle(cur_sprite->angle);

@@ -1464,6 +1464,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     nullptr,
                     1.0f / game.cam.zoom,
                     false,
+                    false,
                     MISSION::EXIT_MIN_SIZE,
                     is_alt_pressed
                 );
@@ -1485,6 +1486,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         &selection_size,
                         &selection_angle,
                         1.0f / game.cam.zoom,
+                        false,
                         false,
                         AREA_EDITOR::SELECTION_TW_PADDING * 2.0f,
                         is_alt_pressed
@@ -1677,6 +1679,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         &shadow_angle,
                         1.0f / game.cam.zoom,
                         selected_shadow_keep_aspect_ratio,
+                        false,
                         -FLT_MAX,
                         is_alt_pressed
                     )
@@ -1700,6 +1703,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 nullptr,
                 1.0f / game.cam.zoom,
                 reference_keep_aspect_ratio,
+                false,
                 5.0f,
                 is_alt_pressed
             );

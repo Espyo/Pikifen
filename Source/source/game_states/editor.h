@@ -263,6 +263,7 @@ protected:
             const point &mouse_coords, point* center, point* size, float* angle,
             const float zoom = 1.0f,
             const bool keep_aspect_ratio = false,
+            const bool keep_area = false,
             const float min_size = -FLT_MAX,
             const bool lock_center = true
         );
@@ -626,8 +627,8 @@ protected:
     );
     bool process_gui_size_widgets(
         const char* label, point &size, const float v_speed,
-        const bool keep_aspect_ratio, const float min_size,
-        const std::function<void()> &pre_change_callback = nullptr
+        const bool keep_aspect_ratio, const bool keep_area,
+        const float min_size
     );
     void process_gui_status_bar_text();
     void process_gui_unsaved_changes_dialog();

@@ -51,10 +51,10 @@ const float CARRY_SWAY_X_TRANSLATION_AMOUNT = 2.0f;
 const float CARRY_SWAY_Y_TRANSLATION_AMOUNT =
     CARRY_SWAY_X_TRANSLATION_AMOUNT / 2.0f;
     
-//How much to change the scale by during a damage squash-and-stretch animation.
+//How much to change the scale by during a damage squash and stretch animation.
 const float DAMAGE_SQUASH_AMOUNT = 0.04f;
 
-//Duration of the damage squash-and-stretch animation.
+//Duration of the damage squash and stretch animation.
 const float DAMAGE_SQUASH_DURATION = 0.25f;
 
 //When a mob shakes during delivery, this is the shake multiplier.
@@ -1388,7 +1388,7 @@ void mob::do_attack_effects(
             attack_sfx_config
         );
         
-        //Damage squash-and-stretch animation.
+        //Damage squash and stretch animation.
         if(damage_squash_time == 0.0f) {
             damage_squash_time = MOB::DAMAGE_SQUASH_DURATION;
         }

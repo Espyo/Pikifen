@@ -1332,12 +1332,17 @@ void area_editor::process_gui_panel_details() {
                 );
                 
                 //Tree shadow size value.
-                process_gui_size_widgets(
-                    "Size", selected_shadow->size,
-                    1.0f, selected_shadow_keep_aspect_ratio,
-                    -FLT_MAX,
-                [this] () { register_change("tree shadow size change"); }
-                );
+                point shadow_size = selected_shadow->size;
+                if(
+                    process_gui_size_widgets(
+                        "Size", shadow_size,
+                        1.0f, selected_shadow_keep_aspect_ratio, false,
+                        -FLT_MAX
+                    )
+                ) {
+                    register_change("tree shadow size change");
+                    selected_shadow->size = shadow_size;
+                };
                 set_tooltip(
                     "Width and height of the tree shadow.",
                     "", WIDGET_EXPLANATION_DRAG
@@ -5684,7 +5689,7 @@ void area_editor::process_gui_panel_tools() {
         //Reference size value.
         process_gui_size_widgets(
             "Size", reference_size, 1.0f,
-            reference_keep_aspect_ratio,
+            reference_keep_aspect_ratio, false,
             AREA_EDITOR::REFERENCE_MIN_SIZE
         );
         set_tooltip(

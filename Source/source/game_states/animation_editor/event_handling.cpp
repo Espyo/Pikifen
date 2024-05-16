@@ -369,6 +369,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 &cur_sprite->angle,
                 1.0f / game.cam.zoom,
                 cur_sprite_keep_aspect_ratio,
+                cur_sprite_keep_area,
                 -FLT_MAX,
                 is_alt_pressed
             )
@@ -393,6 +394,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         nullptr,
                         1.0f / game.cam.zoom,
                         true,
+                        false,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
                         is_alt_pressed
                     );
@@ -412,6 +414,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         &hitbox_size,
                         nullptr,
                         1.0f / game.cam.zoom,
+                        false,
                         false,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
                         is_alt_pressed
@@ -437,6 +440,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 &cur_sprite->top_angle,
                 1.0f / game.cam.zoom,
                 top_keep_aspect_ratio,
+                false,
                 ANIM_EDITOR::TOP_MIN_SIZE,
                 is_alt_pressed
             );

@@ -1385,17 +1385,17 @@ bool editor::process_gui_mob_type_widgets(
  * ImGui::DragFloat2. 1.0f for default.
  * @param keep_aspect_ratio If true, changing one will change the other
  * in the same ratio.
+ * @param keep_area If true, changing one will change the other
+ * such that the total area is preserved.
  * @param min_size Minimum value that either width or height is allowed
  * to have. Use -FLT_MAX for none.
- * @param pre_change_callback Callback to call when the width or height is
- * changed, before it actually changes.
  * @return Whether the user changed one of the values.
  */
 bool editor::process_gui_size_widgets(
     const char* label, point &size, const float v_speed,
     const bool keep_aspect_ratio,
-    const float min_size,
-    const std::function<void()> &pre_change_callback
+    const bool keep_area,
+    const float min_size
 ) {
     bool ret = false;
     point new_size = size;
@@ -1404,19 +1404,18 @@ bool editor::process_gui_size_widgets(
             label, (float*) &new_size, v_speed, min_size, FLT_MAX
         )
     ) {
-        if(pre_change_callback) {
-            pre_change_callback();
-        }
-        
-        if(
-            !keep_aspect_ratio ||
-            size.x == 0.0f || size.y == 0.0f ||
-            new_size.x == 0.0f || new_size.y == 0.0f
-        ) {
-            //Just change them, and forget about keeping the aspect ratio.
+    
+        bool free_resize = !keep_aspect_ratio && !keep_area;
+        bool values_valid =
+            size.x != 0.0f && size.y != 0.0f &&
+            new_size.x != 0.0f && new_size.y != 0.0f;
+            
+        if(free_resize || !values_valid) {
+            //Just change them, forget about keeping the aspect ratio or area.
             new_size.x = std::max(min_size, new_size.x);
             new_size.y = std::max(min_size, new_size.y);
-        } else {
+            
+        } else if(keep_aspect_ratio) {
             //Keep the aspect ratio.
             float ratio = size.x / size.y;
             if(new_size.x != size.x) {
@@ -1434,9 +1433,27 @@ bool editor::process_gui_size_widgets(
                 }
                 new_size.x = new_size.y * ratio;
             }
+            
+        } else {
+            //Keep the area.
+            double area = size.x * size.y;
+            if(new_size.x != size.x) {
+                //Must adjust Y.
+                if(min_size != -FLT_MAX) {
+                    new_size.x = std::max(min_size, new_size.x);
+                }
+                new_size.y = area / new_size.x;
+            } else {
+                //Must adjust X.
+                if(min_size != -FLT_MAX) {
+                    new_size.y = std::max(min_size, new_size.y);
+                }
+                new_size.x = area / new_size.y;
+            }
+            
         }
-        size = new_size;
         
+        size = new_size;
         ret = true;
     }
     
@@ -2673,6 +2690,8 @@ bool editor::transformation_widget::handle_mouse_down(
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @param keep_aspect_ratio If true, aspect ratio is kept when resizing.
+ * @param keep_area If true, keep the same total area.
+ * Used for squash and stretch.
  * @param min_size Minimum possible size for the width or height.
  * Use -FLT_MAX for none.
  * @param lock_center If true, scaling happens with the center locked.
@@ -2681,8 +2700,8 @@ bool editor::transformation_widget::handle_mouse_down(
  */
 bool editor::transformation_widget::handle_mouse_move(
     const point &mouse_coords, point* center, point* size, float* angle,
-    const float zoom, const bool keep_aspect_ratio, const float min_size,
-    const bool lock_center
+    const float zoom, const bool keep_aspect_ratio, const bool keep_area,
+    const float min_size, const bool lock_center
 ) {
     if(!center) return false;
     
@@ -2776,6 +2795,34 @@ bool editor::transformation_widget::handle_mouse_move(
         scale_to_use = std::max(min_size / old_size.x, scale_to_use);
         scale_to_use = std::max(min_size / old_size.y, scale_to_use);
         new_size = old_size * scale_to_use;
+        
+    } else if(keep_area && old_size.x != 0.0f && old_size.y != 0.0f) {
+        bool by_x;
+        float w_scale = new_size.x / old_size.x;
+        float h_scale = new_size.y / old_size.y;
+        double old_area = old_size.x * old_size.y;
+        if(!scaling_y) {
+            by_x = true;
+        } else if(!scaling_x) {
+            by_x = false;
+        } else {
+            if(fabs(w_scale) < fabs(h_scale)) {
+                by_x = true;
+            } else {
+                by_x = false;
+            }
+        }
+        if(by_x) {
+            if(min_size != -FLT_MAX) {
+                new_size.x = std::max(min_size, new_size.x);
+            }
+            new_size.y = old_area / new_size.x;
+        } else {
+            if(min_size != -FLT_MAX) {
+                new_size.y = std::max(min_size, new_size.y);
+            }
+            new_size.x = old_area / new_size.y;
+        }
     }
     
     switch(moving_handle) {

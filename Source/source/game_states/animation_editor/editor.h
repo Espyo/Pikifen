@@ -154,6 +154,9 @@ private:
     //Keep the aspect ratio when resizing the current sprite?
     bool cur_sprite_keep_aspect_ratio = true;
     
+    //Keep the total area when resizing the current sprite?
+    bool cur_sprite_keep_area = false;
+    
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     

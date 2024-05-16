@@ -302,7 +302,7 @@ public:
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot = LARGE_FLOAT;
     
-    //Time left in the current damage squash-and-stretch animation.
+    //Time left in the current damage squash and stretch animation.
     float damage_squash_time = 0.0f;
     
     //Particle generators attached to it.

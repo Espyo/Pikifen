@@ -426,7 +426,7 @@ void gui_editor::process_gui_panel_item() {
     //Size values.
     if(
         process_gui_size_widgets(
-            "Size", cur_item_ptr->size, 0.10f, false, 0.10f
+            "Size", cur_item_ptr->size, 0.10f, false, false, 0.10f
         )
     ) {
         changes_mgr.mark_as_changed();
