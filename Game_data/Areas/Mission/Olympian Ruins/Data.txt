@@ -1,0 +1,30 @@
+name=Olympian Ruins
+description=Legend has it this was a site for Olympian prowesses! Why don't you channel some of that spirit with a fast collectathon? Think of it like an obstacle course.
+tags=Short and sweet; Garden
+maker=Espyo
+version=1.0.0
+engine_version=0.25.0
+subtitle
+difficulty=4
+bg_bmp=Grass_light.jpg
+bg_color=0 0 0
+bg_dist=1.0000
+bg_zoom=1.0000
+song
+weather=Dripping
+day_time_start=990
+day_time_speed=0
+spray_amounts
+mission_goal=Collect treasures
+mission_goal_all_mobs=true
+mission_fail_conditions=129
+mission_fail_time_limit=65
+mission_fail_hud_primary_cond=0
+mission_grading_mode=0
+mission_points_per_sec_left=10
+mission_points_per_treasure_point=1
+mission_point_hud_data=251
+mission_bronze_req=350
+mission_silver_req=550
+mission_gold_req=750
+mission_platinum_req=950
