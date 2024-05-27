@@ -16,6 +16,10 @@
  * Special thanks to:
  * https://www.gamedeveloper.com/business/doing-thumbstick-dead-zones-right
  * https://www.gamedeveloper.com/design/interpreting-analog-sticks-in-inversus
+ * 
+ * Future ideas:
+ * Snapback reduction
+ * Axis deadzones
  */
 
 #pragma once
@@ -34,59 +38,82 @@ public:
      * @brief Settings for the cleaner.
      */
     struct settings_t {
-        //Deadzone size, in radius (0 to 1), for the inner radial deadzone.
-        //This is your typical analog stick deadzone value --
-        //since analog sticks physically wiggle by themselves,
-        //this deadzone stops those inputs from being read.
-        //Something like 0.2 is recommended for most analog sticks.
-        //Use 0 for no inner radial deadzone.
-        float radial_inner_deadzone = 0.2f;
+
+        /**
+         * @brief Values inside of a deadzone will all be considered the same
+         * value. Useful to prevent situations where an analog stick wiggling
+         * by itself being interpreted as purposeful player inputs.
+         */
+        struct deadzones_t {
+
+            /**
+             * @brief Deadzones related to the radius of the analog stick, i.e.
+             * how far away from the center it is.
+             */
+            struct radial_t {
+
+                //Inner radial deadzone size, in radius (0 to 1).
+                //This is your typical analog stick deadzone value.
+                //Something like 0.2 is recommended for most analog sticks.
+                //Use 0 for no inner radial deadzone.
+                float inner = 0.2f;
+
+                //Outer radial deadzone size, in radius (0 to 1).
+                //Like the inner radial deadzone, except this is for values near
+                //the edges, since most analog sticks never physically reach the
+                //exact edge of the input circle.
+                //Something like 0.9 is recommended for most analog sticks.
+                //Use 1 for no outer radial deadzone.
+                float outer = 0.9f;
+
+                //If true, the stick radius is interpolated between the
+                //inner radial deadzone and the outer radial deadzone (if any).
+                //If false, no interpolation is done, meaning once the player
+                //leaves a deadzone the radius value will jump to whatever
+                //the values map to in the raw unit circle.
+                //Using this setting is recommended.
+                bool interpolate = true;
+
+            } radial;
+
+            /**
+             * @brief Deadzones related to the angle of the analog stick.
+             */
+            struct angular_t {
+
+                //Deadzone size, in radians (0 to PI/4), for the left and right
+                //inputs' angular deadzone.
+                //If the player wants to hold directly left or directly right,
+                //subtle movements up or down can veer the player off-course.
+                //This deadzone keeps the player locked if the stick angle is
+                //close enough to the left or right.
+                //Mostly recommended for something like a 3D platformer game.
+                //Use 0 for no horizontal angular deadzone.
+                float horizontal = 0.0f;
+
+                //Deadzone size, in radians (0 to PI/4), for the up and down
+                //inputs' angular deadzone.
+                //Same as angular_horizontal_deadzone, but for up and down.
+                //Use 0 for no vertical angular deadzone.
+                float vertical = 0.0f;
         
-        //Deadzone size, in radius (0 to 1), for the outer radial deadzone.
-        //Like the inner radial deadzone, except this is for values near
-        //the edges, since most analog sticks never physically reach the
-        //exact edge of the input circle.
-        //Something like 0.9 is recommended for most analog sticks.
-        //Use 1 for no outer radial deadzone.
-        float radial_outer_deadzone = 0.9f;
+                //Deadzone size, in radians (0 to PI/4), for the four diagonal
+                //inputs' angular deadzone.
+                //Same as angular_horizontal_deadzone, but for up and down.
+                //Use 0 for no diagonal angular deadzone.
+                float diagonal = 0.0f;
         
-        //If true, the stick radius is interpolated between the inner radial
-        //deadzone and the outer radial deadzone (if any).
-        //If false, no interpolation is done, meaning once the player
-        //leaves a deadzone the radius value will jump to whatever the values
-        //map to in the raw unit circle.
-        //Using this setting is recommended.
-        bool radial_deadzones_interpolate = true;
-        
-        //Deadzone size, in radians (0 to PI/4), for the left and right
-        //inputs' angular deadzone.
-        //If the player wants to hold directly left or directly right,
-        //subtle movements up or down can veer the player off-course.
-        //This deadzone keeps the player locked if the stick angle is
-        //close enough to the left or right.
-        //Mostly recommended for something like a 3D platformer game.
-        //Use 0 for no horizontal angular deadzone.
-        float angular_horizontal_deadzone = 0.0f;
-        
-        //Deadzone size, in radians (0 to PI/4), for the up and down
-        //inputs' angular deadzone.
-        //Same as angular_horizontal_deadzone, but for up and down.
-        //Use 0 for no vertical angular deadzone.
-        float angular_vertical_deadzone = 0.0f;
-        
-        //Deadzone size, in radians (0 to PI/4), for the four diagonal
-        //inputs' angular deadzone.
-        //Same as angular_horizontal_deadzone, but for up and down.
-        //Use 0 for no diagonal angular deadzone.
-        float angular_diagonal_deadzone = 0.0f;
-        
-        //If true, the stick angle is interpolated between the different
-        //angular deadzones (if any).
-        //If false, no interpolation is done, meaning once the player leaves
-        //a deadzone the angle value will jump to whatever the values map to
-        //in the raw unit circle.
-        //Using this setting is recommended.
-        bool angular_deadzones_interpolate = true;
+                //If true, the stick angle is interpolated between the different
+                //angular deadzones (if any).
+                //If false, no interpolation is done, meaning once the player
+                //leaves a deadzone the angle value will jump to whatever the
+                //values map to in the raw unit circle.
+                //Using this setting is recommended.
+                bool interpolate = true;
+
+            } angular;
+            
+        } deadzones;
         
         settings_t() {}
     };

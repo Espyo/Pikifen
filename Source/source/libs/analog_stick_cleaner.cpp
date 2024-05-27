@@ -69,14 +69,14 @@ float analog_stick_cleaner::get_snap_dir_deadzone(
     switch(snap_dir_idx % 8) {
     case 0:
     case 4: {
-        return settings.angular_horizontal_deadzone;
+        return settings.deadzones.angular.horizontal;
     }
     case 2:
     case 6: {
-        return settings.angular_vertical_deadzone;
+        return settings.deadzones.angular.vertical;
     }
     default: {
-        return settings.angular_diagonal_deadzone;
+        return settings.deadzones.angular.diagonal;
     }
     }
 }
@@ -148,7 +148,7 @@ void analog_stick_cleaner::process_angular_deadzones(
     const float output_space_end =
         next_snap_dir_angle;
         
-    if(settings.angular_deadzones_interpolate) {
+    if(settings.deadzones.angular.interpolate) {
         //Interpolate.
         angle =
             interpolate_and_clamp(
@@ -187,15 +187,15 @@ void analog_stick_cleaner::process_radial_deadzones(
     
     //Do the clean up.
     const float input_space_start =
-        settings.radial_inner_deadzone;
+        settings.deadzones.radial.inner;
     const float input_space_end =
-        settings.radial_outer_deadzone;
+        settings.deadzones.radial.outer;
     const float output_space_start =
         0.0f;
     const float output_space_end =
         1.0f;
         
-    if(settings.radial_deadzones_interpolate) {
+    if(settings.deadzones.radial.interpolate) {
         //Interpolate.
         radius =
             interpolate_and_clamp(

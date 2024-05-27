@@ -35,8 +35,8 @@ void controls_manager::clean_stick(const player_input &input) {
     coords[1] = raw_sticks[input.device_nr][input.stick_nr][1];
     
     analog_stick_cleaner::settings_t cleanup_settings;
-    cleanup_settings.radial_inner_deadzone = options.stick_min_deadzone;
-    cleanup_settings.radial_outer_deadzone = options.stick_max_deadzone;
+    cleanup_settings.deadzones.radial.inner = options.stick_min_deadzone;
+    cleanup_settings.deadzones.radial.outer = options.stick_max_deadzone;
     analog_stick_cleaner::clean(coords, cleanup_settings);
     
     clean_sticks[input.device_nr][input.stick_nr][0] = coords[0];
