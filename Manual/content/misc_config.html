@@ -18,85 +18,277 @@
 
     <h2 id="game">Game configuration</h2>
     
-    <p>This file controls some general settings about how the game works. It can be found in <code>Game_data/Misc/Config.txt</code>. Create it if it does not exist. The defaults can be found <a href="https://github.com/Espyo/Pikifen/blob/master/Game_data/Misc/Config.txt">here</a>.</p>
+    <p>This file controls some general settings about how the game works. It can be found in <code>Game_data/Misc/Config.txt</code>. Create it if it does not exist.</p>
 
     <p>The following properties exist:</p>
 
-    <ul>
-      <li><b><code>game_name</code></b>: Name of the fangame.</li>
-      <li><b><code>game_version</code></b>: Version of the fangame. Can be anything, but the preferred format is something like "1.2.3".</li>
-    </ul>
-    
-    <br>
-    
-    <ul>
-      <li><b><code>carrying_color_move</code></b>: Color to use for the carrying numbers when an object that is meant for the ship is being carried. Format is "red green blue" or "red green blue alpha".</li>
-      <li><b><code>carrying_color_stop</code></b>: Same as above, but for when the object is not moving.</li>
-      <li><b><code>carrying_speed_base_mult</code></b>: When an object is being carried, its movement speed depends on the carriers' average speed (and more). With 0 carriers, the average speed is multiplied by base_mult, and with all spots taken, it's multiplied by max_mult. This property controls the base value. In other words, this controls how high the slowest speed of a carried object is.</li>
-      <li><b><code>carrying_speed_max_mult</code></b>: Same as above, but the max_mult. In other words, this controls how high the fastest speed of a carried object is.</li>
-      <li><b><code>carrying_speed_weight_mult</code></b>: For every 1 unit of weight, decrease the carrying speed by this much.</li>
-    </ul>
-    
-    <br>
+    <h3 id="basics">Basics</h3>
 
-    <ul>
-      <li><b><code>day_minutes_start</code></b>: Time of day when gameplay starts. This follows a format similar to real life, so 0 is midnight, 60 is 1 AM, 120 is 2 AM, 420 is 7 AM. This is only used for the Sun Meter HUD item.</li>
-      <li><b><code>day_minutes_end</code></b>: Same as above, but for when gameplay ends.</li>
-    </ul>
-    
-    <br>
-    
-    <ul>
-      <li><b><code>pikmin_order</code></b>: Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Separate each type with a semicolon (;). e.g. <code>Red Pikmin;Yellow Pikmin;Blue Pikmin</code>. Types you do not specify will be sorted alphabetically and go to the end of the list.</li>
-      <li><b><code>standard_pikmin_height</code></b>: The height of a "standard" Pikmin, i.e. a Pikmin that's not shorter or taller than most. Used to help calculate some physics logic.</li>
-      <li><b><code>standard_pikmin_radius</code></b>: The radius of a "standard" Pikmin, i.e. a Pikmin that's not skinnier or fatter than most. Used to help calculate some physics logic.</li>
-    </ul>
-    
-    <br>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>game_name</td>
+        <td>Name of the fangame.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>game_version</td>
+        <td>Version of the fangame. Can be anything, but the preferred format is something like "1.2.3".</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
 
-    <ul>
-      <li><b><code>leader_order</code></b>: Like <code>pikmin_order</code>, but for the leaders.</li>
-      <li><b><code>standard_leader_height</code></b>: Like <code>standard_pikmin_height</code>, but for the leaders.</li>
-      <li><b><code>standard_leader_radius</code></b>: Like <code>standard_pikmin_radius</code>, but for the leaders.</li>
-      <li><b><code>spray_order</code></b>: Like <code>pikmin_order</code>, but for sprays.</li>
-    </ul>
-    
-    <br>
+    <h3 id="carrying">Carrying</h3>
 
-    <ul>
-      <li><b><code>idle_bump_delay</code></b>: In order for an idle Pikmin to be bumped, it must be away from the active leader for these many seconds first.</li>
-      <li><b><code>idle_bump_range</code></b>: Minimum distance between an idle Pikmin and the active leader for the Pikmin to be called to the group.</li>
-      <li><b><code>idle_task_range</code></b>: Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</li>
-      <li><b><code>swarm_task_range</code></b>: Same as above, but for a Pikmin in the group during swarming.</li>
-      <li><b><code>max_pikmin_in_field</code></b>: Maximum number of Pikmin that can be on the field.</li>
-      <li><b><code>maturity_power_mult</code></b>: Every maturity level, add this much to a Pikmin's attack power, as a ratio (e.g. 0.1 adds 10% more).</li>
-      <li><b><code>maturity_speed_mult</code></b>: Same as <code>maturity_power_mult</code>, but for the movement speed.</li>
-      <li><b><code>pikmin_chase_range</code></b>: Pikmin will chase after enemies unless they're this far away.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>carrying_color_move</td>
+        <td>Color to use for the carrying numbers when an object that is meant for the ship is being carried.</td>
+        <td>Color</td>
+        <td>255 255 255</td>
+      </tr>
+      <tr>
+        <td>carrying_color_stop</td>
+        <td>Same as above, but for when the object is not moving.</td>
+        <td>Color</td>
+        <td>102 191 191</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_base_mult</td>
+        <td>When an object is being carried, its movement speed depends on the carriers' average speed (and more). With 0 carriers, the average speed is multiplied by base_mult, and with all spots taken, it's multiplied by max_mult. This property controls the base value. In other words, this controls how high the slowest speed of a carried object is.</td>
+        <td>Number</td>
+        <td>0.5</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_max_mult</td>
+        <td>Same as above, but the max_mult. In other words, this controls how high the fastest speed of a carried object is.</td>
+        <td>Number</td>
+        <td>0.8</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_weight_mult</td>
+        <td>For every 1 unit of weight, decrease the carrying speed by this much.</td>
+        <td>Number</td>
+        <td>0.0004</td>
+      </tr>
+    </table>
     
-    <br>
-
-    <ul>
-      <li><b><code>can_throw_leaders</code></b>: "true" if it's possible to throw leaders, "false" if not.</li>
-      <li><b><code>cursor_max_dist</code></b>: Maximum distance away from the leader that their cursor can go to.</li>
-      <li><b><code>cursor_spin_speed</code></b>: How quickly the mouse cursor's icon spins, in degrees per second.</li>
-      <li><b><code>next_pluck_range</code></b>: When auto-plucking, a leader will only choose the next Pikmin if it is within this distance. Also affects the range at which idle leaders will go pluck.</li>
-      <li><b><code>no_pikmin_color</code></b>: Color that represents the absence of Pikmin.</li>
-      <li><b><code>onion_open_range</code></b>: Leaders can open an Onion if they're within this range from the center of the Onion object.</li>
-      <li><b><code>group_member_grab_range</code></b>: A leader can grab the closest group member only if it is within this distance.</li>
-      <li><b><code>pluck_range</code></b>: A leader can pluck a Pikmin only if it is within this distance.</li>
-      <li><b><code>throw_max_dist</code></b>: Maximum distance away from the leader that a throw can be aimed to.</li>
-      <li><b><code>whistle_growth_speed</code></b>: How quickly the whistle's radius grows in size, in pixels per second.</li>
-      <li><b><code>whistle_max_dist</code></b>: Maximum distance away from the leader that the whistle can focus on.</li>
-    </ul>
+    <h3 id="day-time">Day time</h3>
     
-    <br>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>day_minutes_start</td>
+        <td>Time of day when gameplay starts. This follows a format similar to real life, so 0 is midnight, 60 is 1 AM, 120 is 2 AM, 420 is 7 AM. This is only used for the Sun Meter HUD item.</td>
+        <td>Number</td>
+        <td>420</td>
+      </tr>
+      <tr>
+        <td>day_minutes_end</td>
+        <td>Same as above, but for when gameplay ends.</td>
+        <td>Number</td>
+        <td>1140</td>
+      </tr>
+    </table>
+    
+    <h3 id="pikmin-basics">Pikmin basics</h3>
 
-    <ul>
-      <li><b><code>message_char_interval</code></b>: Time interval between characters when displaying a message, in seconds. 0 shows the entire text instantly.</li>
-      <li><b><code>zoom_max_level</code></b>: Maximum level of zoom (i.e. how close the camera can get).</li>
-      <li><b><code>zoom_min_level</code></b>: Minimum level of zoom (i.e. how far away the camera can get).</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>pikmin_order</td>
+        <td>Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Types you do not specify will be sorted alphabetically and go to the end of the list.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>standard_pikmin_height</td>
+        <td>The height of a "standard" Pikmin, i.e. a Pikmin that's not shorter or taller than most. Used to help calculate some physics logic.</td>
+        <td>Number</td>
+        <td>24</td>
+      </tr>
+      <tr>
+        <td>standard_pikmin_radius</td>
+        <td>The radius of a "standard" Pikmin, i.e. a Pikmin that's not skinnier or fatter than most. Used to help calculate some physics logic.</td>
+        <td>Number</td>
+        <td>5</td>
+      </tr>
+    </table>
+
+    <h3 id="leader-basics">Leader basics</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>leader_order</td>
+        <td>Like <code>pikmin_order</code>, but for the leaders.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>standard_leader_height</td>
+        <td>Like <code>standard_pikmin_height</code>, but for the leaders.</td>
+        <td>Number</td>
+        <td>46</td>
+      </tr>
+      <tr>
+        <td>standard_leader_radius</td>
+        <td>Like <code>standard_pikmin_radius</code>, but for the leaders.</td>
+        <td>Number</td>
+        <td>16</td>
+      </tr>
+      <tr>
+        <td>spray_order</td>
+        <td>Like <code>pikmin_order</code>, but for sprays.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h3 id="pikmin-details">Pikmin details</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>idle_bump_delay</td>
+        <td>In order for an idle Pikmin to be bumped, it must be away from the active leader for these many seconds first.</td>
+        <td>Number</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>idle_bump_range</td>
+        <td>Minimum distance between an idle Pikmin and the active leader for the Pikmin to be called to the group.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td>idle_task_range</td>
+        <td>Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td>swarm_task_range</td>
+        <td>Same as above, but for a Pikmin in the group during swarming.</td>
+        <td>Number</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>max_pikmin_in_field</td>
+        <td>Maximum number of Pikmin that can be on the field.</td>
+        <td>Number</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>maturity_power_mult</td>
+        <td>Every maturity level, add this much to a Pikmin's attack power, as a ratio (e.g. 0.1 adds 10% more).</td>
+        <td>Number</td>
+        <td>0.1</td>
+      </tr>
+      <tr>
+        <td>maturity_speed_mult</td>
+        <td>Same as <code>maturity_power_mult</code>, but for the movement speed.</td>
+        <td>Number</td>
+        <td>0.1</td>
+      </tr>
+      <tr>
+        <td>pikmin_chase_range</td>
+        <td>Pikmin will chase after enemies unless they're this far away.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+    </table>
+
+    <h3 id="leader-details">Leader details</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>can_throw_leaders</td>
+        <td>Whether it's possible for leaders to throw other leaders.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>cursor_max_dist</td>
+        <td>Maximum distance away from the leader that their cursor can go to.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td>cursor_spin_speed</td>
+        <td>How quickly the mouse cursor's icon spins, in degrees per second.</td>
+        <td>Number</td>
+        <td>180</td>
+      </tr>
+      <tr>
+        <td>next_pluck_range</td>
+        <td>When auto-plucking, a leader will only choose the next Pikmin if it is within this distance. Also affects the range at which idle leaders will go pluck.</td>
+        <td>Number</td>
+        <td>160</td>
+      </tr>
+      <tr>
+        <td>no_pikmin_color</td>
+        <td>Color that represents the absence of Pikmin.</td>
+        <td>Color</td>
+        <td>191 230 230</td>
+      </tr>
+      <tr>
+        <td>onion_open_range</td>
+        <td>Leaders can open an Onion if they're within this range from the center of the Onion object.</td>
+        <td>Number</td>
+        <td>24</td>
+      </tr>
+      <tr>
+        <td>group_member_grab_range</td>
+        <td>A leader can grab the closest group member only if it is within this distance.</td>
+        <td>Number</td>
+        <td>64</td>
+      </tr>
+      <tr>
+        <td>pluck_range</td>
+        <td>A leader can pluck a Pikmin only if it is within this distance.</td>
+        <td>Number</td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td>throw_max_dist</td>
+        <td>Maximum distance away from the leader that a throw can be aimed to.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td>whistle_growth_speed</td>
+        <td>How quickly the whistle's radius grows in size, in pixels per second.</td>
+        <td>Number</td>
+        <td>180</td>
+      </tr>
+      <tr>
+        <td>whistle_max_dist</td>
+        <td>Maximum distance away from the leader that the whistle can focus on.</td>
+        <td>Number</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h3 id="game-config-misc">Misc.</h3>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>message_char_interval</td>
+        <td>Time interval between characters when displaying a message, in seconds. 0 shows the entire text instantly.</td>
+        <td>Number</td>
+        <td>0.03</td>
+      </tr>
+      <tr>
+        <td>zoom_max_level</td>
+        <td>Maximum level of zoom (i.e. how close the camera can get).</td>
+        <td>Number</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>zoom_min_level</td>
+        <td>Minimum level of zoom (i.e. how far away the camera can get).</td>
+        <td>Number</td>
+        <td>0.66</td>
+      </tr>
+    </table>
 
     <h2 id="spike-damage">Spike damage</h2>
     
@@ -105,83 +297,397 @@
     <p>The folder <code>Game_data/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="making.html#data-file">data file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
 
     <p>The properties are:</p>
-    
+
+    <h3 id="spike-damage-common">Common</h3>
+
     <ul>
       <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-      <li><b><code>damage</code></b>: How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property. Defaults to 0.</li>
-      <li><b><code>ingestion_only</code></b>: <code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin. Defaults to false.</li>
-      <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Defaults to <code>false</code>.</li>
-      <li><b><code>particle_generator</code></b>: When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</li>
-      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="glossary.html#R">relative coordinates</a>.</li>
-      <li><b><code>status_to_apply</code></b>: A status effect to apply when the spike damage is dealt. Leave empty for none. Default is empty.</li>
     </ul>
+
+    <h3 id="spike-damage-others">Others</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>damage</td>
+        <td>How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>ingestion_only</td>
+        <td><code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>is_damage_ratio</td>
+        <td>If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>particle_generator</td>
+        <td>When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>particle_offset</td>
+        <td>If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="glossary.html#R">relative coordinates</a>.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>status_to_apply</td>
+        <td>A status effect to apply when the spike damage is dealt. Leave empty for none.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
 
     <p>Remember to change the object type properties for the objects you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>Game_data/Graphics</code> and <code>Game_data/Audio/Sounds</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults <a href="https://github.com/Espyo/Pikifen/blob/master/Source/source/misc_structs.cpp">here</a>.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>Game_data/Graphics</code> and <code>Game_data/Audio/Sounds</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image.</p>
     
-    <ul>
-      <li>
-        <code>graphics</code> block:
-        <ul>
-          <li><b><code>area_name_font</code></b>: Font to use for area names.</li>
-          <li><b><code>bright_circle</code></b>: A bright circular shape. Used for the whistle's dots.</li>
-          <li><b><code>bright_ring</code></b>: A bright ring shape. Used for the control point in front of a ship.</li>
-          <li><b><code>bubble_box</code></b>: Bubble-like box. In-engine, it is split into three equal-sized rows and three equal-sized columns, and uses that split to texture the boxes.</li>
-          <li><b><code>button_box</code></b>: Texture box for player inputs that look like buttons.</li>
-          <li><b><code>checkbox_check</code></b>: A checkbox with a checkmark in it. Used in menus.</li>
-          <li><b><code>checkbox_no_check</code></b>: A checkbox without a checkmark in it. Used in menus.</li>
-          <li><b><code>counter_font</code></b>: Font to use for counters in the HUD.</li>
-          <li><b><code>cursor_counter_font</code></b>: Font to use for the standby Pikmin count near the cursor.</li>
-          <li><b><code>cursor</code></b>: Leader cursor.</li>
-          <li><b><code>editor_icons</code></b>: Spritesheet where all editor icons are.</li>
-          <li><b><code>enemy_spirit</code></b>: Enemy spirit.</li>
-          <li><b><code>focus_box</code></b>: Focus indicator that surrounds a selected GUI item.</li>
-          <li><b><code>icon</code></b>: The game's icon.</li>
-          <li><b><code>idle_glow</code></b>: Glowing effect on idle Pikmin.</li>
-          <li><b><code>key_box</code></b>: Texture box for player inputs that look like keyboard keys.</li>
-          <li><b><code>leader_silhouette_side</code></b>: Silhouette of a leader seen from the side. Used in the area editor's cross-section feature.</li>
-          <li><b><code>leader_silhouette_top</code></b>: Silhouette of a leader seen from the top. Used in the animation editor has a visual reference.</li>
-          <li><b><code>main_font</code></b>: The game's main text font.</li>
-          <li><b><code>main_menu</code></b>: Background for the main menu.</li>
-          <li><b><code>menu_icons</code></b>: Spritesheet where all the menu button icons are.</li>
-          <li><b><code>more</code></b>: Icon used in menus to indicate there is still more content beyond. This graphic faces the right, and gets flipped in-engine when needed.</li>
-          <li><b><code>mouse_cursor</code></b>: Mouse cursor.</li>
-          <li><b><code>notification</code></b>: Notification bubble.</li>
-          <li><b><code>player_input_icons</code></b>: A spritesheet of icons for specific player inputs, like mouse buttons, certain keys, etc.</li>
-          <li><b><code>pikmin_spirit</code></b>: Pikmin spirit.</li>
-          <li><b><code>random</code></b>: Randomness icon. Used in the area selection menu.</li>
-          <li><b><code>rock</code></b>: Rock particle.</li>
-          <li><b><code>shadow</code></b>: Object shadows.</li>
-          <li><b><code>smack</code></b>: Smack particle.</li>
-          <li><b><code>smoke</code></b>: Smoke particle.</li>
-          <li><b><code>sparkle</code></b>: Sparkle particle.</li>
-          <li><b><code>spotlight</code></b>: Spotlight texture to use for blackout weather.</li>
-          <li><b><code>swarm_arrow</code></b>: Arrow that comes out from the leader when swarming.</li>
-          <li><b><code>throw_invalid</code></b>: Used on the throw preview when a throw won't reach.</li>
-          <li><b><code>throw_preview</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
-          <li><b><code>throw_preview_dashed</code></b>: Used on the throw preview when a throw's trajectory is uncertain.</li>
-          <li><b><code>value_font</code></b>: Font to use for numeric values, like the carrying fraction numbers.</li>
-          <li><b><code>wave_ring</code></b>: Particle for waves in water, used when objects are standing in water.</li>
-        </ul>
-      </li>
-      <li>
-        <code>audio</code> block:
-        <ul>
-          <li><b><code>attack</code></b>: Smack for when an attack lands.</li>
-          <li><b><code>camera</code></b>: Camera zoom level change click.</li>
-          <li><b><code>menu_activate</code></b>: Sound of a GUI item in a menu being activated.</li>
-          <li><b><code>menu_back</code></b>: Sound of the current menu's "back" GUI item being activated.</li>
-          <li><b><code>menu_select</code></b>: Sound of a GUI item in a menu being selected.</li>
-          <li><b><code>pluck</code></b>: Ground pop for when a Pikmin gets plucked.</li>
-          <li><b><code>spray</code></b>: A leader using a spray.</li>
-          <li><b><code>switch_pikmin</code></b>: Plop for when the current standby Pikmin type is switched.</li>
-          <li><b><code>throw</code></b>: Swoosh for a Pikmin or leader being thrown.</li>
-        </ul>
-      </li>
-    </ul>
+    <h3 id="system-asset-graphics">Graphics</h3>
+
+    <p>These properties belong to the <code>graphics</code> block:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>area_name_font</td>
+        <td>Font to use for area names.</td>
+        <td>Text</td>
+        <td>Area_name_font.png</td>
+      </tr>
+      <tr>
+        <td>bright_circle</td>
+        <td>A bright circular shape. Used for the whistle's dots.</td>
+        <td>Text</td>
+        <td>Bright_circle.png</td>
+      </tr>
+      <tr>
+        <td>bright_ring</td>
+        <td>A bright ring shape. Used for the control point in front of a ship.</td>
+        <td>Text</td>
+        <td>Bright_ring.png</td>
+      </tr>
+      <tr>
+        <td>bubble_box</td>
+        <td>Bubble-like box. In-engine, it is split into three equal-sized rows and three equal-sized columns, and uses that split to texture the boxes.</td>
+        <td>Text</td>
+        <td>Bubble_box.png</td>
+      </tr>
+      <tr>
+        <td>button_box</td>
+        <td>Texture box for player inputs that look like buttons.</td>
+        <td>Text</td>
+        <td>Button_box.png</td>
+      </tr>
+      <tr>
+        <td>checkbox_check</td>
+        <td>A checkbox with a checkmark in it. Used in menus.</td>
+        <td>Text</td>
+        <td>Checkbox_check.png</td>
+      </tr>
+      <tr>
+        <td>checkbox_no_check</td>
+        <td>A checkbox without a checkmark in it. Used in menus.</td>
+        <td>Text</td>
+        <td>Checkbox_no_check.png</td>
+      </tr>
+      <tr>
+        <td>counter_font</td>
+        <td>Font to use for counters in the HUD.</td>
+        <td>Text</td>
+        <td>Counter_font.png</td>
+      </tr>
+      <tr>
+        <td>cursor</td>
+        <td>Leader cursor.</td>
+        <td>Text</td>
+        <td>Cursor.png</td>
+      </tr>
+      <tr>
+        <td>cursor_counter_font</td>
+        <td>Font to use for the standby Pikmin count near the cursor.</td>
+        <td>Text</td>
+        <td>Cursor_counter_font.png</td>
+      </tr>
+      <tr>
+        <td>editor_icons</td>
+        <td>Spritesheet where all editor icons are.</td>
+        <td>Text</td>
+        <td>Editor_icons.png</td>
+      </tr>
+      <tr>
+        <td>enemy_spirit</td>
+        <td>Enemy spirit.</td>
+        <td>Text</td>
+        <td>Enemy_spirit.png</td>
+      </tr>
+      <tr>
+        <td>focus_box</td>
+        <td>Focus indicator that surrounds a selected GUI item.</td>
+        <td>Text</td>
+        <td>Focus_box.png</td>
+      </tr>
+      <tr>
+        <td>icon</td>
+        <td>The game's icon.</td>
+        <td>Text</td>
+        <td>Icon.png</td>
+      </tr>
+      <tr>
+        <td>idle_glow</td>
+        <td>Glowing effect on idle Pikmin.</td>
+        <td>Text</td>
+        <td>Idle_glow.png</td>
+      </tr>
+      <tr>
+        <td>key_box</td>
+        <td>Texture box for player inputs that look like keyboard keys.</td>
+        <td>Text</td>
+        <td>Key_box.png</td>
+      </tr>
+      <tr>
+        <td>leader_silhouette_side</td>
+        <td>Silhouette of a leader seen from the side. Used in the area editor's cross-section feature.</td>
+        <td>Text</td>
+        <td>Leader_silhouette_side.png</td>
+      </tr>
+      <tr>
+        <td>leader_silhouette_top</td>
+        <td>Silhouette of a leader seen from the top. Used in the animation editor has a visual reference.</td>
+        <td>Text</td>
+        <td>Leader_silhouette_top.png</td>
+      </tr>
+      <tr>
+        <td>main_font</td>
+        <td>The game's main text font.</td>
+        <td>Text</td>
+        <td>Font.png</td>
+      </tr>
+      <tr>
+        <td>main_menu</td>
+        <td>Background for the main menu.</td>
+        <td>Text</td>
+        <td>Main_menu.jpg</td>
+      </tr>
+      <tr>
+        <td>medal_bronze</td>
+        <td>Icon for the bronze medal in missions.</td>
+        <td>Text</td>
+        <td>Medal_bronze.png</td>
+      </tr>
+      <tr>
+        <td>medal_gold</td>
+        <td>Icon for the gold medal in missions.</td>
+        <td>Text</td>
+        <td>Medal_gold.png</td>
+      </tr>
+      <tr>
+        <td>medal_platinum</td>
+        <td>Icon for the platinum medal in missions.</td>
+        <td>Text</td>
+        <td>Medal_platinum.png</td>
+      </tr>
+      <tr>
+        <td>medal_silver</td>
+        <td>Icon for the silver medal in missions.</td>
+        <td>Text</td>
+        <td>Medal_silver.png</td>
+      </tr>
+      <tr>
+        <td>menu_icons</td>
+        <td>Spritesheet where all the menu button icons are.</td>
+        <td>Text</td>
+        <td>Menu_icons.png</td>
+      </tr>
+      <tr>
+        <td>mission_clear</td>
+        <td>Mission clear stamp mark on a mission's results screen.</td>
+        <td>Text</td>
+        <td>Mission_clear.png</td>
+      </tr>
+      <tr>
+        <td>mission_fail</td>
+        <td>Mission fail stamp mark on a mission's results screen.</td>
+        <td>Text</td>
+        <td>Mission_fail.png</td>
+      </tr>
+      <tr>
+        <td>more</td>
+        <td>Icon used in menus to indicate there is still more content beyond. This graphic faces the right, and gets flipped in-engine when needed.</td>
+        <td>Text</td>
+        <td>More.png</td>
+      </tr>
+      <tr>
+        <td>mouse_cursor</td>
+        <td>Mouse cursor.</td>
+        <td>Text</td>
+        <td>Mouse_cursor.png</td>
+      </tr>
+      <tr>
+        <td>notification</td>
+        <td>Notification bubble.</td>
+        <td>Text</td>
+        <td>Notification.png</td>
+      </tr>
+      <tr>
+        <td>pikmin_spirit</td>
+        <td>Pikmin spirit.</td>
+        <td>Text</td>
+        <td>Pikmin_spirit.png</td>
+      </tr>
+      <tr>
+        <td>player_input_icons</td>
+        <td>A spritesheet of icons for specific player inputs, like mouse buttons, certain keys, etc.</td>
+        <td>Text</td>
+        <td>Player_input_icons.png</td>
+      </tr>
+      <tr>
+        <td>random</td>
+        <td>Randomness icon. Used in the area selection menu.</td>
+        <td>Text</td>
+        <td>Random.png</td>
+      </tr>
+      <tr>
+        <td>rock</td>
+        <td>Rock particle.</td>
+        <td>Text</td>
+        <td>Rock.png</td>
+      </tr>
+      <tr>
+        <td>shadow</td>
+        <td>Object shadows.</td>
+        <td>Text</td>
+        <td>Shadow.png</td>
+      </tr>
+      <tr>
+        <td>smack</td>
+        <td>Smack particle.</td>
+        <td>Text</td>
+        <td>Smack.png</td>
+      </tr>
+      <tr>
+        <td>smoke</td>
+        <td>Smoke particle.</td>
+        <td>Text</td>
+        <td>Smoke.png</td>
+      </tr>
+      <tr>
+        <td>sparkle</td>
+        <td>Sparkle particle.</td>
+        <td>Text</td>
+        <td>Sparkle.png</td>
+      </tr>
+      <tr>
+        <td>spotlight</td>
+        <td>Spotlight texture to use for blackout weather.</td>
+        <td>Text</td>
+        <td>Spotlight.png</td>
+      </tr>
+      <tr>
+        <td>swarm_arrow</td>
+        <td>Arrow that comes out from the leader when swarming.</td>
+        <td>Text</td>
+        <td>Swarm_arrow.png</td>
+      </tr>
+      <tr>
+        <td>throw_invalid</td>
+        <td>Used on the throw preview when a throw won't reach.</td>
+        <td>Text</td>
+        <td>Throw_invalid.png</td>
+      </tr>
+      <tr>
+        <td>throw_preview</td>
+        <td>Used on the throw preview as the main line.</td>
+        <td>Text</td>
+        <td>Throw_preview.png</td>
+      </tr>
+      <tr>
+        <td>throw_preview_dashed</td>
+        <td>Used on the throw preview when a throw's trajectory is uncertain.</td>
+        <td>Text</td>
+        <td>Throw_preview_dashed.png</td>
+      </tr>
+      <tr>
+        <td>value_font</td>
+        <td>Font to use for numeric values, like the carrying fraction numbers.</td>
+        <td>Text</td>
+        <td>Value_font.png</td>
+      </tr>
+      <tr>
+        <td>wave_ring</td>
+        <td>Particle for waves in water, used when objects are standing in water.</td>
+        <td>Text</td>
+        <td>Wave_ring.png</td>
+      </tr>
+    </table>
+
+    <h3 id="system-asset-audio">Audio</h3>
+
+    <p>These properties belong to the <code>audio</code> block:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>attack</td>
+        <td>Smack for when an attack lands.</td>
+        <td>Text</td>
+        <td>Attack.ogg</td>
+      </tr>
+      <tr>
+        <td>camera</td>
+        <td>Camera zoom level change click.</td>
+        <td>Text</td>
+        <td>Camera.ogg</td>
+      </tr>
+      <tr>
+        <td>menu_activate</td>
+        <td>Sound of a GUI item in a menu being activated.</td>
+        <td>Text</td>
+        <td>Menu_activate.ogg</td>
+      </tr>
+      <tr>
+        <td>menu_back</td>
+        <td>Sound of the current menu's "back" GUI item being activated.</td>
+        <td>Text</td>
+        <td>Menu_back.ogg</td>
+      </tr>
+      <tr>
+        <td>menu_select</td>
+        <td>Sound of a GUI item in a menu being selected.</td>
+        <td>Text</td>
+        <td>Menu_select.ogg</td>
+      </tr>
+      <tr>
+        <td>pluck</td>
+        <td>Ground pop for when a Pikmin gets plucked.</td>
+        <td>Text</td>
+        <td>Pluck.ogg</td>
+      </tr>
+      <tr>
+        <td>spray</td>
+        <td>A leader using a spray.</td>
+        <td>Text</td>
+        <td>Spray.ogg</td>
+      </tr>
+      <tr>
+        <td>switch_pikmin</td>
+        <td>Plop for when the current standby Pikmin type is switched.</td>
+        <td>Text</td>
+        <td>Switch_Pikmin.ogg</td>
+      </tr>
+      <tr>
+        <td>throw</td>
+        <td>Swoosh for a Pikmin or leader being thrown.</td>
+        <td>Text</td>
+        <td>Throw.ogg</td>
+      </tr>
+    </table>
     
   </div>
 </body>

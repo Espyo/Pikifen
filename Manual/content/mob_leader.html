@@ -29,26 +29,40 @@
     <p>If you're creating a new Pikmin type, you may want to add it to the correct spot in the <a href="misc_config.html">game configuration</a>'s Pikmin order.</p>
 
     <h2 id="props">Properties</h2>
-    
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a leader type has the following properties.</p>
 
-    <h3 id="mandatory">Mandatory</h3>
-    
+    <h3 id="props-common">Common</h3>
+
     <ul>
-      <li><b><code>icon</code></b>: <a href="glossary.html#F">File name</a> of the leader's icon image, which must be in <code>Game_data/Graphics</code>. This icon is used on the HUD.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
-    
-    <p>None.</p>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <h3 id="optional">Optional</h3>
-    
-    <ul>
-      <li><b><code>max_throw_height</code></b>: When thrown, the leader reaches this height at the apex of the throw. For reference, you can find the values used by the pre-packaged Pikmin types and leaders <a href="area.html#tips">here</a>. Defaults to 130.</li>
-      <li><b><code>whistle_range</code></b>: Maximum range the whistle can cover. Defaults to 80.</li>
-    </ul>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>icon</td>
+        <td>Icon image, which must be in <code>Game_data/Graphics</code>. This icon is used on the HUD.</td>
+        <td>File name</td>
+      </tr>
+    </table>
 
+    <h3 id="props-others">Others</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>max_throw_height</td>
+        <td>When thrown, the leader reaches this height at the apex of the throw. For reference, you can find the values used by the pre-packaged Pikmin types and leaders <a href="area.html#tips">here</a>.</td>
+        <td>Number</td>
+        <td>130</td>
+      </tr>
+      <tr>
+        <td>whistle_range</td>
+        <td>Maximum range the whistle can cover.</td>
+        <td>Number</td>
+        <td>80</td>
+      </tr>
+    </table>
+    
     <h2 id="animations">Animations</h2>
     
     <p>A leader object type needs to have the following animations:</p>

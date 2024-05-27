@@ -28,29 +28,63 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a drop type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>consumer</code></b>: What type of object will consume this drop. <code>pikmin</code> or <code>leaders</code>.</li>
-      <li><b><code>effect</code></b>: What will happen to the consumer once they've drunk it. <code>maturate</code> to cause a Pikmin's maturity to change, <code>increase_sprays</code> to change the number of available sprays of a given type, or <code>give_status</code> to apply a status effect to the object that drank it.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-recommended">Recommended</h3>
 
-    <ul>
-      <li><b><code>increase_amount</code></b>: When it increases a Pikmin's maturity or the number of a spray, this is the amount to increase by. To maturate a Pikmin directly to the flower stage, you want to give this the value <code>2</code>. You can also write negative values to lower a Pikmin's maturity or a spray count. Defaults to 2.</li>
-      <li><b><code>total_doses</code></b>: How many objects this drop can serve. Defaults to 1.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>consumer</td>
+        <td>What type of object will consume this drop. <code>pikmin</code> or <code>leaders</code>.</td>
+        <td>Text</td>
+        <td>pikmin</td>
+      </tr>
+      <tr>
+        <td>effect</td>
+        <td>What will happen to the consumer once they've drunk it. <code>maturate</code> to cause a Pikmin's maturity to change, <code>increase_sprays</code> to change the number of available sprays of a given type, or <code>give_status</code> to apply a status effect to the object that drank it.</td>
+        <td>Text</td>
+        <td>maturate</td>
+      </tr>
+      <tr>
+        <td>increase_amount</td>
+        <td>When it increases a Pikmin's maturity or the number of a spray, this is the amount to increase by. To maturate a Pikmin directly to the flower stage, you want to give this the value <code>2</code>. You can also write negative values to lower a Pikmin's maturity or a spray count.</td>
+        <td>Number</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>total_doses</td>
+        <td>How many objects this drop can serve.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+    </table>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-others">Others</h3>
 
-    <ul>
-      <li><b><code>shrink_speed</code></b>: When an object drinks it, the drop will decrease in size. This is purely visual. This number specifies the speed of the shrinking in percentage per second. 40 is a good amount for nectar, and 120 is a good amount for spray nectar. Defaults to 40.</li>
-      <li><b><code>spray_type_to_increase</code></b>: If this drop increases the amount of a spray, write the spray type's name here. Defaults to not set.</li>
-      <li><b><code>status_to_give</code></b>: If this drop gives the consumer a status effect, write its name here. Defaults to not set.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>shrink_speed</td>
+        <td>When an object drinks it, the drop will decrease in size. This is purely visual. This number specifies the speed of the shrinking in percentage per second. 40 is a good amount for nectar, and 120 is a good amount for spray nectar.</td>
+        <td>Number</td>
+        <td>40</td>
+      </tr>
+      <tr>
+        <td>spray_type_to_increase</td>
+        <td>If this drop increases the amount of a spray, write the spray type's name here.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>status_to_give</td>
+        <td>If this drop gives the consumer a status effect, write its name here.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

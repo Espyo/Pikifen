@@ -25,21 +25,88 @@
     <h2 id="props">Properties</h2>
     
     <p>Every spray file has these properties:</p>
-    
+
+    <h3 id="props-common">Common</h3>
+
     <ul>
       <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-      <li><b><code>angle</code></b>: Angle to spray it at, relative to the leader's angle, in degrees. In other words, 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them. Defaults to 0.</li>
-      <li><b><code>angle_range</code></b>: How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180. Defaults to 0.</li>
-      <li><b><code>affects_user</code></b>: If true, the spray will affect the leader that used it too. Defaults to false.</li>
-      <li><b><code>buries_pikmin</code></b>: If true, any Pikmin that touch this spray will become sprouts. Defaults to false.</li>
-      <li><b><code>color</code></b>: Color of the spray's particles, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to <code>0 0 0 0</code> (no color).</li>
-      <li><b><code>distance_range</code></b>: How far the spray reaches in distance, in pixels. This is used to calculate what mobs are affected, and how far the spray particles reach. Defaults to 0.</li>
-      <li><b><code>effects</code></b>: List of status effects inflicted on the targets of the spray. This list is separated by semicolon (;). Defaults to empty.</li>
-      <li><b><code>group</code></b>: If true, the spray affects all Pikmin of the leader's group, regardless of distance. If false, the objects that are affected are those within the given angle and distance reach. For instance, for an ultra-bitter spray, all affected objects are the enemies in front of the leader, within a medium distance. Defaults to true.</li>
-      <li><b><code>group_pikmin_only</code></b>: If true, only Pikmin in the group are sprayed. Otherwise, leaders can be sprayed too. This property has no effect when the <code>group</code> property is false. Defaults to true.</li>
-      <li><b><code>icon</code></b>: <a href="glossary.html#F">File name</a> of the image used for its icon on the HUD. This file must be in <code>Game_data/Graphics</code>. Defaults to empty.</li>
-      <li><b><code>ingredients_needed</code></b>: How many ingredients (berries, in the canon games) does it take to concoct one new spray dosage. Defaults to 10.</li>
     </ul>
+
+    <h3 id="props-basics">Basics</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>color</td>
+        <td>Color of the spray's particles.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>icon</td>
+        <td>Image used for its icon on the HUD. This file must be in <code>Game_data/Graphics</code>.</td>
+        <td>File name</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>ingredients_needed</td>
+        <td>How many ingredients (berries, in the canon games) does it take to concoct one new spray dosage.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+    </table>
+
+    <h3 id="props-effects">Effects</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>angle</td>
+        <td><a href="glossary.html#R">Relative angle</a> to spray it at. 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>angle_range</td>
+        <td>How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>affects_user</td>
+        <td>If true, the spray will affect the leader that used it too.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>buries_pikmin</td>
+        <td>If true, any Pikmin that touch this spray will become sprouts.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>distance_range</td>
+        <td>How far the spray reaches in distance, in pixels. This is used to calculate what mobs are affected, and how far the spray particles reach.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>effects</td>
+        <td>List of status effects inflicted on the targets of the spray.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>group</td>
+        <td>If true, the spray affects all Pikmin of the leader's group, regardless of distance. If false, the objects that are affected are those within the given angle and distance reach. For instance, for an ultra-bitter spray, all affected objects are the enemies in front of the leader, within a medium distance.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>group_pikmin_only</td>
+        <td>If true, only Pikmin in the group are sprayed. Otherwise, leaders can be sprayed too. This property has no effect when the <code>group</code> property is false.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+    </table>
 
     <h2 id="notes">Notes</h2>
     

@@ -29,46 +29,126 @@
     <p>If you're creating a new Pikmin type, you may want to add it to the correct spot in the <a href="misc_config.html">game configuration</a>'s Pikmin order.</p>
 
     <h2 id="props">Properties</h2>
-    
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a Pikmin type has the following properties.</p>
+
+    <h3 id="props-common">Common</h3>
+
+    <ul>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
+    </ul>
 
     <p>Note that if you want your Pikmin to be resistant to a certain hazard, you'll want to use the <a href="mob_type.html#vulnerabilities">vulnerabilities</a> properties. Another thing to note when making Pikmin is that the movement speed property indicates the movement speed of a leaf Pikmin. Bud Pikmin move 110% faster, and flowers move 120% faster.</p>
 
-    <h3 id="mandatory">Mandatory</h3>
-    
-    <ul>
-      <li><b><code>icon_leaf</code></b>: <a href="glossary.html#F">File name</a> of the image with the Pikmin type's icon for when it is a leaf. This is displayed on the HUD, for the standby Pikmin bubble. The image should be in <code>Game_data/Graphics</code>.</li>
-      <li><b><code>icon_bud</code></b>: Same as <code>icon_leaf</code>, but for a bud.</li>
-      <li><b><code>icon_flower</code></b>: Same as <code>icon_leaf</code>, but for a flower.</li>
-      <li><b><code>top_leaf</code></b>: <a href="glossary.html#F">File name</a> of the image with the leaf sprite to use in-game. The image should be in <code>Game_data/Graphics</code>.</li>
-      <li><b><code>top_bud</code></b>: Same as <code>top_leaf</code>, but for a bud.</li>
-      <li><b><code>top_flower</code></b>: Same as <code>top_leaf</code>, but for a flower.</li>
-    </ul>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <h3 id="recommended">Recommended</h3>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>icon_leaf</td>
+        <td>The Pikmin type's icon for when it is a leaf. This is displayed on the HUD, for the standby Pikmin bubble. The image should be in <code>Game_data/Graphics</code>.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>icon_bud</td>
+        <td>Same as <code>icon_leaf</code>, but for a bud.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>icon_flower</td>
+        <td>Same as <code>icon_leaf</code>, but for a flower.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>top_leaf</td>
+        <td>Image with the leaf sprite to use in-game. The image should be in <code>Game_data/Graphics</code>.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>top_bud</td>
+        <td>Same as <code>top_leaf</code>, but for a bud.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>top_bud</td>
+        <td>Same as <code>top_leaf</code>, but for a flower.</td>
+        <td>File name</td>
+      </tr>
+    </table>
     
-    <p>None.</p>
+    <h3 id="props-others">Others</h3>
 
-    <h3 id="optional">Optional</h3>
-    
-    <ul>
-      <li><b><code>attack_method</code></b>: Determines how the Pikmin attacks other objects. Defaults to <code>latch</code>. Possible values are:
-        <ul>
-          <li><code>latch</code> to make the Pikmin latch on when thrown or when grounded next to the object.</li>
-          <li><code>impact</code> to make the Pikmin cause impact damage, bounce back when thrown, lie down for a while after hitting, and also lunge on their own when grounded next to the object.</li>
-        </ul>
-      </li>
-      <li><b><code>can_carry_tools</code></b>: <code>true</code> if the Pikmin can carry tools. Defaults to <code>true</code>.</li>
-      <li><b><code>can_fly</code></b>: <code>true</code> if the Pikmin can move vertically to get to its destination. It also makes the Pikmin idle some units above floor level, and be above a leader when chasing them. Defaults to <code>false</code>.</li>
-      <li><b><code>carry_strength</code></b>: The Pikmin is worth this much for carrying strength. Defaults to 1.</li>
-      <li><b><code>knocked_down_duration</code></b>: A Pikmin that is knocked down will still down for this amount of time, if left alone. Defaults to 1.8.</li>
-      <li><b><code>knocked_down_whistle_bonus</code></b>: If a Pikmin is lying down, whistling it will lower the time it has left before it can get up by this amount. Defaults to 1.2.</li>
-      <li><b><code>push_strength</code></b>: The Pikmin is worth this much for pushing strength. Used for certain <a href="mob_group_task.html">group tasks</a>. Defaults to 1.</li>
-      <li><b><code>max_throw_height</code></b>: When thrown, the Pikmin reaches this height at the apex of the throw. For reference, you can find the values used by the pre-packaged Pikmin types and leaders <a href="area.html#tips">here</a>. Defaults to 260.</li>
-      <li><b><code>sprout_evolution_time_1</code></b>: How long a leaf Pikmin sprout must wait before they turn into a bud. 0 means it will never evolve into the next stage. Defaults to 2 minutes.</li>
-      <li><b><code>sprout_evolution_time_2</code></b>: Same as the previous, but between a bud and a flower. Defaults to 2 minutes.</li>
-      <li><b><code>sprout_evolution_time_3</code></b>: Same as the previous, but between a flower and the process of withering back into a leaf. Defaults to 3 minutes.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>attack_method</td>
+        <td>
+          Determines how the Pikmin attacks other objects. Possible values are:
+          <ul>
+            <li><code>latch</code> to make the Pikmin latch on when thrown or when grounded next to the object.</li>
+            <li><code>impact</code> to make the Pikmin cause impact damage, bounce back when thrown, lie down for a while after hitting, and also lunge on their own when grounded next to the object.</li>
+          </ul>
+        </td>
+        <td>Text</td>
+        <td>latch</td>
+      </tr>
+      <tr>
+        <td>can_carry_tools</td>
+        <td>Whether the Pikmin can carry <a href="mob_tool.html">tools</a>.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>can_fly</td>
+        <td><code>true</code> if the Pikmin can move vertically to get to its destination. It also makes the Pikmin idle some units above floor level, and be above a leader when chasing them.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>carry_strength</td>
+        <td>The Pikmin is worth this much for carrying strength.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>knocked_down_duration</td>
+        <td>A Pikmin that is knocked down will still down for this amount of time, if left alone.</td>
+        <td>Number</td>
+        <td>1.8</td>
+      </tr>
+      <tr>
+        <td>knocked_down_whistle_bonus</td>
+        <td>If a Pikmin is lying down, whistling it will lower the time it has left before it can get up by this amount.</td>
+        <td>Number</td>
+        <td>1.2</td>
+      </tr>
+      <tr>
+        <td>push_strength</td>
+        <td>The Pikmin is worth this much for pushing strength. Used for certain <a href="mob_group_task.html">group tasks</a>.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>max_throw_height</td>
+        <td>When thrown, the Pikmin reaches this height at the apex of the throw. For reference, you can find the values used by the pre-packaged Pikmin types and leaders <a href="area.html#tips">here</a>.</td>
+        <td>Number</td>
+        <td>260</td>
+      </tr>
+      <tr>
+        <td>sprout_evolution_time_1</td>
+        <td>How long a leaf Pikmin sprout must wait before they turn into a bud. 0 means it will never evolve into the next stage.</td>
+        <td>Number</td>
+        <td>120</td>
+      </tr>
+      <tr>
+        <td>sprout_evolution_time_2</td>
+        <td>Same as the previous, but between a bud and a flower.</td>
+        <td>Number</td>
+        <td>120</td>
+      </tr>
+      <tr>
+        <td>sprout_evolution_time_3</td>
+        <td>Same as the previous, but between a flower and the process of withering back into a leaf.</td>
+        <td>Number</td>
+        <td>180</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
     

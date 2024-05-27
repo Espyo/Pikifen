@@ -25,53 +25,220 @@
     <h2 id="props">Properties</h2>
     
     <p>Each status effect has the following properties:</p>
-    
+
+    <h3 id="props-common">Common</h3>
+
     <ul>
       <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-      <li><b><code>color</code></b>: Color that represents the status effect, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to <code>0 0 0 0</code> (no color).</li>
-      <li><b><code>tint</code></b>: When an object is under this status effect, they are tinted by this color, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to <code>255 255 255</code> (white, which means no tint).</li>
-      <li><b><code>glow</code></b>: When an object is under this status effect, they are lit up by this color, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to <code>0 0 0 0</code> (no color).</li>
-      <li><b><code>removable_with_whistle</code></b>: If true, the status effect can be removed if the object is whistled by a leader. Defaults to false.</li>
-      <li><b><code>remove_on_hazard_leave</code></b>: If true, the status effect is removed if the object leaves the hazard that was emitting the status. Defaults to false.</li>
-      <li><b><code>auto_remove_time</code></b>: The status effect is automatically removed after these many seconds have passed. 0 means it does not auto-remove with time. Defaults to 0.</li>
-      <li><b><code>reapply_rule</code></b>: In case the object receives this status effect while it already has it, what should happen to the auto-remove time remaining? This property has no use for statuses that don't auto-remove with time. Defaults to <code>keep_time</code>. Possible values are:
-        <ul>
-          <li><code>keep_time</code>: Keep the current time as it is.</li>
-          <li><code>reset_time</code>: Reset the current time to the one defined in the <code>auto_remove_time</code> property.</li>
-          <li><code>add_time</code>: Add more seconds to the current time. It adds the amount defined in the <code>auto_remove_time</code> property.</li>
-        </ul>
-      </li>
-      <li><b><code>health_change</code></b>: Every second that passes, its health increases by this much. Defaults to 0.</li>
-      <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this ratio. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second. Defaults to 0.</li>
-      <li><b><code>state_change_type</code></b>: If not <code>none</code>, the engine will somehow change this object's state when it receives this status effect. Defaults to <code>none</code>. Possible values are:
-        <ul>
-          <li><code>flailing</code>: Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>
-          <li><code>helpless</code>: Pikmin affected by this will enter a "helpless" state. During this state, they can't do much, and can't interact with much. Useful for stunning them.</li>
-          <li><code>panic</code>: Pikmin affected by this will enter a "panic" state, where they won't interact with many things, but will run around randomly in a panic.</li>
-          <li><code>custom</code>: The object will enter the state specified in the <code>state_change_name</code> property.</li>
-        </ul>
-      </li>
-      <li><b><code>state_change_name</code></b>: If <code>state_change_type</code> is set to <code>custom</code>, this property specifies the name of the new state. If the object doesn't have a state by this name, no state change happens. The engine won't change the state back when the status effect is over, so the object should be responsible for that. Also, be careful when forcing objects to switch to states when their script wasn't designed for it! Defaults to empty.</li>
-      <li><b><code>animation_change</code></b>: If not empty, the object's animation will change to this one when the status effect is applied. If the object doesn't have an animation by this name, no animation change happens. Defaults to empty.</li>
-      <li><b><code>disables_attack</code></b>: If true, attack hitboxes are ignored. Useful for petrifying mobs and making them harmless, for instance. Defaults to false.</li>
-      <li><b><code>speed_multiplier</code></b>: Multiply the object's movement speed by this much. Defaults to 1.</li>
-      <li><b><code>attack_multiplier</code></b>: Multiply the object's attack power by this much. Defaults to 1.</li>
-      <li><b><code>defense_multiplier</code></b>: Multiply the object's defense by this much. Defaults to 1.</li>
-      <li><b><code>anim_speed_multiplier</code></b>: Multiply the speed of animations by this much. 0 means animations don't move. Useful for petrified enemies. Defaults to 1.</li>
-      <li><b><code>freezes_animation</code></b>: If true, the object will be stuck in its current sprite until the status is removed. Defaults to false.</li>
-      <li><b><code>overlay_animation</code></b>: <a href="glossary.html#F">File name</a> of the animation to draw on top of the object affected by this status effect, if any. This animation must be defined in <code>Game_data/Animations</code>. Defaults to empty.</li>
-      <li><b><code>overlay_anim_mob_scale</code></b>: If 1, the overlay animation is scaled to be the same size as the object. 0.5 will make it half the size of the object, 2.0 will make it twice as big, etc. Only the width of the animation is taken into account to calculate the final size, but the animation's proportions are kept. Defaults to 1.</li>
-      <li><b><code>affects_pikmin</code></b>: If true, this status effect affects Pikmin. Defaults to false.</li>
-      <li><b><code>affects_leaders</code></b>: If true, this status effect affects leaders. Defaults to false.</li>
-      <li><b><code>affects_enemies</code></b>: If true, this status effect affects enemies. Defaults to false.</li>
-      <li><b><code>particle_generator</code></b>: If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to make some. Defaults to empty.</li>
-      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="glossary.html#R">relative coordinates</a>. Defaults to <code>0 0 0</code>.</li>
-      <li><b><code>shaking_effect</code></b>: If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking. Defaults to 0.</li>
-      <li><b><code>maturity_change_amount</code></b>: If a Pikmin is affected by this status effect, its maturity will instantly increase by the specified amount. You can also write negative numbers to decrease the maturity. You don't need to worry about the maturity number going over, so a change amount of "+4" on Pikmin won't make it go beyond a flower. Defaults to 0.</li>
-      <li><b><code>turns_inedible</code></b>: If true, Pikmin under this status effect cannot be eaten. Defaults to false.</li>
-      <li><b><code>turns_invisible</code></b>: If true, objects under this status effect will be considered invisible for other objects. They will still show up on the screen (unless you tinted them with transparency), but other objects will not be able to receive "in reach" <a href="script.html">events</a>. Defaults to false.</li>
-      <li><b><code>replacement_on_timeout</code></b>: If you want this status effect to be replaced by another one when its time reaches 0, specify the replacement's name here. It will not be replaced if the status effect is removed via other means. Defaults to empty.</li>
     </ul>
+
+    <h3 id="props-behavior">Behavior</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>color</td>
+        <td>Color that represents the status effect.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>removable_with_whistle</td>
+        <td>If true, the status effect can be removed if the object is whistled by a leader.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>remove_on_hazard_leave</td>
+        <td>If true, the status effect is removed if the object leaves the hazard that was emitting the status.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>auto_remove_time</td>
+        <td>The status effect is automatically removed after these many seconds have passed. 0 means it does not auto-remove with time.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>reapply_rule</td>
+        <td>
+          In case the object receives this status effect while it already has it, what should happen to the auto-remove time remaining? This property has no use for statuses that don't auto-remove with time. Possible values are:
+          <ul>
+            <li><code>keep_time</code>: Keep the current time as it is.</li>
+            <li><code>reset_time</code>: Reset the current time to the one defined in the <code>auto_remove_time</code> property.</li>
+            <li><code>add_time</code>: Add more seconds to the current time. It adds the amount defined in the <code>auto_remove_time</code> property.</li>
+          </ul>
+        </td>
+        <td>Text</td>
+        <td>keep_time</td>
+      </tr>
+      <tr>
+        <td>replacement_on_timeout</td>
+        <td>If you want this status effect to be replaced by another one when its time reaches 0, specify the replacement's name here. It will not be replaced if the status effect is removed via other means.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h3 id="props-gameplay-effects">Gameplay effects</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>health_change</td>
+        <td>Every second that passes, its health increases by this much.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>health_change_ratio</td>
+        <td>Every second that passes, its health increases by this ratio. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>state_change_type</td>
+        <td>If not <code>none</code>, the engine will somehow change this object's state when it receives this status effect. Possible values are:
+          <ul>
+            <li><code>flailing</code>: Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>
+            <li><code>helpless</code>: Pikmin affected by this will enter a "helpless" state. During this state, they can't do much, and can't interact with much. Useful for stunning them.</li>
+            <li><code>panic</code>: Pikmin affected by this will enter a "panic" state, where they won't interact with many things, but will run around randomly in a panic.</li>
+            <li><code>custom</code>: The object will enter the state specified in the <code>state_change_name</code> property.</li>
+          </ul></td>
+        <td>Text</td>
+        <td>none</td>
+      </tr>
+      <tr>
+        <td>state_change_name</td>
+        <td>If <code>state_change_type</code> is set to <code>custom</code>, this property specifies the name of the new state. If the object doesn't have a state by this name, no state change happens. The engine won't change the state back when the status effect is over, so the object should be responsible for that. Also, be careful when forcing objects to switch to states when their script wasn't designed for it!</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>animation_change</td>
+        <td>If not empty, the object's animation will change to this one when the status effect is applied. If the object doesn't have an animation by this name, no animation change happens.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>disables_attack</td>
+        <td>If true, attack hitboxes are ignored. Useful for petrifying mobs and making them harmless, for instance.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>speed_multiplier</td>
+        <td>Multiply the object's movement speed by this much.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>attack_multiplier</td>
+        <td>Multiply the object's attack power by this much.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>defense_multiplier</td>
+        <td>Multiply the object's defense by this much.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>anim_speed_multiplier</td>
+        <td>Multiply the speed of animations by this much. 0 means animations don't move, which is useful for petrified enemies.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>freezes_animation</td>
+        <td>If true, the object will be stuck in its current sprite until the status is removed.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>affects_pikmin</td>
+        <td>If true, this status effect affects Pikmin.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>affects_leaders</td>
+        <td>If true, this status effect affects leaders.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>affects_enemies</td>
+        <td>If true, this status effect affects enemies.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>maturity_change_amount</td>
+        <td>If a Pikmin is affected by this status effect, its maturity will instantly increase by the specified amount. You can also write negative numbers to decrease the maturity. You don't need to worry about the maturity number going over, so a change amount of "+4" on Pikmin won't make it go beyond a flower.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>turns_inedible</td>
+        <td>If true, Pikmin under this status effect cannot be eaten.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>turns_invisible</td>
+        <td>If true, objects under this status effect will be considered invisible for other objects. They will still show up on the screen (unless you tinted them with transparency), but other objects will not be able to receive "in reach" <a href="script.html">events</a>.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
+
+    <h3 id="props-aesthetic-effects">Aesthetic effects</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>tint</td>
+        <td>When an object is under this status effect, they are tinted by this color. White means no tint.</td>
+        <td>Color</td>
+        <td>255 255 255</td>
+      </tr>
+      <tr>
+        <td>glow</td>
+        <td>When an object is under this status effect, they are lit up by this color.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>overlay_animation</td>
+        <td>Animation to draw on top of the object affected by this status effect, if any. This animation must be defined in <code>Game_data/Animations</code>.</td>
+        <td>File name</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>overlay_anim_mob_scale</td>
+        <td>If 1, the overlay animation is scaled to be the same size as the object. 0.5 will make it half the size of the object, 2.0 will make it twice as big, etc. Only the width of the animation is taken into account to calculate the final size, but the animation's proportions are kept.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>particle_generator</td>
+        <td>If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to make some.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>particle_offset</td>
+        <td>If particles are meant to spawn, you can offset them from the object's center here. These are <a href="glossary.html#R">relative coordinates</a>.</td>
+        <td>Coordinates</td>
+        <td>0 0 0</td>
+      </tr>
+      <tr>
+        <td>shaking_effect</td>
+        <td>If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
     
   </div>
 </body>

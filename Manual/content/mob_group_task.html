@@ -30,34 +30,96 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a group task type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
-    
-    <ul>
-      <li><b><code>first_row_p1</code></b>: X and Y (in <a href="glossary.html#R">relative coordinates</a>) of the leftmost point of the first row.</li>
-      <li><b><code>first_row_p2</code></b>: Same as above, but the rightmost point.</li>
-    </ul>
-
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>contribution_method</code></b>: In what way does a Pikmin contribute? Possible values are <code>normal</code>, where each Pikmin contributes by 1, <code>weight</code>, where it depends on the Pikmin's weight, <code>carry_strength</code>, for each Pikmin's carry strength, and <code>push_strength</code>, for each Pikmin's pushing strength. Defaults to normal.</li>
-      <li><b><code>power_goal</code></b>: How much combined power is required to meet the quota. Individual instances of a group task can override this with script variables. Defaults to 10.</li>
-      <li><b><code>max_pikmin</code></b>: Maximum number of Pikmin that can contribute to the task. Defaults to 20.</li>
-      <li><b><code>worker_pikmin_angle</code></b>: Pikmin that are working will be facing this angle (relative to the group task object). Defaults to 0.</li>
-      <li><b><code>worker_pikmin_pose</code></b>: Pikmin that are working will be doing this pose. Possible values: <code>stopped</code>, <code>arms_stretched</code>, <code>pushing</code>, <code>carrying</code>. Defaults to stopped.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <ul>
-      <li><b><code>flying_pikmin_only</code></b>: If true, then only Pikmin that can fly will be able to interact with it. Defaults to false.</li>
-      <li><b><code>interval_between_rows</code></b>: Keep this much distance between each row. Defaults to 10.</li>
-      <li><b><code>pikmin_per_row</code></b>: How many Pikmin fit in one row. Defaults to 10.</li>
-      <li><b><code>speed_bonus</code></b>: If this object can move, it will speed up by this much for every extra unit of power put on the task beyond the goal. Defaults to 1.</li>
-      <li><b><code>spots_z</code></b>: Offsets the Z coordinate of the contribution spots by this much. Useful if you want spots above ground level, for flying Pikmin.</li>
-    </ul>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>first_row_p1</td>
+        <td>X and Y (in <a href="glossary.html#R">relative coordinates</a>) of the leftmost point of the first row.</td>
+        <td>Coordinates</td>
+      </tr>
+      <tr>
+        <td>first_row_p2</td>
+        <td>Same as above, but the rightmost point.</td>
+        <td>Coordinates</td>
+      </tr>
+    </table>
+
+    <h3 id="props-recommended">Recommended</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>contribution_method</td>
+        <td>In what way does a Pikmin contribute? Possible values are <code>normal</code>, where each Pikmin contributes by 1, <code>weight</code>, where it depends on the Pikmin's weight, <code>carry_strength</code>, for each Pikmin's carry strength, and <code>push_strength</code>, for each Pikmin's pushing strength.</td>
+        <td>Text</td>
+        <td>normal</td>
+      </tr>
+      <tr>
+        <td>power_goal</td>
+        <td>How much combined power is required to meet the quota. Individual instances of a group task can override this with script variables.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>max_pikmin</td>
+        <td>Maximum number of Pikmin that can contribute to the task.</td>
+        <td>Number</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td>worker_pikmin_angle</td>
+        <td>Pikmin that are working will be facing this angle (relative to the group task object).</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>worker_pikmin_pose</td>
+        <td>Pikmin that are working will be doing this pose. Possible values: <code>stopped</code>, <code>arms_stretched</code>, <code>pushing</code>, <code>carrying</code>.</td>
+        <td>Text</td>
+        <td>stopped</td>
+      </tr>
+    </table>
+
+    <h3 id="props-others">Others</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>flying_pikmin_only</td>
+        <td>If true, then only Pikmin that can fly will be able to interact with it.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>interval_between_rows</td>
+        <td>Keep this much distance between each row.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>pikmin_per_row</td>
+        <td>How many Pikmin fit in one row.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>speed_bonus</td>
+        <td>If this object can move, it will speed up by this much for every extra unit of power put on the task beyond the goal.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>spots_z</td>
+        <td>Offsets the Z coordinate of the contribution spots by this much. Useful if you want spots above ground level, for flying Pikmin.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

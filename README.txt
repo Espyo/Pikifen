@@ -33,6 +33,7 @@ Discord server: https://discord.gg/qbhz4u3
 2. Notable features
 ===============
     * Replicates most of the standard Pikmin gameplay.
+    * Replicates some of the more complex features, such as dynamic music or Go Here!
     * Unique features like weather conditions, complex missions, and more.
     * Content that can be edited via text files, or by just replacing the image and sound files.
     * Intuitive and deep editors, such as an area editor, animation editor, and more.

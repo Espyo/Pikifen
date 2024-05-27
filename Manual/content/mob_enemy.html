@@ -26,25 +26,46 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, an enemy type has the following properties.</p>
+    <h3 id="props-common">Common</h3>
 
-    <h3 id="mandatory">Mandatory</h3>
-
-    <p>None.</p>
-
-    <h3 id="recommended">Recommended</h3>
-    
     <ul>
-      <li><b><code>allow_ground_attacks</code></b>: <code>false</code> makes it so that Pikmin cannot attack it with grounded attacks; the only way to hurt it is by throwing Pikmin and letting them attack latched on. Defaults to true.</li>
-      <li><b><code>drops_corpse</code></b>: <code>true</code> if this enemy drops a corpse, <code>false</code> otherwise. Defaults to true.</li>
-      <li><b><code>is_boss</code></b>: <code>true</code> if this enemy is considered a boss enemy, <code>false</code> otherwise. Defaults to true.</li>
-      <li><b><code>points</code></b>: How many enemy points this enemy is worth when killed. Defaults to 10.</li>
-      <li><b><code>pikmin_seeds</code></b>: How many seeds this enemy gives when the corpse is returned to the Onion. Defaults to 0.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-recommended">Recommended</h3>
 
-    <p>None.</p>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>allow_ground_attacks</td>
+        <td><code>false</code> makes it so that Pikmin cannot attack it with grounded attacks; the only way to hurt it is by throwing Pikmin and letting them attack latched on.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>drops_corpse</td>
+        <td>Whether this enemy drops a carriable corpse upon death.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>is_boss</td>
+        <td>Whether this enemy is considered a boss enemy.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>points</td>
+        <td>How many enemy points this enemy is worth when killed.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>pikmin_seeds</td>
+        <td>How many seeds this enemy gives when the corpse is returned to the Onion.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

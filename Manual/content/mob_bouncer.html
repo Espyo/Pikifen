@@ -28,23 +28,28 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a bouncer type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>riders</code></b>: A list of what types of riders are allowed. This list is separated by space, and the possible values are <code>pikmin</code> or <code>leaders</code>.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-others">Others</h3>
 
-    <ul>
-      <li><b><code>riding_pose</code></b>: What sort of animation the riders switch to when being bounced away. Possible values are <code>stopped</code>, <code>somersault</code>. Defaults to stopped.</li>
-    </ul>
-
-    <h3 id="optional">Optional</h3>
-
-    <p>None.</p>
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>riders</code></td>
+        <td>What types of riders are allowed. Possible values are: <code>pikmin</code>, <code>leaders</code>.</td>
+        <td><i>Text list</i></td>
+        <td>pikmin</td>
+      </tr>
+      <tr>
+        <td><code>riding_pose</code></td>
+        <td>What sort of animation the riders switch to when being bounced away. Possible values are: <code>stopped</code>, <code>somersault</code>.</td>
+        <td><i>Text</i></td>
+        <td><code>stopped</code></td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

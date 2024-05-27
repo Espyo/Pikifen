@@ -30,22 +30,42 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a ship type has the following properties.</p>
+    <h3 id="props-common">Common</h3>
 
-    <h3 id="mandatory">Mandatory</h3>
-
-    <p>None.</p>
-
-    <h3 id="recommended">Recommended</h3>
-    
     <ul>
-      <li><b><code>can_heal</code></b>: If <code>true</code>, that means that leaders can heal their spacesuits using this ship, like the S.S. Dolphin. Defaults to false.</li>
-      <li><b><code>control_point_radius</code></b>: Radius of the control point.</li>
-      <li><b><code>control_point_offset</code></b>: X and Y position of the control point. This uses <a href="glossary.html#R">relative coordinates</a>.</li>
-      <li><b><code>receptacle_offset</code></b>: X and Y position of the receptacle. This uses <a href="glossary.html#R">relative coordinates</a>.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-recommended">Recommended</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>can_heal</td>
+        <td>If <code>true</code>, that means that leaders can heal their spacesuits using this ship, like the S.S. Dolphin.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>control_point_radius</td>
+        <td>Radius of the control point.</td>
+        <td>Number</td>
+        <td>45</td>
+      </tr>
+      <tr>
+        <td>control_point_offset</td>
+        <td>X and Y position of the control point. This uses <a href="glossary.html#R">relative coordinates</a>.</td>
+        <td>Coordinates</td>
+        <td>0 0</td>
+      </tr>
+      <tr>
+        <td>control_point_offset</td>
+        <td>X and Y position of the receptacle. This uses <a href="glossary.html#R">relative coordinates</a>.</td>
+        <td>Coordinates</td>
+        <td>0 0</td>
+      </tr>
+    </table>
+
+    <h3 id="props-others">Others</h3>
 
     <ul>
       <li><b><code>leg_body_parts</code></b>: Names of the <a href="animation.html">body parts</a> that make up the ship's "legs", separated by semicolon. This makes more sense if you follow the logic of the way an <a href="mob_onion.html">Onion</a> uses this property.

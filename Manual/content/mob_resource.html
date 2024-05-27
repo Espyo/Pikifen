@@ -28,29 +28,67 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a resource type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>carrying_destination</code></b>: Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship. <code>linked_mob</code> means it gets taken to whatever object is linked to the this object or the pile that originated this resource. <code>linked_mob_matching_type</code> means it goes to whichever of the object or the pile's linked objects matches the Pikmin type decided from the carrier Pikmin (i.e. which object has the <code>carry_destination_type</code> <a href="script.html">script variable</a> set to the Pikmin type's name.)</li>
-      <li><b><code>delivery_result</code></b>: Specifies what happens when the resource is successfully delivered. <code>damage_mob</code> causes some amount of damage to the delivery object, <code>increase_ingredients</code> causes an increase (by one) in the number of ingredients that make up a spray, <code>add_points</code> adds treasure points to the player's stash, and <code>stay</code> causes the Pikmin to stay with the object there.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <p>None.</p>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>carrying_destination</td>
+        <td>Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship. <code>linked_mob</code> means it gets taken to whatever object is linked to the this object or the pile that originated this resource. <code>linked_mob_matching_type</code> means it goes to whichever of the object or the pile's linked objects matches the Pikmin type decided from the carrier Pikmin (i.e. which object has the <code>carry_destination_type</code> <a href="script.html">script variable</a> set to the Pikmin type's name).</td>
+        <td>Text</td>
+      </tr>
+      <tr>
+        <td>delivery_result</td>
+        <td>Specifies what happens when the resource is successfully delivered. <code>damage_mob</code> causes some amount of damage to the delivery object, <code>increase_ingredients</code> causes an increase (by one) in the number of ingredients that make up a spray, <code>add_points</code> adds treasure points to the player's stash, and <code>stay</code> causes the Pikmin to stay with the object there.</td>
+        <td>Text</td>
+      </tr>
+    </table>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-others">Others</h3>
 
-    <ul>
-      <li><b><code>damage_mob_amount</code></b>: If the resource's delivery damages the delivery object, this specifies how much to hurt it by. Defaults to 1.</li>
-      <li><b><code>point_amount</code></b>: If the resource's delivery increases the player's score, this specifies how much to increase by. Defaults to 1.</li>
-      <li><b><code>return_to_pile_on_vanish</code></b>: If true, the resource returns to the pile from which it came, when it vanishes. If false, it's gone forever. Defaults to false.</li>
-      <li><b><code>spray_to_concoct</code></b>: If the resource's delivery increases a spray's ingredient count, this specifies the name of the spray type. Defaults to not set.</li>
-      <li><b><code>vanish_delay</code></b>: When a resource is dropped, wait these many seconds before making it vanish. 0 means it vanishes instantly. Defaults to 0.</li>
-      <li><b><code>vanish_on_drop</code></b>: If true, the resource will vanish when the Pikmin drops it, after a delay. If false, the resource will lie there forever. Either way, it can be picked up again before it actually vanishes. Defaults to false.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>damage_mob_amount</td>
+        <td>If the resource's delivery damages the delivery object, this specifies how much to hurt it by.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>point_amount</td>
+        <td>If the resource's delivery increases the player's score, this specifies how much to increase by.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>return_to_pile_on_vanish</td>
+        <td>If true, the resource returns to the pile from which it came, when it vanishes. If false, it's gone forever.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>spray_to_concoct</td>
+        <td>If the resource's delivery increases a spray's ingredient count, this specifies the name of the spray type.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>vanish_delay</td>
+        <td>When a resource is dropped, wait these many seconds before making it vanish. 0 means it vanishes instantly.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>vanish_on_drop</td>
+        <td>If true, the resource will vanish when the Pikmin drops it, after a delay. If false, the resource will lie there forever. Either way, it can be picked up again before it actually vanishes.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

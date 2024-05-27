@@ -39,6 +39,17 @@ block {
     
     <p><b>Warning</b>: avoid Windows's "Notepad" program to edit these data files, since they usually show up broken or all in a single line. Try something like <a href="https://notepad-plus-plus.org">Notepad++</a> instead.</p>
 
+    <p>Throughout this manual you'll find tables listing some properties. One of the columns refers to the type of the value. Types include:</p>
+
+    <ul>
+      <li>Text: Just regular text. e.g.: <code>Red Pikmin</code></li>
+      <li>Number: A number. Both positive and negative numbers work. Decimals are allowed, using either a dot or a comma. e.g.: <code>3.14</code></li>
+      <li>Boolean: A <a href="https://en.wikipedia.org/wiki/Boolean_data_type">Boolean</a> is a value that's just either true or false. So, write <code>true</code> or <code>false</code>.</li>
+      <li>Color: A color, represented by its <a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB</a> values. Either write it in the format <code>r g b</code>, or if you want to include alpha (opacity), <code>r g b a</code>. e.g. <code>255 128 0</code> (orange), <code>255 255 255 64</code> (transparent white). You can also write the name of a color (though only a few basic ones are known), and if you want alpha, the number afterwards. e.g. <code>cyan</code> (cyan), <code>yellow 192</code> (slightly transparent yellow).</li>
+      <li>File name: A <a href="glossary.html#F">file name</a>. e.g. <code>Grass.jpg</code></li>
+      <li>List: A list of some values, separated by a semicolon. e.g. <code>Olimar; Louie; President</code></li>
+    </ul>
+
     <h2 id="content-props">Content properties</h2>
 
     <p>Most pieces of content have a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files. Please check the relevant content type's page in this manual since it may mention some special considerations you can or should have about these properties.</p>

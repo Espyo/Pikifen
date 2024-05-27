@@ -26,13 +26,40 @@
     
     <p>To create a hazard, simply specify the following properties in its file:</p>
 
+    <h3 id="common">Common</h3>
+
     <ul>
       <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-      <li><b><code>color</code></b>: A color that represents the hazard, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to empty.</li>
-      <li><b><code>radar_color</code></b>: Color to use for this liquid in the radar, in the format <code>r g b</code> or <code>r g b a</code>. In-game, it'll be slightly tinted with the terrain elevation color. Defaults to empty.</li>
-      <li><b><code>status</code></b>: Status effects to apply to any Pikmin that is not invulnerable. This list is separated by semicolons (;).</li>
-      <li><b><code>liquid</code></b>: If this hazard has an associated liquid (read the next section), specify its name here.</li>
     </ul>
+
+    <h3 id="optional">Optional</h3>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>color</td>
+        <td>A color that represents the hazard.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>radar_color</td>
+        <td>Color to use for this liquid in the radar. In-game, it'll be slightly tinted with the terrain elevation color.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>liquid</td>
+        <td>If this hazard has an associated liquid (read the next section), specify its name here.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>status</td>
+        <td>Status effects to apply to any Pikmin that is not invulnerable.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+    </table>
 
     <h2 id="liquid">Water and other liquids</h2>
     
@@ -42,14 +69,50 @@
 
     <p>Each liquid has the following properties:</p>
 
+    <h3 id="liquid-common">Common</h3>
+
     <ul>
       <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-      <li><b><code>color</code></b>: Color of the liquid, in the format <code>r g b</code> or <code>r g b a</code>. In-game, the terrain below the liquid's surface will be tinted with this color. Defaults to black.</li>
-      <li><b><code>animation</code></b>: <a href="glossary.html#F">File name</a> of the animation <a href="making.html#data-file">data file</a> in <code>Game_data/Animations</code>. The water's surface will have this animated texture on it. <b>Note</b>: Since the sprites used for the animation are tiled over and over across the water's surface, you will not be able to have multiple frames of animation in the same image file. When <a href="animation.html">making its animation</a>, make sure to have each frame on its own file.</li>
-      <li><b><code>surface_1_speed</code></b>: Liquids have the surface animation drawn twice, one layer on top of the other. The fact that they scroll at different speeds is what gives the full surface a dynamic look. This property sets the scrolling speed of the top layer, in pixels per second. Defaults to 10.</li>
-      <li><b><code>surface_2_speed</code></b>: Like <code>surface_1_speed</code>, but for the bottom layer. Defaults to -13.</li>
-      <li><b><code>surface_alpha</code></b>: Opacity (0 - 255) of the entire surface. Defaults to 255.</li>
     </ul>
+
+    <h3 id="liquid-mandatory">Mandatory</h3>
+
+    <table class="props-t props-t-m">
+      <tr>
+        <td>animation</td>
+        <td>Animation <a href="making.html#data-file">data file</a> in <code>Game_data/Animations</code>. The water's surface will have this animated texture on it. <b>Note</b>: Since the sprites used for the animation are tiled over and over across the water's surface, you will not be able to have multiple frames of animation in the same image file. When <a href="animation.html">making its animation</a>, make sure to have each frame on its own file.</td>
+        <td>File name</td>
+      </tr>
+    </table>
+
+    <h3 id="liquid-optional">Optional</h3>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>color</td>
+        <td>Color of the liquid. In-game, the terrain below the liquid's surface will be tinted with this color.</td>
+        <td>Color</td>
+        <td>0 0 0 255</td>
+      </tr>
+      <tr>
+        <td>surface_1_speed</td>
+        <td>Liquids have the surface animation drawn twice, one layer on top of the other. The fact that they scroll at different speeds is what gives the full surface a dynamic look. This property sets the scrolling speed of the top layer, in pixels per second.</td>
+        <td>Number</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>surface_2_speed</td>
+        <td>Like <code>surface_1_speed</code>, but for the bottom layer.</td>
+        <td>Number</td>
+        <td>-13</td>
+      </tr>
+      <tr>
+        <td>surface_alpha</td>
+        <td>Opacity (0 - 255) of the entire surface.</td>
+        <td>Number</td>
+        <td>255</td>
+      </tr>
+    </table>
     
   </div>
 </body>

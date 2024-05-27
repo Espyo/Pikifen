@@ -28,26 +28,48 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a pellet type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>number</code></b>: The number written on the pellet (e.g. 1, 5, 10). This will set the weight to the same thing.</li>
-      <li><b><code>number_image</code></b>: <a href="glossary.html#F">File name</a> of the image with the number. The image should be in <code>Game_data/Graphics</code>.</li>
-      <li><b><code>pikmin_type</code></b>: Name of the type of Pikmin the pellet matches with.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <ul>
-      <li><b><code>match_seeds</code></b>: How many seeds it gives to the Onion when the pellet's Pikmin type matches the Onion's. Defaults to 0.</li>
-      <li><b><code>non_match_seeds</code></b>: How many seeds it gives to the Onion when the pellet's Pikmin type does not match the Onion's. Defaults to 0.</li>
-    </ul>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>number</td>
+        <td>The number written on the pellet (e.g. 1, 5, 10). This will set the weight to the same thing.</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>number_image</td>
+        <td>Image with the number. The image should be in <code>Game_data/Graphics</code>.</td>
+        <td>File name</td>
+      </tr>
+      <tr>
+        <td>pikmin_type</td>
+        <td>Name of the type of Pikmin the pellet matches with.</td>
+        <td>Text</td>
+      </tr>
+    </table>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-recommended">Recommended</h3>
 
-    <p>None.</p>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>match_seeds</td>
+        <td>How many seeds it gives to the Onion when the pellet's Pikmin type matches the Onion's.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>non_match_seeds</td>
+        <td>How many seeds it gives to the Onion when the pellet's Pikmin type does not match the Onion's.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

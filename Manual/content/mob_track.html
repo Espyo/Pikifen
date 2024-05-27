@@ -30,26 +30,49 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a track type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>riders</code></b>: A list of what types of riders are allowed. This list is separated by space, and the possible values are <code>pikmin</code> or <code>leaders</code>.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="recommended">Recommended</h3>
+    <h3 id="props-mandatory">Mandatory</h3>
 
-    <ul>
-      <li><b><code>riding_pose</code></b>: What sort of animation the riders switch to when riding. Possible values are <code>stopped</code>, <code>sliding</code>, <code>climbing</code>. Defaults to stopped.</li>
-      <li><b><code>ride_speed</code></b>: The speed riders go from one body part to the next at. This is in ratio per second, so 0.5 means 50% of the way in one second. Defaults to 0.5.</li>
-    </ul>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>riders</td>
+        <td>What types of riders are allowed. Possible values are: <code>pikmin</code>, <code>leaders</code>.</td>
+        <td>Text list</td>
+      </tr>
+    </table>
 
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-recommended">Recommended</h3>
 
-    <ul>
-      <li><b><code>cancellable_with_whistle</code></b>: If <code>true</code>, riders can stop riding if they are whistled by a leader. Defaults to false.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>riding_pose</td>
+        <td>What sort of animation the riders switch to when riding. Possible values are <code>stopped</code>, <code>sliding</code>, <code>climbing</code>.</td>
+        <td>Text</td>
+        <td>stopped</td>
+      </tr>
+      <tr>
+        <td>ride_speed</td>
+        <td>The speed riders go from one body part to the next at. This is in ratio per second, so 0.5 means 50% of the way in one second.</td>
+        <td>Number</td>
+        <td>0.5</td>
+      </tr>
+    </table>
+
+    <h3 id="props-others">Others</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>cancellable_with_whistle</td>
+        <td>If <code>true</code>, riders can stop riding if they are whistled by a leader.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

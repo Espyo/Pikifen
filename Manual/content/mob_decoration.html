@@ -28,24 +28,40 @@
 
     <h2 id="props">Properties</h2>
 
-    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a decoration type has the following properties.</p>
-
-    <h3 id="mandatory">Mandatory</h3>
-
-    <p>None.</p>
-
-    <h3 id="recommended">Recommended</h3>
-
-    <p>None.</p>
-
-    <h3 id="optional">Optional</h3>
+    <h3 id="props-common">Common</h3>
 
     <ul>
-      <li><b><code>random_animation_delay</code></b>: If true, the first frame of each object's idle animation when spawning will be decided at random, instead of always being the first one. Useful if you have several different decorative objects together, and don't want them to look like they're all moving in sync. Defaults to false.</li>
-      <li><b><code>rotation_random_variation</code></b>: When an object of this type spawns, its angle will be randomly shifted clockwise or counterclockwise, randomly between 0 degrees and these many degrees. Defaults to 0.</li>
-      <li><b><code>scale_random_variation</code></b>: When an object of this type spawns, its scale will be randomly increased or decreased, by a random factor between 0 and this much. 0.1 is a good general-case value. Defaults to 0.</li>
-      <li><b><code>tint_random_maximum</code></b>: When an object of this type spawns, it will be tinted randomly. This color (format <code>r g b</code> or <code>r g b a</code>) is the maximum tint that it can undergo, and the engine will pick a random color to tint it with between this color and full white (i.e. no tint). If you specify an alpha channel, the object's transparency will be decided randomly (but independently) too, between this value and 255 (full opacity). Defaults to transparent black.</li>
+      <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
+    
+    <h3 id="props-others">Others</h3>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>random_animation_delay</td>
+        <td>If true, the first frame of each object's idle animation when spawning will be decided at random, instead of always being the first one. Useful if you have several different decorative objects together, and don't want them to look like they're all moving in sync.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>rotation_random_variation</td>
+        <td>When an object of this type spawns, its angle will be randomly shifted clockwise or counterclockwise, randomly between 0 degrees and these many degrees.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>scale_random_variation</td>
+        <td>When an object of this type spawns, its scale will be randomly increased or decreased, by a random factor between 0 and this much. 0.1 is a good general-case value.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>tint_random_maximum</td>
+        <td>When an object of this type spawns, it will be tinted randomly. This color (format <code>r g b</code> or <code>r g b a</code>) is the maximum tint that it can undergo, and the engine will pick a random color to tint it with between this color and full white (i.e. no tint). If you specify an alpha channel, the object's transparency will be decided randomly (but independently) too, between this value and 255 (full opacity).</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+    </table>
 
     <h2 id="animations">Animations</h2>
 

@@ -6,7 +6,10 @@ body {
   margin: 0px;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: 'Garamond';
   clear: right;
   padding-top: 30px;
@@ -30,7 +33,8 @@ h4 {
   font-size: 15pt;
 }
 
-code, pre {
+code,
+pre {
   background-color: #d0d0d0;
   font-family: monospace;
   overflow-x: scroll;
@@ -47,7 +51,8 @@ table {
   border-collapse: collapse;
 }
 
-td, th {
+td,
+th {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 6px;
@@ -98,7 +103,8 @@ figure img {
   width: 500px;
 }
 
-#toc, ul {
+#toc,
+ul {
   margin: 0px;
 }
 
@@ -119,8 +125,66 @@ figure img {
   margin-left: 40px;
 }
 
+table.props-t {
+  width: 100%;
+}
+
+tr.props-h {
+  font-size: 70%;
+}
+
+table.props-t-m tr.props-h th:nth-child(3) {
+  /* Type. */
+  font-size: 90%;
+  width: 55px;
+}
+
+table.props-t-o tr.props-h th:nth-child(3) {
+  /* Type. */
+  border-right: none;
+  font-size: 90%;
+  width: 55px;
+}
+
+table.props-t-o tr.props-h th:nth-child(4) {
+  /* Default. */
+  border-left: none;
+  font-size: 90%;
+  width: 80px;
+}
+
+tr.props td:first-child {
+  font-size: 110%;
+  font-weight: bold;
+}
+
+table.props-t-m tr.props td:nth-child(3) {
+  /* Type. */
+  font-size: 75%;
+  font-style: italic;
+  text-align: center;
+}
+
+table.props-t-o tr.props td:nth-child(3) {
+  /* Type. */
+  border-right: none;
+  font-size: 75%;
+  font-style: italic;
+  text-align: center;
+}
+
+table.props-t-o tr.props td:nth-child(4) {
+  /* Default. */
+  border-left: none;
+  font-size: 75%;
+  text-align: center;
+}
+
 /* Changelog. */
-.cl-a, .cl-c, .cl-r, .cl-f {
+.cl-a,
+.cl-c,
+.cl-r,
+.cl-f {
   font-weight: bold;
 }
 

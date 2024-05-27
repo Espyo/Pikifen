@@ -1,4 +1,5 @@
-/* Creates the table of contents based on the h2 and beyond tags.
+/**
+ * @brief Creates the table of contents based on the h2 and beyond tags.
  * Then, it places it after the opening paragraphs.
  */
 function make_toc () {
@@ -55,14 +56,12 @@ function make_toc () {
 }
 
 
-/* Creates a header, including breadcrumbs for the current page.
- * title:
- *   Current page title.
- * bc_names:
- *   List of names of the pages in the breadcrumbs. The home page must not be
- *   included. Undefined for none.
- * bc_links:
- *   Same as bc_names, but for the links.
+/**
+ * @brief Creates a header, including breadcrumbs for the current page.
+ * @param {string} title Current page title.
+ * @param {Array} bc_names List of names of the pages in the breadcrumbs.
+ * The home page must not be included. Undefined for none.
+ * @param {Array} bc_links Same as bc_names, but for the links.
  */
 function create_header(title, bc_names, bc_links) {
   var header_div = document.createElement('div');
@@ -93,9 +92,48 @@ function create_header(title, bc_names, bc_links) {
 }
 
 
-/* Adjusts the page's title and first h1 header.
- * title:
- *   Current page title.
+/**
+ * @brief Populates any property tables in the page with the header and such.
+ */
+function populate_prop_tables() {
+  var tables = document.getElementsByClassName('props-t');
+  for(var table of tables) {
+    var isMandatory = table.classList.contains('props-t-m');
+
+    var trs = table.getElementsByTagName('tr');
+    for(var tr of trs) {
+
+      tr.classList.add('props');
+
+      var tds = tr.getElementsByTagName('td');
+      tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
+
+      if(tds.length == 4) {
+        //Default value.
+        tds[3].innerHTML = '<code>' + tds[3].innerHTML + '</code>';
+      }
+
+    }
+
+    var headerTr = document.createElement('tr');
+    headerTr.innerHTML =
+      '<th>Property</th>' +
+      '<th>Description</th>' +
+      '<th><a href="making.html#data-file">Type</a></th>';
+    if(!isMandatory) {
+      headerTr.innerHTML +=
+        '<th>Default</th>';
+    }
+    headerTr.classList.add('props-h');
+
+    table.prepend(headerTr);
+  }
+}
+
+
+/**
+ * @brief Adjusts the page's title and first h1 header.
+ * @param {string} title Current page title.
  */
 function set_title(title) {
   document.title = title + ' - Pikifen manual';
@@ -106,16 +144,13 @@ function set_title(title) {
 }
 
 
-/* Sets up the page.
- * title:
- *   Current page title.
- * bc_names:
- *   List of names of the pages in the breadcrumbs. The home page must not be
- *   included. Undefined for none.
- * bc_links:
- *   Same as bc_names, but for the links.
- * use_toc:
- *   True to use table of contents.
+/**
+ * @brief Sets up the page.
+ * @param {string} title Current page title.
+ * @param {Array} bc_names List of names of the pages in the breadcrumbs.
+ * The home page must not be included. Undefined for none.
+ * @param {Array} bc_links Same as bc_names, but for the links.
+ * @param {boolean} use_toc True to use table of contents.
  */
 function setup(title, bc_names, bc_links, use_toc) {
   if(use_toc === undefined) use_toc = true;
@@ -123,11 +158,13 @@ function setup(title, bc_names, bc_links, use_toc) {
   set_title(title);
   create_header(title, bc_names, bc_links);
   if(use_toc) make_toc();
+  populate_prop_tables();
 }
 
 
-/* Makes scrolling to a section end up slightly before the section's header,
- * so that the page header can be taken into account.
+/**
+ * @brief Makes scrolling to a section end up slightly before the section's
+ * header, so that the page header can be taken into account.
  * Solution by Ian Clark from https://stackoverflow.com/a/13067009
  */
 (function(document, history, location) {
