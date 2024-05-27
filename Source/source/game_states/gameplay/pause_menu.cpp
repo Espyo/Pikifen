@@ -15,6 +15,7 @@
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../mobs/resource.h"
 #include "../../utils/allegro_utils.h"
 #include "../../utils/general_utils.h"
 #include "../../utils/string_utils.h"
@@ -1016,12 +1017,43 @@ void pause_menu_t::draw_radar(
     }
     
     //Treasure icons.
-    //TODO piles of nuggets?
     for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); ++t) {
         treasure* t_ptr = game.states.gameplay->mobs.treasures[t];
         
         draw_bitmap(
             bmp_radar_treasure, t_ptr->pos,
+            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
+        );
+    }
+    for(size_t r = 0; r < game.states.gameplay->mobs.resources.size(); ++r) {
+        resource* r_ptr = game.states.gameplay->mobs.resources[r];
+        if(
+            r_ptr->res_type->delivery_result !=
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+        ) {
+            continue;
+        }
+        
+        draw_bitmap(
+            bmp_radar_treasure, r_ptr->pos,
+            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
+        );
+    }
+    for(size_t p = 0; p < game.states.gameplay->mobs.piles.size(); ++p) {
+        pile* p_ptr = game.states.gameplay->mobs.piles[p];
+        if(
+            !p_ptr->pil_type->contents ||
+            p_ptr->amount == 0 ||
+            p_ptr->pil_type->contents->delivery_result !=
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+        ) {
+            continue;
+        }
+        
+        draw_bitmap(
+            bmp_radar_treasure, p_ptr->pos,
             point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );

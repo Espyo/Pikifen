@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -14,28 +14,22 @@ Current tasks (tasks being worked on, but not yet committed)
             Landmarks: Ruined marble pillars
             Obstacles: Just walls and routing, maybe a shortcut or two via mob
             Textures: Marble-like stuff?, rocks, non-standard dirt and water, many loose leafs
-    Some sounds that should use the new looping feature are instead just a long sustained sound
-        Exhaling, fountain, inhaling?, steam
     Code cleanup
         Use #pragma region in header files?
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Slim font cannot be set in System_asset_file_names.txt
+    Recheck ALL "links_from" and "links_to"
+    If you select three sectors and choose to edit them all together, it'll crash with something about textures
+    If you have a triangle of mobs inside each other, it shouldn't allow it -- when storing one inside, go up the chain to make sure it's not an infinite loop
     lockpick man's resize bug
     Looks like editing some sprites' scales and then trying to preview an interpolated animation makes things weird
 
     --- 0.26 ---
-    Helodity's performance improvements
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Perform some optimizations
-        process_mob_interactions takes up 77%
-            is_stored_inside_mob takes up 5%
-            process_mob_reaches takes up 14%
-            process_mob_misc_interactions takes up 23%
-                mob::get_distance_between takes up 8%
-                dist::operator<= takes up 10%
-            process_mob_touches takes up 2%
-            mob_fsm::get_event takes up 13%
+    Update to Dear ImGui 1.90.7
+        Implement shortcuts?
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -55,6 +49,7 @@ Next tasks (roughly sorted most important first)
                 Ready...
                 GO!
                 TODO Mission stuff
+                Message character being typed out
             Leader
                 x Footsteps
                 Alph, Brittany, and Charlie
@@ -153,6 +148,7 @@ Next tasks (roughly sorted most important first)
         Sliding (add the track logic too)
         Pushing (add the group task logic too)
         Arms outstretched (add the group task logic too)
+        Dying? (like shrinking or something)
     Leader animation improvements
         More frames, for more fluidity
     Leader missing animations
@@ -788,6 +784,7 @@ Misc things (so I don't forget)
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
+        Resizable text inputs? https://github.com/ocornut/imgui/issues/7081#issuecomment-2081167909
         An option to toggle the grid visibility
         Smooth scrolling in the GUI https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)
         Customizable controls overall, including double-clicking any of the mouse buttons
