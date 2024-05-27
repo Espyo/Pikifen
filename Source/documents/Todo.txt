@@ -2,18 +2,6 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Small area
-        A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
-        Concept:
-            Type of experience: quick, micro-management, no distractions
-            Gimmicks: Many of the same object, very few Pikmin
-            Objective: Collect all treasures, medal by time only
-            Types: White flowers so the player doesn't wait long
-            Difficulty: Very easy to just do, slightly hard to master
-            Theme: Marble ruins in some non-standard grass/water ambiance
-            Landmarks: Ruined marble pillars
-            Obstacles: Just walls and routing, maybe a shortcut or two via mob
-            Textures: Marble-like stuff?, rocks, non-standard dirt and water, many loose leafs
     Code cleanup
         Use #pragma region in header files?
 
