@@ -1498,8 +1498,8 @@ protected:
         total_uses--;
         if(it->second.uses == 0) {
             do_unload(it->second.ptr);
+            list.erase(it);
         }
-        list.erase(it);
     }
     
 };
