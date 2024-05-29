@@ -8,7 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Slim font cannot be set in System_asset_file_names.txt
-    Recheck ALL "links_from" and "links_to"
     If you select three sectors and choose to edit them all together, it'll crash with something about textures
     If you have a triangle of mobs inside each other, it shouldn't allow it -- when storing one inside, go up the chain to make sure it's not an infinite loop
     lockpick man's resize bug

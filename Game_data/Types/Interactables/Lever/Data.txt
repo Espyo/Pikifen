@@ -1,6 +1,8 @@
 name = Lever
 description = A lever that can be flipped by a leader or a thrown Pikmin. Sends power when in the "on" position.
 
+area_editor_tips = You can link an object to this so that when it receives power, it gets flipped just like a leader would.
+area_editor_recommend_links_from = true
 custom_category_name = Puzzle
 height = 16
 prompt_text = Flip lever

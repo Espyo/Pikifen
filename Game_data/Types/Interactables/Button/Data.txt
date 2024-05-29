@@ -1,6 +1,8 @@
 name = Button
 description = A button that can be clicked by a leader or a thrown Pikmin. Sends power for a split-second when clicked.
 
+area_editor_tips = You can link an object to this so that when it receives power, it gets pressed just like a leader would.
+area_editor_recommend_links_from = true
 custom_category_name = Puzzle
 height = 16
 prompt_text = Click button
