@@ -155,6 +155,49 @@ area_editor::area_editor() :
     
     zoom_max_level = AREA_EDITOR::ZOOM_MAX_LEVEL;
     zoom_min_level = AREA_EDITOR::ZOOM_MIN_LEVEL;
+    
+#define register_cmd(ptr, name) \
+    commands.push_back( \
+                        command(std::bind((ptr), this, std::placeholders::_1), \
+                                (name)) \
+                      );
+    
+    register_cmd(&area_editor::circle_sector_cmd, "circle_sector");
+    register_cmd(&area_editor::copy_properties_cmd, "copy_properties");
+    register_cmd(&area_editor::delete_area_cmd, "delete_area");
+    register_cmd(&area_editor::delete_cmd, "delete");
+    register_cmd(&area_editor::delete_edge_cmd, "delete_edge");
+    register_cmd(&area_editor::delete_tree_shadow_cmd, "delete_tree_shadow");
+    register_cmd(&area_editor::duplicate_mobs_cmd, "duplicate_mobs");
+    register_cmd(
+        &area_editor::grid_interval_decrease_cmd, "grid_interval_decrease"
+    );
+    register_cmd(
+        &area_editor::grid_interval_increase_cmd, "grid_interval_increase"
+    );
+    register_cmd(&area_editor::layout_drawing_cmd, "layout_drawing");
+    register_cmd(&area_editor::load_cmd, "load");
+    register_cmd(&area_editor::new_mob_cmd, "new_mob");
+    register_cmd(&area_editor::new_path_cmd, "new_path");
+    register_cmd(&area_editor::new_tree_shadow_cmd, "new_tree_shadow");
+    register_cmd(&area_editor::paste_properties_cmd, "paste_properties");
+    register_cmd(&area_editor::paste_texture_cmd, "paste_texture");
+    register_cmd(&area_editor::quick_play_cmd, "quick_play");
+    register_cmd(&area_editor::quit_cmd, "quit");
+    register_cmd(&area_editor::redo_cmd, "redo");
+    register_cmd(&area_editor::reference_toggle_cmd, "reference_toggle");
+    register_cmd(&area_editor::reload_cmd, "reload");
+    register_cmd(&area_editor::save_cmd, "save");
+    register_cmd(&area_editor::select_all_cmd, "select_all");
+    register_cmd(&area_editor::selection_filter_cmd, "selection_filter");
+    register_cmd(&area_editor::snap_mode_cmd, "snap_mode");
+    register_cmd(&area_editor::undo_cmd, "undo");
+    register_cmd(&area_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset");
+    register_cmd(&area_editor::zoom_everything_cmd, "zoom_everything");
+    register_cmd(&area_editor::zoom_in_cmd, "zoom_in");
+    register_cmd(&area_editor::zoom_out_cmd, "zoom_out");
+    
+#undef register_cmd
 }
 
 
@@ -2104,9 +2147,13 @@ area_data* area_editor::prepare_state() {
 
 
 /**
- * @brief Code to run when the circle sector button widget is pressed.
+ * @brief Code to run for the circle sector command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_circle_sector_button() {
+void area_editor::circle_sector_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2138,9 +2185,13 @@ void area_editor::press_circle_sector_button() {
 
 
 /**
- * @brief Code to run when the copy properties button widget is pressed.
+ * @brief Code to run for the copy properties command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_copy_properties_button() {
+void area_editor::copy_properties_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(!selected_sectors.empty()) {
@@ -2161,9 +2212,13 @@ void area_editor::press_copy_properties_button() {
 
 
 /**
- * @brief Code to run when the delete current area button widget is pressed.
+ * @brief Code to run for the delete current area command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_delete_area_button() {
+void area_editor::delete_area_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     open_dialog(
         "Delete area?",
         std::bind(&area_editor::process_gui_delete_area_dialog, this)
@@ -2173,21 +2228,25 @@ void area_editor::press_delete_area_button() {
 
 
 /**
- * @brief Code to run when the delete button widget is pressed.
+ * @brief Code to run for the delete command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_delete_button() {
+void area_editor::delete_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
-        press_remove_edge_button();
+        delete_edge_cmd(1.0f);
         break;
     } case EDITOR_STATE_MOBS: {
-        press_remove_mob_button();
+        delete_mob_cmd(1.0f);
         break;
     } case EDITOR_STATE_PATHS: {
-        press_remove_path_button();
+        delete_path_cmd(1.0f);
         break;
     } case EDITOR_STATE_DETAILS: {
-        press_remove_tree_shadow_button();
+        delete_tree_shadow_cmd(1.0f);
         break;
     }
     }
@@ -2195,9 +2254,13 @@ void area_editor::press_delete_button() {
 
 
 /**
- * @brief Code to run when the duplicate mobs button widget is pressed.
+ * @brief Code to run for the duplicate mobs command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_duplicate_mobs_button() {
+void area_editor::duplicate_mobs_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
@@ -2218,9 +2281,13 @@ void area_editor::press_duplicate_mobs_button() {
 
 
 /**
- * @brief Code to run when the grid interval decrease button is pressed.
+ * @brief Code to run for the grid interval decrease command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_grid_interval_decrease_button() {
+void area_editor::grid_interval_decrease_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.options.area_editor_grid_interval =
         std::max(
             game.options.area_editor_grid_interval * 0.5f,
@@ -2234,9 +2301,13 @@ void area_editor::press_grid_interval_decrease_button() {
 
 
 /**
- * @brief Code to run when the grid interval increase button is pressed.
+ * @brief Code to run for the grid interval increase command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_grid_interval_increase_button() {
+void area_editor::grid_interval_increase_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.options.area_editor_grid_interval =
         std::min(
             game.options.area_editor_grid_interval * 2.0f,
@@ -2250,9 +2321,13 @@ void area_editor::press_grid_interval_increase_button() {
 
 
 /**
- * @brief Code to run when the layout drawing button widget is pressed.
+ * @brief Code to run for the layout drawing command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_layout_drawing_button() {
+void area_editor::layout_drawing_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2284,9 +2359,13 @@ void area_editor::press_layout_drawing_button() {
 
 
 /**
- * @brief Code to run when the load area button widget is pressed.
+ * @brief Code to run for the load area command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_load_button() {
+void area_editor::load_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2301,9 +2380,13 @@ void area_editor::press_load_button() {
 
 
 /**
- * @brief Code to run when the new mob button widget is pressed.
+ * @brief Code to run for the new mob command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_new_mob_button() {
+void area_editor::new_mob_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2325,9 +2408,13 @@ void area_editor::press_new_mob_button() {
 
 
 /**
- * @brief Code to run when the new path button widget is pressed.
+ * @brief Code to run for the new path command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_new_path_button() {
+void area_editor::new_path_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2344,9 +2431,13 @@ void area_editor::press_new_path_button() {
 
 
 /**
- * @brief Code to run when the new tree shadow button widget is pressed.
+ * @brief Code to run for the new tree shadow command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_new_tree_shadow_button() {
+void area_editor::new_tree_shadow_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2362,9 +2453,13 @@ void area_editor::press_new_tree_shadow_button() {
 
 
 /**
- * @brief Code to run when the paste properties button widget is pressed.
+ * @brief Code to run for the paste properties command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_paste_properties_button() {
+void area_editor::paste_properties_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(sub_state != EDITOR_SUB_STATE_NONE) return;
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
@@ -2386,9 +2481,13 @@ void area_editor::press_paste_properties_button() {
 
 
 /**
- * @brief Code to run when the paste texture button widget is pressed.
+ * @brief Code to run for the paste texture command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_paste_texture_button() {
+void area_editor::paste_texture_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(state != EDITOR_STATE_LAYOUT) return;
     if(sub_state != EDITOR_SUB_STATE_NONE) return;
     paste_sector_texture();
@@ -2396,9 +2495,13 @@ void area_editor::press_paste_texture_button() {
 
 
 /**
- * @brief Code to run when the quick play button widget is pressed.
+ * @brief Code to run for the quick play command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_quick_play_button() {
+void area_editor::quick_play_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!save_area(false)) return;
     quick_play_area_path = game.cur_area_data.path;
     quick_play_cam_pos = game.cam.pos;
@@ -2408,9 +2511,13 @@ void area_editor::press_quick_play_button() {
 
 
 /**
- * @brief Code to run when the quit button widget is pressed.
+ * @brief Code to run for the quit command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_quit_button() {
+void area_editor::quit_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         quit_widget_pos,
         "quitting", "quit",
@@ -2421,9 +2528,13 @@ void area_editor::press_quit_button() {
 
 
 /**
- * @brief Code to run when the redo button widget is pressed.
+ * @brief Code to run for the redo command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_redo_button() {
+void area_editor::redo_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(
         sub_state != EDITOR_SUB_STATE_NONE ||
         moving || selecting || cur_transformation_widget.is_moving_handle()
@@ -2437,9 +2548,13 @@ void area_editor::press_redo_button() {
 
 
 /**
- * @brief Code to run when the toggle reference button widget is pressed.
+ * @brief Code to run for the reference toggle command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_reference_button() {
+void area_editor::reference_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     show_reference = !show_reference;
     string state_str = (show_reference ? "Enabled" : "Disabled");
     save_reference();
@@ -2448,9 +2563,13 @@ void area_editor::press_reference_button() {
 
 
 /**
- * @brief Code to run when the reload button widget is pressed.
+ * @brief Code to run for the reload command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_reload_button() {
+void area_editor::reload_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!area_exists_on_disk) {
         return;
     }
@@ -2469,9 +2588,13 @@ void area_editor::press_reload_button() {
 
 
 /**
- * @brief Code to run when the remove edge button widget is pressed.
+ * @brief Code to run for the delete edge command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_remove_edge_button() {
+void area_editor::delete_edge_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     //Check if the user can delete.
     if(moving || selecting) {
         return;
@@ -2509,9 +2632,13 @@ void area_editor::press_remove_edge_button() {
 
 
 /**
- * @brief Code to run when the remove mob button widget is pressed.
+ * @brief Code to run for the delete mob command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_remove_mob_button() {
+void area_editor::delete_mob_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     //Check if the user can delete.
     if(moving || selecting) {
         return;
@@ -2546,9 +2673,13 @@ void area_editor::press_remove_mob_button() {
 
 
 /**
- * @brief Code to run when the remove path button widget is pressed.
+ * @brief Code to run for the delete path command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_remove_path_button() {
+void area_editor::delete_path_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     //Check if the user can delete.
     if(moving || selecting) {
         return;
@@ -2592,9 +2723,13 @@ void area_editor::press_remove_path_button() {
 
 
 /**
- * @brief Code to run when the remove tree shadow button widget is pressed.
+ * @brief Code to run for the remove tree shadow command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_remove_tree_shadow_button() {
+void area_editor::delete_tree_shadow_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(moving || selecting) {
         return;
     }
@@ -2626,9 +2761,13 @@ void area_editor::press_remove_tree_shadow_button() {
 
 
 /**
- * @brief Code to run when the save button widget is pressed.
+ * @brief Code to run for the save button command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_save_button() {
+void area_editor::save_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!save_area(false)) {
         return;
     }
@@ -2636,9 +2775,13 @@ void area_editor::press_save_button() {
 
 
 /**
- * @brief Code to run when the select all button widget is pressed.
+ * @brief Code to run for the select all command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_select_all_button() {
+void area_editor::select_all_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
         if(state == EDITOR_STATE_LAYOUT) {
             selected_edges.insert(
@@ -2690,9 +2833,13 @@ void area_editor::press_select_all_button() {
 
 
 /**
- * @brief Code to run when the selection filter button widget is pressed.
+ * @brief Code to run for the selection filter command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_selection_filter_button() {
+void area_editor::selection_filter_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     clear_selection();
     if(!is_shift_pressed) {
         selection_filter =
@@ -2725,9 +2872,13 @@ void area_editor::press_selection_filter_button() {
 
 
 /**
- * @brief Code to run when the snap mode button widget is pressed.
+ * @brief Code to run for the snap mode command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_snap_mode_button() {
+void area_editor::snap_mode_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!is_shift_pressed) {
         game.options.area_editor_snap_mode =
             (area_editor::SNAP_MODE)
@@ -2762,9 +2913,13 @@ void area_editor::press_snap_mode_button() {
 
 
 /**
- * @brief Code to run when the undo button widget is pressed.
+ * @brief Code to run for the undo command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_undo_button() {
+void area_editor::undo_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(
         sub_state != EDITOR_SUB_STATE_NONE ||
         moving || selecting || cur_transformation_widget.is_moving_handle()
@@ -2778,9 +2933,13 @@ void area_editor::press_undo_button() {
 
 
 /**
- * @brief Code to run when the zoom and position reset button widget is pressed.
+ * @brief Code to run for the zoom and position reset command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_zoom_and_pos_reset_button() {
+void area_editor::zoom_and_pos_reset_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(game.cam.target_zoom == 1.0f) {
         game.cam.target_pos = point();
     } else {
@@ -2790,9 +2949,13 @@ void area_editor::press_zoom_and_pos_reset_button() {
 
 
 /**
- * @brief Code to run when the zoom everything button widget is pressed.
+ * @brief Code to run for the zoom everything command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_zoom_everything_button() {
+void area_editor::zoom_everything_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     bool got_something = false;
     point min_coords, max_coords;
     
@@ -2854,9 +3017,13 @@ void area_editor::press_zoom_everything_button() {
 
 
 /**
- * @brief Code to run when the zoom in button widget is pressed.
+ * @brief Code to run for the zoom in command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_zoom_in_button() {
+void area_editor::zoom_in_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom +
@@ -2867,9 +3034,13 @@ void area_editor::press_zoom_in_button() {
 
 
 /**
- * @brief Code to run when the zoom out button widget is pressed.
+ * @brief Code to run for the zoom out command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void area_editor::press_zoom_out_button() {
+void area_editor::zoom_out_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom -

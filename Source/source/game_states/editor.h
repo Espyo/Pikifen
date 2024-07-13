@@ -475,6 +475,40 @@ protected:
     };
     
     
+    /**
+     * @brief Function executed by some command in the editor.
+     *
+     * The first parameter is the main value (0 to 1).
+     */
+    typedef std::function<void(float)> command_func_t;
+    
+    
+    /**
+     * @brief Represents one of the editor's possible commands.
+     * These are usually triggered by shortcuts.
+     */
+    struct command {
+    
+        public:
+        
+        //--- Function declarations ---
+        
+        command(command_func_t f, const string &n);
+        void run(float input_value);
+        
+        private:
+        
+        //--- Members ---
+        
+        //Function to run.
+        command_func_t func = nullptr;
+        
+        //Name.
+        string name;
+        
+    };
+    
+    
     //--- Members ---
     
     //Bitmap with all of the editor icons.
@@ -491,6 +525,9 @@ protected:
     
     //Manager of (unsaved) changes.
     changes_manager changes_mgr;
+    
+    //List of registered commands.
+    vector<command> commands;
     
     //Maps a custom mob category name to an index of the types' vector.
     map<string, size_t> custom_cat_name_idxs;

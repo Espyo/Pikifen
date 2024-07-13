@@ -412,7 +412,7 @@ void animation_editor::process_gui_menu_bar() {
             //Load file item.
             if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
-                press_load_button();
+                load_cmd(1.0f);
             }
             set_tooltip(
                 "Pick a file to load.",
@@ -422,7 +422,7 @@ void animation_editor::process_gui_menu_bar() {
             //Reload current file item.
             if(ImGui::MenuItem("Reload current file")) {
                 reload_widget_pos = get_last_widget_pos();
-                press_reload_button();
+                reload_cmd(1.0f);
             }
             set_tooltip(
                 "Lose all changes and reload the current file from the disk."
@@ -430,7 +430,7 @@ void animation_editor::process_gui_menu_bar() {
             
             //Save current file item.
             if(ImGui::MenuItem("Save current file", "Ctrl+S")) {
-                press_save_button();
+                save_cmd(1.0f);
             }
             set_tooltip(
                 "Save the animation data into the files on disk.",
@@ -451,7 +451,7 @@ void animation_editor::process_gui_menu_bar() {
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 quit_widget_pos = get_last_widget_pos();
-                press_quit_button();
+                quit_cmd(1.0f);
             }
             set_tooltip(
                 "Quit the animation editor.",
@@ -467,7 +467,7 @@ void animation_editor::process_gui_menu_bar() {
         
             //Zoom in item.
             if(ImGui::MenuItem("Zoom in", "Plus")) {
-                press_zoom_in_button();
+                zoom_in_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera in a bit.",
@@ -476,7 +476,7 @@ void animation_editor::process_gui_menu_bar() {
             
             //Zoom out item.
             if(ImGui::MenuItem("Zoom out", "Minus")) {
-                press_zoom_out_button();
+                zoom_out_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera out a bit.",
@@ -485,7 +485,7 @@ void animation_editor::process_gui_menu_bar() {
             
             //Zoom and position reset item.
             if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                press_zoom_and_pos_reset_button();
+                zoom_and_pos_reset_cmd(1.0f);
             }
             set_tooltip(
                 "Reset the zoom level, and if pressed again,\n"
@@ -495,7 +495,7 @@ void animation_editor::process_gui_menu_bar() {
             
             //Zoom everything item.
             if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                press_zoom_everything_button();
+                zoom_everything_cmd(1.0f);
             }
             set_tooltip(
                 "Move and zoom the camera so that everything in the area\n"
@@ -905,7 +905,7 @@ void animation_editor::process_gui_panel_animation() {
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
-                    press_play_animation_button();
+                    play_animation_cmd(1.0f);
                 }
                 set_tooltip(
                     "Play or pause the animation.\n"
@@ -2873,7 +2873,7 @@ void animation_editor::process_gui_toolbar() {
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
-        press_quit_button();
+        quit_cmd(1.0f);
     }
     set_tooltip(
         "Quit the animation editor.",
@@ -2890,7 +2890,7 @@ void animation_editor::process_gui_toolbar() {
         )
     ) {
         load_widget_pos = get_last_widget_pos();
-        press_load_button();
+        load_cmd(1.0f);
     }
     set_tooltip(
         "Pick a file to load.",
@@ -2908,7 +2908,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_save_button();
+        save_cmd(1.0f);
     }
     set_tooltip(
         "Save the animation data into the files on disk.",
@@ -2924,7 +2924,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_grid_button();
+        grid_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Toggle visibility of the grid.",
@@ -2940,7 +2940,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_hitboxes_button();
+        hitboxes_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Toggle visibility of the hitboxes, if any.",
@@ -2956,7 +2956,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_mob_radius_button();
+        mob_radius_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Toggle visibility of the mob's radius, if applicable.",
@@ -2972,7 +2972,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_leader_silhouette_button();
+        leader_silhouette_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Toggle visibility of a leader silhouette.",

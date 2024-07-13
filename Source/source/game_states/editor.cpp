@@ -2172,6 +2172,28 @@ void editor::changes_manager::reset() {
 
 
 /**
+ * @brief Constructs a new command object.
+ *
+ * @param f Function to run.
+ * @param n Name.
+ */
+editor::command::command(command_func_t f, const string &n) :
+    func(f),
+    name(n) {
+}
+
+
+/**
+ * @brief Runs the function.
+ *
+ * @param input_value Input value, if needed by the command.
+ */
+void editor::command::run(float input_value) {
+    func(input_value);
+}
+
+
+/**
  * @brief Processes the dialog for this frame.
  */
 void editor::dialog_info::process() {

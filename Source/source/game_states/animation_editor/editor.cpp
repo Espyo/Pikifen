@@ -84,6 +84,34 @@ animation_editor::animation_editor() {
     
     zoom_min_level = ANIM_EDITOR::ZOOM_MIN_LEVEL;
     zoom_max_level = ANIM_EDITOR::ZOOM_MAX_LEVEL;
+    
+#define register_cmd(ptr, name) \
+    commands.push_back( \
+                        command(std::bind((ptr), this, std::placeholders::_1), \
+                                (name)) \
+                      );
+    
+    register_cmd(&animation_editor::grid_toggle_cmd, "grid_toggle");
+    register_cmd(&animation_editor::hitboxes_toggle_cmd, "hitboxes_toggle");
+    register_cmd(
+        &animation_editor::leader_silhouette_toggle_cmd,
+        "leader_silhouette_toggle"
+    );
+    register_cmd(&animation_editor::load_cmd, "load");
+    register_cmd(&animation_editor::mob_radius_toggle_cmd, "mob_radius_toggle");
+    register_cmd(&animation_editor::play_animation_cmd, "play_animation");
+    register_cmd(&animation_editor::quit_cmd, "quit");
+    register_cmd(&animation_editor::reload_cmd, "reload");
+    register_cmd(&animation_editor::save_cmd, "save");
+    register_cmd(
+        &animation_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
+    );
+    register_cmd(&animation_editor::zoom_everything_cmd, "zoom_everything");
+    register_cmd(&animation_editor::zoom_in_cmd, "zoom_in");
+    register_cmd(&animation_editor::zoom_out_cmd, "zoom_out");
+    
+#undef register_cmd
+    
 }
 
 
@@ -623,9 +651,13 @@ void animation_editor::play_sound(size_t sound_idx) {
 
 
 /**
- * @brief Code to run when the grid button widget is pressed.
+ * @brief Code to run for the grid toggle command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_grid_button() {
+void animation_editor::grid_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     grid_visible = !grid_visible;
     string state_str = (grid_visible ? "Enabled" : "Disabled");
     set_status(state_str + " grid visibility.");
@@ -633,9 +665,13 @@ void animation_editor::press_grid_button() {
 
 
 /**
- * @brief Code to run when the hitboxes button widget is pressed.
+ * @brief Code to run for the hitboxes toggle command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_hitboxes_button() {
+void animation_editor::hitboxes_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     hitboxes_visible = !hitboxes_visible;
     string state_str = (hitboxes_visible ? "Enabled" : "Disabled");
     set_status(state_str + " hitbox visibility.");
@@ -643,9 +679,13 @@ void animation_editor::press_hitboxes_button() {
 
 
 /**
- * @brief Code to run when the leader silhouette button widget is pressed.
+ * @brief Code to run for the leader silhouette toggle command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_leader_silhouette_button() {
+void animation_editor::leader_silhouette_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     leader_silhouette_visible = !leader_silhouette_visible;
     string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
     set_status(state_str + " leader silhouette visibility.");
@@ -653,9 +693,13 @@ void animation_editor::press_leader_silhouette_button() {
 
 
 /**
- * @brief Code to run when the load file button widget is pressed.
+ * @brief Code to run for the load file command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_load_button() {
+void animation_editor::load_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         load_widget_pos,
         "loading a file", "load",
@@ -666,9 +710,13 @@ void animation_editor::press_load_button() {
 
 
 /**
- * @brief Code to run when the mob radius button widget is pressed.
+ * @brief Code to run for the mob radius toggle command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_mob_radius_button() {
+void animation_editor::mob_radius_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     mob_radius_visible = !mob_radius_visible;
     string state_str = (mob_radius_visible ? "Enabled" : "Disabled");
     set_status(state_str + " object radius visibility.");
@@ -676,9 +724,13 @@ void animation_editor::press_mob_radius_button() {
 
 
 /**
- * @brief Code to run when the play animation button widget is pressed.
+ * @brief Code to run for the play animation command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_play_animation_button() {
+void animation_editor::play_animation_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!cur_anim_i.valid_frame()) {
         anim_playing = false;
     } else {
@@ -698,9 +750,13 @@ void animation_editor::press_play_animation_button() {
 
 
 /**
- * @brief Code to run when the quit button widget is pressed.
+ * @brief Code to run for the quit command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_quit_button() {
+void animation_editor::quit_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         quit_widget_pos,
         "quitting", "quit",
@@ -711,9 +767,13 @@ void animation_editor::press_quit_button() {
 
 
 /**
- * @brief Code to run when the reload button widget is pressed.
+ * @brief Code to run for the reload command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_reload_button() {
+void animation_editor::reload_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!animation_exists_on_disk) return;
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
@@ -725,9 +785,13 @@ void animation_editor::press_reload_button() {
 
 
 /**
- * @brief Code to run when the save button widget is pressed.
+ * @brief Code to run for the save command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_save_button() {
+void animation_editor::save_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!can_save) return;
     save_animation_database();
 }
@@ -735,8 +799,12 @@ void animation_editor::press_save_button() {
 
 /**
  * @brief Code to run when the zoom and position reset button widget is pressed.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_zoom_and_pos_reset_button() {
+void animation_editor::zoom_and_pos_reset_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(game.cam.target_zoom == 1.0f) {
         game.cam.target_pos = point();
     } else {
@@ -746,10 +814,13 @@ void animation_editor::press_zoom_and_pos_reset_button() {
 
 
 /**
- * @brief Code to run when the zoom everything button widget is pressed.
+ * @brief Code to run for the zoom everything command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_zoom_everything_button() {
-
+void animation_editor::zoom_everything_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     sprite* s_ptr = cur_sprite;
     if(!s_ptr && cur_anim_i.valid_frame()) {
         string name =
@@ -791,9 +862,13 @@ void animation_editor::press_zoom_everything_button() {
 
 
 /**
- * @brief Code to run when the zoom in button widget is pressed.
+ * @brief Code to run for the zoom in command
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_zoom_in_button() {
+void animation_editor::zoom_in_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom +
@@ -804,9 +879,13 @@ void animation_editor::press_zoom_in_button() {
 
 
 /**
- * @brief Code to run when the zoom out button widget is pressed.
+ * @brief Code to run for the zoom out command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void animation_editor::press_zoom_out_button() {
+void animation_editor::zoom_out_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom -

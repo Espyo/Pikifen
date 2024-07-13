@@ -302,7 +302,7 @@ void area_editor::process_gui_menu_bar() {
             //Load or create area item.
             if(ImGui::MenuItem("Load or create area...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
-                press_load_button();
+                load_cmd(1.0f);
             }
             set_tooltip(
                 "Pick an area to load, or create a new one.",
@@ -312,7 +312,7 @@ void area_editor::process_gui_menu_bar() {
             //Reload current area item.
             if(ImGui::MenuItem("Reload current area")) {
                 reload_widget_pos = get_last_widget_pos();
-                press_reload_button();
+                reload_cmd(1.0f);
             }
             set_tooltip(
                 "Lose all changes and reload the current area from the disk."
@@ -320,7 +320,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Save current area item.
             if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
-                press_save_button();
+                save_cmd(1.0f);
             }
             set_tooltip(
                 "Save the area into the files on disk.",
@@ -329,7 +329,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Delete current area item.
             if(ImGui::MenuItem("Delete current area")) {
-                press_delete_area_button();
+                delete_area_cmd(1.0f);
             }
             set_tooltip(
                 "Delete the current area from the disk."
@@ -337,7 +337,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Quick play item.
             if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
-                press_quick_play_button();
+                quick_play_cmd(1.0f);
             }
             set_tooltip(
                 "Save, quit, and start playing the area. Leaving will return"
@@ -451,7 +451,7 @@ void area_editor::process_gui_menu_bar() {
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 quit_widget_pos = get_last_widget_pos();
-                press_quit_button();
+                quit_cmd(1.0f);
             }
             set_tooltip(
                 "Quit the area editor.",
@@ -467,7 +467,7 @@ void area_editor::process_gui_menu_bar() {
         
             //Undo item.
             if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
-                press_undo_button();
+                undo_cmd(1.0f);
             }
             string undo_text;
             if(undo_history.empty()) {
@@ -482,7 +482,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Redo item.
             if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
-                press_redo_button();
+                redo_cmd(1.0f);
             }
             string redo_text;
             if(redo_history.empty()) {
@@ -502,7 +502,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Copy properties item.
             if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
-                press_copy_properties_button();
+                copy_properties_cmd(1.0f);
             }
             set_tooltip(
                 "Copies the properties of what you selected, if applicable.",
@@ -511,7 +511,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Paste properties item.
             if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
-                press_paste_properties_button();
+                paste_properties_cmd(1.0f);
             }
             set_tooltip(
                 "Pastes previously-copied properties onto what you selected, "
@@ -525,7 +525,7 @@ void area_editor::process_gui_menu_bar() {
             ) {
                 //Paste texture item.
                 if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
-                    press_paste_texture_button();
+                    paste_texture_cmd(1.0f);
                 }
                 set_tooltip(
                     "Pastes a previously-copied sector's texture onto "
@@ -539,7 +539,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Select all item.
             if(ImGui::MenuItem("Select all", "Ctrl+A")) {
-                press_select_all_button();
+                select_all_cmd(1.0f);
             }
             set_tooltip(
                 "Selects everything in the current mode, if applicable.",
@@ -548,7 +548,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Delete item.
             if(ImGui::MenuItem("Delete", "Delete")) {
-                press_delete_button();
+                delete_cmd(1.0f);
             }
             set_tooltip(
                 "Deletes the selected things, if applicable.",
@@ -564,7 +564,7 @@ void area_editor::process_gui_menu_bar() {
         
             //Zoom in item.
             if(ImGui::MenuItem("Zoom in", "Plus")) {
-                press_zoom_in_button();
+                zoom_in_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera in a bit.",
@@ -573,7 +573,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Zoom out item.
             if(ImGui::MenuItem("Zoom out", "Minus")) {
-                press_zoom_out_button();
+                zoom_out_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera out a bit.",
@@ -582,7 +582,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Zoom and position reset item.
             if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                press_zoom_and_pos_reset_button();
+                zoom_and_pos_reset_cmd(1.0f);
             }
             set_tooltip(
                 "Reset the zoom level, and if pressed again,\n"
@@ -592,7 +592,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Zoom everything item.
             if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                press_zoom_everything_button();
+                zoom_everything_cmd(1.0f);
             }
             set_tooltip(
                 "Move and zoom the camera so that everything in the area\n"
@@ -1123,7 +1123,7 @@ void area_editor::process_gui_options_dialog() {
         //Increase grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("+")) {
-            press_grid_interval_increase_button();
+            grid_interval_increase_cmd(1.0f);
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
@@ -1135,7 +1135,7 @@ void area_editor::process_gui_options_dialog() {
         //Decrease grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("-")) {
-            press_grid_interval_decrease_button();
+            grid_interval_decrease_cmd(1.0f);
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
@@ -1230,7 +1230,7 @@ void area_editor::process_gui_panel_details() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                press_new_tree_shadow_button();
+                new_tree_shadow_cmd(1.0f);
             }
             set_tooltip(
                 "Start creating a new tree shadow.\n"
@@ -1248,7 +1248,7 @@ void area_editor::process_gui_panel_details() {
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
-                    press_remove_tree_shadow_button();
+                    delete_tree_shadow_cmd(1.0f);
                 }
                 set_tooltip(
                     "Delete the selected tree shadow.",
@@ -2324,7 +2324,7 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_layout_drawing_button();
+            layout_drawing_cmd(1.0f);
         }
         set_tooltip(
             "Start drawing a new sector.\n"
@@ -2341,7 +2341,7 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_circle_sector_button();
+            circle_sector_cmd(1.0f);
         }
         set_tooltip(
             "Start creating a new circular sector.\n"
@@ -2360,7 +2360,7 @@ void area_editor::process_gui_panel_layout() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                press_remove_edge_button();
+                delete_edge_cmd(1.0f);
             }
             set_tooltip(
                 "Delete the selected edges.\n"
@@ -2401,7 +2401,7 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_selection_filter_button();
+            selection_filter_cmd(1.0f);
         }
         set_tooltip(
             "Current selection filter: " + sel_filter_description + ".\n"
@@ -4320,7 +4320,7 @@ void area_editor::process_gui_panel_mobs() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_new_mob_button();
+            new_mob_cmd(1.0f);
         }
         set_tooltip(
             "Start creating a new object.\n"
@@ -4339,7 +4339,7 @@ void area_editor::process_gui_panel_mobs() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                press_remove_mob_button();
+                delete_mob_cmd(1.0f);
             }
             set_tooltip(
                 "Delete all selected objects.\n",
@@ -4355,7 +4355,7 @@ void area_editor::process_gui_panel_mobs() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                press_duplicate_mobs_button();
+                duplicate_mobs_cmd(1.0f);
             }
             set_tooltip(
                 "Start duplicating the selected objects.\n"
@@ -4641,7 +4641,7 @@ void area_editor::process_gui_panel_paths() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_new_path_button();
+            new_path_cmd(1.0f);
         }
         set_tooltip(
             "Start drawing a new path.\n"
@@ -4662,7 +4662,7 @@ void area_editor::process_gui_panel_paths() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                press_remove_path_button();
+                delete_path_cmd(1.0f);
             }
             set_tooltip(
                 "Delete all selected path stops and/or path links.\n",
@@ -5844,7 +5844,7 @@ void area_editor::process_gui_toolbar() {
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
-        press_quit_button();
+        quit_cmd(1.0f);
     }
     set_tooltip(
         "Quit the area editor.",
@@ -5861,7 +5861,7 @@ void area_editor::process_gui_toolbar() {
         )
     ) {
         load_widget_pos = get_last_widget_pos();
-        press_load_button();
+        load_cmd(1.0f);
     }
     set_tooltip(
         "Pick an area to load, or create a new one.",
@@ -5879,7 +5879,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_save_button();
+        save_cmd(1.0f);
     }
     set_tooltip(
         "Save the area into the files on disk.",
@@ -5895,7 +5895,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_quick_play_button();
+        quick_play_cmd(1.0f);
     }
     set_tooltip(
         "Save, quit, and start playing the area. Leaving will return "
@@ -5917,7 +5917,7 @@ void area_editor::process_gui_toolbar() {
             ImVec4(1.0f, 1.0f, 1.0f, undo_opacity)
         )
     ) {
-        press_undo_button();
+        undo_cmd(1.0f);
     }
     string undo_text;
     if(undo_history.empty()) {
@@ -5944,7 +5944,7 @@ void area_editor::process_gui_toolbar() {
             ImVec4(1.0f, 1.0f, 1.0f, redo_opacity)
         )
     ) {
-        press_redo_button();
+        redo_cmd(1.0f);
     }
     string redo_text;
     if(redo_history.empty()) {
@@ -5970,7 +5970,7 @@ void area_editor::process_gui_toolbar() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_reference_button();
+            reference_toggle_cmd(1.0f);
         }
         set_tooltip(
             "Toggle the visibility of the reference image.",
@@ -6026,7 +6026,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_snap_mode_button();
+        snap_mode_cmd(1.0f);
     }
     set_tooltip(
         "Current snap mode: " + snap_mode_description,

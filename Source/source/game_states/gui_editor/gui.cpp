@@ -201,7 +201,7 @@ void gui_editor::process_gui_menu_bar() {
             //Load file item.
             if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
-                press_load_button();
+                load_cmd(1.0f);
             }
             set_tooltip(
                 "Pick a GUI file to load.",
@@ -211,7 +211,7 @@ void gui_editor::process_gui_menu_bar() {
             //Reload current file item.
             if(ImGui::MenuItem("Reload current file")) {
                 reload_widget_pos = get_last_widget_pos();
-                press_reload_button();
+                reload_cmd(1.0f);
             }
             set_tooltip(
                 "Lose all changes and reload the current file from the disk."
@@ -219,7 +219,7 @@ void gui_editor::process_gui_menu_bar() {
             
             //Save file item.
             if(ImGui::MenuItem("Save file", "Ctrl+S")) {
-                press_save_button();
+                save_cmd(1.0f);
             }
             set_tooltip(
                 "Save the GUI into the file on disk.",
@@ -240,7 +240,7 @@ void gui_editor::process_gui_menu_bar() {
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 quit_widget_pos = get_last_widget_pos();
-                press_quit_button();
+                quit_cmd(1.0f);
             }
             set_tooltip(
                 "Quit the GUI editor.",
@@ -256,7 +256,7 @@ void gui_editor::process_gui_menu_bar() {
         
             //Zoom in item.
             if(ImGui::MenuItem("Zoom in", "Plus")) {
-                press_zoom_in_button();
+                zoom_in_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera in a bit.",
@@ -265,7 +265,7 @@ void gui_editor::process_gui_menu_bar() {
             
             //Zoom out item.
             if(ImGui::MenuItem("Zoom out", "Minus")) {
-                press_zoom_out_button();
+                zoom_out_cmd(1.0f);
             }
             set_tooltip(
                 "Zooms the camera out a bit.",
@@ -274,7 +274,7 @@ void gui_editor::process_gui_menu_bar() {
             
             //Zoom and position reset item.
             if(ImGui::MenuItem("Reset", "0")) {
-                press_zoom_and_pos_reset_button();
+                zoom_and_pos_reset_cmd(1.0f);
             }
             set_tooltip(
                 "Reset the zoom level and camera position.",
@@ -365,7 +365,7 @@ void gui_editor::process_gui_options_dialog() {
         //Increase grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("+")) {
-            press_grid_interval_increase_button();
+            grid_interval_increase_cmd(1.0f);
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
@@ -377,7 +377,7 @@ void gui_editor::process_gui_options_dialog() {
         //Decrease grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("-")) {
-            press_grid_interval_decrease_button();
+            grid_interval_decrease_cmd(1.0f);
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
@@ -579,7 +579,7 @@ void gui_editor::process_gui_toolbar() {
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
-        press_quit_button();
+        quit_cmd(1.0f);
     }
     set_tooltip(
         "Quit the GUI editor.",
@@ -596,7 +596,7 @@ void gui_editor::process_gui_toolbar() {
         )
     ) {
         load_widget_pos = get_last_widget_pos();
-        press_load_button();
+        load_cmd(1.0f);
     }
     set_tooltip(
         "Pick a GUI file to load.",
@@ -614,7 +614,7 @@ void gui_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_save_button();
+        save_cmd(1.0f);
     }
     set_tooltip(
         "Save the GUI into the file on disk.",
@@ -640,7 +640,7 @@ void gui_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_snap_mode_button();
+        snap_mode_cmd(1.0f);
     }
     set_tooltip(
         "Current snap mode: " + snap_mode_description,

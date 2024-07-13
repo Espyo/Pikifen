@@ -36,24 +36,24 @@ void gui_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        press_zoom_out_button();
+        zoom_out_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        press_zoom_in_button();
+        zoom_in_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
-        press_grid_interval_decrease_button();
+        grid_interval_decrease_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
         //Again, not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        press_grid_interval_increase_button();
+        grid_interval_increase_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         reset_cam(false);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
-        press_snap_mode_button();
+        snap_mode_cmd(1.0f);
         
     }
 }
@@ -66,13 +66,13 @@ void gui_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  */
 void gui_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
-        press_load_button();
+        load_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
-        press_quit_button();
+        quit_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
-        press_save_button();
+        save_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;

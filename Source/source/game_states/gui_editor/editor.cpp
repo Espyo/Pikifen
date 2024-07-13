@@ -45,6 +45,29 @@ gui_editor::gui_editor() :
     
     zoom_max_level = GUI_EDITOR::ZOOM_MAX_LEVEL;
     zoom_min_level = GUI_EDITOR::ZOOM_MIN_LEVEL;
+    
+#define register_cmd(ptr, name) \
+    commands.push_back( \
+                        command(std::bind((ptr), this, std::placeholders::_1), \
+                                (name)) \
+                      );
+    
+    register_cmd(
+        &gui_editor::grid_interval_decrease_cmd, "grid_interval_decrease"
+    );
+    register_cmd(
+        &gui_editor::grid_interval_increase_cmd, "grid_interval_increase"
+    );
+    register_cmd(&gui_editor::load_cmd, "load");
+    register_cmd(&gui_editor::quit_cmd, "quit");
+    register_cmd(&gui_editor::reload_cmd, "reload");
+    register_cmd(&gui_editor::save_cmd, "save");
+    register_cmd(&gui_editor::snap_mode_cmd, "snap_mode");
+    register_cmd(&gui_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset");
+    register_cmd(&gui_editor::zoom_in_cmd, "zoom_in");
+    register_cmd(&gui_editor::zoom_out_cmd, "zoom_out");
+    
+#undef register_cmd
 }
 
 
@@ -233,9 +256,13 @@ void gui_editor::pick_file(
 
 
 /**
- * @brief Code to run when the grid interval decrease button is pressed.
+ * @brief Code to run for the grid interval decrease command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_grid_interval_decrease_button() {
+void gui_editor::grid_interval_decrease_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS[0];
     for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); ++i) {
         if(
@@ -255,9 +282,13 @@ void gui_editor::press_grid_interval_decrease_button() {
 
 
 /**
- * @brief Code to run when the grid interval increase button is pressed.
+ * @brief Code to run for the grid interval increase command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_grid_interval_increase_button() {
+void gui_editor::grid_interval_increase_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS.back();
     for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
@@ -277,9 +308,13 @@ void gui_editor::press_grid_interval_increase_button() {
 
 
 /**
- * @brief Code to run when the load button widget is pressed.
+ * @brief Code to run for the load command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_load_button() {
+void gui_editor::load_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         load_widget_pos,
         "loading a file", "load",
@@ -290,9 +325,13 @@ void gui_editor::press_load_button() {
 
 
 /**
- * @brief Code to run when the quit button widget is pressed.
+ * @brief Code to run for the quit command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_quit_button() {
+void gui_editor::quit_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         quit_widget_pos,
         "quitting", "quit",
@@ -303,9 +342,13 @@ void gui_editor::press_quit_button() {
 
 
 /**
- * @brief Code to run when the reload button widget is pressed.
+ * @brief Code to run for the reload command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_reload_button() {
+void gui_editor::reload_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
@@ -316,9 +359,13 @@ void gui_editor::press_reload_button() {
 
 
 /**
- * @brief Code to run when the save button widget is pressed.
+ * @brief Code to run for the save command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_save_button() {
+void gui_editor::save_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     if(!save_file()) {
         return;
     }
@@ -326,9 +373,13 @@ void gui_editor::press_save_button() {
 
 
 /**
- * @brief Code to run when the snap mode button widget is pressed.
+ * @brief Code to run for the snap mode command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_snap_mode_button() {
+void gui_editor::snap_mode_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.options.gui_editor_snap = !game.options.gui_editor_snap;
     string final_status_text = "Set snap mode to ";
     if(game.options.gui_editor_snap) {
@@ -342,17 +393,25 @@ void gui_editor::press_snap_mode_button() {
 
 
 /**
- * @brief Code to run when the zoom and position reset button widget is pressed.
+ * @brief Code to run for the zoom and position reset command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_zoom_and_pos_reset_button() {
+void gui_editor::zoom_and_pos_reset_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     reset_cam(false);
 }
 
 
 /**
- * @brief Code to run when the zoom in button widget is pressed.
+ * @brief Code to run for the zoom in command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_zoom_in_button() {
+void gui_editor::zoom_in_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom +
@@ -363,9 +422,13 @@ void gui_editor::press_zoom_in_button() {
 
 
 /**
- * @brief Code to run when the zoom out button widget is pressed.
+ * @brief Code to run for the zoom out command.
+ *
+ * @param input_value Value of the player input for the command.
  */
-void gui_editor::press_zoom_out_button() {
+void gui_editor::zoom_out_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
     game.cam.target_zoom =
         clamp(
             game.cam.target_zoom -

@@ -40,14 +40,14 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        press_zoom_out_button();
+        zoom_out_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        press_zoom_in_button();
+        zoom_in_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        press_zoom_and_pos_reset_button();
+        zoom_and_pos_reset_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
@@ -65,25 +65,25 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  */
 void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
-        press_grid_button();
+        grid_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_H, true)) {
-        press_hitboxes_button();
+        hitboxes_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
-        press_load_button();
+        load_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
-        press_leader_silhouette_button();
+        leader_silhouette_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
-        press_quit_button();
+        quit_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
-        press_mob_radius_button();
+        mob_radius_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
-        press_save_button();
+        save_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
     
@@ -95,7 +95,7 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         } else {
             switch(state) {
             case EDITOR_STATE_MAIN: {
-                press_quit_button();
+                quit_cmd(1.0f);
                 break;
             }
             }
@@ -115,10 +115,10 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE) ||
         key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)
     ) {
-        press_play_animation_button();
+        play_animation_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        press_zoom_everything_button();
+        zoom_everything_cmd(1.0f);
         
     }
 }

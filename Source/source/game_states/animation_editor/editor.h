@@ -272,19 +272,19 @@ private:
     void pick_sprite(
         const string &name, const string &category, const bool is_new
     );
-    void press_grid_button();
-    void press_hitboxes_button();
-    void press_leader_silhouette_button();
-    void press_load_button();
-    void press_mob_radius_button();
-    void press_play_animation_button();
-    void press_quit_button();
-    void press_reload_button();
-    void press_save_button();
-    void press_zoom_and_pos_reset_button();
-    void press_zoom_everything_button();
-    void press_zoom_in_button();
-    void press_zoom_out_button();
+    void grid_toggle_cmd(float input_value);
+    void hitboxes_toggle_cmd(float input_value);
+    void leader_silhouette_toggle_cmd(float input_value);
+    void load_cmd(float input_value);
+    void mob_radius_toggle_cmd(float input_value);
+    void play_animation_cmd(float input_value);
+    void quit_cmd(float input_value);
+    void reload_cmd(float input_value);
+    void save_cmd(float input_value);
+    void zoom_and_pos_reset_cmd(float input_value);
+    void zoom_everything_cmd(float input_value);
+    void zoom_in_cmd(float input_value);
+    void zoom_out_cmd(float input_value);
     void process_gui();
     void process_gui_control_panel();
     void process_gui_hitbox_hazards();

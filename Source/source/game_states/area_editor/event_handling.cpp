@@ -68,10 +68,10 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Y, true)) {
-        press_redo_button();
+        redo_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Z, true)) {
-        press_undo_button();
+        undo_cmd(1.0f);
         
     }
 }
@@ -100,21 +100,21 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        press_zoom_out_button();
+        zoom_out_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        press_zoom_in_button();
+        zoom_in_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
-        press_grid_interval_decrease_button();
+        grid_interval_decrease_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
         //Again, not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        press_grid_interval_increase_button();
+        grid_interval_increase_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        press_zoom_and_pos_reset_button();
+        zoom_and_pos_reset_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R)) {
         if(state == EDITOR_STATE_MOBS && sub_state == EDITOR_SUB_STATE_NONE) {
@@ -122,11 +122,11 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
-        press_snap_mode_button();
+        snap_mode_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X, false, true)) {
         //Toggles the snap modes backwards.
-        press_snap_mode_button();
+        snap_mode_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_BACKSPACE)) {
         undo_layout_drawing_node();
@@ -142,19 +142,19 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
-        press_load_button();
+        load_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
-        press_quick_play_button();
+        quick_play_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
-        press_quit_button();
+        quit_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
-        press_reference_button();
+        reference_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
-        press_save_button();
+        save_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
@@ -209,7 +209,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             }
             
         } else if(state == EDITOR_STATE_MAIN) {
-            press_quit_button();
+            quit_cmd(1.0f);
             
         }
         
@@ -243,7 +243,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_A, true)) {
-        press_select_all_button();
+        select_all_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C)) {
         if(
@@ -251,11 +251,11 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             sub_state == EDITOR_SUB_STATE_NONE &&
             !moving && !selecting
         ) {
-            press_circle_sector_button();
+            circle_sector_cmd(1.0f);
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
-        press_copy_properties_button();
+        copy_properties_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(
@@ -267,15 +267,15 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D, true)) {
         if(state == EDITOR_STATE_MOBS && !moving && !selecting) {
-            press_duplicate_mobs_button();
+            duplicate_mobs_cmd(1.0f);
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F)) {
-        press_selection_filter_button();
+        selection_filter_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F, false, true)) {
         //Toggles the filter modes backwards.
-        press_selection_filter_button();
+        selection_filter_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_H)) {
         if(state == EDITOR_STATE_LAYOUT && sub_state == EDITOR_SUB_STATE_NONE) {
@@ -324,16 +324,16 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
-            press_layout_drawing_button();
+            layout_drawing_cmd(1.0f);
             break;
         } case EDITOR_STATE_MOBS: {
-            press_new_mob_button();
+            new_mob_cmd(1.0f);
             break;
         } case EDITOR_STATE_PATHS: {
-            press_new_path_button();
+            new_path_cmd(1.0f);
             break;
         } case EDITOR_STATE_DETAILS: {
-            press_new_tree_shadow_button();
+            new_tree_shadow_cmd(1.0f);
             break;
         }
         }
@@ -358,16 +358,16 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         preview_mode = !preview_mode;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_T, true)) {
-        press_paste_texture_button();
+        paste_texture_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_V, true)) {
-        press_paste_properties_button();
+        paste_properties_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {
-        press_delete_button();
+        delete_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        press_zoom_everything_button();
+        zoom_everything_cmd(1.0f);
         
     }
 }
