@@ -104,7 +104,7 @@ void gui_editor::draw_canvas() {
             clip_x, clip_y, clip_w, clip_h
         );
         draw_scaled_text(
-            game.fonts.builtin,
+            game.sys_assets.fnt_builtin,
             al_map_rgb(40, 40, 96),
             point(
                 (items[i].center.x - items[i].size.x / 2.0f) +

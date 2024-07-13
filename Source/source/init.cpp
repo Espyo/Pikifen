@@ -86,13 +86,6 @@ void destroy_event_things(
  */
 void destroy_misc() {
     al_destroy_bitmap(game.bmp_error);
-    al_destroy_font(game.fonts.area_name);
-    al_destroy_font(game.fonts.counter);
-    al_destroy_font(game.fonts.cursor_counter);
-    al_destroy_font(game.fonts.slim);
-    al_destroy_font(game.fonts.standard);
-    al_destroy_font(game.fonts.value);
-    
     game.audio.destroy();
 }
 

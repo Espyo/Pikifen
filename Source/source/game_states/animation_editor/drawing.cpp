@@ -565,7 +565,7 @@ void animation_editor::draw_timeline() {
                 text = text.substr(1, 3);
             }
             al_draw_text(
-                game.fonts.builtin, al_map_rgb(32, 32, 32),
+                game.sys_assets.fnt_builtin, al_map_rgb(32, 32, 32),
                 floor(x_to_use) + 2,
                 canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2,
                 ALLEGRO_ALIGN_LEFT,

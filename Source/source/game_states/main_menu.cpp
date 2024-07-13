@@ -70,7 +70,7 @@ void main_menu_state::do_drawing() {
     }
     
     draw_scaled_text(
-        game.fonts.standard, COLOR_WHITE,
+        game.sys_assets.fnt_standard, COLOR_WHITE,
         point(8, game.win_h  - 8),
         point(0.6, 0.6),
         ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_BOTTOM,
@@ -87,7 +87,7 @@ void main_menu_state::do_drawing() {
     version_text +=
         "Pikifen " + get_engine_version_string();
     draw_scaled_text(
-        game.fonts.standard, COLOR_WHITE,
+        game.sys_assets.fnt_standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),
         point(0.6, 0.6),
         ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_MODE_BOTTOM,
@@ -221,7 +221,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Play button.
     button_gui_item* play_button =
-        new button_gui_item("Play", game.fonts.area_name);
+        new button_gui_item("Play", game.sys_assets.fnt_area_name);
     play_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -261,7 +261,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Make button.
     button_gui_item* make_button =
-        new button_gui_item("Make", game.fonts.area_name);
+        new button_gui_item("Make", game.sys_assets.fnt_area_name);
     make_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -293,7 +293,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Options button.
     button_gui_item* options_button =
-        new button_gui_item("Options", game.fonts.area_name);
+        new button_gui_item("Options", game.sys_assets.fnt_area_name);
     options_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -319,7 +319,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Statistics button.
     button_gui_item* stats_button =
-        new button_gui_item("Statistics", game.fonts.area_name);
+        new button_gui_item("Statistics", game.sys_assets.fnt_area_name);
     stats_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -344,7 +344,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Exit button.
     main_gui.back_item =
-        new button_gui_item("Exit", game.fonts.area_name);
+        new button_gui_item("Exit", game.sys_assets.fnt_area_name);
     main_gui.back_item->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -414,7 +414,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Animation editor button.
     button_gui_item* anim_ed_button =
-        new button_gui_item("Animation editor", game.fonts.area_name);
+        new button_gui_item("Animation editor", game.sys_assets.fnt_area_name);
     anim_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -439,7 +439,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Area editor button.
     button_gui_item* area_ed_button =
-        new button_gui_item("Area editor", game.fonts.area_name);
+        new button_gui_item("Area editor", game.sys_assets.fnt_area_name);
     area_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -464,7 +464,7 @@ void main_menu_state::init_gui_make_page() {
     
     //GUI editor button.
     button_gui_item* gui_ed_button =
-        new button_gui_item("GUI editor", game.fonts.area_name);
+        new button_gui_item("GUI editor", game.sys_assets.fnt_area_name);
     gui_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -489,7 +489,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Back button.
     make_gui.back_item =
-        new button_gui_item("Back", game.fonts.area_name);
+        new button_gui_item("Back", game.sys_assets.fnt_area_name);
     make_gui.back_item->on_activate =
     [this] (const point &) {
         make_gui.responsive = false;
@@ -511,7 +511,7 @@ void main_menu_state::init_gui_make_page() {
     
     //More bullet point.
     bullet_point_gui_item* more_bullet =
-        new bullet_point_gui_item("More...", game.fonts.standard);
+        new bullet_point_gui_item("More...", game.sys_assets.fnt_standard);
     more_bullet->on_get_tooltip =
     [] () {
         return
@@ -558,7 +558,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Play a simple area button.
     button_gui_item* simple_button =
-        new button_gui_item("Simple areas", game.fonts.area_name);
+        new button_gui_item("Simple areas", game.sys_assets.fnt_area_name);
     simple_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -584,7 +584,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Play a mission area button.
     button_gui_item* mission_button =
-        new button_gui_item("Missions", game.fonts.area_name);
+        new button_gui_item("Missions", game.sys_assets.fnt_area_name);
     mission_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -614,7 +614,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Back button.
     play_gui.back_item =
-        new button_gui_item("Back", game.fonts.area_name);
+        new button_gui_item("Back", game.sys_assets.fnt_area_name);
     play_gui.back_item->on_activate =
     [this] (const point &) {
         play_gui.responsive = false;
@@ -665,14 +665,14 @@ void main_menu_state::init_gui_tutorial_page() {
         "If you're new to Pikifen, it is recommended to play the "
         "\"Tutorial Meadow\" mission first.\n\n"
         "Do you want to play there now?",
-        game.fonts.standard
+        game.sys_assets.fnt_standard
     );
     question_text->line_wrap = true;
     tutorial_gui.add_item(question_text, "question");
     
     //No button.
     tutorial_gui.back_item =
-        new button_gui_item("No", game.fonts.standard);
+        new button_gui_item("No", game.sys_assets.fnt_standard);
     tutorial_gui.back_item->on_activate =
     [this] (const point &) {
         tutorial_gui.responsive = false;
@@ -695,7 +695,7 @@ void main_menu_state::init_gui_tutorial_page() {
     
     //Yes button.
     button_gui_item* yes_button =
-        new button_gui_item("Yes", game.fonts.standard);
+        new button_gui_item("Yes", game.sys_assets.fnt_standard);
     yes_button->on_activate =
     [] (const point &) {
         game.states.gameplay->path_of_area_to_load =

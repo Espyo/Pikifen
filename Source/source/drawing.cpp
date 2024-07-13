@@ -542,20 +542,20 @@ void draw_fraction(
     const point &bottom, const size_t value_nr,
     const size_t requirement_nr, const ALLEGRO_COLOR &color, const float scale
 ) {
-    float font_h = al_get_font_line_height(game.fonts.value) * scale;
+    float font_h = al_get_font_line_height(game.sys_assets.fnt_value) * scale;
     
     float value_nr_y = bottom.y - font_h * 3;
     float value_nr_scale =
         value_nr >= requirement_nr ? scale * 1.2f : scale * 1.0f;
     draw_scaled_text(
-        game.fonts.value, color, point(bottom.x, value_nr_y),
+        game.sys_assets.fnt_value, color, point(bottom.x, value_nr_y),
         point(value_nr_scale, value_nr_scale),
         ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(value_nr).c_str())
     );
     
     float bar_y = bottom.y - font_h * 2;
     draw_scaled_text(
-        game.fonts.value, color, point(bottom.x, bar_y),
+        game.sys_assets.fnt_value, color, point(bottom.x, bar_y),
         point(scale, scale),
         ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, "-"
     );
@@ -564,7 +564,7 @@ void draw_fraction(
     float req_nr_scale =
         requirement_nr > value_nr ? scale * 1.2f : scale * 1.0f;
     draw_scaled_text(
-        game.fonts.value, color, point(bottom.x, req_nr_y),
+        game.sys_assets.fnt_value, color, point(bottom.x, req_nr_y),
         point(req_nr_scale, req_nr_scale),
         ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(requirement_nr).c_str())
     );
@@ -801,7 +801,7 @@ void draw_loading_screen(
             //No main text buffer? Create it!
             
             get_multiline_text_dimensions(
-                game.fonts.area_name, text, &text_w, &text_h
+                game.sys_assets.fnt_area_name, text, &text_w, &text_h
             );
             game.loading_text_bmp =
                 al_create_bitmap(text_w, text_h);
@@ -810,7 +810,7 @@ void draw_loading_screen(
             al_set_target_bitmap(game.loading_text_bmp); {
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
-                    game.fonts.area_name, COLOR_GOLD,
+                    game.sys_assets.fnt_area_name, COLOR_GOLD,
                     point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                     text
                 );
@@ -831,7 +831,7 @@ void draw_loading_screen(
         if(!game.loading_subtext_bmp) {
             //No subtext buffer? Create it!
             get_multiline_text_dimensions(
-                game.fonts.area_name, subtext, &subtext_w, &subtext_h
+                game.sys_assets.fnt_area_name, subtext, &subtext_w, &subtext_h
             );
             game.loading_subtext_bmp =
                 al_create_bitmap(subtext_w, subtext_h);
@@ -839,7 +839,7 @@ void draw_loading_screen(
             al_set_target_bitmap(game.loading_subtext_bmp); {
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
-                    game.fonts.area_name, al_map_rgb(224, 224, 224),
+                    game.sys_assets.fnt_area_name, al_map_rgb(224, 224, 224),
                     point(),
                     ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
                     subtext
@@ -1008,9 +1008,9 @@ void draw_loading_screen(
     if(opacity == 1.0f) {
         point icon_pos(
             game.win_w - 8 -
-            al_get_text_width(game.fonts.standard, "Loading...") -
-            8 - al_get_font_line_height(game.fonts.standard) * 0.5,
-            game.win_h - 8 - al_get_font_line_height(game.fonts.standard) * 0.5
+            al_get_text_width(game.sys_assets.fnt_standard, "Loading...") -
+            8 - al_get_font_line_height(game.sys_assets.fnt_standard) * 0.5,
+            game.win_h - 8 - al_get_font_line_height(game.sys_assets.fnt_standard) * 0.5
         );
         
         if(
@@ -1019,16 +1019,16 @@ void draw_loading_screen(
         ) {
             draw_bitmap(
                 game.sys_assets.bmp_icon, icon_pos,
-                point(-1, al_get_font_line_height(game.fonts.standard)),
+                point(-1, al_get_font_line_height(game.sys_assets.fnt_standard)),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         //Draw the "Loading..." text, if we're not fading.
         al_draw_text(
-            game.fonts.standard, al_map_rgb(192, 192, 192),
+            game.sys_assets.fnt_standard, al_map_rgb(192, 192, 192),
             game.win_w - 8,
-            game.win_h - 8 - al_get_font_line_height(game.fonts.standard),
+            game.win_h - 8 - al_get_font_line_height(game.sys_assets.fnt_standard),
             ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }
@@ -1102,7 +1102,6 @@ void draw_mob_shadow(
         shadow_x = -(diameter * 0.5);
         shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     }
-    
     
     draw_bitmap(
         game.sys_assets.bmp_shadow,

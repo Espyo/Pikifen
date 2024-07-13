@@ -147,9 +147,6 @@ public:
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;
     
-    //List of fonts.
-    font_list fonts;
-    
     //Duration of the last few frames.
     vector<double> framerate_history;
     

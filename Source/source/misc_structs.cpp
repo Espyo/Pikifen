@@ -184,6 +184,15 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("value_font", bmp_value_font);
     grs.set("wave_ring", bmp_wave_ring);
     
+    reader_setter frs(file->get_child_by_name("fonts"));
+    
+    frs.set("area_name", fnt_area_name);
+    frs.set("counter", fnt_counter);
+    frs.set("cursor_counter", fnt_cursor_counter);
+    frs.set("slim_font", fnt_slim);
+    frs.set("standard", fnt_standard);
+    frs.set("value", fnt_value);
+    
     reader_setter srs(file->get_child_by_name("sounds"));
     
     srs.set("attack", sfx_attack);
@@ -754,7 +763,7 @@ void notification_t::draw() const {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_player_input_icon(
-            game.fonts.slim, input,
+            game.sys_assets.fnt_slim, input,
             true,
             point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -770,7 +779,7 @@ void notification_t::draw() const {
     }
     
     draw_compressed_text(
-        game.fonts.standard,
+        game.sys_assets.fnt_standard,
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility),
         point(
             (text_box_x1 + text_box_x2) * 0.5,

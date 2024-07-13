@@ -207,7 +207,7 @@ void options_menu_state::init_gui_audio_page() {
     
     //Back button.
     audio_gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     audio_gui.back_item->on_activate =
     [this] (const point &) {
         audio_gui.responsive = false;
@@ -229,7 +229,7 @@ void options_menu_state::init_gui_audio_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "AUDIO OPTIONS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     audio_gui.add_item(header_text, "header");
     
@@ -353,7 +353,7 @@ void options_menu_state::init_gui_controls_page() {
     
     //Back button.
     controls_gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     controls_gui.back_item->on_activate =
     [this] (const point &) {
         controls_gui.responsive = false;
@@ -375,13 +375,13 @@ void options_menu_state::init_gui_controls_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "CONTROLS OPTIONS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     controls_gui.add_item(header_text, "header");
     
     //Control binds button.
     button_gui_item* control_binds_button =
-        new button_gui_item("Edit control binds...", game.fonts.standard);
+        new button_gui_item("Edit control binds...", game.sys_assets.fnt_standard);
     control_binds_button->on_activate =
     [this] (const point &) {
         go_to_control_binds();
@@ -453,7 +453,7 @@ void options_menu_state::init_gui_graphics_page() {
     
     //Back button.
     graphics_gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     graphics_gui.back_item->on_activate =
     [this] (const point &) {
         graphics_gui.responsive = false;
@@ -475,7 +475,7 @@ void options_menu_state::init_gui_graphics_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "GRAPHICS OPTIONS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     graphics_gui.add_item(header_text, "header");
     
@@ -483,7 +483,7 @@ void options_menu_state::init_gui_graphics_page() {
     check_gui_item* fullscreen_check =
         new check_gui_item(
         &game.options.intended_win_fullscreen,
-        "Fullscreen", game.fonts.standard
+        "Fullscreen", game.sys_assets.fnt_standard
     );
     fullscreen_check->on_activate =
     [this, fullscreen_check] (const point &) {
@@ -536,7 +536,7 @@ void options_menu_state::init_gui_graphics_page() {
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",
-        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
     warning_text->visible = false;
     graphics_gui.add_item(warning_text, "restart_warning");
@@ -571,7 +571,7 @@ void options_menu_state::init_gui_misc_page() {
     
     //Back button.
     misc_gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     misc_gui.back_item->on_activate =
     [this] (const point &) {
         misc_gui.responsive = false;
@@ -593,7 +593,7 @@ void options_menu_state::init_gui_misc_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "MISC. OPTIONS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     misc_gui.add_item(header_text, "header");
     
@@ -617,7 +617,7 @@ void options_menu_state::init_gui_misc_page() {
     check_gui_item* show_hud_input_icons_check =
         new check_gui_item(
         &game.options.show_hud_input_icons,
-        "Show input icons on HUD", game.fonts.standard
+        "Show input icons on HUD", game.sys_assets.fnt_standard
     );
     show_hud_input_icons_check->on_get_tooltip =
     [] () {
@@ -692,7 +692,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Back button.
     top_gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     top_gui.back_item->on_activate =
     [this] (const point &) {
         leave();
@@ -705,13 +705,13 @@ void options_menu_state::init_gui_top_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "OPTIONS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     top_gui.add_item(header_text, "header");
     
     //Controls options button.
     button_gui_item* controls_button =
-        new button_gui_item("Controls", game.fonts.standard);
+        new button_gui_item("Controls", game.sys_assets.fnt_standard);
     controls_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -743,7 +743,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Graphics options button.
     button_gui_item* graphics_button =
-        new button_gui_item("Graphics", game.fonts.standard);
+        new button_gui_item("Graphics", game.sys_assets.fnt_standard);
     graphics_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -775,7 +775,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Audio options button.
     button_gui_item* audio_button =
-        new button_gui_item("Audio", game.fonts.standard);
+        new button_gui_item("Audio", game.sys_assets.fnt_standard);
     audio_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -807,7 +807,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Misc. options button.
     button_gui_item* misc_button =
-        new button_gui_item("Misc.", game.fonts.standard);
+        new button_gui_item("Misc.", game.sys_assets.fnt_standard);
     misc_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -839,7 +839,7 @@ void options_menu_state::init_gui_top_page() {
     
     //Advanced bullet point.
     bullet_point_gui_item* advanced_bullet =
-        new bullet_point_gui_item("Advanced...", game.fonts.standard);
+        new bullet_point_gui_item("Advanced...", game.sys_assets.fnt_standard);
     advanced_bullet->on_get_tooltip =
     [] () {
         return

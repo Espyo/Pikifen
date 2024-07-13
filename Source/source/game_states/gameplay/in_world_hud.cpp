@@ -138,11 +138,11 @@ void in_world_fraction::draw() {
         point pos(
             m->pos.x,
             m->pos.y - m->radius -
-            al_get_font_line_height(game.fonts.standard) -
+            al_get_font_line_height(game.sys_assets.fnt_standard) -
             IN_WORLD_FRACTION::PADDING
         );
         draw_scaled_text(
-            game.fonts.standard,
+            game.sys_assets.fnt_standard,
             final_color, pos,
             point(size_mult, size_mult),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, i2s(value_number)

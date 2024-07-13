@@ -251,9 +251,6 @@ struct asset_file_names_t {
     //A rock.
     string bmp_rock = "Rock.png";
     
-    //Slim font.
-    string bmp_slim_font = "Slim_font.otf";
-    
     //Mob shadow.
     string bmp_shadow = "Shadow.png";
     
@@ -286,6 +283,26 @@ struct asset_file_names_t {
     
     //Wave ring.
     string bmp_wave_ring = "Wave_ring.png";
+    
+    //Fonts.
+    
+    //Font for area names.
+    string fnt_area_name = "Area_name_font.png";
+    
+    //Font for HUD counters.
+    string fnt_counter = "Counter_font.png";
+    
+    //Font displayed next to the cursor.
+    string fnt_cursor_counter = "Cursor_counter_font.png";
+    
+    //Font for slim text.
+    string fnt_slim = "Slim_font.otf";
+    
+    //Font for standard text.
+    string fnt_standard = "Font.png";
+    
+    //Font for the carrying / money values.
+    string fnt_value = "Value_font.png";
     
     //Sound effects.
     
@@ -598,37 +615,6 @@ struct mouse_cursor_t {
 };
 
 
-/**
- * @brief List of fonts used in the game.
- */
-struct font_list {
-
-    //--- Members ---
-    
-    //Font for the area's name in loading screens.
-    ALLEGRO_FONT* area_name = nullptr;
-    
-    //Allegro's built-in font.
-    ALLEGRO_FONT* builtin = nullptr;
-    
-    //Font for HUD counters.
-    ALLEGRO_FONT* counter = nullptr;
-    
-    //Counter displayed next to the cursor.
-    ALLEGRO_FONT* cursor_counter = nullptr;
-    
-    //Font for slim text.
-    ALLEGRO_FONT* slim = nullptr;
-    
-    //Font for standard text.
-    ALLEGRO_FONT* standard = nullptr;
-    
-    //Font for the carrying / money values.
-    ALLEGRO_FONT* value = nullptr;
-    
-};
-
-
 
 /**
  * @brief This structure makes reading values in data files
@@ -836,6 +822,29 @@ struct system_asset_list {
     
     //Wave ring.
     ALLEGRO_BITMAP* bmp_wave_ring = nullptr;
+    
+    //Fonts.
+    
+    //Font for area names.
+    ALLEGRO_FONT* fnt_area_name = nullptr;
+    
+    //Allegro's built-in font.
+    ALLEGRO_FONT* fnt_builtin = nullptr;
+    
+    //Font for HUD counters.
+    ALLEGRO_FONT* fnt_counter = nullptr;
+    
+    //Counter displayed next to the cursor.
+    ALLEGRO_FONT* fnt_cursor_counter = nullptr;
+    
+    //Font for slim text.
+    ALLEGRO_FONT* fnt_slim = nullptr;
+    
+    //Font for standard text.
+    ALLEGRO_FONT* fnt_standard = nullptr;
+    
+    //Font for the carrying / money values.
+    ALLEGRO_FONT* fnt_value = nullptr;
     
     //Sound effects.
     

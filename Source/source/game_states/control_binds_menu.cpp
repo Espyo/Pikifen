@@ -113,7 +113,7 @@ void control_binds_menu_state::do_drawing() {
         );
         
         draw_text_lines(
-            game.fonts.standard,
+            game.sys_assets.fnt_standard,
             COLOR_WHITE,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
@@ -243,7 +243,7 @@ void control_binds_menu_state::load() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.fonts.standard);
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         leave();
@@ -256,7 +256,7 @@ void control_binds_menu_state::load() {
     text_gui_item* header_text =
         new text_gui_item(
         "CONTROL BINDS",
-        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.add_item(header_text, "header");
     
@@ -336,7 +336,7 @@ void control_binds_menu_state::populate_binds() {
             }
             }
             text_gui_item* section_text =
-                new text_gui_item(section_name, game.fonts.area_name);
+                new text_gui_item(section_name, game.sys_assets.fnt_area_name);
             section_text->center =
                 point(
                     0.50f,
@@ -359,7 +359,7 @@ void control_binds_menu_state::populate_binds() {
         
         //Action type name bullet.
         bullet_point_gui_item* name_bullet =
-            new bullet_point_gui_item(action_type.name, game.fonts.standard);
+            new bullet_point_gui_item(action_type.name, game.sys_assets.fnt_standard);
         name_bullet->center =
             point(0.22f, cur_y);
         name_bullet->size =
@@ -371,7 +371,7 @@ void control_binds_menu_state::populate_binds() {
         
         //More button.
         button_gui_item* more_button =
-            new button_gui_item("...", game.fonts.standard);
+            new button_gui_item("...", game.sys_assets.fnt_standard);
         more_button->on_activate =
         [this, a] (const point &) {
             if(showing_more && a == cur_action_type) {
@@ -403,7 +403,7 @@ void control_binds_menu_state::populate_binds() {
         
             //Change bind button.
             button_gui_item* bind_button =
-                new button_gui_item("", game.fonts.standard);
+                new button_gui_item("", game.sys_assets.fnt_standard);
             bind_button->on_activate =
             [this, a, b] (const point &) {
                 choose_input((PLAYER_ACTION_TYPE) a, b);
@@ -412,13 +412,13 @@ void control_binds_menu_state::populate_binds() {
                 [this, a, b, a_binds, bind_button]
             (const point & center, const point & size) {
                 draw_player_input_icon(
-                    game.fonts.slim, a_binds[b].input, false,
+                    game.sys_assets.fnt_slim, a_binds[b].input, false,
                     center, size * 0.8f
                 );
                 
                 draw_button(
                     center, size,
-                    "", game.fonts.standard, COLOR_WHITE,
+                    "", game.sys_assets.fnt_standard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->get_juice_value()
                 );
@@ -435,7 +435,7 @@ void control_binds_menu_state::populate_binds() {
             if(showing_more && a == cur_action_type) {
                 //Remove bind button.
                 button_gui_item* remove_bind_button =
-                    new button_gui_item("", game.fonts.standard);
+                    new button_gui_item("", game.sys_assets.fnt_standard);
                 remove_bind_button->on_activate =
                 [this, a, b] (const point &) {
                     delete_bind((PLAYER_ACTION_TYPE) a, b);
@@ -444,7 +444,7 @@ void control_binds_menu_state::populate_binds() {
                     [this, a, remove_bind_button]
                 (const point & center, const point & size) {
                     draw_button(
-                        center, size, "X", game.fonts.standard, COLOR_WHITE,
+                        center, size, "X", game.sys_assets.fnt_standard, COLOR_WHITE,
                         remove_bind_button->selected,
                         remove_bind_button->get_juice_value()
                     );
@@ -478,7 +478,7 @@ void control_binds_menu_state::populate_binds() {
         
             //Add first bind button.
             button_gui_item* bind_button =
-                new button_gui_item("", game.fonts.standard);
+                new button_gui_item("", game.sys_assets.fnt_standard);
             bind_button->on_activate =
             [this, a] (const point &) {
                 choose_input((PLAYER_ACTION_TYPE) a, 0);
@@ -487,7 +487,7 @@ void control_binds_menu_state::populate_binds() {
                 [this, a, bind_button]
             (const point & center, const point & size) {
                 draw_button(
-                    center, size, "", game.fonts.standard, COLOR_WHITE,
+                    center, size, "", game.sys_assets.fnt_standard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->get_juice_value()
                 );
@@ -512,7 +512,7 @@ void control_binds_menu_state::populate_binds() {
         
             //Add button.
             button_gui_item* add_button =
-                new button_gui_item("+", game.fonts.standard);
+                new button_gui_item("+", game.sys_assets.fnt_standard);
             add_button->center =
                 point(0.63f, cur_y);
             add_button->size =
@@ -540,7 +540,7 @@ void control_binds_menu_state::populate_binds() {
             //Default label.
             text_gui_item* default_label_text =
                 new text_gui_item(
-                "Default:", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+                "Default:", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
             default_label_text->center =
                 point(0.63f, cur_y);
@@ -563,7 +563,7 @@ void control_binds_menu_state::populate_binds() {
             default_icon->on_draw =
             [def_input] (const point & center, const point & size) {
                 draw_player_input_icon(
-                    game.fonts.slim, def_input, false, center, size
+                    game.sys_assets.fnt_slim, def_input, false, center, size
                 );
             };
             list_box->add_child(default_icon);
@@ -575,7 +575,7 @@ void control_binds_menu_state::populate_binds() {
                 
             //Restore default button.
             button_gui_item* restore_button =
-                new button_gui_item("Restore defaults", game.fonts.standard);
+                new button_gui_item("Restore defaults", game.sys_assets.fnt_standard);
             restore_button->center =
                 point(0.63f, cur_y);
             restore_button->size =
@@ -591,7 +591,7 @@ void control_binds_menu_state::populate_binds() {
             restore_button->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
-                
+            
         }
         
         if(a < N_PLAYER_ACTION_TYPES - 1) {

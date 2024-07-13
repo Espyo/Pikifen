@@ -47,6 +47,9 @@ ALLEGRO_BITMAP* load_bmp(
 void load_custom_particle_generators(const bool load_resources);
 data_node load_data_file(const string &file_path);
 void load_maker_tools();
+ALLEGRO_FONT* load_font(
+    const string &file_name, int n, const int ranges[], int size
+);
 void load_fonts();
 void load_game_config();
 void load_hazards();

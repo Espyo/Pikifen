@@ -1111,7 +1111,7 @@ void area_editor::draw_canvas() {
                     al_map_rgb(240, 224, 160)
                 );
                 draw_scaled_text(
-                    game.fonts.builtin, al_map_rgb(0, 64, 64),
+                    game.sys_assets.fnt_builtin, al_map_rgb(0, 64, 64),
                     path_preview_checkpoints[c],
                     point(
                         AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
@@ -1215,7 +1215,7 @@ void area_editor::draw_canvas() {
                 al_map_rgb(255, 255, 32)
             );
             draw_scaled_text(
-                game.fonts.builtin, al_map_rgb(0, 64, 64),
+                game.sys_assets.fnt_builtin, al_map_rgb(0, 64, 64),
                 cross_section_checkpoints[p],
                 point(
                     AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
@@ -1674,7 +1674,7 @@ void area_editor::draw_canvas() {
                     );
                     
                     draw_scaled_text(
-                        game.fonts.builtin, COLOR_WHITE,
+                        game.sys_assets.fnt_builtin, COLOR_WHITE,
                         point(
                             (cross_section_z_window_start.x + 8),
                             line_y
@@ -1688,7 +1688,7 @@ void area_editor::draw_canvas() {
         } else {
         
             draw_scaled_text(
-                game.fonts.builtin, COLOR_WHITE,
+                game.sys_assets.fnt_builtin, COLOR_WHITE,
                 point(
                     (
                         cross_section_window_start.x +
@@ -1817,7 +1817,7 @@ void area_editor::draw_debug_text(
     int dw = 0;
     int dh = 0;
     al_get_text_dimensions(
-        game.fonts.builtin, text.c_str(),
+        game.sys_assets.fnt_builtin, text.c_str(),
         &dox, &doy, &dw, &dh
     );
     
@@ -1831,7 +1831,7 @@ void area_editor::draw_debug_text(
     );
     
     draw_scaled_text(
-        game.fonts.builtin, color,
+        game.sys_assets.fnt_builtin, color,
         where,
         point(
             AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom,

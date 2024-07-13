@@ -254,7 +254,7 @@ hud_t::hud_t() :
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.fonts.slim, i, true, center, size);
+        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
     };
     gui.add_item(leader_next_input, "leader_next_input");
     
@@ -380,7 +380,7 @@ hud_t::hud_t() :
     day_nr->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.sys_assets.fnt_counter, COLOR_WHITE,
             center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
             size, i2s(game.states.gameplay->day)
         );
@@ -428,7 +428,7 @@ hud_t::hud_t() :
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -470,7 +470,7 @@ hud_t::hud_t() :
             game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -578,7 +578,7 @@ hud_t::hud_t() :
         }
         
         draw_compressed_scaled_text(
-            game.fonts.counter,
+            game.sys_assets.fnt_counter,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
@@ -617,7 +617,7 @@ hud_t::hud_t() :
         }
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -655,7 +655,7 @@ hud_t::hud_t() :
         }
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + field_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -693,7 +693,7 @@ hud_t::hud_t() :
         }
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + total_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -709,7 +709,7 @@ hud_t::hud_t() :
     counters_x->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
-            game.fonts.counter,
+            game.sys_assets.fnt_counter,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "x"
         );
@@ -724,7 +724,7 @@ hud_t::hud_t() :
         [this] (const point & center, const point & size) {
             if(!game.states.gameplay->cur_leader_ptr) return;
             draw_compressed_text(
-                game.fonts.counter, COLOR_WHITE,
+                game.sys_assets.fnt_counter, COLOR_WHITE,
                 center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "/"
             );
         };
@@ -757,7 +757,7 @@ hud_t::hud_t() :
         if(top_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter,
+            game.sys_assets.fnt_counter,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
@@ -796,7 +796,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -837,7 +837,7 @@ hud_t::hud_t() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter,
+            game.sys_assets.fnt_counter,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
@@ -872,7 +872,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -914,7 +914,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -956,7 +956,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.fonts.slim, i, true, center, size,
+            game.sys_assets.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -1015,7 +1015,7 @@ hud_t::hud_t() :
                 [this, goal_cur_label_text]
             (const point & center, const point & size) {
                 draw_compressed_scaled_text(
-                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
@@ -1045,7 +1045,7 @@ hud_t::hud_t() :
                 float juicy_grow_amount =
                     mission_goal_cur->get_juice_value();
                 draw_compressed_scaled_text(
-                    game.fonts.counter, COLOR_WHITE,
+                    game.sys_assets.fnt_counter, COLOR_WHITE,
                     center,
                     point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -1062,7 +1062,7 @@ hud_t::hud_t() :
             mission_goal_req_label->on_draw =
             [this] (const point & center, const point & size) {
                 draw_compressed_scaled_text(
-                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
@@ -1089,7 +1089,7 @@ hud_t::hud_t() :
                     text = i2s(value);
                 }
                 draw_compressed_scaled_text(
-                    game.fonts.counter, COLOR_WHITE,
+                    game.sys_assets.fnt_counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
@@ -1104,7 +1104,7 @@ hud_t::hud_t() :
             mission_goal_slash->on_draw =
             [this] (const point & center, const point & size) {
                 draw_compressed_scaled_text(
-                    game.fonts.counter, COLOR_WHITE,
+                    game.sys_assets.fnt_counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
@@ -1120,7 +1120,7 @@ hud_t::hud_t() :
             mission_goal_name->on_draw =
             [this] (const point & center, const point & size) {
                 draw_compressed_scaled_text(
-                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                     size, true,
@@ -1160,7 +1160,7 @@ hud_t::hud_t() :
         mission_score_score_label->on_draw =
         [this] (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x + size.x / 2.0f, center.y), point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1177,7 +1177,7 @@ hud_t::hud_t() :
         (const point & center, const point & size) {
             float juicy_grow_amount = mission_score_points->get_juice_value();
             draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
+                game.sys_assets.fnt_counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -1194,7 +1194,7 @@ hud_t::hud_t() :
         mission_score_points_label->on_draw =
         [this] (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x - size.x / 2.0f, center.y), point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1535,7 +1535,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         mission_fail_cur_label->on_draw =
         [this, cond] (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1567,7 +1567,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             }
             float juicy_grow_amount = mission_fail_cur->get_juice_value();
             draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
+                game.sys_assets.fnt_counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
@@ -1594,7 +1594,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             [this]
         (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1623,7 +1623,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
                 text = i2s(value);
             }
             draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
+                game.sys_assets.fnt_counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1643,7 +1643,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         mission_fail_slash->on_draw =
         [this] (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
+                game.sys_assets.fnt_counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,
@@ -1664,7 +1664,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         mission_fail_name->on_draw =
         [this, cond] (const point & center, const point & size) {
             draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
                 size, true,

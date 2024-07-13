@@ -98,7 +98,7 @@ void results_state::add_stat(
         
     bullet_point_gui_item* label_bullet =
         new bullet_point_gui_item(
-        label, game.fonts.standard, color
+        label, game.sys_assets.fnt_standard, color
     );
     label_bullet->center =
         point(0.50f, stat_center_y);
@@ -109,7 +109,7 @@ void results_state::add_stat(
     
     text_gui_item* value_text =
         new text_gui_item(
-        value, game.fonts.counter, color, ALLEGRO_ALIGN_RIGHT
+        value, game.sys_assets.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
     );
     value_text->center =
         point(0.75f, stat_center_y);
@@ -370,7 +370,7 @@ void results_state::load() {
     //Area name text.
     text_gui_item* area_name_text =
         new text_gui_item(
-        game.cur_area_data.name, game.fonts.area_name, COLOR_GOLD
+        game.cur_area_data.name, game.sys_assets.fnt_area_name, COLOR_GOLD
     );
     gui.add_item(area_name_text, "area_name");
     text_to_animate.push_back(area_name_text);
@@ -384,7 +384,7 @@ void results_state::load() {
         );
     if(!subtitle.empty()) {
         text_gui_item* area_subtitle_text =
-            new text_gui_item(subtitle, game.fonts.area_name);
+            new text_gui_item(subtitle, game.sys_assets.fnt_area_name);
         gui.add_item(area_subtitle_text, "area_subtitle");
         text_to_animate.push_back(area_subtitle_text);
     }
@@ -423,7 +423,7 @@ void results_state::load() {
         if(!end_reason.empty()) {
             text_gui_item* end_reason_text =
                 new text_gui_item(
-                end_reason, game.fonts.standard,
+                end_reason, game.sys_assets.fnt_standard,
                 goal_was_cleared ?
                 al_map_rgba(112, 200, 100, 192) :
                 al_map_rgba(242, 160, 160, 192)
@@ -521,7 +521,7 @@ void results_state::load() {
         //Medal reason.
         text_gui_item* medal_reason_text =
             new text_gui_item(
-            medal_reason, game.fonts.standard, medal_reason_color
+            medal_reason, game.sys_assets.fnt_standard, medal_reason_color
         );
         gui.add_item(medal_reason_text, "medal_reason");
     }
@@ -530,7 +530,7 @@ void results_state::load() {
     string conclusion_label = "Conclusion:";
     text_gui_item* conclusion_label_text =
         new text_gui_item(
-        conclusion_label, game.fonts.standard,
+        conclusion_label, game.sys_assets.fnt_standard,
         al_map_rgba(255, 255, 255, 192)
     );
     gui.add_item(conclusion_label_text, "conclusion_label");
@@ -586,13 +586,13 @@ void results_state::load() {
     }
     }
     text_gui_item* conclusion_text =
-        new text_gui_item(conclusion, game.fonts.standard);
+        new text_gui_item(conclusion, game.sys_assets.fnt_standard);
     gui.add_item(conclusion_text, "conclusion");
     
     //Stats label text.
     text_gui_item* stats_label_text =
         new text_gui_item(
-        "Stats:", game.fonts.standard, al_map_rgba(255, 255, 255, 192)
+        "Stats:", game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 192)
     );
     gui.add_item(stats_label_text, "stats_label");
     
@@ -734,7 +734,7 @@ void results_state::load() {
     
     //Retry button.
     button_gui_item* retry_button =
-        new button_gui_item("Retry", game.fonts.standard);
+        new button_gui_item("Retry", game.sys_assets.fnt_standard);
     retry_button->on_activate =
     [this] (const point &) {
         retry_area();
@@ -749,7 +749,7 @@ void results_state::load() {
         MISSION_FAIL_COND_TIME_LIMIT
     ) {
         button_gui_item* continue_button =
-            new button_gui_item("Keep playing", game.fonts.standard);
+            new button_gui_item("Keep playing", game.sys_assets.fnt_standard);
         continue_button->on_activate =
         [this] (const point &) {
             continue_playing();
@@ -769,7 +769,7 @@ void results_state::load() {
         game.states.area_ed->quick_play_area_path.empty() ?
         "Pick an area" :
         "Back to editor",
-        game.fonts.standard
+        game.sys_assets.fnt_standard
     );
     gui.back_item->on_activate =
     [this] (const point &) {

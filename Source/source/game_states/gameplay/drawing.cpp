@@ -305,7 +305,7 @@ void gameplay_state::draw_big_msg() {
             float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_scaled_text(
-                game.fonts.area_name,
+                game.sys_assets.fnt_area_name,
                 COLOR_GOLD,
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
@@ -332,7 +332,7 @@ void gameplay_state::draw_big_msg() {
         float alpha = ki_a.get(t);
         
         draw_scaled_text(
-            game.fonts.area_name,
+            game.sys_assets.fnt_area_name,
             change_alpha(COLOR_GOLD, 255 * alpha),
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             point(scale, scale),
@@ -377,7 +377,7 @@ void gameplay_state::draw_big_msg() {
             float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_scaled_text(
-                game.fonts.area_name,
+                game.sys_assets.fnt_area_name,
                 change_alpha(COLOR_GOLD, 255 * alpha),
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
@@ -464,7 +464,7 @@ void gameplay_state::draw_debug_tools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.fonts.builtin,
+        game.sys_assets.fnt_builtin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
@@ -479,7 +479,7 @@ void gameplay_state::draw_debug_tools() {
         ).c_str()
     );
     al_draw_text(
-        game.fonts.builtin,
+        game.sys_assets.fnt_builtin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
         ALLEGRO_ALIGN_LEFT,
@@ -566,7 +566,7 @@ void gameplay_state::draw_debug_tools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.fonts.builtin,
+        game.sys_assets.fnt_builtin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
@@ -582,7 +582,7 @@ void gameplay_state::draw_debug_tools() {
         ).c_str()
     );
     al_draw_text(
-        game.fonts.builtin,
+        game.sys_assets.fnt_builtin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE +
         1 + 8,
@@ -1025,7 +1025,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         
     if(n_standby_pikmin > 0) {
         draw_scaled_text(
-            game.fonts.cursor_counter,
+            game.sys_assets.fnt_cursor_counter,
             color,
             leader_cursor_s +
             point(count_offset, count_offset),
@@ -1201,7 +1201,7 @@ void gameplay_state::draw_message_box() {
         msg_box->transition_in ?
         msg_box->transition_timer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
         (1 - msg_box->transition_timer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
-    int line_height = al_get_font_line_height(game.fonts.standard);
+    int line_height = al_get_font_line_height(game.sys_assets.fnt_standard);
     float box_height = line_height * 4;
     float offset =
         box_height * ease(EASE_METHOD_IN, transition_ratio);
@@ -1245,7 +1245,7 @@ void gameplay_state::draw_message_box() {
     
     //Draw the button to advance, if it's time.
     draw_player_input_icon(
-        game.fonts.slim,
+        game.sys_assets.fnt_slim,
         game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
         true,
         point(
@@ -1329,7 +1329,7 @@ void gameplay_state::draw_message_box() {
             switch(cur_token.type) {
             case STRING_TOKEN_CHAR: {
                 draw_scaled_text(
-                    game.fonts.standard, map_alpha(alpha),
+                    game.sys_assets.fnt_standard, map_alpha(alpha),
                     point(x, y),
                     point(x_scale, 1.0f),
                     ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
@@ -1339,7 +1339,7 @@ void gameplay_state::draw_message_box() {
             }
             case STRING_TOKEN_CONTROL_BIND: {
                 draw_player_input_icon(
-                    game.fonts.slim,
+                    game.sys_assets.fnt_slim,
                     game.controls.find_bind(cur_token.content).input,
                     true,
                     point(
@@ -1426,7 +1426,7 @@ void gameplay_state::draw_system_stuff() {
         
         size_t n_lines =
             split(game.maker_tools.info_print_text, "\n", true).size();
-        int fh = al_get_font_line_height(game.fonts.builtin);
+        int fh = al_get_font_line_height(game.sys_assets.fnt_builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = (int) n_lines * fh + (int) (n_lines - 1);
         
@@ -1435,7 +1435,7 @@ void gameplay_state::draw_system_stuff() {
             al_map_rgba(0, 0, 0, 96 * alpha_mult)
         );
         draw_text_lines(
-            game.fonts.builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
+            game.sys_assets.fnt_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
             point(8, 8), 0, TEXT_VALIGN_MODE_TOP, game.maker_tools.info_print_text
         );
     }

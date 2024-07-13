@@ -859,7 +859,7 @@ void load_custom_particle_generators(const bool load_resources) {
             PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
-
+        
         particle_generator new_pg;
         new_pg.path = path;
         new_pg.load_from_data_node(&file, load_resources);
@@ -886,6 +886,38 @@ data_node load_data_file(const string &file_path) {
     }
     
     return n;
+}
+
+
+/**
+ * @brief Loads a font from the disk. If it's a bitmap it'll load it from
+ * the bitmap and map the characters according to the ranges provided.
+ * If it's a font file, it'll just load it directly.
+ *
+ * @param file_name Name of the file in the graphics folder.
+ * @param n Number of Unicode ranges in the bitmap, if it's a bitmap.
+ * @param ranges "n" pairs of first and last Unicode point to map glyphs to
+ * for each range, if it's a bitmap.
+ * @param size Font size, if it's a font file.
+ */
+ALLEGRO_FONT* load_font(
+    const string &file_name, int n, const int ranges[], int size
+) {
+    string full_path = GRAPHICS_FOLDER_PATH + "/" + file_name;
+    ALLEGRO_FONT* result = nullptr;
+    
+    //First, try to load it as a TTF font.
+    result =
+        al_load_ttf_font(full_path.c_str(), size, ALLEGRO_TTF_NO_KERNING);
+        
+    if(result) return result;
+    
+    //Now try as a bitmap.
+    ALLEGRO_BITMAP* bmp = load_bmp(file_name);
+    result = al_grab_font_from_bitmap(bmp, n, ranges);
+    al_destroy_bitmap(bmp);
+    
+    return result;
 }
 
 
@@ -922,77 +954,56 @@ void load_fonts() {
     //We can't load the fonts directly because we want to set the ranges.
     //So we load them into bitmaps first.
     
-    //Main font.
-    ALLEGRO_BITMAP* temp_font_bmp =
-        load_bmp(game.asset_file_names.bmp_main_font);
-    if(temp_font_bmp) {
-        game.fonts.standard =
-            al_grab_font_from_bitmap(
-                temp_font_bmp,
-                STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
-            );
-    }
-    al_destroy_bitmap(temp_font_bmp);
-    
     //Area name font.
-    temp_font_bmp =
-        load_bmp(game.asset_file_names.bmp_area_name_font);
-    if(temp_font_bmp) {
-        game.fonts.area_name =
-            al_grab_font_from_bitmap(
-                temp_font_bmp,
-                STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
-            );
-    }
-    al_destroy_bitmap(temp_font_bmp);
-    
-    //Counter font.
-    temp_font_bmp =
-        load_bmp(game.asset_file_names.bmp_counter_font);
-    if(temp_font_bmp) {
-        game.fonts.counter =
-            al_grab_font_from_bitmap(
-                temp_font_bmp,
-                COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges
-            );
-    }
-    al_destroy_bitmap(temp_font_bmp);
-    
-    //Cursor counter font.
-    temp_font_bmp =
-        load_bmp(game.asset_file_names.bmp_cursor_counter_font);
-    if(temp_font_bmp) {
-        game.fonts.cursor_counter =
-            al_grab_font_from_bitmap(
-                temp_font_bmp,
-                JUST_NUMBERS_FONT_RANGES_SIZE / 2, just_numbers_font_ranges
-            );
-    }
-    al_destroy_bitmap(temp_font_bmp);
-    
-    //Value font.
-    temp_font_bmp =
-        load_bmp(game.asset_file_names.bmp_value_font);
-    if(temp_font_bmp) {
-        game.fonts.value =
-            al_grab_font_from_bitmap(
-                temp_font_bmp,
-                VALUE_FONT_RANGES_SIZE / 2, value_font_ranges
-            );
-    }
-    al_destroy_bitmap(temp_font_bmp);
-    
-    //Slim font.
-    game.fonts.slim =
-        al_load_ttf_font(
-            (
-                GRAPHICS_FOLDER_PATH + "/" +
-                game.asset_file_names.bmp_slim_font
-            ).c_str(),
-            22, ALLEGRO_TTF_NO_KERNING
+    game.sys_assets.fnt_area_name =
+        load_font(
+            game.asset_file_names.fnt_area_name,
+            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            34
         );
         
-    game.fonts.builtin = al_create_builtin_font();
+    //Built-in font.
+    game.sys_assets.fnt_builtin = al_create_builtin_font();
+    
+    //Counter font.
+    game.sys_assets.fnt_counter =
+        load_font(
+            game.asset_file_names.fnt_counter,
+            COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges,
+            32
+        );
+        
+    //Cursor counter font.
+    game.sys_assets.fnt_cursor_counter =
+        load_font(
+            game.asset_file_names.fnt_cursor_counter,
+            JUST_NUMBERS_FONT_RANGES_SIZE / 2, just_numbers_font_ranges,
+            16
+        );
+        
+    //Slim font.
+    game.sys_assets.fnt_slim =
+        load_font(
+            game.asset_file_names.fnt_slim,
+            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            22
+        );
+        
+    //Standard font.
+    game.sys_assets.fnt_standard =
+        load_font(
+            game.asset_file_names.fnt_standard,
+            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            22
+        );
+        
+    //Value font.
+    game.sys_assets.fnt_value =
+        load_font(
+            game.asset_file_names.fnt_value,
+            VALUE_FONT_RANGES_SIZE / 2, value_font_ranges,
+            16
+        );
 }
 
 
@@ -1643,6 +1654,7 @@ void unload_liquids() {
  * @brief Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
+    //Graphics.
     game.bitmaps.free(game.sys_assets.bmp_bright_circle);
     game.bitmaps.free(game.sys_assets.bmp_bright_ring);
     game.bitmaps.free(game.sys_assets.bmp_bubble_box);
@@ -1683,6 +1695,15 @@ void unload_misc_resources() {
     game.bitmaps.free(game.sys_assets.bmp_throw_preview_dashed);
     game.bitmaps.free(game.sys_assets.bmp_wave_ring);
     
+    //Fonts.
+    al_destroy_font(game.sys_assets.fnt_area_name);
+    al_destroy_font(game.sys_assets.fnt_counter);
+    al_destroy_font(game.sys_assets.fnt_cursor_counter);
+    al_destroy_font(game.sys_assets.fnt_slim);
+    al_destroy_font(game.sys_assets.fnt_standard);
+    al_destroy_font(game.sys_assets.fnt_value);
+    
+    //Sounds effects.
     game.audio.samples.free(game.sys_assets.sfx_attack);
     game.audio.samples.free(game.sys_assets.sfx_camera);
     game.audio.samples.free(game.sys_assets.sfx_menu_activate);

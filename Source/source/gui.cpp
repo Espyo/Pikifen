@@ -1376,7 +1376,7 @@ picker_gui_item::picker_gui_item(
         point arrow_regular_size = point(1.0f, 1.0f);
         
         draw_compressed_scaled_text(
-            game.fonts.standard,
+            game.sys_assets.fnt_standard,
             real_arrow_highlight == 0 ?
             arrow_highlight_color :
             arrow_regular_color,
@@ -1390,7 +1390,7 @@ picker_gui_item::picker_gui_item(
             "<"
         );
         draw_compressed_scaled_text(
-            game.fonts.standard,
+            game.sys_assets.fnt_standard,
             real_arrow_highlight == 1 ?
             arrow_highlight_color :
             arrow_regular_color,
@@ -1407,7 +1407,7 @@ picker_gui_item::picker_gui_item(
         float juicy_grow_amount = this->get_juice_value();
         
         draw_compressed_scaled_text(
-            game.fonts.standard, COLOR_WHITE,
+            game.sys_assets.fnt_standard, COLOR_WHITE,
             point(center.x - size.x * 0.40, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
@@ -1565,14 +1565,14 @@ text_gui_item::text_gui_item(
             vector<string_token> tokens =
                 tokenize_string(this->text);
             set_string_token_widths(
-                tokens, this->font, game.fonts.slim, line_height, false
+                tokens, this->font, game.sys_assets.fnt_slim, line_height, false
             );
             vector<vector<string_token> > tokens_per_line =
                 split_long_string_with_tokens(tokens, size.x);
                 
             for(size_t l = 0; l < tokens_per_line.size(); ++l) {
                 draw_string_tokens(
-                    tokens_per_line[l], this->font, game.fonts.slim,
+                    tokens_per_line[l], this->font, game.sys_assets.fnt_slim,
                     false,
                     point(
                         text_x,
@@ -1625,7 +1625,7 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
         }
         float juicy_grow_amount = get_juice_value();
         draw_compressed_scaled_text(
-            game.fonts.standard, COLOR_WHITE,
+            game.sys_assets.fnt_standard, COLOR_WHITE,
             center,
             point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size,
