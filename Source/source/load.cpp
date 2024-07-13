@@ -1234,6 +1234,8 @@ void load_misc_sounds() {
         game.audio.samples.get(game.asset_file_names.sfx_menu_back);
     game.sys_assets.sfx_menu_select =
         game.audio.samples.get(game.asset_file_names.sfx_menu_select);
+    game.sys_assets.sfx_obstacle_cleared =
+        game.audio.samples.get(game.asset_file_names.sfx_obstacle_cleared);
     game.sys_assets.sfx_pluck =
         game.audio.samples.get(game.asset_file_names.sfx_pluck);
     game.sys_assets.sfx_throw =
@@ -1686,6 +1688,7 @@ void unload_misc_resources() {
     game.audio.samples.free(game.sys_assets.sfx_menu_activate);
     game.audio.samples.free(game.sys_assets.sfx_menu_back);
     game.audio.samples.free(game.sys_assets.sfx_menu_select);
+    game.audio.samples.free(game.sys_assets.sfx_obstacle_cleared);
     game.audio.samples.free(game.sys_assets.sfx_spray);
     game.audio.samples.free(game.sys_assets.sfx_switch_pikmin);
     game.audio.samples.free(game.sys_assets.sfx_throw);

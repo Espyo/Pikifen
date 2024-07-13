@@ -304,6 +304,9 @@ struct asset_file_names_t {
     //Menu item selection.
     string sfx_menu_select = "Menu_select.ogg";
     
+    //Obstacle clear jingle.
+    string sfx_obstacle_cleared = "Obstacle_cleared.ogg";
+    
     //Pluck sound effect.
     string sfx_pluck = "Pluck.ogg";
     
@@ -850,6 +853,9 @@ struct system_asset_list {
     
     //Menu item selection.
     ALLEGRO_SAMPLE* sfx_menu_select = nullptr;
+    
+    //Obstacle clear jingle.
+    ALLEGRO_SAMPLE* sfx_obstacle_cleared = nullptr;
     
     //Pluck sound effect.
     ALLEGRO_SAMPLE* sfx_pluck = nullptr;
