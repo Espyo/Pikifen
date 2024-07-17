@@ -24,6 +24,9 @@ namespace OPTIONS {
 //Default value for the ambiance sound volume.
 const float DEF_AMBIANCE_VOLUME = 1.0f;
 
+//Default value for the animation editor background texture.
+const char* DEF_ANIM_EDITOR_BG_TEXTURE = "";
+
 //Default value for the area editor advanced mode setting.
 const bool DEF_AREA_EDITOR_ADVANCED_MODE = false;
 
@@ -236,6 +239,7 @@ void options_t::load(data_node* file) {
     unsigned char leaving_confirmation_mode_c;
     
     rs.set("ambiance_volume", ambiance_volume);
+    rs.set("anim_editor_bg_texture", anim_editor_bg_texture);
     rs.set("area_editor_advanced_mode", area_editor_advanced_mode);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
@@ -411,6 +415,12 @@ void options_t::save(data_node* file) const {
         new data_node(
             "ambiance_volume",
             f2s(ambiance_volume)
+        )
+    );
+    file->add(
+        new data_node(
+            "anim_editor_bg_texture",
+            anim_editor_bg_texture
         )
     );
     file->add(

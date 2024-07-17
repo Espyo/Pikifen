@@ -108,6 +108,9 @@ private:
     
     //Does the animation exist on disk, or RAM only?
     bool animation_exists_on_disk = false;
+
+    //Whether to use a background texture, if any.
+    ALLEGRO_BITMAP* bg = nullptr;
     
     //Can the user use the "save" button?
     bool can_save = false;
@@ -204,6 +207,9 @@ private:
     
     //Keep the aspect ratio when resizing the Pikmin top?
     bool top_keep_aspect_ratio = true;
+    
+    //Whether to use a background texture.
+    bool use_bg = false;
     
     //Position of the load widget.
     point load_widget_pos;

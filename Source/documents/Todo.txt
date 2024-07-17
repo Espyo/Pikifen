@@ -2,21 +2,18 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Code cleanup
-        Use #pragma region in header files?
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Slim font cannot be set in System_asset_file_names.txt
-    If you select three sectors and choose to edit them all together, it'll crash with something about textures
-    If you have a triangle of mobs inside each other, it shouldn't allow it -- when storing one inside, go up the chain to make sure it's not an infinite loop
     lockpick man's resize bug
     Looks like editing some sprites' scales and then trying to preview an interpolated animation makes things weird
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.90.7
+    Update to Dear ImGui 1.90.9
         Implement shortcuts?
+    Add a CONTRIBUTING file
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -35,8 +32,21 @@ Next tasks (roughly sorted most important first)
             HUD
                 Ready...
                 GO!
-                TODO Mission stuff
+                Mission complete
+                Mission failed
+                Mission completion item going up
+                Mission completion item going down
+                Mission failure item going up
+                Mission failure item going down
+                Score ruler ticking after the player got (or lost?) some points
+                Reaching a new medal in the score ruler
                 Message character being typed out
+                Task complete jingle
+            Results screen
+                Item run-up ticking
+                Item run-up finished
+                Katching for getting a medal
+                Puff for the complete/failed stamp
             Leader
                 x Footsteps
                 Alph, Brittany, and Charlie
@@ -204,8 +214,11 @@ Next tasks (roughly sorted most important first)
         Make assets inherit from the plain_content class
         Move area loading to area_data::load_from_data_node
         Add the new common content properties to everything in the engine
-    A way for the user to set a background texture for the animation editor instead of the plain green
     A small "Got it!" for the score bar, to mark the medal you have
+    Missions should have a property where the maker can specify their best score (and date)
+    Animate the mission results screen
+        Basically, reveal one thing at a time
+    Add a screenshot, or better yet, a gif to the readme
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
             "astyle.cmd_options": [
@@ -468,6 +481,7 @@ Next tasks (roughly sorted most important first)
                 The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
             Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
         Mission high scores need to be saved independently for each player amount
+        Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
         Save stats for how much time was spent in normal gameplay, and how much time was spent in competitive modes
         Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
         An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
@@ -618,6 +632,7 @@ Next tasks (roughly sorted most important first)
 Small tasks (for when I'm feeling lazy)
     Style
         Document the code with comments
+        Use #pragma region in header files?
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
@@ -663,6 +678,7 @@ Misc things (so I don't forget)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
+        Pitch the whistle by the swarm angle (or intensity)
         More music mixes
             Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
                 If we can't get away with many variants, explain in the FAQ why that is
@@ -684,6 +700,7 @@ Misc things (so I don't forget)
             Nectars: Work like in the engine, or like in the classics?
         Figure out what to do with sleeping now that Go Here exists. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
             Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
+        A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
         Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
             However, I may want to play the same long sample multiple times with like a .5s interval between each one, which won't burst anyone's ears...
@@ -763,6 +780,7 @@ Misc things (so I don't forget)
             Sectors et al should probably inherit from a "selectable" class
             Sectors et al used in the editor should probably be classes that inherit from the base class, since in the editor they need a lot of stuff that's not necessary in-game
             Make sectors et al have a member of the "reference" type, which is used to refer to another sector, edge, etc.? This would probably make the organization between pointers and indexes more foolproof
+            Show mobs as sprites of the mob proper. In mob editing mode, also show a circle around them to help make it clear what their radius and angle are
             Add regression-testing in-game
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
@@ -816,6 +834,7 @@ Misc things (so I don't forget)
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The spray HUD icons should show a tiny bar with concoction progress
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
+    Some way to import your friends' records (and dates) in missions
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact
@@ -843,6 +862,7 @@ Misc things (so I don't forget)
             It should smoothly jump from item to item as you choose which one is selected
             It should fade out when nothing is selected, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
     Bridges and Dummies emit light during blackout (Darthvato)
+    I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spew. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Missions

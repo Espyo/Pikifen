@@ -63,6 +63,7 @@ enum LEAVING_CONFIRMATION_MODE {
 
 namespace OPTIONS {
 extern const float DEF_AMBIANCE_VOLUME;
+extern const char* DEF_ANIM_EDITOR_BG_TEXTURE;
 extern const bool DEF_AREA_EDITOR_ADVANCED_MODE;
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
 extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
@@ -120,6 +121,9 @@ struct options_t {
     
     //Ambiance sound volume (0 - 1).
     float ambiance_volume = OPTIONS::DEF_AMBIANCE_VOLUME;
+    
+    //Background texture for the animation editor, if any.
+    string anim_editor_bg_texture = OPTIONS::DEF_ANIM_EDITOR_BG_TEXTURE;
     
     //Use the advanced interface mode in the area editor?
     bool area_editor_advanced_mode = OPTIONS::DEF_AREA_EDITOR_ADVANCED_MODE;

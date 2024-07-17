@@ -429,6 +429,17 @@ void animation_editor::load() {
     change_state(EDITOR_STATE_MAIN);
     game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
     
+    if(!game.options.anim_editor_bg_texture.empty()) {
+        bg =
+            load_bmp(
+                game.options.anim_editor_bg_texture,
+                nullptr, false, false, false, true
+            );
+        use_bg = true;
+    } else {
+        use_bg = false;
+    }
+    
     if(!auto_load_anim.empty()) {
         loaded_mob_type = nullptr;
         file_path = auto_load_anim;
@@ -1431,6 +1442,11 @@ void animation_editor::unload() {
     unload_spray_types();
     unload_status_types(false);
     unload_custom_particle_generators();
+    
+    if(bg) {
+        al_destroy_bitmap(bg);
+        bg = NULL;
+    }
 }
 
 
