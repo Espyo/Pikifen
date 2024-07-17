@@ -20,7 +20,8 @@
   <defs
      id="defs2753">
     <linearGradient
-       id="winged_pellet">
+       id="winged_pellet"
+       inkscape:label="winged-pellet">
       <stop
          id="stop1919"
          offset="0"
@@ -39,7 +40,8 @@
          style="stop-color:#f0a0e0;stop-opacity:1" />
     </linearGradient>
     <linearGradient
-       id="rock_pellet">
+       id="rock_pellet"
+       inkscape:label="rock-pellet">
       <stop
          id="stop1668"
          offset="0"
@@ -59,7 +61,8 @@
     </linearGradient>
     <linearGradient
        id="pellet_side_shade"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="pellet-side-shade">
       <stop
          id="stop4272"
          offset="0"
@@ -185,7 +188,8 @@
        fy="1043.6122"
        r="7.5" />
     <linearGradient
-       id="red_pellet">
+       id="red_pellet"
+       inkscape:label="red-pellet">
       <stop
          id="stop8452"
          offset="0"
@@ -216,7 +220,8 @@
        inkscape:collect="always" />
     <linearGradient
        id="stem_shade"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="stem-shade">
       <stop
          id="stop1514"
          offset="0"
@@ -272,7 +277,8 @@
        xlink:href="#pellet-shine-outer"
        inkscape:collect="always" />
     <linearGradient
-       id="yellow_pellet">
+       id="yellow_pellet"
+       inkscape:label="yellow-pellet">
       <stop
          style="stop-color:#e0e000;stop-opacity:1"
          offset="0"
@@ -324,7 +330,8 @@
        xlink:href="#pellet-shine-outer"
        inkscape:collect="always" />
     <linearGradient
-       id="blue_pellet">
+       id="blue_pellet"
+       inkscape:label="blue-pellet">
       <stop
          id="stop1980"
          offset="0"
@@ -1431,8 +1438,8 @@
          rx="3.203124"
          cy="1036.3622"
          cx="-6.7031322"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
@@ -1440,8 +1447,8 @@
          r="15"
          cy="1036.3622"
          cx="-16"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
@@ -1449,22 +1456,22 @@
          r="9.5"
          cy="1036.3622"
          cx="-18"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3780"
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
       <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824"
          d="m -12,1034.8622 v -6 h 2 v 6 z"
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
       <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824-4"

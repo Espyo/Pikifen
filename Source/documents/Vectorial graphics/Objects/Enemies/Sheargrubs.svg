@@ -26,7 +26,8 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
-       id="head-8">
+       id="head-8"
+       inkscape:label="head">
       <stop
          style="stop-color:#dcafc8;stop-opacity:1;"
          offset="0"
@@ -38,7 +39,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="eye-3">
+       id="eye-3"
+       inkscape:label="eye">
       <stop
          style="stop-color:#ffffff;stop-opacity:1"
          offset="0"
@@ -50,7 +52,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="mouth-6">
+       id="mouth-6"
+       inkscape:label="mouth">
       <stop
          style="stop-color:#82315a;stop-opacity:1"
          offset="0"
@@ -62,7 +65,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="body-9">
+       id="body-9"
+       inkscape:label="body">
       <stop
          style="stop-color:#efe7ed;stop-opacity:1"
          offset="0"
@@ -604,8 +608,8 @@
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
          id="path3782"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-6.7031322"
          cy="1036.3622"
          rx="3.203124"
@@ -614,8 +618,8 @@
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path3770-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-16"
          cy="1036.3622"
          r="15" />
@@ -623,8 +627,8 @@
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
          id="path3780"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-18"
          cy="1036.3622"
          r="9.5" />
@@ -634,16 +638,16 @@
          id="path3824"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
          d="m -12,1043.8622 v -6 h 2 v 6 z"
          id="path3824-4"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
   </g>
   <g

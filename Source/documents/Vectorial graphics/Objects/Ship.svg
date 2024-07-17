@@ -926,8 +926,8 @@
        style="fill:none;stroke:url(#radialGradient1038);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path3770-5"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        cx="233"
        cy="115.49989"
        r="38" />
@@ -938,16 +938,16 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6742);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 41,113.49995 h 5.440882 v 4 H 41 Z"
        id="path6592"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#c2264d;fill-opacity:1;stroke:none;stroke-width:2"
        d="m 168,207.50004 c 3.90328,6.5538 9,15 16,12 7,-3 3.63206,-12.942 1,-20.00001 z"
@@ -955,8 +955,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#c2264d;fill-opacity:1;stroke:none;stroke-width:2"
        d="m 167.13848,25.499954 c 3.87148,-8.997039 9.7882,-21.5738592 16.73118,-17.4555392 6.94298,4.1183402 2.74096,16.7662992 0.1304,26.4555392 z"
@@ -964,14 +964,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <circle
        style="fill:url(#radialGradient6600);fill-opacity:1;stroke:none;stroke-width:1.99497"
        id="path5409"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        cx="140.00002"
        cy="116.49997"
        r="96" />
@@ -981,8 +981,8 @@
        id="path5482"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6728);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 135,120.79459 c -14.40552,11.91424 -35.727,11.82844 -34,-1 2,-20.999996 19.72568,-19.23276 34,-9 z"
@@ -990,8 +990,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff273e;fill-opacity:1;stroke:none;stroke-width:2"
        d="M 208.32916,127.50003 H 181 c -9,-7.00008 -8,-17.00008 0,-23.00008 h 27.32916 z"
@@ -999,8 +999,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6730);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 145,111.20533 c 14.40552,-11.914156 35.727,-11.828416 34,1 -2,21.0001 -19.72568,19.2327 -34,9 z"
@@ -1008,16 +1008,16 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6732);fill-opacity:1;stroke:#837b5c;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 140,20.596034 V 212.45024"
        id="path5486"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6620);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 225,38.499954 29,-13 C 250.4781,12.657835 244.29544,2.3199348 228,1.4999548 L 216,29.499954 Z"
@@ -1025,8 +1025,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6628);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 224,189.00003 29,13.00001 c -3.5219,12.842 -9.70456,23.18 -26,24 l -12,-28.00001 z"
@@ -1034,8 +1034,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6734);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 121,75.499954 c 2.84496,-6.91298 3,-16 19,-16 16,0 16.43478,9.62534 19,16 z"
@@ -1043,8 +1043,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6726);fill-opacity:1;stroke:none;stroke-width:2"
        d="m 121,161.50003 c 2.84496,6.913 3,16 19,16 16,0 16.43478,-9.6254 19,-16 z"
@@ -1052,22 +1052,22 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6666);fill-opacity:1;stroke:none;stroke-width:2"
        d="M 22.125002,76.181314 C 14.238861,76.121114 7.03378,79.763674 0,84.306314 v 65.999916 c 14.646981,8.041 28.7486,9.3042 42,0 V 84.306314 c -7.19528,-5.77946 -13.741338,-8.07822 -19.874998,-8.125 z m -5.125001,7.125 V 150.30623 L 10,148.30623 V 85.306314 Z m 9.000001,0 6.999998,2 v 62.999916 l -6.999998,2 z"
        id="path5560"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <circle
        style="fill:url(#linearGradient6676);fill-opacity:1;stroke:none;stroke-width:2"
        id="path5411"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        cx="140"
        cy="115.49997"
        r="8" />
@@ -1077,8 +1077,8 @@
        id="path5409-8"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient6612);fill-opacity:1;stroke:none;stroke-width:2"
        d="M 194.99999,107.99995 235,88.999954 c 14,11.00002 14,44.000076 0,53.000076 0,0 -40.00001,-18 -40.00001,-19 0,-1 0,-15.00008 0,-15.00008 z"
@@ -1086,14 +1086,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccsc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <ellipse
        style="fill:url(#linearGradient6678);fill-opacity:1;stroke:none;stroke-width:1.77143"
        id="path5457"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        cx="211.00002"
        cy="43.99995"
        rx="15.500002"
@@ -1103,8 +1103,8 @@
        id="path5457-4"
        transform="scale(1,-1)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
-       inkscape:export-xdpi="180.40086"
-       inkscape:export-ydpi="180.40086"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        cx="210.00002"
        cy="-183.49988"
        rx="15.500002"

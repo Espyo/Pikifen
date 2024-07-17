@@ -48,7 +48,8 @@
        r="21.66234"
        spreadMethod="reflect" />
     <linearGradient
-       id="helmet-6">
+       id="helmet-6"
+       inkscape:label="helmet">
       <stop
          style="stop-color:#ffffff;stop-opacity:0.6972487;"
          offset="0"
@@ -98,8 +99,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5"
-     inkscape:cx="84.333333"
-     inkscape:cy="34"
+     inkscape:cx="133.66667"
+     inkscape:cy="-4"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"

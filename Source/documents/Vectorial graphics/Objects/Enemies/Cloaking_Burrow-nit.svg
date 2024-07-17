@@ -24,7 +24,8 @@
   <defs
      id="defs4">
     <linearGradient
-       id="leg-4">
+       id="leg-4"
+       inkscape:label="leg">
       <stop
          id="stop4565"
          offset="0"
@@ -39,7 +40,8 @@
          style="stop-color:#ff0000;stop-opacity:1;" />
     </linearGradient>
     <linearGradient
-       id="body-5">
+       id="body-5"
+       inkscape:label="body">
       <stop
          style="stop-color:#e0e0e0;stop-opacity:1;"
          offset="0"
@@ -54,7 +56,8 @@
          id="stop4549" />
     </linearGradient>
     <linearGradient
-       id="spot-5">
+       id="spot-5"
+       inkscape:label="spot">
       <stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="0"
@@ -81,7 +84,8 @@
          style="stop-color:#ed5930;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
-       id="hide-1">
+       id="hide-1"
+       inkscape:label="hide">
       <stop
          style="stop-color:#000032;stop-opacity:1;"
          offset="0"
@@ -1267,7 +1271,8 @@
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(-166,-229.99973)" />
     <linearGradient
-       id="belly-dash-9">
+       id="belly-dash-9"
+       inkscape:label="belly-dash">
       <stop
          id="stop9312-6"
          offset="0"
@@ -1724,7 +1729,7 @@
      inkscape:cx="223.66667"
      inkscape:cy="67.333333"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:window-width="1872"
@@ -1793,8 +1798,8 @@
          rx="3.203124"
          cy="1036.3622"
          cx="-6.7031322"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
@@ -1802,8 +1807,8 @@
          r="15"
          cy="1036.3622"
          cx="-16"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
@@ -1811,22 +1816,22 @@
          r="9.5"
          cy="1036.3622"
          cx="-18"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3780"
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
       <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824"
          d="m -12,1034.8622 v -6 h 2 v 6 z"
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
       <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824-4"
@@ -1841,8 +1846,8 @@
        x="334"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6-2-3-5"
@@ -1851,8 +1856,8 @@
        x="269"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6-2-3"
@@ -1861,8 +1866,8 @@
        x="204"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6-2"
@@ -1871,8 +1876,8 @@
        x="138"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6"
@@ -1881,8 +1886,8 @@
        x="69"
        y="1166.3622"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-1-9"
@@ -1891,8 +1896,8 @@
        x="224"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-9"
@@ -1901,8 +1906,8 @@
        x="68"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166"
@@ -1911,8 +1916,8 @@
        x="0"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-4"
@@ -1921,8 +1926,8 @@
        x="184"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-8"
@@ -1931,8 +1936,8 @@
        x="0"
        y="1109.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-8-4"
@@ -1941,8 +1946,8 @@
        x="57"
        y="1109.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-1"
@@ -1951,8 +1956,8 @@
        x="108"
        y="1109.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-1-4"
@@ -1961,8 +1966,8 @@
        x="201"
        y="1109.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-4-9"
@@ -1971,8 +1976,8 @@
        x="137"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-96"
@@ -1981,8 +1986,8 @@
        x="264"
        y="1052.3622"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0"
@@ -1991,8 +1996,8 @@
        x="0"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6-2-3-5-0-8"
@@ -2001,8 +2006,8 @@
        x="399"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-0-6-2-3-5-0-3"
@@ -2011,8 +2016,8 @@
        x="457"
        y="1166.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-6"
@@ -2021,8 +2026,8 @@
        x="350"
        y="1109.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -2033,8 +2038,8 @@
        height="1052.3622"
        style="fill:#008000;fill-opacity:1"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none"
        id="rect3166-96-3"
@@ -2043,8 +2048,8 @@
        x="325"
        y="1052.3622"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -2059,8 +2064,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9182);fill-opacity:1;stroke:none"
        d="m 375.2,1175.8493 c 6.01843,3.2015 10.91486,8.3222 15.2,14.4885 l 7.2,4.0245 -7.2,4.0246 c -2.88627,5.9776 -10.69013,12.177 -15.2,14.4885 -18.60097,4.3283 -29.96201,-0.2479 -34,-18.513 2.5713,-14.118 11.31068,-22.6417 34,-18.5131 z"
@@ -2068,8 +2073,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient8524);fill-opacity:1;stroke:none"
        d="m 238.4,1210.3624 c -3.65716,-9.9404 -22.4,-13.6 -34.4,-8.8 7.66106,13.9846 27.70464,8.8528 34.4,8.8 z"
@@ -2077,8 +2082,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587);fill-opacity:1;stroke:none"
        d="m 51.082735,1069.1619 c 2.773122,-3.9404 4.466673,-7.5011 4.917265,-10.6243 -2.716749,1.6059 -5.251498,5.2997 -7.826639,8.5293 z"
@@ -2086,8 +2091,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561);fill-opacity:1;stroke:none"
        d="m 52.8,1069.9668 c 4.302934,-2.1375 8.063601,-3.2618 11.2,-3.2196 -2.002546,2.4476 -6.025904,4.387 -9.6,6.4393 z"
@@ -2095,8 +2100,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551);fill-opacity:1;stroke:none"
        d="m 44,1061.9177 c 6.018428,3.2015 10.914861,8.3222 15.2,14.4885 l 7.2,4.0245 -7.2,4.0246 c -2.886268,5.9776 -10.690126,12.177 -15.2,14.4885 l -8.8,-18.5131 z"
@@ -2104,8 +2109,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458);fill-opacity:1;stroke:none"
        d="m 47.2,1106.188 -5.6,-4.0246 4,-0.8049 c -7.137859,-10.741 -3.487202,-15.7502 1.6,-20.9278 -8.222189,-7.9661 -6.469057,-13.0609 -1.6,-20.9278 l -4,-0.8049 5.6,-4.0245 c -24.8,-7.2443 -43.2680249,2.867 -47.2,25.7572 6.2581869,27.1717 24,31.3917 47.2,25.7573 z"
@@ -2113,8 +2118,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543);fill-opacity:1;stroke:none"
        d="m 6.8073317,1075.1093 c 2.8228303,9.435 22.2708173,-15.8463 16.0000003,-17.7081 -6.270817,-1.8617 -18.8228307,8.2732 -16.0000003,17.7081 z"
@@ -2122,8 +2127,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 51.2,1067.5521 4,4.0246 c 0.752821,-4.1782 -1.210722,-4.7946 -4,-4.0246 z"
@@ -2131,8 +2136,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516);fill-opacity:1;stroke:none"
        d="m 6.7619481,1085.8421 c 2.8228299,-9.4349 22.2708179,15.8463 16.0000009,17.7081 -6.270817,1.8618 -18.8228312,-8.2732 -16.0000009,-17.7081 z"
@@ -2140,8 +2145,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631);fill-opacity:1;stroke:none"
        d="m 51.082735,1091.5392 c 2.773122,3.9404 4.466673,7.5011 4.917265,10.6242 -2.716749,-1.6059 -5.251498,-5.2996 -7.826639,-8.5292 z"
@@ -2149,8 +2154,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1);fill-opacity:1;stroke:none"
        d="m 52.8,1090.7343 c 4.302934,2.1375 8.063601,3.2618 11.2,3.2196 -2.002546,-2.4476 -6.025904,-4.387 -9.6,-6.4393 z"
@@ -2158,8 +2163,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 51.2,1093.149 4,-4.0246 c 0.752821,4.1782 -1.210722,4.7946 -4,4.0246 z"
@@ -2167,8 +2172,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient3117);fill-opacity:1;stroke:none"
        d="m 119.08273,1069.162 c 2.77313,-3.9404 2.06668,-4.1211 2.51727,-7.2443 -2.71675,1.6059 -2.8515,1.9197 -5.42664,5.1493 z"
@@ -2178,8 +2183,8 @@
        inkscape:transform-center-x="-1.68668"
        inkscape:transform-center-y="-3.7021923"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-5);fill-opacity:1;stroke:none"
        d="m 120.8,1069.9669 c 4.30293,-2.1375 4.8636,-1.6521 8,-1.6099 -2.00255,2.4477 -2.8259,2.7773 -6.4,4.8296 z"
@@ -2189,8 +2194,8 @@
        inkscape:transform-center-x="-4.8"
        inkscape:transform-center-y="-1.6102932"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-1);fill-opacity:1;stroke:none"
        d="m 112,1061.9178 c 6.01843,3.2015 10.91486,8.3222 15.2,14.4885 l 7.2,4.0245 -7.2,4.0246 c -2.88627,5.9776 -10.69013,12.177 -15.2,14.4885 l -8.8,-18.5131 z"
@@ -2198,8 +2203,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-2);fill-opacity:1;stroke:none"
        d="m 115.2,1106.1881 -5.6,-4.0246 4,-0.8049 c -7.13786,-10.741 -3.4872,-15.7502 1.6,-20.9278 -8.22219,-7.9661 -6.46906,-13.0609 -1.6,-20.9278 l -4,-0.8049 5.6,-4.0245 c -24.8,-7.2443 -43.26802,2.867 -47.2,25.7572 6.25819,27.1717 24,31.3917 47.2,25.7573 z"
@@ -2207,8 +2212,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-6);fill-opacity:1;stroke:none"
        d="m 74.80733,1075.1094 c 2.82283,9.435 22.27082,-15.8463 16,-17.7081 -6.27082,-1.8617 -18.82283,8.2732 -16,17.7081 z"
@@ -2216,8 +2221,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 119.2,1067.5522 4,4.0246 c 0.75282,-4.1782 -1.21072,-4.7946 -4,-4.0246 z"
@@ -2225,8 +2230,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-5);fill-opacity:1;stroke:none"
        d="m 74.76195,1085.8422 c 2.82283,-9.4349 22.27082,15.8463 16,17.7081 -6.27082,1.8618 -18.82283,-8.2732 -16,-17.7081 z"
@@ -2234,8 +2239,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-4);fill-opacity:1;stroke:none"
        d="m 119.08273,1091.5393 c 2.77313,3.9404 8.46668,9.9157 8.91727,13.0389 -2.71675,-1.6059 -9.2515,-7.7143 -11.82664,-10.9439 z"
@@ -2245,8 +2250,8 @@
        inkscape:transform-center-x="-1.68668"
        inkscape:transform-center-y="2.7371512"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-1);fill-opacity:1;stroke:none"
        d="m 120.8,1090.7344 c 4.30293,2.1375 12.0636,5.8368 15.2,5.7946 -2.00255,-2.4476 -10.0259,-6.962 -13.6,-9.0143 z"
@@ -2256,8 +2261,8 @@
        inkscape:transform-center-x="-4"
        inkscape:transform-center-y="1.4501253"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 119.2,1093.1491 4,-4.0246 c 0.75282,4.1782 -1.21072,4.7946 -4,4.0246 z"
@@ -2265,8 +2270,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-1);fill-opacity:1;stroke:none"
        d="m 225.62736,1108.3622 c 25.19999,0 37.37265,-14 37.37265,-28 0,-14 -12.17265,-27.9999 -37.37265,-27.9999 -0.81888,2.7296 -1.58535,6.1659 -1.6,9.5999 -0.0283,6.6307 1.61887,13.6566 3.2,18.4 -1.05294,2.6323 -3.02339,8.7184 -3.2,16 -0.0918,3.7832 -0.0412,7.897 1.6,12 z"
@@ -2274,8 +2279,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cscscsc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-9);fill-opacity:1;stroke:none"
        d="m 228.16125,1060.2769 c -11.56294,8.137 32.307,22.2917 31.86276,13.0799 -0.44426,-9.2119 -20.29996,-21.2168 -31.86276,-13.0799 z"
@@ -2283,8 +2288,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4376);fill-opacity:1;stroke:none"
        d="m 228.16124,1100.4475 c -11.56294,-8.137 32.307,-22.2917 31.86276,-13.0799 -0.44426,9.2118 -20.29996,21.2169 -31.86276,13.0799 z"
@@ -2292,8 +2297,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-03);fill-opacity:1;stroke:none"
        d="m 218.01815,1105.9622 c 5.47525,-17.3887 5.85545,-34.4778 0,-51.1999 -13.23799,-3.5212 -23.22588,-3.4165 -30.4,4 -6.06042,8.4183 -3.61,38.5085 0.8,43.1999 6.77004,6.7545 16.55575,8.2529 29.6,4 z"
@@ -2301,8 +2306,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-7);fill-opacity:1;stroke:none"
        d="m 186.75379,1062.9411 c -9.44825,9.1723 29.8708,10.3507 28.77329,3.0926 -1.0975,-7.2579 -19.32521,-12.2647 -28.77329,-3.0926 z"
@@ -2310,8 +2315,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-2);fill-opacity:1;stroke:none"
        d="m 45.78849,1126.162 c 1.848748,-3.9404 2.977782,-7.5011 3.278177,-10.6243 -1.811166,1.6059 -3.500999,5.2997 -5.21776,8.5293 z"
@@ -2319,8 +2324,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-2);fill-opacity:1;stroke:none"
        d="m 46.933333,1126.9669 c 2.868623,-2.1375 5.375734,-3.2618 7.466667,-3.2196 -1.335031,2.4476 -4.017269,4.387 -6.4,6.4393 z"
@@ -2328,8 +2333,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-9);fill-opacity:1;stroke:none"
        d="m 43.2,1119.7624 c 4.012285,3.2015 5.143241,7.4776 8,13.6439 l 4.8,4.0245 -4.8,4.0246 c -1.924179,5.9776 -5.793418,11.1955 -8.8,13.507 l -7.2,-17.5316 z"
@@ -2337,8 +2342,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-8);fill-opacity:1;stroke:none"
        d="m 47.2,1163.1881 -5.6,-4.0246 4,-0.8049 c -7.137859,-10.741 -3.487202,-15.7502 1.6,-20.9278 -8.222189,-7.9661 -6.469057,-13.0609 -1.6,-20.9278 l -4,-0.8049 5.6,-4.0245 c -24.8,-7.2443 -43.2680249,2.867 -47.2,25.7572 6.2581869,27.1717 24,31.3917 47.2,25.7573 z"
@@ -2346,8 +2351,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-5);fill-opacity:1;stroke:none"
        d="m 6.8073317,1132.1094 c 2.8228303,9.435 22.2708173,-15.8463 16.0000003,-17.7081 -6.270817,-1.8617 -18.8228307,8.2732 -16.0000003,17.7081 z"
@@ -2355,8 +2360,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 45.866667,1124.5522 2.666666,4.0246 c 0.501881,-4.1782 -0.807148,-4.7946 -2.666666,-4.0246 z"
@@ -2364,8 +2369,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-3);fill-opacity:1;stroke:none"
        d="m 6.7619481,1142.8422 c 2.8228299,-9.4349 22.2708179,15.8463 16.0000009,17.7081 -6.270817,1.8618 -18.8228312,-8.2732 -16.0000009,-17.7081 z"
@@ -2373,8 +2378,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-6);fill-opacity:1;stroke:none"
        d="m 45.78849,1148.5393 c 1.848748,3.9404 2.977782,7.5011 3.278177,10.6242 -1.811166,-1.6059 -3.500999,-5.2996 -5.21776,-8.5292 z"
@@ -2382,8 +2387,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-3);fill-opacity:1;stroke:none"
        d="m 46.933333,1147.7344 c 2.868623,2.1375 5.375734,3.2618 7.466667,3.2196 -1.335031,-2.4476 -4.017269,-4.387 -6.4,-6.4393 z"
@@ -2391,8 +2396,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 45.866667,1150.1491 2.666666,-4.0246 c 0.501881,4.1782 -0.807148,4.7946 -2.666666,4.0246 z"
@@ -2400,8 +2405,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-2-5);fill-opacity:1;stroke:none"
        d="m 99.92568,1126.783 c 1.47133,-3.8629 2.43564,-7.3743 2.81622,-10.4809 -1.31294,1.5336 -2.66304,5.1563 -4.00485,8.3146 z"
@@ -2409,8 +2414,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-2-3);fill-opacity:1;stroke:none"
        d="m 100.65187,1127.6306 c 2.05637,-2.0236 3.8112,-3.0495 5.21888,-2.9269 -1.03981,2.3922 -2.95919,4.2252 -4.68302,6.1824 z"
@@ -2418,8 +2423,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-9-3);fill-opacity:1;stroke:none"
        d="m 98.54476,1120.2941 c 2.52335,3.3507 3.04237,7.6634 4.61751,13.9297 l 3.00768,4.2027 -3.46639,3.8333 c -1.63829,5.8938 -4.545,10.9543 -6.70432,13.1463 l -3.85645,-17.7803 z"
@@ -2427,8 +2432,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 100.07014,1125.1788 1.569,4.1207 c 0.57657,-4.1521 -0.2711,-4.8179 -1.569,-4.1207 z"
@@ -2436,8 +2441,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-6-3);fill-opacity:1;stroke:none"
        d="m 98.65043,1149.1239 c 1.02221,4.0052 1.58068,7.6035 1.60529,10.7331 -1.12991,-1.673 -2.059,-5.4257 -3.03271,-8.7162 z"
@@ -2445,8 +2450,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-8-4);fill-opacity:1;stroke:none"
        d="m 102.65541,1164.0251 -5.36154,-4.3372 4.03937,-0.5756 c -6.51415,-11.1303 -2.58395,-15.9233 2.79005,-20.8026 -7.75485,-8.4217 -5.71423,-13.4083 -0.40475,-20.985 l -3.94763,-1.0315 5.82025,-3.6989 c -24.34685,-8.6458 -43.36109,0.3966 -48.59116,23.0255 4.69953,27.4842 22.17202,32.7084 45.65541,28.4053 z"
@@ -2454,8 +2459,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-3-9);fill-opacity:1;stroke:none"
        d="m 99.46836,1148.3644 c 1.81274,2.2444 3.43942,3.4634 4.85191,3.5018 -0.76084,-2.4951 -2.45917,-4.5346 -3.94909,-6.6752 z"
@@ -2463,8 +2468,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 98.61141,1150.7341 2.02771,-3.9154 c 0.10035,4.1907 -0.81757,4.7557 -2.02771,3.9154 z"
@@ -2472,8 +2477,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-5-6);fill-opacity:1;stroke:none"
        d="m 64.09952,1130.695 c 2.28056,9.5806 23.13769,-14.5513 16.98316,-16.7675 -6.15452,-2.2161 -19.26372,7.1871 -16.98316,16.7675 z"
@@ -2481,8 +2486,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-3-2);fill-opacity:1;stroke:none"
        d="m 63.44257,1141.4078 c 3.35592,-9.2587 21.33156,17.0897 14.96483,18.5911 -6.36673,1.5014 -18.32076,-9.3324 -14.96483,-18.5911 z"
@@ -2490,8 +2495,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-6);fill-opacity:1;stroke:none"
        d="m 166.4682,1126.162 c 3.17405,-3.9404 5.11245,-7.5011 5.62819,-10.6243 -3.10954,1.6059 -6.01076,5.2997 -8.95821,8.5293 z"
@@ -2499,8 +2504,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-4);fill-opacity:1;stroke:none"
        d="m 168.43373,1126.9669 c 4.92505,-2.1375 9.22943,-3.2618 12.81928,-3.2196 -2.29207,2.4476 -6.89711,4.387 -10.98795,6.4393 z"
@@ -2508,8 +2513,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-0);fill-opacity:1;stroke:none"
        d="m 158.36145,1118.9178 c 6.88856,3.2015 16.73387,8.2292 21.63855,14.3955 l 20,4.0491 -20,4 c -3.30357,5.9776 -16.47665,12.27 -21.63855,14.5815 l -10.07229,-18.5131 z"
@@ -2517,8 +2522,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-7);fill-opacity:1;stroke:none"
        d="m 162.0241,1163.1881 -6.40964,-4.0246 4.57831,-0.8049 c -8.16984,-10.741 -3.99137,-15.7502 1.83133,-20.9278 -9.41094,-7.9661 -7.40435,-13.0609 -1.83133,-20.9278 l -4.57831,-0.8049 6.40964,-4.0245 c -28.38555,-7.2443 -49.52364,2.867 -54.0241,25.7572 7.16299,27.1717 27.46988,31.3917 54.0241,25.7573 z"
@@ -2526,8 +2531,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-4);fill-opacity:1;stroke:none"
        d="m 115.79152,1132.1094 c 3.23095,9.435 25.4907,-15.8463 18.31326,-17.7081 -7.17745,-1.8617 -21.54421,8.2732 -18.31326,17.7081 z"
@@ -2535,8 +2540,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 168.49705,1124.366 5.07806,3.3722 c 0.29182,-4.2561 -2.01809,-4.5646 -5.07806,-3.3722 z"
@@ -2544,8 +2549,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-8);fill-opacity:1;stroke:none"
        d="m 115.73958,1142.8422 c 3.23095,-9.4349 25.4907,15.8463 18.31325,17.7081 -7.17744,1.8618 -21.5442,-8.2732 -18.31325,-17.7081 z"
@@ -2553,8 +2558,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-0);fill-opacity:1;stroke:none"
        d="m 166.4682,1148.5393 c 3.17405,3.9404 5.11245,7.5011 5.62819,10.6242 -3.10954,-1.6059 -6.01076,-5.2996 -8.95821,-8.5292 z"
@@ -2562,8 +2567,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-7);fill-opacity:1;stroke:none"
        d="m 168.43373,1147.7344 c 4.92505,2.1375 9.22943,3.2618 12.81928,3.2196 -2.29207,-2.4476 -6.89711,-4.387 -10.98795,-6.4393 z"
@@ -2571,8 +2576,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 168.49705,1150.3588 5.07806,-3.3722 c 0.29182,4.2562 -2.01809,4.5647 -5.07806,3.3722 z"
@@ -2580,8 +2585,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-6-0);fill-opacity:1;stroke:none"
        d="m 263.12711,1127.9867 c 3.31205,-3.9404 5.33473,-7.5011 5.87289,-10.6243 -3.24474,1.6059 -6.2721,5.2997 -9.3477,8.5293 z"
@@ -2589,8 +2594,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-4-0);fill-opacity:1;stroke:none"
        d="m 267.62336,1128.5832 c 5.13919,-2.1375 9.63071,-3.2618 13.37664,-3.2196 -2.39172,2.4476 -7.19698,4.387 -11.46568,6.4393 z"
@@ -2598,8 +2603,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-0-1);fill-opacity:1;stroke:none"
        d="m 253,1118.1624 c 7.72092,3.2015 20.08605,8.9846 25.58337,15.1509 l 70.41663,4.0491 -70.41663,4 c -3.70275,5.9776 -19.79775,12.8885 -25.58337,15.2 l -9.95914,-19.1316 z"
@@ -2607,8 +2612,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-7-3);fill-opacity:1;stroke:none"
        d="m 257.37297,1163.1881 -6.68832,-4.0246 4.77737,-0.8049 c -8.52505,-10.741 -4.16491,-15.7502 1.91095,-20.9278 -9.82011,-7.9661 -7.72627,-13.0609 -1.91095,-20.9278 l -4.77737,-0.8049 6.68832,-4.0245 c -29.6197,-7.2443 -51.67684,2.867 -56.37297,25.7572 7.47442,27.1717 28.66422,31.3917 56.37297,25.7573 z"
@@ -2616,8 +2621,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-4-8);fill-opacity:1;stroke:none"
        d="m 209.13028,1132.1094 c 3.37143,9.435 26.59899,-15.8463 19.10949,-17.7081 -7.48951,-1.8617 -22.48091,8.2732 -19.10949,17.7081 z"
@@ -2625,8 +2630,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 265.99112,1124.6241 5.40105,3.1383 c 0.16347,-4.2707 -2.2529,-4.4725 -5.40105,-3.1383 z"
@@ -2634,8 +2639,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-8-3);fill-opacity:1;stroke:none"
        d="m 209.07608,1142.8422 c 3.37143,-9.4349 26.59899,15.8463 19.10948,17.7081 -7.4895,1.8618 -22.4809,-8.2732 -19.10948,-17.7081 z"
@@ -2643,8 +2648,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-0-4);fill-opacity:1;stroke:none"
        d="m 262.0103,1148.5393 c 3.31205,3.9404 5.33473,7.5011 5.87289,10.6242 -3.24474,-1.6059 -6.2721,-5.2996 -9.3477,-8.5292 z"
@@ -2652,8 +2657,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-7-5);fill-opacity:1;stroke:none"
        d="m 264.06128,1147.7344 c 5.13919,2.1375 9.63071,3.2618 13.37664,3.2196 -2.39172,-2.4476 -7.19698,-4.387 -11.46568,-6.4393 z"
@@ -2661,8 +2666,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 263.54201,1151.7825 5.45566,-3.0425 c 0.088,4.273 -2.33158,4.432 -5.45566,3.0425 z"
@@ -2670,8 +2675,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-8-5);fill-opacity:1;stroke:none"
        d="m 177.99672,1068.9645 c 2.23955,-1.529 3.80787,-3.0629 4.60328,-4.6023 -1.80223,0.3258 -3.86529,1.7713 -5.87032,2.9679 z"
@@ -2679,8 +2684,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient5898);fill-opacity:1;stroke:none"
        d="m 175.4,1062.7176 c 5.04357,6.6759 7.6,12.4747 7.6,18.6446 0,5.5 -2.53569,11.362 -7.6,18.3815 l -8.8,-18.5131 z"
@@ -2688,8 +2693,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-03-8);fill-opacity:1;stroke:none"
        d="m 177,1106.1879 -1.6,-2.6257 0.24407,-2.2038 c -2.28829,-9.8456 -2.18432,-15.5666 1.35593,-20.9278 -5.78511,-8.1632 -1.52896,-12.8803 -1.35593,-20.9277 l -1.04407,-1.5406 2.4,-3.2889 c -21.01695,-7.2442 -36.66781,2.8671 -40,25.7572 5.30355,27.1717 20.33898,31.3917 40,25.7573 z"
@@ -2697,8 +2702,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-7-2);fill-opacity:1;stroke:none"
        d="m 140.69969,1072.8389 c -0.99961,13.1302 29.23146,-12.0384 23.60052,-16.7475 -5.63093,-4.7092 -22.60096,3.6175 -23.60052,16.7475 z"
@@ -2706,8 +2711,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-42-9);fill-opacity:1;stroke:none"
        d="m 177.02758,1094.2485 c 2.34314,1.4858 3.97011,2.9895 4.77242,4.5137 -1.91271,-0.2907 -4.07007,-1.6963 -6.17301,-2.854 z"
@@ -2715,8 +2720,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient5165-6);fill-opacity:1;stroke:none"
        d="m 140.69968,1087.3152 c -0.9996,-13.1302 29.23147,12.0385 23.60053,16.7477 -5.63093,4.7092 -22.60096,-3.6176 -23.60053,-16.7477 z"
@@ -2724,8 +2729,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient6559);fill-opacity:1;stroke:none"
        d="m 186.75379,1094.9411 c -9.44825,9.1723 29.8708,10.3507 28.77329,3.0926 -1.0975,-7.258 -19.32521,-12.2648 -28.77329,-3.0926 z"
@@ -2733,8 +2738,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-64);fill-opacity:1;stroke:none"
        d="m 310.15909,1069.162 c 2.50583,-3.9404 4.03615,-7.5011 4.44331,-10.6243 -2.45489,1.6059 -4.74533,5.2997 -7.07226,8.5293 z"
@@ -2742,8 +2747,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-3);fill-opacity:1;stroke:none"
        d="m 311.71084,1069.9669 c 3.88819,-2.1375 7.28638,-3.2618 10.12048,-3.2196 -1.80953,2.4476 -5.4451,4.387 -8.6747,6.4393 z"
@@ -2751,8 +2756,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-8);fill-opacity:1;stroke:none"
        d="m 303.75903,1061.9178 c 5.43834,3.2015 9.86282,8.3222 13.73494,14.4885 l 6.50602,4.0245 -6.50602,4.0246 c -2.60807,5.9776 -9.65975,12.177 -13.73494,14.4885 l -7.95181,-18.5131 z"
@@ -2760,8 +2765,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-9);fill-opacity:1;stroke:none"
        d="m 306.6506,1106.1881 -5.06025,-4.0246 3.61446,-0.8049 c -6.44987,-10.741 -3.15108,-15.7502 1.44579,-20.9278 -7.42969,-7.9661 -5.84554,-13.0609 -1.44579,-20.9278 l -3.61446,-0.8049 5.06025,-4.0246 c -22.40964,-7.2442 -39.09762,2.8671 -42.65061,25.7573 5.65499,27.1717 21.68675,31.3917 42.65061,25.7573 z"
@@ -2769,8 +2774,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-0);fill-opacity:1;stroke:none"
        d="m 270.1512,1075.1094 c 2.55075,9.435 20.12423,-15.8463 14.45783,-17.7081 -5.6664,-1.8618 -17.00858,8.2732 -14.45783,17.7081 z"
@@ -2778,8 +2783,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 310.26505,1067.5522 3.61446,4.0246 c 0.68026,-4.1782 -1.09403,-4.7946 -3.61446,-4.0246 z"
@@ -2787,8 +2792,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-9);fill-opacity:1;stroke:none"
        d="m 270.11019,1085.8422 c 2.55075,-9.4349 20.12423,15.8463 14.45783,17.7081 -5.6664,1.8618 -17.00858,-8.2732 -14.45783,-17.7081 z"
@@ -2796,8 +2801,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-09);fill-opacity:1;stroke:none"
        d="m 310.15909,1091.5393 c 2.50583,3.9404 4.03615,7.5011 4.44331,10.6242 -2.45489,-1.6059 -4.74533,-5.2996 -7.07226,-8.5292 z"
@@ -2805,8 +2810,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-70);fill-opacity:1;stroke:none"
        d="m 311.71084,1090.7344 c 3.88819,2.1375 7.28638,3.2618 10.12048,3.2196 -1.80953,-2.4476 -5.4451,-4.387 -8.6747,-6.4393 z"
@@ -2814,8 +2819,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 310.26505,1093.1491 3.61446,-4.0246 c 0.68026,4.1782 -1.09403,4.7946 -3.61446,4.0246 z"
@@ -2823,8 +2828,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-60);fill-opacity:1;stroke:none"
        d="m 51.082735,1184.0281 c 2.773122,-3.6356 4.466673,-6.9209 4.917265,-9.8026 -2.716749,1.4817 -5.251498,4.8898 -7.826639,7.8697 z"
@@ -2832,8 +2837,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-55);fill-opacity:1;stroke:none"
        d="m 52.8,1184.7708 c 4.302934,-1.9722 8.063601,-3.0096 11.2,-2.9706 -2.002546,2.2583 -6.025904,4.0477 -9.6,5.9413 z"
@@ -2841,8 +2846,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-08);fill-opacity:1;stroke:none"
        d="m 44,1177.3442 c 6.018428,2.9539 10.914861,7.6786 15.2,13.368 l 7.2,3.7132 -7.2,3.7133 c -2.886268,5.5153 -10.690126,11.2353 -15.2,13.368 l -8.8,-17.0813 z"
@@ -2850,8 +2855,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-78);fill-opacity:1;stroke:none"
        d="m 47.2,1218.1906 -5.6,-3.7133 4,-0.7427 c -7.137859,-9.9102 -3.487202,-14.532 1.6,-19.3092 -8.222189,-7.35 -6.469057,-12.0508 -1.6,-19.3092 l -4,-0.7427 5.6,-3.7133 c -5.590418,-1.5067 -11.7,-1.7979 -16.2,-1.7979 -16.5,0 -27.954371,9.204 -31,25.5631 4.7230265,18.9204 15.5,25.4369 31,25.4369 5,0 10.508939,-0.3964 16.2,-1.6717 z"
@@ -2859,8 +2864,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccscsc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-75);fill-opacity:1;stroke:none"
        d="m 6.8073317,1189.5156 c 2.8228303,8.7053 22.2708173,-14.6208 16.0000003,-16.3386 -6.270817,-1.7178 -18.8228307,7.6333 -16.0000003,16.3386 z"
@@ -2868,8 +2873,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 51.2,1182.5428 4,3.7134 c 0.752821,-3.8551 -1.210722,-4.4238 -4,-3.7134 z"
@@ -2877,8 +2882,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-99);fill-opacity:1;stroke:none"
        d="m 6.7619481,1199.4183 c 2.8228299,-8.7052 22.2708179,14.6207 16.0000009,16.3385 -6.270817,1.7179 -18.8228312,-7.6333 -16.0000009,-16.3385 z"
@@ -2886,8 +2891,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-2);fill-opacity:1;stroke:none"
        d="m 51.082735,1204.6748 c 2.773122,3.6356 4.466673,6.9209 4.917265,9.8025 -2.716749,-1.4817 -5.251498,-4.8897 -7.826639,-7.8696 z"
@@ -2895,8 +2900,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-36);fill-opacity:1;stroke:none"
        d="m 52.8,1203.9321 c 4.302934,1.9722 8.063601,3.0096 11.2,2.9706 -2.002546,-2.2583 -6.025904,-4.0477 -9.6,-5.9413 z"
@@ -2904,8 +2909,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 51.2,1206.1601 4,-3.7134 c 0.752821,3.8551 -1.210722,4.4238 -4,3.7134 z"
@@ -2913,8 +2918,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4587-60-7);fill-opacity:1;stroke:none"
        d="m 120.17906,1184.7622 c 2.26763,-1.7802 3.65248,-3.3889 4.02094,-4.8 -2.22154,0.7255 -4.29426,2.3944 -6.4,3.8535 z"
@@ -2922,8 +2927,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-55-4);fill-opacity:1;stroke:none"
        d="m 123.4,1187.1627 c 4.30293,-1.9722 6.4,-1.6005 8.8,-0.8005 -2.4,0.8 -3.6259,1.8776 -7.2,3.7712 z"
@@ -2931,8 +2936,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-08-7);fill-opacity:1;stroke:none"
        d="m 110.6,1175.1622 c 6.01843,2.9539 13.31486,9.8605 17.6,15.5499 l 7.2,6.0501 -7.2,1.3764 c -2.88627,5.5153 -11.49013,11.6909 -16,13.8236 l -8,-17.5369 z"
@@ -2940,8 +2945,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-78-5);fill-opacity:1;stroke:none"
        d="m 117,1216.7622 c -9.63704,-7.9423 -7.71476,-15.187 -4,-20 -6.17076,-17.2401 -1.36666,-17.8476 0,-28.8 -0.8,0.8 -4.695,1.767 -5.6,1.6 -19.354928,-3.5724 -28.600278,6.9678 -38.399998,24.8631 4.8411,27.2615 23.41867,30.9938 47.999998,22.3369 z"
@@ -2949,8 +2954,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccscc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-75-3);fill-opacity:1;stroke:none"
        d="m 75.807332,1189.5155 c 2.82283,8.7053 22.270818,-14.6208 16,-16.3386 -6.27081,-1.7178 -18.82283,7.6333 -16,16.3386 z"
@@ -2958,8 +2963,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 119.71904,1183.0369 4,3.7134 c 0.75282,-3.8551 -1.21072,-4.4238 -4,-3.7134 z"
@@ -2967,8 +2972,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-99-2);fill-opacity:1;stroke:none"
        d="m 75.761952,1199.4182 c 2.82283,-8.7052 22.270818,14.6207 16,16.3385 -6.27082,1.7179 -18.82283,-7.6333 -16,-16.3385 z"
@@ -2976,8 +2981,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-2-4);fill-opacity:1;stroke:none"
        d="m 120.79606,1205.4609 c 2.77312,3.6356 4.46667,6.9209 4.91726,9.8025 -2.71675,-1.4817 -5.2515,-4.8897 -7.82664,-7.8696 z"
@@ -2985,8 +2990,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-36-5);fill-opacity:1;stroke:none"
        d="m 121.77149,1204.9282 c 4.22365,2.1367 7.9415,3.3184 11.07707,3.4005 -1.91394,-2.3339 -5.86527,-4.2772 -9.36366,-6.3073 z"
@@ -2994,8 +2999,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-3.910025"
        inkscape:transform-center-y="0.95436739" />
     <path
@@ -3005,8 +3010,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-55-4-8);fill-opacity:1;stroke:none"
        d="m 191.2,1192.8001 c 4.30293,-1.9722 6.4,-1.6005 8.8,-0.8005 -2.4,0.8 -3.6259,1.8776 -7.2,3.7712 z"
@@ -3014,8 +3019,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-08-7-3);fill-opacity:1;stroke:none"
        d="m 177.2,1179.1624 c 6.01843,2.9539 14.91486,10.3106 19.2,16 l 6.4,4.8 -8,0.8 c -2.88627,5.5153 -11.49013,6.6673 -16,8.8 l -5.6,-15.1369 z"
@@ -3023,8 +3028,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-78-5-4);fill-opacity:1;stroke:none"
        d="m 184.4,1214.3624 c -9.63704,-7.9423 -7.71476,-18.387 -4,-23.2 -6.56838,-1.2465 -2.60772,-13.8276 0,-15.2 -8.08002,0.4321 -2.72332,4.2022 -1.6,-4.8 -0.8,0.8 -3.88567,2.5045 -4.8,2.4 -28,-3.2 -27.2,18.4 -36,22.4 7.43132,37.4127 43.22768,18.6112 46.4,18.4 z"
@@ -3032,8 +3037,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccscc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-75-3-3);fill-opacity:1;stroke:none"
        d="m 147.80479,1183.5715 c 3.82676,-0.1194 25.34211,-12.7962 17.86687,-10.0233 -7.47525,2.7728 -21.69365,10.1428 -17.86687,10.0233 z"
@@ -3041,8 +3046,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-99-2-5);fill-opacity:1;stroke:none"
        d="m 148.74557,1185.05 c 10.37642,-9.2386 28.23446,30.4519 16.52807,29.1157 -11.70658,-1.3359 -26.90454,-19.8769 -16.52807,-29.1157 z"
@@ -3050,8 +3055,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-2-4-1);fill-opacity:1;stroke:none"
        d="m 187.39606,1205.4611 c 2.77312,3.6356 4.46667,6.9209 4.91726,9.8025 -2.71675,-1.4817 -5.2515,-4.8897 -7.82664,-7.8696 z"
@@ -3059,8 +3064,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-36-5-9);fill-opacity:1;stroke:none"
        d="m 188.46146,1206.1155 c 4.22365,2.1367 7.9415,3.3184 11.07708,3.4005 -1.91395,-2.3339 -5.86527,-4.2772 -9.36366,-6.3073 z"
@@ -3068,8 +3073,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-3.910025"
        inkscape:transform-center-y="0.95436739" />
     <path
@@ -3079,8 +3084,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-08-7-3-4);fill-opacity:1;stroke:none"
        d="m 241.6,1183.9624 c 6.01843,2.9539 15.71486,9.5106 20,15.2 l 6.4,6.4 -8,-0.8 c -6.4,4 -10.69013,2.6673 -15.2,4.8 -27.74552,3.634 -31.38817,-3.8761 -32.8,-8.8 l 27.2,-6.3369 z"
@@ -3088,8 +3093,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.12549"
        d="m 214.4,1204.7624 c 12.75251,1.6511 24.73053,2.1291 37.6,-1.6"
@@ -3097,8 +3102,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-78-5-4-8);fill-opacity:1;stroke:none"
        d="m 249.6,1196.7624 c -3.9402,0.6904 -10.55904,-13.8481 -4,-20 -3.53054,0.8 -2.89675,2.5157 -5.6,2.4 -13.45046,-0.5759 -21.83575,2.5498 -26.4,7.2 -3.78164,5.8266 -5.49724,12.54 -9.6,15.2 13.76772,-1.0629 23.65455,1.0159 45.6,-4.8 z"
@@ -3106,8 +3111,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4516-99-2-5-2);fill-opacity:1;stroke:none"
        d="m 221.8692,1182.4601 c 14.4165,-1.5861 9.47609,16.6929 -0.49492,14.0383 -9.9713,-2.6545 -13.92171,-12.4522 0.49492,-14.0383 z"
@@ -3115,8 +3120,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-2-4-1-4);fill-opacity:1;stroke:none"
        d="m 253.63027,1202.968 c 1.81156,-2.5979 3.66603,-4.4381 5.56973,-5.4056 -0.3135,2.0499 -2.029,4.4447 -3.4329,6.7629 z"
@@ -3124,8 +3129,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.7779367"
        inkscape:transform-center-y="-2.6816879" />
     <path
@@ -3135,8 +3140,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-5.371415"
        inkscape:transform-center-y="-0.80610077" />
     <path
@@ -3146,8 +3151,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient8488);fill-opacity:1;stroke:none"
        d="m 253.41627,1207.4583 c 4.60979,1.0745 8.50182,1.3412 11.56746,0.6776 -2.41266,-1.8137 -6.71206,-2.7648 -10.59194,-3.9078 z"
@@ -3155,8 +3160,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-5.387005"
        inkscape:transform-center-y="0.39370826" />
     <path
@@ -3166,8 +3171,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cscc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4551-08-7-3-4-7);fill-opacity:1;stroke:none"
        d="m 307.40001,1180.7624 c 6.32483,1.8049 15.27424,10.5629 19.2,17.6 l 6.4,4.8 h -8 c -6.4,4 -12.29013,5.8673 -16.8,8 -27.74552,3.634 -30.58817,-8.6761 -32,-13.6 -0.8,-4 8.78541,-11.205 28,-11.2 z"
@@ -3175,8 +3180,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-78-5-4-8-2);fill-opacity:1;stroke:none"
        d="m 314.60001,1186.3624 c -3.35187,0.6659 -7.67883,-6.0348 -5.6,-12 -3.53054,0.8 -2.4,1.6 -4,1.6 -15.2,-0.8 -25.6,4.8 -31.2,16.8 -4.8,2.4 -3.2,4 -4.8,6.4 12,-2.4 16.88179,-12.211 33.6,-11.2 3.54589,0.2144 7.79702,-0.699 12,-1.6 z"
@@ -3184,8 +3189,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-2-4-1-4-8);fill-opacity:1;stroke:none"
        d="m 319.01515,1195.5865 c 1.81156,-2.5979 3.66603,-4.4381 5.56973,-5.4056 -0.3135,2.0499 -2.029,4.4447 -3.4329,6.7629 z"
@@ -3193,8 +3198,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.7779367"
        inkscape:transform-center-y="-2.6816879" />
     <path
@@ -3204,8 +3209,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-4.574105"
        inkscape:transform-center-y="-2.1536826" />
     <path
@@ -3215,8 +3220,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient8451-6);fill-opacity:1;stroke:none"
        d="m 316.43746,1205.7614 c 2.4291,3.0523 3.99368,5.9282 4.56255,8.601 -2.22164,-1.0137 -4.44839,-3.8843 -6.67408,-6.3421 z"
@@ -3224,8 +3229,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-2.2407137"
        inkscape:transform-center-y="3.2414849" />
     <path
@@ -3235,8 +3240,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-5.4955353"
        inkscape:transform-center-y="1.3223729" />
     <path
@@ -3246,8 +3251,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 223.18394,1209.7253 0.0322,-8.7011"
@@ -3255,8 +3260,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 228.8,1210.4047 v -9.8766"
@@ -3264,8 +3269,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 234.38394,1210.4372 0.0161,-10.4441"
@@ -3273,8 +3278,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="M 240.01606,1210.087 240,1198.9682"
@@ -3282,8 +3287,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 245.64819,1209.0176 -0.0562,-11.1708"
@@ -3291,16 +3296,16 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient8854);stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 251.5,1208.2032 v -12.3603"
        id="path8769-9-6"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient8451);fill-opacity:1;stroke:none"
        d="m 250.90567,1205.5624 c 2.64059,1.7488 4.52473,3.5586 5.5376,5.4385 -2.05683,-0.2642 -4.49207,-1.9218 -6.84327,-3.2697 z"
@@ -3308,8 +3313,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-2.7491667"
        inkscape:transform-center-y="1.6968121" />
     <path
@@ -3319,8 +3324,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.12549"
        d="m 283.40001,1207.9624 c 10.51597,1.067 20.93798,1.0534 31.2,-0.8"
@@ -3328,8 +3333,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 283.40001,1207.9624 -0.0281,-15.1854"
@@ -3337,8 +3342,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 289.00001,1210.5392 v -20.3978"
@@ -3346,8 +3351,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 294.57791,1211.5822 0.0442,-23.085"
@@ -3355,8 +3360,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 300.24689,1211.7718 -0.0469,-23.8094"
@@ -3364,8 +3369,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 305.80001,1211.3392 v -23.3768"
@@ -3373,8 +3378,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 311.40001,1209.5624 v -22.4"
@@ -3382,8 +3387,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9308);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 343.50096,1187.4892 c 9.74586,-7.294 27.04877,-3.734 43.29904,-0.3268"
@@ -3391,8 +3396,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 348.43112,1208.7716 0.0156,-28.7095"
@@ -3400,8 +3405,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 354.06225,1212.476 -0.0623,-35.7136"
@@ -3409,8 +3414,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 359.61556,1214.0604 -0.0156,-38.898"
@@ -3418,8 +3423,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 365.2,1214.3624 v -39.5112"
@@ -3427,8 +3432,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 370.8,1213.5624 v -38.4"
@@ -3436,8 +3441,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 376.4,1211.9624 v -35.2"
@@ -3445,8 +3450,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9245);fill-opacity:1;stroke:none"
        d="m 382.68273,1182.3692 c 2.77313,-3.9404 4.46668,-7.5011 4.91727,-10.6243 -2.71675,1.6059 -5.2515,5.2997 -7.82664,8.5293 z"
@@ -3454,8 +3459,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-40);fill-opacity:1;stroke:none"
        d="m 384.4,1183.1741 c 4.30293,-2.1375 8.0636,-3.2618 11.2,-3.2196 -2.00255,2.4476 -6.0259,4.387 -9.6,6.4393 z"
@@ -3463,8 +3468,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-02);fill-opacity:1;stroke:none"
        d="m 382.68273,1204.7465 c 2.77313,3.9404 4.46668,7.5011 4.91727,10.6242 -2.71675,-1.6059 -5.2515,-5.2996 -7.82664,-8.5292 z"
@@ -3472,8 +3477,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-0);fill-opacity:1;stroke:none"
        d="m 384.4,1203.9416 c 4.30293,2.1375 8.0636,3.2618 11.2,3.2196 -2.00255,-2.4476 -6.0259,-4.387 -9.6,-6.4393 z"
@@ -3481,8 +3486,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9334);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 343.38213,1200.5445 c 9.74586,7.294 27.1676,4.4251 43.41787,1.0179"
@@ -3490,8 +3495,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 342.8,1199.1624 v -9.6"
@@ -3499,8 +3504,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 382,1207.9624 v -27.2"
@@ -3508,8 +3513,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9779);fill-opacity:1;stroke:none"
        d="m 446.19998,1220.1881 -7.2,-5.8257 c 4,0 4,-40 0,-40 l 7.2,-5.6889 c -24.8,-7.2442 -43.26802,2.8671 -47.2,25.7573 6.25819,27.1717 24,31.3917 47.2,25.7573 z"
@@ -3517,8 +3522,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9182-4);fill-opacity:1;stroke:none"
        d="m 436.08807,1175.8493 c 5.2797,3.2015 9.57513,8.3222 13.33429,14.4885 l 6.31625,4.0245 -6.31625,4.0246 c -2.532,5.9776 -9.37798,12.177 -13.33429,14.4885 -16.31782,4.3283 -26.28437,-0.2479 -29.82672,-18.513 2.25569,-14.118 9.92237,-22.6417 29.82672,-18.5131 z"
@@ -3526,8 +3531,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9308-7);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 408.27989,1187.4892 c 8.54961,-7.294 23.7287,-3.734 37.98435,-0.3268"
@@ -3535,8 +3540,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 412.6049,1208.7716 0.0137,-28.7095"
@@ -3544,8 +3549,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 417.54484,1212.476 -0.0546,-35.7136"
@@ -3553,8 +3558,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 422.41652,1214.0604 -0.0137,-38.898"
@@ -3562,8 +3567,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 427.31551,1214.3624 v -39.5112"
@@ -3571,8 +3576,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 432.22814,1213.5624 v -38.4"
@@ -3580,8 +3585,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 437.14078,1211.9624 v -35.2"
@@ -3589,8 +3594,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9245-4);fill-opacity:1;stroke:none"
        d="m 442.65234,1182.3692 c 2.43274,-3.9404 3.91842,-7.5011 4.3137,-10.6243 -2.38328,1.6059 -4.60691,5.2997 -6.86596,8.5293 z"
@@ -3598,8 +3603,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-40-4);fill-opacity:1;stroke:none"
        d="m 444.15882,1183.1741 c 3.77478,-2.1375 7.07385,-3.2618 9.82528,-3.2196 -1.75675,2.4476 -5.28626,4.387 -8.42167,6.4393 z"
@@ -3607,8 +3612,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-02-3);fill-opacity:1;stroke:none"
        d="m 442.65234,1204.7465 c 2.43274,3.9404 3.91842,7.5011 4.3137,10.6242 -2.38328,-1.6059 -4.60691,-5.2996 -6.86596,-8.5292 z"
@@ -3616,8 +3621,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-0-5);fill-opacity:1;stroke:none"
        d="m 444.15882,1203.9416 c 3.77478,2.1375 7.07385,3.2618 9.82528,3.2196 -1.75675,-2.4476 -5.28626,-4.387 -8.42167,-6.4393 z"
@@ -3625,8 +3630,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9334-0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 408.17564,1200.5445 c 8.54962,7.294 23.83295,4.4251 38.0886,1.0179"
@@ -3634,8 +3639,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 407.66496,1199.1624 v -9.6"
@@ -3643,8 +3648,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 442.05341,1207.9624 v -27.2"
@@ -3652,8 +3657,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9779-8);fill-opacity:1;stroke:none"
        d="m 504.19999,1220.1881 -7.2,-5.8257 c 4,0 4,-40 0,-40 l 7.2,-5.6889 c -24.8,-7.2442 -43.26802,2.8671 -47.2,25.7573 6.25819,27.1717 24,31.3917 47.2,25.7573 z"
@@ -3661,8 +3666,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9182-8);fill-opacity:1;stroke:none"
        d="m 507.86503,1175.8493 c 7.75496,3.2015 14.06417,8.3222 19.58572,14.4885 l 9.27744,4.0245 -9.27744,4.0246 c -3.71906,5.9776 -13.7746,12.177 -19.58572,14.4885 -23.96799,4.3283 -38.60707,-0.2479 -43.81016,-18.513 3.3132,-14.118 14.57419,-22.6417 43.81016,-18.5131 z"
@@ -3670,8 +3675,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9308-49);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 467.01975,1187.4892 c 12.55787,-7.294 34.85327,-3.734 55.79229,-0.3268"
@@ -3679,8 +3684,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 473.37243,1208.7716 0.0201,-28.7095"
@@ -3688,8 +3693,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 480.62833,1212.476 -0.0802,-35.7136"
@@ -3697,8 +3702,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 487.78396,1214.0604 -0.0201,-38.898"
@@ -3706,8 +3711,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 494.9797,1214.3624 v -39.5112"
@@ -3715,8 +3720,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 502.19549,1213.5624 v -38.4"
@@ -3724,8 +3729,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 509.41129,1211.9624 v -35.2"
@@ -3733,8 +3738,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient9245-8);fill-opacity:1;stroke:none"
        d="m 517.50678,1182.3692 c 3.57328,-3.9404 5.75547,-7.5011 6.33608,-10.6243 -3.50063,1.6059 -6.76674,5.2997 -10.0849,8.5293 z"
@@ -3742,8 +3747,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-40-54);fill-opacity:1;stroke:none"
        d="m 519.71954,1183.1741 c 5.54447,-2.1375 10.39023,-3.2618 14.43159,-3.2196 -2.58036,2.4476 -7.76458,4.387 -12.36993,6.4393 z"
@@ -3751,8 +3756,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-02-4);fill-opacity:1;stroke:none"
        d="m 517.50678,1204.7465 c 3.57328,3.9404 5.75547,7.5011 6.33608,10.6242 -3.50063,-1.6059 -6.76674,-5.2996 -10.0849,-8.5292 z"
@@ -3760,8 +3765,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4561-1-0-35);fill-opacity:1;stroke:none"
        d="m 519.71954,1203.9416 c 5.54447,2.1375 10.39023,3.2618 14.43159,3.2196 -2.58036,-2.4476 -7.76458,-4.387 -12.36993,-6.4393 z"
@@ -3769,8 +3774,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:url(#linearGradient9334-9);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 466.86663,1200.5445 c 12.55788,7.294 35.00639,4.4251 55.94541,1.0179"
@@ -3778,8 +3783,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 466.11653,1199.1624 v -9.6"
@@ -3787,8 +3792,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.12549"
        d="m 516.62708,1207.9624 v -27.2"
@@ -3796,8 +3801,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4925);fill-opacity:1;stroke:none"
        d="m 401.4925,1125.6467 c 1.47095,-4.5884 2.02481,-8.4923 1.5229,-11.6076 -2.11377,2.3434 -3.43079,6.6253 -4.92488,10.4762 z"
@@ -3805,8 +3810,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.0434012"
        inkscape:transform-center-y="-4.7194826" />
     <path
@@ -3816,8 +3821,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.98337"
        inkscape:transform-center-y="-3.6942327" />
     <path
@@ -3827,8 +3832,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-84);fill-opacity:1;stroke:none"
        d="m 397.19999,1163.1881 -5.6,-4.0246 4,-0.8049 c -7.13786,-10.741 -3.4872,-15.7502 1.6,-20.9278 -8.22219,-7.9661 -6.46906,-13.0609 -1.6,-20.9278 l -4,-0.8049 5.6,-4.0246 c -24.8,-7.2442 -43.26802,2.8671 -47.2,25.7573 6.25819,27.1717 24,31.3917 47.2,25.7573 z"
@@ -3836,8 +3841,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-1);fill-opacity:1;stroke:none"
        d="m 356.80732,1132.1094 c 2.82283,9.435 22.27082,-15.8463 16,-17.7081 -6.27082,-1.8618 -18.82283,8.2732 -16,17.7081 z"
@@ -3845,8 +3850,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 401.19999,1124.5522 4,4.0246 c 0.75282,-4.1782 -1.21072,-4.7946 -4,-4.0246 z"
@@ -3854,8 +3859,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient5044);fill-opacity:1;stroke:none"
        d="m 356.76194,1142.8422 c 2.82283,-9.4349 22.27082,15.8463 16,17.7081 -6.27082,1.8618 -18.82283,-8.2732 -16,-17.7081 z"
@@ -3863,8 +3868,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-06);fill-opacity:1;stroke:none"
        d="m 401.66048,1148.7833 c 1.71307,4.5035 2.47392,8.3724 2.13855,11.5099 -2.23549,-2.2276 -3.77856,-6.4332 -5.47549,-10.1991 z"
@@ -3872,8 +3877,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-0.70003196"
        inkscape:transform-center-y="3.5758674" />
     <path
@@ -3883,8 +3888,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-2.372725"
        inkscape:transform-center-y="2.9746174" />
     <path
@@ -3894,8 +3899,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient5126);fill-opacity:1;stroke:none"
        d="m 470.04909,1123.9662 c 1.47095,-4.5884 2.02481,-8.4923 1.5229,-11.6076 -2.11377,2.3434 -3.43079,6.6253 -4.92488,10.4762 z"
@@ -3903,8 +3908,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.0434012"
        inkscape:transform-center-y="-4.7194826" />
     <path
@@ -3914,8 +3919,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-1.98337"
        inkscape:transform-center-y="-3.6942327" />
     <path
@@ -3925,8 +3930,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4458-84-9);fill-opacity:1;stroke:none"
        d="m 465.19998,1163.1882 -5.6,-4.0246 4,-0.8049 c -7.13786,-10.741 -3.4872,-15.7502 1.6,-20.9278 -8.22219,-7.9661 -6.46906,-13.0609 -1.6,-20.9278 l -4,-0.8049 5.6,-4.0246 c -24.8,-7.2442 -43.26802,2.8671 -47.2,25.7573 6.25819,27.1717 24,31.3917 47.2,25.7573 z"
@@ -3934,8 +3939,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient4543-1-9);fill-opacity:1;stroke:none"
        d="m 424.80731,1132.1095 c 2.82283,9.435 22.27082,-15.8463 16,-17.7081 -6.27082,-1.8618 -18.82283,8.2732 -16,17.7081 z"
@@ -3943,8 +3948,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#ff4040;fill-opacity:1;stroke:none"
        d="m 469.51902,1123.4925 4,4.0246 c 0.75282,-4.1782 -1.21072,-4.7946 -4,-4.0246 z"
@@ -3952,8 +3957,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#radialGradient5044-1);fill-opacity:1;stroke:none"
        d="m 424.76193,1142.8423 c 2.82283,-9.4349 22.27082,15.8463 16,17.7081 -6.27082,1.8618 -18.82283,-8.2732 -16,-17.7081 z"
@@ -3961,8 +3966,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4631-06-7);fill-opacity:1;stroke:none"
        d="m 470.56044,1150.0074 c 1.71307,4.5035 2.47392,8.3724 2.13855,11.5099 -2.23549,-2.2276 -3.77856,-6.4332 -5.47549,-10.1991 z"
@@ -3970,8 +3975,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-0.70003196"
        inkscape:transform-center-y="3.5758674" />
     <path
@@ -3981,8 +3986,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-2.372725"
        inkscape:transform-center-y="2.9746174" />
     <path
@@ -3992,8 +3997,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="display:inline;fill:url(#linearGradient4587-64-2);fill-opacity:1;stroke:none"
        d="m 370.542,1068.7812 c 0.5776,-4.6272 0.48504,-8.5015 -0.37893,-11.5088 -1.4355,2.485 -1.9279,6.7981 -2.62994,10.7047 z"
@@ -4001,8 +4006,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-17.598104"
        inkscape:transform-center-y="-17.470688" />
     <path
@@ -4012,8 +4017,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-22.059274"
        inkscape:transform-center-y="-12.580238" />
     <path
@@ -4023,8 +4028,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-18.155006"
        inkscape:transform-center-y="-0.050337771" />
     <path
@@ -4034,8 +4039,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="5.2790345"
        inkscape:transform-center-y="-0.085788429" />
     <path
@@ -4045,8 +4050,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="12.935401"
        inkscape:transform-center-y="-13.206409" />
     <path
@@ -4056,8 +4061,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-20.184577"
        inkscape:transform-center-y="-11.08557" />
     <path
@@ -4067,8 +4072,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzz"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="12.88416"
        inkscape:transform-center-y="13.355877" />
     <path
@@ -4078,8 +4083,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-17.964706"
        inkscape:transform-center-y="17.316562" />
     <path
@@ -4089,8 +4094,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-22.577866"
        inkscape:transform-center-y="12.434662" />
     <path
@@ -4100,8 +4105,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\CB.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        inkscape:transform-center-x="-20.257572"
        inkscape:transform-center-y="10.771571" />
   </g>

@@ -26,7 +26,8 @@
      id="defs2">
     <linearGradient
        inkscape:collect="always"
-       id="fire-glow-snout-7">
+       id="fire-glow-snout-7"
+       inkscape:label="fire-glow-snout">
       <stop
          id="stop8159"
          offset="0"
@@ -42,7 +43,8 @@
     </linearGradient>
     <linearGradient
        id="belly-shade-2"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="belly-shade">
       <stop
          id="stop7193"
          offset="0"
@@ -58,7 +60,8 @@
     </linearGradient>
     <linearGradient
        id="shade-9"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="shade">
       <stop
          id="stop6968"
          offset="0"
@@ -70,7 +73,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="leg-3">
+       id="leg-3"
+       inkscape:label="leg">
       <stop
          style="stop-color:#a0a0a0;stop-opacity:1;"
          offset="0"
@@ -94,7 +98,8 @@
     </linearGradient>
     <linearGradient
        id="mask1"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="mask">
       <stop
          id="stop5732"
          offset="0"
@@ -106,7 +111,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="nose-opening-3">
+       id="nose-opening-3"
+       inkscape:label="nose-opening">
       <stop
          style="stop-color:#4f1111;stop-opacity:1;"
          offset="0"
@@ -122,7 +128,8 @@
     </linearGradient>
     <linearGradient
        id="fire-glow-nose-5"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="fire-glow-nose">
       <stop
          style="stop-color:#ffff00;stop-opacity:0.87843138"
          offset="0"
@@ -134,7 +141,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="body-1">
+       id="body-1"
+       inkscape:label="body">
       <stop
          style="stop-color:#b3b3b3;stop-opacity:1"
          offset="0"
@@ -1152,7 +1160,8 @@
        spreadMethod="pad" />
     <linearGradient
        inkscape:collect="always"
-       id="fire-5">
+       id="fire-5"
+       inkscape:label="fire">
       <stop
          style="stop-color:#ffffff;stop-opacity:1"
          offset="0"
@@ -2609,8 +2618,8 @@
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
          id="path3782"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-6.7031322"
          cy="1036.3622"
          rx="3.203124"
@@ -2619,8 +2628,8 @@
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path3770-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-16"
          cy="1036.3622"
          r="15" />
@@ -2628,8 +2637,8 @@
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
          id="path3780"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-18"
          cy="1036.3622"
          r="9.5" />
@@ -2639,16 +2648,16 @@
          id="path3824"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
          d="m -12,1043.8622 v -6 h 2 v 6 z"
          id="path3824-4"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
   </g>
   <g

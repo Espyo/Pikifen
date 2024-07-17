@@ -10209,8 +10209,8 @@
          style="display:inline;fill:url(#linearGradient4508-9-6-6);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="path3822-74-9-4"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-83.999985"
          cy="497.00012"
@@ -10225,16 +10225,16 @@
          rx="1.9999994"
          ry="2.0000038"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="display:inline;fill:url(#linearGradient3985-27-0-1-6);fill-opacity:1;stroke:none;stroke-width:1"
          d="m 84,495.0001 h 9.999998 v 4 H 84 Z"
          id="path3864-7-7-4"
          inkscape:connector-curvature="0"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="display:inline;opacity:0.75;fill:url(#radialGradient5642-8);fill-opacity:1;stroke:none;stroke-width:1"
          id="path3871-2-0-4"
@@ -10243,8 +10243,8 @@
          rx="9.9999943"
          ry="10"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <path
        style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#f1f2d8;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -12109,8 +12109,8 @@
          style="fill:url(#linearGradient2332);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse1997"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="197.64285"
          cy="632"
          rx="2.3571391"
@@ -12128,14 +12128,14 @@
          id="path2001"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient2286);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2111"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="190"
          cy="632"
          rx="9.9999971"
@@ -12158,8 +12158,8 @@
          id="path1917"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="fill:url(#linearGradient2364);fill-opacity:1;stroke:none;stroke-width:0.666666"
          id="ellipse1919"
@@ -12171,8 +12171,8 @@
          style="opacity:0.75;fill:url(#radialGradient2284);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2113"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="273"
          cy="632"
          rx="9.9999971"
@@ -12187,8 +12187,8 @@
          style="fill:url(#linearGradient2318);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse2055"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-83.999985"
          cy="697"
@@ -12208,15 +12208,15 @@
          id="path2059"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient2282);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2115"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-94"
          cy="697"
          rx="9.9999971"
@@ -12264,8 +12264,8 @@
          style="fill:url(#radialGradient2388);fill-opacity:1;stroke:none;stroke-width:0.992762"
          id="ellipse1857"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="100.59377"
          cy="632"
          rx="6.4062481"
@@ -12277,14 +12277,14 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cscc"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <circle
          style="fill:none;stroke:url(#radialGradient2395);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="circle1863"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="82.000031"
          cy="632"
          r="30" />
@@ -12292,8 +12292,8 @@
          style="fill:url(#radialGradient2384);fill-opacity:1;stroke:none;stroke-width:1"
          id="circle1865"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="78.000031"
          cy="632"
          r="19" />
@@ -12307,8 +12307,8 @@
          style="fill:url(#linearGradient2382);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse1873"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="76.000015"
          cy="631.99988"
          rx="2.999999"
@@ -12326,15 +12326,15 @@
          id="path1881"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          sodipodi:nodetypes="ccccc" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient2292);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2105"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="62"
          cy="632"
          rx="9.9999971"
@@ -13793,14 +13793,14 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccc"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <circle
          style="fill:none;stroke:url(#radialGradient2373);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path3770-1"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="82.000031"
          cy="432"
          r="30" />
@@ -13823,8 +13823,8 @@
            style="fill:url(#linearGradient3983-7);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
            id="path3822-6"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="76.000031"
            cy="432"
            r="3" />
@@ -13832,8 +13832,8 @@
            style="fill:url(#linearGradient5805);fill-opacity:1;stroke:none;stroke-width:1"
            id="path3822-6-1"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="62"
            cy="432"
            rx="1.9999994"
@@ -13844,14 +13844,14 @@
            id="path3864-9"
            inkscape:connector-curvature="0"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <ellipse
            style="opacity:0.75;fill:url(#radialGradient3879-17);fill-opacity:1;stroke:none;stroke-width:1"
            id="path3871-27"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="62"
            cy="432"
            rx="9.9999971"
@@ -14080,8 +14080,8 @@
            style="fill:url(#linearGradient3983);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
            id="path3822"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="76.000015"
            cy="31.999928"
            rx="2.999999"
@@ -14099,14 +14099,14 @@
            id="path3864"
            inkscape:connector-curvature="0"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <ellipse
            style="opacity:0.75;fill:url(#radialGradient3879);fill-opacity:1;stroke:none;stroke-width:2"
            id="path3871"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="62"
            cy="31.999998"
            rx="9.9999971"
@@ -15031,8 +15031,8 @@
          id="path7602"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="fill:url(#linearGradient8058);fill-opacity:1;stroke:none;stroke-width:0.666666"
          id="ellipse7604"
@@ -15044,8 +15044,8 @@
          style="opacity:0.75;fill:url(#radialGradient8024);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse7662"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="330"
          cy="832"
          rx="9.9999971"
@@ -15539,8 +15539,8 @@
          style="fill:url(#linearGradient8048);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse7618"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="197.64285"
          cy="832"
          rx="2.3571391"
@@ -15558,14 +15558,14 @@
          id="path7622"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient8026);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse7660"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="190"
          cy="832"
          rx="9.9999971"
@@ -15865,8 +15865,8 @@
          style="fill:url(#linearGradient8034);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse7648"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-83.999985"
          cy="897"
@@ -15886,15 +15886,15 @@
          id="path7652"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient8022);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse7664"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-94"
          cy="897"
          rx="9.9999971"
@@ -16685,8 +16685,8 @@
          style="fill:url(#linearGradient4923);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse2920-5"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-138.99998"
          cy="697"
@@ -16706,8 +16706,8 @@
          id="path2151-8"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          ry="10"
          rx="9.9999971"
@@ -16717,8 +16717,8 @@
          id="ellipse2153-1"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <use
        x="0"
@@ -16838,8 +16838,8 @@
          style="display:inline;fill:url(#linearGradient4722-8-2-9-4-0);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="path3822-64-1-5-0-9"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="371.64285"
          cy="497.00012"
          rx="2.3571391"
@@ -16857,14 +16857,14 @@
          id="path3864-1-3-6-6-0"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="display:inline;opacity:0.75;fill:url(#radialGradient4703-5-3-7-3);fill-opacity:1;stroke:none;stroke-width:1"
          id="path3871-8-9-1-7-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="364"
          cy="497"
          rx="9.9999971"
@@ -16889,8 +16889,8 @@
          style="display:inline;fill:url(#linearGradient4722-8-2-9-4);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="path3822-64-1-5-0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="177.64285"
          cy="497.00012"
          rx="2.3571391"
@@ -16908,14 +16908,14 @@
          id="path3864-1-3-6-6"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="display:inline;opacity:0.75;fill:url(#radialGradient4703-5-3-7);fill-opacity:1;stroke:none;stroke-width:1"
          id="path3871-8-9-1-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="170"
          cy="497"
          rx="9.9999971"
@@ -17313,8 +17313,8 @@
          style="fill:url(#linearGradient4289);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse1997-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="197.64285"
          cy="632"
          rx="2.3571391"
@@ -17332,14 +17332,14 @@
          id="path2001-2"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient2286-50);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2111-2"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="190"
          cy="632"
          rx="9.9999971"
@@ -17516,8 +17516,8 @@
          id="path1917-9"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="fill:url(#linearGradient3191);fill-opacity:1;stroke:none;stroke-width:0.666666"
          id="ellipse1919-3"
@@ -17529,8 +17529,8 @@
          style="opacity:0.75;fill:url(#radialGradient2284-9);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2113-1"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="273"
          cy="632"
          rx="9.9999971"
@@ -17647,8 +17647,8 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cscc"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -17704,8 +17704,8 @@
          style="fill:none;stroke:url(#radialGradient3270);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="circle3268"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="82"
          cy="1032"
          r="30" />
@@ -17717,8 +17717,8 @@
            style="fill:url(#linearGradient2752);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
            id="circle2738"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="76.000031"
            cy="432"
            r="3" />
@@ -17726,8 +17726,8 @@
            style="fill:url(#linearGradient2754);fill-opacity:1;stroke:none;stroke-width:1"
            id="ellipse2740"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="62"
            cy="432"
            rx="1.9999994"
@@ -17738,14 +17738,14 @@
            id="path2742"
            inkscape:connector-curvature="0"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <ellipse
            style="opacity:0.75;fill:url(#radialGradient2758);fill-opacity:1;stroke:none;stroke-width:1"
            id="ellipse2744"
            inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"
            cx="62"
            cy="432"
            rx="9.9999971"
@@ -17788,8 +17788,8 @@
          style="fill:url(#linearGradient3504);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse2055-4"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-69.999985"
          cy="697"
@@ -17809,15 +17809,15 @@
          id="path2059-6"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient2282-0);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2115-56"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-80"
          cy="697"
          rx="9.9999971"
@@ -17915,8 +17915,8 @@
          style="fill:url(#linearGradient3691);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse2920-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="162.00002"
          cy="762"
@@ -17936,8 +17936,8 @@
          id="path2151-3"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          ry="10"
          rx="9.9999971"
@@ -17947,8 +17947,8 @@
          id="ellipse2153-0"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <path
        style="display:inline;fill:url(#linearGradient3785);fill-opacity:1;stroke:none;stroke-width:0.999993px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -18098,8 +18098,8 @@
          style="fill:url(#linearGradient3765);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse3744"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="197.64285"
          cy="632"
          rx="2.3571391"
@@ -18117,14 +18117,14 @@
          id="path3749"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient3771);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse3751"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="190"
          cy="632"
          rx="9.9999971"
@@ -18362,8 +18362,8 @@
          id="path1917-9-7"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="fill:url(#linearGradient4276);fill-opacity:1;stroke:none;stroke-width:0.666666"
          id="ellipse1919-3-6"
@@ -18375,8 +18375,8 @@
          style="opacity:0.75;fill:url(#radialGradient2284-9-7);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse2113-1-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="273"
          cy="632"
          rx="9.9999971"
@@ -18557,8 +18557,8 @@
          style="fill:url(#linearGradient3051);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse3031"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="197.64285"
          cy="632"
          rx="2.3571391"
@@ -18576,14 +18576,14 @@
          id="path3035"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient3057);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse3037"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="190"
          cy="632"
          rx="9.9999971"
@@ -18713,8 +18713,8 @@
          style="fill:url(#linearGradient3152);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse3142"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-69.999985"
          cy="697"
@@ -18734,15 +18734,15 @@
          id="path3146"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          style="opacity:0.75;fill:url(#radialGradient3158);fill-opacity:1;stroke:none;stroke-width:2"
          id="ellipse3148"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-80"
          cy="697"
          rx="9.9999971"
@@ -19210,8 +19210,8 @@
          style="display:inline;fill:url(#linearGradient4508-9-6-6-2);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="path3822-74-9-4-0"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)" />
       <ellipse
          ry="2.0000038"
@@ -19222,16 +19222,16 @@
          style="display:inline;fill:url(#linearGradient5715-2-2-3-2-3-7);fill-opacity:1;stroke:none;stroke-width:1"
          id="path3822-7-64-27-0-4-2"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="display:inline;fill:url(#linearGradient3985-27-0-1-6-2);fill-opacity:1;stroke:none;stroke-width:1"
          d="m 139,495.00004 h 4 v 4 h -4 z"
          id="path3864-7-7-4-8"
          inkscape:connector-curvature="0"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          ry="10"
          rx="9.9999943"
@@ -19240,8 +19240,8 @@
          style="display:inline;opacity:0.75;fill:url(#radialGradient5642-8-5);fill-opacity:1;stroke:none;stroke-width:1"
          id="path3871-2-0-4-7"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
-         inkscape:export-xdpi="95.972664"
-         inkscape:export-ydpi="95.972664" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <use
        x="0"
@@ -19452,8 +19452,8 @@
          style="fill:url(#linearGradient2934);fill-opacity:1;stroke:#404040;stroke-width:1;stroke-opacity:1"
          id="ellipse2920"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          transform="scale(-1,1)"
          cx="-138.99998"
          cy="697"
@@ -19473,8 +19473,8 @@
          id="path2151"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <ellipse
          ry="10"
          rx="9.9999971"
@@ -19484,8 +19484,8 @@
          id="ellipse2153"
          transform="scale(-1,1)"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <path
        id="rect2439-7-5-3-5"

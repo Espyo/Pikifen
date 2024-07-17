@@ -34,7 +34,8 @@
        gradientTransform="translate(5.3776367e-5,-100.00007)" />
     <linearGradient
        id="linearGradient3"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       inkscape:label="mask">
       <stop
          style="stop-color:#000000;stop-opacity:0;"
          offset="0"
@@ -142,7 +143,8 @@
        r="21.66234"
        spreadMethod="reflect" />
     <linearGradient
-       id="helmet-6">
+       id="helmet-6"
+       inkscape:label="helmet">
       <stop
          style="stop-color:#ffffff;stop-opacity:0.6972487;"
          offset="0"
@@ -423,7 +425,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5"
-     inkscape:cx="364.33333"
+     inkscape:cx="363.66667"
      inkscape:cy="29.333333"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"

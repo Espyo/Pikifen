@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -106,19 +106,6 @@ Next tasks (roughly sorted most important first)
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     General graphic file improvements
-        Leader and Pikmin portrait images should
-            Be a group, and then have a mask applied on top to fit the grid rectangle
-            Be resized to their final resolution of 64x64
-            Have a blurred shadow to represent the chin and neck, like Winged Pikmin
-        Inkscape file adjustments
-            Adjust the top-left of the spritesheet to be the document's 0,0 coordinates
-            Adjust the X and Y scale to be 1.00? This breaks clip masks, though; maybe render everything onto a PNG, adjust, then render again, and use a difference blend to check what's broken
-            Adjust the grid to start at 0,0 offset, in the document properties
-            Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
-            Add a reference Olimar image in all of them
-            I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
-            Search for "data:image/" for leftover image files in the SVG files
-            Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Use blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
@@ -168,6 +155,7 @@ Next tasks (roughly sorted most important first)
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
+    I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
     New mobs
         Burrowing Snagret
         A tall grass mob

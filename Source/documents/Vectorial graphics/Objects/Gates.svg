@@ -8,8 +8,8 @@
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
    sodipodi:docname="Gates.svg"
    inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -101,7 +101,8 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient1430">
+       id="linearGradient1430"
+       inkscape:label="bamboo-gate-handle">
       <stop
          style="stop-color:#df337c;stop-opacity:1"
          offset="0"
@@ -1252,8 +1253,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5"
-     inkscape:cx="188.33333"
-     inkscape:cy="195.33333"
+     inkscape:cx="250.33333"
+     inkscape:cy="142"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -1335,8 +1336,8 @@
        x="200"
        y="782.36212"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.1482;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-2"
@@ -1345,8 +1346,8 @@
        x="248.99998"
        y="782.36212"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.1482;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-6"
@@ -1355,8 +1356,8 @@
        x="297.99994"
        y="782.36212"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.1482;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-6-7"
@@ -1365,11 +1366,11 @@
        x="200.00034"
        y="1361.363"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="782.36212"
        x="500.00027"
@@ -1378,8 +1379,8 @@
        id="rect1055"
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574099;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="782.36212"
        x="700.00012"
@@ -1388,8 +1389,8 @@
        id="use5103-3"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574099;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="831.36218"
        x="700.00037"
@@ -1398,8 +1399,8 @@
        id="use1732"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.741159;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="831.36218"
        x="717.00037"
@@ -1408,8 +1409,8 @@
        id="use1734"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.741159;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="831.36218"
        x="734.00037"
@@ -1418,8 +1419,8 @@
        id="use2103"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.741159;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="831.36218"
        x="751.00037"
@@ -1428,8 +1429,8 @@
        id="use2380"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.741159;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="782.36212"
        x="900.00037"
@@ -1438,8 +1439,8 @@
        id="use1125"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.625609;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="840.36218"
        x="900"
@@ -1448,8 +1449,8 @@
        id="use1331"
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.937504;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="840.36218"
        x="933.00037"
@@ -1515,8 +1516,8 @@
        x="249.00034"
        y="1361.3622"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574099;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1362"
@@ -1525,8 +1526,8 @@
        x="249.00067"
        y="1410.3623"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574091;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1364"
@@ -1535,8 +1536,8 @@
        x="249.00133"
        y="1459.3623"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574094;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1366"
@@ -1545,8 +1546,8 @@
        x="298.00067"
        y="1361.3623"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.574094;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1390"
@@ -1555,8 +1556,8 @@
        x="298.00067"
        y="1410.3623"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1566,8 +1567,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1577,8 +1578,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1588,8 +1589,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1599,8 +1600,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1610,8 +1611,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1621,11 +1622,11 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
-       inkscape:export-ydpi="95.999863"
-       inkscape:export-xdpi="95.999863"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Desktop/b.png"
        y="831.36218"
        x="500.00034"
@@ -1642,8 +1643,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1653,8 +1654,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1664,8 +1665,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g4760"
        style="display:inline"
@@ -1674,8 +1675,8 @@
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
          id="path3782"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-6.7031322"
          cy="1036.3622"
          rx="3.203124"
@@ -1684,8 +1685,8 @@
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path3770-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-16"
          cy="1036.3622"
          r="15" />
@@ -1693,8 +1694,8 @@
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
          id="path3780"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          cx="-18"
          cy="1036.3622"
          r="9.5" />
@@ -1704,16 +1705,16 @@
          id="path3824"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
          d="m -12,1043.8622 v -6 h 2 v 6 z"
          id="path3824-4"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
   </g>
   <g
@@ -1729,8 +1730,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#d8d8c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.937497px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 225.00025,1542.3632 3.99999,4 h -7.99998 z"
@@ -1738,8 +1739,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;opacity:1;fill:#d5aa10;fill-opacity:1;stroke:none;stroke-width:1.40624;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4270"
@@ -1748,8 +1749,8 @@
        x="249.00034"
        y="1361.363"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:#501800;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 249.00034,1361.3622 v 47.9992 h 47.99984 v -47.9992 z m 2,2.0009 h 3.99998 l 3.99999,1.9999 2.99999,-1.9999 2.99999,3.9999 4.99999,-2.9999 1.99999,1.9999 1.99999,-2.9999 4.99998,1 3.99999,-1 8.99997,2.9999 3,-2.9999 -1,4.9999 1,4.9999 -1,1 1,5.9998 0.99998,3 -2.99998,1 2,1.9999 -2,3 2,5.9999 0.99998,6.9999 -0.99998,4.9998 -5.99999,-0.9999 -3.99999,1.9999 -4.99998,-1.9999 h -5.99998 l -1.99999,1.9999 -3.99999,-5.9998 -1.99999,4.9998 -3.99999,-2.9999 -3.99999,1 -1.99999,-2.9999 -4.99998,4.9998 1.99999,-3.9998 v -5.9999 l -1.99999,-4.9999 2.99999,-2 1.99999,-5.9999 -2.99999,-3 3.99999,-2 -2,-1.9999 2,-1.9999 -5.99998,-2.875 v -2.1249 l 1.99999,-1 -1.99999,-2.9375 z"
@@ -1757,8 +1758,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccc"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#202020;stroke-width:1.40624;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4545"
@@ -1768,8 +1769,8 @@
        y="1372.3628"
        ry="3.7499549"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        rx="3.7500088" />
     <path
        style="opacity:1;fill:none;fill-opacity:1;stroke:#c000c0;stroke-width:1.87498;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.87498, 1.87498;stroke-dashoffset:0;stroke-opacity:1"
@@ -1784,8 +1785,8 @@
        sodipodi:open="true"
        d="m 276.58868,1376.3627 a 17.999941,17.999681 0 0 1 0,17.9997"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        sodipodi:arc-type="arc" />
     <ellipse
        style="opacity:1;fill:#c04040;fill-opacity:1;stroke:none;stroke-width:1.87498;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -1793,8 +1794,8 @@
        cx="266.50027"
        cy="1385.3625"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        rx="2.4999914"
        ry="2.4999554" />
     <path
@@ -1805,8 +1806,8 @@
        inkscape:transform-center-x="-6.6109099"
        inkscape:transform-center-y="0.69227613"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -1816,8 +1817,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1828,8 +1829,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1840,8 +1841,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1852,8 +1853,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1864,8 +1865,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1878,8 +1879,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1890,8 +1891,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1902,8 +1903,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1914,8 +1915,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1926,8 +1927,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1938,8 +1939,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -1952,14 +1953,14 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <g
        id="g1456"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <rect
          style="opacity:1;fill:url(#linearGradient1105);fill-opacity:1;stroke:none;stroke-width:9.74276;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1969,8 +1970,8 @@
          x="102.99966"
          y="782.36279"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -1978,8 +1979,8 @@
          id="use4730"
          style="stroke-width:0.9375;filter:url(#filter4830)"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          width="100%"
          height="100%"
          clip-path="url(#clipPath1398)" />
@@ -1991,8 +1992,8 @@
          x="103.99965"
          y="782.36279"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -2002,8 +2003,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <path
          style="opacity:0.75;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:3.74999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2012,16 +2013,16 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccccccccccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          inkscape:path-effect="#path-effect1498"
          inkscape:original-d="m 115.99961,968.36224 15.99995,-18 -15.99995,-6.9999 17.99994,-28 -3.99999,-16.9999 -10.99996,-6 14.99995,-14.9999 -1.99999,-17 -15.99995,-15.9999 v -11 l 8.99997,-8.9999 -10.99996,-7 14.99994,-8 -10.99995,-7 14.99994,-13.99992" />
     </g>
     <g
        id="g1463"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <use
          x="0"
@@ -2032,8 +2033,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <use
          x="0"
@@ -2042,8 +2043,8 @@
          id="use4742"
          style="stroke-width:0.9375;filter:url(#filter4834)"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          width="100%"
          height="100%"
          clip-path="url(#clipPath1406)" />
@@ -2056,8 +2057,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <use
          x="0"
@@ -2068,8 +2069,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <path
          style="opacity:0.75;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:3.74999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2077,16 +2078,16 @@
          id="path4740"
          inkscape:connector-curvature="0"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          inkscape:path-effect="#path-effect1500"
          inkscape:original-d="m 161.99946,968.36224 9.99996,-11 -5.99997,-12.9999 19.99993,-9 -24.99992,-13 23.99992,-8.9999 -3.99999,-22 -18.99993,-8.9999 -1,-24 22.99992,-4.9999 -17.99993,-13 16.99994,-6 -18.99994,-12.9999 18.99994,-21 2.99999,-11.99992" />
     </g>
     <g
        id="g1471"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <use
          x="0"
@@ -2097,8 +2098,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <use
          x="0"
@@ -2107,8 +2108,8 @@
          id="use4750"
          style="stroke-width:0.9375;filter:url(#filter4838)"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          width="100%"
          height="100%"
          clip-path="url(#clipPath1410)" />
@@ -2121,8 +2122,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <use
          x="0"
@@ -2133,8 +2134,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="stroke-width:0.9375" />
       <path
          style="opacity:0.75;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:3.74999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2143,8 +2144,8 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccccccccccccccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999977"
-         inkscape:export-ydpi="95.999977"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          inkscape:path-effect="#path-effect1502"
          inkscape:original-d="m 220.99926,968.36224 -9.99996,-10 1.99999,-18.9999 18.99993,-6 -18.99993,-8 18.99993,-8 -18.99993,-9.9999 8.99996,-14 v -14.9999 l 11.99997,-7 -13.99996,-12 12.99996,-9.9999 -4.99998,-14 3.99998,-9 -22.99992,-2.9999 14.99995,-16 -6.99998,-10.9999 2.99999,-8.00002" />
     </g>
@@ -2157,8 +2158,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2169,8 +2170,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2181,8 +2182,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2193,8 +2194,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2205,8 +2206,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2217,8 +2218,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2231,8 +2232,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <use
        x="0"
@@ -2243,8 +2244,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375" />
     <path
        style="fill:url(#linearGradient4799);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.937497px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2253,8 +2254,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccc"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:url(#linearGradient4811);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.937497px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 208.00031,1365.3638 v 5.9999 l 4.99997,-4.9999 5.99999,2 5.99998,-2 3.99999,6 2.99999,-3 4.99997,1.9999 2.99999,-2.9999 v -3 z"
@@ -2262,14 +2263,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccc"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1162"
        transform="matrix(1.0666664,0,0,1.0666664,100.00034,-52.157303)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="stroke-width:0.9375">
       <path
          sodipodi:nodetypes="ccccccccccccccc"
@@ -2359,8 +2360,8 @@
        id="g2471"
        style="opacity:1"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <g
          id="g2778"
@@ -2503,8 +2504,8 @@
        id="g1128"
        style="display:inline"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#6e2608;fill-opacity:1;stroke:none;stroke-width:0.937497px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -2531,8 +2532,8 @@
        id="g1134"
        style="display:inline"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(84.000336,25.000008)">
       <path
          style="display:inline;opacity:0.3;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2585,8 +2586,8 @@
     <g
        id="g2311"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;display:inline;opacity:0.3;vector-effect:none;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
@@ -2632,8 +2633,8 @@
     <g
        id="g2416"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;display:inline;opacity:0.3;vector-effect:none;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
@@ -2677,8 +2678,8 @@
     <g
        id="g2409"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;display:inline;opacity:0.3;vector-effect:none;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
@@ -2706,8 +2707,8 @@
        id="g2428"
        transform="translate(117.00034)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          style="font-variation-settings:normal;display:inline;opacity:0.3;vector-effect:none;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
          d="m 635,1048.3622 -1,1 10e-6,20 2,2 h 12 l 2,-2 -10e-6,-18 -1,-1 -6,-3 -5,3 z"
@@ -2741,8 +2742,8 @@
        style="opacity:0.9"
        transform="translate(101.00034,23.999999)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          style="fill:#404040;fill-opacity:0.3;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 663.54835,914.38806 0.20591,1.09807 -5.43797,6.23159 -0.0482,-3.40935 -5.76526,-0.79151 0.0593,-0.9335 6.43783,0.77882 v 2 z"
@@ -2759,8 +2760,8 @@
        transform="translate(97.792756,46.426329)"
        style="opacity:0.9"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          style="fill:#404040;fill-opacity:0.3;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 663.92936,915.36962 -5.80929,5.05918 -3.71873,-2.42156 0.0393,-0.86561 1.52994,-3.22833 2.39147,-0.0436 -0.96573,-2.04719 0.0594,-0.50416 1.75186,2.6175 -3.12634,0.0857 -0.93335,2.92611 2.88336,1.88333 5.83257,-4.55793 z"
@@ -2777,8 +2778,8 @@
        style="opacity:0.9"
        transform="translate(100.79043,54.164927)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          style="fill:#404040;fill-opacity:0.3;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 664.03448,915.22775 -4.0235,3.20973 -1.68034,-1.51429 0.13899,-0.93948 1.5247,1.53315 3.90013,-3.24806 z"
@@ -2803,8 +2804,8 @@
        cy="806.36218"
        r="24"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <ellipse
        style="display:inline;fill:url(#linearGradient1165);fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;stop-color:#000000"
        id="circle1145"
@@ -2813,8 +2814,8 @@
        rx="22"
        ry="22.000004"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <ellipse
        style="display:inline;fill:#3a240b;fill-opacity:1;stroke-width:0.999998px;paint-order:markers stroke fill;stop-color:#000000"
        id="ellipse1275"
@@ -2823,16 +2824,16 @@
        rx="18"
        ry="18.000004"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        id="ellipse1147"
        style="display:inline;fill:#e7cf98;fill-opacity:1;stroke-width:0.999996px;paint-order:markers stroke fill;stop-color:#000000"
        d="m 924.00035,786.36212 c -11.04569,0 -20,8.9543 -20,20 0,11.0457 8.95431,20 20,20 11.04569,0 20,-8.9543 20,-20 0,-11.0457 -8.95431,-20 -20,-20 z m -1,23.00006 c 0.92086,0 2.22023,-1.37072 3,-1 0.76379,0.36312 1.45549,1.36512 2,2 0.9,1.04936 3,2.50914 3,4 0,0.82955 -1.6956,2.28139 -2,3 -0.39619,0.93531 -0.21409,1.37857 -1,2 -1.02229,0.80834 -2.59555,0 -4,0 -0.8436,0 -2.2717,1.31423 -3,1 -1.08721,-0.46908 -1.35843,-2.01938 -2,-3 -0.61684,-0.94282 -1,-0.78922 -1,-2 0,-1.12284 0.46324,-2.10134 1,-3 0.48212,-0.80718 0.20751,-2.49635 1,-3 0.92907,-0.59045 1.81766,0 3,0 z"
        sodipodi:nodetypes="ssssssssssssssssss"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <ellipse
        style="display:inline;opacity:0.2;fill:#e7af98;fill-opacity:1;stroke-width:0.999996px;paint-order:markers stroke fill;filter:url(#filter1363);stop-color:#000000"
        id="ellipse1171"
@@ -2842,8 +2843,8 @@
        ry="20.000004"
        clip-path="url(#clipPath1187)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(200.00035)" />
     <path
        id="rect1191"
@@ -2853,13 +2854,13 @@
        clip-path="url(#clipPath1201)"
        sodipodi:nodetypes="cccccsszss"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1440"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(200.00035)">
       <path
          id="path1244"
@@ -2887,8 +2888,8 @@
          id="g1446"
          transform="translate(200.00035,17.999998)"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            id="path1442"
            style="fill:url(#linearGradient2370);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2906,8 +2907,8 @@
          id="g1475"
          transform="translate(200.00035,7.9999984)"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="fill:#c0bea3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 728.99965,867.36218 -1,3 -1,-2 -2,1 -1,-1 -1,2 -1,-2 -2,2 -1,-3 z"
@@ -2981,8 +2982,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -2992,8 +2993,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -3003,8 +3004,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -3014,8 +3015,8 @@
          width="100%"
          height="100%"
          inkscape:export-filename="/home/andre/Desktop/b.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <path
        style="fill:#e9e4d0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -3542,8 +3543,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="display:inline;mix-blend-mode:normal;stroke-width:0.9375" />
     <use
        x="0"
@@ -3554,8 +3555,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        style="display:inline;mix-blend-mode:normal;stroke-width:0.9375" />
     <use
        x="0"
@@ -3566,8 +3567,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3577,8 +3578,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3588,8 +3589,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3599,8 +3600,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3610,8 +3611,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3621,8 +3622,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1543"
        style="opacity:1"
@@ -3630,8 +3631,8 @@
     <g
        id="g1730"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <g
          id="g1631"
@@ -3701,8 +3702,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3712,8 +3713,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3723,8 +3724,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3734,8 +3735,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3745,19 +3746,19 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g2119"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <g
          id="g2097"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fefee7;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
            d="m 120.5911,1292.7766 4.4089,-4.4144 4,4 7,-18 -4,-8 3,8 -2,3 -6,-4 6,5 -4,12 -4,-3 -5.00563,5 z"
@@ -3772,8 +3773,8 @@
       <g
          id="g2105"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="font-variation-settings:normal;display:inline;opacity:1;mix-blend-mode:normal;vector-effect:none;fill:#fefee7;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
            d="m 140,1350.3622 -4,3 -6,-3 -6,3 -5,-4 -5,4 5,-5 5,4 6,-3 6,3 4,-3 z"
@@ -3788,8 +3789,8 @@
       <g
          id="g2093"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fefee7;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
            d="m 118,1221.3622 1,-1 10,8 3.01405,9.4051 -0.68227,0.5501 L 128,1228.3622 Z"
@@ -3804,8 +3805,8 @@
       <g
          id="g2101"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4f4f31;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
            d="m 108,1324.3622 8,6 8,-3 12,6 -12,-5 -8,3 -8,-6 z"
@@ -3819,8 +3820,8 @@
       <g
          id="g2165"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863">
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <path
            style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4f4f31;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
            d="m 140,1182.3622 -4,7 -4,-1 -7,11 7,-10 5,1 3,-7 z"
@@ -3838,16 +3839,16 @@
          id="path1513"
          sodipodi:nodetypes="cccccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fefee7;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
          d="m 108,1255.3622 6,-4 8,14 14,-8 -14.39062,9.2812 -7.60938,-14.2812 -6,4 z"
          id="path1536"
          sodipodi:nodetypes="cccccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electric_gate.png"
-         inkscape:export-xdpi="95.999863"
-         inkscape:export-ydpi="95.999863" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <use
        x="0"
@@ -3858,8 +3859,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3869,14 +3870,14 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1511"
        style="opacity:0.9"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#d8d8c6;fill-opacity:1;stroke:none;stroke-width:0.937497px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -3911,8 +3912,8 @@
        height="100%"
        style="opacity:1"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -3923,13 +3924,13 @@
        height="100%"
        style="opacity:1"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g2592"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <g
          id="g2519">
@@ -3992,13 +3993,13 @@
        height="100%"
        transform="translate(-4.3066406e-6,192.99992)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g2614"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4014,8 +4015,8 @@
     <g
        id="g2642"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4031,8 +4032,8 @@
     <g
        id="g2654"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4048,8 +4049,8 @@
     <g
        id="g2691"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          id="path2664"
@@ -4065,8 +4066,8 @@
     <g
        id="g2703"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4082,8 +4083,8 @@
     <g
        id="g2723"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4100,8 +4101,8 @@
        id="g2737"
        transform="translate(100.00034,-17.50002)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
          d="m 443,1248.3622 -5,-5 -6,6 -7,-8 -3,3 -11,-4 11,5 3,-3 7,8 6,-6 5,5 z"
@@ -4115,8 +4116,8 @@
     <g
        id="g2757"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <path
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
@@ -4131,8 +4132,8 @@
     <g
        id="g2452"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
        transform="translate(100.00034)">
       <rect
          style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient1176);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.525153;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
@@ -4166,8 +4167,8 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -4177,15 +4178,15 @@
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1585"
        style="opacity:0.9"
        transform="translate(100.00034,-7.00002)"
        inkscape:export-filename="/home/andre/Desktop/b.png"
-       inkscape:export-xdpi="95.999863"
-       inkscape:export-ydpi="95.999863">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <g
          id="g1545">
         <path
