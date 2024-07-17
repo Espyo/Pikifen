@@ -2,24 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="25.000011"
+   height="120"
+   viewBox="0 0 25.000011 120"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
    sodipodi:docname="White_Spectralid.svg"
    inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title878">White Spectralid spritesheet</title>
   <defs
@@ -168,9 +168,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.3844572"
-     inkscape:cx="-3.7333333"
-     inkscape:cy="-46.93333"
+     inkscape:zoom="1.5"
+     inkscape:cx="32.333333"
+     inkscape:cy="46.666667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -185,13 +185,22 @@
      inkscape:object-nodes="true"
      inkscape:snap-smooth-nodes="true"
      inkscape:window-width="1872"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-x="48"
      inkscape:window-y="0"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid4147" />
+       id="grid4147"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="0.99999999"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -222,7 +231,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(1.1444092e-5,-1052.3622)">
     <rect
        style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
        id="rect4155"
@@ -230,7 +240,7 @@
        height="24.999968"
        x="1052.3622"
        y="-24.999975"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -241,7 +251,7 @@
        height="24.999945"
        x="1085.3622"
        y="-24.999945"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -252,7 +262,7 @@
        height="24.999945"
        x="1108.3622"
        y="-24.999969"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -263,7 +273,7 @@
        height="24.999945"
        x="1119.3622"
        y="-25"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -274,7 +284,7 @@
        height="24.999968"
        x="1136.3622"
        y="-24.999968"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -285,7 +295,7 @@
        height="24.999968"
        x="1155.3636"
        y="-24.999968"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -294,10 +304,11 @@
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(1.1444092e-5,-1052.3622)">
     <path
        style="display:inline;opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.499992,1152.3622 c 3,0.5 5.000008,0.5 8.000008,1.5 -3,-0.5 -5.666708,-0.7337 -8.500008,-1 8e-6,0.5 8e-6,0.5 -0.499992,0.5 l -8.0000076,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.4999996,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.499992,1152.3622 c 3,0.5 5.000008,0.5 8.000008,1.5 -3,-0.5 -5.666708,-0.7337 -8.500008,-1 8e-6,0.5 8e-6,0.5 -0.499992,0.5 H 5.4999924 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 h 8.4999996 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -306,7 +317,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="display:inline;opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.499993,1171.3637 c 3,0.5 5.499996,0 7.999996,-0.5015 -3.388685,1.1541 -5.692762,1.3645 -8.499996,1.0015 -4e-6,0.4985 -4e-6,0.4985 -0.500004,0.4985 l -7.9999956,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.4999996,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.499993,1171.3637 c 3,0.5 5.499996,0 7.999996,-0.5015 -3.388685,1.1541 -5.692762,1.3645 -8.499996,1.0015 -4e-6,0.4985 -4e-6,0.4985 -0.500004,0.4985 H 5.4999934 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 h 8.4999996 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -315,7 +326,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.5,1068.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 l 0,0.5 -8.5,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.5,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.5,1068.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 v 0.5 H 5.5 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 H 14 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -364,7 +375,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.5,1096.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 l 0,0.5 -8.5,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.5,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.5,1096.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 v 0.5 H 5.5 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 H 14 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -413,7 +424,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.5,1113.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 l 0,0.5 -8.5,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.5,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.5,1113.3622 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 v 0.5 H 5.5 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 H 14 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181-1-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -462,7 +473,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="opacity:1;fill:#0e0e16;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.5,1130.3637 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 l 0,0.5 -8.5,0 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 l 8.5,0 0,0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+       d="m 14.5,1130.3637 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 v 0.5 H 5.5 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 H 14 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
        id="path4181-1-8-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccczccccc"
@@ -554,7 +565,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="opacity:1;fill:#000000;fill-opacity:0.22680413;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:1;fill:#000000;fill-opacity:0.226804;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 24.999989,1159.3622 c 0,-2 -1,-4 -4,-4 -3,0 -7.5,1.5 -10,4 -2.0000004,2.5 -1.0000004,8 -0.5,12 7.5,0 14.3313,-7.0206 14.5,-12 z"
        id="path4173-9"
        inkscape:connector-curvature="0"
@@ -574,7 +585,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="opacity:1;fill:#000000;fill-opacity:0.22680413;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:1;fill:#000000;fill-opacity:0.226804;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 10.499989,1171.3622 c 0,0 -1.0000004,-7 -1.5000004,-8 -0.5,-1 -2.5,-3 -5.5581,-3 -3.05800004,0 -3.441900044092,3.25 -3.441900044092,4.5 0,1.25 2.602600044092,6.603 10.500000444092,6.5 z"
        id="path4175-3"
        inkscape:connector-curvature="0"
@@ -594,53 +605,53 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <g
-       transform="translate(-2.3841858e-7,2.1868804e-5)"
+       id="g4760"
        style="display:inline"
-       id="g4760">
+       transform="translate(-1.1444092e-5,1.7382813e-5)">
       <ellipse
-         ry="3.5000007"
-         rx="3.203124"
-         cy="1036.3622"
-         cx="-6.7031322"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
          id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
-      <circle
-         r="15"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"
+         cx="-6.7031322"
          cy="1036.3622"
+         rx="3.203124"
+         ry="3.5000007" />
+      <circle
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path3770-7"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"
          cx="-16"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <circle
-         r="9.5"
          cy="1036.3622"
-         cx="-18"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         r="15" />
+      <circle
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
          id="path3780"
-         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:connector-curvature="0"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"
+         cx="-18"
+         cy="1036.3622"
+         r="9.5" />
+      <path
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
          id="path3824"
-         d="m -12,1034.8622 0,-6 2,0 0,6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
          id="path3824-4"
-         d="m -12,1043.8622 0,-6 2,0 0,6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
     </g>
   </g>
 </svg>

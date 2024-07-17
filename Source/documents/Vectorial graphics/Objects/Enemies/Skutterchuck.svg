@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="267.05582"
+   width="267"
    height="285"
-   viewBox="0 0 267.05582 285"
+   viewBox="0 0 267 285"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
    sodipodi:docname="Skutterchuck.svg"
    inkscape:export-filename="/home/andre/Desktop/whip_boi.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title1501">Skutterchuck spritesheet</title>
   <defs
@@ -78,9 +78,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1009"
-       x="-0.039347731"
+       x="-0.039347729"
        width="1.0786955"
-       y="-0.04470212"
+       y="-0.044702119"
        height="1.0894042">
       <feGaussianBlur
          inkscape:collect="always"
@@ -106,7 +106,7 @@
        x="-0.12654829"
        width="1.2530966"
        y="-0.1002678"
-       height="1.2005357">
+       height="1.2005356">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.910159"
@@ -324,10 +324,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1311"
-       x="-0.050786141"
-       width="1.1015723"
-       y="-0.037702981"
-       height="1.075406">
+       x="-0.09661482"
+       width="1.1932296"
+       y="-0.045381736"
+       height="1.0907635">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.3284538"
@@ -349,10 +349,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1327"
-       x="-0.20707902"
+       x="-0.20707903"
        width="1.4141581"
        y="-0.1002678"
-       height="1.2005357">
+       height="1.2005356">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.910159"
@@ -415,9 +415,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1579"
-       x="-0.57255954"
+       x="-0.5725595"
        width="2.145119"
-       y="-0.85501134"
+       y="-0.85501133"
        height="2.7100227">
       <feGaussianBlur
          inkscape:collect="always"
@@ -440,9 +440,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1595"
-       x="-0.57255954"
+       x="-0.5725595"
        width="2.145119"
-       y="-0.85501134"
+       y="-0.85501133"
        height="2.7100227">
       <feGaussianBlur
          inkscape:collect="always"
@@ -511,10 +511,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1969"
-       x="-0.07232815"
-       width="1.1446563"
-       y="-0.20893127"
-       height="1.4178625">
+       x="-0.10436246"
+       width="1.2087249"
+       y="-0.32851391"
+       height="1.6570278">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.95760047"
@@ -634,9 +634,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1479"
-       x="-0.077417895"
-       width="1.1548358"
-       y="-0.10797919"
+       x="-0.11723454"
+       width="1.2344691"
+       y="-0.10797918"
        height="1.2159584">
       <feGaussianBlur
          inkscape:collect="always"
@@ -659,10 +659,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1585"
-       x="-0.24971597"
-       width="1.4994318"
-       y="-0.081157692"
-       height="1.1623154">
+       x="-0.45402906"
+       width="1.9080581"
+       y="-0.14755944"
+       height="1.2951189">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.3526282"
@@ -703,10 +703,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1789"
-       x="-0.07685411"
-       width="1.1537082"
-       y="-0.10719284"
-       height="1.2143857">
+       x="-0.092573159"
+       width="1.1851463"
+       y="-0.1272915"
+       height="1.254583">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.69722"
@@ -716,7 +716,7 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1882"
-       x="-0.37214258"
+       x="-0.37214259"
        width="1.7442852"
        y="-0.12094634"
        height="1.2418927">
@@ -742,9 +742,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1894"
-       x="-0.24971599"
+       x="-0.249716"
        width="1.499432"
-       y="-0.081157696"
+       y="-0.081157701"
        height="1.1623154">
       <feGaussianBlur
          inkscape:collect="always"
@@ -794,9 +794,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="244.99327"
-     inkscape:cy="173.01354"
+     inkscape:zoom="1.5"
+     inkscape:cx="85.666667"
+     inkscape:cy="124.66667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -805,7 +805,7 @@
      inkscape:measure-start="-10,-404"
      inkscape:measure-end="0,-404"
      inkscape:window-width="1872"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-x="48"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -822,12 +822,19 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      inkscape:document-rotation="0"
-     inkscape:snap-global="true">
+     inkscape:snap-global="true"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid815"
-       originx="3.090861e-13"
-       originy="0" />
+       originx="4.1211479e-13"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -4239,7 +4246,7 @@
        inkscape:export-ydpi="96" />
     <path
        id="path1932"
-       style="display:inline;fill:#404040;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variation-settings:normal;opacity:1;vector-effect:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1311);stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#404040;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1311);stop-color:#000000;stop-opacity:1"
        d="M 27.886719,221.87305 C 13.205093,221.7964 2.2210632,226.33189 1,247 c 0,0 4.651301,7.44903 8,6 13.237548,-6.62442 16.936923,-26.06294 49,-19 l 3,23 -3,23 c -32.063077,7.06294 -35.762452,-12.37558 -49,-19 -3.348699,-1.44903 -8,6 -8,6 2.170779,36.74331 35.198249,22.4967 65,22 l 2,-32 -2,-32 c -13.038266,-0.21731 -26.694239,-3.06734 -38.113281,-3.12695 z"
        clip-path="url(#clipPath1988)"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Skutterchuck.png"
@@ -4460,8 +4467,8 @@
        inkscape:export-ydpi="96" />
     <path
        id="path1992"
-       style="fill:#404040;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;font-variation-settings:normal;opacity:1;vector-effect:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stop-color:#000000;stop-opacity:1;filter:url(#filter2030)"
-       d="M 74 213 L 70 253 C 70 253 77.496824 255.13283 81 254 C 92.170095 250.38789 99.921444 231.20406 118 232 C 128.32333 232.4545 149 232 149 232 L 149 257 L 149 282 C 149 282 128.32333 281.5455 118 282 C 99.921444 282.79594 92.170095 263.61211 81 260 C 77.496824 258.86717 70 261 70 261 L 74 301 L 159 299 L 159 257 L 159 215 L 74 213 z "
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#404040;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2030);stop-color:#000000;stop-opacity:1"
+       d="m 74,213 -4,40 c 0,0 7.496824,2.13283 11,1 11.170095,-3.61211 18.921444,-22.79594 37,-22 10.32333,0.4545 31,0 31,0 v 25 25 c 0,0 -20.67667,-0.4545 -31,0 -18.078556,0.79594 -25.829905,-18.38789 -37,-22 -3.503176,-1.13283 -11,1 -11,1 l 4,40 85,-2 v -42 -42 z"
        clip-path="url(#clipPath2036)"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Skutterchuck.png"
        inkscape:export-xdpi="96"
