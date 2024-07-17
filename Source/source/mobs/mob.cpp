@@ -3291,11 +3291,18 @@ void mob::stop_turning() {
 
 
 /**
- * @brief Stores a mob inside of this one
+ * @brief Stores a mob inside of this one, if possible.
  *
  * @param m The mob to store.
  */
 void mob::store_mob_inside(mob* m) {
+    //First, go up the chain to make sure we're not trying to make a loop.
+    mob* temp = this;
+    while(temp) {
+        if(temp == m) return;
+        temp = temp->stored_inside_another;
+    }
+    
     hold(
         m, INVALID, 0.0f, 0.0f, 0.5f,
         false, HOLD_ROTATION_METHOD_NEVER
