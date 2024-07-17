@@ -2,21 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 793.7007874 1122.519685"
+   width="116"
+   height="699.00006"
+   viewBox="0 0 116 699.00009"
    version="1.1"
    id="svg2115"
-   inkscape:version="0.92.4 (unknown)"
-   sodipodi:docname="Margaret.svg">
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="Margaret.svg"
+   inkscape:export-filename="../../../../../Game_data/Graphics/Margaret.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title966">Margaret spritesheet</title>
   <defs
@@ -171,8 +174,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter10104">
+       style="color-interpolation-filters:sRGB"
+       id="filter10104"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -199,7 +206,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite10098" />
+         id="feComposite10098"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -263,9 +271,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.77771465"
-     inkscape:cx="-65.162746"
-     inkscape:cy="-309.66642"
+     inkscape:zoom="1.5"
+     inkscape:cx="40.333333"
+     inkscape:cy="154.66667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -283,13 +291,22 @@
      inkscape:snap-text-baseline="true"
      inkscape:snap-page="true"
      inkscape:window-width="1872"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-x="48"
      inkscape:window-y="0"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid1945" />
+       id="grid1945"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata2112">
@@ -320,9 +337,10 @@
      inkscape:label="Grid"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-1122.5197)">
     <g
-       transform="translate(-0.09374376,102.1575)"
+       transform="translate(0,70.157517)"
        style="display:inline;opacity:1"
        id="g4760">
       <ellipse
@@ -334,7 +352,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
       <circle
          r="15"
          cy="1036.3622"
@@ -343,7 +361,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <circle
          r="9.5"
          cy="1036.3622"
@@ -382,7 +400,7 @@
        inkscape:export-ydpi="96" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:54.32634735px;line-height:67.9079361px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.71631742px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:54.3263px;line-height:67.9079px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.71632px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-125.33183"
        y="1174.4138"
        id="text933"><tspan
@@ -390,17 +408,17 @@
          id="tspan931"
          x="-125.33183"
          y="1174.4138"
-         style="stroke-width:2.71631742px">L L</tspan><tspan
+         style="stroke-width:2.71632px">L L</tspan><tspan
          sodipodi:role="line"
          x="-125.33183"
-         y="1242.3218"
+         y="1242.3217"
          id="tspan935"
-         style="stroke-width:2.71631742px">R</tspan><tspan
+         style="stroke-width:2.71632px">R</tspan><tspan
          sodipodi:role="line"
          x="-125.33183"
-         y="1310.2297"
+         y="1310.2296"
          id="tspan937"
-         style="stroke-width:2.71631742px">L</tspan></text>
+         style="stroke-width:2.71632px">L</tspan></text>
     <use
        x="0"
        y="0"
@@ -472,7 +490,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Sprites"
-     style="display:inline;opacity:1">
+     style="display:inline;opacity:1"
+     transform="translate(0,-1122.5197)">
     <use
        x="0"
        y="0"
@@ -582,7 +601,7 @@
          inkscape:connector-curvature="0"
          id="path10234"
          d="m 38.066668,1122.5389 c -0.349133,-0.042 -0.624998,0.057 -0.894532,0.2578 -2.605935,1.9436 -4.615979,8.1024 -5.738281,11.3516 l -1.265625,3.666 -0.212891,-1.0254 c -0.696583,-3.3662 -1.901307,-9.7341 -4.236328,-11.9961 -0.322017,-0.3119 -0.677313,-0.4441 -1.238281,-0.3281 -0.560968,0.116 -0.833977,0.379 -1.005859,0.793 -1.197134,2.884 0.05498,8.7724 0.773437,12.2207 -0.157801,-0.178 -0.272222,-0.3147 -0.4375,-0.4981 -2.275224,-2.525 -5.213611,-5.4662 -7.572266,-6.084 -0.4337,-0.1136 -0.808538,-0.056 -1.240234,0.3204 -0.431696,0.3766 -0.539946,0.7404 -0.486328,1.1855 0.388813,3.2276 4.728692,8.0383 6.988281,10.6289 l 0.361328,0.4141 c -3.402309,-0.9888 -9.036017,-2.6265 -11.9609373,-1.67 -0.426123,0.1393 -0.710107,0.3912 -0.869141,0.9415 -0.159033,0.5504 -0.05368,0.9145 0.232422,1.2597 1.0323173,1.2454 3.1006733,2.2894 5.3242193,3.1426 -2.304793,0.3332 -4.490588,0.879 -5.7500003,1.8398 -0.356437,0.2719 -0.540886,0.6038 -0.509766,1.1758 0.03112,0.572 0.248975,0.8817 0.632813,1.1133 2.0521173,1.2386 6.1014573,1.3087 9.4648433,1.1875 -2.936864,1.7782 -6.468573,4.1574 -7.533203,6.4023 -0.192104,0.4051 -0.203948,0.7833 0.08594,1.2774 0.289884,0.4941 0.626889,0.6693 1.074219,0.6992 0.202732,0.014 0.415337,0.013 0.634765,0 0.219428,-0.013 0.445936,-0.039 0.679688,-0.076 1.78979,-0.2866 3.960438,-1.251 5.988281,-2.3105 -0.129075,0.1611 -0.269516,0.3211 -0.392578,0.4824 -1.05054,1.3768 -1.861262,2.7501 -2.101563,3.9453 -0.08837,0.4395 -0.0083,0.8115 0.392579,1.2207 0.400829,0.4092 0.769662,0.4972 1.210937,0.418 0.641937,-0.1153 1.339574,-0.3992 2.0625,-0.7891 -0.710587,2.0536 -1.187448,4.0717 -0.947266,5.5391 0.07242,0.4424 0.279371,0.7606 0.798829,1.0019 0.519458,0.2416 0.894367,0.1942 1.279296,-0.035 0.348903,-0.2083 0.695197,-0.485 1.03711,-0.8125 0.170956,-0.1638 0.341305,-0.339 0.509765,-0.5274 0.168461,-0.1883 0.336489,-0.39 0.501953,-0.5996 0.330929,-0.4191 0.654754,-0.8762 0.970704,-1.3593 0.315949,-0.4832 0.622946,-0.9922 0.919922,-1.5118 0.296975,-0.5195 0.583415,-1.0496 0.857421,-1.5781 0.822019,-1.5854 1.532786,-3.1474 2.076172,-4.3164 v 0 l 1.173828,-2.5215 0.285157,4.5449 c 0.135053,2.1443 0.301985,5.4779 0.894531,8.3027 0.118509,0.565 0.2544,1.1084 0.410156,1.6192 0,0 0,0 0,0 0.311513,1.0216 0.702776,1.9069 1.201172,2.5489 0.274931,0.3541 0.607979,0.5359 1.179687,0.5 0.571709,-0.036 0.878997,-0.2588 1.107422,-0.6446 1.656353,-2.7974 1.141422,-9.2567 0.925782,-12.6875 l -0.214844,-3.3945 2.519531,2.2969 c 2.539767,2.3166 7.252572,6.7657 10.470703,7.2265 0.443803,0.064 0.809225,-0.038 1.195313,-0.4609 0.386087,-0.4231 0.453484,-0.7963 0.349609,-1.2324 -0.753246,-3.1625 -5.614832,-7.4488 -8.154297,-9.7657 l -0.353515,-0.3222 1.021484,0.4277 c 3.170961,1.3274 9.103427,3.9317 12.289062,3.2832 0.439321,-0.089 0.751396,-0.3075 0.972657,-0.8359 0.221262,-0.5284 0.158574,-0.9035 -0.08594,-1.2793 -1.773045,-2.7249 -7.792102,-5.1254 -10.96289,-6.4531 l -4.015625,-1.6836 4.488281,-0.4727 c 3.418587,-0.3608 9.874013,-0.931 12.355469,-3.0312 0.342208,-0.2897 0.509267,-0.6296 0.449218,-1.1993 -0.06005,-0.5697 -0.294376,-0.8681 -0.689453,-1.08 -2.148614,-1.1526 -6.304011,-0.997 -9.689453,-0.6954 -0.422558,0.038 -0.73963,0.075 -1.132812,0.1153 2.552795,-1.3999 5.118189,-3.0882 6.101562,-4.8086 0.222479,-0.3893 0.263025,-0.7665 0.01172,-1.2813 -0.251306,-0.5148 -0.573839,-0.7134 -1.017578,-0.7773 -2.964704,-0.4275 -8.013375,1.9988 -11.21875,3.5684 l 0.447265,-0.7286 c 1.801381,-2.9278 5.290997,-8.3872 5.142578,-11.6347 -0.02047,-0.4479 -0.187934,-0.7877 -0.675781,-1.0879 -0.487847,-0.3003 -0.868293,-0.2968 -1.277343,-0.1133 -1.998852,0.8968 -4.138761,3.7167 -5.88086,6.3594 0.937568,-3.0185 1.755893,-6.452 1.183594,-8.5625 -0.117335,-0.4327 -0.353083,-0.7289 -0.894531,-0.916 -0.135362,-0.047 -0.260576,-0.076 -0.376953,-0.09 z"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.2;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.02864643;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.2;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0286464;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     </g>
     <g
        id="g1467"
@@ -845,7 +864,7 @@
          cy="959.51971"
          cx="221.99997"
          id="path982"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1047);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.06371522;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1047);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0637152;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     </g>
     <use
        x="0"

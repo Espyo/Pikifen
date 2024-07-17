@@ -2,21 +2,21 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 793.7007874 1122.519685"
+   width="68"
+   height="68.000031"
+   viewBox="0 0 68 68.00003"
    version="1.1"
    id="svg2115"
-   inkscape:version="0.92.4 (unknown)"
-   sodipodi:docname="Leaves.svg">
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="Leaves.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title853">Leaves object spritesheet</title>
   <defs
@@ -69,8 +69,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1091">
+       style="color-interpolation-filters:sRGB"
+       id="filter1091"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -97,7 +101,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1085" />
+         id="feComposite1085"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -134,9 +139,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1195"
-       x="-0.035720521"
+       x="-0.035720523"
        width="1.071441"
-       y="-0.036283886"
+       y="-0.036283888"
        height="1.0725678">
       <feGaussianBlur
          inkscape:collect="always"
@@ -151,9 +156,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="-17.283873"
-     inkscape:cy="27.458379"
+     inkscape:zoom="1.5"
+     inkscape:cx="46.333333"
+     inkscape:cy="66.666667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -171,13 +176,22 @@
      inkscape:snap-text-baseline="true"
      inkscape:snap-page="true"
      inkscape:window-width="1872"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-x="48"
      inkscape:window-y="0"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid1945" />
+       id="grid1945"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata2112">
@@ -208,9 +222,10 @@
      inkscape:label="Grid"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-1054.5197)">
     <g
-       transform="translate(-0.09374376,102.1575)"
+       transform="translate(0,2.1575174)"
        style="display:inline;opacity:1"
        id="g4760">
       <ellipse
@@ -222,7 +237,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
       <circle
          r="15"
          cy="1036.3622"
@@ -231,7 +246,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <circle
          r="9.5"
          cy="1036.3622"
@@ -273,7 +288,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Sprites"
-     style="display:inline;opacity:1">
+     style="display:inline;opacity:1"
+     transform="translate(0,-1054.5197)">
     <g
        id="g1105"
        inkscape:transform-center-x="-15.662517"
