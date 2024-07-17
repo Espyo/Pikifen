@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -106,7 +106,6 @@ Next tasks (roughly sorted most important first)
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     General graphic file improvements
-        Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Use blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
         Remember to update the Pikmin Fanon wiki page link in the PNG files
@@ -143,6 +142,7 @@ Next tasks (roughly sorted most important first)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
     Misc. graphical improvements
+        Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         All enemies could probably stand to have some interpolated shaking to spice up their animations
         Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
         Cloaking Burrow-nit, the Dumples, "inked" use a lot of sprites that can just recycle previous ones and use in-engine transformations
@@ -185,6 +185,7 @@ Next tasks (roughly sorted most important first)
         Leaders should be a bit faster
         Leader damage from enemies should be standardized
         Leaf Pikmin should be able to follow leaders in walking
+        Rename the Spectralid to Spectralids
         Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
         When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
