@@ -2,21 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 793.7007874 1122.519685"
+   width="482"
+   height="160.00003"
+   viewBox="0 0 482 160.00003"
    version="1.1"
    id="svg2115"
-   inkscape:version="0.92.4 (unknown)"
-   sodipodi:docname="Ceramic_bridges.svg">
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="Ceramic_bridges.svg"
+   inkscape:export-filename="../../../../Game_data/Graphics/Ceramic_pile_red.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title1746">Ceramic bridges spritesheet</title>
   <defs
@@ -50,7 +53,11 @@
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
        style="color-interpolation-filters:sRGB"
-       id="filter1771-0-1-1">
+       id="filter1771-0-1-1"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -96,7 +103,11 @@
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
        style="color-interpolation-filters:sRGB"
-       id="filter1749-6-7-3">
+       id="filter1749-6-7-3"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -142,7 +153,11 @@
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
        style="color-interpolation-filters:sRGB"
-       id="filter1727-7-3-1">
+       id="filter1727-7-3-1"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -188,7 +203,11 @@
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
        style="color-interpolation-filters:sRGB"
-       id="filter1705-3-2-5">
+       id="filter1705-3-2-5"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -346,9 +365,9 @@
        xlink:href="#red_side"
        id="radialGradient2149"
        cx="68.679688"
-       cy="987.16035"
+       cy="987.16034"
        fx="68.679688"
-       fy="987.16035"
+       fy="987.16034"
        r="12.679688"
        gradientTransform="matrix(1,0,0,1.9433172,0,-931.20535)"
        gradientUnits="userSpaceOnUse" />
@@ -424,7 +443,7 @@
        id="filter3646"
        x="-0.17288168"
        width="1.3457634"
-       y="-0.16798855"
+       y="-0.16798856"
        height="1.3359771">
       <feGaussianBlur
          inkscape:collect="always"
@@ -611,8 +630,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1882">
+       style="color-interpolation-filters:sRGB"
+       id="filter1882"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -639,7 +662,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1876" />
+         id="feComposite1876"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -667,8 +691,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1904">
+       style="color-interpolation-filters:sRGB"
+       id="filter1904"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -695,7 +723,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1898" />
+         id="feComposite1898"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -723,8 +752,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1952">
+       style="color-interpolation-filters:sRGB"
+       id="filter1952"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -751,7 +784,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1946" />
+         id="feComposite1946"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -768,8 +802,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1966">
+       style="color-interpolation-filters:sRGB"
+       id="filter1966"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -796,7 +834,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1960" />
+         id="feComposite1960"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -813,8 +852,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1981">
+       style="color-interpolation-filters:sRGB"
+       id="filter1981"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -841,7 +884,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1974" />
+         id="feComposite1974"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -858,8 +902,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter1995">
+       style="color-interpolation-filters:sRGB"
+       id="filter1995"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -886,7 +934,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite1989" />
+         id="feComposite1989"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -903,8 +952,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2009">
+       style="color-interpolation-filters:sRGB"
+       id="filter2009"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -931,7 +984,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2003" />
+         id="feComposite2003"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -948,8 +1002,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2023">
+       style="color-interpolation-filters:sRGB"
+       id="filter2023"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -976,7 +1034,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2017" />
+         id="feComposite2017"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -993,8 +1052,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2037">
+       style="color-interpolation-filters:sRGB"
+       id="filter2037"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1021,7 +1084,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2031" />
+         id="feComposite2031"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1038,8 +1102,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2051">
+       style="color-interpolation-filters:sRGB"
+       id="filter2051"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1066,7 +1134,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2045" />
+         id="feComposite2045"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1083,8 +1152,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2065">
+       style="color-interpolation-filters:sRGB"
+       id="filter2065"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1111,7 +1184,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2059" />
+         id="feComposite2059"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1128,8 +1202,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2079">
+       style="color-interpolation-filters:sRGB"
+       id="filter2079"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1156,7 +1234,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2073" />
+         id="feComposite2073"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1173,8 +1252,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2093">
+       style="color-interpolation-filters:sRGB"
+       id="filter2093"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1201,7 +1284,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2087" />
+         id="feComposite2087"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1218,8 +1302,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2107">
+       style="color-interpolation-filters:sRGB"
+       id="filter2107"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1246,7 +1334,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2101" />
+         id="feComposite2101"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1263,8 +1352,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2121">
+       style="color-interpolation-filters:sRGB"
+       id="filter2121"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1291,7 +1384,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2115" />
+         id="feComposite2115"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1308,8 +1402,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2135">
+       style="color-interpolation-filters:sRGB"
+       id="filter2135"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1336,7 +1434,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2129" />
+         id="feComposite2129"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1527,8 +1626,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2530">
+       style="color-interpolation-filters:sRGB"
+       id="filter2530"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1555,7 +1658,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2524" />
+         id="feComposite2524"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1583,8 +1687,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2568">
+       style="color-interpolation-filters:sRGB"
+       id="filter2568"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1611,7 +1719,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2562" />
+         id="feComposite2562"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1648,8 +1757,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2632">
+       style="color-interpolation-filters:sRGB"
+       id="filter2632"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1676,7 +1789,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2626" />
+         id="feComposite2626"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1748,8 +1862,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2778">
+       style="color-interpolation-filters:sRGB"
+       id="filter2778"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1776,7 +1894,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2772" />
+         id="feComposite2772"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1815,8 +1934,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2852">
+       style="color-interpolation-filters:sRGB"
+       id="filter2852"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1843,7 +1966,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2846" />
+         id="feComposite2846"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1871,8 +1995,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2912">
+       style="color-interpolation-filters:sRGB"
+       id="filter2912"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1899,7 +2027,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2906" />
+         id="feComposite2906"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -1938,8 +2067,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter2970">
+       style="color-interpolation-filters:sRGB"
+       id="filter2970"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -1966,7 +2099,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite2964" />
+         id="feComposite2964"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -2005,8 +2139,12 @@
        inkscape:label="Cross Noise"
        inkscape:menu="Overlays"
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
-       style="color-interpolation-filters:sRGB;"
-       id="filter3014">
+       style="color-interpolation-filters:sRGB"
+       id="filter3014"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          type="fractalNoise"
          numOctaves="5"
@@ -2033,7 +2171,8 @@
          k2="0.5"
          k3="0.5"
          result="result2"
-         id="feComposite3008" />
+         id="feComposite3008"
+         k4="0" />
       <feBlend
          result="result6"
          in2="result4"
@@ -2131,11 +2270,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="164.92651"
-     inkscape:cy="98.791307"
+     inkscape:zoom="1.5"
+     inkscape:cx="186.33333"
+     inkscape:cy="72.666667"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -2150,16 +2289,25 @@
      inkscape:snap-center="true"
      inkscape:snap-text-baseline="true"
      inkscape:snap-page="true"
-     inkscape:window-width="934"
-     inkscape:window-height="1053"
-     inkscape:window-x="984"
+     inkscape:window-width="1872"
+     inkscape:window-height="1051"
+     inkscape:window-x="48"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid1945" />
+       id="grid1945"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata2112">
@@ -2172,7 +2320,7 @@
         <dc:title>Ceramic bridges spritesheet</dc:title>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
-        <dc:date></dc:date>
+        <dc:date />
         <dc:creator>
           <cc:Agent>
             <dc:title>André &quot;Espyo&quot; Silva</dc:title>
@@ -2191,9 +2339,10 @@
      inkscape:label="Grid"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-962.51969)">
     <g
-       transform="translate(-0.09374376,102.1575)"
+       transform="translate(0,-89.842493)"
        style="display:inline;opacity:1"
        id="g4760">
       <ellipse
@@ -2205,7 +2354,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
       <circle
          r="15"
          cy="1036.3622"
@@ -2214,7 +2363,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <circle
          r="9.5"
          cy="1036.3622"
@@ -2284,9 +2433,9 @@
          height="48"
          width="48"
          id="rect1574"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="use1607"
          width="48"
          height="48"
@@ -2412,7 +2561,7 @@
        id="use3064"
        transform="translate(400)">
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="rect3523"
          width="48"
          height="48"
@@ -2424,7 +2573,7 @@
          height="48"
          width="48"
          id="rect3525"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
       <use
          x="0"
          y="0"
@@ -2487,14 +2636,14 @@
        id="g1770"
        transform="translate(800)">
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="rect1737"
          width="48"
          height="48"
          x="600"
          y="1074.5198" />
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="use1747"
          width="48"
          height="48"
@@ -2509,7 +2658,7 @@
          width="100%"
          height="100%" />
       <rect
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.01230915;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#00c000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0123091;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          id="use1764"
          width="48"
          height="48"
@@ -2521,7 +2670,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Sprites - bottom"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-962.51969)">
     <use
        style="display:inline"
        x="0"
@@ -2663,7 +2813,7 @@
          inkscape:connector-curvature="0"
          id="path842"
          d="m 166.2,1086.9197 4.8,18 -6,12 4.8,9.6 19.2,-3.6 24,3.6 v -14.4 l -3.6,-18 2.4,-9.6 -12,-6 -30,1.2 z"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1382);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.07276069;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1382);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0727607;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
       <use
          height="100%"
          width="100%"
@@ -3744,12 +3894,12 @@
        width="100%"
        height="100%" />
     <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.33000004;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.06;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.33;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.06;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 954,1026.5195 -7,11.9746 2,7.0254 13.69531,3.6524 -0.69531,0.3476 -4,1.6289 6,1.6309 21,2.9258 15,1.6289 -0.008,-3.4942 -0.008,-0.014 h 0.0156 l -2.88867,-5.9043 2.88867,3.5528 h 28 l 11,6.2597 16,0.7832 5,-5.4785 v -0.4824 l 24,0.9609 16,3.9512 v 0.049 l 18,-4.8222 7,6.4511 15,-0.8066 13.1172,-6.3457 2.8828,0.7832 21,2.9258 15,1.6289 -0.01,-3.4942 -0.01,-0.014 h 0.018 l -2.8887,-5.9043 2.8887,3.5528 h 28 l 11,6.2597 16,0.7832 5,-5.4785 v -3.5215 l -14.666,-5.8672 0.666,-6.2636 v -3.1309 l 15,-7.7383 h -32 l -11,1 -18,-1 v 4 0.5606 0 -0.5605 0 l -1,-3 -31,-1 h -14 l -1,1.711 v -1.711 H 1121.8672 1097 l 2,11.2735 1,7.2265 -0.1406,0.1543 -3.8594,-18.6543 -10,1 -19,-1 -21,8 v -0.2617 l 15,-7.7383 h -32 l -11,1 -18,-1 v 4 l -1,-3 -31,-1 z m 185.1348,12.4473 0.2832,0.9941 0.3496,1.2305 0.6445,2.2656 -1.5332,-4.123 z"
        id="path3659"
        inkscape:connector-curvature="0" />
     <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.33000004;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.06;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.33;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.06;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2454);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 983,1090.5195 -27,4 v 3.9082 0.092 l 0.16992,0.066 5.83008,5.4102 -1,9.5234 3,9 13,-1 23,1 h 19 l 8,-1 15,1 3.6445,-3.123 -0.5566,0.4941 -0.088,2.6289 19,-1 22,1 h 18 l 3,-5 v -0.8945 l 16,5.8945 h 29 l 1.0117,-8.9629 2.9883,8.9629 13,-1 23,1 h 19 l 8,-1 15,1 7,-6 v -4 l -1,-7 v -9 l -5,-5 -15,7 -13,-5 -15,-2 -1,7 -2,4 v 0.7383 l -0.1641,-0.4551 2.0528,-4.2109 v 0 l 0.1094,-0.072 v -4 l -16,-4 -27,4 v 0.7696 l -4,-4.1543 -15,-0.6153 h -26 l -5,3 v 1.4063 l -0.02,0.057 h -0.023 l 0.043,-3.4649 -14,1 -21,3 -10,-5 -8,1 0.025,2.0254 -2.0254,-2.0254 -15,7 -13,-5 -15,-2 -1,7 -2,4 v 0.7344 l -0.16406,-0.4512 2.05273,-4.2109 0.11133,-0.072 v -0.1543 -3.8457 z m 65,10.1035 1,6.6661 v 5.2304 l -1,-7 z m 105.9785,3.3536 0.022,0.02 -0.023,0.2227 z M 1000,1114.2344 l 0.3496,0.8886 -0.3496,1.3965 v -1 z m 192,0 0.3496,0.8886 -0.3496,1.3965 v -1 z"
        id="path3809"
        inkscape:connector-curvature="0" />
@@ -3790,7 +3940,8 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Sprites - middle"
-     style="display:none">
+     style="display:inline"
+     transform="translate(0,-962.51969)">
     <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.05;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3630);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="M 51.6105,980.49767 C 42.606057,983.50796 36.711905,992.566 32.053035,1000.8386 22.195798,1018.3419 1.2474378,1033.4579 11,1051.0197 c 3.186242,5.7376 14.138589,0 19.25602,4.1054 7.739288,6.2142 11.48529,17.2055 12.352821,27.0929 0.808451,9.214 -12.68021,19.6148 -6.938981,26.8667 5.500771,6.9482 19.019934,4.0588 26.58014,-0.565 15.58593,-9.5322 7.931102,-50.9518 26,-48.25 15.96936,2.3879 -4.861371,40.1194 9.5,47.5 9.18888,4.7224 21.75252,-4.7176 28.25,-12.75 6.85804,-8.4781 3.5219,-21.6131 6.93032,-31.9714 3.25867,-9.9032 13.34748,-18.1164 12.81968,-28.5286 -0.60747,-11.9837 -6.93725,-26.5255 -17.99927,-31.1742 -7.93235,-3.3335 -16.96827,9.5086 -25.00073,6.4242 -10.831398,-4.1592 -9.778146,-22.29911 -19.25,-29.00002 -9.576234,-6.77475 -20.764365,-3.99127 -31.8895,-0.27201 z"
@@ -4098,9 +4249,9 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="Sprites - top"
-     style="display:none">
+     style="display:inline"
+     transform="translate(0,-962.51969)">
     <path
-       transform="translate(-3.4304859e-8,4.0165401e-6)"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.05;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3646);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 55,1002.5197 c -15.894615,8.5065 -26.01212,27.4189 -30,45 -2.606959,11.4932 -1.004439,24.8592 5,35 4.24578,7.1706 11.889592,16.9146 20,15 7.25417,-1.7125 2.551931,-19.714 10,-20 9.711094,-0.373 5.885396,21.6283 15,25 14.829264,5.4857 35.75492,-2.1731 45,-15 5.8471,-8.1124 -0.82481,-20.0341 0,-30 0.83618,-10.1034 8.87962,-20.6338 5,-30 -5.48661,-13.2459 -21.34674,-20.6246 -35,-25 -11.110114,-3.5604 -24.713796,-5.50501 -35,0 z"
        id="path3075"

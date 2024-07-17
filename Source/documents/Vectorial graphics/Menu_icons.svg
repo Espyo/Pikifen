@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="240.5063mm"
-   height="16.933365mm"
-   viewBox="0 0 909.00016 64.000117"
+   width="909.00018"
+   height="64.000122"
+   viewBox="0 0 909.00015 64.00012"
    version="1.1"
    id="svg2115"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -452,10 +452,10 @@
     <inkscape:grid
        type="xygrid"
        id="grid1945"
-       originx="-79.999946"
-       originy="-1120"
+       originx="0"
+       originy="0"
        spacingy="1"
-       spacingx="1"
+       spacingx="0.99999997"
        units="px"
        visible="true" />
   </sodipodi:namedview>
@@ -952,7 +952,7 @@
        id="g47"
        transform="translate(-7.4982434,5.08588)"
        mask="url(#mask47)"
-       style="filter:url(#filter48);opacity:0.5">
+       style="opacity:0.5;filter:url(#filter48)">
       <path
          id="path43"
          style="color:#000000;overflow:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
@@ -981,7 +981,7 @@
     </g>
     <path
        id="path1919"
-       style="color:#000000;font-variation-settings:normal;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;filter:url(#filter50);opacity:0.5"
+       style="color:#000000;font-variation-settings:normal;display:inline;overflow:visible;opacity:0.5;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;filter:url(#filter50);stop-color:#000000"
        d="m 743.95656,1127 c -14.25182,0.2443 -19.95662,31.6716 -19.95662,43.1251 0,4.1153 2.9675,5.75 5.75002,5.75 8.62503,0 11.50003,-20.1265 17.25005,-20.1251 6.03962,0 12.81955,0 17.25005,0 5.75002,0 8.62503,20.1251 17.25006,20.1251 2.78252,0 5.75001,-1.6347 5.75001,-5.75 0,-11.4986 -5.75001,-43.1272 -20.12506,-43.1251 z m 26.04352,5.75 a 2.8750087,2.8750087 0 0 1 2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,-2.875 2.8750087,2.8750087 0 0 1 2.87501,-2.875 z m -28.89608,2.8807 c 0.0494,0 0.0963,0 0.14605,0 3.17479,0 5.75002,2.5694 5.75002,5.7443 0,3.1749 -2.57523,5.75 -5.75002,5.75 -3.17481,0 -5.74441,-2.5751 -5.74441,-5.75 0,-3.1251 2.49217,-5.6658 5.59842,-5.7443 z m 23.14606,2.8693 a 2.8750087,2.8750087 0 0 1 2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.875,-2.875 2.8750087,2.8750087 0 0 1 2.875,-2.875 z m 11.50004,0 a 2.8750087,2.8750087 0 0 1 2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,-2.875 2.8750087,2.8750087 0 0 1 2.87501,-2.875 z m -5.75002,5.75 a 2.8750087,2.8750087 0 0 1 2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,2.875 2.8750087,2.8750087 0 0 1 -2.87501,-2.875 2.8750087,2.8750087 0 0 1 2.87501,-2.875 z"
        inkscape:export-filename="../../../Game_data/Graphics/Editor_icons.png"
        inkscape:export-xdpi="96"
@@ -1014,7 +1014,7 @@
        id="g55"
        transform="translate(-12.49998)"
        mask="url(#mask55)"
-       style="filter:url(#filter56);opacity:0.5">
+       style="opacity:0.5;filter:url(#filter56)">
       <rect
          style="color:#000000;overflow:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
          id="rect53"
