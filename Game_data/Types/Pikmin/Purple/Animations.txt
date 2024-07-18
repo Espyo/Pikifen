@@ -70,12 +70,21 @@ animations{
 			mid_bend{
 				duration=0.1000
 			}
+			idling_01{
+				duration=0.1000
+			}
 		}
 	}
 	getting_up{
 		frames{
+			lying_01{
+				duration=0.1000
+			}
 			half_lying{
-				duration=0.2000
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
 			}
 		}
 	}
@@ -107,9 +116,13 @@ animations{
 		}
 	}
 	knocked_back{
+		loop_frame=1
 		frames{
+			idling_01{
+				duration=0.1000
+			}
 			half_lying{
-				duration=0.0000
+				duration=0.1000
 			}
 		}
 	}
@@ -176,13 +189,57 @@ animations{
 				duration=0.1000
 			}
 			thrown_01{
-				duration=1.5000
+				duration=0.2000
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.1700
+				interpolate=true
+			}
+			sighing_01{
+				duration=0.1000
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.1000
+				interpolate=true
+			}
+			sighing_02{
+				duration=0.1000
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.1000
+				interpolate=true
+			}
+			sighing_01{
+				duration=0.1000
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.1000
+				interpolate=true
+			}
+			sighing_02{
+				duration=0.1700
+				interpolate=true
+			}
+			thrown_01{
+				duration=0.2000
 			}
 			mid_bend{
 				duration=0.1000
 			}
 			idling_01{
-				duration=1.0000
+				duration=0.3000
+				interpolate=true
+			}
+			sighing_03{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
 			}
 		}
 	}
@@ -672,6 +729,89 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sighing_01{
+		file=Purple_Pikmin.png
+		file_pos=0.0000 37.0000
+		file_size=30.0000 36.0000
+		offset=-0.5000 1.8504
+		scale=0.5000 0.5000
+		angle=0.3491
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sighing_02{
+		file=Purple_Pikmin.png
+		file_pos=0.0000 37.0000
+		file_size=30.0000 36.0000
+		offset=-0.5000 -1.8500
+		scale=0.5000 0.5000
+		angle=5.9341
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sighing_03{
+		file=Purple_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=24.0000 36.0000
+		offset=2.6583 0.0000
+		scale=0.5500 0.4155
+		top_visible=true
+		top_pos=-2.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
 				value=1.0000
 			}
