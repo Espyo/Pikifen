@@ -110,14 +110,11 @@ Next tasks (roughly sorted most important first)
         Add the Inkscape noise filter to more sprites? Or even a different filter
         Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
-        Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
-        Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
             If necessary, seeds should have their own animation
         The "grabbing_near" sprite is unused for all bar Bulbmin
         More frames, for more fluidity
     Pikmin missing animations
-        Sighing
         Idling (bobbing a bit so they aren't static)
         Bored (lying down, looking around, etc.)
         Flailing (also used when caught by an enemy)
@@ -142,6 +139,7 @@ Next tasks (roughly sorted most important first)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
     Misc. graphical improvements
+        Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         All enemies could probably stand to have some interpolated shaking to spice up their animations
         Smoothen some of the more jerky mob animations, like Red Bulborbs flopping

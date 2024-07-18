@@ -44,7 +44,7 @@ animations{
 			mid_bend{
 				duration=0.1000
 			}
-			thrown_01{
+			crouching{
 				duration=0.1250
 				interpolate=true
 			}
@@ -52,7 +52,7 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1250
 				interpolate=true
 			}
@@ -60,7 +60,7 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1250
 				interpolate=true
 			}
@@ -68,13 +68,12 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1250
 				interpolate=true
 			}
 			drinking_02{
 				duration=0.1250
-				interpolate=true
 			}
 			mid_bend{
 				duration=0.1000
@@ -172,7 +171,7 @@ animations{
 			mid_bend{
 				duration=0.1000
 			}
-			thrown_01{
+			crouching{
 				duration=0.2000
 				interpolate=true
 			}
@@ -180,7 +179,7 @@ animations{
 				duration=0.2000
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.0100
 			}
 			mid_bend{
@@ -206,11 +205,11 @@ animations{
 			mid_bend{
 				duration=0.1000
 			}
-			thrown_01{
+			crouching{
 				duration=0.2000
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1700
 				interpolate=true
 			}
@@ -218,7 +217,7 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1000
 				interpolate=true
 			}
@@ -226,7 +225,7 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1000
 				interpolate=true
 			}
@@ -234,7 +233,7 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.1000
 				interpolate=true
 			}
@@ -242,7 +241,7 @@ animations{
 				duration=0.1700
 				interpolate=true
 			}
-			thrown_01{
+			crouching{
 				duration=0.2000
 			}
 			mid_bend{
@@ -381,11 +380,38 @@ sprites{
 			}
 		}
 	}
+	crouching{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 89.0000
+		file_size=27.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=5.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=3.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	drinking_01{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
-		offset=-1.0000 0.0000
+		offset=2.5000 0.0000
 		scale=0.5500 0.4500
 		top_visible=false
 		top_pos=0.0000 0.0000
@@ -393,14 +419,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=6.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=3.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
 				type=0
@@ -412,7 +438,7 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
-		offset=-2.0000 0.0000
+		offset=1.5000 0.0000
 		scale=0.4500 0.5500
 		top_visible=false
 		top_pos=0.0000 0.0000
@@ -420,14 +446,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=5.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=3.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
 				type=0
@@ -574,21 +600,22 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 58.0000
 		file_size=39.0000 28.0000
+		offset=-3.0000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-10.0000 0.0000
+		top_pos=-13.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-10.0000 0.0000 0.0000
+				coords=-13.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=2.0000 0.0000 0.0000
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
 				type=0
@@ -681,21 +708,22 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=40.0000 58.0000
 		file_size=71.0000 30.0000
+		offset=-7.0000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-20.0000 0.0000
+		top_pos=-27.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-20.0000 0.0000 0.0000
+				coords=-27.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=8.0000 0.0000 0.0000
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=10.0000
 				type=0
@@ -707,21 +735,22 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=40.0000 58.0000
 		file_size=71.0000 30.0000
+		offset=-7.0000 0.0000
 		scale=0.5500 0.5500
 		top_visible=true
-		top_pos=-20.5000 0.0000
+		top_pos=-27.5000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-20.0000 0.0000 0.0000
+				coords=-27.5000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=8.0000 0.0000 0.0000
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=10.0000
 				type=0
@@ -733,22 +762,22 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=106.0000 0.0000
 		file_size=28.0000 28.0000
-		offset=-1.0000 0.0000
+		offset=1.5000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=7.0000 0.0000
+		top_pos=8.5000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=3.1416
 		hitboxes{
 			top{
-				coords=7.0000 0.0000 0.0000
+				coords=8.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=2.0000 0.0000 0.0000
 				height=24.0000
 				radius=5.0000
 				type=0
@@ -787,7 +816,7 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
-		offset=-0.5000 0.0000
+		offset=4.0000 0.0000
 		scale=0.6000 0.5000
 		top_visible=false
 		top_pos=0.0000 0.0000
@@ -795,14 +824,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=7.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=5.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
 				type=0
@@ -814,7 +843,7 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
-		offset=-1.5000 1.0000
+		offset=2.0000 1.0000
 		scale=0.5000 0.5000
 		angle=0.3491
 		top_visible=false
@@ -823,14 +852,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=5.0000 2.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=3.0000 1.0000 0.0000
 				height=24.0000
 				radius=6.0000
 				type=0
@@ -842,7 +871,7 @@ sprites{
 		file=Winged_Pikmin.png
 		file_pos=0.0000 89.0000
 		file_size=27.0000 28.0000
-		offset=-1.5000 -1.0000
+		offset=2.0000 -1.0000
 		scale=0.5000 0.5000
 		angle=5.9341
 		top_visible=false
@@ -851,14 +880,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=5.0000 -2.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=3.0000 -1.0000 0.0000
 				height=24.0000
 				radius=6.0000
 				type=0
@@ -878,14 +907,14 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=0.5000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=5.0000 0.0000 0.0000
 				height=24.0000
 				radius=5.0000
 				type=0
