@@ -80,6 +80,9 @@ enum MOB_ACTION {
     
     //Get information about a mob.
     MOB_ACTION_GET_MOB_INFO,
+
+    //Get information about a mob of the onion category.
+    MOB_ACTION_GET_ONION_INFO,
     
     //Get a random decimal number.
     MOB_ACTION_GET_RANDOM_DECIMAL,
@@ -458,6 +461,15 @@ enum MOB_ACTION_GET_MOB_INFO_TYPE {
     
 };
 
+//Get onion info action info types.
+enum MOB_ACTION_GET_ONION_INFO_TYPE {
+    //Get Pikmin inside.
+    MOB_ACTION_GET_ONION_INFO_PIKMIN_INSIDE,
+
+    //Get Pikmin allowed in the onion.
+    MOB_ACTION_GET_ONION_INFO_PIKMIN_TYPES,
+
+};
 
 //Moving action sub-types.
 enum MOB_ACTION_MOVE_TYPE {
@@ -702,6 +714,7 @@ void get_event_info(mob_action_run_data &data);
 void get_area_info(mob_action_run_data &data);
 void get_floor_z(mob_action_run_data &data);
 void get_mob_info(mob_action_run_data &data);
+void get_onion_info(mob_action_run_data& data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
@@ -776,6 +789,7 @@ bool focus(mob_action_call &call);
 bool get_area_info(mob_action_call &call);
 bool get_event_info(mob_action_call &call);
 bool get_mob_info(mob_action_call &call);
+bool get_onion_info(mob_action_call &call);
 bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);

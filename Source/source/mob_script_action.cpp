@@ -396,6 +396,43 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
     return true;
 }
 
+/**
+ * @brief Loading code for the info getting script actions.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::get_onion_info(mob_action_call& call) {
+
+    if (call.args[1] == "self") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
+    }
+    else if (call.args[1] == "focus") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
+    }
+    else if (call.args[1] == "trigger") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_TRIGGER);
+    }
+    else {
+        report_enum_error(call, 1);
+        return false;
+    }
+
+    if (call.args[2] == "pikmin_inside") {
+        call.args[2] = i2s(MOB_ACTION_GET_ONION_INFO_PIKMIN_INSIDE);
+    }
+    else if (call.args[2] == "pikmin_types") {
+        call.args[2] = i2s(MOB_ACTION_GET_ONION_INFO_PIKMIN_TYPES);
+    }
+    else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! "
+            "Try using \"get_event_info\" or \"get_area_info\".";
+        return false;
+    }
+
+    return true;
+}
 
 /**
  * @brief Loading code for the hold focused mob mob script action.
@@ -1333,6 +1370,93 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
     }
 }
 
+/**
+ * @brief Code for the mob info obtaining mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::get_onion_info(mob_action_run_data& data) {
+    onion* target_mob = nullptr;
+    MOB_ACTION_GET_INFO_TARGET tt =
+        (MOB_ACTION_GET_INFO_TARGET)s2i(data.args[1]);
+
+    switch (tt) {
+    case MOB_ACTION_GET_INFO_TARGET_SELF: {
+        target_mob = (onion*)data.m;
+        break;
+    } case MOB_ACTION_GET_INFO_TARGET_FOCUS: {
+        if (!data.m->focused_mob) return;
+        target_mob = (onion*)data.m->focused_mob;
+        break;
+    } case MOB_ACTION_GET_INFO_TARGET_TRIGGER: {
+        target_mob = (onion*)get_trigger_mob(data);
+    }
+    }
+
+    if (!target_mob) return;
+    if (target_mob->type->category->name != "Onion") return;
+
+    string* var = &(data.m->vars[data.args[0]]);
+    MOB_ACTION_GET_ONION_INFO_TYPE t =
+        (MOB_ACTION_GET_ONION_INFO_TYPE)s2i(data.args[2]);
+
+    switch (t) {
+    case MOB_ACTION_GET_ONION_INFO_PIKMIN_INSIDE: {
+        string ttt = (data.args[3]);
+        for (std::size_t i = 0; i < ttt.size(); i++)
+        {
+            if (ttt[i] == '_')
+            {
+                ttt[i] = ' ';
+            }
+        }
+        int tttt = s2i(data.args[4]);
+        *var = "0";
+        //Find the pikmin_type based on the name
+        auto it = game.mob_types.pikmin.find(ttt);
+        if (it == game.mob_types.pikmin.end()) {
+            *var = "0"; break;
+        }
+        pikmin_type* piktype = it->second;        
+        //Get the amount of pikmin of the given maturity size.
+        size_t amount = 0;
+        for (size_t i = 0; i < target_mob->nest->nest_type->pik_types.size(); ++i) {
+            if (target_mob->nest->nest_type->pik_types[i] == piktype) {
+                amount = target_mob->nest->pikmin_inside[i][tttt];           
+                *var = i2s(amount);
+                break;
+            }
+        }
+        break;
+    } case MOB_ACTION_GET_ONION_INFO_PIKMIN_TYPES: {
+        string ttt = (data.args[3]);
+        for (std::size_t i = 0; i < ttt.size(); i++)
+        {
+            if (ttt[i] == '_')
+            {
+                ttt[i] = ' ';
+            }
+        }
+        //Find the pikmin_type based on the name
+        auto it = game.mob_types.pikmin.find(ttt);
+        if (it == game.mob_types.pikmin.end()) {
+            *var = "false"; break;
+        }
+        pikmin_type* piktype = it->second;
+        //Set the default value as False.
+        *var = "false";
+        //If there's a match between the types allowed and our type, set var to "true".
+        for (size_t i = 0; i < target_mob->nest->nest_type->pik_types.size(); ++i) {
+            if (target_mob->nest->nest_type->pik_types[i] == piktype) {
+                *var = "true";
+                break;
+            }
+        }        
+        break;
+
+    } 
+    }
+}
 
 /**
  * @brief Code for the decimal number randomization mob script action.
