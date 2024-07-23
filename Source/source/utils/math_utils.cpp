@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <math.h>
 
 #include "math_utils.h"
 

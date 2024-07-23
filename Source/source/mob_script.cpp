@@ -9,10 +9,7 @@
  * related functions.
  */
 
-//#define DEBUG_FSM
-
 #include <algorithm>
-#include <iostream>
 
 #include "mob_script.h"
 
