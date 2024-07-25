@@ -94,6 +94,7 @@ script {
             start_dying
             finish_dying
             start_particles reinforced_wall_explosion 0 0 129
+            play_sound obstacle_cleared
             set_tangible false
         }
     }

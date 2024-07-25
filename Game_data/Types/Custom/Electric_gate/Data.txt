@@ -26,6 +26,13 @@ children {
     }
 }
 
+sounds {
+    obstacle_cleared {
+        file = Obstacle_cleared.ogg
+        type = world_global
+    }
+}
+
 spawns {
     left_pillar {
         object = Electric gate pillar

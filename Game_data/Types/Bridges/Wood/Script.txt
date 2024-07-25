@@ -8,6 +8,7 @@ script {
     destroyed {
         on_enter {
             set_hiding true
+            play_sound obstacle_cleared
         }
     }
 }

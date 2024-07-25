@@ -40,6 +40,13 @@ spawns {
     }
 }
 
+sounds{
+    obstacle_cleared {
+        file = Obstacle_cleared.ogg
+        type = world_global
+    }
+}
+
 vulnerabilities {
     explosion = 300
 }

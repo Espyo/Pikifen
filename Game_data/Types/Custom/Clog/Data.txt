@@ -12,3 +12,10 @@ radius = 80
 show_health = false
 target_type = pikmin_obstacle
 team = obstacle
+
+sounds {
+    obstacle_cleared {
+        file = Obstacle_cleared.ogg
+        type = world_global
+    }
+}

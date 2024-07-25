@@ -94,6 +94,7 @@ script {
             start_dying
             finish_dying
             start_particles crystal_wall_explosion 0 0 200
+            play_sound obstacle_cleared
             set_tangible false
         }
     }

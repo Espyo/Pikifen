@@ -13,6 +13,7 @@ script{
     destroyed {
         on_enter {
             spawn full_stick
+            play_sound obstacle_cleared
             delete
         }
     }

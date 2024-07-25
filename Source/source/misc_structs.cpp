@@ -200,7 +200,6 @@ void asset_file_names_t::load(data_node* file) {
     srs.set("menu_activate", sfx_menu_activate);
     srs.set("menu_back", sfx_menu_back);
     srs.set("menu_select", sfx_menu_select);
-    srs.set("obstacle_cleared", sfx_obstacle_cleared);
     srs.set("pluck", sfx_pluck);
     srs.set("spray", sfx_spray);
     srs.set("switch_pikmin", sfx_switch_pikmin);

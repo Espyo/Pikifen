@@ -11,6 +11,7 @@ script {
         on_enter {
             start_particles large_rock_explosion 0 0
             set_animation destroyed
+            play_sound obstacle_cleared
             drain_liquid
         }
         on_animation_end {

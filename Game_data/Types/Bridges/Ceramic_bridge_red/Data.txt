@@ -27,6 +27,10 @@ sounds {
         speed_deviation = 10
         volume = 50
     }
+    obstacle_cleared {
+        file = Obstacle_cleared.ogg
+        type = world_global
+    }
 }
 
 spawns {

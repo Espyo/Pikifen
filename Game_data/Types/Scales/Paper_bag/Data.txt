@@ -36,6 +36,13 @@ children {
     }
 }
 
+sounds {
+    obstacle_cleared {
+        file = Obstacle_cleared.ogg
+        type = world_global
+    }
+}
+
 spawns {
     handle {
         object = Paper bag handle
