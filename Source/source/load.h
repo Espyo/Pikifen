@@ -44,7 +44,6 @@ ALLEGRO_BITMAP* load_bmp(
     const bool report_error = true, const bool error_bmp_on_error = true,
     const bool error_bmp_on_empty = true, const bool path_from_root = false
 );
-void load_custom_particle_generators(const bool load_resources);
 data_node load_data_file(const string &file_path);
 void load_maker_tools();
 ALLEGRO_FONT* load_font(
@@ -52,8 +51,6 @@ ALLEGRO_FONT* load_font(
 );
 void load_fonts();
 void load_game_config();
-void load_hazards();
-void load_liquids(const bool load_resources);
 void load_misc_graphics();
 void load_misc_sounds();
 void load_options();
@@ -62,20 +59,9 @@ ALLEGRO_SAMPLE* load_sample(
     bool report_errors = true
 );
 void load_songs();
-void load_spike_damage_types();
-void load_spray_types(const bool load_resources);
 void load_statistics();
-void load_status_types(const bool load_resources);
 void load_system_animations();
-void load_weather();
 
 void unload_area();
-void unload_custom_particle_generators();
-void unload_hazards();
-void unload_liquids();
 void unload_misc_resources();
 void unload_songs();
-void unload_spike_damage_types();
-void unload_spray_types();
-void unload_status_types(const bool unload_resources);
-void unload_weather();

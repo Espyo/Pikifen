@@ -1861,14 +1861,14 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
-    load_custom_particle_generators(false);
-    load_status_types(false);
-    load_spike_damage_types();
-    load_liquids(true);
-    load_spray_types(false);
-    load_hazards();
-    load_mob_types(false);
-    load_weather();
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
+    game.content.load(CONTENT_TYPE_STATUS_TYPE, false);
+    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
+    game.content.load(CONTENT_TYPE_LIQUID, false);
+    game.content.load(CONTENT_TYPE_SPRAY_TYPE, false);
+    game.content.load(CONTENT_TYPE_HAZARD, false);
+    game.content.load(CONTENT_TYPE_MOB_TYPE, false);
+    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, false);
     
     load_custom_mob_cat_types(true);
     
@@ -4516,14 +4516,14 @@ void area_editor::unload() {
     
     clear_current_area();
     
-    unload_weather();
-    unload_mob_types(false);
-    unload_hazards();
-    unload_spray_types();
-    unload_liquids();
-    unload_spike_damage_types();
-    unload_status_types(false);
-    unload_custom_particle_generators();
+    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, false);
+    game.content.unload(CONTENT_TYPE_MOB_TYPE, false);
+    game.content.unload(CONTENT_TYPE_HAZARD, false);
+    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, false);
+    game.content.unload(CONTENT_TYPE_LIQUID, false);
+    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
+    game.content.unload(CONTENT_TYPE_STATUS_TYPE, false);
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
 }
 
 

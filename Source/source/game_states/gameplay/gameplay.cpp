@@ -1074,16 +1074,16 @@ void gameplay_state::load() {
  * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
-    load_custom_particle_generators(true);
-    load_liquids(true);
-    load_status_types(true);
-    load_spray_types(true);
-    load_hazards();
-    load_weather();
-    load_spike_damage_types();
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
+    game.content.load(CONTENT_TYPE_LIQUID, true);
+    game.content.load(CONTENT_TYPE_STATUS_TYPE, true);
+    game.content.load(CONTENT_TYPE_SPRAY_TYPE, true);
+    game.content.load(CONTENT_TYPE_HAZARD, true);
+    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, true);
+    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, true);
     
     //Mob types.
-    load_mob_types(true);
+    game.content.load(CONTENT_TYPE_MOB_TYPE, true);
     
     //Register leader sub-group types.
     for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
@@ -1190,18 +1190,16 @@ void gameplay_state::unload() {
  * @brief Unloads loaded game content.
  */
 void gameplay_state::unload_game_content() {
-    unload_weather();
-    
     subgroup_types.clear();
-    
-    unload_mob_types(true);
-    
-    unload_spike_damage_types();
-    unload_hazards();
-    unload_spray_types();
-    unload_status_types(true);
-    unload_liquids();
-    unload_custom_particle_generators();
+
+    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, true);
+    game.content.unload(CONTENT_TYPE_MOB_TYPE, true);
+    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, true);
+    game.content.unload(CONTENT_TYPE_HAZARD, true);
+    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, true);
+    game.content.unload(CONTENT_TYPE_STATUS_TYPE, true);
+    game.content.unload(CONTENT_TYPE_LIQUID, true);
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
 }
 
 

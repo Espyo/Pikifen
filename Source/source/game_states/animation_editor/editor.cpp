@@ -411,13 +411,13 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
-    load_custom_particle_generators(false);
-    load_status_types(false);
-    load_spray_types(false);
-    load_liquids(false);
-    load_hazards();
-    load_spike_damage_types();
-    load_mob_types(false);
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
+    game.content.load(CONTENT_TYPE_STATUS_TYPE, false);
+    game.content.load(CONTENT_TYPE_SPRAY_TYPE, false);
+    game.content.load(CONTENT_TYPE_LIQUID, false);
+    game.content.load(CONTENT_TYPE_HAZARD, false);
+    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
+    game.content.load(CONTENT_TYPE_MOB_TYPE, false);
     
     load_custom_mob_cat_types(false);
     
@@ -1435,13 +1435,13 @@ void animation_editor::unload() {
     
     anims.destroy();
     
-    unload_mob_types(false);
-    unload_spike_damage_types();
-    unload_hazards();
-    unload_liquids();
-    unload_spray_types();
-    unload_status_types(false);
-    unload_custom_particle_generators();
+    game.content.unload(CONTENT_TYPE_MOB_TYPE, false);
+    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
+    game.content.unload(CONTENT_TYPE_HAZARD, false);
+    game.content.unload(CONTENT_TYPE_LIQUID, false);
+    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, false);
+    game.content.unload(CONTENT_TYPE_STATUS_TYPE, false);
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
     
     if(bg) {
         al_destroy_bitmap(bg);

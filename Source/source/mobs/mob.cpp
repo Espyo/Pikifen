@@ -2979,9 +2979,6 @@ void mob::set_can_block_paths(const bool blocks) {
         if(can_block_paths) {
             game.states.gameplay->path_mgr.handle_obstacle_remove(this);
             can_block_paths = false;
-            game.audio.create_world_global_sfx_source(
-                game.sys_assets.sfx_obstacle_cleared
-            );
         }
     }
 }

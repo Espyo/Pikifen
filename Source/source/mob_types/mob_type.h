@@ -526,7 +526,3 @@ public:
 
 
 void create_special_mob_types();
-void load_mob_types(mob_category* category, bool load_resources);
-void load_mob_types(bool load_resources);
-void unload_mob_types(const bool unload_resources);
-void unload_mob_types(mob_category* category, const bool unload_resources);

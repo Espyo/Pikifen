@@ -840,39 +840,6 @@ ALLEGRO_BITMAP* load_bmp(
 
 
 /**
- * @brief Loads the user-made particle generators.
- *
- * @param load_resources If true, things like bitmaps and the like will
- * be loaded as well. If you don't need those, set this to false to make
- * it load faster.
- */
-void load_custom_particle_generators(const bool load_resources) {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Custom particle generators");
-    }
-    
-    vector<string> generator_files =
-        folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
-        
-    for(size_t g = 0; g < generator_files.size(); ++g) {
-        string path =
-            PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        particle_generator new_pg;
-        new_pg.path = path;
-        new_pg.load_from_data_node(&file, load_resources);
-        game.content.custom_particle_generators[new_pg.name] = new_pg;
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
  * @brief Loads a data file from the game's content.
  *
  * @param file_path Path to the file, relative to the program root folder.
@@ -1019,66 +986,6 @@ void load_game_config() {
         game.display,
         game.config.name.empty() ? "Pikifen" : game.config.name.c_str()
     );
-}
-
-
-/**
- * @brief Loads the hazards from the game data.
- */
-void load_hazards() {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Hazards");
-    }
-    
-    vector<string> hazard_files =
-        folder_to_vector(HAZARDS_FOLDER_PATH, false);
-        
-    for(size_t h = 0; h < hazard_files.size(); ++h) {
-        string path = HAZARDS_FOLDER_PATH + "/" + hazard_files[h];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        hazard new_h;
-        new_h.path = path;
-        new_h.load_from_data_node(&file);
-        game.content.hazards[new_h.name] = new_h;
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
- * @brief Loads the liquids from the game data.
- *
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
- */
-void load_liquids(const bool load_resources) {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Liquid types");
-    }
-    
-    vector<string> liquid_files =
-        folder_to_vector(LIQUIDS_FOLDER_PATH, false);
-        
-    for(size_t l = 0; l < liquid_files.size(); ++l) {
-        string path = LIQUIDS_FOLDER_PATH + "/" + liquid_files[l];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        liquid* new_l = new liquid();
-        new_l->path = path;
-        new_l->load_from_data_node(&file, load_resources);
-        game.content.liquids[new_l->name] = new_l;
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
 }
 
 
@@ -1365,111 +1272,6 @@ void load_songs() {
 
 
 /**
- * @brief Loads the spike damage types available.
- */
-void load_spike_damage_types() {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Spike damage types");
-    }
-    
-    vector<string> type_files =
-        folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
-        
-    for(size_t t = 0; t < type_files.size(); ++t) {
-        string path = SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        spike_damage_type new_t;
-        new_t.path = path;
-        new_t.load_from_data_node(&file);
-        game.content.spike_damage_types[new_t.name] = new_t;
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
- * @brief Loads spray types from the game data.
- *
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make it
- * load faster.
- */
-void load_spray_types(const bool load_resources) {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Spray types");
-    }
-    
-    vector<string> type_files =
-        folder_to_vector(SPRAYS_FOLDER_PATH, false);
-        
-    vector<spray_type> temp_types;
-    
-    for(size_t t = 0; t < type_files.size(); ++t) {
-        string path = SPRAYS_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        spray_type new_t;
-        new_t.path = path;
-        new_t.load_from_data_node(&file, load_resources);
-        temp_types.push_back(new_t);
-    }
-    
-    //Spray type order.
-    vector<string> missing_spray_order_types;
-    for(size_t t = 0; t < temp_types.size(); ++t) {
-        if(
-            find(
-                game.config.spray_order_strings.begin(),
-                game.config.spray_order_strings.end(),
-                temp_types[t].name
-            ) == game.config.spray_order_strings.end()
-        ) {
-            //Missing from the list? Add it to the "missing" pile.
-            missing_spray_order_types.push_back(temp_types[t].name);
-        }
-    }
-    if(!missing_spray_order_types.empty()) {
-        std::sort(
-            missing_spray_order_types.begin(),
-            missing_spray_order_types.end()
-        );
-        game.config.spray_order_strings.insert(
-            game.config.spray_order_strings.end(),
-            missing_spray_order_types.begin(),
-            missing_spray_order_types.end()
-        );
-    }
-    for(size_t o = 0; o < game.config.spray_order_strings.size(); ++o) {
-        string s = game.config.spray_order_strings[o];
-        bool found = false;
-        for(size_t t = 0; t < temp_types.size(); ++t) {
-            if(temp_types[t].name == s) {
-                game.content.spray_types.push_back(temp_types[t]);
-                found = true;
-            }
-        }
-        
-        if(!found) {
-            game.errors.report(
-                "Unknown spray type \"" + s + "\" found "
-                "in the spray order list in the config file!"
-            );
-        }
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
  * @brief Loads the engine's lifetime statistics.
  */
 void load_statistics() {
@@ -1502,68 +1304,6 @@ void load_statistics() {
 
 
 /**
- * @brief Loads status effect types from the game data.
- *
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make it
- * load faster.
- */
-void load_status_types(const bool load_resources) {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Status types");
-    }
-    
-    vector<string> type_files =
-        folder_to_vector(STATUSES_FOLDER_PATH, false);
-    vector<status_type*> types_with_replacements;
-    vector<string> types_with_replacements_names;
-    
-    for(size_t t = 0; t < type_files.size(); ++t) {
-        string path = STATUSES_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        status_type* new_t = new status_type();
-        new_t->path = path;
-        new_t->load_from_data_node(&file, load_resources);
-        game.content.status_types[new_t->name] = new_t;
-        
-        if(!new_t->replacement_on_timeout_str.empty()) {
-            types_with_replacements.push_back(new_t);
-            types_with_replacements_names.push_back(
-                new_t->replacement_on_timeout_str
-            );
-        }
-    }
-    
-    for(size_t s = 0; s < types_with_replacements.size(); ++s) {
-        string rn = types_with_replacements_names[s];
-        bool found = false;
-        for(auto &s2 : game.content.status_types) {
-            if(s2.first == rn) {
-                types_with_replacements[s]->replacement_on_timeout =
-                    s2.second;
-                found = true;
-                break;
-            }
-        }
-        if(found) continue;
-        
-        game.errors.report(
-            "The status effect type \"" +
-            types_with_replacements[s]->name +
-            "\" has a replacement effect called \"" + rn + "\", but there is "
-            "no status effect with that name!"
-        );
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
  * @brief Loads the animations that are used system-wide.
  */
 void load_system_animations() {
@@ -1578,73 +1318,10 @@ void load_system_animations() {
 
 
 /**
- * @brief Loads the weather conditions available.
- */
-void load_weather() {
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("Weather");
-    }
-    
-    vector<string> weather_files =
-        folder_to_vector(WEATHER_FOLDER_PATH, false);
-        
-    for(size_t w = 0; w < weather_files.size(); ++w) {
-        string path = WEATHER_FOLDER_PATH + "/" + weather_files[w];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        weather new_w;
-        new_w.path = path;
-        new_w.load_from_data_node(&file);
-        game.content.weather_conditions[new_w.name] = new_w;
-    }
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/**
  * @brief Unloads the loaded area from memory.
  */
 void unload_area() {
     game.cur_area_data.clear();
-}
-
-
-/**
- * @brief Unloads custom particle generators loaded from memory.
- */
-void unload_custom_particle_generators() {
-    for(
-        auto g = game.content.custom_particle_generators.begin();
-        g != game.content.custom_particle_generators.end();
-        ++g
-    ) {
-        game.bitmaps.free(g->second.base_particle.bitmap);
-    }
-    game.content.custom_particle_generators.clear();
-}
-
-
-/**
- * @brief Unloads hazards loaded in memory.
- */
-void unload_hazards() {
-    game.content.hazards.clear();
-}
-
-
-/**
- * @brief Unloads loaded liquids from memory.
- */
-void unload_liquids() {
-    for(auto &l : game.content.liquids) {
-        l.second->anim_db.destroy();
-        delete l.second;
-    }
-    game.content.liquids.clear();
 }
 
 
@@ -1724,49 +1401,4 @@ void unload_songs() {
         }
     }
     game.audio.songs.clear();
-}
-
-
-/**
- * @brief Unloads spike damage types loaded in memory.
- */
-void unload_spike_damage_types() {
-    game.content.spike_damage_types.clear();
-}
-
-
-/**
- * @brief Unloads loaded spray types from memory.
- */
-void unload_spray_types() {
-    for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
-        game.bitmaps.free(game.content.spray_types[s].bmp_spray);
-    }
-    game.content.spray_types.clear();
-}
-
-
-/**
- * @brief Unloads loaded status effect types from memory.
- *
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
- */
-void unload_status_types(const bool unload_resources) {
-
-    for(auto &s : game.content.status_types) {
-        if(unload_resources) {
-            s.second->overlay_anim_db.destroy();
-        }
-        delete s.second;
-    }
-    game.content.status_types.clear();
-}
-
-
-/**
- * @brief Unloads loaded weather conditions.
- */
-void unload_weather() {
-    game.content.weather_conditions.clear();
 }
