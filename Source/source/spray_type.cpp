@@ -55,15 +55,15 @@ void spray_type::load_from_data_node(
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
             if(
-                game.status_types.find(effect_name) ==
-                game.status_types.end()
+                game.content.status_types.find(effect_name) ==
+                game.content.status_types.end()
             ) {
                 game.errors.report(
                     "Unknown status effect \"" + effect_name + "\"!",
                     effects_node
                 );
             } else {
-                effects.push_back(game.status_types[effect_name]);
+                effects.push_back(game.content.status_types[effect_name]);
             }
         }
     }

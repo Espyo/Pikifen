@@ -43,8 +43,8 @@ void spike_damage_type::load_from_data_node(data_node* node) {
     
     if(particle_generator_node) {
         if(
-            game.custom_particle_generators.find(particle_generator_name) ==
-            game.custom_particle_generators.end()
+            game.content.custom_particle_generators.find(particle_generator_name) ==
+            game.content.custom_particle_generators.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
@@ -52,7 +52,7 @@ void spike_damage_type::load_from_data_node(data_node* node) {
             );
         } else {
             particle_gen =
-                &game.custom_particle_generators[particle_generator_name];
+                &game.content.custom_particle_generators[particle_generator_name];
             particle_offset_pos =
                 s2p(
                     node->get_child_by_name("particle_offset")->value,
@@ -62,8 +62,8 @@ void spike_damage_type::load_from_data_node(data_node* node) {
     }
     
     if(status_name_node) {
-        auto s = game.status_types.find(status_name);
-        if(s != game.status_types.end()) {
+        auto s = game.content.status_types.find(status_name);
+        if(s != game.content.status_types.end()) {
             status_to_apply = s->second;
         } else {
             game.errors.report(

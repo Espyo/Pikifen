@@ -58,15 +58,15 @@ void pellet_type::load_cat_properties(data_node* file) {
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     
     if(
-        game.mob_types.pikmin.find(pik_type_str) ==
-        game.mob_types.pikmin.end()
+        game.content.mob_types.pikmin.find(pik_type_str) ==
+        game.content.mob_types.pikmin.end()
     ) {
         game.errors.report(
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     } else {
-        pik_type = game.mob_types.pikmin[pik_type_str];
+        pik_type = game.content.mob_types.pikmin[pik_type_str];
     }
     
     weight = number;

@@ -652,7 +652,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         }
         
         //Tick all status effect animations.
-        for(auto &s : game.status_types) {
+        for(auto &s : game.content.status_types) {
             s.second->overlay_anim_instance.tick(delta_t);
         }
         
@@ -833,7 +833,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Liquids    ~ ~  *
         *             ~ ~ ~ *
         ********************/
-        for(auto &l : game.liquids) {
+        for(auto &l : game.content.liquids) {
             l.second->anim_instance.tick(delta_t);
         }
         

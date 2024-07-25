@@ -1622,17 +1622,17 @@ void area_editor::process_gui_panel_gameplay() {
         
             map<string, string> spray_strs =
                 get_var_map(game.cur_area_data.spray_amounts);
-            for(size_t s = 0; s < game.spray_types.size(); ++s) {
-                int amount = s2i(spray_strs[game.spray_types[s].name]);
+            for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+                int amount = s2i(spray_strs[game.content.spray_types[s].name]);
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        game.spray_types[s].name.c_str(), &amount,
+                        game.content.spray_types[s].name.c_str(), &amount,
                         0.1, 0, INT_MAX
                     )
                 ) {
                     register_change("area spray amounts change");
-                    spray_strs[game.spray_types[s].name] = i2s(amount);
+                    spray_strs[game.content.spray_types[s].name] = i2s(amount);
                     game.cur_area_data.spray_amounts.clear();
                     for(auto const &v : spray_strs) {
                         game.cur_area_data.spray_amounts +=
@@ -1914,7 +1914,7 @@ void area_editor::process_gui_panel_info() {
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);
-        for(auto &w : game.weather_conditions) {
+        for(auto &w : game.content.weather_conditions) {
             weather_conditions.push_back(w.first);
         }
         if(game.cur_area_data.weather_name.empty()) {
@@ -5243,7 +5243,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector hazard addition popup.
             vector<string> all_hazards_list;
-            for(auto &h : game.hazards) {
+            for(auto &h : game.content.hazards) {
                 all_hazards_list.push_back(h.first);
             }
             string picked_hazard;
@@ -5264,7 +5264,7 @@ void area_editor::process_gui_panel_sector() {
                         s_ptr->hazards_str += ";";
                     }
                     s_ptr->hazards_str += picked_hazard;
-                    s_ptr->hazards.push_back(&(game.hazards[picked_hazard]));
+                    s_ptr->hazards.push_back(&(game.content.hazards[picked_hazard]));
                     selected_hazard_idx = (int) list.size();
                     set_status(
                         "Added hazard \"" + picked_hazard +
@@ -5296,7 +5296,7 @@ void area_editor::process_gui_panel_sector() {
                         for(size_t h = 0; h < list.size(); ++h) {
                             if(h == (size_t) selected_hazard_idx) continue;
                             s_ptr->hazards_str += list[h] + ";";
-                            s_ptr->hazards.push_back(&(game.hazards[list[h]]));
+                            s_ptr->hazards.push_back(&(game.content.hazards[list[h]]));
                         }
                         if(!s_ptr->hazards_str.empty()) {
                             //Delete the trailing semicolon.

@@ -352,7 +352,7 @@ void particle_generator::load_from_data_node(
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
             MOB_PARTICLE_GENERATOR_ID_STATUS +
-            game.custom_particle_generators.size()
+            game.content.custom_particle_generators.size()
         );
 }
 

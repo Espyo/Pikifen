@@ -127,8 +127,8 @@ void load_area(
             game.cur_area_data.weather_condition = weather();
             
         } else if(
-            game.weather_conditions.find(game.cur_area_data.weather_name) ==
-            game.weather_conditions.end()
+            game.content.weather_conditions.find(game.cur_area_data.weather_name) ==
+            game.content.weather_conditions.end()
         ) {
             game.errors.report(
                 "Area \"" + requested_area_folder_name +
@@ -140,7 +140,7 @@ void load_area(
             
         } else {
             game.cur_area_data.weather_condition =
-                game.weather_conditions[game.cur_area_data.weather_name];
+                game.content.weather_conditions[game.cur_area_data.weather_name];
                 
         }
         
@@ -333,13 +333,13 @@ void load_area(
             semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); ++h) {
             string hazard_name = hazards_strs[h];
-            if(game.hazards.find(hazard_name) == game.hazards.end()) {
+            if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
                 game.errors.report(
                     "Unknown hazard \"" + hazard_name +
                     "\"!", hazards_node
                 );
             } else {
-                new_sector->hazards.push_back(&(game.hazards[hazard_name]));
+                new_sector->hazards.push_back(&(game.content.hazards[hazard_name]));
             }
         }
         new_sector->hazards_str = hazards_node->value;
@@ -863,7 +863,7 @@ void load_custom_particle_generators(const bool load_resources) {
         particle_generator new_pg;
         new_pg.path = path;
         new_pg.load_from_data_node(&file, load_resources);
-        game.custom_particle_generators[new_pg.name] = new_pg;
+        game.content.custom_particle_generators[new_pg.name] = new_pg;
     }
     
     if(game.perf_mon) {
@@ -1041,7 +1041,7 @@ void load_hazards() {
         hazard new_h;
         new_h.path = path;
         new_h.load_from_data_node(&file);
-        game.hazards[new_h.name] = new_h;
+        game.content.hazards[new_h.name] = new_h;
     }
     
     if(game.perf_mon) {
@@ -1073,7 +1073,7 @@ void load_liquids(const bool load_resources) {
         liquid* new_l = new liquid();
         new_l->path = path;
         new_l->load_from_data_node(&file, load_resources);
-        game.liquids[new_l->name] = new_l;
+        game.content.liquids[new_l->name] = new_l;
     }
     
     if(game.perf_mon) {
@@ -1385,7 +1385,7 @@ void load_spike_damage_types() {
         spike_damage_type new_t;
         new_t.path = path;
         new_t.load_from_data_node(&file);
-        game.spike_damage_types[new_t.name] = new_t;
+        game.content.spike_damage_types[new_t.name] = new_t;
     }
     
     if(game.perf_mon) {
@@ -1452,7 +1452,7 @@ void load_spray_types(const bool load_resources) {
         bool found = false;
         for(size_t t = 0; t < temp_types.size(); ++t) {
             if(temp_types[t].name == s) {
-                game.spray_types.push_back(temp_types[t]);
+                game.content.spray_types.push_back(temp_types[t]);
                 found = true;
             }
         }
@@ -1528,7 +1528,7 @@ void load_status_types(const bool load_resources) {
         status_type* new_t = new status_type();
         new_t->path = path;
         new_t->load_from_data_node(&file, load_resources);
-        game.status_types[new_t->name] = new_t;
+        game.content.status_types[new_t->name] = new_t;
         
         if(!new_t->replacement_on_timeout_str.empty()) {
             types_with_replacements.push_back(new_t);
@@ -1541,7 +1541,7 @@ void load_status_types(const bool load_resources) {
     for(size_t s = 0; s < types_with_replacements.size(); ++s) {
         string rn = types_with_replacements_names[s];
         bool found = false;
-        for(auto &s2 : game.status_types) {
+        for(auto &s2 : game.content.status_types) {
             if(s2.first == rn) {
                 types_with_replacements[s]->replacement_on_timeout =
                     s2.second;
@@ -1598,7 +1598,7 @@ void load_weather() {
         weather new_w;
         new_w.path = path;
         new_w.load_from_data_node(&file);
-        game.weather_conditions[new_w.name] = new_w;
+        game.content.weather_conditions[new_w.name] = new_w;
     }
     
     if(game.perf_mon) {
@@ -1620,13 +1620,13 @@ void unload_area() {
  */
 void unload_custom_particle_generators() {
     for(
-        auto g = game.custom_particle_generators.begin();
-        g != game.custom_particle_generators.end();
+        auto g = game.content.custom_particle_generators.begin();
+        g != game.content.custom_particle_generators.end();
         ++g
     ) {
         game.bitmaps.free(g->second.base_particle.bitmap);
     }
-    game.custom_particle_generators.clear();
+    game.content.custom_particle_generators.clear();
 }
 
 
@@ -1634,7 +1634,7 @@ void unload_custom_particle_generators() {
  * @brief Unloads hazards loaded in memory.
  */
 void unload_hazards() {
-    game.hazards.clear();
+    game.content.hazards.clear();
 }
 
 
@@ -1642,11 +1642,11 @@ void unload_hazards() {
  * @brief Unloads loaded liquids from memory.
  */
 void unload_liquids() {
-    for(auto &l : game.liquids) {
+    for(auto &l : game.content.liquids) {
         l.second->anim_db.destroy();
         delete l.second;
     }
-    game.liquids.clear();
+    game.content.liquids.clear();
 }
 
 
@@ -1734,7 +1734,7 @@ void unload_songs() {
  * @brief Unloads spike damage types loaded in memory.
  */
 void unload_spike_damage_types() {
-    game.spike_damage_types.clear();
+    game.content.spike_damage_types.clear();
 }
 
 
@@ -1742,10 +1742,10 @@ void unload_spike_damage_types() {
  * @brief Unloads loaded spray types from memory.
  */
 void unload_spray_types() {
-    for(size_t s = 0; s < game.spray_types.size(); ++s) {
-        game.bitmaps.free(game.spray_types[s].bmp_spray);
+    for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+        game.bitmaps.free(game.content.spray_types[s].bmp_spray);
     }
-    game.spray_types.clear();
+    game.content.spray_types.clear();
 }
 
 
@@ -1757,13 +1757,13 @@ void unload_spray_types() {
  */
 void unload_status_types(const bool unload_resources) {
 
-    for(auto &s : game.status_types) {
+    for(auto &s : game.content.status_types) {
         if(unload_resources) {
             s.second->overlay_anim_db.destroy();
         }
         delete s.second;
     }
-    game.status_types.clear();
+    game.content.status_types.clear();
 }
 
 
@@ -1771,5 +1771,5 @@ void unload_status_types(const bool unload_resources) {
  * @brief Unloads loaded weather conditions.
  */
 void unload_weather() {
-    game.weather_conditions.clear();
+    game.content.weather_conditions.clear();
 }

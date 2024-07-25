@@ -444,14 +444,14 @@ void animation_database::load_from_data_node(data_node* node) {
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
             for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
                 string hazard_name = hazards_strs[hs];
-                if(game.hazards.find(hazard_name) == game.hazards.end()) {
+                if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
                     game.errors.report(
                         "Unknown hazard \"" + hazard_name + "\"!",
                         hazards_node
                     );
                 } else {
                     cur_hitbox.hazards.push_back(
-                        &(game.hazards[hazard_name])
+                        &(game.content.hazards[hazard_name])
                     );
                 }
             }

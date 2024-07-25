@@ -32,10 +32,10 @@ group_task_category::group_task_category() :
  * @brief Clears the list of registered types of group tasks.
  */
 void group_task_category::clear_types() {
-    for(auto &t : game.mob_types.group_task) {
+    for(auto &t : game.content.mob_types.group_task) {
         delete t.second;
     }
-    game.mob_types.group_task.clear();
+    game.content.mob_types.group_task.clear();
 }
 
 
@@ -89,8 +89,8 @@ void group_task_category::erase_mob(mob* m) {
  * @return The type.
  */
 mob_type* group_task_category::get_type(const string &name) const {
-    auto it = game.mob_types.group_task.find(name);
-    if(it == game.mob_types.group_task.end()) return nullptr;
+    auto it = game.content.mob_types.group_task.find(name);
+    if(it == game.content.mob_types.group_task.end()) return nullptr;
     return it->second;
 }
 
@@ -101,7 +101,7 @@ mob_type* group_task_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void group_task_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.mob_types.group_task) {
+    for(auto &t : game.content.mob_types.group_task) {
         list.push_back(t.first);
     }
 }
@@ -113,5 +113,5 @@ void group_task_category::get_type_names(vector<string> &list) const {
  * @param type The mob type to register.
  */
 void group_task_category::register_type(mob_type* type) {
-    game.mob_types.group_task[type->name] = (group_task_type*) type;
+    game.content.mob_types.group_task[type->name] = (group_task_type*) type;
 }

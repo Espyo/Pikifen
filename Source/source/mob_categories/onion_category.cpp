@@ -32,10 +32,10 @@ onion_category::onion_category() :
  * @brief Clears the list of registered types of Onion.
  */
 void onion_category::clear_types() {
-    for(auto &t : game.mob_types.onion) {
+    for(auto &t : game.content.mob_types.onion) {
         delete t.second;
     }
-    game.mob_types.onion.clear();
+    game.content.mob_types.onion.clear();
 }
 
 
@@ -89,8 +89,8 @@ void onion_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* onion_category::get_type(const string &name) const {
-    auto it = game.mob_types.onion.find(name);
-    if(it == game.mob_types.onion.end()) return nullptr;
+    auto it = game.content.mob_types.onion.find(name);
+    if(it == game.content.mob_types.onion.end()) return nullptr;
     return it->second;
 }
 
@@ -101,7 +101,7 @@ mob_type* onion_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void onion_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.mob_types.onion) {
+    for(auto &t : game.content.mob_types.onion) {
         list.push_back(t.first);
     }
 }
@@ -113,5 +113,5 @@ void onion_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void onion_category::register_type(mob_type* type) {
-    game.mob_types.onion[type->name] = (onion_type*) type;
+    game.content.mob_types.onion[type->name] = (onion_type*) type;
 }

@@ -283,8 +283,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             if(cur_leader_ptr) {
                 if(
-                    game.spray_types.size() == 1 ||
-                    game.spray_types.size() == 2
+                    game.content.spray_types.size() == 1 ||
+                    game.content.spray_types.size() == 2
                 ) {
                     size_t spray_idx = 0;
                     cur_leader_ptr->fsm.run_event(
@@ -300,7 +300,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(!is_down) return;
             
             if(cur_leader_ptr) {
-                if(game.spray_types.size() == 2) {
+                if(game.content.spray_types.size() == 2) {
                     size_t spray_idx = 1;
                     cur_leader_ptr->fsm.run_event(
                         LEADER_EV_SPRAY, (void*) &spray_idx
@@ -316,13 +316,13 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(!is_down) return;
             
             if(cur_leader_ptr) {
-                if(game.spray_types.size() > 2) {
+                if(game.content.spray_types.size() > 2) {
                     selected_spray =
                         sum_and_wrap(
                             (int) selected_spray,
                             action.action_type_id ==
                             PLAYER_ACTION_TYPE_NEXT_SPRAY ? +1 : -1,
-                            (int) game.spray_types.size()
+                            (int) game.content.spray_types.size()
                         );
                     game.states.gameplay->hud->
                     spray_1_amount->start_juice_animation(
@@ -338,7 +338,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(!is_down) return;
             
             if(cur_leader_ptr) {
-                if(game.spray_types.size() > 2) {
+                if(game.content.spray_types.size() > 2) {
                     cur_leader_ptr->fsm.run_event(
                         LEADER_EV_SPRAY,
                         (void*) &selected_spray

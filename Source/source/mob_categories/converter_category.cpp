@@ -33,10 +33,10 @@ converter_category::converter_category() :
  * @brief Clears the list of registered types of converters.
  */
 void converter_category::clear_types() {
-    for(auto &t : game.mob_types.converter) {
+    for(auto &t : game.content.mob_types.converter) {
         delete t.second;
     }
-    game.mob_types.converter.clear();
+    game.content.mob_types.converter.clear();
 }
 
 
@@ -90,8 +90,8 @@ void converter_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* converter_category::get_type(const string &name) const {
-    auto it = game.mob_types.converter.find(name);
-    if(it == game.mob_types.converter.end()) return nullptr;
+    auto it = game.content.mob_types.converter.find(name);
+    if(it == game.content.mob_types.converter.end()) return nullptr;
     return it->second;
 }
 
@@ -102,7 +102,7 @@ mob_type* converter_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void converter_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.mob_types.converter) {
+    for(auto &t : game.content.mob_types.converter) {
         list.push_back(t.first);
     }
 }
@@ -114,5 +114,5 @@ void converter_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void converter_category::register_type(mob_type* type) {
-    game.mob_types.converter[type->name] = (converter_type*) type;
+    game.content.mob_types.converter[type->name] = (converter_type*) type;
 }

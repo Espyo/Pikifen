@@ -44,8 +44,8 @@ void hazard::load_from_data_node(data_node* node) {
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
             if(
-                game.status_types.find(effect_name) ==
-                game.status_types.end()
+                game.content.status_types.find(effect_name) ==
+                game.content.status_types.end()
             ) {
                 game.errors.report(
                     "Unknown status effect \"" + effect_name + "\"!",
@@ -53,20 +53,20 @@ void hazard::load_from_data_node(data_node* node) {
                 );
             } else {
                 effects.push_back(
-                    game.status_types[effect_name]
+                    game.content.status_types[effect_name]
                 );
             }
         }
     }
     
     if(liquid_node) {
-        if(game.liquids.find(liquid_str) == game.liquids.end()) {
+        if(game.content.liquids.find(liquid_str) == game.content.liquids.end()) {
             game.errors.report(
                 "Unknown liquid \"" + liquid_str + "\"!",
                 liquid_node
             );
         } else {
-            associated_liquid = game.liquids[liquid_str];
+            associated_liquid = game.content.liquids[liquid_str];
         }
     }
 }

@@ -97,8 +97,8 @@ void resource_type::load_cat_properties(data_node* file) {
     }
     
     if(delivery_result == RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS) {
-        for(size_t s = 0; s < game.spray_types.size(); ++s) {
-            if(game.spray_types[s].name == spray_to_concoct_str) {
+        for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+            if(game.content.spray_types[s].name == spray_to_concoct_str) {
                 spray_to_concoct = s;
                 break;
             }

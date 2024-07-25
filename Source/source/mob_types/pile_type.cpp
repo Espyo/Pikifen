@@ -76,8 +76,8 @@ void pile_type::load_cat_properties(data_node* file) {
     rs.set("show_amount", show_amount);
     rs.set("size_animation_suffixes", size_animation_suffixes_str);
     
-    auto res_type = game.mob_types.resource.find(contents_str);
-    if(res_type != game.mob_types.resource.end()) {
+    auto res_type = game.content.mob_types.resource.find(contents_str);
+    if(res_type != game.content.mob_types.resource.end()) {
         contents = res_type->second;
     } else {
         game.errors.report(

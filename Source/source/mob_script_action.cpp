@@ -495,7 +495,7 @@ bool mob_action_loaders::play_sound(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::receive_status(mob_action_call &call) {
-    if(game.status_types.find(call.args[0]) == game.status_types.end()) {
+    if(game.content.status_types.find(call.args[0]) == game.content.status_types.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -511,7 +511,7 @@ bool mob_action_loaders::receive_status(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::remove_status(mob_action_call &call) {
-    if(game.status_types.find(call.args[0]) == game.status_types.end()) {
+    if(game.content.status_types.find(call.args[0]) == game.content.status_types.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -708,8 +708,8 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
  */
 bool mob_action_loaders::start_particles(mob_action_call &call) {
     if(
-        game.custom_particle_generators.find(call.args[0]) ==
-        game.custom_particle_generators.end()
+        game.content.custom_particle_generators.find(call.args[0]) ==
+        game.content.custom_particle_generators.end()
     ) {
         call.custom_error =
             "Unknown particle generator \"" + call.args[0] + "\"!";
@@ -1592,7 +1592,7 @@ void mob_action_runners::print(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
-    data.m->apply_status_effect(game.status_types[data.args[0]], false, false);
+    data.m->apply_status_effect(game.content.status_types[data.args[0]], false, false);
 }
 
 
@@ -2065,7 +2065,8 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
     if(data.args.size() > 2) offset_y = s2f(data.args[2]);
     if(data.args.size() > 3) offset_z = s2f(data.args[3]);
     
-    particle_generator pg = game.custom_particle_generators[data.args[0]];
+    particle_generator pg =
+        game.content.custom_particle_generators[data.args[0]];
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     pg.follow_mob = data.m;
     pg.follow_angle = &data.m->angle;

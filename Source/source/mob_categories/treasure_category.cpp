@@ -32,10 +32,10 @@ treasure_category::treasure_category() :
  * @brief Clears the list of registered types of treasure.
  */
 void treasure_category::clear_types() {
-    for(auto &t : game.mob_types.treasure) {
+    for(auto &t : game.content.mob_types.treasure) {
         delete t.second;
     }
-    game.mob_types.treasure.clear();
+    game.content.mob_types.treasure.clear();
 }
 
 
@@ -89,8 +89,8 @@ void treasure_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* treasure_category::get_type(const string &name) const {
-    auto it = game.mob_types.treasure.find(name);
-    if(it == game.mob_types.treasure.end()) return nullptr;
+    auto it = game.content.mob_types.treasure.find(name);
+    if(it == game.content.mob_types.treasure.end()) return nullptr;
     return it->second;
 }
 
@@ -101,7 +101,7 @@ mob_type* treasure_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void treasure_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.mob_types.treasure) {
+    for(auto &t : game.content.mob_types.treasure) {
         list.push_back(t.first);
     }
 }
@@ -113,5 +113,5 @@ void treasure_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void treasure_category::register_type(mob_type* type) {
-    game.mob_types.treasure[type->name] = (treasure_type*) type;
+    game.content.mob_types.treasure[type->name] = (treasure_type*) type;
 }

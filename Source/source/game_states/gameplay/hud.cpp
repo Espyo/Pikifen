@@ -749,9 +749,9 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
-        if(game.spray_types.size() > 2) {
+        if(game.content.spray_types.size() > 2) {
             top_spray_idx = game.states.gameplay->selected_spray;
-        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+        } else if(!game.content.spray_types.empty() && game.content.spray_types.size() <= 2) {
             top_spray_idx = 0;
         }
         if(top_spray_idx == INVALID) return;
@@ -777,9 +777,9 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
-        if(game.spray_types.size() > 2) {
+        if(game.content.spray_types.size() > 2) {
             top_spray_idx = game.states.gameplay->selected_spray;
-        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+        } else if(!game.content.spray_types.empty() && game.content.spray_types.size() <= 2) {
             top_spray_idx = 0;
         }
         if(top_spray_idx == INVALID) return;
@@ -788,9 +788,9 @@ hud_t::hud_t() :
         }
         
         player_input i;
-        if(game.spray_types.size() > 2) {
+        if(game.content.spray_types.size() > 2) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY).input;
-        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+        } else if(!game.content.spray_types.empty() && game.content.spray_types.size() <= 2) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_1).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
@@ -810,13 +810,13 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
-        if(game.spray_types.size() == 2) {
+        if(game.content.spray_types.size() == 2) {
             bottom_spray_idx = 1;
         }
         if(bottom_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.spray_types[bottom_spray_idx].bmp_spray, center, size, true,
+            game.content.spray_types[bottom_spray_idx].bmp_spray, center, size, true,
             0.0f,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
@@ -831,7 +831,7 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
-        if(game.spray_types.size() == 2) {
+        if(game.content.spray_types.size() == 2) {
             bottom_spray_idx = 1;
         }
         if(bottom_spray_idx == INVALID) return;
@@ -857,7 +857,7 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
-        if(game.spray_types.size() == 2) {
+        if(game.content.spray_types.size() == 2) {
             bottom_spray_idx = 1;
         }
         if(bottom_spray_idx == INVALID) return;
@@ -866,7 +866,7 @@ hud_t::hud_t() :
         }
         
         player_input i;
-        if(game.spray_types.size() == 2) {
+        if(game.content.spray_types.size() == 2) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_2).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
@@ -897,18 +897,18 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t prev_spray_idx = INVALID;
-        if(game.spray_types.size() >= 3) {
+        if(game.content.spray_types.size() >= 3) {
             prev_spray_idx =
                 sum_and_wrap(
                     (int) game.states.gameplay->selected_spray,
                     -1,
-                    (int) game.spray_types.size()
+                    (int) game.content.spray_types.size()
                 );
         }
         if(prev_spray_idx == INVALID) return;
         
         player_input i;
-        if(game.spray_types.size() >= 3) {
+        if(game.content.spray_types.size() >= 3) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_SPRAY).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
@@ -939,18 +939,18 @@ hud_t::hud_t() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t next_spray_idx = INVALID;
-        if(game.spray_types.size() >= 3) {
+        if(game.content.spray_types.size() >= 3) {
             next_spray_idx =
                 sum_and_wrap(
                     (int) game.states.gameplay->selected_spray,
                     1,
-                    (int) game.spray_types.size()
+                    (int) game.content.spray_types.size()
                 );
         }
         if(next_spray_idx == INVALID) return;
         
         player_input i;
-        if(game.spray_types.size() >= 3) {
+        if(game.content.spray_types.size() >= 3) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_SPRAY).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
@@ -1850,9 +1850,9 @@ void hud_t::tick(const float delta_t) {
     
     //Update spray bubbles.
     size_t top_spray_idx = INVALID;
-    if(game.spray_types.size() > 2) {
+    if(game.content.spray_types.size() > 2) {
         top_spray_idx = game.states.gameplay->selected_spray;
-    } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+    } else if(!game.content.spray_types.empty() && game.content.spray_types.size() <= 2) {
         top_spray_idx = 0;
     }
     spray_icon_mgr.update(
@@ -1860,16 +1860,16 @@ void hud_t::tick(const float delta_t) {
         top_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[top_spray_idx],
         top_spray_idx == INVALID ? nullptr :
-        game.spray_types[top_spray_idx].bmp_spray
+        game.content.spray_types[top_spray_idx].bmp_spray
     );
     
     size_t prev_spray_idx = INVALID;
-    if(game.spray_types.size() >= 3) {
+    if(game.content.spray_types.size() >= 3) {
         prev_spray_idx =
             sum_and_wrap(
                 (int) game.states.gameplay->selected_spray,
                 -1,
-                (int) game.spray_types.size()
+                (int) game.content.spray_types.size()
             );
     }
     spray_icon_mgr.update(
@@ -1877,16 +1877,16 @@ void hud_t::tick(const float delta_t) {
         prev_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[prev_spray_idx],
         prev_spray_idx == INVALID ? nullptr :
-        game.spray_types[prev_spray_idx].bmp_spray
+        game.content.spray_types[prev_spray_idx].bmp_spray
     );
     
     size_t next_spray_idx = INVALID;
-    if(game.spray_types.size() >= 3) {
+    if(game.content.spray_types.size() >= 3) {
         next_spray_idx =
             sum_and_wrap(
                 (int) game.states.gameplay->selected_spray,
                 1,
-                (int) game.spray_types.size()
+                (int) game.content.spray_types.size()
             );
     }
     spray_icon_mgr.update(
@@ -1894,7 +1894,7 @@ void hud_t::tick(const float delta_t) {
         next_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[next_spray_idx],
         next_spray_idx == INVALID ? nullptr :
-        game.spray_types[next_spray_idx].bmp_spray
+        game.content.spray_types[next_spray_idx].bmp_spray
     );
     
     spray_icon_mgr.tick(delta_t);

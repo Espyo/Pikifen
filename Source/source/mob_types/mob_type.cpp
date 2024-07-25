@@ -309,7 +309,7 @@ void mob_type::load_from_data_node(
     for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); ++h) {
     
         data_node* vuln_node = vulnerabilities_node->get_child(h);
-        auto hazard_it = game.hazards.find(vuln_node->name);
+        auto hazard_it = game.content.hazards.find(vuln_node->name);
         vector<string> words = split(vuln_node->value);
         float percentage = default_vulnerability;
         string status_name;
@@ -323,16 +323,16 @@ void mob_type::load_from_data_node(
         if(words.size() >= 3) {
             status_overrides = s2b(words[2]);
         }
-        auto status_it = game.status_types.find(status_name);
+        auto status_it = game.content.status_types.find(status_name);
         
-        if(hazard_it == game.hazards.end()) {
+        if(hazard_it == game.content.hazards.end()) {
             game.errors.report(
                 "Unknown hazard \"" + vuln_node->name + "\"!",
                 vuln_node
             );
             
         } else if(
-            !status_name.empty() && status_it == game.status_types.end()
+            !status_name.empty() && status_it == game.content.status_types.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -351,9 +351,9 @@ void mob_type::load_from_data_node(
     }
     
     //Spike damage.
-    auto sd_it = game.spike_damage_types.find(spike_damage_str);
+    auto sd_it = game.content.spike_damage_types.find(spike_damage_str);
     if(spike_damage_node) {
-        if(sd_it == game.spike_damage_types.end()) {
+        if(sd_it == game.content.spike_damage_types.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + spike_damage_str + "\"!",
                 spike_damage_node
@@ -384,7 +384,7 @@ void mob_type::load_from_data_node(
     for(size_t v = 0; v < n_sd_vuln; ++v) {
     
         data_node* vul_node = spike_damage_vuln_node->get_child(v);
-        auto sdv_it = game.spike_damage_types.find(vul_node->name);
+        auto sdv_it = game.content.spike_damage_types.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_name;
@@ -394,16 +394,16 @@ void mob_type::load_from_data_node(
         if(words.size() >= 2) {
             status_name = words[1];
         }
-        auto status_it = game.status_types.find(status_name);
+        auto status_it = game.content.status_types.find(status_name);
         
-        if(sdv_it == game.spike_damage_types.end()) {
+        if(sdv_it == game.content.spike_damage_types.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
             
         } else if(
-            !status_name.empty() && status_it == game.status_types.end()
+            !status_name.empty() && status_it == game.content.status_types.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -426,7 +426,7 @@ void mob_type::load_from_data_node(
     for(size_t v = 0; v < n_s_vuln; ++v) {
     
         data_node* vul_node = status_vuln_node->get_child(v);
-        auto sv_it = game.status_types.find(vul_node->name);
+        auto sv_it = game.content.status_types.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_override_name;
@@ -436,9 +436,9 @@ void mob_type::load_from_data_node(
         if(words.size() >= 2) {
             status_override_name = words[1];
         }
-        auto status_override_it = game.status_types.find(status_override_name);
+        auto status_override_it = game.content.status_types.find(status_override_name);
         
-        if(sv_it == game.status_types.end()) {
+        if(sv_it == game.content.status_types.end()) {
             game.errors.report(
                 "Unknown status type \"" + vul_node->name + "\"!",
                 vul_node
@@ -446,7 +446,7 @@ void mob_type::load_from_data_node(
             
         } else if(
             !status_override_name.empty() &&
-            status_override_it == game.status_types.end()
+            status_override_it == game.content.status_types.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_override_name + "\"!",
@@ -456,7 +456,7 @@ void mob_type::load_from_data_node(
         } else {
             auto &s = status_vulnerabilities[sv_it->second];
             s.damage_mult = percentage / 100.0f;
-            if(status_override_it != game.status_types.end()) {
+            if(status_override_it != game.content.status_types.end()) {
                 s.status_to_apply = status_override_it->second;
             }
             s.status_overrides = true;
@@ -986,7 +986,7 @@ void load_mob_types(bool load_resources) {
     
     //Pikmin type order.
     vector<string> missing_pikmin_order_types;
-    for(auto &p : game.mob_types.pikmin) {
+    for(auto &p : game.content.mob_types.pikmin) {
         if(
             find(
                 game.config.pikmin_order_strings.begin(),
@@ -1011,8 +1011,8 @@ void load_mob_types(bool load_resources) {
     }
     for(size_t o = 0; o < game.config.pikmin_order_strings.size(); ++o) {
         string s = game.config.pikmin_order_strings[o];
-        if(game.mob_types.pikmin.find(s) != game.mob_types.pikmin.end()) {
-            game.config.pikmin_order.push_back(game.mob_types.pikmin[s]);
+        if(game.content.mob_types.pikmin.find(s) != game.content.mob_types.pikmin.end()) {
+            game.config.pikmin_order.push_back(game.content.mob_types.pikmin[s]);
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -1023,7 +1023,7 @@ void load_mob_types(bool load_resources) {
     
     //Leader type order.
     vector<string> missing_leader_order_types;
-    for(auto &l : game.mob_types.leader) {
+    for(auto &l : game.content.mob_types.leader) {
         if(
             find(
                 game.config.leader_order_strings.begin(),
@@ -1048,8 +1048,8 @@ void load_mob_types(bool load_resources) {
     }
     for(size_t o = 0; o < game.config.leader_order_strings.size(); ++o) {
         string s = game.config.leader_order_strings[o];
-        if(game.mob_types.leader.find(s) != game.mob_types.leader.end()) {
-            game.config.leader_order.push_back(game.mob_types.leader[s]);
+        if(game.content.mob_types.leader.find(s) != game.content.mob_types.leader.end()) {
+            game.config.leader_order.push_back(game.content.mob_types.leader[s]);
         } else {
             game.errors.report(
                 "Unknown leader type \"" + s + "\" found "

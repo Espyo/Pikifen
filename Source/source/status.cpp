@@ -153,8 +153,8 @@ void status_type::load_from_data_node(data_node* node, bool load_resources) {
     
     if(particle_gen_node) {
         if(
-            game.custom_particle_generators.find(particle_gen_str) ==
-            game.custom_particle_generators.end()
+            game.content.custom_particle_generators.find(particle_gen_str) ==
+            game.content.custom_particle_generators.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
@@ -164,7 +164,7 @@ void status_type::load_from_data_node(data_node* node, bool load_resources) {
             generates_particles =
                 true;
             particle_gen =
-                &game.custom_particle_generators[particle_gen_str];
+                &game.content.custom_particle_generators[particle_gen_str];
             particle_offset_pos =
                 s2p(particle_offset_str, &particle_offset_z);
         }

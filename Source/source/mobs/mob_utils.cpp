@@ -1026,15 +1026,15 @@ void pikmin_nest_type_t::load_properties(
     for(size_t t = 0; t < pik_types_strs.size(); ++t) {
         string &str = pik_types_strs[t];
         if(
-            game.mob_types.pikmin.find(str) ==
-            game.mob_types.pikmin.end()
+            game.content.mob_types.pikmin.find(str) ==
+            game.content.mob_types.pikmin.end()
         ) {
             game.errors.report(
                 "Unknown Pikmin type \"" + str + "\"!",
                 pik_types_node
             );
         } else {
-            pik_types.push_back(game.mob_types.pikmin[str]);
+            pik_types.push_back(game.content.mob_types.pikmin[str]);
         }
     }
 }

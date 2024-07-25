@@ -128,7 +128,7 @@ void gameplay_state::change_spray_count(
         );
         
     gui_item* spray_hud_item = nullptr;
-    if(game.spray_types.size() > 2) {
+    if(game.content.spray_types.size() > 2) {
         if(selected_spray == type_idx) {
             spray_hud_item = hud->spray_1_amount;
         }
@@ -701,7 +701,7 @@ void gameplay_state::load() {
     load_game_content();
     
     //Initialize some important things.
-    size_t n_spray_types = game.spray_types.size();
+    size_t n_spray_types = game.content.spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) {
         spray_stats.push_back(spray_stats_t());
     }
@@ -973,12 +973,12 @@ void gameplay_state::load() {
         
     for(auto &s : spray_strs) {
         size_t spray_id = 0;
-        for(; spray_id < game.spray_types.size(); ++spray_id) {
-            if(game.spray_types[spray_id].name == s.first) {
+        for(; spray_id < game.content.spray_types.size(); ++spray_id) {
+            if(game.content.spray_types[spray_id].name == s.first) {
                 break;
             }
         }
-        if(spray_id == game.spray_types.size()) {
+        if(spray_id == game.content.spray_types.size()) {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
@@ -1094,12 +1094,12 @@ void gameplay_state::load_game_content() {
     }
     
     vector<string> tool_types_vector;
-    for(auto &t : game.mob_types.tool) {
+    for(auto &t : game.content.mob_types.tool) {
         tool_types_vector.push_back(t.first);
     }
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); ++t) {
-        tool_type* tt_ptr = game.mob_types.tool[tool_types_vector[t]];
+        tool_type* tt_ptr = game.content.mob_types.tool[tool_types_vector[t]];
         subgroup_types.register_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
         );

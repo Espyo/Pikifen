@@ -726,7 +726,7 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    for(auto const &l : game.liquids) {
+    for(auto const &l : game.content.liquids) {
         l.second->anim_instance.tick(game.delta_t);
     }
     

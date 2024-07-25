@@ -16,6 +16,7 @@
 
 #include "audio.h"
 #include "area/area.h"
+#include "content_manager.h"
 #include "libs/controls_manager.h"
 #include "game_config.h"
 #include "game_states/animation_editor/editor.h"
@@ -24,11 +25,9 @@
 #include "game_states/gui_editor/editor.h"
 #include "game_states/menus.h"
 #include "game_states/results.h"
-#include "liquid.h"
 #include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"
-#include "spike_damage.h"
 
 
 namespace GAME {
@@ -125,12 +124,12 @@ public:
     
     //Info about the maker tools.
     maker_tools_t maker_tools;
+
+    //Game content.
+    content_manager content;
     
     //Data about the area that's currently being used.
     area_data cur_area_data;
-    
-    //Particle generators declared by the user.
-    map<string, particle_generator> custom_particle_generators;
     
     //Time between the previous frame and the current.
     double delta_t = 0.0f;
@@ -153,9 +152,6 @@ public:
     //Last framerate average started at this point in the history.
     size_t framerate_last_avg_point = 0.0f;
     
-    //List of hazards.
-    map<string, hazard> hazards;
-    
     //Identity matrix transformation. Cache for convenience.
     ALLEGRO_TRANSFORM identity_transform;
     
@@ -174,9 +170,6 @@ public:
     //Info on every edge's liquid limit offset effect. Cache for performance.
     vector<edge_offset_cache> liquid_limit_effect_caches;
     
-    //List of liquids.
-    map<string, liquid*> liquids;
-    
     //Loading screen subtext buffer.
     ALLEGRO_BITMAP* loading_subtext_bmp = nullptr;
     
@@ -188,9 +181,6 @@ public:
     
     //List of mob categories.
     mob_category_manager mob_categories;
-    
-    //All mob types.
-    mob_type_lists mob_types;
     
     //Mouse cursor information.
     mouse_cursor_t mouse_cursor;
@@ -219,20 +209,11 @@ public:
     //Should we be showing system info? (Framerate, version, etc.)
     bool show_system_info = false;
     
-    //List of spike damage types.
-    map<string, spike_damage_type> spike_damage_types;
-    
-    //List of spray types.
-    vector<spray_type> spray_types;
-    
     //List of game states.
     game_state_list states;
     
     //List of lifetime statistics.
     statistics_t statistics;
-    
-    //List of status types.
-    map<string, status_type*> status_types;
     
     //All system assets.
     system_asset_list sys_assets;
@@ -257,9 +238,6 @@ public:
     
     //Info on every edge's wall smoothing offset effect. Cache for performance.
     vector<edge_offset_cache> wall_smoothing_effect_caches;
-    
-    //List of weather conditions.
-    map<string, weather> weather_conditions;
     
     //Current fullscreen state.
     bool win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;

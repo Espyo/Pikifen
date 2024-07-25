@@ -90,8 +90,8 @@ void drop_type::load_cat_properties(data_node* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        for(size_t s = 0; s < game.spray_types.size(); ++s) {
-            if(game.spray_types[s].name == spray_name_str) {
+        for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+            if(game.content.spray_types[s].name == spray_name_str) {
                 spray_type_to_increase = s;
                 break;
             }
@@ -105,8 +105,8 @@ void drop_type::load_cat_properties(data_node* file) {
     }
     
     if(status_name_node) {
-        auto s = game.status_types.find(status_name_str);
-        if(s != game.status_types.end()) {
+        auto s = game.content.status_types.find(status_name_str);
+        if(s != game.content.status_types.end()) {
             status_to_give = s->second;
         } else {
             game.errors.report(
