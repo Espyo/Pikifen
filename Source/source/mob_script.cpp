@@ -540,6 +540,9 @@ void load_actions(mob_type* mt, data_node* event_node, vector<mob_action_call*>*
             settings->custom_actions_after = true;
 
         }
+        else if(action_node->name == "global_actions_after"){
+            settings->global_actions_after = true;
+        }
         else {
             mob_action_call* new_a = new mob_action_call();
             if (new_a->load_from_data_node(action_node, mt)) {
@@ -548,7 +551,6 @@ void load_actions(mob_type* mt, data_node* event_node, vector<mob_action_call*>*
             else {
                 delete new_a;
             }
-
         }
     }
 }
@@ -557,16 +559,17 @@ void load_actions(mob_type* mt, data_node* event_node, vector<mob_action_call*>*
  * @brief Loads the states off of a data node.
  *
  * @param mt The type of mob the states are going to.
- * @param node The data node.
+ * @param script_node The data node containing the mob's script.
+ * @param global_node The data node containing global events.
  * @param states Vector of states to place the new states on.
  */
-void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
-    size_t n_new_states = node->get_nr_of_children();
+void load_script(mob_type* mt, data_node* script_node, data_node* global_node, vector<mob_state*>* states) {
+    size_t n_new_states = script_node->get_nr_of_children();
     
     //Let's save the states now, so that the state switching events
     //can know what numbers the events they need correspond to.
     for(size_t s = 0; s < n_new_states; ++s) {
-        data_node* state_node = node->get_child(s);
+        data_node* state_node = script_node->get_child(s);
         bool skip = false;
         for(size_t s2 = 0; s2 < states->size(); ++s2) {
             if((*states)[s2]->name == state_node->name) {
@@ -582,8 +585,8 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     
     for(size_t s = 0; s < states->size(); ++s) {
         mob_state* state_ptr = (*states)[s];
-        data_node* state_node = node->get_child_by_name(state_ptr->name);
-        load_state(mt, state_node, state_ptr);
+        data_node* state_node = script_node->get_child_by_name(state_ptr->name);
+        load_state(mt, state_node, global_node, state_ptr);
         state_ptr->id = s;       
     }
     
@@ -596,17 +599,19 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
  *
  * @param mt The type of mob the states are going to.
  * @param state_node The state's data node.
+ * @param global_node The data node containing global events.
  * @param state_ptr Pointer to the state to load.
  */
-void load_state(mob_type* mt, data_node* state_node, mob_state* state_ptr) {
+void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob_state* state_ptr) {
     size_t n_events = state_node->get_nr_of_children();
+    size_t g_events = global_node->get_nr_of_children();
 
-    if (n_events == 0) return;
+    if (n_events + g_events == 0) return;
 
     //Read the events.
     vector<mob_event*> new_events;
     vector<event_load_settings> new_event_load_settings;
-    for (size_t e = 0; e < n_events; ++e) {
+    for(size_t e = 0; e < n_events; ++e) {
 
         data_node* event_node = state_node->get_child(e);
         vector<mob_action_call*> actions;
@@ -620,6 +625,46 @@ void load_state(mob_type* mt, data_node* state_node, mob_state* state_ptr) {
         assert_actions(actions, event_node);
 
     }
+
+    //Get all global events
+    vector<mob_event*> global_events;
+    vector<event_load_settings> global_event_load_settings;
+    for (size_t e = 0; e < g_events; ++e) {
+        data_node* event_node = global_node->get_child(e);
+        vector<mob_action_call*> actions;
+        event_load_settings settings = event_load_settings();
+        load_actions(mt, event_node, &actions, &settings);
+
+        mob_event* global_ev_ptr = new mob_event(event_node, actions);
+        //Try to merge with existing event
+        bool merged = false;
+        for(size_t f = 0; f < n_events; ++f) {
+            mob_event* ev_ptr = new_events[f];
+
+            if(ev_ptr->type != global_ev_ptr->type) continue;
+
+            vector<mob_action_call*>::iterator it;
+            if (new_event_load_settings[f].global_actions_after || settings.global_actions_after) {
+                it = ev_ptr->actions.end();
+            }
+            else {
+                it = ev_ptr->actions.begin();
+            }
+            ev_ptr->actions.insert(
+                it,
+                actions.begin(),
+                actions.end()
+            );
+            merged = true;
+            delete global_ev_ptr;
+            break;
+        }
+        if (!merged) {
+            new_events.push_back(global_ev_ptr);
+            new_event_load_settings.push_back(settings);
+        }
+    }
+
 
     //Inject a damage event.
     if (!state_ptr->events[MOB_EV_HITBOX_TOUCH_N_A]) {

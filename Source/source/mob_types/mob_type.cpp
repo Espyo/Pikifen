@@ -836,7 +836,7 @@ void mob_type::load_from_data_node(
             this,
             script_file.get_child_by_name("init"), &init_actions
         );
-        load_script(this, script_file.get_child_by_name("script"), &states);
+        load_script(this, script_file.get_child_by_name("script"), script_file.get_child_by_name("global"), &states);
         
         if(states.size() > old_n_states) {
         

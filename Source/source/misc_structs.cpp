@@ -528,7 +528,8 @@ bool error_manager::session_has_errors() {
  * @brief Constructs a event load settings object.
  */
 event_load_settings::event_load_settings() :
-custom_actions_after(false) {
+custom_actions_after(false),
+global_actions_after(false){
 }
 
 

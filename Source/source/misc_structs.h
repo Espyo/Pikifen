@@ -447,6 +447,8 @@ struct event_load_settings {
 
     //Whether to run custom actions after hardcoded actions
     bool custom_actions_after;
+    //Run global actions after state specific actions
+    bool global_actions_after;
 
     //--- Function declarations ---
 
