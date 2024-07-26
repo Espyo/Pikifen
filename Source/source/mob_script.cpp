@@ -525,37 +525,6 @@ size_t fix_states(
 
 
 /**
- * @brief Loads actions from a data node.
- *
- * @param mt The type of mob the events are going to.
- * @param node The data node.
- * @param actions Vector of loaded actions.
- * @param settings Settings for how to load the event.
- */
-void load_actions(mob_type* mt, data_node* event_node, vector<mob_action_call*>* actions, event_load_settings* settings) {
-    for (size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
-        data_node* action_node = event_node->get_child(a);
-        if (action_node->name == "custom_actions_after") {
-            //Pfft, that's not an action, that's a special property.
-            settings->custom_actions_after = true;
-
-        }
-        else if(action_node->name == "global_actions_after"){
-            settings->global_actions_after = true;
-        }
-        else {
-            mob_action_call* new_a = new mob_action_call();
-            if (new_a->load_from_data_node(action_node, mt)) {
-                actions->push_back(new_a);
-            }
-            else {
-                delete new_a;
-            }
-        }
-    }
-}
-
-/**
  * @brief Loads the states off of a data node.
  *
  * @param mt The type of mob the states are going to.
@@ -604,66 +573,68 @@ void load_script(mob_type* mt, data_node* script_node, data_node* global_node, v
  */
 void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob_state* state_ptr) {
     size_t n_events = state_node->get_nr_of_children();
-    size_t g_events = global_node->get_nr_of_children();
-
-    if (n_events + g_events == 0) return;
+    size_t n_global_events = global_node->get_nr_of_children();
+    if (n_events + n_global_events == 0) return;
 
     //Read the events.
     vector<mob_event*> new_events;
-    vector<event_load_settings> new_event_load_settings;
+    vector<bitmask_8_t> new_event_settings;
     for(size_t e = 0; e < n_events; ++e) {
 
         data_node* event_node = state_node->get_child(e);
         vector<mob_action_call*> actions;
-        event_load_settings settings = event_load_settings();
+        bitmask_8_t settings;
 
         load_actions(mt, event_node, &actions, &settings);
 
         new_events.push_back(new mob_event(event_node, actions));
-        new_event_load_settings.push_back(settings);
+        new_event_settings.push_back(settings);
 
         assert_actions(actions, event_node);
-
     }
 
-    //Get all global events
+    //Load global actions
     vector<mob_event*> global_events;
-    vector<event_load_settings> global_event_load_settings;
-    for (size_t e = 0; e < g_events; ++e) {
+    vector<bitmask_8_t> global_event_settings;
+    for (size_t e = 0; e < n_global_events; ++e) {
         data_node* event_node = global_node->get_child(e);
         vector<mob_action_call*> actions;
-        event_load_settings settings = event_load_settings();
+        bitmask_8_t settings;
         load_actions(mt, event_node, &actions, &settings);
 
-        mob_event* global_ev_ptr = new mob_event(event_node, actions);
-        //Try to merge with existing event
+        global_events.push_back(new mob_event(event_node, actions));
+        global_event_settings.push_back(settings);
+    }
+
+
+    //Insert global events into the state
+    for (size_t e = 0; e < global_events.size(); ++e) {
+        mob_event* global_event = global_events[e];
+        bitmask_8_t global_settings = global_event_settings[e];
+
         bool merged = false;
         for(size_t f = 0; f < n_events; ++f) {
             mob_event* ev_ptr = new_events[f];
+            bitmask_8_t ev_settings = new_event_settings[f];
 
-            if(ev_ptr->type != global_ev_ptr->type) continue;
+            if(ev_ptr->type != global_event->type) continue;
 
-            vector<mob_action_call*>::iterator it;
-            if (new_event_load_settings[f].global_actions_after || settings.global_actions_after) {
-                it = ev_ptr->actions.end();
-            }
-            else {
-                it = ev_ptr->actions.begin();
-            }
-            ev_ptr->actions.insert(
-                it,
-                actions.begin(),
-                actions.end()
+            insert_event_actions(
+                ev_ptr,
+                global_event->actions,
+                has_flag(global_settings | ev_settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER)
             );
             merged = true;
-            delete global_ev_ptr;
             break;
         }
         if (!merged) {
-            new_events.push_back(global_ev_ptr);
-            new_event_load_settings.push_back(settings);
+            new_events.push_back(global_event);
+            new_event_settings.push_back(global_settings);
         }
+
     }
+
+
 
 
     //Inject a damage event.
@@ -675,7 +646,7 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
         new_events.push_back(
             new mob_event(MOB_EV_HITBOX_TOUCH_N_A, da_actions)
         );
-        new_event_load_settings.push_back(event_load_settings());
+        new_event_settings.push_back(0);
     }
 
     //Inject a death event.
@@ -692,7 +663,7 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
             vector<mob_action_call*> de_actions;
             de_actions.push_back(new mob_action_call(gen_mob_fsm::die));
             new_events.push_back(new mob_event(MOB_EV_DEATH, de_actions));
-            new_event_load_settings.push_back(event_load_settings());
+            new_event_settings.push_back(0);
         }
         
         //Inject a bottomless pit event.
@@ -704,7 +675,7 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
             new_events.push_back(
                 new mob_event(MOB_EV_BOTTOMLESS_PIT, bp_actions)
             );
-            new_event_load_settings.push_back(event_load_settings());
+            new_event_settings.push_back(0);
         }
         
         //Inject a spray touch event.
@@ -723,7 +694,7 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
             new_events.push_back(
                 new mob_event(MOB_EV_TOUCHED_SPRAY, s_actions)
             );
-            new_event_load_settings.push_back(event_load_settings());
+            new_event_settings.push_back(0);
         }
         
         //Inject a hazard event.
@@ -742,7 +713,7 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
         new_events.push_back(
             new mob_event(MOB_EV_TOUCHED_HAZARD, s_actions)
         );
-        new_event_load_settings.push_back(event_load_settings());
+        new_event_settings.push_back(0);
     }
 
     //Connect all new events to the state.
@@ -750,26 +721,17 @@ void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob
         MOB_EV ev_type = new_events[e]->type;
 
         if (state_ptr->events[ev_type]) {
-            //Event already exists. Add the new actions, only.
-            vector<mob_action_call*>::iterator it;
-            if (new_event_load_settings[e].custom_actions_after) {
-                it = state_ptr->events[ev_type]->actions.end();
-            }
-            else {
-                it = state_ptr->events[ev_type]->actions.begin();
-            }
-            state_ptr->events[ev_type]->actions.insert(
-                it,
-                new_events[e]->actions.begin(),
-                new_events[e]->actions.end()
+
+            insert_event_actions(
+                state_ptr->events[ev_type], 
+                new_events[e]->actions, 
+                has_flag(new_event_settings[e], EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER)
             );
             delete new_events[e];
-
         }
         else {
             //New event. Just throw the data we created before.
             state_ptr->events[ev_type] = new_events[e];
-
         }
     }
 }

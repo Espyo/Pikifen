@@ -831,12 +831,18 @@ void mob_type::load_from_data_node(
             semicolon_list_to_vector(
                 script_file.get_child_by_name("states_ignoring_hazard")->value
             );
-            
-        load_init_actions(
-            this,
+        
+        //Load init actions
+        load_actions(
+            this, 
             script_file.get_child_by_name("init"), &init_actions
         );
-        load_script(this, script_file.get_child_by_name("script"), script_file.get_child_by_name("global"), &states);
+        //Load the rest of the script
+        load_script(
+            this, 
+            script_file.get_child_by_name("script"), 
+            script_file.get_child_by_name("global"), &states
+        );
         
         if(states.size() > old_n_states) {
         

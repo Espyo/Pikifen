@@ -16,7 +16,6 @@
 
 #include "const.h"
 #include "libs/data_file.h"
-#include "misc_structs.h"
 
 
 using std::size_t;
@@ -492,7 +491,12 @@ struct hitbox_interaction {
 size_t fix_states(
     vector<mob_state*> &states, const string &starting_state, const mob_type* mt
 );
-void load_actions(mob_type* mt, data_node* node, vector<mob_action_call*>* actions, event_load_settings* settings);
-void load_script(mob_type* mt, data_node* script_node, data_node* global_node, vector<mob_state*>* states);
-void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob_state* state_ptr);
+void load_script(
+    mob_type* mt, data_node* script_node, data_node* global_node, 
+    vector<mob_state*>* states
+);
+void load_state(
+    mob_type* mt, data_node* state_node, data_node* global_node, 
+    mob_state* state_ptr
+);
 void unload_script(mob_type* mt);

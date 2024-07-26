@@ -438,22 +438,6 @@ struct enum_name_database {
     
 };
 
-/**
- * @brief Info about a how to load mob script events.
- */
-struct event_load_settings {
-
-    //--- Members ---
-
-    //Whether to run custom actions after hardcoded actions
-    bool custom_actions_after;
-    //Run global actions after state specific actions
-    bool global_actions_after;
-
-    //--- Function declarations ---
-
-    event_load_settings();
-};
 
 /**
  * @brief Info about a token in a string.

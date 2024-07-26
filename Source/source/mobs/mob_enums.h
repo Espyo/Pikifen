@@ -246,6 +246,14 @@ enum MOB_TARGET_FLAG {
 
 };
 
+enum EVENT_LOAD_FLAG {
+    //Run scripted actions after hardcoded actions.
+    EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER = 1 << 0,
+
+    //Run global actions after state specific actions
+    EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER = 1 << 1,
+};
+
 
 //Mob teams.
 enum MOB_TEAM {
