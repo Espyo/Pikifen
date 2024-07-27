@@ -611,6 +611,27 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPE track_type) {
 
 
 /**
+ * @brief Sets a song's position to the beginning.
+ *
+ * @param name Name of the song in the list of loaded songs.
+ * @return Whether it succeeded.
+ */
+bool audio_manager::rewind_song(const string &name) {
+    auto song_it = songs.find(name);
+    if(song_it == songs.end()) return false;
+    song* song_ptr = &song_it->second;
+    
+    song_ptr->stop_point = 0.0f;
+    al_rewind_audio_stream(song_ptr->main_track);
+    for(auto const &m : song_ptr->mix_tracks) {
+        al_rewind_audio_stream(m.second);
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Schedules a sound effect source's emission. This includes things
  * like randomly delaying it if configured to do so.
  *
@@ -1153,16 +1174,16 @@ void audio_manager::update_volumes(
 
 /**
  * @brief Loads song data from a data node.
- * 
+ *
  * @param node Data node to load from.
  */
 void song::load_from_data_node(data_node* node) {
     //Content metadata.
     load_metadata_from_data_node(node);
-
+    
     //Standard data.
     reader_setter rs(node);
-
+    
     string main_track_str;
     data_node* main_track_node = nullptr;
     

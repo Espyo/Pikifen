@@ -387,6 +387,7 @@ public:
         float ambiance_volume, float ui_sfx_volume
     );
     void mark_mix_track_status(MIX_TRACK_TYPE track_type);
+    bool rewind_song(const string &name);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(const string &name, bool from_start = true);

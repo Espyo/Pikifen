@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -116,7 +116,7 @@ Next tasks (roughly sorted most important first)
         More frames, for more fluidity
     Pikmin missing animations
         Idling (bobbing a bit so they aren't static)
-        Bored (lying down, looking around, etc.)
+        Bored (lying down, looking around, sitting down, etc.)
         Flailing (also used when caught by an enemy)
         Shaking after leaving the water
         Carrying (walking while carrying)
@@ -193,8 +193,14 @@ Next tasks (roughly sorted most important first)
     Find some way of making content sharing easier
         Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-        A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
-            This should be able to figure out a dependency tree
+        All content will need to do this:
+            Load from the base folder first and then from all packages, in alphabetical order
+            Load resources or not, based on the boolean given
+            Check if content by that name already exists, and if so report it
+            Unload
+        For later on, maybe...
+            A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
+                This should be able to figure out a dependency tree
         Current problems
             When makers want to share their content, they have to fish its requirements from several folders
             When players want to install content, they have to place it in the right folders
@@ -261,6 +267,7 @@ Next tasks (roughly sorted most important first)
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
         Allow the player to drag their mouse on the scrollbar GUI item
+        In the results menu, show by how much you've beaten your previous best score
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Controls improvements
@@ -614,6 +621,7 @@ Next tasks (roughly sorted most important first)
             A way to un/fold the contents of states and events
             A way to view all states, with arrows pointing to which events lead to which states
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
+            Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
     
     
 Small tasks (for when I'm feeling lazy)

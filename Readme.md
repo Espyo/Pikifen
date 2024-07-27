@@ -1,7 +1,7 @@
 Pikifen
 ====
 
-A fan-made _Pikmin_ engine made by Espyo that allows users to make and play their own _Pikmin_ content.
+A fan-made _Pikmin_-based engine made by Espyo that allows users to make and play their own _Pikmin_ content.
 
 ![Pikifen's logo](Game_data/Graphics/Icon.png)
 

@@ -738,6 +738,7 @@ void gameplay_state::load() {
     game.framerate_history.clear();
     
     game.audio.set_current_song("");
+    game.audio.rewind_song(GAMEPLAY::BOSS_SONG_NAME);
     
     //Load the area.
     string area_folder_name;
@@ -1191,7 +1192,7 @@ void gameplay_state::unload() {
  */
 void gameplay_state::unload_game_content() {
     subgroup_types.clear();
-
+    
     game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, true);
     game.content.unload(CONTENT_TYPE_MOB_TYPE, true);
     game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, true);
