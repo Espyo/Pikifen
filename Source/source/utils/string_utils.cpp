@@ -9,6 +9,8 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
+#undef _CMATH_
+
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib>

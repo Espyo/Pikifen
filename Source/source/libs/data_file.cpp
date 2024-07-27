@@ -1,4 +1,6 @@
 //Read data_file.h for more info.
+
+#undef _CMATH_
 #include <fstream>
 
 #include <allegro5/allegro.h>

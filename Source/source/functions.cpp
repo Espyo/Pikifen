@@ -9,6 +9,7 @@
  */
 
 #define _USE_MATH_DEFINES
+#undef _CMATH_
 
 // Visual Studio warnings.
 #ifdef _MSC_VER
@@ -18,11 +19,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <math.h>
-#include <signal.h>
-#include <sstream>
 #include <stdlib.h>
-#include <typeinfo>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -32,7 +29,6 @@
 #include "const.h"
 #include "drawing.h"
 #include "game.h"
-#include "game_states/menus.h"
 #include "init.h"
 #include "utils/allegro_utils.h"
 #include "utils/backtrace.h"

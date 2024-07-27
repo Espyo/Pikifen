@@ -9,7 +9,6 @@
  */
 
 #include <algorithm>
-#include <iostream>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>

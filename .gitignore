@@ -1,11 +1,8 @@
-Source/visual_studio_2013/Debug/
-Source/visual_studio_2013/Release/
-Source/visual_studio_2013/Pikifen.v12.suo
-Source/visual_studio_2019/.vs/
-Source/visual_studio_2019/packages/
-Source/visual_studio_2019/Win32/
-Source/visual_studio_2019/x64/
-Source/visual_studio_2019/Pikifen.vcxproj.user
+Source/visual_studio_2022/.vs/
+Source/visual_studio_2022/packages/
+Source/visual_studio_2022/Win32/
+Source/visual_studio_2022/x64/
+Source/visual_studio_2022/Pikifen.vcxproj.user
 Source/codelite/Debug/
 Source/codelite/Release/
 Source/codelite/.codelite/

@@ -9,6 +9,8 @@
  * to warrant their own files.
  */
 
+#undef _CMATH_
+
 #include <algorithm>
 #include <climits>
 #include <iostream>
