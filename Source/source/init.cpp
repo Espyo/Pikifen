@@ -995,6 +995,18 @@ void init_mob_actions() {
         mob_action_runners::get_mob_info,
         mob_action_loaders::get_mob_info
     );
+
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("argument1", MOB_ACTION_PARAM_STRING, true, true);
+    reg_param("argument2", MOB_ACTION_PARAM_STRING, true, true);
+    reg_action(
+        MOB_ACTION_GET_ONION_INFO,
+        "get_onion_info",
+        mob_action_runners::get_onion_info,
+        mob_action_loaders::get_onion_info
+    );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
