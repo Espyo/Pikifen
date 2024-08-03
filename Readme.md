@@ -39,7 +39,9 @@ A fan-made _Pikmin_-based engine made by Espyo that allows users to make and pla
 > * [Notable features](#notable-features)
 > * [Get the latest version](#get-the-latest-version)
 > * [Playing and making](#playing-and-making)
+> * [What's left](#whats-left)
 > * [Troubleshooting](#troubleshooting)
+> * [Contributing](#contributing)
 > * [Disclaimer](#disclaimer)
 
 The included manual (download _Pikifen_ and open `Manual.html`) contains, amongst other things, tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
@@ -92,13 +94,21 @@ Alternatively, you can run the Windows executable under Wine. It works fairly we
 
 * To play, just double-click `Pikifen.exe` (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
 * To make content for the engine, just edit the image, sound, or text files in the `Game_data` folder. Some things can also be edited using the built-in editors.
-* Alternatively, you can download some content made by other players (check the Discord server!)
+* Alternatively, you can download some content made by other players (check the [Discord server](https://discord.gg/qbhz4u3)!)
 * This project is still under construction, so expect some things to be incomplete!
 * For more detailed information, including tutorials, please check the included manual.
+
+## What's left
+
+To know what still needs to be done in the project, please check the [todo file](https://github.com/Espyo/Pikifen/blob/master/Source/documents/Todo.txt).
 
 ## Troubleshooting
 
 If you have any issue, please check the included manual's troubleshooting and FAQ pages.
+
+## Contributing
+
+Please see the [contributing file](https://github.com/Espyo/Pikifen/blob/master/Contributing.md).
 
 ## Disclaimer
 

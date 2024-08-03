@@ -14,22 +14,28 @@
 <body onload="setup('Troubleshooting');">
   <div id="content">
     
-    <p>If something is wrong, this page will try to fix your problem.</p>
+    <p>How to deal with problems in <i>Pikifen</i>.</p>
 
-    <h2 id="playing">Problems while playing</h2>
+    <h2 id="general">General</h2>
+
+    <p>If you have a problem, please follow these steps:</p>
+
+    <ol>
+      <li>
+        Make sure your <i>Pikifen</i> installation is correct:
+        <ul>
+          <li>Make sure you're running the most recent version of the engine. This is because that version might've solved your problem.</li>
+          <li>Make sure you're not running the game from inside a zip file. Remember that when you download the engine's zip file, you need to unzip everything inside of it into a folder before you're able to play.</li>
+        </ul>
+      </li>
+      <li>Otherwise, if you made some content for the engine and you suspect that that is the problem, please check the <code>User_data/Error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</li>
+      <li>Otherwise, read the rest of this page to see if your problem is known.</li>
+      <li>Otherwise, please <a href="#reporting">report it</a>!</li>
+    </ol>
+
+    <h3 id="playing">Problems during gameplay</h3>
     
     <dl>
-      <dt><b>Why did it crash?</b></dt>
-      <dd>If you made some content for the engine and you suspect that that is the problem, please check the <code>User_data/Error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</dd>
-      <dd>
-        If you think the crash is due to a problem with the engine itself, then it could be one of the following:
-        <ul>
-          <li>You're not using the most recent version of the engine, which could have solved that problem. You should try upgrading if you're not up-to-date.</li>
-          <li>The game is running from inside a zip file. Remember that when you download the engine's zip file, you need to unzip everything inside of it into a folder, before you're able to play.</li>
-          <li>It's a problem that I need to fix. Please get in touch with me about it. I'll likely ask you to explain what you were doing when the crash happened, ask you to send me any errors in the <code>User_data/Error_log.txt</code> file, and ask you to send me the crash screenshots in the <code>User_data</code> folder. So you should try to get those ready.</li>
-        </ul>
-      </dd>
-      
       <dt><b>Why can't I see the game window?</b></dt>
       <dd>Because windows sometimes break under Windows.</dd>
       <dd>In the <a href="options.html">options file</a>, there is a line that controls the window position hack feature. Set that property to <code>true</code>.</dd>
@@ -49,7 +55,7 @@
       <dd>You can open the <a href="options.html">options file</a> and adjust the option that controls the joystick minimum deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.</dd>
     </dl>
     
-    <h2 id="making">Problems while making</h2>
+    <h3 id="making">Problems while making content</h3>
     
     <dl>
       <dt><b>Why do I see everything in a single line when I open a <a href="making.html#data-file">data file</a> with Notepad?</b></dt>
@@ -67,14 +73,14 @@
       </dd>
 
       <dt><b>One of my textures is cutting off to black or to garbage, in a repeating pattern.</b></dt>
-      <dd>Your texture's resolution does not use power-of-two numbers. It doesn't happen on all machines, but that's the solution, I guess...</dd>
+      <dd>Your texture's resolution does not use power-of-two numbers (64x64, 128x128, 256x256, etc.). It doesn't happen on all machines, but that's the solution, I guess...</dd>
 
       <dt><b>I'm having a hard time understanding X.</b></dt>
       <dd>Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.</dd>
       <dd>If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.</dd>
     </dl>
 
-    <h2 id="known_issues">Known issues</h2>
+    <h3 id="known_issues">Known issues</h3>
 
     <p>This is a list of problems with the engine that are known to exist, but can't be solved right now, either because they are too difficult to fix, or because they are not a priority. When possible, a solution or workaround is presented too.</p>
 
@@ -97,6 +103,26 @@
       <dt><b>Objects can go from underneath a bridge to the top of it.</b></dt>
       <dd>So long as an object can climb onto one of the (disconnected) boards that make up a slanted bridge, the engine will let them do so. It's very difficult to detect if an object is going from "under" the bridge, since that's not a concept for the engine. The first <i>Pikmin</i> game has a very similar glitch. This shouldn't be a problem in most cases since if you can get underneath the bridge, chances are you can get to its starting point. Still, when designing areas, make sure players can't exploit this to get where they shouldn't.</dd>
     </dl>
+
+    <h2 id="bug-reporting">Bug reporting</h2>
+
+    <p>So you found a bug in <i>Pikifen</i>? Assuming that you've already followed the <a href="#general">general procedure above</a>, please let me know about it so I can fix it! You can report an issue with either the engine itself or any of the pre-packaged content.</p>
+
+    <p>To report a bug, you can either do so on the Discord server's bug reporting channel, or by opening an issue on the <a href="https://github.com/Espyo/Pikifen/issues">GitHub issues page</a>. Please make sure the problem isn't already reported by someone else. In your bug report, please include the following:</p>
+
+    <ul>
+      <li><b>Description</b>: A description of the bug. If it's not painfully obvious, you should also explain what exactly is wrong, and what you expected to happen instead. If you have a screenshot or a video of the bug in action, that'd be very appreciated.</li>
+      <li><b>Steps to reproduce</b>: I'll want to do the same things you did in order to face the bug myself, so it's important that you find and report a way to reproduce the bug. If you can't, please list off what you were doing in the moments leading up to the bug happening.</li>
+      <li><b>Error log</b>: Especially important for crashes, you should share the contents of your error log file. A screenshot may have also been created in the <code>User_data</code> folder, so share that too.</li>
+      <li><b>Content modifications</b>: If you've created some content or changed the pre-packaged content, please let me know what you have done, since the problem might depend on those changes.</li>
+      <li>
+        <b>Extra notes</b>: Any extra notes you feel are relevant to helping me figure out the issue. Some ideas:
+        <ul>
+          <li>You should always be using the latest official version of <i>Pikifen</i>, but in case you're using an older version or on a git commit farther ahead than the latest official version, please specify that information too.</li>
+          <li>If your problem is related to something system-wide, like the game window, graphic or audio corruptions, file mishaps, etc., please specify your operating system.</li>
+        </ul>
+      </li>
+    </ul>
 
   </div>
 </body>

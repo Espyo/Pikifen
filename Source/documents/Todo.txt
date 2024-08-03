@@ -13,7 +13,9 @@ Next tasks (roughly sorted most important first)
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Update to Dear ImGui 1.90.9
         Implement shortcuts?
-    Add a CONTRIBUTING file
+        Use multi-selection in the body part panel of the animation editor?
+        GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
+        Use TextLink() and/or TextLinkOpenURL() for the editors' help dialogs?
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -115,8 +117,6 @@ Next tasks (roughly sorted most important first)
         The "grabbing_near" sprite is unused for all bar Bulbmin
         More frames, for more fluidity
     Pikmin missing animations
-        Idling (bobbing a bit so they aren't static)
-        Bored (lying down, looking around, sitting down, etc.)
         Flailing (also used when caught by an enemy)
         Shaking after leaving the water
         Carrying (walking while carrying)
@@ -141,6 +141,7 @@ Next tasks (roughly sorted most important first)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
+        A gas pipe that is shooting should vibrate
         All enemies could probably stand to have some interpolated shaking to spice up their animations
         Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
         Cloaking Burrow-nit, the Dumples, "inked" use a lot of sprites that can just recycle previous ones and use in-engine transformations
@@ -198,9 +199,11 @@ Next tasks (roughly sorted most important first)
             Load resources or not, based on the boolean given
             Check if content by that name already exists, and if so report it
             Unload
-        For later on, maybe...
-            A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
-                This should be able to figure out a dependency tree
+        Info
+            How each type of content works:
+                One per file: global anims, sounds, songs, graphics, GUI, hazards, liquids, particle generators, spike damage types, sprays, statuses, weather
+                Other ways: areas, mob types
+        For later on, maybe, the content manager should be able to figure out a dependency tree
         Current problems
             When makers want to share their content, they have to fish its requirements from several folders
             When players want to install content, they have to place it in the right folders
@@ -232,6 +235,7 @@ Next tasks (roughly sorted most important first)
                 "--squeeze-lines=3",
                 "--style=java",
             ],
+        Document the usage of Astyle in the Contributing file
     
     --- Future ---
     Some tweaks to the HUD
@@ -346,7 +350,10 @@ Next tasks (roughly sorted most important first)
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
-        Pauses are full-screen, pause everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
+        Split the pause menu into two menus
+            The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
+            The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
+        The Onion menu should work like the radar+status+mission menu, meaning it shouldn't pause gameplay
         HUD changes
             Split-screen logic: horizontal, and four-way
                 Maybe vertical as well? Might be a lot of effort for not a lot of payback
@@ -366,7 +373,6 @@ Next tasks (roughly sorted most important first)
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
                 The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is NULL they just try something peaceful instead of crashing
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
-            A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around
                     Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
