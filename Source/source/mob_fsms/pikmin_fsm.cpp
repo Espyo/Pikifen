@@ -165,6 +165,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::stop_in_group);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_boredom_data);
+        }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
@@ -181,6 +184,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot");
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(pikmin_fsm::start_boredom_anim);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::check_boredom_anim_end);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -511,6 +520,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::become_idle);
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_boredom_data);
             efc.run(pikmin_fsm::stop_being_idle);
         }
         efc.new_event(MOB_EV_OPPONENT_IN_REACH); {
@@ -534,6 +544,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::check_leader_bump);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(pikmin_fsm::start_boredom_anim);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::check_boredom_anim_end);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -1991,6 +2007,9 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     m->set_animation(
         PIKMIN_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
     );
+    m->set_timer(
+        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+    );
 }
 
 
@@ -2092,6 +2111,25 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
         );
         
     pik_ptr->temp_i = 1;
+}
+
+
+/**
+ * @brief When a Pikmin should check if the animation that ended is a boredom
+ * animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::check_boredom_anim_end(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    if(!pik_ptr->in_bored_animation) return;
+    m->set_animation(PIKMIN_ANIM_IDLING);
+    pik_ptr->in_bored_animation = false;
+    m->set_timer(
+        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+    );
 }
 
 
@@ -2201,6 +2239,20 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     );
     
     m->set_animation(PIKMIN_ANIM_WALKING);
+}
+
+
+/**
+ * @brief When a Pikmin has to clear any data about being bored.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::clear_boredom_data(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    pikmin_fsm::clear_timer(m, info1, info2);
+    pik_ptr->in_bored_animation = false;
 }
 
 
@@ -3569,6 +3621,40 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a Pikmin should start a random boredom animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+
+    size_t looking_around_anim_idx =
+        m->type->anims.find_animation("looking_around");
+    size_t sitting_anim_idx =
+        m->type->anims.find_animation("sitting");
+    size_t lounging_anim_idx =
+        m->type->anims.find_animation("lounging");
+    vector<size_t> boredom_anims;
+    if(looking_around_anim_idx != INVALID) {
+        boredom_anims.push_back(looking_around_anim_idx);
+    }
+    if(sitting_anim_idx != INVALID) {
+        boredom_anims.push_back(sitting_anim_idx);
+    }
+    if(lounging_anim_idx != INVALID) {
+        boredom_anims.push_back(lounging_anim_idx);
+    }
+
+    if(boredom_anims.empty()) return;
+    size_t anim_idx = boredom_anims[randomi(0, boredom_anims.size() - 1)];
+    m->set_animation(anim_idx, false);
+    pik_ptr->in_bored_animation = true;
+}
+
+
+/**
  * @brief When a Pikmin needs to start chasing after its leader
  * (or the group spot belonging to the leader).
  *
@@ -3859,6 +3945,9 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     }
     
     m->set_animation(PIKMIN_ANIM_IDLING);
+    m->set_timer(
+        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+    );
 }
 
 

@@ -327,6 +327,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             cur_sprite->set_bitmap(
                 cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
             );
+            changes_mgr.mark_as_changed();
         }
         break;
         

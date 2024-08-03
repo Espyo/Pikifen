@@ -26,6 +26,12 @@
 
 namespace PIKMIN {
 
+//Maximum amount of time for the random boredom animation delay.
+const float BORED_ANIM_MAX_DELAY = 5.0f;
+
+//Minimum amount of time for hte random boredom animation delay.
+const float BORED_ANIM_MIN_DELAY = 1.0f;
+
 //Chance of circling the opponent instead of striking, when grounded.
 const float CIRCLE_OPPONENT_CHANCE_GROUNDED = 0.2f;
 

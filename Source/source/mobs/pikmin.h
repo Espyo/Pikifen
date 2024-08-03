@@ -19,6 +19,8 @@ class leader;
 
 
 namespace PIKMIN {
+extern const float BORED_ANIM_MAX_DELAY;
+extern const float BORED_ANIM_MIN_DELAY;
 extern const float CIRCLE_OPPONENT_CHANCE_GROUNDED;
 extern const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH;
 extern const float DISMISS_TIMEOUT;
@@ -88,6 +90,9 @@ public:
 
     //Leader bump lock. Leaders close and timer running = timer resets.
     float bump_lock = 0.0f;
+
+    //Is it currently doing some boredom-related animation?
+    bool in_bored_animation = false;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i = 0;

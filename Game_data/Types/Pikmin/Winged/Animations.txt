@@ -143,6 +143,108 @@ animations{
 			}
 		}
 	}
+	looking_around{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_02{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_03{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_04{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_06{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_07{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_08{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_09{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_08{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_10{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_11{
+				duration=0.0100
+			}
+			looking_around_12{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_13{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_14{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_15{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_16{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_17{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_18{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_19{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_18{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_20{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_21{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_rev{
+				duration=0.1000
+			}
+		}
+	}
 	lying{
 		frames{
 			lying_01{
@@ -690,6 +792,648 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_big{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.5000 0.0000
+		scale=0.5500 0.5500
+		top_visible=true
+		top_pos=-5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_rev{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.5000 0.0000
+		scale=0.5000 -0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_01{
+		file=Winged_Pikmin.png
+		file_pos=31.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.0000 -1.0000
+		scale=0.5000 0.5000
+		angle=0.5027
+		top_visible=true
+		top_pos=-3.9613 -1.0451
+		top_size=5.5000 10.0000
+		top_angle=0.1396
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_02{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=0.8692
+		top_visible=true
+		top_pos=-3.5000 -2.0000
+		top_size=5.5000 10.0000
+		top_angle=0.3491
+		hitboxes{
+			top{
+				coords=-3.5000 -2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_03{
+		file=Winged_Pikmin.png
+		file_pos=137.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-1.9731 -4.1897
+		top_size=5.5000 10.0000
+		top_angle=1.3090
+		hitboxes{
+			top{
+				coords=-1.0000 -4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_04{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=0.0994 -4.0468
+		top_size=5.5000 10.0000
+		top_angle=2.0071
+		hitboxes{
+			top{
+				coords=0.5000 -3.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_05{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-0.4723 -4.3327
+		top_size=5.5000 10.0000
+		top_angle=1.7453
+		hitboxes{
+			top{
+				coords=0.5000 -3.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_06{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-1.4014 -4.2612
+		top_size=5.5000 10.0000
+		top_angle=1.4835
+		hitboxes{
+			top{
+				coords=0.5000 -3.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_07{
+		file=Winged_Pikmin.png
+		file_pos=137.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.1345
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_08{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.1345
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_09{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.1345
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_10{
+		file=Winged_Pikmin.png
+		file_pos=137.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 -2.0000
+		scale=0.5000 0.5000
+		angle=0.8727
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.2566
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_11{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.0000 -1.5000
+		scale=0.5000 0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_12{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.0000 -1.5000
+		scale=0.5000 -0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_13{
+		file=Winged_Pikmin.png
+		file_pos=31.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.5000 0.0000
+		scale=0.5000 -0.5000
+		angle=0.0698
+		top_visible=true
+		top_pos=-3.5000 -2.5000
+		top_size=5.5000 10.0000
+		top_angle=0.8727
+		hitboxes{
+			top{
+				coords=-3.5000 -2.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_14{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.5000 1.5000
+		scale=0.5000 -0.5000
+		angle=5.4803
+		top_visible=true
+		top_pos=-3.9027 1.4561
+		top_size=5.5000 10.0000
+		top_angle=6.1087
+		hitboxes{
+			top{
+				coords=-4.5000 2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_15{
+		file=Winged_Pikmin.png
+		file_pos=137.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-0.1150 4.1003
+		top_size=5.5000 10.0000
+		top_angle=4.5379
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_16{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-0.6867 4.3147
+		top_size=5.5000 10.0000
+		top_angle=4.7124
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_17{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-1.2584 4.5291
+		top_size=5.5000 10.0000
+		top_angle=4.8869
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_18{
+		file=Winged_Pikmin.png
+		file_pos=75.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-1.6872 4.2433
+		top_size=5.5000 10.0000
+		top_angle=5.0615
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_19{
+		file=Winged_Pikmin.png
+		file_pos=137.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-1.6872 4.2433
+		top_size=5.5000 10.0000
+		top_angle=5.0615
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_20{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 147.0000
+		file_size=30.0000 28.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-1.6872 4.2433
+		top_size=5.5000 10.0000
+		top_angle=5.0615
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_21{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-2.5000 1.0000
+		scale=0.5000 -0.5000
+		angle=5.9341
+		top_visible=true
+		top_pos=-2.1875 3.4571
+		top_size=5.5000 10.0000
+		top_angle=4.9742
+		hitboxes{
+			top{
+				coords=-3.0000 3.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2

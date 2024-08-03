@@ -125,6 +125,118 @@ animations{
 			}
 		}
 	}
+	looking_around{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_02{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_03{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_04{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.2000
+				interpolate=true
+			}
+			looking_around_06{
+				duration=0.0100
+			}
+			looking_around_07{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_08{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_09{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_10{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_11{
+				duration=0.3000
+			}
+			looking_around_11{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_12{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_rev{
+				duration=0.1000
+			}
+		}
+	}
+	lounging{
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			lounging_01{
+				duration=0.0800
+				interpolate=true
+			}
+			lounging_02{
+				duration=0.5000
+				interpolate=true
+			}
+			lounging_03{
+				duration=0.5000
+				interpolate=true
+			}
+			lounging_02{
+				duration=0.5000
+				interpolate=true
+			}
+			lounging_03{
+				duration=0.5000
+				interpolate=true
+			}
+			lounging_02{
+				duration=0.5000
+				interpolate=true
+			}
+			lounging_03{
+				duration=0.0100
+			}
+			half_lying{
+				duration=0.1000
+			}
+			idling_big{
+				duration=0.0800
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
 	lying{
 		frames{
 			lying_01{
@@ -235,6 +347,53 @@ animations{
 			}
 			sighing_03{
 				duration=0.3000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	sitting{
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			sitting_01{
+				duration=0.0800
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.0100
+			}
+			half_lying{
+				duration=0.1000
+			}
+			idling_big{
+				duration=0.0800
 				interpolate=true
 			}
 			idling_01{
@@ -630,6 +789,463 @@ sprites{
 			}
 		}
 	}
+	idling_big{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5500 0.5500
+		top_visible=true
+		top_pos=-5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_rev{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_01{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=0.4887
+		top_visible=true
+		top_pos=-4.5000 -1.0000
+		top_size=5.5000 10.0000
+		top_angle=0.1536
+		hitboxes{
+			top{
+				coords=-4.5000 -1.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_02{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=0.8692
+		top_visible=true
+		top_pos=-3.5000 -2.0000
+		top_size=5.5000 10.0000
+		top_angle=0.3491
+		hitboxes{
+			top{
+				coords=-3.5000 -2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_03{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-1.0000 -4.5000
+		top_size=5.5000 10.0000
+		top_angle=1.3090
+		hitboxes{
+			top{
+				coords=-1.0000 -4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_04{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=0.5000 -3.5000
+		top_size=5.5000 10.0000
+		top_angle=2.0071
+		hitboxes{
+			top{
+				coords=0.5000 -3.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_05{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.1345
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_06{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_07{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_08{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=0.0698
+		top_visible=true
+		top_pos=-3.5000 -2.5000
+		top_size=5.5000 10.0000
+		top_angle=0.8727
+		hitboxes{
+			top{
+				coords=-3.5000 -2.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_09{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=5.4803
+		top_visible=true
+		top_pos=-4.5000 2.0000
+		top_size=5.5000 10.0000
+		top_angle=6.1087
+		hitboxes{
+			top{
+				coords=-4.5000 2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_10{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-0.5000 4.5000
+		top_size=5.5000 10.0000
+		top_angle=4.5379
+		hitboxes{
+			top{
+				coords=-0.5000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_11{
+		file=Yellow_Pikmin.png
+		file_pos=84.0000 74.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-2.0000 4.5000
+		top_size=5.5000 10.0000
+		top_angle=5.0615
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_12{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=20.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=5.9341
+		top_visible=true
+		top_pos=-3.0000 3.0000
+		top_size=5.5000 10.0000
+		top_angle=4.9742
+		hitboxes{
+			top{
+				coords=-3.0000 3.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lounging_01{
+		file=Yellow_Pikmin.png
+		file_pos=37.0000 74.0000
+		file_size=46.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5500 0.5500
+		top_visible=true
+		top_pos=-11.0000 7.0000
+		top_size=5.5000 10.0000
+		top_angle=5.4978
+		hitboxes{
+			top{
+				coords=-8.0000 5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lounging_02{
+		file=Yellow_Pikmin.png
+		file_pos=37.0000 74.0000
+		file_size=46.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-8.0000 5.0000
+		top_size=5.5000 10.0000
+		top_angle=5.4978
+		hitboxes{
+			top{
+				coords=-8.0000 5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lounging_03{
+		file=Yellow_Pikmin.png
+		file_pos=37.0000 74.0000
+		file_size=46.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-10.0000 7.0000
+		top_size=5.5000 10.0000
+		top_angle=5.4978
+		hitboxes{
+			top{
+				coords=-10.0000 7.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	lying_01{
 		file=Yellow_Pikmin.png
 		file_pos=103.0000 0.0000
@@ -841,6 +1457,87 @@ sprites{
 			}
 			body{
 				coords=3.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sitting_01{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 74.0000
+		file_size=36.0000 36.0000
+		offset=-3.0000 0.0000
+		scale=0.5500 0.5500
+		top_visible=true
+		top_pos=-15.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-2.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sitting_02{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 74.0000
+		file_size=36.0000 36.0000
+		offset=-3.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-12.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-2.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sitting_03{
+		file=Yellow_Pikmin.png
+		file_pos=0.0000 74.0000
+		file_size=36.0000 36.0000
+		offset=-3.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-14.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-2.0000 0.0000 0.0000
 				height=24.0000
 				radius=5.0000
 				type=0

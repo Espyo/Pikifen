@@ -126,6 +126,71 @@ animations{
 			}
 		}
 	}
+	looking_around{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_02{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_03{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_04{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.2000
+				interpolate=true
+			}
+			looking_around_06{
+				duration=0.0100
+			}
+			looking_around_07{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_08{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_09{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_10{
+				duration=0.3000
+				interpolate=true
+			}
+			looking_around_11{
+				duration=0.3000
+			}
+			looking_around_11{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_12{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_rev{
+				duration=0.1000
+			}
+		}
+	}
 	lying{
 		frames{
 			lying_01{
@@ -605,6 +670,369 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_rev{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5000 -0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_01{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=1.5000 1.0000
+		scale=0.5000 0.5000
+		angle=0.4887
+		top_visible=true
+		top_pos=-4.5000 -1.0000
+		top_size=5.5000 10.0000
+		top_angle=0.1536
+		hitboxes{
+			top{
+				coords=-4.5000 -1.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_02{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.2839 1.7445
+		scale=0.5000 0.5000
+		angle=0.8692
+		top_visible=true
+		top_pos=-3.5000 -2.0000
+		top_size=5.5000 10.0000
+		top_angle=0.3491
+		hitboxes{
+			top{
+				coords=-3.5000 -2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_03{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-1.0000 -4.5000
+		top_size=5.5000 10.0000
+		top_angle=1.3090
+		hitboxes{
+			top{
+				coords=-1.0000 -4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_04{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=0.5000 -3.5000
+		top_size=5.5000 10.0000
+		top_angle=2.0071
+		hitboxes{
+			top{
+				coords=0.5000 -3.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_05{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.1345
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_06{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=1.5000 1.0000
+		scale=0.5000 0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_07{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=1.5000 1.0000
+		scale=0.5000 -0.5000
+		angle=0.6981
+		top_visible=true
+		top_pos=-2.0000 -4.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-2.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_08{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.5000 -0.5000
+		angle=0.0698
+		top_visible=true
+		top_pos=-3.5000 -2.5000
+		top_size=5.5000 10.0000
+		top_angle=0.8727
+		hitboxes{
+			top{
+				coords=-3.5000 -2.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_09{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 -1.0000
+		scale=0.5000 -0.5000
+		angle=5.4803
+		top_visible=true
+		top_pos=-4.5000 2.0000
+		top_size=5.5000 10.0000
+		top_angle=6.1087
+		hitboxes{
+			top{
+				coords=-4.5000 2.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_10{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 -1.5000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-0.5000 4.5000
+		top_size=5.5000 10.0000
+		top_angle=4.5379
+		hitboxes{
+			top{
+				coords=-0.5000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_11{
+		file=Bulbmin.png
+		file_pos=0.0000 89.0000
+		file_size=34.0000 28.0000
+		offset=1.0000 -1.5000
+		scale=0.5000 -0.5000
+		angle=5.2360
+		top_visible=true
+		top_pos=-2.0000 4.5000
+		top_size=5.5000 10.0000
+		top_angle=5.0615
+		hitboxes{
+			top{
+				coords=-2.0000 4.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_12{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=2.0000 -0.5000
+		scale=0.5000 -0.5000
+		angle=5.9341
+		top_visible=true
+		top_pos=-3.0000 3.0000
+		top_size=5.5000 10.0000
+		top_angle=4.9742
+		hitboxes{
+			top{
+				coords=-3.0000 3.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2

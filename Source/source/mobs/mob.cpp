@@ -90,7 +90,7 @@ const float GROUP_SHUFFLE_DIST = 40.0f;
 
 //Pikmin must be at least these many units away from one another;
 //used when calculating group spots.
-const float GROUP_SPOT_INTERVAL = 3.0f;
+const float GROUP_SPOT_INTERVAL = 5.0f;
 
 //Group spots can randomly deviate in X or Y up to this much.
 const float GROUP_SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
