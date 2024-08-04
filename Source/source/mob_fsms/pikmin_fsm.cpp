@@ -2005,7 +2005,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     
     m->set_animation(
-        PIKMIN_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     m->set_timer(
         randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
@@ -2028,7 +2028,7 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     ((pikmin*) m)->is_seed_or_sprout = true;
     m->set_animation(
-        PIKMIN_ANIM_SPROUT, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
 
@@ -3629,7 +3629,7 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-
+    
     size_t looking_around_anim_idx =
         m->type->anims.find_animation("looking_around");
     size_t sitting_anim_idx =
@@ -3646,10 +3646,10 @@ void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     if(lounging_anim_idx != INVALID) {
         boredom_anims.push_back(lounging_anim_idx);
     }
-
+    
     if(boredom_anims.empty()) return;
     size_t anim_idx = boredom_anims[randomi(0, boredom_anims.size() - 1)];
-    m->set_animation(anim_idx, false);
+    m->set_animation(anim_idx, START_ANIM_OPTION_NORMAL, false);
     pik_ptr->in_bored_animation = true;
 }
 

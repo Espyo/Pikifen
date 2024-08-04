@@ -105,7 +105,7 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
         con_ptr->get_animation_idx_from_base_and_group(
             CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
         ),
-        true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     con_ptr->cur_base_anim_idx = CONVERTER_ANIM_IDLING;
     con_ptr->type_change_timer.start();

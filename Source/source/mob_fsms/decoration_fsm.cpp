@@ -79,8 +79,8 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
         dec_ptr->individual_random_anim_delay
     ) {
         m->set_animation(
-            DECORATION_ANIM_IDLING, true,
-            START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+            DECORATION_ANIM_IDLING,
+            START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
         );
     } else {
         m->set_animation(DECORATION_ANIM_IDLING);

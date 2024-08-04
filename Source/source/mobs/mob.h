@@ -349,8 +349,8 @@ public:
     
     void set_animation(
         const size_t nr,
-        const bool pre_named = true,
-        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL
+        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
+        const bool pre_named = true
     );
     void set_animation(
         const string &name,

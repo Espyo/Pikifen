@@ -156,8 +156,7 @@ void pile::update() {
         get_animation_idx_from_base_and_group(
             PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
         ),
-        true,
-        START_ANIM_OPTION_NO_RESTART
+        START_ANIM_OPTION_NO_RESTART, true
     );
     
     if(pil_type->auto_shrink_smallest_radius != 0.0f) {

@@ -1703,7 +1703,7 @@ void mob_action_runners::set_animation(mob_action_run_data &data) {
         options = (START_ANIM_OPTION) s2i(data.args[1]);
     }
     
-    data.m->set_animation(s2i(data.args[0]), false, options);
+    data.m->set_animation(s2i(data.args[0]), options, false);
 }
 
 

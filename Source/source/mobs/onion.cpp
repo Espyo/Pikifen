@@ -92,8 +92,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     }
     
     set_animation(
-        MOB_TYPE::ANIM_IDLING, true,
-        START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
 

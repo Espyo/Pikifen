@@ -167,6 +167,6 @@ void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
  */
 void bouncer_fsm::set_idling_animation(mob* m, void* info1, void* info2) {
     m->set_animation(
-        BOUNCER_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }

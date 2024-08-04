@@ -28,7 +28,7 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     become_carriable(CARRY_DESTINATION_ONION);
     
     set_animation(
-        MOB_TYPE::ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
 

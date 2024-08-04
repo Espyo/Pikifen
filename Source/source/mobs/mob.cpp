@@ -2893,11 +2893,11 @@ void mob::send_message(mob* receiver, string &msg) const {
  *
  * @param nr Animation index.
  * It's the animation instance index from the database.
- * @param pre_named If true, the animation has already been named in-engine.
  * @param options Options to start the new animation with.
+ * @param pre_named If true, the animation has already been named in-engine.
  */
 void mob::set_animation(
-    const size_t idx, const bool pre_named, const START_ANIM_OPTION options
+    const size_t idx, const START_ANIM_OPTION options, const bool pre_named
 ) {
     if(idx >= type->anims.animations.size()) return;
     
@@ -2959,7 +2959,7 @@ void mob::set_animation(
 ) {
     size_t idx = anim.anim_db->find_animation(name);
     if(idx != INVALID) {
-        set_animation(idx, false, options);
+        set_animation(idx, options, false);
     }
 }
 

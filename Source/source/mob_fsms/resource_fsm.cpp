@@ -297,7 +297,7 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     }
     
     res_ptr->set_animation(
-        RESOURCE_ANIM_IDLING, true, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN
+        RESOURCE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
 
