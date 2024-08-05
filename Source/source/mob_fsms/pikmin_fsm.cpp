@@ -1831,7 +1831,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     disable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pik_ptr->leave_group();
     
-    pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+    pik_ptr->set_animation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
     m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_CAUGHT]);
     
 }
@@ -3712,7 +3712,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //on the edge of the water, and that just looks bad.
     m->set_timer(1.0f);
     
-    m->set_animation(PIKMIN_ANIM_IDLING);
+    m->set_animation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
 }
 
 

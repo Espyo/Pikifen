@@ -125,6 +125,12 @@ ul {
   margin-left: 40px;
 }
 
+.snug-ol ol {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding-left: 20px;
+}
+
 table.props-t {
   width: 100%;
 }

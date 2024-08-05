@@ -8,6 +8,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     lockpick man's resize bug
     Looks like editing some sprites' scales and then trying to preview an interpolated animation makes things weird
+        I think it might actually happen when you delete a sprite that was in use in animations
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -117,7 +118,6 @@ Next tasks (roughly sorted most important first)
         The "grabbing_near" sprite is unused for all bar Bulbmin
         More frames, for more fluidity
     Pikmin missing animations
-        Flailing (also used when caught by an enemy)
         Shaking after leaving the water
         Carrying (walking while carrying)
             Note that there is currently a "grabbing" (unused) and a "carrying" animation
@@ -192,6 +192,9 @@ Next tasks (roughly sorted most important first)
         Add some randomness to the pitch of mob sounds?
         Make Rock Pikmin colors darker (thanks Nataly171)
     Find some way of making content sharing easier
+        Problems to watch out for
+            How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
+            How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
         Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         All content will need to do this:
@@ -355,8 +358,7 @@ Next tasks (roughly sorted most important first)
             The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
         The Onion menu should work like the radar+status+mission menu, meaning it shouldn't pause gameplay
         HUD changes
-            Split-screen logic: horizontal, and four-way
-                Maybe vertical as well? Might be a lot of effort for not a lot of payback
+            Split-screen logic: vertical split (better because you can increase the window size and better fit modern monitors, and also because physically chances are one player's sitting to the left of the other, and the other on the right), and four-way split
             Add HUD support for all the different split-screen layouts
             In competitive modes, tint each player's HUD with their team color or something
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)

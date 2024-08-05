@@ -74,6 +74,32 @@ animations{
 			}
 		}
 	}
+	flailing{
+		frames{
+			flailing_01{
+				duration=0.1600
+				interpolate=true
+			}
+			flailing_02{
+				duration=0.1600
+				interpolate=true
+			}
+			flailing_01{
+				duration=0.0100
+			}
+			flailing_03{
+				duration=0.1600
+				interpolate=true
+			}
+			flailing_04{
+				duration=0.1600
+				interpolate=true
+			}
+			flailing_03{
+				duration=0.0100
+			}
+		}
+	}
 	getting_up{
 		frames{
 			lying_01{
@@ -597,6 +623,114 @@ sprites{
 				coords=3.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	flailing_01{
+		file=Yellow_Pikmin.png
+		file_pos=105.0000 74.0000
+		file_size=27.0000 36.0000
+		offset=-0.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-10.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-10.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	flailing_02{
+		file=Yellow_Pikmin.png
+		file_pos=133.0000 74.0000
+		file_size=29.0000 36.0000
+		scale=0.5000 0.5000
+		angle=5.7596
+		top_visible=true
+		top_pos=-8.0000 5.0000
+		top_size=5.5000 10.0000
+		top_angle=5.7596
+		hitboxes{
+			top{
+				coords=-8.0000 5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	flailing_03{
+		file=Yellow_Pikmin.png
+		file_pos=105.0000 74.0000
+		file_size=27.0000 36.0000
+		offset=-0.5000 0.0000
+		scale=0.5000 -0.5000
+		top_visible=true
+		top_pos=-10.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-10.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	flailing_04{
+		file=Yellow_Pikmin.png
+		file_pos=133.0000 74.0000
+		file_size=29.0000 36.0000
+		scale=0.5000 -0.5000
+		angle=0.5236
+		top_visible=true
+		top_pos=-8.0000 -5.0000
+		top_size=5.5000 10.0000
+		top_angle=0.5236
+		hitboxes{
+			top{
+				coords=-8.0000 -5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
 				value=1.0000
 			}

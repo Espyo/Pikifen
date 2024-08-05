@@ -16,7 +16,7 @@
     
     <p>Got a question about the engine? You may find the answer here! If your question is a problem, please check the <a href="troubleshooting.html">troubleshooting page</a> instead.</p>
 
-    <dd>
+    <dl class="snug-ol">
       <dt><b>What is there left to do?</b></dt>
       <dd>It's hard to say, but the you can find a rough roadmap <a href="history.html#roadmap">here</a>.</dd>
 
@@ -49,7 +49,7 @@
           <li>The less copyrighted content it uses, the better. This being a fan project, there's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".</li>
           <li>Should something happen to the engine, I can rebrand it, and release the assets as they are, since they are my creations.</li>
           <li>If somebody wants to add a new asset, and they want it to fit in with the existing ones, it's easy if everything's custom-made. Otherwise, it may get complicated if players want to also add official assets.</li>
-          <li>It doesn't really matter anyway because what is included with the engine is demo content; players are meant to use whatever assets they please.</li>
+          <li>If someone really wants the official assets, they can replace them easily.</li>
         </ol>
       </dd>
 
@@ -62,15 +62,25 @@
       <dt><b>Why do some updates make previously created content incompatible for such small reasons?</b></dt>
       <dd>I believe that having things clear and consistent is the key towards making the engine enjoyable to use.</dd>
       <dd>Suppose I make a basic feature, and give it a descriptive name. Later on, I expand that feature, but keep the old name instead of using a new one that's more inclusive of the new features. If a new player shows up and tries to understand what that feature's purpose is, the name will be misleading, and it'll be harder for them to piece things together. In cases like this, I prefer to just rename the feature, and in the process, likely break whatever content was making use of the old name.</dd>
-      <dd>I don't like making content incompatible, but I think it's a small price to pay for the sake of making everyone able to juice the most out of the engine.</dd>
+      <dd>I don't like making content incompatible, but since the alternative is <a href="en.wikipedia.org/wiki/Technical_debt">technical debt</a>, I think it's a small price to pay for the sake of making everyone able to juice the most out of the engine.</dd>
 
       <dt><b>Why are some features so customizable and others so strict?</b></dt>
       <dd>It's very hard to balance responsibility and power when creating a feature.</dd>
       <dd>If I give the content maker a lot of power in a feature, they are also more responsible for learning how it works in detail, and how to use it properly.</dd>
       <dd>If I make a feature too simple, it becomes more accessible for anyone to use, but it also doesn't allow for much flexibility and creativity.</dd>
 
+      <dt><b>Will the engine be available in other languages?</b></dt>
+      <dd>Not really:</dd>
+      <dd>
+        <ol>
+          <li>The engine was built with mostly hardcoded strings, so it's fairly difficult to make them dynamic after-the-fact.</li>
+          <li>Since the engine is in active development, text changes often. I could keep updating the text in the languages I know, but other languages would become outdated unless everyone who contributes to those is also constantly updating them.</li>
+          <li>Custom content created by players would need to be localized into other languages too, meaning those players would have to find translators for the supported languages.</li>
+        </ol>
+      </dd>
+
       <dt><b>Why can't Pikmin be limited to only picking path stops within their height?</b></dt>
-      <dd>While yes, it would make life easier, since Pikmin wouldn't try to walk against the wall to go to path stops on a cliff above them, the truth is that because ramps exist, the engine can't know if a given path stop high above is reachable or not.</dd>
+      <dd>While yes, it would make life easier, since Pikmin wouldn't try to walk against the wall to go to path stops on a cliff above them, the truth is that because ramps exist, the engine can't know if a given path stop high above is reachable or not. At least not without it being too computationally costly.</dd>
     </dl>
 
   </div>

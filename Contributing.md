@@ -23,6 +23,7 @@ If you want to make your own code changes to _Pikifen_ and you want them include
 2. Make your changes (see [Writing code](#writing-code) and [Commits](#commits) below).
 3. Update `Source/documents/Todo.txt` if necessary.
 4. Update the manual if necessary.
+4. Update the manual's changelog if necessary.
 5. Open a pull request with your changes.
 
 ### Writing code

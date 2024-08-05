@@ -221,6 +221,9 @@ enum PIKMIN_ANIM {
     //Getting up.
     PIKMIN_ANIM_GETTING_UP,
     
+    //Flailing.
+    PIKMIN_ANIM_FLAILING,
+    
     //Drinking a drop.
     PIKMIN_ANIM_DRINKING,
     
