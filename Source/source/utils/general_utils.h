@@ -38,7 +38,7 @@ using std::vector;
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
 //Returns whether a bit is on or not in a bitmask.
-#define has_flag(flags, flag) ((flags & flag) > 0)
+#define has_flag(flags, flag) (((flags) & (flag)) > 0)
 
 
 
