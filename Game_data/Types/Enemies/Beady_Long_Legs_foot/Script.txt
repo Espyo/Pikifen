@@ -1,7 +1,9 @@
 first_state = hidden
 
-init {
-    
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
 }
 
 script {
@@ -11,8 +13,7 @@ script {
             set_hiding true
         }
         on_receive_message {
-            get_event_info t message
-            if $t = ambush
+            if $msg = ambush
                 set_hiding false
                 start_height_effect
                 teleport_to_relative 0 0 1000
@@ -40,33 +41,32 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_event_info t message
             if $id = fr
-                if $t = move_fr
+                if $msg = move_fr
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if $id = fl
-                if $t = move_fl
+                if $msg = move_fl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if $id = br
-                if $t = move_br
+                if $msg = move_br
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if $id = bl
-                if $t = move_bl
+                if $msg = move_bl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             
-            if $t = die
+            if $msg = die
                 set_state dying
             end_if
         }
@@ -88,8 +88,7 @@ script {
             set_state floating
         }
         on_receive_message {
-            get_event_info t message
-            if $t = die
+            if $msg = die
                 set_state dying
             end_if
         }
@@ -108,8 +107,7 @@ script {
             set_state falling
         }
         on_receive_message {
-            get_event_info t message
-            if $t = die
+            if $msg = die
                 set_state dying
             end_if
         }
@@ -124,8 +122,7 @@ script {
             set_state landing
         }
         on_receive_message {
-            get_event_info t message
-            if $t = die
+            if $msg = die
                 set_state dying
             end_if
         }
@@ -143,8 +140,7 @@ script {
             set_state idling
         }
         on_receive_message {
-            get_event_info t message
-            if $t = die
+            if $msg = die
                 set_state dying
             end_if
         }

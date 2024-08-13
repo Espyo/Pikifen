@@ -5,6 +5,12 @@ init {
     set_var capturing true
 }
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     capturing {
         on_enter {
@@ -27,8 +33,7 @@ script {
             set_animation idling random_time_on_spawn
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_reached
+            if $msg = goal_reached
                 set_state pulled
             end_if
         }
@@ -64,8 +69,7 @@ script {
             end_if
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_lost
+            if $msg = goal_lost
                 set_state idling
             end_if
         }

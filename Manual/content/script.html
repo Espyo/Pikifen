@@ -583,6 +583,15 @@ reaches {
       <dd>Because the engine expects objects to follow their hardcoded script, which usually involves a lot of complex tasks, tampering with the script is risky. For instance, if an object was meant to change to a specific state, and you make it change to another one instead, the engine could later on try to do something with the state it <i>thinks</i> the object should be at, and crash. As such, if you want to enhance a hardcoded script, try sticking to things like adding particles, setting some script variables, sending messages, etc.</dd>
     </dl>
     
+    <h2 id="global-events">Global events</h2>
+    
+    <dl>
+      <dt><b>Events inside the <code>global</code> block will always be run.</b></dt>
+      <dd>If you have some actions that you want to be run on a given event for <i>all</i> states, you can create a <code>global</code>  block in the script file much like the <code>init</code> block, and add events there as if it were a state. Useful, for instance, to make it so that every time the mob receives a message (<code>on_receive_message</code> event), the contents of the message are always stored in a variable regardless of state.</dd>
+      <dt><b>Global event actions will be run first by default.</b></dt>
+      <dd>When the current state's event and the global event both have actions, the engine will run the global event's first and the state's second. To reverse this, write <code>global_actions_after</code> as the first line in your list of actions (either the global event's list or the state's list).</dd>
+    </dl>
+    
     <h2 id="precautions">Precautions</h2>
     
     <ul>

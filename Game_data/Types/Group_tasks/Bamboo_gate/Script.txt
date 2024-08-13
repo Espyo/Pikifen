@@ -10,6 +10,12 @@ init {
     start_height_effect
 }
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     closed {
         on_enter {
@@ -18,8 +24,7 @@ script {
             set_tangible true
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_reached
+            if $msg = goal_reached
                 set_state opening
             end_if
         }
@@ -34,8 +39,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_lost
+            if $msg = goal_lost
                 set_state closing
             end_if
         }
@@ -52,8 +56,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_lost
+            if $msg = goal_lost
                 set_state closing
             end_if
         }
@@ -68,8 +71,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_reached
+            if $msg = goal_reached
                 set_state opening
             end_if
         }

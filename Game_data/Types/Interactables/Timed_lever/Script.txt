@@ -5,6 +5,12 @@ init {
     set_var time 0
 }
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script{
     off {
         on_enter {
@@ -14,11 +20,10 @@ script{
             send_message_to_links 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m = interact
+            if $msg = interact
                 set_state flipping_on
             else
-                if $m > 0
+                if $msg > 0
                     set_state flipping_on
                 end_if
             end_if
@@ -48,11 +53,10 @@ script{
             send_message_to_links 1
         }
         on_receive_message {
-            get_event_info m message
-            if $m = interact
+            if $msg = interact
                 set_state flipping_off
             else
-                if $m > 0
+                if $msg > 0
                     set_state flipping_off
                 end_if
             end_if

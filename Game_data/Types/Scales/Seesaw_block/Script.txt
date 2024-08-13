@@ -7,6 +7,12 @@ init {
     set_var weight 0
 }
 
+global {
+    on_receive_message {
+        get_event_info pair_weight message
+    }
+}
+
 script {
     up {
         on_enter {
@@ -33,7 +39,6 @@ script {
             send_message_to_links $weight
         }
         on_receive_message {
-            get_event_info pair_weight message
             if $weight > $pair_weight
                 set_state lowering
             end_if
@@ -59,9 +64,6 @@ script {
             get_mob_info weight self weight
             send_message_to_links $weight
         }
-        on_receive_message {
-            get_event_info pair_weight message
-        }
     }
     
     down {
@@ -85,7 +87,6 @@ script {
             end_if
         }
         on_receive_message {
-            get_event_info pair_weight message
             if $weight < $pair_weight
                 set_state rising
             end_if
@@ -110,9 +111,6 @@ script {
         on_weight_removed {
             get_mob_info weight self weight
             send_message_to_links $weight
-        }
-        on_receive_message {
-            get_event_info pair_weight message
         }
     }
 }

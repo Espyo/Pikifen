@@ -801,10 +801,10 @@ bool assert_actions(
     const vector<mob_action_call*> &actions, const data_node* dn
 );
 mob* get_trigger_mob(mob_action_run_data &data);
-void insert_event_actions(mob_event* ev, 
-    vector<mob_action_call*> actions, bool at_end
+void insert_event_actions(
+    mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
 );
 void load_actions(
-    mob_type* mt, data_node* node, 
-    vector<mob_action_call*>* actions, bitmask_8_t* settings
+    mob_type* mt, data_node* node,
+    vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings = 0
 );

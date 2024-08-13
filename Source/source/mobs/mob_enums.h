@@ -30,7 +30,7 @@ enum AEMP_TYPE {
     
     //One of a list of numbers, though each has a name.
     AEMP_TYPE_NR_LIST,
-
+    
 };
 
 
@@ -48,7 +48,7 @@ enum CARRY_DESTINATION {
     
     //To one of the linked mobs that match the decided Pikmin type.
     CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE,
-
+    
 };
 
 
@@ -63,7 +63,7 @@ enum CARRY_SPOT_STATE {
     
     //Taken.
     CARRY_SPOT_STATE_USED,
-
+    
 };
 
 
@@ -78,7 +78,7 @@ enum CHASE_FLAG {
     
     //The mob can move in any angle instead of just where it's facing.
     CHASE_FLAG_ANY_ANGLE = 1 << 2,
-
+    
 };
 
 
@@ -93,7 +93,7 @@ enum CHASE_STATE {
     
     //Reached the destination and no longer chasing.
     CHASE_STATE_FINISHED,
-
+    
 };
 
 
@@ -105,7 +105,7 @@ enum DELIVERY_ANIM {
     
     //Tossed into place.
     DELIVERY_ANIM_TOSS,
-
+    
 };
 
 
@@ -126,7 +126,7 @@ enum ENEMY_EXTRA_STATE {
     
     //Carriable, being delivered.
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
-
+    
 };
 
 
@@ -141,7 +141,7 @@ enum H_MOVE_RESULT {
     
     //Move failed.
     H_MOVE_RESULT_FAIL,
-
+    
 };
 
 
@@ -156,7 +156,7 @@ enum HOLD_ROTATION_METHOD {
     
     //The held mob should face the same angle the holding mob faces.
     HOLD_ROTATION_METHOD_COPY_HOLDER,
-
+    
 };
 
 
@@ -180,7 +180,7 @@ enum LIMB_DRAW_METHOD {
     
     //Draw the limb above the child mob and the parent mob.
     LIMB_DRAW_METHOD_ABOVE_BOTH,
-
+    
 };
 
 
@@ -210,7 +210,7 @@ enum MOB_FLAG {
     
     //Can this mob not be hurt right now?
     MOB_FLAG_NON_HURTABLE = 1 << 7,
-
+    
 };
 
 
@@ -243,14 +243,16 @@ enum MOB_TARGET_FLAG {
     
     //Objects that can get hurt by pretty much everything.
     MOB_TARGET_FLAG_FRAGILE = 1 << 8,
-
+    
 };
 
+
+//Flags for how a loaded script event's actions should work.
 enum EVENT_LOAD_FLAG {
     //Run scripted actions after hardcoded actions.
     EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER = 1 << 0,
-
-    //Run global actions after state specific actions
+    
+    //Run global actions after state specific actions.
     EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER = 1 << 1,
 };
 
@@ -293,7 +295,7 @@ enum MOB_TEAM {
     
     //Total amount of mob teams.
     N_MOB_TEAMS,
-
+    
 };
 
 
@@ -320,7 +322,7 @@ enum SPRITE_BMP_EFFECT_FLAG {
     
     //Sway from being carried.
     SPRITE_BMP_EFFECT_CARRY = 1 << 6,
-
+    
 };
 
 
@@ -338,13 +340,13 @@ enum START_ANIM_OPTION {
     
     //Start on a random time, but only if the mob just spawned.
     START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN,
-
+    
 };
 
 
 //Categories of mobs in sub-group types.
 enum SUBGROUP_TYPE_CATEGORY {
-    
+
     //Pikmin.
     SUBGROUP_TYPE_CATEGORY_PIKMIN,
     

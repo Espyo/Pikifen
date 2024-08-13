@@ -10,6 +10,12 @@ init {
     set_var moves_left 0
 }
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     hidden {
         on_enter {
@@ -33,8 +39,7 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_event_info m message
-            if $m = landed
+            if $msg = landed
                 stop_height_effect
                 set_state resting
             end_if
@@ -105,8 +110,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_event_info m message
-            if $m = landed
+            if $msg = landed
                 stabilize_z highest 300
                 set_state move_fl
             end_if
@@ -123,8 +127,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_event_info m message
-            if $m = landed
+            if $msg = landed
                 stabilize_z highest 300
                 set_state move_br
             end_if
@@ -141,8 +144,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_event_info m message
-            if $m = landed
+            if $msg = landed
                 stabilize_z highest 300
                 set_state move_bl
             end_if
@@ -159,8 +161,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_event_info m message
-            if $m = landed
+            if $msg = landed
                 stabilize_z highest 300
                 set_state deciding
             end_if

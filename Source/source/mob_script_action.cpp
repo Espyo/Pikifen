@@ -2463,26 +2463,18 @@ mob* get_trigger_mob(mob_action_run_data &data) {
 
 
 /**
- * @brief Add a vector of actions onto ev
+ * @brief Add a vector of actions onto a given event.
  *
- * @param ev The event to add actions to
- * @param actions Vector of actions to insert
+ * @param ev The event to add actions to.
+ * @param actions Vector of actions to insert.
  * @param at_end Are the actions inserted at the end?
  */
-void insert_event_actions(mob_event* ev, vector<mob_action_call*> actions, bool at_end) {
-    //Event already exists. Add the new actions, only.
-    vector<mob_action_call*>::iterator it;
-    if (at_end) {
-        it = ev->actions.end();
-    }
-    else {
-        it = ev->actions.begin();
-    }
-    ev->actions.insert(
-        it,
-        actions.begin(),
-        actions.end()
-    );
+void insert_event_actions(
+    mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
+) {
+    vector<mob_action_call*>::iterator it =
+        at_end ? ev->actions.end() : ev->actions.begin();
+    ev->actions.insert(it, actions.begin(), actions.end());
 }
 
 
@@ -2491,27 +2483,28 @@ void insert_event_actions(mob_event* ev, vector<mob_action_call*> actions, bool 
  *
  * @param mt The type of mob the events are going to.
  * @param node The data node.
- * @param actions Vector of loaded actions.
- * @param settings Settings for how to load the events.
+ * @param out_actions The oaded actions are returned here.
+ * @param out_settings The settings for how to load the events are
+ * returned here.
  */
-void load_actions(mob_type* mt, data_node* node, vector<mob_action_call*>* actions, bitmask_8_t* settings = 0) {
-    for (size_t a = 0; a < node->get_nr_of_children(); ++a) {
+void load_actions(
+    mob_type* mt, data_node* node,
+    vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings
+) {
+    for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
         data_node* action_node = node->get_child(a);
         if (action_node->name == "custom_actions_after") {
-            enable_flag(*settings, EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER);
-        }
-        else if (action_node->name == "global_actions_after") {
-            enable_flag(*settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
-        }
-        else {
+            enable_flag(*out_settings, EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER);
+        } else if (action_node->name == "global_actions_after") {
+            enable_flag(*out_settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
+        } else {
             mob_action_call* new_a = new mob_action_call();
             if (new_a->load_from_data_node(action_node, mt)) {
-                actions->push_back(new_a);
-            }
-            else {
+                out_actions->push_back(new_a);
+            } else {
                 delete new_a;
             }
         }
     }
-    assert_actions(*actions, node);
+    assert_actions(*out_actions, node);
 }

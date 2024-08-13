@@ -195,6 +195,7 @@ Next tasks (roughly sorted most important first)
         Problems to watch out for
             How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
             How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
+            What should happen when the player opens the texture selection dialog in the area editor?
         Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
         Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
         All content will need to do this:
@@ -213,7 +214,9 @@ Next tasks (roughly sorted most important first)
         Make assets inherit from the plain_content class
         Move area loading to area_data::load_from_data_node
         Add the new common content properties to everything in the engine
+    Rename every file to lowercase?
     A small "Got it!" for the score bar, to mark the medal you have
+    Style Tutorial Meadow to be more DEV Lab-like
     Missions should have a property where the maker can specify their best score (and date)
     Animate the mission results screen
         Basically, reveal one thing at a time

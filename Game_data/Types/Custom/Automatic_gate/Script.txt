@@ -10,6 +10,12 @@ init {
     start_height_effect
 }
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     closed {
         on_enter {
@@ -17,8 +23,7 @@ script {
             set_can_block_paths true
         }
         on_receive_message {
-            get_event_info m message
-            if $m > 0
+            if $msg > 0
                 set_state opening
             end_if
         }
@@ -32,8 +37,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m = 0
+            if $msg = 0
                 set_state closing
             end_if
         }
@@ -49,8 +53,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            get_event_info m message
-            if $m = 0
+            if $msg = 0
                 set_state closing
             end_if
         }
@@ -64,8 +67,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m > 0
+            if $msg > 0
                 set_state opening
             end_if
         }

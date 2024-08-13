@@ -1,5 +1,11 @@
 first_state = idling
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     idling {
         on_enter {
@@ -8,8 +14,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_reached
+            if $msg = goal_reached
                 set_state moving
             end_if
         }
@@ -22,8 +27,7 @@ script {
             start_particles cardboard_box_dust -104 0 0
         }
         on_receive_message {
-            get_event_info m message
-            if $m = goal_lost
+            if $msg = goal_lost
                 set_state idling
             end_if
         }

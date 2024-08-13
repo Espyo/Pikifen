@@ -1,6 +1,12 @@
 first_state = safe
 death_state = destroyed
 
+global {
+    on_receive_message {
+        get_event_info msg message
+    }
+}
+
 script {
     safe {
         on_enter {
@@ -12,8 +18,7 @@ script {
             set_state sparking
         }
         on_receive_message {
-            get_event_info m message
-            if $m = destroyed
+            if $msg = destroyed
                 set_state destroyed
             end_if
         }
@@ -27,8 +32,7 @@ script {
             set_state zapping
         }
         on_receive_message {
-            get_event_info m message
-            if $m = destroyed
+            if $msg = destroyed
                 set_state destroyed
             end_if
         }
@@ -41,8 +45,7 @@ script {
             set_state safe
         }
         on_receive_message {
-            get_event_info m message
-            if $m = destroyed
+            if $msg = destroyed
                 set_state destroyed
             end_if
         }

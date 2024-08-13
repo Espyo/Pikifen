@@ -6,8 +6,8 @@ script{
             set_animation idling
         }
         on_receive_message {
-            get_event_info m message
-            if $m = interact
+            get_event_info msg message
+            if $msg = interact
                 show_message_from_var text
             end_if
         }

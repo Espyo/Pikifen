@@ -7,15 +7,15 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_event_info m message
-            if $m = be_carried
+            get_event_info msg message
+            if $msg = be_carried
                 set_tangible false
             else
-                if $m = be_flung
+                if $msg = be_flung
                     set_tangible true
                     set_state flung
                 else
-                    if $m = be_dropped
+                    if $msg = be_dropped
                         set_tangible true
                     end_if
                 end_if
