@@ -2463,21 +2463,54 @@ mob* get_trigger_mob(mob_action_run_data &data) {
 
 
 /**
- * @brief Loads the actions to be run when the mob initializes.
+ * @brief Add a vector of actions onto ev
  *
- * @param mt The type of mob the actions are going to.
- * @param node The data node.
- * @param actions Vector of actions to be filled.
+ * @param ev The event to add actions to
+ * @param actions Vector of actions to insert
+ * @param at_end Are the actions inserted at the end?
  */
-void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action_call*>* actions
-) {
-    for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
-        mob_action_call* new_a = new mob_action_call();
-        if(new_a->load_from_data_node(node->get_child(a), mt)) {
-            actions->push_back(new_a);
-        } else {
-            delete new_a;
+void insert_event_actions(mob_event* ev, vector<mob_action_call*> actions, bool at_end) {
+    //Event already exists. Add the new actions, only.
+    vector<mob_action_call*>::iterator it;
+    if (at_end) {
+        it = ev->actions.end();
+    }
+    else {
+        it = ev->actions.begin();
+    }
+    ev->actions.insert(
+        it,
+        actions.begin(),
+        actions.end()
+    );
+}
+
+
+/**
+ * @brief Loads actions from a data node.
+ *
+ * @param mt The type of mob the events are going to.
+ * @param node The data node.
+ * @param actions Vector of loaded actions.
+ * @param settings Settings for how to load the events.
+ */
+void load_actions(mob_type* mt, data_node* node, vector<mob_action_call*>* actions, bitmask_8_t* settings = 0) {
+    for (size_t a = 0; a < node->get_nr_of_children(); ++a) {
+        data_node* action_node = node->get_child(a);
+        if (action_node->name == "custom_actions_after") {
+            enable_flag(*settings, EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER);
+        }
+        else if (action_node->name == "global_actions_after") {
+            enable_flag(*settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
+        }
+        else {
+            mob_action_call* new_a = new mob_action_call();
+            if (new_a->load_from_data_node(action_node, mt)) {
+                actions->push_back(new_a);
+            }
+            else {
+                delete new_a;
+            }
         }
     }
     assert_actions(*actions, node);

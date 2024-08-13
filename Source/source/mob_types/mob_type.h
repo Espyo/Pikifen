@@ -404,6 +404,9 @@ public:
     //Actions to run on spawn.
     vector<mob_action_call*> init_actions;
     
+    //Actions to run.
+    vector<vector<mob_action_call*>> functions;
+
     //The states, events and actions. Basically, the FSM.
     vector<mob_state*> states;
     
