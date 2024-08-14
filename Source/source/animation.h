@@ -273,6 +273,7 @@ public:
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, const data_node* file
     );
+    void delete_sprite(size_t idx);
     void fill_sound_idx_caches(mob_type* mt_ptr);
     void fix_body_part_pointers();
     void load_from_data_node(data_node* node);

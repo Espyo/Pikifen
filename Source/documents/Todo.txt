@@ -6,9 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    lockpick man's resize bug
-    Looks like editing some sprites' scales and then trying to preview an interpolated animation makes things weird
-        I think it might actually happen when you delete a sprite that was in use in animations
+    
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -642,6 +640,8 @@ Small tasks (for when I'm feeling lazy)
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
+        Replace the ++i in for loops with i++
+        Replace all instances of "number" when in reality it should be "index"
     
     
 Misc things (so I don't forget)

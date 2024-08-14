@@ -270,6 +270,29 @@ void animation_database::destroy() {
 
 
 /**
+ * @brief Deletes a sprite, adjusting any animations that use it.
+ *
+ * @param idx Sprite index.
+ */
+void animation_database::delete_sprite(size_t idx) {
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        
+        for(size_t f = 0; f < a_ptr->frames.size();) {
+            frame* f_ptr = &a_ptr->frames[f];
+            if(f_ptr->sprite_idx == idx) {
+                a_ptr->frames.erase(a_ptr->frames.begin() + f);
+            } else {
+                ++f;
+            }
+        }
+    }
+    
+    sprites.erase(sprites.begin() + idx);
+}
+
+
+/**
  * @brief Fills each frame's sound index cache variable, where applicable.
  *
  * @param mt_ptr Mob type with the sound data.

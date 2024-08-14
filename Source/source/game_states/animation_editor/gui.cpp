@@ -1803,7 +1803,7 @@ void animation_editor::process_gui_panel_sprite() {
         ) {
             string deleted_sprite_name = cur_sprite->name;
             size_t nr = anims.find_sprite(deleted_sprite_name);
-            anims.sprites.erase(anims.sprites.begin() + nr);
+            anims.delete_sprite(nr);
             if(anims.sprites.empty()) {
                 cur_sprite = nullptr;
                 cur_hitbox = nullptr;
@@ -1816,7 +1816,9 @@ void animation_editor::process_gui_panel_sprite() {
             set_status("Deleted sprite \"" + deleted_sprite_name + "\".");
         }
         set_tooltip(
-            "Delete the current sprite."
+            "Delete the current sprite.\n"
+            "Any frame that makes use of this sprite\n"
+            "will be deleted from its animation."
         );
     }
     
