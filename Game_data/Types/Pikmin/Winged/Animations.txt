@@ -328,6 +328,54 @@ animations{
 			}
 		}
 	}
+	shaking{
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+			mid_bend{
+				duration=0.1000
+			}
+			crouching{
+				duration=0.2000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.2000
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_04{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.0100
+			}
+			shaking_05{
+				duration=0.2000
+				interpolate=true
+			}
+			shaking_06{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
 	sighing{
 		frames{
 			mid_bend{
@@ -1710,6 +1758,174 @@ sprites{
 				coords=5.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_01{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 89.0000
+		file_size=27.0000 28.0000
+		offset=2.5000 1.5000
+		scale=0.5000 0.5000
+		angle=0.6109
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=6.0000 4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=3.0000 -0.0503 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_02{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 89.0000
+		file_size=27.0000 28.0000
+		offset=2.0000 -1.0000
+		scale=0.5000 0.5000
+		angle=5.6723
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=6.0000 -4.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=3.0000 -0.0503 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_03{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 0.0000
+		file_size=28.0000 28.0000
+		offset=2.5000 -1.5000
+		scale=0.5000 0.5000
+		angle=5.6723
+		top_visible=true
+		top_pos=10.0000 -7.0000
+		top_size=5.5000 10.0000
+		top_angle=2.5307
+		hitboxes{
+			top{
+				coords=7.5000 -5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_04{
+		file=Winged_Pikmin.png
+		file_pos=106.0000 0.0000
+		file_size=28.0000 28.0000
+		offset=2.5000 1.5000
+		scale=0.5000 0.5000
+		angle=0.6109
+		top_visible=true
+		top_pos=10.0000 7.0000
+		top_size=5.5000 10.0000
+		top_angle=3.7525
+		hitboxes{
+			top{
+				coords=7.5000 5.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_05{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=0.0000 0.5000
+		scale=0.5000 0.5000
+		angle=5.6723
+		top_visible=true
+		top_pos=-2.0000 2.0000
+		top_size=5.5000 10.0000
+		top_angle=5.6723
+		hitboxes{
+			top{
+				coords=-2.0000 1.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	shaking_06{
+		file=Winged_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=30.0000 28.0000
+		offset=-0.5000 -0.5000
+		scale=0.5000 0.5000
+		angle=0.3491
+		top_visible=true
+		top_pos=-2.5000 -1.5000
+		top_size=5.5000 10.0000
+		top_angle=0.3491
+		hitboxes{
+			top{
+				coords=-3.0000 -1.5000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
 				value=1.0000
 			}

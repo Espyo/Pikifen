@@ -550,6 +550,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(pikmin_fsm::check_boredom_anim_end);
+            efc.run(pikmin_fsm::check_shaking_anim_end);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -2210,6 +2211,25 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
     if(damage == 0 || !attack_success) {
         pik_ptr->was_last_hit_dud = true;
     }
+}
+
+
+/**
+ * @brief When a Pikmin should check if the animation that ended is a shaking
+ * animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::check_shaking_anim_end(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    if(!pik_ptr->in_shaking_animation) return;
+    m->set_animation(PIKMIN_ANIM_IDLING);
+    pik_ptr->in_shaking_animation = false;
+    m->set_timer(
+        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+    );
 }
 
 
@@ -3894,6 +3914,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     pik_ptr->bump_lock = 0.0f;
+    pik_ptr->in_shaking_animation = false;
 }
 
 

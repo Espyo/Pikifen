@@ -116,7 +116,6 @@ Next tasks (roughly sorted most important first)
         The "grabbing_near" sprite is unused for all bar Bulbmin
         More frames, for more fluidity
     Pikmin missing animations
-        Shaking after leaving the water
         Carrying (walking while carrying)
             Note that there is currently a "grabbing" (unused) and a "carrying" animation
             Also use it for when they're carrying tools

@@ -37,6 +37,7 @@ void check_boredom_anim_end(   mob* m, void* info1, void* info2);
 void check_incoming_attack(    mob* m, void* info1, void* info2);
 void check_leader_bump(        mob* m, void* info1, void* info2);
 void check_outgoing_attack(    mob* m, void* info1, void* info2);
+void check_shaking_anim_end(   mob* m, void* info1, void* info2);
 void circle_opponent(          mob* m, void* info1, void* info2);
 void clear_boredom_data(       mob* m, void* info1, void* info2);
 void clear_timer(              mob* m, void* info1, void* info2);

@@ -206,6 +206,9 @@ enum PIKMIN_ANIM {
     //Sighing.
     PIKMIN_ANIM_SIGHING,
     
+    //Shaking, like after leaving water.
+    PIKMIN_ANIM_SHAKING,
+    
     //As a sprout.
     PIKMIN_ANIM_SPROUT,
     

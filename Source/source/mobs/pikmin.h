@@ -44,60 +44,63 @@ class pikmin : public mob {
 public:
 
     //--- Members ---
-
+    
     //What type of Pikmin it is.
     pikmin_type* pik_type = nullptr;
     
     //Mob that it is carrying.
     mob* carrying_mob = nullptr;
-
+    
     //The Pikmin is considering this attack animation as having "missed".
     animation* missed_attack_ptr = nullptr;
-
+    
     //The Pikmin will consider the miss for this long.
     timer missed_attack_timer;
-
+    
     //Did the Pikmin's last attack cause zero damage?
     bool was_last_hit_dud = false;
-
+    
     //How many hits in a row have done no damage.
     unsigned char consecutive_dud_hits = 0;
     
     //Maturity. 0: leaf. 1: bud. 2: flower.
     unsigned char maturity = 2;
-
+    
     //Is this Pikmin currently a seed or a sprout?
     bool is_seed_or_sprout = false;
-
+    
     //Is this Pikmin currently grabbed by an enemy?
     bool is_grabbed_by_enemy = false;
-
+    
     //If true, someone's already coming to pluck this Pikmin.
     //This is to let other leaders know that they should pick a different one.
     bool pluck_reserved = false;
-
+    
     //Leader it is meant to return to after what it is doing, if any.
     mob* leader_to_return_to = nullptr;
-
+    
     //Is this Pikmin latched on to a mob?
     bool latched = false;
-
+    
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool is_tool_primed_for_whistle = false;
-
+    
     //Does this Pikmin have to follow its linked mob as its leader?
     bool must_follow_link_as_leader = false;
-
+    
     //Leader bump lock. Leaders close and timer running = timer resets.
     float bump_lock = 0.0f;
-
+    
     //Is it currently doing some boredom-related animation?
     bool in_bored_animation = false;
+    
+    //Is it currently doing its shaking animation?
+    bool in_shaking_animation = false;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i = 0;
     
-
+    
     //--- Function declarations ---
     
     pikmin(const point &pos, pikmin_type* type, const float angle);

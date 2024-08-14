@@ -333,6 +333,9 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         fsm.cur_state->id == PIKMIN_STATE_FLAILING
     ) {
         fsm.set_state(PIKMIN_STATE_IDLING);
+        set_animation(PIKMIN_ANIM_SHAKING);
+        in_shaking_animation = true;
+        set_timer(0); //The boredom animation timeout.
         pikmin_fsm::stand_still(this, nullptr, nullptr);
         invuln_period.start();
     }
