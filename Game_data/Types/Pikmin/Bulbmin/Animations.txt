@@ -30,6 +30,24 @@ animations{
 			}
 		}
 	}
+	crushed{
+		frames{
+			crushed_01{
+				duration=0.0500
+				interpolate=true
+			}
+			crushed_02{
+				duration=0.8000
+			}
+			crushed_02{
+				duration=0.5000
+				interpolate=true
+			}
+			crushed_03{
+				duration=0.1000
+			}
+		}
+	}
 	drinking{
 		frames{
 			mid_bend{
@@ -510,6 +528,90 @@ sprites{
 				height=24.0000
 				radius=7.0000
 				type=0
+				value=1.0000
+			}
+		}
+	}
+	crushed_01{
+		file=Bulbmin.png
+		file_pos=154.0000 0.0000
+		file_size=34.0000 59.0000
+		offset=-6.0000 -1.0000
+		scale=0.6000 0.6000
+		angle=4.7124
+		top_visible=true
+		top_pos=-26.2095 5.8137
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-26.7628 5.3712 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crushed_02{
+		file=Bulbmin.png
+		file_pos=154.0000 0.0000
+		file_size=34.0000 59.0000
+		offset=-6.0000 -1.0000
+		scale=0.5000 0.5000
+		angle=4.7124
+		top_visible=true
+		top_pos=-23.2221 4.5966
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-23.3327 4.5966 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crushed_03{
+		file=Bulbmin.png
+		file_pos=154.0000 0.0000
+		file_size=34.0000 59.0000
+		offset=-0.4905 -0.1712
+		scale=0.0500 0.0500
+		angle=4.7124
+		top_visible=true
+		top_pos=-2.4380 0.4136
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=2
 				value=1.0000
 			}
 		}

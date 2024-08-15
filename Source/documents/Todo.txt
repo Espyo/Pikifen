@@ -22,6 +22,7 @@ Next tasks (roughly sorted most important first)
                 Struggling to lift
                 Carrying
                 Knocked back
+                Crushed
                 Seed landing
             Menus
                 ? Menu item selected
@@ -120,7 +121,6 @@ Next tasks (roughly sorted most important first)
             Note that there is currently a "grabbing" (unused) and a "carrying" animation
             Also use it for when they're carrying tools
         Celebrating
-        Crushed
         Climbing (add the track logic too)
         Sliding (add the track logic too)
         Pushing (add the group task logic too)

@@ -1720,6 +1720,15 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("crushed", PIKMIN_STATE_CRUSHED); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::be_crushed);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::die);
+        }
+    }
+    
     typ->states = efc.finish();
     typ->first_state_idx = fix_states(typ->states, "idling", typ);
     
@@ -1787,6 +1796,24 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     pikmin_fsm::notify_leader_release(m, info1, info2);
     pikmin_fsm::release_tool(m, nullptr, nullptr);
     m->face(m->angle, nullptr);
+}
+
+
+/**
+ * @brief When a Pikmin is crushed.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::be_crushed(mob* m, void* info1, void* info2) {
+    m->z = m->ground_sector->z;
+    m->leave_group();
+    pikmin_fsm::be_released(m, info1, info2);
+    pikmin_fsm::notify_leader_release(m, info1, info2);
+    pikmin_fsm::release_tool(m, nullptr, nullptr);
+    enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
+    m->set_animation(PIKMIN_ANIM_CRUSHED);
 }
 
 
@@ -2389,6 +2416,18 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
         
     }
     }
+}
+
+
+/**
+ * @brief When a Pikmin has to die right now.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::die(mob* m, void* info1, void* info2) {
+    m->set_health(false, false, 0);
 }
 
 

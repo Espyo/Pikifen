@@ -20,6 +20,7 @@ namespace pikmin_fsm {
 void create_fsm(mob_type* typ);
 
 void be_attacked(              mob* m, void* info1, void* info2);
+void be_crushed(               mob* m, void* info1, void* info2);
 void be_dismissed(             mob* m, void* info1, void* info2);
 void be_grabbed_by_enemy(      mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(     mob* m, void* info1, void* info2);
@@ -42,6 +43,7 @@ void circle_opponent(          mob* m, void* info1, void* info2);
 void clear_boredom_data(       mob* m, void* info1, void* info2);
 void clear_timer(              mob* m, void* info1, void* info2);
 void decide_attack(            mob* m, void* info1, void* info2);
+void die(                      mob* m, void* info1, void* info2);
 void do_impact_bounce(         mob* m, void* info1, void* info2);
 void enter_onion(              mob* m, void* info1, void* info2);
 void fall_down_pit(            mob* m, void* info1, void* info2);

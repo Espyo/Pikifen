@@ -3,9 +3,7 @@ description = Pikmin that are crushed will lie there for a bit before succumbing
 
 affects_pikmin = true
 color = 0 0 0
-health_change_ratio = -1.5
 speed_multiplier = 0
-state_change_type = helpless
-tint = 0 0 0 0
+state_change_type = custom
+state_change_name = crushed
 turns_inedible = true
-turns_invisible = true
