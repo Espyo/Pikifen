@@ -96,6 +96,7 @@ script {
             start_particles electric_gate_explosion 0 0 129
             play_sound obstacle_cleared
             set_tangible false
+            set_shadow_visibility false
             send_message_to_links destroy
         }
     }
