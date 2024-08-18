@@ -1090,7 +1090,7 @@ void draw_mob_shadow(
     if(m->rectangular_dim.x != 0) {
         shadow_size = m->rectangular_dim * 1.1f;
     }
-
+    
     if(shadow_stretch <= 0) return;
     
     float diameter = shadow_size.x;
@@ -1107,7 +1107,7 @@ void draw_mob_shadow(
         shadow_x = -(diameter * 0.5);
         shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     }
-
+    
     if(m->rectangular_dim.x != 0) {
         draw_bitmap(
             game.sys_assets.bmp_shadow_square,
@@ -1116,8 +1116,7 @@ void draw_mob_shadow(
             m->angle,
             map_alpha(255 * (1 - shadow_stretch))
         );
-    }
-    else {
+    } else {
         draw_bitmap(
             game.sys_assets.bmp_shadow,
             point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),

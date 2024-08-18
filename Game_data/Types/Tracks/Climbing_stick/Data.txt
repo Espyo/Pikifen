@@ -2,6 +2,7 @@ name = Climbing stick
 description = A stick slanted upwards so that Pikmin can climb on it, and reach higher platforms (up to 250 units higher).
 
 cancellable_with_whistle = true
+casts_shadow = false
 custom_category_name = Useful
 height = 250
 pushable = false

@@ -6,7 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Automatic gates aren't working
+    Pellet Posies aren't growing while off-camera
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements

@@ -1944,7 +1944,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             } else {
                 c.z = mob_ptr->ground_sector->z;
             }
-            c.z += mob_ptr->height == 0 ? FLT_MAX - 1: mob_ptr->height - 1;
+            c.z += mob_ptr->height == 0 ? FLT_MAX - 1 : mob_ptr->height - 1;
             components.push_back(c);
         }
         

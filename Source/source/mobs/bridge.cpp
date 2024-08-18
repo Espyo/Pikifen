@@ -264,7 +264,7 @@ void bridge::draw_component(mob* m) {
     vertexes[0].y = -m->rectangular_dim.y / 2.0f;
     vertexes[0].u = texture_offset + m->rectangular_dim.x;
     vertexes[0].v = texture_v0;
-
+    
     vertexes[1].color = map_gray(100);
     vertexes[1].x = -m->rectangular_dim.x / 2.0f;
     vertexes[1].y = -m->rectangular_dim.y / 2.0f;
@@ -280,29 +280,29 @@ void bridge::draw_component(mob* m) {
     vertexes[3].y = -0.5f * m->rectangular_dim.y / 2.0f;
     vertexes[3].u = texture_offset;
     vertexes[3].v = texture_v0 + 0.25f * m->rectangular_dim.y;
-
+    
     vertexes[4].x = vertexes[0].x;
     vertexes[4].y = 0.5f * m->rectangular_dim.y / 2.0f;
     vertexes[4].u = texture_offset + m->rectangular_dim.x;
     vertexes[4].v = texture_v0 + 0.75f * m->rectangular_dim.y;
-
+    
     vertexes[5].x = vertexes[1].x;
     vertexes[5].y = 0.5f * m->rectangular_dim.y / 2.0f;
     vertexes[5].u = texture_offset;
     vertexes[5].v = texture_v0 + 0.75f * m->rectangular_dim.y;
-
+    
     vertexes[6].color = map_gray(100);
     vertexes[6].x = vertexes[0].x;
     vertexes[6].y = m->rectangular_dim.y / 2.0f;
     vertexes[6].u = texture_offset + m->rectangular_dim.x;
     vertexes[6].v = texture_v0 + m->rectangular_dim.y;
-
+    
     vertexes[7].color = map_gray(100);
     vertexes[7].x = vertexes[1].x;
     vertexes[7].y = m->rectangular_dim.y / 2.0f;
     vertexes[7].u = texture_offset;
     vertexes[7].v = texture_v0 + m->rectangular_dim.y;
-
+    
     for(size_t v = 0; v < 8; ++v) {
         al_transform_coordinates(
             &angle_transform, &vertexes[v].x, &vertexes[v].y
