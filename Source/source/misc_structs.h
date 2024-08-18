@@ -253,6 +253,9 @@ struct asset_file_names_t {
     
     //Mob shadow.
     string bmp_shadow = "Shadow.png";
+
+    //Rectangular mob shadow.
+    string bmp_shadow_square = "Shadow_square.png";
     
     //Smack effect.
     string bmp_smack = "Smack.png";
@@ -792,6 +795,9 @@ struct system_asset_list {
     
     //Mob shadow.
     ALLEGRO_BITMAP* bmp_shadow = nullptr;
+
+    //Rectangular mob shadow.
+    ALLEGRO_BITMAP* bmp_shadow_square = nullptr;
     
     //Smack effect.
     ALLEGRO_BITMAP* bmp_smack = nullptr;

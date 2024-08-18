@@ -268,7 +268,7 @@ void draw_sector_edge_offsets(
     sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
 );
 void draw_mob_shadow(
-    const point &where, const float size,
+    const mob* m,
     const float delta_z, const float shadow_stretch
 );
 void draw_scaled_text(

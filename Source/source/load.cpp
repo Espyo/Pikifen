@@ -1108,6 +1108,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bmp_rock);
     game.sys_assets.bmp_shadow =
         game.bitmaps.get(game.asset_file_names.bmp_shadow);
+    game.sys_assets.bmp_shadow_square =
+        game.bitmaps.get(game.asset_file_names.bmp_shadow_square);
     game.sys_assets.bmp_smack =
         game.bitmaps.get(game.asset_file_names.bmp_smack);
     game.sys_assets.bmp_smoke =
@@ -1360,6 +1362,7 @@ void unload_misc_resources() {
     game.bitmaps.free(game.sys_assets.bmp_random);
     game.bitmaps.free(game.sys_assets.bmp_rock);
     game.bitmaps.free(game.sys_assets.bmp_shadow);
+    game.bitmaps.free(game.sys_assets.bmp_shadow_square);
     game.bitmaps.free(game.sys_assets.bmp_smack);
     game.bitmaps.free(game.sys_assets.bmp_smoke);
     game.bitmaps.free(game.sys_assets.bmp_sparkle);

@@ -1076,19 +1076,24 @@ void draw_menu_button_icon(
 /**
  * @brief Draws a mob's shadow.
  *
- * @param center Center of the mob.
- * @param diameter Diameter of the mob.
+ * @param m mob to draw the shadow for.
  * @param delta_z The mob is these many units above the floor directly below it.
  * @param shadow_stretch How much to stretch the shadow by
  * (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
-    const point &center, const float diameter,
+    const mob* m,
     const float delta_z, const float shadow_stretch
 ) {
 
+    point shadow_size = point(m->radius * 2.2f, m->radius * 2.2f);
+    if(m->rectangular_dim.x != 0) {
+        shadow_size = m->rectangular_dim * 1.1f;
+    }
+
     if(shadow_stretch <= 0) return;
     
+    float diameter = shadow_size.x;
     float shadow_x = 0;
     float shadow_w =
         diameter + (diameter * shadow_stretch * MOB::SHADOW_STRETCH_MULT);
@@ -1102,14 +1107,25 @@ void draw_mob_shadow(
         shadow_x = -(diameter * 0.5);
         shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     }
-    
-    draw_bitmap(
-        game.sys_assets.bmp_shadow,
-        point(center.x + shadow_x + shadow_w / 2, center.y),
-        point(shadow_w, diameter),
-        0,
-        map_alpha(255 * (1 - shadow_stretch))
-    );
+
+    if(m->rectangular_dim.x != 0) {
+        draw_bitmap(
+            game.sys_assets.bmp_shadow_square,
+            point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
+            shadow_size,
+            m->angle,
+            map_alpha(255 * (1 - shadow_stretch))
+        );
+    }
+    else {
+        draw_bitmap(
+            game.sys_assets.bmp_shadow,
+            point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
+            point(shadow_w, diameter),
+            0,
+            map_alpha(255 * (1 - shadow_stretch))
+        );
+    }
 }
 
 
