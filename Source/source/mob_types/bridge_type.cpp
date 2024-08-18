@@ -26,7 +26,6 @@ bridge_type::bridge_type() :
     max_health = 2000;
     pushable = false;
     pushes = false;
-    casts_shadow = false;
     can_block_paths = true;
     target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     starting_team = MOB_TEAM_OBSTACLE;

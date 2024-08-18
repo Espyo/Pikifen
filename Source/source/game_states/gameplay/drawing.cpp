@@ -1944,7 +1944,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             } else {
                 c.z = mob_ptr->ground_sector->z;
             }
-            c.z += 0.01f;
+            c.z += mob_ptr->height == 0 ? FLT_MAX - 1: mob_ptr->height - 1;
             components.push_back(c);
         }
         
@@ -1994,7 +1994,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         if(mob_ptr->holder.m && mob_ptr->holder.above_holder) {
             c.z = mob_ptr->holder.m->z + mob_ptr->holder.m->height + 0.01;
         } else {
-            c.z = mob_ptr->z + mob_ptr->height;
+            c.z = mob_ptr->height == 0 ? FLT_MAX : mob_ptr->z + mob_ptr->height;
         }
         components.push_back(c);
         
@@ -2075,8 +2075,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                     c_ptr->mob_shadow_ptr->ground_sector->z;
             }
             draw_mob_shadow(
-                c_ptr->mob_shadow_ptr->pos,
-                c_ptr->mob_shadow_ptr->radius * 2,
+                c_ptr->mob_shadow_ptr,
                 delta_z,
                 mob_shadow_stretch
             );
