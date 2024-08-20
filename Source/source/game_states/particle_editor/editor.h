@@ -125,7 +125,6 @@ private:
     void process_gui_menu_bar();
     void process_gui_options_dialog();
     void process_gui_panel_item();
-    void process_gui_panel_items();
     void process_gui_status_bar();
     void process_gui_toolbar();
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;

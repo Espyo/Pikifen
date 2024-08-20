@@ -144,17 +144,7 @@ void particle_editor::process_gui_control_panel() {
     
     //Current file text.
     ImGui::Text("Current file: %s", file_name.c_str());
-    
-    //Spacer dummy widget.
-    //ImGui::Dummy(ImVec2(0, 16));
-    
-    //Process the list of items.
-    //process_gui_panel_items();
-    
-    //Spacer dummy widget.
-    //ImGui::Dummy(ImVec2(0, 16));
-    
-    //Process the currently selected item.
+
     process_gui_panel_item();
     
     ImGui::EndChild();
@@ -793,70 +783,6 @@ void particle_editor::process_gui_panel_item() {
         }
         ImGui::EndTabBar();
     }
-}
-
-
-/**
- * @brief Processes the GUI item list panel for this frame.
- */
-void particle_editor::process_gui_panel_items() {
-    //TODO: remove
-    /*
-    //Items text.
-    ImGui::Text("Items:");
-    
-    //Item list.
-    if(
-        ImGui::BeginChild(
-            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Border
-        )
-    ) {
-        for(size_t i = 0; i < items.size(); ++i) {
-        
-            //Item checkbox.
-            bool visible = items[i].size.x != 0.0f;
-            if(
-                ImGui::Checkbox(("##v" + items[i].name).c_str(), &visible)
-            ) {
-                if(visible) {
-                    items[i].center.x = 50.0f;
-                    items[i].center.y = 50.0f;
-                    items[i].size.x = 10.0f;
-                    items[i].size.y = 10.0f;
-                } else {
-                    items[i].center.x = 0.0f;
-                    items[i].center.y = 0.0f;
-                    items[i].size.x = 0.0f;
-                    items[i].size.y = 0.0f;
-                }
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Whether this item is visible in-game or not."
-            );
-            
-            //Separator text.
-            ImGui::SameLine();
-            ImGui::Text("  ");
-            
-            //Item selectable.
-            bool selected = cur_item == i;
-            ImGui::SameLine();
-            if(
-                ImGui::Selectable(items[i].name.c_str(), &selected)
-            ) {
-                cur_item = i;
-            }
-            
-            if(must_focus_on_cur_item && selected) {
-                ImGui::SetScrollHereY(0.5f);
-                must_focus_on_cur_item = false;
-            }
-            
-        }
-        ImGui::EndChild();
-    }
-    */
 }
 
 
