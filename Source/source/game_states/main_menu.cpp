@@ -405,10 +405,10 @@ void main_menu_state::init_gui_make_page() {
 #undef icon_left
     
     //Menu items.
-    make_gui.register_coords("animation_editor", 58, 59,   60, 10);
-    make_gui.register_coords("area_editor",      56, 71,   60, 10);
-    make_gui.register_coords("gui_editor",       54, 80, 60,  7);
-    make_gui.register_coords("particle_editor",  54, 90, 60, 7);
+    make_gui.register_coords("animation_editor", 26, 63,   46, 12);
+    make_gui.register_coords("area_editor",      74, 63,   46, 12);
+    make_gui.register_coords("gui_editor",       50, 84,   34,  7);
+    make_gui.register_coords("particle_editor",  50, 75,   34,  7);
     make_gui.register_coords("back",              9, 91,   14,  6);
     make_gui.register_coords("more",             91, 91,   14,  6);
     make_gui.register_coords("tooltip",          50, 96,   96,  4);
@@ -511,7 +511,7 @@ void main_menu_state::init_gui_make_page() {
             });
         };
     part_ed_button->on_get_tooltip =
-        []() { return "Particle time (TODO)"; };
+        []() { return "Create and modify particles."; };
     make_gui.add_item(part_ed_button, "particle_editor");
     
     //Back button.

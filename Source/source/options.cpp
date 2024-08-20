@@ -132,6 +132,9 @@ const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
 //Default value for the music volume.
 const float DEF_MUSIC_VOLUME = 1.0f;
 
+//Default value for the area editor grid interval.
+const float DEF_PARTICLE_EDITOR_GRID_INTERVAL = 32.0f;
+
 //Default value for whether to show player input icons on the HUD.
 const bool DEF_SHOW_HUD_INPUT_ICONS = true;
 
