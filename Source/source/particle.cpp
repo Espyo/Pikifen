@@ -169,6 +169,40 @@ void particle::tick(const float delta_t) {
 
 
 /**
+ * @brief Sets the bitmap, according to the given information.
+ * This automatically manages bitmap un/loading and such.
+ * If the file name string is empty, sets to a nullptr bitmap
+ * (and still unloads the old bitmap).
+ *
+ * @param new_file_name File name of the bitmap.
+ * @param node If not nullptr, this will be used to report an error with,
+ * in case something happens.
+ */
+void particle::set_bitmap(
+    const string& new_file_name, data_node* node
+) {
+    if(new_file_name != file && bitmap) {
+        game.bitmaps.free(file);
+        bitmap = nullptr;
+    }
+
+    if(new_file_name.empty()) {
+        file.clear();
+        type = PARTICLE_TYPE_CIRCLE;
+        return;
+    }
+
+    if (new_file_name != file || !bitmap) {
+        bitmap = game.bitmaps.get(new_file_name, node, node != nullptr);
+    }
+
+    type = PARTICLE_TYPE_BITMAP;
+
+    file = new_file_name;
+}
+
+
+/**
  * @brief Constructs a new particle generator object.
  *
  * @param emission_interval Interval to spawn a new set of particles in,
@@ -310,7 +344,7 @@ void particle_generator::load_from_data_node(
     grs.set("emission_interval", emission_interval_float);
     grs.set("number", number_int);
     
-    prs.set("bitmap", base_particle.bitmap_str, &bitmap_node);
+    prs.set("bitmap", base_particle.file, &bitmap_node);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("gravity", base_particle.gravity);
@@ -323,7 +357,7 @@ void particle_generator::load_from_data_node(
         if(load_resources) {
             base_particle.bitmap =
                 game.bitmaps.get(
-                    base_particle.bitmap_str, bitmap_node
+                    base_particle.file, bitmap_node
                 );
         }
         base_particle.type = PARTICLE_TYPE_BITMAP;
@@ -371,7 +405,7 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("number", i2s(number)));
     node->add(new data_node("number_deviation", i2s(number_deviation)));
     data_node* bitmap_node = new data_node("base", "");
-    bitmap_node->add(new data_node("bitmap", base_particle.bitmap_str));
+    bitmap_node->add(new data_node("bitmap", base_particle.file));
     bitmap_node->add(new data_node("duration", f2s(base_particle.duration)));
     bitmap_node->add(new data_node("friction", f2s(base_particle.friction)));
     bitmap_node->add(new data_node("gravity", f2s(base_particle.gravity)));

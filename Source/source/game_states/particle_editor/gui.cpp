@@ -14,7 +14,7 @@
 #include "../../game.h"
 #include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
-
+#include "../../libs/imgui/imgui_stdlib.h"
 
 /**
  * @brief Opens the "load" dialog.
@@ -418,7 +418,7 @@ void particle_editor::process_gui_panel_item() {
         "Hold Shift to start from the beginning.",
         "Spacebar"
     );
-    //Duration value.
+    //Emission Interval value.
     if (
         ImGui::DragFloat(
             "Emission Interval", &loaded_gen.emission_interval, 0.0005, 0.0f, FLT_MAX
@@ -427,7 +427,328 @@ void particle_editor::process_gui_panel_item() {
         changes_mgr.mark_as_changed();
     }
     set_tooltip(
-        "How long this frame lasts for, in seconds.",
+        "How long between particle emissions, in seconds.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Number value.
+    int number = (int)loaded_gen.number;
+    if (
+        ImGui::DragInt(
+            "Number", &number, 1, 1, game.options.max_particles
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "How many particles are emitted per interval.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    loaded_gen.number = number;
+
+    //Number Deviation value.
+    int number_dev = (int)loaded_gen.number_deviation;
+    if (
+        ImGui::DragInt(
+            "Number deviation", &number_dev, 1, 0, game.options.max_particles
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The amount of particles emitted is changed by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    loaded_gen.number_deviation = number_dev;
+
+    //Base particle properties node.
+    if (saveable_tree_node("base", "Base Particle")) {
+
+        //Remove bitmap button.
+        if (
+            ImGui::ImageButton(
+                "removeBitmap",
+                editor_icons[EDITOR_ICON_REMOVE],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+            ) {
+            loaded_gen.base_particle.set_bitmap("");
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Remove the current bitmap"
+        );
+
+        ImGui::SameLine();
+        //Browse for bitmap button.
+        if (ImGui::Button("...")) {
+            FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
+            vector<string> f =
+                prompt_file_dialog_locked_to_folder(
+                    GRAPHICS_FOLDER_PATH,
+                    "Please choose the bitmap to get the sprites from.",
+                    "*.png",
+                    ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                    ALLEGRO_FILECHOOSER_PICTURES,
+                    &result, game.display
+                );
+
+            switch (result) {
+            case FILE_DIALOG_RESULT_WRONG_FOLDER: {
+                //File doesn't belong to the folder.
+                set_status("The chosen image is not in the graphics folder!", true);
+                break;
+            } case FILE_DIALOG_RESULT_CANCELED: {
+                //User canceled.
+                break;
+            } case FILE_DIALOG_RESULT_SUCCESS: {
+                loaded_gen.base_particle.set_bitmap(f[0]);
+                set_status("Picked an image successfully.");
+                changes_mgr.mark_as_changed();
+                break;
+            }
+            }
+        }
+        set_tooltip("Browse for a spritesheet file to use.");
+
+        //Spritesheet file name input.
+        string file_name = loaded_gen.base_particle.file;
+        ImGui::SameLine();
+        if (ImGui::InputText("File", &file_name)) {
+            loaded_gen.base_particle.set_bitmap(file_name);
+            set_status("Picked an image successfully.");
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "File name of the bitmap to use as a spritesheet, in the "
+            "Graphics folder. Extension included. e.g. "
+            "\"Large_Fly.png\""
+        );
+
+        //Duration value.
+        if (
+            ImGui::DragFloat(
+                "Duration", &loaded_gen.base_particle.duration, 0.01f, 0.01f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "How long each particle persists, in seconds.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Friction value.
+        if (
+            ImGui::DragFloat(
+                "Friction", &loaded_gen.base_particle.friction, 0.01f, 0, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Slowing factor applied to particles.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Gravity value.
+        if (
+            ImGui::DragFloat(
+                "Gravity", &loaded_gen.base_particle.gravity, 0.01f, -FLT_MAX, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Downards speed applied to particles.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Size grow speed value.
+        if (
+            ImGui::DragFloat(
+                "Size Grow Speed", &loaded_gen.base_particle.size_grow_speed, 0.01f, -FLT_MAX, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Increase size by this much per second.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Size value.
+        if (
+            ImGui::DragFloat(
+                "Size", &loaded_gen.base_particle.size, 0.01f, 0.01f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Inital particle size.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Speed value.
+        if (
+            ImGui::DragFloat2(
+                "Speed", (float*) &loaded_gen.base_particle.speed, 0.01f, -FLT_MAX, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Inital particle speed.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //particle tint value.
+        ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color;
+        if (
+            ImGui::ColorEdit4(
+                "Tint color", (float*)&particle_color,
+                ImGuiColorEditFlags_NoInputs
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+            loaded_gen.base_particle.color = particle_color;
+        }
+        set_tooltip(
+            "Particle's tint."
+        );
+
+        ImGui::TreePop();
+
+    }
+
+    //Duration deviation value.
+    if (
+        ImGui::DragFloat(
+            "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's lifespan can vary by this amount of seconds.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Friction deviation value.
+    if (
+        ImGui::DragFloat(
+            "Friction deviation", &loaded_gen.friction_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's friciton can vary by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Gravity deviation value.
+    if (
+        ImGui::DragFloat(
+            "Gravity deviation", &loaded_gen.gravity_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's gravity can vary by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Size deviation value.
+    if (
+        ImGui::DragFloat(
+            "Size deviation", &loaded_gen.size_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's size can vary by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Postion deviation value.
+    if (
+        ImGui::DragFloat2(
+            "Position deviation", (float*) &loaded_gen.pos_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's position can vary by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Speed deviation value.
+    if (
+        ImGui::DragFloat2(
+            "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "A particle's speed can vary by this amount.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Angle value.
+    if (
+        ImGui::DragFloat(
+            "Angle", &loaded_gen.angle, 0.01f, 0, 360
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The angle a particle is emitted at.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Angle deviation value.
+    if (
+        ImGui::DragFloat(
+            "Angle deviation", &loaded_gen.angle_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The angle a particle is emitted at can vary by this much.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Total speed value.
+    if (
+        ImGui::DragFloat(
+            "Total speed", &loaded_gen.total_speed, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The speed a particle is emitted at.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+
+    //Total speed value.
+    if (
+        ImGui::DragFloat(
+            "Total speed deviation", &loaded_gen.total_speed_deviation, 0.01f, 0, FLT_MAX
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The speed a particle is emitted at can vary by this much.",
         "", WIDGET_EXPLANATION_DRAG
     );
 }

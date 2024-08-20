@@ -112,7 +112,7 @@ struct particle {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Bitmap string
-    string bitmap_str = "";
+    string file = "";
 
     //Every second, speed is lost by this much.
     float friction = 1.0f;
@@ -162,6 +162,11 @@ struct particle {
     void tick(const float delta_t);
     void draw();
     
+    void set_bitmap(
+        const string& new_file_name, 
+        data_node* node = nullptr
+    );
+
 };
 
 
