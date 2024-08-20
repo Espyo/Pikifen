@@ -60,7 +60,7 @@ void particle_editor::draw_canvas() {
     
     //Grid.
     draw_grid(
-        game.options.gui_editor_grid_interval,
+        game.options.particle_editor_grid_interval,
         al_map_rgba(64, 64, 64, 84),
         al_map_rgba(64, 64, 64, 40)
     );
