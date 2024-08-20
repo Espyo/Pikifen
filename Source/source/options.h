@@ -98,6 +98,7 @@ extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
 extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
 extern const float DEF_MUSIC_VOLUME;
+extern const float DEF_PARTICLE_EDITOR_GRID_INTERVAL;
 extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
@@ -244,6 +245,9 @@ struct options_t {
     //Music volume (0 - 1).
     float music_volume = OPTIONS::DEF_MUSIC_VOLUME;
     
+    //Grid interval in the particle editor, in units.
+    float particle_editor_grid_interval = OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
+
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling = OPTIONS::DEF_SMOOTH_SCALING;
     

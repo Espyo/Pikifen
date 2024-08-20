@@ -20,7 +20,7 @@ namespace PARTICLE_EDITOR {
 
 //Possible grid intervals.
 const vector<float> GRID_INTERVALS =
-{1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
+{4.0f, 8.0f, 16.0f, 32.0f, 64.0f};
 
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
@@ -60,9 +60,13 @@ particle_editor::particle_editor() :
     );
     register_cmd(&particle_editor::load_cmd, "load");
     register_cmd(&particle_editor::quit_cmd, "quit");
+    register_cmd(&particle_editor::particle_playback_toggle_cmd, "play_animation");
+    register_cmd(
+        &particle_editor::leader_silhouette_toggle_cmd,
+        "leader_silhouette_toggle"
+    );
     register_cmd(&particle_editor::reload_cmd, "reload");
     register_cmd(&particle_editor::save_cmd, "save");
-    register_cmd(&particle_editor::snap_mode_cmd, "snap_mode");
     register_cmd(&particle_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset");
     register_cmd(&particle_editor::zoom_in_cmd, "zoom_in");
     register_cmd(&particle_editor::zoom_out_cmd, "zoom_out");
@@ -253,20 +257,20 @@ void particle_editor::pick_file(
 void particle_editor::grid_interval_decrease_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    float new_grid_interval = GUI_EDITOR::GRID_INTERVALS[0];
-    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); ++i) {
+    float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[0];
+    for(size_t i = 0; i < PARTICLE_EDITOR::GRID_INTERVALS.size(); ++i) {
         if(
-            GUI_EDITOR::GRID_INTERVALS[i] >=
-            game.options.gui_editor_grid_interval
+            PARTICLE_EDITOR::GRID_INTERVALS[i] >=
+            game.options.particle_editor_grid_interval
         ) {
             break;
         }
-        new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
+        new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor_grid_interval = new_grid_interval;
+    game.options.particle_editor_grid_interval = new_grid_interval;
     set_status(
         "Decreased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + "."
+        f2s(game.options.particle_editor_grid_interval) + "."
     );
 }
 
@@ -279,20 +283,20 @@ void particle_editor::grid_interval_decrease_cmd(float input_value) {
 void particle_editor::grid_interval_increase_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    float new_grid_interval = GUI_EDITOR::GRID_INTERVALS.back();
-    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
+    float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS.back();
+    for(int i = (int) (PARTICLE_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
-            GUI_EDITOR::GRID_INTERVALS[i] <=
-            game.options.gui_editor_grid_interval
+            PARTICLE_EDITOR::GRID_INTERVALS[i] <=
+            game.options.particle_editor_grid_interval
         ) {
             break;
         }
-        new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
+        new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor_grid_interval = new_grid_interval;
+    game.options.particle_editor_grid_interval = new_grid_interval;
     set_status(
         "Increased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + "."
+        f2s(game.options.particle_editor_grid_interval) + "."
     );
 }
 
@@ -359,26 +363,6 @@ void particle_editor::save_cmd(float input_value) {
     if(!save_file()) {
         return;
     }
-}
-
-
-/**
- * @brief Code to run for the snap mode command.
- *
- * @param input_value Value of the player input for the command.
- */
-void particle_editor::snap_mode_cmd(float input_value) {
-    if(input_value < 0.5f) return;
-    
-    game.options.gui_editor_snap = !game.options.gui_editor_snap;
-    string final_status_text = "Set snap mode to ";
-    if(game.options.gui_editor_snap) {
-        final_status_text += "nothing";
-    } else {
-        final_status_text += "grid";
-    }
-    final_status_text += ".";
-    set_status(final_status_text);
 }
 
 
@@ -463,7 +447,7 @@ void particle_editor::particle_playback_toggle_cmd(float input_value) {
  * or not.
  */
 void particle_editor::reset_cam(const bool instantaneous) {
-    center_camera(point(-100.0f, -100.0f), point(100.0f, 100.0f), instantaneous);
+    center_camera(point(-300.0f, -300.0f), point(300.0f, 300.0f), instantaneous);
 }
 
 
@@ -495,44 +479,6 @@ bool particle_editor::save_file() {
     }
     
     return false;
-}
-
-
-/**
- * @brief Snaps a point to the nearest available grid spot,
- * or keeps the point as is if Shift is pressed.
- *
- * @param p Point to snap.
- * @return The snapped point.
- */
-point particle_editor::snap_point(const point &p) {
-    point final_point = p;
-    bool do_snap = game.options.gui_editor_snap;
-    
-    if(is_ctrl_pressed) {
-        if(cur_transformation_widget.is_moving_center_handle()) {
-            final_point =
-                snap_point_to_axis(
-                    final_point, cur_transformation_widget.get_old_center()
-                );
-        }
-    }
-    
-    if(is_shift_pressed) {
-        do_snap = !do_snap;
-    }
-    
-    if(!do_snap) {
-        return final_point;
-    }
-    
-    return
-        point(
-            round(final_point.x / game.options.gui_editor_grid_interval) *
-            game.options.gui_editor_grid_interval,
-            round(final_point.y / game.options.gui_editor_grid_interval) *
-            game.options.gui_editor_grid_interval
-        );
 }
 
 

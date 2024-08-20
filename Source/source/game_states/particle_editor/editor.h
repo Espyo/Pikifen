@@ -105,7 +105,6 @@ private:
         const string &name, const string &category, const bool is_new
     );
     bool save_file();
-    point snap_point(const point &p);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -115,7 +114,6 @@ private:
     void quit_cmd(float input_value);
     void reload_cmd(float input_value);
     void save_cmd(float input_value);
-    void snap_mode_cmd(float input_value);
     void zoom_and_pos_reset_cmd(float input_value);
     void zoom_in_cmd(float input_value);
     void zoom_out_cmd(float input_value);

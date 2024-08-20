@@ -52,9 +52,6 @@ void particle_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         reset_cam(false);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
-        snap_mode_cmd(1.0f);
-        
     }
 }
 

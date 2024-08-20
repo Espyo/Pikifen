@@ -359,7 +359,7 @@ void particle_editor::process_gui_options_dialog() {
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %f", game.options.gui_editor_grid_interval
+            "Grid interval: %f", game.options.particle_editor_grid_interval
         );
         
         //Increase grid interval button.
@@ -879,8 +879,8 @@ void particle_editor::process_gui_status_bar() {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
-            box_string(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
-            box_string(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()
+            box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
+            box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()
         );
     }
 }
@@ -940,34 +940,8 @@ void particle_editor::process_gui_toolbar() {
         "Save the GUI into the file on disk.",
         "Ctrl + S"
     );
-    
-    //Snap mode button.
-    ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
-    string snap_mode_description;
-    if(game.options.gui_editor_snap) {
-        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
-        snap_mode_description = "grid. Holding Shift disables snapping.";
-    } else {
-        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_NOTHING];
-        snap_mode_description = "nothing. Holding Shift snaps to grid.";
-    }
-    
-    ImGui::SameLine(0, 16);
-    if(
-        ImGui::ImageButton(
-            "snapButton",
-            snap_mode_bmp,
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        snap_mode_cmd(1.0f);
-    }
-    set_tooltip(
-        "Current snap mode: " + snap_mode_description,
-        "X"
-    );
 
-    ImGui::SameLine();
+    ImGui::SameLine(0, 16);
     if (
         ImGui::ImageButton(
             "silhouetteButton",
