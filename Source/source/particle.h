@@ -111,6 +111,9 @@ struct particle {
     //Bitmap to use, if any.
     ALLEGRO_BITMAP* bitmap = nullptr;
     
+    //Bitmap string
+    string bitmap_str = "";
+
     //Every second, speed is lost by this much.
     float friction = 1.0f;
     
@@ -289,9 +292,11 @@ public:
         const particle &base_particle = particle(), const size_t number = 1
     );
     void tick(const float delta_t, particle_manager &manager);
+    void destroy();
     void emit(particle_manager &manager);
     void reset();
     void load_from_data_node(data_node* node, bool load_resources);
+    void save_to_data_node(data_node* node);
     
 private:
     

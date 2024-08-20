@@ -146,13 +146,13 @@ void particle_editor::process_gui_control_panel() {
     ImGui::Text("Current file: %s", file_name.c_str());
     
     //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    //ImGui::Dummy(ImVec2(0, 16));
     
     //Process the list of items.
-    process_gui_panel_items();
+    //process_gui_panel_items();
     
     //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    //ImGui::Dummy(ImVec2(0, 16));
     
     //Process the currently selected item.
     process_gui_panel_item();
@@ -401,84 +401,35 @@ void particle_editor::process_gui_options_dialog() {
  * @brief Processes the GUI item info panel for this frame.
  */
 void particle_editor::process_gui_panel_item() {
-    //TODO: remove???
-    /*
-    if(cur_item == INVALID) return;
-    
-    item* cur_item_ptr = &items[cur_item];
-    
-    if(cur_item_ptr->size.x == 0.0f) return;
-    
-    //Item's name text.
-    ImGui::Text("Item \"%s\" data:", cur_item_ptr->name.c_str());
-    
-    //Center values.
-    if(
-        ImGui::DragFloat2("Center", (float*) &cur_item_ptr->center, 0.10f)
-    ) {
-        changes_mgr.mark_as_changed();
-    }
-    set_tooltip(
-        "Center coordinates of the item. e.g. 32,100 is 32% of the\n"
-        "width horizontally and very bottom vertically.",
-        "",
-        WIDGET_EXPLANATION_DRAG
-    );
-    
-    //Size values.
-    if(
-        process_gui_size_widgets(
-            "Size", cur_item_ptr->size, 0.10f, false, false, 0.10f
+    if(!loaded_content_yet)
+        return;
+    //Play/pause button.
+    if (
+        ImGui::ImageButton(
+            "playButton",
+            generator_running ? editor_icons[EDITOR_ICON_STOP] : editor_icons[EDITOR_ICON_PLAY],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
-    ) {
+        ) {
+        particle_playback_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        "Play or pause the particle system.\n"
+        "Hold Shift to start from the beginning.",
+        "Spacebar"
+    );
+    //Duration value.
+    if (
+        ImGui::DragFloat(
+            "Emission Interval", &loaded_gen.emission_interval, 0.0005, 0.0f, FLT_MAX
+        )
+        ) {
         changes_mgr.mark_as_changed();
     }
     set_tooltip(
-        "Width and height of the item. e.g. 40,90 is 40% of the screen width,\n"
-        "and 90% of the screen height.",
-        "",
-        WIDGET_EXPLANATION_DRAG
+        "How long this frame lasts for, in seconds.",
+        "", WIDGET_EXPLANATION_DRAG
     );
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    point top_left(
-        cur_item_ptr->center.x - cur_item_ptr->size.x / 2.0f,
-        cur_item_ptr->center.y - cur_item_ptr->size.y / 2.0f
-    );
-    point bottom_right(
-        cur_item_ptr->center.x + cur_item_ptr->size.x / 2.0f,
-        cur_item_ptr->center.y + cur_item_ptr->size.y / 2.0f
-    );
-    bool update_from_corners = false;
-    
-    //Top-left coordinates values.
-    if(ImGui::DragFloat2("Top-left", (float*) &top_left, 0.10f)) {
-        update_from_corners = true;
-    }
-    
-    //Bottom-right coordinates values.
-    if(ImGui::DragFloat2("Bottom-right", (float*) &bottom_right, 0.10f)) {
-        update_from_corners = true;
-    }
-    
-    if(update_from_corners) {
-        point new_size(
-            bottom_right.x - top_left.x,
-            bottom_right.y - top_left.y
-        );
-        if(new_size.x > 0.0f && new_size.y > 0.0f) {
-            point new_center(
-                (top_left.x + bottom_right.x) / 2.0f,
-                (top_left.y + bottom_right.y) / 2.0f
-            );
-            cur_item_ptr->center = new_center;
-            cur_item_ptr->size = new_size;
-        }
-        changes_mgr.mark_as_changed();
-    }
-    */
 }
 
 
@@ -651,5 +602,20 @@ void particle_editor::process_gui_toolbar() {
     set_tooltip(
         "Current snap mode: " + snap_mode_description,
         "X"
+    );
+
+    ImGui::SameLine();
+    if (
+        ImGui::ImageButton(
+            "silhouetteButton",
+            editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+        ) {
+        leader_silhouette_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        "Toggle visibility of a leader silhouette.",
+        "Ctrl + P"
     );
 }

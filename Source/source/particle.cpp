@@ -18,6 +18,7 @@
 #include "mobs/mob.h"
 #include "utils/allegro_utils.h"
 #include "utils/geometry_utils.h"
+#include "utils/string_utils.h"
 
 
 /**
@@ -188,8 +189,12 @@ particle_generator::particle_generator(
     emission_timer(emission_interval) {
     
 }
-
-
+/**
+ * @brief Unloads.
+ */
+void particle_generator::destroy() {
+    
+}
 /**
  * @brief Emits the particles, regardless of the timer.
  *
@@ -300,13 +305,12 @@ void particle_generator::load_from_data_node(
     
     float emission_interval_float = 0.0f;
     size_t number_int = 1;
-    string bitmap_str;
     data_node* bitmap_node = nullptr;
     
     grs.set("emission_interval", emission_interval_float);
     grs.set("number", number_int);
     
-    prs.set("bitmap", bitmap_str, &bitmap_node);
+    prs.set("bitmap", base_particle.bitmap_str, &bitmap_node);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("gravity", base_particle.gravity);
@@ -319,7 +323,7 @@ void particle_generator::load_from_data_node(
         if(load_resources) {
             base_particle.bitmap =
                 game.bitmaps.get(
-                    bitmap_str, bitmap_node
+                    base_particle.bitmap_str, bitmap_node
                 );
         }
         base_particle.type = PARTICLE_TYPE_BITMAP;
@@ -354,6 +358,38 @@ void particle_generator::load_from_data_node(
             MOB_PARTICLE_GENERATOR_ID_STATUS +
             game.content.custom_particle_generators.size()
         );
+}
+
+
+void particle_generator::save_to_data_node(
+    data_node* node
+) {
+    //Content metadata.
+    save_metadata_to_data_node(node);
+
+    node->add(new data_node("emission_interval", f2s(emission_interval)));
+    node->add(new data_node("number", i2s(number)));
+    node->add(new data_node("number_deviation", i2s(number_deviation)));
+    data_node* bitmap_node = new data_node("base", "");
+    bitmap_node->add(new data_node("bitmap", base_particle.bitmap_str));
+    bitmap_node->add(new data_node("duration", f2s(base_particle.duration)));
+    bitmap_node->add(new data_node("friction", f2s(base_particle.friction)));
+    bitmap_node->add(new data_node("gravity", f2s(base_particle.gravity)));
+    bitmap_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
+    bitmap_node->add(new data_node("size", f2s(base_particle.size)));
+    bitmap_node->add(new data_node("speed", p2s(base_particle.speed)));
+    bitmap_node->add(new data_node("color", c2s(base_particle.color)));
+
+    node->add(new data_node("duration_deviation", f2s(duration_deviation)));
+    node->add(new data_node("friciton_deviation", f2s(friction_deviation)));
+    node->add(new data_node("gravity_deviation", f2s(gravity_deviation)));
+    node->add(new data_node("size_deviation", f2s(size_deviation)));
+    node->add(new data_node("pos_deviation", p2s(pos_deviation)));
+    node->add(new data_node("speed_deviation", p2s(speed_deviation)));
+    node->add(new data_node("angle", f2s(angle)));
+    node->add(new data_node("angle_deviation", f2s(angle_deviation)));
+    node->add(new data_node("total_speed", f2s(total_speed)));
+    node->add(new data_node("total_speed_deviation", f2s(total_speed_deviation)));
 }
 
 

@@ -65,7 +65,7 @@ void particle_editor::draw_canvas() {
         al_map_rgba(64, 64, 64, 40)
     );
     
-    //50%,50% marker.
+    //Center grid line.
     point cam_top_left_corner(0, 0);
     point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
     al_transform_coordinates(
@@ -85,16 +85,16 @@ void particle_editor::draw_canvas() {
         cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
-    
-    //Items.
-    int orig_clip_x = 0;
-    int orig_clip_y = 0;
-    int orig_clip_w = 0;
-    int orig_clip_h = 0;
-    al_get_clipping_rectangle(
-        &orig_clip_x, &orig_clip_y, &orig_clip_w, &orig_clip_h
-    );
 
+    if(leader_silhouette_visible) {
+        float x_offset = 32;
+
+        draw_bitmap(
+            game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+            point(-1, game.config.standard_leader_radius * 2.0f),
+            0, al_map_rgba(240, 240, 240, 160)
+        );
+    }
 
     vector<world_component> components;
     components.reserve(part_manager.get_count());
@@ -121,6 +121,7 @@ void particle_editor::draw_canvas() {
             c_ptr->particle_ptr->draw();
         }
     }
+
     //Finish up.
     al_reset_clipping_rectangle();
     al_use_transform(&game.identity_transform);

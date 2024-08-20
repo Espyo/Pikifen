@@ -41,7 +41,6 @@ const float ZOOM_MIN_LEVEL = 0.5f;
  * @brief Constructs a new GUI editor object.
  */
 particle_editor::particle_editor() :
-    loaded_gen(nullptr),
     load_dialog_picker(this) {
     
     zoom_max_level = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
@@ -99,11 +98,11 @@ void particle_editor::do_logic() {
     editor::do_logic_pre();
     
     process_gui();
-    if(loaded_gen) {
+    if(loaded_content_yet) {
         if(generator_running) {
-            loaded_gen->tick(game.delta_t, part_manager);
+            loaded_gen.tick(game.delta_t, part_manager);
             //If the particles are meant to be a burst, turn them off.
-            if(loaded_gen->emission_interval == 0)
+            if(loaded_gen.emission_interval == 0)
                 generator_running = false;
         }
         part_manager.tick_all(game.delta_t);
@@ -169,7 +168,7 @@ void particle_editor::load() {
     loaded_content_yet = false;
     must_recenter_cam = true;
     game.audio.set_current_song(PARTICLE_EDITOR::SONG_NAME, false);
-    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
+
     part_manager = particle_manager(game.options.max_particles);
     if(!auto_load_file.empty()) {
         file_name = auto_load_file;
@@ -197,29 +196,14 @@ void particle_editor::load_particle_generator(
         open_load_dialog();
         return;
     }
-    reader_setter rs(&file_node);
-    string gen_name;
-    rs.set("name", gen_name);
 
-    loaded_gen = &game.content.custom_particle_generators[gen_name];
-
-    if(!loaded_gen) {
-        set_status("Failed to load the file \"" + file_name + "\"!", true);
-        open_load_dialog();
-        return;
-    }
-
-
+    //TODO: potential memory leak?
+    loaded_gen.load_from_data_node(&file_node, true);
     changes_mgr.reset();
     loaded_content_yet = true;
     
-    //We could reset the camera now, but if the player enters the editor via
-    //the auto start maker tool, process_gui() won't have a chance
-    //to run before we load the file, and that function is what gives
-    //us the canvas coordinates necessary for camera centering.
-    //Let's flag the need for recentering so it gets handled when possible.
-    //must_recenter_cam = true;
     generator_running = true;
+    part_manager.clear();
     
     if(should_update_history) {
         update_history(file_name);
@@ -445,6 +429,34 @@ void particle_editor::zoom_out_cmd(float input_value) {
 
 
 /**
+ * @brief Code to run for the leader silhouette toggle command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void particle_editor::leader_silhouette_toggle_cmd(float input_value) {
+    if (input_value < 0.5f) return;
+
+    leader_silhouette_visible = !leader_silhouette_visible;
+    string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
+    set_status(state_str + " leader silhouette visibility.");
+}
+
+
+/**
+ * @brief Code to run for the particle playback toggle command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void particle_editor::particle_playback_toggle_cmd(float input_value) {
+    if (input_value < 0.5f) return;
+
+    generator_running = !generator_running;
+    string state_str = (generator_running ? "Enabled" : "Disabled");
+    set_status(state_str + " particle playback.");
+}
+
+
+/**
  * @brief Resets the camera.
  *
  * @param instantaneous Whether the camera moves to its spot instantaneously
@@ -461,16 +473,7 @@ void particle_editor::reset_cam(const bool instantaneous) {
  * @return Whether it succeded.
  */
 bool particle_editor::save_file() {
-    //TODO
-    /*
-    data_node* positions_node = file_node.get_child_by_name("positions");
-    for(size_t i = 0; i < items.size(); ++i) {
-        data_node* item_node = positions_node->get_child(i);
-        item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
-    }
-
-    string file_path = PARTICLE_GENERATOR_FILE_PATH + "/" + file_name;
-    
+    string file_path = PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name;   
     if(!file_node.save_file(file_path)) {
         show_message_box(
             nullptr, "Save failed!",
@@ -486,12 +489,12 @@ bool particle_editor::save_file() {
         set_status("Could not save the particle file!", true);
         return false;
     } else {
-        set_status("Saved GUI file successfully.");
+        set_status("Saved Particle file successfully.");
         changes_mgr.mark_as_saved();
         return true;
     }
-    */
-        return false;
+    
+    return false;
 }
 
 
@@ -538,5 +541,4 @@ point particle_editor::snap_point(const point &p) {
  */
 void particle_editor::unload() {
     editor::unload();
-    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
 }

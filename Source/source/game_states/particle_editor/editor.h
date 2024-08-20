@@ -55,7 +55,7 @@ private:
     //--- Members ---
     
     //Currently loaded item.
-    particle_generator* loaded_gen;
+    particle_generator loaded_gen;
     
     //Manager
     particle_manager part_manager;
@@ -81,6 +81,9 @@ private:
     //Is the particle generator currently active?
     bool generator_running = false;
     
+    //Is the leader silhouette visible?
+    bool leader_silhouette_visible = false;
+
     //Position of the reload widget.
     point reload_widget_pos;
     
@@ -116,6 +119,8 @@ private:
     void zoom_and_pos_reset_cmd(float input_value);
     void zoom_in_cmd(float input_value);
     void zoom_out_cmd(float input_value);
+    void leader_silhouette_toggle_cmd(float input_value);
+    void particle_playback_toggle_cmd(float input_value);
     void process_gui();
     void process_gui_control_panel();
     void process_gui_load_dialog();
