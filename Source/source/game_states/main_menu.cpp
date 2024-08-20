@@ -400,13 +400,15 @@ void main_menu_state::init_gui_make_page() {
     bool anim_editor_icon_left = icon_left("animation_editor", "false");
     bool area_editor_icon_left = icon_left("area_editor", "false");
     bool gui_editor_icon_left = icon_left("gui_editor", "false");
+    bool particle_editor_icon_left = icon_left("particle_editor", "false");
     
 #undef icon_left
     
     //Menu items.
     make_gui.register_coords("animation_editor", 58, 59,   60, 10);
     make_gui.register_coords("area_editor",      56, 71,   60, 10);
-    make_gui.register_coords("gui_editor",       54, 81.5, 60,  7);
+    make_gui.register_coords("gui_editor",       54, 80, 60,  7);
+    make_gui.register_coords("particle_editor",  54, 90, 60, 7);
     make_gui.register_coords("back",              9, 91,   14,  6);
     make_gui.register_coords("more",             91, 91,   14,  6);
     make_gui.register_coords("tooltip",          50, 96,   96,  4);
@@ -486,6 +488,31 @@ void main_menu_state::init_gui_make_page() {
     gui_ed_button->on_get_tooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
     make_gui.add_item(gui_ed_button, "gui_editor");
+
+    //Particle editor button.
+    button_gui_item* part_ed_button =
+        new button_gui_item("Particle editor", game.sys_assets.fnt_area_name);
+    part_ed_button->on_draw =
+        [=](const point& center, const point& size) {
+        draw_menu_button_icon(
+            MENU_ICON_GUI_EDITOR, center, size, particle_editor_icon_left
+        );
+        draw_button(
+            center, size,
+            part_ed_button->text, part_ed_button->font,
+            part_ed_button->color, part_ed_button->selected,
+            part_ed_button->get_juice_value()
+        );
+        };
+    part_ed_button->on_activate =
+        [](const point&) {
+        game.fade_mgr.start_fade(false, []() {
+            game.change_state(game.states.particle_ed);
+            });
+        };
+    part_ed_button->on_get_tooltip =
+        []() { return "Particle time (TODO)"; };
+    make_gui.add_item(part_ed_button, "particle_editor");
     
     //Back button.
     make_gui.back_item =
