@@ -54,13 +54,16 @@ private:
 
     //--- Members ---
     
-    //Currently selected item, or INVALID for none.
-    particle_generator cur_item;
+    //Currently loaded item.
+    particle_generator* loaded_gen;
     
+    //Manager
+    particle_manager part_manager;
+
     //File name of the file currently being edited.
     string file_name;
     
-    //Data node for the contents of this GUI file.
+    //Data node for the contents of this particle file.
     data_node file_node;
     
     //Picker info for the picker in the "load" dialog.
@@ -74,6 +77,9 @@ private:
     
     //Small hack -- does the camera need recentering in process_gui()?
     bool must_recenter_cam = false;
+
+    //Is the particle generator currently active?
+    bool generator_running = false;
     
     //Position of the reload widget.
     point reload_widget_pos;
@@ -89,7 +95,7 @@ private:
     
     void close_load_dialog();
     void close_options_dialog();
-    void load_file(const bool should_update_history);
+    void load_particle_generator(const bool should_update_history);
     void open_load_dialog();
     void open_options_dialog();
     void pick_file(

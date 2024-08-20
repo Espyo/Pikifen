@@ -21,7 +21,7 @@
  */
 void particle_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
-    vector<string> files = folder_to_vector(GUI_FOLDER_PATH, false);
+    vector<string> files = folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
     vector<picker_item> file_items;
     for(size_t f = 0; f < files.size(); ++f) {
         file_items.push_back(picker_item(files[f]));
@@ -172,7 +172,7 @@ void particle_editor::process_gui_load_dialog() {
     },
     [this](const string &name) {
         file_name = name;
-        load_file(true);
+        load_particle_generator(true);
         close_top_dialog();
     }
     );

@@ -10,8 +10,11 @@
 
 #include "editor.h"
 
+#include <algorithm>
+
 #include "../../game.h"
 #include "../../utils/allegro_utils.h"
+#include "../../mobs/mob_utils.h"
 
 
 /**
@@ -48,7 +51,7 @@ void particle_editor::draw_canvas() {
     );
     
     //Background.
-    al_clear_to_color(COLOR_BLACK);
+    al_clear_to_color(al_map_rgb(96, 128, 96));
     
     //Screen dimensions.
     al_draw_filled_rectangle(
@@ -63,15 +66,24 @@ void particle_editor::draw_canvas() {
     );
     
     //50%,50% marker.
+    point cam_top_left_corner(0, 0);
+    point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &cam_top_left_corner.x, &cam_top_left_corner.y
+    );
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+    );
+
     al_draw_line(
-        0.0f, 50.0f, 100.0f, 50.0f,
-        al_map_rgba(208, 208, 224, 84),
-        1.0f / game.cam.zoom
+        0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
+        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
     al_draw_line(
-        50.0f, 0.0f, 50.0f, 100.0f,
-        al_map_rgba(208, 208, 224, 84),
-        1.0f / game.cam.zoom
+        cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
+        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
     
     //Items.
@@ -82,70 +94,33 @@ void particle_editor::draw_canvas() {
     al_get_clipping_rectangle(
         &orig_clip_x, &orig_clip_y, &orig_clip_w, &orig_clip_h
     );
-    //TODO add particle simulation
-    /*
-    for(size_t i = 0; i < items.size(); ++i) {
-        if(items[i].size.x == 0.0f) continue;
-        
-        draw_filled_rounded_rectangle(
-            items[i].center,
-            items[i].size,
-            8.0f / game.cam.zoom,
-            al_map_rgba(224, 224, 224, 64)
-        );
-        
-        float clip_x = items[i].center.x - items[i].size.x / 2.0f;
-        float clip_y = items[i].center.y - items[i].size.y / 2.0f;
-        al_transform_coordinates(
-            &game.world_to_screen_transform, &clip_x, &clip_y
-        );
-        float clip_w = items[i].size.x * game.cam.zoom;
-        float clip_h = items[i].size.y * game.cam.zoom;
-        set_combined_clipping_rectangles(
-            orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h,
-            clip_x, clip_y, clip_w, clip_h
-        );
-        draw_scaled_text(
-            game.sys_assets.fnt_builtin,
-            al_map_rgb(40, 40, 96),
-            point(
-                (items[i].center.x - items[i].size.x / 2.0f) +
-                (4.0f / game.cam.zoom),
-                (items[i].center.y - items[i].size.y / 2.0f) +
-                (4.0f / game.cam.zoom)
-            ),
-            point(
-                1.0f / game.cam.zoom,
-                1.0f / game.cam.zoom
-            ),
-            ALLEGRO_ALIGN_LEFT,
-            TEXT_VALIGN_MODE_TOP,
-            items[i].name
-        );
-        al_set_clipping_rectangle(
-            orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h
-        );
-        
-        if(cur_item != i) {
-            draw_rounded_rectangle(
-                items[i].center,
-                items[i].size,
-                8.0f / game.cam.zoom,
-                al_map_rgb(224, 224, 224),
-                2.0f / game.cam.zoom
-            );
+
+
+    vector<world_component> components;
+    components.reserve(part_manager.get_count());
+    //Particles.
+    part_manager.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
+
+    //Time to draw!
+    for (size_t c = 0; c < components.size(); ++c) {
+        components[c].nr = c;
+    }
+
+    sort(
+        components.begin(), components.end(),
+        [](const world_component& c1, const world_component& c2) -> bool {
+            if (c1.z == c2.z) {
+                return c1.nr < c2.nr;
+            }
+            return c1.z < c2.z;
+        }
+    );
+    for (size_t c = 0; c < components.size(); ++c) {
+        world_component* c_ptr = &components[c];
+        if (c_ptr->particle_ptr) {
+            c_ptr->particle_ptr->draw();
         }
     }
-    
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
-        cur_transformation_widget.draw(
-            &items[cur_item].center,
-            &items[cur_item].size,
-            nullptr,
-            1.0f / game.cam.zoom
-        );
-    }
-    */
     //Finish up.
     al_reset_clipping_rectangle();
     al_use_transform(&game.identity_transform);

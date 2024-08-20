@@ -29,7 +29,7 @@ const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
 const string SONG_NAME = "editors";
 
 //Maximum zoom level possible in the editor.
-const float ZOOM_MAX_LEVEL = 64.0f;
+const float ZOOM_MAX_LEVEL = 64;
 
 //Minimum zoom level possible in the editor.
 const float ZOOM_MIN_LEVEL = 0.5f;
@@ -41,6 +41,7 @@ const float ZOOM_MIN_LEVEL = 0.5f;
  * @brief Constructs a new GUI editor object.
  */
 particle_editor::particle_editor() :
+    loaded_gen(nullptr),
     load_dialog_picker(this) {
     
     zoom_max_level = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
@@ -98,6 +99,16 @@ void particle_editor::do_logic() {
     editor::do_logic_pre();
     
     process_gui();
+    if(loaded_gen) {
+        if(generator_running) {
+            loaded_gen->tick(game.delta_t, part_manager);
+            //If the particles are meant to be a burst, turn them off.
+            if(loaded_gen->emission_interval == 0)
+                generator_running = false;
+        }
+        part_manager.tick_all(game.delta_t);
+    }
+
     
     editor::do_logic_post();
 }
@@ -112,7 +123,7 @@ void particle_editor::do_logic() {
 void particle_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
-    game.states.gui_ed->draw_canvas();
+    game.states.particle_ed->draw_canvas();
 }
 
 
@@ -158,10 +169,11 @@ void particle_editor::load() {
     loaded_content_yet = false;
     must_recenter_cam = true;
     game.audio.set_current_song(PARTICLE_EDITOR::SONG_NAME, false);
-    
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
+    part_manager = particle_manager(game.options.max_particles);
     if(!auto_load_file.empty()) {
         file_name = auto_load_file;
-        load_file(true);
+        load_particle_generator(true);
     } else {
         open_load_dialog();
     }
@@ -174,35 +186,30 @@ void particle_editor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void particle_editor::load_file(
+void particle_editor::load_particle_generator(
     const bool should_update_history
 ) {
     file_node = data_node(PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name);
     
+
     if(!file_node.file_was_opened) {
         set_status("Failed to load the file \"" + file_name + "\"!", true);
         open_load_dialog();
         return;
     }
-    
-    //TODO: Load particle generator
-    /*
-    data_node* positions_node = file_node.get_child_by_name("positions");
-    size_t n_items = positions_node->get_nr_of_children();
-    
-    for(size_t i = 0; i < n_items; ++i) {
-        item new_item;
-        data_node* item_node = positions_node->get_child(i);
-        new_item.name = item_node->name;
-        vector<string> words = split(item_node->value);
-        if(words.size() != 4) continue;
-        new_item.center.x = s2f(words[0]);
-        new_item.center.y = s2f(words[1]);
-        new_item.size.x = s2f(words[2]);
-        new_item.size.y = s2f(words[3]);
-        items.push_back(new_item);
+    reader_setter rs(&file_node);
+    string gen_name;
+    rs.set("name", gen_name);
+
+    loaded_gen = &game.content.custom_particle_generators[gen_name];
+
+    if(!loaded_gen) {
+        set_status("Failed to load the file \"" + file_name + "\"!", true);
+        open_load_dialog();
+        return;
     }
-    */
+
+
     changes_mgr.reset();
     loaded_content_yet = true;
     
@@ -211,7 +218,8 @@ void particle_editor::load_file(
     //to run before we load the file, and that function is what gives
     //us the canvas coordinates necessary for camera centering.
     //Let's flag the need for recentering so it gets handled when possible.
-    must_recenter_cam = true;
+    //must_recenter_cam = true;
+    generator_running = true;
     
     if(should_update_history) {
         update_history(file_name);
@@ -248,7 +256,7 @@ void particle_editor::pick_file(
     const string &name, const string &category, const bool is_new
 ) {
     file_name = name;
-    load_file(true);
+    load_particle_generator(true);
     close_top_dialog();
 }
 
@@ -350,7 +358,7 @@ void particle_editor::reload_cmd(float input_value) {
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_file(false); },
+    [this] () { load_particle_generator(false); },
     std::bind(&particle_editor::save_file, this)
     );
 }
@@ -443,7 +451,7 @@ void particle_editor::zoom_out_cmd(float input_value) {
  * or not.
  */
 void particle_editor::reset_cam(const bool instantaneous) {
-    center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
+    center_camera(point(-100.0f, -100.0f), point(100.0f, 100.0f), instantaneous);
 }
 
 
@@ -530,4 +538,5 @@ point particle_editor::snap_point(const point &p) {
  */
 void particle_editor::unload() {
     editor::unload();
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, true);
 }
