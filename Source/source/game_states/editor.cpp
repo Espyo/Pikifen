@@ -1811,9 +1811,9 @@ void editor::update_style() {
         colors[ImGuiCol_BorderShadow] =
             ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
         colors[ImGuiCol_FrameBg] =
-            ImVec4(pri.r * 0.4f, pri.g * 0.4f, pri.b * 0.4f, 0.54f);
+            ImVec4(sec.r * 0.4f, sec.g * 0.4f, sec.b * 0.4f, 0.54f);
         colors[ImGuiCol_FrameBgHovered] =
-            ImVec4(pri.r * 1.4f, pri.g * 1.4f, pri.b * 1.4f, 0.40f);
+            ImVec4(sec.r * 1.4f, sec.g * 1.4f, sec.b * 1.4f, 0.40f);
         colors[ImGuiCol_FrameBgActive] =
             ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 0.67f);
         colors[ImGuiCol_TitleBg] =
