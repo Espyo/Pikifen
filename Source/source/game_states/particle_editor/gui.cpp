@@ -574,16 +574,14 @@ void particle_editor::process_gui_panel_item() {
                     set_tooltip(
                         "Particle's tint."
                     );
-                    if(c == 0 || c == loaded_gen.base_particle.color.keyframe_count() - 1)
+                    if(c == 0)
                         continue;
                     ImGui::SameLine();
                     float time = loaded_gen.base_particle.color.get_keyframe(c).first;
                     string timeName = "Time " + i2s(c + 1);
                     if (
                         ImGui::DragFloat(
-                            timeName.c_str(), &time, 0.01f, 
-                            loaded_gen.base_particle.color.get_keyframe(c - 1).first, 
-                            loaded_gen.base_particle.color.get_keyframe(c + 1).first
+                            timeName.c_str(), &time, 0.01f, 0, 1
                         )
                         ) {
                         changes_mgr.mark_as_changed();

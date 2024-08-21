@@ -346,18 +346,12 @@ void particle_generator::load_from_data_node(
         ALLEGRO_COLOR color = s2c(c_node->value);
 
         if (c == 0) {
-            //First value has time of 0
             ki_c.set_keyframe_value(0, color);
-        }
-        else if(c == color_node->get_nr_of_children() - 1) {
-            //Last value has time of 1
-            ki_c.add(1, color, EASE_METHOD_NONE);
         }
         else {
             ki_c.add(s2f(c_node->name), color, EASE_METHOD_NONE);
         }
     }
-
     base_particle.color = ki_c;
     
     if(bitmap_node) {
