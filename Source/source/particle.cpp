@@ -420,8 +420,8 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("size_deviation", f2s(size_deviation)));
     node->add(new data_node("pos_deviation", p2s(pos_deviation)));
     node->add(new data_node("speed_deviation", p2s(speed_deviation)));
-    node->add(new data_node("angle", f2s(angle)));
-    node->add(new data_node("angle_deviation", f2s(angle_deviation)));
+    node->add(new data_node("angle", f2s(rad_to_deg(angle))));
+    node->add(new data_node("angle_deviation", f2s(rad_to_deg(angle_deviation))));
     node->add(new data_node("total_speed", f2s(total_speed)));
     node->add(new data_node("total_speed_deviation", f2s(total_speed_deviation)));
 }

@@ -447,7 +447,7 @@ void particle_editor::process_gui_panel_item() {
             int number_dev = (int)loaded_gen.number_deviation;
             if (
                 ImGui::DragInt(
-                    "Deviation", &number_dev, 1, 0, game.options.max_particles
+                    "Number deviation", &number_dev, 1, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -462,7 +462,7 @@ void particle_editor::process_gui_panel_item() {
             //Postion deviation value.
             if (
                 ImGui::DragFloat2(
-                    "Position deviation", (float*)&loaded_gen.pos_deviation, 0.01f, 0, FLT_MAX
+                    "Position deviation", (float*)&loaded_gen.pos_deviation, 0.5f, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -586,7 +586,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.size_deviation, 0.01f, 0, FLT_MAX
+                    "Size deviation", &loaded_gen.size_deviation, 0.01f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -615,7 +615,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.duration_deviation, 0.01f, 0, FLT_MAX
+                    "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -636,7 +636,7 @@ void particle_editor::process_gui_panel_item() {
             //Friction value.
             if (
                 ImGui::DragFloat(
-                    "Friction", &loaded_gen.base_particle.friction, 0.01f, 0, FLT_MAX
+                    "Friction", &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -651,7 +651,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.friction_deviation, 0.01f, 0, FLT_MAX
+                    "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -665,7 +665,7 @@ void particle_editor::process_gui_panel_item() {
             //Gravity value.
             if (
                 ImGui::DragFloat(
-                    "Gravity", &loaded_gen.base_particle.gravity, 0.01f, -FLT_MAX, FLT_MAX
+                    "Gravity", &loaded_gen.base_particle.gravity, 1, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -680,7 +680,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.gravity_deviation, 0.01f, 0, FLT_MAX
+                    "Gravity deviation", &loaded_gen.gravity_deviation, 0.5f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -694,7 +694,7 @@ void particle_editor::process_gui_panel_item() {
             //Speed value.
             if (
                 ImGui::DragFloat2(
-                    "Speed", (float*)&loaded_gen.base_particle.speed, 0.01f, -FLT_MAX, FLT_MAX
+                    "Speed", (float*)&loaded_gen.base_particle.speed, 1, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -709,7 +709,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(150);
             if (
                 ImGui::DragFloat2(
-                    "Deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0, FLT_MAX
+                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -721,9 +721,10 @@ void particle_editor::process_gui_panel_item() {
             ImGui::Unindent();
 
             //Angle value.
+            float angle = rad_to_deg(loaded_gen.angle);
             if (
                 ImGui::DragFloat(
-                    "Angle", &loaded_gen.angle, 0.01f, 0, 360
+                    "Angle", &angle, 1, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -732,13 +733,17 @@ void particle_editor::process_gui_panel_item() {
                 "The angle a particle is emitted at.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+            if (angle < 0)
+                angle += 360;
+            loaded_gen.angle = deg_to_rad(fmodf(angle, 360));
 
             ImGui::Indent();
             //Angle deviation value.
+            float angle_deviation = rad_to_deg(loaded_gen.angle_deviation);
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.angle_deviation, 0.01f, 0, FLT_MAX
+                    "Angle deviation", &angle_deviation, 1, 0, 360
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -747,13 +752,14 @@ void particle_editor::process_gui_panel_item() {
                 "The angle a particle is emitted at can vary by this much.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+            loaded_gen.angle_deviation = deg_to_rad(angle_deviation);
             ImGui::Unindent();
 
 
             //Total speed value.
             if (
                 ImGui::DragFloat(
-                    "Total speed", &loaded_gen.total_speed, 0.01f, 0, FLT_MAX
+                    "Total speed", &loaded_gen.total_speed, 1, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -768,7 +774,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Deviation", &loaded_gen.total_speed_deviation, 0.01f, 0, FLT_MAX
+                    "Speed deviation", &loaded_gen.total_speed_deviation, 0.5f, 0, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
