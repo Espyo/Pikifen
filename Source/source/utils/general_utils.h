@@ -15,6 +15,7 @@
 
 #include "geometry_utils.h"
 #include "math_utils.h"
+#include "allegro_utils.h"
 
 using std::string;
 using std::vector;
@@ -46,17 +47,41 @@ using std::vector;
  * @brief A struct that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  */
+template<typename T>
 struct keyframe_interpolator {
 
     public:
     
     //--- Function declarations ---
     
-    float get(const float t);
+    T get(const float t) {
+        if (t < 0.0f) return keyframe_values[0];
+
+        for (size_t k = 1; k < keyframe_times.size(); ++k) {
+            if (t <= keyframe_times[k]) {
+                float delta_t = keyframe_times[k] - keyframe_times[k - 1];
+                float relative_t = t - keyframe_times[k - 1];
+                float ratio = relative_t / delta_t;
+                ratio = ease(keyframe_eases[k], ratio);
+                return interpolate(keyframe_values[k - 1], keyframe_values[k], ratio);
+            }
+        }
+
+        return keyframe_values.back();
+    }
     void add(
-        const float t, const float value, EASING_METHOD ease = EASE_METHOD_NONE
-    );
-    explicit keyframe_interpolator(const float initial_value);
+        const float t, const T value, EASING_METHOD ease = EASE_METHOD_NONE
+    ) {
+        keyframe_times.push_back(t);
+        keyframe_values.push_back(value);
+        keyframe_eases.push_back(ease);
+    }
+    explicit keyframe_interpolator(const T initial_value) {
+        keyframe_times.push_back(0.0f);
+        keyframe_values.push_back(initial_value);
+        keyframe_eases.push_back(EASE_METHOD_NONE);
+    }
+;
     
     private:
     
@@ -66,11 +91,17 @@ struct keyframe_interpolator {
     vector<float> keyframe_times;
     
     //Keyframe values.
-    vector<float> keyframe_values;
+    vector<T> keyframe_values;
     
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;
     
+    float interpolate(float v1, float v2, float time) {
+        return v1 + (v2 - v1) * time;
+    }
+    ALLEGRO_COLOR interpolate(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2, float time) {
+        return interpolate_color(time, 0, 1, c1, c2);
+    }
 };
 
 
