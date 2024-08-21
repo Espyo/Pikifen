@@ -540,20 +540,74 @@ void particle_editor::process_gui_panel_item() {
                 "\"Large_Fly.png\""
             );
 
-            //Particle tint value.
-            ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color;
-            if (
-                ImGui::ColorEdit4(
-                    "Tint color", (float*)&particle_color,
-                    ImGuiColorEditFlags_NoInputs
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-                loaded_gen.base_particle.color = particle_color;
+            if(saveable_tree_node("particleColors", "Color")) {
+                for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
+                    if (c != 0) {
+                        string btnLabel = "colorDeleteButton" + i2s(c);
+                        if (
+                            ImGui::ImageButton(
+                                btnLabel.c_str(),
+                                editor_icons[EDITOR_ICON_REMOVE],
+                                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                            )
+                            ) {
+                            loaded_gen.base_particle.color.remove(c);
+                            continue;
+                        }
+                        set_tooltip(
+                            "Add a new color to the list of colors.\n"
+                            "Click to open a pop-up for you to choose from."
+                        );
+                        ImGui::SameLine();
+                    }
+                    ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color.get_keyframe(c).second;
+                    string colorName = "Tint " + i2s(c + 1);
+                    if (
+                        ImGui::ColorEdit4(
+                            colorName.c_str(), (float*)&particle_color,
+                            ImGuiColorEditFlags_NoInputs
+                        )
+                        ) {
+                        changes_mgr.mark_as_changed();
+                        loaded_gen.base_particle.color.set_keyframe_value(c, particle_color);
+                    }
+                    set_tooltip(
+                        "Particle's tint."
+                    );
+                    if(c == 0)
+                        continue;
+                    ImGui::SameLine();
+                    float time = loaded_gen.base_particle.color.get_keyframe(c).first;
+                    string timeName = "Time " + i2s(c + 1);
+                    if (
+                        ImGui::DragFloat(
+                            timeName.c_str(), &time, 0.01f, 0, 1
+                        )
+                        ) {
+                        changes_mgr.mark_as_changed();
+                        loaded_gen.base_particle.color.set_keyframe_time(c, time);
+                    }
+                    set_tooltip(
+                        "Inital particle size.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                }
+                //Hitbox hazard addition button.
+                if (
+                    ImGui::ImageButton(
+                        "colorAddButton",
+                        editor_icons[EDITOR_ICON_ADD],
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                    )
+                    ) {
+                    loaded_gen.base_particle.color.add(1, COLOR_WHITE);
+                }
+                set_tooltip(
+                    "Add a new color to the list of colors.\n"
+                    "Click to open a pop-up for you to choose from."
+                );
+                ImGui::TreePop();
             }
-            set_tooltip(
-                "Particle's tint."
-            );
 
             //Size value.
             if (

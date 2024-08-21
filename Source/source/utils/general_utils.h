@@ -47,14 +47,21 @@ using std::vector;
  * @brief A struct that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  */
-template<typename T>
+
+template<typename inter_t>
 struct keyframe_interpolator {
 
     public:
     
     //--- Function declarations ---
     
-    T get(const float t) {
+    explicit keyframe_interpolator(const inter_t initial_value) {
+        keyframe_times.push_back(0.0f);
+        keyframe_values.push_back(initial_value);
+        keyframe_eases.push_back(EASE_METHOD_NONE);
+    };
+
+    inter_t get(const float t) {
         if (t < 0.0f) return keyframe_values[0];
 
         for (size_t k = 1; k < keyframe_times.size(); ++k) {
@@ -70,19 +77,33 @@ struct keyframe_interpolator {
         return keyframe_values.back();
     }
     void add(
-        const float t, const T value, EASING_METHOD ease = EASE_METHOD_NONE
+        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE
     ) {
         keyframe_times.push_back(t);
         keyframe_values.push_back(value);
         keyframe_eases.push_back(ease);
     }
-    explicit keyframe_interpolator(const T initial_value) {
-        keyframe_times.push_back(0.0f);
-        keyframe_values.push_back(initial_value);
-        keyframe_eases.push_back(EASE_METHOD_NONE);
+
+    void remove(int idx) {
+        keyframe_times.erase(keyframe_times.begin() + idx);
+        keyframe_values.erase(keyframe_values.begin() + idx);
+        keyframe_eases.erase(keyframe_eases.begin() + idx);
     }
-;
-    
+
+    int keyframe_count() { return keyframe_times.size(); }
+
+    std::pair<float, inter_t> get_keyframe(int idx) {
+        return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
+    }
+
+    void set_keyframe_value(int idx, inter_t value) {
+        keyframe_values[idx] = value;
+    }
+
+    void set_keyframe_time(int idx, float time) {
+        keyframe_times[idx] = time;
+    }
+
     private:
     
     //--- Members ---
@@ -91,7 +112,7 @@ struct keyframe_interpolator {
     vector<float> keyframe_times;
     
     //Keyframe values.
-    vector<T> keyframe_values;
+    vector<inter_t> keyframe_values;
     
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;

@@ -42,8 +42,9 @@ particle::particle(
     pos(pos),
     z(z),
     size(size),
-    priority(priority) {
-    
+    priority(priority),
+    color(COLOR_WHITE){
+
 }
 
 
@@ -51,6 +52,7 @@ particle::particle(
  * @brief Draws this particle onto the world.
  */
 void particle::draw() {
+    ALLEGRO_COLOR target_color = color.get((duration - time) / duration);
     switch(type) {
     case PARTICLE_TYPE_SQUARE: {
         al_draw_filled_rectangle(
@@ -58,11 +60,7 @@ void particle::draw() {
             pos.y - size * 0.5,
             pos.x + size * 0.5,
             pos.y + size * 0.5,
-            change_alpha(
-                color,
-                (time / duration) *
-                color.a * 255
-            )
+            target_color
         );
         break;
         
@@ -70,34 +68,21 @@ void particle::draw() {
         al_draw_filled_circle(
             pos.x, pos.y,
             size * 0.5,
-            change_alpha(
-                color,
-                (time / duration) *
-                color.a * 255
-            )
+            target_color
         );
         break;
         
     } case PARTICLE_TYPE_BITMAP: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
-            0, change_alpha(
-                color,
-                (time / duration) *
-                color.a * 255
-            )
+            0, target_color
         );
         break;
         
     } case PARTICLE_TYPE_PIKMIN_SPIRIT: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
-            0, change_alpha(
-                color,
-                fabs(
-                    sin((time / duration) * TAU / 2)
-                ) * color.a * 255
-            )
+            0, target_color
         );
         break;
         
@@ -108,7 +93,7 @@ void particle::draw() {
             point(pos.x + s * 16, pos.y),
             point(size, -1), s * TAU / 2,
             change_alpha(
-                color, fabs(s) * color.a * 255
+                target_color, fabs(s) * target_color.a * 255
             )
         );
         break;
@@ -122,7 +107,7 @@ void particle::draw() {
         
         draw_bitmap(
             bitmap, pos, point(s, s),
-            0, change_alpha(color, opacity)
+            0, change_alpha(target_color, opacity)
         );
         break;
         
@@ -135,7 +120,7 @@ void particle::draw() {
         
         draw_bitmap(
             bitmap, pos, point(s, s),
-            0, change_alpha(color, opacity)
+            0, change_alpha(target_color, opacity)
         );
         break;
     }
@@ -339,7 +324,9 @@ void particle_generator::load_from_data_node(
     
     float emission_interval_float = 0.0f;
     size_t number_int = 1;
+
     data_node* bitmap_node = nullptr;
+    data_node* color_node = p_node->get_child_by_name("color");;
     
     grs.set("emission_interval", emission_interval_float);
     grs.set("number", number_int);
@@ -351,7 +338,21 @@ void particle_generator::load_from_data_node(
     prs.set("size_grow_speed", base_particle.size_grow_speed);
     prs.set("size", base_particle.size);
     prs.set("speed", base_particle.speed);
-    prs.set("color", base_particle.color);
+
+
+    keyframe_interpolator ki_c(COLOR_WHITE);
+    for(size_t c = 0; c < color_node->get_nr_of_children(); c++) {
+        data_node* c_node = color_node->get_child(c);
+        ALLEGRO_COLOR color = s2c(c_node->value);
+
+        if (c == 0) {
+            ki_c.set_keyframe_value(0, color);
+        }
+        else {
+            ki_c.add(s2f(c_node->name), color, EASE_METHOD_NONE);
+        }
+    }
+    base_particle.color = ki_c;
     
     if(bitmap_node) {
         if(load_resources) {
@@ -412,7 +413,13 @@ void particle_generator::save_to_data_node(
     bitmap_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
     bitmap_node->add(new data_node("size", f2s(base_particle.size)));
     bitmap_node->add(new data_node("speed", p2s(base_particle.speed)));
-    bitmap_node->add(new data_node("color", c2s(base_particle.color)));
+
+    data_node* color_node = new data_node("color", "");
+
+    for (size_t c = 0; c < base_particle.color.keyframe_count(); c++) {
+        auto keyframe = base_particle.color.get_keyframe(c);
+        color_node->add(new data_node(f2s(keyframe.first), c2s(keyframe.second)));
+    }
 
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
     node->add(new data_node("friciton_deviation", f2s(friction_deviation)));

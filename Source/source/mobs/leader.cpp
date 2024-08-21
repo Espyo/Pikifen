@@ -152,10 +152,14 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         particle p;
         unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
-        p.color.r = WHISTLE::DOT_COLORS[color_idx][0] / 255.0f;
-        p.color.g = WHISTLE::DOT_COLORS[color_idx][1] / 255.0f;
-        p.color.b = WHISTLE::DOT_COLORS[color_idx][2] / 255.0f;
-        p.color.a = LEADER::SWARM_PARTICLE_ALPHA;
+        ALLEGRO_COLOR c = al_map_rgba(
+            WHISTLE::DOT_COLORS[color_idx][0] / 255.0f,
+            WHISTLE::DOT_COLORS[color_idx][1] / 255.0f,
+            WHISTLE::DOT_COLORS[color_idx][2] / 255.0f,
+            LEADER::SWARM_PARTICLE_ALPHA
+        );
+        p.color.add(0, c);
+        p.color.add(1, change_alpha(c,0));
         p.duration =
             randomf(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
@@ -549,10 +553,16 @@ void leader::dismiss() {
         particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
-        par.color.r = color_idx[0] / 255.0f;
-        par.color.g = color_idx[1] / 255.0f;
-        par.color.b = color_idx[2] / 255.0f;
-        par.color.a = LEADER::DISMISS_PARTICLE_ALPHA;
+
+        ALLEGRO_COLOR c = al_map_rgba(
+            color_idx[0] / 255.0f,
+            color_idx[1] / 255.0f,
+            color_idx[2] / 255.0f,
+            LEADER::DISMISS_PARTICLE_ALPHA
+        );
+
+        par.color.add(0, c);
+        par.color.add(1, change_alpha(c,0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
             randomf(
@@ -811,7 +821,8 @@ void leader::start_throw_trail() {
         radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
-    throw_p.color = change_alpha(type->main_color, 128);
+    throw_p.color.add(0, change_alpha(type->main_color, 128));
+    throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;

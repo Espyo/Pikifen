@@ -19,6 +19,8 @@
 #include "utils/geometry_utils.h"
 #include "world_component.h"
 
+#include "utils/general_utils.h"
+
 
 using std::vector;
 
@@ -96,6 +98,7 @@ enum MOB_PARTICLE_GENERATOR_ID {
  * There are several different types, which
  * change the way they look, how they behave over time, etc.
  */
+
 struct particle {
 
     //--- Members ---
@@ -110,7 +113,7 @@ struct particle {
     
     //Bitmap to use, if any.
     ALLEGRO_BITMAP* bitmap = nullptr;
-    
+
     //Bitmap string
     string file = "";
 
@@ -141,7 +144,7 @@ struct particle {
     point speed;
     
     //Current color.
-    ALLEGRO_COLOR color = COLOR_WHITE;
+    keyframe_interpolator<ALLEGRO_COLOR> color;
     
     //Other stuff.
     
@@ -191,6 +194,7 @@ public:
     );
     size_t get_count() const;
     void tick_all(const float delta_t);
+
     
 private:
 
@@ -302,7 +306,7 @@ public:
     void reset();
     void load_from_data_node(data_node* node, bool load_resources);
     void save_to_data_node(data_node* node);
-    
+
 private:
     
     //--- Members ---
