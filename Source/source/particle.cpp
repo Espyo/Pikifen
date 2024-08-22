@@ -347,6 +347,7 @@ void particle_generator::load_from_data_node(
 
         if (c == 0) {
             ki_c.set_keyframe_value(0, color);
+            ki_c.set_keyframe_time(0, s2f(c_node->name));
         }
         else {
             ki_c.add(s2f(c_node->name), color, EASE_METHOD_NONE);
@@ -405,16 +406,20 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("emission_interval", f2s(emission_interval)));
     node->add(new data_node("number", i2s(number)));
     node->add(new data_node("number_deviation", i2s(number_deviation)));
-    data_node* bitmap_node = new data_node("base", "");
-    bitmap_node->add(new data_node("bitmap", base_particle.file));
-    bitmap_node->add(new data_node("duration", f2s(base_particle.duration)));
-    bitmap_node->add(new data_node("friction", f2s(base_particle.friction)));
-    bitmap_node->add(new data_node("gravity", f2s(base_particle.gravity)));
-    bitmap_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
-    bitmap_node->add(new data_node("size", f2s(base_particle.size)));
-    bitmap_node->add(new data_node("speed", p2s(base_particle.speed)));
+
+    data_node* base_particle_node = new data_node("base", "");
+    node->add(base_particle_node);
+
+    base_particle_node->add(new data_node("bitmap", base_particle.file));
+    base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
+    base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
+    base_particle_node->add(new data_node("gravity", f2s(base_particle.gravity)));
+    base_particle_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
+    base_particle_node->add(new data_node("size", f2s(base_particle.size)));
+    base_particle_node->add(new data_node("speed", p2s(base_particle.speed)));
 
     data_node* color_node = new data_node("color", "");
+    base_particle_node->add(color_node);
 
     for (size_t c = 0; c < base_particle.color.keyframe_count(); c++) {
         auto keyframe = base_particle.color.get_keyframe(c);
@@ -422,7 +427,7 @@ void particle_generator::save_to_data_node(
     }
 
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
-    node->add(new data_node("friciton_deviation", f2s(friction_deviation)));
+    node->add(new data_node("friction_deviation", f2s(friction_deviation)));
     node->add(new data_node("gravity_deviation", f2s(gravity_deviation)));
     node->add(new data_node("size_deviation", f2s(size_deviation)));
     node->add(new data_node("pos_deviation", p2s(pos_deviation)));

@@ -541,6 +541,31 @@ void particle_editor::process_gui_panel_item() {
             );
 
             if(saveable_tree_node("particleColors", "Color")) {
+                //Color gradient visualizer
+                ImDrawList* draw_list = ImGui::GetWindowDrawList();
+                ImVec2 pos = ImGui::GetCursorScreenPos();
+
+                float segmentX = ImGui::GetColumnWidth() / 50;
+                for (size_t t = 0; t <= 50; t++) {
+                    ALLEGRO_COLOR color = loaded_gen.base_particle.color.get((float)t / 50);
+                    draw_list->AddRectFilled(
+                        ImVec2(pos.x + segmentX * t, pos.y),
+                        ImVec2(pos.x + segmentX * (t + 1), pos.y + 20),
+                        ImColor(color.r, color.g, color.b)
+                    );
+                }
+
+                for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
+                    float time = loaded_gen.base_particle.color.get_keyframe(c).first;
+                    float lineX = time * ImGui::GetColumnWidth();
+                    draw_list->AddRectFilled(
+                        ImVec2(pos.x + lineX - 1, pos.y + 20),
+                        ImVec2(pos.x + lineX + 1, pos.y + 23),
+                        ImColor(0, 255, 0)
+                    );
+                }
+                ImGui::Dummy(ImVec2(0, 23));
+
                 for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
                     if (c != 0) {
                         string btnLabel = "colorDeleteButton" + i2s(c);
@@ -574,14 +599,20 @@ void particle_editor::process_gui_panel_item() {
                     set_tooltip(
                         "Particle's tint."
                     );
-                    if(c == 0)
-                        continue;
+
                     ImGui::SameLine();
                     float time = loaded_gen.base_particle.color.get_keyframe(c).first;
+
+                    float minvalue = c == 0 ? 
+                        0 : 
+                        loaded_gen.base_particle.color.get_keyframe(c - 1).first + 0.01f;
+                    float maxvalue = c == loaded_gen.base_particle.color.keyframe_count() - 1 ? 
+                        1 : 
+                        loaded_gen.base_particle.color.get_keyframe(c + 1).first - 0.01f;
                     string timeName = "Time " + i2s(c + 1);
                     if (
                         ImGui::DragFloat(
-                            timeName.c_str(), &time, 0.01f, 0, 1
+                            timeName.c_str(), &time, 0.01f, minvalue, maxvalue
                         )
                         ) {
                         changes_mgr.mark_as_changed();

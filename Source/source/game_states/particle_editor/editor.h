@@ -63,9 +63,6 @@ private:
     //File name of the file currently being edited.
     string file_name;
     
-    //Data node for the contents of this particle file.
-    data_node file_node;
-    
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     

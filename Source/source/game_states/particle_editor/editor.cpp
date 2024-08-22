@@ -192,7 +192,7 @@ void particle_editor::load() {
 void particle_editor::load_particle_generator(
     const bool should_update_history
 ) {
-    file_node = data_node(PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name);
+    data_node file_node = data_node(PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name);
     
 
     if(!file_node.file_was_opened) {
@@ -201,7 +201,6 @@ void particle_editor::load_particle_generator(
         return;
     }
 
-    //TODO: potential memory leak?
     loaded_gen.load_from_data_node(&file_node, true);
     changes_mgr.reset();
     loaded_content_yet = true;
@@ -457,7 +456,11 @@ void particle_editor::reset_cam(const bool instantaneous) {
  * @return Whether it succeded.
  */
 bool particle_editor::save_file() {
-    string file_path = PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name;   
+    string file_path = PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name;
+
+    data_node file_node = data_node("", "");
+    loaded_gen.save_to_data_node(&file_node);
+
     if(!file_node.save_file(file_path)) {
         show_message_box(
             nullptr, "Save failed!",
