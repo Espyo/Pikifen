@@ -560,8 +560,8 @@ void particle_editor::process_gui_panel_item() {
                     float lineX = time * (ImGui::GetColumnWidth() - 1);
                     ImColor col = c == selected_color ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
                     draw_list->AddRectFilled(
-                        ImVec2(pos.x + lineX - 1, pos.y),
-                        ImVec2(pos.x + lineX + 1, pos.y + 43),
+                        ImVec2(pos.x + lineX - 2, pos.y),
+                        ImVec2(pos.x + lineX + 2, pos.y + 43),
                         col
                     );
                 }
