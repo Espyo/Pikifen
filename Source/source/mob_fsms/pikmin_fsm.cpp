@@ -1967,8 +1967,8 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
         12, 0.5, PARTICLE_PRIORITY_MEDIUM
     );
     par.bitmap = game.sys_assets.bmp_rock;
-    par.color.add(0, al_map_rgb(172, 164, 134));
-    par.color.add(1, al_map_rgba(172, 164, 134, 0));
+    par.color.push_back(0, al_map_rgb(172, 164, 134));
+    par.color.push_back(1, al_map_rgba(172, 164, 134, 0));
     par.gravity = 70.0f;
     particle_generator pg(0, par, 12);
     pg.number_deviation = 5;
@@ -3529,8 +3529,8 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
         4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = game.sys_assets.bmp_rock;
-    pa.color.add(0, al_map_rgb(160, 80, 32));
-    pa.color.add(1, al_map_rgba(160, 80, 32, 0));
+    pa.color.push_back(0, al_map_rgb(160, 80, 32));
+    pa.color.push_back(1, al_map_rgba(160, 80, 32, 0));
     pa.gravity = 50;
     particle_generator pg(0, pa, 8);
     pg.number_deviation = 1;
@@ -3615,8 +3615,8 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color.add(0, COLOR_WHITE);
-        pa.color.add(1, change_alpha(COLOR_WHITE,0));
+        pa.color.push_back(0, COLOR_WHITE);
+        pa.color.push_back(1, change_alpha(COLOR_WHITE,0));
         particle_generator pg(0, pa, 8);
         pg.number_deviation = 1;
         pg.size_deviation = 8;
@@ -3638,8 +3638,8 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color.add(0, al_map_rgb(255, 224, 224));
-        pa.color.add(1, al_map_rgb(255, 224, 224));
+        pa.color.push_back(0, al_map_rgb(255, 224, 224));
+        pa.color.push_back(1, al_map_rgb(255, 224, 224));
         pa.gravity = 300;
         particle_generator pg(0, pa, 8);
         pg.number_deviation = 1;

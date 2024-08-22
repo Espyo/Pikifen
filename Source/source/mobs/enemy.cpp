@@ -109,8 +109,8 @@ void enemy::finish_dying_class_specifics() {
     par.speed.y = -50;
     par.friction = 0.5;
     par.gravity = 0;
-    par.color.add(0, al_map_rgb(255, 192, 255));
-    par.color.add(1, al_map_rgba(255, 192, 255, 0));
+    par.color.push_back(0, al_map_rgb(255, 192, 255));
+    par.color.push_back(1, al_map_rgba(255, 192, 255, 0));
     game.states.gameplay->particles.add(par);
 }
 

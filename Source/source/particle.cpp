@@ -350,7 +350,7 @@ void particle_generator::load_from_data_node(
             ki_c.set_keyframe_time(0, s2f(c_node->name));
         }
         else {
-            ki_c.add(s2f(c_node->name), color, EASE_METHOD_NONE);
+            ki_c.push_back(s2f(c_node->name), color, EASE_METHOD_NONE);
         }
     }
     base_particle.color = ki_c;

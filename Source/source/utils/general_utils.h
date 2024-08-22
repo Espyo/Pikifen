@@ -66,7 +66,7 @@ struct keyframe_interpolator {
 
         for (size_t k = 1; k < keyframe_times.size(); ++k) {
             if (t <= keyframe_times[k]) {
-                float delta_t = keyframe_times[k] - keyframe_times[k - 1];
+                float delta_t = std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);
                 float relative_t = t - keyframe_times[k - 1];
                 float ratio = relative_t / delta_t;
                 ratio = ease(keyframe_eases[k], ratio);
@@ -76,12 +76,21 @@ struct keyframe_interpolator {
 
         return keyframe_values.back();
     }
-    void add(
+    void push_back(
         const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE
     ) {
         keyframe_times.push_back(t);
         keyframe_values.push_back(value);
         keyframe_eases.push_back(ease);
+    }
+
+    void insert(
+        const int idx, const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE
+    ) {
+        
+        keyframe_times.insert(keyframe_times.begin() + idx, t);
+        keyframe_values.insert(keyframe_values.begin() + idx, value);
+        keyframe_eases.insert(keyframe_eases.begin() + idx, ease);
     }
 
     void remove(int idx) {

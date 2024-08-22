@@ -545,100 +545,163 @@ void particle_editor::process_gui_panel_item() {
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 ImVec2 pos = ImGui::GetCursorScreenPos();
 
-                float segmentX = ImGui::GetColumnWidth() / 50;
-                for (size_t t = 0; t <= 50; t++) {
-                    ALLEGRO_COLOR color = loaded_gen.base_particle.color.get((float)t / 50);
+                float segmentX = (ImGui::GetColumnWidth() - 1) / 100;
+                for (size_t t = 0; t <= 100; t++) {
+                    ALLEGRO_COLOR color = loaded_gen.base_particle.color.get((float)t / 100);
                     draw_list->AddRectFilled(
                         ImVec2(pos.x + segmentX * t, pos.y),
-                        ImVec2(pos.x + segmentX * (t + 1), pos.y + 20),
+                        ImVec2(pos.x + segmentX * (t + 1), pos.y + 40),
                         ImColor(color.r, color.g, color.b)
                     );
                 }
 
                 for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
                     float time = loaded_gen.base_particle.color.get_keyframe(c).first;
-                    float lineX = time * ImGui::GetColumnWidth();
+                    float lineX = time * (ImGui::GetColumnWidth() - 1);
+                    ImColor col = c == selected_color ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
                     draw_list->AddRectFilled(
-                        ImVec2(pos.x + lineX - 1, pos.y + 20),
-                        ImVec2(pos.x + lineX + 1, pos.y + 23),
-                        ImColor(0, 255, 0)
+                        ImVec2(pos.x + lineX - 1, pos.y),
+                        ImVec2(pos.x + lineX + 1, pos.y + 43),
+                        col
                     );
                 }
-                ImGui::Dummy(ImVec2(0, 23));
+                ImGui::Dummy(ImVec2(0, 43));
 
-                for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
-                    if (c != 0) {
-                        string btnLabel = "colorDeleteButton" + i2s(c);
-                        if (
-                            ImGui::ImageButton(
-                                btnLabel.c_str(),
-                                editor_icons[EDITOR_ICON_REMOVE],
-                                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                            )
-                            ) {
-                            loaded_gen.base_particle.color.remove(c);
-                            continue;
-                        }
-                        set_tooltip(
-                            "Add a new color to the list of colors.\n"
-                            "Click to open a pop-up for you to choose from."
-                        );
-                        ImGui::SameLine();
-                    }
-                    ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color.get_keyframe(c).second;
-                    string colorName = "Tint " + i2s(c + 1);
-                    if (
-                        ImGui::ColorEdit4(
-                            colorName.c_str(), (float*)&particle_color,
-                            ImGuiColorEditFlags_NoInputs
-                        )
-                        ) {
-                        changes_mgr.mark_as_changed();
-                        loaded_gen.base_particle.color.set_keyframe_value(c, particle_color);
-                    }
-                    set_tooltip(
-                        "Particle's tint."
-                    );
 
-                    ImGui::SameLine();
-                    float time = loaded_gen.base_particle.color.get_keyframe(c).first;
+                //Current frame text.
+                ImGui::Text(
+                    "Current color: %s / %i",
+                    i2s(selected_color + 1).c_str(),
+                    loaded_gen.base_particle.color.keyframe_count()
+                );
 
-                    float minvalue = c == 0 ? 
-                        0 : 
-                        loaded_gen.base_particle.color.get_keyframe(c - 1).first + 0.01f;
-                    float maxvalue = c == loaded_gen.base_particle.color.keyframe_count() - 1 ? 
-                        1 : 
-                        loaded_gen.base_particle.color.get_keyframe(c + 1).first - 0.01f;
-                    string timeName = "Time " + i2s(c + 1);
-                    if (
-                        ImGui::DragFloat(
-                            timeName.c_str(), &time, 0.01f, minvalue, maxvalue
-                        )
-                        ) {
-                        changes_mgr.mark_as_changed();
-                        loaded_gen.base_particle.color.set_keyframe_time(c, time);
-                    }
-                    set_tooltip(
-                        "Inital particle size.",
-                        "", WIDGET_EXPLANATION_DRAG
-                    );
-                }
-                //Hitbox hazard addition button.
+                //Previous color button.
+                ImGui::SameLine();
                 if (
                     ImGui::ImageButton(
-                        "colorAddButton",
+                        "prevColorButton",
+                        editor_icons[EDITOR_ICON_PREVIOUS],
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                    )
+                    ) {
+                    if (selected_color == 0) {
+                        selected_color = loaded_gen.base_particle.color.keyframe_count() - 1;
+                    }
+                    else {
+                        selected_color--;
+                    }
+                }
+                set_tooltip(
+                    "Previous color."
+                );
+
+                //Previous color button.
+                ImGui::SameLine();
+                if (
+                    ImGui::ImageButton(
+                        "nextColorButton",
+                        editor_icons[EDITOR_ICON_NEXT],
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                    )
+                    ) {
+                    if (selected_color == loaded_gen.base_particle.color.keyframe_count() - 1) {
+                        selected_color = 0;
+                    }
+                    else {
+                        selected_color++;
+                    }
+                }
+                set_tooltip(
+                    "Next color."
+                );
+
+                //Add color button.
+                ImGui::SameLine();
+                if (
+                    ImGui::ImageButton(
+                        "addColorButton",
                         editor_icons[EDITOR_ICON_ADD],
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                     ) {
-                    loaded_gen.base_particle.color.add(1, COLOR_WHITE);
+                    float t = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
+                    ALLEGRO_COLOR c = loaded_gen.base_particle.color.get_keyframe(selected_color).second;
+                    loaded_gen.base_particle.color.insert(selected_color, t, c);
+                    selected_color++;
+                    changes_mgr.mark_as_changed();
+                    set_status(
+                        "Added color #" + i2s(selected_color + 1) + "."
+                    );
                 }
                 set_tooltip(
-                    "Add a new color to the list of colors.\n"
-                    "Click to open a pop-up for you to choose from."
+                    "Add a new color after the curret one, by copying "
+                    "data from the current one."
+                );
+
+                if(loaded_gen.base_particle.color.keyframe_count() > 1) {
+
+                    //Delete frame button.
+                    ImGui::SameLine();
+                    if (
+                        ImGui::ImageButton(
+                            "delColorButton",
+                            editor_icons[EDITOR_ICON_REMOVE],
+                            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                        )
+                        ) {
+                        size_t deleted_frame_idx = selected_color;
+                        loaded_gen.base_particle.color.remove(deleted_frame_idx);
+                        if(selected_color == loaded_gen.base_particle.color.keyframe_count())
+                            selected_color--;
+                        changes_mgr.mark_as_changed();
+                        set_status(
+                            "Deleted color #" + i2s(deleted_frame_idx + 1) + "."
+                        );
+                    }
+                    set_tooltip(
+                        "Delete the current color."
+                    );
+
+                }
+
+                ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color.get_keyframe(selected_color).second;
+                if (
+                    ImGui::ColorEdit4(
+                        "Tint", (float*)&particle_color
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                    loaded_gen.base_particle.color.set_keyframe_value(selected_color, particle_color);
+                }
+                set_tooltip(
+                    "Particle's tint."
+                );
+
+                float time = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
+
+                float minvalue = selected_color == 0 ?
+                    0 :
+                    loaded_gen.base_particle.color.get_keyframe(selected_color - 1).first;
+                float maxvalue = selected_color == loaded_gen.base_particle.color.keyframe_count() - 1 ?
+                    1 :
+                    loaded_gen.base_particle.color.get_keyframe(selected_color + 1).first;
+
+                if (
+                    ImGui::DragFloat(
+                        "Time", &time, 0.01f, minvalue, maxvalue
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                    loaded_gen.base_particle.color.set_keyframe_time(selected_color, time);
+                }
+                set_tooltip(
+                    "Inital particle size.",
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 ImGui::TreePop();
             }
+
+            ImGui::Dummy(ImVec2(0, 12));
 
             //Size value.
             if (

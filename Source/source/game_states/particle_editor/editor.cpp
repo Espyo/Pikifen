@@ -206,6 +206,7 @@ void particle_editor::load_particle_generator(
     loaded_content_yet = true;
     
     generator_running = true;
+    selected_color = 0;
     part_manager.clear();
     
     if(should_update_history) {

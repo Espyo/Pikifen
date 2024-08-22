@@ -81,6 +81,8 @@ private:
     //Is the leader silhouette visible?
     bool leader_silhouette_visible = false;
 
+    size_t selected_color = 0;
+
     //Position of the reload widget.
     point reload_widget_pos;
     
