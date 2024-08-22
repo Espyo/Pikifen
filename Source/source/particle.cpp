@@ -365,6 +365,7 @@ void particle_generator::load_from_data_node(
         base_particle.type = PARTICLE_TYPE_BITMAP;
     } else {
         base_particle.type = PARTICLE_TYPE_CIRCLE;
+        base_particle.file = "";
     }
     
     base_particle.time = base_particle.duration;
