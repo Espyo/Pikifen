@@ -1,26 +1,28 @@
-name = steam
-description = A continuous stream of steam over a large surface. Used when the Armored Cannon Beetle is overheating.
-
-emission_interval = 0.1
-number = 1
-number_deviation = 0
-base {
-    bitmap = Smoke.png
-    duration = 0.7
-    friction = 1
-    gravity = 0
-    size_grow_speed = 30
-    size = 32
-    speed = 0 -50
-    color = 255 255 255 192
+name=steam
+description=A continuous stream of steam over a large surface. Used when the Armored Cannon Beetle is overheating.
+emission_interval=0.1000
+number=1
+number_deviation=0
+base{
+	bitmap=Smoke.png
+	duration=0.7000
+	friction=1.0000
+	gravity=0.0000
+	size_grow_speed=30.0000
+	size=32.0000
+	speed=0.0000 -50.0000
+	color{
+		0.0000=255 255 255 192
+		1.0000=255 255 255 0
+	}
 }
-duration_deviation = 0.3
-friction_deviation = 0
-gravity_deviation = 0
-size_deviation = 2
-pos_deviation = 90 90
-speed_deviation = 5 5
-angle = 0
-angle_deviation = 0
-total_speed = 0
-total_speed_deviation = 0
+duration_deviation=0.3000
+friction_deviation=0.0000
+gravity_deviation=0.0000
+size_deviation=2.0000
+pos_deviation=90.0000 90.0000
+speed_deviation=5.0000 5.0000
+angle=0.0000
+angle_deviation=0.0000
+total_speed=0.0000
+total_speed_deviation=0.0000

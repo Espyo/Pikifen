@@ -1,26 +1,28 @@
-name = crystal_wall_explosion
-description = An explosion of small shards that a crystal wall breaks into when completely destroyed.
-
-emission_interval = 0
-number = 30
-number_deviation = 3
-base {
-    bitmap = Crystal_nodule.png
-    duration = 1.5
-    friction = 3
-    gravity = 100
-    size_grow_speed = 0
-    size = 13
-    speed = 0 0
-    color = 255 255 255 255
+name=crystal_wall_explosion
+description=An explosion of small shards that a crystal wall breaks into when completely destroyed.
+emission_interval=0.0000
+number=30
+number_deviation=3
+base{
+	bitmap=Crystal_nodule.png
+	duration=1.5000
+	friction=3.0000
+	gravity=100.0000
+	size_grow_speed=0.0000
+	size=13.0000
+	speed=0.0000 0.0000
+	color{
+		0.0000=255 255 255
+		1.0000=255 255 255 0
+	}
 }
-duration_deviation = 0.25
-friction_deviation = 0
-gravity_deviation = 0
-size_deviation = 6
-pos_deviation = 8 120
-speed_deviation = 0 0
-angle = 0
-angle_deviation = 180
-total_speed = 200
-total_speed_deviation = 10
+duration_deviation=0.2500
+friction_deviation=0.0000
+gravity_deviation=0.0000
+size_deviation=6.0000
+pos_deviation=8.0000 120.0000
+speed_deviation=0.0000 0.0000
+angle=0.0000
+angle_deviation=180.0000
+total_speed=200.0000
+total_speed_deviation=10.0000

@@ -201,13 +201,13 @@ void particle_editor::load_particle_generator(
         return;
     }
 
+    part_manager.clear();
     loaded_gen.load_from_data_node(&file_node, true);
     changes_mgr.reset();
     loaded_content_yet = true;
     
     generator_running = true;
     selected_color = 0;
-    part_manager.clear();
     
     if(should_update_history) {
         update_history(file_name);
