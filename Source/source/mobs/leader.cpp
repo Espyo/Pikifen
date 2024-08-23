@@ -555,13 +555,13 @@ void leader::dismiss() {
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
 
         ALLEGRO_COLOR c = al_map_rgba(
-            color_idx[0] / 255.0f,
-            color_idx[1] / 255.0f,
-            color_idx[2] / 255.0f,
-            LEADER::DISMISS_PARTICLE_ALPHA
+            color_idx[0],
+            color_idx[1],
+            color_idx[2],
+            LEADER::DISMISS_PARTICLE_ALPHA * 255
         );
 
-        par.color.add(0, c);
+        par.color.set_keyframe_value(0, c);
         par.color.add(1, change_alpha(c,0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
@@ -821,7 +821,7 @@ void leader::start_throw_trail() {
         radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
-    throw_p.color.add(0, change_alpha(type->main_color, 128));
+    throw_p.color.set_keyframe_value(0, change_alpha(type->main_color, 128));
     throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;

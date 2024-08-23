@@ -479,7 +479,7 @@ void pikmin::start_throw_trail() {
         radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
-    throw_p.color.add(0, change_alpha(type->main_color, 128));
+    throw_p.color.set_keyframe_value(0, change_alpha(type->main_color, 128));
     throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
@@ -516,8 +516,9 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.speed.y = randomf(-70, -30);
         par.friction = 0.8;
         par.gravity = -0.2;
-        par.color.add(0, pik_type->main_color);
-        par.color.add(0, change_alpha(pik_type->main_color, 0));
+        par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
+        par.color.add(0.1f, pik_type->main_color);
+        par.color.add(1, change_alpha(pik_type->main_color, 0));
         game.states.gameplay->particles.add(par);
         
         //Create a positional sound source instead of a mob sound source,

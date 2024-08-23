@@ -2159,7 +2159,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     );
     p.bitmap = game.sys_assets.bmp_smoke;
     p.friction = 1;
-    p.color.add(0, spray_type_ref.main_color);
+    p.color.set_keyframe_value(0, change_alpha(spray_type_ref.main_color, 0));
+    p.color.add(0.1f, spray_type_ref.main_color);
     p.color.add(1, change_alpha(spray_type_ref.main_color, 0));
     particle_generator pg(0, p, 32);
     pg.angle = shoot_angle;
