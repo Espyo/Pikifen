@@ -953,6 +953,7 @@ void create_special_mob_types() {
     bridge_component_type->blackout_radius = 0;
     bridge_component_type->appears_in_area_editor = false;
     bridge_component_type->casts_shadow = false;
+    bridge_component_type->custom_category_name = "Misc";
     bridge_component_type->height = 8.0f;
     bridge_component_type->physical_span = 8.0f;
     bridge_component_type->radius = 8.0f;

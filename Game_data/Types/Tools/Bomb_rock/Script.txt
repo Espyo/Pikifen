@@ -74,16 +74,9 @@ script {
     
     exploding {
         on_enter {
-            if $will_be_swallowed = true
-                delete
-            else
-                start_particles rock_explosion 0 0 32
-                start_particles dark_smoke_explosion 0 0 28
-                start_particles spark_explosion 0 0 28
-                set_animation exploding
+            if $will_be_swallowed = false
+                spawn explosion
             end_if
-        }
-        on_animation_end {
             delete
         }
     }
