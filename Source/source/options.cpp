@@ -121,7 +121,7 @@ const LEAVING_CONFIRMATION_MODE DEF_LEAVING_CONFIRMATION_MODE =
 const float DEF_MASTER_VOLUME = 0.8f;
 
 //Default value for the maximum amount of particles.
-const size_t DEF_MAX_PARTICLES = 200;
+const size_t DEF_MAX_PARTICLES = 1000;
 
 //Default value for whether mipmaps are enabled.
 const bool DEF_MIPMAPS_ENABLED = true;

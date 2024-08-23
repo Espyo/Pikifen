@@ -1,0 +1,13 @@
+name = Explosion
+description = An explosion, from things like a bomb rock.
+
+appears_in_area_editor = false
+can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; explodable; explodable_pikmin_obstacle; fragile
+casts_shadow = false
+custom_category_name = Misc
+height = 50
+move_speed = 0
+pikmin_returns_after_using = true
+pushable = false
+pushes = false
+radius = 68

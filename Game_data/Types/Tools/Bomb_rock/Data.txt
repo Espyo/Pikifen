@@ -17,3 +17,11 @@ pushes = false
 radius = 14
 spike_damage = bomb_rock_explosion
 target_type = fragile
+
+spawns {
+    explosion {
+        object = Explosion
+        relative = true
+        coordinates = 0 0 0
+    }
+}

@@ -1,0 +1,216 @@
+name
+engine_version=0.25.0
+animations{
+	exploding{
+		frames{
+			flash{
+				duration=0.0500
+			}
+			exploding_01{
+				duration=0.0800
+				interpolate=true
+			}
+			exploding_02{
+				duration=0.0010
+			}
+			exploding_03{
+				duration=0.0800
+				interpolate=true
+			}
+			exploding_04{
+				duration=0.0010
+			}
+			exploding_05{
+				duration=0.0800
+				interpolate=true
+			}
+			exploding_06{
+				duration=0.0010
+			}
+		}
+	}
+}
+sprites{
+	exploding_01{
+		file=Explosion.png
+		file_pos=0.0000 0.0000
+		file_size=42.0000 42.0000
+		scale=2.0000 2.0000
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=34.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding_02{
+		file=Explosion.png
+		file_pos=0.0000 0.0000
+		file_size=42.0000 42.0000
+		scale=4.0000 4.0000
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=34.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding_03{
+		file=Explosion.png
+		file_pos=43.0000 0.0000
+		file_size=78.0000 78.0000
+		scale=1.9000 1.9000
+		angle=0.1745
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding_04{
+		file=Explosion.png
+		file_pos=43.0000 0.0000
+		file_size=78.0000 78.0000
+		scale=2.4000 2.4000
+		angle=0.1745
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding_05{
+		file=Explosion.png
+		file_pos=122.0000 0.0000
+		file_size=78.0000 78.0000
+		scale=2.4000 2.4000
+		angle=0.2618
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding_06{
+		file=Explosion.png
+		file_pos=122.0000 0.0000
+		file_size=78.0000 78.0000
+		scale=2.6000 2.6000
+		angle=0.2618
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	flash{
+		file=Smack.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=4.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+	explosion
+}

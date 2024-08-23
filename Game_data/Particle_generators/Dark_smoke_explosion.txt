@@ -1,17 +1,18 @@
-name=dark_smoke_explosion
-description=A generic explosion of dark smoke. Used, for instance, when a bomb rock is ingested and blows up inside an enemy.
-emission_interval=0.0000
-number=20
-number_deviation=0
-base{
-	bitmap=Smoke.png
-	duration=0.7500
-	friction=1.2000
-	gravity=0.0000
-	size_grow_speed=40.0000
-	size=40.0000
-	speed=0.0000 0.0000
-	color{
+name = dark_smoke_explosion
+description = A generic explosion of dark smoke. Used, for instance, when a bomb rock is ingested and blows up inside an enemy.
+
+emission_interval = 0
+number = 20
+number_deviation = 0
+base {
+    bitmap = Smoke.png
+    duration = 1.0
+    friction = 1.2
+    gravity = 0
+    size_grow_speed = 40
+    size = 40
+    speed = 0 0
+    color{
 		0.0000=80 80 80
 		1.0000=80 80 80 0
 	}

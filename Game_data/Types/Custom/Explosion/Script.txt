@@ -1,0 +1,55 @@
+first_state = idling
+
+script {
+    idling {
+        on_enter {
+            set_animation exploding
+            start_particles dark_smoke_explosion 0 0 30
+            start_particles spark_explosion 0 0 28
+            start_particles rock_explosion 0 0 26
+            start_particles shockwave 0 0 24
+            start_particles flare 0 0 22
+            start_particles smoke_explosion 0 0 20
+
+            set_var floating false
+            get_mob_info x self x
+            get_mob_info y self y
+            get_mob_info z self z
+
+            calculate temp $x - 68
+            get_floor_z fz $temp $y
+            calculate diff $z - $fz
+            if $diff > 50
+                set_var floating true
+            end_if
+
+            calculate temp $x + 68
+            get_floor_z fz $temp $y
+            calculate diff $z - $fz
+            if $diff > 50
+                set_var floating true
+            end_if
+
+            calculate temp $y - 68
+            get_floor_z fz $x $temp
+            calculate diff $z - $fz
+            if $diff > 50
+                set_var floating true
+            end_if
+
+            calculate temp $y + 68
+            get_floor_z fz $x $temp
+            calculate diff $z - $fz
+            if $diff > 50
+                set_var floating true
+            end_if
+
+            if $floating = false
+                start_particles explosion_crater 0 0 1
+            end_if
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}
