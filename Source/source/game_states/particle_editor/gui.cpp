@@ -407,7 +407,7 @@ void particle_editor::process_gui_panel_item() {
         "Play or pause the particle system.",
         "Spacebar"
     );
-    
+    ImGui::ShowDemoWindow();
     if (ImGui::BeginTabBar("particleTabs")) {
         if (ImGui::BeginTabItem("Emission")) {
 
@@ -545,15 +545,34 @@ void particle_editor::process_gui_panel_item() {
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 ImVec2 pos = ImGui::GetCursorScreenPos();
 
-                float segmentX = (ImGui::GetColumnWidth() - 1) / 100;
-                for (size_t t = 0; t <= 100; t++) {
-                    ALLEGRO_COLOR color = loaded_gen.base_particle.color.get((float)t / 100);
-                    draw_list->AddRectFilled(
-                        ImVec2(pos.x + segmentX * t, pos.y),
-                        ImVec2(pos.x + segmentX * (t + 1), pos.y + 40),
-                        ImColor(color.r, color.g, color.b)
+                ALLEGRO_COLOR c_start = loaded_gen.base_particle.color.get_keyframe(0).second;
+                draw_list->AddRectFilled(
+                    ImVec2(pos.x, pos.y),
+                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * loaded_gen.base_particle.color.get_keyframe(0).first, pos.y + 40),
+                    ImColor(c_start.r, c_start.g, c_start.b)
+                );
+
+                for (size_t t = 0; t < loaded_gen.base_particle.color.keyframe_count() - 1; t++) {
+                    auto kf_1 = loaded_gen.base_particle.color.get_keyframe(t);
+                    auto kf_2 = loaded_gen.base_particle.color.get_keyframe(t + 1);
+                    ALLEGRO_COLOR c1 = kf_1.second;
+                    ALLEGRO_COLOR c2 = kf_2.second;
+
+                    draw_list->AddRectFilledMultiColor(
+                        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first, pos.y),
+                        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first, pos.y + 40),
+                        ImColor(c1.r, c1.g, c1.b), ImColor(c2.r, c2.g, c2.b),
+                        ImColor(c2.r, c2.g, c2.b), ImColor(c1.r, c1.g, c1.b)
                     );
                 }
+
+                ALLEGRO_COLOR c_end = loaded_gen.base_particle.color.get_keyframe(loaded_gen.base_particle.color.keyframe_count() - 1).second;
+                draw_list->AddRectFilled(
+                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * loaded_gen.base_particle.color.get_keyframe(loaded_gen.base_particle.color.keyframe_count() - 1).first, pos.y),
+                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
+                    ImColor(c_end.r, c_end.g, c_end.b)
+                );
+
 
                 for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
                     float time = loaded_gen.base_particle.color.get_keyframe(c).first;
@@ -626,7 +645,7 @@ void particle_editor::process_gui_panel_item() {
                     ) {
                     float t = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
                     ALLEGRO_COLOR c = loaded_gen.base_particle.color.get_keyframe(selected_color).second;
-                    loaded_gen.base_particle.color.insert(selected_color, t, c);
+                    loaded_gen.base_particle.color.add(t, c);
                     selected_color++;
                     changes_mgr.mark_as_changed();
                     set_status(
@@ -678,24 +697,12 @@ void particle_editor::process_gui_panel_item() {
                 );
 
                 float time = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
-
-                float minvalue = selected_color == 0 ?
-                    0 :
-                    loaded_gen.base_particle.color.get_keyframe(selected_color - 1).first;
-                float maxvalue = selected_color == loaded_gen.base_particle.color.keyframe_count() - 1 ?
-                    1 :
-                    loaded_gen.base_particle.color.get_keyframe(selected_color + 1).first;
-
-                if (
-                    ImGui::DragFloat(
-                        "Time", &time, 0.01f, minvalue, maxvalue
-                    )
-                    ) {
+                if (ImGui::SliderFloat("Time", &time, 0, 1)) {
                     changes_mgr.mark_as_changed();
-                    loaded_gen.base_particle.color.set_keyframe_time(selected_color, time);
+                    loaded_gen.base_particle.color.set_keyframe_time(selected_color, time, (int*)&selected_color);
                 }
                 set_tooltip(
-                    "Inital particle size.",
+                    "Keyframe time.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 ImGui::TreePop();

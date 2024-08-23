@@ -220,8 +220,8 @@ void ship::heal_leader(leader* l) const {
         PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;
-    p.color.push_back(0, al_map_rgba(192, 255, 192, 255));
-    p.color.push_back(1, al_map_rgba(192, 255, 192, 0));
+    p.color.add(0, al_map_rgba(192, 255, 192, 255));
+    p.color.add(1, al_map_rgba(192, 255, 192, 0));
     p.speed = point(0, -24);
     
     particle_generator g(0, p, 12);

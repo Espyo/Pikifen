@@ -1362,8 +1362,8 @@ void mob::do_attack_effects(
             64, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
-        smack_p.color.push_back(0, al_map_rgb(255, 160, 128));
-        smack_p.color.push_back(1, al_map_rgba(255, 160, 128, 0));
+        smack_p.color.add(0, al_map_rgb(255, 160, 128));
+        smack_p.color.add(1, al_map_rgba(255, 160, 128, 0));
         game.states.gameplay->particles.add(smack_p);
         
     } else {
@@ -1373,8 +1373,8 @@ void mob::do_attack_effects(
             24, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
-        ding_p.color.push_back(0, al_map_rgb(192, 208, 224));
-        ding_p.color.push_back(1, al_map_rgba(192, 208, 224, 0));
+        ding_p.color.add(0, al_map_rgb(192, 208, 224));
+        ding_p.color.add(1, al_map_rgba(192, 208, 224, 0));
         game.states.gameplay->particles.add(ding_p);
         
     }
@@ -3168,8 +3168,8 @@ void mob::start_dying() {
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;
-    p.color.push_back(0, al_map_rgb(255, 192, 192));
-    p.color.push_back(0, al_map_rgba(255, 192, 192, 0));
+    p.color.add(0, al_map_rgb(255, 192, 192));
+    p.color.add(0, al_map_rgba(255, 192, 192, 0));
     particle_generator pg(0, p, 25);
     pg.number_deviation = 5;
     pg.angle = 0;

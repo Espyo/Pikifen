@@ -158,8 +158,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
             WHISTLE::DOT_COLORS[color_idx][2] / 255.0f,
             LEADER::SWARM_PARTICLE_ALPHA
         );
-        p.color.push_back(0, c);
-        p.color.push_back(1, change_alpha(c,0));
+        p.color.add(0, c);
+        p.color.add(1, change_alpha(c,0));
         p.duration =
             randomf(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
@@ -561,8 +561,8 @@ void leader::dismiss() {
             LEADER::DISMISS_PARTICLE_ALPHA
         );
 
-        par.color.push_back(0, c);
-        par.color.push_back(1, change_alpha(c,0));
+        par.color.add(0, c);
+        par.color.add(1, change_alpha(c,0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
             randomf(
@@ -821,8 +821,8 @@ void leader::start_throw_trail() {
         radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
-    throw_p.color.push_back(0, change_alpha(type->main_color, 128));
-    throw_p.color.push_back(1, change_alpha(type->main_color, 0));
+    throw_p.color.add(0, change_alpha(type->main_color, 128));
+    throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;

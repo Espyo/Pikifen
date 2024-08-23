@@ -76,21 +76,18 @@ struct keyframe_interpolator {
 
         return keyframe_values.back();
     }
-    void push_back(
-        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE
+    void add(
+        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
+        int* out_idx = nullptr
     ) {
-        keyframe_times.push_back(t);
-        keyframe_values.push_back(value);
-        keyframe_eases.push_back(ease);
-    }
+        int new_idx = get_insertion_index(t);
 
-    void insert(
-        const int idx, const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE
-    ) {
-        
-        keyframe_times.insert(keyframe_times.begin() + idx, t);
-        keyframe_values.insert(keyframe_values.begin() + idx, value);
-        keyframe_eases.insert(keyframe_eases.begin() + idx, ease);
+        if(out_idx)
+            *out_idx = new_idx;
+
+        keyframe_times.insert(keyframe_times.begin() + new_idx, t);
+        keyframe_values.insert(keyframe_values.begin() + new_idx, value);
+        keyframe_eases.insert(keyframe_eases.begin() + new_idx, ease);
     }
 
     void remove(int idx) {
@@ -109,8 +106,26 @@ struct keyframe_interpolator {
         keyframe_values[idx] = value;
     }
 
-    void set_keyframe_time(int idx, float time) {
-        keyframe_times[idx] = time;
+    void set_keyframe_time(int idx, float time, int* out_new_idx = nullptr) {
+        int cur_idx = idx;
+
+        while (cur_idx > 0 && time < keyframe_times[cur_idx - 1]) {
+            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx - 1]);
+            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx - 1]);
+            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx - 1]);
+            cur_idx--;
+        }
+        while (cur_idx < (keyframe_count() - 1) && time > keyframe_times[cur_idx + 1]) {
+            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
+            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx + 1]);
+            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx + 1]);
+            cur_idx++;
+        }
+
+        if (out_new_idx)
+            *out_new_idx = cur_idx;
+
+        keyframe_times[cur_idx] = time;
     }
 
     private:
@@ -126,6 +141,17 @@ struct keyframe_interpolator {
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;
     
+    int get_insertion_index(float t) {
+        int idx = 0;
+
+        for (; idx < keyframe_times.size(); idx++) {
+            if (keyframe_times[idx] >= t)
+                break;
+        }
+        return idx;
+    }
+
+
     float interpolate(float v1, float v2, float time) {
         return v1 + (v2 - v1) * time;
     }
