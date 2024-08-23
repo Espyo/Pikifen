@@ -407,7 +407,7 @@ void particle_editor::process_gui_panel_item() {
         "Play or pause the particle system.",
         "Spacebar"
     );
-    ImGui::ShowDemoWindow();
+
     if (ImGui::BeginTabBar("particleTabs")) {
         if (ImGui::BeginTabItem("Emission")) {
 
