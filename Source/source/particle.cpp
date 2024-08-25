@@ -202,11 +202,8 @@ particle_generator::particle_generator(
     const float emission_interval,
     const particle &base_particle, const size_t number
 ) :
-    base_particle(base_particle),
-    number(number),
-    emission_interval(emission_interval),
-    emission_timer(emission_interval) {
-    
+    base_particle(base_particle){
+    emission = particle_emission_struct(emission_interval, number);
 }
 /**
  * @brief Unloads.
@@ -242,8 +239,8 @@ void particle_generator::emit(particle_manager &manager) {
     size_t final_nr =
         std::max(
             0,
-            (int) number +
-            randomi((int) (0 - number_deviation), (int) number_deviation)
+            (int) emission.number +
+            randomi((int) (0 - emission.number_deviation), (int)emission.number_deviation)
         );
         
     for(size_t p = 0; p < final_nr; ++p) {
@@ -262,14 +259,11 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-gravity_deviation, gravity_deviation);
             
         new_p.pos = base_p_pos;
-        point pos_offset_to_use(
-            randomf(-pos_deviation.x, pos_deviation.x),
-            randomf(-pos_deviation.y, pos_deviation.y)
-        );
+        point offset = emission.get_emission_offset();
         if(follow_angle) {
-            pos_offset_to_use = rotate_point(pos_offset_to_use, *follow_angle);
+            offset = rotate_point(offset, *follow_angle);
         }
-        new_p.pos += pos_offset_to_use;
+        new_p.pos += offset;
         
         new_p.z = base_p_z;
         new_p.size =
@@ -321,16 +315,38 @@ void particle_generator::load_from_data_node(
     reader_setter grs(node);
     data_node* p_node = node->get_child_by_name("base");
     reader_setter prs(p_node);
+    data_node* e_node = node->get_child_by_name("emission");
+    reader_setter ers(e_node);
     
     float emission_interval_float = 0.0f;
     size_t number_int = 1;
+    size_t shape_int = 0;
 
-    data_node* bitmap_node = nullptr;
+    ers.set("number", number_int);
+    ers.set("interval", emission_interval_float);
+    emission = particle_emission_struct(emission_interval_float, number_int);
+
+    ers.set("interval_deviation", emission.interval_deviation);
+    ers.set("number_deviation", emission.number_deviation);
+    ers.set("shape", shape_int);
+
+    switch (shape_int)
+    {
+    case PARTICLE_EMISSION_SHAPE_CIRCLE:
+        ers.set("max_radius", emission.max_circular_radius);
+        ers.set("min_radius", emission.min_circular_radius);
+        break;
+    case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+        ers.set("max_offset", emission.max_rectangular_offset);
+        ers.set("min_offset", emission.min_rectangular_offset);
+        break;
+    }
+
+    emission.shape = (PARTICLE_EMISSION_SHAPE)shape_int;
+
+    data_node * bitmap_node = nullptr;
     data_node* color_node = p_node->get_child_by_name("color");;
-    
-    grs.set("emission_interval", emission_interval_float);
-    grs.set("number", number_int);
-    
+
     prs.set("bitmap", base_particle.file, &bitmap_node);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
@@ -371,16 +387,10 @@ void particle_generator::load_from_data_node(
     base_particle.time = base_particle.duration;
     base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
     
-    emission_interval = emission_interval_float;
-    number = number_int;
-    
-    grs.set("interval_deviation", interval_deviation);
-    grs.set("number_deviation", number_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
     grs.set("gravity_deviation", gravity_deviation);
     grs.set("size_deviation", size_deviation);
-    grs.set("pos_deviation", pos_deviation);
     grs.set("speed_deviation", speed_deviation);
     grs.set("angle", angle);
     grs.set("angle_deviation", angle_deviation);
@@ -404,10 +414,27 @@ void particle_generator::save_to_data_node(
     //Content metadata.
     save_metadata_to_data_node(node);
 
-    node->add(new data_node("emission_interval", f2s(emission_interval)));
-    node->add(new data_node("number", i2s(number)));
-    node->add(new data_node("number_deviation", i2s(number_deviation)));
+    data_node* emission_particle_node = new data_node("emission", "");
+    node->add(emission_particle_node);
 
+    emission_particle_node->add(new data_node("number", i2s(emission.number)));
+    emission_particle_node->add(new data_node("number_deviation", i2s(emission.number_deviation)));
+    emission_particle_node->add(new data_node("interval", f2s(emission.interval)));
+    emission_particle_node->add(new data_node("interval_deviation", f2s(emission.interval_deviation)));
+    emission_particle_node->add(new data_node("shape", i2s(emission.shape)));
+
+    switch (emission.shape)
+    {
+    case PARTICLE_EMISSION_SHAPE_CIRCLE:
+        emission_particle_node->add(new data_node("max_radius", f2s(emission.max_circular_radius)));
+        emission_particle_node->add(new data_node("min_radius", f2s(emission.min_circular_radius)));
+        break;
+    case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+        emission_particle_node->add(new data_node("max_offset", p2s(emission.max_rectangular_offset)));
+        emission_particle_node->add(new data_node("min_offset", p2s(emission.min_rectangular_offset)));
+        break;
+    }
+    
     data_node* base_particle_node = new data_node("base", "");
     node->add(base_particle_node);
 
@@ -431,7 +458,6 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("friction_deviation", f2s(friction_deviation)));
     node->add(new data_node("gravity_deviation", f2s(gravity_deviation)));
     node->add(new data_node("size_deviation", f2s(size_deviation)));
-    node->add(new data_node("pos_deviation", p2s(pos_deviation)));
     node->add(new data_node("speed_deviation", p2s(speed_deviation)));
     node->add(new data_node("angle", f2s(rad_to_deg(angle))));
     node->add(new data_node("angle_deviation", f2s(rad_to_deg(angle_deviation))));
@@ -445,13 +471,13 @@ void particle_generator::save_to_data_node(
  * be used. Call this when copying from another generator.
  */
 void particle_generator::reset() {
-    if(interval_deviation == 0.0f) {
-        emission_timer = emission_interval;
+    if(emission.interval_deviation == 0.0f) {
+        emission_timer = emission.interval;
     } else {
         emission_timer =
             randomf(
-                std::max(0.0f, emission_interval - interval_deviation),
-                emission_interval + interval_deviation
+                std::max(0.0f, emission.interval - emission.interval_deviation),
+                emission.interval + emission.interval_deviation
             );
     }
 }
@@ -471,13 +497,13 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {
         emit(manager);
-        if(interval_deviation == 0.0f) {
-            emission_timer = emission_interval;
+        if(emission.interval_deviation == 0.0f) {
+            emission_timer = emission.interval;
         } else {
             emission_timer =
                 randomf(
-                    std::max(0.0f, emission_interval - interval_deviation),
-                    emission_interval + interval_deviation
+                    std::max(0.0f, emission.interval - emission.interval_deviation),
+                    emission.interval + emission.interval_deviation
                 );
         }
     }
@@ -685,4 +711,51 @@ void particle_manager::tick_all(const float delta_t) {
             ++c;
         }
     }
+}
+
+/**
+ * @brief Constructs a new particle em object.
+ *
+ * @param emission_interval Interval to spawn a new set of particles in,
+ * in seconds. 0 means it spawns only one set and that's it.
+ * @param base_particle All particles created will be based on this one.
+ * Their properties will deviate randomly based on the
+ * deviation members of the particle generator object.
+ * @param number Number of particles to spawn.
+ * This number is also deviated by number_deviation.
+ */
+particle_emission_struct::particle_emission_struct(
+    const float emission_interval, const size_t num
+) {
+    number = num;
+    interval = emission_interval;
+}
+
+
+point particle_emission_struct::get_emission_offset() {
+    switch (shape)
+    {
+    case PARTICLE_EMISSION_SHAPE_CIRCLE:
+        {
+            //Created using
+            //https://stackoverflow.com/questions/30564015/how-to-generate-random-points-in-a-circular-distribution
+            float r = min_circular_radius + (max_circular_radius - min_circular_radius) * sqrt(randomf(0, 1));
+            float theta = TAU * randomf(0, 1);
+
+            return point(r * cos(theta), r * sin(theta));
+        }
+    case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+        {
+        int xSign = (randomi(0, 1) * 2) - 1;
+        int ySign = (randomi(0, 1) * 2) - 1;
+
+        return point(
+            randomf(min_rectangular_offset.x, max_rectangular_offset.x) * xSign,
+            randomf(min_rectangular_offset.y, max_rectangular_offset.y) * ySign
+        );
+        }
+    default:
+        return point(0, 0);
+    }
+
 }

@@ -140,7 +140,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     );
     p.bitmap = game.sys_assets.bmp_smoke;
     particle_generator pg(0, p, 15);
-    pg.number_deviation = 5;
+    pg.emission.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = TAU / 2;
     pg.total_speed = 70;

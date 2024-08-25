@@ -106,7 +106,7 @@ void particle_editor::do_logic() {
         if(generator_running) {
             loaded_gen.tick(game.delta_t, part_manager);
             //If the particles are meant to be a burst, turn them off.
-            if(loaded_gen.emission_interval == 0)
+            if(loaded_gen.emission.interval == 0)
                 generator_running = false;
         }
         part_manager.tick_all(game.delta_t);

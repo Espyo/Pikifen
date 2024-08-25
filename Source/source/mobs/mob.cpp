@@ -3171,7 +3171,7 @@ void mob::start_dying() {
     p.color.set_keyframe_value(0, al_map_rgb(255, 192, 192));
     p.color.add(1, al_map_rgba(255, 192, 192, 0));
     particle_generator pg(0, p, 25);
-    pg.number_deviation = 5;
+    pg.emission.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = TAU / 2;
     pg.total_speed = 100;
@@ -3665,7 +3665,7 @@ void mob::tick_misc_logic(const float delta_t) {
         particle_generators[g].tick(
             delta_t, game.states.gameplay->particles
         );
-        if(particle_generators[g].emission_interval == 0) {
+        if(particle_generators[g].emission.interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
             ++g;

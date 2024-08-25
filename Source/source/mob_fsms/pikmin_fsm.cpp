@@ -1971,7 +1971,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     par.color.add(1, al_map_rgba(172, 164, 134, 0));
     par.gravity = 70.0f;
     particle_generator pg(0, par, 12);
-    pg.number_deviation = 5;
+    pg.emission.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = TAU / 2;
     pg.total_speed = 70;
@@ -3533,7 +3533,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pa.color.add(1, al_map_rgba(160, 80, 32, 0));
     pa.gravity = 50;
     particle_generator pg(0, pa, 8);
-    pg.number_deviation = 1;
+    pg.emission.number_deviation = 1;
     pg.size_deviation = 2;
     pg.angle = 0;
     pg.angle_deviation = TAU / 2;
@@ -3617,7 +3617,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pa.bitmap = game.sys_assets.bmp_sparkle;
         pa.color.add(1, change_alpha(COLOR_WHITE,0));
         particle_generator pg(0, pa, 8);
-        pg.number_deviation = 1;
+        pg.emission.number_deviation = 1;
         pg.size_deviation = 8;
         pg.angle = 0;
         pg.angle_deviation = TAU / 2;
@@ -3641,7 +3641,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pa.color.add(1, al_map_rgb(255, 224, 224));
         pa.gravity = 300;
         particle_generator pg(0, pa, 8);
-        pg.number_deviation = 1;
+        pg.emission.number_deviation = 1;
         pg.size_deviation = 8;
         pg.angle = 0;
         pg.angle_deviation = TAU / 2;

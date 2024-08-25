@@ -91,6 +91,61 @@ enum MOB_PARTICLE_GENERATOR_ID {
     
 };
 
+enum PARTICLE_EMISSION_SHAPE {
+
+    //Circular emission area
+    PARTICLE_EMISSION_SHAPE_CIRCLE,
+
+    //Rectangular emission area
+    PARTICLE_EMISSION_SHAPE_RECTANGLE
+};
+
+
+/**
+ * @brief A description of how a particle
+ * generator should emit particles
+ */
+struct particle_emission_struct {
+
+public:
+
+    //Shape to emit particles in
+    PARTICLE_EMISSION_SHAPE shape = PARTICLE_EMISSION_SHAPE_RECTANGLE;
+
+    //Number of particles to spawn.
+    size_t number = 0;
+
+    //Maximum random deviation of amount.
+    size_t number_deviation = 0;
+
+    //Interval at which to emit a new one. 0 means once only.
+    float interval = 0.0f;
+
+    //Maximum random deviation of interval.
+    float interval_deviation = 0.0f;
+
+    //Maximum random deviation of position.
+    point max_rectangular_offset = point(0,0);
+
+    //Minimum random deviation of position.
+    point min_rectangular_offset = point(0, 0);
+
+    //Max radius for circular emission
+    float max_circular_radius = 0;
+
+    //Min radius for circular emission
+    float min_circular_radius = 0;
+
+
+    //--- Function declarations ---
+
+    explicit particle_emission_struct(
+        const float emission_interval = 0.0f, const size_t number = 1
+    );
+
+    point get_emission_offset();
+};
+
 
 /**
  * @brief A particle is best described with examples:
@@ -239,11 +294,8 @@ public:
     //All particles created are based on this one.
     particle base_particle;
     
-    //Number of particles to spawn.
-    size_t number = 0;
-    
-    //Interval at which to emit a new one. 0 means once only.
-    float emission_interval = 0.0f;
+    //How the generator should emit particles
+    particle_emission_struct emission;
     
     //Follow the given mob's coordinates.
     mob* follow_mob = nullptr;
@@ -255,13 +307,7 @@ public:
     float follow_z_offset = 0.0f;
     
     //Follow the given angle. e.g. a mob's angle.
-    float* follow_angle = nullptr;
-    
-    //Maximum random deviation of interval.
-    float interval_deviation = 0.0f;
-    
-    //Maximum random deviation of amount.
-    size_t number_deviation = 0;
+    float* follow_angle = nullptr; 
     
     //Maximum random deviation of duration.
     float duration_deviation = 0.0f;
@@ -273,10 +319,7 @@ public:
     float gravity_deviation = 0.0f;
     
     //Maximum random deviation of size.
-    float size_deviation = 0;
-    
-    //Maximum random deviation of position.
-    point pos_deviation;
+    float size_deviation = 0;  
     
     //Maximum random deviation of speed.
     point speed_deviation;
@@ -315,3 +358,6 @@ private:
     float emission_timer;
     
 };
+
+
+

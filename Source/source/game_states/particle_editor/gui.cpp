@@ -393,6 +393,7 @@ void particle_editor::process_gui_options_dialog() {
 void particle_editor::process_gui_panel_item() {
     if(!loaded_content_yet)
         return;
+    ImGui::ShowDemoWindow();
     //Play/pause button.
     if (
         ImGui::ImageButton(
@@ -416,7 +417,7 @@ void particle_editor::process_gui_panel_item() {
             //Emission Interval value.
             if (
                 ImGui::DragFloat(
-                    "Emission Interval", &loaded_gen.emission_interval, 0.0005, 0.0f, FLT_MAX
+                    "Emission Interval", &loaded_gen.emission.interval, 0.0005, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -427,7 +428,7 @@ void particle_editor::process_gui_panel_item() {
             );
 
             //Number value.
-            int number = (int)loaded_gen.number;
+            int number = (int)loaded_gen.emission.number;
             if (
                 ImGui::DragInt(
                     "Number", &number, 1, 1, game.options.max_particles
@@ -439,15 +440,15 @@ void particle_editor::process_gui_panel_item() {
                 "How many particles are emitted per interval.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.number = number;
+            loaded_gen.emission.number = number;
 
             ImGui::Indent();
             //Number Deviation value.
             ImGui::SetNextItemWidth(75);
-            int number_dev = (int)loaded_gen.number_deviation;
+            int number_dev = (int)loaded_gen.emission.number_deviation;
             if (
                 ImGui::DragInt(
-                    "Number deviation", &number_dev, 1, 0, FLT_MAX
+                    "Number deviation", &number_dev, 1, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -456,21 +457,69 @@ void particle_editor::process_gui_panel_item() {
                 "The amount of particles emitted is changed by this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.number_deviation = number_dev;
+            loaded_gen.emission.number_deviation = number_dev;
             ImGui::Unindent();
 
-            //Postion deviation value.
-            if (
-                ImGui::DragFloat2(
-                    "Position deviation", (float*)&loaded_gen.pos_deviation, 0.5f, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
+
+            static int shape = loaded_gen.emission.shape;
+            ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
+            ImGui::RadioButton("Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE);
+
+            loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
+
+            switch (loaded_gen.emission.shape)
+            {
+            case PARTICLE_EMISSION_SHAPE_CIRCLE:
+                if (
+                    ImGui::DragFloat(
+                        "Min radius", &loaded_gen.emission.min_circular_radius, 0.1f, 0.0f, loaded_gen.emission.max_circular_radius
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's position varies by at least this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                if (
+                    ImGui::DragFloat(
+                        "Max radius", &loaded_gen.emission.max_circular_radius, 0.1f, loaded_gen.emission.min_circular_radius, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's position varies by at most this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+
+                break;
+            case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+                if (
+                    ImGui::DragFloat2(
+                        "Max offset", (float*)&loaded_gen.emission.max_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's position varies by at most this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                if (
+                    ImGui::DragFloat2(
+                        "Min offset", (float*)&loaded_gen.emission.min_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's position varies by at most this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+
+                break;
             }
-            set_tooltip(
-                "A particle's position can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
 
             ImGui::EndTabItem();
         }
@@ -713,7 +762,7 @@ void particle_editor::process_gui_panel_item() {
             //Size value.
             if (
                 ImGui::DragFloat(
-                    "Size", &loaded_gen.base_particle.size, 0.01f, 0.01f, FLT_MAX
+                    "Size", &loaded_gen.base_particle.size, 0.01f, 0.1f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -727,7 +776,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Grow Speed", &loaded_gen.base_particle.size_grow_speed, 0.01f, -FLT_MAX, FLT_MAX
+                    "Grow Speed", &loaded_gen.base_particle.size_grow_speed, 0.1f, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -741,7 +790,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Size deviation", &loaded_gen.size_deviation, 0.01f, 0, FLT_MAX
+                    "Size deviation", &loaded_gen.size_deviation, 0.01f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -770,7 +819,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0, FLT_MAX
+                    "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -806,7 +855,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0, FLT_MAX
+                    "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -835,7 +884,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Gravity deviation", &loaded_gen.gravity_deviation, 0.5f, 0, FLT_MAX
+                    "Gravity deviation", &loaded_gen.gravity_deviation, 0.5f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -864,7 +913,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(150);
             if (
                 ImGui::DragFloat2(
-                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0, FLT_MAX
+                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
