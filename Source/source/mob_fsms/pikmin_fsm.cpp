@@ -843,8 +843,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.run(pikmin_fsm::check_leader_bump);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -1634,6 +1633,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
+            efc.run(pikmin_fsm::set_bump_lock);
             efc.change_state("idling_h");
         }
         efc.new_event(MOB_EV_TIMER); {
@@ -1681,8 +1681,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing_h");
+            efc.run(pikmin_fsm::check_leader_bump);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -2212,7 +2211,14 @@ void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
         return;
     }
     pikmin_fsm::called(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+    if(
+        !pik_ptr->holding.empty() &&
+        pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+    ) {
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+    } else {
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+    }
 }
 
 
@@ -3231,7 +3237,14 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             game.states.gameplay->cur_leader_ptr
         ) {
             pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, nullptr);
-            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            if(
+                !pik_ptr->holding.empty() &&
+                pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+            ) {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+            } else {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            }
         }
     }
 }
@@ -3248,11 +3261,12 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
 void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
     engine_assert(!m->holding.empty(), m->print_state_history());
     
+    pikmin* pik_ptr = (pikmin*) m;
     tool* too_ptr = (tool*) * (m->holding.begin());
     
     pikmin_fsm::stand_still(m, nullptr, nullptr);
     
-    ((pikmin*) m)->is_tool_primed_for_whistle = true;
+    pik_ptr->is_tool_primed_for_whistle = true;
     
     m->set_animation(PIKMIN_ANIM_IDLING);
     
@@ -3265,7 +3279,14 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
             game.states.gameplay->cur_leader_ptr
         ) {
             pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, nullptr);
-            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            if(
+                !pik_ptr->holding.empty() &&
+                pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+            ) {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+            } else {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            }
         }
     } else {
         m->fsm.set_state(PIKMIN_STATE_IDLING_H);
@@ -4076,7 +4097,14 @@ void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
             pik_ptr->leader_to_return_to->health > 0.0f
         ) {
             pikmin_fsm::called(m, pik_ptr->leader_to_return_to, nullptr);
-            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            if(
+                !pik_ptr->holding.empty() &&
+                pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+            ) {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+            } else {
+                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            }
         }
     }
 }
@@ -4307,12 +4335,20 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
 void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info, m->print_state_history());
     
+    pikmin* pik_ptr = (pikmin*) m;
     track* tra_ptr = (track*) (m->track_info->m);
     
     if(tra_ptr->tra_type->cancellable_with_whistle) {
         m->stop_track_ride();
         pikmin_fsm::called(m, info1, nullptr);
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        if(
+            !pik_ptr->holding.empty() &&
+            pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+        ) {
+            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+        } else {
+            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        }
     }
 }
 
