@@ -835,7 +835,7 @@ void mob_type::load_from_data_node(
         //Load init actions.
         load_actions(
             this,
-            script_file.get_child_by_name("init"), &init_actions, 0
+            script_file.get_child_by_name("init"), &init_actions, nullptr
         );
         //Load the rest of the script.
         load_script(

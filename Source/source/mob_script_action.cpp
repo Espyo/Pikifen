@@ -2484,18 +2484,23 @@ void insert_event_actions(
  * @param mt The type of mob the events are going to.
  * @param node The data node.
  * @param out_actions The oaded actions are returned here.
- * @param out_settings The settings for how to load the events are
- * returned here.
+ * @param out_settings If not nullptr, the settings for how to load the
+ * events are returned here.
  */
 void load_actions(
     mob_type* mt, data_node* node,
     vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings
 ) {
+    if(out_settings) *out_settings = 0;
     for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
         data_node* action_node = node->get_child(a);
-        if (action_node->name == "custom_actions_after") {
+        if (
+            out_settings && action_node->name == "custom_actions_after"
+        ) {
             enable_flag(*out_settings, EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER);
-        } else if (action_node->name == "global_actions_after") {
+        } else if (
+            out_settings && action_node->name == "global_actions_after"
+        ) {
             enable_flag(*out_settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
         } else {
             mob_action_call* new_a = new mob_action_call();
