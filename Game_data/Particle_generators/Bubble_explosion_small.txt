@@ -1,8 +1,14 @@
 name=bubble_explosion_small
 description=A generic small explosion of bubbles. Used, for instance, when the Cyclopod dies.
-emission_interval=0.0000
-number=12
-number_deviation=1
+emission{
+	number=12
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=0.0000 0.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap=Bubble.png
 	duration=1.0000
@@ -13,6 +19,7 @@ base{
 	speed=0.0000 0.0000
 	color{
 		0.0000=255 255 255
+		0.9000=255 255 255
 		1.0000=255 255 255 0
 	}
 }
@@ -20,7 +27,6 @@ duration_deviation=0.3000
 friction_deviation=0.3000
 gravity_deviation=0.0000
 size_deviation=4.0000
-pos_deviation=0.0000 0.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=360.0000

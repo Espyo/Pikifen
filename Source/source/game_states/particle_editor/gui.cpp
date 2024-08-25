@@ -393,7 +393,7 @@ void particle_editor::process_gui_options_dialog() {
 void particle_editor::process_gui_panel_item() {
     if(!loaded_content_yet)
         return;
-    ImGui::ShowDemoWindow();
+
     //Play/pause button.
     if (
         ImGui::ImageButton(
@@ -497,7 +497,7 @@ void particle_editor::process_gui_panel_item() {
             case PARTICLE_EMISSION_SHAPE_RECTANGLE:
                 if (
                     ImGui::DragFloat2(
-                        "Max offset", (float*)&loaded_gen.emission.max_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                        "Min offset", (float*)&loaded_gen.emission.min_rectangular_offset, 0.1f, 0.0f, FLT_MAX
                     )
                     ) {
                     changes_mgr.mark_as_changed();
@@ -506,9 +506,10 @@ void particle_editor::process_gui_panel_item() {
                     "A particle's position varies by at most this amount.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
+
                 if (
                     ImGui::DragFloat2(
-                        "Min offset", (float*)&loaded_gen.emission.min_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                        "Max offset", (float*)&loaded_gen.emission.max_rectangular_offset, 0.1f, 0.0f, FLT_MAX
                     )
                     ) {
                     changes_mgr.mark_as_changed();

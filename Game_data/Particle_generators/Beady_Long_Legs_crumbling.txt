@@ -1,8 +1,14 @@
 name=beady_long_legs_crumbling
 description=The flakes dropped by a crumbling Beady Long Legs.
-emission_interval=0.0500
-number=10
-number_deviation=0
+emission{
+	number=10
+	number_deviation=0
+	interval=0.0500
+	interval_deviation=0.0000
+	shape=1
+	max_offset=200.0000 200.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap
 	duration=1.5000
@@ -22,7 +28,6 @@ duration_deviation=0.5000
 friction_deviation=0.2000
 gravity_deviation=0.0000
 size_deviation=2.0000
-pos_deviation=200.0000 200.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=360.0000

@@ -1,8 +1,14 @@
 name=dust_explosion_gate
 description=A generic gate-sized explosion of dust. Used, for instance, when a lifted gate lands.
-emission_interval=0.0000
-number=18
-number_deviation=0
+emission{
+	number=18
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=20.0000 96.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap=Smoke.png
 	duration=0.7500
@@ -12,14 +18,14 @@ base{
 	size=30.0000
 	speed=0.0000 0.0000
 	color{
-		0.0000=238 204 170 0
+		0.0000=238 204 170 252
+		1.0000=238 204 170 4
 	}
 }
 duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=2.0000
-pos_deviation=20.0000 96.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=360.0000

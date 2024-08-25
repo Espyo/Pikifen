@@ -1,8 +1,14 @@
 name=dust_explosion_large
 description=A generic large explosion of dust. Used, for instance, when the Puffy Blowhog falls to the ground.
-emission_interval=0.0000
-number=16
-number_deviation=0
+emission{
+	number=16
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=0.0000 0.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap=Smoke.png
 	duration=0.7500
@@ -20,7 +26,6 @@ duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=2.0000
-pos_deviation=0.0000 0.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=360.0000
