@@ -79,6 +79,29 @@ animation &animation::operator=(const animation &a2) {
 
 
 /**
+ * @brief Deletes one of the animation's frames.
+ *
+ * @param idx Frame index.
+ */
+void animation::delete_frame(size_t idx) {
+    if(idx == INVALID) return;
+    
+    if(idx < loop_frame) {
+        //Let the loop frame stay the same.
+        loop_frame--;
+    }
+    if(
+        idx == loop_frame &&
+        loop_frame == frames.size() - 1
+    ) {
+        //Stop the loop frame from going out of bounds.
+        loop_frame--;
+    }
+    frames.erase(frames.begin() + idx);
+}
+
+
+/**
  * @brief Returns the total duration of the animation.
  *
  * @return The duration.
@@ -279,9 +302,8 @@ void animation_database::delete_sprite(size_t idx) {
         animation* a_ptr = animations[a];
         
         for(size_t f = 0; f < a_ptr->frames.size();) {
-            frame* f_ptr = &a_ptr->frames[f];
-            if(f_ptr->sprite_idx == idx) {
-                a_ptr->frames.erase(a_ptr->frames.begin() + f);
+            if(a_ptr->frames[f].sprite_idx == idx) {
+                a_ptr->delete_frame(f);
             } else {
                 ++f;
             }
@@ -289,6 +311,14 @@ void animation_database::delete_sprite(size_t idx) {
     }
     
     sprites.erase(sprites.begin() + idx);
+    
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            frame* f_ptr = &(a_ptr->frames[f]);
+            f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
+        }
+    }
 }
 
 

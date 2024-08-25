@@ -222,6 +222,7 @@ public:
     );
     animation(const animation &a2);
     animation &operator=(const animation &a2);
+    void delete_frame(size_t idx);
     float get_duration();
     float get_loop_duration();
     void get_frame_and_time(

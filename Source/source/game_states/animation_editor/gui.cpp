@@ -1093,51 +1093,34 @@ void animation_editor::process_gui_panel_animation() {
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
-                    if(
-                        cur_anim_i.cur_frame_idx <
-                        cur_anim_i.cur_anim->loop_frame
-                    ) {
-                        //Let the loop frame stay the same.
-                        cur_anim_i.cur_anim->loop_frame--;
-                    }
-                    if(
-                        cur_anim_i.cur_frame_idx ==
-                        cur_anim_i.cur_anim->loop_frame &&
-                        cur_anim_i.cur_anim->loop_frame ==
-                        cur_anim_i.cur_anim->frames.size() - 1
-                    ) {
-                        //Stop the loop frame from going out of bounds.
-                        cur_anim_i.cur_anim->loop_frame--;
-                    }
-                    anim_playing = false;
                     size_t deleted_frame_idx = cur_anim_i.cur_frame_idx;
                     if(cur_anim_i.cur_frame_idx != INVALID) {
-                        cur_anim_i.cur_anim->frames.erase(
-                            cur_anim_i.cur_anim->frames.begin() +
+                        cur_anim_i.cur_anim->delete_frame(
                             cur_anim_i.cur_frame_idx
                         );
-                        if(cur_anim_i.cur_anim->frames.empty()) {
-                            cur_anim_i.cur_frame_idx = INVALID;
-                            frame_ptr = nullptr;
-                        } else if(
-                            cur_anim_i.cur_frame_idx >=
-                            cur_anim_i.cur_anim->frames.size()
-                        ) {
-                            cur_anim_i.cur_frame_idx =
-                                cur_anim_i.cur_anim->frames.size() - 1;
-                            frame_ptr =
-                                &(
-                                    cur_anim_i.cur_anim->frames[
-                                        cur_anim_i.cur_frame_idx
-                                    ]
-                                );
-                        }
-                        cur_anim_i.cur_frame_time = 0.0f;
-                        changes_mgr.mark_as_changed();
-                        set_status(
-                            "Deleted frame #" + i2s(deleted_frame_idx + 1) + "."
-                        );
                     }
+                    if(cur_anim_i.cur_anim->frames.empty()) {
+                        cur_anim_i.cur_frame_idx = INVALID;
+                        frame_ptr = nullptr;
+                    } else if(
+                        cur_anim_i.cur_frame_idx >=
+                        cur_anim_i.cur_anim->frames.size()
+                    ) {
+                        cur_anim_i.cur_frame_idx =
+                            cur_anim_i.cur_anim->frames.size() - 1;
+                        frame_ptr =
+                            &(
+                                cur_anim_i.cur_anim->frames[
+                                    cur_anim_i.cur_frame_idx
+                                ]
+                            );
+                    }
+                    anim_playing = false;
+                    cur_anim_i.cur_frame_time = 0.0f;
+                    changes_mgr.mark_as_changed();
+                    set_status(
+                        "Deleted frame #" + i2s(deleted_frame_idx + 1) + "."
+                    );
                 }
                 set_tooltip(
                     "Delete the current frame."
@@ -1804,6 +1787,7 @@ void animation_editor::process_gui_panel_sprite() {
             string deleted_sprite_name = cur_sprite->name;
             size_t nr = anims.find_sprite(deleted_sprite_name);
             anims.delete_sprite(nr);
+            cur_anim_i.cur_frame_idx = 0;
             if(anims.sprites.empty()) {
                 cur_sprite = nullptr;
                 cur_hitbox = nullptr;
