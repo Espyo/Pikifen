@@ -21,6 +21,21 @@ using std::string;
 using std::vector;
 
 
+//Ways to vertically align something.
+enum V_ALIGN_MODE {
+
+    //Align to the top.
+    V_ALIGN_MODE_TOP,
+    
+    //Align to the center.
+    V_ALIGN_MODE_CENTER,
+    
+    //Align to the bottom.
+    V_ALIGN_MODE_BOTTOM,
+    
+};
+
+
 /**
  * @brief Simple 2D point.
  */
@@ -254,3 +269,4 @@ size_t select_next_item_directionally(
     const vector<point> &item_coordinates, const size_t selected_item,
     const float direction, const point &loop_region
 );
+float get_vertical_align_offset(V_ALIGN_MODE mode, float height);

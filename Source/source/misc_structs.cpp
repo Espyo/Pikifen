@@ -734,7 +734,7 @@ void notification_t::draw() const {
             (text_box_y1 + text_box_y2) * 0.5
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_MODE_CENTER,
+        V_ALIGN_MODE_CENTER,
         point(
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1

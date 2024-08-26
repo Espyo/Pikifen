@@ -199,7 +199,7 @@ void draw_button(
         font, color,
         center,
         point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, true,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, true,
         text
     );
     
@@ -243,14 +243,14 @@ void draw_fraction(
     draw_scaled_text(
         game.sys_assets.fnt_value, color, point(bottom.x, value_nr_y),
         point(value_nr_scale, value_nr_scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(value_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, (i2s(value_nr).c_str())
     );
     
     float bar_y = bottom.y - font_h * 2;
     draw_scaled_text(
         game.sys_assets.fnt_value, color, point(bottom.x, bar_y),
         point(scale, scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, "-"
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, "-"
     );
     
     float req_nr_y = bottom.y - font_h;
@@ -259,7 +259,7 @@ void draw_fraction(
     draw_scaled_text(
         game.sys_assets.fnt_value, color, point(bottom.x, req_nr_y),
         point(req_nr_scale, req_nr_scale),
-        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_TOP, (i2s(requirement_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, (i2s(requirement_nr).c_str())
     );
 }
 
@@ -504,7 +504,7 @@ void draw_loading_screen(
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
                     game.sys_assets.fnt_area_name, COLOR_GOLD,
-                    point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
+                    point(), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                     text
                 );
             } al_set_target_backbuffer(game.display);
@@ -534,7 +534,7 @@ void draw_loading_screen(
                 draw_text_lines(
                     game.sys_assets.fnt_area_name, al_map_rgb(224, 224, 224),
                     point(),
-                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
+                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                     subtext
                 );
                 
@@ -1051,7 +1051,7 @@ void draw_player_input_icon(
             where.y
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_MODE_CENTER,
+        V_ALIGN_MODE_CENTER,
         point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
             (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
@@ -1270,7 +1270,7 @@ void draw_string_tokens(
                 text_font, COLOR_WHITE,
                 point(caret, where.y),
                 point(x_scale * scale.x, y_scale * scale.y),
-                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
+                ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                 tokens[t].content
             );
             break;

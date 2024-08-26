@@ -73,7 +73,7 @@ void main_menu_state::do_drawing() {
         game.sys_assets.fnt_standard, COLOR_WHITE,
         point(8, game.win_h  - 8),
         point(0.6, 0.6),
-        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_BOTTOM,
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM,
         "Pikmin (c) Nintendo"
     );
     string version_text;
@@ -90,7 +90,7 @@ void main_menu_state::do_drawing() {
         game.sys_assets.fnt_standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),
         point(0.6, 0.6),
-        ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_MODE_BOTTOM,
+        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM,
         version_text
     );
     

@@ -1244,7 +1244,7 @@ void pause_menu_t::draw_radar(
             north_ind_center.y + 4.0f
         ),
         ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_MODE_CENTER,
+        V_ALIGN_MODE_CENTER,
         point(12.0f, 12.0f),
         "N"
     );
@@ -1274,7 +1274,7 @@ void pause_menu_t::draw_radar(
     draw_compressed_text(
         game.sys_assets.fnt_standard, PAUSE_MENU::RADAR_HIGHEST_COLOR,
         area_name_center, ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_MODE_CENTER, area_name_size,
+        V_ALIGN_MODE_CENTER, area_name_size,
         game.cur_area_data.name
     );
     

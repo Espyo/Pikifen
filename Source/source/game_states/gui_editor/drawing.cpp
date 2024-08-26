@@ -117,7 +117,7 @@ void gui_editor::draw_canvas() {
                 1.0f / game.cam.zoom
             ),
             ALLEGRO_ALIGN_LEFT,
-            TEXT_VALIGN_MODE_TOP,
+            V_ALIGN_MODE_TOP,
             items[i].name
         );
         al_set_clipping_rectangle(

@@ -97,7 +97,7 @@ bullet_point_gui_item::bullet_point_gui_item(
             this->font, this->color,
             point(item_x_start + text_x_offset, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, text_space, true,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, text_space, true,
             this->text
         );
         if(selected) {
@@ -161,7 +161,7 @@ check_gui_item::check_gui_item(
             this->font, this->color,
             point(center.x - size.x * 0.45, center.y),
             point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
             point(size.x * 0.90, size.y), true, this->text
         );
         
@@ -1384,7 +1384,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 0 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size,
             false,
             "<"
@@ -1398,7 +1398,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 1 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size,
             false,
             ">"
@@ -1410,7 +1410,7 @@ picker_gui_item::picker_gui_item(
             game.sys_assets.fnt_standard, COLOR_WHITE,
             point(center.x - size.x * 0.40, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
             point(size.x * 0.80, size.y),
             true,
             this->base_text + this->option
@@ -1590,7 +1590,7 @@ text_gui_item::text_gui_item(
                 this->font, this->color,
                 point(text_x, text_y),
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                this->flags, TEXT_VALIGN_MODE_CENTER, size, true,
+                this->flags, V_ALIGN_MODE_CENTER, size, true,
                 this->text
             );
             
@@ -1628,7 +1628,7 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
             game.sys_assets.fnt_standard, COLOR_WHITE,
             center,
             point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size,
             false,
             cur_text
         );

@@ -91,7 +91,7 @@ void draw_bitmap_in_box(
  * @param where Coordinates to draw it at.
  * @param scale Scale to use.
  * @param flags Allegro text render function flags.
- * @param valign Vertical alignment.
+ * @param v_align Vertical alignment.
  * @param max_size The maximum width and height. Use <= 0 to have no limit.
  * @param scale_past_max If true, the max size will only be taken into
  * account when the scale is 1. If it is any bigger, it will overflow
@@ -101,11 +101,11 @@ void draw_bitmap_in_box(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign,
+    const int flags, const V_ALIGN_MODE v_align,
     const point &max_size, const bool scale_past_max, const string &text
 ) {
 
-    if(max_size.x == 0 && max_size.y == 0) return;
+    if(max_size.x == 0.0f && max_size.y == 0.0f) return;
     
     int text_ox;
     int text_oy;
@@ -137,25 +137,16 @@ void draw_compressed_scaled_text(
     }
     
     float final_text_height = normal_text_size.y * final_scale.y;
-    float valign_offset =
-        valign == TEXT_VALIGN_MODE_CENTER ?
-        final_text_height / 2.0f :
-        valign == TEXT_VALIGN_MODE_BOTTOM ?
-        final_text_height :
-        0.0f;
+    float v_align_offset =
+        get_vertical_align_offset(v_align, final_text_height);
         
-    ALLEGRO_TRANSFORM scale_transform, old_transform;
-    al_copy_transform(&old_transform, al_get_current_transform());
-    al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, final_scale.x, final_scale.y);
-    al_translate_transform(
-        &scale_transform,
-        where.x,
-        where.y - valign_offset
+    ALLEGRO_TRANSFORM text_transform, old_transform;
+    get_text_drawing_transforms(
+        where, final_scale, 0.0f, v_align_offset,
+        &text_transform, &old_transform
     );
-    al_compose_transform(&scale_transform, &old_transform);
     
-    al_use_transform(&scale_transform); {
+    al_use_transform(&text_transform); {
         al_draw_text(font, color, 0, 0, flags, text.c_str());
     }; al_use_transform(&old_transform);
 }
@@ -169,13 +160,13 @@ void draw_compressed_scaled_text(
  * @param color Tint the text by this color.
  * @param where Coordinates to draw it at.
  * @param flags Allegro text render function flags.
- * @param valign Vertical alignment.
+ * @param v_align Vertical alignment.
  * @param max_size The maximum width and height. Use <= 0 to have no limit.
  * @param text Text to draw.
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
+    const point &where, const int flags, const V_ALIGN_MODE v_align,
     const point &max_size, const string &text
 ) {
     if(max_size.x == 0 && max_size.y == 0) return;
@@ -199,25 +190,16 @@ void draw_compressed_text(
         final_text_height = max_size.y;
     }
     
-    float valign_offset =
-        valign == TEXT_VALIGN_MODE_CENTER ?
-        final_text_height / 2.0f :
-        valign == TEXT_VALIGN_MODE_BOTTOM ?
-        final_text_height :
-        0.0f;
+    float v_align_offset =
+        get_vertical_align_offset(v_align, final_text_height);
         
-    ALLEGRO_TRANSFORM scale_transform, old_transform;
-    al_copy_transform(&old_transform, al_get_current_transform());
-    al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, scale.x, scale.y);
-    al_translate_transform(
-        &scale_transform,
-        where.x,
-        where.y - valign_offset - text_oy
+    ALLEGRO_TRANSFORM text_transform, old_transform;
+    get_text_drawing_transforms(
+        where, scale, text_oy, v_align_offset,
+        &text_transform, &old_transform
     );
-    al_compose_transform(&scale_transform, &old_transform);
     
-    al_use_transform(&scale_transform); {
+    al_use_transform(&text_transform); {
         al_draw_text(font, color, 0, 0, flags, text.c_str());
     }; al_use_transform(&old_transform);
 }
@@ -382,24 +364,23 @@ void draw_rounded_rectangle(
  * @param where Coordinates to draw in.
  * @param scale Horizontal or vertical scale.
  * @param flags Same flags you'd use for al_draw_text.
- * @param valign Vertical alignment.
+ * @param v_align Vertical alignment.
  * @param text Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign, const string &text
+    const int flags, const V_ALIGN_MODE v_align, const string &text
 ) {
 
-    ALLEGRO_TRANSFORM scale_transform, old_transform;
-    al_copy_transform(&old_transform, al_get_current_transform());
-    al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, scale.x, scale.y);
-    al_translate_transform(&scale_transform, where.x, where.y);
-    al_compose_transform(&scale_transform, &old_transform);
+    ALLEGRO_TRANSFORM text_transform, old_transform;
+    get_text_drawing_transforms(
+        where, scale, 0.0f, 0.0f,
+        &text_transform, &old_transform
+    );
     
-    al_use_transform(&scale_transform); {
-        draw_text_lines(font, color, point(), flags, valign, text);
+    al_use_transform(&text_transform); {
+        draw_text_lines(font, color, point(), flags, v_align, text);
     }; al_use_transform(&old_transform);
 }
 
@@ -413,25 +394,25 @@ void draw_scaled_text(
  * @param color Color.
  * @param where Coordinates of the text.
  * @param flags Flags, just like the ones you'd pass to al_draw_text.
- * @param valign Vertical alignment.
+ * @param v_align Vertical alignment.
  * @param text Text to write, line breaks included ('\n').
  */
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const int flags,
-    const TEXT_VALIGN_MODE valign, const string &text
+    const V_ALIGN_MODE v_align, const string &text
 ) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     float top;
     
-    if(valign == TEXT_VALIGN_MODE_TOP) {
+    if(v_align == V_ALIGN_MODE_TOP) {
         top = where.y;
     } else {
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = (int) n_lines * fh + (int) (n_lines - 1);
-        if(valign == TEXT_VALIGN_MODE_CENTER) {
+        if(v_align == V_ALIGN_MODE_CENTER) {
             top = where.y - total_height / 2;
         } else {
             top = where.y - total_height;
@@ -591,4 +572,33 @@ void draw_textured_box(
     al_draw_prim(
         vert, nullptr, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
+}
+
+
+/**
+ * @brief Returns the Allegro transform to use to draw text in the
+ * specified way.
+ *
+ * @param where Coordinates to draw the text at.
+ * @param scale Text scale.
+ * @param text_orig_oy The text's original Y offset,
+ * from al_get_text_dimensions.
+ * @param v_align_offset Vertical alignment offset.
+ * @param out_text_transform The text transform is returned here.
+ * @param out_old_transform The old (current) transform is returned here.
+ */
+void get_text_drawing_transforms(
+    const point &where, const point &scale,
+    float text_orig_oy, float v_align_offset,
+    ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
+) {
+    al_copy_transform(out_old_transform, al_get_current_transform());
+    al_identity_transform(out_text_transform);
+    al_scale_transform(out_text_transform, scale.x, scale.y);
+    al_translate_transform(
+        out_text_transform,
+        where.x,
+        where.y - v_align_offset - text_orig_oy
+    );
+    al_compose_transform(out_text_transform, out_old_transform);
 }

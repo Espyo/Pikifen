@@ -310,7 +310,7 @@ void gameplay_state::draw_big_msg() {
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
-                TEXT_VALIGN_MODE_CENTER,
+                V_ALIGN_MODE_CENTER,
                 string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c])
             );
         }
@@ -337,7 +337,7 @@ void gameplay_state::draw_big_msg() {
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             point(scale, scale),
             ALLEGRO_ALIGN_CENTER,
-            TEXT_VALIGN_MODE_CENTER,
+            V_ALIGN_MODE_CENTER,
             GAMEPLAY::BIG_MSG_GO_TEXT
         );
         break;
@@ -382,7 +382,7 @@ void gameplay_state::draw_big_msg() {
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
-                TEXT_VALIGN_MODE_CENTER,
+                V_ALIGN_MODE_CENTER,
                 string(1, TEXT[c])
             );
         }
@@ -1031,7 +1031,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             point(count_offset, count_offset),
             point(1.0f, 1.0f),
             ALLEGRO_ALIGN_LEFT,
-            TEXT_VALIGN_MODE_TOP,
+            V_ALIGN_MODE_TOP,
             i2s(n_standby_pikmin)
         );
     }
@@ -1332,7 +1332,7 @@ void gameplay_state::draw_message_box() {
                     game.sys_assets.fnt_standard, map_alpha(alpha),
                     point(x, y),
                     point(x_scale, 1.0f),
-                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_TOP,
+                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                     cur_token.content
                 );
                 break;
@@ -1436,7 +1436,7 @@ void gameplay_state::draw_system_stuff() {
         );
         draw_text_lines(
             game.sys_assets.fnt_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-            point(8, 8), 0, TEXT_VALIGN_MODE_TOP, game.maker_tools.info_print_text
+            point(8, 8), 0, V_ALIGN_MODE_TOP, game.maker_tools.info_print_text
         );
     }
     

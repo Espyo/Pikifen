@@ -145,7 +145,7 @@ void in_world_fraction::draw() {
             game.sys_assets.fnt_standard,
             final_color, pos,
             point(size_mult, size_mult),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, i2s(value_number)
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, i2s(value_number)
         );
     }
 }

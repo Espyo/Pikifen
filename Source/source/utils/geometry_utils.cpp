@@ -2000,3 +2000,21 @@ size_t select_next_item_directionally(
     
     return best_item;
 }
+
+
+/**
+ * @brief Returns how much to vertically offset something so that it aligns
+ * with either the top, center, or bottom of a box.
+ *
+ * @param mode Vertical alignment mode.
+ * @param height Total height of the box.
+ * @return The vertical offset.
+ */
+float get_vertical_align_offset(V_ALIGN_MODE mode, float height) {
+    return
+        mode == V_ALIGN_MODE_BOTTOM ?
+        height :
+        mode == V_ALIGN_MODE_CENTER ?
+        height / 2.0f :
+        0.0f;
+}

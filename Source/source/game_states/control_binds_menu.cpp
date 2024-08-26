@@ -117,7 +117,7 @@ void control_binds_menu_state::do_drawing() {
             COLOR_WHITE,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
-            TEXT_VALIGN_MODE_CENTER,
+            V_ALIGN_MODE_CENTER,
             "Waiting for any input..."
         );
     }

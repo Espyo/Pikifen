@@ -381,7 +381,7 @@ hud_t::hud_t() :
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.sys_assets.fnt_counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size, i2s(game.states.gameplay->day)
         );
     };
@@ -582,7 +582,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
@@ -620,7 +620,7 @@ hud_t::hud_t() :
             game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -658,7 +658,7 @@ hud_t::hud_t() :
             game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + field_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -696,7 +696,7 @@ hud_t::hud_t() :
             game.sys_assets.fnt_counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + total_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             size * 0.7, true,
             i2s(cur_amount)
         );
@@ -711,7 +711,7 @@ hud_t::hud_t() :
         draw_compressed_text(
             game.sys_assets.fnt_counter,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
-            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "x"
+            center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, "x"
         );
     };
     gui.add_item(counters_x, "counters_x");
@@ -725,7 +725,7 @@ hud_t::hud_t() :
             if(!game.states.gameplay->cur_leader_ptr) return;
             draw_compressed_text(
                 game.sys_assets.fnt_counter, COLOR_WHITE,
-                center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER, size, "/"
+                center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, "/"
             );
         };
         gui.add_item(counter_slash, "counters_slash_" + i2s(s + 1));
@@ -761,7 +761,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, size, true,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
         );
@@ -841,7 +841,7 @@ hud_t::hud_t() :
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER, size, true,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
         );
@@ -1017,7 +1017,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     goal_cur_label_text
                 );
@@ -1048,7 +1048,7 @@ hud_t::hud_t() :
                     game.sys_assets.fnt_counter, COLOR_WHITE,
                     center,
                     point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     text
                 );
@@ -1064,7 +1064,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     "Goal"
                 );
@@ -1091,7 +1091,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.sys_assets.fnt_counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     text
                 );
@@ -1106,7 +1106,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.sys_assets.fnt_counter, COLOR_WHITE,
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     "/"
                 );
@@ -1122,7 +1122,7 @@ hud_t::hud_t() :
                 draw_compressed_scaled_text(
                     game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                     center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                     size, true,
                     game.mission_goals[game.cur_area_data.mission.goal]->
                     get_name()
@@ -1162,7 +1162,7 @@ hud_t::hud_t() :
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x + size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_CENTER,
                 size, true,
                 "Score:"
             );
@@ -1180,7 +1180,7 @@ hud_t::hud_t() :
                 game.sys_assets.fnt_counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 i2s(game.states.gameplay->mission_score)
             );
@@ -1196,7 +1196,7 @@ hud_t::hud_t() :
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 point(center.x - size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
                 size, true,
                 "pts"
             );
@@ -1537,7 +1537,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 game.mission_fail_conds[cond]->
                 get_hud_label(game.states.gameplay)
@@ -1570,7 +1570,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
                 game.sys_assets.fnt_counter, COLOR_WHITE,
                 center,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 text
             );
@@ -1596,7 +1596,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 "Fail"
             );
@@ -1625,7 +1625,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 text
             );
@@ -1645,7 +1645,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_counter, COLOR_WHITE,
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 "/"
             );
@@ -1666,7 +1666,7 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             draw_compressed_scaled_text(
                 game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_MODE_CENTER,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
                 size, true,
                 "Fail: " +
                 game.mission_fail_conds[cond]->get_name()

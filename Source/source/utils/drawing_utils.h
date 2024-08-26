@@ -14,6 +14,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 
+#include "general_utils.h"
 #include "geometry_utils.h"
 
 
@@ -33,21 +34,6 @@ constexpr ALLEGRO_COLOR COLOR_GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
 constexpr ALLEGRO_COLOR COLOR_TRANSPARENT_WHITE = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 
-//Ways to vertically align text when rendering it.
-enum TEXT_VALIGN_MODE {
-
-    //Align to the top.
-    TEXT_VALIGN_MODE_TOP,
-    
-    //Align to the center.
-    TEXT_VALIGN_MODE_CENTER,
-    
-    //Align to the bottom.
-    TEXT_VALIGN_MODE_BOTTOM,
-    
-};
-
-
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle = 0,
@@ -62,12 +48,12 @@ void draw_bitmap_in_box(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign,
+    const int flags, const V_ALIGN_MODE v_align,
     const point &max_size, const bool scale_past_max, const string &text
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
+    const point &where, const int flags, const V_ALIGN_MODE v_align,
     const point &max_size, const string &text
 );
 void draw_equilateral_triangle(
@@ -96,14 +82,19 @@ void draw_rounded_rectangle(
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign, const string &text
+    const int flags, const V_ALIGN_MODE valign, const string &text
 );
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
+    const point &where, const int flags, const V_ALIGN_MODE v_align,
     const string &text
 );
 void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
+);
+void get_text_drawing_transforms(
+    const point &where, const point &scale,
+    float text_orig_oy, float v_align_offset,
+    ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
 );
