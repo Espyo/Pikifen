@@ -36,6 +36,7 @@
 #include "../mob_types/track_type.h"
 #include "../mob_types/treasure_type.h"
 #include "../pathing.h"
+#include "../utils/general_utils.h"
 #include "../utils/geometry_utils.h"
 #include "mob_enums.h"
 

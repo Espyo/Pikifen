@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,11 @@
 
 using std::string;
 using std::vector;
+
+
+typedef uint8_t bitmask_8_t;
+typedef uint16_t bitmask_16_t;
+typedef uint32_t bitmask_32_t;
 
 
 //Turns a bit in a bitmask off.
@@ -40,6 +46,38 @@ using std::vector;
 //Returns whether a bit is on or not in a bitmask.
 #define has_flag(flags, flag) (((flags) & (flag)) > 0)
 
+
+//Cross-platform way of representing an invalid index.
+constexpr size_t INVALID = UINT32_MAX;
+
+//Cross-platform way of representing a float value of "invalid" or similar.
+constexpr float LARGE_FLOAT = 999999.0f;
+
+
+
+/**
+ * @brief Just a list of different elements in an enum and what their names are.
+ */
+struct enum_name_database {
+
+    public:
+    
+    //--- Function declarations ---
+    
+    void register_item(const size_t enum_idx, const string &name);
+    size_t get_idx(const string &name) const;
+    string get_name(const size_t idx) const;
+    size_t get_nr_of_items() const;
+    void clear();
+    
+    private:
+    
+    //--- Members ---
+    
+    //Known items.
+    vector<string> names;
+    
+};
 
 
 /**
@@ -100,6 +138,40 @@ struct movement_t {
     
     void get_info(point* coords, float* angle, float* magnitude) const;
     void reset();
+    
+};
+
+
+/**
+ * @brief A timer. You can set it to start at a pre-determined time,
+ * to tick, etc.
+ */
+struct timer {
+
+    //--- Members ---
+    
+    //How much time is left until 0.
+    float time_left = 0.0f;
+    
+    //When the timer starts, its time is set to this.
+    float duration = 0.0f;
+    
+    //Code to run when the timer ends, if any.
+    std::function<void()> on_end = nullptr;
+    
+    
+    //--- Function declarations ---
+    
+    explicit timer(
+        const float duration = 0,
+        const std::function<void()> &on_end = nullptr
+    );
+    ~timer();
+    void start(const bool can_restart = true);
+    void start(const float new_duration);
+    void stop();
+    void tick(const float delta_t);
+    float get_ratio_left() const;
     
 };
 

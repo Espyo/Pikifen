@@ -25,6 +25,59 @@
 
 
 /**
+ * @brief Returns the index number of an item, given its name.
+ *
+ * @param name Name of the item.
+ * @return The index, or INVALID on error.
+ */
+size_t enum_name_database::get_idx(const string &name) const {
+    for(size_t n = 0; n < names.size(); ++n) {
+        if(names[n] == name) return n;
+    }
+    return INVALID;
+}
+
+
+/**
+ * @brief Returns the name of an item, given its index number.
+ *
+ * @param idx Index number of the item.
+ * @return The name, or an empty string on error.
+ */
+string enum_name_database::get_name(const size_t idx) const {
+    if(idx < names.size()) return names[idx];
+    return "";
+}
+
+
+/**
+ * @brief Returns the number of items registered.
+ *
+ * @return The amount.
+ */
+size_t enum_name_database::get_nr_of_items() const {
+    return names.size();
+}
+
+
+/**
+ * @brief Registers a new item.
+ *
+ * @param idx Its index number.
+ * @param name Its name.
+ */
+void enum_name_database::register_item(
+    const size_t idx, const string &name
+) {
+    if(idx >= names.size()) {
+        names.insert(names.end(), (idx + 1) - names.size(), "");
+    }
+    names[idx] = name;
+}
+
+
+
+/**
  * @brief Constructs a new keyframe interpolator object.
  *
  * @param initial_value Initial value of the thing being interpolated.
@@ -108,6 +161,87 @@ void movement_t::reset() {
     up = 0.0f;
     left = 0.0f;
     down = 0.0f;
+}
+
+
+
+/**
+ * @brief Constructs a new timer object.
+ *
+ * @param duration How long before it reaches the end, in seconds.
+ * @param on_end Code to run when time ends.
+ */
+timer::timer(float duration, const std::function<void()> &on_end) :
+    time_left(0),
+    duration(duration),
+    on_end(on_end) {
+    
+    
+}
+
+
+/**
+ * @brief Destroys the timer object.
+ */
+timer::~timer() {
+    //TODO Valgrind detects a leak with on_end...
+}
+
+
+/**
+ * @brief Returns the ratio of time left
+ * (i.e. 0 if done, 1 if all time is left).
+ *
+ * @return The ratio left.
+ */
+float timer::get_ratio_left() const {
+    return time_left / duration;
+}
+
+
+
+/**
+ * @brief Starts a timer.
+ *
+ * @param can_restart If false, calling this while the timer is still
+ * ticking down will not do anything.
+ */
+void timer::start(const bool can_restart) {
+    if(!can_restart && time_left > 0) return;
+    time_left = duration;
+}
+
+
+/**
+ * @brief Starts a timer, but sets a new duration.
+ *
+ * @param new_duration Its new duration.
+ */
+void timer::start(const float new_duration) {
+    duration = new_duration;
+    start();
+}
+
+
+/**
+ * @brief Stops a timer, without executing the on_end callback.
+ */
+void timer::stop() {
+    time_left = 0.0f;
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ */
+void timer::tick(const float delta_t) {
+    if(time_left == 0.0f) return;
+    time_left = std::max(time_left - delta_t, 0.0f);
+    if(time_left == 0.0f && on_end) {
+        on_end();
+    }
 }
 
 

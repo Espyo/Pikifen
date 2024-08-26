@@ -15,6 +15,7 @@
 #include "../spray_type.h"
 #include "../status.h"
 #include "../libs/data_file.h"
+#include "../utils/general_utils.h"
 #include "mob_type.h"
 
 

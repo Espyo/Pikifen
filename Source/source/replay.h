@@ -20,6 +20,7 @@
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "mobs/treasure.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 
 

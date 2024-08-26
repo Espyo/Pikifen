@@ -24,6 +24,7 @@
 #include "../mob_script_action.h"
 #include "../particle.h"
 #include "../status.h"
+#include "../utils/general_utils.h"
 #include "mob_utils.h"
 
 

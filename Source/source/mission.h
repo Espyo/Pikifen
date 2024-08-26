@@ -15,6 +15,7 @@
 
 #include "const.h"
 #include "mob_categories/mob_category.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 
 using std::string;

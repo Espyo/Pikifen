@@ -12,6 +12,7 @@
 
 #include "../libs/data_file.h"
 #include "../mobs/mob_utils.h"
+#include "../utils/general_utils.h"
 #include "mob_type.h"
 #include "pikmin_type.h"
 

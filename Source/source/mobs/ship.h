@@ -13,6 +13,7 @@
 #include "mob.h"
 
 #include "../mob_types/ship_type.h"
+#include "../utils/general_utils.h"
 #include "leader.h"
 
 

@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "hazard.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 
 using std::map;

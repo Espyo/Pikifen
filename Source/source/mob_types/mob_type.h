@@ -26,6 +26,7 @@
 #include "../libs/data_file.h"
 #include "../mobs/mob_enums.h"
 #include "../spike_damage.h"
+#include "../utils/general_utils.h"
 
 
 using std::size_t;

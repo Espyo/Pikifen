@@ -17,6 +17,7 @@
 #include "../libs/data_file.h"
 #include "../mobs/mob_enums.h"
 #include "../mob_types/mob_type.h"
+#include "../utils/general_utils.h"
 
 
 //Resource object animations.

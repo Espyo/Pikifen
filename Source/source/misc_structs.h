@@ -27,6 +27,7 @@
 #include "particle.h"
 #include "libs/data_file.h"
 #include "utils/drawing_utils.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/math_utils.h"
 
@@ -254,7 +255,7 @@ struct asset_file_names_t {
     
     //Mob shadow.
     string bmp_shadow = "Shadow.png";
-
+    
     //Rectangular mob shadow.
     string bmp_shadow_square = "Shadow_square.png";
     
@@ -416,31 +417,6 @@ struct error_manager {
 
 
 /**
- * @brief Just a list of different elements in an enum and what their names are.
- */
-struct enum_name_database {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    void register_item(const size_t enum_idx, const string &name);
-    size_t get_idx(const string &name) const;
-    string get_name(const size_t idx) const;
-    size_t get_nr_of_items() const;
-    void clear();
-    
-    private:
-    
-    //--- Members ---
-    
-    //Known items.
-    vector<string> names;
-    
-};
-
-
-/**
  * @brief Info about a token in a string.
  */
 struct string_token {
@@ -457,41 +433,6 @@ struct string_token {
     int width = 0;
     
 };
-
-
-/**
- * @brief A timer. You can set it to start at a pre-determined time,
- * to tick, etc.
- */
-struct timer {
-
-    //--- Members ---
-    
-    //How much time is left until 0.
-    float time_left = 0.0f;
-    
-    //When the timer starts, its time is set to this.
-    float duration = 0.0f;
-    
-    //Code to run when the timer ends, if any.
-    std::function<void()> on_end = nullptr;
-    
-    
-    //--- Function declarations ---
-    
-    explicit timer(
-        const float duration = 0,
-        const std::function<void()> &on_end = nullptr
-    );
-    ~timer();
-    void start(const bool can_restart = true);
-    void start(const float new_duration);
-    void stop();
-    void tick(const float delta_t);
-    float get_ratio_left() const;
-    
-};
-
 
 
 /**
@@ -796,7 +737,7 @@ struct system_asset_list {
     
     //Mob shadow.
     ALLEGRO_BITMAP* bmp_shadow = nullptr;
-
+    
     //Rectangular mob shadow.
     ALLEGRO_BITMAP* bmp_shadow_square = nullptr;
     

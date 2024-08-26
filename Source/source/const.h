@@ -25,22 +25,11 @@ using std::size_t;
 using std::string;
 
 
-typedef uint8_t bitmask_8_t;
-typedef uint16_t bitmask_16_t;
-typedef uint32_t bitmask_32_t;
-
-
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resouce (.rc) file.
 constexpr unsigned char VERSION_MAJOR = 0;
 constexpr unsigned char VERSION_MINOR = 25;
 constexpr unsigned char VERSION_REV   = 0;
-
-//Cross-platform way of representing an invalid index.
-constexpr size_t INVALID = UINT32_MAX;
-
-//Cross-platform way of representing a float value of "invalid" or similar.
-constexpr float LARGE_FLOAT = 999999.0f;
 
 //The following constants need to be in this file because C++ sucks.
 //Too many files need these constants, and because of the one-definition rule,

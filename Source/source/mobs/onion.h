@@ -16,6 +16,7 @@
 #include "../misc_structs.h"
 #include "../mob_types/onion_type.h"
 #include "../mob_types/pikmin_type.h"
+#include "../utils/general_utils.h"
 #include "mob.h"
 
 
