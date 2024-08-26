@@ -22,6 +22,7 @@
 #include "controls.h"
 #include "misc_structs.h"
 #include "libs/data_file.h"
+#include "utils/drawing_utils.h"
 #include "utils/geometry_utils.h"
 
 

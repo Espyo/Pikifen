@@ -16,6 +16,7 @@
 
 #include "content.h"
 #include "status.h"
+#include "utils/drawing_utils.h"
 
 
 using std::string;

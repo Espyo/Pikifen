@@ -18,6 +18,7 @@
 
 #include "../hazard.h"
 #include "../utils/geometry_utils.h"
+#include "../utils/drawing_utils.h"
 #include "geometry.h"
 #include "edge.h"
 

@@ -15,6 +15,7 @@
 #include "../content.h"
 #include "../mission.h"
 #include "../pathing.h"
+#include "../utils/drawing_utils.h"
 #include "../weather.h"
 #include "sector.h"
 

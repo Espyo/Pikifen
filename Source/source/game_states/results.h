@@ -13,6 +13,7 @@
 #include "game_state.h"
 #include "../gui.h"
 #include "../mission.h"
+#include "../utils/drawing_utils.h"
 
 
 namespace RESULTS {

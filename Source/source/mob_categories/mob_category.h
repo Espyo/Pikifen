@@ -16,6 +16,7 @@
 #include <allegro5/allegro.h>
 
 #include "../const.h"
+#include "../utils/drawing_utils.h"
 #include "../utils/geometry_utils.h"
 
 

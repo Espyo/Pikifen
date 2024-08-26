@@ -14,6 +14,7 @@
 #include <allegro5/allegro.h>
 
 #include "../../const.h"
+#include "../../utils/drawing_utils.h"
 
 
 namespace IN_WORLD_FRACTION {

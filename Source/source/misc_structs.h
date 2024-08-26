@@ -26,6 +26,7 @@
 #include "hazard.h"
 #include "particle.h"
 #include "libs/data_file.h"
+#include "utils/drawing_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/math_utils.h"
 

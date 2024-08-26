@@ -13,6 +13,7 @@
 #include <allegro5/allegro.h>
 
 #include "../libs/data_file.h"
+#include "../utils/drawing_utils.h"
 #include "mob_type.h"
 
 

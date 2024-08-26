@@ -20,6 +20,7 @@
 #include "content.h"
 #include "hitbox.h"
 #include "libs/data_file.h"
+#include "utils/drawing_utils.h"
 
 
 using std::size_t;

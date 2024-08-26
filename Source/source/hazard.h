@@ -18,6 +18,7 @@
 #include "const.h"
 #include "content.h"
 #include "libs/data_file.h"
+#include "utils/drawing_utils.h"
 
 
 using std::string;

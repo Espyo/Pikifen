@@ -16,6 +16,7 @@
 #include "../../gui.h"
 #include "../../mob_script.h"
 #include "../../mobs/mob_utils.h"
+#include "../../utils/drawing_utils.h"
 #include "../../utils/general_utils.h"
 #include "../../utils/geometry_utils.h"
 

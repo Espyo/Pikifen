@@ -18,6 +18,7 @@
 #include "animation.h"
 #include "content.h"
 #include "particle.h"
+#include "utils/drawing_utils.h"
 
 
 using std::string;

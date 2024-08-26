@@ -12,6 +12,7 @@
 #pragma once
 
 #include "../../gui.h"
+#include "../../utils/drawing_utils.h"
 #include "hud_bubble_manager.h"
 
 

@@ -17,6 +17,7 @@
 
 #include "animation.h"
 #include "content.h"
+#include "utils/drawing_utils.h"
 
 
 using std::string;

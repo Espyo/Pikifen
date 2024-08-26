@@ -16,6 +16,7 @@
 
 #include "const.h"
 #include "content.h"
+#include "utils/drawing_utils.h"
 #include "utils/geometry_utils.h"
 #include "world_component.h"
 

@@ -159,36 +159,10 @@ enum PLAYER_INPUT_ICON_SPRITE {
 };
 
 
-//Ways to vertically align text when rendering it.
-enum TEXT_VALIGN_MODE {
-
-    //Align to the top.
-    TEXT_VALIGN_MODE_TOP,
-    
-    //Align to the center.
-    TEXT_VALIGN_MODE_CENTER,
-    
-    //Align to the bottom.
-    TEXT_VALIGN_MODE_BOTTOM,
-    
-};
-
-
 void draw_background_logos(
     const float time_spent, const size_t rows, const size_t cols,
     const point &logo_size, const ALLEGRO_COLOR &tint,
     const point &speed, const float rotation_speed
-);
-void draw_bitmap(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle = 0,
-    const ALLEGRO_COLOR &tint = COLOR_WHITE
-);
-void draw_bitmap_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const bool scale_up,
-    const float angle = 0,
-    const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
@@ -198,32 +172,6 @@ void draw_button(
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     const bool selected,
     const float juicy_grow_amount = 0.0f
-);
-void draw_compressed_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign,
-    const point &max_size, const bool scale_past_max, const string &text
-);
-void draw_compressed_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
-    const point &max_size, const string &text
-);
-void draw_equilateral_triangle(
-    const point &center, float radius, float angle,
-    const ALLEGRO_COLOR &color, float thickness
-);
-void draw_filled_diamond(
-    const point &center, const float radius, const ALLEGRO_COLOR &color
-);
-void draw_filled_equilateral_triangle(
-    const point &center, float radius, float angle,
-    const ALLEGRO_COLOR &color
-);
-void draw_filled_rounded_rectangle(
-    const point &center, const point &size, const float radii,
-    const ALLEGRO_COLOR &color
 );
 void draw_fraction(
     const point &bottom, const size_t value_nr,
@@ -253,14 +201,6 @@ void draw_player_input_icon(
     const bool condensed, const point &where, const point &max_size,
     const unsigned char alpha = 228
 );
-void draw_rounded_rectangle(
-    const point &center, const point &size, const float radii,
-    const ALLEGRO_COLOR &color, const float thickness
-);
-void draw_rotated_rectangle(
-    const point &center, const point &dimensions,
-    const float angle, const ALLEGRO_COLOR &color, const float thickness
-);
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 );
@@ -271,26 +211,12 @@ void draw_mob_shadow(
     const mob* m,
     const float delta_z, const float shadow_stretch
 );
-void draw_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODE valign, const string &text
-);
 void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects);
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
     const point &where, const int flags, const point &max_size,
     const point &scale = point(1.0f, 1.0f)
-);
-void draw_text_lines(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const TEXT_VALIGN_MODE valign,
-    const string &text
-);
-void draw_textured_box(
-    const point &center, const point &size, ALLEGRO_BITMAP* texture,
-    const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
