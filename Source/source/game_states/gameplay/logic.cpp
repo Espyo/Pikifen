@@ -744,7 +744,14 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
-            if(!m_ptr->is_active) continue;
+            if(
+                !has_flag(
+                    m_ptr->type->inactive_logic,
+                    INACTIVE_LOGIC_FLAG_TICKS
+                ) && !m_ptr->is_active
+            ) {
+                continue;
+            }
             
             m_ptr->tick(delta_t);
             if(!m_ptr->is_stored_inside_mob()) {
@@ -1552,7 +1559,14 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs.all[m2];
-        if(!m2_ptr->is_active) continue;
+        if(
+            !has_flag(
+                m2_ptr->type->inactive_logic,
+                INACTIVE_LOGIC_FLAG_INTERACTIONS
+            ) && !m2_ptr->is_active
+        ) {
+            continue;
+        }
         if(m2_ptr->to_delete) continue;
         if(m2_ptr->is_stored_inside_mob()) continue;
         
@@ -2362,11 +2376,6 @@ void gameplay_state::update_area_active_cells() {
 void gameplay_state::update_mob_is_active_flag() {
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
-        
-        if(m_ptr->type->always_active) {
-            m_ptr->is_active = true;
-            continue;
-        }
         
         int cell_x =
             (m_ptr->pos.x - game.cur_area_data.bmap.top_left_corner.x) /

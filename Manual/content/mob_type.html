@@ -141,12 +141,6 @@
         <td>400</td>
       </tr>
       <tr>
-        <td>always_active</td>
-        <td>If true, this object is always <a href="glossary.html#A">active</a>. This is false by default, except for Pikmin and leaders, where it's true by default.</td>
-        <td>Boolean</td>
-        <td></td>
-      </tr>
-      <tr>
         <td>blackout_radius</td>
         <td>How much light it emits during blackout weather conditions. 0 means no light, and is the default for decorations. -1 means it uses the object's own radius, which is the default.</td>
         <td>Number</td>
@@ -205,6 +199,20 @@
         <td>Passive health regeneration rate, in HP per second.</td>
         <td>Number</td>
         <td>0</td>
+      </tr>
+      <tr>
+        <td>inactive_logic</td>
+        <td>
+          Controls how the object works when it is not <a href="glossary.html#A">active</a>. <code>normal</code> by default, except for Pikmin and leaders, where it's <code>all_logic</code> by default. This property is fairly important for performance. Possible values are:
+          <ul>
+            <li><code>normal</code>: Normal logic &ndash; the object does nothing when inactive.</li>
+            <li><code>all_logic</code>: The object still does its whole logic (i.e. ticks and interactions) when inactive.</li>
+            <li><code>tick</code>: The object still ticks its frame-to-frame logic when inactive.</li>
+            <li><code>interactions</code>: The object still interacts with other objects when inactive.</li>
+          </ul>
+        </td>
+        <td>Text</td>
+        <td></td>
       </tr>
       <tr>
         <td>itch_damage</td>

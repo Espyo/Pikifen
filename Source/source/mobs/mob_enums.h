@@ -160,6 +160,18 @@ enum HOLD_ROTATION_METHOD {
 };
 
 
+//Flags that control how a mob works while inactive.
+enum INACTIVE_LOGIC_FLAG {
+
+    //The mob still performs timer and script ticks when inactive.
+    INACTIVE_LOGIC_FLAG_TICKS = 1 << 0,
+    
+    //The mob still performs mob interactions when inactive.
+    INACTIVE_LOGIC_FLAG_INTERACTIONS = 1 << 1,
+    
+};
+
+
 //Ways to draw limbs between mobs.
 enum LIMB_DRAW_METHOD {
 

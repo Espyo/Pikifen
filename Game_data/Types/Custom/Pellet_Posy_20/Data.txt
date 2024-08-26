@@ -3,6 +3,7 @@ description = This plant, when mature, houses a 20 pellet between its petals.
 
 custom_category_name = Pellet Posy
 height = 128
+inactive_logic = ticks
 max_health = 600
 pushable = false
 pushes = true

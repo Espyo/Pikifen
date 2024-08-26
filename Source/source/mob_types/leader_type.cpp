@@ -33,7 +33,8 @@ const float DEF_WHISTLE_RANGE = 80.0f;
 leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS) {
     
-    always_active = true;
+    inactive_logic =
+        INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
     target_type = MOB_TARGET_FLAG_PLAYER;

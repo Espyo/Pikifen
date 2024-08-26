@@ -218,6 +218,7 @@ void mob_type::load_from_data_node(
     string huntable_targets_str;
     string hurtable_targets_str;
     string team_str;
+    string inactive_logic_str;
     data_node* area_editor_tips_node = nullptr;
     data_node* custom_carry_spots_node = nullptr;
     data_node* spike_damage_node = nullptr;
@@ -225,9 +226,9 @@ void mob_type::load_from_data_node(
     data_node* huntable_targets_node = nullptr;
     data_node* hurtable_targets_node = nullptr;
     data_node* team_node = nullptr;
+    data_node* inactive_logic_node = nullptr;
     
     rs.set("acceleration", acceleration);
-    rs.set("always_active", always_active);
     rs.set("appears_in_area_editor", appears_in_area_editor);
     rs.set(
         "area_editor_recommend_links_from",
@@ -258,6 +259,7 @@ void mob_type::load_from_data_node(
     rs.set("has_group", has_group);
     rs.set("health_regen", health_regen);
     rs.set("height", height);
+    rs.set("inactive_logic", inactive_logic_str, &inactive_logic_node);
     rs.set("itch_damage", itch_damage);
     rs.set("itch_time", itch_time);
     rs.set("main_color", main_color);
@@ -372,6 +374,28 @@ void mob_type::load_from_data_node(
             game.errors.report(
                 "Invalid team \"" + team_str + "\"!",
                 team_node
+            );
+        }
+    }
+
+    //Inactive logic.
+    if(inactive_logic_node) {
+        if(inactive_logic_str == "normal") {
+            inactive_logic =
+                0;
+        } else if(inactive_logic_str == "ticks") {
+            inactive_logic =
+                INACTIVE_LOGIC_FLAG_TICKS;
+        } else if(inactive_logic_str == "interactions") {
+            inactive_logic =
+                INACTIVE_LOGIC_FLAG_INTERACTIONS;
+        } else if(inactive_logic_str == "all_logic") {
+            inactive_logic =
+                INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
+        } else {
+            game.errors.report(
+                "Invalid inactive logic \"" + inactive_logic_str + "\"!",
+                inactive_logic_node
             );
         }
     }

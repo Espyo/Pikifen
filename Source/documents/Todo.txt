@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Pellet Posies aren't growing while off-camera
+    
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -641,6 +641,7 @@ Small tasks (for when I'm feeling lazy)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Replace the ++i in for loops with i++
         Replace all instances of "number" when in reality it should be "index"
+        Use enum class, and hopefully there won't be any problems due to all the times I need to cast to and from int, or use values from multiple enums.
     
     
 Misc things (so I don't forget)
@@ -739,6 +740,7 @@ Misc things (so I don't forget)
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Global script variables
+        An else_if action
         More ideas of actions from Game Builder Garage's Nodon
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?

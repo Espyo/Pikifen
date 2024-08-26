@@ -393,8 +393,8 @@ public:
     //Its initial team.
     MOB_TEAM starting_team = MOB_TEAM_NONE;
     
-    //Whether it's always active, even off-camera.
-    bool always_active = false;
+    //Logic for when it's inactive. Use INACTIVE_LOGIC_FLAG.
+    bitmask_8_t inactive_logic = 0;
     
     //Custom behavior callbacks.
     void(*draw_mob_callback)(mob* m) = nullptr;
