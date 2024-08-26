@@ -417,7 +417,7 @@ void particle_editor::process_gui_panel_item() {
             //Emission Interval value.
             if (
                 ImGui::DragFloat(
-                    "Emission Interval", &loaded_gen.emission.interval, 0.0005, 0.0f, FLT_MAX
+                    "Emission Interval", &loaded_gen.emission.interval, 0.01f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -426,6 +426,22 @@ void particle_editor::process_gui_panel_item() {
                 "How long between particle emissions, in seconds.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+
+            ImGui::Indent();
+            //Number Deviation value.
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::DragFloat(
+                    "Interval deviation", &loaded_gen.emission.interval_deviation, 0.01f, 0.0f, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "The emission interval can vary by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
 
             //Number value.
             int number = (int)loaded_gen.emission.number;
