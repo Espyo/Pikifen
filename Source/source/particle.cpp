@@ -746,16 +746,17 @@ point particle_emission_struct::get_emission_offset() {
         }
     case PARTICLE_EMISSION_SHAPE_RECTANGLE:
         {
-        int xSign = (randomi(0, 1) * 2) - 1;
-        int ySign = (randomi(0, 1) * 2) - 1;
+            //Not perfectly uniform, but it works.
+            int xSign = (randomi(0, 1) * 2) - 1;
+            int ySign = (randomi(0, 1) * 2) - 1;
 
-        float x = randomf(0, max_rectangular_offset.x);
-        float y = x < min_rectangular_offset.x ? randomf(min_rectangular_offset.y, max_rectangular_offset.y) : randomf(0, max_rectangular_offset.y);
+            float x = randomf(0, max_rectangular_offset.x);
+            float y = x < min_rectangular_offset.x ? randomf(min_rectangular_offset.y, max_rectangular_offset.y) : randomf(0, max_rectangular_offset.y);
 
-        return point(
-            x * xSign,
-            y * ySign
-        );
+            return point(
+                x * xSign,
+                y * ySign
+            );
         }
     default:
         return point(0, 0);
