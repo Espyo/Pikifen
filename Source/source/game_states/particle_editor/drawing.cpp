@@ -86,6 +86,34 @@ void particle_editor::draw_canvas() {
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
 
+    if (position_outline_visible) {
+        switch (loaded_gen.emission.shape)
+        {
+        case(PARTICLE_EMISSION_SHAPE_CIRCLE):
+            al_draw_circle(
+                0, 0, loaded_gen.emission.max_circular_radius,
+                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+            );
+            al_draw_circle(
+                0, 0, loaded_gen.emission.min_circular_radius,
+                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+            );
+            break;
+        case(PARTICLE_EMISSION_SHAPE_RECTANGLE):
+            al_draw_rectangle(
+                -loaded_gen.emission.max_rectangular_offset.x, -loaded_gen.emission.max_rectangular_offset.y,
+                loaded_gen.emission.max_rectangular_offset.x, loaded_gen.emission.max_rectangular_offset.y,
+                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+            );
+            al_draw_rectangle(
+                -loaded_gen.emission.min_rectangular_offset.x, -loaded_gen.emission.min_rectangular_offset.y,
+                loaded_gen.emission.min_rectangular_offset.x, loaded_gen.emission.min_rectangular_offset.y,
+                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+            );
+            break;
+        }
+    }
+
     if(leader_silhouette_visible) {
         float x_offset = 32;
 

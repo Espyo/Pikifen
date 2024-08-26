@@ -461,7 +461,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::Unindent();
 
 
-            static int shape = loaded_gen.emission.shape;
+            int shape = loaded_gen.emission.shape;
             ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
             ImGui::RadioButton("Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE);
 
@@ -470,6 +470,7 @@ void particle_editor::process_gui_panel_item() {
             switch (loaded_gen.emission.shape)
             {
             case PARTICLE_EMISSION_SHAPE_CIRCLE:
+                ImGui::SetNextItemWidth(75);
                 if (
                     ImGui::DragFloat(
                         "Min radius", &loaded_gen.emission.min_circular_radius, 0.1f, 0.0f, loaded_gen.emission.max_circular_radius
@@ -481,7 +482,12 @@ void particle_editor::process_gui_panel_item() {
                     "A particle's position varies by at least this amount.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
+
+                //DragFloat doesnt clamp 0s right so clamp them manually
+                loaded_gen.emission.min_circular_radius = std::max(loaded_gen.emission.min_circular_radius, 0.0f);
+                ImGui::SameLine();
                 if (
+                    ImGui::SetNextItemWidth(75);
                     ImGui::DragFloat(
                         "Max radius", &loaded_gen.emission.max_circular_radius, 0.1f, loaded_gen.emission.min_circular_radius, FLT_MAX
                     )
@@ -495,29 +501,50 @@ void particle_editor::process_gui_panel_item() {
 
                 break;
             case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+                float min_x = loaded_gen.emission.min_rectangular_offset.x;
+                float min_y = loaded_gen.emission.min_rectangular_offset.y;
+                float max_x = loaded_gen.emission.max_rectangular_offset.x;
+                float max_y = loaded_gen.emission.max_rectangular_offset.y;
+                ImGui::SetNextItemWidth(75);
                 if (
-                    ImGui::DragFloat2(
-                        "Min offset", (float*)&loaded_gen.emission.min_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                    ImGui::DragFloat(
+                        "Min x", (float*)&min_x, 0.1f, 0.0f, max_x
                     )
                     ) {
                     changes_mgr.mark_as_changed();
                 }
-                set_tooltip(
-                    "A particle's position varies by at most this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(75);
+                if (
+                    ImGui::DragFloat(
+                        "Min y", (float*)&min_y, 0.1f, 0.0f, max_y
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
 
+                ImGui::SetNextItemWidth(75);
                 if (
-                    ImGui::DragFloat2(
-                        "Max offset", (float*)&loaded_gen.emission.max_rectangular_offset, 0.1f, 0.0f, FLT_MAX
+                    ImGui::DragFloat(
+                        "Max x", (float*)&max_x, 0.1f, min_x, FLT_MAX
                     )
                     ) {
                     changes_mgr.mark_as_changed();
                 }
-                set_tooltip(
-                    "A particle's position varies by at most this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(75);
+                if (
+                    ImGui::DragFloat(
+                        "Max y", (float*)&max_y, 0.1f, min_y, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                //DragFloat doesnt clamp 0s right so clamp them manually
+                min_x = std::max(min_x, 0.0f);
+                min_y = std::max(min_y, 0.0f);
+                loaded_gen.emission.max_rectangular_offset = point(max_x, max_y);
+                loaded_gen.emission.min_rectangular_offset = point(min_x, min_y);
 
                 break;
             }
@@ -1091,5 +1118,20 @@ void particle_editor::process_gui_toolbar() {
     set_tooltip(
         "Toggle visibility of a leader silhouette.",
         "Ctrl + P"
+    );
+
+    ImGui::SameLine();
+    if (
+        ImGui::ImageButton(
+            "particleOffsetButton",
+            editor_icons[EDITOR_ICON_MOB_RADIUS],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+        ) {
+        position_outline_visible = !position_outline_visible;
+    }
+    set_tooltip(
+        "Toggle visibility of the position deviation.",
+        "Ctrl + R"
     );
 }

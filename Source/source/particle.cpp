@@ -749,9 +749,12 @@ point particle_emission_struct::get_emission_offset() {
         int xSign = (randomi(0, 1) * 2) - 1;
         int ySign = (randomi(0, 1) * 2) - 1;
 
+        float x = randomf(0, max_rectangular_offset.x);
+        float y = x < min_rectangular_offset.x ? randomf(min_rectangular_offset.y, max_rectangular_offset.y) : randomf(0, max_rectangular_offset.y);
+
         return point(
-            randomf(min_rectangular_offset.x, max_rectangular_offset.x) * xSign,
-            randomf(min_rectangular_offset.y, max_rectangular_offset.y) * ySign
+            x * xSign,
+            y * ySign
         );
         }
     default:
