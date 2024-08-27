@@ -634,6 +634,12 @@ void particle_editor::process_gui_panel_item() {
             );
 
             if(saveable_tree_node("particleColors", "Color")) {
+                int blend = loaded_gen.base_particle.blend_type;
+                ImGui::RadioButton("Normal", &blend, PARTICLE_BLEND_TYPE_NORMAL); ImGui::SameLine();
+                ImGui::RadioButton("Additive", &blend, PARTICLE_BLEND_TYPE_ADDITIVE);
+
+                loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
+
                 //Color gradient visualizer
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 ImVec2 pos = ImGui::GetCursorScreenPos();

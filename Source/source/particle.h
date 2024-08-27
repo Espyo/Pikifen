@@ -91,6 +91,8 @@ enum MOB_PARTICLE_GENERATOR_ID {
     
 };
 
+
+//Shapes for particles to render in
 enum PARTICLE_EMISSION_SHAPE {
 
     //Circular emission area
@@ -100,6 +102,14 @@ enum PARTICLE_EMISSION_SHAPE {
     PARTICLE_EMISSION_SHAPE_RECTANGLE
 };
 
+
+enum PARTICLE_BLEND_TYPE {
+    //Normal blending
+    PARTICLE_BLEND_TYPE_NORMAL,
+
+    //Additive blending
+    PARTICLE_BLEND_TYPE_ADDITIVE
+};
 
 /**
  * @brief A description of how a particle
@@ -201,6 +211,9 @@ struct particle {
     //Current color.
     keyframe_interpolator<ALLEGRO_COLOR> color;
     
+    //Blend type
+    PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
+
     //Other stuff.
     
     //Priority. If we reached the particle limit, only spawn

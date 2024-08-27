@@ -53,6 +53,19 @@ particle::particle(
  */
 void particle::draw() {
     ALLEGRO_COLOR target_color = color.get((duration - time) / duration);
+
+    int old_op, old_source, old_dest;
+    al_get_blender(&old_op, &old_source, &old_dest);
+
+    switch (blend_type)
+    {
+    case PARTICLE_BLEND_TYPE_ADDITIVE:
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
+        break;
+    default:
+        break;
+    }
+
     switch(type) {
     case PARTICLE_TYPE_SQUARE: {
         al_draw_filled_rectangle(
@@ -125,6 +138,8 @@ void particle::draw() {
         break;
     }
     }
+
+    al_set_blender(old_op, old_source, old_dest);
 }
 
 
@@ -347,6 +362,8 @@ void particle_generator::load_from_data_node(
     data_node * bitmap_node = nullptr;
     data_node* color_node = p_node->get_child_by_name("color");;
 
+    size_t blend_int = 0;
+
     prs.set("bitmap", base_particle.file, &bitmap_node);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
@@ -354,6 +371,9 @@ void particle_generator::load_from_data_node(
     prs.set("size_grow_speed", base_particle.size_grow_speed);
     prs.set("size", base_particle.size);
     prs.set("speed", base_particle.speed);
+    prs.set("blend_type", blend_int);
+
+    base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
 
 
     keyframe_interpolator ki_c(COLOR_WHITE);
@@ -445,6 +465,7 @@ void particle_generator::save_to_data_node(
     base_particle_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
     base_particle_node->add(new data_node("size", f2s(base_particle.size)));
     base_particle_node->add(new data_node("speed", p2s(base_particle.speed)));
+    base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
 
     data_node* color_node = new data_node("color", "");
     base_particle_node->add(color_node);
