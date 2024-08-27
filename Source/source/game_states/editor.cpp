@@ -1628,7 +1628,7 @@ void editor::keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolat
     for (size_t c = 0; c < interpolator.keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
         float lineX = time * (ImGui::GetColumnWidth() - 1);
-        ImColor col = c == selected_index ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
+        ImColor col = c == selected_index ? ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) : ImGui::GetColorU32(ImGuiCol_PlotLines);
         draw_list->AddRectFilled(
             ImVec2(pos.x + lineX - 2, pos.y),
             ImVec2(pos.x + lineX + 2, pos.y + 43),
@@ -1686,7 +1686,7 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
     for (size_t c = 0; c < interpolator.keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
         float lineX = time * (ImGui::GetColumnWidth() - 1);
-        ImColor col = c == selected_index ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
+        ImColor col = c == selected_index ? ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) : ImGui::GetColorU32(ImGuiCol_PlotLines);
         draw_list->AddRectFilled(
             ImVec2(pos.x + lineX - 2, pos.y),
             ImVec2(pos.x + lineX + 2, pos.y + 43),
