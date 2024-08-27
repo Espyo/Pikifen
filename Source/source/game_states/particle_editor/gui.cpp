@@ -1177,7 +1177,7 @@ void particle_editor::process_gui_toolbar() {
         position_outline_visible = !position_outline_visible;
     }
     set_tooltip(
-        "Toggle visibility of the position deviation.",
+        "Toggle visibility of position deviation.",
         "Ctrl + R"
     );
 }
