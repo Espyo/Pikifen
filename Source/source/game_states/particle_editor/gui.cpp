@@ -975,10 +975,9 @@ void particle_editor::process_gui_panel_item() {
             ImGui::Unindent();
 
             //Angle value.
-            float angle = rad_to_deg(loaded_gen.angle);
             if (
-                ImGui::DragFloat(
-                    "Angle", &angle, 1, -FLT_MAX, FLT_MAX
+                ImGui::SliderAngle(
+                    "Angle", &loaded_gen.angle
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -987,17 +986,13 @@ void particle_editor::process_gui_panel_item() {
                 "The angle a particle is emitted at.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if (angle < 0)
-                angle += 360;
-            loaded_gen.angle = deg_to_rad(fmodf(angle, 360));
 
             ImGui::Indent();
             //Angle deviation value.
-            float angle_deviation = rad_to_deg(loaded_gen.angle_deviation);
             ImGui::SetNextItemWidth(75);
             if (
-                ImGui::DragFloat(
-                    "Angle deviation", &angle_deviation, 1, 0, 360
+                ImGui::SliderAngle(
+                    "Angle deviation", &loaded_gen.angle_deviation, 0
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -1006,7 +1001,6 @@ void particle_editor::process_gui_panel_item() {
                 "The angle a particle is emitted at can vary by this much.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.angle_deviation = deg_to_rad(angle_deviation);
             ImGui::Unindent();
 
 
