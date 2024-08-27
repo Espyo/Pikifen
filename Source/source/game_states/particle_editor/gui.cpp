@@ -661,6 +661,7 @@ void particle_editor::process_gui_panel_item() {
                     "The angle a particle is emitted at can vary by this much.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
+                ImGui::Unindent();
             }
 
             if(saveable_tree_node("particleColors", "Color")) {
@@ -671,173 +672,37 @@ void particle_editor::process_gui_panel_item() {
                 loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
 
                 //Color gradient visualizer
-                keyframe_visualizer(loaded_gen.base_particle.color, selected_color);
+                keyframe_editor("Color", &loaded_gen.base_particle.color, selected_color_keyframe);
 
-
-                //Current frame text.
-                ImGui::Text(
-                    "Current color: %s / %i",
-                    i2s(selected_color + 1).c_str(),
-                    loaded_gen.base_particle.color.keyframe_count()
-                );
-
-                //Previous color button.
-                ImGui::SameLine();
-                if (
-                    ImGui::ImageButton(
-                        "prevColorButton",
-                        editor_icons[EDITOR_ICON_PREVIOUS],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                    ) {
-                    if (selected_color == 0) {
-                        selected_color = loaded_gen.base_particle.color.keyframe_count() - 1;
-                    }
-                    else {
-                        selected_color--;
-                    }
-                }
-                set_tooltip(
-                    "Previous color."
-                );
-
-                //Previous color button.
-                ImGui::SameLine();
-                if (
-                    ImGui::ImageButton(
-                        "nextColorButton",
-                        editor_icons[EDITOR_ICON_NEXT],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                    ) {
-                    if (selected_color == loaded_gen.base_particle.color.keyframe_count() - 1) {
-                        selected_color = 0;
-                    }
-                    else {
-                        selected_color++;
-                    }
-                }
-                set_tooltip(
-                    "Next color."
-                );
-
-                //Add color button.
-                ImGui::SameLine();
-                if (
-                    ImGui::ImageButton(
-                        "addColorButton",
-                        editor_icons[EDITOR_ICON_ADD],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                    ) {
-                    float t = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
-                    ALLEGRO_COLOR c = loaded_gen.base_particle.color.get_keyframe(selected_color).second;
-                    loaded_gen.base_particle.color.add(t, c);
-                    selected_color++;
-                    changes_mgr.mark_as_changed();
-                    set_status(
-                        "Added color #" + i2s(selected_color + 1) + "."
-                    );
-                }
-                set_tooltip(
-                    "Add a new color after the curret one, by copying "
-                    "data from the current one."
-                );
-
-                if(loaded_gen.base_particle.color.keyframe_count() > 1) {
-
-                    //Delete frame button.
-                    ImGui::SameLine();
-                    if (
-                        ImGui::ImageButton(
-                            "delColorButton",
-                            editor_icons[EDITOR_ICON_REMOVE],
-                            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                        )
-                        ) {
-                        size_t deleted_frame_idx = selected_color;
-                        loaded_gen.base_particle.color.remove(deleted_frame_idx);
-                        if(selected_color == loaded_gen.base_particle.color.keyframe_count())
-                            selected_color--;
-                        changes_mgr.mark_as_changed();
-                        set_status(
-                            "Deleted color #" + i2s(deleted_frame_idx + 1) + "."
-                        );
-                    }
-                    set_tooltip(
-                        "Delete the current color."
-                    );
-
-                }
-
-                ALLEGRO_COLOR particle_color = loaded_gen.base_particle.color.get_keyframe(selected_color).second;
-                if (
-                    ImGui::ColorEdit4(
-                        "Tint", (float*)&particle_color
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                    loaded_gen.base_particle.color.set_keyframe_value(selected_color, particle_color);
-                }
-                set_tooltip(
-                    "Particle's tint."
-                );
-
-                float time = loaded_gen.base_particle.color.get_keyframe(selected_color).first;
-                if (ImGui::SliderFloat("Time", &time, 0, 1)) {
-                    changes_mgr.mark_as_changed();
-                    loaded_gen.base_particle.color.set_keyframe_time(selected_color, time, (int*)&selected_color);
-                }
-                set_tooltip(
-                    "Keyframe time.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
                 ImGui::TreePop();
             }
 
             ImGui::Dummy(ImVec2(0, 12));
 
-            //Size value.
-            if (
-                ImGui::DragFloat(
-                    "Size", &loaded_gen.base_particle.size, 0.01f, 0.1f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Inital particle size.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Indent();
-            //Size grow speed value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::DragFloat(
-                    "Grow Speed", &loaded_gen.base_particle.size_grow_speed, 0.1f, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Increase size by this much per second.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
+            if (saveable_tree_node("particleSize", "Size")) {
+                keyframe_editor("Size", &loaded_gen.base_particle.size, selected_size_keyframe);
+                loaded_gen.base_particle.size.set_keyframe_value(
+                    selected_size_keyframe,
+                    std::max(0.0f, loaded_gen.base_particle.size.get_keyframe(selected_size_keyframe).second)
+                );
 
-            //Size deviation value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::DragFloat(
-                    "Size deviation", &loaded_gen.size_deviation, 0.01f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
+                //Size deviation value.
+                ImGui::Indent();
+                ImGui::SetNextItemWidth(75);
+                if (
+                    ImGui::DragFloat(
+                        "Size deviation", &loaded_gen.size_deviation, 0.5f, 0.0f, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's size can vary by this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                ImGui::Unindent();
+                ImGui::TreePop();
             }
-            set_tooltip(
-                "A particle's size can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
 
             //Duration value.
             if (

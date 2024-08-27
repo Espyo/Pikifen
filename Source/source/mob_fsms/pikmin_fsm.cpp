@@ -4150,9 +4150,9 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
+            par.size.add(1, m->radius * 4);
             par.color.add(1, change_alpha(COLOR_WHITE, 0));
             par.bitmap = game.sys_assets.bmp_wave_ring;
-            par.size_grow_speed = m->radius * 4;
             particle_generator pg(0.3, par, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;

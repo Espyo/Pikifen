@@ -476,10 +476,10 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
 void pikmin::start_throw_trail() {
     particle throw_p(
         PARTICLE_TYPE_CIRCLE, pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW
+        radius, 0.6, PARTICLE_PRIORITY_LOW,
+        change_alpha(type->main_color, 128)
     );
-    throw_p.size_grow_speed = -5;
-    throw_p.color.set_keyframe_value(0, change_alpha(type->main_color, 128));
+    throw_p.size.add(1, 0);
     throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;

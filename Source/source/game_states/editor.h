@@ -673,8 +673,27 @@ protected:
     void process_gui_unsaved_changes_dialog();
     void panel_title(const char* title);
     bool saveable_tree_node(const string &category, const string &label);
-    void keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t& selected_index);
-    //void keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t& selected_index);
+    void keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t selected_index);
+    void keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t selected_index);
+    template <class inter_t>
+    void keyframe_navigation(
+        const string& label, 
+        keyframe_interpolator<inter_t>* interpolator, 
+        size_t& selected_index
+    );
+    void keyframe_editor(
+        const string& label, 
+        keyframe_interpolator<float>* interpolator, 
+        size_t& selected_index
+    );
+    void keyframe_editor(
+        const string& label,
+        keyframe_interpolator<ALLEGRO_COLOR>* interpolator,
+        size_t& selected_index
+    );
+
+
+
     void set_status(const string &text = "", const bool error = false);
     void set_tooltip(
         const string &explanation, const string &shortcut = "",

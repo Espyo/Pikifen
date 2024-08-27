@@ -27,24 +27,24 @@
  * @param type The type of particle.
  * @param pos Starting coordinates.
  * @param z Starting Z coordinate.
- * @param size Diameter.
+ * @param diameter Diameter.
  * @param duration Total lifespan.
  * @param priority Lower priority particles will be removed in favor
  * of higher ones.
  */
 particle::particle(
     const PARTICLE_TYPE type, const point &pos, const float z,
-    const float size, const float duration, const PARTICLE_PRIORITY priority
+    const float initial_size, const float duration, const PARTICLE_PRIORITY priority,
+    const ALLEGRO_COLOR initial_color
 ) :
     type(type),
     duration(duration),
     time(duration),
     pos(pos),
+    size(initial_size),
     z(z),
-    size(size),
     priority(priority),
-    color(COLOR_WHITE){
-
+    color(initial_color){
 }
 
 
@@ -53,6 +53,7 @@ particle::particle(
  */
 void particle::draw() {
     ALLEGRO_COLOR target_color = color.get((duration - time) / duration);
+    float target_size = size.get((duration - time) / duration);
 
     int old_op, old_source, old_dest;
     al_get_blender(&old_op, &old_source, &old_dest);
@@ -69,10 +70,10 @@ void particle::draw() {
     switch(type) {
     case PARTICLE_TYPE_SQUARE: {
         al_draw_filled_rectangle(
-            pos.x - size * 0.5,
-            pos.y - size * 0.5,
-            pos.x + size * 0.5,
-            pos.y + size * 0.5,
+            pos.x - target_size * 0.5,
+            pos.y - target_size * 0.5,
+            pos.x + target_size * 0.5,
+            pos.y + target_size * 0.5,
             target_color
         );
         break;
@@ -80,21 +81,21 @@ void particle::draw() {
     } case PARTICLE_TYPE_CIRCLE: {
         al_draw_filled_circle(
             pos.x, pos.y,
-            size * 0.5,
+            target_size * 0.5,
             target_color
         );
         break;
         
     } case PARTICLE_TYPE_BITMAP: {
         draw_bitmap(
-            bitmap, pos, point(size, -1),
+            bitmap, pos, point(target_size, -1),
             rotation, target_color
         );
         break;
         
     } case PARTICLE_TYPE_PIKMIN_SPIRIT: {
         draw_bitmap(
-            bitmap, pos, point(size, -1),
+            bitmap, pos, point(target_size, -1),
             rotation, target_color
         );
         break;
@@ -104,7 +105,7 @@ void particle::draw() {
         draw_bitmap(
             bitmap,
             point(pos.x + s * 16, pos.y),
-            point(size, -1), s * TAU / 2,
+            point(target_size, -1), s * TAU / 2,
             change_alpha(
                 target_color, fabs(s) * target_color.a * 255
             )
@@ -113,7 +114,7 @@ void particle::draw() {
         
     } case PARTICLE_TYPE_SMACK: {
         float r = time / duration;
-        float s = size;
+        float s = target_size;
         float opacity = 255;
         if(r <= 0.5) s *= r * 2;
         else opacity *= (1 - r) * 2;
@@ -126,7 +127,7 @@ void particle::draw() {
         
     } case PARTICLE_TYPE_DING: {
         float r = time / duration;
-        float s = size;
+        float s = target_size;
         float opacity = 255;
         if(r >= 0.5) s *= (1 - r) * 2;
         else opacity *= r * 2;
@@ -162,9 +163,6 @@ void particle::tick(const float delta_t) {
     speed.x *= 1 - (delta_t* friction);
     speed.y *= 1 - (delta_t* friction);
     speed.y += delta_t* gravity;
-    
-    size += delta_t* size_grow_speed;
-    size = std::max(0.0f, size);
 }
 
 
@@ -284,12 +282,13 @@ void particle_generator::emit(particle_manager &manager) {
         new_p.pos += offset;
         
         new_p.z = base_p_z;
-        new_p.size =
-            std::max(
-                0.0f,
-                new_p.size +
-                randomf(-size_deviation, size_deviation)
-            );
+
+        float s_dev = randomf(-size_deviation, size_deviation);
+        for(size_t s = 0; s < new_p.size.keyframe_count(); s++) {
+            auto kf = new_p.size.get_keyframe(s);
+            new_p.size.set_keyframe_value(s, kf.second + s_dev);
+        }
+
         //For speed, let's decide if we should use
         //(speed.x and speed.y) or (speed and angle).
         //We'll use whichever one is not all zeros.
@@ -363,7 +362,6 @@ void particle_generator::load_from_data_node(
     emission.shape = (PARTICLE_EMISSION_SHAPE)shape_int;
 
     data_node * bitmap_node = nullptr;
-    data_node* color_node = p_node->get_child_by_name("color");;
 
     size_t blend_int = 0;
 
@@ -372,14 +370,13 @@ void particle_generator::load_from_data_node(
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("gravity", base_particle.gravity);
-    prs.set("size_grow_speed", base_particle.size_grow_speed);
-    prs.set("size", base_particle.size);
     prs.set("speed", base_particle.speed);
     prs.set("blend_type", blend_int);
 
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
     base_particle.rotation = deg_to_rad(base_particle.rotation);
 
+    data_node* color_node = p_node->get_child_by_name("color");
     keyframe_interpolator ki_c(COLOR_WHITE);
     for(size_t c = 0; c < color_node->get_nr_of_children(); c++) {
         data_node* c_node = color_node->get_child(c);
@@ -394,6 +391,22 @@ void particle_generator::load_from_data_node(
         }
     }
     base_particle.color = ki_c;
+
+    data_node* size_node = p_node->get_child_by_name("size");
+    keyframe_interpolator ki_s(32.0f);
+    for(size_t c = 0; c < size_node->get_nr_of_children(); c++) {
+        data_node* s_node = size_node->get_child(c);
+        float size = std::max(0.0f, (float)s2f(s_node->value));
+
+        if (c == 0) {
+            ki_s.set_keyframe_value(0, size);
+            ki_s.set_keyframe_time(0, s2f(s_node->name));
+        }
+        else {
+            ki_s.add(s2f(s_node->name), size, EASE_METHOD_NONE);
+        }
+    }
+    base_particle.size = ki_s;
     
     if(bitmap_node) {
         if(load_resources) {
@@ -469,8 +482,6 @@ void particle_generator::save_to_data_node(
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
     base_particle_node->add(new data_node("gravity", f2s(base_particle.gravity)));
-    base_particle_node->add(new data_node("size_grow_speed", f2s(base_particle.size_grow_speed)));
-    base_particle_node->add(new data_node("size", f2s(base_particle.size)));
     base_particle_node->add(new data_node("speed", p2s(base_particle.speed)));
     base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
 
@@ -480,6 +491,14 @@ void particle_generator::save_to_data_node(
     for (size_t c = 0; c < base_particle.color.keyframe_count(); c++) {
         auto keyframe = base_particle.color.get_keyframe(c);
         color_node->add(new data_node(f2s(keyframe.first), c2s(keyframe.second)));
+    }
+
+    data_node* size_node = new data_node("size", "");
+    base_particle_node->add(size_node);
+
+    for (size_t c = 0; c < base_particle.size.keyframe_count(); c++) {
+        auto keyframe = base_particle.size.get_keyframe(c);
+        size_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
     }
 
     node->add(new data_node("rotation_deviation", f2s(rad_to_deg(rotation_deviation))));
@@ -665,11 +684,11 @@ void particle_manager::fill_component_list(
     for(size_t c = 0; c < count; ++c) {
     
         particle* p_ptr = &particles[c];
-        
+        float p_size = p_ptr->size.get((p_ptr->duration - p_ptr->time) / p_ptr->duration);
         if(
             cam_tl != cam_br &&
             !rectangles_intersect(
-                p_ptr->pos - p_ptr->size, p_ptr->pos + p_ptr->size,
+                p_ptr->pos - p_size, p_ptr->pos + p_size,
                 cam_tl, cam_br
             )
         ) {

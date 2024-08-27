@@ -207,7 +207,7 @@ void particle_editor::load_particle_generator(
     loaded_content_yet = true;
     
     generator_running = true;
-    selected_color = 0;
+    selected_color_keyframe = 0;
     
     if(should_update_history) {
         update_history(file_name);

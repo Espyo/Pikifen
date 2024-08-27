@@ -84,7 +84,11 @@ private:
     //Is the position offset visible?
     bool position_outline_visible = false;
 
-    size_t selected_color = 0;
+    //Selected color keyframe
+    size_t selected_color_keyframe = 0;
+
+    //Selected color keyframe
+    size_t selected_size_keyframe = 0;
 
     //Position of the reload widget.
     point reload_widget_pos;

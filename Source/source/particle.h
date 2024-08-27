@@ -192,9 +192,6 @@ struct particle {
     //Every second, the vertical speed is increased by this.
     float gravity = 1.0f;
     
-    //Every second, the size is increased by this much.
-    float size_grow_speed = 0.0f;
-    
     //Current state.
     
     //Current time left to live. 0 means it's dead.
@@ -207,7 +204,7 @@ struct particle {
     float z = 0.0f;
     
     //Current size, in diameter.
-    float size = 0.0f;
+    keyframe_interpolator<float> size;
     
     //Current movement speed.
     point speed;
@@ -230,9 +227,10 @@ struct particle {
     explicit particle(
         const PARTICLE_TYPE type = PARTICLE_TYPE_BITMAP,
         const point &pos = point(), const float z = 0.0f,
-        const float size = 0.0f,
+        const float initial_size = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
-            PARTICLE_PRIORITY_HIGH
+            PARTICLE_PRIORITY_HIGH, 
+        const ALLEGRO_COLOR initial_color = COLOR_WHITE
     );
     void tick(const float delta_t);
     void draw();

@@ -88,7 +88,8 @@ void content_manager::load_custom_particle_generators(const string& folder, bool
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
         
-        particle_generator new_pg;
+        particle p;
+        particle_generator new_pg(0, p, 1);
         new_pg.path = path;
         new_pg.load_from_data_node(&file, load_resources);
         game.content.custom_particle_generators[new_pg.name] = new_pg;

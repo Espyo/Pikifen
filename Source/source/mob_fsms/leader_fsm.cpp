@@ -2474,9 +2474,9 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
+            p.size.add(1, m->radius * 4);
             p.color.add(1, change_alpha(COLOR_WHITE, 0));
             p.bitmap = game.sys_assets.bmp_wave_ring;
-            p.size_grow_speed = m->radius * 4;
             particle_generator pg(0.3, p, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
