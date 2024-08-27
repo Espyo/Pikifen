@@ -1,8 +1,14 @@
 name=reinforced_wall_explosion
 description=Explosion of pebbles launched by a recently-destroyed reinforced wall.
-emission_interval=0.0000
-number=30
-number_deviation=0
+emission{
+	number=30
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=20.0000 96.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap=Rock.png
 	duration=1.0000
@@ -20,7 +26,6 @@ duration_deviation=0.2500
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=10.0000
-pos_deviation=20.0000 96.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000

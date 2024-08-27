@@ -1,8 +1,14 @@
 name=petrification_crack
 description=A small explosion of rocks from when a petrified enemy manages to break free.
-emission_interval=0.0000
-number=16
-number_deviation=1
+emission{
+	number=16
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=32.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Rock.png
 	duration=1.0000
@@ -20,7 +26,6 @@ duration_deviation=0.2500
 friction_deviation=0.2000
 gravity_deviation=20.0000
 size_deviation=4.0000
-pos_deviation=32.0000 32.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000

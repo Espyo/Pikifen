@@ -1,8 +1,14 @@
 name=electric_gate_explosion
 description=An explosion of triangular shards representing the glass lamps of a destroyed electric gate.
-emission_interval=0.0000
-number=35
-number_deviation=0
+emission{
+	number=35
+	number_deviation=3
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=20.0000 96.0000
+	min_offset=0.0000 0.0000
+}
 base{
 	bitmap=Triangle.png
 	duration=1.0000
@@ -20,7 +26,6 @@ duration_deviation=0.2500
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=4.0000
-pos_deviation=20.0000 96.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000

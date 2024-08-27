@@ -1,8 +1,14 @@
 name=large_smoke
 description=Large variant of smoke particle
-emission_interval=0.2000
-number=1
-number_deviation=0
+emission{
+	number=1
+	number_deviation=0
+	interval=0.2000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=30.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Smoke.png
 	duration=2.0000
@@ -20,7 +26,6 @@ duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=10.0000
-pos_deviation=30.0000 30.0000
 speed_deviation=20.0000 20.0000
 angle=0.0000
 angle_deviation=0.0000

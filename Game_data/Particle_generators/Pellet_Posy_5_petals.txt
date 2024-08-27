@@ -1,8 +1,14 @@
 name=pellet_posy_5_petals
 description=A small burst of petals from a 5 pellet Pellet Posy.
-emission_interval=0.0000
-number=12
-number_deviation=0
+emission{
+	number=12
+	number_deviation=0
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=40.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Pellet_Posy_petal.png
 	duration=2.0000
@@ -20,7 +26,6 @@ duration_deviation=0.3000
 friction_deviation=0.2000
 gravity_deviation=10.0000
 size_deviation=4.0000
-pos_deviation=40.0000 40.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=360.0000

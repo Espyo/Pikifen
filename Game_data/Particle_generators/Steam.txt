@@ -1,8 +1,14 @@
 name=steam
 description=A continuous stream of steam over a large surface. Used when the Armored Cannon Beetle is overheating.
-emission_interval=0.1000
-number=1
-number_deviation=0
+emission{
+	number=1
+	number_deviation=0
+	interval=0.1000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=90.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Smoke.png
 	duration=0.7000
@@ -20,7 +26,6 @@ duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=2.0000
-pos_deviation=90.0000 90.0000
 speed_deviation=5.0000 5.0000
 angle=0.0000
 angle_deviation=0.0000

@@ -1,8 +1,14 @@
 name=egg_shard_explosion
 description=An explosion of shards from a recently-broken egg's shell.
-emission_interval=0.0000
-number=12
-number_deviation=1
+emission{
+	number=12
+	number_deviation=1
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=24.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Egg_shard.png
 	duration=1.0000
@@ -20,7 +26,6 @@ duration_deviation=0.5000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=6.0000
-pos_deviation=24.0000 24.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000

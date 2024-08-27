@@ -1,8 +1,14 @@
 name=small_crystal_explosion
 description=A small explosion of crystal shards from a recently-destroyed small crystal.
-emission_interval=0.0000
-number=8
-number_deviation=1
+emission{
+	number=8
+	number_deviation=1
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=8.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Crystal_nodule.png
 	duration=0.7500
@@ -20,7 +26,6 @@ duration_deviation=0.2500
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=6.0000
-pos_deviation=8.0000 8.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000

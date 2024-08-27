@@ -1,8 +1,14 @@
 name=fire_geyser_smoke
 description=Dark smoke shot from a fire geyser.
-emission_interval=0.0600
-number=1
-number_deviation=0
+emission{
+	number=1
+	number_deviation=0
+	interval=0.0600
+	interval_deviation=0.0000
+	shape=0
+	max_radius=6.0000
+	min_radius=0.0000
+}
 base{
 	bitmap=Smoke.png
 	duration=1.0000
@@ -20,7 +26,6 @@ duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000
 size_deviation=2.0000
-pos_deviation=6.0000 6.0000
 speed_deviation=0.0000 0.0000
 angle=0.0000
 angle_deviation=180.0000
