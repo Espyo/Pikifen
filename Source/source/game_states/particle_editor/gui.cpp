@@ -567,7 +567,7 @@ void particle_editor::process_gui_panel_item() {
 
             ImGui::EndTabItem();
         }
-
+        ImGui::ShowDemoWindow();
         if (ImGui::BeginTabItem("Visuals", nullptr)) {
 
             ImGui::Dummy(ImVec2(0, 4));
@@ -671,49 +671,7 @@ void particle_editor::process_gui_panel_item() {
                 loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
 
                 //Color gradient visualizer
-                ImDrawList* draw_list = ImGui::GetWindowDrawList();
-                ImVec2 pos = ImGui::GetCursorScreenPos();
-
-                ALLEGRO_COLOR c_start = loaded_gen.base_particle.color.get_keyframe(0).second;
-                draw_list->AddRectFilled(
-                    ImVec2(pos.x, pos.y),
-                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * loaded_gen.base_particle.color.get_keyframe(0).first, pos.y + 40),
-                    ImColor(c_start.r, c_start.g, c_start.b)
-                );
-
-                for (size_t t = 0; t < loaded_gen.base_particle.color.keyframe_count() - 1; t++) {
-                    auto kf_1 = loaded_gen.base_particle.color.get_keyframe(t);
-                    auto kf_2 = loaded_gen.base_particle.color.get_keyframe(t + 1);
-                    ALLEGRO_COLOR c1 = kf_1.second;
-                    ALLEGRO_COLOR c2 = kf_2.second;
-
-                    draw_list->AddRectFilledMultiColor(
-                        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first, pos.y),
-                        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first, pos.y + 40),
-                        ImColor(c1.r, c1.g, c1.b), ImColor(c2.r, c2.g, c2.b),
-                        ImColor(c2.r, c2.g, c2.b), ImColor(c1.r, c1.g, c1.b)
-                    );
-                }
-
-                ALLEGRO_COLOR c_end = loaded_gen.base_particle.color.get_keyframe(loaded_gen.base_particle.color.keyframe_count() - 1).second;
-                draw_list->AddRectFilled(
-                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * loaded_gen.base_particle.color.get_keyframe(loaded_gen.base_particle.color.keyframe_count() - 1).first, pos.y),
-                    ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
-                    ImColor(c_end.r, c_end.g, c_end.b)
-                );
-
-
-                for (size_t c = 0; c < loaded_gen.base_particle.color.keyframe_count(); c++) {
-                    float time = loaded_gen.base_particle.color.get_keyframe(c).first;
-                    float lineX = time * (ImGui::GetColumnWidth() - 1);
-                    ImColor col = c == selected_color ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
-                    draw_list->AddRectFilled(
-                        ImVec2(pos.x + lineX - 2, pos.y),
-                        ImVec2(pos.x + lineX + 2, pos.y + 43),
-                        col
-                    );
-                }
-                ImGui::Dummy(ImVec2(0, 43));
+                keyframe_visualizer(loaded_gen.base_particle.color, selected_color);
 
 
                 //Current frame text.

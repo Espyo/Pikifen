@@ -16,6 +16,8 @@
 #include "game_state.h"
 #include "../libs/imgui/imgui.h"
 
+#include "../misc_structs.h"
+
 
 using std::map;
 using std::string;
@@ -671,6 +673,8 @@ protected:
     void process_gui_unsaved_changes_dialog();
     void panel_title(const char* title);
     bool saveable_tree_node(const string &category, const string &label);
+    void keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t& selected_index);
+    //void keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t& selected_index);
     void set_status(const string &text = "", const bool error = false);
     void set_tooltip(
         const string &explanation, const string &shortcut = "",

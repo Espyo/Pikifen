@@ -1588,6 +1588,56 @@ bool editor::saveable_tree_node(const string &category, const string &label) {
     return is_open;
 }
 
+void editor::keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t& selected_index) {
+    //Color gradient visualizer
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImGui::RenderColorRectWithAlphaCheckerboard(draw_list, pos, 
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40), 
+        ImColor(0.0f, 0.0f, 0.0f, 0.0f), 5, ImVec2(0.0f, 0.0f)
+    );
+    ALLEGRO_COLOR c_start = interpolator.get_keyframe(0).second;
+    draw_list->AddRectFilled(
+        ImVec2(pos.x, pos.y),
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * interpolator.get_keyframe(0).first, pos.y + 40),
+        ImColor(c_start.r, c_start.g, c_start.b, c_start.a)
+    );
+
+    for (size_t t = 0; t < interpolator.keyframe_count() - 1; t++) {
+        auto kf_1 = interpolator.get_keyframe(t);
+        auto kf_2 = interpolator.get_keyframe(t + 1);
+        ALLEGRO_COLOR c1 = kf_1.second;
+        ALLEGRO_COLOR c2 = kf_2.second;
+
+        draw_list->AddRectFilledMultiColor(
+            ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first, pos.y),
+            ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first, pos.y + 40),
+            ImColor(c1.r, c1.g, c1.b, c1.a), ImColor(c2.r, c2.g, c2.b, c2.a),
+            ImColor(c2.r, c2.g, c2.b, c2.a), ImColor(c1.r, c1.g, c1.b, c1.a)
+        );
+    }
+
+    ALLEGRO_COLOR c_end = interpolator.get_keyframe(interpolator.keyframe_count() - 1).second;
+    draw_list->AddRectFilled(
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * interpolator.get_keyframe(interpolator.keyframe_count() - 1).first, pos.y),
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
+        ImColor(c_end.r, c_end.g, c_end.b, c_end.a)
+    );
+
+
+    for (size_t c = 0; c < interpolator.keyframe_count(); c++) {
+        float time = interpolator.get_keyframe(c).first;
+        float lineX = time * (ImGui::GetColumnWidth() - 1);
+        ImColor col = c == selected_index ? ImColor(255, 0, 0) : ImColor(0, 255, 0);
+        draw_list->AddRectFilled(
+            ImVec2(pos.x + lineX - 2, pos.y),
+            ImVec2(pos.x + lineX + 2, pos.y + 43),
+            col
+        );
+    }
+    ImGui::Dummy(ImVec2(0, 43));
+}
+
 
 /**
  * @brief Sets the status bar, and notifies the user of an error,
@@ -1889,7 +1939,7 @@ void editor::update_style() {
                 0.40f
             );
         colors[ImGuiCol_PlotLines] =
-            ImVec4(pri.r * 2, pri.g * 2, pri.b * 2, 1.0f);
+            ImVec4(sec.r, sec.g, sec.b, 1.0f);
         colors[ImGuiCol_PlotLinesHovered] =
             ImVec4(sec.r * 2, sec.g * 2, sec.b * 2, 1.0f);
         colors[ImGuiCol_PlotHistogram] =
