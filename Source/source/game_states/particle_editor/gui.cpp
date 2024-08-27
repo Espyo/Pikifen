@@ -633,6 +633,36 @@ void particle_editor::process_gui_panel_item() {
                 "\"Large_Fly.png\""
             );
 
+            if(loaded_gen.base_particle.type == PARTICLE_TYPE_BITMAP) {
+                //Angle value.
+                if (
+                    ImGui::SliderAngle(
+                        "Rotation", &loaded_gen.base_particle.rotation
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "The angle a particle is emitted at.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+
+                ImGui::Indent();
+                //Angle deviation value.
+                ImGui::SetNextItemWidth(75);
+                if (
+                    ImGui::SliderAngle(
+                        "Rotation deviation", &loaded_gen.rotation_deviation, 0
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "The angle a particle is emitted at can vary by this much.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            }
+
             if(saveable_tree_node("particleColors", "Color")) {
                 int blend = loaded_gen.base_particle.blend_type;
                 ImGui::RadioButton("Normal", &blend, PARTICLE_BLEND_TYPE_NORMAL); ImGui::SameLine();

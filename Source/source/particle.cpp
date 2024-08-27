@@ -88,14 +88,14 @@ void particle::draw() {
     } case PARTICLE_TYPE_BITMAP: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
-            0, target_color
+            rotation, target_color
         );
         break;
         
     } case PARTICLE_TYPE_PIKMIN_SPIRIT: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
-            0, target_color
+            rotation, target_color
         );
         break;
         
@@ -272,7 +272,10 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-friction_deviation, friction_deviation);
         new_p.gravity +=
             randomf(-gravity_deviation, gravity_deviation);
-            
+        new_p.rotation +=     
+            randomf(-rotation_deviation, rotation_deviation);
+
+
         new_p.pos = base_p_pos;
         point offset = emission.get_emission_offset();
         if(follow_angle) {
@@ -365,6 +368,7 @@ void particle_generator::load_from_data_node(
     size_t blend_int = 0;
 
     prs.set("bitmap", base_particle.file, &bitmap_node);
+    prs.set("rotation", base_particle.rotation);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("gravity", base_particle.gravity);
@@ -374,7 +378,7 @@ void particle_generator::load_from_data_node(
     prs.set("blend_type", blend_int);
 
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
-
+    base_particle.rotation = deg_to_rad(base_particle.rotation);
 
     keyframe_interpolator ki_c(COLOR_WHITE);
     for(size_t c = 0; c < color_node->get_nr_of_children(); c++) {
@@ -406,7 +410,8 @@ void particle_generator::load_from_data_node(
     
     base_particle.time = base_particle.duration;
     base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
-    
+
+    grs.set("rotation_deviation", rotation_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
     grs.set("gravity_deviation", gravity_deviation);
@@ -419,6 +424,7 @@ void particle_generator::load_from_data_node(
     
     angle = deg_to_rad(angle);
     angle_deviation = deg_to_rad(angle_deviation);
+    rotation_deviation = deg_to_rad(rotation_deviation);
     
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
@@ -459,6 +465,7 @@ void particle_generator::save_to_data_node(
     node->add(base_particle_node);
 
     base_particle_node->add(new data_node("bitmap", base_particle.file));
+    base_particle_node->add(new data_node("rotation", f2s(rad_to_deg(base_particle.rotation))));
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
     base_particle_node->add(new data_node("gravity", f2s(base_particle.gravity)));
@@ -475,6 +482,7 @@ void particle_generator::save_to_data_node(
         color_node->add(new data_node(f2s(keyframe.first), c2s(keyframe.second)));
     }
 
+    node->add(new data_node("rotation_deviation", f2s(rad_to_deg(rotation_deviation))));
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
     node->add(new data_node("friction_deviation", f2s(friction_deviation)));
     node->add(new data_node("gravity_deviation", f2s(gravity_deviation)));

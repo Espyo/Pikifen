@@ -29,6 +29,7 @@ class mob;
 
 
 //Types of particle. This controls their behavior and appearance.
+//TODO: REMOVE AFTER MOTION REVAMP IS DONE
 enum PARTICLE_TYPE {
 
     //A simple square.
@@ -179,6 +180,9 @@ struct particle {
     //Bitmap to use, if any.
     ALLEGRO_BITMAP* bitmap = nullptr;
 
+    //Angle the bitmap should be at.
+    float rotation = 0.0f;
+
     //Bitmap string
     string file = "";
 
@@ -322,6 +326,9 @@ public:
     //Follow the given angle. e.g. a mob's angle.
     float* follow_angle = nullptr; 
     
+    //Maximum random deviation of the bitmap's rotation.
+    float rotation_deviation = 0.0f;
+
     //Maximum random deviation of duration.
     float duration_deviation = 0.0f;
     
