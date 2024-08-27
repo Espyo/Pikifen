@@ -11,17 +11,20 @@ emission{
 }
 base{
 	bitmap=Smoke.png
+	rotation=0.0000
 	duration=0.5000
 	friction=1.8000
 	gravity=0.0000
 	size_grow_speed=40.0000
 	size=16.0000
 	speed=0.0000 0.0000
+	blend_type=0
 	color{
 		0.0000=244 230 212
 		1.0000=244 230 212 7
 	}
 }
+rotation_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 gravity_deviation=0.0000

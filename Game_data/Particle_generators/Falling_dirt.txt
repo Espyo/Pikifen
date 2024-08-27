@@ -24,7 +24,7 @@ base{
 		1.0000=238 204 170 0
 	}
 }
-rotation_deviation=0.0000
+rotation_deviation=15.0000
 duration_deviation=0.1000
 friction_deviation=0.0000
 gravity_deviation=0.0000

@@ -11,18 +11,21 @@ emission{
 }
 base{
 	bitmap=Bubble.png
+	rotation=0.0000
 	duration=1.0000
 	friction=2.0000
 	gravity=0.0000
 	size_grow_speed=0.0000
 	size=10.0000
 	speed=0.0000 0.0000
+	blend_type=0
 	color{
 		0.0000=255 255 255
 		0.9000=255 255 255
 		1.0000=255 255 255 0
 	}
 }
+rotation_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.3000
 gravity_deviation=0.0000

@@ -5,23 +5,26 @@ emission{
 	number_deviation=0
 	interval=0.1000
 	interval_deviation=0.0000
-	shape=1
-	max_offset=0.0000 0.0000
-	min_offset=0.0000 0.0000
+	shape=0
+	max_radius=0.0000
+	min_radius=0.0000
 }
 base{
 	bitmap=Bubble.png
+	rotation=0.0000
 	duration=1.0000
 	friction=0.0000
 	gravity=1.0000
 	size_grow_speed=0.0000
 	size=16.0000
 	speed=0.0000 -10.0000
+	blend_type=0
 	color{
 		0.0000=255 255 255
 		1.0000=255 255 255 0
 	}
 }
+rotation_deviation=0.0000
 duration_deviation=0.2000
 friction_deviation=0.0000
 gravity_deviation=0.0000
