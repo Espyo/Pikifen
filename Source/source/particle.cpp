@@ -289,25 +289,18 @@ void particle_generator::emit(particle_manager &manager) {
             new_p.size.set_keyframe_value(s, kf.second + s_dev);
         }
 
-        //For speed, let's decide if we should use
-        //(speed.x and speed.y) or (speed and angle).
-        //We'll use whichever one is not all zeros.
-        if(angle != 0 || total_speed != 0) {
-            float angle_to_use = angle;
-            if(follow_angle) angle_to_use += (*follow_angle);
-            
-            new_p.speed =
-                angle_to_coordinates(
-                    angle_to_use + randomf(-angle_deviation, angle_deviation),
-                    total_speed +
-                    randomf(-total_speed_deviation, total_speed_deviation)
-                );
-        } else {
-            new_p.speed.x +=
-                randomf(-speed_deviation.x, speed_deviation.x);
-            new_p.speed.y +=
-                randomf(-speed_deviation.y, speed_deviation.y);
-        }
+        float angle_to_use = angle + randomf(-angle_deviation, angle_deviation);
+        if (follow_angle) angle_to_use += (*follow_angle);
+
+        new_p.speed.x +=
+            randomf(-speed_deviation.x, speed_deviation.x);
+        new_p.speed.y +=
+            randomf(-speed_deviation.y, speed_deviation.y);
+
+        new_p.speed =
+            rotate_point(
+                new_p.speed, angle_to_use
+            );
         
         manager.add(new_p);
     }
@@ -432,8 +425,6 @@ void particle_generator::load_from_data_node(
     grs.set("speed_deviation", speed_deviation);
     grs.set("angle", angle);
     grs.set("angle_deviation", angle_deviation);
-    grs.set("total_speed", total_speed);
-    grs.set("total_speed_deviation", total_speed_deviation);
     
     angle = deg_to_rad(angle);
     angle_deviation = deg_to_rad(angle_deviation);
@@ -509,8 +500,6 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("speed_deviation", p2s(speed_deviation)));
     node->add(new data_node("angle", f2s(rad_to_deg(angle))));
     node->add(new data_node("angle_deviation", f2s(rad_to_deg(angle_deviation))));
-    node->add(new data_node("total_speed", f2s(total_speed)));
-    node->add(new data_node("total_speed_deviation", f2s(total_speed_deviation)));
 }
 
 

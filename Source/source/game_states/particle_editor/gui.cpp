@@ -856,36 +856,6 @@ void particle_editor::process_gui_panel_item() {
             );
             ImGui::Unindent();
 
-
-            //Total speed value.
-            if (
-                ImGui::DragFloat(
-                    "Total speed", &loaded_gen.total_speed, 1, 0, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The speed a particle is emitted at.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-
-            ImGui::Indent();
-            //Total speed deviation value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::DragFloat(
-                    "Speed deviation", &loaded_gen.total_speed_deviation, 0.5f, 0, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The speed a particle is emitted at can vary by this much.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

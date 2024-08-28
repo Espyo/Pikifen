@@ -347,13 +347,6 @@ public:
     
     //Maximum random deviation of angle.
     float angle_deviation = 0.0f;
-    
-    //Total speed they move at.
-    float total_speed = 0.0f;
-    
-    //Maximum random deviation of total speed.
-    float total_speed_deviation = 0.0f;
-    
 
     //--- Function declarations ---
 
