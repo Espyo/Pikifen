@@ -64,6 +64,10 @@ struct keyframe_interpolator {
     inter_t get(const float t) {
         if (t < 0.0f) return keyframe_values[0];
 
+        if (t < keyframe_times[0]) {
+            return keyframe_values[0];
+        }
+
         for (size_t k = 1; k < keyframe_times.size(); ++k) {
             if (t <= keyframe_times[k]) {
                 float delta_t = std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);

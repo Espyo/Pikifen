@@ -45,6 +45,7 @@ particle::particle(
     z(z),
     priority(priority),
     color(initial_color){
+    
 }
 
 
@@ -157,12 +158,16 @@ void particle::tick(const float delta_t) {
         time = 0.0f;
         return;
     }
-    
+
     pos += speed * delta_t;
-    
+    pos = rotate_point(pos, deg_to_rad(angular_speed) * delta_t);
+
     speed.x *= 1 - (delta_t* friction);
     speed.y *= 1 - (delta_t* friction);
-    speed.y += delta_t* gravity;
+    speed.y += delta_t* acceleration.y;
+    speed.x += delta_t * acceleration.x;
+
+    speed = rotate_point(speed, deg_to_rad(angular_speed) * delta_t);
 }
 
 
@@ -268,8 +273,10 @@ void particle_generator::emit(particle_manager &manager) {
         new_p.time = new_p.duration;
         new_p.friction +=
             randomf(-friction_deviation, friction_deviation);
-        new_p.gravity +=
-            randomf(-gravity_deviation, gravity_deviation);
+        new_p.acceleration.x +=
+            randomf(-acceleration_deviation.x, acceleration_deviation.x);
+        new_p.acceleration.y +=
+            randomf(-acceleration_deviation.y, acceleration_deviation.y);
         new_p.rotation +=     
             randomf(-rotation_deviation, rotation_deviation);
 
@@ -301,7 +308,11 @@ void particle_generator::emit(particle_manager &manager) {
             rotate_point(
                 new_p.speed, angle_to_use
             );
-        
+        float outwards_angle = get_angle(new_p.pos);
+        new_p.speed += angle_to_coordinates(outwards_angle,
+            outwards_speed + randomf(-outwards_speed_deviation, outwards_speed_deviation)
+        );
+
         manager.add(new_p);
     }
 }
@@ -362,8 +373,9 @@ void particle_generator::load_from_data_node(
     prs.set("rotation", base_particle.rotation);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
-    prs.set("gravity", base_particle.gravity);
+    prs.set("gravity", base_particle.acceleration);
     prs.set("speed", base_particle.speed);
+    prs.set("angular_speed", base_particle.angular_speed);
     prs.set("blend_type", blend_int);
 
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
@@ -420,11 +432,13 @@ void particle_generator::load_from_data_node(
     grs.set("rotation_deviation", rotation_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
-    grs.set("gravity_deviation", gravity_deviation);
+    grs.set("gravity_deviation", acceleration_deviation);
     grs.set("size_deviation", size_deviation);
     grs.set("speed_deviation", speed_deviation);
     grs.set("angle", angle);
     grs.set("angle_deviation", angle_deviation);
+    grs.set("outwards_speed", outwards_speed);
+    grs.set("outwards_speed_deviation", outwards_speed_deviation);
     
     angle = deg_to_rad(angle);
     angle_deviation = deg_to_rad(angle_deviation);
@@ -472,9 +486,10 @@ void particle_generator::save_to_data_node(
     base_particle_node->add(new data_node("rotation", f2s(rad_to_deg(base_particle.rotation))));
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
-    base_particle_node->add(new data_node("gravity", f2s(base_particle.gravity)));
-    base_particle_node->add(new data_node("speed", p2s(base_particle.speed)));
+    base_particle_node->add(new data_node("acceleration", p2s(base_particle.acceleration)));
+    base_particle_node->add(new data_node("velocity", p2s(base_particle.speed)));
     base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
+    base_particle_node->add(new data_node("angular_speed", f2s(base_particle.angular_speed)));
 
     data_node* color_node = new data_node("color", "");
     base_particle_node->add(color_node);
@@ -495,8 +510,10 @@ void particle_generator::save_to_data_node(
     node->add(new data_node("rotation_deviation", f2s(rad_to_deg(rotation_deviation))));
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
     node->add(new data_node("friction_deviation", f2s(friction_deviation)));
-    node->add(new data_node("gravity_deviation", f2s(gravity_deviation)));
+    node->add(new data_node("acceleration_deviation", p2s(acceleration_deviation)));
     node->add(new data_node("size_deviation", f2s(size_deviation)));
+    node->add(new data_node("outwards_speed", f2s(outwards_speed)));
+    node->add(new data_node("outwards_speed_deviation", f2s(outwards_speed_deviation)));
     node->add(new data_node("speed_deviation", p2s(speed_deviation)));
     node->add(new data_node("angle", f2s(rad_to_deg(angle))));
     node->add(new data_node("angle_deviation", f2s(rad_to_deg(angle_deviation))));

@@ -189,8 +189,8 @@ struct particle {
     //Every second, speed is lost by this much.
     float friction = 1.0f;
     
-    //Every second, the vertical speed is increased by this.
-    float gravity = 1.0f;
+    //Every second, velocity is increased by this.
+    point acceleration;
     
     //Current state.
     
@@ -208,6 +208,9 @@ struct particle {
     
     //Current movement speed.
     point speed;
+
+    //Current rotational speed
+    float angular_speed = 0.0f;
     
     //Current color.
     keyframe_interpolator<ALLEGRO_COLOR> color;
@@ -334,11 +337,17 @@ public:
     float friction_deviation = 0.0f;
     
     //Maximum random deviation of gravity.
-    float gravity_deviation = 0.0f;
+    point acceleration_deviation;
     
     //Maximum random deviation of size.
     float size_deviation = 0;  
     
+    //Apply this speed away from the particle generator.
+    float outwards_speed = 0;
+
+    //Maximum random deviation of outward_speed.
+    float outwards_speed_deviation = 0;
+
     //Maximum random deviation of speed.
     point speed_deviation;
     

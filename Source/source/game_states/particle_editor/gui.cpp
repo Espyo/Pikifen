@@ -428,7 +428,7 @@ void particle_editor::process_gui_panel_item() {
             );
 
             ImGui::Indent();
-            //Number Deviation value.
+            //Interval Deviation value.
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
@@ -442,6 +442,7 @@ void particle_editor::process_gui_panel_item() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
+            ImGui::Dummy(ImVec2(0, 4));
 
             //Number value.
             int number = (int)loaded_gen.emission.number;
@@ -459,6 +460,7 @@ void particle_editor::process_gui_panel_item() {
             loaded_gen.emission.number = number;
 
             ImGui::Indent();
+
             //Number Deviation value.
             ImGui::SetNextItemWidth(75);
             int number_dev = (int)loaded_gen.emission.number_deviation;
@@ -475,7 +477,7 @@ void particle_editor::process_gui_panel_item() {
             );
             loaded_gen.emission.number_deviation = number_dev;
             ImGui::Unindent();
-
+            ImGui::Dummy(ImVec2(0, 4));
 
             int shape = loaded_gen.emission.shape;
             ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
@@ -567,7 +569,7 @@ void particle_editor::process_gui_panel_item() {
 
             ImGui::EndTabItem();
         }
-        ImGui::ShowDemoWindow();
+
         if (ImGui::BeginTabItem("Visuals", nullptr)) {
 
             ImGui::Dummy(ImVec2(0, 4));
@@ -704,6 +706,7 @@ void particle_editor::process_gui_panel_item() {
                 ImGui::TreePop();
             }
 
+            ImGui::Dummy(ImVec2(0, 12));
             //Duration value.
             if (
                 ImGui::DragFloat(
@@ -768,11 +771,12 @@ void particle_editor::process_gui_panel_item() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
+            ImGui::Dummy(ImVec2(0, 4));
 
             //Gravity value.
             if (
-                ImGui::DragFloat(
-                    "Gravity", &loaded_gen.base_particle.gravity, 1, -FLT_MAX, FLT_MAX
+                ImGui::DragFloat2(
+                    "Gravity", (float*)&loaded_gen.base_particle.acceleration, 1
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -784,10 +788,10 @@ void particle_editor::process_gui_panel_item() {
 
             ImGui::Indent();
             //Gravity deviation value.
-            ImGui::SetNextItemWidth(75);
+            ImGui::SetNextItemWidth(150);
             if (
-                ImGui::DragFloat(
-                    "Gravity deviation", &loaded_gen.gravity_deviation, 0.5f, 0.0f, FLT_MAX
+                ImGui::DragFloat2(
+                    "Gravity deviation", (float*)&loaded_gen.acceleration_deviation, 0.5f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -797,6 +801,7 @@ void particle_editor::process_gui_panel_item() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
+            ImGui::Dummy(ImVec2(0, 4));
 
             //Speed value.
             if (
@@ -816,7 +821,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::SetNextItemWidth(150);
             if (
                 ImGui::DragFloat2(
-                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.01f, 0.0f, FLT_MAX
+                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.5f, 0.0f, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -826,6 +831,7 @@ void particle_editor::process_gui_panel_item() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
+            ImGui::Dummy(ImVec2(0, 4));
 
             //Angle value.
             if (
@@ -852,6 +858,50 @@ void particle_editor::process_gui_panel_item() {
             }
             set_tooltip(
                 "The angle a particle is emitted at can vary by this much.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+            ImGui::Dummy(ImVec2(0, 4));
+
+            //Angular speed value.
+            if (
+                ImGui::DragFloat(
+                    "Anglular speed", &loaded_gen.base_particle.angular_speed, 1, -FLT_MAX, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "The direction a particle moves in changes by this many degrees per second",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Dummy(ImVec2(0, 4));
+
+            //Outwards speed value.
+            if (
+                ImGui::DragFloat(
+                    "Outwards Speed", &loaded_gen.outwards_speed, 1, -FLT_MAX, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "How fast the particle initially moves away from the center.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+
+            ImGui::Indent();
+            //Speed deviation value.
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::DragFloat(
+                    "Outwards Speed deviation", &loaded_gen.outwards_speed_deviation, 0.5f, 0.0f, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's speed can vary by this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();

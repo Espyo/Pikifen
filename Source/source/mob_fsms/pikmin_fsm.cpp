@@ -1969,7 +1969,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     par.bitmap = game.sys_assets.bmp_rock;
     par.color.set_keyframe_value(0, al_map_rgb(172, 164, 134));
     par.color.add(1, al_map_rgba(172, 164, 134, 0));
-    par.gravity = 70.0f;
+    par.acceleration.y = 70.0f;
     par.speed.x = 70;
     particle_generator pg(0, par, 12);
     pg.emission.number_deviation = 5;
@@ -3531,7 +3531,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pa.bitmap = game.sys_assets.bmp_rock;
     pa.color.set_keyframe_value(0, al_map_rgb(160, 80, 32));
     pa.color.add(1, al_map_rgba(160, 80, 32, 0));
-    pa.gravity = 50;
+    pa.acceleration.y = 50;
     pa.speed.x = 50;
     particle_generator pg(0, pa, 8);
     pg.emission.number_deviation = 1;
@@ -3639,7 +3639,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pa.bitmap = game.sys_assets.bmp_sparkle;
         pa.color.set_keyframe_value(0, al_map_rgb(255, 224, 224));
         pa.color.add(1, al_map_rgb(255, 224, 224));
-        pa.gravity = 300;
+        pa.acceleration.y = 300;
         pa.speed.x = 50;
         particle_generator pg(0, pa, 8);
         pg.emission.number_deviation = 1;

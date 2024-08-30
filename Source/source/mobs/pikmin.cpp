@@ -515,7 +515,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.speed.x = randomf(-20, 20);
         par.speed.y = randomf(-70, -30);
         par.friction = 0.8;
-        par.gravity = -0.2;
+        par.acceleration.y = -0.2;
         par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
         par.color.add(0.1f, pik_type->main_color);
         par.color.add(1, change_alpha(pik_type->main_color, 0));
