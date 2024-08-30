@@ -90,14 +90,29 @@ void particle_editor::draw_canvas() {
         switch (loaded_gen.emission.shape)
         {
         case(PARTICLE_EMISSION_SHAPE_CIRCLE):
-            al_draw_circle(
-                0, 0, loaded_gen.emission.max_circular_radius,
-                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
-            );
-            al_draw_circle(
-                0, 0, loaded_gen.emission.min_circular_radius,
-                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
-            );
+
+            if (loaded_gen.emission.circular_arc == TAU) {
+                al_draw_circle(
+                    0, 0, loaded_gen.emission.max_circular_radius,
+                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                );
+                al_draw_circle(
+                    0, 0, loaded_gen.emission.min_circular_radius,
+                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                );
+            } else {
+                al_draw_arc(
+                    0, 0, loaded_gen.emission.max_circular_radius, 
+                    -loaded_gen.emission.circular_arc / 2 + loaded_gen.emission.circular_arc_rotation, loaded_gen.emission.circular_arc,
+                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                );
+                al_draw_arc(
+                    0, 0, loaded_gen.emission.min_circular_radius, 
+                    -loaded_gen.emission.circular_arc / 2 + loaded_gen.emission.circular_arc_rotation, loaded_gen.emission.circular_arc,
+                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                );
+
+            }
             break;
         case(PARTICLE_EMISSION_SHAPE_RECTANGLE):
             al_draw_rectangle(

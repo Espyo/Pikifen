@@ -136,7 +136,7 @@ public:
     float interval_deviation = 0.0f;
 
     //Maximum random deviation of position.
-    point max_rectangular_offset = point(0,0);
+    point max_rectangular_offset = point(0, 0);
 
     //Minimum random deviation of position.
     point min_rectangular_offset = point(0, 0);
@@ -147,6 +147,11 @@ public:
     //Min radius for circular emission
     float min_circular_radius = 0;
 
+    //How many radians around the center particles can emit
+    float circular_arc = TAU;
+
+    //How many radians the arc is rotated by
+    float circular_arc_rotation = 0;
 
     //--- Function declarations ---
 

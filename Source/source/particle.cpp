@@ -356,6 +356,7 @@ void particle_generator::load_from_data_node(
     case PARTICLE_EMISSION_SHAPE_CIRCLE:
         ers.set("max_radius", emission.max_circular_radius);
         ers.set("min_radius", emission.min_circular_radius);
+        ers.set("arc", emission.circular_arc);
         break;
     case PARTICLE_EMISSION_SHAPE_RECTANGLE:
         ers.set("max_offset", emission.max_rectangular_offset);
@@ -472,6 +473,7 @@ void particle_generator::save_to_data_node(
     case PARTICLE_EMISSION_SHAPE_CIRCLE:
         emission_particle_node->add(new data_node("max_radius", f2s(emission.max_circular_radius)));
         emission_particle_node->add(new data_node("min_radius", f2s(emission.min_circular_radius)));
+        emission_particle_node->add(new data_node("arc", f2s(emission.circular_arc)));
         break;
     case PARTICLE_EMISSION_SHAPE_RECTANGLE:
         emission_particle_node->add(new data_node("max_offset", p2s(emission.max_rectangular_offset)));
@@ -794,7 +796,12 @@ point particle_emission_struct::get_emission_offset() {
             //Created using
             //https://stackoverflow.com/questions/30564015/how-to-generate-random-points-in-a-circular-distribution
             float r = min_circular_radius + (max_circular_radius - min_circular_radius) * sqrt(randomf(0, 1));
-            float theta = TAU * randomf(0, 1);
+
+            
+            float theta = randomf(
+                -circular_arc / 2 + circular_arc_rotation, 
+                circular_arc / 2 + circular_arc_rotation
+            );
 
             return point(r * cos(theta), r * sin(theta));
         }

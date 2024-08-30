@@ -516,6 +516,33 @@ void particle_editor::process_gui_panel_item() {
                     "A particle's position varies by at most this amount.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
+                ImGui::Dummy(ImVec2(0, 4));
+
+                //Emission arc value.
+                if (
+                    ImGui::SliderAngle(
+                        "Arc", &loaded_gen.emission.circular_arc, 0
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Maximum degrees around the center particles can emit.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+
+                //Emission arc rotation value.
+                if (
+                    ImGui::SliderAngle(
+                        "Arc rotation", &loaded_gen.emission.circular_arc_rotation
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Degress the emission arc is rotated by",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
 
                 break;
             case PARTICLE_EMISSION_SHAPE_RECTANGLE:
