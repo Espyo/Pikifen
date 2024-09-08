@@ -185,6 +185,24 @@ const vector<player_action_type>
 
 
 /**
+ * @brief Returns a registered type, given its ID.
+ *
+ * @param action_id ID of the player action.
+ * @return The type, or an empty type on failure.
+ */
+player_action_type controls_mediator::get_player_action_type(
+    const int &action_id
+) const {
+    for(size_t b = 0; b < player_action_types.size(); ++b) {
+        if(player_action_types[b].id == action_id) {
+            return player_action_types[b];
+        }
+    }
+    return player_action_type();
+}
+
+
+/**
  * @brief Returns the internal name from an input ID,
  * used in the on_input_recieved event.
  *

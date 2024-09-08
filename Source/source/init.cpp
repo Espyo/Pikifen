@@ -519,7 +519,7 @@ void init_controls() {
     //If the options are loaded successfully, these binds are overwritten.
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
-    for(size_t a = 0; a < N_PLAYER_ACTION_TYPES; ++a) {
+    for(size_t a = 0; a < action_types.size(); ++a) {
         string def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         

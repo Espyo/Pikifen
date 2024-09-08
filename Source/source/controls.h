@@ -187,10 +187,6 @@ enum PLAYER_ACTION_TYPE {
     
     //Menu navigation page to the right.
     PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
-    
-    
-    //Total amount of player action types.
-    N_PLAYER_ACTION_TYPES,
 
 };
 
@@ -267,6 +263,8 @@ public:
     control_bind find_bind(
         const string &action_type_name
     ) const;
+    player_action_type get_player_action_type(const int &action_id) const;
+    string get_player_action_type_internal_name(const int &action_id);
     float get_player_action_type_value(
         PLAYER_ACTION_TYPE player_action_type_id
     );
@@ -276,7 +274,6 @@ public:
     vector<player_action> new_frame();
     void release_all();
     void set_options(const controls_manager_options &options);
-    string get_player_action_type_internal_name(const int &action_id);
     
 private:
 
