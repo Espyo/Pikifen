@@ -37,6 +37,7 @@ extern const string SPECS_GUI_FILE_PATH;
 namespace CONTROL_BINDS_MENU {
 extern const float BIND_BUTTON_HEIGHT;
 extern const float BIND_BUTTON_PADDING;
+extern const float CAPTURE_TIMEOUT_DURATION;
 extern const string GUI_FILE_PATH;
 extern const string SONG_NAME;
 }
@@ -506,6 +507,9 @@ private:
     
     //Is it currently capturing input? 0: No. 1: Capturing. 2: Finishing.
     unsigned char capturing_input = 0;
+    
+    //Time left before the input capturing times out.
+    float capturing_input_timeout = 0.0f;
     
     //Is it showing an action type's "more..." menu?
     bool showing_more = false;

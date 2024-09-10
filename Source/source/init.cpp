@@ -160,32 +160,32 @@ void init_controls() {
     
     //MAIN.
     game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_RIGHT,
+        PLAYER_ACTION_CAT_MAIN,
+        "Move right",
+        "Move the leader right.",
+        "move_right", "k_4"
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_UP,
         PLAYER_ACTION_CAT_MAIN,
-        "Up",
-        "Move up.",
+        "Move up",
+        "Move the leader up.",
         "move_up", "k_23"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_LEFT,
         PLAYER_ACTION_CAT_MAIN,
-        "Left",
-        "Move left.",
+        "Move left",
+        "Move the leader left.",
         "move_left", "k_1"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_DOWN,
         PLAYER_ACTION_CAT_MAIN,
-        "Down",
-        "Move down.",
+        "Move down",
+        "Move the leader down.",
         "move_down", "k_19"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_TYPE_RIGHT,
-        PLAYER_ACTION_CAT_MAIN,
-        "Right",
-        "Move right.",
-        "move_right", "k_4"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_THROW,
@@ -281,6 +281,13 @@ void init_controls() {
     
     //Menus.
     game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MENU_RIGHT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu right",
+        "Navigate right in a menu.",
+        "menu_right", "k_83"
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
@@ -300,13 +307,6 @@ void init_controls() {
         "Menu down",
         "Navigate down in a menu.",
         "menu_down", "k_85"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_TYPE_MENU_RIGHT,
-        PLAYER_ACTION_CAT_MENUS,
-        "Menu right",
-        "Navigate right in a menu.",
-        "menu_right", "k_83"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_OK,
@@ -360,6 +360,13 @@ void init_controls() {
     
     //Advanced.
     game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor right",
+        "Move the cursor right. Useful if it's not mouse-controlled.",
+        "cursor_right", ""
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_CURSOR_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor up",
@@ -381,11 +388,11 @@ void init_controls() {
         "cursor_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
+        PLAYER_ACTION_TYPE_GROUP_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
-        "Cursor right",
-        "Move the cursor right. Useful if it's not mouse-controlled.",
-        "cursor_right", ""
+        "Swarm right",
+        "Swarm all Pikmin right.",
+        "swarm_right", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_GROUP_UP,
@@ -407,13 +414,6 @@ void init_controls() {
         "Swarm down",
         "Swarm all Pikmin down.",
         "swarm_down", ""
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_TYPE_GROUP_RIGHT,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Swarm right",
-        "Swarm all Pikmin right.",
-        "swarm_right", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_PREV_LEADER,

@@ -28,6 +28,9 @@ const float BIND_BUTTON_HEIGHT = 0.07f;
 //Padding between each bind button.
 const float BIND_BUTTON_PADDING = 0.01f;
 
+//Timeout before the input capturing cancels.
+const float CAPTURE_TIMEOUT_DURATION = 5.0f;
+
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Control_binds_menu.txt";
 
@@ -49,6 +52,7 @@ void control_binds_menu_state::choose_input(
     const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
 ) {
     capturing_input = 1;
+    capturing_input_timeout = CONTROL_BINDS_MENU::CAPTURE_TIMEOUT_DURATION;
     
     const vector<control_bind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
@@ -118,7 +122,10 @@ void control_binds_menu_state::do_drawing() {
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
             V_ALIGN_MODE_CENTER,
-            "Waiting for any input..."
+            "Please perform the new input for \n" +
+            game.controls.get_player_action_type(cur_action_type).name + "\n"
+            "\n"
+            "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)"
         );
     }
     
@@ -144,7 +151,13 @@ void control_binds_menu_state::do_logic() {
     
     gui.tick(game.delta_t);
     
-    if(capturing_input == 2) {
+    if(capturing_input == 1) {
+        capturing_input_timeout -= game.delta_t;
+        if(capturing_input_timeout <= 0.0f) {
+            //Timed out. Cancel.
+            capturing_input = 0;
+        }
+    } else if(capturing_input == 2) {
         //A frame has passed in the post-capture cooldown. Finish the cooldown.
         capturing_input = 0;
     }
@@ -223,6 +236,7 @@ void control_binds_menu_state::leave() {
 void control_binds_menu_state::load() {
     bmp_menu_bg = nullptr;
     capturing_input = 0;
+    capturing_input_timeout = 0.0f;
     showing_more = false;
     cur_action_type = PLAYER_ACTION_TYPE_NONE;
     cur_bind_idx = INVALID;
@@ -559,7 +573,7 @@ void control_binds_menu_state::populate_binds() {
             cur_y +=
                 CONTROL_BINDS_MENU::BIND_BUTTON_HEIGHT +
                 CONTROL_BINDS_MENU::BIND_BUTTON_PADDING;
-            
+                
             //Default label.
             text_gui_item* default_label_text =
                 new text_gui_item(
