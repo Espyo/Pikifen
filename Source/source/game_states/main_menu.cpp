@@ -69,12 +69,12 @@ void main_menu_state::do_drawing() {
         );
     }
     
-    draw_scaled_text(
-        game.sys_assets.fnt_standard, COLOR_WHITE,
+    draw_text(
+        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
+        game.sys_assets.fnt_standard,
         point(8, game.win_h  - 8),
-        point(0.6, 0.6),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM,
-        "Pikmin (c) Nintendo"
+        point(game.win_w * 0.45f, game.win_h * 0.02f), COLOR_WHITE,
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM
     );
     string version_text;
     if(!game.config.name.empty()) {
@@ -86,12 +86,11 @@ void main_menu_state::do_drawing() {
     }
     version_text +=
         "Pikifen " + get_engine_version_string();
-    draw_scaled_text(
-        game.sys_assets.fnt_standard, COLOR_WHITE,
+    draw_text(
+        version_text, game.sys_assets.fnt_standard,
         point(game.win_w - 8, game.win_h  - 8),
-        point(0.6, 0.6),
-        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM,
-        version_text
+        point(game.win_w * 0.45f, game.win_h * 0.02f), COLOR_WHITE,
+        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
     );
     
     main_gui.draw();

@@ -117,15 +117,15 @@ void control_binds_menu_state::do_drawing() {
         );
         
         draw_text_lines(
-            game.sys_assets.fnt_standard,
-            COLOR_WHITE,
-            point(game.win_w / 2.0f, game.win_h / 2.0f),
-            ALLEGRO_ALIGN_CENTER,
-            V_ALIGN_MODE_CENTER,
             "Please perform the new input for \n" +
             game.controls.get_player_action_type(cur_action_type).name + "\n"
             "\n"
-            "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)"
+            "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)",
+            game.sys_assets.fnt_standard,
+            point(game.win_w / 2.0f, game.win_h / 2.0f),
+            point(LARGE_FLOAT, LARGE_FLOAT),
+            COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW
         );
     }
     

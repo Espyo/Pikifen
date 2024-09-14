@@ -21,8 +21,9 @@ namespace IN_WORLD_FRACTION {
 extern const float GROW_JUICE_DURATION;
 extern const float GROW_JUICE_AMOUNT;
 extern const float PADDING;
-extern const float REQ_MET_JUICE_DURATION;
 extern const float REQ_MET_GROW_JUICE_AMOUNT;
+extern const float REQ_MET_JUICE_DURATION;
+extern const float ROW_HEIGHT;
 extern const float TRANSITION_IN_DURATION;
 extern const float TRANSITION_OUT_DURATION;
 }

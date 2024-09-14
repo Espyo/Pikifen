@@ -32,8 +32,10 @@ namespace DRAWING {
 extern const float DEF_HEALTH_WHEEL_RADIUS;
 extern const float LIQUID_WOBBLE_DELTA_X;
 extern const float LIQUID_WOBBLE_TIME_SCALE;
-extern const float LOADING_SCREEN_SUBTITLE_SCALE;
 extern const int LOADING_SCREEN_PADDING;
+extern const float LOADING_SCREEN_SUBTEXT_SCALE;
+extern const float LOADING_SCREEN_TEXT_HEIGHT;
+extern const float LOADING_SCREEN_TEXT_WIDTH;
 extern const unsigned char NOTIFICATION_ALPHA;
 extern const float NOTIFICATION_CONTROL_SIZE;
 extern const float NOTIFICATION_PADDING;
@@ -176,7 +178,7 @@ void draw_button(
 void draw_fraction(
     const point &bottom, const size_t value_nr,
     const size_t requirement_nr, const ALLEGRO_COLOR &color,
-    const float scale = 1.0f
+    const float height
 );
 void draw_health(
     const point &center, const float ratio,

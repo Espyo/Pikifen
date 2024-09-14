@@ -112,10 +112,6 @@ ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);
 float get_liquid_limit_length(edge* e_ptr);
-void get_multiline_text_dimensions(
-    const ALLEGRO_FONT* const font, const string &text,
-    int* out_ret_w, int* out_ret_h
-);
 void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise,
     const edge* ignore, edge** out_edge, float* out_angle, float* out_diff

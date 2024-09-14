@@ -275,7 +275,7 @@ void gameplay_state::draw_big_msg() {
         
     } case BIG_MESSAGE_READY: {
         const float TEXT_W = game.win_w * 0.60f;
-        const float TEXT_INITIAL_SCALE = 2.0f;
+        const float TEXT_INITIAL_HEIGHT = 0.10;
         const float TEXT_VARIATION_DUR = 0.08f;
         const float TEXT_START_T = 0.15f;
         const float TEXT_MOVE_MID_T = 0.30f;
@@ -288,11 +288,9 @@ void gameplay_state::draw_big_msg() {
         ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
         ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
-        keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
-        ki_s.add(TEXT_SHRINK_T, TEXT_INITIAL_SCALE * 1.4f);
-        ki_s.add(1.0f, 0.0f, EASE_METHOD_IN);
-        
-        float scale = ki_s.get(t);
+        keyframe_interpolator ki_h(TEXT_INITIAL_HEIGHT);
+        ki_h.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
+        ki_h.add(1.0f, 0.0f, EASE_METHOD_IN);
         
         for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); ++c) {
             float char_ratio =
@@ -300,14 +298,11 @@ void gameplay_state::draw_big_msg() {
             char_ratio = 1.0f - char_ratio;
             float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
-            draw_scaled_text(
+            draw_text(
+                string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c]),
                 game.sys_assets.fnt_area_name,
-                COLOR_GOLD,
                 point((game.win_w / 2.0f) + x_offset, y),
-                point(scale, scale),
-                ALLEGRO_ALIGN_CENTER,
-                V_ALIGN_MODE_CENTER,
-                string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c])
+                point(LARGE_FLOAT, game.win_h * ki_h.get(t)), COLOR_GOLD
             );
         }
         break;
@@ -317,24 +312,19 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_GROW_STOP_T = 0.10f;
         const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DUR;
         
-        keyframe_interpolator ki_s(0.0f);
-        ki_s.add(TEXT_GROW_STOP_T, 4.0f, EASE_METHOD_OUT_ELASTIC);
-        ki_s.add(1.0f, 4.4f);
+        keyframe_interpolator ki_h(0.0f);
+        ki_h.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
+        ki_h.add(1.0f, 0.22f);
         keyframe_interpolator ki_a(1.0f);
         ki_a.add(TEXT_GROW_STOP_T, 1.0f);
         ki_a.add(1.0f, 0.0f);
         
-        float scale = ki_s.get(t);
-        float alpha = ki_a.get(t);
-        
-        draw_scaled_text(
+        draw_text(
+            GAMEPLAY::BIG_MSG_GO_TEXT,
             game.sys_assets.fnt_area_name,
-            change_alpha(COLOR_GOLD, 255 * alpha),
             point(game.win_w / 2.0f, game.win_h / 2.0f),
-            point(scale, scale),
-            ALLEGRO_ALIGN_CENTER,
-            V_ALIGN_MODE_CENTER,
-            GAMEPLAY::BIG_MSG_GO_TEXT
+            point(LARGE_FLOAT, game.win_h * ki_h.get(t)),
+            change_alpha(COLOR_GOLD, 255 * ki_a.get(t))
         );
         break;
         
@@ -345,7 +335,7 @@ void gameplay_state::draw_big_msg() {
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
         const float TEXT_W = game.win_w * 0.80f;
-        const float TEXT_INITIAL_SCALE = 1.1f;
+        const float TEXT_INITIAL_HEIGHT = 0.05f;
         const float TEXT_VARIATION_DUR = 0.08f;
         const float TEXT_MOVE_MID_T = 0.30f;
         const float TEXT_PAUSE_T = 0.50f;
@@ -358,13 +348,12 @@ void gameplay_state::draw_big_msg() {
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
         ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
-        keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
-        ki_s.add(1.0f, TEXT_INITIAL_SCALE * 1.4f, EASE_METHOD_IN);
+        keyframe_interpolator ki_h(TEXT_INITIAL_HEIGHT);
+        ki_h.add(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
         keyframe_interpolator ki_a(1.0f);
         ki_a.add(TEXT_FADE_T, 1.0f);
         ki_a.add(1.0f, 0.0f);
         
-        float scale = ki_s.get(t);
         float alpha = ki_a.get(t);
         
         for(size_t c = 0; c < TEXT.size(); ++c) {
@@ -372,14 +361,12 @@ void gameplay_state::draw_big_msg() {
             char_ratio = 1.0f - char_ratio;
             float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
-            draw_scaled_text(
-                game.sys_assets.fnt_area_name,
-                change_alpha(COLOR_GOLD, 255 * alpha),
+            
+            draw_text(
+                string(1, TEXT[c]), game.sys_assets.fnt_area_name,
                 point((game.win_w / 2.0f) + x_offset, y),
-                point(scale, scale),
-                ALLEGRO_ALIGN_CENTER,
-                V_ALIGN_MODE_CENTER,
-                string(1, TEXT[c])
+                point(LARGE_FLOAT, game.win_h * ki_h.get(t)),
+                change_alpha(COLOR_GOLD, 255 * alpha)
             );
         }
         break;
@@ -1026,15 +1013,12 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         std::max(bmp_cursor_w, bmp_cursor_h) * 0.18f * game.cam.zoom;
         
     if(n_standby_pikmin > 0) {
-        draw_scaled_text(
-            game.sys_assets.fnt_cursor_counter,
-            color,
+        draw_text(
+            i2s(n_standby_pikmin), game.sys_assets.fnt_cursor_counter,
             leader_cursor_s +
             point(count_offset, count_offset),
-            point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_LEFT,
-            V_ALIGN_MODE_TOP,
-            i2s(n_standby_pikmin)
+            point(LARGE_FLOAT, game.win_h * 0.02f), color,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
     }
     
@@ -1330,12 +1314,13 @@ void gameplay_state::draw_message_box() {
             float token_final_width = cur_token.width * x_scale;
             switch(cur_token.type) {
             case STRING_TOKEN_CHAR: {
-                draw_scaled_text(
-                    game.sys_assets.fnt_standard, map_alpha(alpha),
+                draw_text(
+                    cur_token.content, game.sys_assets.fnt_standard,
                     point(x, y),
-                    point(x_scale, 1.0f),
-                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-                    cur_token.content
+                    point(token_final_width, LARGE_FLOAT),
+                    map_alpha(alpha),
+                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
+                    point(x_scale, 1.0f)
                 );
                 break;
             }
@@ -1437,8 +1422,12 @@ void gameplay_state::draw_system_stuff() {
             al_map_rgba(0, 0, 0, 96 * alpha_mult)
         );
         draw_text_lines(
-            game.sys_assets.fnt_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-            point(8, 8), 0, V_ALIGN_MODE_TOP, game.maker_tools.info_print_text
+            game.maker_tools.info_print_text,
+            game.sys_assets.fnt_builtin,
+            point(8, 8),
+            point(LARGE_FLOAT, LARGE_FLOAT),
+            al_map_rgba(255, 255, 255, 128 * alpha_mult),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
         );
     }
     

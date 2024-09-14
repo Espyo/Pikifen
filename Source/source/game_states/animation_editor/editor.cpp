@@ -1445,7 +1445,7 @@ void animation_editor::unload() {
     
     if(bg) {
         al_destroy_bitmap(bg);
-        bg = NULL;
+        bg = nullptr;
     }
 }
 

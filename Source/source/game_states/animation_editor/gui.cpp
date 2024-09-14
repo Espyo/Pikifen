@@ -603,7 +603,7 @@ void animation_editor::process_gui_options_dialog() {
             if(!use_bg) {
                 if(bg) {
                     al_destroy_bitmap(bg);
-                    bg = NULL;
+                    bg = nullptr;
                 }
                 game.options.anim_editor_bg_texture.clear();
             }
@@ -629,7 +629,7 @@ void animation_editor::process_gui_options_dialog() {
                     game.options.anim_editor_bg_texture = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
-                        bg = NULL;
+                        bg = nullptr;
                     }
                     bg =
                         load_bmp(

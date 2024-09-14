@@ -591,12 +591,14 @@ void animation_editor::draw_timeline() {
             if(text.size() >= 4) {
                 text = text.substr(1, 3);
             }
-            al_draw_text(
-                game.sys_assets.fnt_builtin, al_map_rgb(32, 32, 32),
-                floor(x_to_use) + 2,
-                canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2,
-                ALLEGRO_ALIGN_LEFT,
-                text.c_str()
+            draw_text(
+                text, game.sys_assets.fnt_builtin,
+                point(
+                    floor(x_to_use) + 2,
+                    canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
+                ),
+                point(LARGE_FLOAT, 8.0f), al_map_rgb(32, 32, 32),
+                ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
             );
             al_draw_line(
                 x_to_use + 0.5, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,

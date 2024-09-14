@@ -35,6 +35,9 @@ const float REQ_MET_GROW_JUICE_AMOUNT = 0.12f;
 //How long it takes to animate the numbers flashing.
 const float REQ_MET_JUICE_DURATION = 0.5f;
 
+//Height of one of the fraction's rows.
+const float ROW_HEIGHT = 18.0f;
+
 //How long it takes to fade in.
 const float TRANSITION_IN_DURATION = 0.4f;
 
@@ -132,7 +135,7 @@ void in_world_fraction::draw() {
         draw_fraction(
             pos,
             value_number, requirement_number,
-            final_color, size_mult
+            final_color, IN_WORLD_FRACTION::ROW_HEIGHT * 3 * size_mult
         );
     } else {
         point pos(
@@ -141,11 +144,10 @@ void in_world_fraction::draw() {
             al_get_font_line_height(game.sys_assets.fnt_standard) -
             IN_WORLD_FRACTION::PADDING
         );
-        draw_scaled_text(
-            game.sys_assets.fnt_standard,
-            final_color, pos,
-            point(size_mult, size_mult),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, i2s(value_number)
+        draw_text(
+            i2s(value_number), game.sys_assets.fnt_standard, pos,
+            point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
+            final_color
         );
     }
 }

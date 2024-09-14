@@ -726,20 +726,18 @@ void notification_t::draw() const {
         );
     }
     
-    draw_compressed_text(
-        game.sys_assets.fnt_standard,
-        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility),
+    draw_text(
+        text, game.sys_assets.fnt_standard,
         point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5
         ),
-        ALLEGRO_ALIGN_CENTER,
-        V_ALIGN_MODE_CENTER,
         point(
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1
         ),
-        text
+        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility),
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, TEXT_SETTING_FLAG_CANT_GROW
     );
     
     al_use_transform(&old_tra);

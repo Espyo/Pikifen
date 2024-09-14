@@ -34,7 +34,7 @@ namespace GAMEPLAY {
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 
 //How long it takes for the area name to fade away, in-game.
-const float AREA_TITLE_FADE_DURATION = 3.0f;
+const float AREA_TITLE_FADE_DURATION = 1.0f;
 
 //How long the "Go!" big message lasts for.
 const float BIG_MSG_GO_DUR = 1.5f;

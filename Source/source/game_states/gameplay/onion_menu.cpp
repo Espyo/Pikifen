@@ -151,15 +151,13 @@ onion_menu_t::onion_menu_t(
         }
         
         float juicy_grow_amount = field_amount_text->get_juice_value();
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_standard,
-            color,
-            center,
-            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size, true,
+        draw_text(
             "Field: " +
-            i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta)
+            i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta),
+            game.sys_assets.fnt_standard, center,
+            size * GUI::STANDARD_CONTENT_SIZE, color,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
         );
     };
     gui.add_item(field_amount_text, "field");
@@ -279,13 +277,12 @@ onion_menu_t::onion_menu_t(
             }
             
             float juicy_grow_amount = onion_amount_text->get_juice_value();
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_area_name,
-                color,
-                center,
-                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true, i2s(real_onion_amount - t_ptr->delta)
+            draw_text(
+                i2s(real_onion_amount - t_ptr->delta),
+                game.sys_assets.fnt_area_name, center,
+                size * GUI::STANDARD_CONTENT_SIZE, color,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
             );
         };
         gui.add_item(onion_amount_text, "onion_" + i2s(t + 1) + "_amount");
@@ -387,13 +384,12 @@ onion_menu_t::onion_menu_t(
             }
             
             float juicy_grow_amount = group_amount_text->get_juice_value();
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_area_name,
-                color,
-                center,
-                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true, i2s(real_group_amount + t_ptr->delta)
+            draw_text(
+                i2s(real_group_amount + t_ptr->delta),
+                game.sys_assets.fnt_area_name, center,
+                size * GUI::STANDARD_CONTENT_SIZE, color,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
             );
         };
         gui.add_item(group_amount_text, "group_" + i2s(t + 1) + "_amount");

@@ -92,22 +92,16 @@ void gui_editor::draw_canvas() {
             orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h,
             clip_x, clip_y, clip_w, clip_h
         );
-        draw_scaled_text(
-            game.sys_assets.fnt_builtin,
-            al_map_rgb(40, 40, 96),
+        draw_text(
+            items[i].name, game.sys_assets.fnt_builtin,
             point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
                 (4.0f / game.cam.zoom),
                 (items[i].center.y - items[i].size.y / 2.0f) +
                 (4.0f / game.cam.zoom)
             ),
-            point(
-                1.0f / game.cam.zoom,
-                1.0f / game.cam.zoom
-            ),
-            ALLEGRO_ALIGN_LEFT,
-            V_ALIGN_MODE_TOP,
-            items[i].name
+            point(LARGE_FLOAT, 8.0 / game.cam.zoom),
+            al_map_rgb(40, 40, 96), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
         al_set_clipping_rectangle(
             orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h

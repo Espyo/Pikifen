@@ -1236,17 +1236,14 @@ void pause_menu_t::draw_radar(
         north_ind_center.x, north_ind_center.y,
         12.0f, PAUSE_MENU::RADAR_BG_COLOR
     );
-    draw_compressed_text(
-        game.sys_assets.fnt_slim,
-        PAUSE_MENU::RADAR_HIGHEST_COLOR,
+    draw_text(
+        "N", game.sys_assets.fnt_slim,
         point(
             north_ind_center.x,
             north_ind_center.y + 4.0f
         ),
-        ALLEGRO_ALIGN_CENTER,
-        V_ALIGN_MODE_CENTER,
         point(12.0f, 12.0f),
-        "N"
+        PAUSE_MENU::RADAR_HIGHEST_COLOR
     );
     al_draw_filled_triangle(
         north_ind_center.x,
@@ -1271,11 +1268,9 @@ void pause_menu_t::draw_radar(
         area_name_center, area_name_size,
         12.0f, PAUSE_MENU::RADAR_BG_COLOR
     );
-    draw_compressed_text(
-        game.sys_assets.fnt_standard, PAUSE_MENU::RADAR_HIGHEST_COLOR,
-        area_name_center, ALLEGRO_ALIGN_CENTER,
-        V_ALIGN_MODE_CENTER, area_name_size,
-        game.cur_area_data.name
+    draw_text(
+        game.cur_area_data.name, game.sys_assets.fnt_standard,
+        area_name_center, area_name_size, PAUSE_MENU::RADAR_HIGHEST_COLOR
     );
     
     //Draw some scan lines.

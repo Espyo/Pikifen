@@ -43,6 +43,7 @@ extern const float JUICY_GROW_ICON_MULT;
 extern const float JUICY_GROW_TEXT_HIGH_MULT;
 extern const float JUICY_GROW_TEXT_LOW_MULT;
 extern const float JUICY_GROW_TEXT_MEDIUM_MULT;
+extern const float STANDARD_CONTENT_SIZE;
 }
 
 

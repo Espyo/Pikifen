@@ -83,129 +83,6 @@ void draw_bitmap_in_box(
 
 
 /**
- * @brief Draws text, scaled, but also compresses (scales) it
- * to fit within the specified range.
- *
- * @param font Font to use.
- * @param color Tint the text by this color.
- * @param where Coordinates to draw it at.
- * @param scale Scale to use.
- * @param flags Allegro text render function flags.
- * @param v_align Vertical alignment.
- * @param max_size The maximum width and height. Use <= 0 to have no limit.
- * @param scale_past_max If true, the max size will only be taken into
- * account when the scale is 1. If it is any bigger, it will overflow
- * past the max size.
- * @param text Text to draw.
- */
-void draw_compressed_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const V_ALIGN_MODE v_align,
-    const point &max_size, const bool scale_past_max, const string &text
-) {
-
-    if(max_size.x == 0.0f && max_size.y == 0.0f) return;
-    
-    int text_ox;
-    int text_oy;
-    int text_w;
-    int text_h;
-    al_get_text_dimensions(
-        font, text.c_str(),
-        &text_ox, &text_oy, &text_w, &text_h
-    );
-    
-    point normal_text_size(text_w, text_h);
-    point text_size_to_check = normal_text_size;
-    point final_scale(1.0f, 1.0f);
-    
-    if(!scale_past_max) {
-        final_scale = scale;
-        text_size_to_check = normal_text_size * scale;
-    }
-    
-    if(max_size.x > 0 && text_size_to_check.x > max_size.x) {
-        final_scale.x = max_size.x / normal_text_size.x;
-    }
-    if(max_size.y > 0 && text_size_to_check.y > max_size.y) {
-        final_scale.y = max_size.y / normal_text_size.y;
-    }
-    
-    if(scale_past_max) {
-        final_scale = final_scale * scale;
-    }
-    
-    float final_text_height = normal_text_size.y * final_scale.y;
-    float v_align_offset =
-        get_vertical_align_offset(v_align, final_text_height);
-        
-    ALLEGRO_TRANSFORM text_transform, old_transform;
-    get_text_drawing_transforms(
-        where, final_scale, 0.0f, v_align_offset,
-        &text_transform, &old_transform
-    );
-    
-    al_use_transform(&text_transform); {
-        al_draw_text(font, color, 0, 0, flags, text.c_str());
-    }; al_use_transform(&old_transform);
-}
-
-
-/**
- * @brief Draws text on the screen, but compresses (scales) it
- * to fit within the specified range.
- *
- * @param font Font to use.
- * @param color Tint the text by this color.
- * @param where Coordinates to draw it at.
- * @param flags Allegro text render function flags.
- * @param v_align Vertical alignment.
- * @param max_size The maximum width and height. Use <= 0 to have no limit.
- * @param text Text to draw.
- */
-void draw_compressed_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const V_ALIGN_MODE v_align,
-    const point &max_size, const string &text
-) {
-    if(max_size.x == 0 && max_size.y == 0) return;
-    
-    int text_ox;
-    int text_oy;
-    int text_w;
-    int text_h;
-    al_get_text_dimensions(
-        font, text.c_str(),
-        &text_ox, &text_oy, &text_w, &text_h
-    );
-    point scale(1.0, 1.0);
-    float final_text_height = text_h;
-    
-    if(text_w > max_size.x && max_size.x > 0) {
-        scale.x = max_size.x / text_w;
-    }
-    if(text_h > max_size.y && max_size.y > 0) {
-        scale.y = max_size.y / text_h;
-        final_text_height = max_size.y;
-    }
-    
-    float v_align_offset =
-        get_vertical_align_offset(v_align, final_text_height);
-        
-    ALLEGRO_TRANSFORM text_transform, old_transform;
-    get_text_drawing_transforms(
-        where, scale, text_oy, v_align_offset,
-        &text_transform, &old_transform
-    );
-    
-    al_use_transform(&text_transform); {
-        al_draw_text(font, color, 0, 0, flags, text.c_str());
-    }; al_use_transform(&old_transform);
-}
-
-
-/**
  * @brief Draws an equilateral triangle made of three lines.
  *
  * @param center Center point of the triangle.
@@ -357,35 +234,6 @@ void draw_rounded_rectangle(
 
 
 /**
- * @brief Draws text, scaled.
- *
- * @param font Font to use.
- * @param color Tint the text with this color.
- * @param where Coordinates to draw in.
- * @param scale Horizontal or vertical scale.
- * @param flags Same flags you'd use for al_draw_text.
- * @param v_align Vertical alignment.
- * @param text Text to draw.
- */
-void draw_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const V_ALIGN_MODE v_align, const string &text
-) {
-
-    ALLEGRO_TRANSFORM text_transform, old_transform;
-    get_text_drawing_transforms(
-        where, scale, 0.0f, 0.0f,
-        &text_transform, &old_transform
-    );
-    
-    al_use_transform(&text_transform); {
-        draw_text_lines(font, color, point(), flags, v_align, text);
-    }; al_use_transform(&old_transform);
-}
-
-
-/**
  * @brief Draws plain text, scaled as necessary.
  *
  * @param text Text to draw.
@@ -443,7 +291,10 @@ void draw_text(
     get_text_drawing_transforms(
         where,
         text_final_scale * further_scale,
-        text_orig_oy, v_align_offset * further_scale.y,
+        has_flag(settings, TEXT_SETTING_COMPENSATE_Y_OFFSET) ?
+        text_orig_oy :
+        0.0f,
+        v_align_offset * further_scale.y,
         &text_transform, &old_transform
     );
     
@@ -457,41 +308,72 @@ void draw_text(
 /**
  * @brief Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
- * It basically calls Allegro's text drawing functions, but for each line.
  *
+ * @param text Text to draw.
  * @param font Font to use.
- * @param color Color.
- * @param where Coordinates of the text.
- * @param flags Flags, just like the ones you'd pass to al_draw_text.
+ * @param where Coordinates to draw it at.
+ * @param box_size Size of the box it must be scaled to.
+ * @param color Tint the text with this color.
+ * @param text_flags Allegro text drawing function flags.
  * @param v_align Vertical alignment.
- * @param text Text to write, line breaks included ('\n').
+ * @param settings Settings to control how the text can be scaled.
+ * Use TEXT_SETTING_FLAG.
+ * @param further_scale After calculating everything, further scale the
+ * text by this much before drawing.
  */
 void draw_text_lines(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags,
-    const V_ALIGN_MODE v_align, const string &text
+    const string &text, const ALLEGRO_FONT* const font,
+    const point &where, const point &box_size, const ALLEGRO_COLOR &color,
+    int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
+    const point &further_scale
 ) {
+    //Initial checks.
+    if(text.empty()) return;
+    if(box_size.x == 0 || box_size.y == 0) return;
+    
     vector<string> lines = split(text, "\n", true);
-    int fh = al_get_font_line_height(font);
-    size_t n_lines = lines.size();
-    float top;
     
-    if(v_align == V_ALIGN_MODE_TOP) {
-        top = where.y;
-    } else {
-        //We add n_lines - 1 because there is a 1px gap between each line.
-        int total_height = (int) n_lines * fh + (int) (n_lines - 1);
-        if(v_align == V_ALIGN_MODE_CENTER) {
-            top = where.y - total_height / 2;
-        } else {
-            top = where.y - total_height;
+    //Get the basic text information.
+    int total_orig_width = 0;
+    int total_orig_height = 0;
+    int line_orig_height = 0;
+    get_multiline_text_dimensions(
+        lines, font, &total_orig_width, &total_orig_height, &line_orig_height
+    );
+    point total_orig_size(total_orig_width, total_orig_height);
+    
+    //Figure out the scales.
+    point total_final_scale =
+        scale_rectangle_to_box(
+            total_orig_size, box_size,
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
+            has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
+        );
+    point total_final_size = total_orig_size * total_final_scale;
+    
+    //Figure out offsets.
+    float v_align_offset =
+        get_vertical_align_offset(v_align, total_final_size.y);
+        
+    //Create the transformation.
+    ALLEGRO_TRANSFORM text_transform, old_transform;
+    get_text_drawing_transforms(
+        where,
+        total_final_scale * further_scale,
+        0.0f, v_align_offset * further_scale.y,
+        &text_transform, &old_transform
+    );
+    
+    //Draw!
+    al_use_transform(&text_transform); {
+        for(size_t l = 0; l < lines.size(); ++l) {
+            float line_y = (line_orig_height + 1) * l;
+            al_draw_text(font, color, 0, line_y, text_flags, lines[l].c_str());
         }
-    }
-    
-    for(size_t l = 0; l < n_lines; ++l) {
-        float line_y = (fh + 1) * l + top;
-        al_draw_text(font, color, where.x, line_y, flags, lines[l].c_str());
-    }
+    }; al_use_transform(&old_transform);
 }
 
 
@@ -641,6 +523,44 @@ void draw_textured_box(
     al_draw_prim(
         vert, nullptr, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
+}
+
+
+/**
+ * @brief Returns the width and height of a block of multi-line text.
+ *
+ * Lines are split by a single "\n" character.
+ * These are the dimensions of a bitmap
+ * that would hold a drawing by draw_text_lines().
+ *
+ * @param lines The text lines.
+ * @param font The text's font.
+ * @param out_width If not nullptr, the width is returned here.
+ * @param out_height If not nullptr, the height is returned here.
+ * @param out_line_height If not nullptr, the line height is returned here.
+ */
+void get_multiline_text_dimensions(
+    const vector<string> &lines, const ALLEGRO_FONT* const font,
+    int* out_width, int* out_height, int* out_line_height
+) {
+    int lh = al_get_font_line_height(font);
+    size_t n_lines = lines.size();
+    
+    if(out_height) *out_height = std::max(0, (int) ((lh + 1) * n_lines) - 1);
+    
+    if(out_width) {
+        int largest_w = 0;
+        for(size_t l = 0; l < lines.size(); ++l) {
+            largest_w =
+                std::max(
+                    largest_w, al_get_text_width(font, lines[l].c_str())
+                );
+        }
+        
+        *out_width = largest_w;
+    }
+    
+    if(out_line_height) *out_line_height = lh;
 }
 
 

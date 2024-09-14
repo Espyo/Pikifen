@@ -55,6 +55,9 @@ const float JUICY_GROW_TEXT_LOW_MULT = 0.02f;
 //Grow scale multiplier for a juicy text medium grow animation.
 const float JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
 
+//Standard size of the content inside of a GUI item, in ratio.
+const float STANDARD_CONTENT_SIZE = 0.80f;
+
 }
 
 
@@ -93,12 +96,13 @@ bullet_point_gui_item::bullet_point_gui_item(
             this->color
         );
         float juicy_grow_amount = get_juice_value();
-        draw_compressed_scaled_text(
-            this->font, this->color,
+        draw_text(
+            this->text, this->font,
             point(item_x_start + text_x_offset, center.y),
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, text_space, true,
-            this->text
+            text_space * GUI::STANDARD_CONTENT_SIZE,
+            this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW,
+            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
         );
         if(selected) {
             draw_textured_box(
@@ -157,12 +161,13 @@ check_gui_item::check_gui_item(
     on_draw =
     [this] (const point & center, const point & size) {
         float juicy_grow_amount = get_juice_value();
-        draw_compressed_scaled_text(
-            this->font, this->color,
+        draw_text(
+            this->text, this->font,
             point(center.x - size.x * 0.45, center.y),
-            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-            point(size.x * 0.90, size.y), true, this->text
+            point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
+            this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW,
+            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
         );
         
         draw_bitmap(
@@ -1372,48 +1377,54 @@ picker_gui_item::picker_gui_item(
         }
         ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
         ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
-        point arrow_highlight_size = point(1.4f, 1.4f);
-        point arrow_regular_size = point(1.0f, 1.0f);
+        point arrow_highlight_scale = point(1.4f, 1.4f);
+        point arrow_regular_scale = point(1.0f, 1.0f);
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_standard,
-            real_arrow_highlight == 0 ?
-            arrow_highlight_color :
-            arrow_regular_color,
-            point(center.x - size.x * 0.45, center.y),
-            real_arrow_highlight == 0 ?
-            arrow_highlight_size :
-            arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size,
-            false,
-            "<"
+        point arrow_box(
+            size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE,
+            size.y * GUI::STANDARD_CONTENT_SIZE
         );
-        draw_compressed_scaled_text(
+        draw_text(
+            "<",
             game.sys_assets.fnt_standard,
+            point(center.x - size.x * 0.45, center.y),
+            arrow_box,
+            real_arrow_highlight == 0 ?
+            arrow_highlight_color :
+            arrow_regular_color,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW,
+            real_arrow_highlight == 0 ?
+            arrow_highlight_scale :
+            arrow_regular_scale
+        );
+        draw_text(
+            ">",
+            game.sys_assets.fnt_standard,
+            point(center.x + size.x * 0.45, center.y),
+            arrow_box,
             real_arrow_highlight == 1 ?
             arrow_highlight_color :
             arrow_regular_color,
-            point(center.x + size.x * 0.45, center.y),
-            real_arrow_highlight == 1 ?
-            arrow_highlight_size :
-            arrow_regular_size,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size,
-            false,
-            ">"
+            TEXT_SETTING_FLAG_CANT_GROW,
+            real_arrow_highlight == 1 ?
+            arrow_highlight_scale :
+            arrow_regular_scale
         );
         
         float juicy_grow_amount = this->get_juice_value();
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_standard, COLOR_WHITE,
+        point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE);
+        draw_text(
+            this->base_text + this->option,
+            game.sys_assets.fnt_standard,
             point(center.x - size.x * 0.40, center.y),
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
+            text_box,
+            COLOR_WHITE,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-            point(size.x * 0.80, size.y),
-            true,
-            this->base_text + this->option
+            TEXT_SETTING_FLAG_CANT_GROW,
+            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
         );
         
         ALLEGRO_COLOR box_tint =
@@ -1586,12 +1597,11 @@ text_gui_item::text_gui_item(
             
         } else {
         
-            draw_compressed_scaled_text(
-                this->font, this->color,
-                point(text_x, text_y),
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                this->flags, V_ALIGN_MODE_CENTER, size, true,
-                this->text
+            draw_text(
+                this->text, this->font, point(text_x, text_y), size,
+                this->color, this->flags, V_ALIGN_MODE_CENTER,
+                TEXT_SETTING_FLAG_CANT_GROW,
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
             );
             
         }
@@ -1624,13 +1634,15 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
             this->prev_text = cur_text;
         }
         float juicy_grow_amount = get_juice_value();
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_standard, COLOR_WHITE,
+        draw_text(
+            cur_text,
+            game.sys_assets.fnt_standard,
             center,
-            point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size,
-            false,
-            cur_text
+            size,
+            COLOR_WHITE,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW,
+            point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount)
         );
     };
 }

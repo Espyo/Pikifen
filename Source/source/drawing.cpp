@@ -23,6 +23,7 @@
 #include "mobs/scale.h"
 #include "utils/allegro_utils.h"
 #include "utils/drawing_utils.h"
+#include "utils/drawing_utils.h"
 #include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
@@ -59,11 +60,17 @@ const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 //Liquid surfaces wobble using this time scale.
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
 
-//Loading screen subtitle text padding.
+//Loading screen subtext padding.
 const int LOADING_SCREEN_PADDING = 64;
 
-//Loading screen subtitle text scale.
-const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
+//Loading screen subtext scale.
+const float LOADING_SCREEN_SUBTEXT_SCALE = 0.6f;
+
+//Loading screen text height, in screen ratio.
+const float LOADING_SCREEN_TEXT_HEIGHT = 0.10f;
+
+//Loading screen text width, in screen ratio.
+const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
 
 //Notification opacity.
 const unsigned char NOTIFICATION_ALPHA = 160;
@@ -195,12 +202,11 @@ void draw_button(
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     const bool selected, const float juicy_grow_amount
 ) {
-    draw_compressed_scaled_text(
-        font, color,
-        center,
-        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, true,
-        text
+    draw_text(
+        text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -229,37 +235,34 @@ void draw_button(
  * @param value_nr Number that represents the current value.
  * @param requirement_nr Number that represents the requirement.
  * @param color Color of the fraction's text.
- * @param scale Scale the fraction by this much.
+ * @param height Height of the whole fraction.
  */
 void draw_fraction(
     const point &bottom, const size_t value_nr,
-    const size_t requirement_nr, const ALLEGRO_COLOR &color, const float scale
+    const size_t requirement_nr, const ALLEGRO_COLOR &color, const float height
 ) {
-    float font_h = al_get_font_line_height(game.sys_assets.fnt_value) * scale;
-    
-    float value_nr_y = bottom.y - font_h * 3;
-    float value_nr_scale =
-        value_nr >= requirement_nr ? scale * 1.2f : scale * 1.0f;
-    draw_scaled_text(
-        game.sys_assets.fnt_value, color, point(bottom.x, value_nr_y),
-        point(value_nr_scale, value_nr_scale),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, (i2s(value_nr).c_str())
+    const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
+    const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
+    draw_text(
+        i2s(value_nr), game.sys_assets.fnt_value, point(bottom.x, value_nr_y),
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * value_nr_scale),
+        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
     
-    float bar_y = bottom.y - font_h * 2;
-    draw_scaled_text(
-        game.sys_assets.fnt_value, color, point(bottom.x, bar_y),
-        point(scale, scale),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, "-"
+    const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
+    draw_text(
+        "-", game.sys_assets.fnt_value, point(bottom.x, bar_y),
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT),
+        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
     
-    float req_nr_y = bottom.y - font_h;
-    float req_nr_scale =
-        requirement_nr > value_nr ? scale * 1.2f : scale * 1.0f;
-    draw_scaled_text(
-        game.sys_assets.fnt_value, color, point(bottom.x, req_nr_y),
-        point(req_nr_scale, req_nr_scale),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, (i2s(requirement_nr).c_str())
+    float req_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT;
+    float req_nr_scale = requirement_nr > value_nr ? 1.2f : 1.0f;
+    draw_text(
+        i2s(requirement_nr), game.sys_assets.fnt_value,
+        point(bottom.x, req_nr_y),
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * req_nr_scale),
+        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
 }
 
@@ -476,6 +479,11 @@ void draw_liquid(
 void draw_loading_screen(
     const string &text, const string &subtext, const float opacity
 ) {
+    const float text_w = game.win_w * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
+    const float text_h = game.win_h * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
+    const float subtext_w = text_w * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
+    const float subtext_h = text_h * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
+    
     unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
         0, 0, game.win_w, game.win_h, al_map_rgba(0, 0, 0, blackness_alpha)
@@ -487,67 +495,37 @@ void draw_loading_screen(
     );
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
     
-    //Set up the bitmap that will hold the text.
-    int text_w = 0, text_h = 0;
-    if(!text.empty()) {
-        if(!game.loading_text_bmp) {
-            //No main text buffer? Create it!
-            
-            get_multiline_text_dimensions(
-                game.sys_assets.fnt_area_name, text, &text_w, &text_h
+    //Set up the bitmap that will hold the text if it doesn't exist.
+    if(!text.empty() && !game.loading_text_bmp) {
+        game.loading_text_bmp = al_create_bitmap(text_w, text_h);
+        
+        al_set_target_bitmap(game.loading_text_bmp); {
+            al_clear_to_color(COLOR_EMPTY);
+            draw_text(
+                text, game.sys_assets.fnt_area_name,
+                point(text_w * 0.5f, text_h * 0.5f),
+                point(text_w, text_h),
+                COLOR_GOLD, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
-            game.loading_text_bmp =
-                al_create_bitmap(text_w, text_h);
-                
-            //Draw the main text on its bitmap.
-            al_set_target_bitmap(game.loading_text_bmp); {
-                al_clear_to_color(COLOR_EMPTY);
-                draw_text_lines(
-                    game.sys_assets.fnt_area_name, COLOR_GOLD,
-                    point(), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-                    text
-                );
-            } al_set_target_backbuffer(game.display);
-            
-        } else {
-            text_w =
-                al_get_bitmap_width(game.loading_text_bmp);
-            text_h =
-                al_get_bitmap_height(game.loading_text_bmp);
-        }
+        } al_set_target_backbuffer(game.display);
         
     }
     
-    int subtext_w = 0, subtext_h = 0;
-    if(!subtext.empty()) {
-    
-        if(!game.loading_subtext_bmp) {
-            //No subtext buffer? Create it!
-            get_multiline_text_dimensions(
-                game.sys_assets.fnt_area_name, subtext, &subtext_w, &subtext_h
+    //Set up the bitmap that will hold the text if it doesn't exist.
+    if(!subtext.empty() && !game.loading_subtext_bmp) {
+        game.loading_subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
+        
+        al_set_target_bitmap(game.loading_subtext_bmp); {
+            al_clear_to_color(COLOR_EMPTY);
+            draw_text(
+                subtext, game.sys_assets.fnt_area_name,
+                point(subtext_w * 0.5f, subtext_h * 0.5f),
+                point(subtext_w, subtext_h),
+                al_map_rgb(224, 224, 224),
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
-            game.loading_subtext_bmp =
-                al_create_bitmap(subtext_w, subtext_h);
-                
-            al_set_target_bitmap(game.loading_subtext_bmp); {
-                al_clear_to_color(COLOR_EMPTY);
-                draw_text_lines(
-                    game.sys_assets.fnt_area_name, al_map_rgb(224, 224, 224),
-                    point(),
-                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-                    subtext
-                );
-                
-            } al_set_target_backbuffer(game.display);
             
-            //We'll be scaling this, so let's update the mipmap.
-            game.loading_subtext_bmp =
-                recreate_bitmap(game.loading_subtext_bmp);
-                
-        } else {
-            subtext_w = al_get_bitmap_width(game.loading_subtext_bmp);
-            subtext_h = al_get_bitmap_height(game.loading_subtext_bmp);
-        }
+        } al_set_target_backbuffer(game.display);
         
     }
     
@@ -556,69 +534,63 @@ void draw_loading_screen(
     );
     
     //Draw the text bitmap in its place.
-    float text_y = 0;
+    const float text_x = game.win_w * 0.5 - text_w * 0.5;
+    float text_y = game.win_h * 0.5 - text_h * 0.5;
     if(!text.empty()) {
-    
-        text_y =
-            subtext.empty() ?
-            (game.win_h * 0.5 - text_h * 0.5) :
-            (game.win_h * 0.5 - DRAWING::LOADING_SCREEN_PADDING * 0.5 - text_h);
+        if(!subtext.empty()) {
+            text_y -= DRAWING::LOADING_SCREEN_PADDING * 0.5;
+        }
         al_draw_tinted_bitmap(
-            game.loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
+            game.loading_text_bmp,
+            al_map_rgba(255, 255, 255, 255.0 * opacity),
             game.win_w * 0.5 - text_w * 0.5, text_y, 0
         );
         
     }
     
     //Draw the subtext bitmap in its place.
+    const float subtext_x = game.win_w * 0.5 - subtext_w * 0.5;
     float subtext_y = game.win_h * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
     
-        al_draw_tinted_scaled_bitmap(
+        al_draw_tinted_bitmap(
             game.loading_subtext_bmp,
             al_map_rgba(255, 255, 255, 255.0 * opacity),
-            0, 0, subtext_w, subtext_h,
-            game.win_w * 0.5 -
-            (subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
-            subtext_y,
-            subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE,
-            subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE,
-            0
+            game.win_w * 0.5 - subtext_w * 0.5, subtext_y, 0
         );
         
     }
     
-    unsigned char reflection_alpha = 128.0 * opacity;
+    const unsigned char reflection_alpha = 128.0 * opacity;
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
     
         ALLEGRO_VERTEX text_vertexes[4];
-        float text_reflection_h =
-            std::min((int) (DRAWING::LOADING_SCREEN_PADDING * 0.5), text_h);
+        const float text_reflection_h = text_h * 0.80f;
         //Top-left vertex.
-        text_vertexes[0].x = game.win_w * 0.5 - text_w * 0.5;
+        text_vertexes[0].x = text_x;
         text_vertexes[0].y = text_y + text_h;
         text_vertexes[0].z = 0;
         text_vertexes[0].u = 0;
         text_vertexes[0].v = text_h;
         text_vertexes[0].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
-        text_vertexes[1].x = game.win_w * 0.5 + text_w * 0.5;
+        text_vertexes[1].x = text_x + text_w;
         text_vertexes[1].y = text_y + text_h;
         text_vertexes[1].z = 0;
         text_vertexes[1].u = text_w;
         text_vertexes[1].v = text_h;
         text_vertexes[1].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
-        text_vertexes[2].x = game.win_w * 0.5 + text_w * 0.5;
+        text_vertexes[2].x = text_x + text_w;
         text_vertexes[2].y = text_y + text_h + text_reflection_h;
         text_vertexes[2].z = 0;
         text_vertexes[2].u = text_w;
         text_vertexes[2].v = text_h - text_reflection_h;
         text_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        text_vertexes[3].x = game.win_w * 0.5 - text_w * 0.5;
+        text_vertexes[3].x = text_x;
         text_vertexes[3].y = text_y + text_h + text_reflection_h;
         text_vertexes[3].z = 0;
         text_vertexes[3].u = 0;
@@ -636,55 +608,33 @@ void draw_loading_screen(
     if(!subtext.empty()) {
     
         ALLEGRO_VERTEX subtext_vertexes[4];
-        float subtext_reflection_h =
-            std::min(
-                (int) (DRAWING::LOADING_SCREEN_PADDING * 0.5),
-                (int) (text_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE)
-            );
+        const float subtext_reflection_h = subtext_h * 0.80f;
         //Top-left vertex.
-        subtext_vertexes[0].x =
-            game.win_w * 0.5 - subtext_w *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertexes[0].y =
-            subtext_y + subtext_h *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertexes[0].x = subtext_x;
+        subtext_vertexes[0].y = subtext_y + subtext_h;
         subtext_vertexes[0].z = 0;
         subtext_vertexes[0].u = 0;
         subtext_vertexes[0].v = subtext_h;
         subtext_vertexes[0].color =
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
-        subtext_vertexes[1].x =
-            game.win_w * 0.5 + subtext_w *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertexes[1].y =
-            subtext_y + subtext_h *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertexes[1].x = subtext_x + subtext_w;
+        subtext_vertexes[1].y = subtext_y + subtext_h;
         subtext_vertexes[1].z = 0;
         subtext_vertexes[1].u = subtext_w;
         subtext_vertexes[1].v = subtext_h;
         subtext_vertexes[1].color =
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
-        subtext_vertexes[2].x =
-            game.win_w * 0.5 + subtext_w *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertexes[2].y =
-            subtext_y + subtext_h *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
-            subtext_reflection_h;
+        subtext_vertexes[2].x = subtext_x + subtext_w;
+        subtext_vertexes[2].y = subtext_y + subtext_h + subtext_reflection_h;
         subtext_vertexes[2].z = 0;
         subtext_vertexes[2].u = subtext_w;
         subtext_vertexes[2].v = subtext_h - subtext_reflection_h;
         subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        subtext_vertexes[3].x =
-            game.win_w * 0.5 - subtext_w *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertexes[3].y =
-            subtext_y + subtext_h *
-            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
-            subtext_reflection_h;
+        subtext_vertexes[3].x = subtext_x;
+        subtext_vertexes[3].y = subtext_y + subtext_h + subtext_reflection_h;
         subtext_vertexes[3].z = 0;
         subtext_vertexes[3].u = 0;
         subtext_vertexes[3].v = subtext_h - subtext_reflection_h;
@@ -697,32 +647,30 @@ void draw_loading_screen(
         
     }
     
-    //Draw the game's logo to the left of the "Loading..." text.
+    //Draw the game's logo to the left of the "Loading..." text,
+    //if we're not fading.
     if(opacity == 1.0f) {
-        point icon_pos(
-            game.win_w - 8 -
-            al_get_text_width(game.sys_assets.fnt_standard, "Loading...") -
-            8 - al_get_font_line_height(game.sys_assets.fnt_standard) * 0.5,
-            game.win_h - 8 - al_get_font_line_height(game.sys_assets.fnt_standard) * 0.5
-        );
+        const point text_box(game.win_w * 0.11f, game.win_h * 0.03f);
         
         if(
             game.sys_assets.bmp_icon &&
             game.sys_assets.bmp_icon != game.bmp_error
         ) {
+            point icon_pos(
+                game.win_w - 8 - text_box.x - 8 - text_box.y / 2.0f,
+                game.win_h - 8 - text_box.y / 2.0f
+            );
             draw_bitmap(
                 game.sys_assets.bmp_icon, icon_pos,
-                point(-1, al_get_font_line_height(game.sys_assets.fnt_standard)),
+                point(-1, text_box.y),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
-        //Draw the "Loading..." text, if we're not fading.
-        al_draw_text(
-            game.sys_assets.fnt_standard, al_map_rgb(192, 192, 192),
-            game.win_w - 8,
-            game.win_h - 8 - al_get_font_line_height(game.sys_assets.fnt_standard),
-            ALLEGRO_ALIGN_RIGHT, "Loading..."
+        draw_text(
+            "Loading...", game.sys_assets.fnt_standard,
+            point(game.win_w - 8, game.win_h - 8), text_box,
+            al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
         );
     }
     
@@ -1043,20 +991,14 @@ void draw_player_input_icon(
     }
     
     //And finally, the text inside.
-    draw_compressed_text(
-        font,
-        final_text_color,
-        point(
-            where.x,
-            where.y
-        ),
-        ALLEGRO_ALIGN_CENTER,
-        V_ALIGN_MODE_CENTER,
+    draw_text(
+        text, font, where,
         point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
             (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
         ),
-        text
+        final_text_color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_COMPENSATE_Y_OFFSET
     );
 }
 
@@ -1266,12 +1208,12 @@ void draw_string_tokens(
         float token_final_width = tokens[t].width * x_scale;
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
-            draw_scaled_text(
-                text_font, COLOR_WHITE,
-                point(caret, where.y),
-                point(x_scale * scale.x, y_scale * scale.y),
+            draw_text(
+                tokens[t].content, text_font, point(caret, where.y),
+                point(LARGE_FLOAT, LARGE_FLOAT), COLOR_WHITE,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-                tokens[t].content
+                TEXT_SETTING_FLAG_CANT_GROW,
+                point(x_scale * scale.x, y_scale * scale.y)
             );
             break;
         }

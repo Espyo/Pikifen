@@ -379,10 +379,10 @@ hud_t::hud_t() :
     gui_item* day_nr = new gui_item();
     day_nr->on_draw =
     [this] (const point & center, const point & size) {
-        draw_compressed_text(
-            game.sys_assets.fnt_counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size, i2s(game.states.gameplay->day)
+        draw_text(
+            i2s(game.states.gameplay->day),
+            game.sys_assets.fnt_counter, center,
+            point(size.x * 0.70f, size.y * 0.50f)
         );
     };
     gui.add_item(day_nr, "day_number");
@@ -577,13 +577,12 @@ hud_t::hud_t() :
             standby_count_nr = n_standby_pikmin;
         }
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter,
+        draw_text(
+            i2s(n_standby_pikmin), game.sys_assets.fnt_counter,
+            center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
-            center,
-            point(1.0f, 1.0f) + standby_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size * 0.7, true, i2s(n_standby_pikmin)
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + standby_amount->get_juice_value()
         );
     };
     gui.add_item(standby_amount, "standby_amount");
@@ -616,13 +615,11 @@ hud_t::hud_t() :
             group_count_nr = cur_amount;
         }
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter, COLOR_WHITE,
-            center,
-            point(1.0f, 1.0f) + group_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size * 0.7, true,
-            i2s(cur_amount)
+        draw_text(
+            i2s(cur_amount), game.sys_assets.fnt_counter,
+            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + group_amount->get_juice_value()
         );
     };
     gui.add_item(group_amount, "group_amount");
@@ -654,13 +651,11 @@ hud_t::hud_t() :
             field_count_nr = cur_amount;
         }
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter, COLOR_WHITE,
-            center,
-            point(1.0f, 1.0f) + field_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size * 0.7, true,
-            i2s(cur_amount)
+        draw_text(
+            i2s(cur_amount), game.sys_assets.fnt_counter,
+            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + field_amount->get_juice_value()
         );
     };
     gui.add_item(field_amount, "field_amount");
@@ -692,13 +687,11 @@ hud_t::hud_t() :
             total_count_nr = cur_amount;
         }
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter, COLOR_WHITE,
-            center,
-            point(1.0f, 1.0f) + total_amount->get_juice_value(),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            size * 0.7, true,
-            i2s(cur_amount)
+        draw_text(
+            i2s(total_count_nr), game.sys_assets.fnt_counter,
+            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + total_amount->get_juice_value()
         );
     };
     gui.add_item(total_amount, "total_amount");
@@ -708,10 +701,9 @@ hud_t::hud_t() :
     gui_item* counters_x = new gui_item();
     counters_x->on_draw =
     [this] (const point & center, const point & size) {
-        draw_compressed_text(
-            game.sys_assets.fnt_counter,
-            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
-            center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, "x"
+        draw_text(
+            "x", game.sys_assets.fnt_counter, center, size,
+            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255)
         );
     };
     gui.add_item(counters_x, "counters_x");
@@ -723,9 +715,8 @@ hud_t::hud_t() :
         counter_slash->on_draw =
         [this] (const point & center, const point & size) {
             if(!game.states.gameplay->cur_leader_ptr) return;
-            draw_compressed_text(
-                game.sys_assets.fnt_counter, COLOR_WHITE,
-                center, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, size, "/"
+            draw_text(
+                "/", game.sys_assets.fnt_counter, center, size
             );
         };
         gui.add_item(counter_slash, "counters_slash_" + i2s(s + 1));
@@ -756,14 +747,14 @@ hud_t::hud_t() :
         }
         if(top_spray_idx == INVALID) return;
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
-            point(center.x - size.x / 2.0, center.y),
-            point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, size, true,
+        draw_text(
             "x" +
-            i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
+            i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays),
+            game.sys_assets.fnt_counter,
+            point(center.x - size.x / 2.0, center.y), size,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + spray_1_amount->get_juice_value()
         );
     };
     gui.add_item(spray_1_amount, "spray_1_amount");
@@ -836,14 +827,14 @@ hud_t::hud_t() :
         }
         if(bottom_spray_idx == INVALID) return;
         
-        draw_compressed_scaled_text(
-            game.sys_assets.fnt_counter,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
-            point(center.x - size.x / 2.0, center.y),
-            point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, size, true,
+        draw_text(
             "x" +
-            i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
+            i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays),
+            game.sys_assets.fnt_counter,
+            point(center.x - size.x / 2.0, center.y), size,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
+            point(1.0f, 1.0f) + spray_2_amount->get_juice_value()
         );
     };
     gui.add_item(spray_2_amount, "spray_2_amount");
@@ -1014,12 +1005,9 @@ hud_t::hud_t() :
             mission_goal_cur_label->on_draw =
                 [this, goal_cur_label_text]
             (const point & center, const point & size) {
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                    center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
-                    goal_cur_label_text
+                draw_text(
+                    goal_cur_label_text, game.sys_assets.fnt_standard,
+                    center, size, al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
@@ -1044,13 +1032,10 @@ hud_t::hud_t() :
                 }
                 float juicy_grow_amount =
                     mission_goal_cur->get_juice_value();
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_counter, COLOR_WHITE,
-                    center,
-                    point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
-                    text
+                draw_text(
+                    text, game.sys_assets.fnt_counter, center, size,
+                    COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                    point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
                 );
             };
             gui.add_item(mission_goal_cur, "mission_goal_cur");
@@ -1061,12 +1046,9 @@ hud_t::hud_t() :
             gui_item* mission_goal_req_label = new gui_item();
             mission_goal_req_label->on_draw =
             [this] (const point & center, const point & size) {
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                    center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
-                    "Goal"
+                draw_text(
+                    "Goal", game.sys_assets.fnt_standard, center, size,
+                    al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.add_item(mission_goal_req_label, "mission_goal_req_label");
@@ -1088,12 +1070,8 @@ hud_t::hud_t() :
                 } else {
                     text = i2s(value);
                 }
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_counter, COLOR_WHITE,
-                    center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
-                    text
+                draw_text(
+                    text, game.sys_assets.fnt_counter, center, size
                 );
             };
             gui.add_item(mission_goal_req, "mission_goal_req");
@@ -1103,12 +1081,8 @@ hud_t::hud_t() :
             gui_item* mission_goal_slash = new gui_item();
             mission_goal_slash->on_draw =
             [this] (const point & center, const point & size) {
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_counter, COLOR_WHITE,
-                    center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
-                    "/"
+                draw_text(
+                    "/", game.sys_assets.fnt_counter, center, size
                 );
             };
             gui.add_item(mission_goal_slash, "mission_goal_slash");
@@ -1119,13 +1093,10 @@ hud_t::hud_t() :
             gui_item* mission_goal_name = new gui_item();
             mission_goal_name->on_draw =
             [this] (const point & center, const point & size) {
-                draw_compressed_scaled_text(
-                    game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                    center, point(1.0f, 1.0f),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    size, true,
+                draw_text(
                     game.mission_goals[game.cur_area_data.mission.goal]->
-                    get_name()
+                    get_name(), game.sys_assets.fnt_standard,
+                    center, size, al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.add_item(mission_goal_name, "mission_goal_name");
@@ -1159,12 +1130,10 @@ hud_t::hud_t() :
         gui_item* mission_score_score_label = new gui_item();
         mission_score_score_label->on_draw =
         [this] (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                point(center.x + size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_CENTER,
-                size, true,
-                "Score:"
+            draw_text(
+                "Score:", game.sys_assets.fnt_standard,
+                point(center.x + size.x / 2.0f, center.y), size,
+                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
         gui.add_item(mission_score_score_label, "mission_score_score_label");
@@ -1176,13 +1145,11 @@ hud_t::hud_t() :
             [this, mission_score_points]
         (const point & center, const point & size) {
             float juicy_grow_amount = mission_score_points->get_juice_value();
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_counter, COLOR_WHITE,
-                center,
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
-                i2s(game.states.gameplay->mission_score)
+            draw_text(
+                i2s(game.states.gameplay->mission_score),
+                game.sys_assets.fnt_counter, center, size, COLOR_WHITE,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(mission_score_points, "mission_score_points");
@@ -1193,12 +1160,10 @@ hud_t::hud_t() :
         gui_item* mission_score_points_label = new gui_item();
         mission_score_points_label->on_draw =
         [this] (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                point(center.x - size.x / 2.0f, center.y), point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-                size, true,
-                "pts"
+            draw_text(
+                "pts", game.sys_assets.fnt_standard,
+                point(center.x + size.x / 2.0f, center.y), size,
+                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
         gui.add_item(mission_score_points_label, "mission_score_points_label");
@@ -1534,13 +1499,11 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         gui_item* mission_fail_cur_label = new gui_item();
         mission_fail_cur_label->on_draw =
         [this, cond] (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
+            draw_text(
                 game.mission_fail_conds[cond]->
-                get_hud_label(game.states.gameplay)
+                get_hud_label(game.states.gameplay),
+                game.sys_assets.fnt_standard, center, size,
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.add_item(
@@ -1566,13 +1529,10 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
                 text = i2s(value);
             }
             float juicy_grow_amount = mission_fail_cur->get_juice_value();
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_counter, COLOR_WHITE,
-                center,
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
-                text
+            draw_text(
+                text, game.sys_assets.fnt_counter, center, size,
+                COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(
@@ -1593,12 +1553,9 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         mission_fail_req_label->on_draw =
             [this]
         (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
-                "Fail"
+            draw_text(
+                "Fail", game.sys_assets.fnt_standard, center, size,
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.add_item(
@@ -1622,12 +1579,8 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
             } else {
                 text = i2s(value);
             }
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
-                text
+            draw_text(
+                text, game.sys_assets.fnt_counter, center, size
             );
         };
         gui.add_item(
@@ -1642,12 +1595,8 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         gui_item* mission_fail_slash = new gui_item();
         mission_fail_slash->on_draw =
         [this] (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
-                "/"
+            draw_text(
+                "/", game.sys_assets.fnt_counter, center, size
             );
         };
         gui.add_item(
@@ -1663,13 +1612,11 @@ void hud_t::create_mission_fail_cond_items(const bool primary) {
         gui_item* mission_fail_name = new gui_item();
         mission_fail_name->on_draw =
         [this, cond] (const point & center, const point & size) {
-            draw_compressed_scaled_text(
-                game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                size, true,
+            draw_text(
                 "Fail: " +
-                game.mission_fail_conds[cond]->get_name()
+                game.mission_fail_conds[cond]->get_name(),
+                game.sys_assets.fnt_standard, center, size,
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.add_item(

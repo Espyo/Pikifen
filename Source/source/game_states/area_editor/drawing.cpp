@@ -1099,15 +1099,16 @@ void area_editor::draw_canvas() {
                     path_preview_checkpoints[c].y + factor,
                     al_map_rgb(240, 224, 160)
                 );
-                draw_scaled_text(
-                    game.sys_assets.fnt_builtin, al_map_rgb(0, 64, 64),
+                draw_text(
+                    letter, game.sys_assets.fnt_builtin,
                     path_preview_checkpoints[c],
                     point(
-                        AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
-                        AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
+                        AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
+                        game.cam.zoom,
+                        AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
+                        game.cam.zoom
                     ),
-                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                    letter
+                    al_map_rgb(0, 64, 64)
                 );
             }
         }
@@ -1203,15 +1204,16 @@ void area_editor::draw_canvas() {
                 (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 al_map_rgb(255, 255, 32)
             );
-            draw_scaled_text(
-                game.sys_assets.fnt_builtin, al_map_rgb(0, 64, 64),
+            draw_text(
+                letter, game.sys_assets.fnt_builtin,
                 cross_section_checkpoints[p],
                 point(
-                    AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
-                    AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
+                    AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
+                    game.cam.zoom,
+                    AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
+                    game.cam.zoom
                 ),
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                letter
+                al_map_rgb(0, 64, 64)
             );
         }
         al_draw_line(
@@ -1662,22 +1664,23 @@ void area_editor::draw_canvas() {
                         COLOR_WHITE, 1
                     );
                     
-                    draw_scaled_text(
-                        game.sys_assets.fnt_builtin, COLOR_WHITE,
+                    draw_text(
+                        i2s(z), game.sys_assets.fnt_builtin,
                         point(
                             (cross_section_z_window_start.x + 8),
                             line_y
                         ),
-                        point(1, 1),
-                        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, i2s(z)
+                        point(LARGE_FLOAT, 8.0f), COLOR_WHITE,
+                        ALLEGRO_ALIGN_LEFT
                     );
                 }
             }
             
         } else {
         
-            draw_scaled_text(
-                game.sys_assets.fnt_builtin, COLOR_WHITE,
+            draw_text(
+                "Please cross some edges.",
+                game.sys_assets.fnt_builtin,
                 point(
                     (
                         cross_section_window_start.x +
@@ -1688,8 +1691,7 @@ void area_editor::draw_canvas() {
                         cross_section_window_end.y
                     ) * 0.5
                 ),
-                point(1, 1), ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-                "Please cross\nsome edges."
+                point(LARGE_FLOAT, 8.0f), COLOR_WHITE
             );
             
         }
@@ -1819,15 +1821,9 @@ void area_editor::draw_debug_text(
         al_map_rgba(0, 0, 0, 128)
     );
     
-    draw_scaled_text(
-        game.sys_assets.fnt_builtin, color,
-        where,
-        point(
-            AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom,
-            AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom
-        ),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-        text
+    draw_text(
+        text, game.sys_assets.fnt_builtin, where,
+        point(bbox_w, bbox_h) * 0.80f, color
     );
     
     if(dots > 0) {

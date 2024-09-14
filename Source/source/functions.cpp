@@ -481,42 +481,6 @@ float get_liquid_limit_length(edge* e_ptr) {
 
 
 /**
- * @brief Returns the width and height of a block of multi-line text.
- *
- * Lines are split by a single "\n" character.
- * These are the dimensions of a bitmap
- * that would hold a drawing by draw_text_lines().
- *
- * @param font The text's font.
- * @param text The text.
- * @param out_ret_w If not nullptr, the width is returned here.
- * @param out_ret_h If not nullptr, the height is returned here.
- */
-void get_multiline_text_dimensions(
-    const ALLEGRO_FONT* const font, const string &text,
-    int* out_ret_w, int* out_ret_h
-) {
-    vector<string> lines = split(text, "\n", true);
-    int fh = al_get_font_line_height(font);
-    size_t n_lines = lines.size();
-    
-    if(out_ret_h) *out_ret_h = std::max(0, (int) ((fh + 1) * n_lines) - 1);
-    
-    if(out_ret_w) {
-        int largest_w = 0;
-        for(size_t l = 0; l < lines.size(); ++l) {
-            largest_w =
-                std::max(
-                    largest_w, al_get_text_width(font, lines[l].c_str())
-                );
-        }
-        
-        *out_ret_w = largest_w;
-    }
-}
-
-
-/**
  * @brief Returns an area's subtitle or, if none is specified,
  * the mission's goal.
  *
