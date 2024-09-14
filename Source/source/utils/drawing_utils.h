@@ -34,6 +34,51 @@ constexpr ALLEGRO_COLOR COLOR_GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
 constexpr ALLEGRO_COLOR COLOR_TRANSPARENT_WHITE = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 
+//Flags for text drawing settings.
+enum TEXT_SETTING_FLAG {
+
+    //The text can never be grown horizontally.
+    TEXT_SETTING_FLAG_CANT_GROW_X = 1 << 0,
+    
+    //The text can never be grown vertically.
+    TEXT_SETTING_FLAG_CANT_GROW_Y = 1 << 1,
+    
+    //The text can never be shrunk horizontally.
+    TEXT_SETTING_FLAG_CANT_SHRINK_X = 1 << 2,
+    
+    //The text can never be shrunk vertically.
+    TEXT_SETTING_FLAG_CANT_SHRINK_Y = 1 << 3,
+    
+    //If necessary, the text's aspect ratio can be changed.
+    TEXT_SETTING_FLAG_CAN_CHANGE_RATIO = 1 << 4,
+    
+    //Utility flag -- The text can never be grown in any way.
+    TEXT_SETTING_FLAG_CANT_GROW =
+        TEXT_SETTING_FLAG_CANT_GROW_X |
+        TEXT_SETTING_FLAG_CANT_GROW_Y,
+        
+    //Utility flag -- The text can never be shrunk in any way.
+    TEXT_SETTING_FLAG_CANT_SHRINK =
+        TEXT_SETTING_FLAG_CANT_SHRINK_X |
+        TEXT_SETTING_FLAG_CANT_SHRINK_Y,
+        
+    //Utility flag -- The text can never be scaled horizontally in any way.
+    TEXT_SETTING_FLAG_FIXED_WIDTH =
+        TEXT_SETTING_FLAG_CANT_GROW_X |
+        TEXT_SETTING_FLAG_CANT_SHRINK_X,
+        
+    //Utility flag -- The text can never be scaled vertically in any way.
+    TEXT_SETTING_FLAG_FIXED_HEIGHT =
+        TEXT_SETTING_FLAG_CANT_GROW_Y |
+        TEXT_SETTING_FLAG_CANT_SHRINK_Y,
+        
+    //Utility flag -- The text can never be grown or shrunk in any way.
+    TEXT_SETTING_FLAG_FIXED_SIZE =
+        TEXT_SETTING_FLAG_CANT_GROW |
+        TEXT_SETTING_FLAG_CANT_SHRINK,
+};
+
+
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle = 0,
@@ -82,7 +127,15 @@ void draw_rounded_rectangle(
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const V_ALIGN_MODE valign, const string &text
+    const int flags, const V_ALIGN_MODE v_align, const string &text
+);
+void draw_text(
+    const string &text, const ALLEGRO_FONT* const font,
+    const point &where, const point &box_size,
+    const ALLEGRO_COLOR &color = COLOR_WHITE,
+    int text_flags = ALLEGRO_ALIGN_CENTER,
+    V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
+    const point &further_scale = point(1.0f, 1.0f)
 );
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,

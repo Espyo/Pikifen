@@ -1891,6 +1891,61 @@ point s2p(const string &s, float* out_z) {
 
 
 /**
+ * @brief Scales a rectangle so that it fits as much of the box as possible,
+ * based on a number of settings. If any of the settings cannot be respected,
+ * a scale of 1,1 will be returned, even if that goes against the box.
+ *
+ * @param rect_size Width and height of the rectangle to scale.
+ * @param box_size Box width and height.
+ * @param can_grow_x Whether it's possible to increase the width.
+ * @param can_grow_y Whether it's possible to increase the height.
+ * @param can_shrink_x Whether it's possible to decrease the width.
+ * @param can_shrink_y Whether it's possible to decrease the height.
+ * @param can_change_ratio Whether it's possible to change the aspect ratio
+ * of the rectangle.
+ * @return The scale factor for X and for Y.
+ */
+point scale_rectangle_to_box(
+    const point &rect_size, const point &box_size,
+    bool can_grow_x, bool can_grow_y,
+    bool can_shrink_x, bool can_shrink_y,
+    bool can_change_ratio
+) {
+    point final_scale(1.0f, 1.0f);
+    
+    if(
+        rect_size.x == 0.0f || rect_size.y == 0.0f ||
+        box_size.x == 0.0f || box_size.y == 0.0f
+    ) {
+        return final_scale;
+    }
+    
+    point box_to_use =
+        can_change_ratio ?
+        box_size :
+        resize_to_box_keeping_aspect_ratio(rect_size, box_size);
+    bool can_scale_x =
+        (rect_size.x < box_to_use.x && can_grow_x) ||
+        (rect_size.x > box_to_use.x && can_shrink_x);
+    bool can_scale_y =
+        (rect_size.y < box_to_use.y && can_grow_y) ||
+        (rect_size.y > box_to_use.y && can_shrink_y);
+        
+    if(can_change_ratio) {
+        if(can_scale_x) final_scale.x = box_to_use.x / rect_size.x;
+        if(can_scale_y) final_scale.y = box_to_use.y / rect_size.y;
+    } else {
+        if(can_scale_x && can_scale_y) {
+            final_scale.x = box_to_use.x / rect_size.x;
+            final_scale.y = box_to_use.y / rect_size.y;
+        }
+    }
+    
+    return final_scale;
+}
+
+
+/**
  * @brief Given a list of items, chooses which item comes next
  * geometrically in the specified direction. Useful for menus with
  * several buttons the player can select multidirectionally in.

@@ -265,6 +265,12 @@ point resize_to_box_keeping_aspect_ratio(
 );
 point rotate_point(const point &coords, const float angle);
 point s2p(const string &s, float* out_z = nullptr);
+point scale_rectangle_to_box(
+    const point &rect_size, const point &box_size,
+    bool can_grow_x, bool can_grow_y,
+    bool can_shrink_x, bool can_shrink_y,
+    bool can_change_ratio
+);
 size_t select_next_item_directionally(
     const vector<point> &item_coordinates, const size_t selected_item,
     const float direction, const point &loop_region

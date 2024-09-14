@@ -386,6 +386,75 @@ void draw_scaled_text(
 
 
 /**
+ * @brief Draws plain text, scaled as necessary.
+ *
+ * @param text Text to draw.
+ * @param font Font to use.
+ * @param where Coordinates to draw it at.
+ * @param box_size Size of the box it must be scaled to.
+ * @param color Tint the text with this color.
+ * @param text_flags Allegro text drawing function flags.
+ * @param v_align Vertical alignment.
+ * @param settings Settings to control how the text can be scaled.
+ * Use TEXT_SETTING_FLAG.
+ * @param further_scale After calculating everything, further scale the
+ * text by this much before drawing.
+ */
+void draw_text(
+    const string &text, const ALLEGRO_FONT* const font,
+    const point &where, const point &box_size, const ALLEGRO_COLOR &color,
+    int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
+    const point &further_scale
+) {
+    //Initial checks.
+    if(text.empty()) return;
+    if(box_size.x == 0 || box_size.y == 0) return;
+    
+    //Get the raw text information.
+    int text_orig_ox;
+    int text_orig_oy;
+    int text_orig_w;
+    int text_orig_h;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &text_orig_ox, &text_orig_oy, &text_orig_w, &text_orig_h
+    );
+    
+    //Figure out the scales.
+    point text_orig_size(text_orig_w, text_orig_h);
+    point text_final_scale =
+        scale_rectangle_to_box(
+            text_orig_size,
+            box_size,
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
+            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
+            has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
+        );
+    point text_final_size = text_orig_size * text_final_scale;
+    
+    //Figure out offsets.
+    float v_align_offset =
+        get_vertical_align_offset(v_align, text_final_size.y);
+        
+    //Create the transformation.
+    ALLEGRO_TRANSFORM text_transform, old_transform;
+    get_text_drawing_transforms(
+        where,
+        text_final_scale * further_scale,
+        text_orig_oy, v_align_offset * further_scale.y,
+        &text_transform, &old_transform
+    );
+    
+    //Draw!
+    al_use_transform(&text_transform); {
+        al_draw_text(font, color, 0, 0, text_flags, text.c_str());
+    }; al_use_transform(&old_transform);
+}
+
+
+/**
  * @brief Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
