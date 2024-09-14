@@ -91,6 +91,7 @@ Tips for when you're making content
     ''Pikmin'' games take place over the course of several days, and the playable time in a day lasts from early dawn to night, normally. One of the engine's features is to cast a lighting effect that changes the lighting of the area as time passes, per weather condition. The standard one starts at a faint pink, goes to bright white, to sunset orange, to dark. However, if your game takes a more serious and dark tone, you could literally darken the lighting! Just decrease the existing weather lighting values by a small bit. It won't have much of a gameplay impact, but it'll feel darker, eerier, less cheery. On the other hand, if your game is more light-hearted, make the lighting slightly brighter.
     Spruce up the existing particle effects. Particle effects exist to complement the game's feel, so changing that changes the feel of the game.
 
+
 Technical prowesses
     Edge offset effects
     
@@ -98,6 +99,10 @@ Technical prowesses
 Bag of notes (useful stuff)
     If mobs start moving so fast that they can clip through walls
         Keep track of its sector before the move. If after the move, no wall collisions were registered, but it's on a different sector, then that's all you need to know: a collision happened
+    If there's a crash in imgui_impl_allegro5.cpp's al_draw_indexed_prim function call...
+        I couldn't figure out exactly how I fixed it but...
+        Make sure you're not doing ImGui logic between an ImGui::EndFrame() (or ImGui::Render()) and ImGui_ImplAllegro5_RenderDrawData()
+        Make sure that even if you don't render this frame, you're still calling ImGui::EndFrame()
     Carrying speed balancing
         If I ever need to balance carrying speeds because heavy objects being carried at the same (max) speed as light objects looks bad
             Instead of having a max speed penalty for the object's weight, have it for the number of max carriers instead

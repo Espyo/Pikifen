@@ -6,15 +6,16 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If an object is on-camera and a child object is not, or vice-versa, they'll desync. Especially notable with the electric wire (thanks Helodity)
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.90.9
+    Update to Dear ImGui 1.91.0
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
         Use TextLink() and/or TextLinkOpenURL() for the editors' help dialogs?
+        Change ImGuiChildFlags_Border to ImGuiChildFlags_Borders
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -22,6 +23,7 @@ Next tasks (roughly sorted most important first)
                 Struggling to lift
                 Carrying
                 Knocked back
+                Drowning
                 Crushed
                 Seed landing
             Menus
@@ -107,6 +109,8 @@ Next tasks (roughly sorted most important first)
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
+    Make it so some animations (mostly walking) have their speed depend on the mob's speed
+        Probably have an upper and lower cap
     General graphic file improvements
         Use blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
@@ -135,6 +139,7 @@ Next tasks (roughly sorted most important first)
         Thrown (add to the logic of bouncers too)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
+        Turning (maybe just the walking animation)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
@@ -152,6 +157,7 @@ Next tasks (roughly sorted most important first)
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
+        From here on, all commits should pre-png-crush their changed bitmaps
     New mobs
         Burrowing Snagret
         A tall grass mob
@@ -165,7 +171,6 @@ Next tasks (roughly sorted most important first)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         More across the board
     Other demo content changes
-        Pellet Posies should regrow
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
             Shake hitboxes last way too long across the board
@@ -213,6 +218,7 @@ Next tasks (roughly sorted most important first)
         Add the new common content properties to everything in the engine
     Rename every file to lowercase?
     A small "Got it!" for the score bar, to mark the medal you have
+    Add Pro Controller controls to the default controls
     Style Tutorial Meadow to be more DEV Lab-like
     Missions should have a property where the maker can specify their best score (and date)
     Animate the mission results screen
@@ -642,6 +648,7 @@ Small tasks (for when I'm feeling lazy)
         Replace the ++i in for loops with i++
         Replace all instances of "number" when in reality it should be "index"
         Use enum class, and hopefully there won't be any problems due to all the times I need to cast to and from int, or use values from multiple enums.
+        Get rid of consts in functions arguments the precede primitive types
     
     
 Misc things (so I don't forget)
@@ -854,6 +861,7 @@ Misc things (so I don't forget)
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
+        Pellet Posies could have properties that make them regrow
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent

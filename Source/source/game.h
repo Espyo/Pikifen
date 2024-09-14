@@ -124,7 +124,7 @@ public:
     
     //Info about the maker tools.
     maker_tools_t maker_tools;
-
+    
     //Game content.
     content_manager content;
     
@@ -285,6 +285,7 @@ private:
     //--- Function declarations ---
     
     void check_system_key_press(const ALLEGRO_EVENT &ev);
+    void do_global_drawing();
     void do_global_logic();
     void global_handle_allegro_event(const ALLEGRO_EVENT &ev);
     

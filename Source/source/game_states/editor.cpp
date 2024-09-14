@@ -338,8 +338,6 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     bool does_imgui_need_keyboard =
         ImGui::GetIO().WantCaptureKeyboard && !is_m1_pressed;
         
-    ImGui_ImplAllegro5_ProcessEvent(&ev);
-    
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||

@@ -92,10 +92,6 @@ void area_editor::open_options_dialog() {
  * @brief Processes Dear ImGui for this frame.
  */
 void area_editor::process_gui() {
-    //Initial setup.
-    ImGui_ImplAllegro5_NewFrame();
-    ImGui::NewFrame();
-    
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -152,9 +148,6 @@ void area_editor::process_gui() {
     
     //Process the picker dialog, if any.
     process_dialogs();
-    
-    //Finishing setup.
-    ImGui::EndFrame();
 }
 
 

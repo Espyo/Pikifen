@@ -59,7 +59,7 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * @brief Constructs a new game class object.
  */
 game_class::game_class() {
-    
+
     team_internal_names[MOB_TEAM_NONE] = "none";
     team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
     team_internal_names[MOB_TEAM_PLAYER_2] = "player_2";
@@ -159,6 +159,19 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 
 
 /**
+ * @brief Performs some global drawings to run every frame.
+ */
+void game_class::do_global_drawing() {
+    //Dear ImGui.
+    ImGui::Render();
+    ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+    
+    //Fade manager.
+    game.fade_mgr.draw();
+}
+
+
+/**
  * @brief Performs some global logic to run every frame.
  */
 void game_class::do_global_logic() {
@@ -169,6 +182,10 @@ void game_class::do_global_logic() {
     
     //Audio.
     audio.tick(delta_t);
+    
+    //Dear ImGui.
+    ImGui_ImplAllegro5_NewFrame();
+    ImGui::NewFrame();
 }
 
 
@@ -191,6 +208,7 @@ string game_class::get_cur_state_name() const {
  * @param ev Event to handle.
  */
 void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
+    //Mouse cursor.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
@@ -199,6 +217,9 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
     ) {
         mouse_cursor.update_pos(ev, screen_to_world_transform);
     }
+    
+    //Dear ImGui.
+    ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
 }
 
 
@@ -251,9 +272,14 @@ void game_class::main_loop() {
                 
                 do_global_logic();
                 cur_state->do_logic();
+                
                 if(cur_state == prev_state) {
                     //Only draw if we didn't change states in the meantime.
                     cur_state->do_drawing();
+                    do_global_drawing();
+                    al_flip_display();
+                } else {
+                    ImGui::EndFrame();
                 }
                 
                 double cur_frame_end_time = al_get_time();

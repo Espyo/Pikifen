@@ -191,13 +191,9 @@ void gameplay_state::do_game_drawing(
             );
         }
         
-        game.fade_mgr.draw();
-        
     }
     
     draw_debug_tools();
-    
-    al_flip_display();
 }
 
 
@@ -397,6 +393,12 @@ void gameplay_state::draw_big_msg() {
  * @brief Draws any debug visualization tools useful for debugging.
  */
 void gameplay_state::draw_debug_tools() {
+    //Tests using Dear ImGui.
+    /*
+    ImGui::GetIO().MouseDrawCursor = true;
+    //GUI logic goes here.
+    */
+    
     //Raw analog stick viewer.
     /*
     const float RAW_STICK_VIEWER_X = 8;

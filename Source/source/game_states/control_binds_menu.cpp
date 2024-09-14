@@ -130,10 +130,6 @@ void control_binds_menu_state::do_drawing() {
     }
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
-    
-    game.fade_mgr.draw();
-    
-    al_flip_display();
 }
 
 

@@ -18,21 +18,10 @@
  * @brief Handles the drawing part of the main loop of the GUI editor.
  */
 void gui_editor::do_drawing() {
-    //Render what is needed for the (Dear ImGui) GUI.
-    //This will also render the canvas in due time.
-    ImGui::Render();
+    //The canvas drawing is handled by Dear ImGui elsewhere.
     
-    //Actually draw the GUI + canvas on-screen.
     al_clear_to_color(COLOR_BLACK);
-    ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-    
     draw_op_error_cursor();
-    
-    //And the fade manager atop it all.
-    game.fade_mgr.draw();
-    
-    //Finally, swap buffers.
-    al_flip_display();
 }
 
 
