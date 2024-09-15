@@ -7,6 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If an object is on-camera and a child object is not, or vice-versa, they'll desync. Especially notable with the electric wire (thanks Helodity)
+    If you're on an elevator platform, you won't be able to throw Winged Pikmin
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements

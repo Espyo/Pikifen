@@ -81,13 +81,13 @@ hud_t::hud_t() :
     gui.register_coords("day_number",                    0,    0,  0,  0);
     gui.register_coords("leader_1_icon",                 7,   90,  8, 10);
     gui.register_coords("leader_2_icon",                 6,   80,  5,  9);
-    gui.register_coords("leader_3_icon",                 6,   72,  5,  9);
+    gui.register_coords("leader_3_icon",                 6, 71.5,  5,  7);
     gui.register_coords("leader_1_health",              16,   90,  8, 10);
     gui.register_coords("leader_2_health",              12,   80,  5,  9);
-    gui.register_coords("leader_3_health",              12,   72,  5,  9);
+    gui.register_coords("leader_3_health",              12, 71.5,  5,  7);
     gui.register_coords("leader_next_input",            4,   83,  3,  3);
     gui.register_coords("standby_icon",                 50,   91,  8, 10);
-    gui.register_coords("standby_amount",               50,   96, 15,  8);
+    gui.register_coords("standby_amount",               50,   97,  8,  4);
     gui.register_coords("standby_bubble",                0,    0,  0,  0);
     gui.register_coords("standby_maturity_icon",        54,   88,  4,  8);
     gui.register_coords("standby_next_icon",            58,   93,  6,  8);
@@ -122,9 +122,9 @@ hud_t::hud_t() :
     gui.register_coords("mission_goal_slash",           18,  6.5,  4,  7);
     gui.register_coords("mission_goal_name",            18,    8, 30, 10);
     gui.register_coords("mission_score_bubble",         18,   20, 32, 10);
-    gui.register_coords("mission_score_score_label",   7.5, 21.5,  9,  5);
+    gui.register_coords("mission_score_score_label",   7.5,   22,  9,  4);
     gui.register_coords("mission_score_points",         18, 21.5, 10,  5);
-    gui.register_coords("mission_score_points_label", 28.5, 21.5,  9,  5);
+    gui.register_coords("mission_score_points_label", 28.5,   22,  9,  4);
     gui.register_coords("mission_score_ruler",          18,   17, 30,  2);
     gui.register_coords("mission_fail_1_bubble",        82,    8, 32, 12);
     gui.register_coords("mission_fail_1_cur_label",   73.5, 11.5, 13,  3);

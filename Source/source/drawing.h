@@ -177,8 +177,7 @@ void draw_button(
 );
 void draw_fraction(
     const point &bottom, const size_t value_nr,
-    const size_t requirement_nr, const ALLEGRO_COLOR &color,
-    const float height
+    const size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 );
 void draw_health(
     const point &center, const float ratio,

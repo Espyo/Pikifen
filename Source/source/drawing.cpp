@@ -235,24 +235,25 @@ void draw_button(
  * @param value_nr Number that represents the current value.
  * @param requirement_nr Number that represents the requirement.
  * @param color Color of the fraction's text.
- * @param height Height of the whole fraction.
+ * @param scale Scale the text by this much.
  */
 void draw_fraction(
     const point &bottom, const size_t value_nr,
-    const size_t requirement_nr, const ALLEGRO_COLOR &color, const float height
+    const size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 ) {
     const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
     draw_text(
         i2s(value_nr), game.sys_assets.fnt_value, point(bottom.x, value_nr_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * value_nr_scale),
-        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
+        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
+        point(value_nr_scale, value_nr_scale)
     );
     
     const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
     draw_text(
         "-", game.sys_assets.fnt_value, point(bottom.x, bar_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT),
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
     
@@ -261,8 +262,9 @@ void draw_fraction(
     draw_text(
         i2s(requirement_nr), game.sys_assets.fnt_value,
         point(bottom.x, req_nr_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * req_nr_scale),
-        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
+        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
+        color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
+        point(req_nr_scale, req_nr_scale)
     );
 }
 

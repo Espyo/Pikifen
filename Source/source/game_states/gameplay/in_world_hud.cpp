@@ -134,8 +134,7 @@ void in_world_fraction::draw() {
         point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
         draw_fraction(
             pos,
-            value_number, requirement_number,
-            final_color, IN_WORLD_FRACTION::ROW_HEIGHT * 3 * size_mult
+            value_number, requirement_number, final_color, size_mult
         );
     } else {
         point pos(
