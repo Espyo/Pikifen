@@ -157,8 +157,6 @@ Next tasks (roughly sorted most important first)
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
-        From here on, all commits should pre-png-crush their changed bitmaps
     New mobs
         Burrowing Snagret
         A tall grass mob

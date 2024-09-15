@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="464"
-   height="529"
-   viewBox="0 0 464 529.00002"
+   width="465"
+   height="530"
+   viewBox="0 0 465 530.00002"
    version="1.1"
    id="svg1587"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -4911,9 +4911,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="133.66667"
-     inkscape:cy="188.66667"
+     inkscape:zoom="1.1538462"
+     inkscape:cx="204.53333"
+     inkscape:cy="260"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -4944,7 +4944,7 @@
        type="xygrid"
        id="grid2132"
        originx="0"
-       originy="0"
+       originy="4.6679689e-05"
        spacingy="1"
        spacingx="1"
        units="px"
@@ -4981,6 +4981,16 @@
      id="layer1"
      style="display:inline"
      transform="translate(0,-1122.5197)">
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:18.5489;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect572"
+       width="465"
+       height="530"
+       x="0"
+       y="1122.5197"
+       inkscape:export-filename="../../../../../Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect1955-69-8-6"

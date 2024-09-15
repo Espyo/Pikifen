@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="747"
-   height="2214.0005"
-   viewBox="0 0 746.99997 2214.0005"
+   width="748"
+   height="2215"
+   viewBox="0 0 747.99997 2215"
    version="1.1"
    id="svg8630"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -3821,9 +3821,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="194.33333"
-     inkscape:cy="148.66667"
+     inkscape:zoom="0.29032817"
+     inkscape:cx="24.110647"
+     inkscape:cy="1174.5329"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -3857,8 +3857,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid9377"
-       originx="-2.3293404e-21"
-       originy="0"
+       originx="6.0970931e-12"
+       originy="-2.4355469e-05"
        spacingy="1"
        spacingx="1"
        units="px"
@@ -3895,7 +3895,87 @@
      id="layer2"
      inkscape:label="Grid"
      style="display:inline"
-     transform="translate(0,-960.51969)">
+     transform="translate(0,-960.51971)">
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:29.1733;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect7"
+       width="748"
+       height="815"
+       x="-2.3293404e-21"
+       y="2360.5198"
+       inkscape:export-filename="../../../../Game_data/Graphics/Queen_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect6"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="2160.5198"
+       inkscape:export-filename="../../../../Game_data/Graphics/Pink_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect5"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="1960.5198"
+       inkscape:export-filename="../../../../Game_data/Graphics/Gray_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="1760.5197"
+       inkscape:export-filename="../../../../Game_data/Graphics/Ivory_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect3"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="1560.5197"
+       inkscape:export-filename="../../../../Game_data/Graphics/Violet_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect2"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="1360.5197"
+       inkscape:export-filename="../../../../Game_data/Graphics/Lapis_Lazuli_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect1"
+       width="748"
+       height="163"
+       x="-2.3293404e-21"
+       y="1160.5197"
+       inkscape:export-filename="../../../../Game_data/Graphics/Golden_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:13.0467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect572"
+       width="748"
+       height="163"
+       x="0"
+       y="960.51971"
+       inkscape:export-filename="../../../../Game_data/Graphics/Crimson_Candypop_Bud.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
        id="rect3193-65"
@@ -4622,7 +4702,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1"
-     transform="translate(0,-960.51969)">
+     transform="translate(0,-960.51971)">
     <g
        transform="translate(52.00027,-1.4971961e-4)"
        id="g6403-2-7"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="928"
-   height="760"
+   width="564"
+   height="1161"
    id="svg6166"
    version="1.1"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -3004,10 +3004,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5"
-     inkscape:cx="257.66667"
-     inkscape:cy="228"
+     inkscape:cx="503.33333"
+     inkscape:cy="1090"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1051"
@@ -3078,6 +3078,66 @@
      id="layer2"
      inkscape:label="Grid"
      style="display:inline">
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect5"
+       width="564"
+       height="161"
+       x="0"
+       y="1000"
+       inkscape:export-filename="../../../../Game_data/Graphics/Winged_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4"
+       width="564"
+       height="161"
+       x="0"
+       y="800"
+       inkscape:export-filename="../../../../Game_data/Graphics/Rock_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect3"
+       width="564"
+       height="161"
+       x="0"
+       y="600"
+       inkscape:export-filename="../../../../Game_data/Graphics/Blue_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect2"
+       width="564"
+       height="161"
+       x="0"
+       y="400"
+       inkscape:export-filename="../../../../Game_data/Graphics/Yellow_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect1"
+       width="564"
+       height="161"
+       x="0"
+       y="200"
+       inkscape:export-filename="../../../../Game_data/Graphics/Red_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect572"
+       width="564"
+       height="161"
+       x="0"
+       y="0"
+       inkscape:export-filename="../../../../Game_data/Graphics/Master_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke-width:1.016px;stop-color:#000000"
        id="rect977"
@@ -3489,7 +3549,7 @@
        inkscape:export-ydpi="96" />
     <path
        id="path4493"
-       style="fill:url(#radialGradient5075);fill-opacity:1.0;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:url(#radialGradient5075);fill-opacity:1;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 864,229.61194 c -13.3731,0 -45.8507,2.86568 -45.8507,33.43284 0,30.56717 38.2089,42.02986 45.8507,42.02986 7.6418,0 45.8507,-11.46269 45.8507,-42.02986 0,-30.56717 -32.4776,-33.43284 -45.8507,-33.43284 z"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Red_Onion_icon.png"
        inkscape:export-xdpi="96"
@@ -5575,7 +5635,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Red_Onion.png"
        id="circle3599"
-       style="fill:url(#radialGradient5051);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5051);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="189"
        cy="280"
        r="23.499998" />
@@ -5887,7 +5947,7 @@
        r="23.499998"
        cy="280"
        cx="330"
-       style="fill:url(#radialGradient5059);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5059);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle3661"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Red_Onion.png"
        inkscape:export-xdpi="96"
@@ -6201,7 +6261,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Red_Onion.png"
        id="circle3723"
-       style="fill:url(#radialGradient5067);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5067);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="471"
        cy="280"
        r="23.499998" />
@@ -6815,7 +6875,7 @@
        r="23.499998"
        cy="480"
        cx="189"
-       style="fill:url(#radialGradient5091);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5091);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle3899"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Onion.png"
        inkscape:export-xdpi="96"
@@ -7129,7 +7189,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Onion.png"
        id="circle3957"
-       style="fill:url(#radialGradient5099);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5099);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="330"
        cy="480"
        r="23.499998" />
@@ -7441,7 +7501,7 @@
        r="23.499998"
        cy="480"
        cx="471"
-       style="fill:url(#radialGradient5107);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5107);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle4015"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Onion.png"
        inkscape:export-xdpi="96"
@@ -8057,7 +8117,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Blue_Onion.png"
        id="circle4187"
-       style="fill:url(#radialGradient5131);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5131);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="189"
        cy="680"
        r="23.499998" />
@@ -8369,7 +8429,7 @@
        r="23.499998"
        cy="680"
        cx="330"
-       style="fill:url(#radialGradient5139);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5139);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle4245"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Blue_Onion.png"
        inkscape:export-xdpi="96"
@@ -8683,7 +8743,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Blue_Onion.png"
        id="circle4303"
-       style="fill:url(#radialGradient5147);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient5147);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="471"
        cy="680"
        r="23.499998" />
@@ -9088,7 +9148,7 @@
        inkscape:export-ydpi="96" />
     <path
        d="m 864,429.61193 c -13.3731,0 -45.8507,2.86568 -45.8507,33.43284 0,30.56717 38.2089,42.02986 45.8507,42.02986 7.6418,0 45.8507,-11.46269 45.8507,-42.02986 0,-30.56717 -32.4776,-33.43284 -45.8507,-33.43284 z"
-       style="fill:url(#radialGradient5115);fill-opacity:1.0;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:url(#radialGradient5115);fill-opacity:1;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="path4897"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Onion_icon.png"
        inkscape:export-xdpi="96"
@@ -9311,7 +9371,7 @@
        inkscape:export-ydpi="96" />
     <path
        id="path4969"
-       style="fill:url(#radialGradient5155);fill-opacity:1.0;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:url(#radialGradient5155);fill-opacity:1;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 864,629.61193 c -13.3731,0 -45.8507,2.86568 -45.8507,33.43284 0,30.56717 38.2089,42.02986 45.8507,42.02986 7.6418,0 45.8507,-11.46269 45.8507,-42.02986 0,-30.56717 -32.4776,-33.43284 -45.8507,-33.43284 z"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Blue_Onion_icon.png"
        inkscape:export-xdpi="96"
@@ -9634,7 +9694,7 @@
        r="23.499998"
        cy="880"
        cx="48"
-       style="fill:url(#radialGradient1990);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient1990);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle1728"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Onion.png"
        inkscape:export-xdpi="96"
@@ -9937,7 +9997,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Onion.png"
        id="circle1786"
-       style="fill:url(#radialGradient1976);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient1976);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="189"
        cy="880"
        r="23.499998" />
@@ -10249,7 +10309,7 @@
        r="23.499998"
        cy="880"
        cx="330"
-       style="fill:url(#radialGradient1962);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient1962);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle1844"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Onion.png"
        inkscape:export-xdpi="96"
@@ -10563,7 +10623,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Onion.png"
        id="circle1902"
-       style="fill:url(#radialGradient1948);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient1948);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="471"
        cy="880"
        r="23.499998" />
@@ -10875,7 +10935,7 @@
        r="23.499998"
        cy="1080"
        cx="48"
-       style="fill:url(#radialGradient2291);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient2291);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle2029"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
        inkscape:export-xdpi="96"
@@ -11178,7 +11238,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
        id="circle2087"
-       style="fill:url(#radialGradient2277);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient2277);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="189"
        cy="1080"
        r="23.499998" />
@@ -11490,7 +11550,7 @@
        r="23.499998"
        cy="1080"
        cx="330"
-       style="fill:url(#radialGradient2263);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient2263);fill-opacity:1;stroke:none;stroke-width:1.04444"
        id="circle2145"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
        inkscape:export-xdpi="96"
@@ -11804,7 +11864,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
        id="circle2203"
-       style="fill:url(#radialGradient2249);fill-opacity:1.0;stroke:none;stroke-width:1.04444"
+       style="fill:url(#radialGradient2249);fill-opacity:1;stroke:none;stroke-width:1.04444"
        cx="471"
        cy="1080"
        r="23.499998" />
@@ -12032,7 +12092,7 @@
        inkscape:export-ydpi="96" />
     <path
        id="path2312"
-       style="fill:url(#radialGradient2374);fill-opacity:1.0;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:url(#radialGradient2374);fill-opacity:1;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 864,829.61193 c -13.3731,0 -45.8507,2.86568 -45.8507,33.43284 0,30.56717 38.2089,42.02986 45.8507,42.02986 7.6418,0 45.8507,-11.46269 45.8507,-42.02986 0,-30.56717 -32.4776,-33.43284 -45.8507,-33.43284 z"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Onion_icon.png"
        inkscape:export-xdpi="96"
@@ -12271,7 +12331,7 @@
        inkscape:export-ydpi="96" />
     <path
        id="path2392"
-       style="fill:url(#radialGradient2454);fill-opacity:1.0;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:url(#radialGradient2454);fill-opacity:1;stroke:none;stroke-width:0.955224px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 864,1029.6119 c -13.3731,0 -45.8507,2.8657 -45.8507,33.4329 0,30.5671 38.2089,42.0298 45.8507,42.0298 7.6418,0 45.8507,-11.4627 45.8507,-42.0298 0,-30.5672 -32.4776,-33.4329 -45.8507,-33.4329 z"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion_icon.png"
        inkscape:export-xdpi="96"
