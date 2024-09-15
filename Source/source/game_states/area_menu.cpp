@@ -473,9 +473,9 @@ void area_menu_state::init_gui_info_page() {
             if(cur_thumb) {
                 draw_bitmap(cur_thumb, final_center, final_size - 4.0f);
             }
-            draw_rounded_rectangle(
-                final_center, final_size, 8.0f,
-                COLOR_TRANSPARENT_WHITE, 1.0f
+            draw_textured_box(
+                final_center, final_size, game.sys_assets.bmp_frame_box,
+                COLOR_TRANSPARENT_WHITE
             );
         };
         info_box->add_child(thumb_item);
@@ -729,8 +729,9 @@ void area_menu_state::init_gui_main() {
         info_box = new gui_item();
         info_box->on_draw =
         [] (const point & center, const point & size) {
-            draw_rounded_rectangle(
-                center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
+            draw_textured_box(
+                center, size, game.sys_assets.bmp_frame_box,
+                COLOR_TRANSPARENT_WHITE
             );
         };
         gui.add_item(info_box, "info_box");
@@ -796,8 +797,9 @@ void area_menu_state::init_gui_main() {
             specs_box = new gui_item();
             specs_box->on_draw =
             [] (const point & center, const point & size) {
-                draw_rounded_rectangle(
-                    center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
+                draw_textured_box(
+                    center, size, game.sys_assets.bmp_frame_box,
+                    COLOR_TRANSPARENT_WHITE
                 );
             };
             gui.add_item(specs_box, "specs_box");

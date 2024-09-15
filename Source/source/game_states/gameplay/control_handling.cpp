@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Control handling.
+ * Control handling in the gameplay state.
  */
 
 #include "gameplay.h"

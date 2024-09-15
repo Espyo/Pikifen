@@ -154,6 +154,7 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("editor_icons", bmp_editor_icons);
     grs.set("enemy_spirit", bmp_enemy_spirit);
     grs.set("focus_box", bmp_focus_box);
+    grs.set("frame_box", bmp_frame_box);
     grs.set("hard_bubble", bmp_hard_bubble);
     grs.set("icon", bmp_icon);
     grs.set("idle_glow", bmp_idle_glow);

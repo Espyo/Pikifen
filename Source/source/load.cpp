@@ -1068,6 +1068,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bmp_enemy_spirit);
     game.sys_assets.bmp_focus_box =
         game.bitmaps.get(game.asset_file_names.bmp_focus_box);
+    game.sys_assets.bmp_frame_box =
+        game.bitmaps.get(game.asset_file_names.bmp_frame_box);
     game.sys_assets.bmp_hard_bubble =
         game.bitmaps.get(game.asset_file_names.bmp_hard_bubble);
     game.sys_assets.bmp_idle_glow =
@@ -1343,6 +1345,7 @@ void unload_misc_resources() {
     game.bitmaps.free(game.sys_assets.bmp_cursor);
     game.bitmaps.free(game.sys_assets.bmp_enemy_spirit);
     game.bitmaps.free(game.sys_assets.bmp_focus_box);
+    game.bitmaps.free(game.sys_assets.bmp_frame_box);
     game.bitmaps.free(game.sys_assets.bmp_hard_bubble);
     game.bitmaps.free(game.sys_assets.bmp_icon);
     game.bitmaps.free(game.sys_assets.bmp_idle_glow);

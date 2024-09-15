@@ -1300,10 +1300,9 @@ void pause_menu_t::draw_radar(
     }
     
     //Draw a rectangle all around.
-    draw_rounded_rectangle(
-        center, size,
-        8.0f,
-        COLOR_TRANSPARENT_WHITE, 3.0f
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_frame_box,
+        COLOR_TRANSPARENT_WHITE
     );
 }
 
@@ -2488,8 +2487,9 @@ void pause_menu_t::init_radar_page() {
         }
         
         //Draw a box around it.
-        draw_rounded_rectangle(
-            center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 2.0f
+        draw_textured_box(
+            center, size, game.sys_assets.bmp_frame_box,
+            COLOR_TRANSPARENT_WHITE
         );
         
         //Draw a connection from here to the radar cursor.

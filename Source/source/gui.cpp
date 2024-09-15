@@ -1193,8 +1193,9 @@ list_gui_item::list_gui_item() :
     padding = 8.0f;
     on_draw =
     [this] (const point & center, const point & size) {
-        draw_rounded_rectangle(
-            center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
+        draw_textured_box(
+            center, size, game.sys_assets.bmp_frame_box,
+            COLOR_TRANSPARENT_WHITE
         );
         if(offset > 0.0f) {
             //Shade effect at the top.
@@ -1492,8 +1493,9 @@ scroll_gui_item::scroll_gui_item() :
             alpha = 128;
         }
         
-        draw_rounded_rectangle(
-            center, size, 8.0f, al_map_rgba(255, 255, 255, alpha), 1.0f
+        draw_textured_box(
+            center, size, game.sys_assets.bmp_frame_box,
+            al_map_rgba(255, 255, 255, alpha)
         );
         
         if(bar_h != 0.0f) {

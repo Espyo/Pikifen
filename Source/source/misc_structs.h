@@ -187,6 +187,9 @@ struct asset_file_names_t {
     //GUI focus box.
     string bmp_focus_box = "Focus_box.png";
     
+    //Texture box for GUI frames.
+    string bmp_frame_box = "Frame_box.png";
+    
     //A hard bubble.
     string bmp_hard_bubble = "HUD/Hard_bubble.png";
     
@@ -677,6 +680,9 @@ struct system_asset_list {
     
     //Focus box.
     ALLEGRO_BITMAP* bmp_focus_box = nullptr;
+    
+    //Texture box for GUI frames.
+    ALLEGRO_BITMAP* bmp_frame_box = nullptr;
     
     //A hard bubble.
     ALLEGRO_BITMAP* bmp_hard_bubble = nullptr;
