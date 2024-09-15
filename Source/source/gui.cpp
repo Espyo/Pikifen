@@ -87,13 +87,14 @@ bullet_point_gui_item::bullet_point_gui_item(
             size.y
         );
         
-        al_draw_filled_circle(
-            item_x_start +
-            GUI::BULLET_RADIUS +
-            GUI::BULLET_PADDING,
-            center.y,
-            GUI::BULLET_RADIUS,
-            this->color
+        draw_bitmap(
+            game.sys_assets.bmp_hard_bubble,
+            point(
+                item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
+                center.y
+            ),
+            point(GUI::BULLET_RADIUS * 2, GUI::BULLET_RADIUS * 2),
+            0.0f, this->color
         );
         float juicy_grow_amount = get_juice_value();
         draw_text(

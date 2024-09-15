@@ -187,6 +187,9 @@ struct asset_file_names_t {
     //GUI focus box.
     string bmp_focus_box = "Focus_box.png";
     
+    //A hard bubble.
+    string bmp_hard_bubble = "HUD/Hard_bubble.png";
+    
     //Pikifen icon.
     string bmp_icon = "Icon.png";
     
@@ -674,6 +677,9 @@ struct system_asset_list {
     
     //Focus box.
     ALLEGRO_BITMAP* bmp_focus_box = nullptr;
+    
+    //A hard bubble.
+    ALLEGRO_BITMAP* bmp_hard_bubble = nullptr;
     
     //Pikifen icon.
     ALLEGRO_BITMAP* bmp_icon = nullptr;
