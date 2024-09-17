@@ -374,8 +374,8 @@ void particle_generator::load_from_data_node(
     prs.set("rotation", base_particle.rotation);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
-    prs.set("gravity", base_particle.acceleration);
-    prs.set("speed", base_particle.speed);
+    prs.set("acceleration", base_particle.acceleration);
+    prs.set("velocity", base_particle.speed);
     prs.set("angular_speed", base_particle.angular_speed);
     prs.set("blend_type", blend_int);
 

@@ -208,6 +208,7 @@ void particle_editor::load_particle_generator(
     
     generator_running = true;
     selected_color_keyframe = 0;
+    selected_size_keyframe = 0;
     
     if(should_update_history) {
         update_history(file_name);

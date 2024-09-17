@@ -14,23 +14,25 @@ base{
 	rotation=0.0000
 	duration=0.7500
 	friction=0.0000
-	gravity=0.0000
-	size_grow_speed=0.0000
-	size=4.0000
-	speed=0.0000 30.0000
+	acceleration=0.0000 0.0000
+	velocity=0.0000 30.0000
 	blend_type=0
+	angular_speed=0.0000
 	color{
 		0.0000=238 204 170
 		1.0000=238 204 170 0
+	}
+	size{
+		0.0000=4.0000
 	}
 }
 rotation_deviation=15.0000
 duration_deviation=0.1000
 friction_deviation=0.0000
-gravity_deviation=0.0000
+acceleration_deviation=0.0000 0.0000
 size_deviation=2.0000
+outwards_speed=0.0000
+outwards_speed_deviation=0.0000
 speed_deviation=40.0000 0.0000
 angle=0.0000
 angle_deviation=0.0000
-total_speed=0.0000
-total_speed_deviation=0.0000
