@@ -3003,9 +3003,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="503.33333"
-     inkscape:cy="1090"
+     inkscape:zoom="0.70075439"
+     inkscape:cx="214.05503"
+     inkscape:cy="565.10527"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -3086,8 +3086,8 @@
        x="0"
        y="1000"
        inkscape:export-filename="../../../../Game_data/Graphics/Winged_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect4"
@@ -3096,8 +3096,8 @@
        x="0"
        y="800"
        inkscape:export-filename="../../../../Game_data/Graphics/Rock_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect3"
@@ -3106,8 +3106,8 @@
        x="0"
        y="600"
        inkscape:export-filename="../../../../Game_data/Graphics/Blue_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect2"
@@ -3116,8 +3116,8 @@
        x="0"
        y="400"
        inkscape:export-filename="../../../../Game_data/Graphics/Yellow_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect1"
@@ -3126,8 +3126,8 @@
        x="0"
        y="200"
        inkscape:export-filename="../../../../Game_data/Graphics/Red_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect572"
@@ -3136,8 +3136,8 @@
        x="0"
        y="0"
        inkscape:export-filename="../../../../Game_data/Graphics/Master_Onion.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke-width:1.016px;stop-color:#000000"
        id="rect977"

@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=75
@@ -27,13 +29,22 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=5
+		loop_frame=10
 		frames{
+			dying_02{
+				duration=0.0500
+				interpolate=true
+			}
 			dying_01{
-				duration=0.1000
+				duration=0.0500
+				interpolate=true
 			}
 			dying_02{
 				duration=0.1000
+			}
+			dying_02{
+				duration=0.5000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
@@ -42,9 +53,18 @@ animations{
 				duration=0.1000
 			}
 			dying_05{
-				duration=0.3000
+				duration=0.1000
 			}
-			dying_04{
+			dying_06{
+				duration=0.1000
+			}
+			dying_07{
+				duration=0.1000
+			}
+			dying_08{
+				duration=0.5000
+			}
+			dying_07{
 				duration=0.5000
 			}
 		}
@@ -122,27 +142,46 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0100
 			}
 			shaking_03{
 				duration=0.1000
@@ -155,7 +194,7 @@ animations{
 				duration=0.1000
 			}
 			idling_01{
-				duration=0.1000
+				duration=0.4000
 			}
 		}
 	}
@@ -300,6 +339,92 @@ sprites{
 	}
 	dying_01{
 		file=Electric_Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=140.0000 87.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Electric_Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=140.0000 87.0000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Electric_Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=140.0000 87.0000
+		scale=1.1000 0.9000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Electric_Water_Dumple.png
 		file_pos=277.0000 184.0000
 		file_size=140.0000 90.0000
 		hitboxes{
@@ -326,7 +451,7 @@ sprites{
 			}
 		}
 	}
-	dying_02{
+	dying_05{
 		file=Electric_Water_Dumple.png
 		file_pos=418.0000 184.0000
 		file_size=141.0000 63.0000
@@ -354,7 +479,7 @@ sprites{
 			}
 		}
 	}
-	dying_03{
+	dying_06{
 		file=Electric_Water_Dumple.png
 		file_pos=560.0000 187.0000
 		file_size=141.0000 83.0000
@@ -382,7 +507,7 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_07{
 		file=Electric_Water_Dumple.png
 		file_pos=702.0000 194.0000
 		file_size=139.0000 88.0000
@@ -410,7 +535,7 @@ sprites{
 			}
 		}
 	}
-	dying_05{
+	dying_08{
 		file=Electric_Water_Dumple.png
 		file_pos=560.0000 187.0000
 		file_size=141.0000 83.0000
@@ -712,7 +837,8 @@ sprites{
 		file=Electric_Water_Dumple.png
 		file_pos=489.0000 89.0000
 		file_size=145.0000 90.0000
-		offset=1.2500 -1.2500
+		offset=0.5000 3.0000
+		angle=0.1396
 		hitboxes{
 			body{
 				coords=-5.0000 0.0000 0.0000
@@ -742,8 +868,8 @@ sprites{
 		file=Electric_Water_Dumple.png
 		file_pos=489.0000 89.0000
 		file_size=145.0000 90.0000
-		offset=1.2500 1.2500
-		scale=1.0000 -1.0000
+		offset=0.0000 3.0000
+		angle=6.1436
 		hitboxes{
 			body{
 				coords=-5.0000 0.0000 0.0000
@@ -1025,4 +1151,3 @@ body_parts{
 	mouth
 	zapping
 }
-engine_version=0.25.0

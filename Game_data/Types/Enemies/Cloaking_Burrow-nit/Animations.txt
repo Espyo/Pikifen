@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=50
@@ -6,40 +8,47 @@ animations{
 				duration=0.0800
 			}
 			attacking_02{
-				duration=0.0700
+				duration=0.1200
+				interpolate=true
+			}
+			attacking_03{
+				duration=0.1100
+				interpolate=true
+			}
+			attacking_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_03{
+				duration=0.0900
+				interpolate=true
+			}
+			attacking_02{
+				duration=0.0800
+				interpolate=true
 			}
 			attacking_03{
 				duration=0.0700
+				interpolate=true
 			}
 			attacking_02{
 				duration=0.0700
+				interpolate=true
 			}
 			attacking_03{
 				duration=0.0700
+				interpolate=true
 			}
 			attacking_02{
 				duration=0.0700
+				interpolate=true
 			}
 			attacking_03{
 				duration=0.0700
+				interpolate=true
 			}
 			attacking_02{
-				duration=0.0700
-			}
-			attacking_03{
-				duration=0.0700
-			}
-			attacking_02{
-				duration=0.0700
-			}
-			attacking_03{
-				duration=0.0700
-			}
-			attacking_02{
-				duration=0.0700
-			}
-			attacking_03{
-				duration=0.0700
+				duration=0.0400
 			}
 			attacking_04{
 				duration=0.0500
@@ -63,22 +72,33 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=16
+		loop_frame=19
 		frames{
-			dying_01{
-				duration=0.1000
-			}
-			dying_02{
-				duration=0.1000
+			idling{
+				duration=0.0500
+				interpolate=true
 			}
 			dying_01{
-				duration=0.1000
+				duration=0.2000
+				interpolate=true
 			}
 			dying_02{
-				duration=0.1000
+				duration=0.2000
+			}
+			dying_02{
+				duration=0.2000
+				interpolate=true
 			}
 			dying_03{
-				duration=0.0800
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
 			}
 			dying_04{
 				duration=0.0800
@@ -90,30 +110,33 @@ animations{
 				duration=0.0800
 			}
 			dying_07{
-				duration=0.4000
+				duration=0.1300
 			}
 			dying_08{
+				duration=0.3500
+			}
+			dying_09{
 				duration=0.1000
 			}
-			dying_07{
+			dying_08{
+				duration=0.0500
+			}
+			dying_10{
+				duration=0.0500
+			}
+			dying_08{
 				duration=0.0500
 			}
 			dying_09{
+				duration=0.1000
+			}
+			dying_08{
 				duration=0.0500
 			}
-			dying_07{
+			dying_10{
 				duration=0.0500
 			}
 			dying_08{
-				duration=0.1000
-			}
-			dying_07{
-				duration=0.0500
-			}
-			dying_09{
-				duration=0.0500
-			}
-			dying_07{
 				duration=0.1000
 			}
 		}
@@ -144,28 +167,36 @@ animations{
 		frames{
 			emerging_01{
 				duration=0.2000
+				interpolate=true
 			}
 			emerging_02{
 				duration=0.1000
+				interpolate=true
 				sound=burying
 			}
 			emerging_01{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_03{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_01{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_02{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_01{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_03{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_01{
 				duration=0.1500
@@ -196,15 +227,19 @@ animations{
 			}
 			emerging_01{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_02{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_01{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_03{
 				duration=0.1000
+				interpolate=true
 			}
 			emerging_01{
 				duration=0.1000
@@ -249,67 +284,88 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_02{
-				duration=0.0800
+				duration=0.1000
+				interpolate=true
 			}
 			shaking_03{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_03{
 				duration=0.0800
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.0800
+				interpolate=true
 			}
 			shaking_04{
-				duration=0.0800
+				duration=0.1400
+				interpolate=true
 				sound=shaking
 			}
 			shaking_05{
-				duration=0.0800
+				duration=0.1400
+				interpolate=true
 			}
 			shaking_04{
-				duration=0.0800
-			}
-			shaking_06{
-				duration=0.0800
-			}
-			shaking_07{
-				duration=0.0800
-			}
-			shaking_06{
-				duration=0.0800
-			}
-			shaking_04{
-				duration=0.0800
+				duration=0.1400
+				interpolate=true
 			}
 			shaking_05{
-				duration=0.0800
-			}
-			shaking_04{
-				duration=0.0800
-			}
-			shaking_06{
-				duration=0.0800
-			}
-			shaking_07{
-				duration=0.0800
-			}
-			shaking_06{
-				duration=0.0800
+				duration=0.1400
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_03{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.0800
+				interpolate=true
 			}
 			shaking_03{
 				duration=0.0800
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.0800
+				interpolate=true
+			}
+			shaking_03{
+				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.0800
@@ -360,6 +416,7 @@ sprites{
 		file_pos=57.0000 57.0000
 		file_size=50.0000 56.0000
 		offset=-8.5000 0.0000
+		angle=0.0698
 		hitboxes{
 			face{
 				coords=-2.0000 2.0000 0.0000
@@ -397,7 +454,7 @@ sprites{
 		file_pos=57.0000 57.0000
 		file_size=50.0000 56.0000
 		offset=-8.5000 0.0000
-		scale=1.0000 -1.0000
+		angle=6.2134
 		hitboxes{
 			face{
 				coords=-2.0000 -2.0000 0.0000
@@ -512,8 +569,46 @@ sprites{
 	}
 	dying_01{
 		file=Cloaking_Burrow-nit.png
-		file_pos=0.0000 116.0000
-		file_size=67.0000 52.0000
+		file_pos=0.0000 0.0000
+		file_size=67.0000 56.0000
+		scale=0.8333 1.2000
+		hitboxes{
+			face{
+				coords=-2.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			hide{
+				coords=-8.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=0.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=0.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Cloaking_Burrow-nit.png
+		file_pos=0.0000 0.0000
+		file_size=67.0000 56.0000
 		hitboxes{
 			face{
 				coords=-2.0000 0.0000 0.0000
@@ -545,10 +640,11 @@ sprites{
 			}
 		}
 	}
-	dying_02{
+	dying_03{
 		file=Cloaking_Burrow-nit.png
 		file_pos=0.0000 0.0000
 		file_size=67.0000 56.0000
+		scale=1.0000 0.8500
 		hitboxes{
 			face{
 				coords=-2.0000 0.0000 0.0000
@@ -580,7 +676,7 @@ sprites{
 			}
 		}
 	}
-	dying_03{
+	dying_04{
 		file=Cloaking_Burrow-nit.png
 		file_pos=69.0000 115.0000
 		file_size=67.0000 54.0000
@@ -615,7 +711,7 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_05{
 		file=Cloaking_Burrow-nit.png
 		file_pos=138.0000 114.0000
 		file_size=65.0000 56.0000
@@ -651,7 +747,7 @@ sprites{
 			}
 		}
 	}
-	dying_05{
+	dying_06{
 		file=Cloaking_Burrow-nit.png
 		file_pos=204.0000 114.0000
 		file_size=64.0000 56.0000
@@ -687,7 +783,7 @@ sprites{
 			}
 		}
 	}
-	dying_06{
+	dying_07{
 		file=Cloaking_Burrow-nit.png
 		file_pos=269.0000 114.0000
 		file_size=64.0000 56.0000
@@ -723,7 +819,7 @@ sprites{
 			}
 		}
 	}
-	dying_07{
+	dying_08{
 		file=Cloaking_Burrow-nit.png
 		file_pos=334.0000 114.0000
 		file_size=64.0000 56.0000
@@ -758,7 +854,7 @@ sprites{
 			}
 		}
 	}
-	dying_08{
+	dying_09{
 		file=Cloaking_Burrow-nit.png
 		file_pos=399.0000 114.0000
 		file_size=57.0000 56.0000
@@ -794,7 +890,7 @@ sprites{
 			}
 		}
 	}
-	dying_09{
+	dying_10{
 		file=Cloaking_Burrow-nit.png
 		file_pos=457.0000 114.0000
 		file_size=80.0000 56.0000
@@ -942,7 +1038,7 @@ sprites{
 		file=Cloaking_Burrow-nit.png
 		file_pos=224.0000 0.0000
 		file_size=39.0000 56.0000
-		angle=0.0500
+		angle=0.1396
 		hitboxes{
 			face{
 				coords=0.0000 0.0000 0.0000
@@ -978,7 +1074,7 @@ sprites{
 		file=Cloaking_Burrow-nit.png
 		file_pos=224.0000 0.0000
 		file_size=39.0000 56.0000
-		angle=6.2300
+		angle=6.1436
 		hitboxes{
 			face{
 				coords=0.0000 0.0000 0.0000
@@ -1235,7 +1331,7 @@ sprites{
 		file_pos=325.0000 0.0000
 		file_size=58.0000 56.0000
 		offset=-1.0000 0.0000
-		angle=0.0500
+		angle=0.1396
 		hitboxes{
 			face{
 				coords=2.0000 0.0000 0.0000
@@ -1273,7 +1369,7 @@ sprites{
 		file_pos=325.0000 0.0000
 		file_size=58.0000 56.0000
 		offset=-1.0000 0.0000
-		angle=6.2300
+		angle=6.1436
 		hitboxes{
 			face{
 				coords=2.0000 0.0000 0.0000
@@ -1311,7 +1407,7 @@ sprites{
 		file_pos=325.0000 0.0000
 		file_size=58.0000 56.0000
 		offset=-1.0000 0.0000
-		angle=0.0500
+		angle=0.5236
 		hitboxes{
 			face{
 				coords=16.0000 0.0000 -32.0000
@@ -1354,92 +1450,7 @@ sprites{
 		file_pos=325.0000 0.0000
 		file_size=58.0000 56.0000
 		offset=-1.0000 0.0000
-		angle=0.1700
-		hitboxes{
-			face{
-				coords=16.0000 0.0000 -32.0000
-				height=100.0000
-				radius=28.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=5
-			}
-			hide{
-				coords=-4.0000 0.0000 -32.0000
-				height=100.0000
-				radius=34.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=5
-			}
-			mouth{
-				coords=35.0000 0.0000 0.0000
-				height=64.0000
-				radius=6.0000
-				type=2
-				value=0.0000
-			}
-			mouth_kb{
-				coords=40.0000 0.0000 0.0000
-				height=64.0000
-				radius=6.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	shaking_06{
-		file=Cloaking_Burrow-nit.png
-		file_pos=325.0000 0.0000
-		file_size=58.0000 56.0000
-		offset=-1.0000 0.0000
-		angle=6.2300
-		hitboxes{
-			face{
-				coords=16.0000 0.0000 -32.0000
-				height=100.0000
-				radius=28.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=5
-			}
-			hide{
-				coords=-4.0000 0.0000 -32.0000
-				height=100.0000
-				radius=34.0000
-				type=1
-				value=0.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=5
-			}
-			mouth{
-				coords=35.0000 0.0000 0.0000
-				height=64.0000
-				radius=6.0000
-				type=2
-				value=0.0000
-			}
-			mouth_kb{
-				coords=40.0000 0.0000 0.0000
-				height=64.0000
-				radius=6.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	shaking_07{
-		file=Cloaking_Burrow-nit.png
-		file_pos=325.0000 0.0000
-		file_size=58.0000 56.0000
-		offset=-1.0000 0.0000
+		angle=5.7596
 		hitboxes{
 			face{
 				coords=16.0000 0.0000 -32.0000
@@ -1484,4 +1495,3 @@ body_parts{
 	mouth
 	mouth_kb
 }
-engine_version=0.25.0

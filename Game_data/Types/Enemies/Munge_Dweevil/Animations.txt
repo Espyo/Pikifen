@@ -1,19 +1,127 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		frames{
-			attacking_gas{
-				duration=2.0000
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_01{
+				duration=0.1000
+				interpolate=true
+			}
+			attacking_gas_02{
+				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
 	dying{
-		loop_frame=5
+		loop_frame=13
 		frames{
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
 			dying_01{
 				duration=0.1000
+				interpolate=true
 			}
 			dying_02{
-				duration=0.4000
+				duration=0.1000
+				interpolate=true
+			}
+			dying_01{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_01{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_01{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.1000
 			}
 			dying_03{
 				duration=0.1000
@@ -25,6 +133,9 @@ animations{
 				duration=0.1000
 			}
 			dying_06{
+				duration=0.1000
+			}
+			dying_07{
 				duration=0.1000
 			}
 		}
@@ -71,8 +182,19 @@ animations{
 		frames{
 			picking_up_01{
 				duration=0.1000
+				interpolate=true
 			}
 			picking_up_02{
+				duration=0.1000
+			}
+			picking_up_02{
+				duration=0.1000
+				interpolate=true
+			}
+			picking_up_01{
+				duration=0.1000
+			}
+			picking_up_03{
 				duration=0.1000
 				signal=0
 			}
@@ -194,10 +316,40 @@ sprites{
 			}
 		}
 	}
-	attacking_gas{
+	attacking_gas_01{
 		file=Munge_Dweevil.png
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			gas{
+				coords=0.0000 0.0000 -32.0000
+				height=108.0000
+				radius=70.0000
+				type=1
+				value=0.0000
+				hazards=poison
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_gas_02{
+		file=Munge_Dweevil.png
+		file_pos=0.0000 121.0000
+		file_size=94.0000 88.0000
+		scale=1.1000 1.1000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -254,6 +406,36 @@ sprites{
 	}
 	dying_02{
 		file=Munge_Dweevil.png
+		file_pos=0.0000 121.0000
+		file_size=94.0000 88.0000
+		offset=4.0000 0.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Munge_Dweevil.png
 		file_pos=95.0000 121.0000
 		file_size=76.0000 52.0000
 		offset=13.0000 0.0000
@@ -281,7 +463,7 @@ sprites{
 			}
 		}
 	}
-	dying_03{
+	dying_04{
 		file=Munge_Dweevil.png
 		file_pos=172.0000 121.0000
 		file_size=103.0000 90.0000
@@ -310,7 +492,7 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_05{
 		file=Munge_Dweevil.png
 		file_pos=276.0000 136.0000
 		file_size=81.0000 74.0000
@@ -339,7 +521,7 @@ sprites{
 			}
 		}
 	}
-	dying_05{
+	dying_06{
 		file=Munge_Dweevil.png
 		file_pos=358.0000 136.0000
 		file_size=70.0000 54.0000
@@ -368,7 +550,7 @@ sprites{
 			}
 		}
 	}
-	dying_06{
+	dying_07{
 		file=Munge_Dweevil.png
 		file_pos=429.0000 144.0000
 		file_size=60.0000 52.0000
@@ -695,6 +877,36 @@ sprites{
 	}
 	picking_up_02{
 		file=Munge_Dweevil.png
+		file_pos=487.0000 0.0000
+		file_size=137.0000 143.0000
+		offset=2.0000 5.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	picking_up_03{
+		file=Munge_Dweevil.png
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		offset=4.0000 0.0000
@@ -758,4 +970,3 @@ body_parts{
 	gas
 	treasure
 }
-engine_version=0.25.0

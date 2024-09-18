@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	dying{
 		loop_frame=3
@@ -35,10 +37,26 @@ animations{
 	resting{
 		frames{
 			opened{
-				duration=0.8000
+				duration=0.3000
+				interpolate=true
+			}
+			resting_02{
+				duration=0.1000
+			}
+			resting_02{
+				duration=0.3000
+				interpolate=true
 			}
 			mid{
-				duration=0.5000
+				duration=0.4000
+				interpolate=true
+			}
+			resting_01{
+				duration=0.1000
+			}
+			resting_01{
+				duration=0.3000
+				interpolate=true
 			}
 		}
 	}
@@ -131,8 +149,37 @@ sprites{
 			}
 		}
 	}
+	resting_01{
+		file=White_Spectralid.png
+		file_pos=0.0000 33.0000
+		file_size=25.0000 22.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	resting_02{
+		file=White_Spectralid.png
+		file_pos=0.0000 0.0000
+		file_size=25.0000 32.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 }
 body_parts{
 	body
 }
-engine_version=0.25.0

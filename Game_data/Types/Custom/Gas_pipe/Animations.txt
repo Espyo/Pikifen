@@ -1,15 +1,22 @@
+name
+engine_version=0.25.0
 animations{
-	shooting{
-		frames{
-			shooting{
-				duration=0.0000
-			}
-		}
-	}
 	destroyed{
 		frames{
 			safe{
 				duration=0.0000
+			}
+		}
+	}
+	shooting{
+		frames{
+			shooting_01{
+				duration=0.0700
+				interpolate=true
+			}
+			shooting_02{
+				duration=0.0700
+				interpolate=true
 			}
 		}
 	}
@@ -26,8 +33,6 @@ sprites{
 				radius=48.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -39,7 +44,7 @@ sprites{
 			}
 		}
 	}
-	shooting{
+	shooting_01{
 		file=Gas_pipe.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
@@ -51,8 +56,30 @@ sprites{
 				type=0
 				value=1.0000
 				hazards=poison
-				knockback_outward=true
-				knockback=1.0000
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=80.0000
+				type=1
+				value=0.0000
+				hazards=poison
+			}
+		}
+	}
+	shooting_02{
+		file=Gas_pipe.png
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			tube{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				hazards=poison
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000

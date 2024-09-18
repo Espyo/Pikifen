@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	bouncing{
 		frames{
@@ -78,6 +80,7 @@ sprites{
 		file=Geyser.png
 		file_pos=196.0000 0.0000
 		file_size=48.0000 48.0000
+		scale=1.0500 1.0500
 	}
 	spraying_03{
 		file=Geyser.png
@@ -88,7 +91,7 @@ sprites{
 		file=Geyser.png
 		file_pos=294.0000 0.0000
 		file_size=48.0000 48.0000
+		scale=0.9500 0.9500
 	}
 }
 body_parts
-engine_version=0.25.0

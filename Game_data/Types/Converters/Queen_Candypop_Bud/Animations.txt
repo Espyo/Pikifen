@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	bumped_blue{
 		frames{
@@ -116,8 +118,12 @@ animations{
 			closing_04_blue{
 				duration=0.1000
 			}
+			closing_05_blue{
+				duration=0.1000
+				interpolate=true
+			}
 			closed_blue{
-				duration=0.8000
+				duration=0.7000
 			}
 		}
 	}
@@ -133,8 +139,12 @@ animations{
 			closing_04_red{
 				duration=0.1000
 			}
+			closing_05_red{
+				duration=0.1000
+				interpolate=true
+			}
 			closed_red{
-				duration=0.8000
+				duration=0.7000
 			}
 		}
 	}
@@ -150,8 +160,12 @@ animations{
 			closing_04_rock{
 				duration=0.1000
 			}
+			closing_05_rock{
+				duration=0.1000
+				interpolate=true
+			}
 			closed_rock{
-				duration=0.8000
+				duration=0.7000
 			}
 		}
 	}
@@ -167,8 +181,12 @@ animations{
 			closing_04_winged{
 				duration=0.1000
 			}
+			closing_05_winged{
+				duration=0.1000
+				interpolate=true
+			}
 			closed_winged{
-				duration=0.8000
+				duration=0.7000
 			}
 		}
 	}
@@ -184,8 +202,12 @@ animations{
 			closing_04_yellow{
 				duration=0.1000
 			}
+			closing_05_yellow{
+				duration=0.1000
+				interpolate=true
+			}
 			closed_yellow{
-				duration=0.8000
+				duration=0.7000
 			}
 		}
 	}
@@ -549,6 +571,10 @@ animations{
 			closing_01_blue{
 				duration=0.1000
 			}
+			idling_big_blue{
+				duration=0.0500
+				interpolate=true
+			}
 			idling_01_blue{
 				duration=0.1000
 			}
@@ -568,6 +594,10 @@ animations{
 			}
 			closing_01_red{
 				duration=0.1000
+			}
+			idling_big_red{
+				duration=0.0500
+				interpolate=true
 			}
 			idling_01_red{
 				duration=0.1000
@@ -589,6 +619,10 @@ animations{
 			closing_01_rock{
 				duration=0.1000
 			}
+			idling_big_rock{
+				duration=0.0500
+				interpolate=true
+			}
 			idling_01_rock{
 				duration=0.1000
 			}
@@ -608,6 +642,10 @@ animations{
 			}
 			closing_01_winged{
 				duration=0.1000
+			}
+			idling_big_winged{
+				duration=0.0500
+				interpolate=true
 			}
 			idling_01_winged{
 				duration=0.1000
@@ -629,6 +667,10 @@ animations{
 			closing_01_yellow{
 				duration=0.1000
 			}
+			idling_big_yellow{
+				duration=0.0500
+				interpolate=true
+			}
 			idling_01_yellow{
 				duration=0.1000
 			}
@@ -636,56 +678,76 @@ animations{
 	}
 	spitting_blue{
 		frames{
+			closing_05_blue{
+				duration=0.1000
+				interpolate=true
+			}
 			closing_04_blue{
 				duration=0.1000
+				sound=pop
 			}
 			closed_blue{
 				duration=0.3000
-				sound=pop
 			}
 		}
 	}
 	spitting_red{
 		frames{
+			closing_05_red{
+				duration=0.1000
+				interpolate=true
+			}
 			closing_04_red{
 				duration=0.1000
+				sound=pop
 			}
 			closed_red{
 				duration=0.3000
-				sound=pop
 			}
 		}
 	}
 	spitting_rock{
 		frames{
+			closing_05_rock{
+				duration=0.1000
+				interpolate=true
+			}
 			closing_04_rock{
 				duration=0.1000
+				sound=pop
 			}
 			closed_rock{
 				duration=0.3000
-				sound=pop
 			}
 		}
 	}
 	spitting_winged{
 		frames{
+			closing_05_winged{
+				duration=0.1000
+				interpolate=true
+			}
 			closing_04_winged{
 				duration=0.1000
+				sound=pop
 			}
 			closed_winged{
 				duration=0.3000
-				sound=pop
 			}
 		}
 	}
 	spitting_yellow{
 		frames{
+			closing_05_yellow{
+				duration=0.1000
+				interpolate=true
+			}
 			closing_04_yellow{
 				duration=0.1000
+				sound=pop
 			}
 			closed_yellow{
 				duration=0.3000
-				sound=pop
 			}
 		}
 	}
@@ -1216,6 +1278,86 @@ sprites{
 		file_pos=542.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	closing_05_blue{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	closing_05_red{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	closing_05_rock{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 489.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	closing_05_winged{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 652.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	closing_05_yellow{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
 		hitboxes{
 			receptacle{
 				coords=0.0000 0.0000 0.0000
@@ -2021,8 +2163,87 @@ sprites{
 			}
 		}
 	}
+	idling_big_blue{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_big_red{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_big_rock{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 489.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_big_winged{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 652.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling_big_yellow{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=40.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
 }
 body_parts{
 	receptacle
 }
-engine_version=0.25.0

@@ -2293,6 +2293,19 @@
        y1="331.39581"
        x2="74.347923"
        y2="331.39581" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1"
+       x="-0.063530212"
+       y="-0.032620801"
+       width="1.1270604"
+       height="1.0652416">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.74665739"
+         id="feGaussianBlur1" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2301,9 +2314,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.88757396"
-     inkscape:cx="310.96"
-     inkscape:cy="156.60667"
+     inkscape:zoom="1.8325991"
+     inkscape:cx="308.30529"
+     inkscape:cy="195.35096"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -4377,6 +4390,11 @@
        id="path5366-64-4-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
+    <path
+       id="path1"
+       style="color:#000000;display:inline;overflow:visible;opacity:0.56656577;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-linecap:round;-inkscape-stroke:none;paint-order:markers stroke fill;filter:url(#filter1)"
+       d="m 21.73162,654.57121 c 0.182537,2.80051 1.56539,5.60182 -1.017578,8.40234 -4.180567,-3.28025 -9.221614,-2.29428 -14.070312,-2.26758 4.725727,0.83397 9.810017,1.40164 11.632812,4.39258 l 5.451172,11.12695 c -6.303948,-2.94059 -10.816427,0.87393 -16.193359,1.42578 5.797608,0.81379 15.266942,-0.16326 16.876953,2.69141 -0.311793,1.23891 -0.510359,2.45576 -0.931641,3.7168 l -6.773437,2.85156 4.955078,1.05859 c -1.641451,6.14102 -8.229568,8.00821 -14.5683592,9.83399 5.7948492,0.74893 11.4158342,0.91821 15.4785152,-4.13867 -0.05372,5.62888 -4.027724,10.64485 -6.859375,15.83984 0,0 17.980593,-15.67683 19.079402,-26.12853 C 35.872263,673.09614 21.73162,654.57121 21.73162,654.57121 Z"
+       sodipodi:nodetypes="cccccccccccccsc" />
   </g>
   <script
      id="mesh_polyfill"

@@ -1,17 +1,23 @@
+name
+engine_version=0.25.0
 animations{
 	idling{
 		frames{
 			idling_01{
 				duration=0.1700
+				interpolate=true
 			}
 			idling_02{
 				duration=0.1700
+				interpolate=true
 			}
 			idling_03{
 				duration=0.1700
+				interpolate=true
 			}
 			idling_04{
 				duration=0.1700
+				interpolate=true
 			}
 		}
 	}
@@ -27,7 +33,7 @@ sprites{
 		file=Orb_sign.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
-		scale=1.5000 1.5000
+		scale=1.6000 1.6000
 		angle=5.9341
 	}
 	idling_03{
@@ -41,8 +47,8 @@ sprites{
 		file=Orb_sign.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
-		scale=1.5000 1.5000
+		scale=1.4000 1.4000
+		angle=5.2360
 	}
 }
 body_parts
-engine_version=0.25.0

@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=50
@@ -24,10 +26,22 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=4
+		loop_frame=10
 		frames{
 			dying_02{
+				duration=0.0500
+				interpolate=true
+			}
+			dying_01{
+				duration=0.0500
+				interpolate=true
+			}
+			dying_02{
 				duration=0.1000
+			}
+			dying_02{
+				duration=0.5000
+				interpolate=true
 			}
 			dying_03{
 				duration=0.1000
@@ -36,9 +50,18 @@ animations{
 				duration=0.1000
 			}
 			dying_05{
-				duration=0.3000
+				duration=0.1000
 			}
-			dying_04{
+			dying_06{
+				duration=0.1000
+			}
+			dying_07{
+				duration=0.1000
+			}
+			dying_08{
+				duration=0.5000
+			}
+			dying_07{
 				duration=0.5000
 			}
 		}
@@ -119,27 +142,46 @@ animations{
 		frames{
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_01{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_02{
 				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0100
 			}
 			shaking_03{
 				duration=0.1000
@@ -150,6 +192,9 @@ animations{
 			}
 			shaking_03{
 				duration=0.1000
+			}
+			idling_01{
+				duration=0.4000
 			}
 		}
 	}
@@ -228,6 +273,92 @@ sprites{
 	}
 	dying_01{
 		file=Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=66.0000 50.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=66.0000 50.0000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=Water_Dumple.png
+		file_pos=0.0000 0.0000
+		file_size=66.0000 50.0000
+		scale=1.1000 0.9000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=Water_Dumple.png
 		file_pos=135.0000 103.0000
 		file_size=66.0000 51.0000
 		hitboxes{
@@ -247,7 +378,7 @@ sprites{
 			}
 		}
 	}
-	dying_02{
+	dying_05{
 		file=Water_Dumple.png
 		file_pos=202.0000 104.0000
 		file_size=66.0000 36.0000
@@ -268,7 +399,7 @@ sprites{
 			}
 		}
 	}
-	dying_03{
+	dying_06{
 		file=Water_Dumple.png
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
@@ -289,7 +420,7 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_07{
 		file=Water_Dumple.png
 		file_pos=336.0000 112.0000
 		file_size=66.0000 50.0000
@@ -310,7 +441,7 @@ sprites{
 			}
 		}
 	}
-	dying_05{
+	dying_08{
 		file=Water_Dumple.png
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
@@ -495,7 +626,7 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
-		offset=-1.0000 -1.0000
+		angle=0.1396
 		hitboxes{
 			body{
 				coords=3.0000 0.0000 0.0000
@@ -518,8 +649,7 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
-		offset=-1.0000 -1.0000
-		scale=1.0000 -1.0000
+		angle=6.1436
 		hitboxes{
 			body{
 				coords=3.0000 0.0000 0.0000
@@ -593,4 +723,3 @@ body_parts{
 	body
 	mouth
 }
-engine_version=0.25.0

@@ -8,6 +8,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If an object is on-camera and a child object is not, or vice-versa, they'll desync. Especially notable with the electric wire (thanks Helodity)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
+    Winged Pikmin are too high to be hit by a bomb rock explosion (thanks Arcadius)
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
@@ -112,10 +113,6 @@ Next tasks (roughly sorted most important first)
     Use a screenshot for the title screen
     Make it so some animations (mostly walking) have their speed depend on the mob's speed
         Probably have an upper and lower cap
-    General graphic file improvements
-        Use blurring and better lighting
-        Add the Inkscape noise filter to more sprites? Or even a different filter
-        Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
             If necessary, seeds should have their own animation
@@ -144,17 +141,13 @@ Next tasks (roughly sorted most important first)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
-        A gas pipe that is shooting should vibrate
-        All enemies could probably stand to have some interpolated shaking to spice up their animations
-        Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
-        Cloaking Burrow-nit, the Dumples, "inked" use a lot of sprites that can just recycle previous ones and use in-engine transformations
+        Bulborbs need a few more frames for fluidity
         Yellow Wollywog should close its eyes when shaking
-        Candypop Buds should squash when they close
         Treasures should have sparkle particles
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
-        Improve the explosions https://www.patreon.com/posts/explosions-part-7719254 https://www.youtube.com/watch?v=ZDopYzDX-Jg
         Add a glow to the smack effect particle?
+        Onions need to spin their flowers fast when producing Pikmin
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New mobs
