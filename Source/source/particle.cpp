@@ -59,27 +59,16 @@ void particle::draw() {
     int old_op, old_source, old_dest;
     al_get_blender(&old_op, &old_source, &old_dest);
 
-    switch (blend_type)
-    {
-    case PARTICLE_BLEND_TYPE_ADDITIVE:
+    switch(blend_type) {
+      case PARTICLE_BLEND_TYPE_ADDITIVE:
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
         break;
-    default:
+      default:
         break;
     }
 
     switch(type) {
-    case PARTICLE_TYPE_SQUARE: {
-        al_draw_filled_rectangle(
-            pos.x - target_size * 0.5,
-            pos.y - target_size * 0.5,
-            pos.x + target_size * 0.5,
-            pos.y + target_size * 0.5,
-            target_color
-        );
-        break;
-        
-    } case PARTICLE_TYPE_CIRCLE: {
+      case PARTICLE_TYPE_CIRCLE: {
         al_draw_filled_circle(
             pos.x, pos.y,
             target_size * 0.5,
@@ -88,13 +77,6 @@ void particle::draw() {
         break;
         
     } case PARTICLE_TYPE_BITMAP: {
-        draw_bitmap(
-            bitmap, pos, point(target_size, -1),
-            rotation, target_color
-        );
-        break;
-        
-    } case PARTICLE_TYPE_PIKMIN_SPIRIT: {
         draw_bitmap(
             bitmap, pos, point(target_size, -1),
             rotation, target_color
@@ -113,31 +95,6 @@ void particle::draw() {
         );
         break;
         
-    } case PARTICLE_TYPE_SMACK: {
-        float r = time / duration;
-        float s = target_size;
-        float opacity = 255;
-        if(r <= 0.5) s *= r * 2;
-        else opacity *= (1 - r) * 2;
-        
-        draw_bitmap(
-            bitmap, pos, point(s, s),
-            0, change_alpha(target_color, opacity)
-        );
-        break;
-        
-    } case PARTICLE_TYPE_DING: {
-        float r = time / duration;
-        float s = target_size;
-        float opacity = 255;
-        if(r >= 0.5) s *= (1 - r) * 2;
-        else opacity *= r * 2;
-        
-        draw_bitmap(
-            bitmap, pos, point(s, s),
-            0, change_alpha(target_color, opacity)
-        );
-        break;
     }
     }
 

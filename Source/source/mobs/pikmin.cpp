@@ -508,7 +508,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         pikmin_fsm::notify_leader_release(this, nullptr, nullptr);
         
         particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
+            PARTICLE_TYPE_BITMAP, pos, LARGE_FLOAT,
             radius * 2, 2.0f
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;

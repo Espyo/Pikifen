@@ -1357,24 +1357,31 @@ void mob::do_attack_effects(
     //Create the particle.
     if(!useless) {
         particle smack_p(
-            PARTICLE_TYPE_SMACK, particle_pos,
+            PARTICLE_TYPE_BITMAP, particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
-            64, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+            0, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
         smack_p.color.set_keyframe_value(0, al_map_rgb(255, 160, 128));
-        smack_p.color.add(1, al_map_rgba(255, 160, 128, 0));
+        smack_p.color.add(0.5f, al_map_rgb(255, 160, 128));
+        smack_p.color.add(1,    al_map_rgba(255, 160, 128, 0));
+
+        smack_p.size.add(0.5f, 64);
+        smack_p.size.add(1,    0);
         game.states.gameplay->particles.add(smack_p);
         
     } else {
         particle ding_p(
-            PARTICLE_TYPE_DING, particle_pos,
+            PARTICLE_TYPE_BITMAP, particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
-            24, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
+            0, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
         ding_p.color.set_keyframe_value(0, al_map_rgb(192, 208, 224));
-        ding_p.color.add(1, al_map_rgba(192, 208, 224, 0));
+        ding_p.color.add(0.5f, al_map_rgb(192, 208, 224));
+        ding_p.color.add(1,    al_map_rgba(192, 208, 224, 0));
+
+        ding_p.size.add(0.5f, 24);
         game.states.gameplay->particles.add(ding_p);
         
     }

@@ -32,26 +32,14 @@ class mob;
 //TODO: REMOVE AFTER MOTION REVAMP IS DONE
 enum PARTICLE_TYPE {
 
-    //A simple square.
-    PARTICLE_TYPE_SQUARE,
-    
     //A simple circle.
     PARTICLE_TYPE_CIRCLE,
     
     //A bitmap.
     PARTICLE_TYPE_BITMAP,
     
-    //A Pikmin spirit that moves up and vanishes.
-    PARTICLE_TYPE_PIKMIN_SPIRIT,
-    
     //An enemy spirit that moves up and wobbles.
-    PARTICLE_TYPE_ENEMY_SPIRIT,
-    
-    //A smack that grows and shrinks real quick.
-    PARTICLE_TYPE_SMACK,
-    
-    //A ding that grows and shrinks.
-    PARTICLE_TYPE_DING,
+    PARTICLE_TYPE_ENEMY_SPIRIT
 
 };
 
