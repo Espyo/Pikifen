@@ -184,7 +184,7 @@ void particle_editor::load() {
 
 
 /**
- * @brief Loads the GUI file.
+ * @brief Loads the particle generator file.
  *
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
@@ -201,14 +201,9 @@ void particle_editor::load_particle_generator(
         return;
     }
 
-    part_manager.clear();
+    init_editor();
     loaded_gen.load_from_data_node(&file_node, true);
-    changes_mgr.reset();
     loaded_content_yet = true;
-    
-    generator_running = true;
-    selected_color_keyframe = 0;
-    selected_size_keyframe = 0;
     
     if(should_update_history) {
         update_history(file_name);
@@ -218,6 +213,49 @@ void particle_editor::load_particle_generator(
     set_status("Loaded particle file successfully.");
 }
 
+
+/**
+ * @brief Creates a new particle generator.
+ *
+ * @param requested_name Name of the requested generator.
+ */
+void particle_editor::create_particle_generator(
+    const string& requested_name
+) {
+    particle_generator new_gen = particle_generator();
+
+    //Set up some default parameters
+    new_gen.name = replace_all(requested_name, " ", "_");
+    new_gen.base_particle.duration = 1;
+    new_gen.base_particle.set_bitmap("");
+    new_gen.base_particle.size.set_keyframe_value(0, 32);
+    new_gen.base_particle.color.add(1, map_alpha(0));
+
+    new_gen.emission.interval = 0.5f;
+    new_gen.emission.number = 1;
+    new_gen.outwards_speed = 32;
+
+    loaded_gen = new_gen;
+
+    update_history(file_name);
+    save_options(); //Save the history in the options.
+    save_file(); //Write the file to disk
+    init_editor();
+    loaded_content_yet = true;
+
+    set_status(
+        "Created particle \"" + requested_name + "\" successfully."
+    );
+}
+
+void particle_editor::init_editor() {
+    part_manager.clear();
+    changes_mgr.reset();
+
+    generator_running = true;
+    selected_color_keyframe = 0;
+    selected_size_keyframe = 0;
+}
 
 /**
  * @brief Pans the camera around.
@@ -244,8 +282,19 @@ void particle_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 void particle_editor::pick_file(
     const string &name, const string &category, const bool is_new
 ) {
-    file_name = name;
-    load_particle_generator(true);
+    file_name = name + ".txt";
+
+    string file_to_check =
+        PARTICLE_GENERATORS_FOLDER_PATH + "/" + file_name;
+
+    if (al_filename_exists(file_to_check.c_str())) {
+        //Area exists, load it.
+        load_particle_generator(true);
+    }
+    else {
+        create_particle_generator(sanitize_file_name(name));
+    }
+
     close_top_dialog();
 }
 
@@ -453,7 +502,7 @@ void particle_editor::reset_cam(const bool instantaneous) {
 
 
 /**
- * @brief Saves the GUI file onto the disk.
+ * @brief Saves the particle generator onto the disk.
  *
  * @return Whether it succeded.
  */

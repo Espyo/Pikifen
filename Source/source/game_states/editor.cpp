@@ -1817,7 +1817,7 @@ void editor::keyframe_editor(
         interpolator->set_keyframe_value(selected_index, value);
     }
     set_tooltip(
-        "Particle's size."
+        "Keyframe value."
     );
 
     float time = interpolator->get_keyframe(selected_index).first;
@@ -1850,7 +1850,7 @@ void editor::keyframe_editor(
         interpolator->set_keyframe_value(selected_index, value);
     }
     set_tooltip(
-        "Particle's size."
+        "Keyframe value."
     );
 
     float time = interpolator->get_keyframe(selected_index).first;

@@ -309,6 +309,11 @@ void particle_generator::emit(particle_manager &manager) {
                 new_p.speed, angle_to_use
             );
         float outwards_angle = get_angle(new_p.pos);
+
+        if (new_p.pos == point(0, 0)) {
+            outwards_angle = randomf(-180, 180);
+        }
+
         new_p.speed += angle_to_coordinates(outwards_angle,
             outwards_speed + randomf(-outwards_speed_deviation, outwards_speed_deviation)
         );

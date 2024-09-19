@@ -24,10 +24,11 @@ void particle_editor::open_load_dialog() {
     vector<string> files = folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
     vector<picker_item> file_items;
     for(size_t f = 0; f < files.size(); ++f) {
-        file_items.push_back(picker_item(files[f]));
+        file_items.push_back(picker_item(remove_extension(files[f])));
     }
+
     load_dialog_picker = picker_info(this);
-    load_dialog_picker.can_make_new = false;
+    load_dialog_picker.can_make_new = true;
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(

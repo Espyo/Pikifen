@@ -105,11 +105,13 @@ private:
     void close_load_dialog();
     void close_options_dialog();
     void load_particle_generator(const bool should_update_history);
+    void create_particle_generator(const string& name);
     void open_load_dialog();
     void open_options_dialog();
     void pick_file(
         const string &name, const string &category, const bool is_new
     );
+    void init_editor();
     bool save_file();
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
