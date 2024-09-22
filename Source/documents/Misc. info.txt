@@ -94,7 +94,20 @@ Tips for when you're making content
 
 Technical prowesses
     Edge offset effects
-    
+
+
+When adding a song
+    Export as OGG, "sinc best" interpolation
+    Add its LMMS project to the source code -- .mmp, not .mmpz
+    Credit the instruments used in the credits page
+    Edit the file's metadata
+        Title (add something like "(enemy track)" if needed)
+        Artist: André 'Espyo' Silva
+        Composer: André 'Espyo' Silva
+        BPM
+        Year
+        Comment (trim as necessary): Original composition for Pikifen. This is an extra track overlaid on top of the main track.
+
 
 Bag of notes (useful stuff)
     If mobs start moving so fast that they can clip through walls

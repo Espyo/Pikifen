@@ -16,6 +16,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../load.h"
+#include "../utils/allegro_utils.h"
 #include "../utils/string_utils.h"
 
 
@@ -71,9 +72,9 @@ void main_menu_state::do_drawing() {
     
     draw_text(
         "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
-        game.sys_assets.fnt_standard,
+        game.sys_assets.fnt_slim,
         point(8, game.win_h  - 8),
-        point(game.win_w * 0.45f, game.win_h * 0.02f), COLOR_WHITE,
+        point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM
     );
     string version_text;
@@ -87,9 +88,9 @@ void main_menu_state::do_drawing() {
     version_text +=
         "Pikifen " + get_engine_version_string();
     draw_text(
-        version_text, game.sys_assets.fnt_standard,
+        version_text, game.sys_assets.fnt_slim,
         point(game.win_w - 8, game.win_h  - 8),
-        point(game.win_w * 0.45f, game.win_h * 0.02f), COLOR_WHITE,
+        point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
     );
     
