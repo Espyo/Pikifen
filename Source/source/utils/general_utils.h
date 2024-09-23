@@ -162,6 +162,9 @@ struct keyframe_interpolator {
     ALLEGRO_COLOR interpolate(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2, float time) {
         return interpolate_color(time, 0, 1, c1, c2);
     }
+    point interpolate(point p1, point p2, float time) {
+        return interpolate_point(time, 0, 1, p1, p2);
+    }
 };
 
 

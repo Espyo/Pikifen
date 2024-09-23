@@ -1650,15 +1650,17 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
     );
 
     float max_value = -FLT_MAX;
+    float min_value = FLT_MAX;
 
     for (size_t t = 0; t < interpolator.keyframe_count(); t++) {
         max_value = std::max(interpolator.get_keyframe(t).second, max_value);
+        min_value = std::min(interpolator.get_keyframe(t).second, min_value);
     }
 
     auto kf_start = interpolator.get_keyframe(0);
     draw_list->AddLine(
-        ImVec2(pos.x, pos.y + interpolate_number(kf_start.second, 0, max_value, size.y, 1)),
-        ImVec2(pos.x + size.x * kf_start.first, pos.y + interpolate_number(kf_start.second, 0, max_value, size.y, 1)),
+        ImVec2(pos.x, pos.y + interpolate_number(kf_start.second, min_value, max_value, size.y, 1)),
+        ImVec2(pos.x + size.x * kf_start.first, pos.y + interpolate_number(kf_start.second, min_value, max_value, size.y, 1)),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
     );
 
@@ -1669,16 +1671,16 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
         float f2 = kf_2.second;
 
         draw_list->AddLine(
-            ImVec2(pos.x + size.x * kf_1.first, pos.y + interpolate_number(f1, 0, max_value, size.y, 1)),
-            ImVec2(pos.x + size.x * kf_2.first, pos.y + interpolate_number(f2, 0, max_value, size.y, 1)),
+            ImVec2(pos.x + size.x * kf_1.first, pos.y + interpolate_number(f1, min_value, max_value, size.y, 1)),
+            ImVec2(pos.x + size.x * kf_2.first, pos.y + interpolate_number(f2, min_value, max_value, size.y, 1)),
             ImGui::GetColorU32(ImGuiCol_PlotLines)
         );
     }
 
     float end_value = interpolator.get_keyframe(interpolator.keyframe_count() - 1).second;
     draw_list->AddLine(
-        ImVec2(pos.x + size.x * interpolator.get_keyframe(interpolator.keyframe_count() - 1).first, pos.y + interpolate_number(end_value, 0, max_value, size.y, 1)),
-        ImVec2(pos.x + size.x, pos.y + interpolate_number(end_value, 0, max_value, size.y, 1)),
+        ImVec2(pos.x + size.x * interpolator.get_keyframe(interpolator.keyframe_count() - 1).first, pos.y + interpolate_number(end_value, min_value, max_value, size.y, 1)),
+        ImVec2(pos.x + size.x, pos.y + interpolate_number(end_value, min_value, max_value, size.y, 1)),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
     );
 
@@ -1694,6 +1696,24 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
         );
     }
     ImGui::Dummy(ImVec2(0, 43));
+}
+
+void editor::keyframe_visualizer(keyframe_interpolator<point> interpolator, size_t selected_index) {
+    
+    //Split the point into an X and Y visualizer
+    keyframe_interpolator x_inter(interpolator.get_keyframe(0).second.x);
+    keyframe_interpolator y_inter(interpolator.get_keyframe(0).second.y);
+
+    x_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
+    y_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
+
+    for (size_t s = 1; s < interpolator.keyframe_count(); s++) {
+        auto kf = interpolator.get_keyframe(s);
+        x_inter.add(kf.first, kf.second.x);
+        y_inter.add(kf.first, kf.second.y);
+    }
+    keyframe_visualizer(x_inter, selected_index);
+    keyframe_visualizer(y_inter, selected_index);
 }
 
 template <class inter_t>
@@ -1843,6 +1863,39 @@ void editor::keyframe_editor(
     float value = interpolator->get_keyframe(selected_index).second;
     if (
         ImGui::DragFloat(
+            label.c_str(), &value
+        )
+        ) {
+        changes_mgr.mark_as_changed();
+        interpolator->set_keyframe_value(selected_index, value);
+    }
+    set_tooltip(
+        "Keyframe value."
+    );
+
+    float time = interpolator->get_keyframe(selected_index).first;
+    if (ImGui::SliderFloat("Time", &time, 0, 1)) {
+        changes_mgr.mark_as_changed();
+        interpolator->set_keyframe_time(selected_index, time, (int*)&selected_index);
+    }
+    set_tooltip(
+        "Keyframe time.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+}
+
+
+void editor::keyframe_editor(
+    const string& label,
+    keyframe_interpolator<point>* interpolator,
+    size_t& selected_index) {
+
+    keyframe_visualizer(*interpolator, selected_index);
+    keyframe_navigation(label, interpolator, selected_index);
+
+    point value = interpolator->get_keyframe(selected_index).second;
+    if (
+        ImGui::DragFloat2(
             label.c_str(), (float*)&value
         )
         ) {

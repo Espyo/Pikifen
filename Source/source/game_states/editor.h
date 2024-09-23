@@ -675,6 +675,7 @@ protected:
     bool saveable_tree_node(const string &category, const string &label);
     void keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t selected_index);
     void keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t selected_index);
+    void keyframe_visualizer(keyframe_interpolator<point> interpolator, size_t selected_index);
     template <class inter_t>
     void keyframe_navigation(
         const string& label, 
@@ -689,6 +690,11 @@ protected:
     void keyframe_editor(
         const string& label,
         keyframe_interpolator<ALLEGRO_COLOR>* interpolator,
+        size_t& selected_index
+    );
+    void keyframe_editor(
+        const string& label,
+        keyframe_interpolator<point>* interpolator,
         size_t& selected_index
     );
 
