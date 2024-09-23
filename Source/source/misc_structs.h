@@ -107,6 +107,9 @@ enum MAKER_TOOL_TYPE {
     //Show path info.
     MAKER_TOOL_TYPE_PATH_INFO,
     
+    //Set song position near loop.
+    MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
+    
     //Teleport to mouse cursor.
     MAKER_TOOL_TYPE_TELEPORT,
     

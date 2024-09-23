@@ -701,7 +701,6 @@ bool audio_manager::set_current_song(const string &name, bool from_start) {
             break;
         }
         }
-        //TODO
     }
     
     //Get the new song to play, if applicable.
@@ -741,6 +740,21 @@ bool audio_manager::set_current_song(const string &name, bool from_start) {
     }
     
     return true;
+}
+
+
+/**
+ * @brief Sets the current position of all songs to be near the loop point.
+ * This is helpful for when you want to test said loop point.
+ */
+void audio_manager::set_song_pos_near_loop() {
+    for(auto s : songs) {
+        double pos = std::max(0.0, s.second.loop_end - 4.0f);
+        al_seek_audio_stream_secs(s.second.main_track, pos);
+        for(auto const &m : s.second.mix_tracks) {
+            al_seek_audio_stream_secs(m.second, pos);
+        }
+    }
 }
 
 
@@ -1217,6 +1231,9 @@ void song::load_from_data_node(data_node* node) {
             game.audio.streams.get(mix_track_node->value, mix_track_node);
     }
     
+    if(loop_end == 0.0f) {
+        loop_end = al_get_audio_stream_length_secs(main_track);
+    }
     if(loop_end < loop_start) {
         loop_start = 0.0f;
     }

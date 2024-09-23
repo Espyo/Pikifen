@@ -522,6 +522,10 @@ void gameplay_state::process_system_key_press(const int keycode) {
             game.maker_tools.used_helping_tools = true;
             break;
             
+        } case MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP: {
+            game.audio.set_song_pos_near_loop();
+            break;
+            
         } case MAKER_TOOL_TYPE_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor.w_pos, nullptr, true);

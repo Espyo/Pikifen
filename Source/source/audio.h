@@ -391,6 +391,7 @@ public:
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(const string &name, bool from_start = true);
+    void set_song_pos_near_loop();
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);

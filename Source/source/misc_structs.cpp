@@ -127,6 +127,7 @@ const string NAMES[N_MAKER_TOOLS] = {
     "mob_info",
     "new_pikmin",
     "path_info",
+    "set_song_pos_near_loop",
     "teleport"
 };
 
