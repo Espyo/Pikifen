@@ -116,15 +116,15 @@ void particle::tick(const float delta_t) {
         return;
     }
 
-    pos += speed * delta_t;
+    pos += velocity * delta_t;
     pos = rotate_point(pos, deg_to_rad(angular_speed) * delta_t);
 
-    speed.x *= 1 - (delta_t* friction);
-    speed.y *= 1 - (delta_t* friction);
-    speed.y += delta_t* acceleration.y;
-    speed.x += delta_t * acceleration.x;
+    velocity.x *= 1 - (delta_t* friction);
+    velocity.y *= 1 - (delta_t* friction);
+    velocity.y += delta_t* acceleration.y;
+    velocity.x += delta_t * acceleration.x;
 
-    speed = rotate_point(speed, deg_to_rad(angular_speed) * delta_t);
+    velocity = rotate_point(velocity, deg_to_rad(angular_speed) * delta_t);
 }
 
 
@@ -256,14 +256,14 @@ void particle_generator::emit(particle_manager &manager) {
         float angle_to_use = angle + randomf(-angle_deviation, angle_deviation);
         if (follow_angle) angle_to_use += (*follow_angle);
 
-        new_p.speed.x +=
+        new_p.velocity.x +=
             randomf(-speed_deviation.x, speed_deviation.x);
-        new_p.speed.y +=
+        new_p.velocity.y +=
             randomf(-speed_deviation.y, speed_deviation.y);
 
-        new_p.speed =
+        new_p.velocity =
             rotate_point(
-                new_p.speed, angle_to_use
+                new_p.velocity, angle_to_use
             );
         float outwards_angle = get_angle(new_p.pos);
 
@@ -271,7 +271,7 @@ void particle_generator::emit(particle_manager &manager) {
             outwards_angle = randomf(-180, 180);
         }
 
-        new_p.speed += angle_to_coordinates(outwards_angle,
+        new_p.velocity += angle_to_coordinates(outwards_angle,
             outwards_speed + randomf(-outwards_speed_deviation, outwards_speed_deviation)
         );
 
@@ -337,7 +337,7 @@ void particle_generator::load_from_data_node(
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("acceleration", base_particle.acceleration);
-    prs.set("velocity", base_particle.speed);
+    prs.set("velocity", base_particle.velocity);
     prs.set("angular_speed", base_particle.angular_speed);
     prs.set("blend_type", blend_int);
 
@@ -451,7 +451,7 @@ void particle_generator::save_to_data_node(
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
     base_particle_node->add(new data_node("acceleration", p2s(base_particle.acceleration)));
-    base_particle_node->add(new data_node("velocity", p2s(base_particle.speed)));
+    base_particle_node->add(new data_node("velocity", p2s(base_particle.velocity)));
     base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
     base_particle_node->add(new data_node("angular_speed", f2s(base_particle.angular_speed)));
 

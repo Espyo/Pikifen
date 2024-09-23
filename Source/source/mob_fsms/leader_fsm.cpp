@@ -2162,7 +2162,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     p.color.set_keyframe_value(0, change_alpha(spray_type_ref.main_color, 0));
     p.color.add(0.1f, spray_type_ref.main_color);
     p.color.add(1, change_alpha(spray_type_ref.main_color, 0));
-    p.speed.x = spray_type_ref.distance_range * 0.8;
+    p.velocity.x = spray_type_ref.distance_range * 0.8;
     particle_generator pg(0, p, 32);
     pg.angle = shoot_angle;
     pg.angle_deviation = spray_type_ref.angle_range / 2.0f;

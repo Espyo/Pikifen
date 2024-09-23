@@ -184,7 +184,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
+        p.velocity = rotate_point(point(p_speed, 0.0f), p_angle);
         p.time = p.duration;
         p.type = PARTICLE_TYPE_BITMAP;
         p.z = this->z + this->height / 2.0f;
@@ -579,7 +579,7 @@ void leader::dismiss() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.speed = rotate_point(point(par_speed, 0.0f), par_angle);
+        par.velocity = rotate_point(point(par_speed, 0.0f), par_angle);
         par.time = par.duration;
         par.type = PARTICLE_TYPE_BITMAP;
         par.z = z + height / 2.0f;

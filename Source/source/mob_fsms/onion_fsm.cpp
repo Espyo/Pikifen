@@ -97,7 +97,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
-    p.speed.x = 70;
+    p.velocity.x = 70;
     particle_generator pg(0, p, 15);
     pg.emission.number_deviation = 5;
     pg.angle = 0;

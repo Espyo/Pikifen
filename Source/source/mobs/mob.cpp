@@ -3177,7 +3177,7 @@ void mob::start_dying() {
     p.bitmap = game.sys_assets.bmp_sparkle;
     p.color.set_keyframe_value(0, al_map_rgb(255, 192, 192));
     p.color.add(1, al_map_rgba(255, 192, 192, 0));
-    p.speed.x = 100;
+    p.velocity.x = 100;
     particle_generator pg(0, p, 25);
     pg.emission.number_deviation = 5;
     pg.angle = 0;

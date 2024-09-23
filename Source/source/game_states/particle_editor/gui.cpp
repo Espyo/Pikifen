@@ -834,7 +834,7 @@ void particle_editor::process_gui_panel_item() {
             //Speed value.
             if (
                 ImGui::DragFloat2(
-                    "Speed", (float*)&loaded_gen.base_particle.speed, 1, -FLT_MAX, FLT_MAX
+                    "Speed", (float*)&loaded_gen.base_particle.velocity, 1, -FLT_MAX, FLT_MAX
                 )
                 ) {
                 changes_mgr.mark_as_changed();

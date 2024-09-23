@@ -200,7 +200,7 @@ struct particle {
     keyframe_interpolator<float> size;
     
     //Current movement speed.
-    point speed;
+    point velocity;
 
     //Current rotational speed
     float angular_speed = 0.0f;

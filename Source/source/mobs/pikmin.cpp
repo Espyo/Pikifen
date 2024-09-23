@@ -512,8 +512,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
             radius * 2, 2.0f
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;
-        par.speed.x = randomf(-20, 20);
-        par.speed.y = randomf(-70, -30);
+        par.velocity.x = randomf(-20, 20);
+        par.velocity.y = randomf(-70, -30);
         par.friction = 0.8;
         par.acceleration.y = -0.2;
         par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
