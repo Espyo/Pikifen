@@ -46,7 +46,7 @@ particle::particle(
     priority(priority),
     color(initial_color),
     linear_speed(point(0,0)),
-    orbital_velocity(0),
+    orbital_speed(0),
     outwards_speed(0){
 }
 
@@ -128,7 +128,7 @@ void particle::tick(const float delta_t) {
     total_velocity += angle_to_coordinates(outwards_angle, outwards_speed.get(1 - (time / duration)));
 
     //Add 90 degrees to make the angle tangential
-    total_velocity += angle_to_coordinates(outwards_angle + (TAU / 4), orbital_velocity.get(1 - (time / duration)));
+    total_velocity += angle_to_coordinates(outwards_angle + (TAU / 4), orbital_speed.get(1 - (time / duration)));
 
     //Accumulate and apply friction
     total_velocity -= total_friction_applied;
@@ -284,9 +284,9 @@ void particle_generator::emit(particle_manager &manager) {
         }
 
         float orb_dev = randomf(-orbital_speed_deviation, orbital_speed_deviation);
-        for (size_t s = 0; s < new_p.orbital_velocity.keyframe_count(); s++) {
-            auto kf = new_p.orbital_velocity.get_keyframe(s);
-            new_p.orbital_velocity.set_keyframe_value(s, kf.second + orb_dev);
+        for (size_t s = 0; s < new_p.orbital_speed.keyframe_count(); s++) {
+            auto kf = new_p.orbital_speed.get_keyframe(s);
+            new_p.orbital_speed.set_keyframe_value(s, kf.second + orb_dev);
         }
 
         manager.add(new_p);
@@ -434,7 +434,7 @@ void particle_generator::load_from_data_node(
             ki_orb_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
         }
     }
-    base_particle.orbital_velocity = ki_orb_v;
+    base_particle.orbital_speed = ki_orb_v;
     
     if(bitmap_node) {
         if(load_resources) {
@@ -544,8 +544,8 @@ void particle_generator::save_to_data_node(
     data_node* orb_speed_node = new data_node("orbital_speed", "");
     base_particle_node->add(orb_speed_node);
 
-    for (size_t c = 0; c < base_particle.orbital_velocity.keyframe_count(); c++) {
-        auto keyframe = base_particle.orbital_velocity.get_keyframe(c);
+    for (size_t c = 0; c < base_particle.orbital_speed.keyframe_count(); c++) {
+        auto keyframe = base_particle.orbital_speed.get_keyframe(c);
         orb_speed_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
     }
 

@@ -203,7 +203,7 @@ struct particle {
     keyframe_interpolator<float> outwards_speed;
 
     //Orbital velocity over time.
-    keyframe_interpolator<float> orbital_velocity;
+    keyframe_interpolator<float> orbital_speed;
 
     //Current color.
     keyframe_interpolator<ALLEGRO_COLOR> color;

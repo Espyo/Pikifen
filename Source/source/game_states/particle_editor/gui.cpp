@@ -814,7 +814,7 @@ void particle_editor::process_gui_panel_item() {
             ImGui::Dummy(ImVec2(0, 12));
 
             if (saveable_tree_node("orbSpeed", "Orbital Speed")) {
-                keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_velocity, selected_oribital_velocity_keyframe);
+                keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_speed, selected_oribital_velocity_keyframe);
                 ImGui::TreePop();
             }
             ImGui::Dummy(ImVec2(0, 12));
