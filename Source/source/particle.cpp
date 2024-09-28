@@ -402,22 +402,6 @@ void particle_generator::load_from_data_node(
         }
     }
 
-    if (linear_speed_node->get_nr_of_children() == 0) {
-        point acceleration;
-        point velocity;
-        prs.set("acceleration", acceleration);
-        prs.set("velocity", velocity);
-
-        if (velocity != point(0,0)) {
-            ki_lin_v.set_keyframe_value(0, velocity);
-            ki_lin_v.add(1, point(
-                velocity.x + acceleration.x * base_particle.duration, 
-                velocity.y + acceleration.y * base_particle.duration)
-            );
-        }
-
-    }
-
     base_particle.linear_speed = ki_lin_v;
 
     data_node* outwards_speed_node = base_particle_node->get_child_by_name("outwards_speed");
