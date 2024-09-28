@@ -228,12 +228,13 @@ void particle_editor::create_particle_generator(
     new_gen.name = replace_all(requested_name, " ", "_");
     new_gen.base_particle.duration = 1;
     new_gen.base_particle.set_bitmap("");
-    new_gen.base_particle.size.set_keyframe_value(0, 32);
+    new_gen.base_particle.size = keyframe_interpolator<float>(32);
+    new_gen.base_particle.color = keyframe_interpolator<ALLEGRO_COLOR>(map_alpha(255));
     new_gen.base_particle.color.add(1, map_alpha(0));
 
     new_gen.emission.interval = 0.5f;
     new_gen.emission.number = 1;
-    new_gen.outwards_speed = 32;
+    new_gen.base_particle.outwards_speed = keyframe_interpolator<float>(32);
 
     loaded_gen = new_gen;
 
@@ -255,6 +256,9 @@ void particle_editor::init_editor() {
     generator_running = true;
     selected_color_keyframe = 0;
     selected_size_keyframe = 0;
+    selected_linear_speed_keyframe = 0;
+    selected_oribital_velocity_keyframe = 0;
+    selected_outward_velocity_keyframe = 0;
 }
 
 /**

@@ -94,6 +94,23 @@ struct keyframe_interpolator {
         keyframe_eases.insert(keyframe_eases.begin() + new_idx, ease);
     }
 
+    void add_or_set(
+        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
+        int* out_idx = nullptr
+    ) {
+        for(size_t k = 0; k < keyframe_times.size(); ++k) {
+            if (keyframe_times[k] == t) {
+                if(out_idx)
+                    *out_idx = k;
+                set_keyframe_value(k, value);
+                return;
+            }
+        }
+
+        add(t, value, ease, out_idx);
+    }
+
+
     void remove(int idx) {
         keyframe_times.erase(keyframe_times.begin() + idx);
         keyframe_values.erase(keyframe_values.begin() + idx);

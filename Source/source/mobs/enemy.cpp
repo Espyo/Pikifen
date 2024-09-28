@@ -97,7 +97,7 @@ void enemy::finish_dying_class_specifics() {
         fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
     particle par(
-        PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
+        PARTICLE_TYPE_BITMAP, pos, LARGE_FLOAT,
         clamp(
             radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
             ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
@@ -105,11 +105,14 @@ void enemy::finish_dying_class_specifics() {
         2, PARTICLE_PRIORITY_MEDIUM
     );
     par.bitmap = game.sys_assets.bmp_enemy_spirit;
-    par.velocity.x = 0;
-    par.velocity.y = -50;
-    par.friction = 0.5;
-    par.acceleration = point(0,0);
-    par.color.set_keyframe_value(0, al_map_rgb(255, 192, 255));
+    par.friction = 0.5f;
+    par.linear_speed = keyframe_interpolator<point>(point(-50, -50));
+    par.linear_speed.add(0.5f, point(50, -50));
+    par.linear_speed.add(1, point(-50, -50));
+
+    par.color = keyframe_interpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
+    par.color.add(0.1f, al_map_rgb(255, 192, 255));
+    par.color.add(0.6f, al_map_rgb(255, 192, 255));
     par.color.add(1, al_map_rgba(255, 192, 255, 0));
     game.states.gameplay->particles.add(par);
 }

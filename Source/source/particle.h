@@ -178,12 +178,6 @@ struct particle {
 
     //Bitmap string
     string file = "";
-
-    //Every second, speed is lost by this much.
-    float friction = 1.0f;
-    
-    //Every second, velocity is increased by this.
-    point acceleration;
     
     //Current state.
     
@@ -193,20 +187,32 @@ struct particle {
     //Current coordinates.
     point pos;
     
+    //Where the particle generator was when this was emitted.
+    point origin;
+
     //Current Z.
     float z = 0.0f;
     
     //Current size, in diameter.
     keyframe_interpolator<float> size;
     
-    //Current movement speed.
-    point velocity;
+    //Linear velocity over time.
+    keyframe_interpolator<point> linear_speed;
 
-    //Current rotational speed
-    float angular_speed = 0.0f;
-    
+    //Outwards velocity over time.
+    keyframe_interpolator<float> outwards_speed;
+
+    //Orbital velocity over time.
+    keyframe_interpolator<float> orbital_velocity;
+
     //Current color.
     keyframe_interpolator<ALLEGRO_COLOR> color;
+
+    //Friction
+    float friction = 0.0f;
+
+    //How much the particles have been slowed since being created
+    point total_friction_applied = point(0,0);
     
     //Blend type
     PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
@@ -329,26 +335,20 @@ public:
     //Maximum random deviation of friction.
     float friction_deviation = 0.0f;
     
-    //Maximum random deviation of gravity.
-    point acceleration_deviation;
-    
     //Maximum random deviation of size.
-    float size_deviation = 0;  
-    
-    //Apply this speed away from the particle generator.
-    float outwards_speed = 0;
+    float size_deviation = 0.0f;  
 
     //Maximum random deviation of outward_speed.
-    float outwards_speed_deviation = 0;
+    float outwards_speed_deviation = 0.0f;
+
+    //Maximum random deviation of orbital speed.
+    float orbital_speed_deviation = 0.0f;
 
     //Maximum random deviation of speed.
-    point speed_deviation;
-    
-    //Angle they move at.
-    float angle = 0.0f;
-    
-    //Maximum random deviation of angle.
-    float angle_deviation = 0.0f;
+    point linear_speed_deviation = point(0,0);
+
+    //How many degress linear speed can be rotated by.
+    float linear_speed_angle_deviation = 0.0f;
 
     //--- Function declarations ---
 

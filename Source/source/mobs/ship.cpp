@@ -222,7 +222,7 @@ void ship::heal_leader(leader* l) const {
     p.bitmap = game.sys_assets.bmp_sparkle;
     p.color.set_keyframe_value(0, al_map_rgba(192, 255, 192, 255));
     p.color.add(1, al_map_rgba(192, 255, 192, 0));
-    p.velocity = point(0, -24);
+    p.linear_speed = keyframe_interpolator<point>(point(0, -24));
     
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;

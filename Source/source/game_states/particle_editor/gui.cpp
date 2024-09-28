@@ -771,6 +771,54 @@ void particle_editor::process_gui_panel_item() {
 
             ImGui::Dummy(ImVec2(0, 4));
 
+            if (saveable_tree_node("lSpeed", "Linear Speed")) {
+                keyframe_editor("Linear Speed", &loaded_gen.base_particle.linear_speed, selected_linear_speed_keyframe);
+
+                ImGui::Indent();
+                //Angle deviation value.
+                ImGui::SetNextItemWidth(150);
+                if (
+                    ImGui::DragFloat2(
+                        "Linear Speed deviation", (float*)&loaded_gen.linear_speed_deviation, 0.5f, 0.0f, FLT_MAX
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "The linear speed a particle is emitted with can vary by this much.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                ImGui::Unindent();
+
+                //Angle deviation value.
+                if (
+                    ImGui::SliderAngle(
+                        "Angle deviation", &loaded_gen.linear_speed_angle_deviation, 0, 180
+                    )
+                    ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's lifespan can vary by this amount of seconds.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+
+                ImGui::TreePop();
+            }
+            ImGui::Dummy(ImVec2(0, 12));
+
+            if (saveable_tree_node("outSpeed", "Outwards Speed")) {
+                keyframe_editor("Outwards Speed", &loaded_gen.base_particle.outwards_speed, selected_outward_velocity_keyframe);
+                ImGui::TreePop();
+            }
+            ImGui::Dummy(ImVec2(0, 12));
+
+            if (saveable_tree_node("orbSpeed", "Orbital Speed")) {
+                keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_velocity, selected_oribital_velocity_keyframe);
+                ImGui::TreePop();
+            }
+            ImGui::Dummy(ImVec2(0, 12));
+
             //Friction value.
             if (
                 ImGui::DragFloat(
@@ -783,8 +831,8 @@ void particle_editor::process_gui_panel_item() {
                 "Slowing factor applied to particles.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+            ImGui::EndTabItem();
 
-            ImGui::Indent();
             //Friction deviation value.
             ImGui::SetNextItemWidth(75);
             if (
@@ -801,140 +849,6 @@ void particle_editor::process_gui_panel_item() {
             ImGui::Unindent();
             ImGui::Dummy(ImVec2(0, 4));
 
-            //Gravity value.
-            if (
-                ImGui::DragFloat2(
-                    "Gravity", (float*)&loaded_gen.base_particle.acceleration, 1
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Downards speed applied to particles.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-
-            ImGui::Indent();
-            //Gravity deviation value.
-            ImGui::SetNextItemWidth(150);
-            if (
-                ImGui::DragFloat2(
-                    "Gravity deviation", (float*)&loaded_gen.acceleration_deviation, 0.5f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "A particle's gravity can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-            ImGui::Dummy(ImVec2(0, 4));
-
-            //Speed value.
-            if (
-                ImGui::DragFloat2(
-                    "Speed", (float*)&loaded_gen.base_particle.velocity, 1, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Inital particle speed.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-
-            ImGui::Indent();
-            //Speed deviation value.
-            ImGui::SetNextItemWidth(150);
-            if (
-                ImGui::DragFloat2(
-                    "Speed deviation", (float*)&loaded_gen.speed_deviation, 0.5f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "A particle's speed can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-            ImGui::Dummy(ImVec2(0, 4));
-
-            //Angle value.
-            if (
-                ImGui::SliderAngle(
-                    "Angle", &loaded_gen.angle
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The angle a particle is emitted at.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-
-            ImGui::Indent();
-            //Angle deviation value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::SliderAngle(
-                    "Angle deviation", &loaded_gen.angle_deviation, 0
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The angle a particle is emitted at can vary by this much.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-            ImGui::Dummy(ImVec2(0, 4));
-
-            //Angular speed value.
-            if (
-                ImGui::DragFloat(
-                    "Anglular speed", &loaded_gen.base_particle.angular_speed, 1, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The direction a particle moves in changes by this many degrees per second",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Dummy(ImVec2(0, 4));
-
-            //Outwards speed value.
-            if (
-                ImGui::DragFloat(
-                    "Outwards Speed", &loaded_gen.outwards_speed, 1, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "How fast the particle initially moves away from the center.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-
-            ImGui::Indent();
-            //Speed deviation value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::DragFloat(
-                    "Outwards Speed deviation", &loaded_gen.outwards_speed_deviation, 0.5f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "A particle's speed can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-
-            ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
     }

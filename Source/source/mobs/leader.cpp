@@ -153,12 +153,12 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
         ALLEGRO_COLOR c = al_map_rgba(
-            WHISTLE::DOT_COLORS[color_idx][0] / 255.0f,
-            WHISTLE::DOT_COLORS[color_idx][1] / 255.0f,
-            WHISTLE::DOT_COLORS[color_idx][2] / 255.0f,
-            LEADER::SWARM_PARTICLE_ALPHA
+            WHISTLE::DOT_COLORS[color_idx][0],
+            WHISTLE::DOT_COLORS[color_idx][1],
+            WHISTLE::DOT_COLORS[color_idx][2],
+            LEADER::SWARM_PARTICLE_ALPHA * 255
         );
-        p.color.add(0, c);
+        p.color = keyframe_interpolator<ALLEGRO_COLOR>(c);
         p.color.add(1, change_alpha(c,0));
         p.duration =
             randomf(
@@ -184,7 +184,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.velocity = rotate_point(point(p_speed, 0.0f), p_angle);
+        p.linear_speed = keyframe_interpolator<point>(rotate_point(point(p_speed, 0.0f), p_angle));
+
         p.time = p.duration;
         p.type = PARTICLE_TYPE_BITMAP;
         p.z = this->z + this->height / 2.0f;
@@ -579,7 +580,7 @@ void leader::dismiss() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.velocity = rotate_point(point(par_speed, 0.0f), par_angle);
+        par.linear_speed = keyframe_interpolator<point>(rotate_point(point(par_speed, 0.0f), par_angle));
         par.time = par.duration;
         par.type = PARTICLE_TYPE_BITMAP;
         par.z = z + height / 2.0f;

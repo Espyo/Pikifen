@@ -90,6 +90,15 @@ private:
     //Selected color keyframe
     size_t selected_size_keyframe = 0;
 
+    //Selected color keyframe
+    size_t selected_linear_speed_keyframe = 0;
+
+    //Selected color keyframe
+    size_t selected_oribital_velocity_keyframe = 0;
+
+    //Selected color keyframe
+    size_t selected_outward_velocity_keyframe = 0;
+
     //Position of the reload widget.
     point reload_widget_pos;
     

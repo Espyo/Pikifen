@@ -44,8 +44,10 @@ particle::particle(
     size(initial_size),
     z(z),
     priority(priority),
-    color(initial_color){
-    
+    color(initial_color),
+    linear_speed(point(0,0)),
+    orbital_velocity(0),
+    outwards_speed(0){
 }
 
 
@@ -116,15 +118,25 @@ void particle::tick(const float delta_t) {
         return;
     }
 
-    pos += velocity * delta_t;
-    pos = rotate_point(pos, deg_to_rad(angular_speed) * delta_t);
+    point total_velocity = linear_speed.get(1 - (time/duration));
 
-    velocity.x *= 1 - (delta_t* friction);
-    velocity.y *= 1 - (delta_t* friction);
-    velocity.y += delta_t* acceleration.y;
-    velocity.x += delta_t * acceleration.x;
+    float outwards_angle = get_angle(pos - origin);
 
-    velocity = rotate_point(velocity, deg_to_rad(angular_speed) * delta_t);
+    if (pos == origin) {
+        outwards_angle = randomf(-180, 180);
+    }
+    total_velocity += angle_to_coordinates(outwards_angle, outwards_speed.get(1 - (time / duration)));
+
+    //Add 90 degrees to make the angle tangential
+    total_velocity += angle_to_coordinates(outwards_angle + (TAU / 4), orbital_velocity.get(1 - (time / duration)));
+
+    //Accumulate and apply friction
+    total_velocity -= total_friction_applied;
+    point new_friction = total_velocity * (delta_t * friction);
+    total_friction_applied += new_friction; 
+    total_velocity -= new_friction;
+
+    pos += total_velocity * delta_t;
 }
 
 
@@ -228,17 +240,13 @@ void particle_generator::emit(particle_manager &manager) {
                 randomf(-duration_deviation, duration_deviation)
             );
         new_p.time = new_p.duration;
-        new_p.friction +=
-            randomf(-friction_deviation, friction_deviation);
-        new_p.acceleration.x +=
-            randomf(-acceleration_deviation.x, acceleration_deviation.x);
-        new_p.acceleration.y +=
-            randomf(-acceleration_deviation.y, acceleration_deviation.y);
+
         new_p.rotation +=     
             randomf(-rotation_deviation, rotation_deviation);
 
 
         new_p.pos = base_p_pos;
+        new_p.origin = base_p_pos;
         point offset = emission.get_emission_offset();
         if(follow_angle) {
             offset = rotate_point(offset, *follow_angle);
@@ -253,27 +261,33 @@ void particle_generator::emit(particle_manager &manager) {
             new_p.size.set_keyframe_value(s, kf.second + s_dev);
         }
 
-        float angle_to_use = angle + randomf(-angle_deviation, angle_deviation);
+        float angle_to_use = 
+           randomf(-linear_speed_angle_deviation, linear_speed_angle_deviation);
         if (follow_angle) angle_to_use += (*follow_angle);
 
-        new_p.velocity.x +=
-            randomf(-speed_deviation.x, speed_deviation.x);
-        new_p.velocity.y +=
-            randomf(-speed_deviation.y, speed_deviation.y);
-
-        new_p.velocity =
-            rotate_point(
-                new_p.velocity, angle_to_use
+        float v_dev_x = randomf(-linear_speed_deviation.x, linear_speed_deviation.x);
+        float v_dev_y = randomf(-linear_speed_deviation.y, linear_speed_deviation.y);
+        for (size_t s = 0; s < new_p.linear_speed.keyframe_count(); s++) {
+            auto kf = new_p.linear_speed.get_keyframe(s);
+            point base = kf.second;
+            point result = point(base.x + v_dev_x, base.y + v_dev_y);
+            result = rotate_point(
+                result, angle_to_use
             );
-        float outwards_angle = get_angle(new_p.pos);
-
-        if (new_p.pos == point(0, 0)) {
-            outwards_angle = randomf(-180, 180);
+            new_p.linear_speed.set_keyframe_value(s, result);
         }
 
-        new_p.velocity += angle_to_coordinates(outwards_angle,
-            outwards_speed + randomf(-outwards_speed_deviation, outwards_speed_deviation)
-        );
+        float out_dev = randomf(-outwards_speed_deviation, outwards_speed_deviation);
+        for (size_t s = 0; s < new_p.outwards_speed.keyframe_count(); s++) {
+            auto kf = new_p.outwards_speed.get_keyframe(s);
+            new_p.outwards_speed.set_keyframe_value(s, kf.second + out_dev);
+        }
+
+        float orb_dev = randomf(-orbital_speed_deviation, orbital_speed_deviation);
+        for (size_t s = 0; s < new_p.orbital_velocity.keyframe_count(); s++) {
+            auto kf = new_p.orbital_velocity.get_keyframe(s);
+            new_p.orbital_velocity.set_keyframe_value(s, kf.second + orb_dev);
+        }
 
         manager.add(new_p);
     }
@@ -296,10 +310,10 @@ void particle_generator::load_from_data_node(
 
     //Standard data.
     reader_setter grs(node);
-    data_node* p_node = node->get_child_by_name("base");
-    reader_setter prs(p_node);
-    data_node* e_node = node->get_child_by_name("emission");
-    reader_setter ers(e_node);
+    data_node* base_particle_node = node->get_child_by_name("base");
+    reader_setter prs(base_particle_node);
+    data_node* emission_node = node->get_child_by_name("emission");
+    reader_setter ers(emission_node);
     
     float emission_interval_float = 0.0f;
     size_t number_int = 1;
@@ -336,15 +350,12 @@ void particle_generator::load_from_data_node(
     prs.set("rotation", base_particle.rotation);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
-    prs.set("acceleration", base_particle.acceleration);
-    prs.set("velocity", base_particle.velocity);
-    prs.set("angular_speed", base_particle.angular_speed);
     prs.set("blend_type", blend_int);
 
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
     base_particle.rotation = deg_to_rad(base_particle.rotation);
 
-    data_node* color_node = p_node->get_child_by_name("color");
+    data_node* color_node = base_particle_node->get_child_by_name("color");
     keyframe_interpolator ki_c(COLOR_WHITE);
     for(size_t c = 0; c < color_node->get_nr_of_children(); c++) {
         data_node* c_node = color_node->get_child(c);
@@ -360,7 +371,7 @@ void particle_generator::load_from_data_node(
     }
     base_particle.color = ki_c;
 
-    data_node* size_node = p_node->get_child_by_name("size");
+    data_node* size_node = base_particle_node->get_child_by_name("size");
     keyframe_interpolator ki_s(32.0f);
     for(size_t c = 0; c < size_node->get_nr_of_children(); c++) {
         data_node* s_node = size_node->get_child(c);
@@ -375,6 +386,71 @@ void particle_generator::load_from_data_node(
         }
     }
     base_particle.size = ki_s;
+
+    data_node* linear_speed_node = base_particle_node->get_child_by_name("linear_speed");
+    keyframe_interpolator ki_lin_v(point(0, 0));
+    for (size_t c = 0; c < linear_speed_node->get_nr_of_children(); c++) {
+        data_node* s_node = linear_speed_node->get_child(c);
+        point val = s2p(s_node->value);
+
+        if (c == 0) {
+            ki_lin_v.set_keyframe_value(0, val);
+            ki_lin_v.set_keyframe_time(0, s2f(s_node->name));
+        }
+        else {
+            ki_lin_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
+        }
+    }
+
+    if (linear_speed_node->get_nr_of_children() == 0) {
+        point acceleration;
+        point velocity;
+        prs.set("acceleration", acceleration);
+        prs.set("velocity", velocity);
+
+        if (velocity != point(0,0)) {
+            ki_lin_v.set_keyframe_value(0, velocity);
+            ki_lin_v.add(1, point(
+                velocity.x + acceleration.x * base_particle.duration, 
+                velocity.y + acceleration.y * base_particle.duration)
+            );
+        }
+
+    }
+
+    base_particle.linear_speed = ki_lin_v;
+
+    data_node* outwards_speed_node = base_particle_node->get_child_by_name("outwards_speed");
+    keyframe_interpolator ki_out_v(0.0f);
+    for (size_t c = 0; c < outwards_speed_node->get_nr_of_children(); c++) {
+        data_node* s_node = outwards_speed_node->get_child(c);
+        float val = s2f(s_node->value);
+
+        if (c == 0) {
+            ki_out_v.set_keyframe_value(0, val);
+            ki_out_v.set_keyframe_time(0, s2f(s_node->name));
+        }
+        else {
+            ki_out_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
+        }
+    }
+    base_particle.outwards_speed = ki_out_v;
+
+    data_node* orbital_speed_node = base_particle_node->get_child_by_name("orbital_speed");
+    keyframe_interpolator ki_orb_v(0.0f);
+    for (size_t c = 0; c < orbital_speed_node->get_nr_of_children(); c++) {
+        data_node* s_node = orbital_speed_node->get_child(c);
+        float val = s2f(s_node->value);
+
+        if (c == 0) {
+            ki_orb_v.set_keyframe_value(0, val);
+            ki_orb_v.set_keyframe_time(0, s2f(s_node->name));
+        }
+        else {
+            ki_orb_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
+        }
+    }
+    base_particle.orbital_velocity = ki_orb_v;
     
     if(bitmap_node) {
         if(load_resources) {
@@ -395,18 +471,15 @@ void particle_generator::load_from_data_node(
     grs.set("rotation_deviation", rotation_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
-    grs.set("gravity_deviation", acceleration_deviation);
     grs.set("size_deviation", size_deviation);
-    grs.set("speed_deviation", speed_deviation);
-    grs.set("angle", angle);
-    grs.set("angle_deviation", angle_deviation);
-    grs.set("outwards_speed", outwards_speed);
+    grs.set("angle_deviation", linear_speed_angle_deviation);
+    grs.set("linear_speed_deviation", linear_speed_deviation);
+    grs.set("orbital_speed_deviation", orbital_speed_deviation);
     grs.set("outwards_speed_deviation", outwards_speed_deviation);
     
-    angle = deg_to_rad(angle);
-    angle_deviation = deg_to_rad(angle_deviation);
     rotation_deviation = deg_to_rad(rotation_deviation);
-    
+    linear_speed_angle_deviation = deg_to_rad(linear_speed_angle_deviation);
+
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
             MOB_PARTICLE_GENERATOR_ID_STATUS +
@@ -450,10 +523,7 @@ void particle_generator::save_to_data_node(
     base_particle_node->add(new data_node("rotation", f2s(rad_to_deg(base_particle.rotation))));
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
-    base_particle_node->add(new data_node("acceleration", p2s(base_particle.acceleration)));
-    base_particle_node->add(new data_node("velocity", p2s(base_particle.velocity)));
     base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
-    base_particle_node->add(new data_node("angular_speed", f2s(base_particle.angular_speed)));
 
     data_node* color_node = new data_node("color", "");
     base_particle_node->add(color_node);
@@ -471,16 +541,38 @@ void particle_generator::save_to_data_node(
         size_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
     }
 
+    data_node* lin_speed_node = new data_node("linear_speed", "");
+    base_particle_node->add(lin_speed_node);
+
+    for (size_t c = 0; c < base_particle.linear_speed.keyframe_count(); c++) {
+        auto keyframe = base_particle.linear_speed.get_keyframe(c);
+        lin_speed_node->add(new data_node(f2s(keyframe.first), p2s(keyframe.second)));
+    }
+
+    data_node* out_speed_node = new data_node("outwards_speed", "");
+    base_particle_node->add(out_speed_node);
+
+    for (size_t c = 0; c < base_particle.outwards_speed.keyframe_count(); c++) {
+        auto keyframe = base_particle.outwards_speed.get_keyframe(c);
+        out_speed_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
+    }
+
+    data_node* orb_speed_node = new data_node("orbital_speed", "");
+    base_particle_node->add(orb_speed_node);
+
+    for (size_t c = 0; c < base_particle.orbital_velocity.keyframe_count(); c++) {
+        auto keyframe = base_particle.orbital_velocity.get_keyframe(c);
+        orb_speed_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
+    }
+
     node->add(new data_node("rotation_deviation", f2s(rad_to_deg(rotation_deviation))));
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
     node->add(new data_node("friction_deviation", f2s(friction_deviation)));
-    node->add(new data_node("acceleration_deviation", p2s(acceleration_deviation)));
     node->add(new data_node("size_deviation", f2s(size_deviation)));
-    node->add(new data_node("outwards_speed", f2s(outwards_speed)));
+    node->add(new data_node("orbital_speed_deviation", f2s(orbital_speed_deviation)));
     node->add(new data_node("outwards_speed_deviation", f2s(outwards_speed_deviation)));
-    node->add(new data_node("speed_deviation", p2s(speed_deviation)));
-    node->add(new data_node("angle", f2s(rad_to_deg(angle))));
-    node->add(new data_node("angle_deviation", f2s(rad_to_deg(angle_deviation))));
+    node->add(new data_node("angle_deviation", f2s(rad_to_deg(linear_speed_angle_deviation))));
+    node->add(new data_node("linear_speed_deviation", p2s(linear_speed_deviation)));
 }
 
 
