@@ -215,7 +215,6 @@ void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
     
     particle p(
-        PARTICLE_TYPE_BITMAP,
         l->pos, l->z + l->height, 16, 3,
         PARTICLE_PRIORITY_LOW
     );

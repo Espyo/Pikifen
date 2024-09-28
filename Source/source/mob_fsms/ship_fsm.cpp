@@ -135,7 +135,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     
     shi_ptr->mobs_being_beamed--;
     particle p(
-        PARTICLE_TYPE_BITMAP, shi_ptr->receptacle_final_pos,
+        shi_ptr->receptacle_final_pos,
         shi_ptr->z + shi_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;

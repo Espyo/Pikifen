@@ -187,7 +187,6 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         p.linear_speed = keyframe_interpolator<point>(rotate_point(point(p_speed, 0.0f), p_angle));
 
         p.time = p.duration;
-        p.type = PARTICLE_TYPE_BITMAP;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
     };
@@ -582,7 +581,6 @@ void leader::dismiss() {
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
         par.linear_speed = keyframe_interpolator<point>(rotate_point(point(par_speed, 0.0f), par_angle));
         par.time = par.duration;
-        par.type = PARTICLE_TYPE_BITMAP;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);
     }
@@ -818,7 +816,7 @@ void leader::start_auto_throwing() {
  */
 void leader::start_throw_trail() {
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, pos, z,
+        pos, z,
         radius, 0.6, PARTICLE_PRIORITY_LOW,
         change_alpha(type->main_color, 128)
     );

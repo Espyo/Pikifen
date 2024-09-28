@@ -1357,7 +1357,7 @@ void mob::do_attack_effects(
     //Create the particle.
     if(!useless) {
         particle smack_p(
-            PARTICLE_TYPE_BITMAP, particle_pos,
+            particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
             0, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
@@ -1372,7 +1372,7 @@ void mob::do_attack_effects(
         
     } else {
         particle ding_p(
-            PARTICLE_TYPE_BITMAP, particle_pos,
+            particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
             0, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
@@ -3171,7 +3171,7 @@ void mob::start_dying() {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, pos, z + height + 1,
+        pos, z + height + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;

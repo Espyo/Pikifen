@@ -663,7 +663,7 @@ void particle_editor::process_gui_panel_item() {
                 "\"Large_Fly.png\""
             );
 
-            if(loaded_gen.base_particle.type == PARTICLE_TYPE_BITMAP) {
+            if(loaded_gen.base_particle.bitmap) {
                 //Angle value.
                 if (
                     ImGui::SliderAngle(

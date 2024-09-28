@@ -28,22 +28,6 @@ using std::vector;
 class mob;
 
 
-//Types of particle. This controls their behavior and appearance.
-//TODO: REMOVE AFTER MOTION REVAMP IS DONE
-enum PARTICLE_TYPE {
-
-    //A simple circle.
-    PARTICLE_TYPE_CIRCLE,
-    
-    //A bitmap.
-    PARTICLE_TYPE_BITMAP,
-    
-    //An enemy spirit that moves up and wobbles.
-    PARTICLE_TYPE_ENEMY_SPIRIT
-
-};
-
-
 //Particle priorities.
 enum PARTICLE_PRIORITY {
 
@@ -163,10 +147,7 @@ struct particle {
     //--- Members ---
 
     //Behavior stats.
-    
-    //Type.
-    PARTICLE_TYPE type;
-    
+
     //How long its lifespan is.
     float duration = 0.0f;
     
@@ -227,7 +208,6 @@ struct particle {
     //--- Function declarations ---
     
     explicit particle(
-        const PARTICLE_TYPE type = PARTICLE_TYPE_BITMAP,
         const point &pos = point(), const float z = 0.0f,
         const float initial_size = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =

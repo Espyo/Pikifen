@@ -33,11 +33,10 @@
  * of higher ones.
  */
 particle::particle(
-    const PARTICLE_TYPE type, const point &pos, const float z,
+    const point &pos, const float z,
     const float initial_size, const float duration, const PARTICLE_PRIORITY priority,
     const ALLEGRO_COLOR initial_color
 ) :
-    type(type),
     duration(duration),
     time(duration),
     pos(pos),
@@ -69,35 +68,18 @@ void particle::draw() {
         break;
     }
 
-    switch(type) {
-      case PARTICLE_TYPE_CIRCLE: {
+    if (bitmap) {
+        draw_bitmap(
+            bitmap, pos, point(target_size, -1),
+            rotation, target_color
+        );
+    }
+    else {
         al_draw_filled_circle(
             pos.x, pos.y,
             target_size * 0.5,
             target_color
         );
-        break;
-        
-    } case PARTICLE_TYPE_BITMAP: {
-        draw_bitmap(
-            bitmap, pos, point(target_size, -1),
-            rotation, target_color
-        );
-        break;
-        
-    } case PARTICLE_TYPE_ENEMY_SPIRIT: {
-        float s = sin((time / duration) * TAU / 2);
-        draw_bitmap(
-            bitmap,
-            point(pos.x + s * 16, pos.y),
-            point(target_size, -1), s * TAU / 2,
-            change_alpha(
-                target_color, fabs(s) * target_color.a * 255
-            )
-        );
-        break;
-        
-    }
     }
 
     al_set_blender(old_op, old_source, old_dest);
@@ -160,15 +142,12 @@ void particle::set_bitmap(
 
     if(new_file_name.empty()) {
         file.clear();
-        type = PARTICLE_TYPE_CIRCLE;
         return;
     }
 
     if (new_file_name != file || !bitmap) {
         bitmap = game.bitmaps.get(new_file_name, node, node != nullptr);
     }
-
-    type = PARTICLE_TYPE_BITMAP;
 
     file = new_file_name;
 }
@@ -443,9 +422,7 @@ void particle_generator::load_from_data_node(
                     base_particle.file, bitmap_node
                 );
         }
-        base_particle.type = PARTICLE_TYPE_BITMAP;
     } else {
-        base_particle.type = PARTICLE_TYPE_CIRCLE;
         base_particle.file = "";
     }
     

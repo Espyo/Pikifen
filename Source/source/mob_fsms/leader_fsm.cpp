@@ -2154,7 +2154,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+        m->pos, m->z + m->height,
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
@@ -2475,7 +2475,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->pos, m->z,
+                m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.size.add(1, m->radius * 4);

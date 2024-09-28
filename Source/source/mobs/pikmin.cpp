@@ -475,7 +475,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
  */
 void pikmin::start_throw_trail() {
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, pos, z,
+        pos, z,
         radius, 0.6, PARTICLE_PRIORITY_LOW,
         change_alpha(type->main_color, 128)
     );
@@ -508,7 +508,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         pikmin_fsm::notify_leader_release(this, nullptr, nullptr);
         
         particle par(
-            PARTICLE_TYPE_BITMAP, pos, LARGE_FLOAT,
+            pos, LARGE_FLOAT,
             radius * 2, 2.0f
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;

@@ -1963,7 +1963,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     ((pikmin*) m)->start_throw_trail();
     
     particle par(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
+        m->pos, m->z + m->height + 1.0,
         12, 0.5, PARTICLE_PRIORITY_MEDIUM
     );
     par.bitmap = game.sys_assets.bmp_rock;
@@ -3523,7 +3523,7 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     particle pa(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+        m->pos, m->z + m->height,
         4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = game.sys_assets.bmp_rock;
@@ -3607,7 +3607,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a burst of particles to symbolize the maturation.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+            m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
@@ -3627,7 +3627,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a dribble of particles to symbolize the regression.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+            m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
@@ -4140,7 +4140,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle par(
-                PARTICLE_TYPE_BITMAP, m->pos, m->z,
+                m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             par.size.add(1, m->radius * 4);

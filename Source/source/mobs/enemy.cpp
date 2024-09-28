@@ -97,7 +97,7 @@ void enemy::finish_dying_class_specifics() {
         fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
     particle par(
-        PARTICLE_TYPE_BITMAP, pos, LARGE_FLOAT,
+        pos, LARGE_FLOAT,
         clamp(
             radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
             ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
