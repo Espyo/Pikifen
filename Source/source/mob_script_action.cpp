@@ -1699,11 +1699,19 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
     START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL;
+    float mob_speed_baseline = 0.0f;
     if(data.args.size() > 1) {
         options = (START_ANIM_OPTION) s2i(data.args[1]);
     }
+    if(data.args.size() > 2) {
+        if(s2b(data.args[2])) {
+            mob_speed_baseline = data.m->type->move_speed;
+        };
+    }
     
-    data.m->set_animation(s2i(data.args[0]), options, false);
+    data.m->set_animation(
+        s2i(data.args[0]), options, false, mob_speed_baseline
+    );
 }
 
 

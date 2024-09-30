@@ -1745,7 +1745,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
         }
     }
     
-    lea_ptr->set_animation(LEADER_ANIM_WALKING);
+    leader_fsm::set_walk_anim(m, nullptr, nullptr);
 }
 
 
@@ -2052,7 +2052,10 @@ void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     if(!lea_ptr->is_in_walking_anim) {
         lea_ptr->is_in_walking_anim = true;
-        lea_ptr->set_animation(LEADER_ANIM_WALKING);
+        lea_ptr->set_animation(
+            LEADER_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true,
+            lea_ptr->type->move_speed
+        );
     }
 }
 
@@ -2189,7 +2192,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
 void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     leader_fsm::update_in_group_chasing(m, nullptr, nullptr);
-    m->set_animation(LEADER_ANIM_WALKING);
+    leader_fsm::set_walk_anim(m, nullptr, nullptr);
 }
 
 
@@ -2237,7 +2240,7 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
         
     if(success) {
         lea_ptr->mid_go_here = true;
-        lea_ptr->set_animation(LEADER_ANIM_WALKING);
+        leader_fsm::set_walk_anim(m, nullptr, nullptr);
     }
 }
 

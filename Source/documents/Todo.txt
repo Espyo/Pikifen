@@ -112,8 +112,6 @@ Next tasks (roughly sorted most important first)
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
-    Make it so some animations (mostly walking) have their speed depend on the mob's speed
-        Probably have an upper and lower cap
     Pikmin animation improvements
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
             If necessary, seeds should have their own animation
@@ -360,6 +358,7 @@ Next tasks (roughly sorted most important first)
             Split-screen logic: vertical split (better because you can increase the window size and better fit modern monitors, and also because physically chances are one player's sitting to the left of the other, and the other on the right), and four-way split
             Add HUD support for all the different split-screen layouts
             In competitive modes, tint each player's HUD with their team color or something
+            Show each player's name in their screen somewhere
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
             The cursor that highlights the currently selected GUI item should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         Make sure that:
@@ -400,6 +399,7 @@ Next tasks (roughly sorted most important first)
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off
+            Each column should also let players choose a name, if they want (it defaults to Player 1, Player 2, etc.)
             Each column should also let players pick which control scheme they want to use
             Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
             Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area

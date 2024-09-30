@@ -52,7 +52,7 @@ script {
     
     exploring {
         on_enter {
-            set_animation moving
+            set_animation moving normal true
             get_random_decimal t 1.5 2.5
             set_timer $t
             get_random_decimal x -1000 1000
@@ -73,7 +73,7 @@ script {
     
     returning {
         on_enter {
-            set_animation moving
+            set_animation moving normal true
             move_to_target home
         }
         on_reach_destination {

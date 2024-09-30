@@ -27,7 +27,7 @@ script {
     
     chasing {
         on_enter {
-            set_animation moving
+            set_animation moving normal true
             move_to_target focused_mob
             set_near_reach attack
             set_far_reach chase
@@ -115,7 +115,7 @@ script {
     returning {
         on_enter {
             move_to_target home
-            set_animation moving
+            set_animation moving normal true
             set_timer 2
             set_near_reach search
         }

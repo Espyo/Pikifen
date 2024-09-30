@@ -64,7 +64,7 @@ script {
         on_enter {
             start_height_effect
             set_flying true
-            set_animation flapping
+            set_animation flapping normal true
             set_timer 0.01
             set_var flutters 0
         }

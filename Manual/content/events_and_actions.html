@@ -835,12 +835,18 @@
         <td><dl>
           <dt><code><b>set_animation</b> &lt;animation&gt;</code></dt>
           <dd>Changes to and begins the animation &lt;animation&gt;.</dd>
-          <dt><code><b>set_animation</b> &lt;animation&gt; no_restart</code></dt>
-          <dd>Same as normal, but doesn't set the frame number to 0, meaning that animation will continue from whatever frame number the previous one left off.</dd>
-          <dt><code><b>set_animation</b> &lt;animation&gt; random_time</code></dt>
-          <dd>Same as normal, but starts on a random time.</dd>
-          <dt><code><b>set_animation</b> &lt;animation&gt; random_time_on_spawn</code></dt>
-          <dd>Same as above, but only when the enemy has just spawned. Otherwise it starts the animation from the beginning.</dd>
+          <dt><code><b>set_animation</b> &lt;animation&gt; &lt;start_option&gt;</code></dt>
+          <dd>
+            Same as above, but controls how the animation is meant to start. Possbile values for &lt;start_option&gt; are:
+            <ul>
+              <li><code>normal</code>: Starts the animation from the beginning as normal.</li>
+              <li><code>no_restart</code>: Sets animation but doesn't set the frame number to 0, meaning that animation will continue from whatever frame number the previous one left off.</li>
+              <li><code>random_time</code>: Starts on a random time.</li>
+              <li><code>random_time_on_spawn</code>: Starts on a random time but only when the enemy has just spawned. Otherwise it starts the animation from the beginning as normal.</li>
+            </ul>
+          </dd>
+          <dt><code><b>set_animation</b> &lt;animation&gt; &lt;start_option&gt; true</code></dt>
+          <dd>Same as above but also makes it so that the animation speed depends on the object's speed. If the object is moving at full speed (i.e. the speed defined in the <code>move_speed</code> property of its mob type data), the animation will play at normal speed. If the object is moving slower the animation will play slower (up to a limit), and the same is true if the object is going faster.</dd>
         </dl></td>
       </tr>
       <tr>

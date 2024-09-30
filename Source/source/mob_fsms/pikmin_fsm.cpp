@@ -2291,7 +2291,9 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
         m->get_base_speed(), true
     );
     
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
 }
 
 
@@ -2835,7 +2837,9 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     );
     pik_ptr->set_timer(PIKMIN::GOTO_TIMEOUT);
     
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
     
 }
 
@@ -2884,7 +2888,9 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     );
     pik_ptr->set_timer(PIKMIN::GOTO_TIMEOUT);
     
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
     
     pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_GROUP_TASK);
     
@@ -2930,7 +2936,9 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     m->chase(coords, nest_ptr->m_ptr->z);
     m->leave_group();
     
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
 }
 
 
@@ -2990,7 +2998,9 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     pik_ptr->was_last_hit_dud = false;
     pik_ptr->consecutive_dud_hits = 0;
     
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
     
     m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
@@ -3040,7 +3050,9 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     );
     pik_ptr->set_timer(PIKMIN::GOTO_TIMEOUT);
     
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
     
     pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_TOOL);
     
@@ -3063,7 +3075,9 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     
     m->set_timer(PIKMIN::DISMISS_TIMEOUT);
     
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
 }
 
 
@@ -3746,7 +3760,9 @@ void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     pikmin_fsm::update_in_group_chasing(m, nullptr, nullptr);
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
 }
 
 
@@ -3855,7 +3871,9 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     }
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->set_animation(
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+    );
 }
 
 
@@ -3917,7 +3935,10 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
             settings, pik_ptr->get_base_speed(), pik_ptr->type->acceleration
         )
     ) {
-        pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+        m->set_animation(
+            PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true,
+            m->type->move_speed
+        );
     } else {
         pik_ptr->fsm.set_state(PIKMIN_STATE_IDLING);
     }

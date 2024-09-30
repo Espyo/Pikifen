@@ -104,6 +104,12 @@ const float KNOCKBACK_H_POWER = 64.0f;
 //Base vertical speed at which mobs move due to attacks with knockback.
 const float KNOCKBACK_V_POWER = 800.0f;
 
+//Maximum speed multiplier for animations whose speed depend on the mob's.
+const float MOB_SPEED_ANIM_MAX_MULT = 3.0f;
+
+//Minimum speed multiplier for animations whose speed depend on the mob's.
+const float MOB_SPEED_ANIM_MIN_MULT = 0.3f;
+
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 
@@ -2895,9 +2901,12 @@ void mob::send_message(mob* receiver, string &msg) const {
  * It's the animation instance index from the database.
  * @param options Options to start the new animation with.
  * @param pre_named If true, the animation has already been named in-engine.
+ * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
+ * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void mob::set_animation(
-    const size_t idx, const START_ANIM_OPTION options, const bool pre_named
+    const size_t idx, const START_ANIM_OPTION options, const bool pre_named,
+    const float mob_speed_anim_baseline
 ) {
     if(idx >= type->anims.animations.size()) return;
     
@@ -2925,6 +2934,7 @@ void mob::set_animation(
     
     animation* new_anim = anim.anim_db->animations[final_idx];
     anim.cur_anim = new_anim;
+    this->mob_speed_anim_baseline = mob_speed_anim_baseline;
     
     if(new_anim->frames.empty()) {
         anim.cur_frame_idx = INVALID;
@@ -2953,13 +2963,16 @@ void mob::set_animation(
  *
  * @param name Name of the animation.
  * @param options Options to start the new animation with.
+ * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
+ * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void mob::set_animation(
-    const string &name, const START_ANIM_OPTION options
+    const string &name, const START_ANIM_OPTION options,
+    const float mob_speed_anim_baseline
 ) {
     size_t idx = anim.anim_db->find_animation(name);
     if(idx != INVALID) {
-        set_animation(idx, options, false);
+        set_animation(idx, options, false, mob_speed_anim_baseline);
     }
 }
 
@@ -3421,6 +3434,16 @@ void mob::tick_animation(const float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         mult *= this->statuses[s].type->anim_speed_multiplier;
+    }
+    
+    if(mob_speed_anim_baseline != 0.0f) {
+        float mob_speed_mult = chase_info.cur_speed / mob_speed_anim_baseline;
+        mob_speed_mult =
+            clamp(
+                mob_speed_mult,
+                MOB::MOB_SPEED_ANIM_MIN_MULT, MOB::MOB_SPEED_ANIM_MAX_MULT
+            );
+        mult *= mob_speed_mult;
     }
     
     vector<size_t> frame_signals;

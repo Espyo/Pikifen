@@ -64,6 +64,8 @@ extern const float GROUP_SPOT_MAX_DEVIATION;
 extern const float HEIGHT_EFFECT_FACTOR;
 extern const float KNOCKBACK_H_POWER;
 extern const float KNOCKBACK_V_POWER;
+extern const float MOB_SPEED_ANIM_MAX_MULT;
+extern const float MOB_SPEED_ANIM_MIN_MULT;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
 extern const float PIKMIN_NEST_CALL_INTERVAL;
 extern const float PUSH_EXTRA_AMOUNT;
@@ -297,6 +299,10 @@ public:
     
     //Force the usage of this specific sprite.
     sprite* forced_sprite = nullptr;
+
+    //If not 0, speed up or slow down the current animation based on the
+    //mob's speed, using this value as a baseline (1.0x speed).
+    float mob_speed_anim_baseline = 0.0f;
     
     //-Aesthetic-
     
@@ -351,11 +357,13 @@ public:
     void set_animation(
         const size_t nr,
         const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
-        const bool pre_named = true
+        const bool pre_named = true,
+        const float mob_speed_baseline = 0.0f
     );
     void set_animation(
         const string &name,
-        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL
+        const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
+        const float mob_speed_baseline = 0.0f
     );
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
