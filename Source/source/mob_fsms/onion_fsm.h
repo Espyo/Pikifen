@@ -19,5 +19,10 @@
 namespace onion_fsm {
 void create_fsm(mob_type* typ);
 
+void check_start_generating(mob* m, void* info1, void* info2);
+void check_stop_generating(mob* m, void* info1, void* info2);
 void receive_mob(mob* m, void* info1, void* info2);
+void start_generating(mob* m, void* info1, void* info2);
+void start_idling(mob* m, void* info1, void* info2);
+void stop_generating(mob* m, void* info1, void* info2);
 }

@@ -23,8 +23,29 @@ enum ONION_STATE {
     //Idling.
     ONION_STATE_IDLING,
     
+    //Generating Pikmin.
+    ONION_STATE_GENERATING,
+    
+    //Stopped generating Pikmin.
+    ONION_STATE_STOPPING_GENERATION,
+    
     //Total amount of Onion object states.
     N_ONION_STATES,
+    
+};
+
+
+//Onion object animations.
+enum ONION_ANIM {
+
+    //Idling.
+    ONION_ANIM_IDLING,
+    
+    //Generating.
+    ONION_ANIM_GENERATING,
+    
+    //Winding down since it stopped generating.
+    ONION_ANIM_STOPPING_GENERATION,
     
 };
 

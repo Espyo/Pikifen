@@ -27,8 +27,41 @@ void onion_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idling", ONION_STATE_IDLING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::start_idling);
+        }
         efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(onion_fsm::receive_mob);
+        }
+        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::check_start_generating);
+        }
+    }
+    
+    efc.new_state("generating", ONION_STATE_GENERATING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::start_generating);
+        }
+        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(onion_fsm::receive_mob);
+        }
+        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::check_stop_generating);
+        }
+    }
+    
+    efc.new_state("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::stop_generating);
+        }
+        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(onion_fsm::receive_mob);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::check_start_generating);
         }
     }
     
@@ -41,6 +74,38 @@ void onion_fsm::create_fsm(mob_type* typ) {
         i2s(typ->states.size()) + " registered, " +
         i2s(N_ONION_STATES) + " in enum."
     );
+}
+
+
+/**
+ * @brief When an Onion has to check if it started generating Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the message received.
+ * @param info2 Unused.
+ */
+void onion_fsm::check_start_generating(mob* m, void* info1, void* info2) {
+    if(!info1) return;
+    string* msg = (string*) info1;
+    if(*msg == "started_generation") {
+        m->fsm.set_state(ONION_STATE_GENERATING);
+    }
+}
+
+
+/**
+ * @brief When an Onion has to check if it stopped generating Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the message received.
+ * @param info2 Unused.
+ */
+void onion_fsm::check_stop_generating(mob* m, void* info1, void* info2) {
+    if(!info1) return;
+    string* msg = (string*) info1;
+    if(*msg == "stopped_generation") {
+        m->fsm.set_state(ONION_STATE_STOPPING_GENERATION);
+    }
 }
 
 
@@ -88,9 +153,9 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
         }
     }
     
-    oni_ptr->full_spew_timer.start();
-    oni_ptr->next_spew_timer.stop();
-    oni_ptr->spew_queue[type_idx] += seeds;
+    oni_ptr->stop_generating();
+    oni_ptr->generation_delay_timer.start();
+    oni_ptr->generation_queue[type_idx] += seeds;
     
     particle p(
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height - 0.01,
@@ -106,4 +171,42 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.duration_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
+}
+
+
+/**
+ * @brief When an Onion starts generating Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob being received.
+ * @param info2 Unused.
+ */
+void onion_fsm::start_generating(mob* m, void* info1, void* info2) {
+    m->set_animation(ONION_ANIM_GENERATING);
+}
+
+
+/**
+ * @brief When an Onion enters the idle state.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void onion_fsm::start_idling(mob* m, void* info1, void* info2) {
+    m->set_animation(
+        MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+    );
+}
+
+
+/**
+ * @brief When an Onion stops generating Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the mob being received.
+ * @param info2 Unused.
+ */
+void onion_fsm::stop_generating(mob* m, void* info1, void* info2) {
+    m->set_animation(ONION_ANIM_STOPPING_GENERATION);
 }

@@ -22,9 +22,9 @@
 
 namespace ONION {
 extern const float FADE_SPEED;
-extern const float FULL_SPEW_DELAY;
+extern const float GENERATION_DELAY;
 extern const float NEW_SEED_Z_OFFSET;
-extern const float NEXT_SPEW_DELAY;
+extern const float NEXT_GENERATION_INTERVAL;
 extern const unsigned char SEETHROUGH_ALPHA;
 extern const float SPEW_ANGLE_SHIFT;
 extern const float SPEW_H_SPEED;
@@ -39,9 +39,9 @@ extern const float SPEW_V_SPEED;
 class onion : public mob {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //What type of Onion it is.
     onion_type* oni_type = nullptr;
     
@@ -50,16 +50,16 @@ public:
     
     //Is this Onion currently activated?
     bool activated = true;
-
+    
     //How many seeds are queued up to be spat, of each type.
-    vector<size_t> spew_queue;
-
-    //Time left until it starts spewing queued seeds.
-    timer full_spew_timer = timer(ONION::FULL_SPEW_DELAY);
-
-    //Time left until it spews the next seed in the queue.
-    timer next_spew_timer = timer(ONION::NEXT_SPEW_DELAY);
-
+    vector<size_t> generation_queue;
+    
+    //Time left until it starts the Pikmin generation process.
+    timer generation_delay_timer = timer(ONION::GENERATION_DELAY);
+    
+    //Time left until it generates the next Pikmin in the queue.
+    timer next_generation_timer = timer(ONION::NEXT_GENERATION_INTERVAL);
+    
     //Angle at which the next seed will be spit.
     float next_spew_angle = 0.0f;
     
@@ -67,21 +67,23 @@ public:
     unsigned char seethrough = 255;
     
     //Spit a new seed.
-    void spew();
+    void generate();
     
-
+    
     //--- Function declarations ---
-
+    
     onion(const point &pos, onion_type* type, const float angle);
     ~onion();
     void draw_mob() override;
     void read_script_vars(const script_var_reader &svr) override;
+    void start_generating();
+    void stop_generating();
     
     
 protected:
-    
-    //--- Function declarations ---
 
+    //--- Function declarations ---
+    
     void tick_class_specifics(const float delta_t) override;
     
 };

@@ -1,4 +1,51 @@
+name
+engine_version=0.25.0
 animations{
+	generating{
+		loop_frame=6
+		frames{
+			idling_03{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_06{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_07{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
 	idling{
 		frames{
 			idling_01{
@@ -31,6 +78,46 @@ animations{
 			}
 			idling_08{
 				duration=0.1100
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation{
+		frames{
+			idling_01{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_03{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_06{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_07{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
 				interpolate=true
 			}
 		}
@@ -454,4 +541,3 @@ body_parts{
 	hole_3
 	foot_3
 }
-engine_version=0.25.0

@@ -57,7 +57,11 @@ onion_type::~onion_type() {
  */
 anim_conversion_vector onion_type::get_anim_conversions() const {
     anim_conversion_vector v;
-    v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
+    v.push_back(
+        std::make_pair(ONION_ANIM_STOPPING_GENERATION, "stopping_generation")
+    );
     return v;
 }
 
