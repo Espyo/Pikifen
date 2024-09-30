@@ -748,7 +748,8 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 !has_flag(
                     m_ptr->type->inactive_logic,
                     INACTIVE_LOGIC_FLAG_TICKS
-                ) && !m_ptr->is_active
+                ) && !m_ptr->is_active &&
+                m_ptr->time_alive > 0.1f
             ) {
                 continue;
             }
@@ -1563,7 +1564,8 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
             !has_flag(
                 m2_ptr->type->inactive_logic,
                 INACTIVE_LOGIC_FLAG_INTERACTIONS
-            ) && !m2_ptr->is_active
+            ) && !m2_ptr->is_active &&
+            m_ptr->time_alive > 0.1f
         ) {
             continue;
         }
