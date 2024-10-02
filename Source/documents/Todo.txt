@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     not all public domain sounds are public domain, but instead cc0
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -156,7 +156,6 @@ Next tasks (roughly sorted most important first)
         Add Helodity's Plasm Wraith
         Mobs for decorative pebbles, stones, and sticks
     More particles
-        Treasures should have sparkle particles
         Onions should spit spark particles when generating Pikmin inside
         Dust particles while walking
         Dust poof when a leader lands from a height
