@@ -156,7 +156,6 @@ Next tasks (roughly sorted most important first)
         Add Helodity's Plasm Wraith
         Mobs for decorative pebbles, stones, and sticks
     More particles
-        Onions should spit spark particles when generating Pikmin inside
         Dust particles while walking
         Dust poof when a leader lands from a height
         There should be some petal particle effects when a Pikmin loses their maturity
@@ -644,6 +643,7 @@ Small tasks (for when I'm feeling lazy)
         Replace all instances of "number" when in reality it should be "index"
         Use enum class, and hopefully there won't be any problems due to all the times I need to cast to and from int, or use values from multiple enums.
         Get rid of consts in functions arguments the precede primitive types
+        Get rid of the f in floating point numbers except where they're really needed
     
     
 Misc things (so I don't forget)
