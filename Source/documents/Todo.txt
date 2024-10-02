@@ -103,7 +103,6 @@ Next tasks (roughly sorted most important first)
         Title screen
         Editors
         A couple of gameplay songs
-        Boss
         Results screen
         Helodity's tropical song
         Other people's songs

@@ -67,3 +67,16 @@ Content should have a minimum level of quality to make it into _Pikifen_. The id
 ### Other notes
 
 * For textures, songs, and sounds, make sure they aren't massive in size, and that they are royalty-free.
+* For songs:
+  * Ideally, add your DAW's song project to `Source/documents/Music`, provided it's possible and it's not bloated with embedded samples or anything.
+  * Ideally, use OGG.
+  * Looped sections, if only, should play only once to help keep the file size small.
+  * Credit the instruments used in the manual's credits page.
+  * Edit every track files' metadata:
+    * Title: e.g. "My Song", "My Song (enemy track)", etc.
+    * Artist
+    * Composer
+    * BPM
+    * Year
+    * Genre: Game
+    * Comment: Any comments you can think of, like what you'd put in the song's `notes` property. _Pikifen_ originals use e.g. "Original composition for Pikifen. This is an extra track overlaid on top of the main track."

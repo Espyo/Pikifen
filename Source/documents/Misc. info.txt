@@ -96,19 +96,6 @@ Technical prowesses
     Edge offset effects
 
 
-When adding a song
-    Export as OGG, "sinc best" interpolation
-    Add its LMMS project to the source code -- .mmp, not .mmpz
-    Credit the instruments used in the credits page
-    Edit the file's metadata
-        Title (add something like "(enemy track)" if needed)
-        Artist: André 'Espyo' Silva
-        Composer: André 'Espyo' Silva
-        BPM
-        Year
-        Comment (trim as necessary): Original composition for Pikifen. This is an extra track overlaid on top of the main track.
-
-
 Bag of notes (useful stuff)
     If mobs start moving so fast that they can clip through walls
         Keep track of its sector before the move. If after the move, no wall collisions were registered, but it's on a different sector, then that's all you need to know: a collision happened
@@ -463,6 +450,7 @@ Bag of notes (useful stuff)
         It's the Pikmin amount, most likely. For some reason I didn't confirm, many Pikmin make the framerate vary a bunch.
     Looks like Dear ImGui has some leak of sorts. If I leave the animation editor or area editor on for a few hours, eventually my system starts to slow down; even the mouse cursor updates slowly, even outside Pikifen. Leaving to the main menu, or playing the game proper returns everything to normality, and entering an editor again brings everything to a crawl again. There is no increase in CPU or RAM usage, and once I had another game running which reported 60fps all throughout, so I have no idea why this is happening...
     The mathematical term for when you want to grow a polygon outward is called buffering or offsetting (like the edge offset mechanism in the engine)
+    When adding a song from LMMS, export as OGG, "sinc best" interpolation
 
 
 Procedure for every version release
