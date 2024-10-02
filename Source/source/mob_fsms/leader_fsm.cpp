@@ -67,7 +67,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("inactive_mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -138,7 +137,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -193,7 +191,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -240,7 +237,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -335,7 +331,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
@@ -591,7 +586,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -667,7 +661,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::start_go_here);
-            efc.change_state("inactive_mid_go_here");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -2239,6 +2232,11 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
         );
         
     if(success) {
+        lea_ptr->fsm.set_state(
+            lea_ptr->active ?
+            LEADER_STATE_MID_GO_HERE :
+            LEADER_STATE_INACTIVE_MID_GO_HERE
+        );
         lea_ptr->mid_go_here = true;
         leader_fsm::set_walk_anim(m, nullptr, nullptr);
     }
