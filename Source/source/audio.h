@@ -390,7 +390,9 @@ public:
     bool rewind_song(const string &name);
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
-    bool set_current_song(const string &name, bool from_start = true);
+    bool set_current_song(
+        const string &name, bool from_start = true, bool fade_in = true
+    );
     void set_song_pos_near_loop();
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
@@ -458,7 +460,8 @@ private:
     bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_t* get_source(size_t source_id);
     void start_song_track(
-        song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
+        song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
+        bool from_start, bool fade_in
     );
     bool stop_sfx_playback(size_t playback_idx);
     void update_playback_gain_and_pan(size_t playback_idx);

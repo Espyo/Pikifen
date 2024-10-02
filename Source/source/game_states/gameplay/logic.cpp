@@ -566,8 +566,9 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         }
         
         if(near_boss && !playing_boss_music) {
-            game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, false);
+            game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, boss_song_from_start, !boss_song_from_start);
             playing_boss_music = true;
+            boss_song_from_start = false;
         } else if(!near_boss && playing_boss_music) {
             game.audio.set_current_song(game.cur_area_data.song_name, false);
             playing_boss_music = false;

@@ -423,6 +423,9 @@ private:
     //Are we currently playing boss music?
     bool playing_boss_music = false;
     
+    //Is the boss song meant to start from the beginning?
+    bool boss_song_from_start = true;
+    
     //The first frame shouldn't allow for input just yet, because
     //some things are still being set up within the first logic loop.
     //So forbid input until the second frame.

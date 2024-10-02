@@ -108,7 +108,6 @@ Next tasks (roughly sorted most important first)
         Helodity's tropical song
         Other people's songs
     Boss music logic needs some tweaks
-        A way for the song to start right away, so that songs with intros can slam instead of slowly fading in
         A way to skip to different portions
         A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
@@ -281,6 +280,7 @@ Next tasks (roughly sorted most important first)
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
             If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
+                It should probably use the largest value of all inputs. Like if you bind move cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
             Implement a screen stack system, with push&pop
@@ -841,6 +841,7 @@ Misc things (so I don't forget)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The spray HUD icons should show a tiny bar with concoction progress
+    The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end

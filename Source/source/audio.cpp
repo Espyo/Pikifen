@@ -676,9 +676,12 @@ void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
  * @param from_start If true, the song starts from the beginning,
  * otherwise it starts from where it left off.
  * This argument only applies if the song was stopped.
+ * @param fade_in If true, the new song fades in like normal.
  * @return Whether it succeeded.
  */
-bool audio_manager::set_current_song(const string &name, bool from_start) {
+bool audio_manager::set_current_song(
+    const string &name, bool from_start, bool fade_in
+) {
 
     //Stop all other songs first.
     for(auto &s : songs) {
@@ -730,12 +733,15 @@ bool audio_manager::set_current_song(const string &name, bool from_start) {
     } case SONG_STATE_STOPPED: {
         //Start it.
         if(song_ptr->state == SONG_STATE_STOPPED) {
-            start_song_track(song_ptr, song_ptr->main_track, from_start);
+            start_song_track(
+                song_ptr, song_ptr->main_track, from_start, fade_in
+            );
             for(auto const &m : song_ptr->mix_tracks) {
-                start_song_track(song_ptr, m.second, from_start);
+                start_song_track(song_ptr, m.second, from_start, fade_in);
             }
         }
-        song_ptr->state = SONG_STATE_STARTING;
+        song_ptr->gain = fade_in ? 0.0f : 1.0f;
+        song_ptr->state = fade_in ? SONG_STATE_STARTING : SONG_STATE_PLAYING;
     }
     }
     
@@ -782,12 +788,14 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
  * @param stream Audio stream of the track.
  * @param from_start If true, the song starts from the beginning,
  * otherwise it starts from where it left off.
+ * @param fade_in If true, the song starts fading in like normal.
  */
 void audio_manager::start_song_track(
-    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream, bool from_start
+    song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
+    bool from_start, bool fade_in
 ) {
     if(!stream) return;
-    al_set_audio_stream_gain(stream, 0.0f);
+    al_set_audio_stream_gain(stream, fade_in ? 0.0f : 1.0f);
     al_seek_audio_stream_secs(stream, from_start ? 0.0f : song_ptr->stop_point);
     al_set_audio_stream_loop_secs(
         stream, song_ptr->loop_start, song_ptr->loop_end

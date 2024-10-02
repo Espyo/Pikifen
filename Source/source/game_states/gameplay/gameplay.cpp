@@ -653,6 +653,8 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     }
     
     game.audio.stop_all_playbacks();
+    game.audio.set_current_song("");
+    boss_song_from_start = true;
     save_statistics();
     
     switch(target) {
@@ -738,7 +740,7 @@ void gameplay_state::load() {
     game.framerate_history.clear();
     
     game.audio.set_current_song("");
-    game.audio.rewind_song(GAMEPLAY::BOSS_SONG_NAME);
+    boss_song_from_start = true;
     
     //Load the area.
     string area_folder_name;
