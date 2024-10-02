@@ -7144,13 +7144,13 @@ sectors{
 	}
 	s{
 		type=Blocking
-		z=0.0000
+		z=60.0000
 		fade=true
 		texture=Tile.jpg
 	}
 	s{
 		type=Blocking
-		z=0.0000
+		z=60.0000
 		fade=true
 		texture=Tile.jpg
 	}

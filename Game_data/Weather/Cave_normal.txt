@@ -1,0 +1,15 @@
+name = Cave, normal
+description = Standard in-cave lighting.
+
+sun_strength {
+    0    = 128
+}
+fog_color {
+    0    = 0 0 0 160
+    360  = 0 0 0 160
+    480  = 0 0 0 32
+    1140 = 0 0 0 32
+    1200 = 0 0 0 160
+}
+fog_near = 96
+fog_far = 256
