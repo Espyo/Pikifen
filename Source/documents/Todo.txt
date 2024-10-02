@@ -1,8 +1,9 @@
-Point I left on (so I can continue the next day without losing my train of thought)
-    
+﻿Point I left on (so I can continue the next day without losing my train of thought)
+    not all public domain sounds are public domain, but instead cc0
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
+    Test -S-'s get_onion_info branch
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -67,7 +68,7 @@ Next tasks (roughly sorted most important first)
                 ? Generic shaking
                 x Generic whisk (Burrow-nit stabbing)
                 x Generic biting
-                Generic gulping
+                x Generic gulping
                 x Generic eletric attack
                 x Generic electric sparks
                 x Generic fire attack
@@ -85,7 +86,7 @@ Next tasks (roughly sorted most important first)
             Others
                 Generic sparkles (Spiderworts regrowing, Pikmin flowering)
                 Boing (Bouncy Mushrooms)
-                Thud (carriable rock landing, airborne enemy enemy lands)
+                x Thud (carriable rock landing, airborne enemy enemy lands)
                 x Ceramic clunk (ceramic bridge piece fitting)
                 x Sticks clacking (climbing stick growing)
                 Rocks crumbling (clog being destroyed)
@@ -95,6 +96,9 @@ Next tasks (roughly sorted most important first)
                 Chocolate snapping off
                 Explosion
                 Ambiance sounds
+                    Wind
+                    Leaves rustling
+                    Birds, frogs, etc.
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         All sound files should be at peak amplitude

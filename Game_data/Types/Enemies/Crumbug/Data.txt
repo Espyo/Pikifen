@@ -38,4 +38,10 @@ sounds {
         volume = 20
         speed = 140
     }
+    swallow {
+        file = Swallow.ogg
+        volume = 20
+        speed = 140
+        speed_deviation = 20
+    }
 }

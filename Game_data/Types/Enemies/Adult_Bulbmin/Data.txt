@@ -59,6 +59,12 @@ sounds {
         file = Shaking.ogg
         volume = 60
     }
+    swallow {
+        file = Swallow.ogg
+        volume = 40
+        speed = 90
+        speed_deviation = 20
+    }
 }
 
 spawns {

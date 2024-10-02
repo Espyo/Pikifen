@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	dismissing{
 		frames{
@@ -51,10 +53,14 @@ animations{
 		}
 	}
 	lying{
-		loop_frame=1
+		loop_frame=2
 		frames{
 			half_lying{
 				duration=0.0700
+			}
+			lying{
+				duration=0.0100
+				sound=thump
 			}
 			lying{
 				duration=0.1000
@@ -419,4 +425,3 @@ body_parts{
 	fist
 	body
 }
-engine_version=0.25.0

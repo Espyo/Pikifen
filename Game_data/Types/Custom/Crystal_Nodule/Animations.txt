@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	destroyed{
 		frames{
@@ -23,7 +25,11 @@ animations{
 	landing{
 		frames{
 			landing{
+				duration=0.0100
+			}
+			landing{
 				duration=0.2000
+				sound=thump
 			}
 		}
 	}

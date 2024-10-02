@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	blowing{
 		loop_frame=3
@@ -256,10 +258,15 @@ animations{
 		}
 	}
 	grounded{
-		loop_frame=1
+		loop_frame=2
 		frames{
 			grounded_landing{
 				duration=0.0800
+			}
+			grounded_01{
+				duration=0.0100
+				interpolate=true
+				sound=thump
 			}
 			grounded_01{
 				duration=0.3000
@@ -2161,4 +2168,3 @@ body_parts{
 	head
 	wind
 }
-engine_version=0.25.0

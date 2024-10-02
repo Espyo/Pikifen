@@ -20,3 +20,10 @@ vulnerabilities {
     explosion = 100
     rock = 100
 }
+
+sounds {
+    thump {
+        file = Thump.ogg
+    }
+}
+

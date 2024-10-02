@@ -42,4 +42,7 @@ sounds {
         loop = true
         volume = 50
     }
+    thump {
+        file = Thump.ogg
+    }
 }

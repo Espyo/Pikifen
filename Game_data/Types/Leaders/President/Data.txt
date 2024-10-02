@@ -38,6 +38,10 @@ sounds {
         volume_deviation = 3
         speed_deviation = 30
     }
+    thump {
+        file = Thump.ogg
+        volume = 45
+    }
 }
 
 vulnerabilities {

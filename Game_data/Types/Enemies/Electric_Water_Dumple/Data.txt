@@ -51,4 +51,10 @@ sounds {
         loop = true
         volume = 80
     }
+    swallow {
+        file = Swallow.ogg
+        volume = 40
+        speed = 70
+        speed_deviation = 20
+    }
 }

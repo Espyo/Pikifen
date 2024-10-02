@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	croaking{
 		frames{
@@ -150,6 +152,7 @@ animations{
 			}
 			floating_02{
 				duration=0.4000
+				sound=thump
 			}
 			squatting{
 				duration=0.1000
@@ -906,4 +909,3 @@ body_parts{
 	body
 	damage
 }
-engine_version=0.25.0

@@ -146,6 +146,7 @@ script {
         }
         on_animation_end {
             swallow_all
+            play_sound swallow
             set_state examining
         }
         on_pikmin_land {

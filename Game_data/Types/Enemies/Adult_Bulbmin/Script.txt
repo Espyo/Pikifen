@@ -138,6 +138,7 @@ script {
         }
         on_animation_end {
             swallow_all
+            play_sound swallow
             set_state exploring
         }
     }

@@ -40,7 +40,7 @@
     </dl>
     <dl>
       <dt>Active</dt>
-      <dd>If an object is active that means it will be processed on the current frame. To save on performance, objects that are off-camera and too far from any Pikmin or leader (and also not marked as always-active) will become inactive, meaning they are essentially frozen in time.</dd>
+      <dd>If an object is active that means it will be processed on the current frame. To save on performance, objects that are off-camera and too far from any Pikmin or leader (and also not marked as always-active) will become inactive, meaning they are essentially frozen in time. In reality they don't process their logic each frame, and/or don't check for interactions with other objects, but they still receive events, can spawn and despawn, etc.</dd>
     </dl>
     <dl>
       <dt>Animation</dt>

@@ -31,3 +31,10 @@ reaches {
     align = 250 2
     jump = 150 2
 }
+
+sounds {
+    thump {
+        file = Thump.ogg
+        speed_deviation = 10
+    }
+}
