@@ -542,36 +542,37 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     if(game.states.gameplay->mobs.enemies.size() > 0) {
         bool near_enemy = false;
         bool near_boss = false;
-        for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
-            enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
-            if(e_ptr->health <= 0.0f) continue;
-            
-            dist d = cur_leader_ptr->get_distance_between(e_ptr);
-            
-            if(!e_ptr->ene_type->is_boss) {
-                if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
-                    near_enemy = true;
-                }
-            } else {
-                if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
-                    near_boss = true;
-                }
-            }
-            
-            if(near_enemy && near_boss) break;
-        }
+        is_near_enemy_and_boss(&near_enemy, &near_boss);
+        
         
         if(near_enemy) {
             game.audio.mark_mix_track_status(MIX_TRACK_TYPE_ENEMY);
         }
         
-        if(near_boss && !playing_boss_music) {
-            game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, boss_song_from_start, !boss_song_from_start);
-            playing_boss_music = true;
-            boss_song_from_start = false;
-        } else if(!near_boss && playing_boss_music) {
-            game.audio.set_current_song(game.cur_area_data.song_name, false);
-            playing_boss_music = false;
+        if(near_boss) {
+            switch(boss_music_state) {
+            case BOSS_MUSIC_STATE_NEVER_PLAYED: {
+                game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, true, false);
+                boss_music_state = BOSS_MUSIC_STATE_PLAYING;
+                break;
+            } case BOSS_MUSIC_STATE_PAUSED: {
+            } case BOSS_MUSIC_STATE_VICTORY: {
+                game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, false);
+                boss_music_state = BOSS_MUSIC_STATE_PLAYING;
+            } default: {
+                break;
+            }
+            }
+        } else {
+            switch(boss_music_state) {
+            case BOSS_MUSIC_STATE_PLAYING: {
+                game.audio.set_current_song(game.cur_area_data.song_name, false);
+                boss_music_state = BOSS_MUSIC_STATE_PAUSED;
+                break;
+            } default: {
+                break;
+            }
+            }
         }
     }
     
@@ -1455,6 +1456,42 @@ void gameplay_state::do_menu_logic() {
     
     //Fade.
     game.fade_mgr.tick(game.delta_t);
+}
+
+
+/**
+ * @brief Checks if the player is close to any living enemy and also if
+ * they are close to any living boss.
+ *
+ * @param near_enemy If not nullptr, whether they are close to an enemy is
+ * returned here.
+ * @param near_boss If not nullptr, whether they are close to a boss is
+ * returned here.
+ */
+void gameplay_state::is_near_enemy_and_boss(bool* near_enemy, bool* near_boss) {
+    bool found_enemy = false;
+    bool found_boss = false;
+    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
+        enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
+        if(e_ptr->health <= 0.0f) continue;
+        
+        dist d = cur_leader_ptr->get_distance_between(e_ptr);
+        
+        if(!e_ptr->ene_type->is_boss) {
+            if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
+                found_enemy = true;
+            }
+        } else {
+            if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
+                found_boss = true;
+            }
+        }
+        
+        if(found_enemy && found_boss) break;
+    }
+    
+    if(near_enemy) *near_enemy = found_enemy;
+    if(near_boss) *near_boss = found_boss;
 }
 
 

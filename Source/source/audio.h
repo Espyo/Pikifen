@@ -349,6 +349,9 @@ public:
     
     //Loaded songs.
     map<string, song> songs;
+
+    //Callback for when a song ends, if any.
+    std::function<void(const string& name)> on_song_finished = nullptr;
     
     
     //--- Function declarations ---
@@ -380,6 +383,7 @@ public:
     void destroy();
     bool emit(size_t source_id);
     void handle_mob_deletion(const mob* m_ptr);
+    void handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream);
     void handle_world_pause();
     void handle_world_unpause();
     void init(
@@ -391,7 +395,8 @@ public:
     bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_current_song(
-        const string &name, bool from_start = true, bool fade_in = true
+        const string &name, bool from_start = true, bool fade_in = true,
+        bool loop = true
     );
     void set_song_pos_near_loop();
     bool set_sfx_source_pos(size_t source_id, const point &pos);
@@ -461,7 +466,7 @@ private:
     sfx_source_t* get_source(size_t source_id);
     void start_song_track(
         song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
-        bool from_start, bool fade_in
+        bool from_start, bool fade_in, bool loop
     );
     bool stop_sfx_playback(size_t playback_idx);
     void update_playback_gain_and_pan(size_t playback_idx);

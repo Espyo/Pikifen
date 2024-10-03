@@ -450,6 +450,20 @@ void audio_manager::handle_mob_deletion(const mob* m_ptr) {
 
 
 /**
+ * @brief Handles a non-looping Allegro audio stream being finished.
+ *
+ * @param stream Stream that finished.
+ */
+void audio_manager::handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream) {
+    for(const auto &s : songs) {
+        if(s.second.main_track == stream) {
+            if(on_song_finished) on_song_finished(s.first);
+        }
+    }
+}
+
+
+/**
  * @brief Handles the gameplay of the game world being paused.
  */
 void audio_manager::handle_world_pause() {
@@ -677,10 +691,11 @@ void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
  * otherwise it starts from where it left off.
  * This argument only applies if the song was stopped.
  * @param fade_in If true, the new song fades in like normal.
+ * @param loop Whether it loops.
  * @return Whether it succeeded.
  */
 bool audio_manager::set_current_song(
-    const string &name, bool from_start, bool fade_in
+    const string &name, bool from_start, bool fade_in, bool loop
 ) {
 
     //Stop all other songs first.
@@ -734,10 +749,10 @@ bool audio_manager::set_current_song(
         //Start it.
         if(song_ptr->state == SONG_STATE_STOPPED) {
             start_song_track(
-                song_ptr, song_ptr->main_track, from_start, fade_in
+                song_ptr, song_ptr->main_track, from_start, fade_in, loop
             );
             for(auto const &m : song_ptr->mix_tracks) {
-                start_song_track(song_ptr, m.second, from_start, fade_in);
+                start_song_track(song_ptr, m.second, from_start, fade_in, loop);
             }
         }
         song_ptr->gain = fade_in ? 0.0f : 1.0f;
@@ -789,10 +804,11 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
  * @param from_start If true, the song starts from the beginning,
  * otherwise it starts from where it left off.
  * @param fade_in If true, the song starts fading in like normal.
+ * @param loop Whether it loops.
  */
 void audio_manager::start_song_track(
     song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
-    bool from_start, bool fade_in
+    bool from_start, bool fade_in, bool loop
 ) {
     if(!stream) return;
     al_set_audio_stream_gain(stream, fade_in ? 0.0f : 1.0f);
@@ -800,7 +816,9 @@ void audio_manager::start_song_track(
     al_set_audio_stream_loop_secs(
         stream, song_ptr->loop_start, song_ptr->loop_end
     );
-    al_set_audio_stream_playmode(stream, ALLEGRO_PLAYMODE_LOOP);
+    al_set_audio_stream_playmode(
+        stream, loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE
+    );
     
     al_attach_audio_stream_to_mixer(stream, music_mixer);
     al_set_audio_stream_playing(stream, true);

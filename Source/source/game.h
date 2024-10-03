@@ -261,6 +261,8 @@ public:
     );
     string get_cur_state_name() const;
     void unload_loaded_state(game_state* loaded_state);
+    void register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream);
+    void unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream);
     int start();
     void main_loop();
     void shutdown();

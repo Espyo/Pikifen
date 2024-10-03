@@ -66,6 +66,9 @@ const float BOSS_MUSIC_DISTANCE = 300.0f;
 //Name of the boss theme song.
 const string BOSS_SONG_NAME = "boss";
 
+//Name of the boss victory theme song.
+const string BOSS_VICTORY_SONG_NAME = "boss_victory";
+
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
 
@@ -270,7 +273,7 @@ void gameplay_state::enter() {
     cur_big_msg = BIG_MESSAGE_READY;
     big_msg_time = 0.0f;
     delta_t_mult = 0.5f;
-    playing_boss_music = false;
+    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
     
     if(!game.states.area_ed->quick_play_area_path.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.
@@ -654,7 +657,7 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     
     game.audio.stop_all_playbacks();
     game.audio.set_current_song("");
-    boss_song_from_start = true;
+    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
     save_statistics();
     
     switch(target) {
@@ -739,8 +742,20 @@ void gameplay_state::load() {
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
     
+    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.set_current_song("");
-    boss_song_from_start = true;
+    game.audio.on_song_finished = [this] (const string &name) {
+        if(name == GAMEPLAY::BOSS_VICTORY_SONG_NAME) {
+            switch(boss_music_state) {
+            case BOSS_MUSIC_STATE_VICTORY: {
+                game.audio.set_current_song(game.cur_area_data.song_name, false);
+                boss_music_state = BOSS_MUSIC_STATE_PAUSED;
+            } default: {
+                break;
+            }
+            }
+        }
+    };
     
     //Load the area.
     string area_folder_name;

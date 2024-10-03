@@ -40,6 +40,7 @@ extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
 extern const string BOSS_SONG_NAME;
+extern const string BOSS_VICTORY_SONG_NAME;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
@@ -90,6 +91,23 @@ enum BIG_MESSAGE {
     //Mission failed...
     BIG_MESSAGE_MISSION_FAILED,
     
+};
+
+
+//States for the area's boss music.
+enum BOSS_MUSIC_STATE {
+
+    //Hasn't played yet.
+    BOSS_MUSIC_STATE_NEVER_PLAYED,
+    
+    //Is playing.
+    BOSS_MUSIC_STATE_PLAYING,
+    
+    //Is not playing right now, but has played before.
+    BOSS_MUSIC_STATE_PAUSED,
+    
+    //Playing the victory theme.
+    BOSS_MUSIC_STATE_VICTORY,
 };
 
 
@@ -349,6 +367,9 @@ public:
     //Time passed in the current big message.
     float big_msg_time = 0.0f;
     
+    //Current state of the boss music.
+    BOSS_MUSIC_STATE boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
+    
     //Zoom level to use on the radar.
     float radar_zoom = PAUSE_MENU::RADAR_DEF_ZOOM;
     
@@ -370,6 +391,7 @@ public:
     size_t get_amount_of_idle_pikmin(const pikmin_type* filter = nullptr);
     long get_amount_of_onion_pikmin(const pikmin_type* filter = nullptr);
     long get_amount_of_total_pikmin(const pikmin_type* filter = nullptr);
+    void is_near_enemy_and_boss(bool* near_enemy, bool* near_boss);
     void update_available_leaders();
     void update_closest_group_members();
     void load() override;
@@ -419,12 +441,6 @@ private:
     
     //Is the gameplay paused?
     bool paused = false;
-    
-    //Are we currently playing boss music?
-    bool playing_boss_music = false;
-    
-    //Is the boss song meant to start from the beginning?
-    bool boss_song_from_start = true;
     
     //The first frame shouldn't allow for input just yet, because
     //some things are still being set up within the first logic loop.

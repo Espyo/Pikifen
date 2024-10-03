@@ -223,7 +223,11 @@ void asset_file_names_t::load(data_node* file) {
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
     const string &path, data_node* node, const bool report_errors
 ) {
-    return load_audio_stream(path, node, report_errors);
+    ALLEGRO_AUDIO_STREAM* stream = load_audio_stream(path, node, report_errors);
+    if(stream) {
+        game.register_audio_stream_source(stream);
+    }
+    return stream;
 }
 
 
@@ -233,6 +237,8 @@ ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
  * @param asset Audio stream to unload.
  */
 void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
+    al_drain_audio_stream(asset);
+    game.unregister_audio_stream_source(asset);
     al_destroy_audio_stream(asset);
 }
 

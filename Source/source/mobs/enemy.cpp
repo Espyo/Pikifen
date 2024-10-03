@@ -126,4 +126,23 @@ void enemy::start_dying_class_specifics() {
     if(game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
         game.states.gameplay->mission_remaining_mob_ids.erase(id);
     }
+    
+    if(ene_type->is_boss) {
+        switch(game.states.gameplay->boss_music_state) {
+        case BOSS_MUSIC_STATE_PLAYING: {
+            bool near_boss;
+            game.states.gameplay->is_near_enemy_and_boss(nullptr, &near_boss);
+            if(!near_boss) {
+                //Only play the victory fanfare if they're not near another one.
+                game.audio.set_current_song(
+                    GAMEPLAY::BOSS_VICTORY_SONG_NAME, true, false, false
+                );
+                game.states.gameplay->boss_music_state =
+                    BOSS_MUSIC_STATE_VICTORY;
+            }
+        } default: {
+            break;
+        }
+        }
+    }
 }

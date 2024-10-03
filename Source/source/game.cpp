@@ -218,6 +218,11 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
         mouse_cursor.update_pos(ev, screen_to_world_transform);
     }
     
+    //Audio stream finished.
+    if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
+        game.audio.handle_stream_finished((ALLEGRO_AUDIO_STREAM*) (ev.any.source));
+    }
+    
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
 }
@@ -329,6 +334,20 @@ void game_class::shutdown() {
     destroy_misc();
     destroy_event_things(logic_timer, logic_queue);
     destroy_allegro();
+}
+
+
+/**
+ * @brief Registers an Allegro audio stream's event source into the event
+ * queue.
+ *
+ * @param stream The audio stream.
+ */
+void game_class::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+    al_register_event_source(
+        logic_queue,
+        al_get_audio_stream_event_source(stream)
+    );
 }
 
 
@@ -452,6 +471,20 @@ int game_class::start() {
  */
 void game_class::unload_loaded_state(game_state* loaded_state) {
     loaded_state->unload();
+}
+
+
+/**
+ * @brief Unregisters an Allegro audio stream's event source from the event
+ * queue.
+ *
+ * @param stream The audio stream.
+ */
+void game_class::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+    al_unregister_event_source(
+        logic_queue,
+        al_get_audio_stream_event_source(stream)
+    );
 }
 
 
