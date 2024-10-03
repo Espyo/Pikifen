@@ -1141,7 +1141,7 @@ void mob::chomp(mob* m, const hitbox* hitbox_info) {
  * @param m The mob to circle around. If nullptr, circle around a point instead.
  * @param p The point to circle around, if any.
  * @param radius Circle these many units around the target.
- * @param clockwise Circle clockwise or counter-clockwise?
+ * @param clockwise Circle clockwise or counterclockwise?
  * @param speed Speed at which to move.
  * @param can_free_move Can the mob move freely, or only forward?
  */

@@ -49,31 +49,31 @@
     <table class="props-t props-t-o">
       <tr>
         <td>dropped_when_pikmin_is_whistled</td>
-        <td>If true, the Pikmin will drop the tool when it is whistled.</td>
+        <td>If <code>true</code>, the Pikmin will drop the tool when it is whistled.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>dropped_when_pikmin_lands</td>
-        <td>If true, the Pikmin will drop the tool when the Pikmin lands on the floor.</td>
+        <td>If <code>true</code>, the Pikmin will drop the tool when the Pikmin lands on the floor.</td>
         <td>Boolean</td>
         <td>true</td>
       </tr>
       <tr>
         <td>dropped_when_pikmin_lands_on_opponent</td>
-        <td>If true, the Pikmin will drop the tool when the Pikmin lands on the an opponent.</td>
+        <td>If <code>true</code>, the Pikmin will drop the tool when the Pikmin lands on the an opponent.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>pikmin_returns_after_using</td>
-        <td>If true, the Pikmin will return to the current leader after it drops the tool.</td>
+        <td>If <code>true</code>, the Pikmin will return to the current leader after it drops the tool.</td>
         <td>Boolean</td>
         <td>true</td>
       </tr>
       <tr>
         <td>stuck_when_pikmin_lands_on_opponent</td>
-        <td>If true, and if the Pikmin drops when it lands on an opponent, then the tool will become stuck to the opponent object.</td>
+        <td>If <code>true</code>, and if the Pikmin drops when it lands on an opponent, then the tool will become stuck to the opponent object.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
@@ -85,7 +85,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the tool type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that you use the <code>set_holdable</code> action at some point to make it so Pikmin can hold the tool, and listen out to the <code>on_held</code> and <code>on_released</code> events, to know when the tool has been picked up, and is ready to be used. The engine changes the <code>gentle_release</code> script variable to true when the Pikmin releases the tool "gently", i.e. when the Pikmin needs to go inside an Onion, and sets it to false otherwise, so you can use this to distinguish whether to leave the tool idling on the floor, or to activate it.</p>
+    <p>All of the tool type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that you use the <code><a href="events_and_actions.html#set-holdable">set_holdable</a></code> action at some point to make it so Pikmin can hold the tool, and listen out to the <code>on_held</code> and <code>on_released</code> events, to know when the tool has been picked up, and is ready to be used. The engine changes the <code>gentle_release</code> script variable to <code>true</code> when the Pikmin releases the tool "gently", i.e. when the Pikmin needs to go inside an Onion, and sets it to <code>false</code> otherwise, so you can use this to distinguish whether to leave the tool idling on the floor, or to activate it.</p>
 
     <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the tool's starting team. To know which ones exist, you can go to the area editor, select a tool, and read the tooltip of each variable.</p>
 

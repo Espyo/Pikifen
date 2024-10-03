@@ -12,7 +12,7 @@
 </head>
 
 <body onload="setup('Events and actions', ['Making content', 'Object script'], ['making.html', 'script.html']);">
-  <div id="content">
+  <div id="content" class="highlight-target">
     
     <p>This page will list all events and actions for <a href="script.html">object scripting</a>.</p>
 
@@ -22,11 +22,11 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-enter">
         <th style="text-align: left;"><code>on_enter</code></th>
         <td>Triggered when the current state is entered.</td>
       </tr>
-      <tr>
+      <tr id="on-leave">
         <th style="text-align: left;"><code>on_leave</code></th>
         <td>Triggered when the current state is left.</td>
       </tr>
@@ -36,23 +36,23 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-animation-end">
         <th style="text-align: left;"><code>on_animation end</code></th>
         <td>Triggered when the current animation finishes. Technically, this is triggered when the current animation begins looping.</td>
       </tr>
-      <tr>
+      <tr id="on-frame-signal">
         <th style="text-align: left;"><code>on_frame_signal</code></th>
-        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code>get_event_info</code> action.</td>
+        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code></code><a href="#get-event-info">get_event_info</a></code> action.</td>
       </tr>
-      <tr>
+      <tr id="on-ready">
         <th style="text-align: left;"><code>on_ready</code></th>
-        <td>Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code>on_enter</code> event of the first state are triggered before this.</td>
+        <td>Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code><a href="#on-enter">on_enter</a></code> event of the first state are triggered before this.</td>
       </tr>
-      <tr>
+      <tr id="on-tick">
         <th style="text-align: left;"><code>on_tick</code></th>
         <td>Triggered every single game frame. Because a frame can last for any amount of time, this is not an appropriate way to make things change over time. It is more useful for when you want to constantly update something, like make the object constantly turn to its focused object's position.</td>
       </tr>
-      <tr>
+      <tr id="on-timer">
         <th style="text-align: left;"><code>on_timer</code></th>
         <td>Triggered when the internal timer reaches 0.</td>
       </tr>
@@ -62,27 +62,27 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-far-from-home">
         <th style="text-align: left;"><code>on_far_from_home</code></th>
         <td>Triggered every frame the object is far enough away from its home (as per the <code>territory_radius</code> property).</td>
       </tr>
-      <tr>
+      <tr id="on-land">
         <th style="text-align: left;"><code>on_land</code></th>
         <td>Triggered every frame the object is touching the floor.</td>
       </tr>
-      <tr>
+      <tr id="on-leave-hazard">
         <th style="text-align: left;"><code>on_leave_hazard</code></th>
         <td>Triggered when the object was on a hazardous sector, but no longer is.</td>
       </tr>
-      <tr>
+      <tr id="on-reach-destination">
         <th style="text-align: left;"><code>on_reach_destination</code></th>
         <td>Triggered every frame that the object is in its destination, by moving there with any of the "move" actions, or by reaching the final destination with any of the "follow_path" actions.</td>
       </tr>
-      <tr>
+      <tr id="on-touch-hazard">
         <th style="text-align: left;"><code>on_touch_hazard</code></th>
         <td>Triggered when it touches a hazard, whether from a hitbox, or from a sector.</td>
       </tr>
-      <tr>
+      <tr id="on-touch-wall">
         <th style="text-align: left;"><code>on_touch_wall</code></th>
         <td>Triggered every frame it is touching a wall.</td>
       </tr>
@@ -92,15 +92,15 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-focus-off-reach">
         <th style="text-align: left;"><code>on_focus_off_reach</code></th>
         <td>Triggered every frame the focused object is beyond the current "far reach", or is dead. Also triggered when the focused object is deleted. Useful for making enemies lose track of focused Pikmin that are too far away.</td>
       </tr>
-      <tr>
+      <tr id="on-object-in-reach">
         <th style="text-align: left;"><code>on_object_in_reach</code></th>
         <td>Triggered when an object has entered within its "near reach". Will trigger every frame for the same object, too.</td>
       </tr>
-      <tr>
+      <tr id="on-opponent-in-reach">
         <th style="text-align: left;"><code>on_opponent_in_reach</code></th>
         <td>Same as <code>on_object_in_reach</code>, but for opponents only.</td>
       </tr>
@@ -110,27 +110,27 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-hitbox-touch-a-n">
         <th style="text-align: left;"><code>on_hitbox_touch_a_n</code></th>
-        <td>Triggered when one of the object's attack hitboxes touches an opponent's normal hitbox. The opposite doesn't exist since it's reserved by the engine for controlling attack damage, but you can try the <code>on_damage</code> event.</td>
+        <td>Triggered when one of the object's attack hitboxes touches an opponent's normal hitbox. The opposite doesn't exist since it's reserved by the engine for controlling attack damage, but you can try the <code><a href="#on-damage">on_damage</a></code> event.</td>
       </tr>
-      <tr>
+      <tr id="on-hitbox-touch-eat">
         <th style="text-align: left;"><code>on_hitbox_touch_eat</code></th>
         <td>Triggered when one of the object's normal hitboxes touches an opponent's "eat" hitbox. Particularly useful for tool objects.</td>
       </tr>
-      <tr>
+      <tr id="on-hitbox-touch-n-n">
         <th style="text-align: left;"><code>on_hitbox_touch_n_n</code></th>
         <td>Triggered when one of the object's normal hitboxes touches an opponent's normal hitbox.</td>
       </tr>
-      <tr>
+      <tr id="on-pikmin-land">
         <th style="text-align: left;"><code>on_pikmin_land</code></th>
         <td>Triggered when a thrown Pikmin lands on it. Technically, triggers when one of a thrown Pikmin's hitboxes touches one of its normal hitboxes.</td>
       </tr>
-      <tr>
+      <tr id="on-touch-object">
         <th style="text-align: left;"><code>on_touch_object</code></th>
         <td>Triggered every frame it is touches an object, for every object it's touching.</td>
       </tr>
-      <tr>
+      <tr id="on-touch-opponent">
         <th style="text-align: left;"><code>on_touch_opponent</code></th>
         <td>Same as <code>on_touch_object</code>, but for opponents only.</td>
       </tr>
@@ -140,43 +140,43 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
-      <tr>
+      <tr id="on-damage">
         <th style="text-align: left;"><code>on_damage</code></th>
         <td>Triggered when the object takes any sort of damage.</td>
       </tr>
-      <tr>
+      <tr id="on-finish-receiving-delivery">
         <th style="text-align: left;"><code>on_finish_receiving_delivery</code></th>
         <td>Triggered when another object, delivered to it by carrier Pikmin, finishes being received.</td>
       </tr>
-      <tr>
+      <tr id="on-held">
         <th style="text-align: left;"><code>on_held</code></th>
         <td>Triggered when the object is picked up by another one. Particularly useful for tool objects.</td>
       </tr>
-      <tr>
+      <tr id="on-itch">
         <th style="text-align: left;"><code>on_itch</code></th>
-        <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until an event shows up that can handle it.</td>
+        <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until a state shows up that can handle it.</td>
       </tr>
-      <tr>
+      <tr id="on-input-received">
         <th style="text-align: left;"><code>on_input_received</code></th>
-        <td>Triggered when the player performs an input. The action and value can be obtained with the <code>get_event_info</code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
+        <td>Triggered when the player performs an input. The player action and value can be obtained with the <code><a href="#get-event-info">get_event_info</a></code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
       </tr>
-      <tr>
+      <tr id="on-receive-message">
         <th style="text-align: left;"><code>on_receive_message</code></th>
-        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_event_info</code> action.</td>
+        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code><a href="#get-event-info">get_event_info</a></code> action.</td>
       </tr>
-      <tr>
+      <tr id="on-released">
         <th style="text-align: left;"><code>on_released</code></th>
         <td>Triggered when the object was being held by another, but has now been released. Particularly useful for tool objects.</td>
       </tr>
-      <tr>
+      <tr id="on-start-receiving-delivery">
         <th style="text-align: left;"><code>on_start_receiving_delivery</code></th>
         <td>Triggered when another object, delivered to it by carrier Pikmin, starts being received.</td>
       </tr>
-      <tr>
+      <tr id="on-weight-added">
         <th style="text-align: left;"><code>on_weight_added</code></th>
         <td>Triggered when an object starts standing atop this one, thus adding weight.</td>
       </tr>
-      <tr>
+      <tr id="on-weight-removed">
         <th style="text-align: left;"><code>on_weight_removed</code></th>
         <td>Triggered when an object that was standing atop this one leaves, thus removing weight.</td>
       </tr>
@@ -190,25 +190,25 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="else">
         <th><code>else</code></th>
-        <td>If the corresponding <code>if</code> action's check ends up being false, the script will run the actions after this <code>else</code>, until it reaches the matching <code>end_if</code>.</td>
+        <td>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run the actions after this <code>else</code>, until it reaches the matching <code>end_if</code>.</td>
       </tr>
-      <tr>
+      <tr id="end-if">
         <th><code>end_if</code></th>
-        <td>Closes a condition started by an <code>if</code> action.</td>
+        <td>Closes a condition started by an <code><a href="#if">if</a></code> action.</td>
       </tr>
-      <tr>
+      <tr id="goto">
         <th><code>goto</code></th>
         <td><dl>
           <dt><code><b>goto</b> &lt;label_name&gt;</code></dt>
           <dd>Orders the script to jump to where the label named &lt;label_name&gt; is. The label must be in the same event block as this <code>goto</code>. You can use this to loop actions multiple times in a row by returning to the top of the loop.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="if">
         <th><code>if</code></th>
         <td>
-          Only executes the next actions, until an <code>else</code> or <code>end_if</code> action, if the condition you specify is true. If not, it jumps to the matching <code>else</code> or <code>end_if</code> action.
+          Only executes the next actions, until an <code><a href="else">else</a></code> or <code><a href="end-if">end_if</a></code> action, if the condition you specify is true. If not, it jumps to the matching <code>else</code> or <code>end_if</code> action.
           <dl><dt><code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
           <dd>
             &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is a string. The possible operators are:
@@ -223,14 +223,14 @@
           </dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="label">
         <th><code>label</code></th>
         <td><dl>
           <dt><code><b>label</b> &lt;label_name&gt;</code></dt>
-          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code>goto</code> action to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
+          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code><a href="goto">goto</a></code> action to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-state">
         <th><code>set_state</code></th>
         <td><dl>
           <dt><code><b>set_state</b> &lt;state&gt;</code></dt>
@@ -243,42 +243,42 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="follow-path-randomly">
         <th><code>follow_path_randomly</code></th>
         <td><dl>
           <dt><code><b>follow_path_randomly</b> [&lt;path_label&gt;]</code></dt>
-          <dd>Tells the object to pick a random path stop in the area, and begin heading there, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first stop is not affected by the label, but if you wrote a label, the last path stop has to have an outgoing link with that label. When the mob gets there, or in the case it can't follow a path there, the <code>on_reach_destination</code> event will be triggered.</dd>
+          <dd>Tells the object to pick a random path stop in the area, and begin heading there, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first stop is not affected by the label, but if you wrote a label, the last path stop has to have an outgoing link with that label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="#on-reach-destination">on_reach_destination</a></code> event will be triggered.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="follow-path-to-absolute">
         <th><code>follow_path_to_absolute</code></th>
         <td><dl>
           <dt><code><b>follow_path_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;path_label&gt;]</code></dt>
-          <dd>Tells the object to begin heading towards the specified <a href="glossary.html#A">area coordinates</a>, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first and last path stop are not affected by the label. When the mob gets there, or in the case it can't follow a path there, the <code>on_reach_destination</code> event will be triggered.</dd>
+          <dd>Tells the object to begin heading towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first and last path stop are not affected by the label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="#on-reach-destination">on_reach_destination</a></code> event will be triggered.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="move-to-absolute">
         <th><code>move_to_absolute</code></th>
         <td><dl>
           <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#A">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
+          <dd>Tells the object to begin moving to the specified <a href="glossary.html#area-coordinates">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="move-to-relative">
         <th><code>move_to_relative</code></th>
         <td><dl>
           <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#R">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
+          <dd>Tells the object to begin moving to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="move-to-target">
         <th><code>move_to_target</code></th>
         <td><dl>
           <dt><code><b>move_to_target</b> &lt;target&gt;</code></dt>
           <dd>
             Tells the object to begin moving towards a special target. Possible values:
             <ul>
-              <li><code>arachnorb_foot_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> feet objects to move according to the internal plan. See the <code>arachnorb_plan_logic</code> action for more information.</li>
+              <li><code>arachnorb_foot_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> feet objects to move according to the internal plan. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
               <li><code>away_from_focused_mob</code>: Move away from the focused object, thus going in the direct opposite direction.</li>
               <li><code>focused_mob</code>: Move towards the focused object, following it as it moves.</li>
               <li><code>focused_mob_position</code>: Move towards the position of the focused object at this exact moment. In other words, don't follow it as it moves.</li>
@@ -288,76 +288,76 @@
           </dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-flying">
         <th><code>set_flying</code></th>
         <td><dl>
           <dt><code><b>set_flying</b> &lt;true/false&gt;</code></dt>
           <dd>Sets whether or not this object can fly.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-gravity">
         <th><code>set_gravity</code></th>
         <td><dl>
           <dt><code><b>set_gravity</b> &lt;multiplier&gt;</code></dt>
           <dd>Sets how gravity affects this object. 1 is normal, 0 is no gravity, 0.5 is half gravity, -1 is upwards gravity, etc.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="stabilize-z">
         <th><code>stabilize_z</code></th>
         <td><dl>
           <dt><code><b>stabilize_z</b> &lt;reference&gt; &lt;offset&gt;</code></dt>
           <dd>Changes the object's Z coordinate to match the Z coordinate of its highest (if the reference is <code>highest</code>) or lowest (if the reference is <code>lowest</code>) linked object. After changing it, it also moves it up by the specified offset.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="stop">
         <th><code>stop</code></th>
         <td>Makes the object stop moving laterally, and makes it stop rotating. If it was following a path, it will also stop doing that.</td>
       </tr>
-      <tr>
+      <tr id="stop-vertically">
         <th><code>stop_vertically</code></th>
         <td>Kills the object's vertical momentum.</td>
       </tr>
-      <tr>
+      <tr id="teleport-to-absolute">
         <th><code>teleport_to_absolute</code></th>
         <td><dl>
           <dt><code><b>teleport_to_absolute</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
-          <dd>Instantly teleports the object to the specified <a href="glossary.html#A">area coordinates</a>.</dd>
+          <dd>Instantly teleports the object to the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="teleport-to-relative">
         <th><code>teleport_to_relative</code></th>
         <td><dl>
           <dt><code><b>teleport_to_relative</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
-          <dd>Instantly teleports the object to the specified <a href="glossary.html#R">relative coordinates</a>.</dd>
+          <dd>Instantly teleports the object to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="turn-to-absolute">
         <th><code>turn_to_absolute</code></th>
         <td><dl>
           <dt><code><b>turn_to_absolute</b> &lt;angle&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#A">absolute angle</a>.</dd>
+          <dd>Turn towards the specified <a href="glossary.html#absolute-angle">absolute angle</a>.</dd>
           <dt><code><b>turn_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#A">area coordinates</a>.</dd>
+          <dd>Turn towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="turn-to-relative">
         <th><code>turn_to_relative</code></th>
         <td><dl>
           <dt><code><b>turn_to_relative</b> &lt;angle&gt;</code></dt>
-          <dd>Turn &lt;angle&gt; degrees anti-clockwise.</dd>
+          <dd>Turn &lt;angle&gt; degrees clockwise.</dd>
           <dt><code><b>turn_to_relative</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#R">relative coordinates</a>.</dd>
+          <dd>Turn towards the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="turn-to-target">
         <th><code>turn_to_target</code></th>
         <td><dl>
           <dt><code><b>turn_to_target</b> &lt;target&gt;</code></dt>
           <dd>
             Turns towards a special target. Possible values are:
             <ul>
-              <li><code>arachnorb_head_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code>arachnorb_plan_logic</code> action for more information.</li>
-              <li><code>focused_mob</code>: Constantly turn towards the focused mob. You can make it stop with the <code>stop</code> action.</li>
+              <li><code>arachnorb_head_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
+              <li><code>focused_mob</code>: Constantly turn towards the focused mob. You can make it stop with the <code><a href="#stop">stop</a></code> action.</li>
               <li><code>home</code>: Turn towards home (spawn point).</li>
             </ul>
           </dd>
@@ -369,60 +369,60 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="add-health">
         <th><code>add_health</code></th>
         <td><dl>
           <dt><b><code>add_health &lt;amount&gt;</code></b></dt>
           <dd>Add &lt;amount&gt; health to the object's health. You can also remove some health by specifying a negative number.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="finish-dying">
         <th><code>finish_dying</code></th>
         <td>Runs the procedure related to the end of the object's death sequence. Amongst other things, this makes enemies unleash a spirit.</td>
       </tr>
-      <tr>
+      <tr id="receive-status">
         <th><code>receive_status</code></th>
         <td><dl>
           <dt><code><b>receive_status</b> &lt;status name&gt;</code></dt>
           <dd>Applies the specified status effect.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="remove-status">
         <th><code>remove_status</code></th>
         <td><dl>
           <dt><code><b>remove_status</b> &lt;status name&gt;</code></dt>
           <dd>Removes the specified status effect, if the object is currently afflicted by it.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-far-reach">
         <th><code>set_far_reach</code></th>
         <td><dl>
           <dt><code><b>set_far_reach</b> &lt;reach_name&gt;</code></dt>
           <dd>Makes it use the specified reach as the "far reach", from here on out.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-health">
         <th><code>set_health</code></th>
         <td><dl>
           <dt><code><b>set_health</b> &lt;amount&gt;</code></dt>
           <dd>Sets the object's health to the specified number.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-huntable">
         <th><code>set_huntable</code></th>
         <td><dl>
           <dt><code><b>set_huntable</b> &lt;true/false&gt;</code></dt>
           <dd>Sets whether or not this object can currently be hunted by other objects. This does not affect whether or not other objects can hurt it.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-near-reach">
         <th><code>set_near_reach</code></th>
         <td><dl>
           <dt><code><b>set_near_reach</b> &lt;reach_name&gt;</code></dt>
           <dd>Makes it use the specified reach as the "near reach", from here on out.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-team">
         <th><code>set_team</code></th>
         <td><dl>
           <dt><code><b>set_team</b> &lt;team_name&gt;</code></dt>
@@ -431,7 +431,7 @@
           </dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="start-dying">
         <th><code>start_dying</code></th>
         <td>Runs the procedure related to the start of the object's death sequence. Amongst other things, this makes enemies unleash a cloud of sparkle particles.</td>
       </tr>
@@ -441,15 +441,15 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="get-chomped">
         <th><code>get_chomped</code></th>
-        <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code>on_hitbox_touch_eat</code> event.</td>
+        <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code><a href="#on-hitbox-touch-eat">on_hitbox_touch_eat</a></code> event.</td>
       </tr>
-      <tr>
+      <tr id="release">
         <th><code>release</code></th>
         <td>All captured Pikmin are safely freed.</td>
       </tr>
-      <tr>
+      <tr id="start-chomping">
         <th><code>start_chomping</code></th>
         <td>
           Sets what body parts will be used to trap Pikmin from here on out.
@@ -457,18 +457,18 @@
           <dd>&lt;victim_max&gt; is the maximum number of Pikmin that can be caught. &lt;body_parts&gt; is the name of the body part(s) that will be used for trapping, one per word.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="stop-chomping">
         <th><code>stop_chomping</code></th>
         <td>Makes it so no body parts will be used for chomping any more, from here on out.</td>
       </tr>
-      <tr>
+      <tr id="swallow">
         <th><code>swallow</code></th>
         <td><dl>
           <dt><code><b>swallow</b> &lt;number&gt;</code></dt>
           <dd>Makes the object swallow &lt;number&gt; amount out of the captured Pikmin, picked at random. This kills the Pikmin.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="swallow-all">
         <th><code>swallow_all</code></th>
         <td>Makes the object swallow all captured Pikmin. This kills the Pikmin.</td>
       </tr>
@@ -478,7 +478,7 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="focus">
         <th><code>focus</code></th>
         <td><dl>
           <dt><code><b>focus</b> trigger</code></dt>
@@ -489,18 +489,18 @@
           <dd>Focuses on the parent object, if any. You cannot use this when the mob has just spawned, since it doesn't have parent information by that point.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="link-with-focused-mob">
         <th><code>link_with_focused_mob</code></th>
         <td>Establishes a link between this mob and its focused mob, but not the other way around. If that mob is already a linked mob, nothing happens.</td>
       </tr>
-      <tr>
+      <tr id="load-focused-mob-memory">
         <th><code>load_focused_mob_memory</code></th>
         <td><dl>
           <dt><code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
           <dd>Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Loses mob focus if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="save-focused-mob-memory">
         <th><code>save_focused_mob_memory</code></th>
         <td><dl>
           <dt><code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
@@ -513,30 +513,30 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="hold-focused-mob">
         <th><code>hold_focused_mob</code></th>
         <td><dl>
           <dt><code><b>hold_focused_mob</b> &lt;body_part_name&gt;</code></dt>
           <dd>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="order-release">
         <th><code>order_release</code></th>
         <td>Orders the Pikmin that is holding on to this object to release it.</td>
       </tr>
-      <tr>
+      <tr id="release-stored-mobs">
         <th><code>release_stored_mobs</code></th>
         <td>Releases any objects stored "inside" this one with <code>store_focus_inside</code>.</td>
       </tr>
-      <tr>
+      <tr id="store-focus-inside">
         <th><code>store_focus_inside</code></th>
         <td>Takes the focused object and stores it "inside" the current one. Once inside, it is not visible and cannot be interacted with. Objects stored inside another can be released with <code>release_stored_mobs</code>.</td>
       </tr>
-      <tr>
+      <tr id="throw-focused-mob">
         <th><code>throw_focused_mob</code></th>
         <td><dl>
           <dt><code><b>throw_focused_mob</b> &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;max_height&gt;</code></dt>
-          <dd>Makes the focused mob be thrown in an arc from where it is towards the specified <a href="glossary.html#A">absolute coordinates</a>. The peak of its jump reaches a height specified by the &lt;max_height&gt; parameter. If this mob was holding the focused mob, then it will stop holding. If the &lt;max_height&gt; is 0, the mob is simply gently released.</dd>
+          <dd>Makes the focused mob be thrown in an arc from where it is towards the specified <a href="glossary.html#absolute-coordinates">absolute coordinates</a>. The peak of its jump reaches a height specified by the &lt;max_height&gt; parameter. If this mob was holding the focused mob, then it will stop holding. If the &lt;max_height&gt; is 0, the mob is simply gently released.</dd>
         </dl></td>
       </tr>
       
@@ -546,14 +546,14 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="get-angle">
         <th><code>get_angle</code></th>
         <td><dl>
           <dt><code><b>get_angle</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the angle between the two sets of coordinates. This angle is in degrees, like other angles used in scripts.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="glossary.html#angle">angle</a> between the two sets of coordinates.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-area-info">
         <th><code>get_area_info</code></th>
         <td><dl>
           <dt><code><b>get_area_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
@@ -566,21 +566,21 @@
           </dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-coordinates-from-angle">
         <th><code>get_coordinates_from_angle</code></th>
         <td><dl>
           <dt><code><b>get_coordinates_from_angle</b> &lt;x_destination_variable_name&gt; &lt;y_destination_variable_name&gt; &lt;angle&gt; &lt;distance&gt;</code></dt>
-          <dd>Sets the destination variables to the X and Y coordinates that represent the specified angle and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates. The angle should be in degrees, like other angles used in scripts.</dd>
+          <dd>Sets the destination variables to the X and Y <a href="glossary.html#coordinates">coordinates</a> that represent the specified <a href="glossary.html#angle">angle</a> and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-distance">
         <th><code>get_distance</code></th>
         <td><dl>
           <dt><code><b>get_distance</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
           <dd>Sets the variable &lt;destination_variable_name&gt; to the distance between the two sets of coordinates.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-event-info">
         <th><code>get_event_info</code></th>
         <td><dl>
           <dt><code><b>get_event_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
@@ -588,31 +588,31 @@
             Sets the variable &lt;destination_variable_name&gt; to some special information about the script event. The possible data are:
             <ul>
               <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
-              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
+              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code><a href="#on-frame-signal">on_frame_signal</a></code> event.</li>
               <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
-              <li><code><b>input_name</b></code>: The name of the input that triggered an <code>on_input_received</code> event.</li>
-              <li><code><b>input_value</b></code>: The value of the input that triggered an <code>on_input_received</code> event. 1 when fully pressed, 0 when fully released.</li>
-              <li><code><b>message</b></code>: What the message was that got sent when the <code>on_receive_message</code> event got triggered.</li>
+              <li><code><b>input_name</b></code>: The name of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event.</li>
+              <li><code><b>input_value</b></code>: The value of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event. 1 when fully pressed, 0 when fully released.</li>
+              <li><code><b>message</b></code>: What the message was that got sent when the <code><a href="#on-receive-message">on_receive_message</a></code> event got triggered.</li>
               <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
             </ul>
           </dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-floor-z">
         <th><code>get_floor_z</code></th>
         <td><dl>
           <dt><code><b>get_floor_z</b> &lt;destination_variable_name&gt; &lt;x&gt; &lt;y&gt;</code></dt>
           <dd>Sets the variable &lt;destination_variable_name&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-focus-var">
         <th><code>get_focus_var</code></th>
         <td><dl>
           <dt><code><b>get_focus_var</b> &lt;destination_variable_name&gt; &lt;focused_mob_variable_name&gt;</code></dt>
           <dd>Sets the variable &lt;destination_variable_name&gt; of this mob to the same value as the variable &lt;focused_mob_variable_name&gt; of the focused mob, if any.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-mob-info">
         <th><code>get_mob_info</code></th>
         <td><dl>
           <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target&gt; &lt;information&gt;</code></dt>
@@ -651,28 +651,28 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="calculate">
         <th><code>calculate</code></th>
         <td><dl>
           <dt><code><b>calculate</b> &lt;destination_variable_name&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
           <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), or <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;destination_variable_name&gt; field shouldn't use it!</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-random-decimal">
         <th><code>get_random_decimal</code></th>
         <td><dl>
           <dt><code><b>get_random_decimal</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;. This number is a real number, so it can have decimal places.</dd>
+          <dd>Places a random <a href="glossary.html#real-number">real number</a> between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="get-random-int">
         <th><code>get_random_int</code></th>
         <td><dl>
           <dt><code><b>get_random_int</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;. This number is an integer number, so it will not have decimal places.</dd>
+          <dd>Places a random <a href="glossary.html#integer">integer number</a> between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-var">
         <th><code>set_var</code></th>
         <td><dl>
           <dt><code><b>set_var</b> &lt;destination_variable_name&gt; &lt;value&gt;</code></dt>
@@ -685,21 +685,21 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="send-message-to-focus">
         <th><code>send_message_to_focus</code></th>
         <td><dl>
           <dt><code><b>send_message_to_focus</b> &lt;message&gt;</code></dt>
-          <dd>Send a text message to the currently focused mob. Objects that receive a message will be thrown the <code>on_receive_message</code> event.</dd>
+          <dd>Send a text message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="#on-receive-message">on_receive_message</a></code> event.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="send-message-to-links">
         <th><code>send_message_to_links</code></th>
         <td><dl>
           <dt><code><b>send_message_to_links</b> &lt;message&gt;</code></dt>
           <dd>Same as <code>send_message_to_focus</code>, but it sends it to all linked objects.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="send-message-to-nearby">
         <th><code>send_message_to_nearby</code></th>
         <td><dl>
           <dt><code><b>send_message_to_nearby</b> &lt;distance&gt; &lt;message&gt;</code></dt>
@@ -712,21 +712,21 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="set-can-block-paths">
         <th><code>set_can_block_paths</code></th>
         <td><dl>
           <dt><code><b>set_can_block_paths</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a false parameter, when the object's health drops to 0.</dd>
+          <dd>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a <code>false</code> parameter, when the object's health drops to 0.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-height">
         <th><code>set_height</code></th>
         <td><dl>
           <dt><code><b>set_height</b> &lt;height&gt;</code></dt>
           <dd>Sets the object's height. Objects atop this one will rise or lower accordingly.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-holdable">
         <th><code>set_holdable</code></th>
         <td><dl>
           <dt><code><b>set_holdable</b></code></dt>
@@ -735,7 +735,7 @@
           <dd>Makes it so that the specified kinds of objects can hold this object. You can write more than one, by writing one in each word. The valid values are <code>pikmin</code> for Pikmin, and <code>enemies</code> for enemies.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-tangible">
         <th><code>set_tangible</code></th>
         <td><dl>
           <dt><code><b>set_tangible</b> &lt;true/false&gt;</code></dt>
@@ -748,51 +748,51 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="play-sound">
         <th><code>play_sound</code></th>
         <td><dl>
           <dt><code><b>play_sound</b> &lt;sound_data&gt; [&lt;sound_ID_destination_variable_name&gt;]</code></dt>
-          <dd>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>. You can obtain the ID of the resulting sound (technically the ID of the sound <i>source</i>) by specifying the name of the variable that will receive it in the second parameter. You can then use that ID to stop the sound prematurely with the <code>stop_sound</code> action. The ID will be 0 if the sound couldn't be played.</dd>
+          <dd>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>. You can obtain the ID of the resulting sound (technically the ID of the sound <i>source</i>) by specifying the name of the variable that will receive it in the second parameter. You can then use that ID to stop the sound prematurely with the <code><a href="#stop-sound">stop_sound</a></code> action. The ID will be 0 if the sound couldn't be played.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-hiding">
         <th><code>set_hiding</code></th>
         <td><dl>
           <dt><code><b>set_hiding</b> &lt;true/false&gt;</code></dt>
           <dd>Sets whether or not the engine should hide this object from here on out. This makes the object, as well as its shadow and health to not be drawn. This is useful, for instance, when a Sheargrub digs underground.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-shadow-visibility">
         <th><code>set_shadow_visibility</code></th>
         <td><dl>
           <dt><code><b>set_shadow_visibility</b> &lt;true/false&gt;</code></dt>
           <dd>Sets whether or not the engine should draw this object's shadow from here on out.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="start-height-effect">
         <th><code>start_height_effect</code></th>
         <td>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a fake perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</td>
       </tr>
-      <tr>
+      <tr id="start-particles">
         <th><code>start_particles</code></th>
         <td><dl>
           <dt><code><b>start_particles</b> &lt;generator_name&gt; [&lt;x offset&gt;] [&lt;y offset&gt;] [&lt;z offset&gt;]</code></dt>
-          <dd>Begin emitting particles using the specified particle generator. If specified, x, y, and z are the <a href="glossary.html#R">relative coordinates</a> of the object at which to place the particles. If the particle generator specified has no interval (i.e. it only launches particles once and then it's over), then the particle generator is automatically removed from the object after it emits its particles. An object can only have one script-given particle generator attached at a time.</dd>
+          <dd>Begin emitting particles using the specified particle generator. If specified, x, y, and z are the <a href="glossary.html#relative-coordinates">relative coordinates</a> of the object at which to place the particles. If the particle generator specified has no interval (i.e. it only launches particles once and then it's over), then the particle generator is automatically removed from the object after it emits its particles. An object can only have one script-given particle generator attached at a time.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="stop-height-effect">
         <th><code>stop_height_effect</code></th>
         <td>Stops the height effect started with <code>start_height_effect</code>. This also gets called every time the object touches the floor.</td>
       </tr>
-      <tr>
+      <tr id="stop-particles">
         <th><code>stop_particles</code></th>
         <td>Removes any currently attached particle generator.</td>
       </tr>
-      <tr>
+      <tr id="stop-sound">
         <th><code>stop_sound</code></th>
         <td><dl>
           <dt><code><b>stop_sound</b> &lt;sound_ID&gt;</code></dt>
-          <dd>If the object is currently playing a sound, this stops it. You can obtain the ID of a sound when you start it by the second parameter in the <code>play_sound</code> action. It's safe to use this action even if the ID is 0 (meaning the sound didn't play) or it's a sound that has already stopped.</dd>
+          <dd>If the object is currently playing a sound, this stops it. You can obtain the ID of a sound when you start it by the second parameter in the <code><a href="#play-sound">play_sound</a></code> action. It's safe to use this action even if the ID is 0 (meaning the sound didn't play) or it's a sound that has already stopped.</dd>
         </dl></td>
       </tr>
     </table>
@@ -801,7 +801,7 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
-      <tr>
+      <tr id="arachnorb-plan-logic">
         <th><code>arachnorb_plan_logic</code></th>
         <td>
           Special logic for <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>-type enemies. This is used to internally plan what sort of movements the arachnorb's feet will need to do for the next sequence of steps, so that it can achieve the specified goal. This only works on the object that represents the arachnorb's head, which must be a <a href="mob_type.html#parent">parent object</a> with feet children objects. In order for the engine to know where to position the feet, the following script variables should be declared: <code>max_step_distance</code> specifies the maximum distance a foot can move per step; <code>max_turn_angle</code> specifies the maximum amount of degrees the arachnorb can turn per step; <code>min_turn_angle</code> specifies the minimum amount of degrees the arachnorb can turn per step; <code>feet_normal_distance</code> specifies the usual distance the feet are from the center of the head.
@@ -812,25 +812,25 @@
           <dt><code><b>arachnorb_plan_logic</b> cw_turn</code></dt>
           <dd>Sets up the internal logic for the arachnorb to rotate clockwise. When this is called manually, the arachnorb turns a random angle between the minimum and maximum turn amounts.</dd>
           <dt><code><b>arachnorb_plan_logic</b> ccw_turn</code></dt>
-          <dd>Same as the <code>cw_turn</code> goal, but for a counter-clockwise turn.</dd>
+          <dd>Same as the <code>cw_turn</code> goal, but for a counterclockwise turn.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="delete">
         <th><code>delete</code></th>
         <td>Delete this object.</td>
       </tr>
-      <tr>
+      <tr id="drain-liquid">
         <th><code>drain_liquid</code></th>
         <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</td>
       </tr>
-      <tr>
+      <tr id="print">
         <th><code>print</code></th>
         <td><dl>
           <dt><code><b>print</b> &lt;text&gt;</code></dt>
           <dd>Prints some text to the top of the screen. Only useful for debugging the script, so you know how much a variable is worth, where the script passes, etc.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-animation">
         <th><code>set_animation</code></th>
         <td><dl>
           <dt><code><b>set_animation</b> &lt;animation&gt;</code></dt>
@@ -849,35 +849,35 @@
           <dd>Same as above but also makes it so that the animation speed depends on the object's speed. If the object is moving at full speed (i.e. the speed defined in the <code>move_speed</code> property of its mob type data), the animation will play at normal speed. If the object is moving slower the animation will play slower (up to a limit), and the same is true if the object is going faster.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-limb-animation">
         <th><code>set_limb_animation</code></th>
         <td><dl>
           <dt><code><b>set_limb_animation</b> &lt;animation&gt;</code></dt>
           <dd>Same as <code>set_animation</code>, but for the limb connecting it to its parent mob.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-sector-scroll">
         <th><code>set_sector_scroll</code></th>
         <td><dl>
           <dt><code><b>set_sector_scroll</b> &lt;x_speed&gt; &lt;y_speed&gt;</code></dt>
           <dd>Makes the sector this object is on begin scrolling, with the specified speed in the X axis (units per second) and the specified speed in the Y axis. Its floor texture will scroll along, and any objects on this sector will be dragged too. Setting both values to 0 will make it stop scrolling, naturally.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="set-timer">
         <th><code>set_timer</code></th>
         <td><dl>
           <dt><code><b>set_timer</b> &lt;amount&gt;</code></dt>
           <dd>Starts the mob's timer with the specified time period. Writing 0 makes the current timer stop, without triggering any <code>on_timer</code> events.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="show-message-from-var">
         <th><code>show_message_from_var</code></th>
         <td><dl>
           <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
           <dd>Shows a message on-screen using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
         </dl></td>
       </tr>
-      <tr>
+      <tr id="spawn">
         <th><code>spawn</code></th>
         <td><dl>
           <dt><code><b>spawn</b> &lt;spawn data&gt;</code></dt>

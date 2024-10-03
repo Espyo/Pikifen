@@ -57,7 +57,7 @@
     
     <p>The way the engine does daylight is quite simple: the entire game scene is rendered on the screen, and then a giant, transparent, colored layer is placed on top of everything. Imagine having a drawing of a scene from the engine on top of a table, in a piece of paper. Now imagine placing a sheet of <a href="http://en.wikipedia.org/wiki/Tracing_paper">tracing paper</a> that's slightly orange on top of it. This would make the scene be more orange, which would give it a faint twilight-hour look. The color and the opacity of the layer (the tracing paper, in the real world example) influence the final daylight tint.</p>
 
-    <p>To add lighting information, you must create a <code>lighting</code> block inside the weather condition's block. Inside the block you just created, write down the <a href="#tables">table</a> with the <a href="making.html#data-file">colors</a> to use throughout the day, along with their opacity. If you don't add lighting information, then no lighting filter will be applied.</p>
+    <p>To add lighting information, you must create a <code>lighting</code> block inside the weather condition's block. Inside the block you just created, write down the <a href="#tables">table</a> with the <a href="making.html#data-file-color">colors</a> to use throughout the day, along with their opacity. If you don't add lighting information, then no lighting filter will be applied.</p>
 
     <h2 id="sun-strength">Sun strength</h2>
     
@@ -74,7 +74,7 @@
     
     <p>You can add a fog effect to make things near the camera visible, but things farther away to become more and more washed out by the fog. This is a good way to limit the player's visibility, or to add a gloomy feel to the ambiance.</p>
 
-    <p>To add fog information, create a <code>fog_near</code> property inside the weather condition's block. Specify a number for this property. Anything within this radius you wrote is 100% visible, and from this radius outwards, visibility starts to become gradually more consumed by the fog. Then, add a <code>fog_far</code> property. From this distance outwards, the fog is fully dense. This is where the gradual fog density increase stops. Finally, write a <code>fog</code> block, and inside, write down the <a href="#tables">table</a> that lists the <a href="making.html#data-file">color and opacity</a> of the fog throughout the day. If you don't specify fog information, no fog effect will be applied.</p>
+    <p>To add fog information, create a <code>fog_near</code> property inside the weather condition's block. Specify a number for this property. Anything within this radius you wrote is 100% visible, and from this radius outwards, visibility starts to become gradually more consumed by the fog. Then, add a <code>fog_far</code> property. From this distance outwards, the fog is fully dense. This is where the gradual fog density increase stops. Finally, write a <code>fog</code> block, and inside, write down the <a href="#tables">table</a> that lists the <a href="making.html#data-file-color">color and opacity</a> of the fog throughout the day. If you don't specify fog information, no fog effect will be applied.</p>
 
     <h2 id="blackout">Blackout effect</h2>
     

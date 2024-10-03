@@ -154,13 +154,13 @@
       </tr>
       <tr>
         <td>can_walk_on_others</td>
-        <td>If true, this object can move in any direction freely, without having to first turn there. It will also not face towards the direction it is going.</td>
+        <td>If <code>true</code>, this object can move in any direction freely, without having to first turn there. It will also not face towards the direction it is going.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>can_free_move</td>
-        <td>If true, this object can walk on top of objects that have the "walkable" property.</td>
+        <td>If <code>true</code>, this object can walk on top of objects that have the "walkable" property.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
@@ -172,7 +172,7 @@
       </tr>
       <tr>
         <td>custom_carry_spots</td>
-        <td>Normally Pikmin place themselves around the object in a ring pattern when carrying it. With this you can specify custom positions. This is a list of <a href="glossary.html#R">relative coordinates</a>, e.g.: <code>128 0; 100 50; -30 -30</code>.</td>
+        <td>Normally Pikmin place themselves around the object in a ring pattern when carrying it. With this you can specify custom positions. This is a list of <a href="glossary.html#relative-coordinates">relative coordinates</a>, e.g.: <code>128 0; 100 50; -30 -30</code>.</td>
         <td>Coordinate list</td>
         <td></td>
       </tr>
@@ -190,7 +190,7 @@
       </tr>
       <tr>
         <td>has_group</td>
-        <td>If true, this object can have a group of other objects (usually a group of Pikmin) following behind it, likely via the <code>follow_link_as_leader</code> <a href="script.html">script variable</a>. Without this property, it can't have other objects following it.</td>
+        <td>If <code>true</code>, this object can have a group of other objects (usually a group of Pikmin) following behind it, likely via the <code>follow_link_as_leader</code> <a href="script.html">script variable</a>. Without this property, it can't have other objects following it.</td>
         <td>Boolean</td>
         <td></td>
       </tr>
@@ -203,7 +203,7 @@
       <tr>
         <td>inactive_logic</td>
         <td>
-          Controls how the object works when it is not <a href="glossary.html#A">active</a>. <code>normal</code> by default, except for Pikmin and leaders, where it's <code>all_logic</code> by default. This property is fairly important for performance. Possible values are:
+          Controls how the object works when it is not <a href="glossary.html#active">active</a>. <code>normal</code> by default, except for Pikmin and leaders, where it's <code>all_logic</code> by default. This property is fairly important for performance. Possible values are:
           <ul>
             <li><code>normal</code>: Normal logic &ndash; the object does nothing when inactive.</li>
             <li><code>all_logic</code>: The object still does its whole logic (i.e. ticks and interactions) when inactive.</li>
@@ -216,7 +216,7 @@
       </tr>
       <tr>
         <td>itch_damage</td>
-        <td>If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code>on_itch</code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go.</td>
+        <td>If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code><a href="events_and_actions.html#on-itch">on_itch</a></code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
@@ -240,13 +240,13 @@
       </tr>
       <tr>
         <td>pushes_softly</td>
-        <td>If true, and if this object can push others, then the push is fairly soft, allowing leaders and Pikmin to squeeze through if they persist for long enough.</td>
+        <td>If <code>true</code>, and if this object can push others, then the push is fairly soft, allowing leaders and Pikmin to squeeze through if they persist for long enough.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>pushes_with_hitboxes</td>
-        <td>If true, this object pushes with its (normal or attack) hitboxes, instead of pushing using its object's center and radius.</td>
+        <td>If <code>true</code>, this object pushes with its (normal or attack) hitboxes, instead of pushing using its object's center and radius.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
@@ -453,16 +453,51 @@
     </ul>
 
     <p>It can also optionally have these properties:</p>
-    
-    <ul>
-      <li><b><code>relative</code></b>: Are the specified spawn coordinates <a href="glossary.html#A">absolute</a> or <a href="glossary.html#R">relative</a>? Defaults to true.</li>
-      <li><b><code>coordinates</code></b>: Coordinates to spawn in, in the format <code>x y z</code>. Defaults to <code>0 0 0</code>.</li>
-      <li><b><code>angle</code></b>: Angle the spawned object will be facing. Defaults to 0.</li>
-      <li><b><code>momentum</code></b>: If this is 0, the mob spawns in the exact spot specified and stand there. Otherwise, it will spawn in that spot but be launched in a random direction, with the specified momentum. 100 is a good general case value. Defaults to 0.</li>
-      <li><b><code>vars</code></b>: Any <a href="script.html#vars">script variables</a> to include, separated by semicolon. Example: <code>vars = maturity = 0; sprout = true</code>. Defaults to none.</li>
-      <li><b><code>link_spawn_to_object</code></b>: If <code>true</code>, a <a href="misc_features.html#mob-links">link</a> will be created from the spawned object to your object. Defaults to false.</li>
-      <li><b><code>link_object_to_spawn</code></b>: If <code>true</code>, a link will be created from your object to the spawned object. Defaults to false.</li>
-    </ul>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>relative</td>
+        <td>Are the spawn coordinates specified in the <code>coordinates</code> property <a href="glossary.html#absolute-coordinates">absolute</a> or <a href="glossary.html#relative-coordinates">relative</a>?</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>coordinates</td>
+        <td><a href="glossary.html#coordinates">Coordinates</a> to spawn in. Whether they are relative or absolute depends on the <code>relative</code> property.</td>
+        <td>Text</td>
+        <td>0 0 0</td>
+      </tr>
+      <tr>
+        <td>angle</td>
+        <td><a href="glossary.html#absolute-angle">Absolute angle</a> the spawned object will be facing.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>momentum</td>
+        <td>If this is 0, the mob spawns in the exact spot specified and stand there. Otherwise, it will spawn in that spot but be launched in a random direction, with the specified momentum. 100 is a good general case value.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>vars</td>
+        <td>Any <a href="script.html#vars">script variables</a> to include, separated by semicolon. Example: <code>vars = maturity = 0; sprout = true</code>.</td>
+        <td>List</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>link_spawn_to_object</td>
+        <td>If <code>true</code>, a <a href="misc_features.html#mob-links">link</a> will be created from the spawned object to your object.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>link_object_to_spawn</td>
+        <td>If <code>true</code>, a link will be created from your object to the spawned object.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
 
     <h3 id="parent">Parent/child objects</h3>
     
@@ -473,44 +508,143 @@
     <p>Children objects can also be connected to a specific body part in the parent. Because children objects are commonly used as appendages of the creature, it is possible to draw a "limb" connecting a parent object to a child object. This limb is a rectangular shaped sprite that stretches and rotates accordingly.</p>
 
     <p>To make your object type a parent, go to <code>Data.txt</code>, and add a block called <code>children</code>. Inside, you will include a series of blocks, each one with a unique name that represents the child, e.g. "left_foot". Now, when your object is spawned, it will spawn these children along with it. Each of these children blocks needs to have the following properties:</p>
-    
-    <ul>
-      <li><b><code>spawn</code></b>: Name of the <a href="#spawning">spawn data</a> to use.</li>
-    </ul>
+
+    <table class="props-t props-t-m">
+      <tr>
+        <td>spawn</td>
+        <td>Name of the <a href="#spawning">spawn data</a> to use.</td>
+        <td>Text</td>
+      </tr>
+    </table>
 
     <p>The blocks can also have the following optional properties:</p>
     
-    <ul>
-      <li><b><code>parent_holds</code></b>: If <code>true</code>, then the parent object is holding this one, much like an enemy holds a Pikmin that is latched on to it. Use the following properties to specify the location. Defaults to false.</li>
-      <li><b><code>hold_body_part</code></b>: If the parent holds this child, this is the name of the body part it is held on. If empty, the center of the parent object is used instead. Defaults to empty.</li>
-      <li><b><code>hold_offset_distance</code></b>: If the parent holds this child, this is how far away from the center of the body part/object the child is. 0 means dead center, and 1 means on the edge, but you can write numbers beyond this range. Defaults to 0.</li>
-      <li><b><code>hold_offset_vertical_distance</code></b>: If the parent holds this child, this is how far away from the bottom of the body part/object the child is. 0 means same as bottom, and 1 means same as top, but you can write numbers beyond this range. Defaults to 0.</li>
-      <li><b><code>hold_offset_angle</code></b>: If the parent holds this child, this is the angle from the body part/object's default position that the child is located at. Defaults to 0.</li>
-      <li><b><code>hold_rotation_method</code></b>: Indicates how the child can rotate. <code>never</code> means it never rotates (besides the starting angle). <code>face_parent</code> means it always rotates to face the center of the parent object. <code>copy_parent</code> means it's always the same angle as the parent object. Defaults to never.</li>
-      <li><b><code>handle_damage</code></b>: If <code>true</code>, the child object loses health when it receives damage. If <code>false</code>, it ignores the damage. Defaults to false.</li>
-      <li><b><code>relay_damage</code></b>: If <code>true</code>, the child object relays any damage to the parent object, so <i>it</i> can handle it. Defaults to false.</li>
-      <li><b><code>handle_events</code></b>: If <code>true</code>, the child object handles any script event that it receives. If <code>false</code>, it ignores the event. Defaults to false.</li>
-      <li><b><code>relay_events</code></b>: If <code>true</code>, the child object relays any events received to the parent object, so <i>it</i> can handle them. Defaults to false.</li>
-      <li><b><code>handle_statuses</code></b>: If <code>true</code>, the child object handles any status effect that it receives. If <code>false</code>, it ignores the status. Defaults to false.</li>
-      <li><b><code>relay_statuses</code></b>: If <code>true</code>, the child object relays any status effects received to the parent object, so <i>it</i> can handle them. Defaults to false.</li>
-      <li><b><code>limb_animation</code></b>: If there is meant to be a "limb" drawn between the child and parent, specify the name of its <a href="animation.html">animation</a> here. This animation must be included in the parent object's animation set. Defaults to none.</li>
-      <li><b><code>limb_thickness</code></b>: If there is a limb, this specifies how thick it is. Defaults to 32.</li>
-      <li><b><code>limb_parent_body_part</code></b>: If there is a limb, this specifies where it connects to in the parent. If it's empty, it connects to the parent's center. Otherwise, it connects to the center of the specified body part. Defaults to empty.</li>
-      <li><b><code>limb_parent_offset</code></b>: If there is a limb, you can specify how far away it is from the center of the parent-side connection. Defaults to 0.</li>
-      <li><b><code>limb_child_body_part</code></b>: Same as <code>limb_parent_body_part</code>, but for the child object. Defaults to empty.</li>
-      <li><b><code>limb_child_offset</code></b>: Same as <code>limb_parent_offset</code>, but for the child object. Defaults to 0.</li>
-      <li>
-        <b><code>limb_draw_method</code></b>: How to draw the limb. Defaults to above child. This can be one of the following:
-        <ul>
-          <li><code>below_both</code>: Draw the limb below both the parent and the child.</li>
-          <li><code>below_child</code>: Draw the limb below the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
-          <li><code>below_parent</code>: Draw the limb below the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
-          <li><code>above_parent</code>: Draw the limb above the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
-          <li><code>above_child</code>: Draw the limb above the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
-          <li><code>above_both</code>: Draw the limb above both the parent and the child.</li>
-        </ul>
-      </li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>parent_holds</td>
+        <td>If <code>true</code>, then the parent object is holding this one, much like an enemy holds a Pikmin that is latched on to it. Use the following properties to specify the location.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>hold_body_part</td>
+        <td>If the parent holds this child, this is the name of the body part it is held on. If empty, the center of the parent object is used instead.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>hold_offset_distance</td>
+        <td>If the parent holds this child, this is how far away from the center of the body part/object the child is. 0 means dead center, and 1 means on the edge, but you can write numbers beyond this range.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>hold_offset_vertical_distance</td>
+        <td>If the parent holds this child, this is how far away from the bottom of the body part/object the child is. 0 means same as bottom, and 1 means same as top, but you can write numbers beyond this range.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>hold_offset_angle</td>
+        <td>If the parent holds this child, this is the <a href="glossary.html#relative-angle">relative angle</a> from the body part/object's default position that the child is located at.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>hold_rotation_method</td>
+        <td>Indicates how the child can rotate. <code>never</code> means it never rotates (besides the starting angle). <code>face_parent</code> means it always rotates to face the center of the parent object. <code>copy_parent</code> means it's always the same angle as the parent object.</td>
+        <td>Text</td>
+        <td>never</td>
+      </tr>
+      <tr>
+        <td>handle_damage</td>
+        <td>If <code>true</code>, the child object loses health when it receives damage. If <code>false</code>, it ignores the damage.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>relay_damage</td>
+        <td>If <code>true</code>, the child object relays any damage to the parent object, so <i>it</i> can handle it.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>handle_events</td>
+        <td>If <code>true</code>, the child object handles any script event that it receives. If <code>false</code>, it ignores the event.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>relay_events</td>
+        <td>If <code>true</code>, the child object relays any events received to the parent object, so <i>it</i> can handle them.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>handle_statuses</td>
+        <td>If <code>true</code>, the child object handles any status effect that it receives. If <code>false</code>, it ignores the status.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>relay_statuses</td>
+        <td>If <code>true</code>, the child object relays any status effects received to the parent object, so <i>it</i> can handle them.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>limb_animation</td>
+        <td>If there is meant to be a "limb" drawn between the child and parent, specify the name of its <a href="animation.html">animation</a> here. This animation must be included in the parent object's animation set.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>limb_thickness</td>
+        <td>If there is a limb, this specifies how thick it is.</td>
+        <td>Number</td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td>limb_parent_body_part</td>
+        <td>If there is a limb, this specifies where it connects to in the parent. If it's empty, it connects to the parent's center. Otherwise, it connects to the center of the specified body part.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>limb_parent_offset</td>
+        <td>If there is a limb, you can specify how far away it is from the center of the parent-side connection.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>limb_child_body_part</td>
+        <td>Same as <code>limb_parent_body_part</code>, but for the child object.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>limb_child_offset</td>
+        <td>Same as <code>limb_parent_offset</code>, but for the child object.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>limb_draw_method</td>
+        <td>
+          How to draw the limb. Defaults to above child. This can be one of the following:
+          <ul>
+            <li><code>below_both</code>: Draw the limb below both the parent and the child.</li>
+            <li><code>below_child</code>: Draw the limb below the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
+            <li><code>below_parent</code>: Draw the limb below the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
+            <li><code>above_parent</code>: Draw the limb above the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
+            <li><code>above_child</code>: Draw the limb above the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
+            <li><code>above_both</code>: Draw the limb above both the parent and the child.</li>
+          </ul>
+        </td>
+        <td>Text</td>
+        <td>above_both</td>
+      </tr>
+    </table>
 
     <h3 id="vulnerabilities">Vulnerabilities</h3>
     
@@ -520,7 +654,7 @@
     <ol>
       <li>The first word is the damage percentage. When the object is hurt by an attack with this hazard, its damage will be changed by the specified percentage, so 50 would make it take half damage. You can make this negative to get the object to heal instead! If this value is 0, the object will completely ignore this hazard in its entirety, even if it's not an attack.</li>
       <li>The second word, optional, is the name of a status effect. When the object interacts with this hazard, it will receive this status effect.</li>
-      <li>The third word, also optional, controls whether the status effect overrides others. If true, then the object will <i>only</i> receive the status effect from the previous word, and will not receive the status effect the hazard usually gives. If false or not specified, then the object will <i>also</i> receive this status effect on top of any others the hazard gives.</li>
+      <li>The third word, also optional, controls whether the status effect overrides others. If <code>true</code>, then the object will <i>only</i> receive the status effect from the previous word, and will not receive the status effect the hazard usually gives. If <code>false</code> or not specified, then the object will <i>also</i> receive this status effect on top of any others the hazard gives.</li>
     </ol>
 
     <p>You can use this in conjunction with the <code>default_vulnerability</code> <a href="#optional-props">property</a> to make an object that is invulnerable to anything except explosions, for instance.</p>
@@ -529,20 +663,74 @@
 
     <p>To make your object play sounds, you need to specify information about them. Typically you just specify what the sound file is, but more properties exist to make the object play sounds in more interesting ways.</p>
 
-    <p>In <code>Data.txt</code>, add a block titled <code>sounds</code>. Inside will be a list of blocks, where the name of a block is the name of the sound (which you will use later to refer to this sound). Each sound block can have the following properties, which are all optional except for the <code>file</code> property.</p>
+    <p>In <code>Data.txt</code>, add a block titled <code>sounds</code>. Inside will be a list of blocks, where the name of a block is the name of the sound (which you will use later to refer to this sound). Each sound block must have the following properties.
 
-    <ul>
-      <li><b><code>file</code></b>: <a href="glossary.html#F">File name</a> of the sound to play. This must be in the <code>Game_data/Audio/Sounds</code> folder.</li>
-      <li><b><code>type</code></b>: Type of sound. <code>world_global</code> means it's an in-world sound but doesn't play from any specific spot in the area. <code>world_pos</code> means it's an in-world sound that does play from a specific spot, meaning it comes from the object itself. <code>world_ambiance</code> means it's in-world, but just a general background ambiance sound. <code>ui</code> means it's a UI sound, like a chime. Defaults to <code>world_pos</code>.</li>
-      <li><b><code>stack_mode</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, what should happen? <code>normal</code> means the second sound plays too, like normal. <code>override</code> means the first sound stops and the second plays instead, overriding it. <code>never</code> means the second sound will never play so long as the first sound is still playing. Defaults to <code>normal</code>.</li>
-      <li><b><code>stack_min_pos</code></b>: If the object needs to play this sound again while another instance of this sound is already playing, the second sound is only allowed to stack if the first one is already these many seconds in. Avoid using 0, since doing so can allow for the same sound to play many times at the exact same time, which just results in a really loud sound. Defaults to 0.1</li>
-      <li><b><code>loop</code></b>: If you want the sound to loop, set this to <code>true</code>. Make sure you only use this for sounds that you intend to stop (i.e. via the <a href="script.html">script actions</a> <code>play_sound</code> and <code>stop_sound</code>), otherwise the sound will keep playing forever!</li>
-      <li><b><code>volume</code></b>: Volume it should play at, from 0 to 100. Defaults to 100.</li>
-      <li><b><code>speed</code></b>: Speed to play the sound at. The faster it plays, the higher-pitched it sounds too. 100 plays at normal speed, 200 at double-speed, etc. Defaults to 100.</li>
-      <li><b><code>volume_deviation</code></b>: Every time the sound plays, deviate the volume up or down by a random amount, between 0 and this number. Defaults to 0.</li>
-      <li><b><code>speed_deviation</code></b>: Same as above, but for the speed. Defaults to 0.</li>
-      <li><b><code>random_delay</code></b>: Every time the sound is meant to play, wait a random amount of time between 0 and this before actually starting.</li>
-    </ul>
+    <table class="props-t props-t-m">
+      <tr>
+        <td>file</td>
+        <td><a href="glossary.html#file-name">File name</a> of the sound to play. This must be in the <code>Game_data/Audio/Sounds</code> folder.</td>
+        <td>File name</td>
+      </tr>
+    </table>
+    
+    <p>Each block can also have the following properties.</p>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>type</td>
+        <td>Type of sound. <code>world_global</code> means it's an in-world sound but doesn't play from any specific spot in the area. <code>world_pos</code> means it's an in-world sound that does play from a specific spot, meaning it comes from the object itself. <code>world_ambiance</code> means it's in-world, but just a general background ambiance sound. <code>ui</code> means it's a UI sound, like a chime.</td>
+        <td>Text</td>
+        <td>world_pos</td>
+      </tr>
+      <tr>
+        <td>stack_mode</td>
+        <td>If the object needs to play this sound again while another instance of this sound is already playing, what should happen? <code>normal</code> means the second sound plays too, like normal. <code>override</code> means the first sound stops and the second plays instead, overriding it. <code>never</code> means the second sound will never play so long as the first sound is still playing.</td>
+        <td>Text</td>
+        <td>normal</td>
+      </tr>
+      <tr>
+        <td>stack_min_pos</td>
+        <td>If the object needs to play this sound again while another instance of this sound is already playing, the second sound is only allowed to stack if the first one is already these many seconds in. Avoid using 0, since doing so can allow for the same sound to play many times at the exact same time, which just results in a really loud sound.</td>
+        <td>Number</td>
+        <td>0.1</td>
+      </tr>
+      <tr>
+        <td>loop</td>
+        <td>If you want the sound to loop, set this to <code>true</code>. Make sure you only use this for sounds that you intend to stop (i.e. via the <a href="script.html">script</a> actions <code><a href="events_and_actions.html#play-sound">play_sound</a></code> and <code><a href="events_and_actions.html#stop-sound">stop_sound</a></code>), otherwise the sound will keep playing forever!</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>volume</td>
+        <td>Volume it should play at, from 0 to 100.</td>
+        <td>Number</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>speed</td>
+        <td>Speed to play the sound at. The faster it plays, the higher-pitched it sounds too. 100 plays at normal speed, 200 at double-speed, etc.</td>
+        <td>Number</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>volume_deviation</td>
+        <td>Every time the sound plays, deviate the volume up or down by a random amount, between 0 and this number.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>speed_deviation</td>
+        <td>Same as above, but for the speed.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>random_delay</td>
+        <td>Every time the sound is meant to play, wait a random amount of time between 0 and this before actually starting.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
     
     <h3 id="area-editor-tips">Area editor tips</h3>
     
@@ -556,27 +744,66 @@
     
     <p>Some object types can make use of <a href="script.html#vars">script variables</a> to make specific objects have different behavior. For instance, with script variables, you can place two Pellet Posies in an area, and one of them can start already fully bloomed. When an object spawns, the engine itself or the object's script may read any declared script variables and use them as they see fit. In the area editor, you can write down the script variables you want a specific object to declare, along with their values, but having to memorize the names of the variables &ndash; as well as what each value means &ndash; is a bit of a pain. To remedy this, you can add some properties to the object type's data with information about important script variables. Then, when the area editor loads, it will use that information to present the user with some helpful widgets to set those special behaviors with, each widget in charge of one script variable.</p>
     
-    <p>In <code>Data.txt</code>, add a block titled <code>area_editor_properties</code>. Inside, you will write one block per script variable, with each block's name being the name of the widget responsible. Then, add the following properties as needed:</p>
+    <p>In <code>Data.txt</code>, add a block titled <code>area_editor_properties</code>. Inside, you will write one block per script variable, with each block's name being the name of the widget responsible. Then, add the following properties:</p>
+
+    <table class="props-t props-t-m">
+      <tr>
+        <td>var</td>
+        <td>The name of the variable, as used in the script.</td>
+        <td>Text</td>
+      </tr>
+    </table>
+
+    <p>You can also add these properties as needed:</p>
     
-    <ul>
-      <li><b><code>var</code></b>: The name of the variable, as used in the script.</li>
-      <li>
-        <b><code>type</code></b>: What type of variable this is. Defaults to text. Can be one of the following:
-        <ul>
-          <li><code>text</code>: The variable is meant to be text. The widget will be a text box. Use this when the other types won't cut it, so that the user is free to write whatever they need in the text box.</li>
-          <li><code>int</code>: The variable is meant to be an integer number. The widget will be a number box with integers.</li>
-          <li><code>decimal</code>: The variable is meant to be a decimal number. The widget will be a number box with decimal numbers.</li>
-          <li><code>bool</code>: The variable is meant to be true or false. The widget will be a checkbox.</li>
-          <li><code>list</code>: The variable is meant to be text. The widget will be a list box with several choices to choose from.</li>
-          <li><code>number_list</code>: The variable is meant to be an integer number. The widget will be a list box with several choices, where each choice maps to a number.</li>
-        </ul>
-      </li>
-      <li><b><code>def_value</code></b>: The variable's default value, as used in the script. Defaults to not set.</li>
-      <li><b><code>min_value</code></b>: For variables meant to be integer or decimal numbers, this is the minimum value it is meant to have. The widget will not let the user pick a number beyond this one. Defaults to no limit.</li>
-      <li><b><code>max_value</code></b>: Same as <code>min_value</code>, but for the maximum. Defaults to no limit.</li>
-      <li><b><code>list</code></b>: For list widgets, this is the list of choices, separated by semicolon (;). If the variable is meant to be an integer, the first option maps to 0, the second to 1, etc. Defaults to empty.</li>
-      <li><b><code>tooltip</code></b>: Tooltip to display when the user places their mouse cursor on top of the widget. Use this to explain what the variable means, to provide extra info, to give special instructions, etc. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>. Defaults to empty.</li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>type</td>
+        <td>
+          What type of variable this is. Can be one of the following:
+          <ul>
+            <li><code>text</code>: The variable is meant to be text. The widget will be a text box. Use this when the other types won't cut it, so that the user is free to write whatever they need in the text box.</li>
+            <li><code>int</code>: The variable is meant to be an <a href="glossary.html#integer">integer number</a>. The widget will be a number box with integers.</li>
+            <li><code>decimal</code>: The variable is meant to be a <a href="glossary.html#real-number">real number</a>. The widget will be a number box with real numbers.</li>
+            <li><code>bool</code>: The variable is meant to be true or false. The widget will be a checkbox.</li>
+            <li><code>list</code>: The variable is meant to be text. The widget will be a list box with several choices to choose from.</li>
+            <li><code>number_list</code>: The variable is meant to be an integer number. The widget will be a list box with several choices, where each choice maps to a number.</li>
+          </ul>
+        </td>
+        <td>Text</td>
+        <td>text</td>
+      </tr>
+      <tr>
+        <td>def_value</td>
+        <td>The variable's default value, as used in the script.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>min_value</td>
+        <td>For variables meant to be integer or real numbers, this is the minimum value it is meant to have, if any. The widget will not let the user pick a number beyond this one.</td>
+        <td>Number</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>max_value</td>
+        <td>Same as <code>min_value</code>, but for the maximum.</td>
+        <td>Number</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>For list widgets, this is the list of choices. If the variable is meant to be an integer, the first option maps to 0, the second to 1, etc.</td>
+        <td>List</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>tooltip</td>
+        <td>Tooltip to display when the user places their mouse cursor on top of the widget. Use this to explain what the variable means, to provide extra info, to give special instructions, etc. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
 
     <h2 id="notes">Notes and tips</h2>
     
@@ -587,7 +814,7 @@
           <li>The object's target type is one of the types the attacker wants to hunt or can hurt.</li>
           <li>The object is not in the same team as the attacker.</li>
           <li>The object has more than zero health.</li>
-          <li>The object is not unhuntable via the <code>set_huntable</code> <a href="script.html">script action</a>.</li>
+          <li>The object is not unhuntable via the <code><a href="events_and_actions.html#set-huntable">set_huntable</a></code> <a href="script.html">script action</a>.</li>
           <li>The object is not invisible via a <a href="status.html">status effect</a>.</li>
         </ul>
       </li>

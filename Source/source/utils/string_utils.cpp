@@ -95,7 +95,8 @@ void duplicate_string(const string &orig_str, string &new_str) {
 
 
 /**
- * @brief Converts a float to a string, with 4 decimal places.
+ * @brief Converts a float to a string, with a precision of 4 significant
+ * figures.
  *
  * @param f Float to convert.
  * @return The string.

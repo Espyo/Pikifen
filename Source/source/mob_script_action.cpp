@@ -1335,7 +1335,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
 
 
 /**
- * @brief Code for the decimal number randomization mob script action.
+ * @brief Code for the real number randomization mob script action.
  *
  * @param data Data about the action call.
  */

@@ -106,10 +106,33 @@ function populate_prop_tables() {
       tr.classList.add('props');
 
       var tds = tr.getElementsByTagName('td');
+      //Name.
       tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
 
+      //TYpe.
+      switch(tds[2].innerHTML) {
+        case "Text":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-text\">Text</a>";
+          break;
+        case "Number":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-number\">Number</a>";
+          break;
+        case "Boolean":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-boolean\">Boolean</a>";
+          break;
+        case "Color":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-color\">Color</a>";
+          break;
+        case "File name":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-file-name\">File name</a>";
+          break;
+        case "List":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-list\">List</a>";
+          break;
+      }
+
+      //Default value.
       if(tds.length == 4) {
-        //Default value.
         tds[3].innerHTML = '<code>' + tds[3].innerHTML + '</code>';
       }
 

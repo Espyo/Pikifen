@@ -12,7 +12,7 @@
 </head>
 
 <body onload="setup('Glossary', undefined, undefined, false);">
-  <div id="content">
+  <div id="content" class="highlight-target">
     
     <p>A glossary of terms used in <i>Pikifen</i>, both for casual play, and for making content. This glossary will not include terms popular in the <i>Pikmin</i> franchise, since you can find more about those on <a href="https://www.pikminwiki.com">Pikipedia</a>, and will also not focus on terms used in the engine's code, even though most of them match what you'd read outside of the code.</p>
     
@@ -24,166 +24,170 @@
     
     <h2 id="A">A</h2>
 
-    <dl>
+    <dl id="absolute-angle">
       <dt>Absolute angle</dt>
-      <dd>Unlike a <a href="#R">relative angle</a>, this refers to the angle facing a cardinal direction in the area. 0 points to the right/east, 10 means 10 degrees anti-clockwise of east, etc.</dd>
+      <dd>Unlike a <a href="#R">relative angle</a>, this refers to the <a href="#angle">angle</a> facing a cardinal direction in the area. 0 points to the right/east, 10 means 10 degrees clockwise of east, etc.</dd>
     </dl>
-    <dl>
+    <dl id="absolute-coordinates">
       <dt>Absolute coordinates, Area coordinates</dt>
       <dd>Unlike <a href="#R">relative coordinates</a>, these specify the exact coordinates in the current area.</dd>
     </dl>
-    <dl>
+    <dl id="action">
       <dt>Action</dt>
       <dd>Something that an object can do in its <a href="#S">script</a>. This includes walking to a certain point, losing <a href="#H">health</a>, changing its <a href="#A">animation</a>, etc.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
       <dd>See also: <a href="#P">Player action</a>.</dd>
     </dl>
-    <dl>
+    <dl id="active">
       <dt>Active</dt>
       <dd>If an object is active that means it will be processed on the current frame. To save on performance, objects that are off-camera and too far from any Pikmin or leader (and also not marked as always-active) will become inactive, meaning they are essentially frozen in time. In reality they don't process their logic each frame, and/or don't check for interactions with other objects, but they still receive events, can spawn and despawn, etc.</dd>
     </dl>
-    <dl>
+    <dl id="animation">
       <dt>Animation</dt>
       <dd>A series of <a href="#F">frames</a> that change the way an object looks. When put together nicely, these make it look like the object is walking, growling, chomping, etc. Animations are independent of what the object is actually doing. For instance, it can be walking, but it could be frozen in appearance, which would make it appear to slide. That said, accurate animations are necessary for gameplay reasons, like <a href="#H">hitboxes</a>.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="angle">
+      <dt>Angle</dt>
+      <dd>A direction. Angles are represented in degrees, meaning they range from 0 to 360. The number increases as the angle goes clockwise.</dd>
+    </dl>
+    <dl id="assert">
       <dt>Assert, Assertion</dt>
       <dd>When something is wrong with the engine, and it is detected by an assertion, the program usually shuts down in a controlled manner. This helps because the developer can know what assert was triggered exactly, to make finding the problem easier.</dd>
     </dl>
-    <dl>
+    <dl id="asset">
       <dt>Asset</dt>
       <dd>Also known as resource, this is any plain image or sound file.</dd>
     </dl>
     
     <h2 id="B">B</h2>
 
-    <dl>
+    <dl id="blackout">
       <dt>Blackout</dt>
       <dd>A <a href="#W">weather</a> effect that makes everything dark (to different degrees) except for the leaders and a few specific objects, which cast light.</dd>
       <dd>Further reading: <a href="weather.html">Making weather</a>.</dd>
     </dl>
-    <dl>
+    <dl id="body-part">
       <dt>Body part</dt>
       <dd>Objects can have a series of body parts, which move around when it is <a href="#A">animating</a>. When a Pikmin latches on to a leg, for instance, it will follow the leg around as the body part moves. In an animation, body parts are directed by <a href="#H">hitboxes</a>.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="bind">
       <dt>Bind</dt>
       <dd>The mapping between a <a href="#P">player input</a> and a <a href="#P">player action</a>.</dd>
     </dl>
-    <dl>
+    <dl id="bitmap">
       <dt>Bitmap</dt>
       <dd>An image. It contains a series of pixels, like most computer images.</dd>
       <dd>Further reading: <a href="http://en.wikipedia.org/wiki/Bitmap">Wikipedia's definition of bitmap</a>.</dd>
     </dl>
-    <dl>
+    <dl id="button">
       <dt>Button</dt>
       <dd>An on-screen button, or a button in the real world, that the player can press. For the latter case, it's usually a mouse button or a game <a href="#C">controller</a> button, but it may sometimes refer to a keyboard <a href="#K">key</a> too, but never to a game <a href="#C">controller</a> analog <a href="#S">stick.</a></dd>
     </dl>
     
     <h2 id="C">C</h2>
 
-    <dl>
+    <dl id="canvas">
       <dt>Canvas</dt>
       <dd>The area on an editor where the user can see a preview of what they are working on, as well as drag components, draw elements, etc. This is the part of the editor that is not the panel, toolbar, status bar, etc.</dd>
     </dl>
-    <dl>
+    <dl id="category">
       <dt>Category</dt>
       <dd>See <a href="#O">Object category</a>.</dd>
     </dl>
-    <dl>
+    <dl id="child">
       <dt>Child</dt>
       <dd>An object that is part of a more complex object.</dd>
       <dd>Further reading: <a href="mob_type.html#parent">Parent/Child objects</a>.</dd>
     </dl>
-    <dl>
+    <dl id="clear">
       <dt>Clear</dt>
       <dd>A mission being cleared means the mission has ended because the player has completed the mission's goal. It has no bearing on the medal the player receives.</dd>
     </dl>
-    <dl>
+    <dl id="content">
       <dt>Content</dt>
       <dd>Any piece of content created for <i>Pikifen</i>, including <a href="#A">assets</a>.</dd>
     </dl>
-    <dl>
+    <dl id="control-bind">
       <dt>Control bind</dt>
       <dd>See <a href="#B">Bind</a>.</dd>
     </dl>
-    <dl>
+    <dl id="controller">
       <dt>Controller, Game controller</dt>
       <dd>Any video game controller in the real world, also known as gamepads or joysticsk (though not to be confused with <a href="#S">stick</a>). Examples include the GameCube Controller, the Nintendo Switch Pro Controller, the Xbox Wireless Controller, etc.</dd>
     </dl>
-    <dl>
+    <dl id="controls">
       <dt>Controls</dt>
       <dd>The entire subject regarding <a href="#P">player input</a>, control <a href="#B">binds</a>, and <a href="#P">player actions</a>.</dd>
     </dl>
-    <dl>
+    <dl id="coordinates">
       <dt>Coordinates</dt>
       <dd>Numbers representing where in the world the object is. X refers to where it is horizontally on west/east &#8211; a smaller X means more to the west, and a larger one more to the east. Y is north/south, with a lower Y corresponding to higher north. Z is the vertical coordinate, with a higher Z being higher up in the air.</dd>
     </dl>
     
     <h2 id="D">D</h2>
 
-    <dl>
+    <dl id="day">
       <dt>Day</dt>
       <dd>The in-game 24-hour period.</dd>
     </dl>
-    <dl>
+    <dl id="dummy">
       <dt>Dummy</dt>
       <dd>An object that does absolutely nothing. It serves to guide other objects, like indicating the end point of a pushable cardboard box.</dd>
     </dl>
     
     <h2 id="E">E</h2>
 
-    <dl>
+    <dl id="edge">
       <dt>Edge</dt>
       <dd>In an area's layout, edges are the lines that delimit a <a href="#S">sector</a>. An edge can have sectors on either side, and if they are different heights, that creates a wall.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="end">
       <dt>End</dt>
       <dd>An <a href="#E">exploration</a> or a <a href="#M">mission</a> end when the player ends manually from the pause menu, or in the case of a mission, when the the goal is met (a <a href="#C">clear</a>) or a fail condition is met (a <a href="#F">fail</a>).</dd>
     </dl>
-    <dl>
+    <dl id="enemy">
       <dt>Enemy</dt>
       <dd>Enemy is a general term for the creatures that attack or are attacked by Pikmin. Although it makes little sense, one could make a fire geyser "enemy", and it would be technically valid.</dd>
     </dl>
-    <dl>
+    <dl id="error">
       <dt>Error</dt>
       <dd>If something goes wrong when loading or during gameplay, the engine will write an error on the error log file. Not all errors will result in a crash, but ideally, one should aim to resolve all of them.</dd>
     </dl>
-    <dl>
+    <dl id="event">
       <dt>Event</dt>
       <dd>When something happens to an object, like when it gets hurt, or it reaches its destination, an event is thrown. In the <a href="#S">script</a>, you can specify what <a href="#A">actions</a> to perform whenever a certain event is triggered. Different <a href="#S">states</a> can have different event handling.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
     </dl>
-    <dl>
+    <dl id="exploration">
       <dt>Exploration</dt>
       <dd>The portion of gameplay that takes place when the player is just exploring a simple area. Contrast with the term <a href="#M">mission</a>.</dd>
     </dl>
     
     <h2 id="F">F</h2>
 
-    <dl>
+    <dl id="fade">
       <dt>Fade</dt>
       <dd>In an area's layout, a "fade" <a href="#S">sector</a> refers to a sector whose only purpose is to fade the <a href="#T">textures</a> of the sectors around it, transitioning smoothly from one neighbor to the other.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="fail">
       <dt>Fail</dt>
       <dd>A mission being cleared means the mission has ended and the player has failed to meet the mission's goal. It has no bearing on the medal the player receives.</dd>
     </dl>
-    <dl>
+    <dl id="file-name">
       <dt>File name</dt>
       <dd>The name of a file on your machine, e.g. <code>Berry.png</code>. It consists of a base name (<code>Berry</code> in this case) and an extension, which is the part with the dot and whatever comes after (<code>.png</code>). File name extensions are usually not visible by default on Windows operative systems, but can be enabled.</dd>
       <dd>Whenever you need to refer to the name of a file in <i>Pikifen</i>, always be sure that the extension is included and that the uppercase and lowercase letters match what the file's name says (since some player's filesystems are case sensitive). e.g. Don't just write <code>Berry</code> or <code>berry.png</code>.</dd>
     </dl>
-    <dl>
+    <dl id="frame">
       <dt>Frame</dt>
       <dd>A represents a specific point during an <a href="#A">animation</a>. In this point, a certain <a href="#S">sprite</a> is shown, and different frames can have different durations.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="frame-signal">
       <dt>Frame signal</dt>
       <dd>When something needs to happen during a specific <a href="#F">frame</a> of <a href="#A">animation</a>, a frame signal <a href="#E">event</a> can be thrown, and handled in the <a href="#S">script</a>.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>, <a href="mob_type.html">Object script</a>.</dd>
@@ -191,44 +195,44 @@
     
     <h2 id="G">G</h2>
 
-    <dl>
+    <dl id="glow">
       <dt>Glow</dt>
       <dd>A way to brighten up an object. Due to Allegro limitations, it's not a real glow in the current versions of the engine because: 1. the brightness is limited to the bitmap's original pixels &#8211; darker bitmaps have a harder time becoming brighter; 2. the glow doesn't bleed and fade out, but is limited to the exact shape of the original bitmap.</dd>
     </dl>
-    <dl>
+    <dl id="group">
       <dt>Group</dt>
       <dd>The group of objects that follow another object. Typically, the group of Pikmin+leaders following a leader.</dd>
     </dl>
     
     <h2 id="H">H</h2>
 
-    <dl>
+    <dl id="hardcoded">
       <dt>Hardcoded</dt>
       <dd>Something that is hardcoded is something that is written inside the engine's logic, and cannot be edited by a user.</dd>
     </dl>
-    <dl>
+    <dl id="hazard">
       <dt>Hazard</dt>
       <dd>Like in the canon games, a hazard refers to the concept of danger, not to a physical object. Electricity (danger of being shocked), fire (danger of burning up), etc. are all hazards, but electrical wires, fire geysers, and so on are just obstacles whose attacks involve hazards.</dd>
       <dd>Further reading: <a href="hazard.html">Making hazards</a>.</dd>
     </dl>
-    <dl>
+    <dl id="health">
       <dt>Health</dt>
       <dd>Every <a href="#O">object</a> in the engine has an amount of health, whether that is used for anything or not. Objects can be attacked in a few ways, and doing so depletes health. When the health reaches zero, the object is considered dead, and its behavior when that happens depends on the type of object.</dd>
     </dl>
-    <dl>
+    <dl id="height-effect">
       <dt>Height effect</dt>
       <dd>To help portray depths, objects that are in mid-air may appear larger than they would appear on land. Or if they are falling into a pit, they may appear smaller and smaller. This is called the "height effect".</dd>
     </dl>
-    <dl>
+    <dl id="hitbox">
       <dt>Hitbox</dt>
       <dd>A hitbox is a part of a <a href="#S">sprite</a> that represents where a <a href="#B">body part</a> is at that moment. It also contains information about how that body part relates to combat at that moment &#8211; the body part could be vulnerable to enemy attacks, it could be causing damage of its own, etc.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="home">
       <dt>Home</dt>
       <dd>The spot an object <a href="#S">spawns</a> on. The <a href="#T">territory</a> radius is determined around this spot. This is also where a treasure returns to when it falls into a pit, for instance.</dd>
     </dl>
-    <dl>
+    <dl id="hud">
       <dt>HUD</dt>
       <dd>Refers to the on-screen elements visible to the player to help them understand what is going on during gameplay. The Pikmin counter, health meters, sun meter, etc. are all HUD elements.</dd>
       <dd>Further reading: <a href="misc_config.html">Misc. configurations</a>.</dd>
@@ -236,52 +240,57 @@
     
     <h2 id="I">I</h2>
 
-    <dl>
+    <dl id="inactive">
       <dt>Inactive</dt>
       <dd>See <a href="#A">Active</a>.</dd>
     </dl>
-    <dl>
+    <dl id="ingredient">
       <dt>Ingredient</dt>
       <dd>An ingredient for concocting a spray. In the canon games, these are berries. After a certain number of ingredients of a certain type are collected, the player gains one more dosage of a certain spray.</dd>
     </dl>
-    <dl>
+    <dl id="input">
       <dt>Input</dt>
       <dd>See <a href="#P">Player input</a>.</dd>
     </dl>
-    <dl>
+    <dl id="integer">
+      <dt>Integer</dt>
+      <dd>An <a href="https://en.wikipedia.org/wiki/Integer">integer</a> is basically any whole number, with no fractional part. e.g. "1", "400".</dd>
+      <dd>See also: <a href="#real-number">Real number</a>.</dd>
+    </dl>
+    <dl id="itch">
       <dt>Itch</dt>
       <dd>When an object has been taking damage for a while, an "itch" <a href="#E">event</a> will be triggered. This periodic event allows an enemy to shake Pikmin off when it is under attack. In order for the enemy to not shake several times in a row, an "itch" event will only be triggered if enough time has passed since the last one, and if enough damage has been done since the last one.</dd>
     </dl>
     
     <h2 id="J">J</h2>
 
-    <dl>
+    <dl id="joystick">
       <dt>Joystick</dt>
       <dd>See <a href="#C">Controller</a> and <a href="#S">Stick</a>.</dd>
     </dl>
     
     <h2 id="K">K</h2>
 
-    <dl>
+    <dl id="key">
       <dt>Key</dt>
       <dd>A keyboard key.</dd>
     </dl>
-    <dl>
+    <dl id="knockback">
       <dt>Knockback</dt>
       <dd>Leaders and Pikmin, when hurt, can get blown backwards and land on the floor lying down. When this happens, it is said that they have suffered knockback.</dd>
     </dl>
     
     <h2 id="L">L</h2>
 
-    <dl>
+    <dl id="latch">
       <dt>Latch</dt>
       <dd>A latched Pikmin is any Pikmin that is grabbing on to an enemy (or gate, etc.) for the purpose of attacking it.</dd>
     </dl>
-    <dl>
+    <dl id="link">
       <dt>Link</dt>
       <dd>See <a href="#O">object link</a> or <a href="#P">path stop link</a>.</dd>
     </dl>
-    <dl>
+    <dl id="liquid">
       <dt>Liquid</dt>
       <dd>Water, mud, lava, etc. are all liquids. If a <a href="#S">sector</a> has an associated liquid, it will change the sector's appearance to have a water surface <a href="#T">texture</a>, among other things. If a liquid has an associated <a href="#H">hazard</a>, <a href="#O">objects</a> vulnerable to that hazard can get affected when they walk on the sector.</dd>
       <dd>Further reading: <a href="hazard.html">Making hazards</a>.</dd>
@@ -289,25 +298,25 @@
     
     <h2 id="M">M</h2>
 
-    <dl>
+    <dl id="maker-tool">
       <dt>Maker tool</dt>
       <dd>Any tool that exists to help makers make content. There are tools that speed up the gameplay, tools that show <a href="#H">hitbox</a> locations, etc.</dd>
       <dd>Further reading: <a href="maker_toolkit.html">Maker toolkit</a>.</dd>
     </dl>
-    <dl>
+    <dl id="message">
       <dt>Message</dt>
       <dd>One of the object <a href="#A">actions</a> involves sending a message to other objects. This message is in plain text, and could be whatever you want. The receivers can either be objects that have an <a href="#O">object link</a>, or all nearby objects, up to a specified distance.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
     </dl>
-    <dl>
+    <dl id="mission">
       <dt>Mission</dt>
       <dd>The portion of gameplay that takes place when the player is playing in a mission area. Contrast with the term <a href="#E">exploration</a>.</dd>
     </dl>
-    <dl>
+    <dl id="mob">
       <dt>Mob</dt>
       <dd>Alternative name for <a href="#O">object</a>. Short for "mobile object".</dd>
     </dl>
-    <dl>
+    <dl id="music-track">
       <dt>Music track</dt>
       <dd>An audio file that, combined with other tracks in real-time, make up a <a href="#S">song</a>.</dd>
       <dd>Further reading: <a href="music.html">Making music</a>.</dd>
@@ -315,78 +324,78 @@
     
     <h2 id="N">N</h2>
 
-    <dl>
+    <dl id="nest">
       <dt>Nest</dt>
       <dd>Any object that can house Pikmin inside. So Onions, and ships equipped to do so.</dd>
     </dl>
     
     <h2 id="O">O</h2>
 
-    <dl>
+    <dl id="object">
       <dt>Object</dt>
       <dd>Any individual Pikmin, leader, obstacle, enemy, ship, etc. is an object. Each object is of an <a href="#O">object type</a>, and multiple objects of the same type can exist in the same area at once.</dd>
     </dl>
-    <dl>
+    <dl id="object-action">
       <dt>Object action</dt>
       <dd>See <a href="#A">Action</a>.</dd>
     </dl>
-    <dl>
-      <dt>Object link</dt>
-      <dd>A way for an object to send messages or refer to another object.</dd>
-      <dd>Further reading: <a href="misc_features.html#mob-links">Object links</a>.</dd>
-    </dl>
-    <dl>
-      <dt>Object type</dt>
-      <dd>An object type contains data about what an object of its type should look and behave like. Red Pikmin look different from Blue Pikmin, so these two are different object types.</dd>
-      <dd>Further reading: <a href="mob_type.html">Making object types</a>.</dd>
-    </dl>
-    <dl>
+    <dl id="object-category">
       <dt>Object category</dt>
       <dd>A category contains a list of <a href="#O">object types</a>. Examples include Pikmin, leaders, treasures, and so on. Types in the same category look and behave similarly. For instance, all <a href="#O">objects</a> of a Pikmin type need to show the Pikmin itself and its <a href="#T">top</a>, they all need to follow leaders who whistle them, etc.</dd>
       <dd>Further reading: <a href="mob_type.html#mob-categories">List of object categories</a>.</dd>
     </dl>
-    <dl>
+    <dl id="object-link">
+      <dt>Object link</dt>
+      <dd>A way for an object to send messages or refer to another object.</dd>
+      <dd>Further reading: <a href="misc_features.html#mob-links">Object links</a>.</dd>
+    </dl>
+    <dl id="object-type">
+      <dt>Object type</dt>
+      <dd>An object type contains data about what an object of its type should look and behave like. Red Pikmin look different from Blue Pikmin, so these two are different object types.</dd>
+      <dd>Further reading: <a href="mob_type.html">Making object types</a>.</dd>
+    </dl>
+    <dl id="obstacle">
       <dt>Obstacle</dt>
       <dd>"Obstacle" is a generic term used to refer to objects that stand in the way of the leaders and Pikmin; it does not refer to anything specific.</dd>
     </dl>
-    <dl>
+    <dl id="opponent">
       <dt>Opponent</dt>
       <dd>In the engine, "opponent" refers to any <a href="#O">object</a> that the current object wants to hunt down. For instance, Pikmin and enemies are opponents of each other, but gates and enemies are not opponents. Two objects that are normally opponents but belong to the same <a href="#T">team</a>, will no longer be opponents.</dd>
     </dl>
     
     <h2 id="P">P</h2>
 
-    <dl>
+    <dl id="parent">
       <dt>Parent</dt>
       <dd>An object that is composed of simpler objects.</dd>
       <dd>Further reading: <a href="mob_type.html#parent">Parent/Child objects</a>.</dd>
     </dl>
-    <dl>
+    <dl id="particle">
       <dt>Particle</dt>
       <dd>A particle is a small, simple thing that shows up on the game world, disappears with time, and follows a very simple behavior. They are used for graphical effects and ambiance. For instance, because each particle is its own thing, you can have a Wollywog's landing cause several smoke particles to appear, each moving away from the creature, to simulate dust picking up after a thud.</dd>
       <dd>Further reading: <a href="particle.html">Making particle generators</a>.</dd>
     </dl>
-    <dl>
+    <dl id="particle-generator">
       <dt>Particle generator</dt>
       <dd>Responsible for spawning <a href="#P">particles</a> over time.</dd>
       <dd>Further reading: <a href="particle.html">Making particle generators</a>.</dd>
     </dl>
-    <dl>
+    <dl id="path-stop">
       <dt>Path stop</dt>
       <dd>When an <a href="#O">object</a> is following a path, it goes from one stop to another, to another, until its destination. It goes from stop A to stop B in a straight line. It can only cross stops that are linked with <a href="#P">path stop links</a>.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="path-stop-link">
       <dt>Path stop link</dt>
       <dd>Path stop links refer to the connection between two path stops. This means an object can go from stop A to stop B when following a path. Path stop links can either be one-way or bidirectional.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="player-action">
       <dt>Player action</dt>
       <dd>After a player performs some <a href="#P">input</a> that is <a href="#B">bound</a> to an action type, then the player has executed that action, which is then processed by the game. Action types include grabbing+throwing, moving right, whistling, lying down, going up on a menu, etc. Actions also contain information about the player input's value (e.g. if the <a href="#B">button</a> was released or pressed, how far an analog <a href="#S">stick</a> was held, etc.).</dd>
       <dd>See also: <a href="#A">Action</a>.</dd>
     </dl>
-    <dl>
+    <dl id="player-input">
       <dt>Player input</dt>
       <dd>Any type of real world hardware input the player can perform. There are several types, including mouse button presses, game <a href="#C">controller</a> button releases, keyboard <a href="#K">key</a> presses, game controller analog <a href="#S">stick</a> tilts, mouse wheel scrolls, and so on.</dd>
     </dl>
@@ -396,145 +405,149 @@
     
     <h2 id="R">R</h2>
 
-    <dl>
+    <dl id="ramp">
       <dt>Ramp</dt>
       <dd>Although <a href="#S">sectors</a> in the engine have a fixed height, and hence, cannot ramp smoothly from one height to another, the engine doesn't have real ramps. However, a convincing alternative is to just use stairs. Any wall that is 50 units or less in height can make an <a href="#O">object</a> walk up or down the sectors smoothly as they move forward and back.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
-      <dt>Relative angle</dt>
-      <dd>Unlike an <a href="#A">absolute angle</a>, a relative angle of 0 means the same angle that the object is facing, a relative angle of 10 means the same angle as the object but 10 degrees anti-clockwise, etc.</dd>
+    <dl id="real-number">
+      <dt>Real number</dt>
+      <dd>A <a href="https://en.wikipedia.org/wiki/Real_number">real number</a> is basically any number with an <a href="#integer">integer</a> part, a decimal separator, and the fractional part. e.g. "3.14159", "999.99". <i>Pikifen</i> supports decimal separators that are either dots or commas, and also supports integer numbers where a real number is expected.</dd>
     </dl>
-    <dl>
+    <dl id="relative-angle">
+      <dt>Relative angle</dt>
+      <dd>Unlike an <a href="#A">absolute angle</a>, a relative angle of 0 means the same angle that the object is facing, a relative angle of 10 means the same angle as the object but 10 degrees clockwise, etc.</dd>
+    </dl>
+    <dl id="relative-coordinates">
       <dt>Relative coordinates</dt>
       <dd>Unlike <a href="#A">absolute coordinates</a>, relative coordinates like for example "50,100" mean that this is at the object's position, plus 50 to the right, and 100 down. This is assuming the object is facing the right/east. If it isn't, the coordinates rotate around the object, such that a positive X is always in front of the object. So for coordinates "50,100", this would mean 50 units in front of the object, and 100 units to its right-hand side.</dd>
     </dl>
-    <dl>
+    <dl id="rotation">
       <dt>Rotation</dt>
-      <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is spun clockwise or counter-clockwise, that is called a rotation.</dd>
+      <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is spun clockwise or counterclockwise, that is called a rotation.</dd>
     </dl>
     
     <h2 id="S">S</h2>
 
-    <dl>
+    <dl id="scale">
       <dt>Scale</dt>
       <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is shrunk or grown to different sizes, that is called a scale. The width and height can be scaled independently. A negative scale flips the image around in that same axis.</dd>
     </dl>
-    <dl>
+    <dl id="script">
       <dt>Script</dt>
       <dd>An <a href="#O">object</a>'s script controls what the object should do when certain scenarios occur. Every object is in a <a href="#S">state</a> at any given time, and depending on the <a href="#E">events</a> it receives while in a specific state, it can do a different set of <a href="#A">actions</a>.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
     </dl>
-    <dl>
+    <dl id="sector">
       <dt>Sector</dt>
       <dd>An area's layout is made of up of sectors. Each sector is a polygon (which is composed of <a href="#E">edges</a> and <a href="#V">vertexes</a>), which represent a floor an <a href="#O">object</a> can walk on. Neighboring sectors of different heights make a wall.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="song">
       <dt>Song</dt>
       <dd>A piece of music, composed of several <a href="#M">music tracks</a>.</dd>
       <dd>Further reading: <a href="music.html">Making music</a>.</dd>
     </dl>
-    <dl>
+    <dl id="spawn">
       <dt>Spawn</dt>
       <dd>As a verb, it means "to make appear". When an object is created and placed into the game world, it is said that it has "spawned". As a noun, it refers to any object created by the current object.</dd>
     </dl>
-    <dl>
+    <dl id="spike">
       <dt>Spike</dt>
       <dd>Spike damage is a special type of damage that only happens in retaliation. When an <a href="#O">object</a> is hurt, if it has spike damage configured, it will automatically hurt its attacker as well. Another type of spike damage happens when a Pikmin is swallowed; this allows White Pikmin to cause some damage to their predators.</dd>
       <dd>Further reading: <a href="misc_config.html">Misc. configurations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="spoil">
       <dt>Spoil</dt>
       <dd>Something that an enemy drops when it dies.</dd>
     </dl>
-    <dl>
+    <dl id="sprite">
       <dt>Sprite</dt>
       <dd>When making <a href="#A">animations</a>, a sprite is a <a href="#B">bitmap</a> that represents how the animation looks at a specific point in time. Sprites are used in <a href="#F">frames</a>, and one sprite can be used in more than one frame. For instance, an image of an enemy with its leg up could represent part of its walking animation, growling animation, dying animation, etc.</dd>
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
-    <dl>
+    <dl id="spritesheet">
       <dt>Spritesheet</dt>
       <dd>Name given to <a href="#B">bitmaps</a> that hold several <a href="#S">sprites</a> inside. Due to the way modern GPUs work, it's faster to store several sprites into one image, rather than creating several images for each.</dd>
     </dl>
-    <dl>
+    <dl id="state">
       <dt>State</dt>
       <dd>Every <a href="#O">object</a> with a <a href="#S">script</a> is in a specific state at any given time. When an <a href="#E">event</a> is received, the state the object is on will influence the response. For instance, when a Pikmin is near a Red Bulborb, if the Bulborb is in the "sleeping" state, it should wake up, but if it is in the "chasing" state, it should lunge in for a bite.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
     </dl>
-    <dl>
+    <dl id="stairs">
       <dt>Stairs</dt>
       <dd>See <a href="#R">Ramp</a>.</dd>
     </dl>
-    <dl>
+    <dl id="status">
       <dt>Status</dt>
       <dd>An <a href="#O">object</a> can be under the influence of any number of statuses. These affect the object's stats. For instance, if a Pikmin is under the "burning" status effect, it loses health at a steady pace. If it is under the "spicy" status effect, it gains a boost in speed until the status wears off.</dd>
       <dd>Further reading: <a href="status.html">Making status effects</a>.</dd>
     </dl>
-    <dl>
+    <dl id="stick">
       <dt>Stick</dt>
       <dd>An analog stick on a game <a href="#C">controller</a>. Due to hardware limitations, things like a D-pad or a bumper on a game controller may also be recognized internally as an analog stick. Sticks are also sometimes referred to as joysticks, though not to be confused game <a href="#C">controllers</a>.</dd>
     </dl>
-    <dl>
+    <dl id="stop">
       <dt>Stop</dt>
       <dd>See <a href="#P">Path stop</a>.</dd>
     </dl>
     
     <h2 id="T">T</h2>
 
-    <dl>
+    <dl id="team">
       <dt>Team</dt>
       <dd>An <a href="#O">object</a> can be a part of a specific team. Two objects in the same team will never try to hunt each other down, nor will they ever be able to cause damage to one another.</dd>
     </dl>
-    <dl>
+    <dl id="territory">
       <dt>Territory</dt>
       <dd>An imaginary circle around an object's <a href="#H">home</a>. If the object goes past this circle, the "far from home" <a href="#E">event</a> is triggered, which is normally used to make enemies turn around and go back to a more comfortable place instead of wandering off too far.</dd>
     </dl>
-    <dl>
+    <dl id="texture">
       <dt>Texture</dt>
       <dd>Textures are just <a href="#B">bitmaps</a>, although the term is more commonly used when the image portrays terrain, and is meant to tile over and over, like dirt, grass, stone, etc.</dd>
     </dl>
-    <dl>
+    <dl id="top">
       <dt>Top</dt>
       <dd>Refers to a Pikmin's leaf, bud, or flower.</dd>
     </dl>
-    <dl>
+    <dl id="transformation">
       <dt>Transformation</dt>
       <dd>Certain shapes, images, or other such things in the engine can be transformed using primary <a href="http://en.wikipedia.org/wiki/Geometric_transformation">geometric transformations</a>. This is what allows you to resize, flip, rotate, or shift an enemy's image, for instance. The following primary transformations exist: <a href="#T">translation</a>, <a href="#S">scale</a>, and <a href="#R">rotation</a>.</dd>
     </dl>
-    <dl>
+    <dl id="translation">
       <dt>Translation</dt>
       <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is moved exactly as it is from one point to another, that is called a translation.</dd>
     </dl>
-    <dl>
+    <dl id="treasure">
       <dt>Treasure</dt>
       <dd>Treasure is a general term for the <a href="#O">objects</a> that can be carried by Pikmin to a ship, to exchange for some sort of value.</dd>
     </dl>
-    <dl>
+    <dl id="tree-shadow">
       <dt>Tree shadow</dt>
       <dd>A tree shadow refers to a <a href="#T">texture</a> overlaid on the area that represents the shadow of a tree and its leaves. Despite the name, it can be a shadow of anything, or even any texture at all.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="triangle">
       <dt>Triangle</dt>
       <dd>Internally, a <a href="#S">sector</a> is made up of triangles, since those are needed for rendering and physics. They are generated automatically, and are not controllable by the user. That said, the disposition of the triangles can help explain the twisted look of some <a href="#F">fade sectors</a>, as well as other minor quirks.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
-    <dl>
+    <dl id="type">
       <dt>Type</dt>
       <dd>See <a href="#O">Object type</a>.</dd>
     </dl>
     
     <h2 id="U">U</h2>
 
-    <dl>
+    <dl id="unit">
       <dt>Unit</dt>
       <dd>Likely refers to <a href="#W">world unit</a>.</dd>
     </dl>
     
     <h2 id="V">V</h2>
 
-    <dl>
+    <dl id="vertex">
       <dt>Vertex</dt>
       <dd>A <a href="#S">sector</a> is made up of <a href="#E">edges</a>, and each edge is determined by a starting point and an end point. These points are called vertexes. A vertex can serve as an endpoint for one or several edges.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
@@ -542,37 +555,37 @@
     
     <h2 id="W">W</h2>
 
-    <dl>
+    <dl id="wall">
       <dt>Wall</dt>
       <dd>An edge where the sector on one side is higher than the other, to the point where objects can't walk from one to the other.</dd>
     </dl>
-    <dl>
+    <dl id="weather">
       <dt>Weather</dt>
       <dd>The current weather controls more than just the rain: it controls the lighting of the area, from the sunlight throughout the day, to the strength of the shadows, to how foggy it is.</dd>
       <dd>Further reading: <a href="weather.html">Making weather</a>.</dd>
     </dl>
-    <dl>
+    <dl id="world-unit">
       <dt>World unit</dt>
       <dd>One unit in the game's space. When the camera is at 1:1 zoom (which is not the default value!), 1 pixel on your screen represents 1 world unit. For reference, Pikmin have a diameter of 10 units.</dd>
     </dl>
     
     <h2 id="X">X</h2>
 
-    <dl>
+    <dl id="x-coordinate">
       <dt>X</dt>
       <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>
     
     <h2 id="Y">Y</h2>
 
-    <dl>
+    <dl id="y-coordinate">
       <dt>Y</dt>
       <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>
     
     <h2 id="Z">Z</h2>
 
-    <dl>
+    <dl id="z-coordinate">
       <dt>Z</dt>
       <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>

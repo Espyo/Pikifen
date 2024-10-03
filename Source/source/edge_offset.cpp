@@ -503,7 +503,7 @@ void get_edge_offset_intersection(
  * @param v_ptr Vertex to work on.
  * @param pivot_angle Angle to check from.
  * @param clockwise True to check in a clockwise direction,
- * false for counter-clockwise.
+ * false for counterclockwise.
  * @param ignore Edge to ignore while checking, if any.
  * @param out_edge The found edge is returned here, or nullptr.
  * @param out_angle The angle of the found edge is returned here.
@@ -557,7 +557,7 @@ void get_next_edge(
  * @param v_ptr Vertex to work on.
  * @param pivot_angle Angle to check from.
  * @param clockwise True to check in a clockwise direction,
- * false for counter-clockwise.
+ * false for counterclockwise.
  * @param ignore Edge to ignore while checking, if any.
  * @param edge_checker Function that returns whether or not a given edge
  * should use the effect.

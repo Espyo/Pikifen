@@ -19,7 +19,7 @@ enum AEMP_TYPE {
     //Integer number.
     AEMP_TYPE_INT,
     
-    //Decimal number.
+    //Real number.
     AEMP_TYPE_DECIMAL,
     
     //Boolean.

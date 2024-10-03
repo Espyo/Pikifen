@@ -38,64 +38,86 @@
     
     <p>Creates an image of the entire area and saves it in the <code>User_data</code> folder. This is a great way to show other people what your area is like. This draws the area just as it appears in-game, so with the objects and shadows and everything. The HUD won't be visible, though. How zoomed in or out the area is when compared to how it looks in-game depends on the size of the image. It is recommended that you don't try to aim for a 1:1 zoom level, but instead focus on having an image big enough for people to understand what is happening, but not so big that it is a pain to open.</p>
 
-    <ul>
-      <li>Tool ID: <code>area_image</code>.</li>
-      <li>
-        Settings:
-        <ul>
-          <li><code>area_image_size</code>: Maximum image width or height, in pixels. 2048 is a good size for medium or large areas, otherwise 1024 works fine. Defaults to 2048.</li>
-          <li><code>area_image_mobs</code>: Set to true or false depending on whether or not you want to see objects, particle effects, etc. Defaults to true.</li>
-          <li><code>area_image_padding</code>: Padding around the actual area. Defaults to 32.</li>
-          <li><code>area_image_shadows</code>: Set to true or false depending on whether or not you want to see tree leaf shadows. Defaults to true.</li>
-        </ul>
-      </li>
-    </ul>
+    <p><b>Tool ID</b>: <code>area_image</code>.</p>
+
+    <p><b>Settings</b>:</p>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>area_image_size</td>
+        <td>Maximum image width or height, in pixels. 2048 is a good size for medium or large areas, otherwise 1024 works fine.</td>
+        <td>Number</td>
+        <td>2048</td>
+      </tr>
+      <tr>
+        <td>area_image_mobs</td>
+        <td>Whether you want to see objects, particle effects, etc.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>area_image_padding</td>
+        <td>Padding around the actual area.</td>
+        <td>Number</td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td>area_image_shadows</td>
+        <td>Whether you want to see tree leaf shadows.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+    </table>
 
     <h3 id="speed">Change speed</h3>
     
     <p>Changes the game's flow of time, making it faster or slower. Press the tool's key while playing to switch from normal speed to the set speed, and then press again to return to normal. If you're testing something tedious, speeding up the gameplay means you have to wait less, and if you're trying to understand what is happening in a scenario that goes by too quickly, you can slow the game down. Note that the engine wasn't meant to run at these speeds, so some behaviors might not work properly, like objects being able to clip through walls they normally wouldn't.</p>
 
-    <ul>
-      <li>Tool ID: <code>change_speed</code>.</li>
-      <li>
-        Settings:
-        <ul>
-          <li><code>change_speed_multiplier</code>: Game speed multiplier. 1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc. Defaults to 2.</li>
-        </ul>
-      </li>
-    </ul>
+    <p><b>Tool ID</b>: <code>change_speed</code>.</p>
+
+    <p><b>Settings</b>:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>change_speed_multiplier</td>
+        <td>Game speed multiplier. 1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.</td>
+        <td>Number</td>
+        <td>2</td>
+      </tr>
+    </table>
 
     <h3 id="geometry-info">Geometry info</h3>
     
     <p>Prints out geometry info about what's under the cursor (or stops if pressed again), on the top of the screen. It uses the mouse cursor for this, not the leader's cursor. This prints out the cursor's coordinates, as well as some basic info about the sector that the cursor is on: its height and texture.</p>
     
-    <ul>
-      <li>Tool ID: <code>geometry_info</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>geometry_info</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="hud">HUD</h3>
     
     <p>Toggles the HUD's visibility on or off. Good for taking screenshots with.</p>
     
-    <ul>
-      <li>Tool ID: <code>hud</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>hud</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="hurt-mob">Hurt mob</h3>
     
     <p>Hurts the mob closest to the cursor. This is the mouse cursor, not the leader cursor. It saps away some half of its health every time you press it, meaning you can kill anything with just two presses (or more, if it regenerates). It's useful to kill troublesome enemies or boring obstacles without having to deal with them. Note that if you hold down the key, you'll be able to kill several mobs quickly, but if you don't pay attention, you could end up killing an object you didn't mean to, like your leader. To note also is that the mob does not receive any damage-related event with this, so it will never react to having lost health, even if its script says it should. It will die normally, however.</p>
     
-    <ul>
-      <li>Tool ID: <code>hurt_mob</code>.</li>
-      <li>
-        Settings:
-        <ul>
-          <li><code>mob_hurting_percentage</code>: How much of the mob's total health should be lost each time. 50 is 50%, 100 will kill any mob instantly, etc. Defaults to 50.</li>
-        </ul>
-      </li>
-    </ul>
+    <p><b>Tool ID</b>: <code>hurt_mob</code>.</p>
+
+    <p><b>Settings</b>:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>mob_hurting_percentage</td>
+        <td>How much of the mob's total health should be lost each time. 50 is 50%, 100 will kill any mob instantly, etc.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+    </table>
 
     <h3 id="mob-info">Mob info</h3>
     
@@ -113,19 +135,17 @@
 
     <p>As such, the information shown is mostly useful to debug scripts and animations. </p>
     
-    <ul>
-      <li>Tool ID: <code>mob_info</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>mob_info</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="new-pikmin">New Pikmin</h3>
     
     <p>Creates a new Pikmin where the cursor is, in the idle state. This uses the mouse cursor, not the leader's cursor. The type of the Pikmin created depends on the previous Pikmin created this way, in that it follows a cycle, alphabetically going through all Pikmin types declared on the engine. The new Pikmin will also have flower maturity. This tool is very useful if you need more Pikmin with you instantly. You can hold down the key to create a large army of Pikmin in a short time.</p>
     
-    <ul>
-      <li>Tool ID: <code>new_pikmin</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>new_pikmin</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
     
     <h3 id="path-info">Path info</h3>
     
@@ -153,46 +173,41 @@
 
     <p>If an object is not following a path like you expect it to, using this tool will help you figure out why.</p>
     
-    <ul>
-      <li>Tool ID: <code>path_info</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>path_info</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="set-song-pos-near-loop">Set song position near loop</h3>
     
     <p>Changes the current position of all songs to be just a few seconds before their loop point. This is useful when you want to test the loop points and don't want to wait until the song gets there normally.</p>
     
-    <ul>
-      <li>Tool ID: <code>set_song_pos_near_loop</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>set_song_pos_near_loop</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="collision">Show collision</h3>
     
     <p>Toggles visibility of mob collision boxes/bubbles. This is just a simple unfilled circle or rectangle, and for objects that push with their hitboxes, each hitbox's bubble will be shown too.</p>
 
-    <ul>
-      <li>Tool ID: <code>collision</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>collision</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="hitboxes">Show hitboxes</h3>
     
     <p>Toggles visibility of mob hitboxes in-game. For each mob that has hitboxes, they will appear overlaid on top of it, and with a color scheme similar to the animation editor (green for hitboxes that can be damaged, red for those currently causing damage, and yellow for ignored ones).</p>
 
-    <ul>
-      <li>Tool ID: <code>hitboxes</code>.</li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>hitboxes</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h3 id="teleport">Teleport</h3>
     
     <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Keep in mind that Pikmin in your party will not teleport with you, so they may have a hard time following you. This also has some technical drawbacks: Pikmin may go to an incorrect spot when trying to stay on the group, and the leader's vertical position may not be updated correctly. Neither of these are critical and eventually fix themselves. You can also hold down the key to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control.</p>
 
-    <ul>
-      <li>Tool ID: <code>teleport</code></li>
-      <li>Settings: none.</li>
-    </ul>
+    <p><b>Tool ID</b>: <code>teleport</code>.</p>
+
+    <p><b>Settings</b>: none.</p>
 
     <h2 id="others">Other tools</h2>
     
@@ -200,7 +215,7 @@
     
     <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid that. It makes the engine start on something other than the main menu automatically, and also optionally automatically open a specific area or animation.</p>
 
-    <p>The <code>auto_start_mode</code> variable controls what mode to automatically start on. If left empty, the engine boots to the main menu as usual. Valid values are <code>play</code>, <code>animation_editor</code>, <code>area_editor</code>, or <code>gui_editor</code>. The <code>auto_start_option</code> variable contains the area or animation to load on the game or editor, optionally. For areas, this is the path to the area's folder from the engine's folder. For animations it's the same, but the path to the data file. For GUIs, it's just the name of the GUI's data file.</p>
+    <p>The <code>auto_start_mode</code> property controls what mode to automatically start on. If left empty, the engine boots to the main menu as usual. Valid values are <code>play</code>, <code>animation_editor</code>, <code>area_editor</code>, or <code>gui_editor</code>. The <code>auto_start_option</code> property contains the area or animation to load on the game or editor, optionally. For areas, this is the path to the area's folder from the engine's folder. For animations it's the same, but the path to the data file. For GUIs, it's just the name of the GUI's data file.</p>
 
     <p>You can also press Ctrl+F12 in the engine to set the auto-start mode and option to the current mode and currently opened content. Pressing that outside of any of the recognized modes will set both values to empty.</p>
     

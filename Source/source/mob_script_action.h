@@ -81,7 +81,7 @@ enum MOB_ACTION {
     //Get information about a mob.
     MOB_ACTION_GET_MOB_INFO,
     
-    //Get a random decimal number.
+    //Get a random real number.
     MOB_ACTION_GET_RANDOM_DECIMAL,
     
     //Get a random integer number.
@@ -291,7 +291,7 @@ enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
     //Plan a clockwise turn.
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN,
     
-    //Plan a counter-clockwise turn.
+    //Plan a counterclockwise turn.
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN,
     
 };

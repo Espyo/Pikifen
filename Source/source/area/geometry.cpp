@@ -532,7 +532,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  * This is the angle from the previous vertex to the current vertex,
  * so it's sent here cached for performance.
  * @param best_is_closest_cw True if we want the edge that is closest clockwise
- * from the previous edge. False for the closest counter-clockwise.
+ * from the previous edge. False for the closest counterclockwise.
  * @param next_e_ptr The next edge is returned here.
  * If there is none, nullptr is returned.
  * @param next_e_angle The next edge's angle is returned here.
@@ -680,7 +680,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  * Outer polygons are all the ones that contain the sector inside, and inner
  * polygons do not contain the sector inside. (In theory, since in practice
  * an inner polygon could contain another outer polygon inside.)
- * The vertexes are ordered counter-clockwise for the outer polygons,
+ * The vertexes are ordered counterclockwise for the outer polygons,
  * and clockwise for the inner ones.
  *
  * @param s_ptr Pointer to the sector.
@@ -713,7 +713,7 @@ TRIANGULATION_ERROR get_polys(
                 first_v_ptr, s_ptr, edges_left, doing_first_polygon
             );
             
-        //Trace! For the outer poly, we're going counter-clockwise,
+        //Trace! For the outer poly, we're going counterclockwise,
         //while for the inner ones, it's clockwise.
         TRIANGULATION_ERROR trace_result =
             trace_edges(
@@ -865,7 +865,7 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 
 
 /**
- * @brief Returns whether a polygon was created clockwise or anti-clockwise,
+ * @brief Returns whether a polygon was created clockwise or counterclockwise,
  * given the order of its vertexes.
  *
  * @param vertexes Vertexes to check.
@@ -952,7 +952,7 @@ bool is_vertex_ear(
  * @param start_v_ptr Vertex to start on.
  * @param s_ptr Sector to trace around.
  * @param going_cw True if the travel direction should be clockwise,
- * false for counter-clockwise.
+ * false for counterclockwise.
  * @param vertexes The final list of vertexes is returned here.
  * @param unvisited_edges List of edges that have not been visited,
  * so the algorithm can remove them from the list as it visits them.
@@ -1029,9 +1029,9 @@ TRIANGULATION_ERROR trace_edges(
         //your direction of travel (from the|your direction of travel (from the
         //shared vertex). i.e. closest      |shared vertex). i.e. closest
         //clockwise if you're traversing the|clockwise if you're traversing the
-        //edges counter-clockwise, closest  |edges clockwise, closest
-        //counter-clockwise if you're       |counter-clockwise if you're
-        //traversing clockwise.             |traversing counter-clockwise.
+        //edges counterclockwise, closest   |edges clockwise, closest
+        //counterclockwise if you're        |counterclockwise if you're
+        //traversing clockwise.             |traversing counterclockwise.
         //
         //Fig. A.
         //  +--------+
@@ -1055,11 +1055,11 @@ TRIANGULATION_ERROR trace_edges(
         //
         //With all of that said, the first iteration, where we find the first
         //edge, needs to be selected according to what sort of polygon we're
-        //tracing. Counter-clockwise for outer, clockwise for inner. The edge
+        //tracing. Counterclockwise for outer, clockwise for inner. The edge
         //we pick from the starting vertex will dictate the direction of travel.
         //So for outer polygons, we want to start by picking the closest
-        //counter-clockwise edge, so we can set the trace orientation to
-        //counter-clockwise, and then swap over to picking the closest
+        //counterclockwise edge, so we can set the trace orientation to
+        //counterclockwise, and then swap over to picking the closest
         //clockwise so we can turn inward.
         //For inner polygons, start with the closest clockwise edge so we
         //trace clockwise, then continue that way so we turn outward.

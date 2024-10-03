@@ -121,6 +121,10 @@ ul {
   color: #808080;
 }
 
+.highlight-target *:target {
+  border: solid green;
+}
+
 .indent {
   margin-left: 40px;
 }

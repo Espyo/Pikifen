@@ -124,7 +124,7 @@ void analog_stick_cleaner::process_angular_deadzones(
     angle = fmod(angle + M_PI * 2, M_PI * 2);
     
     //Start by finding the previous snap direction (i.e. the closest one
-    //counter-clockwise), and the next snap direction (i.e. closest clockwise).
+    //counterclockwise), and the next snap direction (i.e. closest clockwise).
     int prev_snap_dir_idx =
         (int) (floor(angle / M_PI_4) + 8) % 8;
     int next_snap_dir_idx =
