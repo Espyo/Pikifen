@@ -7,7 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If an object is on-camera and a child object is not, or vice-versa, they'll desync. Especially notable with the electric wire (thanks Helodity)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
     Winged Pikmin are too high to be hit by a bomb rock explosion (thanks Arcadius)
     "quick bug i found with the shadow fix, ding particles now render under them" --Helodity
@@ -110,9 +109,6 @@ Next tasks (roughly sorted most important first)
         Results screen
         Helodity's tropical song
         Other people's songs
-    Boss music logic needs some tweaks
-        A way to skip to different portions
-        A way to skip to the end portion on death AND play it all the way to the end, instead of the game changing to the area song because the player is no longer technically next to a living boss
     Use a screenshot for the title screen
     Pikmin animation improvements
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
@@ -877,6 +873,7 @@ Misc things (so I don't forget)
     I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spew. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
+    Boss music logic for attack jingles
     Missions
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)

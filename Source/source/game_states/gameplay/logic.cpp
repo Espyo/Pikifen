@@ -2414,6 +2414,8 @@ void gameplay_state::update_area_active_cells() {
  * @brief Updates the "is_active" member variable of all mobs for this frame.
  */
 void gameplay_state::update_mob_is_active_flag() {
+    unordered_set<mob*> child_mobs;
+    
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
         
@@ -2437,5 +2439,15 @@ void gameplay_state::update_mob_is_active_flag() {
             m_ptr->is_active =
                 game.states.gameplay->area_active_cells[cell_x][cell_y];
         }
+        
+        if(m_ptr->parent && m_ptr->parent->m) child_mobs.insert(m_ptr);
+    }
+    
+    for(const auto &m : child_mobs) {
+        if(m->is_active) m->parent->m->is_active = true;
+    }
+    
+    for(auto &m : child_mobs) {
+        if(m->parent->m->is_active) m->is_active = true;
     }
 }
