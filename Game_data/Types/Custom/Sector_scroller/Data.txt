@@ -7,7 +7,7 @@ area_editor_properties {
     Speed {
         var = speed
         def_value = 50
-        type = decimal
+        type = real
         tooltip = What speed the sector's floor scrolls at.
     }
 }

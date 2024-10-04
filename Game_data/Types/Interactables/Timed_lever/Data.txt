@@ -15,7 +15,7 @@ trigger_range = 64
 area_editor_properties {
     Duration {
         var = duration
-        type = decimal
+        type = real
         def_value = 5
         tooltip = How long it lasts in the "on" position.
     }

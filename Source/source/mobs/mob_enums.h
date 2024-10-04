@@ -20,7 +20,7 @@ enum AEMP_TYPE {
     AEMP_TYPE_INT,
     
     //Real number.
-    AEMP_TYPE_DECIMAL,
+    AEMP_TYPE_REAL,
     
     //Boolean.
     AEMP_TYPE_BOOL,

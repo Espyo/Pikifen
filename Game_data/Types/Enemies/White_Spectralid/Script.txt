@@ -72,9 +72,9 @@ script {
             set_state dying
         }
         on_timer {
-            get_random_decimal x -600 600
+            get_random_real x -600 600
             calculate x $home_x + $x
-            get_random_decimal y -600 600
+            get_random_real y -600 600
             calculate y $home_y + $y
             get_floor_z z $x $y
             calculate z $z + 100

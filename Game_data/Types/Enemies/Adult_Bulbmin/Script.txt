@@ -36,12 +36,12 @@ script {
         on_enter {
             set_animation moving random_time_on_spawn true
             set_near_reach search
-            get_random_decimal r -600 600
+            get_random_real r -600 600
             calculate x $home_x + $r
-            get_random_decimal r -600 600
+            get_random_real r -600 600
             calculate y $home_y + $r
             move_to_absolute $x $y
-            get_random_decimal r 3 6
+            get_random_real r 3 6
             set_timer $r
         }
         on_far_from_home {

@@ -14,7 +14,7 @@ script {
 			if $t = 3
 				set_animation idling_03
 			end_if
-            get_random_decimal t 0 360
+            get_random_real t 0 360
             turn_to_relative $t
         }
     }

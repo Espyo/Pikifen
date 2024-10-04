@@ -790,7 +790,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             
             break;
             
-        } case AEMP_TYPE_DECIMAL: {
+        } case AEMP_TYPE_REAL: {
     
             float value_f = s2f(value);
             if(
@@ -843,7 +843,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             (p_ptr->tooltip.empty() ? "" : "\n") +
             "(Variable name: \"" + p_ptr->var + "\".)",
             "",
-            (p_ptr->type == AEMP_TYPE_INT || p_ptr->type == AEMP_TYPE_DECIMAL) ?
+            (p_ptr->type == AEMP_TYPE_INT || p_ptr->type == AEMP_TYPE_REAL) ?
             WIDGET_EXPLANATION_DRAG :
             WIDGET_EXPLANATION_NONE
         );

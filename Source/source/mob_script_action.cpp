@@ -1339,7 +1339,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
+void mob_action_runners::get_random_real(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
         f2s(randomf(s2f(data.args[1]), s2f(data.args[2])));
 }
