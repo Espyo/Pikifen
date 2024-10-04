@@ -1992,14 +1992,14 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     
     //Time to draw!
     for(size_t c = 0; c < components.size(); c++) {
-        components[c].nr = c;
+        components[c].idx = c;
     }
     
     sort(
         components.begin(), components.end(),
     [] (const world_component & c1, const world_component & c2) -> bool {
         if(c1.z == c2.z) {
-            return c1.nr < c2.nr;
+            return c1.idx < c2.idx;
         }
         return c1.z < c2.z;
     }

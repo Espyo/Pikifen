@@ -232,7 +232,7 @@ private:
         //During stage 1, was the working sector to the left?
         bool is_working_at_stage_1_left = false;
         
-        //Nr. of drawing nodes before a useless split part 2. Or INVALID.
+        //Number of drawing nodes before a useless split part 2. Or INVALID.
         size_t useless_split_part_2_checkpoint = INVALID;
         
     };

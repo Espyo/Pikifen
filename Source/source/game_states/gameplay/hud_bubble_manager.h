@@ -118,19 +118,19 @@ public:
     * @brief Returns the necessary information for the bubble to know how
     * to draw itself.
     * 
-    * @param number Number of the registered bubble.
+    * @param id ID of the registered bubble.
     * @param content The content the bubble should use is returned here.
     * A default-constructed object is returned on error.
     * @param pos The final position it should use is returned here.
     * @param size The final size it should use is returned here.
     */
     void get_drawing_info(
-        size_t number,
+        size_t id,
         t* content, point* pos, point* size
     ) {
         float transition_anim_ratio = transition_timer / transition_duration;
         
-        auto it = bubbles.find(number);
+        auto it = bubbles.find(id);
         if(it == bubbles.end()) {
             *content = t();
             return;
@@ -291,12 +291,12 @@ public:
     /**
     * @brief Registers a bubble.
     * 
-    * @param bubble GUI item that represents this bubble.
-    * @param number Number of this item in its "family". For instance, if
+    * @param id ID of this item in its "family". For instance, if
     * this is the icon for the second leader, this value is 1 (0-indexed).
+    * @param bubble GUI item that represents this bubble.
     */
-    void register_bubble(size_t number, gui_item* bubble) {
-        bubbles[number] = bubble_t(bubble);
+    void register_bubble(size_t id, gui_item* bubble) {
+        bubbles[id] = bubble_t(bubble);
     }
     
     /**
@@ -315,12 +315,12 @@ public:
     /**
     * @brief Updates the reference and content of a given bubble.
     * 
-    * @param number Number of the registered bubble.
+    * @param id ID of the registered bubble.
     * @param new_ref New reference.
     * @param new_content New content.
     */
-    void update(size_t number, void* new_ref, t new_content) {
-        auto it = bubbles.find(number);
+    void update(size_t id, void* new_ref, t new_content) {
+        auto it = bubbles.find(id);
         if(it == bubbles.end()) return;
         if(it->second.ref != new_ref && !transition_is_setup) {
             for(auto &b : bubbles) {

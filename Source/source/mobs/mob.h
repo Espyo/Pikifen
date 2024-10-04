@@ -355,7 +355,7 @@ public:
     virtual void draw_mob();
     
     void set_animation(
-        size_t nr,
+        size_t idx,
         const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
         bool pre_named = true,
         float mob_speed_baseline = 0.0f
@@ -441,7 +441,7 @@ public:
     dist get_distance_between(
         const mob* m2_ptr, const dist* regular_distance_cache = nullptr
     ) const;
-    hitbox* get_hitbox(size_t nr) const;
+    hitbox* get_hitbox(size_t idx) const;
     hitbox* get_closest_hitbox(
         const point &p, size_t h_type = INVALID, dist* d = nullptr
     ) const;
@@ -571,7 +571,7 @@ public:
 
     //--- Members ---
     
-    //Index number of its current base animation.
+    //Index of its current base animation.
     size_t cur_base_anim_idx = INVALID;
     
     

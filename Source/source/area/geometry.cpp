@@ -887,13 +887,13 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
  * @brief Returns whether this vertex is convex or not.
  *
  * @param vec List of all vertexes.
- * @param nr Index number of the vertex to check.
+ * @param idx Index of the vertex to check.
  * @return Whether it is convex.
  */
-bool is_vertex_convex(const vector<vertex*> &vec, size_t nr) {
-    const vertex* cur_v = vec[nr];
-    const vertex* prev_v = get_prev_in_vector(vec, nr);
-    const vertex* next_v = get_next_in_vector(vec, nr);
+bool is_vertex_convex(const vector<vertex*> &vec, size_t idx) {
+    const vertex* cur_v = vec[idx];
+    const vertex* prev_v = get_prev_in_vector(vec, idx);
+    const vertex* next_v = get_next_in_vector(vec, idx);
     float angle_prev =
         get_angle(
             point(cur_v->x, cur_v->y),
@@ -914,18 +914,18 @@ bool is_vertex_convex(const vector<vertex*> &vec, size_t nr) {
  *
  * @param vec List of all vertexes.
  * @param concaves List of concave vertexes.
- * @param nr Index number of the vertex to check.
+ * @param idx Index of the vertex to check.
  * @return Whether it is an ear.
  */
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t nr
+    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t idx
 ) {
     //A vertex is an ear if the triangle of it, the previous, and next vertexes
     //does not contain any other vertex inside. Also, if it has vertexes inside,
     //they mandatorily are concave, so only check those.
-    const vertex* v = vec[nr];
-    const vertex* pv = get_prev_in_vector(vec, nr);
-    const vertex* nv = get_next_in_vector(vec, nr);
+    const vertex* v = vec[idx];
+    const vertex* pv = get_prev_in_vector(vec, idx);
+    const vertex* nv = get_next_in_vector(vec, idx);
     
     for(size_t c = 0; c < concaves.size(); c++) {
         const vertex* v_to_check = vec[concaves[c]];

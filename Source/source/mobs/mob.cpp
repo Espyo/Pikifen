@@ -1914,15 +1914,15 @@ mob_type::vulnerability_t mob::get_hazard_vulnerability(
 /**
  * @brief Returns the hitbox in the current animation with the specified number.
  *
- * @param nr The hitbox's number.
+ * @param idx The hitbox's index.
  * @return The hitbox.
  */
-hitbox* mob::get_hitbox(size_t nr) const {
+hitbox* mob::get_hitbox(size_t idx) const {
     sprite* s;
     get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
     if(s->hitboxes.empty()) return nullptr;
-    return &s->hitboxes[nr];
+    return &s->hitboxes[idx];
 }
 
 
@@ -2897,7 +2897,7 @@ void mob::send_message(mob* receiver, string &msg) const {
 /**
  * @brief Sets the mob's animation.
  *
- * @param nr Animation index.
+ * @param idx Animation index.
  * It's the animation instance index from the database.
  * @param options Options to start the new animation with.
  * @param pre_named If true, the animation has already been named in-engine.

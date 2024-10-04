@@ -46,7 +46,7 @@ public:
     //Its Z coordinate.
     float z = 0.0f;
     
-    //Index number in the list of world components. Used for sorting.
-    size_t nr = 0;
+    //Index in the list of world components. Used for sorting.
+    size_t idx = 0;
     
 };

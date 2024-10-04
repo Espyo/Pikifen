@@ -34,7 +34,7 @@ sector::~sector() {
  * @brief Adds an edge to the sector's list of edges, if it's not there already.
  *
  * @param e_ptr Edge to add.
- * @param e_idx Index number of the edge to add.
+ * @param e_idx Index of the edge to add.
  */
 void sector::add_edge(edge* e_ptr, size_t e_idx) {
     for(size_t i = 0; i < edges.size(); i++) {

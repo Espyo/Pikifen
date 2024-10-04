@@ -156,21 +156,20 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) const {
 /**
  * @brief Registers a new mob category.
  *
- * @param nr ID of the category.
+ * @param id ID of the category.
  * @param category Pointer to its data.
  */
 void mob_category_manager::register_category(
-    MOB_CATEGORY nr,
-    mob_category* category
+    MOB_CATEGORY id, mob_category* category
 ) {
-    if(nr >= categories.size()) {
+    if(id >= categories.size()) {
         categories.insert(
             categories.end(),
-            (nr + 1) - categories.size(),
+            (id + 1) - categories.size(),
             nullptr
         );
     }
-    categories[nr] = category;
+    categories[id] = category;
 }
 
 

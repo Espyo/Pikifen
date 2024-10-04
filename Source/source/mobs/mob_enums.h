@@ -344,7 +344,7 @@ enum START_ANIM_OPTION {
     //Start the new animation like normal.
     START_ANIM_OPTION_NORMAL,
     
-    //Start from whatever frame number the previous animation was at.
+    //Start from whatever frame index the previous animation was at.
     START_ANIM_OPTION_NO_RESTART,
     
     //Start on a random time.

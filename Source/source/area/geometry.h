@@ -164,9 +164,9 @@ bool get_polys_is_outer(
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
-bool is_vertex_convex(const vector<vertex*> &vec, size_t nr);
+bool is_vertex_convex(const vector<vertex*> &vec, size_t idx);
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t nr
+    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t idx
 );
 TRIANGULATION_ERROR trace_edges(
     vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
