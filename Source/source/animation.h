@@ -133,7 +133,7 @@ public:
     sprite &operator=(const sprite &s2);
     void create_hitboxes(
         animation_database* const adb,
-        const float height = 0, const float radius = 0
+        float height = 0, float radius = 0
     );
     void set_bitmap(
         const string &new_file_name,
@@ -183,9 +183,9 @@ public:
     //--- Function declarations ---
     
     explicit frame(
-        const string &sn = "", const size_t si = INVALID,
-        sprite* sp = nullptr, const float d = 0.1,
-        const bool in = false, const string &snd = "", const size_t s = INVALID
+        const string &sn = "", size_t si = INVALID,
+        sprite* sp = nullptr, float d = 0.1,
+        bool in = false, const string &snd = "", size_t s = INVALID
     );
     
 };
@@ -220,7 +220,7 @@ public:
     explicit animation(
         const string &name = "",
         const vector<frame> &frames = vector<frame>(),
-        const size_t loop_frame = 0, const unsigned char hit_rate = 100
+        size_t loop_frame = 0, unsigned char hit_rate = 100
     );
     animation(const animation &a2);
     animation &operator=(const animation &a2);
@@ -228,9 +228,9 @@ public:
     float get_duration();
     float get_loop_duration();
     void get_frame_and_time(
-        const float t, size_t* frame_idx, float* frame_time
+        float t, size_t* frame_idx, float* frame_time
     );
-    float get_time(const size_t frame_idx, const float frame_time);
+    float get_time(size_t frame_idx, float frame_time);
     
 };
 
@@ -318,7 +318,7 @@ public:
     void to_start();
     void skip_ahead_randomly();
     bool tick(
-        const float delta_t,
+        float delta_t,
         vector<size_t>* signals = nullptr,
         vector<size_t>* sounds = nullptr
     );

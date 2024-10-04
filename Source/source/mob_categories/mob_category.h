@@ -139,7 +139,7 @@ public:
     virtual mob_type* create_type() = 0;
     virtual void register_type(mob_type* type) = 0;
     virtual mob* create_mob(
-        const point &pos, mob_type* type, const float angle
+        const point &pos, mob_type* type, float angle
     ) = 0;
     virtual void erase_mob(mob* m) = 0;
     virtual void clear_types() = 0;
@@ -195,7 +195,7 @@ public:
     mob_type* create_type() override;
     void register_type(mob_type* type) override;
     mob* create_mob(
-        const point &pos, mob_type* type, const float angle
+        const point &pos, mob_type* type, float angle
     ) override;
     void erase_mob(mob* m) override;
     void clear_types() override;

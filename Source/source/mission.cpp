@@ -153,7 +153,7 @@ int mission_fail_kill_enemies::get_req_amount(
  * @return The status.
  */
 string mission_fail_kill_enemies::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have killed " +
@@ -296,7 +296,7 @@ int mission_fail_lose_leaders::get_req_amount(
  * @return The status.
  */
 string mission_fail_lose_leaders::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have lost " +
@@ -437,7 +437,7 @@ int mission_fail_lose_pikmin::get_req_amount(
  * @return The status.
  */
 string mission_fail_lose_pikmin::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have lost " +
@@ -569,7 +569,7 @@ int mission_fail_pause_menu::get_req_amount(
  * @return The status.
  */
 string mission_fail_pause_menu::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return "";
 }
@@ -704,7 +704,7 @@ int mission_fail_take_damage::get_req_amount(
  * @return The status.
  */
 string mission_fail_take_damage::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return "";
 }
@@ -858,7 +858,7 @@ int mission_fail_time_limit::get_req_amount(
  * @return The status.
  */
 string mission_fail_time_limit::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         time_to_str2(cur, "m", "s") +
@@ -999,7 +999,7 @@ int mission_fail_too_few_pikmin::get_req_amount(
  * @return The status.
  */
 string mission_fail_too_few_pikmin::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have " +
@@ -1142,7 +1142,7 @@ int mission_fail_too_many_pikmin::get_req_amount(
  * @return The status.
  */
 string mission_fail_too_many_pikmin::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have " +
@@ -1301,7 +1301,7 @@ int mission_goal_battle_enemies::get_req_amount(
  * @return The status.
  */
 string mission_goal_battle_enemies::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have killed " + i2s(cur) + "/" + i2s(req) +
@@ -1453,7 +1453,7 @@ int mission_goal_collect_treasures::get_req_amount(
  * @return The status.
  */
 string mission_goal_collect_treasures::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have collected " + i2s(cur) + "/" + i2s(req) +
@@ -1611,7 +1611,7 @@ int mission_goal_end_manually::get_req_amount(
  * @return The status.
  */
 string mission_goal_end_manually::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return "";
 }
@@ -1769,7 +1769,7 @@ int mission_goal_get_to_exit::get_req_amount(
  * @return The status.
  */
 string mission_goal_get_to_exit::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have " + i2s(cur) + "/" + i2s(req) +
@@ -1912,7 +1912,7 @@ int mission_goal_grow_pikmin::get_req_amount(
  * @return The status.
  */
 string mission_goal_grow_pikmin::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have " + i2s(cur) + "/" + i2s(req) +
@@ -2054,7 +2054,7 @@ int mission_goal_timed_survival::get_req_amount(
  * @return The status.
  */
 string mission_goal_timed_survival::get_status(
-    const int cur, const int req, const float percentage
+    int cur, int req, float percentage
 ) const {
     return
         "You have survived for " +

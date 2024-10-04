@@ -655,7 +655,7 @@ void get_cce(
  */
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &pos, const vector<vertex*> &all_vertexes,
-    const float merge_radius
+    float merge_radius
 ) {
 
     vector<std::pair<dist, vertex*> > result;
@@ -890,7 +890,7 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
  * @param nr Index number of the vertex to check.
  * @return Whether it is convex.
  */
-bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
+bool is_vertex_convex(const vector<vertex*> &vec, size_t nr) {
     const vertex* cur_v = vec[nr];
     const vertex* prev_v = get_prev_in_vector(vec, nr);
     const vertex* next_v = get_next_in_vector(vec, nr);
@@ -918,7 +918,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
  * @return Whether it is an ear.
  */
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
+    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t nr
 ) {
     //A vertex is an ear if the triangle of it, the previous, and next vertexes
     //does not contain any other vertex inside. Also, if it has vertexes inside,
@@ -1187,7 +1187,7 @@ TRIANGULATION_ERROR triangulate_polygon(
  * @return An error code.
  */
 TRIANGULATION_ERROR triangulate_sector(
-    sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
+    sector* s_ptr, set<edge*>* lone_edges, bool clear_lone_edges
 ) {
 
     //Root of the polygon tree.

@@ -103,10 +103,10 @@ public:
     
     //--- Function declarations ---
     
-    pikmin(const point &pos, pikmin_type* type, const float angle);
+    pikmin(const point &pos, pikmin_type* type, float angle);
     void force_carry(mob* m);
     bool process_attack_miss(hitbox_interaction* info);
-    void increase_maturity(const int amount);
+    void increase_maturity(int amount);
     void latch(mob* m, const hitbox* h);
     void start_throw_trail();
     bool can_receive_status(status_type* s) const override;
@@ -123,11 +123,11 @@ protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
 };
 
 
 pikmin* get_closest_sprout(
-    const point &pos, dist* d, const bool ignore_reserved
+    const point &pos, dist* d, bool ignore_reserved
     
 );

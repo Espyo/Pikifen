@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 bouncer::bouncer(
-    const point &pos, bouncer_type* type, const float angle
+    const point &pos, bouncer_type* type, float angle
 ):
     mob(pos, type, angle),
     bou_type(type) {

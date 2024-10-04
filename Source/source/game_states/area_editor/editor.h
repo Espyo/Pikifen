@@ -855,8 +855,8 @@ private:
         const layout_drawing_node &n2
     ) const;
     float calculate_day_speed(
-        const float day_start_min, const float day_end_min,
-        const float mission_min
+        float day_start_min, float day_end_min,
+        float mission_min
     );
     void cancel_circle_sector();
     void cancel_layout_drawing();
@@ -917,7 +917,7 @@ private:
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
     ) const;
     edge* get_closest_edge_to_angle(
-        vertex* v_ptr, const float angle, const bool clockwise,
+        vertex* v_ptr, float angle, bool clockwise,
         float* out_closest_edge_angle
     ) const;
     bool get_common_sector(
@@ -960,7 +960,7 @@ private:
     void load_area(
         const string &requested_area_folder_name,
         const AREA_TYPE requested_area_type,
-        const bool from_backup, const bool should_update_history
+        bool from_backup, bool should_update_history
     );
     void load_backup();
     void load_reference();
@@ -980,10 +980,10 @@ private:
         const string &operation_name, area_data* pre_prepared_change = nullptr
     );
     void remove_thumbnail();
-    void resize_everything(const float mults[2]);
+    void resize_everything(float mults[2]);
     void rollback_to_prepared_state(area_data* prepared_state);
     void rotate_mob_gens_to_point(const point &pos);
-    bool save_area(const bool to_backup);
+    bool save_area(bool to_backup);
     void save_backup();
     void save_reference();
     void select_edge(edge* e_ptr);
@@ -995,7 +995,7 @@ private:
     void set_selection_status_text();
     void set_state_from_undo_or_redo_history(area_data* state);
     void setup_sector_split();
-    point snap_point(const point &p, const bool ignore_selected = false);
+    point snap_point(const point &p, bool ignore_selected = false);
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
         path_link* l1, path_link* l2,
@@ -1027,19 +1027,19 @@ private:
     void update_vertex_selection();
     void draw_arrow(
         const point &start, const point &end,
-        const float start_offset, const float end_offset,
-        const float thickness, const ALLEGRO_COLOR &color
+        float start_offset, float end_offset,
+        float thickness, const ALLEGRO_COLOR &color
     );
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
     void draw_cross_section_sector(
-        const float start_ratio, const float end_ratio, const float proportion,
-        const float lowest_z, const sector* sector_ptr
+        float start_ratio, float end_ratio, float proportion,
+        float lowest_z, const sector* sector_ptr
     );
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,
-        const unsigned char dots = 0
+        unsigned char dots = 0
     );
     void draw_line_dist(
         const point &focus, const point &other, const string &prefix = ""
@@ -1047,10 +1047,10 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_area(
-        const string &name, const string &category, const bool is_new
+        const string &name, const string &category, bool is_new
     );
     void pick_texture(
-        const string &name, const string &category, const bool is_new
+        const string &name, const string &category, bool is_new
     );
     void circle_sector_cmd(float input_value);
     void copy_properties_cmd(float input_value);

@@ -966,7 +966,7 @@ vertex* area_data::new_vertex() {
  *
  * @param e_idx Index number of the edge to remove.
  */
-void area_data::remove_edge(const size_t e_idx) {
+void area_data::remove_edge(size_t e_idx) {
     edges.erase(edges.begin() + e_idx);
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
@@ -1025,7 +1025,7 @@ void area_data::remove_edge(const edge* e_ptr) {
  *
  * @param s_idx Index number of the sector to remove.
  */
-void area_data::remove_sector(const size_t s_idx) {
+void area_data::remove_sector(size_t s_idx) {
     sectors.erase(sectors.begin() + s_idx);
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
         edge* e_ptr = game.cur_area_data.edges[e];
@@ -1067,7 +1067,7 @@ void area_data::remove_sector(const sector* s_ptr) {
  *
  * @param v_idx Index number of the vertex to remove.
  */
-void area_data::remove_vertex(const size_t v_idx) {
+void area_data::remove_vertex(size_t v_idx) {
     vertexes.erase(vertexes.begin() + v_idx);
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
@@ -1135,7 +1135,7 @@ void blockmap::clear() {
  * @param x X coordinate.
  * @return The column, or INVALID on error.
  */
-size_t blockmap::get_col(const float x) const {
+size_t blockmap::get_col(float x) const {
     if(x < top_left_corner.x) return INVALID;
     float final_x = (x - top_left_corner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
@@ -1191,7 +1191,7 @@ bool blockmap::get_edges_in_region(
  * @param y Y coordinate.
  * @return The row, or INVALID on error.
  */
-size_t blockmap::get_row(const float y) const {
+size_t blockmap::get_row(float y) const {
     if(y < top_left_corner.y) return INVALID;
     float final_y = (y - top_left_corner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
@@ -1206,7 +1206,7 @@ size_t blockmap::get_row(const float y) const {
  * @param row Row to check.
  * @return The top-left coordinates.
  */
-point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
+point blockmap::get_top_left_corner(size_t col, size_t row) const {
     return
         point(
             col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
@@ -1224,7 +1224,7 @@ point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
  * @param vars String representation of the script vars.
  */
 mob_gen::mob_gen(
-    const point &pos, mob_type* type, const float angle, const string &vars
+    const point &pos, mob_type* type, float angle, const string &vars
 ) :
     type(type),
     pos(pos),
@@ -1241,7 +1241,7 @@ mob_gen::mob_gen(
  * @param destination Mob generator to clone the data into.
  * @param include_position If true, the position is included too.
  */
-void mob_gen::clone(mob_gen* destination, const bool include_position) const {
+void mob_gen::clone(mob_gen* destination, bool include_position) const {
     destination->angle = angle;
     if(include_position) destination->pos = pos;
     destination->type = type;
@@ -1263,8 +1263,8 @@ void mob_gen::clone(mob_gen* destination, const bool include_position) const {
  * vertically.
  */
 tree_shadow::tree_shadow(
-    const point &center, const point &size, const float angle,
-    const unsigned char alpha, const string &file_name, const point &sway
+    const point &center, const point &size, float angle,
+    unsigned char alpha, const string &file_name, const point &sway
 ) :
     file_name(file_name),
     bitmap(nullptr),
@@ -1327,7 +1327,7 @@ void get_area_info_from_path(
  * @return The folder path.
  */
 string get_base_area_folder_path(
-    const AREA_TYPE type, const bool from_game_data
+    const AREA_TYPE type, bool from_game_data
 ) {
     string result =
         from_game_data ?

@@ -25,7 +25,7 @@ using std::string;
 void load_area(
     const string &requested_area_folder_name,
     const AREA_TYPE requested_area_type,
-    const bool load_for_editor, const bool from_backup
+    bool load_for_editor, bool from_backup
 );
 void load_area_mission_data(data_node* node, mission_data &data);
 void load_area_mission_record(
@@ -41,8 +41,8 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
 );
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = nullptr,
-    const bool report_error = true, const bool error_bmp_on_error = true,
-    const bool error_bmp_on_empty = true, const bool path_from_root = false
+    bool report_error = true, bool error_bmp_on_error = true,
+    bool error_bmp_on_empty = true, bool path_from_root = false
 );
 data_node load_data_file(const string &file_path);
 void load_maker_tools();

@@ -202,7 +202,7 @@ void none_category::clear_types() { }
  * @return The mob.
  */
 mob* none_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) { return nullptr; }
 
 

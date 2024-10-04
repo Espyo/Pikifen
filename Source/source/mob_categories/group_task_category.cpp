@@ -48,7 +48,7 @@ void group_task_category::clear_types() {
  * @return The mob.
  */
 mob* group_task_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     group_task* m = new group_task(pos, (group_task_type*) type, angle);
     game.states.gameplay->mobs.group_tasks.push_back(m);

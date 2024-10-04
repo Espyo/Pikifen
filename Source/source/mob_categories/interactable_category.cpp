@@ -48,7 +48,7 @@ void interactable_category::clear_types() {
  * @return The mob.
  */
 mob* interactable_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     interactable* m = new interactable(pos, (interactable_type*) type, angle);
     game.states.gameplay->mobs.interactables.push_back(m);

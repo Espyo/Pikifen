@@ -191,7 +191,7 @@ void draw_edge_offset_on_buffer(
  * @param opacity Draw at this opacity, 0 - 1.
  */
 void draw_sector_edge_offsets(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
+    sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
 ) {
     if(s_ptr->is_bottomless_pit) return;
     
@@ -254,8 +254,8 @@ void draw_sector_edge_offsets(
  * is returned here. 0 if no elbow is needed.
  */
 void get_edge_offset_edge_info(
-    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
-    const float edge_process_angle,
+    edge* e_ptr, vertex* end_vertex, unsigned char end_idx,
+    float edge_process_angle,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter,
@@ -434,8 +434,8 @@ void get_edge_offset_edge_info(
  */
 void get_edge_offset_intersection(
     const edge* e1, const edge* e2, const vertex* common_vertex,
-    const float base_effect_angle1, const float base_effect_angle2,
-    const float effect_length,
+    float base_effect_angle1, float base_effect_angle2,
+    float effect_length,
     float* out_angle, float* out_length
 ) {
     vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
@@ -510,7 +510,7 @@ void get_edge_offset_intersection(
  * @param out_diff The difference in angle between the two is returned here.
  */
 void get_next_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    vertex* v_ptr, float pivot_angle, bool clockwise,
     const edge* ignore, edge** out_edge, float* out_angle, float* out_diff
 ) {
     edge* best_edge = nullptr;
@@ -569,7 +569,7 @@ void get_next_edge(
  * @param out_effect_cw Whether the effect is cast clockwise is returned here.
  */
 void get_next_offset_effect_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    vertex* v_ptr, float pivot_angle, bool clockwise,
     const edge* ignore, offset_effect_checker_t edge_checker,
     edge** out_edge, float* out_angle, float* out_diff,
     float* out_base_effect_angle,
@@ -648,7 +648,7 @@ void get_next_offset_effect_edge(
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
     const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
-    const bool clear_first
+    bool clear_first
 ) {
     unordered_set<size_t> edges;
     

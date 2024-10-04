@@ -37,7 +37,7 @@ using std::vector;
  */
 animation::animation(
     const string &name, const vector<frame> &frames,
-    const size_t loop_frame, const unsigned char hit_rate
+    size_t loop_frame, unsigned char hit_rate
 ) :
     name(name),
     frames(frames),
@@ -124,7 +124,7 @@ float animation::get_duration() {
  * @param frame_time The time within the frame is returned here.
  */
 void animation::get_frame_and_time(
-    const float t, size_t* frame_idx, float* frame_time
+    float t, size_t* frame_idx, float* frame_time
 ) {
     *frame_idx = 0;
     *frame_time = 0.0f;
@@ -172,7 +172,7 @@ float animation::get_loop_duration() {
  * @param frame_time Time in the current frame.
  * @return The time.
  */
-float animation::get_time(const size_t frame_idx, const float frame_time) {
+float animation::get_time(size_t frame_idx, float frame_time) {
     if(frame_idx == INVALID) {
         return 0.0f;
     }
@@ -1006,7 +1006,7 @@ void animation_instance::clear() {
  * @return Whether or not the animation ended its final frame.
  */
 bool animation_instance::tick(
-    const float delta_t, vector<size_t>* signals,
+    float delta_t, vector<size_t>* signals,
     vector<size_t>* sounds
 ) {
     if(!cur_anim) return false;
@@ -1076,8 +1076,8 @@ bool animation_instance::valid_frame() const {
  * @param s Signal.
  */
 frame::frame(
-    const string &sn, const size_t si, sprite* sp, const float d,
-    const bool in, const string &snd, const size_t s
+    const string &sn, size_t si, sprite* sp, float d,
+    bool in, const string &snd, size_t s
 ) :
     sprite_name(sn),
     sprite_idx(si),
@@ -1177,7 +1177,7 @@ sprite::~sprite() {
  * @param radius The hitboxes's starting radius.
  */
 void sprite::create_hitboxes(
-    animation_database* const adb, const float height, const float radius
+    animation_database* const adb, float height, float radius
 ) {
     hitboxes.clear();
     for(size_t b = 0; b < adb->body_parts.size(); ++b) {

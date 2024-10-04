@@ -96,7 +96,7 @@ game_class::game_class() {
  * things will go wrong.
  */
 void game_class::change_state(
-    game_state* new_state, const bool unload_current, const bool load_new
+    game_state* new_state, bool unload_current, bool load_new
 ) {
 
     if(cur_state && unload_current) {

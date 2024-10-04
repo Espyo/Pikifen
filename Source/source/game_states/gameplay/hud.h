@@ -187,13 +187,13 @@ struct hud_t {
 
     hud_t();
     ~hud_t();
-    void tick(const float delta_t);
+    void tick(float delta_t);
     
 private:
     
     //--- Function declarations ---
     
-    void create_mission_fail_cond_items(const bool primary);
+    void create_mission_fail_cond_items(bool primary);
     void draw_standby_icon(BUBBLE_RELATION which);
     void draw_spray_icon(BUBBLE_RELATION which);
     

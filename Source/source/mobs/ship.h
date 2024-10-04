@@ -70,6 +70,6 @@ public:
     bool is_leader_on_cp(const leader* l) const;
     void draw_mob() override;
     void read_script_vars(const script_var_reader &svr) override;
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 };

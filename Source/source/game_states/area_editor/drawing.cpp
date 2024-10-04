@@ -55,8 +55,8 @@ void area_editor::do_drawing() {
  */
 void area_editor::draw_arrow(
     const point &start, const point &end,
-    const float start_offset, const float end_offset,
-    const float thickness, const ALLEGRO_COLOR &color
+    float start_offset, float end_offset,
+    float thickness, const ALLEGRO_COLOR &color
 ) {
     al_draw_line(
         start.x, start.y, end.x, end.y,
@@ -1514,7 +1514,7 @@ void area_editor::draw_canvas() {
              * @param l2r Line 2 intersection point.
              */
             split_t(
-                sector* s1, sector* s2, const float l1r, const float l2r
+                sector* s1, sector* s2, float l1r, float l2r
             ) {
                 sector_ptrs[0] = s1;
                 sector_ptrs[1] = s2;
@@ -1747,8 +1747,8 @@ void area_editor::draw_canvas() {
  * @param sector_ptr Pointer to the sector to draw.
  */
 void area_editor::draw_cross_section_sector(
-    const float start_ratio, const float end_ratio, const float proportion,
-    const float lowest_z, const sector* sector_ptr
+    float start_ratio, float end_ratio, float proportion,
+    float lowest_z, const sector* sector_ptr
 ) {
     float rectangle_x1 =
         cross_section_window_start.x +
@@ -1801,7 +1801,7 @@ void area_editor::draw_cross_section_sector(
  */
 void area_editor::draw_debug_text(
     const ALLEGRO_COLOR color, const point &where, const string &text,
-    const unsigned char dots
+    unsigned char dots
 ) {
     int dox = 0;
     int doy = 0;

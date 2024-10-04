@@ -23,7 +23,7 @@
  * @param maximum Maximum value it can have, inclusive.
  * @return The clamped number.
  */
-float clamp(const float number, const float minimum, const float maximum) {
+float clamp(float number, float minimum, float maximum) {
     return std::min(maximum, std::max(minimum, number));
 }
 
@@ -36,7 +36,7 @@ float clamp(const float number, const float minimum, const float maximum) {
  * @param n The number to ease, in the range [0, 1].
  * @return The eased number.
  */
-float ease(const EASING_METHOD method, const float n) {
+float ease(const EASING_METHOD method, float n) {
     switch(method) {
     case EASE_METHOD_NONE: {
         return n;
@@ -123,7 +123,7 @@ float ease(const EASING_METHOD method, const float n) {
  * @param input The input number.
  * @return The hash.
  */
-uint32_t hash_nr(const unsigned int input) {
+uint32_t hash_nr(unsigned int input) {
     //Robert Jenkins' 32 bit integer hash function.
     //From https://gist.github.com/badboy/6267743
     //This algorithm is the simplest, lightest, fairest one I could find.
@@ -145,7 +145,7 @@ uint32_t hash_nr(const unsigned int input) {
  * @param input2 Second input number.
  * @return The hash.
  */
-uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
+uint32_t hash_nr2(unsigned int input1, unsigned int input2) {
     uint32_t n1 = hash_nr(input1);
     
     //Same algorithm as in hash_nr() with one argument,
@@ -191,8 +191,8 @@ float inch_towards(float start, float target, float max_step) {
  * @return The interpolated number.
  */
 float interpolate_number(
-    const float input, const float input_start, const float input_end,
-    const float output_start, const float output_end
+    float input, float input_start, float input_end,
+    float output_start, float output_end
 ) {
     return
         output_start +
@@ -238,7 +238,7 @@ int randomi(int minimum, int maximum) {
  * @param wrap_limit Wrap between [0 - wrap_limit[.
  * @return The wrapped number.
  */
-int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
+int sum_and_wrap(int nr, int sum, int wrap_limit) {
     int final_nr = nr + sum;
     while(final_nr < 0) {
         final_nr += wrap_limit;
@@ -255,7 +255,7 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
  * @param maximum Maximum of the interval.
  * @return The wrapped number.
  */
-float wrap_float(const float nr, const float minimum, const float maximum) {
+float wrap_float(float nr, float minimum, float maximum) {
     const float diff = maximum - minimum;
     return
         minimum + (float) fmod(diff + (float) fmod(nr - minimum, diff), diff);

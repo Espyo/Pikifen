@@ -29,7 +29,7 @@
  */
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle, const ALLEGRO_COLOR &tint
+    const point &size, float angle, const ALLEGRO_COLOR &tint
 ) {
 
     if(size.x == 0 && size.y == 0) return;
@@ -64,7 +64,7 @@ void draw_bitmap(
  */
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center, const point &box_size,
-    const bool scale_up, const float angle, const ALLEGRO_COLOR &tint
+    bool scale_up, float angle, const ALLEGRO_COLOR &tint
 ) {
     if(box_size.x == 0 || box_size.y == 0) return;
     int bmp_w = al_get_bitmap_width(bmp);
@@ -110,7 +110,7 @@ void draw_equilateral_triangle(
  * @param color Color the diamond with this color.
  */
 void draw_filled_diamond(
-    const point &center, const float radius, const ALLEGRO_COLOR &color
+    const point &center, float radius, const ALLEGRO_COLOR &color
 ) {
     ALLEGRO_VERTEX vert[4];
     for(unsigned char v = 0; v < 4; ++v) {
@@ -161,7 +161,7 @@ void draw_filled_equilateral_triangle(
  * @param color Color the rectangle with this color.
  */
 void draw_filled_rounded_rectangle(
-    const point &center, const point &size, const float radii,
+    const point &center, const point &size, float radii,
     const ALLEGRO_COLOR &color
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
@@ -187,7 +187,7 @@ void draw_filled_rounded_rectangle(
  */
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,
-    const float angle, const ALLEGRO_COLOR &color, const float thickness
+    float angle, const ALLEGRO_COLOR &color, float thickness
 ) {
     ALLEGRO_TRANSFORM rot_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
@@ -218,8 +218,8 @@ void draw_rotated_rectangle(
  * @param thickness Line thickness.
  */
 void draw_rounded_rectangle(
-    const point &center, const point &size, const float radii,
-    const ALLEGRO_COLOR &color, const float thickness
+    const point &center, const point &size, float radii,
+    const ALLEGRO_COLOR &color, float thickness
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
     final_radii = std::min(final_radii, size.y / 2.0f);

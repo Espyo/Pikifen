@@ -109,7 +109,7 @@ struct replay_event {
     //--- Function declarations ---
     
     replay_event(
-        const REPLAY_EVENT type, const size_t data
+        const REPLAY_EVENT type, size_t data
     );
     
 };
@@ -163,7 +163,7 @@ public:
         const vector<treasure*> &treasure_list,
         const vector<onion*> &onion_list,
         const vector<mob*> &obstacle_list,
-        const size_t cur_leader_idx
+        size_t cur_leader_idx
     );
     void clear();
     void finish_recording();

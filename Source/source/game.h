@@ -257,7 +257,7 @@ public:
     game_class();
     void change_state(
         game_state* new_state,
-        const bool unload_current = true, const bool load_new = true
+        bool unload_current = true, bool load_new = true
     );
     string get_cur_state_name() const;
     void unload_loaded_state(game_state* loaded_state);

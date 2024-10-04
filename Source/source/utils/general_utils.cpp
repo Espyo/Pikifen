@@ -44,7 +44,7 @@ size_t enum_name_database::get_idx(const string &name) const {
  * @param idx Index number of the item.
  * @return The name, or an empty string on error.
  */
-string enum_name_database::get_name(const size_t idx) const {
+string enum_name_database::get_name(size_t idx) const {
     if(idx < names.size()) return names[idx];
     return "";
 }
@@ -67,7 +67,7 @@ size_t enum_name_database::get_nr_of_items() const {
  * @param name Its name.
  */
 void enum_name_database::register_item(
-    const size_t idx, const string &name
+    size_t idx, const string &name
 ) {
     if(idx >= names.size()) {
         names.insert(names.end(), (idx + 1) - names.size(), "");
@@ -83,7 +83,7 @@ void enum_name_database::register_item(
  * @param initial_value Initial value of the thing being interpolated.
  * This gets used at t = 0.
  */
-keyframe_interpolator::keyframe_interpolator(const float initial_value) {
+keyframe_interpolator::keyframe_interpolator(float initial_value) {
     keyframe_times.push_back(0.0f);
     keyframe_values.push_back(initial_value);
     keyframe_eases.push_back(EASE_METHOD_NONE);
@@ -98,7 +98,7 @@ keyframe_interpolator::keyframe_interpolator(const float initial_value) {
  * @param ease Easing method, if any.
  */
 void keyframe_interpolator::add(
-    const float t, const float value, const EASING_METHOD ease
+    float t, float value, const EASING_METHOD ease
 ) {
     keyframe_times.push_back(t);
     keyframe_values.push_back(value);
@@ -112,7 +112,7 @@ void keyframe_interpolator::add(
  * @param t Time.
  * @return The value.
  */
-float keyframe_interpolator::get(const float t) {
+float keyframe_interpolator::get(float t) {
     if(t < 0.0f) return keyframe_values[0];
     
     for(size_t k = 1; k < keyframe_times.size(); ++k) {
@@ -206,7 +206,7 @@ float timer::get_ratio_left() const {
  * @param can_restart If false, calling this while the timer is still
  * ticking down will not do anything.
  */
-void timer::start(const bool can_restart) {
+void timer::start(bool can_restart) {
     if(!can_restart && time_left > 0) return;
     time_left = duration;
 }
@@ -217,7 +217,7 @@ void timer::start(const bool can_restart) {
  *
  * @param new_duration Its new duration.
  */
-void timer::start(const float new_duration) {
+void timer::start(float new_duration) {
     duration = new_duration;
     start();
 }
@@ -236,7 +236,7 @@ void timer::stop() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void timer::tick(const float delta_t) {
+void timer::tick(float delta_t) {
     if(time_left == 0.0f) return;
     time_left = std::max(time_left - delta_t, 0.0f);
     if(time_left == 0.0f && on_end) {
@@ -253,7 +253,7 @@ void timer::tick(const float delta_t) {
  * and semicolons become dots.
  * @return The string.
  */
-string get_current_time(const bool file_name_friendly) {
+string get_current_time(bool file_name_friendly) {
     time_t tt;
     time(&tt);
     struct tm t = *localtime(&tt);
@@ -323,7 +323,7 @@ string standardize_path(const string &path) {
  * @param signum Signal number.
  * @return The string.
  */
-string strsignal(const int signum) {
+string strsignal(int signum) {
     switch(signum) {
     case SIGINT: {
         return "SIGINT";
@@ -360,7 +360,7 @@ string strsignal(const int signum) {
  * @param pos Use the string at this position and onward.
  * @return The joined string.
  */
-string vector_tail_to_string(const vector<string> &v, const size_t pos) {
+string vector_tail_to_string(const vector<string> &v, size_t pos) {
     string result = v[pos];
     for(size_t p = pos + 1; p < v.size(); ++p) {
         result += " " + v[p];

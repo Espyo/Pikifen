@@ -562,8 +562,8 @@ struct mob_action_param {
     mob_action_param(
         const string &name,
         const MOB_ACTION_PARAM type,
-        const bool force_const,
-        const bool is_extras
+        bool force_const,
+        bool is_extras
     );
     
 };
@@ -793,7 +793,7 @@ bool start_chomping(mob_action_call &call);
 bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
 
-void report_enum_error(mob_action_call &call, const size_t arg_idx);
+void report_enum_error(mob_action_call &call, size_t arg_idx);
 };
 
 

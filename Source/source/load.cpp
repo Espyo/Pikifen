@@ -42,7 +42,7 @@ using std::set;
 void load_area(
     const string &requested_area_folder_name,
     const AREA_TYPE requested_area_type,
-    const bool load_for_editor, const bool from_backup
+    bool load_for_editor, bool from_backup
 ) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Area -- Data");
@@ -808,8 +808,8 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  */
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node,
-    const bool report_error, const bool error_bmp_on_error,
-    const bool error_bmp_on_empty, const bool path_from_root
+    bool report_error, bool error_bmp_on_error,
+    bool error_bmp_on_empty, bool path_from_root
 ) {
     if(file_name.empty()) {
         if(error_bmp_on_empty) {

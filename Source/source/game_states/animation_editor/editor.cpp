@@ -121,7 +121,7 @@ animation_editor::animation_editor() {
  *
  * @param instant If true, change the camera instantly.
  */
-void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
+void animation_editor::center_camera_on_sprite_bitmap(bool instant) {
     if(cur_sprite && cur_sprite->parent_bmp) {
         int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
         int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
@@ -457,7 +457,7 @@ void animation_editor::load() {
  * the user's file open history.
  */
 void animation_editor::load_animation_database(
-    const bool should_update_history
+    bool should_update_history
 ) {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
@@ -598,7 +598,7 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param is_new Is this a new animation or an existing one?
  */
 void animation_editor::pick_animation(
-    const string &name, const string &category, const bool is_new
+    const string &name, const string &category, bool is_new
 ) {
     if(is_new) {
         anims.animations.push_back(new animation(name));
@@ -620,7 +620,7 @@ void animation_editor::pick_animation(
  * @param is_new Is this a new sprite or an existing one?
  */
 void animation_editor::pick_sprite(
-    const string &name, const string &category, const bool is_new
+    const string &name, const string &category, bool is_new
 ) {
     if(is_new) {
         if(anims.find_sprite(name) == INVALID) {
@@ -1090,7 +1090,7 @@ void animation_editor::reset_cam_zoom() {
  *
  * @param mult Multiplier to resize by.
  */
-void animation_editor::resize_everything(const float mult) {
+void animation_editor::resize_everything(float mult) {
     if(mult == 0.0f) {
         set_status("Can't resize everything to size 0!", true);
         return;
@@ -1117,7 +1117,7 @@ void animation_editor::resize_everything(const float mult) {
  * @param s Sprite to resize.
  * @param mult Multiplier to resize by.
  */
-void animation_editor::resize_sprite(sprite* s, const float mult) {
+void animation_editor::resize_sprite(sprite* s, float mult) {
     if(mult == 0.0f) {
         set_status("Can't resize a sprite to size 0!", true);
         return;
@@ -1189,7 +1189,7 @@ bool animation_editor::save_animation_database() {
  *
  * @param scale Value to set the scales to.
  */
-void animation_editor::set_all_sprite_scales(const float scale) {
+void animation_editor::set_all_sprite_scales(float scale) {
     if(scale == 0) {
         set_status("The scales can't be 0!", true);
         return;
@@ -1264,7 +1264,7 @@ void animation_editor::set_best_frame_sprite() {
         std::sort(
             best_sprite_idxs.begin(),
             best_sprite_idxs.end(),
-        [this, &best_sprite_idxs] (const size_t s1, const size_t s2) {
+        [this, &best_sprite_idxs] (size_t s1, size_t s2) {
             return
                 str_to_lower(anims.sprites[s1]->name) <
                 str_to_lower(anims.sprites[s2]->name);
@@ -1291,7 +1291,7 @@ void animation_editor::set_best_frame_sprite() {
  * @param y Y coordinate to start on.
  */
 void animation_editor::sprite_bmp_flood_fill(
-    ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
+    ALLEGRO_BITMAP* bmp, bool* selection_pixels, int x, int y
 ) {
     //https://en.wikipedia.org/wiki/Flood_fill#The_algorithm
     int bmp_w = al_get_bitmap_width(bmp);

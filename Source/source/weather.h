@@ -111,7 +111,7 @@ private:
      */
     template<typename T>
     bool get_table_values(
-        const vector<std::pair<int, T> > &table, const int cur_time,
+        const vector<std::pair<int, T> > &table, int cur_time,
         float* ratio, T* value1, T* value2
     ) {
         if(table.empty()) {

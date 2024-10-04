@@ -48,7 +48,7 @@ void treasure_category::clear_types() {
  * @return The mob.
  */
 mob* treasure_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     treasure* m = new treasure(pos, (treasure_type*) type, angle);
     game.states.gameplay->mobs.treasures.push_back(m);

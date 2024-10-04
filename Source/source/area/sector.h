@@ -131,7 +131,7 @@ struct sector {
     //--- Function declarations ---
     
     ~sector();
-    void add_edge(edge* e_ptr, const size_t e_idx);
+    void add_edge(edge* e_ptr, size_t e_idx);
     void calculate_bounding_box();
     void clone(sector* destination) const;
     vertex* get_rightmost_vertex() const;
@@ -148,5 +148,5 @@ struct sector {
 
 
 sector* get_sector(
-    const point &p, size_t* out_sector_idx, const bool use_blockmap
+    const point &p, size_t* out_sector_idx, bool use_blockmap
 );

@@ -365,7 +365,7 @@ public:
     
     explicit mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
-    mob_state(const string &name, const size_t id);
+    mob_state(const string &name, size_t id);
     mob_event* get_event(const MOB_EV type) const;
     
 };
@@ -408,7 +408,7 @@ public:
         void* custom_data_1 = nullptr, void* custom_data_2 = nullptr
     );
     bool set_state(
-        const size_t new_state, void* info1 = nullptr, void* info2 = nullptr
+        size_t new_state, void* info1 = nullptr, void* info2 = nullptr
     );
     
 };
@@ -434,7 +434,7 @@ public:
 
     //--- Function declarations ---
     
-    void new_state(const string &name, const size_t id);
+    void new_state(const string &name, size_t id);
     void new_event(const MOB_EV type);
     void change_state(const string &new_state);
     void run(custom_action_code_t code);

@@ -36,7 +36,7 @@ sector::~sector() {
  * @param e_ptr Edge to add.
  * @param e_idx Index number of the edge to add.
  */
-void sector::add_edge(edge* e_ptr, const size_t e_idx) {
+void sector::add_edge(edge* e_ptr, size_t e_idx) {
     for(size_t i = 0; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             return;
@@ -308,7 +308,7 @@ void sector::remove_edge(const edge* e_ptr) {
  * @return The sector.
  */
 sector* get_sector(
-    const point &p, size_t* out_sector_idx, const bool use_blockmap
+    const point &p, size_t* out_sector_idx, bool use_blockmap
 ) {
 
     if(use_blockmap) {

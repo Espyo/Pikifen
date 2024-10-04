@@ -125,7 +125,7 @@ public:
     * @param size The final size it should use is returned here.
     */
     void get_drawing_info(
-        const size_t number,
+        size_t number,
         t* content, point* pos, point* size
     ) {
         float transition_anim_ratio = transition_timer / transition_duration;
@@ -295,7 +295,7 @@ public:
     * @param number Number of this item in its "family". For instance, if
     * this is the icon for the second leader, this value is 1 (0-indexed).
     */
-    void register_bubble(const size_t number, gui_item* bubble) {
+    void register_bubble(size_t number, gui_item* bubble) {
         bubbles[number] = bubble_t(bubble);
     }
     
@@ -304,7 +304,7 @@ public:
     * 
     * @param delta_t How long the frame's tick is, in seconds.
     */
-    void tick(const float delta_t) {
+    void tick(float delta_t) {
         if(transition_timer > 0.0f) {
             transition_timer -= delta_t;
             transition_timer = std::max(transition_timer, 0.0f);
@@ -319,7 +319,7 @@ public:
     * @param new_ref New reference.
     * @param new_content New content.
     */
-    void update(const size_t number, void* new_ref, t new_content) {
+    void update(size_t number, void* new_ref, t new_content) {
         auto it = bubbles.find(number);
         if(it == bubbles.end()) return;
         if(it->second.ref != new_ref && !transition_is_setup) {

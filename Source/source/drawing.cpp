@@ -97,9 +97,9 @@ const float NOTIFICATION_PADDING = 8.0f;
  * @param rotation_speed Rotation speed of each logo.
  */
 void draw_background_logos(
-    const float time_spent, const size_t rows, const size_t cols,
+    float time_spent, size_t rows, size_t cols,
     const point &logo_size, const ALLEGRO_COLOR &tint,
-    const point &speed, const float rotation_speed
+    const point &speed, float rotation_speed
 ) {
     al_hold_bitmap_drawing(true);
     
@@ -200,7 +200,7 @@ void draw_bitmap_with_effects(
 void draw_button(
     const point &center, const point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
-    const bool selected, const float juicy_grow_amount
+    bool selected, float juicy_grow_amount
 ) {
     draw_text(
         text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
@@ -238,8 +238,8 @@ void draw_button(
  * @param scale Scale the text by this much.
  */
 void draw_fraction(
-    const point &bottom, const size_t value_nr,
-    const size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
+    const point &bottom, size_t value_nr,
+    size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 ) {
     const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
@@ -282,8 +282,8 @@ void draw_fraction(
  */
 void draw_health(
     const point &center,
-    const float ratio, const float alpha,
-    const float radius, const bool just_chart
+    float ratio, float alpha,
+    float radius, bool just_chart
 ) {
     ALLEGRO_COLOR c;
     if(ratio >= 0.5) {
@@ -318,8 +318,8 @@ void draw_health(
  * @param time How much time has passed. Used to animate.
  */
 void draw_liquid(
-    sector* s_ptr, liquid* l_ptr, const point &where, const float scale,
-    const float time
+    sector* s_ptr, liquid* l_ptr, const point &where, float scale,
+    float time
 ) {
 
     size_t n_vertexes = s_ptr->triangles.size() * 3;
@@ -479,7 +479,7 @@ void draw_liquid(
  * much faster.
  */
 void draw_loading_screen(
-    const string &text, const string &subtext, const float opacity
+    const string &text, const string &subtext, float opacity
 ) {
     const float text_w = game.win_w * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
     const float text_h = game.win_h * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
@@ -726,7 +726,7 @@ void draw_menu_button_icon(
  */
 void draw_mob_shadow(
     const mob* m,
-    const float delta_z, const float shadow_stretch
+    float delta_z, float shadow_stretch
 ) {
 
     point shadow_size = point(m->radius * 2.2f, m->radius * 2.2f);
@@ -915,8 +915,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  */
 void draw_player_input_icon(
     const ALLEGRO_FONT* const font, const player_input &i,
-    const bool condensed, const point &where, const point &max_size,
-    const unsigned char alpha
+    bool condensed, const point &where, const point &max_size,
+    unsigned char alpha
 ) {
     if(alpha == 0) return;
     
@@ -1014,7 +1014,7 @@ void draw_player_input_icon(
  * @param opacity Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale, const float opacity
+    sector* s_ptr, const point &where, float scale, float opacity
 ) {
     if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
@@ -1181,7 +1181,7 @@ void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
-    const point &where, const int flags, const point &max_size,
+    const point &where, int flags, const point &max_size,
     const point &scale
 ) {
     unsigned int total_width = 0;
@@ -1257,7 +1257,7 @@ void draw_string_tokens(
  * empty string is returned if there's nothing to write.
  */
 void get_player_input_icon_info(
-    const player_input &i, const bool condensed,
+    const player_input &i, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
@@ -1465,8 +1465,8 @@ void get_player_input_icon_info(
  * @return The width.
  */
 float get_player_input_icon_width(
-    const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
-    const float max_bitmap_height
+    const ALLEGRO_FONT* font, const player_input &i, bool condensed,
+    float max_bitmap_height
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;
     PLAYER_INPUT_ICON_SPRITE bitmap_sprite;

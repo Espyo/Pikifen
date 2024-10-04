@@ -23,7 +23,7 @@
  * @param type Drop type this mob belongs to.
  * @param angle Starting angle.
  */
-drop::drop(const point &pos, drop_type* type, const float angle) :
+drop::drop(const point &pos, drop_type* type, float angle) :
     mob(pos, type, angle),
     dro_type(type),
     doses_left(dro_type->total_doses) {
@@ -65,7 +65,7 @@ void drop::draw_mob() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void drop::tick_class_specifics(const float delta_t) {
+void drop::tick_class_specifics(float delta_t) {
     float intended_scale;
     
     if(doses_left == dro_type->total_doses) {

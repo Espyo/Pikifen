@@ -36,7 +36,7 @@ status::status(status_type* type) :
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void status::tick(const float delta_t) {
+void status::tick(float delta_t) {
     if(type->auto_remove_time > 0.0f) {
         time_left -= delta_t;
         if(time_left <= 0.0f) {

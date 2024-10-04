@@ -238,7 +238,7 @@ struct path_stop {
     );
     ~path_stop();
     void clone(path_stop* destination) const;
-    void add_link(path_stop* other_stop, const bool normal);
+    void add_link(path_stop* other_stop, bool normal);
     path_link* get_link(const path_stop* other_stop) const;
     void remove_link(const path_link* link_ptr);
     void remove_link(const path_stop* other_stop);

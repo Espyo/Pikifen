@@ -66,16 +66,16 @@ enum EASING_METHOD {
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
-float clamp(const float number, const float minimum, const float maximum);
+float clamp(float number, float minimum, float maximum);
 float ease(const EASING_METHOD method, float n);
-uint32_t hash_nr(const unsigned int input);
-uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
+uint32_t hash_nr(unsigned int input);
+uint32_t hash_nr2(unsigned int input1, unsigned int input2);
 float inch_towards(float start, float target, float max_step);
 float interpolate_number(
-    const float input, const float input_start, const float input_end,
-    const float output_start, const float output_end
+    float input, float input_start, float input_end,
+    float output_start, float output_end
 );
 float randomf(float min, float max);
 int randomi(int min, int max);
-int sum_and_wrap(const int nr, const int sum, const int wrap_limit);
-float wrap_float(const float nr, const float minimum, const float maximum);
+int sum_and_wrap(int nr, int sum, int wrap_limit);
+float wrap_float(float nr, float minimum, float maximum);

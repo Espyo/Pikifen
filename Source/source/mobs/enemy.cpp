@@ -43,7 +43,7 @@ const float SPIRIT_SIZE_MULT = 0.7;
  * @param type Enemy type this mob belongs to.
  * @param angle Starting angle.
  */
-enemy::enemy(const point &pos, enemy_type* type, const float angle) :
+enemy::enemy(const point &pos, enemy_type* type, float angle) :
     mob(pos, type, angle),
     ene_type(type) {
     

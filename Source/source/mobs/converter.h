@@ -61,7 +61,7 @@ public:
 
     //--- Function declarations ---
 
-    converter(const point &pos, converter_type* con_type, const float angle);
+    converter(const point &pos, converter_type* con_type, float angle);
     void change_type();
     void close();
     void spew();
@@ -70,6 +70,6 @@ protected:
     
     //--- Function declarations ---
 
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 };

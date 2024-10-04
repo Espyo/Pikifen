@@ -34,7 +34,7 @@ vertex::vertex(float x, float y) :
  * @param e_ptr Edge to add.
  * @param e_idx Index number of the edge to add.
  */
-void vertex::add_edge(edge* e_ptr, const size_t e_idx) {
+void vertex::add_edge(edge* e_ptr, size_t e_idx) {
     for(size_t i = 0; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             return;

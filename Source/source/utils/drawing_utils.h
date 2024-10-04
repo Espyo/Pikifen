@@ -84,13 +84,13 @@ enum TEXT_SETTING_FLAG {
 
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle = 0,
+    const point &size, float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const bool scale_up,
-    const float angle = 0,
+    const point &box_size, bool scale_up,
+    float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_equilateral_triangle(
@@ -98,23 +98,23 @@ void draw_equilateral_triangle(
     const ALLEGRO_COLOR &color, float thickness
 );
 void draw_filled_diamond(
-    const point &center, const float radius, const ALLEGRO_COLOR &color
+    const point &center, float radius, const ALLEGRO_COLOR &color
 );
 void draw_filled_equilateral_triangle(
     const point &center, float radius, float angle,
     const ALLEGRO_COLOR &color
 );
 void draw_filled_rounded_rectangle(
-    const point &center, const point &size, const float radii,
+    const point &center, const point &size, float radii,
     const ALLEGRO_COLOR &color
 );
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,
-    const float angle, const ALLEGRO_COLOR &color, const float thickness
+    float angle, const ALLEGRO_COLOR &color, float thickness
 );
 void draw_rounded_rectangle(
-    const point &center, const point &size, const float radii,
-    const ALLEGRO_COLOR &color, const float thickness
+    const point &center, const point &size, float radii,
+    const ALLEGRO_COLOR &color, float thickness
 );
 void draw_text(
     const string &text, const ALLEGRO_FONT* const font,

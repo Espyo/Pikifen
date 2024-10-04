@@ -125,7 +125,7 @@ void area_menu_state::animate_info_and_specs() {
  *
  * @param area_idx Index of the newly-selected area.
  */
-void area_menu_state::change_info(const size_t area_idx) {
+void area_menu_state::change_info(size_t area_idx) {
     if(area_idx == cur_area_idx) return;
     cur_area_idx = area_idx;
     

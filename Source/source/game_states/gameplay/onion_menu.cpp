@@ -545,7 +545,7 @@ void onion_menu_t::add_all_to_onion() {
  *
  * @param type_idx Index of the Onion's Pikmin type.
  */
-void onion_menu_t::add_to_group(const size_t type_idx) {
+void onion_menu_t::add_to_group(size_t type_idx) {
     size_t real_onion_amount =
         n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
@@ -594,7 +594,7 @@ void onion_menu_t::add_to_group(const size_t type_idx) {
  *
  * @param type_idx Index of the Onion's Pikmin type.
  */
-void onion_menu_t::add_to_onion(const size_t type_idx) {
+void onion_menu_t::add_to_onion(size_t type_idx) {
     size_t real_group_amount =
         l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
@@ -645,7 +645,7 @@ void onion_menu_t::confirm() {
  *
  * @param page Index of the new page.
  */
-void onion_menu_t::go_to_page(const size_t page) {
+void onion_menu_t::go_to_page(size_t page) {
     this->page = page;
     grow_buttons();
     update();
@@ -730,7 +730,7 @@ void onion_menu_t::start_closing() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void onion_menu_t::tick(const float delta_t) {
+void onion_menu_t::tick(float delta_t) {
 
     //Correct the amount of wanted group members, if they are invalid.
     int total_delta = 0;
@@ -941,7 +941,7 @@ void onion_menu_t::update() {
  * @param pik_type The Pikmin type.
  */
 onion_menu_type_t::onion_menu_type_t(
-    const size_t idx, pikmin_type* pik_type
+    size_t idx, pikmin_type* pik_type
 ) :
     type_idx(idx),
     pik_type(pik_type) {

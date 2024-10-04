@@ -46,7 +46,7 @@ void replay::add_state(
     const vector<treasure*> &treasure_list,
     const vector<onion*> &onion_list,
     const vector<mob*> &obstacle_list,
-    const size_t cur_leader_idx
+    size_t cur_leader_idx
 ) {
     states.push_back(replay_state());
     replay_state* new_state_ptr = &(states[states.size() - 1]);
@@ -265,7 +265,7 @@ replay_element::replay_element(
  * @param data Any numerical data this event needs.
  */
 replay_event::replay_event(
-    const REPLAY_EVENT type, const size_t data
+    const REPLAY_EVENT type, size_t data
 ) :
     type(type),
     data(data) {

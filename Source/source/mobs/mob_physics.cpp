@@ -215,7 +215,7 @@ H_MOVE_RESULT mob::get_movement_edge_intersections(
  * movement is entirely impossible this frame.
  */
 H_MOVE_RESULT mob::get_physics_horizontal_movement(
-    const float delta_t, const float move_speed_mult, point* move_speed
+    float delta_t, float move_speed_mult, point* move_speed
 ) {
     //Held by another mob.
     if(holder.m) {
@@ -332,7 +332,7 @@ H_MOVE_RESULT mob::get_physics_horizontal_movement(
  * slide against this wall.
  */
 H_MOVE_RESULT mob::get_wall_slide_angle(
-    const edge* e_ptr, unsigned char wall_sector, const float move_angle,
+    const edge* e_ptr, unsigned char wall_sector, float move_angle,
     float* slide_angle
 ) const {
     //The wall's normal is the direction the wall is facing.
@@ -386,7 +386,7 @@ H_MOVE_RESULT mob::get_wall_slide_angle(
  * @param touched_wall Holds whether or not the mob touched a wall in this move.
  */
 void mob::tick_horizontal_movement_physics(
-    const float delta_t, const point &attempted_move_speed,
+    float delta_t, const point &attempted_move_speed,
     bool* touched_wall
 ) {
     if(attempted_move_speed.x == 0 && attempted_move_speed.y == 0) {
@@ -599,7 +599,7 @@ void mob::tick_horizontal_movement_physics(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_physics(const float delta_t) {
+void mob::tick_physics(float delta_t) {
     if(!ground_sector) {
         //Object is placed out of bounds.
         return;
@@ -662,7 +662,7 @@ void mob::tick_physics(const float delta_t) {
  * @param move_speed_mult Movement speed is multiplied by this.
  */
 void mob::tick_rotation_physics(
-    const float delta_t, const float move_speed_mult
+    float delta_t, float move_speed_mult
 ) {
     //Change the facing angle to the angle the mob wants to face.
     if(angle > TAU / 2)  angle -= TAU;
@@ -715,8 +715,8 @@ void mob::tick_rotation_physics(
  * movement logic?
  */
 void mob::tick_vertical_movement_physics(
-    const float delta_t, const float pre_move_ground_z,
-    const bool was_teleport
+    float delta_t, float pre_move_ground_z,
+    bool was_teleport
 ) {
     bool apply_gravity = true;
     
@@ -840,7 +840,7 @@ void mob::tick_vertical_movement_physics(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_walkable_riding_physics(const float delta_t) {
+void mob::tick_walkable_riding_physics(float delta_t) {
     mob* rider_added_ev_mob = nullptr;
     mob* rider_removed_ev_mob = nullptr;
     mob* new_standing_on_mob = get_mob_to_walk_on();

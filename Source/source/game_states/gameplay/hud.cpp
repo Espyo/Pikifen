@@ -340,7 +340,7 @@ hud_t::hud_t() :
         );
     };
     sun_meter->on_tick =
-    [this, sun_meter] (const float delta_t) {
+    [this, sun_meter] (float delta_t) {
         float day_length =
             game.config.day_minutes_end - game.config.day_minutes_start;
         float pre_tick_day_minutes =
@@ -1437,7 +1437,7 @@ hud_t::~hud_t() {
  * @param primary True if it's the primary HUD item,
  * false if it's the secondary.
  */
-void hud_t::create_mission_fail_cond_items(const bool primary) {
+void hud_t::create_mission_fail_cond_items(bool primary) {
     MISSION_FAIL_COND cond =
         primary ?
         (MISSION_FAIL_COND)
@@ -1698,7 +1698,7 @@ void hud_t::draw_standby_icon(BUBBLE_RELATION which) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void hud_t::tick(const float delta_t) {
+void hud_t::tick(float delta_t) {
     //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
         leader* l_ptr = nullptr;

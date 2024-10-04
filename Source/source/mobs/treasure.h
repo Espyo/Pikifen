@@ -47,6 +47,6 @@ public:
     
     //--- Function declarations ---
     
-    treasure(const point &pos, treasure_type* type, const float angle);
+    treasure(const point &pos, treasure_type* type, float angle);
     
 };

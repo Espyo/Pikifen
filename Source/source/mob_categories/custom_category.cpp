@@ -47,7 +47,7 @@ void custom_category::clear_types() {
  * @return The mob.
  */
 mob* custom_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     mob* m = new mob(pos, type, angle);
     return m;

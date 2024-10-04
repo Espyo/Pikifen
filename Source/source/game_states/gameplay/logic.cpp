@@ -30,7 +30,7 @@
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
+void gameplay_state::do_aesthetic_leader_logic(float delta_t) {
     if(!cur_leader_ptr) return;
     
     //Swarming arrows.
@@ -141,7 +141,7 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_logic(const float delta_t) {
+void gameplay_state::do_aesthetic_logic(float delta_t) {
     //Leader stuff.
     do_aesthetic_leader_logic(delta_t);
     
@@ -155,7 +155,7 @@ void gameplay_state::do_aesthetic_logic(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
+void gameplay_state::do_gameplay_leader_logic(float delta_t) {
     if(!cur_leader_ptr) return;
     
     if(game.perf_mon) {
@@ -588,7 +588,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_gameplay_logic(const float delta_t) {
+void gameplay_state::do_gameplay_logic(float delta_t) {
 
     //Camera movement.
     if(!cur_leader_ptr) {
@@ -1707,7 +1707,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
  * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_misc_interactions(
-    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
+    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Find a carriable mob to grab.
@@ -1801,7 +1801,7 @@ void gameplay_state::process_mob_misc_interactions(
  * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_reaches(
-    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
+    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Check reaches.
@@ -1865,7 +1865,7 @@ void gameplay_state::process_mob_reaches(
  * @param d Distance between the two.
  */
 void gameplay_state::process_mob_touches(
-    mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
+    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, dist &d
 ) {
     //Check if mob 1 should be pushed by mob 2.
     bool both_idle_pikmin =

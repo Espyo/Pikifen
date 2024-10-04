@@ -27,26 +27,26 @@ namespace ImGui {
 
 bool Combo(
     const string &label, int* current_item, const vector<string> &items,
-    const int popup_max_height_in_items = -1
+    int popup_max_height_in_items = -1
 );
 bool Combo(
     const string &label, string* current_item, const vector<string> &items,
-    const int popup_max_height_in_items = -1
+    int popup_max_height_in_items = -1
 );
 bool DragTime2(
     const string &label, int* total_amount,
     const string &format1 = "m", const string &format2 = "s",
-    const int limit1 = INT_MAX, const int limit2 = 59
+    int limit1 = INT_MAX, int limit2 = 59
 );
 bool ImageButtonAndText(
     const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
-    const float button_padding, const string &text
+    float button_padding, const string &text
 );
 bool ListBox(
     const string &label, int* current_item, const vector<string> &items,
-    const int height_in_items = -1
+    int height_in_items = -1
 );
 void Reset();
-void SetupCentering(const int upcoming_items_width);
+void SetupCentering(int upcoming_items_width);
 
 };

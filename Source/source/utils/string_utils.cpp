@@ -31,7 +31,7 @@
  * @return The string.
  */
 string amount_str(
-    const int amount, const string &singular_text, const string &plural_text
+    int amount, const string &singular_text, const string &plural_text
 ) {
     string result = i2s(amount) + " ";
     if(amount == 1) {
@@ -51,7 +51,7 @@ string amount_str(
  * @param b Boolean to convert.
  * @return The string.
  */
-string b2s(const bool b) {
+string b2s(bool b) {
     return b ? "true" : "false";
 }
 
@@ -67,7 +67,7 @@ string b2s(const bool b) {
  * get truncated.
  * @return The boxed string.
  */
-string box_string(const string &s, const size_t size, const string &finisher) {
+string box_string(const string &s, size_t size, const string &finisher) {
     assert(size > finisher.size());
     size_t core_size = std::min(s.size(), size - finisher.size());
     return
@@ -101,7 +101,7 @@ void duplicate_string(const string &orig_str, string &new_str) {
  * @param f Float to convert.
  * @return The string.
  */
-string f2s(const float f) {
+string f2s(float f) {
     std::stringstream s;
     s << std::fixed << std::setprecision(4) << f;
     return s.str();
@@ -162,7 +162,7 @@ bool is_number(const string &s) {
  * @param padding What character to pad with.
  * @return The padded string.
  */
-string pad_string(const string &s, const size_t size, const char padding) {
+string pad_string(const string &s, size_t size, char padding) {
     string result = s;
     if(size > s.size()) {
         result.insert(0, size - s.size(), padding);
@@ -276,7 +276,7 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
  * @return The substrings.
  */
 vector<string> split(
-    string text, const string &del, const bool inc_empty, const bool inc_del
+    string text, const string &del, bool inc_empty, bool inc_del
 ) {
     vector<string> v;
     size_t pos;
@@ -324,7 +324,7 @@ vector<string> split(
  * @param match What string to match with.
  * @return Whether it matches.
  */
-bool str_peek(const string &s, const size_t where, const string &match) {
+bool str_peek(const string &s, size_t where, const string &match) {
     if(where + match.size() > s.size()) return false;
     return s.substr(where, match.size()) == match;
 }
@@ -396,9 +396,9 @@ string str_to_upper(string s) {
  * @return The time string.
  */
 string time_to_str2(
-    const size_t units,
+    size_t units,
     const string &suffix1, const string &suffix2,
-    const uint8_t flags
+    uint8_t flags
 ) {
     size_t units1 = units / 60;
     size_t units2 = units % 60;
@@ -438,9 +438,9 @@ string time_to_str2(
  * @return The time string.
  */
 string time_to_str3(
-    const size_t units,
+    size_t units,
     const string &suffix1, const string &suffix2, const string &suffix3,
-    const uint8_t flags
+    uint8_t flags
 ) {
     size_t units1 = units / 60 / 60;
     size_t units2 = (units / 60) % 60;
@@ -490,7 +490,7 @@ string time_to_str3(
  * @param left_only If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string trim_spaces(const string &s, const bool left_only) {
+string trim_spaces(const string &s, bool left_only) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {
@@ -529,7 +529,7 @@ string trim_spaces(const string &s, const bool left_only) {
  * unless it's impossible to split.
  * @return The wrapped string.
  */
-string word_wrap(const string &s, const size_t nr_chars_per_line) {
+string word_wrap(const string &s, size_t nr_chars_per_line) {
     string result;
     string word_in_queue;
     size_t cur_line_width = 0;

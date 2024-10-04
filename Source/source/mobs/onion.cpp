@@ -63,7 +63,7 @@ const float SPEW_V_SPEED = 600.0f;
  * @param type Onion type this mob belongs to.
  * @param angle Starting angle.
  */
-onion::onion(const point &pos, onion_type* type, const float angle) :
+onion::onion(const point &pos, onion_type* type, float angle) :
     mob(pos, type, angle),
     oni_type(type) {
     
@@ -230,7 +230,7 @@ void onion::stop_generating() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void onion::tick_class_specifics(const float delta_t) {
+void onion::tick_class_specifics(float delta_t) {
     generation_delay_timer.tick(delta_t);
     next_generation_timer.tick(delta_t);
     

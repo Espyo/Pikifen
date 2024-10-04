@@ -21,7 +21,7 @@
  * @param angle Starting angle.
  */
 group_task::group_task(
-    const point &pos, group_task_type* type, const float angle
+    const point &pos, group_task_type* type, float angle
 ):
     mob(pos, type, angle),
     tas_type(type),
@@ -278,7 +278,7 @@ void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void group_task::tick_class_specifics(const float delta_t) {
+void group_task::tick_class_specifics(float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {
         ran_task_finished_code = true;
         finish_task();

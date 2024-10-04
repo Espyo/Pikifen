@@ -48,7 +48,7 @@ void decoration_category::clear_types() {
  * @return The mob.
  */
 mob* decoration_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     decoration* m = new decoration(pos, (decoration_type*) type, angle);
     game.states.gameplay->mobs.decorations.push_back(m);

@@ -223,6 +223,6 @@ struct status {
     //--- Function declarations ---
     
     explicit status(status_type* type);
-    void tick(const float delta_t);
+    void tick(float delta_t);
     
 };

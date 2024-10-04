@@ -42,7 +42,7 @@ public:
 
     //--- Function declarations ---
 
-    decoration(const point &pos, decoration_type* dec_type, const float angle);
+    decoration(const point &pos, decoration_type* dec_type, float angle);
     void draw_mob() override;
     void read_script_vars(const script_var_reader &svr) override;
     

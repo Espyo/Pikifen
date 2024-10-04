@@ -64,9 +64,9 @@ struct enum_name_database {
     
     //--- Function declarations ---
     
-    void register_item(const size_t enum_idx, const string &name);
+    void register_item(size_t enum_idx, const string &name);
     size_t get_idx(const string &name) const;
-    string get_name(const size_t idx) const;
+    string get_name(size_t idx) const;
     size_t get_nr_of_items() const;
     void clear();
     
@@ -90,11 +90,11 @@ struct keyframe_interpolator {
     
     //--- Function declarations ---
     
-    float get(const float t);
+    float get(float t);
     void add(
-        const float t, const float value, EASING_METHOD ease = EASE_METHOD_NONE
+        float t, float value, EASING_METHOD ease = EASE_METHOD_NONE
     );
-    explicit keyframe_interpolator(const float initial_value);
+    explicit keyframe_interpolator(float initial_value);
     
     private:
     
@@ -163,24 +163,24 @@ struct timer {
     //--- Function declarations ---
     
     explicit timer(
-        const float duration = 0,
+        float duration = 0,
         const std::function<void()> &on_end = nullptr
     );
     ~timer();
-    void start(const bool can_restart = true);
-    void start(const float new_duration);
+    void start(bool can_restart = true);
+    void start(float new_duration);
     void stop();
-    void tick(const float delta_t);
+    void tick(float delta_t);
     float get_ratio_left() const;
     
 };
 
 
 
-string get_current_time(const bool file_name_friendly);
+string get_current_time(bool file_name_friendly);
 string sanitize_file_name(const string &s);
 string standardize_path(const string &path);
-string vector_tail_to_string(const vector<string> &v, const size_t pos);
+string vector_tail_to_string(const vector<string> &v, size_t pos);
 
 
 /**
@@ -217,5 +217,5 @@ bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
 
 
 #if defined(_WIN32)
-string strsignal(const int signum);
+string strsignal(int signum);
 #endif //#if defined(_WIN32)

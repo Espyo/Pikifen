@@ -48,7 +48,7 @@ void track_category::clear_types() {
  * @return The mob.
  */
 mob* track_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     track* m = new track(pos, (track_type*) type, angle);
     game.states.gameplay->mobs.tracks.push_back(m);

@@ -35,6 +35,6 @@ public:
 
     //--- Function declarations ---
     
-    resource(const point &pos, resource_type* type, const float angle);
+    resource(const point &pos, resource_type* type, float angle);
     
 };

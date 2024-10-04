@@ -383,8 +383,8 @@ struct camera_t {
     //--- Function declarations ---
     
     void set_pos(const point &new_pos);
-    void set_zoom(const float new_zoom);
-    void tick(const float delta_t);
+    void set_zoom(float new_zoom);
+    void tick(float delta_t);
     void update_box();
     
 };
@@ -852,11 +852,11 @@ struct fade_manager {
     
     //--- Function declarations ---
     
-    void start_fade(const bool fade_in, const std::function<void()> &on_end);
+    void start_fade(bool fade_in, const std::function<void()> &on_end);
     bool is_fade_in() const;
     bool is_fading() const;
     float get_perc_left() const;
-    void tick(const float delta_t);
+    void tick(float delta_t);
     void draw();
     
     private:
@@ -893,8 +893,8 @@ struct notification_t {
     void set_contents(
         const player_input &input, const string &text, const point &pos
     );
-    void set_enabled(const bool enabled);
-    void tick(const float delta_t);
+    void set_enabled(bool enabled);
+    void tick(float delta_t);
     
     private:
     
@@ -969,7 +969,7 @@ struct performance_monitor_t {
     
     performance_monitor_t();
     void set_area_name(const string &name);
-    void set_paused(const bool paused);
+    void set_paused(bool paused);
     void enter_state(const PERF_MON_STATE mode);
     void leave_state();
     void start_measurement(const string &name);
@@ -1007,7 +1007,7 @@ struct performance_monitor_t {
         
         void write_measurement(
             string &str, const string &name,
-            const double time, const float total
+            double time, float total
         );
     };
     
@@ -1276,8 +1276,8 @@ struct whistle_t {
     void start_whistling();
     void stop_whistling();
     void tick(
-        const float delta_t, const point &center,
-        const float whistle_range, const float leader_to_cursor_dist
+        float delta_t, const point &center,
+        float whistle_range, float leader_to_cursor_dist
     );
     
 };
@@ -1342,7 +1342,7 @@ public:
      */
     asset_t get(
         const string &name, data_node* node = nullptr,
-        const bool report_errors = true
+        bool report_errors = true
     ) {
         if(name.empty()) return do_load("", node, report_errors);
         
@@ -1419,7 +1419,7 @@ protected:
     //--- Misc. declarations ---
     
     virtual asset_t do_load(
-        const string &path, data_node* node, const bool report_errors
+        const string &path, data_node* node, bool report_errors
     ) = 0;
     virtual void do_unload(asset_t asset) = 0;
     
@@ -1494,7 +1494,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_AUDIO_STREAM* do_load(
-        const string &path, data_node* node, const bool report_errors
+        const string &path, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
     
@@ -1518,7 +1518,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* do_load(
-        const string &path, data_node* node, const bool report_errors
+        const string &path, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_BITMAP* asset) override;
     
@@ -1542,7 +1542,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_SAMPLE* do_load(
-        const string &path, data_node* node, const bool report_errors
+        const string &path, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_SAMPLE* asset) override;
     

@@ -194,7 +194,7 @@ void data_node::encrypt_string(string &s) {
  * @param encrypted If true, the document is encrypted and needs decrypting.
  */
 void data_node::getline(
-    ALLEGRO_FILE* file, string &line, const bool encrypted
+    ALLEGRO_FILE* file, string &line, bool encrypted
 ) {
     line.clear();
     if(!file) {
@@ -255,7 +255,7 @@ void data_node::getline(
  * @param number The index number of the child.
  * @return The node.
  */
-data_node* data_node::get_child(const size_t number) {
+data_node* data_node::get_child(size_t number) {
     if(number >= children.size()) return create_dummy();
     return children[number];
 }
@@ -271,7 +271,7 @@ data_node* data_node::get_child(const size_t number) {
  * @return The node.
  */
 data_node* data_node::get_child_by_name(
-    const string &name, const size_t occurrence_number
+    const string &name, size_t occurrence_number
 ) {
     size_t cur_occurrence_number = 0;
     
@@ -342,8 +342,8 @@ string data_node::get_value_or_default(const string &def) const {
  * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
 void data_node::load_file(
-    const string &file_path, const bool trim_values,
-    const bool names_only_after_root, const bool encrypted
+    const string &file_path, bool trim_values,
+    bool names_only_after_root, bool encrypted
 ) {
     vector<string> lines;
     
@@ -393,9 +393,9 @@ void data_node::load_file(
  * judging by start_line. This is used for the recursion.
  */
 size_t data_node::load_node(
-    const vector<string> &lines, const bool trim_values,
-    const size_t start_line, const size_t depth,
-    const bool names_only_after_root
+    const vector<string> &lines, bool trim_values,
+    size_t start_line, size_t depth,
+    bool names_only_after_root
 ) {
     children.clear();
     
@@ -540,8 +540,8 @@ bool data_node::remove(data_node* node_to_remove) {
  * @return Whether it succeded.
  */
 bool data_node::save_file(
-    string file_path, const bool children_only,
-    const bool include_empty_values, const bool encrypted
+    string file_path, bool children_only,
+    bool include_empty_values, bool encrypted
 ) const {
 
     if(file_path == "") file_path = this->file_path;
@@ -586,8 +586,8 @@ bool data_node::save_file(
  * @param encrypted If true, the file must be encrypted.
  */
 void data_node::save_node(
-    ALLEGRO_FILE* file, const size_t level,
-    const bool include_empty_values, const bool encrypted
+    ALLEGRO_FILE* file, size_t level,
+    bool include_empty_values, bool encrypted
 ) const {
 
     string tabs_str(level, '\t');
@@ -632,7 +632,7 @@ void data_node::save_node(
  * @param left_only If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string data_node::trim_spaces(const string &s, const bool left_only) {
+string data_node::trim_spaces(const string &s, bool left_only) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {

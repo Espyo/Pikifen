@@ -527,7 +527,7 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
  * @param arg_idx Index number of the argument that is an enum.
  */
 void mob_action_loaders::report_enum_error(
-    mob_action_call &call, const size_t arg_idx
+    mob_action_call &call, size_t arg_idx
 ) {
     size_t param_idx = std::min(arg_idx, call.action->parameters.size() - 1);
     call.custom_error =
@@ -752,8 +752,8 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
 mob_action_param::mob_action_param(
     const string &name,
     const MOB_ACTION_PARAM type,
-    const bool force_const,
-    const bool is_extras
+    bool force_const,
+    bool is_extras
 ):
     name(name),
     type(type),

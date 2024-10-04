@@ -152,7 +152,7 @@ void get_cce(
 );
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &p, const vector<vertex*> &all_vertexes,
-    const float merge_radius
+    float merge_radius
 );
 TRIANGULATION_ERROR get_polys(
     sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
@@ -164,9 +164,9 @@ bool get_polys_is_outer(
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
-bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr);
+bool is_vertex_convex(const vector<vertex*> &vec, size_t nr);
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
+    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t nr
 );
 TRIANGULATION_ERROR trace_edges(
     vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
@@ -178,5 +178,5 @@ TRIANGULATION_ERROR triangulate_polygon(
     polygon* poly, vector<triangle>* triangles
 );
 TRIANGULATION_ERROR triangulate_sector(
-    sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
+    sector* s_ptr, set<edge*>* lone_edges, bool clear_lone_edges
 );

@@ -170,7 +170,7 @@ void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
  *
  * @param new_req_nr Requirement number to set to.
  */
-void in_world_fraction::set_requirement_number(const float new_req_nr) {
+void in_world_fraction::set_requirement_number(float new_req_nr) {
     if(requirement_number == new_req_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -193,7 +193,7 @@ void in_world_fraction::set_requirement_number(const float new_req_nr) {
  *
  * @param new_value_nr Value number to set to.
  */
-void in_world_fraction::set_value_number(const float new_value_nr) {
+void in_world_fraction::set_value_number(float new_value_nr) {
     if(value_number == new_value_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -229,7 +229,7 @@ void in_world_fraction::start_fading() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_fraction::tick(const float delta_t) {
+void in_world_fraction::tick(float delta_t) {
     in_world_hud_item::tick(delta_t);
     if(grow_juice_timer > 0.0f) {
         grow_juice_timer -= delta_t;
@@ -311,7 +311,7 @@ void in_world_health_wheel::start_fading() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_health_wheel::tick(const float delta_t) {
+void in_world_health_wheel::tick(float delta_t) {
     in_world_hud_item::tick(delta_t);
     
     if(m->max_health == 0.0f) return;
@@ -338,7 +338,7 @@ in_world_hud_item::in_world_hud_item(mob* m) :
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_hud_item::tick(const float delta_t) {
+void in_world_hud_item::tick(float delta_t) {
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
         transition_timer -= delta_t;

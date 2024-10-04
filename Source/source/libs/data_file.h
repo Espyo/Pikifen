@@ -93,33 +93,33 @@ public:
     ~data_node();
     string get_value_or_default(const string &def) const;
     size_t get_nr_of_children() const;
-    data_node* get_child(const size_t number);
+    data_node* get_child(size_t number);
     size_t get_nr_of_children_by_name(const string &name) const;
     data_node* get_child_by_name(
-        const string &name, const size_t occurrence_number = 0
+        const string &name, size_t occurrence_number = 0
     );
     size_t add(data_node* new_node);
     bool remove(data_node* node_to_remove);
     void load_file(
         const string &file_path,
-        const bool trim_values = true,
-        const bool names_only_after_root = false,
-        const bool encrypted = false
+        bool trim_values = true,
+        bool names_only_after_root = false,
+        bool encrypted = false
     );
     size_t load_node(
-        const vector<string> &lines, const bool trim_values,
-        const size_t start_line = 0, const size_t depth = 0,
-        const bool names_only_after_root = false
+        const vector<string> &lines, bool trim_values,
+        size_t start_line = 0, size_t depth = 0,
+        bool names_only_after_root = false
     );
     bool save_file(
-        string file_path = "", const bool children_only = true,
-        const bool include_empty_values = false,
-        const bool encrypted = false
+        string file_path = "", bool children_only = true,
+        bool include_empty_values = false,
+        bool encrypted = false
     ) const;
     void save_node(
-        ALLEGRO_FILE* file, const size_t level = 0,
-        const bool include_empty_values = false,
-        const bool encrypted = false
+        ALLEGRO_FILE* file, size_t level = 0,
+        bool include_empty_values = false,
+        bool encrypted = false
     ) const;
     
 private:
@@ -136,12 +136,12 @@ private:
     //--- Function declarations ---
     
     data_node* create_dummy();
-    static unsigned char decrypt_char(const unsigned char c);
-    static unsigned char encrypt_char(const unsigned char c);
+    static unsigned char decrypt_char(unsigned char c);
+    static unsigned char encrypt_char(unsigned char c);
     static void encrypt_string(string &s);
     static void getline(
-        ALLEGRO_FILE* file, string &line, const bool encrypted = false
+        ALLEGRO_FILE* file, string &line, bool encrypted = false
     );
-    static string trim_spaces(const string &s, const bool left_only = false);
+    static string trim_spaces(const string &s, bool left_only = false);
     
 };

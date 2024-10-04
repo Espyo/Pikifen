@@ -68,7 +68,7 @@ struct edge {
     size_t remove_from_vertexes();
     void swap_vertexes();
     void transfer_sector(
-        sector* from, sector* to, const size_t to_idx, const size_t edge_idx
+        sector* from, sector* to, size_t to_idx, size_t edge_idx
     );
     
 };

@@ -527,10 +527,10 @@ private:
     //--- Function declarations ---
     
     void choose_input(
-        const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
+        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
     );
     void delete_bind(
-        const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
+        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
     );
     void populate_binds();
     void restore_defaults(const PLAYER_ACTION_TYPE action_type);
@@ -678,7 +678,7 @@ private:
     
     void add_bullet(list_gui_item* list, const string &text);
     void animate_info_and_specs();
-    void change_info(const size_t area_idx);
+    void change_info(size_t area_idx);
     void init_gui_main();
     void init_gui_info_page();
     void init_gui_specs_page();

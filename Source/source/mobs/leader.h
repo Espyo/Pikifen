@@ -139,11 +139,11 @@ public:
 
     //--- Function declarations ---
     
-    leader(const point &pos, leader_type* type, const float angle);
+    leader(const point &pos, leader_type* type, float angle);
     bool check_throw_ok() const;
     void dismiss();
     bool order_pikmin_to_onion(
-        const pikmin_type* type, pikmin_nest_t* n_ptr, const size_t amount
+        const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount
     );
     void queue_throw();
     void signal_swarm_start() const;
@@ -166,7 +166,7 @@ protected:
 
     //--- Function declarations ---
 
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 private:
 
@@ -176,12 +176,12 @@ private:
     size_t whistle_sfx_source_id = 0;
     
     //Returns how many rows are needed for all members' dismissal.
-    size_t get_dismiss_rows(const size_t n_members) const;
+    size_t get_dismiss_rows(size_t n_members) const;
     
 };
 
 
 void change_to_next_leader(
-    const bool forward, const bool force_success, const bool keep_idx
+    bool forward, bool force_success, bool keep_idx
 );
 bool grab_closest_group_member();

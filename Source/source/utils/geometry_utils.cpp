@@ -42,7 +42,7 @@ dist::dist(const point &p1, const point &p2) :
  *
  * @param d Regular, non-squared distance.
  */
-dist::dist(const float d) :
+dist::dist(float d) :
     distance_squared(d * d),
     normal_distance(d),
     has_normal_distance(true) {
@@ -56,7 +56,7 @@ dist::dist(const float d) :
  * @param d Regular, non-squared distance.
  * @return The current object.
  */
-dist &dist::operator =(const float d) {
+dist &dist::operator =(float d) {
     distance_squared = d * d;
     normal_distance = d;
     has_normal_distance = true;
@@ -70,7 +70,7 @@ dist &dist::operator =(const float d) {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is smaller.
  */
-bool dist::operator<(const float d2) const {
+bool dist::operator<(float d2) const {
     return distance_squared < (d2 * d2);
 }
 
@@ -81,7 +81,7 @@ bool dist::operator<(const float d2) const {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is larger.
  */
-bool dist::operator>(const float d2) const {
+bool dist::operator>(float d2) const {
     return distance_squared > (d2 * d2);
 }
 
@@ -92,7 +92,7 @@ bool dist::operator>(const float d2) const {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is the same.
  */
-bool dist::operator==(const float d2) const {
+bool dist::operator==(float d2) const {
     return distance_squared == (d2 * d2);
 }
 
@@ -103,7 +103,7 @@ bool dist::operator==(const float d2) const {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is smaller or equal.
  */
-bool dist::operator<=(const float d2) const {
+bool dist::operator<=(float d2) const {
     return !operator>(d2);
 }
 
@@ -114,7 +114,7 @@ bool dist::operator<=(const float d2) const {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is larger or equal.
  */
-bool dist::operator>=(const float d2) const {
+bool dist::operator>=(float d2) const {
     return !operator<(d2);
 }
 
@@ -125,7 +125,7 @@ bool dist::operator>=(const float d2) const {
  * @param d2 Regular, non-squared distance to check.
  * @return Whether it is different.
  */
-bool dist::operator!=(const float d2) const {
+bool dist::operator!=(float d2) const {
     return !operator==(d2);
 }
 
@@ -201,7 +201,7 @@ bool dist::operator!=(const dist &d2) const {
  *
  * @param d2 Amount of distance to add.
  */
-void dist::operator+=(const float d2) {
+void dist::operator+=(float d2) {
     if(!has_normal_distance) {
         normal_distance = (float) sqrt(distance_squared);
         has_normal_distance = true;
@@ -233,7 +233,7 @@ void dist::operator+=(const dist &d2) {
  *
  * @param d2 Amount of distance to remove.
  */
-void dist::operator-=(const float d2) {
+void dist::operator-=(float d2) {
     operator+=(-d2);
 }
 
@@ -275,7 +275,7 @@ float dist::to_float() {
  * @param x X coordinate.
  * @param y Y coordinate.
  */
-point::point(const float x, const float y) :
+point::point(float x, float y) :
     x(x),
     y(y) {
     
@@ -339,7 +339,7 @@ const point point::operator /(const point &p) const {
  * @param n Number to add to both coordinates.
  * @return The new point.
  */
-const point point::operator +(const float n) const {
+const point point::operator +(float n) const {
     return point(x + n, y + n);
 }
 
@@ -350,7 +350,7 @@ const point point::operator +(const float n) const {
  * @param n Value to multiply both coordinates with.
  * @return The new point.
  */
-const point point::operator *(const float n) const {
+const point point::operator *(float n) const {
     return point(x * n, y * n);
 }
 
@@ -361,7 +361,7 @@ const point point::operator *(const float n) const {
  * @param n Number to subtract from both coordinates.
  * @return The new point.
  */
-const point point::operator -(const float n) const {
+const point point::operator -(float n) const {
     return point(x - n, y - n);
 }
 
@@ -372,7 +372,7 @@ const point point::operator -(const float n) const {
  * @param n Number to divide both coordinates with.
  * @return The new point.
  */
-const point point::operator /(const float n) const {
+const point point::operator /(float n) const {
     return point(x / n, y / n);
 }
 
@@ -409,7 +409,7 @@ point point::operator -=(const point &p) {
  * @param n Value to add to both coordinates with.
  * @return The current object.
  */
-point point::operator +=(const float n) {
+point point::operator +=(float n) {
     x += n;
     y += n;
     return point(x, y);
@@ -422,7 +422,7 @@ point point::operator +=(const float n) {
  * @param n Value to multiply both coordinates with.
  * @return The current object.
  */
-point point::operator *=(const float n) {
+point point::operator *=(float n) {
     x *= n;
     y *= n;
     return point(x, y);
@@ -460,7 +460,7 @@ bool point::operator !=(const point &p) const {
  * @return The coordinates.
  */
 point angle_to_coordinates(
-    const float angle, const float magnitude
+    float angle, float magnitude
 ) {
     return
         point(
@@ -477,7 +477,7 @@ point angle_to_coordinates(
  * @param radius Radius of the circle.
  * @return The linear distance.
  */
-float angular_dist_to_linear(const float angular_dist, const float radius) {
+float angular_dist_to_linear(float angular_dist, float radius) {
     return (float) (2 * radius * tan(angular_dist / 2));
 }
 
@@ -490,7 +490,7 @@ float angular_dist_to_linear(const float angular_dist, const float radius) {
  * @param r Range of the bounding box.
  * @return Whether they are colliding.
  */
-bool bbox_check(const point &center1, const point &center2, const float r) {
+bool bbox_check(const point &center1, const point &center2, float r) {
     return
         (
             fabs(center1.x - center2.x) <= r &&
@@ -511,7 +511,7 @@ bool bbox_check(const point &center1, const point &center2, const float r) {
  */
 bool bbox_check(
     const point &tl1, const point &br1,
-    const point &center2, const float r
+    const point &center2, float r
 ) {
     return
         rectangles_intersect(
@@ -542,9 +542,9 @@ bool bbox_check(
  * returned here.
  */
 void calculate_throw(
-    const point &start_xy, const float start_z,
-    const point &target_xy, const float target_z,
-    const float max_h, const float gravity,
+    const point &start_xy, float start_z,
+    const point &target_xy, float target_z,
+    float max_h, float gravity,
     point* req_speed_xy, float* req_speed_z, float* out_h_angle
 ) {
 
@@ -614,7 +614,7 @@ void calculate_throw(
  * @return Whether they intersect.
  */
 bool circle_intersects_line_seg(
-    const point &circle, const float radius,
+    const point &circle, float radius,
     const point &line_p1, const point &line_p2,
     float* out_lix, float* out_liy
 ) {
@@ -673,9 +673,9 @@ bool circle_intersects_line_seg(
  * @return Whether they intersect.
  */
 bool circle_intersects_rectangle(
-    const point &circle, const float radius,
+    const point &circle, float radius,
     const point &rectangle, const point &rect_dim,
-    const float rect_angle,
+    float rect_angle,
     float* out_overlap_dist, float* out_rectangle_side_angle
 ) {
     point circle_rel_pos = circle - rectangle;
@@ -814,7 +814,7 @@ void coordinates_to_angle(
  * @param deg Angle, in degrees.
  * @return The radians.
  */
-float deg_to_rad(const float deg) {
+float deg_to_rad(float deg) {
     return (float) (M_PI / 180.0f) * deg;
 }
 
@@ -878,7 +878,7 @@ float get_angle_cw_diff(float a1, float a2) {
  * @param a2 Second angle.
  * @return The distance.
  */
-float get_angle_smallest_dif(const float a1, const float a2) {
+float get_angle_smallest_dif(float a1, float a2) {
     return
         (float) M_PI -
         (float) std::abs(
@@ -938,7 +938,7 @@ point get_closest_point_in_line_seg(
  */
 point get_closest_point_in_rotated_rectangle(
     const point &p,
-    const point &rect_center, const point &rect_dim, const float rect_angle,
+    const point &rect_center, const point &rect_dim, float rect_angle,
     bool* out_is_inside
 ) {
     point closest_point;
@@ -1006,7 +1006,7 @@ point get_closest_point_in_rotated_rectangle(
  * @param max_miter_length If not 0, the miter is limited to this length.
  */
 void get_miter_points(
-    const point &a, const point &b, const point &c, const float thickness,
+    const point &a, const point &b, const point &c, float thickness,
     point* miter_point_1, point* miter_point_2, float max_miter_length
 ) {
     //https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
@@ -1068,7 +1068,7 @@ float get_point_sign(const point &p, const point &lp1, const point &lp2) {
  * @param max_coords The bottom-right coordinates are returned here.
  */
 void get_transformed_rectangle_bounding_box(
-    const point &center, const point &dimensions, const float angle,
+    const point &center, const point &dimensions, float angle,
     point* min_coords, point* max_coords
 ) {
 
@@ -1124,8 +1124,8 @@ void get_transformed_rectangle_bounding_box(
  * @return The interpolated angle.
  */
 float interpolate_angle(
-    const float input, const float input_start, const float input_end,
-    const float &output_start, const float &output_end
+    float input, float input_start, float input_end,
+    float &output_start, float &output_end
 ) {
     float angle_cw_diff = get_angle_cw_diff(output_start, output_end);
     float angle_delta;
@@ -1154,7 +1154,7 @@ float interpolate_angle(
  * @return The interpolated point.
  */
 point interpolate_point(
-    const float input, const float input_start, const float input_end,
+    float input, float input_start, float input_end,
     const point &output_start, const point &output_end
 ) {
     return
@@ -1203,7 +1203,7 @@ bool is_point_in_rectangle(
  */
 bool is_point_in_triangle(
     const point &p, const point &tp1, const point &tp2, const point &tp3,
-    const bool loq
+    bool loq
 ) {
 
     //https://stackoverflow.com/q/2049582
@@ -1305,7 +1305,7 @@ bool line_seg_intersects_rectangle(
  */
 bool line_seg_intersects_rotated_rectangle(
     const point &lp1, const point &lp2,
-    const point &rect_center, const point &rect_dim, const float rect_angle
+    const point &rect_center, const point &rect_dim, float rect_angle
 ) {
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
@@ -1460,7 +1460,7 @@ bool line_segs_intersect(
  * @param radius Radius of the circle.
  * @return The angular distance.
  */
-float linear_dist_to_angular(const float linear_dist, const float radius) {
+float linear_dist_to_angular(float linear_dist, float radius) {
     return (float) (2 * atan(linear_dist / (2 * radius)));
 }
 
@@ -1574,8 +1574,8 @@ bool lines_intersect(
  */
 void move_point(
     const point &start, const point &target,
-    const float speed, const float reach_radius,
-    point* mov, float* angle, bool* reached, const float delta_t
+    float speed, float reach_radius,
+    point* mov, float* angle, bool* reached, float delta_t
 ) {
     point diff = target - start;
     float dis = (float) sqrt(diff.x * diff.x + diff.y * diff.y);
@@ -1685,7 +1685,7 @@ void project_vertexes(
  * @param rad Angle, in radians.
  * @return The degrees.
  */
-float rad_to_deg(const float rad) {
+float rad_to_deg(float rad) {
     return (float) (180.0f / M_PI) * rad;
 }
 
@@ -1728,8 +1728,8 @@ bool rectangles_intersect(
  * @return Whether they intersect.
  */
 bool rectangles_intersect(
-    const point &rect1, const point &rect_dim1, const float rect_angle1,
-    const point &rect2, const point &rect_dim2, const float rect_angle2,
+    const point &rect1, const point &rect_dim1, float rect_angle1,
+    const point &rect2, const point &rect_dim2, float rect_angle2,
     float* out_overlap_dist, float* out_overlap_angle
 ) {
     //Start by getting the vertexes of the rectangles.
@@ -1860,7 +1860,7 @@ point resize_to_box_keeping_aspect_ratio(
  * @param angle Angle to rotate by.
  * @return The rotated point.
  */
-point rotate_point(const point &coords, const float angle) {
+point rotate_point(const point &coords, float angle) {
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     return point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);
@@ -1958,8 +1958,8 @@ point scale_rectangle_to_box(
  * @return The next item's index in the list.
  */
 size_t select_next_item_directionally(
-    const vector<point> &item_coordinates, const size_t selected_item,
-    const float direction, const point &loop_region
+    const vector<point> &item_coordinates, size_t selected_item,
+    float direction, const point &loop_region
 ) {
     const float MIN_BLINDSPOT_ANGLE = TAU * 0.17;
     const float MAX_BLINDSPOT_ANGLE = TAU * 0.33;

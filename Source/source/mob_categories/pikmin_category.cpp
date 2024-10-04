@@ -48,7 +48,7 @@ void pikmin_category::clear_types() {
  * @return The mob.
  */
 mob* pikmin_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     pikmin* m = new pikmin(pos, (pikmin_type*) type, angle);
     game.states.gameplay->mobs.pikmin_list.push_back(m);

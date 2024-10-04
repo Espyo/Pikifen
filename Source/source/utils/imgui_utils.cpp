@@ -28,7 +28,7 @@
  */
 bool ImGui::Combo(
     const string &label, int* current_item, const vector<string> &items,
-    const int popup_max_height_in_items
+    int popup_max_height_in_items
 ) {
     string items_str;
     for(size_t i = 0; i < items.size(); ++i) {
@@ -56,7 +56,7 @@ bool ImGui::Combo(
  */
 bool ImGui::Combo(
     const string &label, string* current_item, const vector<string> &items,
-    const int popup_max_height_in_items
+    int popup_max_height_in_items
 ) {
 
     string items_str;
@@ -101,7 +101,7 @@ bool ImGui::Combo(
 bool ImGui::DragTime2(
     const string &label, int* total_amount,
     const string &format1, const string &format2,
-    const int limit1, const int limit2
+    int limit1, int limit2
 ) {
     int part1 = floor(*total_amount / 60.0f);
     int part2 = *total_amount % 60;
@@ -151,7 +151,7 @@ bool ImGui::DragTime2(
  */
 bool ImGui::ImageButtonAndText(
     const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
-    const float button_padding, const string &text
+    float button_padding, const string &text
 ) {
     ImGui::BeginGroup();
     
@@ -193,7 +193,7 @@ bool ImGui::ImageButtonAndText(
  */
 bool ImGui::ListBox(
     const string &label, int* current_item, const vector<string> &items,
-    const int height_in_items
+    int height_in_items
 ) {
     //TODO check if items is empty
     const char** array = new const char* [items.size()];
@@ -251,7 +251,7 @@ void ImGui::Reset() {
  *
  * @param upcoming_items_width Width of the items that will belong to this line.
  */
-void ImGui::SetupCentering(const int upcoming_items_width) {
+void ImGui::SetupCentering(int upcoming_items_width) {
     int window_width = ImGui::GetWindowSize().x;
     ImGui::SetCursorPosX((window_width - upcoming_items_width) * 0.5f);
 }

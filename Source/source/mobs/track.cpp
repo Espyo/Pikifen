@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 track::track(
-    const point &pos, track_type* type, const float angle
+    const point &pos, track_type* type, float angle
 ):
     mob(pos, type, angle),
     tra_type(type) {

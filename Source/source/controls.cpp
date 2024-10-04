@@ -191,7 +191,7 @@ const vector<player_action_type>
  * @return The type, or an empty type on failure.
  */
 player_action_type controls_mediator::get_player_action_type(
-    const int &action_id
+    int action_id
 ) const {
     for(size_t b = 0; b < player_action_types.size(); ++b) {
         if(player_action_types[b].id == action_id) {
@@ -210,7 +210,7 @@ player_action_type controls_mediator::get_player_action_type(
  * @return The name, or an empty string on failure.
  */
 string controls_mediator::get_player_action_type_internal_name(
-    const int &action_id
+    int action_id
 ) {
     for(size_t b = 0; b < player_action_types.size(); ++b) {
         if(player_action_types[b].id == action_id) {
@@ -403,7 +403,7 @@ player_input controls_mediator::str_to_input(
  *
  * @param keycode Allegro keycode of the pressed key.
  */
-void gameplay_state::process_system_key_press(const int keycode) {
+void gameplay_state::process_system_key_press(int keycode) {
     if(keycode == ALLEGRO_KEY_F1) {
     
         game.show_system_info = !game.show_system_info;

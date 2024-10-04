@@ -122,7 +122,7 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @param amount Amount to change by.
  */
 void gameplay_state::change_spray_count(
-    const size_t type_idx, signed int amount
+    size_t type_idx, signed int amount
 ) {
     spray_stats[type_idx].nr_sprays =
         std::max(
@@ -206,7 +206,7 @@ void gameplay_state::do_logic() {
  *
  * @param cleared Did the player reach the goal?
  */
-void gameplay_state::end_mission(const bool cleared) {
+void gameplay_state::end_mission(bool cleared) {
     if(cur_interlude != INTERLUDE_NONE) {
         return;
     }
@@ -312,7 +312,7 @@ void gameplay_state::enter() {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
-    const float near_radius, const float far_radius
+    float near_radius, float far_radius
 ) {
     if(far_radius == 0) return nullptr;
     
@@ -1455,7 +1455,7 @@ void msg_box_t::close() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void msg_box_t::tick(const float delta_t) {
+void msg_box_t::tick(float delta_t) {
     size_t tokens_in_section = 0;
     for(size_t l = 0; l < 3; ++l) {
         size_t line_idx = cur_section * 3 + l;

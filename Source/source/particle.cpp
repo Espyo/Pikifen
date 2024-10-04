@@ -32,8 +32,8 @@
  * of higher ones.
  */
 particle::particle(
-    const PARTICLE_TYPE type, const point &pos, const float z,
-    const float size, const float duration, const PARTICLE_PRIORITY priority
+    const PARTICLE_TYPE type, const point &pos, float z,
+    float size, float duration, const PARTICLE_PRIORITY priority
 ) :
     type(type),
     duration(duration),
@@ -148,7 +148,7 @@ void particle::draw() {
  * @param delta_t How long the frame's tick is, in seconds.
  * @return Whether its lifespan is over (meaning it should be deleted).
  */
-void particle::tick(const float delta_t) {
+void particle::tick(float delta_t) {
     time -= delta_t;
     
     if(time <= 0.0f) {
@@ -179,8 +179,8 @@ void particle::tick(const float delta_t) {
  * This number is also deviated by number_deviation.
  */
 particle_generator::particle_generator(
-    const float emission_interval,
-    const particle &base_particle, const size_t number
+    float emission_interval,
+    const particle &base_particle, size_t number
 ) :
     base_particle(base_particle),
     number(number),
@@ -380,7 +380,7 @@ void particle_generator::reset() {
  * @param delta_t How long the frame's tick is, in seconds.
  * @param manager The manager of all particles.
  */
-void particle_generator::tick(const float delta_t, particle_manager &manager) {
+void particle_generator::tick(float delta_t, particle_manager &manager) {
     if(follow_mob) {
         base_particle.pos = follow_mob->pos;
         base_particle.z = follow_mob->z;
@@ -406,7 +406,7 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
  *
  * @param max_nr Maximum number of particles it can manage.
  */
-particle_manager::particle_manager(const size_t &max_nr) :
+particle_manager::particle_manager(size_t max_nr) :
     max_nr(max_nr) {
     
     if(max_nr == 0) return;
@@ -562,7 +562,7 @@ size_t particle_manager::get_count() const {
  *
  * @param pos Position in the list.
  */
-void particle_manager::remove(const size_t pos) {
+void particle_manager::remove(size_t pos) {
     if(pos > count) return;
     
     //To remove a particle, let's simply move its data to the start of
@@ -593,7 +593,7 @@ void particle_manager::remove(const size_t pos) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void particle_manager::tick_all(const float delta_t) {
+void particle_manager::tick_all(float delta_t) {
     for(size_t c = 0; c < count;) {
         particles[c].tick(delta_t);
         if(particles[c].time == 0.0f) {

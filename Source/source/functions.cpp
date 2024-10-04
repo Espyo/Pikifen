@@ -139,7 +139,7 @@ void clear_area_textures() {
  * @param info Any extra information to report to the logs.
  * @param exit_status Program exit status.
  */
-void crash(const string &reason, const string &info, const int exit_status) {
+void crash(const string &reason, const string &info, int exit_status) {
 
     if(game.display) {
         ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
@@ -524,11 +524,11 @@ string get_subtitle_or_mission_goal(
  */
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
-    const float start, const float end,
+    float start, float end,
     const point &leader_pos, const point &cursor_pos,
     const ALLEGRO_COLOR &color,
-    const float u_offset, const float u_scale,
-    const bool vary_thickness
+    float u_offset, float u_scale,
+    bool vary_thickness
 ) {
     const float segment_points[] = {
         0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
@@ -747,7 +747,7 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
  * @param fade_duration When closing, fade out in the last N seconds.
  */
 void print_info(
-    const string &text, const float total_duration, const float fade_duration
+    const string &text, float total_duration, float fade_duration
 ) {
     game.maker_tools.info_print_text = text;
     game.maker_tools.info_print_duration = total_duration;
@@ -1016,7 +1016,7 @@ void save_statistics() {
 void set_string_token_widths(
     vector<string_token> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    const float max_control_bitmap_height, bool control_condensed
+    float max_control_bitmap_height, bool control_condensed
 ) {
     for(size_t t = 0; t < tokens.size(); ++t) {
         switch(tokens[t].type) {
@@ -1047,7 +1047,7 @@ void set_string_token_widths(
  *
  * @param signum Signal number.
  */
-void signal_handler(const int signum) {
+void signal_handler(int signum) {
     volatile static bool already_handling_signal = false;
     
     if(already_handling_signal) {
@@ -1083,8 +1083,8 @@ void signal_handler(const int signum) {
  * @param vertical_speed Vertical speed in which to spew.
  */
 void spew_pikmin_seed(
-    const point pos, const float z, pikmin_type* pik_type,
-    const float angle, const float horizontal_speed, const float vertical_speed
+    const point pos, float z, pikmin_type* pik_type,
+    float angle, float horizontal_speed, float vertical_speed
 ) {
     pikmin* new_pikmin =
         (
@@ -1112,7 +1112,7 @@ void spew_pikmin_seed(
  * @return The lines.
  */
 vector<vector<string_token> > split_long_string_with_tokens(
-    const vector<string_token> &tokens, const int max_width
+    const vector<string_token> &tokens, int max_width
 ) {
     vector<vector<string_token> > tokens_per_line;
     if(tokens.empty()) return tokens_per_line;

@@ -49,7 +49,7 @@ const string SONG_NAME = "menus";
  * @param bind_idx Index of that action type's bind.
  */
 void control_binds_menu_state::choose_input(
-    const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
+    const PLAYER_ACTION_TYPE action_type, size_t bind_idx
 ) {
     capturing_input = 1;
     capturing_input_timeout = CONTROL_BINDS_MENU::CAPTURE_TIMEOUT_DURATION;
@@ -78,7 +78,7 @@ void control_binds_menu_state::choose_input(
  * @param bind_idx Index number of the control.
  */
 void control_binds_menu_state::delete_bind(
-    const PLAYER_ACTION_TYPE action_type, const size_t bind_idx
+    const PLAYER_ACTION_TYPE action_type, size_t bind_idx
 ) {
     vector<control_bind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;

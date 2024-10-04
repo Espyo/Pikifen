@@ -80,7 +80,7 @@ const float THROW_VER_SPEED = 900.0f;
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
+pikmin::pikmin(const point &pos, pikmin_type* type, float angle) :
     mob(pos, type, angle),
     pik_type(type) {
     
@@ -373,7 +373,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
  *
  * @param amount Amount to increase by.
  */
-void pikmin::increase_maturity(const int amount) {
+void pikmin::increase_maturity(int amount) {
     int old_maturity = maturity;
     int new_maturity = maturity + amount;
     maturity = clamp(new_maturity, 0, NR_MATURITIES - 1);
@@ -492,7 +492,7 @@ void pikmin::start_throw_trail() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pikmin::tick_class_specifics(const float delta_t) {
+void pikmin::tick_class_specifics(float delta_t) {
     //Carrying object.
     if(carrying_mob) {
         if(!carrying_mob->carry_info) {
@@ -570,7 +570,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
  * @return The sprout.
  */
 pikmin* get_closest_sprout(
-    const point &pos, dist* d, const bool ignore_reserved
+    const point &pos, dist* d, bool ignore_reserved
 ) {
     dist closest_distance;
     pikmin* closest_pikmin = nullptr;

@@ -261,7 +261,7 @@ void ship::read_script_vars(const script_var_reader &svr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void ship::tick_class_specifics(const float delta_t) {
+void ship::tick_class_specifics(float delta_t) {
     nest->tick(delta_t);
     
     if(mobs_being_beamed > 0) {

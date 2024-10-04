@@ -175,7 +175,7 @@ void gui_editor::load() {
  * the user's file open history.
  */
 void gui_editor::load_file(
-    const bool should_update_history
+    bool should_update_history
 ) {
     items.clear();
     
@@ -247,7 +247,7 @@ void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param is_new Unused.
  */
 void gui_editor::pick_file(
-    const string &name, const string &category, const bool is_new
+    const string &name, const string &category, bool is_new
 ) {
     file_name = name;
     load_file(true);
@@ -444,7 +444,7 @@ void gui_editor::zoom_out_cmd(float input_value) {
  * @param instantaneous Whether the camera moves to its spot instantaneously
  * or not.
  */
-void gui_editor::reset_cam(const bool instantaneous) {
+void gui_editor::reset_cam(bool instantaneous) {
     center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
 }
 

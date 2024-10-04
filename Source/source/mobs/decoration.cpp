@@ -23,7 +23,7 @@
  * @param angle Starting angle.
  */
 decoration::decoration(
-    const point &pos, decoration_type* type, const float angle
+    const point &pos, decoration_type* type, float angle
 ) :
     mob(pos, type, angle),
     dec_type(type) {

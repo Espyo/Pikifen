@@ -65,24 +65,24 @@ bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
-ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
-ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
-string get_key_name(const int keycode, const bool condensed);
+ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a);
+ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l);
+string get_key_name(int keycode, bool condensed);
 void getline(ALLEGRO_FILE* file, string &line);
 vector<string> folder_to_vector(
-    string folder_name, const bool folders, bool* out_folder_found = nullptr
+    string folder_name, bool folders, bool* out_folder_found = nullptr
 );
 ALLEGRO_COLOR interpolate_color(
-    const float input, const float input_start, const float input_end,
+    float input, float input_start, float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 );
 vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
-    const string &patterns, const int mode, ALLEGRO_DISPLAY* display
+    const string &patterns, int mode, ALLEGRO_DISPLAY* display
 );
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder_path, const string &title,
-    const string &patterns, const int mode, FILE_DIALOG_RESULT* result,
+    const string &patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);

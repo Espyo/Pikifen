@@ -167,7 +167,7 @@ public:
     void draw();
     void handle_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
-    void tick(const float delta_t);
+    void tick(float delta_t);
     
 private:
 

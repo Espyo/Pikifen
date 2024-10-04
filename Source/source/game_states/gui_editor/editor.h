@@ -113,11 +113,11 @@ private:
     
     void close_load_dialog();
     void close_options_dialog();
-    void load_file(const bool should_update_history);
+    void load_file(bool should_update_history);
     void open_load_dialog();
     void open_options_dialog();
     void pick_file(
-        const string &name, const string &category, const bool is_new
+        const string &name, const string &category, bool is_new
     );
     bool save_file();
     point snap_point(const point &p);
@@ -157,6 +157,6 @@ private:
     void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
     void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
     void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam(const bool instantaneous);
+    void reset_cam(bool instantaneous);
     
 };

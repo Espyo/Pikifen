@@ -945,7 +945,7 @@ void mob_type::unload_resources() { }
  */
 anim_conversion_vector
 mob_type_with_anim_groups::get_anim_conversions_with_groups(
-    const anim_conversion_vector &v, const size_t base_anim_total
+    const anim_conversion_vector &v, size_t base_anim_total
 ) const {
     anim_conversion_vector new_v;
     

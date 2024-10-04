@@ -37,8 +37,8 @@ public:
     
     //--- Function declarations ---
 
-    pile(const point &pos, pile_type* type, const float angle);
-    void change_amount(const int change);
+    pile(const point &pos, pile_type* type, float angle);
+    void change_amount(int change);
     void recharge();
     void update();
     bool get_fraction_numbers_info(
@@ -51,6 +51,6 @@ protected:
 
     //--- Function declarations ---
         
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 };

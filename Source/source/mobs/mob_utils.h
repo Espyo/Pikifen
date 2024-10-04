@@ -125,7 +125,7 @@ struct carry_t {
     vector<hazard*> get_carrier_invulnerabilities() const;
     bool can_fly() const;
     float get_speed() const;
-    void rotate_points(const float angle);
+    void rotate_points(float angle);
     
 };
 
@@ -323,11 +323,11 @@ struct group_t {
         mob* include_leader = nullptr
     ) const;
     bool get_next_standby_type(
-        const bool move_backwards, subgroup_type** new_type
+        bool move_backwards, subgroup_type** new_type
     );
-    point get_spot_offset(const size_t spot_idx) const;
+    point get_spot_offset(size_t spot_idx) const;
     void reassign_spots();
-    bool change_standby_type(const bool move_backwards);
+    bool change_standby_type(bool move_backwards);
 };
 
 
@@ -691,14 +691,14 @@ struct pikmin_nest_t {
     //--- Function declarations ---
     
     pikmin_nest_t(mob* m_ptr, pikmin_nest_type_t* type);
-    bool call_pikmin(mob* m_ptr, const size_t type_idx);
+    bool call_pikmin(mob* m_ptr, size_t type_idx);
     size_t get_amount_by_type(const pikmin_type* type);
     void read_script_vars(const script_var_reader &svr);
     void request_pikmin(
-        const size_t type_idx, const size_t amount, leader* l_ptr
+        size_t type_idx, size_t amount, leader* l_ptr
     );
     void store_pikmin(pikmin* p_ptr);
-    void tick(const float delta_t);
+    void tick(float delta_t);
     
 };
 
@@ -731,23 +731,23 @@ struct track_t {
     //--- Function declarations ---
     
     track_t(
-        mob* m, const vector<size_t> &checkpoints, const float speed
+        mob* m, const vector<size_t> &checkpoints, float speed
     );
     
 };
 
 
 float calculate_mob_physical_span(
-    const float radius, const float anim_hitbox_span,
+    float radius, float anim_hitbox_span,
     const point &rectangular_dim
 );
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars,
+    float angle, const string &vars,
     std::function<void(mob*)> code_after_creation = nullptr,
-    const size_t first_state_override = INVALID
+    size_t first_state_override = INVALID
 );
-void delete_mob(mob* m, const bool complete_destruction = false);
+void delete_mob(mob* m, bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);
 vector<hazard*> get_mob_type_list_invulnerabilities(
     const unordered_set<mob_type*> &types

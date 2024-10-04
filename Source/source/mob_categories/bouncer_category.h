@@ -34,7 +34,7 @@ public:
     mob_type* create_type() override;
     void register_type(mob_type* type) override;
     mob* create_mob(
-        const point &pos, mob_type* type, const float angle
+        const point &pos, mob_type* type, float angle
     ) override;
     void erase_mob(mob* m) override;
     void clear_types() override;

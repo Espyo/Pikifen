@@ -263,8 +263,8 @@ public:
     control_bind find_bind(
         const string &action_type_name
     ) const;
-    player_action_type get_player_action_type(const int &action_id) const;
-    string get_player_action_type_internal_name(const int &action_id);
+    player_action_type get_player_action_type(int action_id) const;
+    string get_player_action_type_internal_name(int action_id);
     float get_player_action_type_value(
         PLAYER_ACTION_TYPE player_action_type_id
     );

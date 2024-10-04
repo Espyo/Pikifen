@@ -51,7 +51,7 @@ struct onion_menu_type_t {
 
     //--- Function declarations ---
     
-    onion_menu_type_t(const size_t idx, pikmin_type* pik_type);
+    onion_menu_type_t(size_t idx, pikmin_type* pik_type);
 
 };
 
@@ -155,15 +155,15 @@ public:
     ~onion_menu_t();
     void add_all_to_group();
     void add_all_to_onion();
-    void add_to_group(const size_t type_idx);
-    void add_to_onion(const size_t type_idx);
+    void add_to_group(size_t type_idx);
+    void add_to_onion(size_t type_idx);
     void confirm();
-    void go_to_page(const size_t page);
+    void go_to_page(size_t page);
     void grow_buttons();
     void handle_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
     void start_closing();
-    void tick(const float delta_t);
+    void tick(float delta_t);
     void toggle_select_all();
     
 private:

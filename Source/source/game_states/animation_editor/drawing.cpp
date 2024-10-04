@@ -399,7 +399,7 @@ void animation_editor::draw_comparison() {
  */
 void animation_editor::draw_side_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
-    const ALLEGRO_COLOR &outline_color, const float outline_thickness
+    const ALLEGRO_COLOR &outline_color, float outline_thickness
 ) {
     float dummy = 0;
     float z_to_use = h_ptr->z;
@@ -446,7 +446,7 @@ void animation_editor::draw_side_view_hitbox(
  * @param x_offset From the center, offset the silhouette this much
  * to the right.
  */
-void animation_editor::draw_side_view_leader_silhouette(const float x_offset) {
+void animation_editor::draw_side_view_leader_silhouette(float x_offset) {
     draw_bitmap(
         game.sys_assets.bmp_leader_silhouette_side,
         point(x_offset, -game.config.standard_leader_height / 2.0),
@@ -648,7 +648,7 @@ void animation_editor::draw_timeline() {
  */
 void animation_editor::draw_top_down_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
-    const ALLEGRO_COLOR &outline_color, const float outline_thickness
+    const ALLEGRO_COLOR &outline_color, float outline_thickness
 ) {
     if(h_ptr->radius <= 0) return;
     
@@ -670,7 +670,7 @@ void animation_editor::draw_top_down_view_hitbox(
  * to the right.
  */
 void animation_editor::draw_top_down_view_leader_silhouette(
-    const float x_offset
+    float x_offset
 ) {
     draw_bitmap(
         game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),

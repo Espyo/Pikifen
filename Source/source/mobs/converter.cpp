@@ -43,7 +43,7 @@ const float SPEW_V_SPEED = 1200.0f;
  * @param angle Starting angle.
  */
 converter::converter(
-    const point &pos, converter_type* type, const float angle
+    const point &pos, converter_type* type, float angle
 ) :
     mob(pos, type, angle),
     con_type(type),
@@ -136,7 +136,7 @@ void converter::spew() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void converter::tick_class_specifics(const float delta_t) {
+void converter::tick_class_specifics(float delta_t) {
     type_change_timer.tick(delta_t);
     auto_conversion_timer.tick(delta_t);
 }

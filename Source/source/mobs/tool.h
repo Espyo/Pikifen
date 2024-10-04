@@ -51,6 +51,6 @@ public:
     
     //--- Function declarations ---
     
-    tool(const point &pos, tool_type* type, const float angle);
+    tool(const point &pos, tool_type* type, float angle);
     
 };

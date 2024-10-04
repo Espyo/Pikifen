@@ -190,7 +190,7 @@ void edge::swap_vertexes() {
  * @param edge_idx Index of the current edge.
  */
 void edge::transfer_sector(
-    sector* from, sector* to, const size_t to_idx, const size_t edge_idx
+    sector* from, sector* to, size_t to_idx, size_t edge_idx
 ) {
     size_t idx = get_side_with_sector(from);
     engine_assert(

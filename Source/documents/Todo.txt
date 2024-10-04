@@ -638,7 +638,6 @@ Small tasks (for when I'm feeling lazy)
         Replace the ++i in for loops with i++
         Replace all instances of "number" when in reality it should be "index"
         Use enum class, and hopefully there won't be any problems due to all the times I need to cast to and from int, or use values from multiple enums.
-        Get rid of consts in functions arguments the precede primitive types
         Get rid of the f in floating point numbers except where they're really needed
     
     

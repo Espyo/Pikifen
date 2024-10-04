@@ -614,7 +614,7 @@ void content_manager::unload_liquids(bool unload_resources) {
  * @param unload_resources False if you don't need to unload images or sounds,
  * since they never got loaded in the first place.
  */
-void content_manager::unload_mob_type(mob_type* mt, const bool unload_resources) {
+void content_manager::unload_mob_type(mob_type* mt, bool unload_resources) {
     for(size_t s = 0; s < mt->sounds.size(); ++s) {
         ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
         if(!s) continue;

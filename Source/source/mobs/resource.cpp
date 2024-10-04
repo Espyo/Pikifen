@@ -22,7 +22,7 @@
  * @param type Resource type this mob belongs to.
  * @param angle Starting angle.
  */
-resource::resource(const point &pos, resource_type* type, const float angle) :
+resource::resource(const point &pos, resource_type* type, float angle) :
     mob(pos, type, angle),
     res_type(type),
     origin_pile(nullptr) {

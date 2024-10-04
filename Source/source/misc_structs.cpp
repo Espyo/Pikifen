@@ -221,7 +221,7 @@ void asset_file_names_t::load(data_node* file) {
  * @return The audio stream.
  */
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
-    const string &path, data_node* node, const bool report_errors
+    const string &path, data_node* node, bool report_errors
 ) {
     ALLEGRO_AUDIO_STREAM* stream = load_audio_stream(path, node, report_errors);
     if(stream) {
@@ -252,7 +252,7 @@ void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* bitmap_manager::do_load(
-    const string &path, data_node* node, const bool report_errors
+    const string &path, data_node* node, bool report_errors
 ) {
     return load_bmp(path, node, report_errors);
 }
@@ -286,7 +286,7 @@ void camera_t::set_pos(const point &new_pos) {
  *
  * @param new_zoom Zoom to set to.
  */
-void camera_t::set_zoom(const float new_zoom) {
+void camera_t::set_zoom(float new_zoom) {
     zoom = new_zoom;
     target_zoom = new_zoom;
 }
@@ -297,7 +297,7 @@ void camera_t::set_zoom(const float new_zoom) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void camera_t::tick(const float delta_t) {
+void camera_t::tick(float delta_t) {
     pos.x +=
         (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     pos.y +=
@@ -532,7 +532,7 @@ bool fade_manager::is_fading() const {
  * @param on_end Code to run when the fade finishes.
  */
 void fade_manager::start_fade(
-    const bool is_fade_in, const std::function<void()> &on_end
+    bool is_fade_in, const std::function<void()> &on_end
 ) {
     time_left = GAME::FADE_DURATION;
     fade_in = is_fade_in;
@@ -545,7 +545,7 @@ void fade_manager::start_fade(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void fade_manager::tick(const float delta_t) {
+void fade_manager::tick(float delta_t) {
     if(time_left == 0) return;
     time_left -= delta_t;
     if(time_left <= 0) {
@@ -797,7 +797,7 @@ void notification_t::set_contents(
  *
  * @param enabled Whether it's enabled or not.
  */
-void notification_t::set_enabled(const bool enabled) {
+void notification_t::set_enabled(bool enabled) {
     this->enabled = enabled;
 }
 
@@ -807,7 +807,7 @@ void notification_t::set_enabled(const bool enabled) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void notification_t::tick(const float delta_t) {
+void notification_t::tick(float delta_t) {
     if(enabled) {
         visibility += NOTIFICATION::FADE_SPEED * delta_t;
     } else {
@@ -1042,7 +1042,7 @@ void performance_monitor_t::set_area_name(const string &name) {
  *
  * @param paused Pause value.
  */
-void performance_monitor_t::set_paused(const bool paused) {
+void performance_monitor_t::set_paused(bool paused) {
     this->paused = paused;
 }
 
@@ -1106,7 +1106,7 @@ void performance_monitor_t::page::write(string &s) {
  * @param total How long the entire procedure lasted for.
  */
 void performance_monitor_t::page::write_measurement(
-    string &str, const string &name, const double dur, const float total
+    string &str, const string &name, double dur, float total
 ) {
     float perc = dur / total * 100.0;
     str +=
@@ -1524,7 +1524,7 @@ bool script_var_reader::get(const string &name, point &dest) const {
  * @return The audio sample.
  */
 ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
-    const string &path, data_node* node, const bool report_errors
+    const string &path, data_node* node, bool report_errors
 ) {
     return load_sample(path, node, report_errors);
 }
@@ -1721,8 +1721,8 @@ void whistle_t::stop_whistling() {
  * @param leader_to_cursor_dist Distance between the leader and the cursor.
  */
 void whistle_t::tick(
-    const float delta_t, const point &center,
-    const float whistle_range, const float leader_to_cursor_dist
+    float delta_t, const point &center,
+    float whistle_range, float leader_to_cursor_dist
 ) {
     this->center = center;
     

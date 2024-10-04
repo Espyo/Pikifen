@@ -152,12 +152,12 @@ struct particle {
     
     explicit particle(
         const PARTICLE_TYPE type = PARTICLE_TYPE_BITMAP,
-        const point &pos = point(), const float z = 0.0f,
-        const float size = 0.0f,
-        const float duration = 0.0f, const PARTICLE_PRIORITY priority =
+        const point &pos = point(), float z = 0.0f,
+        float size = 0.0f,
+        float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_HIGH
     );
-    void tick(const float delta_t);
+    void tick(float delta_t);
     void draw();
     
 };
@@ -172,7 +172,7 @@ public:
 
     //--- Function declarations ---
 
-    explicit particle_manager(const size_t &max_nr = 0);
+    explicit particle_manager(size_t max_nr = 0);
     particle_manager(const particle_manager &pm2);
     particle_manager &operator=(const particle_manager &pm2);
     ~particle_manager();
@@ -183,7 +183,7 @@ public:
         const point &cam_tl = point(), const point &cam_br = point()
     );
     size_t get_count() const;
-    void tick_all(const float delta_t);
+    void tick_all(float delta_t);
     
 private:
 
@@ -207,7 +207,7 @@ private:
 
     //--- Function declarations ---
 
-    void remove(const size_t pos);
+    void remove(size_t pos);
     
 };
 
@@ -286,10 +286,10 @@ public:
     //--- Function declarations ---
 
     explicit particle_generator(
-        const float emission_interval = 0.0f,
-        const particle &base_particle = particle(), const size_t number = 1
+        float emission_interval = 0.0f,
+        const particle &base_particle = particle(), size_t number = 1
     );
-    void tick(const float delta_t, particle_manager &manager);
+    void tick(float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
     void reset();
     void load_from_data_node(data_node* node, bool load_resources);

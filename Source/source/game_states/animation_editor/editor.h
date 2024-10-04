@@ -224,7 +224,7 @@ private:
     
     //--- Function declarations ---
     
-    void center_camera_on_sprite_bitmap(const bool instant);
+    void center_camera_on_sprite_bitmap(bool instant);
     void change_state(const EDITOR_STATE new_state);
     void close_load_dialog();
     void close_options_dialog();
@@ -237,18 +237,18 @@ private:
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
     bool is_cursor_in_timeline();
-    void load_animation_database(const bool should_update_history);
+    void load_animation_database(bool should_update_history);
     void play_sound(size_t sound_idx);
     void rename_animation(animation* anim, const string &new_name);
     void rename_body_part(body_part* part, const string &new_name);
     void rename_sprite(sprite* spr, const string &new_name);
-    void resize_everything(const float mult);
-    void resize_sprite(sprite* s, const float mult);
+    void resize_everything(float mult);
+    void resize_sprite(sprite* s, float mult);
     bool save_animation_database();
-    void set_all_sprite_scales(const float scale);
+    void set_all_sprite_scales(float scale);
     void set_best_frame_sprite();
     void sprite_bmp_flood_fill(
-        ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
+        ALLEGRO_BITMAP* bmp, bool* selection_pixels, int x, int y
     );
     void update_cur_hitbox();
     void update_hitboxes();
@@ -259,25 +259,25 @@ private:
     void draw_comparison();
     void draw_side_view_hitbox(
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
-        const ALLEGRO_COLOR &outline_color, const float outline_thickness
+        const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
-    void draw_side_view_leader_silhouette(const float x_offset);
+    void draw_side_view_leader_silhouette(float x_offset);
     void draw_side_view_sprite(const sprite* s);
     void draw_timeline();
     void draw_top_down_view_hitbox(
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
-        const ALLEGRO_COLOR &outline_color, const float outline_thickness
+        const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
-    void draw_top_down_view_leader_silhouette(const float x_offset);
+    void draw_top_down_view_leader_silhouette(float x_offset);
     void draw_top_down_view_mob_radius(mob_type* mt);
     void draw_top_down_view_sprite(sprite* s);
     void open_load_dialog();
     void open_options_dialog();
     void pick_animation(
-        const string &name, const string &category, const bool is_new
+        const string &name, const string &category, bool is_new
     );
     void pick_sprite(
-        const string &name, const string &category, const bool is_new
+        const string &name, const string &category, bool is_new
     );
     void grid_toggle_cmd(float input_value);
     void hitboxes_toggle_cmd(float input_value);

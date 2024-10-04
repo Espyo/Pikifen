@@ -182,7 +182,7 @@ bool carry_t::is_full() const {
  *
  * @param angle Angle to rotate to.
  */
-void carry_t::rotate_points(const float angle) {
+void carry_t::rotate_points(float angle) {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
@@ -233,7 +233,7 @@ group_t::group_t(mob* leader_ptr) :
  * @param move_backwards If true, go through the list backwards.
  * @return Whether it succeeded.
  */
-bool group_t::change_standby_type(const bool move_backwards) {
+bool group_t::change_standby_type(bool move_backwards) {
     return get_next_standby_type(move_backwards, &cur_standby_type);
 }
 
@@ -317,7 +317,7 @@ vector<hazard*> group_t::get_group_invulnerabilities(
  * @return Whether it succeeded.
  */
 bool group_t::get_next_standby_type(
-    const bool move_backwards, subgroup_type** new_type
+    bool move_backwards, subgroup_type** new_type
 ) {
 
     if(members.empty()) {
@@ -391,7 +391,7 @@ bool group_t::get_next_standby_type(
  * @param spot_idx Index of the spot to check.
  * @return The offset.
  */
-point group_t::get_spot_offset(const size_t spot_idx) const {
+point group_t::get_spot_offset(size_t spot_idx) const {
     point res = spots[spot_idx].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
@@ -803,7 +803,7 @@ pikmin_nest_t::pikmin_nest_t(
  * @param type_idx Index of the Pikmin type, from the types this nest manages.
  * @return Whether a Pikmin spawned.
  */
-bool pikmin_nest_t::call_pikmin(mob* m_ptr, const size_t type_idx) {
+bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
@@ -920,7 +920,7 @@ void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
  * @param l_ptr Leader responsible.
  */
 void pikmin_nest_t::request_pikmin(
-    const size_t type_idx, const size_t amount, leader* l_ptr
+    size_t type_idx, size_t amount, leader* l_ptr
 ) {
     call_queue[type_idx] += amount;
     next_call_time = MOB::PIKMIN_NEST_CALL_INTERVAL;
@@ -951,7 +951,7 @@ void pikmin_nest_t::store_pikmin(pikmin* p_ptr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pikmin_nest_t::tick(const float delta_t) {
+void pikmin_nest_t::tick(float delta_t) {
     if(calling_leader && calling_leader->to_delete) {
         calling_leader = nullptr;
     }
@@ -1048,7 +1048,7 @@ void pikmin_nest_type_t::load_properties(
  * @param ride_speed Speed to ride at, in ratio per second.
  */
 track_t::track_t(
-    mob* m, const vector<size_t> &checkpoints, const float ride_speed
+    mob* m, const vector<size_t> &checkpoints, float ride_speed
 ) :
     m(m),
     checkpoints(checkpoints),
@@ -1067,7 +1067,7 @@ track_t::track_t(
  * @return The span.
  */
 float calculate_mob_physical_span(
-    const float radius, const float anim_hitbox_span,
+    float radius, float anim_hitbox_span,
     const point &rectangular_dim
 ) {
     float final_span = std::max(radius, anim_hitbox_span);
@@ -1100,9 +1100,9 @@ float calculate_mob_physical_span(
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars,
+    float angle, const string &vars,
     std::function<void(mob*)> code_after_creation,
-    const size_t first_state_override
+    size_t first_state_override
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
     
@@ -1233,7 +1233,7 @@ mob* create_mob(
  * @param complete_destruction If true, don't bother removing it from groups
  * and such, since everything is going to be destroyed.
  */
-void delete_mob(mob* m_ptr, const bool complete_destruction) {
+void delete_mob(mob* m_ptr, bool complete_destruction) {
     if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = nullptr;
     
     if(!complete_destruction) {

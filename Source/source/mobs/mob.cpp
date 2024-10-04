@@ -165,7 +165,7 @@ const float WAVE_RING_DURATION = 1.0f;
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-mob::mob(const point &pos, mob_type* type, const float angle) :
+mob::mob(const point &pos, mob_type* type, float angle) :
     type(type),
     pos(pos),
     angle(angle),
@@ -304,7 +304,7 @@ void mob::apply_attack_damage(
  * @param knockback Total knockback value.
  * @param knockback_angle Angle to knockback towards.
  */
-void mob::apply_knockback(const float knockback, const float knockback_angle) {
+void mob::apply_knockback(float knockback, float knockback_angle) {
     if(knockback != 0) {
         stop_chasing();
         speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
@@ -325,7 +325,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
  * @param from_hazard If true, this status effect was given from a hazard.
  */
 void mob::apply_status_effect(
-    status_type* s, const bool given_by_parent, const bool from_hazard
+    status_type* s, bool given_by_parent, bool from_hazard
 ) {
     if(parent && parent->relay_statuses && !given_by_parent) {
         parent->m->apply_status_effect(s, false, from_hazard);
@@ -502,7 +502,7 @@ void mob::arachnorb_head_turn_logic() {
  * @param goal What its goal is.
  */
 void mob::arachnorb_plan_logic(
-    const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
     float max_step_distance = s2f(vars["max_step_distance"]);
     float max_turn_angle = deg_to_rad(s2f(vars["max_turn_angle"]));
@@ -988,7 +988,7 @@ bool mob::can_receive_status(status_type* s) const {
  * @param is_ingestion If true, the attacker just got eaten.
  * If false, it merely got hurt.
  */
-void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
+void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     if(!type->spike_damage) return;
     
     if(type->spike_damage->ingestion_only != is_ingestion) return;
@@ -1053,9 +1053,9 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
  */
 void mob::chase(
     point* orig_coords, float* orig_z,
-    const point &offset, const float offset_z,
-    const bitmask_8_t flags,
-    const float target_distance, const float speed, const float acceleration
+    const point &offset, float offset_z,
+    bitmask_8_t flags,
+    float target_distance, float speed, float acceleration
 ) {
     chase_info.orig_coords = orig_coords;
     chase_info.orig_z = orig_z;
@@ -1091,9 +1091,9 @@ void mob::chase(
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
 void mob::chase(
-    const point &coords, const float coords_z,
-    const unsigned char flags,
-    const float target_distance, const float speed, const float acceleration
+    const point &coords, float coords_z,
+    unsigned char flags,
+    float target_distance, float speed, float acceleration
 ) {
     chase(
         nullptr, nullptr, coords, coords_z,
@@ -1146,8 +1146,8 @@ void mob::chomp(mob* m, const hitbox* hitbox_info) {
  * @param can_free_move Can the mob move freely, or only forward?
  */
 void mob::circle_around(
-    mob* m, const point &p, const float radius, const bool clockwise,
-    const float speed, const bool can_free_move
+    mob* m, const point &p, float radius, bool clockwise,
+    float speed, bool can_free_move
 ) {
     if(!circling_info) {
         circling_info = new circling_t(this);
@@ -1327,7 +1327,7 @@ void mob::delete_old_status_effects() {
  */
 void mob::do_attack_effects(
     const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
-    const float damage, const float knockback
+    float damage, float knockback
 ) {
     if(attack_h->value == 0.0f) {
         //Attack hitboxes that cause 0 damage don't need to smack or ding.
@@ -1513,7 +1513,7 @@ void mob::draw_mob() {
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
  */
-void mob::face(const float new_angle, point* new_pos, const bool instantly) {
+void mob::face(float new_angle, point* new_pos, bool instantly) {
     if(carry_info) return; //If it's being carried, it shouldn't rotate.
     intended_turn_angle = new_angle;
     intended_turn_pos = new_pos;
@@ -1566,7 +1566,7 @@ void mob::focus_on_mob(mob* m2) {
  */
 bool mob::follow_path(
     const path_follow_settings &settings,
-    const float speed, const float acceleration
+    float speed, float acceleration
 ) {
     bool was_blocked = false;
     path_stop* old_next_stop = nullptr;
@@ -1728,7 +1728,7 @@ point mob::get_chase_target(float* out_z) const {
  * @return The hitbox.
  */
 hitbox* mob::get_closest_hitbox(
-    const point &p, const size_t h_type, dist* d
+    const point &p, size_t h_type, dist* d
 ) const {
     sprite* s;
     get_sprite_data(&s, nullptr, nullptr);
@@ -1917,7 +1917,7 @@ mob_type::vulnerability_t mob::get_hazard_vulnerability(
  * @param nr The hitbox's number.
  * @return The hitbox.
  */
-hitbox* mob::get_hitbox(const size_t nr) const {
+hitbox* mob::get_hitbox(size_t nr) const {
     sprite* s;
     get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
@@ -2524,10 +2524,10 @@ bool mob::has_clear_line(const mob* target_mob) const {
  * @param rotation_method How should the held mob rotate?
  */
 void mob::hold(
-    mob* m, const size_t hitbox_idx,
-    const float offset_dist, const float offset_angle,
-    const float vertical_dist,
-    const bool above_holder, const HOLD_ROTATION_METHOD rotation_method
+    mob* m, size_t hitbox_idx,
+    float offset_dist, float offset_angle,
+    float vertical_dist,
+    bool above_holder, const HOLD_ROTATION_METHOD rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -2668,7 +2668,7 @@ void mob::leave_group() {
  * @param speed Speed to move at.
  * @param acceleration Speed acceleration.
  */
-void mob::move_to_path_end(const float speed, const float acceleration) {
+void mob::move_to_path_end(float speed, float acceleration) {
     if(!path_info) return;
     if(
         (
@@ -2905,8 +2905,8 @@ void mob::send_message(mob* receiver, string &msg) const {
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void mob::set_animation(
-    const size_t idx, const START_ANIM_OPTION options, const bool pre_named,
-    const float mob_speed_anim_baseline
+    size_t idx, const START_ANIM_OPTION options, bool pre_named,
+    float mob_speed_anim_baseline
 ) {
     if(idx >= type->anims.animations.size()) return;
     
@@ -2968,7 +2968,7 @@ void mob::set_animation(
  */
 void mob::set_animation(
     const string &name, const START_ANIM_OPTION options,
-    const float mob_speed_anim_baseline
+    float mob_speed_anim_baseline
 ) {
     size_t idx = anim.anim_db->find_animation(name);
     if(idx != INVALID) {
@@ -2982,7 +2982,7 @@ void mob::set_animation(
  *
  * @param blocks Whether it can block paths or not.
  */
-void mob::set_can_block_paths(const bool blocks) {
+void mob::set_can_block_paths(bool blocks) {
     if(blocks) {
         if(!can_block_paths) {
             game.states.gameplay->path_mgr.handle_obstacle_add(this);
@@ -3007,7 +3007,7 @@ void mob::set_can_block_paths(const bool blocks) {
  * If false, it's the number in HP.
  * @param amount Health amount.
  */
-void mob::set_health(const bool add, const bool ratio, const float amount) {
+void mob::set_health(bool add, bool ratio, float amount) {
     float change = amount;
     if(ratio) change = max_health * amount;
     float base_nr = 0;
@@ -3022,7 +3022,7 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
  *
  * @param radius New radius.
  */
-void mob::set_radius(const float radius) {
+void mob::set_radius(float radius) {
     this->radius = radius;
     physical_span =
         calculate_mob_physical_span(
@@ -3056,7 +3056,7 @@ void mob::set_rectangular_dim(const point &rectangular_dim) {
  *
  * @param time New time.
  */
-void mob::set_timer(const float time) {
+void mob::set_timer(float time) {
     script_timer.duration = time;
     script_timer.start();
 }
@@ -3326,7 +3326,7 @@ void mob::store_mob_inside(mob* m) {
  *
  * @param nr Number of captured opponents to swallow.
  */
-void mob::swallow_chomped_pikmin(const size_t nr) {
+void mob::swallow_chomped_pikmin(size_t nr) {
 
     size_t total = std::min(nr, chomping_mobs.size());
     
@@ -3356,7 +3356,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick(const float delta_t) {
+void mob::tick(float delta_t) {
     //Since the mob could be marked for deletion after any little
     //interaction with the world, and since doing logic on a mob that already
     //forgot some things due to deletion is dangerous... Let's constantly
@@ -3430,7 +3430,7 @@ void mob::tick(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_animation(const float delta_t) {
+void mob::tick_animation(float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         mult *= this->statuses[s].type->anim_speed_multiplier;
@@ -3485,7 +3485,7 @@ void mob::tick_animation(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_brain(const float delta_t) {
+void mob::tick_brain(float delta_t) {
     //Circling around something.
     if(circling_info) {
         point circling_center =
@@ -3627,7 +3627,7 @@ void mob::tick_brain(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_class_specifics(const float delta_t) {
+void mob::tick_class_specifics(float delta_t) {
 }
 
 
@@ -3636,7 +3636,7 @@ void mob::tick_class_specifics(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_misc_logic(const float delta_t) {
+void mob::tick_misc_logic(float delta_t) {
     if(time_alive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
@@ -3884,7 +3884,7 @@ void mob::tick_misc_logic(const float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_script(const float delta_t) {
+void mob::tick_script(float delta_t) {
     if(!fsm.cur_state) return;
     
     //Timer events.
@@ -4111,8 +4111,8 @@ void mob::unfocus_from_mob() {
  * @return The index.
  */
 size_t mob_with_anim_groups::get_animation_idx_from_base_and_group(
-    const size_t base_anim_idx, const size_t group_idx,
-    const size_t base_anim_total
+    size_t base_anim_idx, size_t group_idx,
+    size_t base_anim_total
 ) const {
     return group_idx * base_anim_total + base_anim_idx;
 }

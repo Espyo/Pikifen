@@ -94,7 +94,7 @@ void easy_fsm_creator::new_event(const MOB_EV type) {
  * @param name Name of the state.
  * @param id Its ID.
  */
-void easy_fsm_creator::new_state(const string &name, const size_t id) {
+void easy_fsm_creator::new_state(const string &name, size_t id) {
     commit_state();
     cur_state = new mob_state(name, id);
     states.push_back(cur_state);
@@ -374,7 +374,7 @@ void mob_fsm::run_event(
  * @param info2 Same as info1, but a second variable.
  * @return Whether it succeeded.
  */
-bool mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
+bool mob_fsm::set_state(size_t new_state, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(cur_state) {
@@ -441,7 +441,7 @@ mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
  * @param name The state's name.
  * @param id Its ID, for sorting on the vector of states.
  */
-mob_state::mob_state(const string &name, const size_t id) :
+mob_state::mob_state(const string &name, size_t id) :
     name(name),
     id(id) {
     

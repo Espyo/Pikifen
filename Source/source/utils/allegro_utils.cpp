@@ -82,7 +82,7 @@ string c2s(const ALLEGRO_COLOR &c) {
  * @param a The new alpha, [0-255].
  * @return The new color.
  */
-ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
+ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
@@ -97,7 +97,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
  * @param l Lighting amount, positive or negative, from 0 to 1.
  * @return The new color.
  */
-ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
+ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
     ALLEGRO_COLOR c2;
     c2.r = clamp(c.r + l, 0.0f, 1.0f);
     c2.g = clamp(c.g + l, 0.0f, 1.0f);
@@ -117,7 +117,7 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
  * @return The vector.
  */
 vector<string> folder_to_vector(
-    string folder_name, const bool folders, bool* out_folder_found
+    string folder_name, bool folders, bool* out_folder_found
 ) {
     vector<string> v;
     
@@ -183,7 +183,7 @@ vector<string> folder_to_vector(
  * the left or right Ctrl.
  * @return The name, or an empty string on error.
  */
-string get_key_name(const int keycode, const bool condensed) {
+string get_key_name(int keycode, bool condensed) {
     switch(keycode) {
     case ALLEGRO_KEY_ESCAPE: {
         return "Esc";
@@ -374,7 +374,7 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * @return The interpolated color.
  */
 ALLEGRO_COLOR interpolate_color(
-    const float input, const float input_start, const float input_end,
+    float input, float input_start, float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 ) {
     float progress =
@@ -401,7 +401,7 @@ ALLEGRO_COLOR interpolate_color(
  */
 vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
-    const string &patterns, const int mode, ALLEGRO_DISPLAY* display
+    const string &patterns, int mode, ALLEGRO_DISPLAY* display
 ) {
     ALLEGRO_FILECHOOSER* dialog =
         al_create_native_file_dialog(
@@ -450,7 +450,7 @@ vector<string> prompt_file_dialog(
  */
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder_path, const string &title,
-    const string &patterns, const int mode, FILE_DIALOG_RESULT* result,
+    const string &patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 ) {
     vector<string> f =

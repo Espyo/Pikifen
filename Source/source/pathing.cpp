@@ -266,7 +266,7 @@ path_stop::~path_stop() {
  * @param other_stop Pointer to the other stop.
  * @param normal Normal link? False means one-way link.
  */
-void path_stop::add_link(path_stop* other_stop, const bool normal) {
+void path_stop::add_link(path_stop* other_stop, bool normal) {
     PATH_LINK_TYPE link_type = PATH_LINK_TYPE_NORMAL;
     
     path_link* old_link_data = get_link(other_stop);

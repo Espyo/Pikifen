@@ -177,7 +177,7 @@ public:
     std::function<void(const point &center, const point &size)> on_draw = nullptr;
     
     //What to do when it's time to tick one frame.
-    std::function<void(const float time)> on_tick = nullptr;
+    std::function<void(float time)> on_tick = nullptr;
     
     //What to do when it receives any Allegro event.
     std::function<void(const ALLEGRO_EVENT &ev)> on_event = nullptr;
@@ -189,7 +189,7 @@ public:
     std::function<void(const point &cursor_pos)> on_mouse_over = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
-    std::function<bool(const size_t button_id)> on_menu_dir_button = nullptr;
+    std::function<bool(size_t button_id)> on_menu_dir_button = nullptr;
     
     //What to do when it gets selected.
     std::function<void()> on_selected = nullptr;
@@ -203,7 +203,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit gui_item(const bool selectable = false);
+    explicit gui_item(bool selectable = false);
     bool activate(const point &cursor_pos);
     void add_child(gui_item* item);
     void delete_all_children();
@@ -366,7 +366,7 @@ public:
     
     picker_gui_item(
         const string &base_text, const string &option,
-        const size_t nr_options = 0, const size_t cur_option_idx = INVALID
+        size_t nr_options = 0, size_t cur_option_idx = INVALID
     );
     
 private:
@@ -433,7 +433,7 @@ public:
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE,
-        const int flags = ALLEGRO_ALIGN_CENTER
+        int flags = ALLEGRO_ALIGN_CENTER
     );
     
 };
@@ -508,7 +508,7 @@ public:
     gui_manager();
     void add_item(gui_item* item, const string &id = "");
     void draw();
-    void tick(const float delta_t);
+    void tick(float delta_t);
     string get_current_tooltip();
     bool get_item_draw_info(
         gui_item* item, point* draw_center, point* draw_size
@@ -519,13 +519,13 @@ public:
     void read_coords(data_node* node);
     void register_coords(
         const string &id,
-        const float cx, const float cy, const float w, const float h
+        float cx, float cy, float w, float h
     );
     void remove_item(gui_item* item);
     void set_selected_item(gui_item* item, bool silent = false);
     void show_items();
     void start_animation(
-        const GUI_MANAGER_ANIM type, const float duration
+        const GUI_MANAGER_ANIM type, float duration
     );
     bool was_last_input_mouse();
     void destroy();

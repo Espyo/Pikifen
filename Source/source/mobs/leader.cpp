@@ -133,7 +133,7 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-leader::leader(const point &pos, leader_type* type, const float angle) :
+leader::leader(const point &pos, leader_type* type, float angle) :
     mob(pos, type, angle),
     lea_type(type) {
     
@@ -632,7 +632,7 @@ void leader::draw_mob() {
  * @param n_members Total number of group members to dismiss.
  * @return The amount of rows.
  */
-size_t leader::get_dismiss_rows(const size_t n_members) const {
+size_t leader::get_dismiss_rows(size_t n_members) const {
     size_t members_that_fit = 1;
     size_t rows_needed = 1;
     while(members_that_fit < n_members) {
@@ -698,7 +698,7 @@ void leader::get_group_spot_info(
  * to fulfill the order entirely.
  */
 bool leader::order_pikmin_to_onion(
-    const pikmin_type* type, pikmin_nest_t* n_ptr, const size_t amount
+    const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount
 ) {
     //Find Pikmin of that type.
     vector<std::pair<dist, pikmin*>> candidates;
@@ -896,7 +896,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void leader::tick_class_specifics(const float delta_t) {
+void leader::tick_class_specifics(float delta_t) {
     //Throw-related things.
     if(auto_throw_cooldown > 0.0f) {
         auto_throw_cooldown -= delta_t;
@@ -1045,7 +1045,7 @@ void leader::update_throw_variables() {
  * Usually this is used because the current leader is no longer available.
  */
 void change_to_next_leader(
-    const bool forward, const bool force_success, const bool keep_idx
+    bool forward, bool force_success, bool keep_idx
 ) {
     if(game.states.gameplay->available_leaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.

@@ -79,7 +79,7 @@ bool are_walls_between(
     float ignore_walls_below_z = -FLT_MAX, bool* out_impassable_walls = nullptr
 );
 void clear_area_textures();
-void crash(const string &reason, const string &info, const int exit_status);
+void crash(const string &reason, const string &info, int exit_status);
 bool does_edge_have_ledge_smoothing(
     edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
 );
@@ -94,8 +94,8 @@ void draw_edge_offset_on_buffer(
 );
 mob* get_closest_mob_to_cursor();
 void get_edge_offset_edge_info(
-    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
-    const float edge_process_angle,
+    edge* e_ptr, vertex* end_vertex, unsigned char end_idx,
+    float edge_process_angle,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter,
@@ -104,8 +104,8 @@ void get_edge_offset_edge_info(
 );
 void get_edge_offset_intersection(
     const edge* e1, const edge* e2, const vertex* common_vertex,
-    const float base_shadow_angle1, const float base_shadow_angle2,
-    const float shadow_length,
+    float base_shadow_angle1, float base_shadow_angle2,
+    float shadow_length,
     float* out_angle, float* out_length
 );
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
@@ -113,11 +113,11 @@ ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);
 float get_liquid_limit_length(edge* e_ptr);
 void get_next_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    vertex* v_ptr, float pivot_angle, bool clockwise,
     const edge* ignore, edge** out_edge, float* out_angle, float* out_diff
 );
 void get_next_offset_effect_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    vertex* v_ptr, float pivot_angle, bool clockwise,
     const edge* ignore, offset_effect_checker_t edge_checker,
     edge** out_edge, float* out_angle, float* out_diff,
     float* out_base_shadow_angle,
@@ -129,11 +129,11 @@ string get_subtitle_or_mission_goal(
 );
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
-    const float start, const float end,
+    float start, float end,
     const point &leader_pos, const point &cursor_pos,
     const ALLEGRO_COLOR &color,
-    const float u_offset, const float u_scale,
-    const bool vary_thickness
+    float u_offset, float u_scale,
+    bool vary_thickness
 );
 map<string, string> get_var_map(const string &vars_string);
 string get_engine_version_string();
@@ -142,8 +142,8 @@ float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(data_node* node);
 void print_info(
     const string &text,
-    const float total_duration = 5.0f,
-    const float fade_duration = 3.0f
+    float total_duration = 5.0f,
+    float fade_duration = 3.0f
 );
 void report_fatal_error(const string &s, const data_node* dn = nullptr);
 void save_maker_tools();
@@ -153,15 +153,15 @@ void save_statistics();
 void set_string_token_widths(
     vector<string_token> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    const float max_control_bitmap_height = 0, bool control_condensed = false
+    float max_control_bitmap_height = 0, bool control_condensed = false
 );
-void signal_handler(const int signum);
+void signal_handler(int signum);
 void spew_pikmin_seed(
-    const point pos, const float z, pikmin_type* pik_type,
-    const float angle, const float horizontal_speed, const float vertical_speed
+    const point pos, float z, pikmin_type* pik_type,
+    float angle, float horizontal_speed, float vertical_speed
 );
 vector<vector<string_token> > split_long_string_with_tokens(
-    const vector<string_token> &tokens, const int max_width
+    const vector<string_token> &tokens, int max_width
 );
 void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
 vector<string_token> tokenize_string(const string &s);
@@ -169,7 +169,7 @@ string unescape_string(const string &s);
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
     const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
-    const bool clear_first
+    bool clear_first
 );
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,

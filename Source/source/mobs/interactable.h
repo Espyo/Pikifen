@@ -31,6 +31,6 @@ public:
     
     //--- Function declarations ---
 
-    interactable(const point &pos, interactable_type* type, const float angle);
+    interactable(const point &pos, interactable_type* type, float angle);
     
 };

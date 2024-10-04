@@ -106,7 +106,7 @@ editor::editor() :
  */
 void editor::center_camera(
     const point &min_coords, const point &max_coords,
-    const bool instantaneous
+    bool instantaneous
 ) {
     point min_c = min_coords;
     point max_c = max_coords;
@@ -185,7 +185,7 @@ void editor::do_logic_pre() {
  * These are lines that aren't major.
  */
 void editor::draw_grid(
-    const float interval,
+    float interval,
     const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
 ) {
     point cam_top_left_corner(0, 0);
@@ -813,8 +813,8 @@ bool editor::input_popup(
  * @return Whether the pressed key corresponds.
  */
 bool editor::key_check(
-    const int pressed_key, const int match_key,
-    const bool needs_ctrl, const bool needs_shift
+    int pressed_key, int match_key,
+    bool needs_ctrl, bool needs_shift
 ) {
 
     if(pressed_key != match_key) {
@@ -922,7 +922,7 @@ void editor::load() {
  * @param is_area_editor If true, mob types that do not appear in the
  * area editor will not be counted for here.
  */
-void editor::load_custom_mob_cat_types(const bool is_area_editor) {
+void editor::load_custom_mob_cat_types(bool is_area_editor) {
     //Load.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORY) c);
@@ -1019,10 +1019,10 @@ void editor::open_picker_dialog(
     const string &title,
     const vector<picker_item> &items,
     const std::function <void(
-        const string &, const string &, const bool
+        const string &, const string &, bool
     )> &pick_callback,
     const string &list_header,
-    const bool can_make_new,
+    bool can_make_new,
     const string &filter
 ) {
     picker_info* new_picker = new picker_info(this);
@@ -1286,7 +1286,7 @@ bool editor::process_gui_mob_type_widgets(
         }
         open_picker_dialog(
             "Pick an object type", items,
-        [this] (const string  &n, const string  &c, const bool) {
+        [this] (const string  &n, const string  &c, bool) {
             //For clarity, this code will NOT be run within the context
             //of editor::process_gui_mob_type_widgets, but will instead
             //be run wherever dialogs are processed.
@@ -1390,10 +1390,10 @@ bool editor::process_gui_mob_type_widgets(
  * @return Whether the user changed one of the values.
  */
 bool editor::process_gui_size_widgets(
-    const char* label, point &size, const float v_speed,
-    const bool keep_aspect_ratio,
-    const bool keep_area,
-    const float min_size
+    const char* label, point &size, float v_speed,
+    bool keep_aspect_ratio,
+    bool keep_area,
+    float min_size
 ) {
     bool ret = false;
     point new_size = size;
@@ -1594,7 +1594,7 @@ bool editor::saveable_tree_node(const string &category, const string &label) {
  * @param text Text to put in the status bar.
  * @param error Whether there was an error or not.
  */
-void editor::set_status(const string &text, const bool error) {
+void editor::set_status(const string &text, bool error) {
     status_text = text;
     if(error) {
         op_error_flash_timer.start();
@@ -1701,7 +1701,7 @@ point editor::snap_point_to_axis(const point &p, const point &anchor) {
  * @param grid_interval Current grid interval.
  * @return The snapped point.
  */
-point editor::snap_point_to_grid(const point &p, const float grid_interval) {
+point editor::snap_point_to_grid(const point &p, float grid_interval) {
     return
         point(
             round(p.x / grid_interval) * grid_interval,
@@ -1942,7 +1942,7 @@ void editor::update_transformations() {
  *
  * @param new_zoom New zoom level.
  */
-void editor::zoom_with_cursor(const float new_zoom) {
+void editor::zoom_with_cursor(float new_zoom) {
     //Keep a backup of the old mouse coordinates.
     point old_mouse_pos = game.mouse_cursor.w_pos;
     
@@ -2537,7 +2537,7 @@ editor::picker_item::picker_item(
  */
 void editor::transformation_widget::draw(
     const point* const center, const point* const size,
-    const float* const angle, const float zoom
+    const float* const angle, float zoom
 ) const {
     if(!center) return;
     
@@ -2660,7 +2660,7 @@ point editor::transformation_widget::get_old_center() const {
  */
 bool editor::transformation_widget::handle_mouse_down(
     const point &mouse_coords, const point* const center,
-    const point* const size, const float* const angle, const float zoom
+    const point* const size, const float* const angle, float zoom
 ) {
     if(!center) return false;
     
@@ -2720,8 +2720,8 @@ bool editor::transformation_widget::handle_mouse_down(
  */
 bool editor::transformation_widget::handle_mouse_move(
     const point &mouse_coords, point* center, point* size, float* angle,
-    const float zoom, const bool keep_aspect_ratio, const bool keep_area,
-    const float min_size, const bool lock_center
+    float zoom, bool keep_aspect_ratio, bool keep_area,
+    float min_size, bool lock_center
 ) {
     if(!center) return false;
     

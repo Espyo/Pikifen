@@ -25,7 +25,7 @@
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-pile::pile(const point &pos, pile_type* type, const float angle) :
+pile::pile(const point &pos, pile_type* type, float angle) :
     mob(pos, type, angle),
     pil_type(type),
     amount(type->max_amount) {
@@ -42,7 +42,7 @@ pile::pile(const point &pos, pile_type* type, const float angle) :
  *
  * @param change Amount to increase by.
  */
-void pile::change_amount(const int change) {
+void pile::change_amount(int change) {
     if(change < 0 && amount == 0) return;
     if(change > 0 && amount == pil_type->max_amount) return;
     
@@ -110,7 +110,7 @@ void pile::recharge() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pile::tick_class_specifics(const float delta_t) {
+void pile::tick_class_specifics(float delta_t) {
     recharge_timer.tick(delta_t);
     
     if(amount == 0 && pil_type->delete_when_finished) {

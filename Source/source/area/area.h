@@ -73,12 +73,12 @@ struct blockmap {
     
     //--- Function declarations ---
     
-    size_t get_col(const float x) const;
-    size_t get_row(const float y) const;
+    size_t get_col(float x) const;
+    size_t get_row(float y) const;
     bool get_edges_in_region(
         const point &tl, const point &br, set<edge*> &edges
     ) const;
-    point get_top_left_corner(const size_t col, const size_t row) const;
+    point get_top_left_corner(size_t col, size_t row) const;
     void clear();
     
 };
@@ -121,9 +121,9 @@ struct mob_gen {
     
     explicit mob_gen(
         const point &pos = point(),
-        mob_type* type = nullptr, const float angle = 0, const string &vars = ""
+        mob_type* type = nullptr, float angle = 0, const string &vars = ""
     );
-    void clone(mob_gen* destination, const bool include_position = true) const;
+    void clone(mob_gen* destination, bool include_position = true) const;
     
 };
 
@@ -162,7 +162,7 @@ struct tree_shadow {
     
     explicit tree_shadow(
         const point &center = point(), const point &size = point(100, 100),
-        const float angle = 0, const unsigned char alpha = 255,
+        float angle = 0, unsigned char alpha = 255,
         const string &file_name = "", const point &sway = point(1, 1)
     );
     ~tree_shadow();
@@ -284,11 +284,11 @@ struct area_data : public content {
     edge* new_edge();
     sector* new_sector();
     vertex* new_vertex();
-    void remove_vertex(const size_t v_idx);
+    void remove_vertex(size_t v_idx);
     void remove_vertex(const vertex* v_ptr);
-    void remove_edge(const size_t e_idx);
+    void remove_edge(size_t e_idx);
     void remove_edge(const edge* e_ptr);
-    void remove_sector(const size_t s_idx);
+    void remove_sector(size_t s_idx);
     void remove_sector(const sector* s_ptr);
     void save_to_data_node(data_node* node);
     void clear();
@@ -302,5 +302,5 @@ void get_area_info_from_path(
     AREA_TYPE* out_area_type
 );
 string get_base_area_folder_path(
-    const AREA_TYPE type, const bool from_game_data
+    const AREA_TYPE type, bool from_game_data
 );

@@ -211,8 +211,8 @@ area_editor::area_editor() :
  * @return The day speed.
  */
 float area_editor::calculate_day_speed(
-    const float day_start_min, const float day_end_min,
-    const float mission_min
+    float day_start_min, float day_end_min,
+    float mission_min
 ) {
     if(mission_min == 0.0f) return 0.0f;
     float aux_day_end_min = day_end_min;
@@ -1919,7 +1919,7 @@ void area_editor::load() {
 void area_editor::load_area(
     const string &requested_area_folder_name,
     const AREA_TYPE requested_area_type,
-    const bool from_backup, const bool should_update_history
+    bool from_backup, bool should_update_history
 ) {
     string new_area_name = requested_area_folder_name;
     
@@ -2060,7 +2060,7 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param is_new Is it a new area, or an existing one?
  */
 void area_editor::pick_area(
-    const string &name, const string &category, const bool is_new
+    const string &name, const string &category, bool is_new
 ) {
     AREA_TYPE type = AREA_TYPE_SIMPLE;
     if(category == "Mission") {
@@ -2079,7 +2079,7 @@ void area_editor::pick_area(
  * @param is_new Unused.
  */
 void area_editor::pick_texture(
-    const string &name, const string &category, const bool is_new
+    const string &name, const string &category, bool is_new
 ) {
     sector* s_ptr = nullptr;
     string final_name = name;
@@ -3183,7 +3183,7 @@ void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
  * If true, save to an auto-backup file.
  * @return Whether it succeded.
  */
-bool area_editor::save_area(const bool to_backup) {
+bool area_editor::save_area(bool to_backup) {
 
     //Before we start, let's get rid of unused sectors.
     bool deleted_sectors = false;

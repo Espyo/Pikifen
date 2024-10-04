@@ -396,7 +396,7 @@ void options_menu_state::init_gui_controls_page() {
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
     "Cursor speed, when controlling without a mouse."
     );
-    cursor_speed_picker->value_to_string = [] (const float v) {
+    cursor_speed_picker->value_to_string = [] (float v) {
         return f2s(v);
     };
     cursor_speed_picker->init();
@@ -603,7 +603,7 @@ void options_menu_state::init_gui_misc_page() {
     {"None", "Small", "Medium", "Large"},
     "When you move the cursor, how much does it affect the camera?"
     );
-    cursor_cam_weight_picker->value_to_string = [] (const float v) {
+    cursor_cam_weight_picker->value_to_string = [] (float v) {
         return f2s(v);
     };
     cursor_cam_weight_picker->init();

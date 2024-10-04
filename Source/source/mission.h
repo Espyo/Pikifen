@@ -288,7 +288,7 @@ public:
     virtual int get_req_amount(gameplay_state* gameplay) const = 0;
     virtual string get_player_description(mission_data* mission) const = 0;
     virtual string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const = 0;
     virtual string get_end_reason(mission_data* mission) const = 0;
     virtual bool get_end_zoom_data(
@@ -315,7 +315,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -342,7 +342,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -369,7 +369,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -396,7 +396,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -423,7 +423,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -450,7 +450,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -477,7 +477,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -504,7 +504,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -532,7 +532,7 @@ public:
     virtual int get_req_amount(gameplay_state* gameplay) const = 0;
     virtual string get_player_description(mission_data* mission) const = 0;
     virtual string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const = 0;
     virtual string get_end_reason(mission_data* mission) const = 0;
     virtual bool get_end_zoom_data(
@@ -559,7 +559,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -586,7 +586,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -613,7 +613,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -640,7 +640,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -667,7 +667,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(
@@ -694,7 +694,7 @@ public:
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        int cur, int req, float percentage
     ) const override;
     string get_end_reason(mission_data* mission) const override;
     bool get_end_zoom_data(

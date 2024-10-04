@@ -72,7 +72,7 @@ public:
     
     //--- Function declarations ---
     
-    onion(const point &pos, onion_type* type, const float angle);
+    onion(const point &pos, onion_type* type, float angle);
     ~onion();
     void draw_mob() override;
     void read_script_vars(const script_var_reader &svr) override;
@@ -84,6 +84,6 @@ protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 };

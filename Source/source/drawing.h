@@ -162,9 +162,9 @@ enum PLAYER_INPUT_ICON_SPRITE {
 
 
 void draw_background_logos(
-    const float time_spent, const size_t rows, const size_t cols,
+    float time_spent, size_t rows, size_t cols,
     const point &logo_size, const ALLEGRO_COLOR &tint,
-    const point &speed, const float rotation_speed
+    const point &speed, float rotation_speed
 );
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
@@ -172,25 +172,25 @@ void draw_bitmap_with_effects(
 void draw_button(
     const point &center, const point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
-    const bool selected,
-    const float juicy_grow_amount = 0.0f
+    bool selected,
+    float juicy_grow_amount = 0.0f
 );
 void draw_fraction(
-    const point &bottom, const size_t value_nr,
-    const size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
+    const point &bottom, size_t value_nr,
+    size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 );
 void draw_health(
-    const point &center, const float ratio,
-    const float alpha = 1.0f,
-    const float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS,
-    const bool just_chart = false
+    const point &center, float ratio,
+    float alpha = 1.0f,
+    float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS,
+    bool just_chart = false
 );
 void draw_liquid(
-    sector* s_ptr, liquid* l_ptr, const point &where, const float scale,
-    const float time
+    sector* s_ptr, liquid* l_ptr, const point &where, float scale,
+    float time
 );
 void draw_loading_screen(
-    const string &area_name, const string &subtitle, const float opacity
+    const string &area_name, const string &subtitle, float opacity
 );
 void draw_menu_button_icon(
     MENU_ICON icon, const point &button_center, const point &button_size,
@@ -199,33 +199,33 @@ void draw_menu_button_icon(
 void draw_mouse_cursor(const ALLEGRO_COLOR &color);
 void draw_player_input_icon(
     const ALLEGRO_FONT* const font, const player_input &i,
-    const bool condensed, const point &where, const point &max_size,
-    const unsigned char alpha = 228
+    bool condensed, const point &where, const point &max_size,
+    unsigned char alpha = 228
 );
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale, const float opacity
+    sector* s_ptr, const point &where, float scale, float opacity
 );
 void draw_sector_edge_offsets(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
+    sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
 );
 void draw_mob_shadow(
     const mob* m,
-    const float delta_z, const float shadow_stretch
+    float delta_z, float shadow_stretch
 );
 void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects);
 void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
-    const point &where, const int flags, const point &max_size,
+    const point &where, int flags, const point &max_size,
     const point &scale = point(1.0f, 1.0f)
 );
 void get_player_input_icon_info(
-    const player_input &i, const bool condensed,
+    const player_input &i, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
 );
 float get_player_input_icon_width(
-    const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
-    const float max_bitmap_height = 0
+    const ALLEGRO_FONT* font, const player_input &i, bool condensed,
+    float max_bitmap_height = 0
 );

@@ -385,7 +385,7 @@ public:
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
-    void change_spray_count(const size_t type_idx, signed int amount);
+    void change_spray_count(size_t type_idx, signed int amount);
     size_t get_amount_of_field_pikmin(const pikmin_type* filter = nullptr);
     size_t get_amount_of_group_pikmin(const pikmin_type* filter = nullptr);
     size_t get_amount_of_idle_pikmin(const pikmin_type* filter = nullptr);
@@ -459,14 +459,14 @@ private:
     
     //--- Function declarations ---
     
-    void do_aesthetic_leader_logic(const float delta_t);
-    void do_aesthetic_logic(const float delta_t);
+    void do_aesthetic_leader_logic(float delta_t);
+    void do_aesthetic_logic(float delta_t);
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = nullptr,
         const ALLEGRO_TRANSFORM* bmp_transform = nullptr
     );
-    void do_gameplay_leader_logic(const float delta_t);
-    void do_gameplay_logic(const float delta_t);
+    void do_gameplay_leader_logic(float delta_t);
+    void do_gameplay_logic(float delta_t);
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
     void draw_debug_tools();
@@ -483,9 +483,9 @@ private:
     void draw_tree_shadows();
     void draw_world_components(ALLEGRO_BITMAP* bmp_output);
     ALLEGRO_BITMAP* draw_to_bitmap();
-    void end_mission(const bool cleared);
+    void end_mission(bool cleared);
     ALLEGRO_BITMAP* generate_fog_bitmap(
-        const float near_radius, const float far_radius
+        float near_radius, float far_radius
     );
     mob* get_closest_group_member(const subgroup_type* type);
     void handle_player_action(const player_action &action);
@@ -501,17 +501,17 @@ private:
     );
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(
-        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
+        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
         vector<pending_intermob_event> &pending_intermob_events
     );
     void process_mob_reaches(
-        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, const dist &d,
+        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
         vector<pending_intermob_event> &pending_intermob_events
     );
     void process_mob_touches(
-        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
+        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, dist &d
     );
-    void process_system_key_press(const int keycode);
+    void process_system_key_press(int keycode);
     void unload_game_content();
     void update_area_active_cells();
     void update_mob_is_active_flag();
@@ -571,6 +571,6 @@ struct msg_box_t {
     msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon);
     void advance();
     void close();
-    void tick(const float delta_t);
+    void tick(float delta_t);
     
 };

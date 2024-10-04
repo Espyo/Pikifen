@@ -36,7 +36,7 @@ body_part::body_part(const string &name) :
  */
 hitbox::hitbox(
     const string &bpn, size_t bpi, body_part* bpp, const point &pos,
-    const float z, const float height, const float radius
+    float z, float height, float radius
 ) :
     body_part_name(bpn),
     body_part_idx(bpi),
@@ -57,7 +57,7 @@ hitbox::hitbox(
  * @param mob_angle The angle the mob is facing.
  * @return The position.
  */
-point hitbox::get_cur_pos(const point &mob_pos, const float mob_angle) const {
+point hitbox::get_cur_pos(const point &mob_pos, float mob_angle) const {
     float mob_angle_cos = cos(mob_angle);
     float mob_angle_sin = sin(mob_angle);
     return
@@ -80,7 +80,7 @@ point hitbox::get_cur_pos(const point &mob_pos, const float mob_angle) const {
  * @return The position.
  */
 point hitbox::get_cur_pos(
-    const point &mob_pos, const float mob_angle_cos, const float mob_angle_sin
+    const point &mob_pos, float mob_angle_cos, float mob_angle_sin
 ) const {
     return
         point(

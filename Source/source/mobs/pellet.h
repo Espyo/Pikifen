@@ -33,7 +33,7 @@ public:
     
     //--- Function declarations ---
     
-    pellet(const point &pos, pellet_type* type, const float angle);
+    pellet(const point &pos, pellet_type* type, float angle);
     void draw_mob() override;
     
 };

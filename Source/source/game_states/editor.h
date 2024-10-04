@@ -253,20 +253,20 @@ protected:
         
         void draw(
             const point* const center, const point* const size,
-            const float* const angle, const float zoom = 1.0f
+            const float* const angle, float zoom = 1.0f
         ) const;
         bool handle_mouse_down(
             const point &mouse_coords, const point* const center,
             const point* const size, const float* const angle,
-            const float zoom = 1.0f
+            float zoom = 1.0f
         );
         bool handle_mouse_move(
             const point &mouse_coords, point* center, point* size, float* angle,
-            const float zoom = 1.0f,
-            const bool keep_aspect_ratio = false,
-            const bool keep_area = false,
-            const float min_size = -FLT_MAX,
-            const bool lock_center = true
+            float zoom = 1.0f,
+            bool keep_aspect_ratio = false,
+            bool keep_area = false,
+            float min_size = -FLT_MAX,
+            bool lock_center = true
         );
         bool handle_mouse_up();
         bool is_moving_center_handle();
@@ -393,7 +393,7 @@ protected:
         
         //Callback for when the user picks an item from the picker dialog.
         std::function<void(
-            const string &, const string &, const bool
+            const string &, const string &, bool
         )> pick_callback = nullptr;
         
         //Text to display above the picker dialog list.
@@ -616,20 +616,20 @@ protected:
     
     void center_camera(
         const point &min_coords, const point &max_coords,
-        const bool instantaneous = false
+        bool instantaneous = false
     );
     void close_top_dialog();
     void do_logic_post();
     void do_logic_pre();
     void draw_grid(
-        const float interval,
+        float interval,
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
     void draw_op_error_cursor();
     point get_last_widget_pos();
     bool key_check(
-        const int pressed_key, const int match_key,
-        const bool needs_ctrl = false, const bool needs_shift = false
+        int pressed_key, int match_key,
+        bool needs_ctrl = false, bool needs_shift = false
     );
     bool input_popup(
         const char* label, const char* prompt, string* text
@@ -638,7 +638,7 @@ protected:
         const char* label, const vector<string> &items, string* picked_item
     );
     void leave();
-    void load_custom_mob_cat_types(const bool is_area_editor);
+    void load_custom_mob_cat_types(bool is_area_editor);
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback
@@ -647,10 +647,10 @@ protected:
         const string &title,
         const vector<picker_item> &items,
         const std::function<void(
-            const string &, const string &, const bool
+            const string &, const string &, bool
         )> &pick_callback,
         const string &list_header = "",
-        const bool can_make_new = false,
+        bool can_make_new = false,
         const string &filter = ""
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
@@ -664,23 +664,23 @@ protected:
         string* custom_cat_name, mob_type** type
     );
     bool process_gui_size_widgets(
-        const char* label, point &size, const float v_speed,
-        const bool keep_aspect_ratio, const bool keep_area,
-        const float min_size
+        const char* label, point &size, float v_speed,
+        bool keep_aspect_ratio, bool keep_area,
+        float min_size
     );
     void process_gui_status_bar_text();
     void process_gui_unsaved_changes_dialog();
     void panel_title(const char* title);
     bool saveable_tree_node(const string &category, const string &label);
-    void set_status(const string &text = "", const bool error = false);
+    void set_status(const string &text = "", bool error = false);
     void set_tooltip(
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATION widget_explanation = WIDGET_EXPLANATION_NONE
     );
     point snap_point_to_axis(const point &p, const point &anchor);
-    point snap_point_to_grid(const point &p, const float grid_interval);
+    point snap_point_to_grid(const point &p, float grid_interval);
     void update_history(const string &n);
-    void zoom_with_cursor(const float new_zoom);
+    void zoom_with_cursor(float new_zoom);
     virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
     virtual void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
     virtual void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);

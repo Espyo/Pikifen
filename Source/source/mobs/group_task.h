@@ -68,7 +68,7 @@ public:
 
     //--- Function declarations ---
 
-    group_task(const point &pos, group_task_type* type, const float angle);
+    group_task(const point &pos, group_task_type* type, float angle);
     void add_worker(pikmin* who);
     void finish_task();
     void free_up_spot(pikmin* whose);
@@ -86,7 +86,7 @@ protected:
 
     //--- Function declarations ---
 
-    void tick_class_specifics(const float delta_t) override;
+    void tick_class_specifics(float delta_t) override;
     
 private:
     

@@ -123,15 +123,15 @@ public:
     
     explicit hitbox(
         const string &bpn = "", size_t bpi = INVALID, body_part* bpp = nullptr,
-        const point &pos = point(), const float z = 0,
-        const float height = 128, const float radius = 32
+        const point &pos = point(), float z = 0,
+        float height = 128, float radius = 32
     );
     point get_cur_pos(
-        const point &mob_pos, const float mob_angle
+        const point &mob_pos, float mob_angle
     ) const;
     point get_cur_pos(
         const point &mob_pos,
-        const float mob_angle_cos, const float mob_angle_sin
+        float mob_angle_cos, float mob_angle_sin
     ) const;
     
 };

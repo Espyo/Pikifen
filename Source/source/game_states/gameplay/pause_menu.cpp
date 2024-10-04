@@ -2953,7 +2953,7 @@ void pause_menu_t::switch_page(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pause_menu_t::tick(const float delta_t) {
+void pause_menu_t::tick(float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
     radar_gui.tick(delta_t);

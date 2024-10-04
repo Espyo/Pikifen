@@ -208,7 +208,7 @@ check_gui_item::check_gui_item(
  *
  * @param selectable Can the item be selected by the player?
  */
-gui_item::gui_item(const bool selectable) :
+gui_item::gui_item(bool selectable) :
     selectable(selectable) {
     
 }
@@ -1025,7 +1025,7 @@ void gui_manager::read_coords(data_node* node) {
  */
 void gui_manager::register_coords(
     const string &id,
-    const float cx, const float cy, const float w, const float h
+    float cx, float cy, float w, float h
 ) {
     registered_centers[id] =
         point(cx / 100.0f, cy / 100.0f);
@@ -1114,7 +1114,7 @@ void gui_manager::show_items() {
  * @param duration Total duration of the animation.
  */
 void gui_manager::start_animation(
-    const GUI_MANAGER_ANIM type, const float duration
+    const GUI_MANAGER_ANIM type, float duration
 ) {
     anim_type = type;
     anim_timer.start(duration);
@@ -1127,7 +1127,7 @@ void gui_manager::start_animation(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gui_manager::tick(const float delta_t) {
+void gui_manager::tick(float delta_t) {
     //Tick the animation.
     anim_timer.tick(delta_t);
     
@@ -1276,7 +1276,7 @@ list_gui_item::list_gui_item() :
         }
     };
     on_tick =
-    [this] (const float delta_t) {
+    [this] (float delta_t) {
         float child_bottom = get_child_bottom();
         if(child_bottom < 1.0f) {
             target_offset = 0.0f;
@@ -1339,7 +1339,7 @@ list_gui_item::list_gui_item() :
  */
 picker_gui_item::picker_gui_item(
     const string &base_text, const string &option,
-    const size_t nr_options, const size_t cur_option_idx
+    size_t nr_options, size_t cur_option_idx
 ) :
     gui_item(true),
     base_text(base_text),
@@ -1455,7 +1455,7 @@ picker_gui_item::picker_gui_item(
     };
     
     on_menu_dir_button =
-    [this] (const size_t button_id) -> bool{
+    [this] (size_t button_id) -> bool{
         if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
             on_next();
             return true;
@@ -1547,7 +1547,7 @@ scroll_gui_item::scroll_gui_item() :
  */
 text_gui_item::text_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
-    const int flags
+    int flags
 ) :
     gui_item(),
     text(text),

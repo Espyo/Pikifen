@@ -1250,7 +1250,7 @@ void area_editor::get_affected_sectors(
  * @return The closest edge.
  */
 edge* area_editor::get_closest_edge_to_angle(
-    vertex* v_ptr, const float angle, const bool clockwise,
+    vertex* v_ptr, float angle, bool clockwise,
     float* out_closest_edge_angle
 ) const {
     edge* best_edge = nullptr;
@@ -2191,7 +2191,7 @@ void area_editor::paste_sector_texture() {
  * @param mults Multiply the coordinates horizontally and vertically by
  * these values.
  */
-void area_editor::resize_everything(const float mults[2]) {
+void area_editor::resize_everything(float mults[2]) {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         v_ptr->x *= mults[0];
@@ -2271,7 +2271,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  * when snapping to vertexes or edges.
  * @return The snapped point.
  */
-point area_editor::snap_point(const point &p, const bool ignore_selected) {
+point area_editor::snap_point(const point &p, bool ignore_selected) {
     SNAP_MODE mode_to_use = game.options.area_editor_snap_mode;
     point final_point = p;
     

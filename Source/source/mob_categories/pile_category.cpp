@@ -48,7 +48,7 @@ void pile_category::clear_types() {
  * @return The mob.
  */
 mob* pile_category::create_mob(
-    const point &pos, mob_type* type, const float angle
+    const point &pos, mob_type* type, float angle
 ) {
     pile* m = new pile(pos, (pile_type*) type, angle);
     game.states.gameplay->mobs.piles.push_back(m);
