@@ -729,7 +729,7 @@ bool mission_fail_take_damage::has_hud_content() const {
 bool mission_fail_take_damage::is_met(
     gameplay_state* gameplay
 ) const {
-    for(size_t l = 0; l < gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < gameplay->mobs.leaders.size(); l++) {
         if(
             gameplay->mobs.leaders[l]->health <
             gameplay->mobs.leaders[l]->max_health
@@ -1690,7 +1690,7 @@ bool mission_goal_get_to_exit::get_end_zoom_data(
     point avg_pos;
     for(size_t leader_id : gameplay->mission_remaining_mob_ids) {
         mob* leader_ptr = nullptr;
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             mob* m_ptr = game.states.gameplay->mobs.all[m];
             if(m_ptr->id == leader_id) {
                 leader_ptr = m_ptr;

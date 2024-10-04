@@ -305,7 +305,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
     bool still_has_flailing = false;
     bool still_has_helplessness = false;
     bool still_has_panic = false;
-    for(size_t s = 0; s < statuses.size(); ++s) {
+    for(size_t s = 0; s < statuses.size(); s++) {
         if(statuses[s].type == sta_type) continue;
         
         switch(statuses[s].type->state_change_type) {
@@ -576,7 +576,7 @@ pikmin* get_closest_sprout(
     pikmin* closest_pikmin = nullptr;
     
     size_t n_pikmin = game.states.gameplay->mobs.pikmin_list.size();
-    for(size_t p = 0; p < n_pikmin; ++p) {
+    for(size_t p = 0; p < n_pikmin; p++) {
         if(
             game.states.gameplay->mobs.pikmin_list[p]->fsm.cur_state->id !=
             PIKMIN_STATE_SPROUT

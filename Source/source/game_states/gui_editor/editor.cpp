@@ -190,7 +190,7 @@ void gui_editor::load_file(
     data_node* positions_node = file_node.get_child_by_name("positions");
     size_t n_items = positions_node->get_nr_of_children();
     
-    for(size_t i = 0; i < n_items; ++i) {
+    for(size_t i = 0; i < n_items; i++) {
         item new_item;
         data_node* item_node = positions_node->get_child(i);
         new_item.name = item_node->name;
@@ -264,7 +264,7 @@ void gui_editor::grid_interval_decrease_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS[0];
-    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); ++i) {
+    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] >=
             game.options.gui_editor_grid_interval
@@ -456,7 +456,7 @@ void gui_editor::reset_cam(bool instantaneous) {
  */
 bool gui_editor::save_file() {
     data_node* positions_node = file_node.get_child_by_name("positions");
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         data_node* item_node = positions_node->get_child(i);
         item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
     }

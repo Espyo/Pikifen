@@ -74,7 +74,7 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
 void onion_type::load_cat_properties(data_node* file) {
     nest->load_properties(file);
     
-    for(size_t s = 0; s < sounds.size(); ++s) {
+    for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
             sfx_pop_idx = s;
         }
@@ -91,7 +91,7 @@ void onion_type::load_cat_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->leg_body_parts.size(); ++b) {
+    for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
         if(anims.find_body_part(nest->leg_body_parts[b]) == INVALID) {
             game.errors.report(
                 "The Onion type \"" + name + "\" specifies a leg body part "

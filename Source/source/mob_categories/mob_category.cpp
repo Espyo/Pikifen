@@ -50,7 +50,7 @@ mob_category::mob_category(
  * @brief Clears the list of registered categories, freeing memory.
  */
 void mob_category_manager::clear() {
-    for(size_t c = 0; c < categories.size(); ++c) {
+    for(size_t c = 0; c < categories.size(); c++) {
         delete categories[c];
     }
     categories.clear();
@@ -66,7 +66,7 @@ void mob_category_manager::clear() {
  * @return The type, or nullptr on error.
  */
 mob_type* mob_category_manager::find_mob_type(const string &name) const {
-    for(size_t n = 0; n < categories.size(); ++n) {
+    for(size_t n = 0; n < categories.size(); n++) {
         mob_type* t = categories[n]->get_type(name);
         if(t) return t;
     }
@@ -86,7 +86,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
 ) const {
     vector<string> types;
     cat->get_type_names(types);
-    for(size_t t = 0 ; t < types.size(); ++t) {
+    for(size_t t = 0 ; t < types.size(); t++) {
         mob_type* mt = cat->get_type(types[t]);
         if(mt->folder_name == name) return mt;
     }
@@ -115,7 +115,7 @@ mob_category* mob_category_manager::get(const MOB_CATEGORY id) const {
 mob_category* mob_category_manager::get_from_folder_name(
     const string &name
 ) const {
-    for(size_t n = 0; n < categories.size(); ++n) {
+    for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->folder_path == name) return categories[n];
     }
     game.errors.report(
@@ -132,7 +132,7 @@ mob_category* mob_category_manager::get_from_folder_name(
  * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get_from_name(const string &name) const {
-    for(size_t n = 0; n < categories.size(); ++n) {
+    for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->name == name) return categories[n];
     }
     return nullptr;
@@ -146,7 +146,7 @@ mob_category* mob_category_manager::get_from_name(const string &name) const {
  * @return The category, or nullptr on error.
  */
 mob_category* mob_category_manager::get_from_pname(const string &pname) const {
-    for(size_t n = 0; n < categories.size(); ++n) {
+    for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->plural_name == pname) return categories[n];
     }
     return nullptr;

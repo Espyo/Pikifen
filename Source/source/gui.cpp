@@ -268,7 +268,7 @@ void gui_item::delete_all_children() {
  */
 float gui_item::get_child_bottom() {
     float bottommost = 0.0f;
-    for(size_t c = 0; c < children.size(); ++c) {
+    for(size_t c = 0; c < children.size(); c++) {
         gui_item* c_ptr = children[c];
         bottommost =
             std::max(
@@ -434,7 +434,7 @@ bool gui_item::is_visible() {
  * @param item Child item to remove.
  */
 void gui_item::remove_child(gui_item* item) {
-    for(size_t c = 0; c < children.size(); ++c) {
+    for(size_t c = 0; c < children.size(); c++) {
         if(children[c] == item) {
             children.erase(children.begin() + c);
         }
@@ -547,7 +547,7 @@ void gui_manager::draw() {
     int ocr_w = 0;
     int ocr_h = 0;
     
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
     
         gui_item* i_ptr = items[i];
         
@@ -752,7 +752,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
         gui_item* selection_result = nullptr;
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
             gui_item* i_ptr = items[i];
             if(
                 i_ptr->is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
@@ -789,7 +789,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         mouse_moved = true;
     }
     
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         if(items[i]->is_responsive() && items[i]->on_event) {
             items[i]->on_event(ev);
         }
@@ -861,7 +861,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         if(pressed == PLAYER_ACTION_TYPE_NONE) break;
         
         if(!selected_item) {
-            for(size_t i = 0; i < items.size(); ++i) {
+            for(size_t i = 0; i < items.size(); i++) {
                 if(items[i]->is_responsive() && items[i]->selectable) {
                     set_selected_item(items[i]);
                     break;
@@ -911,7 +911,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         float min_y = 0;
         float max_y = game.win_h;
         
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
             gui_item* i_ptr = items[i];
             if(i_ptr->is_responsive() && i_ptr->selectable) {
                 point i_center = i_ptr->get_reference_center();
@@ -1000,7 +1000,7 @@ void gui_manager::hide_items() {
  */
 void gui_manager::read_coords(data_node* node) {
     size_t n_items = node->get_nr_of_children();
-    for(size_t i = 0; i < n_items; ++i) {
+    for(size_t i = 0; i < n_items; i++) {
         data_node* item_node = node->get_child(i);
         vector<string> words = split(item_node->value);
         if(words.size() < 4) {
@@ -1047,7 +1047,7 @@ void gui_manager::remove_item(gui_item* item) {
         back_item = nullptr;
     }
     
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         if(items[i] == item) {
             items.erase(items.begin() + i);
         }
@@ -1132,7 +1132,7 @@ void gui_manager::tick(float delta_t) {
     anim_timer.tick(delta_t);
     
     //Tick all items.
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         gui_item* i_ptr = items[i];
         if(i_ptr->on_tick) {
             i_ptr->on_tick(delta_t);
@@ -1200,7 +1200,7 @@ list_gui_item::list_gui_item() :
         if(offset > 0.0f) {
             //Shade effect at the top.
             ALLEGRO_VERTEX vertexes[8];
-            for(size_t v = 0; v < 8; ++v) {
+            for(size_t v = 0; v < 8; v++) {
                 vertexes[v].z = 0.0f;
             }
             float y1 = center.y - size.y / 2.0f;
@@ -1239,7 +1239,7 @@ list_gui_item::list_gui_item() :
         if(child_bottom > 1.0f && offset < child_bottom - 1.0f) {
             //Shade effect at the bottom.
             ALLEGRO_VERTEX vertexes[8];
-            for(size_t v = 0; v < 8; ++v) {
+            for(size_t v = 0; v < 8; v++) {
                 vertexes[v].z = 0.0f;
             }
             float y1 = center.y + size.y / 2.0f;
@@ -1356,7 +1356,7 @@ picker_gui_item::picker_gui_item(
             );
             float option_boxes_interval =
                 (size.x - 40.0f) / (this->nr_options - 0.5f);
-            for(size_t o = 0; o < this->nr_options; ++o) {
+            for(size_t o = 0; o < this->nr_options; o++) {
                 float x1 = option_boxes_start.x + o * option_boxes_interval;
                 float y1 = option_boxes_start.y;
                 al_draw_filled_rectangle(
@@ -1584,7 +1584,7 @@ text_gui_item::text_gui_item(
             vector<vector<string_token> > tokens_per_line =
                 split_long_string_with_tokens(tokens, size.x);
                 
-            for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+            for(size_t l = 0; l < tokens_per_line.size(); l++) {
                 draw_string_tokens(
                     tokens_per_line[l], this->font, game.sys_assets.fnt_slim,
                     false,

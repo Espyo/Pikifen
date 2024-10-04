@@ -144,7 +144,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     
     size_t type_idx = 0;
-    for(; type_idx < oni_ptr->oni_type->nest->pik_types.size(); ++type_idx) {
+    for(; type_idx < oni_ptr->oni_type->nest->pik_types.size(); type_idx++) {
         if(
             oni_ptr->oni_type->nest->pik_types[type_idx] ==
             delivery->delivery_info->intended_pik_type

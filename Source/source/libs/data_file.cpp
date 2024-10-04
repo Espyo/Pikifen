@@ -48,10 +48,10 @@ data_node::data_node(const data_node &dn2) :
     file_path(dn2.file_path),
     line_nr(dn2.line_nr) {
     
-    for(size_t c = 0; c < dn2.children.size(); ++c) {
+    for(size_t c = 0; c < dn2.children.size(); c++) {
         children.push_back(new data_node(*(dn2.children[c])));
     }
-    for(size_t dc = 0; dc < dn2.dummy_children.size(); ++dc) {
+    for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
         dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
     }
 }
@@ -87,11 +87,11 @@ data_node::data_node(const string &name, const string &value) :
  *
  */
 data_node::~data_node() {
-    for(size_t c = 0; c < children.size(); ++c) {
+    for(size_t c = 0; c < children.size(); c++) {
         delete children[c];
     }
     
-    for(size_t dc = 0; dc < dummy_children.size(); ++dc) {
+    for(size_t dc = 0; dc < dummy_children.size(); dc++) {
         delete dummy_children[dc];
     }
 }
@@ -180,7 +180,7 @@ unsigned char data_node::encrypt_char(unsigned char c) {
  * @param s String to encrypt.
  */
 void data_node::encrypt_string(string &s) {
-    for(size_t c = 0; c < s.size(); ++c) {
+    for(size_t c = 0; c < s.size(); c++) {
         s[c] = encrypt_char(s[c]);
     }
 }
@@ -275,13 +275,13 @@ data_node* data_node::get_child_by_name(
 ) {
     size_t cur_occurrence_number = 0;
     
-    for(size_t c = 0; c < children.size(); ++c) {
+    for(size_t c = 0; c < children.size(); c++) {
         if(name == children[c]->name) {
             if(cur_occurrence_number == occurrence_number) {
                 //We found it.
                 return children[c];
             } else {
-                ++cur_occurrence_number;
+                cur_occurrence_number++;
             }
         }
     }
@@ -310,8 +310,8 @@ size_t data_node::get_nr_of_children() const {
 size_t data_node::get_nr_of_children_by_name(const string &name) const {
     size_t number = 0;
     
-    for(size_t c = 0; c < children.size(); ++c) {
-        if(name == children[c]->name) ++number;
+    for(size_t c = 0; c < children.size(); c++) {
+        if(name == children[c]->name) number++;
     }
     
     return number;
@@ -403,7 +403,7 @@ size_t data_node::load_node(
     
     bool returning_from_sub_node = false;
     
-    for(size_t l = start_line; l < lines.size(); ++l) {
+    for(size_t l = start_line; l < lines.size(); l++) {
         string line = lines[l];
         
         line = trim_spaces(line, true); //Removes the leftmost spaces.
@@ -497,11 +497,11 @@ data_node &data_node::operator=(const data_node &dn2) {
         line_nr = dn2.line_nr;
         
         children.clear();
-        for(size_t c = 0; c < dn2.children.size(); ++c) {
+        for(size_t c = 0; c < dn2.children.size(); c++) {
             children.push_back(new data_node(*(dn2.children[c])));
         }
         dummy_children.clear();
-        for(size_t dc = 0; dc < dn2.dummy_children.size(); ++dc) {
+        for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
             dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
         }
     }
@@ -517,7 +517,7 @@ data_node &data_node::operator=(const data_node &dn2) {
  * @return Whether the node existed.
  */
 bool data_node::remove(data_node* node_to_remove) {
-    for(size_t c = 0; c < children.size(); ++c) {
+    for(size_t c = 0; c < children.size(); c++) {
         if(children[c] == node_to_remove) {
             delete node_to_remove;
             children.erase(children.begin() + c);
@@ -560,7 +560,7 @@ bool data_node::save_file(
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "w");
     if(file) {
         if(children_only) {
-            for(size_t c = 0; c < children.size(); ++c) {
+            for(size_t c = 0; c < children.size(); c++) {
                 children[c]->save_node(
                     file, 0, include_empty_values, encrypted
                 );
@@ -608,7 +608,7 @@ void data_node::save_node(
     
     if(!children.empty()) {
         al_fwrite(file, block_start_str.c_str(), block_start_str.size());
-        for(size_t c = 0; c < children.size(); ++c) {
+        for(size_t c = 0; c < children.size(); c++) {
             children[c]->save_node(
                 file, level + 1, include_empty_values, encrypted
             );

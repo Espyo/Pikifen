@@ -56,7 +56,7 @@ void draw_edge_offset_on_buffer(
         end_vertexes[1] = e_ptr->vertexes[0];
     }
     
-    for(unsigned char end = 0; end < 2; ++end) {
+    for(unsigned char end = 0; end < 2; end++) {
         //For each end of the effect...
         
         float length = caches[e_idx].lengths[end];
@@ -110,7 +110,7 @@ void draw_edge_offset_on_buffer(
     //Start setting up the vertexes for the drawing process. These do not
     //take into account the elbow, and are just the standard "rectangle".
     ALLEGRO_VERTEX av[4];
-    for(size_t e = 0; e < 2; ++e) {
+    for(size_t e = 0; e < 2; e++) {
         av[e].x = end_vertexes[e]->x;
         av[e].y = end_vertexes[e]->y;
         av[e].color = end_colors[e];
@@ -129,7 +129,7 @@ void draw_edge_offset_on_buffer(
     av[3].z = 0;
     
     //Let's transform the "rectangle" coordinates for the buffer.
-    for(unsigned char v = 0; v < 4; ++v) {
+    for(unsigned char v = 0; v < 4; v++) {
         al_transform_coordinates(
             &game.world_to_screen_transform, &av[v].x, &av[v].y
         );
@@ -154,8 +154,8 @@ void draw_edge_offset_on_buffer(
     elbow_av[1][0] = av[1];
     elbow_av[1][1] = av[2];
     
-    for(unsigned char e = 0; e < 2; ++e) {
-        for(unsigned char v = 0; v < n_elbow_tris[e]; ++v) {
+    for(unsigned char e = 0; e < 2; e++) {
+        for(unsigned char v = 0; v < n_elbow_tris[e]; v++) {
             elbow_av[e][v + 2].x =
                 end_vertexes[e]->x + elbow_rel_coords[e][v].x;
             elbow_av[e][v + 2].y =
@@ -171,7 +171,7 @@ void draw_edge_offset_on_buffer(
     }
     
     //Draw the elbows!
-    for(unsigned char e = 0; e < 2; ++e) {
+    for(unsigned char e = 0; e < 2; e++) {
         if(n_elbow_tris[e] == 0) continue;
         al_draw_prim(
             elbow_av[e], nullptr, nullptr, 0,
@@ -198,7 +198,7 @@ void draw_sector_edge_offsets(
     size_t n_vertexes = s_ptr->triangles.size() * 3;
     ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
     
-    for(size_t v = 0; v < n_vertexes; ++v) {
+    for(size_t v = 0; v < n_vertexes; v++) {
         const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
         vertex* v_ptr = t_ptr->points[v % 3];
         float vx = v_ptr->x;
@@ -517,7 +517,7 @@ void get_next_edge(
     float best_edge_diff = 0.0f;
     float best_edge_angle = 0.0f;
     
-    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+    for(size_t e = 0; e < v_ptr->edges.size(); e++) {
         edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr == ignore) continue;
@@ -580,7 +580,7 @@ void get_next_offset_effect_edge(
     float best_edge_angle = 0;
     bool best_edge_effect_cw = false;
     
-    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+    for(size_t e = 0; e < v_ptr->edges.size(); e++) {
         edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr == ignore) continue;
@@ -652,7 +652,7 @@ void update_offset_effect_buffer(
 ) {
     unordered_set<size_t> edges;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         
         if(
@@ -675,7 +675,7 @@ void update_offset_effect_buffer(
             fully_on_camera = true;
         }
         
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             if(!fully_on_camera) {
                 //If the sector's fully on-camera, it's faster to not bother
                 //with the edge-by-edge check.
@@ -799,7 +799,7 @@ void update_offset_effect_caches (
                 point(ends_to_process[1]->x, ends_to_process[1]->y)
             );
             
-        for(unsigned char end = 0; end < 2; ++end) {
+        for(unsigned char end = 0; end < 2; end++) {
             //For each end of the effect...
             
             float length = 0.0f;

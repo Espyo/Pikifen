@@ -48,7 +48,7 @@ carry_t::carry_t(
     m(m),
     destination(destination) {
     
-    for(size_t c = 0; c < m->type->max_carriers; ++c) {
+    for(size_t c = 0; c < m->type->max_carriers; c++) {
         point p;
         if(m->type->custom_carry_spots.empty()) {
             float angle = TAU / m->type->max_carriers * c;
@@ -74,7 +74,7 @@ carry_t::carry_t(
  * @return Whether it can fly.
  */
 bool carry_t::can_fly() const {
-    for(size_t c = 0; c < spot_info.size(); ++c) {
+    for(size_t c = 0; c < spot_info.size(); c++) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
         if(!has_flag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
@@ -94,7 +94,7 @@ bool carry_t::can_fly() const {
 vector<hazard*> carry_t::get_carrier_invulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<mob_type*> carrier_types;
-    for(size_t c = 0; c < spot_info.size(); ++c) {
+    for(size_t c = 0; c < spot_info.size(); c++) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
         carrier_types.insert(carrier_ptr->type);
@@ -118,7 +118,7 @@ float carry_t::get_speed() const {
     float max_speed = 0;
     
     //Begin by obtaining the average walking speed of the carriers.
-    for(size_t s = 0; s < spot_info.size(); ++s) {
+    for(size_t s = 0; s < spot_info.size(); s++) {
         const carrier_spot_t* s_ptr = &spot_info[s];
         
         if(s_ptr->state != CARRY_SPOT_STATE_USED) continue;
@@ -154,7 +154,7 @@ float carry_t::get_speed() const {
  * @return Whether it is empty.
  */
 bool carry_t::is_empty() const {
-    for(size_t s = 0; s < spot_info.size(); ++s) {
+    for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state != CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
@@ -167,7 +167,7 @@ bool carry_t::is_empty() const {
  * @return Whether it is full.
  */
 bool carry_t::is_full() const {
-    for(size_t s = 0; s < spot_info.size(); ++s) {
+    for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state == CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
@@ -183,7 +183,7 @@ bool carry_t::is_full() const {
  * @param angle Angle to rotate to.
  */
 void carry_t::rotate_points(float angle) {
-    for(size_t s = 0; s < spot_info.size(); ++s) {
+    for(size_t s = 0; s < spot_info.size(); s++) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
             cos(s_angle) *
@@ -243,7 +243,7 @@ bool group_t::change_standby_type(bool move_backwards) {
  * Pikmin of the current one. Or to no type.
  */
 void group_t::change_standby_type_if_needed() {
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->subgroup_type_ptr == cur_standby_type) {
             //Never mind, there is a member of this subgroup type.
             return;
@@ -262,7 +262,7 @@ void group_t::change_standby_type_if_needed() {
  */
 size_t group_t::get_amount_by_type(const mob_type* type) const {
     size_t amount = 0;
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->type == type) {
             amount++;
         }
@@ -278,7 +278,7 @@ size_t group_t::get_amount_by_type(const mob_type* type) const {
  */
 point group_t::get_average_member_pos() const {
     point avg;
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         avg += members[m]->pos;
     }
     return avg / members.size();
@@ -297,7 +297,7 @@ vector<hazard*> group_t::get_group_invulnerabilities(
 ) const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<mob_type*> member_types;
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         mob* member_ptr = members[m];
         if(!member_ptr) continue;
         member_types.insert(member_ptr->type);
@@ -357,7 +357,7 @@ bool group_t::get_next_standby_type(
         ) {
             //If this is a leader, and leaders cannot be thrown, skip.
         } else {
-            for(size_t m = 0; m < members.size(); ++m) {
+            for(size_t m = 0; m < members.size(); m++) {
                 if(members[m]->subgroup_type_ptr == scanning_type) {
                     final_type = scanning_type;
                     success = true;
@@ -416,7 +416,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     //First, backup the old mob indexes.
     vector<mob*> old_mobs;
     old_mobs.resize(spots.size());
-    for(size_t m = 0; m < spots.size(); ++m) {
+    for(size_t m = 0; m < spots.size(); m++) {
         old_mobs[m] = spots[m].mob_ptr;
     }
     
@@ -493,7 +493,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
         //Get a better angle. One that can evenly distribute the spots.
         float angle = TAU / n_spots_on_wheel;
         
-        for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
+        for(unsigned s = 0; s < n_spots_on_wheel; s++) {
             alpha_spots.push_back(
                 alpha_spot(
                     point(
@@ -520,7 +520,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     //with the rightmost points coming first.
     
     //Start by sorting the points.
-    for(size_t a = 0; a < alpha_spots.size(); ++a) {
+    for(size_t a = 0; a < alpha_spots.size(); a++) {
         alpha_spots[a].distance_to_rightmost =
             dist(
                 alpha_spots[a].pos,
@@ -538,7 +538,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     //Finally, create the group spots.
     spots.clear();
     spots.resize(members.size(), group_spot());
-    for(size_t s = 0; s < members.size(); ++s) {
+    for(size_t s = 0; s < members.size(); s++) {
         spots[s] =
             group_spot(
                 point(
@@ -551,7 +551,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     
     //Pass the old mobs over.
     if(old_mobs.size() < spots.size()) {
-        for(size_t m = 0; m < old_mobs.size(); ++m) {
+        for(size_t m = 0; m < old_mobs.size(); m++) {
             spots[m].mob_ptr = old_mobs[m];
             spots[m].mob_ptr->group_spot_idx = m;
         }
@@ -559,18 +559,18 @@ void group_t::init_spots(mob* affected_mob_ptr) {
         affected_mob_ptr->group_spot_idx = old_mobs.size();
         
     } else if(old_mobs.size() > spots.size()) {
-        for(size_t m = 0, s = 0; m < old_mobs.size(); ++m) {
+        for(size_t m = 0, s = 0; m < old_mobs.size(); m++) {
             if(old_mobs[m] == affected_mob_ptr) {
                 old_mobs[m]->group_spot_idx = INVALID;
                 continue;
             }
             spots[s].mob_ptr = old_mobs[m];
             spots[s].mob_ptr->group_spot_idx = s;
-            ++s;
+            s++;
         }
         
     } else {
-        for(size_t m = 0; m < old_mobs.size(); ++m) {
+        for(size_t m = 0; m < old_mobs.size(); m++) {
             spots[m].mob_ptr = old_mobs[m];
             spots[m].mob_ptr->group_spot_idx = m;
         }
@@ -583,16 +583,16 @@ void group_t::init_spots(mob* affected_mob_ptr) {
  * each spot.
  */
 void group_t::reassign_spots() {
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         members[m]->group_spot_idx = INVALID;
     }
     
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         point spot_pos = anchor + get_spot_offset(s);
         mob* closest_mob = nullptr;
         dist closest_dist;
         
-        for(size_t m = 0; m < members.size(); ++m) {
+        for(size_t m = 0; m < members.size(); m++) {
             mob* m_ptr = members[m];
             if(m_ptr->group_spot_idx != INVALID) continue;
             
@@ -618,7 +618,7 @@ void group_t::reassign_spots() {
  */
 void group_t::sort(subgroup_type* leading_type) {
 
-    for(size_t m = 0; m < members.size(); ++m) {
+    for(size_t m = 0; m < members.size(); m++) {
         members[m]->group_spot_idx = INVALID;
     }
     
@@ -631,7 +631,7 @@ void group_t::sort(subgroup_type* leading_type) {
         //Find the member closest to this spot.
         mob* closest_member = nullptr;
         dist closest_dist;
-        for(size_t m = 0; m < members.size(); ++m) {
+        for(size_t m = 0; m < members.size(); m++) {
             mob* m_ptr = members[m];
             if(m_ptr->subgroup_type_ptr != cur_type) continue;
             if(m_ptr->group_spot_idx != INVALID) continue;
@@ -788,7 +788,7 @@ pikmin_nest_t::pikmin_nest_t(
     m_ptr(m_ptr),
     nest_type(type) {
     
-    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         pikmin_inside.push_back(vector<size_t>(NR_MATURITIES, 0));
         call_queue.push_back(0);
     }
@@ -811,7 +811,7 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
         return false;
     }
     
-    for(size_t m = 0; m < NR_MATURITIES; ++m) {
+    for(size_t m = 0; m < NR_MATURITIES; m++) {
         //Let's check the maturities in reverse order.
         size_t cur_m = NR_MATURITIES - m - 1;
         
@@ -874,9 +874,9 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
  */
 size_t pikmin_nest_t::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
-    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(nest_type->pik_types[t] == type) {
-            for(size_t m = 0; m < NR_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; m++) {
                 amount += pikmin_inside[t][m];
             }
             break;
@@ -899,8 +899,8 @@ void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
         vector<string> pikmin_inside_vars = split(pikmin_inside_var);
         size_t word = 0;
         
-        for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
-            for(size_t m = 0; m < NR_MATURITIES; ++m) {
+        for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
+            for(size_t m = 0; m < NR_MATURITIES; m++) {
                 if(word < pikmin_inside_vars.size()) {
                     pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
                     word++;
@@ -935,7 +935,7 @@ void pikmin_nest_t::request_pikmin(
  * @param p_ptr Pikmin to store.
  */
 void pikmin_nest_t::store_pikmin(pikmin* p_ptr) {
-    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(p_ptr->type == nest_type->pik_types[t]) {
             pikmin_inside[t][p_ptr->maturity]++;
             break;
@@ -965,7 +965,7 @@ void pikmin_nest_t::tick(float delta_t) {
         size_t best_type = INVALID;
         size_t best_type_amount = 0;
         
-        for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+        for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
             if(call_queue[t] == 0) continue;
             if(call_queue[t] > best_type_amount) {
                 best_type = t;
@@ -1023,7 +1023,7 @@ void pikmin_nest_type_t::load_properties(
     }
     
     vector<string> pik_types_strs = semicolon_list_to_vector(pik_types_str);
-    for(size_t t = 0; t < pik_types_strs.size(); ++t) {
+    for(size_t t = 0; t < pik_types_strs.size(); t++) {
         string &str = pik_types_strs[t];
         if(
             game.content.mob_types.pikmin.find(str) ==
@@ -1114,7 +1114,7 @@ mob* create_mob(
         code_after_creation(m_ptr);
     }
     
-    for(size_t a = 0; a < type->init_actions.size(); ++a) {
+    for(size_t a = 0; a < type->init_actions.size(); a++) {
         type->init_actions[a]->run(m_ptr, nullptr, nullptr);
     }
     
@@ -1142,7 +1142,7 @@ mob* create_mob(
         m_ptr->fsm.cur_state = game.dummy_mob_state;
     };
     
-    for(size_t c = 0; c < type->children.size(); ++c) {
+    for(size_t c = 0; c < type->children.size(); c++) {
         mob_type::child_t* child_info =
             &type->children[c];
         mob_type::spawn_t* spawn_info =
@@ -1172,7 +1172,7 @@ mob* create_mob(
         if(!child_info->limb_anim_name.empty()) {
             p_info->limb_anim.anim_db = m_ptr->anim.anim_db;
             animation* anim_to_use = nullptr;
-            for(size_t a = 0; a < m_ptr->anim.anim_db->animations.size(); ++a) {
+            for(size_t a = 0; a < m_ptr->anim.anim_db->animations.size(); a++) {
                 if(
                     m_ptr->anim.anim_db->animations[a]->name ==
                     child_info->limb_anim_name
@@ -1239,7 +1239,7 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
     if(!complete_destruction) {
         m_ptr->leave_group();
         
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->focused_mob == m_ptr) {
                 m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
@@ -1252,17 +1252,17 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
                 m2_ptr->parent = nullptr;
                 m2_ptr->to_delete = true;
             }
-            for(size_t f = 0; f < m2_ptr->focused_mob_memory.size(); ++f) {
+            for(size_t f = 0; f < m2_ptr->focused_mob_memory.size(); f++) {
                 if(m2_ptr->focused_mob_memory[f] == m_ptr) {
                     m2_ptr->focused_mob_memory[f] = nullptr;
                 }
             }
-            for(size_t c = 0; c < m2_ptr->chomping_mobs.size(); ++c) {
+            for(size_t c = 0; c < m2_ptr->chomping_mobs.size(); c++) {
                 if(m2_ptr->chomping_mobs[c] == m_ptr) {
                     m2_ptr->chomping_mobs[c] = nullptr;
                 }
             }
-            for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
+            for(size_t l = 0; l < m2_ptr->links.size(); l++) {
                 if(m2_ptr->links[l] == m_ptr) {
                     m2_ptr->links[l] = nullptr;
                 }
@@ -1273,7 +1273,7 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
             }
             if(m2_ptr->carry_info) {
                 for(
-                    size_t c = 0; c < m2_ptr->carry_info->spot_info.size(); ++c
+                    size_t c = 0; c < m2_ptr->carry_info->spot_info.size(); c++
                 ) {
                     if(m2_ptr->carry_info->spot_info[c].pik_ptr == m_ptr) {
                         m2_ptr->carry_info->spot_info[c].pik_ptr =
@@ -1378,7 +1378,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
 mob_type::spawn_t* get_spawn_info_from_child_info(
     mob_type* type, const mob_type::child_t* child_info
 ) {
-    for(size_t s = 0; s < type->spawns.size(); ++s) {
+    for(size_t s = 0; s < type->spawns.size(); s++) {
         if(type->spawns[s].name == child_info->spawn_name) {
             return &type->spawns[s];
         }
@@ -1424,7 +1424,7 @@ MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str) {
  * @return The team, or INVALID if invalid.
  */
 MOB_TEAM string_to_team_nr(const string &team_str) {
-    for(size_t t = 0; t < N_MOB_TEAMS; ++t) {
+    for(size_t t = 0; t < N_MOB_TEAMS; t++) {
         if(team_str == game.team_internal_names[t]) {
             return (MOB_TEAM) t;
         }

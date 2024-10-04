@@ -65,7 +65,7 @@ void bouncer_type::load_cat_properties(data_node* file) {
     if(riders_node) {
         riders = 0;
         vector<string> riders_str_words = split(riders_str);
-        for(size_t r = 0; r < riders_str_words.size(); ++r) {
+        for(size_t r = 0; r < riders_str_words.size(); r++) {
             if(riders_str_words[r] == "pikmin") {
                 enable_flag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {

@@ -192,7 +192,7 @@ void animation_editor::do_logic() {
             vector<size_t> frame_sounds;
             cur_anim_i.tick(game.delta_t, nullptr, &frame_sounds);
             
-            for(size_t s = 0; s < frame_sounds.size(); ++s) {
+            for(size_t s = 0; s < frame_sounds.size(); s++) {
                 play_sound(frame_sounds[s]);
             }
         } else {
@@ -345,7 +345,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_hitbox_data(const string &name) {
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
         if(anims.sprites[s]->name == name) {
             cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
         }
@@ -496,7 +496,7 @@ void animation_editor::load_animation_database(
     if(!anims.sprites.empty()) {
         map<string, size_t> file_uses_map;
         vector<std::pair<size_t, string> > file_uses_vector;
-        for(size_t f = 0; f < anims.sprites.size(); ++f) {
+        for(size_t f = 0; f < anims.sprites.size(); f++) {
             file_uses_map[anims.sprites[f]->file]++;
         }
         for(auto &u : file_uses_map) {
@@ -538,7 +538,7 @@ void animation_editor::load_animation_database(
     }
     
     //Top bitmap.
-    for(unsigned char t = 0; t < NR_MATURITIES; ++t) {
+    for(unsigned char t = 0; t < NR_MATURITIES; t++) {
         if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
             al_destroy_bitmap(top_bmp[t]);
             top_bmp[t] = nullptr;
@@ -860,7 +860,7 @@ void animation_editor::zoom_everything_cmd(float input_value) {
         cmax.y = std::max(cmax.y, top_max.y);
     }
     
-    for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+    for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
         hitbox* h_ptr = &s_ptr->hitboxes[h];
         cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
         cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
@@ -935,7 +935,7 @@ void animation_editor::rename_animation(
     }
     
     //Check if the name already exists.
-    for(size_t a = 0; a < anims.animations.size(); ++a) {
+    for(size_t a = 0; a < anims.animations.size(); a++) {
         if(anims.animations[a]->name == new_name) {
             set_status(
                 "An animation by the name \"" + new_name + "\" already exists!",
@@ -984,7 +984,7 @@ void animation_editor::rename_body_part(
     }
     
     //Check if the name already exists.
-    for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+    for(size_t b = 0; b < anims.body_parts.size(); b++) {
         if(anims.body_parts[b]->name == new_name) {
             set_status(
                 "A body part by the name \"" + new_name + "\" already exists!",
@@ -995,8 +995,8 @@ void animation_editor::rename_body_part(
     }
     
     //Rename!
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        for(size_t h = 0; h < anims.sprites[s]->hitboxes.size(); ++h) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
+        for(size_t h = 0; h < anims.sprites[s]->hitboxes.size(); h++) {
             if(anims.sprites[s]->hitboxes[h].body_part_name == old_name) {
                 anims.sprites[s]->hitboxes[h].body_part_name = new_name;
             }
@@ -1041,7 +1041,7 @@ void animation_editor::rename_sprite(
     }
     
     //Check if the name already exists.
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
         if(anims.sprites[s]->name == new_name) {
             set_status(
                 "A sprite by the name \"" + new_name + "\" already exists!",
@@ -1053,9 +1053,9 @@ void animation_editor::rename_sprite(
     
     //Rename!
     spr->name = new_name;
-    for(size_t a = 0; a < anims.animations.size(); ++a) {
+    for(size_t a = 0; a < anims.animations.size(); a++) {
         animation* a_ptr = anims.animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+        for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             if(a_ptr->frames[f].sprite_name == old_name) {
                 a_ptr->frames[f].sprite_name = new_name;
             }
@@ -1102,7 +1102,7 @@ void animation_editor::resize_everything(float mult) {
         return;
     }
     
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
         resize_sprite(anims.sprites[s], mult);
     }
     
@@ -1132,7 +1132,7 @@ void animation_editor::resize_sprite(sprite* s, float mult) {
     s->top_pos  *= mult;
     s->top_size *= mult;
     
-    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+    for(size_t h = 0; h < s->hitboxes.size(); h++) {
         hitbox* h_ptr = &s->hitboxes[h];
         
         h_ptr->radius = fabs(h_ptr->radius * mult);
@@ -1195,7 +1195,7 @@ void animation_editor::set_all_sprite_scales(float scale) {
         return;
     }
     
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
         sprite* s_ptr = anims.sprites[s];
         s_ptr->scale.x = scale;
         s_ptr->scale.y = scale;
@@ -1229,7 +1229,7 @@ void animation_editor::set_best_frame_sprite() {
     
     if(anims.sprites.size() > 1) {
         size_t best_score = 3;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             size_t score = 0;
             if(
                 str_to_lower(cur_anim_i.cur_anim->name) ==
@@ -1400,7 +1400,7 @@ void animation_editor::sprite_bmp_flood_fill(
             }
         }
         
-        for(size_t c = 0; c < columns.size(); ++c) {
+        for(size_t c = 0; c < columns.size(); c++) {
             //For each column obtained, mark the pixel there,
             //and check the pixels above and below, to see if they should be
             //processed next.
@@ -1472,7 +1472,7 @@ void animation_editor::update_cur_hitbox() {
  * @brief Update every frame's hitbox instances in light of new hitbox info.
  */
 void animation_editor::update_hitboxes() {
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+    for(size_t s = 0; s < anims.sprites.size(); s++) {
     
         sprite* s_ptr = anims.sprites[s];
         
@@ -1481,7 +1481,7 @@ void animation_editor::update_hitboxes() {
             string h_name = s_ptr->hitboxes[h].body_part_name;
             bool name_found = false;
             
-            for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+            for(size_t b = 0; b < anims.body_parts.size(); b++) {
                 if(anims.body_parts[b]->name == h_name) {
                     name_found = true;
                     break;
@@ -1498,11 +1498,11 @@ void animation_editor::update_hitboxes() {
         }
         
         //Add missing hitboxes.
-        for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+        for(size_t b = 0; b < anims.body_parts.size(); b++) {
             bool hitbox_found = false;
             string name = anims.body_parts[b]->name;
             
-            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
                 if(s_ptr->hitboxes[h].body_part_name == name) {
                     hitbox_found = true;
                     break;
@@ -1526,7 +1526,7 @@ void animation_editor::update_hitboxes() {
             s_ptr->hitboxes.end(),
         [this] (const hitbox & h1, const hitbox & h2) -> bool {
             size_t pos1 = 0, pos2 = 1;
-            for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+            for(size_t b = 0; b < anims.body_parts.size(); b++) {
                 if(anims.body_parts[b]->name == h1.body_part_name) pos1 = b;
                 if(anims.body_parts[b]->name == h2.body_part_name) pos2 = b;
             }

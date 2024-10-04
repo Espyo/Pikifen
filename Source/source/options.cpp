@@ -192,8 +192,8 @@ void options_t::load(data_node* file) {
     game.controls.binds().clear();
     const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        for(size_t a = 0; a < player_action_types.size(); ++a) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+        for(size_t a = 0; a < player_action_types.size(); a++) {
             string internal_name = player_action_types[a].internal_name;
             if(internal_name.empty()) continue;
             data_node* control_node =
@@ -201,7 +201,7 @@ void options_t::load(data_node* file) {
             vector<string> possible_controls =
                 semicolon_list_to_vector(control_node->value);
                 
-            for(size_t c = 0; c < possible_controls.size(); ++c) {
+            for(size_t c = 0; c < possible_controls.size(); c++) {
                 player_input input =
                     game.controls.str_to_input(possible_controls[c]);
                 if(input.type == INPUT_TYPE_NONE) continue;
@@ -214,7 +214,7 @@ void options_t::load(data_node* file) {
         }
     }
     
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         rs.set(
             "p" + i2s((p + 1)) + "_mouse_moves_cursor",
             mouse_moves_cursor[p]
@@ -227,7 +227,7 @@ void options_t::load(data_node* file) {
         semicolon_list_to_vector(
             file->get_child_by_name("editor_open_nodes")->value
         );
-    for(size_t n = 0; n < open_nodes_vector.size(); ++n) {
+    for(size_t n = 0; n < open_nodes_vector.size(); n++) {
         editor_open_nodes[open_nodes_vector[n]] = true;
     }
     
@@ -354,9 +354,9 @@ void options_t::save(data_node* file) const {
     
     const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         string prefix = "p" + i2s((p + 1)) + "_";
-        for(size_t b = 0; b < player_action_types.size(); ++b) {
+        for(size_t b = 0; b < player_action_types.size(); b++) {
             string internal_name = player_action_types[b].internal_name;
             if(internal_name.empty()) continue;
             grouped_controls[prefix + internal_name].clear();
@@ -365,12 +365,12 @@ void options_t::save(data_node* file) const {
     
     //Write down their input strings.
     const vector<control_bind> &all_binds = game.controls.binds();
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        for(size_t b = 0; b < all_binds.size(); ++b) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+        for(size_t b = 0; b < all_binds.size(); b++) {
             if(all_binds[b].player_nr != p) continue;
             string name = "p" + i2s(p + 1) + "_";
             
-            for(size_t a = 0; a < player_action_types.size(); ++a) {
+            for(size_t a = 0; a < player_action_types.size(); a++) {
                 if(player_action_types[a].internal_name.empty()) continue;
                 
                 if(all_binds[b].action_type_id == player_action_types[a].id) {
@@ -392,7 +392,7 @@ void options_t::save(data_node* file) const {
         file->add(new data_node(c.first, c.second));
     }
     
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         file->add(
             new data_node(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",

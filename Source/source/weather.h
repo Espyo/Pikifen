@@ -124,7 +124,7 @@ private:
             return true;
         }
         
-        for(size_t t = 0; t < table.size() - 1; ++t) {
+        for(size_t t = 0; t < table.size() - 1; t++) {
             auto prev_ptr = &table[t];
             auto next_ptr = &table[t + 1];
             

@@ -41,12 +41,12 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[NR_MATURITIES] =
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN) {
     
-    for(size_t m = 0; m < NR_MATURITIES; ++m) {
+    for(size_t m = 0; m < NR_MATURITIES; m++) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
         bmp_top[m] = nullptr;
         bmp_maturity_icon[m] = nullptr;
     }
-    for(size_t s = 0; s < N_PIKMIN_SOUNDS; ++s) {
+    for(size_t s = 0; s < N_PIKMIN_SOUNDS; s++) {
         sfx_data_idxs[s] = INVALID;
     }
     
@@ -184,7 +184,7 @@ void pikmin_type::load_cat_properties(data_node* file) {
         }
     }
     
-    for(size_t s = 0; s < sounds.size(); ++s) {
+    for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "attack") {
             sfx_data_idxs[PIKMIN_SOUND_ATTACK] = s;
         } else if(sounds[s].name == "called") {

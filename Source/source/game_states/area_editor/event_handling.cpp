@@ -626,7 +626,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
                 bool all_valid = true;
                 for(
-                    size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e
+                    size_t e = 0; e < new_circle_sector_valid_edges.size(); e++
                 ) {
                     if(!new_circle_sector_valid_edges[e]) {
                         all_valid = false;
@@ -851,7 +851,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
             }
             mob_gen* m_ptr = *(selected_mobs.begin());
-            for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+            for(size_t l = 0; l < m_ptr->links.size(); l++) {
                 if(m_ptr->links[l] == target) {
                     set_status(
                         "The object already links to that object!",
@@ -913,7 +913,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             size_t link_i = 0;
-            for(; link_i < m_ptr->links.size(); ++link_i) {
+            for(; link_i < m_ptr->links.size(); link_i++) {
                 if(m_ptr->links[link_i] == target) {
                     break;
                 }
@@ -1102,7 +1102,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
             //First, check if the user clicked on a path preview checkpoint.
             if(show_path_preview) {
-                for(unsigned char c = 0; c < 2; ++c) {
+                for(unsigned char c = 0; c < 2; c++) {
                     if(
                         bbox_check(
                             path_preview_checkpoints[c],
@@ -1219,7 +1219,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 selected_shadow = nullptr;
                 for(
                     size_t s = 0;
-                    s < game.cur_area_data.tree_shadows.size(); ++s
+                    s < game.cur_area_data.tree_shadows.size(); s++
                 ) {
                 
                     tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
@@ -1268,7 +1268,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 
         if(show_cross_section) {
             moving_cross_section_point = -1;
-            for(unsigned char p = 0; p < 2; ++p) {
+            for(unsigned char p = 0; p < 2; p++) {
                 if(
                     bbox_check(
                         cross_section_checkpoints[p], game.mouse_cursor.w_pos,
@@ -1308,7 +1308,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around the layout.
             if(!is_ctrl_pressed) clear_selection();
             
-            for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+            for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
                 vertex* v_ptr = game.cur_area_data.vertexes[v];
                 
                 if(
@@ -1323,7 +1323,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             update_vertex_selection();
             
             if(selection_filter != SELECTION_FILTER_VERTEXES) {
-                for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+                for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
                     edge* e_ptr = game.cur_area_data.edges[e];
                     
                     if(
@@ -1342,11 +1342,11 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             if(selection_filter == SELECTION_FILTER_SECTORS) {
-                for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+                for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
                     sector* s_ptr = game.cur_area_data.sectors[s];
                     bool valid_sector = true;
                     
-                    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
                         edge* e_ptr = s_ptr->edges[e];
                         
                         if(
@@ -1382,7 +1382,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
             for(
                 size_t m = 0;
-                m < game.cur_area_data.mob_generators.size(); ++m
+                m < game.cur_area_data.mob_generators.size(); m++
             ) {
                 mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
                 float radius = get_mob_gen_radius(m_ptr);
@@ -1407,7 +1407,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around path stops.
             if(!is_ctrl_pressed) clear_selection();
             
-            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 
                 if(
@@ -1424,9 +1424,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
-                for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+                for(size_t l = 0; l < s_ptr->links.size(); l++) {
                     path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
                     
                     if(

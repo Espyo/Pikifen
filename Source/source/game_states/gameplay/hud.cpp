@@ -143,7 +143,7 @@ hud_t::hud_t() :
     gui.read_coords(hud_file_node.get_child_by_name("positions"));
     
     //Leader health and icons.
-    for(size_t l = 0; l < 3; ++l) {
+    for(size_t l = 0; l < 3; l++) {
     
         //Icon.
         gui_item* leader_icon = new gui_item();
@@ -305,7 +305,7 @@ hud_t::hud_t() :
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
         
-        for(unsigned char h = 0; h < n_hours + 1; ++h) {
+        for(unsigned char h = 0; h < n_hours + 1; h++) {
             draw_bitmap(
                 bmp_hard_bubble,
                 point(first_dot_x + h * dot_interval, dots_y),
@@ -349,7 +349,7 @@ hud_t::hud_t() :
         float post_tick_day_minutes =
             game.states.gameplay->day_minutes;
         const float checkpoints[3] = {0.25f, 0.50f, 0.75f};
-        for(unsigned char c = 0; c < 3; ++c) {
+        for(unsigned char c = 0; c < 3; c++) {
             float checkpoint =
                 game.config.day_minutes_start + day_length * checkpoints[c];
             if(
@@ -562,7 +562,7 @@ hud_t::hud_t() :
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         
         if(l_ptr && l_ptr->group->cur_standby_type) {
-            for(size_t m = 0; m < l_ptr->group->members.size(); ++m) {
+            for(size_t m = 0; m < l_ptr->group->members.size(); m++) {
                 mob* m_ptr = l_ptr->group->members[m];
                 if(m_ptr->subgroup_type_ptr == l_ptr->group->cur_standby_type) {
                     n_standby_pikmin++;
@@ -710,7 +710,7 @@ hud_t::hud_t() :
     
     
     //Pikmin counter slashes.
-    for(size_t s = 0; s < 3; ++s) {
+    for(size_t s = 0; s < 3; s++) {
         gui_item* counter_slash = new gui_item();
         counter_slash->on_draw =
         [this] (const point & center, const point & size) {
@@ -1223,7 +1223,7 @@ hud_t::hud_t() :
             };
             
             //Draw each segment (no medal, bronze, etc.).
-            for(int s = 0; s < 6; ++s) {
+            for(int s = 0; s < 6; s++) {
                 float seg_start_value = seg_limits[s];
                 float seg_end_value = seg_limits[s + 1];
                 if(seg_end_value < ruler_start_value) continue;
@@ -1240,7 +1240,7 @@ hud_t::hud_t() :
                 seg_end_x = std::min(ruler_end_x, seg_end_x);
                 
                 ALLEGRO_VERTEX vertexes[4];
-                for(unsigned char v = 0; v < 4; ++v) {
+                for(unsigned char v = 0; v < 4; v++) {
                     vertexes[v].z = 0.0f;
                 }
                 vertexes[0].x = seg_start_x;
@@ -1298,7 +1298,7 @@ hud_t::hud_t() :
                     HUD::MEDAL_ICON_SCALE_TIME_MULT
                 ) *
                 HUD::MEDAL_ICON_SCALE_MULT;
-            for(int s = 0; s < 6; ++s) {
+            for(int s = 0; s < 6; s++) {
                 float seg_start_value = seg_limits[s];
                 if(seg_start_value <= game.states.gameplay->score_indicator) {
                     cur_seg = s;
@@ -1307,7 +1307,7 @@ hud_t::hud_t() :
                     last_passed_seg = s;
                 }
             }
-            for(int s = 0; s < 6; ++s) {
+            for(int s = 0; s < 6; s++) {
                 if(!seg_icons[s]) continue;
                 float seg_start_value = seg_limits[s];
                 if(seg_start_value < ruler_start_value) continue;
@@ -1700,7 +1700,7 @@ void hud_t::draw_standby_icon(BUBBLE_RELATION which) {
  */
 void hud_t::tick(float delta_t) {
     //Update leader bubbles.
-    for(size_t l = 0; l < 3; ++l) {
+    for(size_t l = 0; l < 3; l++) {
         leader* l_ptr = nullptr;
         if(l < game.states.gameplay->available_leaders.size()) {
             size_t l_idx =
@@ -1735,7 +1735,7 @@ void hud_t::tick(float delta_t) {
     leader_health_mgr.tick(delta_t);
     
     //Update standby bubbles.
-    for(unsigned char s = 0; s < 3; ++s) {
+    for(unsigned char s = 0; s < 3; s++) {
     
         ALLEGRO_BITMAP* icon = nullptr;
         leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
@@ -1867,7 +1867,7 @@ void hud_t::tick(float delta_t) {
     
     //Update the spray items opacity.
     size_t total_sprays = 0;
-    for(size_t s = 0; s < game.states.gameplay->spray_stats.size(); ++s) {
+    for(size_t s = 0; s < game.states.gameplay->spray_stats.size(); s++) {
         total_sprays +=
             game.states.gameplay->spray_stats[s].nr_sprays;
     }

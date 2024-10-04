@@ -41,7 +41,7 @@ void hazard::load_from_data_node(data_node* node) {
     
     if(effects_node) {
         vector<string> effects_strs = semicolon_list_to_vector(effects_str);
-        for(size_t e = 0; e < effects_strs.size(); ++e) {
+        for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(
                 game.content.status_types.find(effect_name) ==

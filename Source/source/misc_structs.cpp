@@ -396,7 +396,7 @@ void error_manager::log_to_file(const string &s) {
     //Log this error.
     vector<string> lines = split(s, "\n");
     output += "  " + get_current_time(false) + ": " + lines[0] + "\n";
-    for(size_t l = 1; l < lines.size(); ++l) {
+    for(size_t l = 1; l < lines.size(); l++) {
         output += "  " + lines[l] + "\n";
     }
     
@@ -580,7 +580,7 @@ maker_tools_t::maker_tools_t() :
     used_helping_tools(false) {
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
-    for(size_t k = 0; k < 20; ++k) {
+    for(size_t k = 0; k < 20; k++) {
         keys[k] = MAKER_TOOL_TYPE_NONE;
     }
 }
@@ -866,7 +866,7 @@ void performance_monitor_t::finish_measurement() {
     double dur = al_get_time() - cur_measurement_start_time;
     bool is_new = true;
     
-    for(size_t m = 0; m < cur_page.measurements.size(); ++m) {
+    for(size_t m = 0; m < cur_page.measurements.size(); m++) {
         if(cur_page.measurements[m].first == cur_measurement_name) {
             cur_page.measurements[m].second += dur;
             is_new = false;
@@ -915,11 +915,11 @@ void performance_monitor_t::leave_state() {
             frame_avg_page = cur_page;
         } else {
             frame_avg_page.duration += cur_page.duration;
-            for(size_t m = 0; m < cur_page.measurements.size(); ++m) {
+            for(size_t m = 0; m < cur_page.measurements.size(); m++) {
                 bool is_new = true;
                 for(
                     size_t m2 = 0;
-                    m2 < frame_avg_page.measurements.size(); ++m2
+                    m2 < frame_avg_page.measurements.size(); m2++
                 ) {
                     if(
                         cur_page.measurements[m].first ==
@@ -975,7 +975,7 @@ void performance_monitor_t::save_log() {
     
     //Average out the frames of gameplay.
     frame_avg_page.duration /= (double) frame_samples;
-    for(size_t m = 0; m < frame_avg_page.measurements.size(); ++m) {
+    for(size_t m = 0; m < frame_avg_page.measurements.size(); m++) {
         frame_avg_page.measurements[m].second /= (double) frame_samples;
     }
     
@@ -1076,12 +1076,12 @@ void performance_monitor_t::start_measurement(const string &name) {
 void performance_monitor_t::page::write(string &s) {
     //Get the total measured time.
     double total_measured_time = 0.0;
-    for(size_t m = 0; m < measurements.size(); ++m) {
+    for(size_t m = 0; m < measurements.size(); m++) {
         total_measured_time += measurements[m].second;
     }
     
     //Write each measurement into the string.
-    for(size_t m = 0; m < measurements.size(); ++m) {
+    for(size_t m = 0; m < measurements.size(); m++) {
         write_measurement(
             s, measurements[m].first,
             measurements[m].second,
@@ -1544,7 +1544,7 @@ void sfx_sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
  * @brief Clears the list of registered subgroup types.
  */
 void subgroup_type_manager::clear() {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         delete types[t];
     }
     types.clear();
@@ -1570,7 +1570,7 @@ subgroup_type* subgroup_type_manager::get_first_type() const {
 subgroup_type* subgroup_type_manager::get_next_type(
     const subgroup_type* sgt
 ) const {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
             return get_next_in_vector(types, t);
         }
@@ -1588,7 +1588,7 @@ subgroup_type* subgroup_type_manager::get_next_type(
 subgroup_type* subgroup_type_manager::get_prev_type(
     const subgroup_type* sgt
 ) const {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
             return get_prev_in_vector(types, t);
         }
@@ -1609,7 +1609,7 @@ subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORY category,
     const mob_type* specific_type
 ) const {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         subgroup_type* t_ptr = types[t];
         if(
             t_ptr->category == category &&
@@ -1667,7 +1667,7 @@ whistle_t::whistle_t() :
     next_dot_timer.on_end = [this] () {
         next_dot_timer.start();
         unsigned char dot = 255;
-        for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
+        for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
             if(dot_radius[d] == -1) {
                 dot = d;
                 break;
@@ -1692,7 +1692,7 @@ whistle_t::whistle_t() :
  * @brief Stuff to do when a leader starts whistling.
  */
 void whistle_t::start_whistling() {
-    for(unsigned char d = 0; d < 6; ++d) {
+    for(unsigned char d = 0; d < 6; d++) {
         dot_radius[d] = -1;
     }
     fade_timer.start();
@@ -1733,7 +1733,7 @@ void whistle_t::tick(
         next_ring_timer.tick(delta_t);
         next_dot_timer.tick(delta_t);
         
-        for(unsigned char d = 0; d < 6; ++d) {
+        for(unsigned char d = 0; d < 6; d++) {
             if(dot_radius[d] == -1) continue;
             
             dot_radius[d] += game.config.whistle_growth_speed * delta_t;

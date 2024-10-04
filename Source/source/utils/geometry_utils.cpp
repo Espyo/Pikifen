@@ -1078,7 +1078,7 @@ void get_transformed_rectangle_bounding_box(
     bool got_min_y = false;
     bool got_max_y = false;
     
-    for(unsigned char p = 0; p < 4; ++p) {
+    for(unsigned char p = 0; p < 4; p++) {
         point corner, final_corner;
         
         if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5f);
@@ -1669,7 +1669,7 @@ bool points_are_collinear(
 void project_vertexes(
     const vector<point> &v, const point axis, float* min, float* max
 ) {
-    for(size_t i = 0; i < v.size(); ++i) {
+    for(size_t i = 0; i < v.size(); i++) {
         point p = v[i];
         float proj = dot_product(p, axis);
         
@@ -1762,14 +1762,14 @@ bool rectangles_intersect(
     
     vector<point> shape1 = rect1_vertexes;
     
-    for(int s = 0; s < 2; ++s) {
+    for(int s = 0; s < 2; s++) {
         if(s == 1) {
             shape1 = rect2_vertexes;
         }
         
         //We only need to test the first two edges,
         //since the other two are parallel.
-        for(int e = 0; e < 2; ++e) {
+        for(int e = 0; e < 2; e++) {
             point a = shape1[e];
             point b = shape1[(e + 1) % 4];
             
@@ -1970,7 +1970,7 @@ size_t select_next_item_directionally(
     size_t best_item = selected_item;
     
     //Check each item that isn't the current one.
-    for(size_t i = 0; i < item_coordinates.size(); ++i) {
+    for(size_t i = 0; i < item_coordinates.size(); i++) {
     
         if(i == selected_item) continue;
         
@@ -2016,8 +2016,8 @@ size_t select_next_item_directionally(
             //item, so we should just check all loop variations: above, below
             //to the left, to the right, and combinations.
             
-            for(char c = -1; c < 2; ++c) {
-                for(char r = -1; r < 2; ++r) {
+            for(char c = -1; c < 2; c++) {
+                for(char r = -1; r < 2; r++) {
                 
                     //If it's the same "screen" as the regular one,
                     //forget it, since we already checked above.

@@ -222,7 +222,7 @@ void particle_generator::emit(particle_manager &manager) {
             randomi((int) (0 - number_deviation), (int) number_deviation)
         );
         
-    for(size_t p = 0; p < final_nr; ++p) {
+    for(size_t p = 0; p < final_nr; p++) {
         particle new_p = base_particle;
         
         new_p.duration =
@@ -425,7 +425,7 @@ particle_manager::particle_manager(const particle_manager &pm2) :
     max_nr(pm2.max_nr) {
     
     particles = new particle[max_nr];
-    for(size_t p = 0; p < count; ++p) {
+    for(size_t p = 0; p < count; p++) {
         this->particles[p] = pm2.particles[p];
     }
 }
@@ -450,7 +450,7 @@ particle_manager &particle_manager::operator =(
         count = pm2.count;
         if(max_nr == 0) return *this;
         this->particles = new particle[max_nr];
-        for(size_t p = 0; p < count; ++p) {
+        for(size_t p = 0; p < count; p++) {
             this->particles[p] = pm2.particles[p];
         }
     }
@@ -483,7 +483,7 @@ void particle_manager::add(const particle &p) {
     bool success = true;
     if(count == max_nr) {
         success = false;
-        for(size_t i = 0; i < max_nr; ++i) {
+        for(size_t i = 0; i < max_nr; i++) {
             if(particles[i].priority < p.priority) {
                 remove(i);
                 success = true;
@@ -505,7 +505,7 @@ void particle_manager::add(const particle &p) {
  * @brief Clears the list.
  */
 void particle_manager::clear() {
-    for(size_t p = 0; p < max_nr; ++p) {
+    for(size_t p = 0; p < max_nr; p++) {
         particles[p].time = 0.0f;
     }
     count = 0;
@@ -524,7 +524,7 @@ void particle_manager::fill_component_list(
     vector<world_component> &list,
     const point &cam_tl, const point &cam_br
 ) {
-    for(size_t c = 0; c < count; ++c) {
+    for(size_t c = 0; c < count; c++) {
     
         particle* p_ptr = &particles[c];
         
@@ -599,7 +599,7 @@ void particle_manager::tick_all(float delta_t) {
         if(particles[c].time == 0.0f) {
             remove(c);
         } else {
-            ++c;
+            c++;
         }
     }
 }

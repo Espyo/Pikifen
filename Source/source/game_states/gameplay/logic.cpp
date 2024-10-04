@@ -91,7 +91,7 @@ void gameplay_state::do_aesthetic_leader_logic(float delta_t) {
     }
     
     throw_dest_mob = nullptr;
-    for(size_t m = 0; m < mobs.all.size(); ++m) {
+    for(size_t m = 0; m < mobs.all.size(); m++) {
         mob* m_ptr = mobs.all[m];
         if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->physical_span)) {
             //Too far away; of course the cursor isn't on it.
@@ -210,7 +210,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         if(!cur_leader_ptr->group->members.empty()) {
             point tl = cur_leader_ptr->group->members[0]->pos;
             point br = tl;
-            for(size_t m = 1; m < cur_leader_ptr->group->members.size(); ++m) {
+            for(size_t m = 1; m < cur_leader_ptr->group->members.size(); m++) {
                 mob* member = cur_leader_ptr->group->members[m];
                 tl.x = std::min(tl.x, member->pos.x);
                 tl.y = std::min(tl.y, member->pos.y);
@@ -314,7 +314,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         
         //Ship healing notification.
         close_to_ship_to_heal = nullptr;
-        for(size_t s = 0; s < mobs.ships.size(); ++s) {
+        for(size_t s = 0; s < mobs.ships.size(); s++) {
             ship* s_ptr = mobs.ships[s];
             d = dist(cur_leader_ptr->pos, s_ptr->pos);
             if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
@@ -348,7 +348,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         d = 0;
         close_to_interactable_to_use = nullptr;
         if(!notification_done) {
-            for(size_t i = 0; i < mobs.interactables.size(); ++i) {
+            for(size_t i = 0; i < mobs.interactables.size(); i++) {
                 d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
                 if(d > mobs.interactables[i]->int_type->trigger_range) {
                     continue;
@@ -398,7 +398,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         d = 0;
         close_to_nest_to_open = nullptr;
         if(!notification_done) {
-            for(size_t o = 0; o < mobs.onions.size(); ++o) {
+            for(size_t o = 0; o < mobs.onions.size(); o++) {
                 d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
                 if(d > game.config.onion_open_range) continue;
                 if(d < closest_d || !close_to_nest_to_open) {
@@ -417,7 +417,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                     notification_done = true;
                 }
             }
-            for(size_t s = 0; s < mobs.ships.size(); ++s) {
+            for(size_t s = 0; s < mobs.ships.size(); s++) {
                 d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
                 if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
                     continue;
@@ -667,7 +667,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             game.perf_mon->start_measurement("Logic -- Sector animation");
         }
         
-        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
             sector* s_ptr = game.cur_area_data.sectors[s];
             
             if(s_ptr->draining_liquid) {
@@ -681,7 +681,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                             s_ptr->hazards.erase(s_ptr->hazards.begin() + h);
                             path_mgr.handle_sector_hazard_change(s_ptr);
                         } else {
-                            ++h;
+                            h++;
                         }
                     }
                     
@@ -689,7 +689,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                     s_ptr->draining_liquid = false;
                     
                     unordered_set<vertex*> sector_vertexes;
-                    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
                         sector_vertexes.insert(s_ptr->edges[e]->vertexes[0]);
                         sector_vertexes.insert(s_ptr->edges[e]->vertexes[1]);
                     }
@@ -743,7 +743,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         update_mob_is_active_flag();
         
         size_t n_mobs = mobs.all.size();
-        for(size_t m = 0; m < n_mobs; ++m) {
+        for(size_t m = 0; m < n_mobs; m++) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             if(
@@ -791,7 +791,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         }
         
         nr_living_leaders = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+        for(size_t l = 0; l < mobs.leaders.size(); l++) {
             if(mobs.leaders[l]->health > 0.0f) {
                 nr_living_leaders++;
             }
@@ -858,7 +858,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             cur_leaders_in_mission_exit = 0;
-            for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            for(size_t l = 0; l < mobs.leaders.size(); l++) {
                 mob* l_ptr = mobs.leaders[l];
                 if(
                     std::find(
@@ -958,7 +958,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
             mission_score = game.cur_area_data.mission.starting_points;
-            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+            for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
                 if(
                     !has_flag(
                         game.cur_area_data.mission.point_hud_data,
@@ -1118,7 +1118,7 @@ void gameplay_state::do_menu_logic() {
                     game.framerate_history.size()
                 );
                 
-            for(size_t f = 0; f < sample_size; ++f) {
+            for(size_t f = 0; f < sample_size; f++) {
                 size_t idx =
                     game.framerate_history.size() -
                     game.framerate_last_avg_point + f;
@@ -1231,7 +1231,7 @@ void gameplay_state::do_menu_logic() {
                 game.maker_tools.info_lock->fsm.cur_state->name :
                 "(None!)"
             );
-        for(unsigned char p = 0; p < STATE_HISTORY_SIZE; ++p) {
+        for(unsigned char p = 0; p < STATE_HISTORY_SIZE; p++) {
             state_h_str +=
                 " " + game.maker_tools.info_lock->fsm.prev_state_names[p];
         }
@@ -1471,7 +1471,7 @@ void gameplay_state::do_menu_logic() {
 void gameplay_state::is_near_enemy_and_boss(bool* near_enemy, bool* near_boss) {
     bool found_enemy = false;
     bool found_boss = false;
-    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
+    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
         enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
         if(e_ptr->health <= 0.0f) continue;
         
@@ -1512,7 +1512,7 @@ bool gameplay_state::is_mission_clear_met() {
  * @return Whether a failure condition is met.
  */
 bool gameplay_state::is_mission_fail_met(MISSION_FAIL_COND* reason) {
-    for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+    for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
@@ -1574,8 +1574,8 @@ void gameplay_state::mark_area_cells_active(
     from_y = std::max(0, from_y);
     to_y = std::min(to_y, (int) area_active_cells[0].size() - 1);
     
-    for(int x = from_x; x <= to_x; ++x) {
-        for(int y = from_y; y <= to_y; ++y) {
+    for(int x = from_x; x <= to_x; x++) {
+        for(int y = from_y; y <= to_y; y++) {
             area_active_cells[x][y] = true;
         }
     }
@@ -1594,7 +1594,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
     mob_state* state_before = m_ptr->fsm.cur_state;
     
     size_t n_mobs = mobs.all.size();
-    for(size_t m2 = 0; m2 < n_mobs; ++m2) {
+    for(size_t m2 = 0; m2 < n_mobs; m2++) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs.all[m2];
@@ -1676,7 +1676,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
     }
     );
     
-    for(size_t e = 0; e < pending_intermob_events.size(); ++e) {
+    for(size_t e = 0; e < pending_intermob_events.size(); e++) {
         if(m_ptr->fsm.cur_state != state_before) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
@@ -1921,7 +1921,7 @@ void gameplay_state::process_mob_touches(
             sprite* s2_ptr;
             m2_ptr->get_sprite_data(&s2_ptr, nullptr, nullptr);
             
-            for(size_t h = 0; h < s2_ptr->hitboxes.size(); ++h) {
+            for(size_t h = 0; h < s2_ptr->hitboxes.size(); h++) {
                 hitbox* h_ptr = &s2_ptr->hitboxes[h];
                 if(h_ptr->type == HITBOX_TYPE_DISABLED) continue;
                 point h_pos(
@@ -2148,12 +2148,12 @@ void gameplay_state::process_mob_touches(
         bool reported_eat_ev = false;
         bool reported_haz_ev = false;
         
-        for(size_t h1 = 0; h1 < s1_ptr->hitboxes.size(); ++h1) {
+        for(size_t h1 = 0; h1 < s1_ptr->hitboxes.size(); h1++) {
         
             hitbox* h1_ptr = &s1_ptr->hitboxes[h1];
             if(h1_ptr->type == HITBOX_TYPE_DISABLED) continue;
             
-            for(size_t h2 = 0; h2 < s2_ptr->hitboxes.size(); ++h2) {
+            for(size_t h2 = 0; h2 < s2_ptr->hitboxes.size(); h2++) {
                 hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
                 if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
@@ -2286,7 +2286,7 @@ void gameplay_state::process_mob_touches(
                 //Check if m2 is under any status effect
                 //that disables attacks.
                 bool disable_attack_status = false;
-                for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
+                for(size_t s = 0; s < m2_ptr->statuses.size(); s++) {
                     if(m2_ptr->statuses[s].type->disables_attack) {
                         disable_attack_status = true;
                         break;
@@ -2334,7 +2334,7 @@ void gameplay_state::process_mob_touches(
                 ) {
                     for(
                         size_t h = 0;
-                        h < h2_ptr->hazards.size(); ++h
+                        h < h2_ptr->hazards.size(); h++
                     ) {
                         hitbox_interaction ev_info =
                             hitbox_interaction(
@@ -2384,21 +2384,21 @@ void gameplay_state::process_mob_touches(
  */
 void gameplay_state::update_area_active_cells() {
     //Initialize the grid to false.
-    for(size_t x = 0; x < area_active_cells.size(); ++x) {
-        for(size_t y = 0; y < area_active_cells[x].size(); ++y) {
+    for(size_t x = 0; x < area_active_cells.size(); x++) {
+        for(size_t y = 0; y < area_active_cells[x].size(); y++) {
             area_active_cells[x][y] = false;
         }
     }
     
     //Mark the 3x3 region around Pikmin and leaders as active.
-    for(size_t p = 0; p < mobs.pikmin_list.size(); ++p) {
+    for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
         mark_area_cells_active(
             mobs.pikmin_list[p]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.pikmin_list[p]->pos + GEOMETRY::AREA_CELL_SIZE
         );
     }
     
-    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < mobs.leaders.size(); l++) {
         mark_area_cells_active(
             mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
@@ -2416,7 +2416,7 @@ void gameplay_state::update_area_active_cells() {
 void gameplay_state::update_mob_is_active_flag() {
     unordered_set<mob*> child_mobs;
     
-    for(size_t m = 0; m < mobs.all.size(); ++m) {
+    for(size_t m = 0; m < mobs.all.size(); m++) {
         mob* m_ptr = mobs.all[m];
         
         int cell_x =

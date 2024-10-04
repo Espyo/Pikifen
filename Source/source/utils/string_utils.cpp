@@ -121,7 +121,7 @@ string get_matching_string_starts(const string &s1, const string &s2) {
     size_t chars_to_check = std::min(s1.size(), s2.size());
     size_t nr_matching_chars = 0;
     
-    for(size_t c = 0; c < chars_to_check; ++c) {
+    for(size_t c = 0; c < chars_to_check; c++) {
         if(s1[c] == s2[c]) {
             nr_matching_chars++;
         } else {
@@ -142,7 +142,7 @@ string get_matching_string_starts(const string &s1, const string &s2) {
  * @return Whether it is a number.
  */
 bool is_number(const string &s) {
-    for(size_t c = 0; c < s.size(); ++c) {
+    for(size_t c = 0; c < s.size(); c++) {
         unsigned char ch = s[c];
         if((ch < '0' || ch > '9') && ch != '-' && ch != ',' && ch != '.') {
             return false;
@@ -257,7 +257,7 @@ int s2i(const string &s) {
  */
 vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
     vector<string> parts = split(s, sep);
-    for(size_t p = 0; p < parts.size(); ++p) {
+    for(size_t p = 0; p < parts.size(); p++) {
         parts[p] = trim_spaces(parts[p]);
     }
     return parts;
@@ -338,7 +338,7 @@ bool str_peek(const string &s, size_t where, const string &match) {
  */
 string str_to_lower(string s) {
     size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; ++c) {
+    for(size_t c = 0; c < n_characters; c++) {
         s[c] = (char) tolower(s[c]);
     }
     return s;
@@ -354,7 +354,7 @@ string str_to_lower(string s) {
 string str_to_title(string s) {
     size_t letter_streak = 0;
     size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; ++c) {
+    for(size_t c = 0; c < n_characters; c++) {
         if(isalpha(s[c])) {
             if(letter_streak == 0) {
                 s[c] = (char) toupper(s[c]);
@@ -378,7 +378,7 @@ string str_to_title(string s) {
  */
 string str_to_upper(string s) {
     size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; ++c) {
+    for(size_t c = 0; c < n_characters; c++) {
         s[c] = (char) toupper(s[c]);
     }
     return s;
@@ -533,7 +533,7 @@ string word_wrap(const string &s, size_t nr_chars_per_line) {
     string result;
     string word_in_queue;
     size_t cur_line_width = 0;
-    for(size_t c = 0; c < s.size() + 1; ++c) {
+    for(size_t c = 0; c < s.size() + 1; c++) {
     
         if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
             //Keep building the current word.

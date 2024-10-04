@@ -106,12 +106,12 @@ void area_menu_state::animate_info_and_specs() {
         goal_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
-        for(size_t c = 0; c < fail_list->children.size(); ++c) {
+        for(size_t c = 0; c < fail_list->children.size(); c++) {
             fail_list->children[c]->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
-        for(size_t c = 0; c < grading_list->children.size(); ++c) {
+        for(size_t c = 0; c < grading_list->children.size(); c++) {
             grading_list->children[c]->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
@@ -257,7 +257,7 @@ void area_menu_state::change_info(size_t area_idx) {
             game.mission_goals[mission.goal]->
             get_player_description(&mission);
             
-        for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+        for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
             if(has_flag(mission.fail_conditions, get_idx_bitmask(f))) {
                 mission_fail* cond = game.mission_fail_conds[f];
                 add_bullet(
@@ -294,7 +294,7 @@ void area_menu_state::change_info(size_t area_idx) {
                 "    Bronze: " + i2s(mission.bronze_req) + "+ points."
             );
             vector<string> score_notes;
-            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+            for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
                 mission_score_criterion* c_ptr =
                     game.mission_score_criteria[c];
                 int mult = c_ptr->get_multiplier(&mission);
@@ -309,7 +309,7 @@ void area_menu_state::change_info(size_t area_idx) {
                     grading_list,
                     "Your score is calculated like so:"
                 );
-                for(size_t s = 0; s < score_notes.size(); ++s) {
+                for(size_t s = 0; s < score_notes.size(); s++) {
                     add_bullet(grading_list, score_notes[s]);
                 }
             } else {
@@ -319,7 +319,7 @@ void area_menu_state::change_info(size_t area_idx) {
                 );
             }
             vector<string> loss_notes;
-            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+            for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
                 mission_score_criterion* c_ptr =
                     game.mission_score_criteria[c];
                 if(
@@ -336,7 +336,7 @@ void area_menu_state::change_info(size_t area_idx) {
                     grading_list,
                     "If you fail, you'll lose your score for:"
                 );
-                for(size_t l = 0; l < loss_notes.size(); ++l) {
+                for(size_t l = 0; l < loss_notes.size(); l++) {
                     add_bullet(grading_list, loss_notes[l]);
                 }
             }
@@ -389,7 +389,7 @@ void area_menu_state::do_drawing() {
 void area_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
         }
     }
@@ -624,7 +624,7 @@ void area_menu_state::init_gui_main() {
         gui.add_item(list_scroll, "list_scroll");
         
         //Items for the various areas.
-        for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+        for(size_t a = 0; a < areas_to_pick.size(); a++) {
             string area_name = area_names[a];
             string area_folder = areas_to_pick[a];
             const float BUTTON_HEIGHT = 0.09f;
@@ -929,7 +929,7 @@ void area_menu_state::load() {
             true
         );
         
-    for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+    for(size_t a = 0; a < areas_to_pick.size(); a++) {
         string actual_name = areas_to_pick[a];
         data_node data(
             get_base_area_folder_path(area_type, true) +
@@ -979,7 +979,7 @@ void area_menu_state::load() {
         data_node mission_records;
         mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
         
-        for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+        for(size_t a = 0; a < areas_to_pick.size(); a++) {
             mission_record record;
             
             load_area_mission_record(
@@ -1044,7 +1044,7 @@ void area_menu_state::unload() {
     cur_thumb = nullptr;
     cur_stamp = nullptr;
     cur_medal = nullptr;
-    for(size_t a = 0; a < area_thumbs.size(); ++a) {
+    for(size_t a = 0; a < area_thumbs.size(); a++) {
         if(area_thumbs[a]) {
             al_destroy_bitmap(area_thumbs[a]);
         }

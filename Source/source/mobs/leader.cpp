@@ -243,7 +243,7 @@ void leader::dismiss() {
         //Leftmost member coordinate, rightmost, etc.
         point min_coords, max_coords;
         
-        for(size_t m = 0; m < n_group_members; ++m) {
+        for(size_t m = 0; m < n_group_members; m++) {
             mob* member_ptr = group->members[m];
             
             if(member_ptr->pos.x < min_coords.x || m == 0)
@@ -298,7 +298,7 @@ void leader::dismiss() {
         
             bool subgroup_exists = false;
             
-            for(size_t m = 0; m < n_group_members; ++m) {
+            for(size_t m = 0; m < n_group_members; m++) {
                 mob* m_ptr = group->members[m];
                 if(m_ptr->subgroup_type_ptr != cur_type) continue;
                 
@@ -324,7 +324,7 @@ void leader::dismiss() {
     //The second row is 6 spots around that one.
     //The third is 12 spots around those 6.
     //And so on. Each row fits an additional 6.
-    for(size_t s = 0; s < subgroups_info.size(); ++s) {
+    for(size_t s = 0; s < subgroups_info.size(); s++) {
         size_t n_rows = get_dismiss_rows(subgroups_info[s].members.size());
         
         //Since each row loops all around,
@@ -387,7 +387,7 @@ void leader::dismiss() {
             );
             
         float new_angle_occupation = 0;
-        for(size_t s = 0; s < cur_row.subgroups.size(); ++s) {
+        for(size_t s = 0; s < cur_row.subgroups.size(); s++) {
             new_angle_occupation +=
                 linear_dist_to_angular(
                     subgroups_info[cur_row.subgroups[s]].radius * 2.0,
@@ -449,11 +449,11 @@ void leader::dismiss() {
     
     //Now that we know which subgroups go into which row,
     //simply decide the positioning.
-    for(size_t r = 0; r < rows.size(); ++r) {
+    for(size_t r = 0; r < rows.size(); r++) {
         float start_angle = -(rows[r].angle_occupation / 2.0f);
         float cur_angle = start_angle;
         
-        for(size_t s = 0; s < rows[r].subgroups.size(); ++s) {
+        for(size_t s = 0; s < rows[r].subgroups.size(); s++) {
             size_t s_idx = rows[r].subgroups[s];
             float subgroup_angle = cur_angle;
             
@@ -487,12 +487,12 @@ void leader::dismiss() {
     }
     
     //Now, dismiss!
-    for(size_t s = 0; s < subgroups_info.size(); ++s) {
+    for(size_t s = 0; s < subgroups_info.size(); s++) {
         cur_row_idx = 0;
         size_t cur_row_spot_idx = 0;
         size_t cur_row_spots = 1;
         
-        for(size_t m = 0; m < subgroups_info[s].members.size(); ++m) {
+        for(size_t m = 0; m < subgroups_info[s].members.size(); m++) {
         
             point destination;
             
@@ -545,7 +545,7 @@ void leader::dismiss() {
     
     //Final things.
     play_sound(lea_type->sfx_data_idxs[LEADER_SOUND_DISMISSING]);
-    for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
+    for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
         particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
@@ -668,7 +668,7 @@ void leader::get_group_spot_info(
         following_group->radius +
         radius + game.config.standard_pikmin_radius;
         
-    for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
+    for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
         mob* member_ptr = leader_group_ptr->members[me];
         if(member_ptr == this) {
             break;
@@ -704,7 +704,7 @@ bool leader::order_pikmin_to_onion(
     vector<std::pair<dist, pikmin*>> candidates;
     size_t amount_ordered = 0;
     
-    for(size_t m = 0; m < group->members.size(); ++m) {
+    for(size_t m = 0; m < group->members.size(); m++) {
         mob* mob_ptr = group->members[m];
         if(
             mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN ||
@@ -738,7 +738,7 @@ bool leader::order_pikmin_to_onion(
     );
     
     //Order Pikmin, in order.
-    for(size_t p = 0; p < candidates.size(); ++p) {
+    for(size_t p = 0; p < candidates.size(); p++) {
     
         pikmin* pik_ptr = candidates[p].second;
         mob_event* ev = pik_ptr->fsm.get_event(MOB_EV_GO_TO_ONION);
@@ -775,7 +775,7 @@ void leader::queue_throw() {
  * @brief Signals the group members that the swarm mode stopped.
  */
 void leader::signal_swarm_end() const {
-    for(size_t m = 0; m < group->members.size(); ++m) {
+    for(size_t m = 0; m < group->members.size(); m++) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_ENDED);
     }
 }
@@ -785,7 +785,7 @@ void leader::signal_swarm_end() const {
  * @brief Signals the group members that the swarm mode started.
  */
 void leader::signal_swarm_start() const {
-    for(size_t m = 0; m < group->members.size(); ++m) {
+    for(size_t m = 0; m < group->members.size(); m++) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_STARTED);
     }
 }

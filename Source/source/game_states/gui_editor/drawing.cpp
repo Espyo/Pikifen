@@ -71,7 +71,7 @@ void gui_editor::draw_canvas() {
     al_get_clipping_rectangle(
         &orig_clip_x, &orig_clip_y, &orig_clip_w, &orig_clip_h
     );
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         if(items[i].size.x == 0.0f) continue;
         
         draw_filled_rounded_rectangle(

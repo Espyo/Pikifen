@@ -106,8 +106,8 @@ void draw_background_logos(
     float spacing_x = (game.win_w + logo_size.x) / cols;
     float spacing_y = (game.win_h + logo_size.y) / rows;
     
-    for(size_t c = 0; c < cols; ++c) {
-        for(size_t r = 0; r < rows; ++r) {
+    for(size_t c = 0; c < cols; c++) {
+        for(size_t r = 0; r < rows; r++) {
             float x = (c * spacing_x) + time_spent * speed.x;
             if(r % 2 == 0) {
                 x += spacing_x / 2.0f;
@@ -325,7 +325,7 @@ void draw_liquid(
     size_t n_vertexes = s_ptr->triangles.size() * 3;
     ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
     
-    for(size_t v = 0; v < n_vertexes; ++v) {
+    for(size_t v = 0; v < n_vertexes; v++) {
         av[v].z = 0;
     }
     
@@ -356,7 +356,7 @@ void draw_liquid(
         float ground_texture_dy =
             al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.8;
             
-        for(size_t v = 0; v < n_vertexes; ++v) {
+        for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
             vertex* v_ptr = t_ptr->points[v % 3];
@@ -394,7 +394,7 @@ void draw_liquid(
             l_ptr->main_color.a * liquid_opacity_mult
         );
         
-    for(size_t v = 0; v < n_vertexes; ++v) {
+    for(size_t v = 0; v < n_vertexes; v++) {
     
         const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
         vertex* v_ptr = t_ptr->points[v % 3];
@@ -414,7 +414,7 @@ void draw_liquid(
     );
     
     //Layers 3 and 4 - Water surface texture.
-    for(unsigned char l = 0; l < 2; ++l) {
+    for(unsigned char l = 0; l < 2; l++) {
     
         sprite* anim_sprite = nullptr;
         float layer_2_dy = 0;
@@ -433,7 +433,7 @@ void draw_liquid(
         
         if(!anim_sprite) continue;
         
-        for(size_t v = 0; v < n_vertexes; ++v) {
+        for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
             vertex* v_ptr = t_ptr->points[v % 3];
@@ -783,7 +783,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     if(game.options.draw_cursor_trail) {
         size_t anchor = 0;
         
-        for(size_t s = 1; s < game.mouse_cursor.history.size(); ++s) {
+        for(size_t s = 1; s < game.mouse_cursor.history.size(); s++) {
             point anchor_diff =
                 game.mouse_cursor.history[anchor] -
                 game.mouse_cursor.history[s];
@@ -859,7 +859,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             }
             
             ALLEGRO_VERTEX vertexes[4];
-            for(unsigned char v = 0; v < 4; ++v) {
+            for(unsigned char v = 0; v < 4; v++) {
                 vertexes[v].z = 0.0f;
             }
             
@@ -1037,7 +1037,7 @@ void draw_sector_texture(
         
     }
     
-    for(unsigned char t = 0; t < n_textures; ++t) {
+    for(unsigned char t = 0; t < n_textures; t++) {
     
         bool draw_sector_0 = true;
         if(!texture_sector[0]) draw_sector_0 = false;
@@ -1071,7 +1071,7 @@ void draw_sector_texture(
             -texture_info_to_use->rot
         );
         
-        for(size_t v = 0; v < n_vertexes; ++v) {
+        for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
             vertex* v_ptr = t_ptr->points[v % 3];
@@ -1085,8 +1085,7 @@ void draw_sector_texture(
                 if(!draw_sector_0) {
                     alpha_mult = 0;
                     for(
-                        size_t e = 0; e < texture_sector[1]->edges.size();
-                        ++e
+                        size_t e = 0; e < texture_sector[1]->edges.size(); e++
                     ) {
                         if(
                             texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
@@ -1097,8 +1096,7 @@ void draw_sector_texture(
                     }
                 } else {
                     for(
-                        size_t e = 0; e < texture_sector[0]->edges.size();
-                        ++e
+                        size_t e = 0; e < texture_sector[0]->edges.size(); e++
                     ) {
                         if(
                             texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
@@ -1126,7 +1124,7 @@ void draw_sector_texture(
                 );
         }
         
-        for(size_t v = 0; v < n_vertexes; ++v) {
+        for(size_t v = 0; v < n_vertexes; v++) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
@@ -1186,7 +1184,7 @@ void draw_string_tokens(
 ) {
     unsigned int total_width = 0;
     float x_scale = 1.0f;
-    for(size_t t = 0; t < tokens.size(); ++t) {
+    for(size_t t = 0; t < tokens.size(); t++) {
         total_width += tokens[t].width;
     }
     if(total_width > max_size.x) {
@@ -1206,7 +1204,7 @@ void draw_string_tokens(
     }
     
     float caret = start_x;
-    for(size_t t = 0; t < tokens.size(); ++t) {
+    for(size_t t = 0; t < tokens.size(); t++) {
         float token_final_width = tokens[t].width * x_scale;
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {

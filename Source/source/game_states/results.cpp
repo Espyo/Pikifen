@@ -185,7 +185,7 @@ void results_state::do_logic() {
     
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
         }
     }
@@ -246,7 +246,7 @@ void results_state::load() {
     //Calculate score things.
     final_mission_score = game.cur_area_data.mission.starting_points;
     
-    for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+    for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
         mission_score_criterion* c_ptr =
             game.mission_score_criteria[c];
         int c_score =

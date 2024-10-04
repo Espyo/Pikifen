@@ -179,7 +179,7 @@ void load_area(
         geometry_file.get_child_by_name(
             "vertexes"
         )->get_nr_of_children_by_name("v");
-    for(size_t v = 0; v < n_vertexes; ++v) {
+    for(size_t v = 0; v < n_vertexes; v++) {
         data_node* vertex_data =
             geometry_file.get_child_by_name(
                 "vertexes"
@@ -205,7 +205,7 @@ void load_area(
         geometry_file.get_child_by_name(
             "edges"
         )->get_nr_of_children_by_name("e");
-    for(size_t e = 0; e < n_edges; ++e) {
+    for(size_t e = 0; e < n_edges; e++) {
         data_node* edge_data =
             geometry_file.get_child_by_name(
                 "edges"
@@ -214,7 +214,7 @@ void load_area(
         
         vector<string> s_idxs = split(edge_data->get_child_by_name("s")->value);
         if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
-        for(size_t s = 0; s < 2; ++s) {
+        for(size_t s = 0; s < 2; s++) {
             if(s_idxs[s] == "-1") new_edge->sector_idxs[s] = INVALID;
             else new_edge->sector_idxs[s] = s2i(s_idxs[s]);
         }
@@ -269,7 +269,7 @@ void load_area(
         geometry_file.get_child_by_name(
             "sectors"
         )->get_nr_of_children_by_name("s");
-    for(size_t s = 0; s < n_sectors; ++s) {
+    for(size_t s = 0; s < n_sectors; s++) {
         data_node* sector_data =
             geometry_file.get_child_by_name(
                 "sectors"
@@ -331,7 +331,7 @@ void load_area(
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
-        for(size_t h = 0; h < hazards_strs.size(); ++h) {
+        for(size_t h = 0; h < hazards_strs.size(); h++) {
             string hazard_name = hazards_strs[h];
             if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
                 game.errors.report(
@@ -366,7 +366,7 @@ void load_area(
     size_t n_mobs =
         geometry_file.get_child_by_name("mobs")->get_nr_of_children();
         
-    for(size_t m = 0; m < n_mobs; ++m) {
+    for(size_t m = 0; m < n_mobs; m++) {
     
         data_node* mob_node =
             geometry_file.get_child_by_name("mobs")->get_child(m);
@@ -394,7 +394,7 @@ void load_area(
         
         vector<string> link_strs =
             split(mob_node->get_child_by_name("links")->value);
-        for(size_t l = 0; l < link_strs.size(); ++l) {
+        for(size_t l = 0; l < link_strs.size(); l++) {
             mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
@@ -423,7 +423,7 @@ void load_area(
         game.cur_area_data.mob_generators.push_back(mob_ptr);
     }
     
-    for(size_t l = 0; l < mob_links_buffer.size(); ++l) {
+    for(size_t l = 0; l < mob_links_buffer.size(); l++) {
         size_t f = mob_links_buffer[l].first;
         size_t s = mob_links_buffer[l].second;
         game.cur_area_data.mob_generators[f]->links.push_back(
@@ -443,7 +443,7 @@ void load_area(
     
     size_t n_stops =
         geometry_file.get_child_by_name("path_stops")->get_nr_of_children();
-    for(size_t s = 0; s < n_stops; ++s) {
+    for(size_t s = 0; s < n_stops; s++) {
     
         data_node* path_stop_node =
             geometry_file.get_child_by_name("path_stops")->get_child(s);
@@ -457,7 +457,7 @@ void load_area(
         data_node* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
         
-        for(size_t l = 0; l < n_links; ++l) {
+        for(size_t l = 0; l < n_links; l++) {
         
             string link_data = links_node->get_child(l)->value;
             vector<string> link_data_parts = split(link_data);
@@ -490,7 +490,7 @@ void load_area(
     
     size_t n_shadows =
         geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
-    for(size_t s = 0; s < n_shadows; ++s) {
+    for(size_t s = 0; s < n_shadows; s++) {
     
         data_node* shadow_node =
             geometry_file.get_child_by_name("tree_shadows")->get_child(s);
@@ -552,33 +552,33 @@ void load_area(
         game.perf_mon->start_measurement("Area -- Geometry calculations");
     }
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         game.cur_area_data.fix_edge_pointers(
             game.cur_area_data.edges[e]
         );
     }
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         game.cur_area_data.connect_sector_edges(
             game.cur_area_data.sectors[s]
         );
     }
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
         game.cur_area_data.connect_vertex_edges(
             game.cur_area_data.vertexes[v]
         );
     }
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         game.cur_area_data.fix_path_stop_pointers(
             game.cur_area_data.path_stops[s]
         );
     }
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         game.cur_area_data.path_stops[s]->calculate_dists();
     }
     if(!load_for_editor) {
         //Fade sectors that also fade brightness should be
         //at midway between the two neighbors.
-        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
             sector* s_ptr = game.cur_area_data.sectors[s];
             if(s_ptr->fade) {
                 sector* n1 = nullptr;
@@ -594,7 +594,7 @@ void load_area(
     
     //Triangulate everything and save bounding boxes.
     set<edge*> lone_edges;
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         TRIANGULATION_ERROR res =
@@ -664,7 +664,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_platinum_req", data.platinum_req);
     
     data.goal = MISSION_GOAL_END_MANUALLY;
-    for(size_t g = 0; g < game.mission_goals.size(); ++g) {
+    for(size_t g = 0; g < game.mission_goals.size(); g++) {
         if(game.mission_goals[g]->get_name() == goal_str) {
             data.goal = (MISSION_GOAL) g;
             break;
@@ -675,7 +675,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     data.goal_mob_idxs.reserve(
         mission_required_mobs_strs.size()
     );
-    for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
+    for(size_t m = 0; m < mission_required_mobs_strs.size(); m++) {
         data.goal_mob_idxs.insert(
             s2i(mission_required_mobs_strs[m])
         );
@@ -1009,7 +1009,7 @@ void load_maker_tools() {
             tool_name = file.get_child_by_name(i2s(k - 10))->value;
         }
         
-        for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
+        for(size_t t = 0; t < N_MAKER_TOOLS; t++) {
             if(tool_name == MAKER_TOOLS::NAMES[t]) {
                 game.maker_tools.keys[k] = (MAKER_TOOL_TYPE) t;
             }
@@ -1179,7 +1179,7 @@ void load_options() {
     //Init game controllers.
     game.controller_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
-    for(int j = 0; j < n_joysticks; ++j) {
+    for(int j = 0; j < n_joysticks; j++) {
         game.controller_numbers[al_get_joystick(j)] = j;
     }
     
@@ -1194,7 +1194,7 @@ void load_options() {
     reader_setter rs(&file);
     
     game.states.animation_ed->history.clear();
-    for(size_t h = 0; h < game.states.animation_ed->get_history_size(); ++h) {
+    for(size_t h = 0; h < game.states.animation_ed->get_history_size(); h++) {
         game.states.animation_ed->history.push_back("");
         rs.set(
             game.states.animation_ed->get_history_option_prefix() +
@@ -1203,7 +1203,7 @@ void load_options() {
         );
     }
     game.states.area_ed->history.clear();
-    for(size_t h = 0; h < game.states.area_ed->get_history_size(); ++h) {
+    for(size_t h = 0; h < game.states.area_ed->get_history_size(); h++) {
         game.states.area_ed->history.push_back("");
         rs.set(
             game.states.area_ed->get_history_option_prefix() +
@@ -1212,7 +1212,7 @@ void load_options() {
         );
     }
     game.states.gui_ed->history.clear();
-    for(size_t h = 0; h < game.states.gui_ed->get_history_size(); ++h) {
+    for(size_t h = 0; h < game.states.gui_ed->get_history_size(); h++) {
         game.states.gui_ed->history.push_back("");
         rs.set(
             game.states.gui_ed->get_history_option_prefix() +
@@ -1264,7 +1264,7 @@ void load_songs() {
     vector<string> song_files =
         folder_to_vector(AUDIO_SONG_FOLDER_PATH, false);
         
-    for(size_t s = 0; s < song_files.size(); ++s) {
+    for(size_t s = 0; s < song_files.size(); s++) {
         string path = AUDIO_SONG_FOLDER_PATH + "/" + song_files[s];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;

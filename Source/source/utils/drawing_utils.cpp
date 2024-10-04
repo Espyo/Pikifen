@@ -113,7 +113,7 @@ void draw_filled_diamond(
     const point &center, float radius, const ALLEGRO_COLOR &color
 ) {
     ALLEGRO_VERTEX vert[4];
-    for(unsigned char v = 0; v < 4; ++v) {
+    for(unsigned char v = 0; v < 4; v++) {
         vert[v].color = color;
         vert[v].z = 0;
     }
@@ -369,7 +369,7 @@ void draw_text_lines(
     
     //Draw!
     al_use_transform(&text_transform); {
-        for(size_t l = 0; l < lines.size(); ++l) {
+        for(size_t l = 0; l < lines.size(); l++) {
             float line_y = (line_orig_height + 1) * l;
             al_draw_text(font, color, 0, line_y, text_flags, lines[l].c_str());
         }
@@ -429,13 +429,13 @@ void draw_textured_box(
     
     //Initialize the vertexes.
     ALLEGRO_VERTEX vert[total_vertexes];
-    for(unsigned char v = 0; v < total_vertexes; ++v) {
+    for(unsigned char v = 0; v < total_vertexes; v++) {
         vert[v].color = tint;
         vert[v].z = 0;
     }
     
     size_t v = 0;
-    for(size_t r = 0; r < 3; ++r) {
+    for(size_t r = 0; r < 3; r++) {
         //For every row.
         
         //Figure out the start and end Y drawing coordinates.
@@ -461,7 +461,7 @@ void draw_textured_box(
         float v1 = (bmp_h / 3.0f) * r;
         float v2 = (bmp_h / 3.0f) * (r + 1);
         
-        for(size_t c = 0; c < 3; ++c) {
+        for(size_t c = 0; c < 3; c++) {
             //For every column.
             
             //Figure out the start and end X drawing coordinates.
@@ -550,7 +550,7 @@ void get_multiline_text_dimensions(
     
     if(out_width) {
         int largest_w = 0;
-        for(size_t l = 0; l < lines.size(); ++l) {
+        for(size_t l = 0; l < lines.size(); l++) {
             largest_w =
                 std::max(
                     largest_w, al_get_text_width(font, lines[l].c_str())

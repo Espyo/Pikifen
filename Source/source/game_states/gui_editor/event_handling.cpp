@@ -130,7 +130,7 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
     if(!tw_handled) {
         vector<size_t> clicked_items;
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
             item* item_ptr = &items[i];
             if(
                 is_point_in_rectangle(
@@ -148,7 +148,7 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
         } else {
             size_t cur_item_idx = INVALID;
-            for(size_t i = 0; i < clicked_items.size(); ++i) {
+            for(size_t i = 0; i < clicked_items.size(); i++) {
                 if(cur_item == clicked_items[i]) {
                     cur_item_idx = i;
                     break;

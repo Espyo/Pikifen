@@ -44,9 +44,9 @@ group_task::group_task(
         &trans, tas_type->first_row_p1.x, tas_type->first_row_p1.y
     );
     
-    for(size_t r = 0; r < needed_rows; ++r) {
+    for(size_t r = 0; r < needed_rows; r++) {
     
-        for(size_t s = 0; s < tas_type->pikmin_per_row; ++s) {
+        for(size_t s = 0; s < tas_type->pikmin_per_row; s++) {
         
             float x;
             if(tas_type->pikmin_per_row % 2 == 0) {
@@ -81,7 +81,7 @@ group_task::group_task(
  * @param who Pikmin to add.
  */
 void group_task::add_worker(pikmin* who) {
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikmin_here == who) {
             spots[s].state = 2;
             break;
@@ -119,7 +119,7 @@ void group_task::add_worker(pikmin* who) {
 void group_task::finish_task() {
     for(
         size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin_list.size(); ++p
+        p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
         pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob && p_ptr->focused_mob == this) {
@@ -137,7 +137,7 @@ void group_task::finish_task() {
 void group_task::free_up_spot(pikmin* whose) {
     bool was_contributing = false;
     
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikmin_here == whose) {
             if(spots[s].state == 2) {
                 was_contributing = true;
@@ -207,7 +207,7 @@ bool group_task::get_fraction_numbers_info(
 group_task::group_task_spot* group_task::get_free_spot() {
     size_t spots_taken = 0;
     
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].state != 0) {
             spots_taken++;
             if(spots_taken == tas_type->max_pikmin) {
@@ -240,7 +240,7 @@ float group_task::get_power() const {
  * @return The coordinates, or (0,0) if that Pikmin doesn't have a spot.
  */
 point group_task::get_spot_pos(const pikmin* whose) const {
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikmin_here == whose) {
             return spots[s].absolute_pos;
         }
@@ -316,7 +316,7 @@ void group_task::update_spot_absolute_positions() {
     al_rotate_transform(&t, angle);
     al_translate_transform(&t, pos.x, pos.y);
     
-    for(size_t s = 0; s < spots.size(); ++s) {
+    for(size_t s = 0; s < spots.size(); s++) {
         point* p = &(spots[s].absolute_pos);
         *p = spots[s].relative_pos;
         al_transform_coordinates(&t, &(p->x), &(p->y));

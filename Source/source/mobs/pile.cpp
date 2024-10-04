@@ -118,7 +118,7 @@ void pile::tick_class_specifics(float delta_t) {
         
         for(
             size_t r = 0;
-            r < game.states.gameplay->mobs.resources.size(); ++r
+            r < game.states.gameplay->mobs.resources.size(); r++
         ) {
             resource* r_ptr = game.states.gameplay->mobs.resources[r];
             if(r_ptr->origin_pile == this) {

@@ -31,7 +31,7 @@ mob* mob::get_mob_to_walk_on() const {
     if(speed_z > 0.0f) return nullptr;
     
     mob* best_candidate = nullptr;
-    for(size_t m = 0; m < game.states.gameplay->mobs.walkables.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.walkables.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.walkables[m];
         if(m_ptr == this) {
             continue;
@@ -152,7 +152,7 @@ H_MOVE_RESULT mob::get_movement_edge_intersections(
             return H_MOVE_RESULT_FAIL;
         }
         
-        for(unsigned char s = 0; s < 2; ++s) {
+        for(unsigned char s = 0; s < 2; s++) {
             if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
                 is_edge_blocking = true;
                 break;
@@ -441,7 +441,7 @@ void mob::tick_horizontal_movement_physics(
         
         //For every sector in the new position, let's figure out
         //the ground sector, and also a stepping sector, if possible.
-        for(size_t e = 0; e < intersecting_edges.size(); ++e) {
+        for(size_t e = 0; e < intersecting_edges.size(); e++) {
             edge* e_ptr = intersecting_edges[e];
             sector* tallest_sector = ground_sector; //Tallest of the two.
             if(
@@ -496,7 +496,7 @@ void mob::tick_horizontal_movement_physics(
         
         //Check the sector heights of the intersecting edges to figure out
         //which are really walls, and how to slide against them.
-        for(size_t e = 0; e < intersecting_edges.size(); ++e) {
+        for(size_t e = 0; e < intersecting_edges.size(); e++) {
             edge* e_ptr = intersecting_edges[e];
             bool is_edge_wall = false;
             unsigned char wall_sector = 0;
@@ -786,7 +786,7 @@ void mob::tick_vertical_movement_physics(
                 fsm.run_event(MOB_EV_BOTTOMLESS_PIT);
             }
             
-            for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+            for(size_t h = 0; h < ground_sector->hazards.size(); h++) {
                 fsm.run_event(
                     MOB_EV_TOUCHED_HAZARD,
                     (void*) ground_sector->hazards[h]
@@ -806,7 +806,7 @@ void mob::tick_vertical_movement_physics(
     
     //On a sector that has a hazard that is not on the floor.
     if(z > ground_sector->z && !ground_sector->hazard_floor) {
-        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+        for(size_t h = 0; h < ground_sector->hazards.size(); h++) {
             fsm.run_event(
                 MOB_EV_TOUCHED_HAZARD,
                 (void*) ground_sector->hazards[h]
@@ -821,7 +821,7 @@ void mob::tick_vertical_movement_physics(
             (void*) on_hazard
         );
         
-        for(size_t s = 0; s < statuses.size(); ++s) {
+        for(size_t s = 0; s < statuses.size(); s++) {
             if(statuses[s].type->remove_on_hazard_leave) {
                 statuses[s].to_delete = true;
             }

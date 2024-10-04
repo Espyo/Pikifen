@@ -79,7 +79,7 @@ bool are_walls_between(
         ) {
             continue;
         }
-        for(size_t s = 0; s < 2; ++s) {
+        for(size_t s = 0; s < 2; s++) {
             if(!e_ptr->sectors[s]) {
                 //No sectors means there's out-of-bounds geometry in the way.
                 if(out_impassable_walls) *out_impassable_walls = true;
@@ -118,7 +118,7 @@ bool are_walls_between(
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         if(
             s_ptr->texture_info.bitmap &&
@@ -191,7 +191,7 @@ void crash(const string &reason, const string &info, int exit_status) {
             p2s(game.states.gameplay->cur_leader_ptr->pos) +
             ", state history: " +
             game.states.gameplay->cur_leader_ptr->fsm.cur_state->name;
-        for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
+        for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
             error_str +=
                 " " +
                 game.states.gameplay->cur_leader_ptr->
@@ -217,12 +217,12 @@ void crash(const string &reason, const string &info, int exit_status) {
         );
         
         size_t closest_p_amount = std::min(closest_pikmin.size(), (size_t) 10);
-        for(size_t p = 0; p < closest_p_amount; ++p) {
+        for(size_t p = 0; p < closest_p_amount; p++) {
             error_str +=
                 "    " + closest_pikmin[p]->type->name + ", at " +
                 p2s(closest_pikmin[p]->pos) + ", history: " +
                 closest_pikmin[p]->fsm.cur_state->name;
-            for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
+            for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
                 error_str += " " + closest_pikmin[p]->fsm.prev_state_names[h];
             }
             error_str += "\n";
@@ -318,8 +318,8 @@ bool does_edge_have_liquid_limit(
     
     //Check which ones have liquid.
     bool has_liquid[2] = {false, false};
-    for(unsigned char s = 0; s < 2; ++s) {
-        for(size_t h = 0; h < e_ptr->sectors[s]->hazards.size(); ++h) {
+    for(unsigned char s = 0; s < 2; s++) {
+        for(size_t h = 0; h < e_ptr->sectors[s]->hazards.size(); h++) {
             if(e_ptr->sectors[s]->hazards[h]->associated_liquid) {
                 has_liquid[s] = true;
             }
@@ -396,7 +396,7 @@ mob* get_closest_mob_to_cursor() {
     dist closest_mob_to_cursor_dist;
     mob* closest_mob_to_cursor = nullptr;
     
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->fsm.cur_state) continue;
@@ -572,7 +572,7 @@ unsigned char get_throw_preview_vertexes(
     };
     
     //Get the vertexes of each necessary segment.
-    for(unsigned char segment = 0; segment < 4; ++segment) {
+    for(unsigned char segment = 0; segment < 4; segment++) {
         float segment_start = std::max(segment_points[segment], start);
         float segment_end = std::min(segment_points[segment + 1], end);
         
@@ -603,7 +603,7 @@ unsigned char get_throw_preview_vertexes(
     }
     
     //Final setup on all points.
-    for(unsigned char v = 0; v < cur_v; ++v) {
+    for(unsigned char v = 0; v < cur_v; v++) {
         point p(vertexes[v].x, vertexes[v].y);
         
         //Apply the texture UVs.
@@ -638,7 +638,7 @@ map<string, string> get_var_map(const string &vars_string) {
     map<string, string> final_map;
     vector<string> raw_vars = semicolon_list_to_vector(vars_string);
     
-    for(size_t v = 0; v < raw_vars.size(); ++v) {
+    for(size_t v = 0; v < raw_vars.size(); v++) {
         vector<string> raw_parts = split(raw_vars[v], "=");
         if(raw_parts.size() < 2) {
             continue;
@@ -692,7 +692,7 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
     vector<std::pair<int, string> > table;
     size_t n_points = node->get_nr_of_children();
     
-    for(size_t p = 0; p < n_points; ++p) {
+    for(size_t p = 0; p < n_points; p++) {
         data_node* point_node = node->get_child(p);
         
         int point_time = s2i(point_node->name);
@@ -865,7 +865,7 @@ void save_options() {
     
     //Also add the editor histories.
     for(
-        size_t h = 0; h < game.states.animation_ed->history.size(); ++h
+        size_t h = 0; h < game.states.animation_ed->history.size(); h++
     ) {
         file.add(
             new data_node(
@@ -877,7 +877,7 @@ void save_options() {
     }
     
     for(
-        size_t h = 0; h < game.states.area_ed->history.size(); ++h
+        size_t h = 0; h < game.states.area_ed->history.size(); h++
     ) {
         file.add(
             new data_node(
@@ -889,7 +889,7 @@ void save_options() {
     }
     
     for(
-        size_t h = 0; h < game.states.gui_ed->history.size(); ++h
+        size_t h = 0; h < game.states.gui_ed->history.size(); h++
     ) {
         file.add(
             new data_node(
@@ -950,8 +950,8 @@ void save_screenshot() {
     unsigned char* row = (unsigned char*) region->data;
     int bmp_w = ceil(al_get_bitmap_width(screenshot));
     int bmp_h = ceil(al_get_bitmap_height(screenshot));
-    for(int y = 0; y < bmp_h; ++y) {
-        for(int x = 0; x < bmp_w; ++x) {
+    for(int y = 0; y < bmp_h; y++) {
+        for(int x = 0; x < bmp_w; x++) {
             row[(x) * 4 + 3] = 255;
         }
         row += region->pitch;
@@ -1018,7 +1018,7 @@ void set_string_token_widths(
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
     float max_control_bitmap_height, bool control_condensed
 ) {
-    for(size_t t = 0; t < tokens.size(); ++t) {
+    for(size_t t = 0; t < tokens.size(); t++) {
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
             tokens[t].width =
@@ -1059,7 +1059,7 @@ void signal_handler(int signum) {
     
     string bt_str = "Backtrace:\n";
     vector<string> bt = get_backtrace();
-    for(size_t s = 0; s < bt.size(); ++s) {
+    for(size_t s = 0; s < bt.size(); s++) {
         bt_str += "    " + bt[s] + "\n";
     }
     if(bt_str.back() == '\n') {
@@ -1123,7 +1123,7 @@ vector<vector<string_token> > split_long_string_with_tokens(
     vector<string_token> word_buffer;
     unsigned int word_buffer_width = 0;
     
-    for(size_t t = 0; t < tokens.size() + 1; ++t) {
+    for(size_t t = 0; t < tokens.size() + 1; t++) {
     
         bool token_is_space =
             t != tokens.size() &&
@@ -1231,7 +1231,7 @@ vector<string_token> tokenize_string(const string &s) {
     string_token cur_token;
     cur_token.type = STRING_TOKEN_CHAR;
     
-    for(size_t c = 0; c < s.size(); ++c) {
+    for(size_t c = 0; c < s.size(); c++) {
         if(str_peek(s, c, "\\\\")) {
             cur_token.content.push_back('\\');
             if(cur_token.type == STRING_TOKEN_CHAR) {
@@ -1298,13 +1298,13 @@ string unescape_string(const string &s) {
                 break;
             } default: {
                 ret.push_back('\\');
-                ++c;
+                c++;
                 break;
             }
             }
         } else {
             ret.push_back(s[c]);
-            ++c;
+            c++;
         }
     }
     ret.push_back(s.back());

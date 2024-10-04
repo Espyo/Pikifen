@@ -103,7 +103,7 @@ void converter::close() {
 void converter::spew() {
     size_t total_to_spit = amount_in_buffer * con_type->pikmin_per_conversion;
     
-    for(size_t s = 0; s < total_to_spit; ++s) {
+    for(size_t s = 0; s < total_to_spit; s++) {
         if(
             game.states.gameplay->mobs.pikmin_list.size() ==
             game.config.max_pikmin_in_field

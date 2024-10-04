@@ -291,7 +291,7 @@ void area_editor::clear_current_area() {
     
     clear_area_textures();
     
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
         game.textures.free(game.cur_area_data.tree_shadows[s]->file_name);
     }
     
@@ -388,7 +388,7 @@ void area_editor::clear_selection() {
  * @brief Clears the list of texture suggestions. This frees up the bitmaps.
  */
 void area_editor::clear_texture_suggestions() {
-    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+    for(size_t s = 0; s < texture_suggestions.size(); s++) {
         texture_suggestions[s].destroy();
     }
     texture_suggestions.clear();
@@ -399,11 +399,11 @@ void area_editor::clear_texture_suggestions() {
  * @brief Clears the undo history, deleting the memory allocated for them.
  */
 void area_editor::clear_undo_history() {
-    for(size_t h = 0; h < undo_history.size(); ++h) {
+    for(size_t h = 0; h < undo_history.size(); h++) {
         delete undo_history[h].first;
     }
     undo_history.clear();
-    for(size_t h = 0; h < redo_history.size(); ++h) {
+    for(size_t h = 0; h < redo_history.size(); h++) {
         delete redo_history[h].first;
     }
     redo_history.clear();
@@ -472,7 +472,7 @@ void area_editor::create_area(
         folder_to_vector(TEXTURES_FOLDER_PATH, false);
     size_t texture_to_use = INVALID;
     //First, if there's any "grass" texture, use that.
-    for(size_t t = 0; t < textures.size(); ++t) {
+    for(size_t t = 0; t < textures.size(); t++) {
         string lc_name = str_to_lower(textures[t]);
         if(lc_name.find("grass") != string::npos) {
             texture_to_use = t;
@@ -481,7 +481,7 @@ void area_editor::create_area(
     }
     //No grass texture? Try one with "dirt".
     if(texture_to_use == INVALID) {
-        for(size_t t = 0; t < textures.size(); ++t) {
+        for(size_t t = 0; t < textures.size(); t++) {
             string lc_name = str_to_lower(textures[t]);
             if(lc_name.find("dirt") != string::npos) {
                 texture_to_use = t;
@@ -534,7 +534,7 @@ void area_editor::create_area(
  * either create edge splits, or create simple vertexes inside a sector.
  */
 void area_editor::create_drawing_vertexes() {
-    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+    for(size_t n = 0; n < drawing_nodes.size(); n++) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         if(n_ptr->on_vertex) continue;
         vertex* new_vertex = nullptr;
@@ -544,7 +544,7 @@ void area_editor::create_drawing_vertexes() {
             
             //The split created new edges, so let's check future nodes
             //and update them, since they could've landed on new edges.
-            for(size_t n2 = n; n2 < drawing_nodes.size(); ++n2) {
+            for(size_t n2 = n; n2 < drawing_nodes.size(); n2++) {
                 if(drawing_nodes[n2].on_edge == n_ptr->on_edge) {
                     drawing_nodes[n2].on_edge =
                         get_edge_under_point(drawing_nodes[n2].snapped_spot);
@@ -742,7 +742,7 @@ void area_editor::do_logic() {
 void area_editor::do_sector_split() {
     //Create the drawing's new edges and connect them.
     vector<edge*> drawing_edges;
-    for(size_t n = 0; n < drawing_nodes.size() - 1; ++n) {
+    for(size_t n = 0; n < drawing_nodes.size() - 1; n++) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         layout_drawing_node* next_node = &drawing_nodes[n + 1];
         
@@ -767,7 +767,7 @@ void area_editor::do_sector_split() {
     //Let's figure out which stage to use now.
     vector<edge*> new_sector_edges = drawing_edges;
     vector<vertex*> new_sector_vertexes;
-    for(size_t d = 0; d < drawing_nodes.size(); ++d) {
+    for(size_t d = 0; d < drawing_nodes.size(); d++) {
         new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
     }
     
@@ -782,7 +782,7 @@ void area_editor::do_sector_split() {
     for(
         size_t t = 0;
         t < sector_split_info.traversed_vertexes[0].size() - 1;
-        ++t
+        t++
     ) {
         new_sector_vertexes.push_back(
             sector_split_info.traversed_vertexes[0][t]
@@ -801,14 +801,14 @@ void area_editor::do_sector_split() {
         //inner sector. Let's swap to the traversal stage 2 data.
         
         new_sector_vertexes.clear();
-        for(size_t d = 0; d < drawing_nodes.size(); ++d) {
+        for(size_t d = 0; d < drawing_nodes.size(); d++) {
             new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
         }
         //Same as before, skip the last.
         for(
             size_t t = 0;
             t < sector_split_info.traversed_vertexes[1].size() - 1;
-            ++t
+            t++
         ) {
             new_sector_vertexes.push_back(
                 sector_split_info.traversed_vertexes[1][t]
@@ -818,7 +818,7 @@ void area_editor::do_sector_split() {
         for(
             size_t t = 0;
             t < sector_split_info.traversed_edges[1].size();
-            ++t
+            t++
         ) {
             new_sector_edges.push_back(
                 sector_split_info.traversed_edges[1][t]
@@ -831,7 +831,7 @@ void area_editor::do_sector_split() {
         for(
             size_t t = 0;
             t < sector_split_info.traversed_edges[0].size();
-            ++t
+            t++
         ) {
             new_sector_edges.push_back(
                 sector_split_info.traversed_edges[0][t]
@@ -841,7 +841,7 @@ void area_editor::do_sector_split() {
     }
     
     //Organize all edge vertexes such that they follow the same order.
-    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+    for(size_t e = 0; e < new_sector_edges.size(); e++) {
         if(new_sector_edges[e]->vertexes[0] != new_sector_vertexes[e]) {
             new_sector_edges[e]->swap_vertexes();
         }
@@ -855,7 +855,7 @@ void area_editor::do_sector_split() {
     unsigned char new_sector_side = (is_new_clockwise ? 1 : 0);
     unsigned char working_sector_side = (is_new_clockwise ? 0 : 1);
     
-    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+    for(size_t e = 0; e < new_sector_edges.size(); e++) {
         edge* e_ptr = new_sector_edges[e];
         
         if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
@@ -1008,7 +1008,7 @@ void area_editor::emit_triangulation_error_status_bar_message(
  */
 void area_editor::finish_circle_sector() {
     clear_layout_drawing();
-    for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+    for(size_t p = 0; p < new_circle_sector_points.size(); p++) {
         layout_drawing_node n;
         n.raw_spot = new_circle_sector_points[p];
         n.snapped_spot = n.raw_spot;
@@ -1050,7 +1050,7 @@ void area_editor::finish_layout_moving() {
             ) {
                 merge_vertexes.erase(merge_vertexes.begin() + mv);
             } else {
-                ++mv;
+                mv++;
             }
         }
         
@@ -1099,10 +1099,10 @@ void area_editor::finish_layout_moving() {
     }
     
     set<edge*> moved_edges;
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         edge* e_ptr = game.cur_area_data.edges[e];
         bool both_selected = true;
-        for(size_t v = 0; v < 2; ++v) {
+        for(size_t v = 0; v < 2; v++) {
             if(
                 selected_vertexes.find(e_ptr->vertexes[v]) ==
                 selected_vertexes.end()
@@ -1118,7 +1118,7 @@ void area_editor::finish_layout_moving() {
     
     //If an edge is moving into a stationary vertex, it needs to be split.
     //Let's find such edges.
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         point p(v_ptr->x, v_ptr->y);
         
@@ -1159,8 +1159,8 @@ void area_editor::finish_layout_moving() {
     vector<edge_intersection> intersections =
         get_intersecting_edges();
     for(auto &m : merges) {
-        for(size_t e1 = 0; e1 < m.first->edges.size(); ++e1) {
-            for(size_t e2 = 0; e2 < m.second->edges.size(); ++e2) {
+        for(size_t e1 = 0; e1 < m.first->edges.size(); e1++) {
+            for(size_t e2 = 0; e2 < m.second->edges.size(); e2++) {
                 for(size_t i = 0; i < intersections.size();) {
                     if(
                         intersections[i].contains(m.first->edges[e1]) &&
@@ -1168,14 +1168,14 @@ void area_editor::finish_layout_moving() {
                     ) {
                         intersections.erase(intersections.begin() + i);
                     } else {
-                        ++i;
+                        i++;
                     }
                 }
             }
         }
     }
     for(auto &v : edges_to_split) {
-        for(size_t e = 0; e < v.first->edges.size(); ++e) {
+        for(size_t e = 0; e < v.first->edges.size(); e++) {
             for(size_t i = 0; i < intersections.size();) {
                 if(
                     intersections[i].contains(v.first->edges[e]) &&
@@ -1183,7 +1183,7 @@ void area_editor::finish_layout_moving() {
                 ) {
                     intersections.erase(intersections.begin() + i);
                 } else {
-                    ++i;
+                    i++;
                 }
             }
         }
@@ -1282,7 +1282,7 @@ void area_editor::finish_new_sector_drawing() {
     if(outer_sector) {
         outer_sector_old_edges = outer_sector->edges;
     } else {
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
             edge* e_ptr = game.cur_area_data.edges[e];
             if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 outer_sector_old_edges.push_back(e_ptr);
@@ -1298,7 +1298,7 @@ void area_editor::finish_new_sector_drawing() {
     //Now that all nodes have a vertex, create the necessary edges.
     vector<vertex*> drawing_vertexes;
     vector<edge*> drawing_edges;
-    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+    for(size_t n = 0; n < drawing_nodes.size(); n++) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         size_t prev_node_idx =
             sum_and_wrap((int) n, -1, (int) drawing_nodes.size());
@@ -1331,7 +1331,7 @@ void area_editor::finish_new_sector_drawing() {
     unsigned char inner_sector_side = (is_clockwise ? 1 : 0);
     unsigned char outer_sector_side = (is_clockwise ? 0 : 1);
     
-    for(size_t e = 0; e < drawing_edges.size(); ++e) {
+    for(size_t e = 0; e < drawing_edges.size(); e++) {
         edge* e_ptr = drawing_edges[e];
         
         game.cur_area_data.connect_edge_to_sector(
@@ -1437,7 +1437,7 @@ size_t area_editor::get_mission_required_mob_count() const {
         for(
             size_t m = 0;
             m < game.cur_area_data.mob_generators.size();
-            ++m
+            m++
         ) {
             mob_gen* g = game.cur_area_data.mob_generators[m];
             if(
@@ -1933,7 +1933,7 @@ void area_editor::load_area(
     map<string, size_t> texture_uses_map;
     vector<std::pair<string, size_t> > texture_uses_vector;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         string n = game.cur_area_data.sectors[s]->texture_info.file_name;
         if(n.empty()) continue;
         texture_uses_map[n]++;
@@ -1952,7 +1952,7 @@ void area_editor::load_area(
         size_t u = 0;
         u < texture_uses_vector.size() && u <
         AREA_EDITOR::MAX_TEXTURE_SUGGESTIONS;
-        ++u
+        u++
     ) {
         texture_suggestions.push_back(
             texture_suggestion(texture_uses_vector[u].first)
@@ -2741,7 +2741,7 @@ void area_editor::delete_tree_shadow_cmd(float input_value) {
         for(
             size_t s = 0;
             s < game.cur_area_data.tree_shadows.size();
-            ++s
+            s++
         ) {
             if(
                 game.cur_area_data.tree_shadows[s] ==
@@ -2818,7 +2818,7 @@ void area_editor::select_all_cmd(float input_value) {
     ) {
         register_change("mission object requirements change");
         for(
-            size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m
+            size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++
         ) {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             if(
@@ -2959,7 +2959,7 @@ void area_editor::zoom_everything_cmd(float input_value) {
     bool got_something = false;
     point min_coords, max_coords;
     
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         if(v_ptr->x < min_coords.x || !got_something) {
             min_coords.x = v_ptr->x;
@@ -2976,7 +2976,7 @@ void area_editor::zoom_everything_cmd(float input_value) {
         got_something = true;
     }
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         if(m_ptr->pos.x < min_coords.x || !got_something) {
             min_coords.x = m_ptr->pos.x;
@@ -2993,7 +2993,7 @@ void area_editor::zoom_everything_cmd(float input_value) {
         got_something = true;
     }
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         if(s_ptr->pos.x < min_coords.x || !got_something) {
             min_coords.x = s_ptr->pos.x;
@@ -3057,7 +3057,7 @@ void area_editor::zoom_out_cmd(float input_value) {
  *
  */
 void area_editor::recreate_drawing_nodes() {
-    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+    for(size_t n = 0; n < drawing_nodes.size(); n++) {
         drawing_nodes[n] = layout_drawing_node(this, drawing_nodes[n].raw_spot);
     }
 }
@@ -3130,7 +3130,7 @@ void area_editor::register_change(
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
-    for(size_t h = 0; h < redo_history.size(); ++h) {
+    for(size_t h = 0; h < redo_history.size(); h++) {
         delete redo_history[h].first;
     }
     redo_history.clear();
@@ -3192,7 +3192,7 @@ bool area_editor::save_area(bool to_backup) {
             game.cur_area_data.remove_sector(s);
             deleted_sectors = true;
         } else {
-            ++s;
+            s++;
         }
     }
     if(deleted_sectors && !selected_sectors.empty()) {
@@ -3215,7 +3215,7 @@ bool area_editor::save_area(bool to_backup) {
     data_node* vertexes_node = new data_node("vertexes", "");
     geometry_file.add(vertexes_node);
     
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         data_node* vertex_node =
             new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
@@ -3226,12 +3226,12 @@ bool area_editor::save_area(bool to_backup) {
     data_node* edges_node = new data_node("edges", "");
     geometry_file.add(edges_node);
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         edge* e_ptr = game.cur_area_data.edges[e];
         data_node* edge_node = new data_node("e", "");
         edges_node->add(edge_node);
         string s_str;
-        for(size_t s = 0; s < 2; ++s) {
+        for(size_t s = 0; s < 2; s++) {
             if(e_ptr->sector_idxs[s] == INVALID) s_str += "-1";
             else s_str += i2s(e_ptr->sector_idxs[s]);
             s_str += " ";
@@ -3280,7 +3280,7 @@ bool area_editor::save_area(bool to_backup) {
     data_node* sectors_node = new data_node("sectors", "");
     geometry_file.add(sectors_node);
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
@@ -3375,7 +3375,7 @@ bool area_editor::save_area(bool to_backup) {
     data_node* mobs_node = new data_node("mobs", "");
     geometry_file.add(mobs_node);
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         string cat_name = "(Unknown)";
         if(m_ptr->type && m_ptr->type->category) {
@@ -3407,7 +3407,7 @@ bool area_editor::save_area(bool to_backup) {
         }
         
         string links_str;
-        for(size_t l = 0; l < m_ptr->link_idxs.size(); ++l) {
+        for(size_t l = 0; l < m_ptr->link_idxs.size(); l++) {
             if(l > 0) links_str += " ";
             links_str += i2s(m_ptr->link_idxs[l]);
         }
@@ -3429,7 +3429,7 @@ bool area_editor::save_area(bool to_backup) {
     data_node* path_stops_node = new data_node("path_stops", "");
     geometry_file.add(path_stops_node);
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         data_node* path_stop_node = new data_node("s", "");
         path_stops_node->add(path_stop_node);
@@ -3472,7 +3472,7 @@ bool area_editor::save_area(bool to_backup) {
     data_node* shadows_node = new data_node("tree_shadows", "");
     geometry_file.add(shadows_node);
     
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
@@ -3981,7 +3981,7 @@ void area_editor::save_reference() {
 void area_editor::select_edge(edge* e) {
     if(selection_filter == SELECTION_FILTER_VERTEXES) return;
     selected_edges.insert(e);
-    for(size_t v = 0; v < 2; ++v) {
+    for(size_t v = 0; v < 2; v++) {
         select_vertex(e->vertexes[v]);
     }
     set_selection_status_text();
@@ -3995,7 +3995,7 @@ void area_editor::select_edge(edge* e) {
  */
 void area_editor::select_path_stops_with_label(const string &label) {
     clear_selection();
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         if(s_ptr->label == label) {
             selected_path_stops.insert(s_ptr);
@@ -4013,7 +4013,7 @@ void area_editor::select_path_stops_with_label(const string &label) {
 void area_editor::select_sector(sector* s) {
     if(selection_filter != SELECTION_FILTER_SECTORS) return;
     selected_sectors.insert(s);
-    for(size_t e = 0; e < s->edges.size(); ++e) {
+    for(size_t e = 0; e < s->edges.size(); e++) {
         select_edge(s->edges[e]);
     }
     set_selection_status_text();
@@ -4070,7 +4070,7 @@ void area_editor::set_new_circle_sector_points() {
         );
         
     new_circle_sector_points.clear();
-    for(size_t p = 0; p < n_points; ++p) {
+    for(size_t p = 0; p < n_points; p++) {
         float delta_a = (TAU / n_points) * p;
         new_circle_sector_points.push_back(
             point(
@@ -4083,11 +4083,11 @@ void area_editor::set_new_circle_sector_points() {
     }
     
     new_circle_sector_valid_edges.clear();
-    for(size_t p = 0; p < n_points; ++p) {
+    for(size_t p = 0; p < n_points; p++) {
         point next = get_next_in_vector(new_circle_sector_points, p);
         bool valid = true;
         
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
             edge* e_ptr = game.cur_area_data.edges[e];
             
             if(
@@ -4256,7 +4256,7 @@ void area_editor::setup_sector_split() {
         sector_split_info.working_sector_old_edges =
             sector_split_info.working_sector->edges;
     } else {
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
             edge* e_ptr = game.cur_area_data.edges[e];
             if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 sector_split_info.working_sector_old_edges.push_back(e_ptr);
@@ -4382,7 +4382,7 @@ void area_editor::traverse_sector_for_split(
     edge* first_e_ptr = nullptr;
     unsigned char first_edge_visits = 0;
     
-    for(unsigned char s = 0; s < 2; ++s) {
+    for(unsigned char s = 0; s < 2; s++) {
         vertex* v_ptr = begin;
         vertex* prev_v_ptr = nullptr;
         float prev_e_angle = TAU / 2.0f;
@@ -4648,7 +4648,7 @@ void area_editor::update_texture_suggestions(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
-    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+    for(size_t s = 0; s < texture_suggestions.size(); s++) {
         if(texture_suggestions[s].name == n) {
             pos = s;
             break;

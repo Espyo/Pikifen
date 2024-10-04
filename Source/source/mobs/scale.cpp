@@ -39,12 +39,12 @@ float scale::calculate_cur_weight() const {
     //Start by figuring out which mobs are applying weight.
     set<mob*> weighing_mobs;
     
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(m_ptr->standing_on_mob == this) {
             weighing_mobs.insert(m_ptr);
-            for(size_t h = 0; h < m_ptr->holding.size(); ++h) {
+            for(size_t h = 0; h < m_ptr->holding.size(); h++) {
                 weighing_mobs.insert(m_ptr->holding[h]);
             }
         }

@@ -78,7 +78,7 @@ onion::onion(const point &pos, onion_type* type, float angle) :
     [this] () { start_generating(); };
     next_generation_timer.on_end =
     [this] () {
-        for(size_t t = 0; t < oni_type->nest->pik_types.size(); ++t) {
+        for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
             if(generation_queue[t] > 0) {
                 next_generation_timer.start();
                 generate();
@@ -88,7 +88,7 @@ onion::onion(const point &pos, onion_type* type, float angle) :
         stop_generating();
     };
     
-    for(size_t t = 0; t < oni_type->nest->pik_types.size(); ++t) {
+    for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
         generation_queue.push_back(0);
     }
 }
@@ -145,7 +145,7 @@ void onion::read_script_vars(const script_var_reader &svr) {
  * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void onion::generate() {
-    for(size_t t = 0; t < generation_queue.size(); ++t) {
+    for(size_t t = 0; t < generation_queue.size(); t++) {
         if(generation_queue[t] == 0) continue;
         
         generation_queue[t]--;

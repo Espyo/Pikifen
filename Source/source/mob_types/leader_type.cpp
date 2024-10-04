@@ -48,7 +48,7 @@ leader_type::leader_type() :
         MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
         MOB_TARGET_FLAG_FRAGILE;
         
-    for(size_t s = 0; s < N_LEADER_SOUNDS; ++s) {
+    for(size_t s = 0; s < N_LEADER_SOUNDS; s++) {
         sfx_data_idxs[s] = INVALID;
     }
     
@@ -89,7 +89,7 @@ void leader_type::load_cat_properties(data_node* file) {
     rs.set("max_throw_height", max_throw_height);
     rs.set("whistle_range", whistle_range);
     
-    for(size_t s = 0; s < sounds.size(); ++s) {
+    for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "whistling") {
             sfx_data_idxs[LEADER_SOUND_WHISTLING] = s;
         } else if(sounds[s].name == "dismissing") {

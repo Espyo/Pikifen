@@ -295,7 +295,7 @@ public:
      */
     void init() {
         cur_option_idx = INVALID;
-        for(size_t p = 0; p < preset_values.size(); ++p) {
+        for(size_t p = 0; p < preset_values.size(); p++) {
             if(*cur_value == preset_values[p]) {
                 cur_option_idx = p;
                 break;
@@ -309,7 +309,7 @@ public:
         on_get_tooltip = [this] () {
             size_t def_idx = 0;
             string full_tooltip;
-            for(; def_idx < this->preset_values.size(); ++def_idx) {
+            for(; def_idx < this->preset_values.size(); def_idx++) {
                 if(this->preset_values[def_idx] == this->def_value) {
                     break;
                 }

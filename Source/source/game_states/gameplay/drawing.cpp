@@ -209,7 +209,7 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     if(!game.cur_area_data.bg_bmp) return;
     
     ALLEGRO_VERTEX bg_v[4];
-    for(unsigned char v = 0; v < 4; ++v) {
+    for(unsigned char v = 0; v < 4; v++) {
         bg_v[v].color = COLOR_WHITE;
         bg_v[v].z = 0;
     }
@@ -292,7 +292,7 @@ void gameplay_state::draw_big_msg() {
         ki_h.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
         ki_h.add(1.0f, 0.0f, EASE_METHOD_IN);
         
-        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); ++c) {
+        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); c++) {
             float char_ratio =
                 c / ((float) GAMEPLAY::BIG_MSG_READY_TEXT.size() - 1);
             char_ratio = 1.0f - char_ratio;
@@ -356,7 +356,7 @@ void gameplay_state::draw_big_msg() {
         
         float alpha = ki_a.get(t);
         
-        for(size_t c = 0; c < TEXT.size(); ++c) {
+        for(size_t c = 0; c < TEXT.size(); c++) {
             float char_ratio = c / ((float) TEXT.size() - 1);
             char_ratio = 1.0f - char_ratio;
             float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
@@ -591,7 +591,7 @@ void gameplay_state::draw_debug_tools() {
     //Group stuff.
     /*
     al_use_transform(&game.world_to_screen_transform);
-    for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+    for(size_t m = 0; m < cur_leader_ptr->group->members.size(); m++) {
         point offset = cur_leader_ptr->group->get_spot_offset(m);
         al_draw_filled_circle(
             cur_leader_ptr->group->anchor.x + offset.x,
@@ -634,7 +634,7 @@ void gameplay_state::draw_debug_tools() {
 void gameplay_state::draw_ingame_text() {
     //Mob things.
     size_t n_mobs = mobs.all.size();
-    for(size_t m = 0; m < n_mobs; ++m) {
+    for(size_t m = 0; m < n_mobs; m++) {
         mob* mob_ptr = mobs.all[m];
         
         //Fractions and health.
@@ -650,7 +650,7 @@ void gameplay_state::draw_ingame_text() {
             sprite* s;
             mob_ptr->get_sprite_data(&s, nullptr, nullptr);
             if(s) {
-                for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                for(size_t h = 0; h < s->hitboxes.size(); h++) {
                     hitbox* h_ptr = &s->hitboxes[h];
                     ALLEGRO_COLOR hc;
                     switch(h_ptr->type) {
@@ -680,7 +680,7 @@ void gameplay_state::draw_ingame_text() {
                 sprite* s;
                 mob_ptr->get_sprite_data(&s, nullptr, nullptr);
                 if(s) {
-                    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                    for(size_t h = 0; h < s->hitboxes.size(); h++) {
                         hitbox* h_ptr = &s->hitboxes[h];
                         point p =
                             mob_ptr->pos +
@@ -746,7 +746,7 @@ void gameplay_state::draw_ingame_text() {
         if(!path->path.empty()) {
         
             //Faint lines for the entire path.
-            for(size_t s = 0; s < path->path.size() - 1; ++s) {
+            for(size_t s = 0; s < path->path.size() - 1; s++) {
                 bool is_blocked = false;
                 path_link* l_ptr = path->path[s]->get_link(path->path[s + 1]);
                 auto l_it = path_mgr.obstructions.find(l_ptr);
@@ -864,7 +864,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     if(!cur_leader_ptr) return;
     
     size_t n_arrows = cur_leader_ptr->swarm_arrows.size();
-    for(size_t a = 0; a < n_arrows; ++a) {
+    for(size_t a = 0; a < n_arrows; a++) {
         point pos(
             cos(swarm_angle) * cur_leader_ptr->swarm_arrows[a],
             sin(swarm_angle) * cur_leader_ptr->swarm_arrows[a]
@@ -896,7 +896,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         get_angle(cur_leader_ptr->pos, leader_cursor_w);
     float cursor_distance =
         dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
-    for(size_t r = 0; r < n_rings; ++r) {
+    for(size_t r = 0; r < n_rings; r++) {
         point pos(
             cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
             cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
@@ -937,8 +937,8 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         );
         
         unsigned char n_dots = 16 * WHISTLE::N_DOT_COLORS;
-        for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; ++d) {
-            for(unsigned char d2 = 0; d2 < 16; ++d2) {
+        for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; d++) {
+            for(unsigned char d2 = 0; d2 < 16; d2++) {
                 unsigned char current_dot = d2 * WHISTLE::N_DOT_COLORS + d;
                 float angle =
                     TAU / n_dots *
@@ -994,8 +994,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     size_t n_standby_pikmin = 0;
     if(cur_leader_ptr->group->cur_standby_type) {
         for(
-            size_t m = 0; m < cur_leader_ptr->group->members.size();
-            ++m
+            size_t m = 0; m < cur_leader_ptr->group->members.size(); m++
         ) {
             mob* m_ptr = cur_leader_ptr->group->members[m];
             if(
@@ -1127,7 +1126,7 @@ void gameplay_state::draw_lighting_filter() {
         //Then, find out spotlights, and draw
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < mobs.all.size(); ++m) {
+        for(size_t m = 0; m < mobs.all.size(); m++) {
             mob* m_ptr = mobs.all[m];
             if(
                 has_flag(m_ptr->flags, MOB_FLAG_HIDDEN) ||
@@ -1245,7 +1244,7 @@ void gameplay_state::draw_message_box() {
     
     //Draw the message's text.
     size_t token_idx = 0;
-    for(size_t l = 0; l < 3; ++l) {
+    for(size_t l = 0; l < 3; l++) {
         size_t line_idx = msg_box->cur_section * 3 + l;
         if(line_idx >= msg_box->tokens_per_line.size()) {
             break;
@@ -1254,7 +1253,7 @@ void gameplay_state::draw_message_box() {
         //Figure out what scaling is necessary, if any.
         unsigned int total_width = 0;
         float x_scale = 1.0f;
-        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
+        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); t++) {
             total_width += msg_box->tokens_per_line[line_idx][t].width;
         }
         const float max_text_width = (MSG_BOX::MARGIN + MSG_BOX::PADDING) * 2;
@@ -1267,7 +1266,7 @@ void gameplay_state::draw_message_box() {
         float start_y =
             game.win_h - line_height * 4 + MSG_BOX::PADDING + offset;
             
-        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
+        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); t++) {
             token_idx++;
             if(token_idx >= msg_box->cur_token) break;
             string_token &cur_token = msg_box->tokens_per_line[line_idx][t];
@@ -1386,7 +1385,7 @@ void gameplay_state::draw_precipitation() {
         PRECIPITATION_TYPE_NONE
     ) {
         size_t n_precipitation_particles = precipitation.size();
-        for(size_t p = 0; p < n_precipitation_particles; ++p) {
+        for(size_t p = 0; p < n_precipitation_particles; p++) {
             al_draw_filled_circle(
                 precipitation[p].x, precipitation[p].y,
                 3, COLOR_WHITE
@@ -1441,7 +1440,7 @@ void gameplay_state::draw_system_stuff() {
         double chart_min = 1.0f; //1 FPS.
         double chart_max =
             game.options.target_fps + game.options.target_fps * 0.05f;
-        for(size_t f = 0; f < game.framerate_history.size(); ++f) {
+        for(size_t f = 0; f < game.framerate_history.size(); f++) {
             float fps =
                 std::min(
                     (float) (1.0f / game.framerate_history[f]),
@@ -1788,7 +1787,7 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
  * @brief Draws tree shadows.
  */
 void gameplay_state::draw_tree_shadows() {
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         
         unsigned char alpha =
@@ -1886,7 +1885,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     );
     
     //Sectors.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         
         if(
@@ -1910,7 +1909,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     particles.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
     
     //Mobs.
-    for(size_t m = 0; m < mobs.all.size(); ++m) {
+    for(size_t m = 0; m < mobs.all.size(); m++) {
         mob* mob_ptr = mobs.all[m];
         
         if(!bmp_output && mob_ptr->is_off_camera()) {
@@ -1992,7 +1991,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     }
     
     //Time to draw!
-    for(size_t c = 0; c < components.size(); ++c) {
+    for(size_t c = 0; c < components.size(); c++) {
         components[c].nr = c;
     }
     
@@ -2016,14 +2015,14 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         mob_shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
     
-    for(size_t c = 0; c < components.size(); ++c) {
+    for(size_t c = 0; c < components.size(); c++) {
         world_component* c_ptr = &components[c];
         
         if(c_ptr->sector_ptr) {
         
             draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
             
-            for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); ++h) {
+            for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); h++) {
                 if(c_ptr->sector_ptr->hazards[h]->associated_liquid) {
                     draw_liquid(
                         c_ptr->sector_ptr,

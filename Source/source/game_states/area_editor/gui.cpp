@@ -35,7 +35,7 @@ void area_editor::open_load_dialog() {
             true
         );
         
-    for(size_t f = 0; f < folders.size(); ++f) {
+    for(size_t f = 0; f < folders.size(); f++) {
         areas.push_back(picker_item(folders[f], "Simple"));
     }
     
@@ -46,7 +46,7 @@ void area_editor::open_load_dialog() {
             true
         );
         
-    for(size_t f = 0; f < folders.size(); ++f) {
+    for(size_t f = 0; f < folders.size(); f++) {
         areas.push_back(picker_item(folders[f], "Mission"));
     }
     
@@ -671,7 +671,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     
     vector<string> team_names;
     team_names.push_back("(Default)");
-    for(unsigned char t = 0; t < N_MOB_TEAMS; ++t) {
+    for(unsigned char t = 0; t < N_MOB_TEAMS; t++) {
         team_names.push_back(game.team_names[t]);
     }
     
@@ -752,7 +752,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     
     //Now, dynamically create widgets for all properties this mob type has.
     
-    for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); ++p) {
+    for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); p++) {
     
         mob_type::area_editor_prop_t* p_ptr =
             &m_ptr->type->area_editor_props[p];
@@ -1615,7 +1615,7 @@ void area_editor::process_gui_panel_gameplay() {
         
             map<string, string> spray_strs =
                 get_var_map(game.cur_area_data.spray_amounts);
-            for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+            for(size_t s = 0; s < game.content.spray_types.size(); s++) {
                 int amount = s2i(spray_strs[game.content.spray_types[s].name]);
                 ImGui::SetNextItemWidth(50);
                 if(
@@ -2687,7 +2687,7 @@ void area_editor::process_gui_panel_mission() {
     
         //Goal combobox.
         vector<string> goals_list;
-        for(size_t g = 0; g < game.mission_goals.size(); ++g) {
+        for(size_t g = 0; g < game.mission_goals.size(); g++) {
             goals_list.push_back(game.mission_goals[g]->get_name());
         }
         int mission_goal = game.cur_area_data.mission.goal;
@@ -3315,7 +3315,7 @@ void area_editor::process_gui_panel_mission() {
         }
         
         vector<MISSION_FAIL_COND> active_conditions;
-        for(size_t c = 0; c < game.mission_fail_conds.size(); ++c) {
+        for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
             if(
                 has_flag(
                     game.cur_area_data.mission.fail_conditions,
@@ -3350,7 +3350,7 @@ void area_editor::process_gui_panel_mission() {
                 int selected = 0;
                 bool found = false;
                 vector<string> cond_strings;
-                for(size_t c = 0; c < active_conditions.size(); ++c) {
+                for(size_t c = 0; c < active_conditions.size(); c++) {
                     size_t cond_id = active_conditions[c];
                     cond_strings.push_back(
                         game.mission_fail_conds[cond_id]->get_name()
@@ -3402,7 +3402,7 @@ void area_editor::process_gui_panel_mission() {
                 bool found = false;
                 int selected = 0;
                 vector<string> cond_strings;
-                for(size_t c = 0; c < active_conditions.size(); ++c) {
+                for(size_t c = 0; c < active_conditions.size(); c++) {
                     size_t cond_id = active_conditions[c];
                     cond_strings.push_back(
                         game.mission_fail_conds[cond_id]->get_name()
@@ -4013,10 +4013,10 @@ void area_editor::process_gui_panel_mob() {
             for(
                 size_t m = 0;
                 m < game.cur_area_data.mob_generators.size();
-                ++m
+                m++
             ) {
                 mob_gen* other_m_ptr = game.cur_area_data.mob_generators[m];
-                for(size_t l = 0; l < other_m_ptr->links.size(); ++l) {
+                for(size_t l = 0; l < other_m_ptr->links.size(); l++) {
                     if(other_m_ptr->links[l] == m_ptr) {
                         has_links_to = true;
                         break;
@@ -5286,7 +5286,7 @@ void area_editor::process_gui_panel_sector() {
                         string hazard_name = list[selected_hazard_idx];
                         s_ptr->hazards_str.clear();
                         s_ptr->hazards.clear();
-                        for(size_t h = 0; h < list.size(); ++h) {
+                        for(size_t h = 0; h < list.size(); h++) {
                             if(h == (size_t) selected_hazard_idx) continue;
                             s_ptr->hazards_str += list[h] + ";";
                             s_ptr->hazards.push_back(&(game.content.hazards[list[h]]));
@@ -5347,7 +5347,7 @@ void area_editor::process_gui_panel_sector() {
             //Sector type combobox.
             vector<string> types_list;
             for(
-                size_t t = 0; t < game.sector_types.get_nr_of_items(); ++t
+                size_t t = 0; t < game.sector_types.get_nr_of_items(); t++
             ) {
                 types_list.push_back(
                     game.sector_types.get_name((SECTOR_TYPE) t)
@@ -5423,7 +5423,7 @@ void area_editor::process_gui_panel_sector() {
                 
                 picker_buttons.push_back(picker_item("Browse..."));
                 
-                for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+                for(size_t s = 0; s < texture_suggestions.size(); s++) {
                     picker_buttons.push_back(
                         picker_item(
                             texture_suggestions[s].name,

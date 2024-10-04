@@ -87,7 +87,7 @@ editor::editor() :
     changes_mgr(this) {
     
     editor_icons.reserve(N_EDITOR_ICONS);
-    for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+    for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
         editor_icons.push_back(nullptr);
     }
 }
@@ -869,7 +869,7 @@ bool editor::list_popup(
         if(escape_was_pressed) {
             ImGui::CloseCurrentPopup();
         }
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
             if(ImGui::Selectable(name.c_str())) {
                 *picked_item = name;
@@ -891,7 +891,7 @@ void editor::load() {
     bmp_editor_icons =
         load_bmp(game.asset_file_names.bmp_editor_icons, nullptr, true, false);
     if(bmp_editor_icons) {
-        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
             editor_icons[i] =
                 al_create_sub_bitmap(
                     bmp_editor_icons,
@@ -924,12 +924,12 @@ void editor::load() {
  */
 void editor::load_custom_mob_cat_types(bool is_area_editor) {
     //Load.
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORY) c);
         vector<string> type_names;
         c_ptr->get_type_names(type_names);
         
-        for(size_t tn = 0; tn < type_names.size(); ++tn) {
+        for(size_t tn = 0; tn < type_names.size(); tn++) {
             mob_type* mt_ptr = c_ptr->get_type(type_names[tn]);
             
             if(is_area_editor && !mt_ptr->appears_in_area_editor) {
@@ -960,7 +960,7 @@ void editor::load_custom_mob_cat_types(bool is_area_editor) {
         c2.front()->custom_category_name;
     }
     );
-    for(size_t c = 0; c < custom_cat_types.size(); ++c) {
+    for(size_t c = 0; c < custom_cat_types.size(); c++) {
         vector<mob_type*> &types = custom_cat_types[c];
         //Sort the types within a custom category.
         std::sort(
@@ -1092,7 +1092,7 @@ void editor::process_dialogs() {
             delete d_ptr;
             dialogs.erase(dialogs.begin() + d);
         } else {
-            ++d;
+            d++;
         }
     }
     
@@ -1197,7 +1197,7 @@ void editor::process_gui_history(
     
         if(!history.empty() && !history[0].empty()) {
         
-            for(size_t h = 0; h < history.size(); ++h) {
+            for(size_t h = 0; h < history.size(); h++) {
                 string name = history[h];
                 if(name.empty()) continue;
                 
@@ -1276,8 +1276,8 @@ bool editor::process_gui_mob_type_widgets(
     
     if(search_button_pressed) {
         vector<picker_item> items;
-        for(size_t c = 0; c < custom_cat_types.size(); ++c) {
-            for(size_t n = 0; n < custom_cat_types[c].size(); ++n) {
+        for(size_t c = 0; c < custom_cat_types.size(); c++) {
+            for(size_t n = 0; n < custom_cat_types[c].size(); n++) {
                 mob_type* mt_ptr = custom_cat_types[c][n];
                 items.push_back(
                     picker_item(mt_ptr->name, mt_ptr->custom_category_name)
@@ -1296,7 +1296,7 @@ bool editor::process_gui_mob_type_widgets(
             size_t custom_cat_idx = custom_cat_name_idxs[c];
             const vector<mob_type*> &types =
                 custom_cat_types[custom_cat_idx];
-            for(size_t t = 0; t < types.size(); ++t) {
+            for(size_t t = 0; t < types.size(); t++) {
                 if(types[t]->name == n) {
                     internal_mob_type = types[t];
                     return;
@@ -1315,7 +1315,7 @@ bool editor::process_gui_mob_type_widgets(
     //Object category combobox.
     vector<string> categories;
     int selected_category_idx = -1;
-    for(size_t c = 0; c < custom_cat_types.size(); ++c) {
+    for(size_t c = 0; c < custom_cat_types.size(); c++) {
         string cn =
             custom_cat_types[c].front()->custom_category_name;
         categories.push_back(cn);
@@ -1339,7 +1339,7 @@ bool editor::process_gui_mob_type_widgets(
         vector<string> type_names;
         size_t custom_cat_idx = custom_cat_name_idxs[internal_custom_cat_name];
         const vector<mob_type*> &types = custom_cat_types[custom_cat_idx];
-        for(size_t t = 0; t < types.size(); ++t) {
+        for(size_t t = 0; t < types.size(); t++) {
             mob_type* t_ptr = types[t];
             type_names.push_back(t_ptr->name);
         }
@@ -1350,7 +1350,7 @@ bool editor::process_gui_mob_type_widgets(
         }
         if(ImGui::Combo("Type", &selected_type_name, type_names, 15)) {
             result = true;
-            for(size_t t = 0; t < types.size(); ++t) {
+            for(size_t t = 0; t < types.size(); t++) {
                 if(types[t]->name == selected_type_name) {
                     internal_mob_type = types[t];
                     break;
@@ -1715,7 +1715,7 @@ point editor::snap_point_to_grid(const point &p, float grid_interval) {
  */
 void editor::unload() {
     if(bmp_editor_icons) {
-        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
             al_destroy_bitmap(editor_icons[i]);
             editor_icons[i] = nullptr;
         }
@@ -1737,7 +1737,7 @@ void editor::update_history(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
-    for(size_t h = 0; h < history.size(); ++h) {
+    for(size_t h = 0; h < history.size(); h++) {
         if(history[h] == n) {
             pos = h;
             break;
@@ -2260,7 +2260,7 @@ void editor::picker_info::process() {
     vector<vector<picker_item> > final_items;
     string filter_lower = str_to_lower(filter);
     
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         if(!filter.empty()) {
             string name_lower = str_to_lower(items[i].name);
             if(name_lower.find(filter_lower) == string::npos) {
@@ -2269,7 +2269,7 @@ void editor::picker_info::process() {
         }
         
         size_t cat_idx = INVALID;
-        for(size_t c = 0; c < category_names.size(); ++c) {
+        for(size_t c = 0; c < category_names.size(); c++) {
             if(category_names[c] == items[i].category) {
                 cat_idx = c;
                 break;
@@ -2299,7 +2299,7 @@ void editor::picker_info::process() {
         }
         
         bool is_really_new = true;
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
             if(
                 filter == items[i].name &&
                 new_item_category == items[i].category
@@ -2353,7 +2353,7 @@ void editor::picker_info::process() {
             try_make_new();
         } else {
             size_t possible_choices = 0;
-            for(size_t c = 0; c < final_items.size(); ++c) {
+            for(size_t c = 0; c < final_items.size(); c++) {
                 possible_choices += final_items[c].size();
             }
             if(possible_choices == 1) {
@@ -2377,7 +2377,7 @@ void editor::picker_info::process() {
                 "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
             )
         ) {
-            for(size_t c = 0; c < new_item_category_choices.size(); ++c) {
+            for(size_t c = 0; c < new_item_category_choices.size(); c++) {
                 if(ImGui::Selectable(new_item_category_choices[c].c_str())) {
                     new_item_category = new_item_category_choices[c];
                     ImGui::CloseCurrentPopup();
@@ -2401,7 +2401,7 @@ void editor::picker_info::process() {
     float picker_x2 =
         ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
         
-    for(size_t c = 0; c < final_items.size(); ++c) {
+    for(size_t c = 0; c < final_items.size(); c++) {
     
         bool show = true;
         if(!category_names[c].empty()) {
@@ -2410,7 +2410,7 @@ void editor::picker_info::process() {
         }
         
         if(show) {
-            for(size_t i = 0; i < final_items[c].size(); ++i) {
+            for(size_t i = 0; i < final_items[c].size(); i++) {
                 picker_item* i_ptr = &final_items[c][i];
                 string widgetId = i2s(c) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
@@ -2560,7 +2560,7 @@ void editor::transformation_widget::draw(
         handles[8],
         handles[6],
     };
-    for(unsigned char c = 0; c < 4; ++c) {
+    for(unsigned char c = 0; c < 4; c++) {
         size_t c2 = sum_and_wrap(c, 1, 4);
         al_draw_line(
             corners[c].x, corners[c].y,
@@ -2570,7 +2570,7 @@ void editor::transformation_widget::draw(
     }
     
     //Draw the translation and scale handles.
-    for(unsigned char h = 0; h < 9; ++h) {
+    for(unsigned char h = 0; h < 9; h++) {
         if(!size && h != 4) continue;
         al_draw_filled_circle(
             handles[h].x, handles[h].y,
@@ -2621,7 +2621,7 @@ void editor::transformation_widget::get_locations(
     handles[7] = { 0.0f,                  size_to_use.y / 2.0f  };
     handles[8] = { size_to_use.x / 2.0f,  size_to_use.y / 2.0f  };
     
-    for(unsigned char h = 0; h < 9; ++h) {
+    for(unsigned char h = 0; h < 9; h++) {
         al_transform_coordinates(
             &transform_to_use, &handles[h].x, &handles[h].y
         );
@@ -2669,7 +2669,7 @@ bool editor::transformation_widget::handle_mouse_down(
     get_locations(center, size, angle, handles, &radius, nullptr);
     
     //Check if the user clicked on a translation or scale handle.
-    for(unsigned char h = 0; h < 9; ++h) {
+    for(unsigned char h = 0; h < 9; h++) {
         if(dist(handles[h], mouse_coords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
             if(h == 4) {
                 moving_handle = h;

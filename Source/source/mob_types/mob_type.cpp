@@ -65,7 +65,7 @@ mob_type::mob_type(MOB_CATEGORY category_id) :
 mob_type::~mob_type() {
     states.clear();
     anims.destroy();
-    for(size_t a = 0; a < init_actions.size(); ++a) {
+    for(size_t a = 0; a < init_actions.size(); a++) {
         delete init_actions[a];
     }
     init_actions.clear();
@@ -297,7 +297,7 @@ void mob_type::load_from_data_node(
                 custom_carry_spots_node
             );
         } else {
-            for(size_t p = 0; p < points.size(); ++p) {
+            for(size_t p = 0; p < points.size(); p++) {
                 custom_carry_spots.push_back(s2p(points[p]));
             }
         }
@@ -308,7 +308,7 @@ void mob_type::load_from_data_node(
     //Vulnerabilities.
     data_node* vulnerabilities_node =
         node->get_child_by_name("vulnerabilities");
-    for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); ++h) {
+    for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); h++) {
     
         data_node* vuln_node = vulnerabilities_node->get_child(h);
         auto hazard_it = game.content.hazards.find(vuln_node->name);
@@ -405,7 +405,7 @@ void mob_type::load_from_data_node(
         node->get_child_by_name("spike_damage_vulnerabilities");
     size_t n_sd_vuln =
         spike_damage_vuln_node->get_nr_of_children();
-    for(size_t v = 0; v < n_sd_vuln; ++v) {
+    for(size_t v = 0; v < n_sd_vuln; v++) {
     
         data_node* vul_node = spike_damage_vuln_node->get_child(v);
         auto sdv_it = game.content.spike_damage_types.find(vul_node->name);
@@ -447,7 +447,7 @@ void mob_type::load_from_data_node(
         node->get_child_by_name("status_vulnerabilities");
     size_t n_s_vuln =
         status_vuln_node->get_nr_of_children();
-    for(size_t v = 0; v < n_s_vuln; ++v) {
+    for(size_t v = 0; v < n_s_vuln; v++) {
     
         data_node* vul_node = status_vuln_node->get_child(v);
         auto sv_it = game.content.status_types.find(vul_node->name);
@@ -491,7 +491,7 @@ void mob_type::load_from_data_node(
     //Reaches.
     data_node* reaches_node = node->get_child_by_name("reaches");
     size_t n_reaches = reaches_node->get_nr_of_children();
-    for(size_t r = 0; r < n_reaches; ++r) {
+    for(size_t r = 0; r < n_reaches; r++) {
     
         mob_type::reach_t new_reach;
         new_reach.name = reaches_node->get_child(r)->name;
@@ -518,7 +518,7 @@ void mob_type::load_from_data_node(
     //Spawns.
     data_node* spawns_node = node->get_child_by_name("spawns");
     size_t n_spawns = spawns_node->get_nr_of_children();
-    for(size_t s = 0; s < n_spawns; ++s) {
+    for(size_t s = 0; s < n_spawns; s++) {
     
         data_node* spawn_node = spawns_node->get_child(s);
         reader_setter spawn_rs(spawn_node);
@@ -546,7 +546,7 @@ void mob_type::load_from_data_node(
     //Children.
     data_node* children_node = node->get_child_by_name("children");
     size_t n_children = children_node->get_nr_of_children();
-    for(size_t c = 0; c < n_children; ++c) {
+    for(size_t c = 0; c < n_children; c++) {
     
         data_node* child_node = children_node->get_child(c);
         reader_setter child_rs(child_node);
@@ -630,7 +630,7 @@ void mob_type::load_from_data_node(
     //Sounds.
     data_node* sfxs_node = node->get_child_by_name("sounds");
     size_t n_sounds = sfxs_node->get_nr_of_children();
-    for(size_t s = 0; s < n_sounds; ++s) {
+    for(size_t s = 0; s < n_sounds; s++) {
     
         data_node* sfx_node = sfxs_node->get_child(s);
         reader_setter sfx_rs(sfx_node);
@@ -713,7 +713,7 @@ void mob_type::load_from_data_node(
     data_node* ae_props_node =
         node->get_child_by_name("area_editor_properties");
     size_t n_ae_props = ae_props_node->get_nr_of_children();
-    for(size_t p = 0; p < n_ae_props; ++p) {
+    for(size_t p = 0; p < n_ae_props; p++) {
     
         data_node* prop_node = ae_props_node->get_child(p);
         reader_setter prop_rs(prop_node);
@@ -796,7 +796,7 @@ void mob_type::load_from_data_node(
     if(huntable_targets_node) {
         huntable_targets = 0;
     }
-    for(size_t h = 0; h < huntable_targets_strs.size(); ++h) {
+    for(size_t h = 0; h < huntable_targets_strs.size(); h++) {
         size_t v = string_to_mob_target_type(huntable_targets_strs[h]);
         if(v == INVALID) {
             game.errors.report(
@@ -813,7 +813,7 @@ void mob_type::load_from_data_node(
     if(hurtable_targets_node) {
         hurtable_targets = 0;
     }
-    for(size_t h = 0; h < hurtable_targets_strs.size(); ++h) {
+    for(size_t h = 0; h < hurtable_targets_strs.size(); h++) {
         size_t v = string_to_mob_target_type(hurtable_targets_strs[h]);
         if(v == INVALID) {
             game.errors.report(
@@ -875,7 +875,7 @@ void mob_type::load_from_data_node(
                 script_file.get_child_by_name("first_state");
             string first_state_name = first_state_name_node->value;
             
-            for(size_t s = 0; s < states.size(); ++s) {
+            for(size_t s = 0; s < states.size(); s++) {
                 if(states[s]->name == first_state_name) {
                     first_state_idx = s;
                     break;
@@ -890,7 +890,7 @@ void mob_type::load_from_data_node(
             }
             
             if(!death_state_name.empty()) {
-                for(size_t s = 0; s < states.size(); ++s) {
+                for(size_t s = 0; s < states.size(); s++) {
                     if(states[s]->name == death_state_name) {
                         death_state_idx = s;
                         break;
@@ -949,8 +949,8 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
 ) const {
     anim_conversion_vector new_v;
     
-    for(size_t g = 0; g < animation_group_suffixes.size(); ++g) {
-        for(size_t c = 0; c < v.size(); ++c) {
+    for(size_t g = 0; g < animation_group_suffixes.size(); g++) {
+        for(size_t c = 0; c < v.size(); c++) {
             new_v.push_back(
                 make_pair(
                     g * base_anim_total + v[c].first,

@@ -113,7 +113,7 @@ vector<string> get_backtrace() {
     size_t n_symbols = backtrace(stack, BACKTRACE::MAX_FRAMES);
     char** symbols = backtrace_symbols(stack, n_symbols);
     
-    for(size_t s = 0; s < n_symbols; ++s) {
+    for(size_t s = 0; s < n_symbols; s++) {
         result.push_back(demangle_symbol(symbols[s]));
     }
     
@@ -161,7 +161,7 @@ vector<string> get_backtrace() {
     size_t n_symbols =
         CaptureStackBackTrace(0, BACKTRACE::MAX_FRAMES, stack, nullptr);
         
-    for(size_t s = 0; s < n_symbols; ++s) {
+    for(size_t s = 0; s < n_symbols; s++) {
         SymFromAddr(process, (DWORD64) stack[s], nullptr, symbol);
         
         std::stringstream str;

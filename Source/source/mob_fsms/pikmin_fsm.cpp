@@ -2807,7 +2807,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         );
     }
     
-    for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
+    for(size_t s = 0; s < carriable_mob->type->max_carriers; s++) {
         carrier_spot_t* spot_ptr =
             &carriable_mob->carry_info->spot_info[s];
         if(spot_ptr->state != CARRY_SPOT_STATE_FREE) continue;
@@ -3962,7 +3962,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->start_height_effect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
+    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); c++) {
         checkpoints.push_back(c);
     }
     m->track_info =
@@ -4147,7 +4147,7 @@ void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
         return;
     }
     
-    for(size_t s = 0; s < m->statuses.size(); ++s) {
+    for(size_t s = 0; s < m->statuses.size(); s++) {
         if(m->statuses[s].type->turns_inedible) {
             return;
         }
@@ -4181,7 +4181,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(h->associated_liquid) {
         bool already_generating = false;
-        for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+        for(size_t g = 0; g < m->particle_generators.size(); g++) {
             if(
                 m->particle_generators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
@@ -4210,7 +4210,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     if(vuln.damage_mult == 0.0f) return;
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
-        for(size_t e = 0; e < h->effects.size(); ++e) {
+        for(size_t e = 0; e < h->effects.size(); e++) {
             p->apply_status_effect(h->effects[e], false, true);
         }
     }
@@ -4232,7 +4232,7 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     
     spray_type* s = (spray_type*) info1;
     
-    for(size_t e = 0; e < s->effects.size(); ++e) {
+    for(size_t e = 0; e < s->effects.size(); e++) {
         m->apply_status_effect(s->effects[e], false, false);
     }
     

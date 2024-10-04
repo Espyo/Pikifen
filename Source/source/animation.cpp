@@ -108,7 +108,7 @@ void animation::delete_frame(size_t idx) {
  */
 float animation::get_duration() {
     float duration = 0.0f;
-    for(size_t f = 0; f < frames.size(); ++f) {
+    for(size_t f = 0; f < frames.size(); f++) {
         duration += frames[f].duration;
     }
     return duration;
@@ -136,7 +136,7 @@ void animation::get_frame_and_time(
     float duration_so_far = 0.0f;
     float prev_duration_so_far = 0.0f;
     size_t f = 0;
-    for(f = 0; f < frames.size(); ++f) {
+    for(f = 0; f < frames.size(); f++) {
         prev_duration_so_far = duration_so_far;
         duration_so_far += frames[f].duration;
         
@@ -157,7 +157,7 @@ void animation::get_frame_and_time(
  */
 float animation::get_loop_duration() {
     float duration = 0.0f;
-    for(size_t f = loop_frame; f < frames.size(); ++f) {
+    for(size_t f = loop_frame; f < frames.size(); f++) {
         duration += frames[f].duration;
     }
     return duration;
@@ -181,7 +181,7 @@ float animation::get_time(size_t frame_idx, float frame_time) {
     }
     
     float cur_time = 0.0f;
-    for(size_t f = 0; f < frame_idx; ++f) {
+    for(size_t f = 0; f < frame_idx; f++) {
         cur_time += frames[f].duration;
     }
     cur_time += frame_time;
@@ -213,9 +213,9 @@ animation_database::animation_database(
  */
 void animation_database::calculate_hitbox_span() {
     hitbox_span = 0.0f;
-    for(size_t s = 0; s < sprites.size(); ++s) {
+    for(size_t s = 0; s < sprites.size(); s++) {
         sprite* s_ptr = sprites[s];
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
             
             float d = dist(point(0, 0), h_ptr->pos).to_float();
@@ -254,13 +254,13 @@ void animation_database::create_conversions(
     
     //First, find the highest index.
     size_t highest = conversions[0].first;
-    for(size_t c = 1; c < conversions.size(); ++c) {
+    for(size_t c = 1; c < conversions.size(); c++) {
         highest = std::max(highest, conversions[c].first);
     }
     
     pre_named_conversions.assign(highest + 1, INVALID);
     
-    for(size_t c = 0; c < conversions.size(); ++c) {
+    for(size_t c = 0; c < conversions.size(); c++) {
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
         if(a_pos == INVALID) {
@@ -277,13 +277,13 @@ void animation_database::create_conversions(
  * @brief Destroys an animation database and all of its content.
  */
 void animation_database::destroy() {
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         delete animations[a];
     }
-    for(size_t s = 0; s < sprites.size(); ++s) {
+    for(size_t s = 0; s < sprites.size(); s++) {
         delete sprites[s];
     }
-    for(size_t b = 0; b < body_parts.size(); ++b) {
+    for(size_t b = 0; b < body_parts.size(); b++) {
         delete body_parts[b];
     }
     animations.clear();
@@ -298,23 +298,23 @@ void animation_database::destroy() {
  * @param idx Sprite index.
  */
 void animation_database::delete_sprite(size_t idx) {
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         animation* a_ptr = animations[a];
         
         for(size_t f = 0; f < a_ptr->frames.size();) {
             if(a_ptr->frames[f].sprite_idx == idx) {
                 a_ptr->delete_frame(f);
             } else {
-                ++f;
+                f++;
             }
         }
     }
     
     sprites.erase(sprites.begin() + idx);
     
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         animation* a_ptr = animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+        for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             frame* f_ptr = &(a_ptr->frames[f]);
             f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
         }
@@ -328,14 +328,14 @@ void animation_database::delete_sprite(size_t idx) {
  * @param mt_ptr Mob type with the sound data.
  */
 void animation_database::fill_sound_idx_caches(mob_type* mt_ptr) {
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         animation* a_ptr = animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+        for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             frame* f_ptr = &a_ptr->frames[f];
             f_ptr->sound_idx = INVALID;
             if(f_ptr->sound.empty()) continue;
             
-            for(size_t s = 0; s < mt_ptr->sounds.size(); ++s) {
+            for(size_t s = 0; s < mt_ptr->sounds.size(); s++) {
                 if(mt_ptr->sounds[s].name == f_ptr->sound) {
                     f_ptr->sound_idx = s;
                 }
@@ -352,7 +352,7 @@ void animation_database::fill_sound_idx_caches(mob_type* mt_ptr) {
  * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_animation(const string &name) const {
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         if(animations[a]->name == name) return a;
     }
     return INVALID;
@@ -366,7 +366,7 @@ size_t animation_database::find_animation(const string &name) const {
  * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_body_part(const string &name) const {
-    for(size_t b = 0; b < body_parts.size(); ++b) {
+    for(size_t b = 0; b < body_parts.size(); b++) {
         if(body_parts[b]->name == name) return b;
     }
     return INVALID;
@@ -380,7 +380,7 @@ size_t animation_database::find_body_part(const string &name) const {
  * @return The index, or INVALID if not found.
  */
 size_t animation_database::find_sprite(const string &name) const {
-    for(size_t s = 0; s < sprites.size(); ++s) {
+    for(size_t s = 0; s < sprites.size(); s++) {
         if(sprites[s]->name == name) return s;
     }
     return INVALID;
@@ -391,12 +391,12 @@ size_t animation_database::find_sprite(const string &name) const {
  * @brief Fixes the pointers for body parts.
  */
 void animation_database::fix_body_part_pointers() {
-    for(size_t s = 0; s < sprites.size(); ++s) {
+    for(size_t s = 0; s < sprites.size(); s++) {
         sprite* s_ptr = sprites[s];
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
             
-            for(size_t b = 0; b < body_parts.size(); ++b) {
+            for(size_t b = 0; b < body_parts.size(); b++) {
                 body_part* b_ptr = body_parts[b];
                 if(b_ptr->name == h_ptr->body_part_name) {
                     h_ptr->body_part_idx = b;
@@ -421,7 +421,7 @@ void animation_database::load_from_data_node(data_node* node) {
     //Body parts.
     data_node* body_parts_node = node->get_child_by_name("body_parts");
     size_t n_body_parts = body_parts_node->get_nr_of_children();
-    for(size_t b = 0; b < n_body_parts; ++b) {
+    for(size_t b = 0; b < n_body_parts; b++) {
     
         data_node* body_part_node = body_parts_node->get_child(b);
         
@@ -432,7 +432,7 @@ void animation_database::load_from_data_node(data_node* node) {
     //Sprites.
     data_node* sprites_node = node->get_child_by_name("sprites");
     size_t n_sprites = sprites_node->get_nr_of_children();
-    for(size_t s = 0; s < n_sprites; ++s) {
+    for(size_t s = 0; s < n_sprites; s++) {
     
         data_node* sprite_node = sprites_node->get_child(s);
         vector<hitbox> hitboxes;
@@ -441,7 +441,7 @@ void animation_database::load_from_data_node(data_node* node) {
             sprite_node->get_child_by_name("hitboxes");
         size_t n_hitboxes = hitboxes_node->get_nr_of_children();
         
-        for(size_t h = 0; h < n_hitboxes; ++h) {
+        for(size_t h = 0; h < n_hitboxes; h++) {
         
             data_node* hitbox_node =
                 hitboxes_node->get_child(h);
@@ -495,7 +495,7 @@ void animation_database::load_from_data_node(data_node* node) {
             cur_hitbox.hazards_str = hazards_node->value;
             vector<string> hazards_strs =
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
-            for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
+            for(size_t hs = 0; hs < hazards_strs.size(); hs++) {
                 string hazard_name = hazards_strs[hs];
                 if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
                     game.errors.report(
@@ -560,7 +560,7 @@ void animation_database::load_from_data_node(data_node* node) {
     //Animations.
     data_node* anims_node = node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
-    for(size_t a = 0; a < n_anims; ++a) {
+    for(size_t a = 0; a < n_anims; a++) {
     
         data_node* anim_node = anims_node->get_child(a);
         vector<frame> frames;
@@ -570,7 +570,7 @@ void animation_database::load_from_data_node(data_node* node) {
         size_t n_frames =
             frames_node->get_nr_of_children();
             
-        for(size_t f = 0; f < n_frames; ++f) {
+        for(size_t f = 0; f < n_frames; f++) {
             data_node* frame_node = frames_node->get_child(f);
             size_t s_pos = find_sprite(frame_node->name);
             string signal_str =
@@ -623,7 +623,7 @@ void animation_database::save_to_data_node(
     data_node* animations_node = new data_node("animations", "");
     node->add(animations_node);
     
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         data_node* anim_node = new data_node(animations[a]->name, "");
         animations_node->add(anim_node);
         
@@ -642,10 +642,7 @@ void animation_database::save_to_data_node(
         data_node* frames_node = new data_node("frames", "");
         anim_node->add(frames_node);
         
-        for(
-            size_t f = 0; f < animations[a]->frames.size();
-            ++f
-        ) {
+        for(size_t f = 0; f < animations[a]->frames.size(); f++) {
             frame* f_ptr = &animations[a]->frames[f];
             
             data_node* frame_node =
@@ -677,7 +674,7 @@ void animation_database::save_to_data_node(
     data_node* sprites_node = new data_node("sprites", "");
     node->add(sprites_node);
     
-    for(size_t s = 0; s < sprites.size(); ++s) {
+    for(size_t s = 0; s < sprites.size(); s++) {
         sprite* s_ptr = sprites[s];
         data_node* sprite_node = new data_node(sprites[s]->name, "");
         sprites_node->add(sprite_node);
@@ -718,7 +715,7 @@ void animation_database::save_to_data_node(
                 new data_node("hitboxes", "");
             sprite_node->add(hitboxes_node);
             
-            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
                 hitbox* h_ptr = &s_ptr->hitboxes[h];
                 
                 data_node* hitbox_node =
@@ -802,7 +799,7 @@ void animation_database::save_to_data_node(
     data_node* body_parts_node = new data_node("body_parts", "");
     node->add(body_parts_node);
     
-    for(size_t b = 0; b < body_parts.size(); ++b) {
+    for(size_t b = 0; b < body_parts.size(); b++) {
         data_node* body_part_node =
             new data_node(body_parts[b]->name, "");
         body_parts_node->add(body_part_node);
@@ -829,9 +826,9 @@ void animation_database::sort_alphabetically() {
     }
     );
     
-    for(size_t a = 0; a < animations.size(); ++a) {
+    for(size_t a = 0; a < animations.size(); a++) {
         animation* a_ptr = animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+        for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             frame* f_ptr = &(a_ptr->frames[f]);
             
             f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
@@ -978,7 +975,7 @@ void animation_instance::skip_ahead_randomly() {
     //First, find how long the animation lasts for.
     
     float total_duration = 0;
-    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+    for(size_t f = 0; f < cur_anim->frames.size(); f++) {
         total_duration += cur_anim->frames[f].duration;
     }
     
@@ -1180,7 +1177,7 @@ void sprite::create_hitboxes(
     animation_database* const adb, float height, float radius
 ) {
     hitboxes.clear();
-    for(size_t b = 0; b < adb->body_parts.size(); ++b) {
+    for(size_t b = 0; b < adb->body_parts.size(); b++) {
         hitboxes.push_back(
             hitbox(
                 adb->body_parts[b]->name,

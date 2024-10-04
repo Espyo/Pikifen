@@ -519,7 +519,7 @@ void init_controls() {
     //If the options are loaded successfully, these binds are overwritten.
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
-    for(size_t a = 0; a < action_types.size(); ++a) {
+    for(size_t a = 0; a < action_types.size(); a++) {
         string def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
@@ -541,7 +541,7 @@ void init_dear_imgui() {
     ImGui_ImplAllegro5_Init(game.display);
     ImGui::GetIO().IniFilename = "";
     ImGui::GetIO().ConfigDragClickToInputText = true;
-    for(size_t c = 0; c < ImGuiCol_COUNT; ++c) {
+    for(size_t c = 0; c < ImGuiCol_COUNT; c++) {
         game.imgui_default_style[c] = ImGui::GetStyle().Colors[c];
     }
 }

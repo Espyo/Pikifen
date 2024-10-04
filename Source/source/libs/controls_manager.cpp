@@ -55,7 +55,7 @@ vector<int> controls_manager::get_action_types_from_input(
 ) {
     vector<int> action_types;
     
-    for(size_t b = 0; b < binds.size(); ++b) {
+    for(size_t b = 0; b < binds.size(); b++) {
     
         const control_bind &bind = binds[b];
         
@@ -127,7 +127,7 @@ void controls_manager::handle_clean_input(
     //Find what game action types are bound to this input.
     vector<int> action_types = get_action_types_from_input(input);
     
-    for(size_t a = 0; a < action_types.size(); ++a) {
+    for(size_t a = 0; a < action_types.size(); a++) {
         if(add_directly) {
             //Add it to the action queue directly.
             player_action new_action;

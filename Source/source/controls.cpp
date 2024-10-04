@@ -164,7 +164,7 @@ control_bind controls_mediator::find_bind(
 control_bind controls_mediator::find_bind(
     const string &action_name
 ) const {
-    for(size_t b = 0; b < player_action_types.size(); ++b) {
+    for(size_t b = 0; b < player_action_types.size(); b++) {
         if(player_action_types[b].internal_name == action_name) {
             return find_bind(player_action_types[b].id);
         }
@@ -193,7 +193,7 @@ const vector<player_action_type>
 player_action_type controls_mediator::get_player_action_type(
     int action_id
 ) const {
-    for(size_t b = 0; b < player_action_types.size(); ++b) {
+    for(size_t b = 0; b < player_action_types.size(); b++) {
         if(player_action_types[b].id == action_id) {
             return player_action_types[b];
         }
@@ -212,7 +212,7 @@ player_action_type controls_mediator::get_player_action_type(
 string controls_mediator::get_player_action_type_internal_name(
     int action_id
 ) {
-    for(size_t b = 0; b < player_action_types.size(); ++b) {
+    for(size_t b = 0; b < player_action_types.size(); b++) {
         if(player_action_types[b].id == action_id) {
             return player_action_types[b].internal_name;
         }

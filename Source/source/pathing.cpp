@@ -90,9 +90,9 @@ bool path_link::is_one_way() const {
 void path_manager::clear() {
     obstructions.clear();
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
             game.cur_area_data.path_stops[s]->links[l]->blocked_by_obstacle =
                 false;
         }
@@ -106,7 +106,7 @@ void path_manager::clear() {
  */
 void path_manager::handle_area_load() {
     //Go through all path stops and check if they're on hazardous sectors.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         if(!s_ptr->sector_ptr) continue;
         if(s_ptr->sector_ptr->hazards.empty()) continue;
@@ -126,10 +126,10 @@ void path_manager::handle_obstacle_add(mob* m) {
     bool paths_changed = false;
     
     //Go through all path links and check if they have obstacles.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = game.cur_area_data.path_stops[s]->links[l];
             
             if(
@@ -147,7 +147,7 @@ void path_manager::handle_obstacle_add(mob* m) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
             mob* m2_ptr = game.states.gameplay->mobs.all[m2];
             if(!m2_ptr->path_info) continue;
             
@@ -185,7 +185,7 @@ void path_manager::handle_obstacle_remove(mob* m) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
             mob* m2_ptr = game.states.gameplay->mobs.all[m2];
             if(!m2_ptr->path_info) continue;
             
@@ -224,7 +224,7 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             mob* m_ptr = game.states.gameplay->mobs.all[m];
             if(!m_ptr->path_info) continue;
             
@@ -296,7 +296,7 @@ void path_stop::add_link(path_stop* other_stop, bool normal) {
  * @brief Calculates the distance between it and all neighbors.
  */
 void path_stop::calculate_dists() {
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         links[l]->calculate_dist(this);
     }
 }
@@ -308,12 +308,12 @@ void path_stop::calculate_dists() {
  * if that neighbor links back.
  */
 void path_stop::calculate_dists_plus_neighbors() {
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         path_link* l_ptr = links[l];
         l_ptr->calculate_dist(this);
     }
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         path_link* l_ptr = s_ptr->get_link(this);
         if(l_ptr) {
@@ -344,7 +344,7 @@ void path_stop::clone(path_stop* destination) const {
  * @return The link, or nullptr if it does not link to that stop.
  */
 path_link* path_stop::get_link(const path_stop* other_stop) const {
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         if(links[l]->end_ptr == other_stop) return links[l];
     }
     return nullptr;
@@ -358,7 +358,7 @@ path_link* path_stop::get_link(const path_stop* other_stop) const {
  * @param link_ptr Pointer to the link to remove.
  */
 void path_stop::remove_link(const path_link* link_ptr) {
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         if(links[l] == link_ptr) {
             delete links[l];
             links.erase(links.begin() + l);
@@ -375,7 +375,7 @@ void path_stop::remove_link(const path_link* link_ptr) {
  * @param other_stop Path stop to remove the link from.
  */
 void path_stop::remove_link(const path_stop* other_stop) {
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         if(links[l]->end_ptr == other_stop) {
             delete links[l];
             links.erase(links.begin() + l);
@@ -469,9 +469,9 @@ bool can_take_path_stop(
         sector_ptr &&
         !sector_ptr->hazards.empty()
     ) {
-        for(size_t sh = 0; sh < sector_ptr->hazards.size(); ++sh) {
+        for(size_t sh = 0; sh < sector_ptr->hazards.size(); sh++) {
             bool invulnerable = false;
-            for(size_t ih = 0; ih < settings.invulnerabilities.size(); ++ih) {
+            for(size_t ih = 0; ih < settings.invulnerabilities.size(); ih++) {
                 if(
                     settings.invulnerabilities[ih] ==
                     sector_ptr->hazards[sh]
@@ -578,11 +578,11 @@ void depth_first_search(
     visited.insert(start);
     unordered_set<path_stop*> links;
     
-    for(size_t l = 0; l < start->links.size(); ++l) {
+    for(size_t l = 0; l < start->links.size(); l++) {
         links.insert(start->links[l]->end_ptr);
     }
     
-    for(size_t n = 0; n < nodes.size(); ++n) {
+    for(size_t n = 0; n < nodes.size(); n++) {
         path_stop* n_ptr = nodes[n];
         if(n_ptr == start) continue;
         if(visited.find(n_ptr) != visited.end()) continue;
@@ -685,7 +685,7 @@ PATH_RESULT a_star(
         to_visit.erase(cur_node);
         
         //Part 4: Check the neighbors.
-        for(size_t l = 0; l < cur_node->links.size(); ++l) {
+        for(size_t l = 0; l < cur_node->links.size(); l++) {
             path_link* l_ptr = cur_node->links[l];
             path_stop* neighbor = l_ptr->end_ptr;
             
@@ -784,7 +784,7 @@ PATH_RESULT get_path(
     float closest_to_start_dist = 0.0f;
     float closest_to_end_dist = 0.0f;
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
         float dist_to_start =

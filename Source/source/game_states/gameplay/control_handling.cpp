@@ -530,11 +530,11 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             pikmin* closest_members[NR_MATURITIES];
             dist closest_dists[NR_MATURITIES];
-            for(size_t m = 0; m < NR_MATURITIES; ++m) {
+            for(size_t m = 0; m < NR_MATURITIES; m++) {
                 closest_members[m] = nullptr;
             }
             
-            for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+            for(size_t m = 0; m < cur_leader_ptr->group->members.size(); m++) {
                 mob* m_ptr = cur_leader_ptr->group->members[m];
                 if(m_ptr->type != held_p_ptr->type) continue;
                 

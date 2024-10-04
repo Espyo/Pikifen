@@ -199,9 +199,9 @@ bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
         return false;
     }
     
-    for(size_t i1 = 0; i1 < v1.size(); ++i1) {
+    for(size_t i1 = 0; i1 < v1.size(); i1++) {
         bool found = false;
-        for(size_t i2 = 0; i2 < v2.size(); ++i2) {
+        for(size_t i2 = 0; i2 < v2.size(); i2++) {
             if(v1[i1] == v2[i2]) {
                 found = true;
                 break;

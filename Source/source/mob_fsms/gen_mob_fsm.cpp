@@ -425,7 +425,7 @@ void gen_mob_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
-    for(size_t p = 0; p < m->carry_info->spot_info.size(); ++p) {
+    for(size_t p = 0; p < m->carry_info->spot_info.size(); p++) {
         mob* pik_ptr = m->carry_info->spot_info[p].pik_ptr;
         if(pik_ptr) {
             pik_ptr->fsm.run_event(MOB_EV_FINISHED_CARRYING);
@@ -463,7 +463,7 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     
     hazard* h = (hazard*) info1;
     
-    for(size_t e = 0; e < h->effects.size(); ++e) {
+    for(size_t e = 0; e < h->effects.size(); e++) {
         m->apply_status_effect(h->effects[e], false, true);
     }
 }
@@ -481,7 +481,7 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
     
     spray_type* s = (spray_type*) info1;
     
-    for(size_t e = 0; e < s->effects.size(); ++e) {
+    for(size_t e = 0; e < s->effects.size(); e++) {
         m->apply_status_effect(s->effects[e], false, false);
     }
 }

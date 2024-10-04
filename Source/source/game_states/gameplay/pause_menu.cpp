@@ -116,7 +116,7 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     lowest_sector_z = FLT_MAX;
     highest_sector_z = -FLT_MAX;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
         lowest_sector_z = std::min(lowest_sector_z, s_ptr->z);
@@ -133,7 +133,7 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     radar_min_coords = point(FLT_MAX, FLT_MAX);
     radar_max_coords = point(-FLT_MAX, -FLT_MAX);
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         edge* e_ptr = game.cur_area_data.edges[e];
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) continue;
         if(
@@ -189,9 +189,9 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
  * @brief Destroys the pause menu struct object.
  */
 pause_menu_t::~pause_menu_t() {
-    for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
+    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(c == HELP_CATEGORY_PIKMIN) continue;
-        for(size_t t = 0; t < tidbits.size(); ++t) {
+        for(size_t t = 0; t < tidbits.size(); t++) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
                 game.bitmaps.free(tidbits[(HELP_CATEGORY) c][t].image);
             }
@@ -511,7 +511,7 @@ void pause_menu_t::add_pikmin_status_line(
  */
 void pause_menu_t::calculate_go_here_path() {
     radar_cursor_leader = nullptr;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(dist(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom) {
             radar_cursor_leader = l_ptr;
@@ -787,7 +787,7 @@ void pause_menu_t::draw_go_here_segment(
     const float PATH_SEGMENT_TIME_MULT = 10.0f;
     
     ALLEGRO_VERTEX av[4];
-    for(unsigned char a = 0; a < 4; ++a) {
+    for(unsigned char a = 0; a < 4; a++) {
         av[a].color = color;
         av[a].z = 0.0f;
     }
@@ -856,7 +856,7 @@ void pause_menu_t::draw_radar(
     al_clear_to_color(PAUSE_MENU::RADAR_BG_COLOR);
     
     //Draw each sector.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
@@ -867,7 +867,7 @@ void pause_menu_t::draw_radar(
                 PAUSE_MENU::RADAR_HIGHEST_COLOR
             );
             
-        for(size_t h = 0; h < s_ptr->hazards.size(); ++h) {
+        for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
             if(!s_ptr->hazards[h]->associated_liquid) continue;
             color =
                 interpolate_color(
@@ -876,9 +876,9 @@ void pause_menu_t::draw_radar(
                 );
         }
         
-        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+        for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
             ALLEGRO_VERTEX av[3];
-            for(size_t v = 0; v < 3; ++v) {
+            for(size_t v = 0; v < 3; v++) {
                 av[v].u = 0;
                 av[v].v = 0;
                 av[v].x = s_ptr->triangles[t].points[v]->x;
@@ -895,7 +895,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Draw each edge.
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         edge* e_ptr = game.cur_area_data.edges[e];
         
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
@@ -922,7 +922,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Onion icons.
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
         onion* o_ptr =
             game.states.gameplay->mobs.onions[o];
         vector<pikmin_type*>* pik_types_ptr =
@@ -969,7 +969,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Ship icons.
-    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
+    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
         ship* s_ptr = game.states.gameplay->mobs.ships[s];
         
         draw_bitmap(
@@ -979,7 +979,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Enemy icons.
-    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); ++e) {
+    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
         enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
         
         draw_bitmap(
@@ -990,7 +990,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Leader icons.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         
         draw_bitmap(
@@ -1017,7 +1017,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Treasure icons.
-    for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); ++t) {
+    for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); t++) {
         treasure* t_ptr = game.states.gameplay->mobs.treasures[t];
         
         draw_bitmap(
@@ -1026,7 +1026,7 @@ void pause_menu_t::draw_radar(
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
-    for(size_t r = 0; r < game.states.gameplay->mobs.resources.size(); ++r) {
+    for(size_t r = 0; r < game.states.gameplay->mobs.resources.size(); r++) {
         resource* r_ptr = game.states.gameplay->mobs.resources[r];
         if(
             r_ptr->res_type->delivery_result !=
@@ -1041,7 +1041,7 @@ void pause_menu_t::draw_radar(
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
-    for(size_t p = 0; p < game.states.gameplay->mobs.piles.size(); ++p) {
+    for(size_t p = 0; p < game.states.gameplay->mobs.piles.size(); p++) {
         pile* p_ptr = game.states.gameplay->mobs.piles[p];
         if(
             !p_ptr->pil_type->contents ||
@@ -1060,7 +1060,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Pikmin icons.
-    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); ++p) {
+    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); p++) {
         pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         
         draw_bitmap(
@@ -1072,7 +1072,7 @@ void pause_menu_t::draw_radar(
     }
     
     //Currently-active Go Here paths.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(!l_ptr->mid_go_here) continue;
         
@@ -1107,7 +1107,7 @@ void pause_menu_t::draw_radar(
             for(
                 size_t s = first_stop + 1;
                 s < l_ptr->path_info->path.size();
-                ++s
+                s++
             ) {
                 draw_go_here_segment(
                     l_ptr->path_info->path[s - 1]->pos,
@@ -1162,7 +1162,7 @@ void pause_menu_t::draw_radar(
                 go_here_path[0]->pos,
                 color, &path_texture_point
             );
-            for(size_t s = 1; s < go_here_path.size(); ++s) {
+            for(size_t s = 1; s < go_here_path.size(); s++) {
                 draw_go_here_segment(
                     go_here_path[s - 1]->pos,
                     go_here_path[s]->pos,
@@ -1196,12 +1196,12 @@ void pause_menu_t::draw_radar(
     for(
         size_t cell_x = 0;
         cell_x < game.states.gameplay->area_active_cells.size();
-        ++cell_x
+        cell_x++
     ) {
         for(
             size_t cell_y = 0;
             cell_y < game.states.gameplay->area_active_cells[cell_x].size();
-            ++cell_y
+            cell_y++
         ) {
             float start_x =
                 game.cur_area_data.bmap.top_left_corner.x +
@@ -1346,7 +1346,7 @@ void pause_menu_t::draw_tidbit(
     }
     
     //Draw!
-    for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+    for(size_t l = 0; l < tokens_per_line.size(); l++) {
         draw_string_tokens(
             tokens_per_line[l], game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
             true,
@@ -1367,7 +1367,7 @@ void pause_menu_t::draw_tidbit(
  * @param list List item to fill.
  */
 void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
-    for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+    for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
@@ -1440,7 +1440,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
         );
         
         vector<string> score_notes;
-        for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
             mission_score_criterion* c_ptr =
                 game.mission_score_criteria[c];
             int mult = c_ptr->get_multiplier(&game.cur_area_data.mission);
@@ -1455,7 +1455,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
                 list,
                 "Your score is calculated like so:"
             );
-            for(size_t s = 0; s < score_notes.size(); ++s) {
+            for(size_t s = 0; s < score_notes.size(); s++) {
                 add_bullet(list, score_notes[s]);
             }
         } else {
@@ -1466,7 +1466,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
         }
         
         vector<string> loss_notes;
-        for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
             mission_score_criterion* c_ptr =
                 game.mission_score_criteria[c];
             if(
@@ -1483,7 +1483,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
                 list,
                 "If you fail, you'll lose your score for:"
             );
-            for(size_t l = 0; l < loss_notes.size(); ++l) {
+            for(size_t l = 0; l < loss_notes.size(); l++) {
                 add_bullet(list, loss_notes[l]);
             }
         }
@@ -1815,14 +1815,14 @@ void pause_menu_t::init_help_page() {
     //Load the tidbits.
     data_node* tidbits_node = gui_file.get_child_by_name("tidbits");
     
-    for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
+    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(category_node_names[c].empty()) continue;
         data_node* category_node =
             tidbits_node->get_child_by_name(category_node_names[c]);
         size_t n_tidbits = category_node->get_nr_of_children();
         vector<tidbit> &category_tidbits = tidbits[(HELP_CATEGORY) c];
         category_tidbits.reserve(n_tidbits);
-        for(size_t t = 0; t < n_tidbits; ++t) {
+        for(size_t t = 0; t < n_tidbits; t++) {
             vector<string> parts =
                 split(category_node->get_child(t)->name, ";");
             tidbit new_t;
@@ -1832,7 +1832,7 @@ void pause_menu_t::init_help_page() {
             category_tidbits.push_back(new_t);
         }
     }
-    for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
+    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
         tidbit new_t;
         new_t.name = game.config.pikmin_order[p]->name;
         new_t.description = game.config.pikmin_order[p]->description;
@@ -2473,7 +2473,7 @@ void pause_menu_t::init_radar_page() {
             split_long_string_with_tokens(tokens, size.x);
         float text_h = tokens_per_line.size() * line_height;
         
-        for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+        for(size_t l = 0; l < tokens_per_line.size(); l++) {
             draw_string_tokens(
                 tokens_per_line[l], game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
                 false,
@@ -2694,7 +2694,7 @@ void pause_menu_t::init_status_page() {
     long total_lost = 0;
     
     //Setup the list rows.
-    for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
+    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
         pikmin_type* pt_ptr = game.config.pikmin_order[p];
         
         size_t in_group =
@@ -2811,7 +2811,7 @@ void pause_menu_t::populate_help_tidbits(const HELP_CATEGORY category) {
     
     help_tidbit_list->delete_all_children();
     
-    for(size_t t = 0; t < tidbit_list.size(); ++t) {
+    for(size_t t = 0; t < tidbit_list.size(); t++) {
         tidbit* t_ptr = &tidbit_list[t];
         bullet_point_gui_item* tidbit_bullet =
             new bullet_point_gui_item(

@@ -301,7 +301,7 @@ string get_key_name(int keycode, bool condensed) {
     }
     }
     string name = str_to_title(al_keycode_to_name(keycode));
-    for(size_t c = 0; c < name.size(); ++c) {
+    for(size_t c = 0; c < name.size(); c++) {
         if(name[c] == '_') name[c] = ' ';
     }
     return name;
@@ -416,7 +416,7 @@ vector<string> prompt_file_dialog(
     
     vector<string> result;
     size_t n_choices = al_get_native_file_dialog_count(dialog);
-    for(size_t c = 0; c < n_choices; ++c) {
+    for(size_t c = 0; c < n_choices; c++) {
         result.push_back(
             standardize_path(
                 al_get_native_file_dialog_path(dialog, c)
@@ -461,7 +461,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
         return vector<string>();
     }
     
-    for(size_t fi = 0; fi < f.size(); ++fi) {
+    for(size_t fi = 0; fi < f.size(); fi++) {
         size_t folder_pos = f[0].find(folder_path);
         if(folder_pos == string::npos) {
             //This isn't in the specified folder!

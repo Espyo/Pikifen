@@ -31,7 +31,7 @@
  * @return The index, or INVALID on error.
  */
 size_t enum_name_database::get_idx(const string &name) const {
-    for(size_t n = 0; n < names.size(); ++n) {
+    for(size_t n = 0; n < names.size(); n++) {
         if(names[n] == name) return n;
     }
     return INVALID;
@@ -115,7 +115,7 @@ void keyframe_interpolator::add(
 float keyframe_interpolator::get(float t) {
     if(t < 0.0f) return keyframe_values[0];
     
-    for(size_t k = 1; k < keyframe_times.size(); ++k) {
+    for(size_t k = 1; k < keyframe_times.size(); k++) {
         if(t <= keyframe_times[k]) {
             float delta_t = keyframe_times[k] - keyframe_times[k - 1];
             float relative_t = t - keyframe_times[k - 1];
@@ -283,7 +283,7 @@ string get_current_time(bool file_name_friendly) {
 string sanitize_file_name(const string &s) {
     string ret;
     ret.reserve(s.size());
-    for(size_t c = 0; c < s.size(); ++c) {
+    for(size_t c = 0; c < s.size(); c++) {
         if(
             (s[c] >= 'A' && s[c] <= 'Z') ||
             (s[c] >= 'a' && s[c] <= 'z') ||
@@ -362,7 +362,7 @@ string strsignal(int signum) {
  */
 string vector_tail_to_string(const vector<string> &v, size_t pos) {
     string result = v[pos];
-    for(size_t p = pos + 1; p < v.size(); ++p) {
+    for(size_t p = pos + 1; p < v.size(); p++) {
         result += " " + v[p];
     }
     return result;

@@ -82,7 +82,7 @@ void content_manager::load_custom_particle_generators(const string& folder, bool
     vector<string> generator_files =
         folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
         
-    for(size_t g = 0; g < generator_files.size(); ++g) {
+    for(size_t g = 0; g < generator_files.size(); g++) {
         string path =
             PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g];
         data_node file = load_data_file(path);
@@ -116,7 +116,7 @@ void content_manager::load_hazards(const string& folder, bool load_resources) {
     vector<string> hazard_files =
         folder_to_vector(HAZARDS_FOLDER_PATH, false);
         
-    for(size_t h = 0; h < hazard_files.size(); ++h) {
+    for(size_t h = 0; h < hazard_files.size(); h++) {
         string path = HAZARDS_FOLDER_PATH + "/" + hazard_files[h];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -149,7 +149,7 @@ void content_manager::load_liquids(const string& folder, bool load_resources) {
     vector<string> liquid_files =
         folder_to_vector(LIQUIDS_FOLDER_PATH, false);
         
-    for(size_t l = 0; l < liquid_files.size(); ++l) {
+    for(size_t l = 0; l < liquid_files.size(); l++) {
         string path = LIQUIDS_FOLDER_PATH + "/" + liquid_files[l];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -176,7 +176,7 @@ void content_manager::load_liquids(const string& folder, bool load_resources) {
  */
 void content_manager::load_mob_types(const string& folder, bool load_resources) {
     //Load the categorized mob types.
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         if(c == MOB_CATEGORY_NONE) {
             continue;
         }
@@ -220,7 +220,7 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
             missing_pikmin_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.pikmin_order_strings.size(); ++o) {
+    for(size_t o = 0; o < game.config.pikmin_order_strings.size(); o++) {
         string s = game.config.pikmin_order_strings[o];
         if(game.content.mob_types.pikmin.find(s) != game.content.mob_types.pikmin.end()) {
             game.config.pikmin_order.push_back(game.content.mob_types.pikmin[s]);
@@ -257,7 +257,7 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
             missing_leader_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.leader_order_strings.size(); ++o) {
+    for(size_t o = 0; o < game.config.leader_order_strings.size(); o++) {
         string s = game.config.leader_order_strings[o];
         if(game.content.mob_types.leader.find(s) != game.content.mob_types.leader.end()) {
             game.config.leader_order.push_back(game.content.mob_types.leader[s]);
@@ -293,7 +293,7 @@ void content_manager::load_mob_types_of_category(const string& folder, mob_categ
         );
     }
     
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         string type_folder_name =
             types[t];
         string type_folder_path =
@@ -330,7 +330,7 @@ void content_manager::load_spike_damage_types(const string& folder, bool load_re
     vector<string> type_files =
         folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
         
-    for(size_t t = 0; t < type_files.size(); ++t) {
+    for(size_t t = 0; t < type_files.size(); t++) {
         string path = SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -365,7 +365,7 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
         
     vector<spray_type> temp_types;
     
-    for(size_t t = 0; t < type_files.size(); ++t) {
+    for(size_t t = 0; t < type_files.size(); t++) {
         string path = SPRAYS_FOLDER_PATH + "/" + type_files[t];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -378,7 +378,7 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
     
     //Spray type order.
     vector<string> missing_spray_order_types;
-    for(size_t t = 0; t < temp_types.size(); ++t) {
+    for(size_t t = 0; t < temp_types.size(); t++) {
         if(
             find(
                 game.config.spray_order_strings.begin(),
@@ -401,10 +401,10 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
             missing_spray_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.spray_order_strings.size(); ++o) {
+    for(size_t o = 0; o < game.config.spray_order_strings.size(); o++) {
         string s = game.config.spray_order_strings[o];
         bool found = false;
-        for(size_t t = 0; t < temp_types.size(); ++t) {
+        for(size_t t = 0; t < temp_types.size(); t++) {
             if(temp_types[t].name == s) {
                 game.content.spray_types.push_back(temp_types[t]);
                 found = true;
@@ -443,7 +443,7 @@ void content_manager::load_status_types(const string& folder, bool load_resource
     vector<status_type*> types_with_replacements;
     vector<string> types_with_replacements_names;
     
-    for(size_t t = 0; t < type_files.size(); ++t) {
+    for(size_t t = 0; t < type_files.size(); t++) {
         string path = STATUSES_FOLDER_PATH + "/" + type_files[t];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -461,7 +461,7 @@ void content_manager::load_status_types(const string& folder, bool load_resource
         }
     }
     
-    for(size_t s = 0; s < types_with_replacements.size(); ++s) {
+    for(size_t s = 0; s < types_with_replacements.size(); s++) {
         string rn = types_with_replacements_names[s];
         bool found = false;
         for(auto &s2 : game.content.status_types) {
@@ -504,7 +504,7 @@ void content_manager::load_weather_conditions(const string& folder, bool load_re
     vector<string> weather_files =
         folder_to_vector(WEATHER_FOLDER_PATH, false);
         
-    for(size_t w = 0; w < weather_files.size(); ++w) {
+    for(size_t w = 0; w < weather_files.size(); w++) {
         string path = WEATHER_FOLDER_PATH + "/" + weather_files[w];
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
@@ -615,7 +615,7 @@ void content_manager::unload_liquids(bool unload_resources) {
  * since they never got loaded in the first place.
  */
 void content_manager::unload_mob_type(mob_type* mt, bool unload_resources) {
-    for(size_t s = 0; s < mt->sounds.size(); ++s) {
+    for(size_t s = 0; s < mt->sounds.size(); s++) {
         ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
         if(!s) continue;
         game.audio.samples.free(s_ptr);
@@ -638,7 +638,7 @@ void content_manager::unload_mob_types(bool unload_resources) {
     game.config.leader_order.clear();
     game.config.pikmin_order.clear();
     
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         unload_mob_types_of_category(category, unload_resources);
     }
@@ -657,7 +657,7 @@ void content_manager::unload_mob_types_of_category(mob_category* category, bool 
     vector<string> type_names;
     category->get_type_names(type_names);
     
-    for(size_t t = 0; t < type_names.size(); ++t) {
+    for(size_t t = 0; t < type_names.size(); t++) {
         mob_type* mt = category->get_type(type_names[t]);
         unload_mob_type(mt, unload_resources);
     }
@@ -682,7 +682,7 @@ void content_manager::unload_spike_damage_types(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_spray_types(bool unload_resources) {
-    for(size_t s = 0; s < game.content.spray_types.size(); ++s) {
+    for(size_t s = 0; s < game.content.spray_types.size(); s++) {
         game.bitmaps.free(game.content.spray_types[s].bmp_spray);
     }
     game.content.spray_types.clear();

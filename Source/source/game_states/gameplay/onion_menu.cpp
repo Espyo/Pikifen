@@ -44,7 +44,7 @@ onion_menu_t::onion_menu_t(
     n_ptr(n_ptr),
     l_ptr(l_ptr) {
     
-    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
         types.push_back(
             onion_menu_type_t(t, n_ptr->nest_type->pik_types[t])
         );
@@ -130,7 +130,7 @@ onion_menu_t::onion_menu_t(
     field_amount_text->on_draw =
     [this] (const point & center, const point & size) {
         int total_delta = 0;
-        for(size_t t = 0; t < this->types.size(); ++t) {
+        for(size_t t = 0; t < this->types.size(); t++) {
             total_delta += this->types[t].delta;
         }
         
@@ -183,7 +183,7 @@ onion_menu_t::onion_menu_t(
     gui.add_item(select_all_check, "select_all");
     
     //Onion icons and buttons.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         string id = "onion_" + i2s(t + 1) + "_button";
         
         gui_item* onion_icon = new gui_item(false);
@@ -250,7 +250,7 @@ onion_menu_t::onion_menu_t(
     gui.add_item(onion_all_button, "onion_all");
     
     //Onion amounts.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         gui_item* onion_amount_text = new gui_item(false);
         onion_amount_text->on_draw =
             [this, t, onion_amount_text]
@@ -290,7 +290,7 @@ onion_menu_t::onion_menu_t(
     }
     
     //Group icons and buttons.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         string id = "group_" + i2s(t + 1) + "_button";
         
         gui_item* group_icon = new gui_item(false);
@@ -357,7 +357,7 @@ onion_menu_t::onion_menu_t(
     gui.add_item(group_all_button, "group_all");
     
     //Group amounts.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         gui_item* group_amount_text = new gui_item(false);
         group_amount_text->on_draw =
             [this, t, group_amount_text]
@@ -524,7 +524,7 @@ onion_menu_t::~onion_menu_t() {
  * @brief Adds one Pikmin of each type from Onion to the group, if possible.
  */
 void onion_menu_t::add_all_to_group() {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         add_to_group(t);
     }
 }
@@ -534,7 +534,7 @@ void onion_menu_t::add_all_to_group() {
  * @brief Adds one Pikmin of each type from the group to the Onion, if possible.
  */
 void onion_menu_t::add_all_to_onion() {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         add_to_onion(t);
     }
 }
@@ -560,7 +560,7 @@ void onion_menu_t::add_to_group(size_t type_idx) {
     
     //Next, check if the addition won't make the field amount hit the limit.
     int total_delta = 0;
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         total_delta += types[t].delta;
     }
     if(
@@ -628,7 +628,7 @@ void onion_menu_t::add_to_onion(size_t type_idx) {
  * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
  */
 void onion_menu_t::confirm() {
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         if(types[t].delta > 0) {
             n_ptr->request_pikmin(t, types[t].delta, l_ptr);
         } else if(types[t].delta < 0) {
@@ -656,7 +656,7 @@ void onion_menu_t::go_to_page(size_t page) {
  * @brief Makes the Onion and group buttons juicy grow.
  */
 void onion_menu_t::grow_buttons() {
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         onion_icon_items[t]->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_ICON
         );
@@ -735,7 +735,7 @@ void onion_menu_t::tick(float delta_t) {
     //Correct the amount of wanted group members, if they are invalid.
     int total_delta = 0;
     
-    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
         //Get how many the player really has with them.
         int real_group_amount =
             (int) l_ptr->group->get_amount_by_type(
@@ -765,7 +765,7 @@ void onion_menu_t::tick(float delta_t) {
     while(delta_over_limit > 0) {
         vector<size_t> candidate_types;
         
-        for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
+        for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
             int real_group_amount =
                 (int) l_ptr->group->get_amount_by_type(
                     n_ptr->nest_type->pik_types[t]
@@ -780,7 +780,7 @@ void onion_menu_t::tick(float delta_t) {
         //Figure out the type with the largest delta.
         size_t best_type = 0;
         int best_type_delta = types[candidate_types[0]].delta;
-        for(size_t t = 1; t < candidate_types.size(); ++t) {
+        for(size_t t = 1; t < candidate_types.size(); t++) {
             if(types[candidate_types[t]].delta > best_type_delta) {
                 best_type = candidate_types[t];
                 best_type_delta = types[candidate_types[t]].delta;
@@ -839,12 +839,12 @@ void onion_menu_t::update() {
     //Reset the on-screen types.
     on_screen_types.clear();
     
-    for(size_t t = 0; t < types.size(); ++t) {
+    for(size_t t = 0; t < types.size(); t++) {
         types[t].on_screen_idx = INVALID;
     }
     
     //Reset the button and amount states.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         onion_icon_items[t]->visible = false;
         onion_button_items[t]->visible = false;
         onion_button_items[t]->selectable = false;
@@ -860,7 +860,7 @@ void onion_menu_t::update() {
         size_t t = page * ONION_MENU::TYPES_PER_PAGE;
         t < (page + 1) * ONION_MENU::TYPES_PER_PAGE &&
         t < n_ptr->nest_type->pik_types.size();
-        ++t
+        t++
     ) {
         types[t].on_screen_idx = on_screen_types.size();
         on_screen_types.push_back(&types[t]);
@@ -871,7 +871,7 @@ void onion_menu_t::update() {
     float leftmost = 0.50f;
     float rightmost = 0.50f;
     
-    for(size_t t = 0; t < on_screen_types.size(); ++t) {
+    for(size_t t = 0; t < on_screen_types.size(); t++) {
         float x = 1.0f / splits * (t + 1);
         onion_icon_items[t]->center.x = x;
         onion_button_items[t]->center.x = x;
@@ -893,7 +893,7 @@ void onion_menu_t::update() {
     }
     
     //Make all relevant GUI items active.
-    for(size_t t = 0; t < on_screen_types.size(); ++t) {
+    for(size_t t = 0; t < on_screen_types.size(); t++) {
         onion_icon_items[t]->visible = true;
         onion_amount_items[t]->visible = true;
         group_icon_items[t]->visible = true;

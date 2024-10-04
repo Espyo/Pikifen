@@ -73,7 +73,7 @@ void converter_type::load_cat_properties(data_node* file) {
     vector<string> pikmin_types_strs =
         semicolon_list_to_vector(pikmin_types_str);
         
-    for(size_t t = 0; t < pikmin_types_strs.size(); ++t) {
+    for(size_t t = 0; t < pikmin_types_strs.size(); t++) {
         mob_type* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
         
         if(type_ptr) {

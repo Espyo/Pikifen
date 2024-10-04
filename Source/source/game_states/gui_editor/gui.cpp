@@ -23,7 +23,7 @@ void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
     vector<string> files = folder_to_vector(GUI_FOLDER_PATH, false);
     vector<picker_item> file_items;
-    for(size_t f = 0; f < files.size(); ++f) {
+    for(size_t f = 0; f < files.size(); f++) {
         file_items.push_back(picker_item(files[f]));
     }
     load_dialog_picker = picker_info(this);
@@ -485,7 +485,7 @@ void gui_editor::process_gui_panel_items() {
             "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Border
         )
     ) {
-        for(size_t i = 0; i < items.size(); ++i) {
+        for(size_t i = 0; i < items.size(); i++) {
         
             //Item checkbox.
             bool visible = items[i].size.x != 0.0f;

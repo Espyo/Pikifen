@@ -62,7 +62,7 @@ void main_menu_state::do_drawing() {
     pik_size.x *= game.win_w / 100.0f;
     pik_size.y *= game.win_h / 100.0f;
     
-    for(size_t p = 0; p < logo_pikmin.size(); ++p) {
+    for(size_t p = 0; p < logo_pikmin.size(); p++) {
         logo_pik* pik = &logo_pikmin[p];
         
         draw_bitmap_in_box(
@@ -108,7 +108,7 @@ void main_menu_state::do_drawing() {
  */
 void main_menu_state::do_logic() {
     //Animate the logo Pikmin.
-    for(size_t p = 0; p < logo_pikmin.size(); ++p) {
+    for(size_t p = 0; p < logo_pikmin.size(); p++) {
         logo_pik* pik = &logo_pikmin[p];
         
         if(!pik->reached_destination) {
@@ -139,7 +139,7 @@ void main_menu_state::do_logic() {
     
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             main_gui.handle_player_action(player_actions[a]);
             play_gui.handle_player_action(player_actions[a]);
             make_gui.handle_player_action(player_actions[a]);
@@ -760,7 +760,7 @@ void main_menu_state::load() {
     
     data_node* pik_types_node =
         logo_node->get_child_by_name("pikmin_types");
-    for(size_t t = 0; t < pik_types_node->get_nr_of_children(); ++t) {
+    for(size_t t = 0; t < pik_types_node->get_nr_of_children(); t++) {
         data_node* type_node = pik_types_node->get_child(t);
         if(type_node->name.empty()) continue;
         logo_type_bitmaps[type_node->name[0]] =
@@ -771,7 +771,7 @@ void main_menu_state::load() {
         logo_node->get_child_by_name("map");
     size_t map_total_rows = map_node->get_nr_of_children();
     size_t map_total_cols = 0;
-    for(size_t r = 0; r < map_total_rows; ++r) {
+    for(size_t r = 0; r < map_total_rows; r++) {
         map_total_cols =
             std::max(map_total_cols, map_node->get_child(r)->name.size());
     }
@@ -788,10 +788,10 @@ void main_menu_state::load() {
     
     bool map_ok = true;
     
-    for(size_t r = 0; r < map_total_rows; ++r) {
+    for(size_t r = 0; r < map_total_rows; r++) {
         string row = map_node->get_child(r)->name;
         
-        for(size_t c = 0; c < row.size(); ++c) {
+        for(size_t c = 0; c < row.size(); c++) {
             if(row[c] == '.') continue;
             if(logo_type_bitmaps.find(row[c]) == logo_type_bitmaps.end()) {
                 map_ok = false;

@@ -72,7 +72,7 @@ void replay::add_state(
     );
     
     if(!prev_state_mobs.empty()) {
-        for(size_t pm = 0; pm < prev_state_mobs.size(); ++pm) {
+        for(size_t pm = 0; pm < prev_state_mobs.size(); pm++) {
             //Is this mob in the list of new mobs?
             auto m =
                 find(
@@ -86,7 +86,7 @@ void replay::add_state(
             }
         }
         
-        for(size_t m = 0; m < new_state_mobs.size(); ++m) {
+        for(size_t m = 0; m < new_state_mobs.size(); m++) {
             //Is this mob in the list of previous mobs?
             auto pm =
                 find(
@@ -115,32 +115,32 @@ void replay::add_state(
         onion_list.size() +
         obstacle_list.size()
     );
-    for(size_t l = 0; l < leader_list.size(); ++l) {
+    for(size_t l = 0; l < leader_list.size(); l++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_LEADER, leader_list[l]->pos)
         );
     }
-    for(size_t p = 0; p < pikmin_list.size(); ++p) {
+    for(size_t p = 0; p < pikmin_list.size(); p++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_PIKMIN, pikmin_list[p]->pos)
         );
     }
-    for(size_t e = 0; e < enemy_list.size(); ++e) {
+    for(size_t e = 0; e < enemy_list.size(); e++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_ENEMY, enemy_list[e]->pos)
         );
     }
-    for(size_t t = 0; t < treasure_list.size(); ++t) {
+    for(size_t t = 0; t < treasure_list.size(); t++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_TREASURE, treasure_list[t]->pos)
         );
     }
-    for(size_t o = 0; o < onion_list.size(); ++o) {
+    for(size_t o = 0; o < onion_list.size(); o++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_ONION, onion_list[o]->pos)
         );
     }
-    for(size_t o = 0; o < obstacle_list.size(); ++o) {
+    for(size_t o = 0; o < obstacle_list.size(); o++) {
         new_state_ptr->elements.push_back(
             replay_element(REPLAY_ELEMENT_OBSTACLE, obstacle_list[o]->pos)
         );
@@ -180,14 +180,14 @@ void replay::load_from_file(const string &file_path) {
     size_t n_states = al_fread32be(file);
     states.reserve(n_states);
     
-    for(size_t s = 0; s < n_states; ++s) {
+    for(size_t s = 0; s < n_states; s++) {
         states.push_back(replay_state());
         replay_state* s_ptr = &states[states.size() - 1];
         
         size_t n_elements = al_fread32be(file);
         s_ptr->elements.reserve(n_elements);
         
-        for(size_t e = 0; e < n_elements; ++e) {
+        for(size_t e = 0; e < n_elements; e++) {
             s_ptr->elements.push_back(
                 replay_element(
                     (REPLAY_ELEMENT) al_fgetc(file),
@@ -200,7 +200,7 @@ void replay::load_from_file(const string &file_path) {
         if(n_events > 0) {
             s_ptr->events.reserve(n_events);
             
-            for(size_t e = 0; e < n_events; ++e) {
+            for(size_t e = 0; e < n_events; e++) {
                 s_ptr->events.push_back(
                     replay_event(
                         (REPLAY_EVENT) al_fgetc(file),
@@ -222,18 +222,18 @@ void replay::save_to_file(const string &file_path) const {
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());
-    for(size_t s = 0; s < states.size(); ++s) {
+    for(size_t s = 0; s < states.size(); s++) {
         const replay_state* s_ptr = &states[s];
         
         al_fwrite32be(file, (int32_t) s_ptr->elements.size());
-        for(size_t e = 0; e < s_ptr->elements.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->elements.size(); e++) {
             al_fputc(file, s_ptr->elements[e].type);
             al_fwrite32be(file, floor(s_ptr->elements[e].pos.x));
             al_fwrite32be(file, floor(s_ptr->elements[e].pos.y));
         }
         
         al_fwrite32be(file, (int32_t) s_ptr->events.size());
-        for(size_t e = 0; e < s_ptr->events.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->events.size(); e++) {
             al_fputc(file, s_ptr->events[e].type);
             al_fwrite32be(file, (int32_t) s_ptr->events[e].data);
         }

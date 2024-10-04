@@ -28,7 +28,7 @@
 void animation_editor::open_load_dialog() {
     global_anim_files_cache =
         folder_to_vector(ANIMATIONS_FOLDER_PATH, false, nullptr);
-    for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
+    for(size_t f = 0; f < global_anim_files_cache.size(); f++) {
         global_anim_files_cache[f] =
             remove_extension(global_anim_files_cache[f]);
     }
@@ -234,7 +234,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                 if(selected_hazard_idx < (int) list.size()) {
                     string hazard_name = list[selected_hazard_idx];
                     cur_hitbox->hazards_str.clear();
-                    for(size_t h = 0; h < list.size(); ++h) {
+                    for(size_t h = 0; h < list.size(); h++) {
                         if(h == (size_t) selected_hazard_idx) continue;
                         cur_hitbox->hazards_str += list[h] + ";";
                     }
@@ -725,7 +725,7 @@ void animation_editor::process_gui_panel_animation() {
     ImGui::SameLine();
     if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
-        for(size_t a = 0; a < anims.animations.size(); ++a) {
+        for(size_t a = 0; a < anims.animations.size(); a++) {
             ALLEGRO_BITMAP* anim_frame_1 = nullptr;
             if(!anims.animations[a]->frames.empty()) {
                 size_t s_pos =
@@ -837,7 +837,7 @@ void animation_editor::process_gui_panel_animation() {
             
             //Import animation popup.
             vector<string> import_anim_names;
-            for(size_t a = 0; a < anims.animations.size(); ++a) {
+            for(size_t a = 0; a < anims.animations.size(); a++) {
                 if(anims.animations[a] == cur_anim_i.cur_anim) continue;
                 import_anim_names.push_back(anims.animations[a]->name);
             }
@@ -1125,7 +1125,7 @@ void animation_editor::process_gui_panel_animation() {
             
                 //Sprite combobox.
                 vector<string> sprite_names;
-                for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                for(size_t s = 0; s < anims.sprites.size(); s++) {
                     sprite_names.push_back(anims.sprites[s]->name);
                 }
                 if(
@@ -1226,7 +1226,7 @@ void animation_editor::process_gui_panel_animation() {
                         for(
                             size_t s = 0;
                             s < loaded_mob_type->sounds.size();
-                            ++s
+                            s++
                         ) {
                             sounds.push_back(loaded_mob_type->sounds[s].name);
                         }
@@ -1260,7 +1260,7 @@ void animation_editor::process_gui_panel_animation() {
                     for(
                         size_t i = 0;
                         i < cur_anim_i.cur_anim->frames.size();
-                        ++i
+                        i++
                     ) {
                         cur_anim_i.cur_anim->frames[i].duration = d;
                     }
@@ -1316,7 +1316,7 @@ void animation_editor::process_gui_panel_body_part() {
     if(input_popup("newPartName", "New body part's name:", &new_part_name)) {
         if(!new_part_name.empty()) {
             bool already_exists = false;
-            for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+            for(size_t b = 0; b < anims.body_parts.size(); b++) {
                 if(anims.body_parts[b]->name == new_part_name) {
                     selected_part = (int) b;
                     already_exists = true;
@@ -1415,7 +1415,7 @@ void animation_editor::process_gui_panel_body_part() {
             )
         ) {
         
-            for(size_t p = 0; p < anims.body_parts.size(); ++p) {
+            for(size_t p = 0; p < anims.body_parts.size(); p++) {
             
                 //Body part selectable.
                 bool is_selected = (p == (size_t) selected_part);
@@ -1712,7 +1712,7 @@ void animation_editor::process_gui_panel_sprite() {
     ImGui::SameLine();
     if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
         vector<picker_item> sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             sprite_names.push_back(
                 picker_item(
                     anims.sprites[s]->name,
@@ -1820,7 +1820,7 @@ void animation_editor::process_gui_panel_sprite() {
             
             //Import sprite popup.
             vector<string> import_sprite_names;
-            for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            for(size_t s = 0; s < anims.sprites.size(); s++) {
                 if(anims.sprites[s] == cur_sprite) continue;
                 import_sprite_names.push_back(anims.sprites[s]->name);
             }
@@ -1974,7 +1974,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         
         //Import bitmap popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             if(anims.sprites[s] == cur_sprite) continue;
             import_sprite_names.push_back(anims.sprites[s]->name);
         }
@@ -2218,7 +2218,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             if(anims.sprites[s] == cur_sprite) continue;
             import_sprite_names.push_back(anims.sprites[s]->name);
         }
@@ -2485,7 +2485,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             if(anims.sprites[s] == cur_sprite) continue;
             import_sprite_names.push_back(anims.sprites[s]->name);
         }
@@ -2612,7 +2612,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t s = 0; s < anims.sprites.size(); s++) {
             if(anims.sprites[s] == cur_sprite) continue;
             import_sprite_names.push_back(anims.sprites[s]->name);
         }
@@ -2735,7 +2735,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
             
                 //Comparison sprite combobox.
                 vector<string> all_sprites;
-                for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                for(size_t s = 0; s < anims.sprites.size(); s++) {
                     if(cur_sprite == anims.sprites[s]) continue;
                     all_sprites.push_back(anims.sprites[s]->name);
                 }

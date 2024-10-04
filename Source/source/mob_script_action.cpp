@@ -32,7 +32,7 @@ using std::set;
  */
 mob_action_call::mob_action_call(MOB_ACTION type) {
 
-    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+    for(size_t a = 0; a < game.mob_actions.size(); a++) {
         if(game.mob_actions[a].type == type) {
             action = &(game.mob_actions[a]);
             break;
@@ -49,7 +49,7 @@ mob_action_call::mob_action_call(MOB_ACTION type) {
 mob_action_call::mob_action_call(custom_action_code_t code) :
     code(code) {
     
-    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+    for(size_t a = 0; a < game.mob_actions.size(); a++) {
         if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) {
             action = &(game.mob_actions[a]);
             break;
@@ -73,7 +73,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     //First, get the name and arguments.
     vector<string> words = split(dn->name);
     
-    for(size_t w = 0; w < words.size(); ++w) {
+    for(size_t w = 0; w < words.size(); w++) {
         words[w] = trim_spaces(words[w]);
     }
     
@@ -81,7 +81,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     words.erase(words.begin());
     
     //Find the corresponding action.
-    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+    for(size_t a = 0; a < game.mob_actions.size(); a++) {
         if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
         if(game.mob_actions[a].name == name) {
             action = &(game.mob_actions[a]);
@@ -126,7 +126,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     }
     
     //Fetch the arguments, and check if any of them are not allowed.
-    for(size_t w = 0; w < words.size(); ++w) {
+    for(size_t w = 0; w < words.size(); w++) {
         size_t param_idx = std::min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
@@ -198,7 +198,7 @@ bool mob_action_call::run(
     
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
-    for(size_t a = 0; a < args.size(); ++a) {
+    for(size_t a = 0; a < args.size(); a++) {
         if(arg_is_var[a]) {
             data.args[a] = m->vars[args[a]];
         }
@@ -476,7 +476,7 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::play_sound(mob_action_call &call) {
-    for(size_t s = 0; s < call.mt->sounds.size(); ++s) {
+    for(size_t s = 0; s < call.mt->sounds.size(); s++) {
         if(call.mt->sounds[s].name == call.args[0]) {
             call.args[0] = i2s(s);
             return true;
@@ -552,7 +552,7 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
     }
     call.args[0] = i2s(a_pos);
     
-    for(size_t a = 1; a < call.args.size(); ++a) {
+    for(size_t a = 1; a < call.args.size(); a++) {
         if(call.args[a] == "no_restart") {
             call.args[a] = i2s(START_ANIM_OPTION_NO_RESTART);
         } else if(call.args[a] == "random_time") {
@@ -575,7 +575,7 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_far_reach(mob_action_call &call) {
-    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
+    for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
             return true;
@@ -593,7 +593,7 @@ bool mob_action_loaders::set_far_reach(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_holdable(mob_action_call &call) {
-    for(size_t a = 0; a < call.args.size(); ++a) {
+    for(size_t a = 0; a < call.args.size(); a++) {
         if(call.args[a] == "pikmin") {
             call.args[a] = i2s(HOLDABILITY_FLAG_PIKMIN);
         } else if(call.args[a] == "enemies") {
@@ -614,7 +614,7 @@ bool mob_action_loaders::set_holdable(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_near_reach(mob_action_call &call) {
-    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
+    for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
             return true;
@@ -649,7 +649,7 @@ bool mob_action_loaders::set_team(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::spawn(mob_action_call &call) {
-    for(size_t s = 0; s < call.mt->spawns.size(); ++s) {
+    for(size_t s = 0; s < call.mt->spawns.size(); s++) {
         if(call.mt->spawns[s].name == call.args[0]) {
             call.args[0] = i2s(s);
             return true;
@@ -687,7 +687,7 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::start_chomping(mob_action_call &call) {
-    for(size_t s = 1; s < call.args.size(); ++s) {
+    for(size_t s = 1; s < call.args.size(); s++) {
         size_t p_nr = call.mt->anims.find_body_part(call.args[s]);
         if(p_nr == INVALID) {
             call.custom_error =
@@ -869,7 +869,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     
     s_ptr->get_neighbor_sectors_conditionally(
     [] (sector * s) -> bool {
-        for(size_t h = 0; h < s->hazards.size(); ++h) {
+        for(size_t h = 0; h < s->hazards.size(); h++) {
             if(s->hazards[h]->associated_liquid) {
                 return true;
             }
@@ -879,7 +879,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     sectors_to_drain
     );
     
-    for(size_t s = 0; s < sectors_to_drain.size(); ++s) {
+    for(size_t s = 0; s < sectors_to_drain.size(); s++) {
         sectors_to_drain[s]->draining_liquid = true;
         sectors_to_drain[s]->liquid_drain_left =
             GEOMETRY::LIQUID_DRAIN_DURATION;
@@ -953,7 +953,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
         );
     } else {
         //If there's a label, we should only pick stops that have the label.
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             if(s_ptr->label == label) {
                 choices.push_back(s_ptr);
@@ -1431,7 +1431,7 @@ void mob_action_runners::link_with_focus(mob_action_run_data &data) {
         return;
     }
     
-    for(size_t l = 0; l < data.m->links.size(); ++l) {
+    for(size_t l = 0; l < data.m->links.size(); l++) {
         if(data.m->links[l] == data.m->focused_mob) {
             //Already linked.
             return;
@@ -1533,7 +1533,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         }
         
         point des;
-        for(size_t l = 0; l < data.m->links.size(); ++l) {
+        for(size_t l = 0; l < data.m->links.size(); l++) {
             if(!data.m->links[l]) continue;
             des += data.m->links[l]->pos;
         }
@@ -1622,7 +1622,7 @@ void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::remove_status(mob_action_run_data &data) {
-    for(size_t s = 0; s < data.m->statuses.size(); ++s) {
+    for(size_t s = 0; s < data.m->statuses.size(); s++) {
         if(data.m->statuses[s].type->name == data.args[0]) {
             data.m->statuses[s].to_delete = true;
         }
@@ -1661,7 +1661,7 @@ void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
-    for(size_t l = 0; l < data.m->links.size(); ++l) {
+    for(size_t l = 0; l < data.m->links.size(); l++) {
         if(data.m->links[l] == data.m) continue;
         if(!data.m->links[l]) continue;
         data.m->send_message(data.m->links[l], data.args[0]);
@@ -1677,7 +1677,7 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
     float d = s2f(data.args[0]);
     
-    for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+    for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
         if(game.states.gameplay->mobs.all[m2] == data.m) {
             continue;
         }
@@ -1780,7 +1780,7 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
     
     if(data.m->type->walkable) {
         //Update the Z of mobs standing on top of it.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->standing_on_mob == data.m) {
                 m2_ptr->z = data.m->z + data.m->height;
@@ -1812,7 +1812,7 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
 void mob_action_runners::set_holdable(mob_action_run_data &data) {
     if(typeid(*(data.m)) == typeid(tool)) {
         unsigned char flags = 0;
-        for(size_t i = 0; i < data.args.size(); ++i) {
+        for(size_t i = 0; i < data.args.size(); i++) {
             flags |= s2i(data.args[i]);
         }
         ((tool*) (data.m))->holdability_flags = flags;
@@ -2000,7 +2000,7 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     MOB_ACTION_STABILIZE_Z_TYPE t =
         (MOB_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
         
-    for(size_t l = 1; l < data.m->links.size(); ++l) {
+    for(size_t l = 1; l < data.m->links.size(); l++) {
     
         if(!data.m->links[l]) continue;
         
@@ -2034,7 +2034,7 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
 void mob_action_runners::start_chomping(mob_action_run_data &data) {
     data.m->chomp_max = s2i(data.args[0]);
     data.m->chomp_body_parts.clear();
-    for(size_t p = 1; p < data.args.size(); ++p) {
+    for(size_t p = 1; p < data.args.size(); p++) {
         data.m->chomp_body_parts.push_back(s2i(data.args[p]));
     }
 }
@@ -2329,7 +2329,7 @@ bool assert_actions(
 ) {
     //Check if the "if"-related actions are okay.
     int if_level = 0;
-    for(size_t a = 0; a < actions.size(); ++a) {
+    for(size_t a = 0; a < actions.size(); a++) {
         switch(actions[a]->action->type) {
         case MOB_ACTION_IF: {
             if_level++;
@@ -2368,7 +2368,7 @@ bool assert_actions(
     
     //Check if the "goto"-related actions are okay.
     set<string> labels;
-    for(size_t a = 0; a < actions.size(); ++a) {
+    for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_LABEL) {
         
             string name = actions[a]->args[0];
@@ -2383,7 +2383,7 @@ bool assert_actions(
             labels.insert(name);
         }
     }
-    for(size_t a = 0; a < actions.size(); ++a) {
+    for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_GOTO) {
             string name = actions[a]->args[0];
             if(labels.find(name) == labels.end()) {
@@ -2398,7 +2398,7 @@ bool assert_actions(
     
     //Check if there are actions after a "set_state" action.
     bool passed_set_state = false;
-    for(size_t a = 0; a < actions.size(); ++a) {
+    for(size_t a = 0; a < actions.size(); a++) {
         switch(actions[a]->action->type) {
         case MOB_ACTION_SET_STATE: {
             passed_set_state = true;
@@ -2500,7 +2500,7 @@ void load_actions(
     vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings
 ) {
     if(out_settings) *out_settings = 0;
-    for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
+    for(size_t a = 0; a < node->get_nr_of_children(); a++) {
         data_node* action_node = node->get_child(a);
         if (
             out_settings && action_node->name == "custom_actions_after"

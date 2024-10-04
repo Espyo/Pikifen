@@ -181,7 +181,7 @@ mob_event::mob_event(
         game.errors.report("Unknown script event name \"" + n + "\"!", node);
     }
     
-    for(size_t a = 0; a < this->actions.size(); ++a) {
+    for(size_t a = 0; a < this->actions.size(); a++) {
         this->actions[a]->parent_event = (MOB_EV) type;
     }
 }
@@ -215,7 +215,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
         }
     }
     
-    for(size_t a = 0; a < actions.size(); ++a) {
+    for(size_t a = 0; a < actions.size(); a++) {
     
         switch(actions[a]->action->type) {
         case MOB_ACTION_IF: {
@@ -227,7 +227,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                 //if it returned false, skip to the "else" or "end if" actions.
                 size_t next_a = a + 1;
                 size_t depth = 0;
-                for(; next_a < actions.size(); ++next_a) {
+                for(; next_a < actions.size(); next_a++) {
                     if(
                         actions[next_a]->action->type == MOB_ACTION_IF
                     ) {
@@ -255,7 +255,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             //Jump to the "end if".
             size_t next_a = a + 1;
             size_t depth = 0;
-            for(; next_a < actions.size(); ++next_a) {
+            for(; next_a < actions.size(); next_a++) {
                 if(actions[next_a]->action->type == MOB_ACTION_IF) {
                     depth++;
                 } else if(actions[next_a]->action->type == MOB_ACTION_END_IF) {
@@ -269,7 +269,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             
         } case MOB_ACTION_GOTO: {
             //Find the label that matches.
-            for(size_t a2 = 0; a2 < actions.size(); ++a2) {
+            for(size_t a2 = 0; a2 < actions.size(); a2++) {
                 if(actions[a2]->action->type == MOB_ACTION_LABEL) {
                     if(actions[a]->args[0] == actions[a2]->args[0]) {
                         a = a2;
@@ -328,7 +328,7 @@ mob_event* mob_fsm::get_event(const MOB_EV type) const {
  * @return The index, or INVALID if it doesn't exist.
  */
 size_t mob_fsm::get_state_idx(const string &name) const {
-    for(size_t s = 0; s < m->type->states.size(); ++s) {
+    for(size_t s = 0; s < m->type->states.size(); s++) {
         if(m->type->states[s]->name == name) {
             return s;
         }
@@ -414,7 +414,7 @@ bool mob_fsm::set_state(size_t new_state, void* info1, void* info2) {
 mob_state::mob_state(const string &name) :
     name(name) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -429,7 +429,7 @@ mob_state::mob_state(const string &name) :
 mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
     name(name) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = evs[e];
     }
 }
@@ -445,7 +445,7 @@ mob_state::mob_state(const string &name, size_t id) :
     name(name),
     id(id) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -478,15 +478,15 @@ size_t fix_states(
     size_t starting_state_idx = INVALID;
     
     //Fix actions that change the state that are using a string.
-    for(size_t s = 0; s < states.size(); ++s) {
+    for(size_t s = 0; s < states.size(); s++) {
         mob_state* state = states[s];
         if(state->name == starting_state) starting_state_idx = s;
         
-        for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        for(size_t e = 0; e < N_MOB_EVENTS; e++) {
             mob_event* ev = state->events[e];
             if(!ev) continue;
             
-            for(size_t a = 0; a < ev->actions.size(); ++a) {
+            for(size_t a = 0; a < ev->actions.size(); a++) {
                 mob_action_call* call = ev->actions[a];
                 
                 if(call->action->type == MOB_ACTION_SET_STATE) {
@@ -496,7 +496,7 @@ size_t fix_states(
                     
                     if(is_number(state_name)) continue;
                     
-                    for(; state_idx < states.size(); ++state_idx) {
+                    for(; state_idx < states.size(); state_idx++) {
                         if(states[state_idx]->name == state_name) {
                             found_state = true;
                             break;
@@ -540,10 +540,10 @@ void load_script(
     
     //Let's save the states now, so that the state switching events
     //can know what numbers the events they need correspond to.
-    for(size_t s = 0; s < n_new_states; ++s) {
+    for(size_t s = 0; s < n_new_states; s++) {
         data_node* state_node = script_node->get_child(s);
         bool skip = false;
-        for(size_t s2 = 0; s2 < out_states->size(); ++s2) {
+        for(size_t s2 = 0; s2 < out_states->size(); s2++) {
             if((*out_states)[s2]->name == state_node->name) {
                 //Already exists, probably hardcoded. Skip this.
                 skip = true;
@@ -555,7 +555,7 @@ void load_script(
         }
     }
     
-    for(size_t s = 0; s < out_states->size(); ++s) {
+    for(size_t s = 0; s < out_states->size(); s++) {
         mob_state* state_ptr = (*out_states)[s];
         data_node* state_node = script_node->get_child_by_name(state_ptr->name);
         load_state(mt, state_node, global_node, state_ptr);
@@ -586,7 +586,7 @@ void load_state(
     vector<mob_event*> new_events;
     vector<bitmask_8_t> new_event_settings;
     
-    for(size_t e = 0; e < n_events; ++e) {
+    for(size_t e = 0; e < n_events; e++) {
         data_node* event_node = state_node->get_child(e);
         vector<mob_action_call*> actions;
         bitmask_8_t settings;
@@ -603,7 +603,7 @@ void load_state(
     vector<mob_event*> global_events;
     vector<bitmask_8_t> global_event_settings;
     
-    for(size_t e = 0; e < n_global_events; ++e) {
+    for(size_t e = 0; e < n_global_events; e++) {
         data_node* event_node = global_node->get_child(e);
         vector<mob_action_call*> actions;
         bitmask_8_t settings;
@@ -617,12 +617,12 @@ void load_state(
     }
     
     //Insert global events into the state.
-    for(size_t e = 0; e < global_events.size(); ++e) {
+    for(size_t e = 0; e < global_events.size(); e++) {
         mob_event* global_event = global_events[e];
         bitmask_8_t global_settings = global_event_settings[e];
         
         bool merged = false;
-        for(size_t ne = 0; ne < n_events; ++ne) {
+        for(size_t ne = 0; ne < n_events; ne++) {
             mob_event* ev_ptr = new_events[ne];
             bitmask_8_t ev_settings = new_event_settings[ne];
             
@@ -725,7 +725,7 @@ void load_state(
     }
     
     //Connect all new events to the state.
-    for(size_t e = 0; e < new_events.size(); ++e) {
+    for(size_t e = 0; e < new_events.size(); e++) {
         MOB_EV ev_type = new_events[e]->type;
         
         if(state_ptr->events[ev_type]) {
@@ -752,14 +752,14 @@ void load_state(
  * @param mt The type of mob.
  */
 void unload_script(mob_type* mt) {
-    for(size_t s = 0; s < mt->states.size(); ++s) {
+    for(size_t s = 0; s < mt->states.size(); s++) {
         mob_state* s_ptr = mt->states[s];
         
-        for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        for(size_t e = 0; e < N_MOB_EVENTS; e++) {
             mob_event* e_ptr = s_ptr->events[e];
             if(!e_ptr) continue;
             
-            for(size_t a = 0; a < e_ptr->actions.size(); ++a) {
+            for(size_t a = 0; a < e_ptr->actions.size(); a++) {
                 delete e_ptr->actions[a];
             }
             

@@ -273,7 +273,7 @@ bool audio_manager::destroy_sfx_source(size_t source_id) {
             SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY
         )
     ) {
-        for(size_t p = 0; p < playbacks.size(); ++p) {
+        for(size_t p = 0; p < playbacks.size(); p++) {
             if(playbacks[p].source_id == source_id) {
                 stop_sfx_playback(p);
             }
@@ -304,7 +304,7 @@ bool audio_manager::emit(size_t source_id) {
         source_ptr->config.stack_min_pos > 0.0f ||
         source_ptr->config.stack_mode == SFX_STACK_MODE_NEVER
     ) {
-        for(size_t p = 0; p < playbacks.size(); ++p) {
+        for(size_t p = 0; p < playbacks.size(); p++) {
             sfx_playback_t* playback = &playbacks[p];
             sfx_source_t* p_source_ptr = get_source(playback->source_id);
             if(!p_source_ptr || p_source_ptr->sample != sample) continue;
@@ -337,7 +337,7 @@ bool audio_manager::emit(size_t source_id) {
     
     //Check if other playbacks exist and if we need to stop them.
     if(source_ptr->config.stack_mode == SFX_STACK_MODE_OVERRIDE) {
-        for(size_t p = 0; p < playbacks.size(); ++p) {
+        for(size_t p = 0; p < playbacks.size(); p++) {
             sfx_playback_t* playback = &playbacks[p];
             sfx_source_t* p_source_ptr = get_source(playback->source_id);
             if(!p_source_ptr || p_source_ptr->sample != sample) {
@@ -468,7 +468,7 @@ void audio_manager::handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream) {
  */
 void audio_manager::handle_world_pause() {
     //Pause playbacks.
-    for(size_t p = 0; p < playbacks.size(); ++p) {
+    for(size_t p = 0; p < playbacks.size(); p++) {
         sfx_playback_t* playback_ptr = &playbacks[p];
         if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) {
             continue;
@@ -504,7 +504,7 @@ void audio_manager::handle_world_pause() {
  */
 void audio_manager::handle_world_unpause() {
     //Unpause playbacks.
-    for(size_t p = 0; p < playbacks.size(); ++p) {
+    for(size_t p = 0; p < playbacks.size(); p++) {
         sfx_playback_t* playback_ptr = &playbacks[p];
         if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) {
             continue;
@@ -607,7 +607,7 @@ void audio_manager::init(
     );
     
     //Initialization of every mix track type.
-    for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+    for(size_t m = 0; m < N_MIX_TRACK_TYPES; m++) {
         mix_statuses.push_back(false);
         mix_volumes.push_back(0.0f);
     }
@@ -832,7 +832,7 @@ void audio_manager::start_song_track(
  * @param filter Sound sample to filter by, or nullptr to stop all playbacks.
  */
 void audio_manager::stop_all_playbacks(const ALLEGRO_SAMPLE* filter) {
-    for(size_t p = 0; p < playbacks.size(); ++p) {
+    for(size_t p = 0; p < playbacks.size(); p++) {
         bool to_stop = false;
         
         if(!filter) {
@@ -907,7 +907,7 @@ void audio_manager::tick(float delta_t) {
     }
     
     //Update playbacks.
-    for(size_t p = 0; p < playbacks.size(); ++p) {
+    for(size_t p = 0; p < playbacks.size(); p++) {
         sfx_playback_t* playback_ptr = &playbacks[p];
         if(playback_ptr->state == SFX_PLAYBACK_STATE_DESTROYED) continue;
         
@@ -983,7 +983,7 @@ void audio_manager::tick(float delta_t) {
         if(playbacks[p].state == SFX_PLAYBACK_STATE_DESTROYED) {
             playbacks.erase(playbacks.begin() + p);
         } else {
-            ++p;
+            p++;
         }
     }
     
@@ -1075,7 +1075,7 @@ void audio_manager::tick(float delta_t) {
     }
     
     //Update the status of mix track types, and their volumes.
-    for(size_t m = 0; m < N_MIX_TRACK_TYPES; ++m) {
+    for(size_t m = 0; m < N_MIX_TRACK_TYPES; m++) {
         mix_volumes[m] =
             inch_towards(
                 mix_volumes[m],
@@ -1100,7 +1100,7 @@ void audio_manager::tick(float delta_t) {
     }
     
     //Prepare the statuses for the next frame.
-    for(size_t s = 0; s < N_MIX_TRACK_TYPES; ++s) {
+    for(size_t s = 0; s < N_MIX_TRACK_TYPES; s++) {
         mix_statuses[s] = false;
     }
 }
@@ -1238,7 +1238,7 @@ void song::load_from_data_node(data_node* node) {
     data_node* mix_tracks_node = node->get_child_by_name("mix_tracks");
     size_t n_mix_tracks = mix_tracks_node->get_nr_of_children();
     
-    for(size_t m = 0; m < n_mix_tracks; ++m) {
+    for(size_t m = 0; m < n_mix_tracks; m++) {
         data_node* mix_track_node = mix_tracks_node->get_child(m);
         MIX_TRACK_TYPE trigger = N_MIX_TRACK_TYPES;
         

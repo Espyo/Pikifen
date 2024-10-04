@@ -26,10 +26,10 @@
  * To get the type and size of the third object of every level,
  * you would do something like:
  *   data_node file("levels.txt");
- *   for(size_t l = 0; l < file.get_nr_of_children_by_name("level"); ++l) {
+ *   for(size_t l = 0; l < file.get_nr_of_children_by_name("level"); l++) {
  *       data_node* level_objects =
  *           file.get_child_by_name("level", l)->get_child_by_name("objects");
- *       for(size_t o = 0; o < level_objects->get_nr_of_children(); ++o){
+ *       for(size_t o = 0; o < level_objects->get_nr_of_children(); o++){
  *           string type = level_objects->get_child(o)->name;
  *           string size =
  *              level_objects->get_child(o)->get_child_by_name("size")->value;

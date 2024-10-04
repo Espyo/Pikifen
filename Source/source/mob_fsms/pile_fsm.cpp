@@ -87,7 +87,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     resource* resource_to_pick_up = nullptr;
     pikmin* pikmin_to_start_carrying = nullptr;
     
-    for(size_t r = 0; r < (size_t) amount_to_spawn; ++r) {
+    for(size_t r = 0; r < (size_t) amount_to_spawn; r++) {
         point spawn_pos;
         float spawn_z = 0;
         float spawn_angle = 0;

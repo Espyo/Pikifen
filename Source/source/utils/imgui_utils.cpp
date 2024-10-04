@@ -31,7 +31,7 @@ bool ImGui::Combo(
     int popup_max_height_in_items
 ) {
     string items_str;
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         items_str += items[i] + '\0';
     }
     
@@ -61,7 +61,7 @@ bool ImGui::Combo(
 
     string items_str;
     int item_idx = -1;
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         items_str += items[i] + '\0';
         if(*current_item == items[i]) {
             item_idx = (int) i;
@@ -198,7 +198,7 @@ bool ImGui::ListBox(
     //TODO check if items is empty
     const char** array = new const char* [items.size()];
     
-    for(size_t i = 0; i < items.size(); ++i) {
+    for(size_t i = 0; i < items.size(); i++) {
         array[i] = items[i].c_str();
     }
     
@@ -221,7 +221,7 @@ void ImGui::Reset() {
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     io.MouseWheel = 0.0f;
     io.MouseWheelH = 0.0f;
-    for(size_t b = 0; b < IM_ARRAYSIZE(io.MouseDown); ++b) {
+    for(size_t b = 0; b < IM_ARRAYSIZE(io.MouseDown); b++) {
         io.MouseDown[b] = false;
     }
     

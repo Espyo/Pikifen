@@ -89,7 +89,7 @@ void ship_type::load_cat_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->leg_body_parts.size(); ++b) {
+    for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
         if(anims.find_body_part(nest->leg_body_parts[b]) == INVALID) {
             game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "

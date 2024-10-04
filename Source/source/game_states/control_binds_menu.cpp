@@ -59,7 +59,7 @@ void control_binds_menu_state::choose_input(
     cur_action_type = action_type;
     cur_bind_idx = all_binds.size();
     
-    for(size_t b = 0; b < all_binds.size(); ++b) {
+    for(size_t b = 0; b < all_binds.size(); b++) {
         if(all_binds[b].action_type_id != action_type) continue;
         if(binds_counted == bind_idx) {
             cur_bind_idx = b;
@@ -83,7 +83,7 @@ void control_binds_menu_state::delete_bind(
     vector<control_bind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
     
-    for(size_t b = 0; b < all_binds.size(); ++b) {
+    for(size_t b = 0; b < all_binds.size(); b++) {
         if(all_binds[b].action_type_id != action_type) continue;
         if(binds_counted == bind_idx) {
             all_binds.erase(all_binds.begin() + b);
@@ -140,7 +140,7 @@ void control_binds_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     
     if(capturing_input == 0) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
         }
     }
@@ -310,7 +310,7 @@ void control_binds_menu_state::populate_binds() {
     binds_per_action_type.assign(all_player_action_types.size(), vector<control_bind>());
     
     //Read all binds and sort them by player action type.
-    for(size_t b = 0; b < all_binds.size(); ++b) {
+    for(size_t b = 0; b < all_binds.size(); b++) {
         const control_bind &bind = all_binds[b];
         if(bind.player_nr != 0) continue;
         binds_per_action_type[bind.action_type_id].push_back(bind);
@@ -318,7 +318,7 @@ void control_binds_menu_state::populate_binds() {
     
     PLAYER_ACTION_CAT last_cat = PLAYER_ACTION_CAT_NONE;
     
-    for(size_t a = 0; a < all_player_action_types.size(); ++a) {
+    for(size_t a = 0; a < all_player_action_types.size(); a++) {
         const player_action_type &action_type = all_player_action_types[a];
         
         if(action_type.internal_name.empty()) continue;
@@ -409,7 +409,7 @@ void control_binds_menu_state::populate_binds() {
         }
         
         vector<control_bind> a_binds = binds_per_action_type[action_type.id];
-        for(size_t b = 0; b < a_binds.size(); ++b) {
+        for(size_t b = 0; b < a_binds.size(); b++) {
         
             //Change bind button.
             button_gui_item* bind_button =
@@ -650,7 +650,7 @@ void control_binds_menu_state::restore_defaults(
         ) {
             all_binds.erase(all_binds.begin() + b);
         } else {
-            ++b;
+            b++;
         }
     }
     

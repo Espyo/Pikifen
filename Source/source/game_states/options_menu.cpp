@@ -61,7 +61,7 @@ options_menu_state::options_menu_state() {
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
     int n_modes = al_get_num_display_modes();
-    for(int d = 0; d < n_modes; ++d) {
+    for(int d = 0; d < n_modes; d++) {
         ALLEGRO_DISPLAY_MODE d_info;
         if(!al_get_display_mode(d, &d_info)) continue;
         if(d_info.width < SMALLEST_WIN_WIDTH) continue;
@@ -95,7 +95,7 @@ options_menu_state::options_menu_state() {
         if(resolution_presets[p] == resolution_presets[p + 1]) {
             resolution_presets.erase(resolution_presets.begin() + (p + 1));
         } else {
-            ++p;
+            p++;
         }
     }
 }
@@ -128,7 +128,7 @@ void options_menu_state::do_drawing() {
 void options_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             top_gui.handle_player_action(player_actions[a]);
             controls_gui.handle_player_action(player_actions[a]);
             graphics_gui.handle_player_action(player_actions[a]);
@@ -500,7 +500,7 @@ void options_menu_state::init_gui_graphics_page() {
     
     //Resolution picker.
     vector<string> resolution_preset_names;
-    for(size_t p = 0; p < resolution_presets.size(); ++p) {
+    for(size_t p = 0; p < resolution_presets.size(); p++) {
         resolution_preset_names.push_back(
             i2s(resolution_presets[p].first) + "x" +
             i2s(resolution_presets[p].second)

@@ -52,7 +52,7 @@ void animation_editor::draw_canvas() {
             &game.screen_to_world_transform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
-        for(size_t v = 0; v < 4; ++v) {
+        for(size_t v = 0; v < 4; v++) {
             bg_vertexes[v].z = 0;
             bg_vertexes[v].color = COLOR_WHITE;
         }
@@ -132,7 +132,7 @@ void animation_editor::draw_canvas() {
                 &game.screen_to_world_transform, &scene_br.x, &scene_br.y
             );
             
-            for(unsigned char x = 0; x < 3; ++x) {
+            for(unsigned char x = 0; x < 3; x++) {
                 point rec_tl, rec_br;
                 switch(x) {
                 case 0: {
@@ -150,7 +150,7 @@ void animation_editor::draw_canvas() {
                 }
                 }
                 
-                for(unsigned char y = 0; y < 3; ++y) {
+                for(unsigned char y = 0; y < 3; y++) {
                     if(x == 1 && y == 1) continue;
                     
                     switch(y) {
@@ -495,7 +495,7 @@ void animation_editor::draw_timeline() {
     float anim_total_duration = 0;
     float anim_cur_time = 0;
     float anim_loop_time = 0;
-    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); ++f) {
+    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); f++) {
         float f_dur = cur_anim_i.cur_anim->frames[f].duration;
         
         if(f < cur_anim_i.cur_frame_idx) {
@@ -533,7 +533,7 @@ void animation_editor::draw_timeline() {
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
     float frame_rectangle_bottom =
         canvas_br.y - ANIM_EDITOR::TIMELINE_PADDING;
-    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); ++f) {
+    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); f++) {
         float end_x =
             frame_rectangles_cur_x +
             cur_anim_i.cur_anim->frames[f].duration * scale;

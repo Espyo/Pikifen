@@ -195,6 +195,8 @@ Bag of notes (useful stuff)
         For constants, first, you'd have to move all constant initializations in .cpp files to their declarations in .h files. Second, this removes your ability to do some things with them, like passing them into functions that have arguments by reference, or access an element of an array.
     Why not use foreach and/or iterators?
         In testing, it turned out to be slower than accessing by index, in vectors.
+    Why does every floating-point number have the f at the end?
+        Because I got tired of dealing with std::min and std::max thinking the number I'm sending is a double and giving a compiler error, but most importantly, I'm tired of trying to get a real division between two numbers but instead getting an integer division because the divisor is an integer.
     Why not use clang-format?
         It's far too aggressive in its style, meaning that case-by-case doesn't exist and if your style is slightly different, you're out of luck
         There's no option to let it indent empty lines to the level of the code before it

@@ -124,7 +124,7 @@ void stats_menu_state::do_drawing() {
 void stats_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); ++a) {
+        for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
         }
     }
@@ -342,7 +342,7 @@ void stats_menu_state::populate_stats_list() {
     size_t mission_platinums = 0;
     long mission_scores = 0;
     
-    for(size_t a = 0; a < mission_folders.size(); ++a) {
+    for(size_t a = 0; a < mission_folders.size(); a++) {
         string name = mission_folders[a];
         data_node data(
             get_base_area_folder_path(AREA_TYPE_MISSION, true) +

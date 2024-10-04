@@ -202,7 +202,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             if(!tw_handled) {
                 vector<size_t> clicked_hitboxes;
-                for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
+                for(size_t h = 0; h < cur_sprite->hitboxes.size(); h++) {
                     hitbox* h_ptr = &cur_sprite->hitboxes[h];
                     
                     if(side_view) {
@@ -239,7 +239,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     
                 } else {
                     size_t cur_hitbox_idx_idx = INVALID;
-                    for(size_t i = 0; i < clicked_hitboxes.size(); ++i) {
+                    for(size_t i = 0; i < clicked_hitboxes.size(); i++) {
                         if(cur_hitbox_idx == clicked_hitboxes[i]) {
                             cur_hitbox_idx_idx = i;
                             break;
@@ -309,8 +309,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             al_unlock_bitmap(cur_sprite->parent_bmp);
             
             size_t p;
-            for(size_t y = 0; y < (size_t) bmp_h; ++y) {
-                for(size_t x = 0; x < (size_t) bmp_w; ++x) {
+            for(size_t y = 0; y < (size_t) bmp_h; y++) {
+                for(size_t x = 0; x < (size_t) bmp_w; x++) {
                     p = y * bmp_w + x;
                     if(!selection_pixels[p]) continue;
                     selection_tl.x = std::min(selection_tl.x, (float) x);

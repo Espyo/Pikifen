@@ -105,7 +105,7 @@ bool bridge::check_health() {
                     angle
                 );
                 
-            for(size_t m = 0; m < prev_chunk_components.size(); ++m) {
+            for(size_t m = 0; m < prev_chunk_components.size(); m++) {
                 prev_chunk_components[m]->pos +=
                     offset;
                 prev_chunk_components[m]->set_rectangular_dim(
@@ -206,7 +206,7 @@ bool bridge::check_health() {
     }
     
     //Finish setting up the new component mobs.
-    for(size_t m = 0; m < new_mobs.size(); ++m) {
+    for(size_t m = 0; m < new_mobs.size(); m++) {
         mob* m_ptr = new_mobs[m];
         enable_flag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         m_ptr->links.push_back(this);
@@ -254,7 +254,7 @@ void bridge::draw_component(mob* m) {
     al_rotate_transform(&angle_transform, m->angle);
     
     ALLEGRO_VERTEX vertexes[8];
-    for(size_t v = 0; v < 8; ++v) {
+    for(size_t v = 0; v < 8; v++) {
         vertexes[v].color = eff.tint_color;
         vertexes[v].z = 0.0f;
     }
@@ -303,7 +303,7 @@ void bridge::draw_component(mob* m) {
     vertexes[7].u = texture_offset;
     vertexes[7].v = texture_v0 + m->rectangular_dim.y;
     
-    for(size_t v = 0; v < 8; ++v) {
+    for(size_t v = 0; v < 8; v++) {
         al_transform_coordinates(
             &angle_transform, &vertexes[v].x, &vertexes[v].y
         );

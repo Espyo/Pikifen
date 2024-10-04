@@ -1404,7 +1404,7 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     
     //Update pointers and such.
     size_t new_leader_idx = game.states.gameplay->cur_leader_idx;
-    for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); l++) {
         if(game.states.gameplay->available_leaders[l] == lea_ptr) {
             new_leader_idx = l;
             break;
@@ -1730,7 +1730,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     pik_ptr->pluck_reserved = true;
     
     //Now for the leaders in the group.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
             l2_ptr->auto_plucking = true;
@@ -2063,7 +2063,7 @@ void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
             l2_ptr->fsm.run_event(LEADER_EV_CANCEL);
@@ -2100,7 +2100,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     if(spray_type_ref.group) {
-        for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
+        for(size_t gm = 0; gm < m->group->members.size(); gm++) {
             mob* gm_ptr = m->group->members[gm];
             if(
                 gm_ptr->type->category->id != MOB_CATEGORY_PIKMIN &&
@@ -2119,7 +2119,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         
     } else {
         for(
-            size_t am = 0; am < game.states.gameplay->mobs.all.size(); ++am
+            size_t am = 0; am < game.states.gameplay->mobs.all.size(); am++
         ) {
             mob* am_ptr = game.states.gameplay->mobs.all[am];
             if(am_ptr == m) continue;
@@ -2221,7 +2221,7 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
     settings.target_point = destination;
     
     float speed = lea_ptr->get_base_speed();
-    for(size_t gm = 0; gm < lea_ptr->group->members.size(); ++gm) {
+    for(size_t gm = 0; gm < lea_ptr->group->members.size(); gm++) {
         //It can only go as fast as its slowest member.
         speed = std::min(speed, lea_ptr->group->members[gm]->get_base_speed());
     }
@@ -2278,7 +2278,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->start_height_effect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
+    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); c++) {
         checkpoints.push_back(c);
     }
     m->track_info =
@@ -2448,7 +2448,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     mob_type::vulnerability_t vuln = m->get_hazard_vulnerability(h);
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
-        for(size_t e = 0; e < h->effects.size(); ++e) {
+        for(size_t e = 0; e < h->effects.size(); e++) {
             l->apply_status_effect(h->effects[e], false, true);
         }
     }
@@ -2458,7 +2458,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(h->associated_liquid) {
         bool already_generating = false;
-        for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+        for(size_t g = 0; g < m->particle_generators.size(); g++) {
             if(
                 m->particle_generators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
@@ -2497,7 +2497,7 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     leader* l = (leader*) m;
     spray_type* s = (spray_type*) info1;
     
-    for(size_t e = 0; e < s->effects.size(); ++e) {
+    for(size_t e = 0; e < s->effects.size(); e++) {
         l->apply_status_effect(s->effects[e], false, false);
     }
 }

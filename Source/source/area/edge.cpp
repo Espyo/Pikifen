@@ -74,7 +74,7 @@ vertex* edge::get_other_vertex(const vertex* v_ptr) const {
  * @return The side index, or INVALID if neither.
  */
 size_t edge::get_side_with_sector(const sector* s_ptr) const {
-    for(unsigned char s = 0; s < 2; ++s) {
+    for(unsigned char s = 0; s < 2; s++) {
         if(sectors[s] == s_ptr) return s;
     }
     return INVALID;
@@ -89,8 +89,8 @@ size_t edge::get_side_with_sector(const sector* s_ptr) const {
  * @return The binding vertex, or nullptr if they are not neighbors.
  */
 vertex* edge::has_neighbor(const edge* other) const {
-    for(size_t v1 = 0; v1 < 2; ++v1) {
-        for(size_t v2 = 0; v2 < 2; ++v2) {
+    for(size_t v1 = 0; v1 < 2; v1++) {
+        for(size_t v2 = 0; v2 < 2; v2++) {
             if(vertexes[v1] == other->vertexes[v2]) {
                 return vertexes[v1];
             }
@@ -121,10 +121,10 @@ bool edge::is_valid() const {
  */
 size_t edge::remove_from_sectors() {
     size_t e_idx = INVALID;
-    for(unsigned char s = 0; s < 2; ++s) {
+    for(unsigned char s = 0; s < 2; s++) {
         sector* s_ptr = sectors[s];
         if(!s_ptr) continue;
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             edge* e_ptr = s_ptr->edges[e];
             if(e_ptr == this) {
                 s_ptr->edges.erase(s_ptr->edges.begin() + e);
@@ -149,10 +149,10 @@ size_t edge::remove_from_sectors() {
  */
 size_t edge::remove_from_vertexes() {
     size_t e_idx = INVALID;
-    for(unsigned char v = 0; v < 2; ++v) {
+    for(unsigned char v = 0; v < 2; v++) {
         vertex* v_ptr = vertexes[v];
         if(!v_ptr) continue;
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
             edge* e_ptr = v_ptr->edges[e];
             if(e_ptr == this) {
                 v_ptr->edges.erase(v_ptr->edges.begin() + e);

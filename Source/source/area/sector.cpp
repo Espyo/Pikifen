@@ -22,7 +22,7 @@
  *
  */
 sector::~sector() {
-    for(size_t t = 0; t < 2; ++t) {
+    for(size_t t = 0; t < 2; t++) {
         if(texture_info.bitmap && texture_info.bitmap != game.bmp_error) {
             game.bitmaps.free(texture_info.file_name);
         }
@@ -37,7 +37,7 @@ sector::~sector() {
  * @param e_idx Index number of the edge to add.
  */
 void sector::add_edge(edge* e_ptr, size_t e_idx) {
-    for(size_t i = 0; i < edges.size(); ++i) {
+    for(size_t i = 0; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             return;
         }
@@ -64,8 +64,8 @@ void sector::calculate_bounding_box() {
     bbox[0].y = edges[0]->vertexes[0]->y;
     bbox[1].y = bbox[0].y;
     
-    for(size_t e = 0; e < edges.size(); ++e) {
-        for(unsigned char v = 0; v < 2; ++v) {
+    for(size_t e = 0; e < edges.size(); e++) {
+        for(unsigned char v = 0; v < 2; v++) {
             point coords(
                 edges[e]->vertexes[v]->x,
                 edges[e]->vertexes[v]->y
@@ -119,7 +119,7 @@ void sector::get_neighbor_sectors_conditionally(
 ) {
 
     //If this sector is already on the list, skip.
-    for(size_t s = 0; s < sector_list.size(); ++s) {
+    for(size_t s = 0; s < sector_list.size(); s++) {
         if(sector_list[s] == this) return;
     }
     
@@ -132,7 +132,7 @@ void sector::get_neighbor_sectors_conditionally(
     //Now check its neighbors.
     edge* e_ptr = nullptr;
     sector* other_s = nullptr;
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         e_ptr = edges[e];
         other_s = e_ptr->get_other_sector(this);
         if(!other_s) continue;
@@ -150,7 +150,7 @@ void sector::get_neighbor_sectors_conditionally(
 vertex* sector::get_rightmost_vertex() const {
     vertex* rightmost = nullptr;
     
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
         if(!rightmost) rightmost = e_ptr->vertexes[0];
         else {
@@ -181,7 +181,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //So save all sector/length pairs.
     //Sectors with different heights from the current one are also saved,
     //but they have lower priority compared to same-heigh sectors.
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         e_ptr = edges[e];
         bool valid = true;
         
@@ -246,7 +246,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
  */
 bool sector::is_clockwise() const {
     vector<vertex*> vertexes;
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         vertexes.push_back(edges[e]->vertexes[0]);
     }
     return is_polygon_clockwise(vertexes);
@@ -260,7 +260,7 @@ bool sector::is_clockwise() const {
  * @return Whether it is in the sector.
  */
 bool sector::is_point_in_sector(const point &p) const {
-    for(size_t t = 0; t < triangles.size(); ++t) {
+    for(size_t t = 0; t < triangles.size(); t++) {
         const triangle* t_ptr = &triangles[t];
         if(
             is_point_in_triangle(
@@ -286,7 +286,7 @@ bool sector::is_point_in_sector(const point &p) const {
  */
 void sector::remove_edge(const edge* e_ptr) {
     size_t i = 0;
-    for(; i < edges.size(); ++i) {
+    for(; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
             edge_idxs.erase(edge_idxs.begin() + i);
@@ -336,7 +336,7 @@ sector* get_sector(
         
     } else {
     
-        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
             sector* s_ptr = game.cur_area_data.sectors[s];
             
             if(

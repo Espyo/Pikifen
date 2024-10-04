@@ -44,26 +44,26 @@ const unsigned char DEF_DIFFICULTY = 0;
  * don't match.
  */
 void area_data::check_stability() {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         vertex* v_ptr = vertexes[v];
         engine_assert(
             v_ptr->edges.size() == v_ptr->edge_idxs.size(),
             i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_idxs.size())
         );
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
             engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_idxs[e]], "");
         }
     }
     
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
-        for(size_t v = 0; v < 2; ++v) {
+        for(size_t v = 0; v < 2; v++) {
             engine_assert(
                 e_ptr->vertexes[v] == vertexes[e_ptr->vertex_idxs[v]], ""
             );
         }
         
-        for(size_t s = 0; s < 2; ++s) {
+        for(size_t s = 0; s < 2; s++) {
             sector* s_ptr = e_ptr->sectors[s];
             if(
                 s_ptr == nullptr &&
@@ -75,13 +75,13 @@ void area_data::check_stability() {
         }
     }
     
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         sector* s_ptr = sectors[s];
         engine_assert(
             s_ptr->edges.size() == s_ptr->edge_idxs.size(),
             i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_idxs.size())
         );
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_idxs[e]], "");
         }
     }
@@ -92,22 +92,22 @@ void area_data::check_stability() {
  * @brief Clears the info of an area map.
  */
 void area_data::clear() {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         delete vertexes[v];
     }
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         delete edges[e];
     }
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         delete sectors[s];
     }
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
+    for(size_t m = 0; m < mob_generators.size(); m++) {
         delete mob_generators[m];
     }
-    for(size_t s = 0; s < path_stops.size(); ++s) {
+    for(size_t s = 0; s < path_stops.size(); s++) {
         delete path_stops[s];
     }
-    for(size_t s = 0; s < tree_shadows.size(); ++s) {
+    for(size_t s = 0; s < tree_shadows.size(); s++) {
         delete tree_shadows[s];
     }
     
@@ -203,45 +203,45 @@ void area_data::clone(area_data &other) {
     other.bmap = bmap;
     
     other.vertexes.reserve(vertexes.size());
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         other.vertexes.push_back(new vertex());
     }
     other.edges.reserve(edges.size());
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         other.edges.push_back(new edge());
     }
     other.sectors.reserve(sectors.size());
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         other.sectors.push_back(new sector());
     }
     other.mob_generators.reserve(mob_generators.size());
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
+    for(size_t m = 0; m < mob_generators.size(); m++) {
         other.mob_generators.push_back(new mob_gen());
     }
     other.path_stops.reserve(path_stops.size());
-    for(size_t s = 0; s < path_stops.size(); ++s) {
+    for(size_t s = 0; s < path_stops.size(); s++) {
         other.path_stops.push_back(new path_stop());
     }
     other.tree_shadows.reserve(tree_shadows.size());
-    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+    for(size_t t = 0; t < tree_shadows.size(); t++) {
         other.tree_shadows.push_back(new tree_shadow());
     }
     
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         vertex* v_ptr = vertexes[v];
         vertex* ov_ptr = other.vertexes[v];
         ov_ptr->x = v_ptr->x;
         ov_ptr->y = v_ptr->y;
         ov_ptr->edges.reserve(v_ptr->edges.size());
         ov_ptr->edge_idxs.reserve(v_ptr->edge_idxs.size());
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
             size_t nr = v_ptr->edge_idxs[e];
             ov_ptr->edges.push_back(other.edges[nr]);
             ov_ptr->edge_idxs.push_back(nr);
         }
     }
     
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
         edge* oe_ptr = other.edges[e];
         oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_idxs[0]];
@@ -263,7 +263,7 @@ void area_data::clone(area_data &other) {
         e_ptr->clone(oe_ptr);
     }
     
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         sector* s_ptr = sectors[s];
         sector* os_ptr = other.sectors[s];
         s_ptr->clone(os_ptr);
@@ -272,13 +272,13 @@ void area_data::clone(area_data &other) {
             game.textures.get(s_ptr->texture_info.file_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_idxs.reserve(s_ptr->edge_idxs.size());
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             size_t nr = s_ptr->edge_idxs[e];
             os_ptr->edges.push_back(other.edges[nr]);
             os_ptr->edge_idxs.push_back(nr);
         }
         os_ptr->triangles.reserve(s_ptr->triangles.size());
-        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+        for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
             triangle* t_ptr = &s_ptr->triangles[t];
             os_ptr->triangles.push_back(
                 triangle(
@@ -292,27 +292,27 @@ void area_data::clone(area_data &other) {
         os_ptr->bbox[1] = s_ptr->bbox[1];
     }
     
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
+    for(size_t m = 0; m < mob_generators.size(); m++) {
         mob_gen* m_ptr = mob_generators[m];
         mob_gen* om_ptr = other.mob_generators[m];
         m_ptr->clone(om_ptr);
     }
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
+    for(size_t m = 0; m < mob_generators.size(); m++) {
         mob_gen* om_ptr = other.mob_generators[m];
-        for(size_t l = 0; l < om_ptr->link_idxs.size(); ++l) {
+        for(size_t l = 0; l < om_ptr->link_idxs.size(); l++) {
             om_ptr->links.push_back(
                 other.mob_generators[om_ptr->link_idxs[l]]
             );
         }
     }
     
-    for(size_t s = 0; s < path_stops.size(); ++s) {
+    for(size_t s = 0; s < path_stops.size(); s++) {
         path_stop* s_ptr = path_stops[s];
         path_stop* os_ptr = other.path_stops[s];
         os_ptr->pos = s_ptr->pos;
         s_ptr->clone(os_ptr);
         os_ptr->links.reserve(s_ptr->links.size());
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* new_link =
                 new path_link(
                 os_ptr,
@@ -325,7 +325,7 @@ void area_data::clone(area_data &other) {
         }
     }
     
-    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+    for(size_t t = 0; t < tree_shadows.size(); t++) {
         tree_shadow* t_ptr = tree_shadows[t];
         tree_shadow* ot_ptr = other.tree_shadows[t];
         ot_ptr->alpha = t_ptr->alpha;
@@ -454,7 +454,7 @@ void area_data::connect_edge_to_vertex(
  */
 void area_data::connect_sector_edges(sector* s_ptr) {
     s_ptr->edge_idxs.clear();
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
         if(e_ptr->sectors[0] == s_ptr || e_ptr->sectors[1] == s_ptr) {
             s_ptr->edge_idxs.push_back(e);
@@ -471,7 +471,7 @@ void area_data::connect_sector_edges(sector* s_ptr) {
  */
 void area_data::connect_vertex_edges(vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
         if(e_ptr->vertexes[0] == v_ptr || e_ptr->vertexes[1] == v_ptr) {
             v_ptr->edge_idxs.push_back(e);
@@ -489,7 +489,7 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
  * @return The index, or INVALID if not found.
  */
 size_t area_data::find_edge_idx(const edge* e_ptr) const {
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) return e;
     }
     return INVALID;
@@ -504,7 +504,7 @@ size_t area_data::find_edge_idx(const edge* e_ptr) const {
  * @return The index, or INVALID if not found.
  */
 size_t area_data::find_mob_gen_idx(const mob_gen* m_ptr) const {
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
+    for(size_t m = 0; m < mob_generators.size(); m++) {
         if(mob_generators[m] == m_ptr) return m;
     }
     return INVALID;
@@ -519,7 +519,7 @@ size_t area_data::find_mob_gen_idx(const mob_gen* m_ptr) const {
  * @return The index, or INVALID if not found.
  */
 size_t area_data::find_sector_idx(const sector* s_ptr) const {
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) return s;
     }
     return INVALID;
@@ -534,7 +534,7 @@ size_t area_data::find_sector_idx(const sector* s_ptr) const {
  * @return The index, or INVALID if not found.
  */
 size_t area_data::find_vertex_idx(const vertex* v_ptr) const {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) return v;
     }
     return INVALID;
@@ -549,7 +549,7 @@ size_t area_data::find_vertex_idx(const vertex* v_ptr) const {
  * @param e_ptr Edge to fix the indexes of.
  */
 void area_data::fix_edge_idxs(edge* e_ptr) {
-    for(size_t s = 0; s < 2; ++s) {
+    for(size_t s = 0; s < 2; s++) {
         if(!e_ptr->sectors[s]) {
             e_ptr->sector_idxs[s] = INVALID;
         } else {
@@ -557,7 +557,7 @@ void area_data::fix_edge_idxs(edge* e_ptr) {
         }
     }
     
-    for(size_t v = 0; v < 2; ++v) {
+    for(size_t v = 0; v < 2; v++) {
         if(!e_ptr->vertexes[v]) {
             e_ptr->vertex_idxs[v] = INVALID;
         } else {
@@ -577,14 +577,14 @@ void area_data::fix_edge_idxs(edge* e_ptr) {
 void area_data::fix_edge_pointers(edge* e_ptr) {
     e_ptr->sectors[0] = nullptr;
     e_ptr->sectors[1] = nullptr;
-    for(size_t s = 0; s < 2; ++s) {
+    for(size_t s = 0; s < 2; s++) {
         size_t s_idx = e_ptr->sector_idxs[s];
         e_ptr->sectors[s] = (s_idx == INVALID ? nullptr : sectors[s_idx]);
     }
     
     e_ptr->vertexes[0] = nullptr;
     e_ptr->vertexes[1] = nullptr;
-    for(size_t v = 0; v < 2; ++v) {
+    for(size_t v = 0; v < 2; v++) {
         size_t v_idx = e_ptr->vertex_idxs[v];
         e_ptr->vertexes[v] = (v_idx == INVALID ? nullptr : vertexes[v_idx]);
     }
@@ -599,13 +599,13 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
  * @param s_ptr Path stop to fix the indexes of.
  */
 void area_data::fix_path_stop_idxs(path_stop* s_ptr) {
-    for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+    for(size_t l = 0; l < s_ptr->links.size(); l++) {
         path_link* l_ptr = s_ptr->links[l];
         l_ptr->end_idx = INVALID;
         
         if(!l_ptr->end_ptr) continue;
         
-        for(size_t s = 0; s < path_stops.size(); ++s) {
+        for(size_t s = 0; s < path_stops.size(); s++) {
             if(l_ptr->end_ptr == path_stops[s]) {
                 l_ptr->end_idx = s;
                 break;
@@ -623,7 +623,7 @@ void area_data::fix_path_stop_idxs(path_stop* s_ptr) {
  * @param s_ptr Path stop to fix the pointers of.
  */
 void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
-    for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+    for(size_t l = 0; l < s_ptr->links.size(); l++) {
         path_link* l_ptr = s_ptr->links[l];
         l_ptr->end_ptr = nullptr;
         
@@ -644,7 +644,7 @@ void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
  */
 void area_data::fix_sector_idxs(sector* s_ptr) {
     s_ptr->edge_idxs.clear();
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
         s_ptr->edge_idxs.push_back(find_edge_idx(s_ptr->edges[e]));
     }
 }
@@ -659,7 +659,7 @@ void area_data::fix_sector_idxs(sector* s_ptr) {
  */
 void area_data::fix_sector_pointers(sector* s_ptr) {
     s_ptr->edges.clear();
-    for(size_t e = 0; e < s_ptr->edge_idxs.size(); ++e) {
+    for(size_t e = 0; e < s_ptr->edge_idxs.size(); e++) {
         size_t e_idx = s_ptr->edge_idxs[e];
         s_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
     }
@@ -675,7 +675,7 @@ void area_data::fix_sector_pointers(sector* s_ptr) {
  */
 void area_data::fix_vertex_idxs(vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
-    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+    for(size_t e = 0; e < v_ptr->edges.size(); e++) {
         v_ptr->edge_idxs.push_back(find_edge_idx(v_ptr->edges[e]));
     }
 }
@@ -690,7 +690,7 @@ void area_data::fix_vertex_idxs(vertex* v_ptr) {
  */
 void area_data::fix_vertex_pointers(vertex* v_ptr) {
     v_ptr->edges.clear();
-    for(size_t e = 0; e < v_ptr->edge_idxs.size(); ++e) {
+    for(size_t e = 0; e < v_ptr->edge_idxs.size(); e++) {
         size_t e_idx = v_ptr->edge_idxs[e];
         v_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
     }
@@ -710,7 +710,7 @@ void area_data::generate_blockmap() {
     min_coords.x = max_coords.x = vertexes[0]->x;
     min_coords.y = max_coords.y = vertexes[0]->y;
     
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         vertex* v_ptr = vertexes[v];
         min_coords.x = std::min(v_ptr->x, min_coords.x);
         max_coords.x = std::max(v_ptr->x, max_coords.x);
@@ -753,8 +753,8 @@ void area_data::generate_blockmap() {
      * triangle method to get the sector. Using the center of the blockmap is
      * just as good a checking spot as any.
      */
-    for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
-        for(size_t by = 0; by < bmap.n_rows; ++by) {
+    for(size_t bx = 0; bx < bmap.n_cols; bx++) {
+        for(size_t by = 0; by < bmap.n_rows; by++) {
         
             if(!bmap.sectors[bx][by].empty()) continue;
             
@@ -799,7 +799,7 @@ void area_data::generate_blockmap() {
  * @param edge_list Edges to generate the blockmap around.
  */
 void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
-    for(size_t e = 0; e < edge_list.size(); ++e) {
+    for(size_t e = 0; e < edge_list.size(); e++) {
     
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
@@ -823,8 +823,8 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
                 std::max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
             );
             
-        for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
-            for(size_t by = b_min_y; by <= b_max_y; ++by) {
+        for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
+            for(size_t by = b_min_y; by <= b_max_y; by++) {
             
                 //Get the block's coordinates.
                 point corner = bmap.get_top_left_corner(bx, by);
@@ -873,9 +873,9 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
 size_t area_data::get_nr_path_links() {
     size_t one_ways_found = 0;
     size_t normals_found = 0;
-    for(size_t s = 0; s < path_stops.size(); ++s) {
+    for(size_t s = 0; s < path_stops.size(); s++) {
         path_stop* s_ptr = path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
             if(l_ptr->end_ptr->get_link(s_ptr)) {
                 //The other stop links to this one. So it's a two-way.
@@ -968,9 +968,9 @@ vertex* area_data::new_vertex() {
  */
 void area_data::remove_edge(size_t e_idx) {
     edges.erase(edges.begin() + e_idx);
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         vertex* v_ptr = vertexes[v];
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
             if(
                 v_ptr->edge_idxs[e] != INVALID &&
                 v_ptr->edge_idxs[e] > e_idx
@@ -985,9 +985,9 @@ void area_data::remove_edge(size_t e_idx) {
             }
         }
     }
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         sector* s_ptr = sectors[s];
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             if(
                 s_ptr->edge_idxs[e] != INVALID &&
                 s_ptr->edge_idxs[e] > e_idx
@@ -1011,7 +1011,7 @@ void area_data::remove_edge(size_t e_idx) {
  * @param e_ptr Pointer of the edge to remove.
  */
 void area_data::remove_edge(const edge* e_ptr) {
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) {
             remove_edge(e);
             return;
@@ -1027,9 +1027,9 @@ void area_data::remove_edge(const edge* e_ptr) {
  */
 void area_data::remove_sector(size_t s_idx) {
     sectors.erase(sectors.begin() + s_idx);
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
         edge* e_ptr = game.cur_area_data.edges[e];
-        for(size_t s = 0; s < 2; ++s) {
+        for(size_t s = 0; s < 2; s++) {
             if(
                 e_ptr->sector_idxs[s] != INVALID &&
                 e_ptr->sector_idxs[s] > s_idx
@@ -1053,7 +1053,7 @@ void area_data::remove_sector(size_t s_idx) {
  * @param s_ptr Pointer of the sector to remove.
  */
 void area_data::remove_sector(const sector* s_ptr) {
-    for(size_t s = 0; s < sectors.size(); ++s) {
+    for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) {
             remove_sector(s);
             return;
@@ -1069,9 +1069,9 @@ void area_data::remove_sector(const sector* s_ptr) {
  */
 void area_data::remove_vertex(size_t v_idx) {
     vertexes.erase(vertexes.begin() + v_idx);
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edges.size(); e++) {
         edge* e_ptr = edges[e];
-        for(size_t v = 0; v < 2; ++v) {
+        for(size_t v = 0; v < 2; v++) {
             if(
                 e_ptr->vertex_idxs[v] != INVALID &&
                 e_ptr->vertex_idxs[v] > v_idx
@@ -1095,7 +1095,7 @@ void area_data::remove_vertex(size_t v_idx) {
  * @param v_ptr Pointer of the vertex to remove.
  */
 void area_data::remove_vertex(const vertex* v_ptr) {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) {
             remove_vertex(v);
             return;
@@ -1169,13 +1169,13 @@ bool blockmap::get_edges_in_region(
         return false;
     }
     
-    for(size_t bx = bx1; bx <= bx2; ++bx) {
-        for(size_t by = by1; by <= by2; ++by) {
+    for(size_t bx = bx1; bx <= bx2; bx++) {
+        for(size_t by = by1; by <= by2; by++) {
         
             vector<edge*> &block_edges =
                 game.cur_area_data.bmap.edges[bx][by];
                 
-            for(size_t e = 0; e < block_edges.size(); ++e) {
+            for(size_t e = 0; e < block_edges.size(); e++) {
                 edges.insert(block_edges[e]);
             }
         }

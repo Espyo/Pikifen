@@ -337,7 +337,7 @@ void mob::apply_status_effect(
     }
     
     //Let's start by sending the status to the child mobs.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m2_ptr = game.states.gameplay->mobs.all[m];
         if(m2_ptr->parent && m2_ptr->parent->m == this) {
             m2_ptr->apply_status_effect(s, true, from_hazard);
@@ -357,7 +357,7 @@ void mob::apply_status_effect(
     }
     
     //Check if the mob is already under this status.
-    for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
+    for(size_t ms = 0; ms < this->statuses.size(); ms++) {
         if(this->statuses[ms].type == s) {
             //Already exists. What do we do with the time left?
             
@@ -457,7 +457,7 @@ void mob::arachnorb_head_turn_logic() {
     float angle_deviation_avg = 0;
     size_t n_feet = 0;
     
-    for(size_t l = 0; l < links.size(); ++l) {
+    for(size_t l = 0; l < links.size(); l++) {
         if(!links[l]) {
             continue;
         }
@@ -579,7 +579,7 @@ void mob::become_carriable(const CARRY_DESTINATION destination) {
 void mob::become_uncarriable() {
     if(!carry_info) return;
     
-    for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
+    for(size_t p = 0; p < carry_info->spot_info.size(); p++) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_STATE_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(
                 MOB_EV_FOCUSED_MOB_UNAVAILABLE
@@ -623,7 +623,7 @@ bool mob::calculate_carrying_destination(
         ship* closest_ship = nullptr;
         dist closest_ship_dist;
         
-        for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
+        for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
             ship* s_ptr = game.states.gameplay->mobs.ships[s];
             dist d(pos, s_ptr->control_point_final_pos);
             
@@ -655,7 +655,7 @@ bool mob::calculate_carrying_destination(
                 for(
                     size_t t = 0;
                     t < o_ptr->oni_type->nest->pik_types.size();
-                    ++t
+                    t++
                 ) {
                     available_types.insert(
                         o_ptr->oni_type->nest->pik_types[t]
@@ -675,14 +675,14 @@ bool mob::calculate_carrying_destination(
         //Figure out where that type's Onion is.
         size_t closest_onion_idx = INVALID;
         dist closest_onion_dist;
-        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
             if(!o_ptr->activated) continue;
             bool has_type = false;
             for(
                 size_t t = 0;
                 t < o_ptr->oni_type->nest->pik_types.size();
-                ++t
+                t++
             ) {
                 if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
                     has_type = true;
@@ -713,7 +713,7 @@ bool mob::calculate_carrying_destination(
         mob* closest_link = nullptr;
         dist closest_link_dist;
         
-        for(size_t s = 0; s < links.size(); ++s) {
+        for(size_t s = 0; s < links.size(); s++) {
             dist d(pos, links[s]->pos);
             
             if(!closest_link || d < closest_link_dist) {
@@ -742,7 +742,7 @@ bool mob::calculate_carrying_destination(
         unordered_set<pikmin_type*> available_types;
         vector<std::pair<mob*, pikmin_type*> > mobs_per_type;
         
-        for(size_t l = 0; l < links.size(); ++l) {
+        for(size_t l = 0; l < links.size(); l++) {
             if(!links[l]) continue;
             string type_name =
                 links[l]->vars["carry_destination_type"];
@@ -770,7 +770,7 @@ bool mob::calculate_carrying_destination(
         //Figure out which linked mob matches the decided type.
         size_t closest_target_idx = INVALID;
         dist closest_target_dist;
-        for(size_t m = 0; m < mobs_per_type.size(); ++m) {
+        for(size_t m = 0; m < mobs_per_type.size(); m++) {
             if(mobs_per_type[m].second != decided_type) continue;
             
             dist d(pos, mobs_per_type[m].first->pos);
@@ -825,7 +825,7 @@ bool mob::calculate_damage(
         
         if(!attack_h->hazards.empty()) {
             float max_vulnerability = 0.0f;
-            for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
+            for(size_t h = 0; h < attack_h->hazards.size(); h++) {
                 mob_type::vulnerability_t vuln =
                     victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
@@ -863,10 +863,10 @@ bool mob::calculate_damage(
     
     defense_multiplier *= victim_h->value;
     
-    for(size_t s = 0; s < statuses.size(); ++s) {
+    for(size_t s = 0; s < statuses.size(); s++) {
         attacker_offense *= statuses[s].type->attack_multiplier;
     }
-    for(size_t s = 0; s < victim->statuses.size(); ++s) {
+    for(size_t s = 0; s < victim->statuses.size(); s++) {
         defense_multiplier *= victim->statuses[s].type->defense_multiplier;
     }
     
@@ -957,7 +957,7 @@ bool mob::can_hurt(mob* v) const {
     if(has_flag(v->flags, MOB_FLAG_NON_HURTABLE)) return false;
     
     //Check if this mob has already hit v recently.
-    for(size_t h = 0; h < hit_opponents.size(); ++h) {
+    for(size_t h = 0; h < hit_opponents.size(); h++) {
         if(hit_opponents[h].second == v) {
             //v was hit by this mob recently, so don't let it attack again.
             //This stops the same attack from hitting every single frame.
@@ -1182,7 +1182,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
     vector<pikmin_type*> majority_types;
     
     //Count how many of each type there are carrying.
-    for(size_t p = 0; p < type->max_carriers; ++p) {
+    for(size_t p = 0; p < type->max_carriers; p++) {
         pikmin* pik_ptr = nullptr;
         
         if(carry_info->spot_info[p].state != CARRY_SPOT_STATE_USED) continue;
@@ -1288,12 +1288,12 @@ void mob::delete_old_status_effects() {
             
             statuses.erase(statuses.begin() + s);
         } else {
-            ++s;
+            s++;
         }
     }
     
     //Apply new status effects.
-    for(size_t s = 0; s < new_statuses_to_apply.size(); ++s) {
+    for(size_t s = 0; s < new_statuses_to_apply.size(); s++) {
         apply_status_effect(
             new_statuses_to_apply[s].first,
             false, new_statuses_to_apply[s].second
@@ -1306,7 +1306,7 @@ void mob::delete_old_status_effects() {
     
     //Update some flags.
     has_invisibility_status = false;
-    for(size_t s = 0; s < statuses.size(); ++s) {
+    for(size_t s = 0; s < statuses.size(); s++) {
         if(statuses[s].type->turns_invisible) {
             has_invisibility_status = true;
             break;
@@ -1635,7 +1635,7 @@ bool mob::follow_path(
         !was_blocked &&
         path_info->path.size() >= 2
     ) {
-        for(size_t s = 1; s < path_info->path.size(); ++s) {
+        for(size_t s = 1; s < path_info->path.size(); s++) {
             if(path_info->path[s] == old_next_stop) {
                 //If before, the mob was already heading towards this stop,
                 //then just continue the new journey from there.
@@ -1736,7 +1736,7 @@ hitbox* mob::get_closest_hitbox(
     hitbox* closest_hitbox = nullptr;
     float closest_hitbox_dist = 0;
     
-    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+    for(size_t h = 0; h < s->hitboxes.size(); h++) {
         hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
@@ -1972,7 +1972,7 @@ size_t mob::get_latched_pikmin_amount() const {
     size_t total = 0;
     for(
         size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin_list.size(); ++p
+        p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
         pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
@@ -1994,7 +1994,7 @@ float mob::get_latched_pikmin_weight() const {
     float total = 0;
     for(
         size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin_list.size(); ++p
+        p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
         pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
@@ -2042,7 +2042,7 @@ void mob::update_interaction_span() {
  */
 float mob::get_speed_multiplier() const {
     float move_speed_mult = 1.0f;
-    for (size_t s = 0; s < this->statuses.size(); ++s) {
+    for (size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].to_delete) {
             move_speed_mult *= this->statuses[s].type->speed_multiplier;
         }
@@ -2095,7 +2095,7 @@ void mob::get_sprite_bitmap_effects(
         size_t n_glow_colors = 0;
         ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
         
-        for(size_t s = 0; s < statuses.size(); ++s) {
+        for(size_t s = 0; s < statuses.size(); s++) {
             status_type* t = this->statuses[s].type;
             if(
                 t->tint.r == 1.0f &&
@@ -2378,7 +2378,7 @@ void mob::get_sprite_bitmap_effects(
  */
 ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
     *bmp_scale = 0.0f;
-    for(size_t st = 0; st < this->statuses.size(); ++st) {
+    for(size_t st = 0; st < this->statuses.size(); st++) {
         status_type* t = this->statuses[st].type;
         if(t->overlay_animation.empty()) continue;
         sprite* sp;
@@ -2436,7 +2436,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
     );
     
     //Check against other mobs.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->type->pushes) continue;
@@ -2615,7 +2615,7 @@ bool mob::is_point_on(const point &p) const {
  * @return Whether it is resitant.
  */
 bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
-    for(size_t h = 0; h < hazards.size(); ++h) {
+    for(size_t h = 0; h < hazards.size(); h++) {
         if(get_hazard_vulnerability(hazards[h]).damage_mult != 0.0f) {
             return false;
         }
@@ -2755,7 +2755,7 @@ string mob::print_state_history() const {
         return str;
     }
     
-    for(size_t s = 0; s < STATE_HISTORY_SIZE; ++s) {
+    for(size_t s = 0; s < STATE_HISTORY_SIZE; s++) {
         str += ", " + fsm.prev_state_names[s];
     }
     str += ".";
@@ -2802,7 +2802,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
  * @param m Mob to release.
  */
 void mob::release(mob* m) {
-    for(size_t h = 0; h < holding.size(); ++h) {
+    for(size_t h = 0; h < holding.size(); h++) {
         if(holding[h] == m) {
             m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
             holding.erase(holding.begin() + h);
@@ -2825,7 +2825,7 @@ void mob::release(mob* m) {
  * @brief Safely releases all chomped Pikmin.
  */
 void mob::release_chomped_pikmin() {
-    for(size_t p = 0; p < chomping_mobs.size(); ++p) {
+    for(size_t p = 0; p < chomping_mobs.size(); p++) {
         if(!chomping_mobs[p]) continue;
         release(chomping_mobs[p]);
     }
@@ -2837,7 +2837,7 @@ void mob::release_chomped_pikmin() {
  * @brief Releases any mobs stored inside.
  */
 void mob::release_stored_mobs() {
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(m_ptr->stored_inside_another == this) {
             release(m_ptr);
@@ -2863,7 +2863,7 @@ void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id) {
         if(particle_generators[g].id == id) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
-            ++g;
+            g++;
         }
     }
 }
@@ -3170,7 +3170,7 @@ void mob::start_dying() {
     stop_turning();
     gravity_mult = 1.0;
     
-    for(size_t s = 0; s < statuses.size(); ++s) {
+    for(size_t s = 0; s < statuses.size(); s++) {
         statuses[s].to_delete = true;
     }
     
@@ -3330,7 +3330,7 @@ void mob::swallow_chomped_pikmin(size_t nr) {
 
     size_t total = std::min(nr, chomping_mobs.size());
     
-    for(size_t p = 0; p < total; ++p) {
+    for(size_t p = 0; p < total; p++) {
         if(!chomping_mobs[p]) continue;
         chomping_mobs[p]->set_health(false, false, 0.0f);
         chomping_mobs[p]->cause_spike_damage(this, true);
@@ -3432,7 +3432,7 @@ void mob::tick(float delta_t) {
  */
 void mob::tick_animation(float delta_t) {
     float mult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
+    for(size_t s = 0; s < this->statuses.size(); s++) {
         mult *= this->statuses[s].type->anim_speed_multiplier;
     }
     
@@ -3454,10 +3454,10 @@ void mob::tick_animation(float delta_t) {
     if(finished_anim) {
         fsm.run_event(MOB_EV_ANIMATION_END);
     }
-    for(size_t s = 0; s < frame_signals.size(); ++s) {
+    for(size_t s = 0; s < frame_signals.size(); s++) {
         fsm.run_event(MOB_EV_FRAME_SIGNAL, &frame_signals[s]);
     }
-    for(size_t s = 0; s < frame_sounds.size(); ++s) {
+    for(size_t s = 0; s < frame_sounds.size(); s++) {
         play_sound(frame_sounds[s]);
     }
     
@@ -3466,7 +3466,7 @@ void mob::tick_animation(float delta_t) {
         if(hit_opponents[h].first <= 0.0f) {
             hit_opponents.erase(hit_opponents.begin() + h);
         } else {
-            ++h;
+            h++;
         }
     }
     
@@ -3646,7 +3646,7 @@ void mob::tick_misc_logic(float delta_t) {
     
     invuln_period.tick(delta_t);
     
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
+    for(size_t s = 0; s < this->statuses.size(); s++) {
         statuses[s].tick(delta_t);
         
         float damage_mult = 1.0f;
@@ -3688,7 +3688,7 @@ void mob::tick_misc_logic(float delta_t) {
         if(particle_generators[g].emission_interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
-            ++g;
+            g++;
         }
     }
     
@@ -3979,7 +3979,7 @@ void mob::tick_script(float delta_t) {
         );
         
         bool saved_by_whistle = false;
-        for(size_t s = 0; s < statuses.size(); ++s) {
+        for(size_t s = 0; s < statuses.size(); s++) {
             if(statuses[s].type->removable_with_whistle) {
                 statuses[s].to_delete = true;
                 if(
