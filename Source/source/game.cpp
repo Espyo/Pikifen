@@ -238,7 +238,7 @@ void game_class::main_loop() {
     ALLEGRO_EVENT ev;
     
     //Main loop.
-    al_start_timer(logic_timer);
+    al_start_timer(main_timer);
     while(is_game_running) {
     
         /*  ************************************************
@@ -247,7 +247,7 @@ void game_class::main_loop() {
           *** +---+                                  +---+ ***
             ************************************************/
         
-        al_wait_for_event(logic_queue, &ev);
+        al_wait_for_event(event_queue, &ev);
         
         global_handle_allegro_event(ev);
         cur_state->handle_allegro_event(ev);
@@ -255,7 +255,7 @@ void game_class::main_loop() {
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
-            if(al_is_event_queue_empty(logic_queue)) {
+            if(al_is_event_queue_empty(event_queue)) {
             
                 double cur_frame_start_time = al_get_time();
                 if(reset_delta_t) {
@@ -332,7 +332,7 @@ void game_class::shutdown() {
     destroy_mob_categories();
     states.destroy();
     destroy_misc();
-    destroy_event_things(logic_timer, logic_queue);
+    destroy_event_things(main_timer, event_queue);
     destroy_allegro();
 }
 
@@ -345,7 +345,7 @@ void game_class::shutdown() {
  */
 void game_class::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
     al_register_event_source(
-        logic_queue,
+        event_queue,
         al_get_audio_stream_event_source(stream)
     );
 }
@@ -388,7 +388,7 @@ int game_class::start() {
     save_statistics();
     
     //Event stuff.
-    init_event_things(logic_timer, logic_queue);
+    init_event_things(main_timer, event_queue);
     
     //Other fundamental initializations and loadings.
     init_misc();
@@ -482,7 +482,7 @@ void game_class::unload_loaded_state(game_state* loaded_state) {
  */
 void game_class::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
     al_unregister_event_source(
-        logic_queue,
+        event_queue,
         al_get_audio_stream_event_source(stream)
     );
 }

@@ -69,14 +69,14 @@ void destroy_allegro() {
 /**
  * @brief Destroys Allegro's event-related things.
  *
- * @param logic_timer The game logic timer.
- * @param logic_queue Queue of game logic events.
+ * @param main_timer The main game timer.
+ * @param event_queue Queue of Allegro events.
  */
 void destroy_event_things(
-    ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
+    ALLEGRO_TIMER* &main_timer, ALLEGRO_EVENT_QUEUE* &event_queue
 ) {
-    al_destroy_event_queue(logic_queue);
-    al_destroy_timer(logic_timer);
+    al_destroy_event_queue(event_queue);
+    al_destroy_timer(main_timer);
     al_destroy_display(game.display);
 }
 
@@ -584,11 +584,11 @@ void init_essentials() {
  * @brief Initializes things regarding Allegro events, like the queue,
  * timer, etc.
  *
- * @param logic_timer The game logic timer.
- * @param logic_queue Queue of game logic events.
+ * @param main_timer The main game timer.
+ * @param event_queue Queue of Allegro events.
  */
 void init_event_things(
-    ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
+    ALLEGRO_TIMER* &main_timer, ALLEGRO_EVENT_QUEUE* &event_queue
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |
@@ -634,23 +634,23 @@ void init_event_things(
     //This hack fixes it.
     al_resize_display(game.display, game.win_w, game.win_h);
     
-    logic_timer = al_create_timer(1.0f / game.options.target_fps);
-    if(!logic_timer) {
-        report_fatal_error("Could not create the main logic timer!");
+    main_timer = al_create_timer(1.0f / game.options.target_fps);
+    if(!main_timer) {
+        report_fatal_error("Could not create the main game timer!");
     }
     
-    logic_queue = al_create_event_queue();
-    if(!logic_queue) {
-        report_fatal_error("Could not create the main logic event queue!");
+    event_queue = al_create_event_queue();
+    if(!event_queue) {
+        report_fatal_error("Could not create the main event queue!");
     }
-    al_register_event_source(logic_queue, al_get_mouse_event_source());
-    al_register_event_source(logic_queue, al_get_keyboard_event_source());
-    al_register_event_source(logic_queue, al_get_joystick_event_source());
+    al_register_event_source(event_queue, al_get_mouse_event_source());
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_joystick_event_source());
     al_register_event_source(
-        logic_queue, al_get_display_event_source(game.display)
+        event_queue, al_get_display_event_source(game.display)
     );
     al_register_event_source(
-        logic_queue, al_get_timer_event_source(logic_timer)
+        event_queue, al_get_timer_event_source(main_timer)
     );
 }
 

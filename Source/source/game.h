@@ -274,11 +274,11 @@ private:
     //Current game state: main menu, gameplay, etc.
     game_state* cur_state = nullptr;
     
-    //Queue of events.
-    ALLEGRO_EVENT_QUEUE* logic_queue = nullptr;
+    //Queue of Allegro events.
+    ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
     
     //Timer for the main frame logic.
-    ALLEGRO_TIMER* logic_timer = nullptr;
+    ALLEGRO_TIMER* main_timer = nullptr;
     
     //Is delta_t meant to be reset for the next frame?
     bool reset_delta_t = true;
