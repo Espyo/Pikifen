@@ -1930,11 +1930,11 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             if(mob_ptr->standing_on_mob) {
                 c.z =
                     mob_ptr->standing_on_mob->z +
-                    mob_ptr->standing_on_mob->height;
+                    mob_ptr->standing_on_mob->get_drawing_height();
             } else {
                 c.z = mob_ptr->ground_sector->z;
             }
-            c.z += mob_ptr->height == 0 ? FLT_MAX - 1 : mob_ptr->height - 1;
+            c.z += mob_ptr->get_drawing_height() - 1;
             components.push_back(c);
         }
         
@@ -1957,19 +1957,20 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
                 c.z =
                     mob_ptr->parent->m->z +
-                    mob_ptr->parent->m->height +
+                    mob_ptr->parent->m->get_drawing_height() +
                     0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
-                c.z = mob_ptr->z + mob_ptr->height + 0.001;
+                c.z = mob_ptr->z + mob_ptr->get_drawing_height() + 0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
                 c.z =
                     std::max(
                         mob_ptr->parent->m->z +
-                        mob_ptr->parent->m->height +
+                        mob_ptr->parent->m->get_drawing_height() +
                         0.001,
-                        mob_ptr->z + mob_ptr->height + 0.001
+                        mob_ptr->z + mob_ptr->get_drawing_height() + 
+                        0.001
                     );
                 break;
             }
@@ -1981,11 +1982,14 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         //The mob proper.
         world_component c;
         c.mob_ptr = mob_ptr;
-        if(mob_ptr->holder.m && mob_ptr->holder.above_holder) {
-            c.z = mob_ptr->holder.m->z + mob_ptr->holder.m->height + 0.01;
-        } else {
-            c.z = mob_ptr->height == 0 ? FLT_MAX : mob_ptr->z + mob_ptr->height;
+        c.z = mob_ptr->z;
+        if(mob_ptr->holder.m) {
+            c.z = mob_ptr->holder.m->z;
+            if(mob_ptr->holder.above_holder) {
+                c.z = mob_ptr->holder.m->get_drawing_height() + 1;
+            }
         }
+        c.z += mob_ptr->get_drawing_height();
         components.push_back(c);
         
     }

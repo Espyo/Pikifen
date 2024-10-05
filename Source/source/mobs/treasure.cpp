@@ -35,7 +35,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     );
     
     particle pa(
-        PARTICLE_TYPE_BITMAP, pos, z + height + 1.0f,
+        PARTICLE_TYPE_BITMAP, pos, z + get_drawing_height() + 1.0f,
         28.0f, 1.0f, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = game.sys_assets.bmp_sparkle;
@@ -44,7 +44,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     pg.follow_mob = this;
     pg.follow_angle = &this->angle;
-    pg.follow_z_offset = z + height + 1.0f;
+    pg.follow_z_offset = z + get_drawing_height() + 1.0f;
     pg.duration_deviation = 0.1f;
     pg.interval_deviation = 0.05f;
     pg.pos_deviation = point(radius * 0.75f, radius * 0.75f);

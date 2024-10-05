@@ -158,7 +158,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     oni_ptr->generation_queue[type_idx] += seeds;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height - 0.01,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height() - 0.01,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
