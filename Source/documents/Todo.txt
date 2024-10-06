@@ -1,19 +1,18 @@
-Point I left on (so I can continue the next day without losing my train of thought)
-    not all public domain sounds are public domain, but instead cc0
+﻿Point I left on (so I can continue the next day without losing my train of thought)
+    
 
 Current tasks (tasks being worked on, but not yet committed)
-    A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
-    Test -S-'s get_onion_info branch
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
-    Winged Pikmin are too high to be hit by a bomb rock explosion (thanks Arcadius)
-    "quick bug i found with the shadow fix, ding particles now render under them" --Helodity
 
     --- 0.26 ---
+    Test -S-'s get_onion_info branch
+    Check Helodity's particle editor
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.91.0
+    Update to Dear ImGui 1.91.3
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
@@ -180,36 +179,36 @@ Next tasks (roughly sorted most important first)
         Bitter sprays should last for a short time
         Add some randomness to the pitch of mob sounds?
         Make Rock Pikmin colors darker (thanks Nataly171)
+        Style Tutorial Meadow to be more DEV Lab-like
+        Add Pro Controller controls to the default controls
     Find some way of making content sharing easier
-        Problems to watch out for
-            How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
-            How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
-            What should happen when the player opens the texture selection dialog in the area editor?
-        Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
-        Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-        All content will need to do this:
-            Load from the base folder first and then from all packages, in alphabetical order
-            Load resources or not, based on the boolean given
-            Check if content by that name already exists, and if so report it
-            Unload
-        Info
-            How each type of content works:
+        The idea
+            The Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
+            Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
+            Problems with the current way of doing things "by hand"
+                When makers want to share their content, they have to fish its requirements from several folders
+                When players want to install content, they have to place it in the right folders
+        Implementation
+            All content will need to be able to:
+                Load from the base folder first and then from all packages, in alphabetical order
+                Load resources or not, based on the boolean given
+                Check if content by that name already exists, and if so report it
+                Unload
+            Make assets inherit from the plain_content class
+            Move area loading to area_data::load_from_data_node
+            Add the new common content properties to everything in the engine
+            A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
+        Other info
+            Right now, this is how each type of content works:
                 One per file: global anims, sounds, songs, graphics, GUI, hazards, liquids, particle generators, spike damage types, sprays, statuses, weather
                 Other ways: areas, mob types
+            Problems to watch out for
+                How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
+                How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
+                What should happen when the player opens the texture selection dialog in the area editor?
         For later on, maybe, the content manager should be able to figure out a dependency tree
-        Current problems
-            When makers want to share their content, they have to fish its requirements from several folders
-            When players want to install content, they have to place it in the right folders
-        Make assets inherit from the plain_content class
-        Move area loading to area_data::load_from_data_node
-        Add the new common content properties to everything in the engine
     Rename every file to lowercase?
-    A small "Got it!" for the score bar, to mark the medal you have
-    Add Pro Controller controls to the default controls
-    Style Tutorial Meadow to be more DEV Lab-like
     Missions should have a property where the maker can specify their best score (and date)
-    Animate the mission results screen
-        Basically, reveal one thing at a time
     Add a screenshot, or better yet, a gif to the readme
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
@@ -234,6 +233,8 @@ Next tasks (roughly sorted most important first)
         Document the usage of Astyle in the Contributing file
     
     --- Future ---
+    A way to port content from previous versions
+        It could check each loaded package's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -675,6 +676,8 @@ Misc things (so I don't forget)
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
+        A small "Got it!" for the score bar, to mark the medal you have
+        Animate the mission results screen. Basically, reveal one thing at a time
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
@@ -903,7 +906,6 @@ Misc things (so I don't forget)
         Some treasures should weigh as much as the current army, after a boss battle
     Loose thoughts
         If something is under construction, like a menu or something, add a small "WIP" blurb
-        Next time there are file format changes, past version 0.22.0, make it so that every time an area/animation is loaded it checks the engine version, and if it's outdated port to a new format, save the file again, and try loading again
 
 
 Tasks for later on (I might never implement these)

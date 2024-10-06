@@ -46,8 +46,8 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
+				coords=0.0000 0.0000 -20.0000
+				height=70.0000
 				radius=34.0000
 				type=1
 				value=600.0000
@@ -72,9 +72,9 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
-				radius=34.0000
+				coords=0.0000 0.0000 -40.0000
+				height=140.0000
+				radius=68.0000
 				type=1
 				value=600.0000
 				hazards=explosion
@@ -98,8 +98,8 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
+				coords=0.0000 0.0000 -40.0000
+				height=140.0000
 				radius=68.0000
 				type=1
 				value=600.0000
@@ -124,8 +124,8 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
+				coords=0.0000 0.0000 -40.0000
+				height=140.0000
 				radius=68.0000
 				type=1
 				value=600.0000
@@ -150,8 +150,8 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
+				coords=0.0000 0.0000 -40.0000
+				height=140.0000
 				radius=68.0000
 				type=1
 				value=600.0000
@@ -176,8 +176,8 @@ sprites{
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 -48.0000
-				height=96.0000
+				coords=0.0000 0.0000 -40.0000
+				height=140.0000
 				radius=68.0000
 				type=1
 				value=600.0000
@@ -197,14 +197,14 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=28.0000
 				radius=14.0000
-				type=0
+				type=2
 				value=1.0000
 			}
 			explosion{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=0
+				coords=0.0000 0.0000 -10.0000
+				height=40.0000
+				radius=26.0000
+				type=1
 				value=1.0000
 			}
 		}
