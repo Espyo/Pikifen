@@ -299,7 +299,7 @@ public:
     
     //Force the usage of this specific sprite.
     sprite* forced_sprite = nullptr;
-
+    
     //If not 0, speed up or slow down the current animation based on the
     //mob's speed, using this value as a baseline (1.0x speed).
     float mob_speed_anim_baseline = 0.0f;
@@ -404,7 +404,7 @@ public:
     size_t get_latched_pikmin_amount() const;
     float get_latched_pikmin_weight() const;
     void do_attack_effects(
-        mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
+        const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
         float damage, float knockback
     );
     bool is_stored_inside_mob() const;
@@ -428,7 +428,7 @@ public:
     bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
     size_t play_sound(size_t sfx_data_idx);
     void swallow_chomped_pikmin(size_t nr);
-    float get_drawing_height();
+    float get_drawing_height() const;
     void start_height_effect();
     void stop_height_effect();
     void store_mob_inside(mob* m);

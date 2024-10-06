@@ -4341,18 +4341,17 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
-
+    
     pikmin_fsm::called(m, info1, nullptr);
     if (
         !pik_ptr->holding.empty() &&
         pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-        ) {
+    ) {
         m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
-    }
-    else {
+    } else {
         m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
     }
-
+    
 }
 
 

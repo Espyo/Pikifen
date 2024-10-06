@@ -1326,7 +1326,7 @@ void mob::delete_old_status_effects() {
  * @param knockback Total knockback strength.
  */
 void mob::do_attack_effects(
-    mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
+    const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
     float damage, float knockback
 ) {
     if(attack_h->value == 0.0f) {
@@ -3225,7 +3225,7 @@ void mob::start_dying_class_specifics() {
  * @brief Returns the height that should be used in calculating
  * drawing order.
  */
-float mob::get_drawing_height() {
+float mob::get_drawing_height() const {
     //We can't use FLT_MAX since multiple mobs with max height can stack.
     return height == 0 ? 1000000 : height;
 }

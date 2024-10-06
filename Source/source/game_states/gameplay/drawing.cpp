@@ -1969,7 +1969,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                         mob_ptr->parent->m->z +
                         mob_ptr->parent->m->get_drawing_height() +
                         0.001,
-                        mob_ptr->z + mob_ptr->get_drawing_height() + 
+                        mob_ptr->z + mob_ptr->get_drawing_height() +
                         0.001
                     );
                 break;
