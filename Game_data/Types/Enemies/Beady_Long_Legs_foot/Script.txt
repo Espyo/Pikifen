@@ -20,6 +20,7 @@ script {
                 set_gravity 1
                 focus parent
                 turn_to_target focused_mob
+                set_animation falling
                 set_state ambushing
             end_if
         }

@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	dying{
 		loop_frame=5
@@ -24,6 +26,18 @@ animations{
 			}
 			crumbling_05{
 				duration=0.8000
+			}
+		}
+	}
+	falling{
+		loop_frame=1
+		frames{
+			invisible{
+				duration=0.2000
+				interpolate=true
+			}
+			idling{
+				duration=0.2000
 			}
 		}
 	}
@@ -134,6 +148,21 @@ sprites{
 			}
 		}
 	}
+	invisible{
+		file=Beady_Long_Legs.png
+		file_pos=422.0000 286.0000
+		file_size=75.0000 75.0000
+		tint=255 255 255 0
+		hitboxes{
+			foot{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=37.5000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	landing{
 		file=Beady_Long_Legs.png
 		file_pos=422.0000 286.0000
@@ -155,4 +184,3 @@ sprites{
 body_parts{
 	foot
 }
-engine_version=0.25.0

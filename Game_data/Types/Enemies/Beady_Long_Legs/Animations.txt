@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	dying_01{
 		frames{
@@ -90,6 +92,18 @@ animations{
 			}
 			crumbling_05{
 				duration=0.8000
+			}
+		}
+	}
+	falling{
+		loop_frame=1
+		frames{
+			invisible{
+				duration=0.2000
+				interpolate=true
+			}
+			idling{
+				duration=0.2000
 			}
 		}
 	}
@@ -497,6 +511,50 @@ sprites{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	invisible{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		tint=255 255 255 0
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -1594,4 +1652,3 @@ body_parts{
 	back_right
 	back_left
 }
-engine_version=0.25.0
