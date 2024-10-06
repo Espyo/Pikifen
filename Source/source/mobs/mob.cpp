@@ -1326,7 +1326,7 @@ void mob::delete_old_status_effects() {
  * @param knockback Total knockback strength.
  */
 void mob::do_attack_effects(
-    const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
+    mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
     float damage, float knockback
 ) {
     if(attack_h->value == 0.0f) {
@@ -1364,7 +1364,7 @@ void mob::do_attack_effects(
     if(!useless) {
         particle smack_p(
             PARTICLE_TYPE_SMACK, particle_pos,
-            std::max(z + height + 1, attacker->z + attacker->height + 1),
+            std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
             64, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
@@ -1374,7 +1374,7 @@ void mob::do_attack_effects(
     } else {
         particle ding_p(
             PARTICLE_TYPE_DING, particle_pos,
-            std::max(z + height + 1, attacker->z + attacker->height + 1),
+            std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
             24, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
@@ -3175,7 +3175,7 @@ void mob::start_dying() {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, pos, z + height + 1,
+        PARTICLE_TYPE_BITMAP, pos, z + get_drawing_height() + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;
@@ -3220,6 +3220,15 @@ void mob::start_dying() {
 void mob::start_dying_class_specifics() {
 }
 
+
+/**
+ * @brief Returns the height that should be used in calculating
+ * drawing order.
+ */
+float mob::get_drawing_height() {
+    //We can't use FLT_MAX since multiple mobs with max height can stack.
+    return height == 0 ? 1000000 : height;
+}
 
 /**
  * @brief From here on out, the mob's Z changes will be reflected in the height

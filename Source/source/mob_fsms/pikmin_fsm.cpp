@@ -1677,8 +1677,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::whistled_while_holding);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::check_leader_bump);
@@ -1962,7 +1960,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     ((pikmin*) m)->start_throw_trail();
     
     particle par(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height() + 1.0,
         12, 0.5, PARTICLE_PRIORITY_MEDIUM
     );
     par.bitmap = game.sys_assets.bmp_rock;
@@ -3559,7 +3557,7 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     particle pa(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
         4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = game.sys_assets.bmp_rock;
@@ -3644,7 +3642,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a burst of particles to symbolize the maturation.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
@@ -3666,7 +3664,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a dribble of particles to symbolize the regression.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
@@ -4343,6 +4341,18 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
+
+    pikmin_fsm::called(m, info1, nullptr);
+    if (
+        !pik_ptr->holding.empty() &&
+        pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
+        ) {
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+    }
+    else {
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+    }
+
 }
 
 

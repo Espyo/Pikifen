@@ -2150,7 +2150,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;

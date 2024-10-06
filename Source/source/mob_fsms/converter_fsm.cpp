@@ -208,7 +208,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height() + 1.0,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;

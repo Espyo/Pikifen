@@ -164,7 +164,7 @@ void onion::generate() {
             nest->pikmin_inside[t][0]++;
             
             particle pa(
-                PARTICLE_TYPE_BITMAP, pos, z + height + 1.0f,
+                PARTICLE_TYPE_BITMAP, pos, z + get_drawing_height() + 1.0f,
                 64.0f, 1.0f, PARTICLE_PRIORITY_LOW
             );
             pa.bitmap = game.sys_assets.bmp_sparkle;
