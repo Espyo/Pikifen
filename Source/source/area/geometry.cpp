@@ -754,7 +754,7 @@ TRIANGULATION_ERROR get_polys(
  * @return Whether it is an outer polygon.
  */
 bool get_polys_is_outer(
-    vertex* v_ptr, const sector* s_ptr, unordered_set<edge*> edges_left,
+    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*>& edges_left,
     bool doing_first_polygon
 ) {
     if(doing_first_polygon) {

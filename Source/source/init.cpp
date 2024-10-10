@@ -520,7 +520,7 @@ void init_controls() {
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
     for(size_t a = 0; a < action_types.size(); a++) {
-        string def = action_types[a].default_bind_str;
+        const string& def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
         control_bind bind;

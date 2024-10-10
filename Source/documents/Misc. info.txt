@@ -519,6 +519,8 @@ Procedure for every version release
                     valgrind --leak-check=yes ./pikifen 2> valgrind.txt
                 Use clang analyze and correct problems
                     make CXX=clang++ -f Source/gnu_make/makefile analyze
+                Use Infer and correct problems
+                    infer run -o ~/Desktop/infer-out --report-block-list-files-containing "libs/imgui" -- make -f Source/gnu_make/makefile debug
                 Confirm that there are no superfluous #includes (how?)
             Code cleanup
                 Confirm that no line goes over 80 characters

@@ -532,7 +532,7 @@ bool data_node::remove(data_node* node_to_remove) {
  * @brief Saves a node into a new text file. Line numbers are ignored.
  * If you don't provide a file name, it'll use the node's file name.
  *
- * @param file_path Path to the file to save to.
+ * @param destination_file_path Path to the file to save to.
  * @param children_only If true, only save the nodes inside this node.
  * @param include_empty_values If true, even nodes with an empty value
  * will be saved.
@@ -540,24 +540,24 @@ bool data_node::remove(data_node* node_to_remove) {
  * @return Whether it succeded.
  */
 bool data_node::save_file(
-    string file_path, bool children_only,
+    string destination_file_path, bool children_only,
     bool include_empty_values, bool encrypted
 ) const {
 
-    if(file_path == "") file_path = this->file_path;
+    if(destination_file_path == "") destination_file_path = this->file_path;
     
     //Create any missing folders.
-    size_t next_slash_pos = file_path.find('/', 0);
+    size_t next_slash_pos = destination_file_path.find('/', 0);
     while(next_slash_pos != string::npos) {
-        string path_so_far = file_path.substr(0, next_slash_pos);
+        string path_so_far = destination_file_path.substr(0, next_slash_pos);
         if(!al_make_directory(path_so_far.c_str())) {
             return false;
         }
-        next_slash_pos = file_path.find('/', next_slash_pos + 1);
+        next_slash_pos = destination_file_path.find('/', next_slash_pos + 1);
     }
     
     //Save the file.
-    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "w");
+    ALLEGRO_FILE* file = al_fopen(destination_file_path.c_str(), "w");
     if(file) {
         if(children_only) {
             for(size_t c = 0; c < children.size(); c++) {

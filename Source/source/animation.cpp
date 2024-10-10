@@ -246,7 +246,8 @@ void animation_database::calculate_hitbox_span() {
  * report errors.
  */
 void animation_database::create_conversions(
-    vector<std::pair<size_t, string> > conversions, const data_node* file
+    const vector<std::pair<size_t, string> >& conversions,
+    const data_node* file
 ) {
     pre_named_conversions.clear();
     
@@ -496,7 +497,7 @@ void animation_database::load_from_data_node(data_node* node) {
             vector<string> hazards_strs =
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
             for(size_t hs = 0; hs < hazards_strs.size(); hs++) {
-                string hazard_name = hazards_strs[hs];
+                const string& hazard_name = hazards_strs[hs];
                 if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
                     game.errors.report(
                         "Unknown hazard \"" + hazard_name + "\"!",

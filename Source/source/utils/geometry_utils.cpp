@@ -552,7 +552,8 @@ void calculate_throw(
         //If the target is above the maximum height it can be thrown...
         //Then this is an impossible throw.
         *req_speed_xy = point();
-        *req_speed_z = 0;
+        *req_speed_z = 0.0f;
+        if(out_h_angle) *out_h_angle = 0.0f;
         return;
     }
     

@@ -2311,7 +2311,7 @@ void mob::get_sprite_bitmap_effects(
     ) {
         float damage_squash_time_ratio =
             damage_squash_time / MOB::DAMAGE_SQUASH_DURATION;
-        float damage_scale_y = 1.0f;
+        float damage_scale_y;
         if(damage_squash_time_ratio > 0.5) {
             damage_scale_y =
                 interpolate_number(

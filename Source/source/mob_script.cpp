@@ -142,7 +142,7 @@ mob_event::mob_event(
 #define r(name, number) \
     else if(n == (name)) type = (number)
     
-    string n = node->name;
+    const string& n = node->name;
     if(n == "on_enter") type =          MOB_EV_ON_ENTER;
     r("on_leave",                       MOB_EV_ON_LEAVE);
     r("on_tick",                        MOB_EV_ON_TICK);

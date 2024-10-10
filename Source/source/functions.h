@@ -173,7 +173,7 @@ void update_offset_effect_buffer(
 );
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,
-    unordered_set<vertex*> vertexes_to_update,
+    const unordered_set<vertex*>& vertexes_to_update,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter

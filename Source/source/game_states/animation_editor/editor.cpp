@@ -834,7 +834,7 @@ void animation_editor::zoom_everything_cmd(float input_value) {
     
     sprite* s_ptr = cur_sprite;
     if(!s_ptr && cur_anim_i.valid_frame()) {
-        string name =
+        const string& name =
             cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_name;
         size_t s_pos = anims.find_sprite(name);
         if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
@@ -920,7 +920,7 @@ void animation_editor::rename_animation(
         return;
     }
     
-    string old_name = anim->name;
+    const string& old_name = anim->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -969,7 +969,7 @@ void animation_editor::rename_body_part(
         return;
     }
     
-    string old_name = part->name;
+    const string& old_name = part->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -1026,7 +1026,7 @@ void animation_editor::rename_sprite(
         return;
     }
     
-    string old_name = spr->name;
+    const string& old_name = spr->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -1500,7 +1500,7 @@ void animation_editor::update_hitboxes() {
         //Add missing hitboxes.
         for(size_t b = 0; b < anims.body_parts.size(); b++) {
             bool hitbox_found = false;
-            string name = anims.body_parts[b]->name;
+            const string& name = anims.body_parts[b]->name;
             
             for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
                 if(s_ptr->hitboxes[h].body_part_name == name) {

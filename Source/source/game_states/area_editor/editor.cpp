@@ -570,21 +570,16 @@ void area_editor::create_mob_under_cursor() {
     sub_state = EDITOR_SUB_STATE_NONE;
     point hotspot = snap_point(game.mouse_cursor.w_pos);
     
-    string custom_cat_name_to_use = last_mob_custom_cat_name;
-    mob_type* type_to_use = last_mob_type;
-    if(custom_cat_name_to_use.empty()) {
-        custom_cat_name_to_use =
+    if(last_mob_custom_cat_name.empty()) {
+        last_mob_custom_cat_name =
             game.config.pikmin_order[0]->custom_category_name;
-        type_to_use =
+        last_mob_type =
             game.config.pikmin_order[0];
     }
     
     game.cur_area_data.mob_generators.push_back(
-        new mob_gen(hotspot, type_to_use)
+        new mob_gen(hotspot, last_mob_type)
     );
-    
-    last_mob_custom_cat_name = custom_cat_name_to_use;
-    last_mob_type = type_to_use;
     
     selected_mobs.insert(game.cur_area_data.mob_generators.back());
     
@@ -1921,12 +1916,10 @@ void area_editor::load_area(
     const AREA_TYPE requested_area_type,
     bool from_backup, bool should_update_history
 ) {
-    string new_area_name = requested_area_folder_name;
-    
     clear_current_area();
     
     ::load_area(
-        new_area_name, requested_area_type, true, from_backup
+        requested_area_folder_name, requested_area_type, true, from_backup
     );
     
     //Calculate texture suggestions.
@@ -1934,7 +1927,7 @@ void area_editor::load_area(
     vector<std::pair<string, size_t> > texture_uses_vector;
     
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        string n = game.cur_area_data.sectors[s]->texture_info.file_name;
+        const string& n = game.cur_area_data.sectors[s]->texture_info.file_name;
         if(n.empty()) continue;
         texture_uses_map[n]++;
     }
@@ -1973,13 +1966,13 @@ void area_editor::load_area(
     if(should_update_history) {
         update_history(
             get_base_area_folder_path(requested_area_type, true) + "/" +
-            new_area_name
+            requested_area_folder_name
         );
         save_options(); //Save the history in the options.
     }
     
     set_status(
-        "Loaded area \"" + new_area_name + "\" " +
+        "Loaded area \"" + requested_area_folder_name + "\" " +
         (from_backup ? "from a backup " : "") +
         "successfully."
     );

@@ -54,7 +54,7 @@ bool are_walls_between(
     float ignore_walls_below_z, bool* out_impassable_walls
 ) {
     point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
-    point bb_br(std::max(p1.x, p1.x), std::max(p2.y, p2.y));
+    point bb_br(std::max(p1.x, p2.x), std::max(p1.y, p2.y));
     
     set<edge*> candidate_edges;
     if(
@@ -694,11 +694,7 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
     
     for(size_t p = 0; p < n_points; p++) {
         data_node* point_node = node->get_child(p);
-        
-        int point_time = s2i(point_node->name);
-        string point_value = point_node->value;
-        
-        table.push_back(make_pair(point_time, point_value));
+        table.push_back(make_pair(s2i(point_node->name), point_node->value));
     }
     
     sort(

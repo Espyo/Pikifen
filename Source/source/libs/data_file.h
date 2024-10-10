@@ -112,7 +112,7 @@ public:
         bool names_only_after_root = false
     );
     bool save_file(
-        string file_path = "", bool children_only = true,
+        string destination_file_path = "", bool children_only = true,
         bool include_empty_values = false,
         bool encrypted = false
     ) const;

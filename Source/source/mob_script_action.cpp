@@ -2370,22 +2370,19 @@ bool assert_actions(
     set<string> labels;
     for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_LABEL) {
-        
-            string name = actions[a]->args[0];
-            
+            const string& name = actions[a]->args[0];
             if(labels.find(name) != labels.end()) {
                 game.errors.report(
                     "There are multiple labels called \"" + name + "\"!", dn
                 );
                 return false;
             }
-            
             labels.insert(name);
         }
     }
     for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_GOTO) {
-            string name = actions[a]->args[0];
+            const string& name = actions[a]->args[0];
             if(labels.find(name) == labels.end()) {
                 game.errors.report(
                     "There is no label called \"" + name + "\", even though "

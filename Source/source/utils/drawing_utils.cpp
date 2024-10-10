@@ -544,9 +544,10 @@ void get_multiline_text_dimensions(
     int* out_width, int* out_height, int* out_line_height
 ) {
     int lh = al_get_font_line_height(font);
-    size_t n_lines = lines.size();
     
-    if(out_height) *out_height = std::max(0, (int) ((lh + 1) * n_lines) - 1);
+    if(out_height) {
+        *out_height = std::max(0, (int) ((lh + 1) * lines.size()) - 1);
+    }
     
     if(out_width) {
         int largest_w = 0;

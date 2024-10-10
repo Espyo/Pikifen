@@ -330,7 +330,7 @@ void gameplay_state::draw_big_msg() {
         
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED: {
-        const string TEXT =
+        const string& TEXT =
             cur_big_msg == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
@@ -1752,9 +1752,9 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     //Figure out the scale that will fit on the image.
     float area_w = max_x - min_x + game.maker_tools.area_image_padding;
     float area_h = max_y - min_y + game.maker_tools.area_image_padding;
-    float scale = 1.0f;
     float final_bmp_w = game.maker_tools.area_image_size;
     float final_bmp_h = final_bmp_w;
+    float scale;
     
     if(area_w > area_h) {
         scale = game.maker_tools.area_image_size / area_w;

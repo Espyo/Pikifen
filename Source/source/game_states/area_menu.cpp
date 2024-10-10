@@ -936,7 +936,7 @@ void area_menu_state::load() {
             "/" + actual_name + "/" + AREA_DATA_FILE_NAME
         );
         if(data.file_was_opened) {
-            string s = data.get_child_by_name("name")->value;
+            const string& s = data.get_child_by_name("name")->value;
             if(!s.empty()) {
                 actual_name = s;
             }
