@@ -19925,13 +19925,6 @@
        x="0"
        y="0"
        xlink:href="#path1"
-       id="use60"
-       transform="translate(65,865)"
-       style="display:inline;opacity:1" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#path1"
        id="use61"
        transform="translate(129,865)"
        style="display:inline;opacity:1" />
@@ -20099,6 +20092,13 @@
        xlink:href="#path1"
        id="use79"
        transform="translate(450,1065)"
+       style="display:inline;opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use1"
+       transform="translate(63,865)"
        style="display:inline;opacity:1" />
   </g>
 </svg>

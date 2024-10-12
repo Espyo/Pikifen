@@ -40,6 +40,9 @@ enum LEADER_STATE {
     //Holding a Pikmin.
     LEADER_STATE_HOLDING,
     
+    //Throwing a Pikmin.
+    LEADER_STATE_THROWING,
+    
     //Dismissing.
     LEADER_STATE_DISMISSING,
     

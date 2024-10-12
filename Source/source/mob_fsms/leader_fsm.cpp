@@ -261,8 +261,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("holding", LEADER_STATE_HOLDING); {
         efc.new_event(LEADER_EV_THROW); {
-            efc.run(leader_fsm::do_throw);
-            efc.change_state("active");
+            efc.change_state("throwing");
         }
         efc.new_event(MOB_EV_RELEASE_ORDER); {
             efc.run(leader_fsm::notify_pikmin_release);
@@ -312,6 +311,53 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::notify_pikmin_release);
             efc.run(leader_fsm::release);
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("throwing", LEADER_STATE_THROWING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::do_throw);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EV_ON_TICK); {
+            efc.run(leader_fsm::tick_active_state);
+        }
+        efc.new_event(LEADER_EV_MOVE_START); {
+            efc.run(leader_fsm::move);
+        }
+        efc.new_event(LEADER_EV_MOVE_END); {
+            efc.run(leader_fsm::stop);
+        }
+        efc.new_event(LEADER_EV_HOLDING); {
+            efc.run(leader_fsm::grab_mob);
+            efc.change_state("holding");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EV_GO_HERE); {
+            efc.run(leader_fsm::start_go_here);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
     }
