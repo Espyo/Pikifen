@@ -2230,7 +2230,6 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
 void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     leader_fsm::update_in_group_chasing(m, nullptr, nullptr);
-    leader_fsm::set_walk_anim(m, nullptr, nullptr);
 }
 
 
@@ -2429,7 +2428,7 @@ void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    m->set_animation(LEADER_ANIM_IDLING);
+    leader_fsm::set_stop_anim(m, nullptr, nullptr);
 }
 
 
@@ -2568,6 +2567,8 @@ void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
         target_pos, lea_ptr->following_group->z,
         CHASE_FLAG_ANY_ANGLE, target_dist
     );
+    
+    leader_fsm::set_walk_anim(m, nullptr, nullptr);
 }
 
 
