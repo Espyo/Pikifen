@@ -312,21 +312,6 @@ enum MOB_ACTION_TURN_TYPE {
 };
 
 
-//Focus action sub-types.
-enum MOB_ACTION_FOCUS_TYPE {
-
-    //Focus on linked object.
-    MOB_ACTION_FOCUS_TYPE_LINK,
-    
-    //Focus on parent.
-    MOB_ACTION_FOCUS_TYPE_PARENT,
-    
-    //Focus on the mob that triggered the event.
-    MOB_ACTION_FOCUS_TYPE_TRIGGER,
-    
-};
-
-
 //If action operator types.
 enum MOB_ACTION_IF_OP {
 
@@ -351,18 +336,24 @@ enum MOB_ACTION_IF_OP {
 };
 
 
-//Get info action target types.
-enum MOB_ACTION_GET_INFO_TARGET {
+//General mob action target types.
+enum MOB_ACTION_TARGET_SELECTOR {
 
-    //Gets info about itself.
-    MOB_ACTION_GET_INFO_TARGET_SELF,
-    
-    //Gets info about its focus.
-    MOB_ACTION_GET_INFO_TARGET_FOCUS,
-    
-    //Gets info about the mob that triggered the event.
-    MOB_ACTION_GET_INFO_TARGET_TRIGGER,
-    
+    //Targets self
+    MOB_ACTION_TARGET_SELECTOR_SELF,
+
+    //Targets the focused mob.
+    MOB_ACTION_TARGET_SELECTOR_FOCUS,
+
+    //Targets the trigger mob.
+    MOB_ACTION_TARGET_SELECTOR_TRIGGER,
+
+    //Target the first linked object.
+    MOB_ACTION_TARGET_SELECTOR_LINK,
+
+    //Focus on parent.
+    MOB_ACTION_TARGET_SELECTOR_PARENT,
+
 };
 
 
@@ -794,6 +785,7 @@ bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
 
 void report_enum_error(mob_action_call &call, size_t arg_idx);
+bool load_mob_target_type(mob_action_call& call, size_t arg_idx);
 };
 
 
@@ -801,6 +793,9 @@ bool assert_actions(
     const vector<mob_action_call*> &actions, const data_node* dn
 );
 mob* get_trigger_mob(mob_action_run_data &data);
+mob* get_target_mob(
+    mob_action_run_data& data, MOB_ACTION_TARGET_SELECTOR selector
+);
 void insert_event_actions(
     mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
 );

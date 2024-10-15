@@ -481,12 +481,8 @@
       <tr id="focus">
         <th><code>focus</code></th>
         <td><dl>
-          <dt><code><b>focus</b> trigger</code></dt>
-          <dd>Focuses on the object that triggered the event.</dd>
-          <dt><code><b>focus</b> link</code></dt>
-          <dd>Focuses on the first linked object, if any. You cannot use this when the mob has just spawned, since it doesn't have link information by that point.</dd>
-          <dt><code><b>focus</b> parent</code></dt>
-          <dd>Focuses on the parent object, if any. You cannot use this when the mob has just spawned, since it doesn't have parent information by that point.</dd>
+          <dt><code><b>focus</b> &lt;<a href="#target-selector">target</a>&gt;</code></dt>
+          <dd>Focuses on the targeted mob.</dd>
         </dl></td>
       </tr>
       <tr id="link-with-focused-mob">
@@ -615,14 +611,9 @@
       <tr id="get-mob-info">
         <th><code>get_mob_info</code></th>
         <td><dl>
-          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target&gt; &lt;information&gt;</code></dt>
+          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;<a href="#target-selector">target</a>&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about a given object. The possible target types are:
-            <ul>
-              <li><code><b>self</b></code>: The object that the script belongs to.</li>
-              <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
-              <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
-            </ul>
+            Sets the variable &lt;destination_variable_name&gt; to some special information about a given object. 
             The possible data are:
             <ul>
               <li><code><b>angle</b></code>: Current angle.</li>
@@ -885,6 +876,16 @@
         </dl></td>
       </tr>
     </table>
+    
+    <h2 id="target-selector">Target Selectors</h2>   
+    <p>Some actions require a mob to be selected as a target. Possible target types are:</p>  
+    <ul>
+      <li><code><b>self</b></code>: The object that the script belongs to.</li>
+      <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
+      <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
+      <li><code><b>link</b></code>: The first linked object. This action does nothing if there is no linked object, or the mob has just spawned.</li>
+      <li><code><b>parent</b></code>: The parent object. This action does nothing if there is parent object, or the mob has just spawned.</li>
+    </ul>
     
   </div>
 </body>
