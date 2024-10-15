@@ -1779,7 +1779,6 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
-            l2_ptr->auto_plucking = true;
             l2_ptr->fsm.run_event(LEADER_EV_MUST_SEARCH_SEED);
         }
     }
