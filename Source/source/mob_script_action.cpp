@@ -267,17 +267,7 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::focus(mob_action_call &call) {
-    if(call.args[0] == "link") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_LINK);
-    } else if(call.args[0] == "parent") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_PARENT);
-    } else if(call.args[0] == "trigger") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_TYPE_TRIGGER);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
+    return load_mob_target_type(call, 0);
 }
 
 
@@ -343,14 +333,7 @@ bool mob_action_loaders::get_event_info(mob_action_call &call) {
  */
 bool mob_action_loaders::get_mob_info(mob_action_call &call) {
 
-    if(call.args[1] == "self") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
-    } else if(call.args[1] == "focus") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
-    } else if (call.args[1] == "trigger") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_TRIGGER);
-    } else {
-        report_enum_error(call, 1);
+    if(!load_mob_target_type(call, 1)) {
         return false;
     }
     
@@ -436,6 +419,38 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_IF_OP_MORE_E);
     } else {
         report_enum_error(call, 1);
+        return false;
+    }
+    return true;
+}
+
+
+/**
+ * @brief Reports an error of an unknown enum value.
+ *
+ * @param call Mob action call that called this.
+ * @param arg_idx Index number of the argument that is an enum.
+ */
+bool mob_action_loaders::load_mob_target_type(
+    mob_action_call& call, size_t arg_idx
+) {
+    if (call.args[arg_idx] == "self") {
+        call.args[arg_idx] = i2s(MOB_ACTION_TARGET_SELECTOR_SELF);
+    }
+    else if (call.args[arg_idx] == "focus") {
+        call.args[arg_idx] = i2s(MOB_ACTION_TARGET_SELECTOR_FOCUS);
+    }
+    else if (call.args[arg_idx] == "trigger") {
+        call.args[arg_idx] = i2s(MOB_ACTION_TARGET_SELECTOR_TRIGGER);
+    }
+    else if (call.args[arg_idx] == "link") {
+        call.args[arg_idx] = i2s(MOB_ACTION_TARGET_SELECTOR_LINK);
+    }
+    else if (call.args[arg_idx] == "parent") {
+        call.args[arg_idx] = i2s(MOB_ACTION_TARGET_SELECTOR_PARENT);
+    }
+    else {
+        report_enum_error(call, arg_idx);
         return false;
     }
     return true;
@@ -903,30 +918,12 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
-    MOB_ACTION_FOCUS_TYPE t = (MOB_ACTION_FOCUS_TYPE) s2i(data.args[0]);
-    
-    switch(t) {
-    case MOB_ACTION_FOCUS_TYPE_LINK: {
-        if(!data.m->links.empty() && data.m->links[0]) {
-            data.m->focus_on_mob(data.m->links[0]);
-        }
-        break;
-        
-    } case MOB_ACTION_FOCUS_TYPE_PARENT: {
-        if(data.m->parent) {
-            data.m->focus_on_mob(data.m->parent->m);
-        }
-        break;
-        
-    } case MOB_ACTION_FOCUS_TYPE_TRIGGER: {
-        mob* trigger = get_trigger_mob(data);
-        if(trigger) {
-            data.m->focus_on_mob(trigger);
-        }
-        break;
-        
-    }
-    }
+
+    MOB_ACTION_TARGET_SELECTOR s = (MOB_ACTION_TARGET_SELECTOR)s2i(data.args[0]);
+    mob* target = get_target_mob(data, s);
+
+    if(target)
+        data.m->focus_on_mob(target);
 }
 
 
@@ -1233,24 +1230,10 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
-    mob* target_mob = nullptr;
-    MOB_ACTION_GET_INFO_TARGET tt =
-        (MOB_ACTION_GET_INFO_TARGET) s2i(data.args[1]);
-        
-    switch(tt) {
-    case MOB_ACTION_GET_INFO_TARGET_SELF: {
-        target_mob = data.m;
-        break;
-    } case MOB_ACTION_GET_INFO_TARGET_FOCUS: {
-        if(!data.m->focused_mob) return;
-        target_mob = data.m->focused_mob;
-        break;
-    } case MOB_ACTION_GET_INFO_TARGET_TRIGGER: {
-        target_mob = get_trigger_mob(data);
-    }
-    }
+    MOB_ACTION_TARGET_SELECTOR s = (MOB_ACTION_TARGET_SELECTOR)s2i(data.args[1]);
+    mob* target = get_target_mob(data, s);
     
-    if(!target_mob) return;
+    if(!target) return;
     
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_MOB_INFO_TYPE t =
@@ -1258,29 +1241,29 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         
     switch (t) {
     case MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE: {
-        *var = f2s(rad_to_deg(target_mob->angle));
+        *var = f2s(rad_to_deg(target->angle));
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
-        *var = i2s(target_mob->chomping_mobs.size());
+        *var = i2s(target->chomping_mobs.size());
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
-        if (target_mob->focused_mob) {
+        if (target->focused_mob) {
             float d =
-                dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
+                dist(target->pos, target->focused_mob->pos).to_float();
             *var = f2s(d);
         }
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
-        if(target_mob->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
-            *var = f2s(((group_task*)target_mob)->get_power());
+        if(target->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
+            *var = f2s(((group_task*)target)->get_power());
         }
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH: {
-        *var = i2s(target_mob->health);
+        *var = i2s(target->health);
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
@@ -1288,46 +1271,46 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_ID: {
-        *var = i2s(target_mob->id);
+        *var = i2s(target->id);
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN: {
-        *var = i2s(target_mob->get_latched_pikmin_amount());
+        *var = i2s(target->get_latched_pikmin_amount());
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT: {
-        *var = i2s(target_mob->get_latched_pikmin_weight());
+        *var = i2s(target->get_latched_pikmin_weight());
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
-        *var = target_mob->type->category->name;
+        *var = target->type->category->name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
-        *var = target_mob->type->name;
+        *var = target->type->name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {
-        *var = target_mob->fsm.cur_state->name;
+        *var = target->fsm.cur_state->name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
-        if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
-            scale* s_ptr = (scale*)(target_mob);
+        if(target->type->category->id == MOB_CATEGORY_SCALES) {
+            scale* s_ptr = (scale*)(target);
             *var = i2s(s_ptr->calculate_cur_weight());
         }
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_X: {
-        *var = f2s(target_mob->pos.x);
+        *var = f2s(target->pos.x);
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_Y: {
-        *var = f2s(target_mob->pos.y);
+        *var = f2s(target->pos.y);
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_Z: {
-        *var = f2s(target_mob->z);
+        *var = f2s(target->z);
         break;
     }
     }
@@ -1353,6 +1336,37 @@ void mob_action_runners::get_random_real(mob_action_run_data &data) {
 void mob_action_runners::get_random_int(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
         i2s(randomi(s2i(data.args[1]), s2i(data.args[2])));
+}
+
+
+/**
+ * @brief Code for the integer number randomization mob script action.
+ *
+ * @param data Data about the action call.
+ */
+mob* get_target_mob(
+    mob_action_run_data& data, MOB_ACTION_TARGET_SELECTOR selector
+) {
+    switch (selector)
+    {
+    case MOB_ACTION_TARGET_SELECTOR_SELF:
+        return data.m;
+    case MOB_ACTION_TARGET_SELECTOR_FOCUS:
+        return data.m->focused_mob;
+    case MOB_ACTION_TARGET_SELECTOR_TRIGGER:
+        return get_trigger_mob(data);
+    case MOB_ACTION_TARGET_SELECTOR_LINK:
+        if (!data.m->links.empty() && data.m->links[0]) {
+            return data.m->links[0];
+        }
+        return nullptr;
+    case MOB_ACTION_TARGET_SELECTOR_PARENT:
+        if (data.m->parent) {
+            return data.m->parent->m;
+        }
+        return nullptr;
+        break;
+    }
 }
 
 
