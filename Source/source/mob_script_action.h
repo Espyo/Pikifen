@@ -336,24 +336,24 @@ enum MOB_ACTION_IF_OP {
 };
 
 
-//General mob action target types.
-enum MOB_ACTION_TARGET_SELECTOR {
+//Target types for actions that target mobs.
+enum MOB_ACTION_MOB_TARGET_TYPE {
 
-    //Targets self
-    MOB_ACTION_TARGET_SELECTOR_SELF,
-
-    //Targets the focused mob.
-    MOB_ACTION_TARGET_SELECTOR_FOCUS,
-
-    //Targets the trigger mob.
-    MOB_ACTION_TARGET_SELECTOR_TRIGGER,
-
-    //Target the first linked object.
-    MOB_ACTION_TARGET_SELECTOR_LINK,
-
-    //Focus on parent.
-    MOB_ACTION_TARGET_SELECTOR_PARENT,
-
+    //Targets the mob the script belongs to.
+    MOB_ACTION_MOB_TARGET_TYPE_SELF,
+    
+    //Targets the currently focused mob, if any.
+    MOB_ACTION_MOB_TARGET_TYPE_FOCUS,
+    
+    //Targets the mob that triggered the event, if any.
+    MOB_ACTION_MOB_TARGET_TYPE_TRIGGER,
+    
+    //Targets the first linked object, if any.
+    MOB_ACTION_MOB_TARGET_TYPE_LINK,
+    
+    //Targets the parent mob, if any.
+    MOB_ACTION_MOB_TARGET_TYPE_PARENT,
+    
 };
 
 
@@ -785,7 +785,7 @@ bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
 
 void report_enum_error(mob_action_call &call, size_t arg_idx);
-bool load_mob_target_type(mob_action_call& call, size_t arg_idx);
+bool load_mob_target_type(mob_action_call &call, size_t arg_idx);
 };
 
 
@@ -794,7 +794,7 @@ bool assert_actions(
 );
 mob* get_trigger_mob(mob_action_run_data &data);
 mob* get_target_mob(
-    mob_action_run_data& data, MOB_ACTION_TARGET_SELECTOR selector
+    mob_action_run_data &data, MOB_ACTION_MOB_TARGET_TYPE type
 );
 void insert_event_actions(
     mob_event* ev, const vector<mob_action_call*> &actions, bool at_end

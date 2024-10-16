@@ -481,8 +481,8 @@
       <tr id="focus">
         <th><code>focus</code></th>
         <td><dl>
-          <dt><code><b>focus</b> &lt;<a href="#target-selector">target</a>&gt;</code></dt>
-          <dd>Focuses on the targeted mob.</dd>
+          <dt><code><b>focus</b> &lt;target_mob&gt;</code></dt>
+          <dd>Focuses on <a href="#target-mob">a given mob</a>.</dd>
         </dl></td>
       </tr>
       <tr id="link-with-focused-mob">
@@ -611,10 +611,9 @@
       <tr id="get-mob-info">
         <th><code>get_mob_info</code></th>
         <td><dl>
-          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;<a href="#target-selector">target</a>&gt; &lt;information&gt;</code></dt>
+          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target_mob&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about a given object. 
-            The possible data are:
+            Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible keywords for &lt;information&gt; are:
             <ul>
               <li><code><b>angle</b></code>: Current angle.</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
@@ -877,14 +876,16 @@
       </tr>
     </table>
     
-    <h2 id="target-selector">Target Selectors</h2>   
+    <h2 id="target-mob">Target mob</h2>   
+
     <p>Some actions require a mob to be selected as a target. Possible target types are:</p>  
+
     <ul>
       <li><code><b>self</b></code>: The object that the script belongs to.</li>
       <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
       <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
       <li><code><b>link</b></code>: The first linked object. This action does nothing if there is no linked object, or the mob has just spawned.</li>
-      <li><code><b>parent</b></code>: The parent object. This action does nothing if there is parent object, or the mob has just spawned.</li>
+      <li><code><b>parent</b></code>: The parent object. This action does nothing if there is no parent object, or the mob has just spawned.</li>
     </ul>
     
   </div>

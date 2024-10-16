@@ -199,6 +199,9 @@ Next tasks (roughly sorted most important first)
             Move area loading to area_data::load_from_data_node
             Add the new common content properties to everything in the engine
             A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
+            Editors should separate creating and loading
+            Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing Game_data/<package name>/Package.txt
+            Editors should warn if you try to edit or create something in the base package, saying how it'll affect the usual experience, may affect all packages, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true
         Other info
             Right now, this is how each type of content works:
                 One per file: global anims, sounds, songs, graphics, GUI, hazards, liquids, particle generators, spike damage types, sprays, statuses, weather
