@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -7,7 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
-    If you've got an earlier frame selected and lower its time, the timeline indicator may jump to a later frame, even though you're still on the current frame
+        This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -106,6 +106,11 @@ Next tasks (roughly sorted most important first)
         Title screen
         Editors
         A couple of gameplay songs
+            Something for DEV Lab
+                Experience: steadfastness
+                Theme: industrial, gentle
+                Structure: just normal I guess? Iunno
+                Tempo: 130?, 4/4, straight
         Results screen
         Helodity's tropical song
         Other people's songs

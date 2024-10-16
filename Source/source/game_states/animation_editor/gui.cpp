@@ -1149,6 +1149,7 @@ void animation_editor::process_gui_panel_animation() {
                         "Duration", &frame_ptr->duration, 0.0005, 0.0f, FLT_MAX
                     )
                 ) {
+                    cur_anim_i.cur_frame_time = 0.0f;
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
@@ -1264,6 +1265,7 @@ void animation_editor::process_gui_panel_animation() {
                     ) {
                         cur_anim_i.cur_anim->frames[i].duration = d;
                     }
+                    cur_anim_i.cur_frame_time = 0.0f;
                     changes_mgr.mark_as_changed();
                     set_status(
                         "Applied the duration " + f2s(d) + " to all frames."

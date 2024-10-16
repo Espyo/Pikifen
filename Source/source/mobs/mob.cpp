@@ -2440,6 +2440,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->type->pushes) continue;
+        if(m_ptr == this || m_ptr == target_mob) continue;
         if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
         const float m_ptr_max_z = m_ptr->z + m_ptr->height;
         if(m_ptr_max_z < z && m_ptr_max_z < target_mob->z) continue;
@@ -2455,7 +2456,6 @@ bool mob::has_clear_line(const mob* target_mob) const {
         ) {
             continue;
         }
-        if(m_ptr == this || m_ptr == target_mob) continue;
         if(
             !rectangles_intersect(
                 bb_tl, bb_br,
