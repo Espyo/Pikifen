@@ -645,6 +645,27 @@
           </dd>
         </dl></td>
       </tr>
+	  <th><code>get_onion_info</code></th>
+        <td><dl>
+          <dt><code><b>get_onion_info</b> &lt;destination_variable_name&gt; &lt;target&gt; &lt;information&gt; [&lt;argument1&gt;] [&lt;argument2&gt;]</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to some special information about a given object from the Onion category. The possible target types are:
+            <ul>
+              <li><code><b>self</b></code>: The object that the script belongs to.</li>
+              <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
+              <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
+            </ul>
+			
+            The possible data are:
+            <ul>
+              <li><code><b>pikmin_amount</b></code>: Requires argument1 and argument2, returns the amount of a specific pikmin type and maturity stored in an onion. 
+e.g: pikmin_inside "Red Pikmin" 0 for leaf red pikmin inside the onion. </li>
+              <li><code><b>pikmin_types</b></code>: Requires argument1, returns if a specific type is allowed in the onion. Returns "true" or "false"
+e.g: pikmin_types "Red Pikmin" to check if Red Pikmin are allowed in the onion </li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
     </table>
     
     <h3 id="actions-var-manipulation">Variable manipulation</h3>
