@@ -27,34 +27,6 @@ using std::map;
 using std::string;
 
 
-//Type of content.
-enum CONTENT_TYPE {
-    //Custom particle generator.
-    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
-    
-    //Hazard.
-    CONTENT_TYPE_HAZARD,
-    
-    //Liquid.
-    CONTENT_TYPE_LIQUID,
-    
-    //Mob type.
-    CONTENT_TYPE_MOB_TYPE,
-    
-    //Spike damage type.
-    CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
-    
-    //Spray type.
-    CONTENT_TYPE_SPRAY_TYPE,
-    
-    //Status type.
-    CONTENT_TYPE_STATUS_TYPE,
-    
-    //Weather condition.
-    CONTENT_TYPE_WEATHER_CONDITION,
-};
-
-
 /**
  * @brief Manages everything regarding game content, be it assets, types of
  * mobs, etc.
@@ -83,69 +55,79 @@ struct content_manager {
     
     //List of weather conditions.
     map<string, weather> weather_conditions;
+
+    //--- Function declarations ---
     
-    void load(CONTENT_TYPE type, bool load_resources);
-    void unload(CONTENT_TYPE type, bool unload_resources);
+    content_manager();
+    void load(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
+    void unload(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
     
 private:
+
+    //--- Members ---
+
+    CONTENT_LOAD_LEVEL load_levels[N_CONTENT_TYPES];
+
+    //--- Function declarations ---
+
     void load_custom_particle_generator(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_custom_particle_generators(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_hazard(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_hazards(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_liquid(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_liquids(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_mob_types(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
         );
     void load_mob_types_of_category(
-        const string &folder, mob_category* category, bool load_resources
+        const string &folder, mob_category* category, CONTENT_LOAD_LEVEL level
     );
     void load_spike_damage_type(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_spike_damage_types(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_spray_type(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_spray_types(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_status_type(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_status_types(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
     void load_weather_condition(
-        const string &path, bool load_resources
+        const string &path, CONTENT_LOAD_LEVEL level
     );
     void load_weather_conditions(
-        const string &folder, bool load_resources
+        const string &folder, CONTENT_LOAD_LEVEL level
     );
-    void unload_custom_particle_generators(bool unload_resources);
-    void unload_hazards(bool unload_resources);
-    void unload_liquids(bool unload_resources);
-    void unload_mob_type(mob_type* mt, bool unload_resources);
-    void unload_mob_types(bool unload_resources);
+    void unload_custom_particle_generators(CONTENT_LOAD_LEVEL level);
+    void unload_hazards(CONTENT_LOAD_LEVEL level);
+    void unload_liquids(CONTENT_LOAD_LEVEL level);
+    void unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL level);
+    void unload_mob_types(CONTENT_LOAD_LEVEL level);
     void unload_mob_types_of_category(
-        mob_category* category, bool unload_resources
+        mob_category* category, CONTENT_LOAD_LEVEL level
     );
-    void unload_spike_damage_types(bool unload_resources);
-    void unload_spray_types(bool unload_resources);
-    void unload_status_types(bool unload_resources);
-    void unload_weather_conditions(bool unload_resources);
+    void unload_spike_damage_types(CONTENT_LOAD_LEVEL level);
+    void unload_spray_types(CONTENT_LOAD_LEVEL level);
+    void unload_status_types(CONTENT_LOAD_LEVEL level);
+    void unload_weather_conditions(CONTENT_LOAD_LEVEL level);
 };

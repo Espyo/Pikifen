@@ -292,7 +292,7 @@ public:
     void tick(float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
     void reset();
-    void load_from_data_node(data_node* node, bool load_resources);
+    void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
     
 private:
     

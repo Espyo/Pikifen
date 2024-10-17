@@ -36,7 +36,7 @@
         info += ":"; \
         info += std::to_string((long long) (__LINE__)); \
         info += "). Extra info: "; \
-        info += message; \
+        info += (message); \
         crash("Assert", info, 1); \
         return; \
     }

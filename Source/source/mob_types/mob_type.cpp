@@ -203,8 +203,15 @@ void mob_type::load_cat_properties(data_node*) { }
 void mob_type::load_cat_resources(data_node*) { }
 
 
+/**
+ * @brief Loads mob type data from a data node.
+ * 
+ * @param node Data node to load from.
+ * @param level Level to load at.
+ * @param folder_path Path to the folder this mob type is in.
+ */
 void mob_type::load_from_data_node(
-    data_node* node, bool load_resources, const string &folder_path
+    data_node* node, CONTENT_LOAD_LEVEL level, const string &folder_path
 ) {
     //Content metadata.
     load_metadata_from_data_node(node);
@@ -826,7 +833,7 @@ void mob_type::load_from_data_node(
     }
     
     //Resources.
-    if(load_resources) {
+    if(level >= CONTENT_LOAD_LEVEL_FULL) {
         anims.path = folder_path + "/Animations.txt";
         data_node anim_file = load_data_file(anims.path);
         anims.load_from_data_node(&anim_file);
@@ -911,7 +918,7 @@ void mob_type::load_from_data_node(
     load_cat_properties(node);
     
     //Category-specific resources.
-    if(load_resources) {
+    if(level >= CONTENT_LOAD_LEVEL_FULL) {
         load_cat_resources(node);
         anims.create_conversions(get_anim_conversions(), node);
     }
@@ -919,7 +926,7 @@ void mob_type::load_from_data_node(
     physical_span =
         calculate_mob_physical_span(
             radius,
-            (load_resources ? anims.hitbox_span : 0),
+            (level >= CONTENT_LOAD_LEVEL_FULL ? anims.hitbox_span : 0),
             rectangular_dim
         );
         

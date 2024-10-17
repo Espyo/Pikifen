@@ -411,13 +411,13 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
-    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
-    game.content.load(CONTENT_TYPE_STATUS_TYPE, false);
-    game.content.load(CONTENT_TYPE_SPRAY_TYPE, false);
-    game.content.load(CONTENT_TYPE_LIQUID, false);
-    game.content.load(CONTENT_TYPE_HAZARD, false);
-    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
-    game.content.load(CONTENT_TYPE_MOB_TYPE, false);
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
     
     load_custom_mob_cat_types(false);
     
@@ -1435,13 +1435,13 @@ void animation_editor::unload() {
     
     anims.destroy();
     
-    game.content.unload(CONTENT_TYPE_MOB_TYPE, false);
-    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
-    game.content.unload(CONTENT_TYPE_HAZARD, false);
-    game.content.unload(CONTENT_TYPE_LIQUID, false);
-    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, false);
-    game.content.unload(CONTENT_TYPE_STATUS_TYPE, false);
-    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
+    game.content.unload(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
     
     if(bg) {
         al_destroy_bitmap(bg);

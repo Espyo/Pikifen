@@ -18,6 +18,60 @@
 using std::string;
 
 
+//Type of content.
+enum CONTENT_TYPE {
+
+    //Area.
+    CONTENT_TYPE_AREA,
+    
+    //Custom particle generator.
+    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    
+    //Hazard.
+    CONTENT_TYPE_HAZARD,
+    
+    //Liquid.
+    CONTENT_TYPE_LIQUID,
+    
+    //Mob type.
+    CONTENT_TYPE_MOB_TYPE,
+    
+    //Spike damage type.
+    CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+    
+    //Spray type.
+    CONTENT_TYPE_SPRAY_TYPE,
+    
+    //Status type.
+    CONTENT_TYPE_STATUS_TYPE,
+    
+    //Weather condition.
+    CONTENT_TYPE_WEATHER_CONDITION,
+
+    //Total number of content types.
+    N_CONTENT_TYPES,
+
+};
+
+
+//Levels to which content can be loaded.
+enum CONTENT_LOAD_LEVEL {
+
+    //Not loaded in any way.
+    CONTENT_LOAD_LEVEL_UNLOADED,
+
+    //Basic. Usually just the internal name and whatever free things come along.
+    CONTENT_LOAD_LEVEL_BASIC,
+
+    //Sufficient for menus and/or editors, but not gameplay.
+    CONTENT_LOAD_LEVEL_MENUS,
+
+    //Fully loaded, including resources and dependencies.
+    CONTENT_LOAD_LEVEL_FULL,
+
+};
+
+
 /**
  * @brief Represents any piece of game content that can be used in the engine,
  * shared around, belong as part of another piece of content, etc.

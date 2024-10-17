@@ -483,7 +483,7 @@ public:
     explicit mob_type(MOB_CATEGORY category_id);
     virtual ~mob_type();
     void load_from_data_node(
-        data_node* node, bool load_resources, const string &folder
+        data_node* node, CONTENT_LOAD_LEVEL level, const string &folder
     );
     virtual void load_cat_properties(data_node* file);
     virtual void load_cat_resources(data_node* file);

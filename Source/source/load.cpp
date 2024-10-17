@@ -35,14 +35,13 @@ using std::set;
  * area's data is.
  * @param requested_area_type Type of area this is.
  * What folder it loads from depends on this value.
- * @param load_for_editor If true, skips loading some things that the
- * area editor won't need.
+ * @param level Level to load at.
  * @param from_backup If true, load from a backup, if any.
  */
 void load_area(
     const string &requested_area_folder_name,
     const AREA_TYPE requested_area_type,
-    bool load_for_editor, bool from_backup
+    CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Area -- Data");
@@ -77,7 +76,7 @@ void load_area(
     reader_setter rs(&data_file);
     
     //Content metadata.
-    game.cur_area_data.load_from_data_node(&data_file);
+    game.cur_area_data.load_from_data_node(&data_file, level);
     
     //Area configuration data.
     data_node* weather_node = nullptr;

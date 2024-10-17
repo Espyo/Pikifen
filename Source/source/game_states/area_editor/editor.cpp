@@ -1856,14 +1856,14 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
-    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
-    game.content.load(CONTENT_TYPE_STATUS_TYPE, false);
-    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
-    game.content.load(CONTENT_TYPE_LIQUID, false);
-    game.content.load(CONTENT_TYPE_SPRAY_TYPE, false);
-    game.content.load(CONTENT_TYPE_HAZARD, false);
-    game.content.load(CONTENT_TYPE_MOB_TYPE, false);
-    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, false);
+    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
     
     load_custom_mob_cat_types(true);
     
@@ -1919,7 +1919,7 @@ void area_editor::load_area(
     clear_current_area();
     
     ::load_area(
-        requested_area_folder_name, requested_area_type, true, from_backup
+        requested_area_folder_name, requested_area_type, CONTENT_LOAD_LEVEL_MENUS, from_backup
     );
     
     //Calculate texture suggestions.
@@ -4509,14 +4509,14 @@ void area_editor::unload() {
     
     clear_current_area();
     
-    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, false);
-    game.content.unload(CONTENT_TYPE_MOB_TYPE, false);
-    game.content.unload(CONTENT_TYPE_HAZARD, false);
-    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, false);
-    game.content.unload(CONTENT_TYPE_LIQUID, false);
-    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, false);
-    game.content.unload(CONTENT_TYPE_STATUS_TYPE, false);
-    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, false);
+    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
 }
 
 

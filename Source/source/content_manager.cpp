@@ -13,49 +13,67 @@
 #include <algorithm>
 
 #include "game.h"
+#include "functions.h"
 #include "load.h"
 #include "mob_types/mob_type.h"
 #include "utils/allegro_utils.h"
+#include "utils/string_utils.h"
+
+
+/**
+ * @brief Constructs a new content manager object.
+ */
+content_manager::content_manager() {
+    for(size_t c = 0; c < N_CONTENT_TYPES; c++) {
+        load_levels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
+    }
+}
 
 
 /**
  * @brief Loads some game content.
  * 
  * @param type Type of game content to load.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load(CONTENT_TYPE type, bool load_resources) {
+void content_manager::load(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
+    engine_assert(
+        load_levels[type] == CONTENT_LOAD_LEVEL_UNLOADED,
+        "Tried to load content of type " + i2s(type) + " even though it's "
+        "already loaded!"
+    );
+
     string folder = GAME_DATA_FOLDER_PATH;
 
     switch(type) {
     case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
-        load_custom_particle_generators(folder, load_resources);
+        load_custom_particle_generators(folder, level);
         break;
     } case CONTENT_TYPE_HAZARD: {
-        load_hazards(folder, load_resources);
+        load_hazards(folder, level);
         break;
     } case CONTENT_TYPE_LIQUID: {
-        load_liquids(folder, load_resources);
+        load_liquids(folder, level);
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
-        load_mob_types(folder, load_resources);
+        load_mob_types(folder, level);
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
-        load_spike_damage_types(folder, load_resources);
+        load_spike_damage_types(folder, level);
         break;
     } case CONTENT_TYPE_SPRAY_TYPE: {
-        load_spray_types(folder, load_resources);
+        load_spray_types(folder, level);
         break;
     } case CONTENT_TYPE_STATUS_TYPE: {
-        load_status_types(folder, load_resources);
+        load_status_types(folder, level);
         break;
     } case CONTENT_TYPE_WEATHER_CONDITION: {
-        load_weather_conditions(folder, load_resources);
+        load_weather_conditions(folder, level);
         break;
     }
     }
+
+    load_levels[type] = level;
 }
 
 
@@ -63,19 +81,17 @@ void content_manager::load(CONTENT_TYPE type, bool load_resources) {
  * @brief Loads a user-made particle generator.
  * 
  * @param path Path to the particle generator.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
 void content_manager::load_custom_particle_generator(
-    const string& path, bool load_resources
+    const string& path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
     particle_generator new_pg;
     new_pg.path = path;
-    new_pg.load_from_data_node(&file, load_resources);
+    new_pg.load_from_data_node(&file, level);
     custom_particle_generators[new_pg.name] = new_pg;
 }
 
@@ -84,11 +100,11 @@ void content_manager::load_custom_particle_generator(
  * @brief Loads user-made particle generators.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_custom_particle_generators(const string& folder, bool load_resources) {
+void content_manager::load_custom_particle_generators(
+    const string& folder, CONTENT_LOAD_LEVEL level
+) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Custom particle generators");
     }
@@ -99,7 +115,7 @@ void content_manager::load_custom_particle_generators(const string& folder, bool
     for(size_t g = 0; g < generator_files.size(); g++) {
         load_custom_particle_generator(
             PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g],
-            load_resources
+            level
         );
     }
     
@@ -113,12 +129,10 @@ void content_manager::load_custom_particle_generators(const string& folder, bool
  * @brief Loads a hazard.
  * 
  * @param path Path to the hazard.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
 void content_manager::load_hazard(
-    const string& path, bool load_resources
+    const string& path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
@@ -134,11 +148,9 @@ void content_manager::load_hazard(
  * @brief Loads hazards.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_hazards(const string& folder, bool load_resources) {
+void content_manager::load_hazards(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Hazards");
     }
@@ -149,7 +161,7 @@ void content_manager::load_hazards(const string& folder, bool load_resources) {
     for(size_t h = 0; h < hazard_files.size(); h++) {
         load_hazard(
             HAZARDS_FOLDER_PATH + "/" + hazard_files[h],
-            load_resources
+            level
         );
     }
     
@@ -163,19 +175,17 @@ void content_manager::load_hazards(const string& folder, bool load_resources) {
  * @brief Loads a liquid.
  * 
  * @param path Path to the liquid.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
 void content_manager::load_liquid(
-    const string& path, bool load_resources
+    const string& path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
     liquid* new_l = new liquid();
     new_l->path = path;
-    new_l->load_from_data_node(&file, load_resources);
+    new_l->load_from_data_node(&file, level);
     liquids[new_l->name] = new_l;
 }
 
@@ -184,11 +194,9 @@ void content_manager::load_liquid(
  * @brief Loads liquids.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_liquids(const string& folder, bool load_resources) {
+void content_manager::load_liquids(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Liquid types");
     }
@@ -199,7 +207,7 @@ void content_manager::load_liquids(const string& folder, bool load_resources) {
     for(size_t l = 0; l < liquid_files.size(); l++) {
         load_liquid(
             LIQUIDS_FOLDER_PATH + "/" + liquid_files[l],
-            load_resources
+            level
         );
     }
     
@@ -213,11 +221,9 @@ void content_manager::load_liquids(const string& folder, bool load_resources) {
  * @brief Loads mob types.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_mob_types(const string& folder, bool load_resources) {
+void content_manager::load_mob_types(const string& folder, CONTENT_LOAD_LEVEL level) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         if(c == MOB_CATEGORY_NONE) {
@@ -231,7 +237,7 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
             );
         }
         
-        load_mob_types_of_category(folder, category, load_resources);
+        load_mob_types_of_category(folder, category, level);
         
         if(game.perf_mon) {
             game.perf_mon->finish_measurement();
@@ -322,10 +328,9 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
  *
  * @param folder Folder to load from.
  * @param category Pointer to the mob category.
- * @param load_resources False if you don't need the images and sounds,
- * so it loads faster.
+ * @param level Level to load at.
  */
-void content_manager::load_mob_types_of_category(const string& folder, mob_category* category, bool load_resources) {
+void content_manager::load_mob_types_of_category(const string& folder, mob_category* category, CONTENT_LOAD_LEVEL level) {
     if(category->folder_path.empty()) return;
     bool folder_found;
     vector<string> types =
@@ -347,7 +352,7 @@ void content_manager::load_mob_types_of_category(const string& folder, mob_categ
         
         mob_type* mt;
         mt = category->create_type();
-        mt->load_from_data_node(&file, load_resources, type_folder_path);
+        mt->load_from_data_node(&file, level, type_folder_path);
         category->register_type(mt);
         mt->folder_name = type_folder_name;
         mt->path = type_folder_path;
@@ -361,11 +366,9 @@ void content_manager::load_mob_types_of_category(const string& folder, mob_categ
  * @brief Loads a spike damage type.
  * 
  * @param path Path to the spike damage type.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_spike_damage_type(const string& path, bool load_resources) {
+void content_manager::load_spike_damage_type(const string& path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -380,11 +383,9 @@ void content_manager::load_spike_damage_type(const string& path, bool load_resou
  * @brief Loads spike damage types.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_spike_damage_types(const string& folder, bool load_resources) {
+void content_manager::load_spike_damage_types(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Spike damage types");
     }
@@ -395,7 +396,7 @@ void content_manager::load_spike_damage_types(const string& folder, bool load_re
     for(size_t t = 0; t < type_files.size(); t++) {
         load_spike_damage_type(
             SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t],
-            load_resources
+            level
         );
     }
     
@@ -409,17 +410,15 @@ void content_manager::load_spike_damage_types(const string& folder, bool load_re
  * @brief Loads a spray type.
  * 
  * @param path Path to the spray type.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_spray_type(const string& path, bool load_resources) {
+void content_manager::load_spray_type(const string& path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
     spray_type new_t;
     new_t.path = path;
-    new_t.load_from_data_node(&file, load_resources);
+    new_t.load_from_data_node(&file, level);
     spray_types.push_back(new_t);
 }
 
@@ -428,11 +427,9 @@ void content_manager::load_spray_type(const string& path, bool load_resources) {
  * @brief Loads spray types.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_spray_types(const string& folder, bool load_resources) {
+void content_manager::load_spray_types(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Spray types");
     }
@@ -443,7 +440,7 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
     for(size_t t = 0; t < type_files.size(); t++) {
         load_spray_type(
             SPRAYS_FOLDER_PATH + "/" + type_files[t],
-            load_resources
+            level
         );
     }
     
@@ -502,17 +499,15 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
  * @brief Loads a status type.
  * 
  * @param path Path to the status type.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_status_type(const string& path, bool load_resources) {
+void content_manager::load_status_type(const string& path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
     status_type* new_t = new status_type();
     new_t->path = path;
-    new_t->load_from_data_node(&file, load_resources);
+    new_t->load_from_data_node(&file, level);
     status_types[new_t->name] = new_t;
 }
 
@@ -521,11 +516,9 @@ void content_manager::load_status_type(const string& path, bool load_resources) 
  * @brief Loads status types.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_status_types(const string& folder, bool load_resources) {
+void content_manager::load_status_types(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Status types");
     }
@@ -538,7 +531,7 @@ void content_manager::load_status_types(const string& folder, bool load_resource
     for(size_t t = 0; t < type_files.size(); t++) {
         load_status_type(
             STATUSES_FOLDER_PATH + "/" + type_files[t],
-            load_resources
+            level
         );
     }
 
@@ -582,11 +575,9 @@ void content_manager::load_status_types(const string& folder, bool load_resource
  * @brief Loads a weather condition.
  * 
  * @param path Path to the weather condition.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_weather_condition(const string& path, bool load_resources) {
+void content_manager::load_weather_condition(const string& path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -601,11 +592,9 @@ void content_manager::load_weather_condition(const string& path, bool load_resou
  * @brief Loads weather conditions.
  * 
  * @param folder Folder to load from.
- * @param load_resources If true, things like bitmaps and the like will be
- * loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void content_manager::load_weather_conditions(const string& folder, bool load_resources) {
+void content_manager::load_weather_conditions(const string& folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Weather");
     }
@@ -616,7 +605,7 @@ void content_manager::load_weather_conditions(const string& folder, bool load_re
     for(size_t w = 0; w < weather_files.size(); w++) {
         load_weather_condition(
             WEATHER_FOLDER_PATH + "/" + weather_files[w],
-            load_resources
+            level
         );
     }
     
@@ -630,34 +619,36 @@ void content_manager::load_weather_conditions(const string& folder, bool load_re
  * @brief Unloads some loaded content.
  * 
  * @param type Type of content to unload.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload(CONTENT_TYPE type, bool unload_resources) {
+void content_manager::unload(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
     switch(type) {
-    case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
-        unload_custom_particle_generators(unload_resources);
+    case CONTENT_TYPE_AREA: {
+        unload_areas(level);
+        break;
+    } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
+        unload_custom_particle_generators(level);
         break;
     } case CONTENT_TYPE_HAZARD: {
-        unload_hazards(unload_resources);
+        unload_hazards(level);
         break;
     } case CONTENT_TYPE_LIQUID: {
-        unload_liquids(unload_resources);
+        unload_liquids(level);
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
-        unload_mob_types(unload_resources);
+        unload_mob_types(level);
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
-        unload_spike_damage_types(unload_resources);
+        unload_spike_damage_types(level);
         break;
     } case CONTENT_TYPE_SPRAY_TYPE: {
-        unload_spray_types(unload_resources);
+        unload_spray_types(level);
         break;
     } case CONTENT_TYPE_STATUS_TYPE: {
-        unload_status_types(unload_resources);
+        unload_status_types(level);
         break;
     } case CONTENT_TYPE_WEATHER_CONDITION: {
-        unload_weather_conditions(unload_resources);
+        unload_weather_conditions(level);
         break;
     }
     }
@@ -666,10 +657,9 @@ void content_manager::unload(CONTENT_TYPE type, bool unload_resources) {
 
 /**
  * @brief Unloads loaded user-made particle generators.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_custom_particle_generators(bool unload_resources) {
+void content_manager::unload_custom_particle_generators(CONTENT_LOAD_LEVEL level) {
     for(
         auto g = custom_particle_generators.begin();
         g != custom_particle_generators.end();
@@ -683,20 +673,18 @@ void content_manager::unload_custom_particle_generators(bool unload_resources) {
 
 /**
  * @brief Unloads loaded hazards.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_hazards(bool unload_resources) {
+void content_manager::unload_hazards(CONTENT_LOAD_LEVEL level) {
     hazards.clear();
 }
 
 
 /**
  * @brief Unloads loaded liquids.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_liquids(bool unload_resources) {
+void content_manager::unload_liquids(CONTENT_LOAD_LEVEL level) {
     for(auto &l : liquids) {
         l.second->anim_db.destroy();
         delete l.second;
@@ -709,16 +697,15 @@ void content_manager::unload_liquids(bool unload_resources) {
  * @brief Unloads a type of mob.
  *
  * @param mt Mob type to unload.
- * @param unload_resources False if you don't need to unload images or sounds,
- * since they never got loaded in the first place.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_mob_type(mob_type* mt, bool unload_resources) {
+void content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL level) {
     for(size_t s = 0; s < mt->sounds.size(); s++) {
         ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
         if(!s) continue;
         game.audio.samples.free(s_ptr);
     }
-    if(unload_resources) {
+    if(level >= CONTENT_LOAD_LEVEL_FULL) {
         mt->anims.destroy();
         unload_script(mt);
         
@@ -729,16 +716,15 @@ void content_manager::unload_mob_type(mob_type* mt, bool unload_resources) {
 
 /**
  * @brief Unloads loaded mob types.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_mob_types(bool unload_resources) {
+void content_manager::unload_mob_types(CONTENT_LOAD_LEVEL level) {
     game.config.leader_order.clear();
     game.config.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
-        unload_mob_types_of_category(category, unload_resources);
+        unload_mob_types_of_category(category, level);
     }
 }
 
@@ -747,17 +733,16 @@ void content_manager::unload_mob_types(bool unload_resources) {
  * @brief Unloads all loaded types of mob from a category.
  *
  * @param category Pointer to the mob category.
- * @param unload_resources False if you don't need to unload images or sounds,
- * since they never got loaded in the first place.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_mob_types_of_category(mob_category* category, bool unload_resources) {
+void content_manager::unload_mob_types_of_category(mob_category* category, CONTENT_LOAD_LEVEL level) {
 
     vector<string> type_names;
     category->get_type_names(type_names);
     
     for(size_t t = 0; t < type_names.size(); t++) {
         mob_type* mt = category->get_type(type_names[t]);
-        unload_mob_type(mt, unload_resources);
+        unload_mob_type(mt, level);
     }
     
     category->clear_types();
@@ -766,20 +751,18 @@ void content_manager::unload_mob_types_of_category(mob_category* category, bool 
 
 /**
  * @brief Unloads loaded spike damage types.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_spike_damage_types(bool unload_resources) {
+void content_manager::unload_spike_damage_types(CONTENT_LOAD_LEVEL level) {
     spike_damage_types.clear();
 }
 
 
 /**
  * @brief Unloaded loaded spray types.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_spray_types(bool unload_resources) {
+void content_manager::unload_spray_types(CONTENT_LOAD_LEVEL level) {
     for(size_t s = 0; s < spray_types.size(); s++) {
         game.bitmaps.free(spray_types[s].bmp_spray);
     }
@@ -789,12 +772,11 @@ void content_manager::unload_spray_types(bool unload_resources) {
 
 /**
  * @brief Unloaded loaded status types.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_status_types(bool unload_resources) {
+void content_manager::unload_status_types(CONTENT_LOAD_LEVEL level) {
     for(auto &s : status_types) {
-        if(unload_resources) {
+        if(level >= CONTENT_LOAD_LEVEL_FULL) {
             s.second->overlay_anim_db.destroy();
         }
         delete s.second;
@@ -805,9 +787,8 @@ void content_manager::unload_status_types(bool unload_resources) {
 
 /**
  * @brief Unloads loaded weather conditions.
- * @param unload_resources If resources got loaded, set this to true to
- * unload them.
+ * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_weather_conditions(bool unload_resources) {
+void content_manager::unload_weather_conditions(CONTENT_LOAD_LEVEL level) {
     weather_conditions.clear();
 }

@@ -23,11 +23,9 @@ using std::vector;
  * @brief Loads liquid data from a data node.
  *
  * @param node Data node to load from.
- * @param load_resources If true, things like bitmaps and the like will
- * be loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
-void liquid::load_from_data_node(data_node* node, bool load_resources) {
+void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
@@ -42,7 +40,7 @@ void liquid::load_from_data_node(data_node* node, bool load_resources) {
     rs.set("surface_2_speed", surface_speed[1]);
     rs.set("surface_alpha", surface_alpha);
     
-    if(load_resources) {
+    if(level >= CONTENT_LOAD_LEVEL_FULL) {
         data_node anim_file =
             load_data_file(ANIMATIONS_FOLDER_PATH + "/" + animation_str);
             
