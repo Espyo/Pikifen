@@ -1701,8 +1701,8 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
 void editor::keyframe_visualizer(keyframe_interpolator<point> interpolator, size_t selected_index) {
     
     //Split the point into an X and Y visualizer
-    keyframe_interpolator x_inter(interpolator.get_keyframe(0).second.x);
-    keyframe_interpolator y_inter(interpolator.get_keyframe(0).second.y);
+    keyframe_interpolator<float> x_inter(interpolator.get_keyframe(0).second.x);
+    keyframe_interpolator<float> y_inter(interpolator.get_keyframe(0).second.y);
 
     x_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
     y_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
