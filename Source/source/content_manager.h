@@ -87,22 +87,63 @@ struct content_manager {
     void load(CONTENT_TYPE type, bool load_resources);
     void unload(CONTENT_TYPE type, bool unload_resources);
     
-    private:
-    void load_custom_particle_generators(const string &folder, bool load_resources);
-    void load_hazards(const string &folder, bool load_resources);
-    void load_liquids(const string &folder, bool load_resources);
-    void load_mob_types(const string &folder, bool load_resources);
-    void load_mob_types_of_category(const string &folder, mob_category* category, bool load_resources);
-    void load_spike_damage_types(const string &folder, bool load_resources);
-    void load_spray_types(const string &folder, bool load_resources);
-    void load_status_types(const string &folder, bool load_resources);
-    void load_weather_conditions(const string &folder, bool load_resources);
+private:
+    void load_custom_particle_generator(
+        const string &path, bool load_resources
+    );
+    void load_custom_particle_generators(
+        const string &folder, bool load_resources
+    );
+    void load_hazard(
+        const string &path, bool load_resources
+    );
+    void load_hazards(
+        const string &folder, bool load_resources
+    );
+    void load_liquid(
+        const string &path, bool load_resources
+    );
+    void load_liquids(
+        const string &folder, bool load_resources
+    );
+    void load_mob_types(
+        const string &folder, bool load_resources
+        );
+    void load_mob_types_of_category(
+        const string &folder, mob_category* category, bool load_resources
+    );
+    void load_spike_damage_type(
+        const string &path, bool load_resources
+    );
+    void load_spike_damage_types(
+        const string &folder, bool load_resources
+    );
+    void load_spray_type(
+        const string &path, bool load_resources
+    );
+    void load_spray_types(
+        const string &folder, bool load_resources
+    );
+    void load_status_type(
+        const string &path, bool load_resources
+    );
+    void load_status_types(
+        const string &folder, bool load_resources
+    );
+    void load_weather_condition(
+        const string &path, bool load_resources
+    );
+    void load_weather_conditions(
+        const string &folder, bool load_resources
+    );
     void unload_custom_particle_generators(bool unload_resources);
     void unload_hazards(bool unload_resources);
     void unload_liquids(bool unload_resources);
     void unload_mob_type(mob_type* mt, bool unload_resources);
     void unload_mob_types(bool unload_resources);
-    void unload_mob_types_of_category(mob_category* category, bool unload_resources);
+    void unload_mob_types_of_category(
+        mob_category* category, bool unload_resources
+    );
     void unload_spike_damage_types(bool unload_resources);
     void unload_spray_types(bool unload_resources);
     void unload_status_types(bool unload_resources);

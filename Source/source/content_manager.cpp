@@ -33,36 +33,50 @@ void content_manager::load(CONTENT_TYPE type, bool load_resources) {
     case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
         load_custom_particle_generators(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_HAZARD: {
+    } case CONTENT_TYPE_HAZARD: {
         load_hazards(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_LIQUID: {
+    } case CONTENT_TYPE_LIQUID: {
         load_liquids(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_MOB_TYPE: {
+    } case CONTENT_TYPE_MOB_TYPE: {
         load_mob_types(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
+    } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
         load_spike_damage_types(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_SPRAY_TYPE: {
+    } case CONTENT_TYPE_SPRAY_TYPE: {
         load_spray_types(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_STATUS_TYPE: {
+    } case CONTENT_TYPE_STATUS_TYPE: {
         load_status_types(folder, load_resources);
         break;
-    }
-    case CONTENT_TYPE_WEATHER_CONDITION: {
+    } case CONTENT_TYPE_WEATHER_CONDITION: {
         load_weather_conditions(folder, load_resources);
         break;
     }
     }
+}
+
+
+/**
+ * @brief Loads a user-made particle generator.
+ * 
+ * @param path Path to the particle generator.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_custom_particle_generator(
+    const string& path, bool load_resources
+) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    particle_generator new_pg;
+    new_pg.path = path;
+    new_pg.load_from_data_node(&file, load_resources);
+    custom_particle_generators[new_pg.name] = new_pg;
 }
 
 
@@ -83,20 +97,36 @@ void content_manager::load_custom_particle_generators(const string& folder, bool
         folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
         
     for(size_t g = 0; g < generator_files.size(); g++) {
-        string path =
-            PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        particle_generator new_pg;
-        new_pg.path = path;
-        new_pg.load_from_data_node(&file, load_resources);
-        game.content.custom_particle_generators[new_pg.name] = new_pg;
+        load_custom_particle_generator(
+            PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g],
+            load_resources
+        );
     }
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
+}
+
+
+/**
+ * @brief Loads a hazard.
+ * 
+ * @param path Path to the hazard.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_hazard(
+    const string& path, bool load_resources
+) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    hazard new_h;
+    new_h.path = path;
+    new_h.load_from_data_node(&file);
+    hazards[new_h.name] = new_h;
 }
 
 
@@ -117,19 +147,36 @@ void content_manager::load_hazards(const string& folder, bool load_resources) {
         folder_to_vector(HAZARDS_FOLDER_PATH, false);
         
     for(size_t h = 0; h < hazard_files.size(); h++) {
-        string path = HAZARDS_FOLDER_PATH + "/" + hazard_files[h];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        hazard new_h;
-        new_h.path = path;
-        new_h.load_from_data_node(&file);
-        game.content.hazards[new_h.name] = new_h;
+        load_hazard(
+            HAZARDS_FOLDER_PATH + "/" + hazard_files[h],
+            load_resources
+        );
     }
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
+}
+
+
+/**
+ * @brief Loads a liquid.
+ * 
+ * @param path Path to the liquid.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_liquid(
+    const string& path, bool load_resources
+) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    liquid* new_l = new liquid();
+    new_l->path = path;
+    new_l->load_from_data_node(&file, load_resources);
+    liquids[new_l->name] = new_l;
 }
 
 
@@ -150,14 +197,10 @@ void content_manager::load_liquids(const string& folder, bool load_resources) {
         folder_to_vector(LIQUIDS_FOLDER_PATH, false);
         
     for(size_t l = 0; l < liquid_files.size(); l++) {
-        string path = LIQUIDS_FOLDER_PATH + "/" + liquid_files[l];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        liquid* new_l = new liquid();
-        new_l->path = path;
-        new_l->load_from_data_node(&file, load_resources);
-        game.content.liquids[new_l->name] = new_l;
+        load_liquid(
+            LIQUIDS_FOLDER_PATH + "/" + liquid_files[l],
+            load_resources
+        );
     }
     
     if(game.perf_mon) {
@@ -197,7 +240,7 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
     
     //Pikmin type order.
     vector<string> missing_pikmin_order_types;
-    for(auto &p : game.content.mob_types.pikmin) {
+    for(auto &p : mob_types.pikmin) {
         if(
             find(
                 game.config.pikmin_order_strings.begin(),
@@ -222,8 +265,8 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
     }
     for(size_t o = 0; o < game.config.pikmin_order_strings.size(); o++) {
         string s = game.config.pikmin_order_strings[o];
-        if(game.content.mob_types.pikmin.find(s) != game.content.mob_types.pikmin.end()) {
-            game.config.pikmin_order.push_back(game.content.mob_types.pikmin[s]);
+        if(mob_types.pikmin.find(s) != mob_types.pikmin.end()) {
+            game.config.pikmin_order.push_back(mob_types.pikmin[s]);
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -234,7 +277,7 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
     
     //Leader type order.
     vector<string> missing_leader_order_types;
-    for(auto &l : game.content.mob_types.leader) {
+    for(auto &l : mob_types.leader) {
         if(
             find(
                 game.config.leader_order_strings.begin(),
@@ -259,8 +302,8 @@ void content_manager::load_mob_types(const string& folder, bool load_resources) 
     }
     for(size_t o = 0; o < game.config.leader_order_strings.size(); o++) {
         string s = game.config.leader_order_strings[o];
-        if(game.content.mob_types.leader.find(s) != game.content.mob_types.leader.end()) {
-            game.config.leader_order.push_back(game.content.mob_types.leader[s]);
+        if(mob_types.leader.find(s) != mob_types.leader.end()) {
+            game.config.leader_order.push_back(mob_types.leader[s]);
         } else {
             game.errors.report(
                 "Unknown leader type \"" + s + "\" found "
@@ -315,6 +358,25 @@ void content_manager::load_mob_types_of_category(const string& folder, mob_categ
 
 
 /**
+ * @brief Loads a spike damage type.
+ * 
+ * @param path Path to the spike damage type.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_spike_damage_type(const string& path, bool load_resources) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    spike_damage_type new_t;
+    new_t.path = path;
+    new_t.load_from_data_node(&file);
+    spike_damage_types[new_t.name] = new_t;
+}
+
+
+/**
  * @brief Loads spike damage types.
  * 
  * @param folder Folder to load from.
@@ -331,19 +393,34 @@ void content_manager::load_spike_damage_types(const string& folder, bool load_re
         folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
         
     for(size_t t = 0; t < type_files.size(); t++) {
-        string path = SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        spike_damage_type new_t;
-        new_t.path = path;
-        new_t.load_from_data_node(&file);
-        game.content.spike_damage_types[new_t.name] = new_t;
+        load_spike_damage_type(
+            SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t],
+            load_resources
+        );
     }
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
+}
+
+
+/**
+ * @brief Loads a spray type.
+ * 
+ * @param path Path to the spray type.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_spray_type(const string& path, bool load_resources) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    spray_type new_t;
+    new_t.path = path;
+    new_t.load_from_data_node(&file, load_resources);
+    spray_types.push_back(new_t);
 }
 
 
@@ -363,31 +440,25 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
     vector<string> type_files =
         folder_to_vector(SPRAYS_FOLDER_PATH, false);
         
-    vector<spray_type> temp_types;
-    
     for(size_t t = 0; t < type_files.size(); t++) {
-        string path = SPRAYS_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        spray_type new_t;
-        new_t.path = path;
-        new_t.load_from_data_node(&file, load_resources);
-        temp_types.push_back(new_t);
+        load_spray_type(
+            SPRAYS_FOLDER_PATH + "/" + type_files[t],
+            load_resources
+        );
     }
     
     //Spray type order.
     vector<string> missing_spray_order_types;
-    for(size_t t = 0; t < temp_types.size(); t++) {
+    for(size_t t = 0; t < spray_types.size(); t++) {
         if(
             find(
                 game.config.spray_order_strings.begin(),
                 game.config.spray_order_strings.end(),
-                temp_types[t].name
+                spray_types[t].name
             ) == game.config.spray_order_strings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_spray_order_types.push_back(temp_types[t].name);
+            missing_spray_order_types.push_back(spray_types[t].name);
         }
     }
     if(!missing_spray_order_types.empty()) {
@@ -401,12 +472,13 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
             missing_spray_order_types.end()
         );
     }
+    vector<spray_type> temp;
     for(size_t o = 0; o < game.config.spray_order_strings.size(); o++) {
         string s = game.config.spray_order_strings[o];
         bool found = false;
-        for(size_t t = 0; t < temp_types.size(); t++) {
-            if(temp_types[t].name == s) {
-                game.content.spray_types.push_back(temp_types[t]);
+        for(size_t t = 0; t < spray_types.size(); t++) {
+            if(spray_types[t].name == s) {
+                temp.push_back(spray_types[t]);
                 found = true;
             }
         }
@@ -418,10 +490,30 @@ void content_manager::load_spray_types(const string& folder, bool load_resources
             );
         }
     }
+    spray_types = temp;
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
+}
+
+
+/**
+ * @brief Loads a status type.
+ * 
+ * @param path Path to the status type.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_status_type(const string& path, bool load_resources) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    status_type* new_t = new status_type();
+    new_t->path = path;
+    new_t->load_from_data_node(&file, load_resources);
+    status_types[new_t->name] = new_t;
 }
 
 
@@ -444,19 +536,17 @@ void content_manager::load_status_types(const string& folder, bool load_resource
     vector<string> types_with_replacements_names;
     
     for(size_t t = 0; t < type_files.size(); t++) {
-        string path = STATUSES_FOLDER_PATH + "/" + type_files[t];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        status_type* new_t = new status_type();
-        new_t->path = path;
-        new_t->load_from_data_node(&file, load_resources);
-        game.content.status_types[new_t->name] = new_t;
-        
-        if(!new_t->replacement_on_timeout_str.empty()) {
-            types_with_replacements.push_back(new_t);
+        load_status_type(
+            STATUSES_FOLDER_PATH + "/" + type_files[t],
+            load_resources
+        );
+    }
+
+    for(auto& s : status_types) {
+        if(!s.second->replacement_on_timeout_str.empty()) {
+            types_with_replacements.push_back(s.second);
             types_with_replacements_names.push_back(
-                new_t->replacement_on_timeout_str
+                s.second->replacement_on_timeout_str
             );
         }
     }
@@ -464,7 +554,7 @@ void content_manager::load_status_types(const string& folder, bool load_resource
     for(size_t s = 0; s < types_with_replacements.size(); s++) {
         string rn = types_with_replacements_names[s];
         bool found = false;
-        for(auto &s2 : game.content.status_types) {
+        for(auto &s2 : status_types) {
             if(s2.first == rn) {
                 types_with_replacements[s]->replacement_on_timeout =
                     s2.second;
@@ -489,6 +579,25 @@ void content_manager::load_status_types(const string& folder, bool load_resource
 
 
 /**
+ * @brief Loads a weather condition.
+ * 
+ * @param path Path to the weather condition.
+ * @param load_resources If true, things like bitmaps and the like will be
+ * loaded as well. If you don't need those, set this to false to make
+ * it load faster.
+ */
+void content_manager::load_weather_condition(const string& path, bool load_resources) {
+    data_node file = load_data_file(path);
+    if(!file.file_was_opened) return;
+    
+    weather new_w;
+    new_w.path = path;
+    new_w.load_from_data_node(&file);
+    weather_conditions[new_w.name] = new_w;
+}
+
+
+/**
  * @brief Loads weather conditions.
  * 
  * @param folder Folder to load from.
@@ -505,14 +614,10 @@ void content_manager::load_weather_conditions(const string& folder, bool load_re
         folder_to_vector(WEATHER_FOLDER_PATH, false);
         
     for(size_t w = 0; w < weather_files.size(); w++) {
-        string path = WEATHER_FOLDER_PATH + "/" + weather_files[w];
-        data_node file = load_data_file(path);
-        if(!file.file_was_opened) continue;
-        
-        weather new_w;
-        new_w.path = path;
-        new_w.load_from_data_node(&file);
-        game.content.weather_conditions[new_w.name] = new_w;
+        load_weather_condition(
+            WEATHER_FOLDER_PATH + "/" + weather_files[w],
+            load_resources
+        );
     }
     
     if(game.perf_mon) {
@@ -533,32 +638,25 @@ void content_manager::unload(CONTENT_TYPE type, bool unload_resources) {
     case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
         unload_custom_particle_generators(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_HAZARD: {
+    } case CONTENT_TYPE_HAZARD: {
         unload_hazards(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_LIQUID: {
+    } case CONTENT_TYPE_LIQUID: {
         unload_liquids(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_MOB_TYPE: {
+    } case CONTENT_TYPE_MOB_TYPE: {
         unload_mob_types(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
+    } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
         unload_spike_damage_types(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_SPRAY_TYPE: {
+    } case CONTENT_TYPE_SPRAY_TYPE: {
         unload_spray_types(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_STATUS_TYPE: {
+    } case CONTENT_TYPE_STATUS_TYPE: {
         unload_status_types(unload_resources);
         break;
-    }
-    case CONTENT_TYPE_WEATHER_CONDITION: {
+    } case CONTENT_TYPE_WEATHER_CONDITION: {
         unload_weather_conditions(unload_resources);
         break;
     }
@@ -573,13 +671,13 @@ void content_manager::unload(CONTENT_TYPE type, bool unload_resources) {
  */
 void content_manager::unload_custom_particle_generators(bool unload_resources) {
     for(
-        auto g = game.content.custom_particle_generators.begin();
-        g != game.content.custom_particle_generators.end();
+        auto g = custom_particle_generators.begin();
+        g != custom_particle_generators.end();
         ++g
     ) {
         game.bitmaps.free(g->second.base_particle.bitmap);
     }
-    game.content.custom_particle_generators.clear();
+    custom_particle_generators.clear();
 }
 
 
@@ -589,7 +687,7 @@ void content_manager::unload_custom_particle_generators(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_hazards(bool unload_resources) {
-    game.content.hazards.clear();
+    hazards.clear();
 }
 
 
@@ -599,11 +697,11 @@ void content_manager::unload_hazards(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_liquids(bool unload_resources) {
-    for(auto &l : game.content.liquids) {
+    for(auto &l : liquids) {
         l.second->anim_db.destroy();
         delete l.second;
     }
-    game.content.liquids.clear();
+    liquids.clear();
 }
 
 
@@ -672,7 +770,7 @@ void content_manager::unload_mob_types_of_category(mob_category* category, bool 
  * unload them.
  */
 void content_manager::unload_spike_damage_types(bool unload_resources) {
-    game.content.spike_damage_types.clear();
+    spike_damage_types.clear();
 }
 
 
@@ -682,10 +780,10 @@ void content_manager::unload_spike_damage_types(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_spray_types(bool unload_resources) {
-    for(size_t s = 0; s < game.content.spray_types.size(); s++) {
-        game.bitmaps.free(game.content.spray_types[s].bmp_spray);
+    for(size_t s = 0; s < spray_types.size(); s++) {
+        game.bitmaps.free(spray_types[s].bmp_spray);
     }
-    game.content.spray_types.clear();
+    spray_types.clear();
 }
 
 
@@ -695,13 +793,13 @@ void content_manager::unload_spray_types(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_status_types(bool unload_resources) {
-    for(auto &s : game.content.status_types) {
+    for(auto &s : status_types) {
         if(unload_resources) {
             s.second->overlay_anim_db.destroy();
         }
         delete s.second;
     }
-    game.content.status_types.clear();
+    status_types.clear();
 }
 
 
@@ -711,5 +809,5 @@ void content_manager::unload_status_types(bool unload_resources) {
  * unload them.
  */
 void content_manager::unload_weather_conditions(bool unload_resources) {
-    game.content.weather_conditions.clear();
+    weather_conditions.clear();
 }
