@@ -314,7 +314,7 @@ void particle_generator::load_from_data_node(
     prs.set("color", base_particle.color);
     
     if(bitmap_node) {
-        if(level >= CONTENT_LOAD_LEVEL_MENUS) {
+        if(level >= CONTENT_LOAD_LEVEL_FULL) {
             base_particle.bitmap =
                 game.bitmaps.get(
                     bitmap_str, bitmap_node

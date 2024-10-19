@@ -22,11 +22,6 @@
 using std::string;
 
 
-void load_area(
-    const string &requested_area_folder_name,
-    const AREA_TYPE requested_area_type,
-    CONTENT_LOAD_LEVEL level, bool from_backup
-);
 void load_area_mission_data(data_node* node, mission_data &data);
 void load_area_mission_record(
     data_node* file,

@@ -27,26 +27,30 @@ content_manager::content_manager() {
     for(size_t c = 0; c < N_CONTENT_TYPES; c++) {
         load_levels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
+    areas.insert(areas.begin(), N_AREA_TYPES, map<string, area_data>());
 }
 
 
 /**
  * @brief Loads some game content.
- * 
+ *
  * @param type Type of game content to load.
  * @param level Level to load at.
  */
-void content_manager::load(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
     engine_assert(
         load_levels[type] == CONTENT_LOAD_LEVEL_UNLOADED,
         "Tried to load content of type " + i2s(type) + " even though it's "
         "already loaded!"
     );
-
+    
     string folder = GAME_DATA_FOLDER_PATH;
-
+    
     switch(type) {
-    case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
+    case CONTENT_TYPE_AREA: {
+        load_areas(folder, level);
+        break;
+    } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
         load_custom_particle_generators(folder, level);
         break;
     } case CONTENT_TYPE_HAZARD: {
@@ -70,21 +74,139 @@ void content_manager::load(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
     } case CONTENT_TYPE_WEATHER_CONDITION: {
         load_weather_conditions(folder, level);
         break;
+    } case N_CONTENT_TYPES: {
+        break;
     }
     }
-
+    
     load_levels[type] = level;
 }
 
 
 /**
+ * @brief Loads an area.
+ *
+ * @param path Path to the area's folder.
+ * @param level Level to load at.
+ * @param type Type of area this is.
+ * What folder it loads from depends on this value.
+ * @param from_backup If true, load from a backup, if any.
+ */
+void content_manager::load_area(
+    const string &path, CONTENT_LOAD_LEVEL level,
+    AREA_TYPE type, bool from_backup
+) {
+    //Setup.
+    string data_file_path;
+    string geometry_file_path;
+    
+    if(from_backup) {
+        string base_folder =
+            get_base_area_folder_path(type, false) +
+            "/" + path;
+        data_file_path = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
+        geometry_file_path = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
+    } else {
+        string base_folder =
+            get_base_area_folder_path(type, true) +
+            "/" + path;
+        data_file_path = base_folder + "/" + AREA_DATA_FILE_NAME;
+        geometry_file_path = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
+    }
+    
+    data_node data_file = load_data_file(data_file_path);
+    if(!data_file.file_was_opened) return;
+    data_node geometry_file = load_data_file(geometry_file_path);
+    if(!geometry_file.file_was_opened) return;
+    
+    area_data new_area;
+    
+    new_area.folder_name = path;
+    new_area.path =
+        get_base_area_folder_path(type, true) +
+        "/" + path;
+    new_area.type = type;
+    
+    //Main data.
+    if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
+    new_area.load_main_data_from_data_node(&data_file, level);
+    if(game.perf_mon) game.perf_mon->finish_measurement();
+    
+    //Loading screen.
+    if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
+    if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
+    game.loading_text_bmp = nullptr;
+    game.loading_subtext_bmp = nullptr;
+    draw_loading_screen(
+        new_area.name,
+        get_subtitle_or_mission_goal(
+            new_area.subtitle,
+            new_area.type,
+            new_area.mission.goal
+        ),
+        1.0f
+    );
+    al_flip_display();
+    
+    //Thumbnail image.
+    string thumbnail_path =
+        get_base_area_folder_path(type, !from_backup) +
+        "/" + path +
+        (from_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
+    new_area.load_thumbnail(thumbnail_path);
+    
+    //Geometry.
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
+        if(game.perf_mon) game.perf_mon->start_measurement("Area -- Geometry");
+        new_area.load_geometry_from_data_node(&geometry_file, level);
+        if(game.perf_mon) game.perf_mon->finish_measurement();
+    }
+    
+    //Finish up.
+    areas[type][new_area.name] = new_area;
+    game.cur_area_data = new_area; //TODO turn game.cur_area_data to a pointer
+}
+
+
+/**
+ * @brief Loads areas.
+ *
+ * @param folder Folder to load from.
+ * @param level Level to load at.
+ */
+void content_manager::load_areas(const string &folder, CONTENT_LOAD_LEVEL level) {
+    const string simple_areas_path =
+        GAME_DATA_FOLDER_PATH + "/" + SIMPLE_AREA_FOLDER_NAME;
+    vector<string> simple_area_files =
+        folder_to_vector(simple_areas_path, false);
+    for(size_t a = 0; a < simple_area_files.size(); a++) {
+        load_area(
+            folder + "/" + simple_area_files[a],
+            level, AREA_TYPE_SIMPLE, false
+        );
+    }
+    
+    const string mission_areas_path =
+        GAME_DATA_FOLDER_PATH + "/" + MISSION_AREA_FOLDER_NAME;
+    vector<string> mission_area_files =
+        folder_to_vector(mission_areas_path, false);
+    for(size_t a = 0; a < mission_area_files.size(); a++) {
+        load_area(
+            folder + "/" + mission_area_files[a],
+            level, AREA_TYPE_MISSION, false
+        );
+    }
+}
+
+
+/**
  * @brief Loads a user-made particle generator.
- * 
+ *
  * @param path Path to the particle generator.
  * @param level Level to load at.
  */
 void content_manager::load_custom_particle_generator(
-    const string& path, CONTENT_LOAD_LEVEL level
+    const string &path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
@@ -98,12 +220,12 @@ void content_manager::load_custom_particle_generator(
 
 /**
  * @brief Loads user-made particle generators.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
 void content_manager::load_custom_particle_generators(
-    const string& folder, CONTENT_LOAD_LEVEL level
+    const string &folder, CONTENT_LOAD_LEVEL level
 ) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Custom particle generators");
@@ -127,12 +249,12 @@ void content_manager::load_custom_particle_generators(
 
 /**
  * @brief Loads a hazard.
- * 
+ *
  * @param path Path to the hazard.
  * @param level Level to load at.
  */
 void content_manager::load_hazard(
-    const string& path, CONTENT_LOAD_LEVEL level
+    const string &path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
@@ -146,11 +268,11 @@ void content_manager::load_hazard(
 
 /**
  * @brief Loads hazards.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_hazards(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_hazards(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Hazards");
     }
@@ -173,12 +295,12 @@ void content_manager::load_hazards(const string& folder, CONTENT_LOAD_LEVEL leve
 
 /**
  * @brief Loads a liquid.
- * 
+ *
  * @param path Path to the liquid.
  * @param level Level to load at.
  */
 void content_manager::load_liquid(
-    const string& path, CONTENT_LOAD_LEVEL level
+    const string &path, CONTENT_LOAD_LEVEL level
 ) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
@@ -192,11 +314,11 @@ void content_manager::load_liquid(
 
 /**
  * @brief Loads liquids.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_liquids(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_liquids(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Liquid types");
     }
@@ -219,11 +341,11 @@ void content_manager::load_liquids(const string& folder, CONTENT_LOAD_LEVEL leve
 
 /**
  * @brief Loads mob types.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_mob_types(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_mob_types(const string &folder, CONTENT_LOAD_LEVEL level) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         if(c == MOB_CATEGORY_NONE) {
@@ -330,7 +452,7 @@ void content_manager::load_mob_types(const string& folder, CONTENT_LOAD_LEVEL le
  * @param category Pointer to the mob category.
  * @param level Level to load at.
  */
-void content_manager::load_mob_types_of_category(const string& folder, mob_category* category, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_mob_types_of_category(const string &folder, mob_category* category, CONTENT_LOAD_LEVEL level) {
     if(category->folder_path.empty()) return;
     bool folder_found;
     vector<string> types =
@@ -364,11 +486,11 @@ void content_manager::load_mob_types_of_category(const string& folder, mob_categ
 
 /**
  * @brief Loads a spike damage type.
- * 
+ *
  * @param path Path to the spike damage type.
  * @param level Level to load at.
  */
-void content_manager::load_spike_damage_type(const string& path, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_spike_damage_type(const string &path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -381,11 +503,11 @@ void content_manager::load_spike_damage_type(const string& path, CONTENT_LOAD_LE
 
 /**
  * @brief Loads spike damage types.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_spike_damage_types(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_spike_damage_types(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Spike damage types");
     }
@@ -408,11 +530,11 @@ void content_manager::load_spike_damage_types(const string& folder, CONTENT_LOAD
 
 /**
  * @brief Loads a spray type.
- * 
+ *
  * @param path Path to the spray type.
  * @param level Level to load at.
  */
-void content_manager::load_spray_type(const string& path, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_spray_type(const string &path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -425,11 +547,11 @@ void content_manager::load_spray_type(const string& path, CONTENT_LOAD_LEVEL lev
 
 /**
  * @brief Loads spray types.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_spray_types(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_spray_types(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Spray types");
     }
@@ -497,11 +619,11 @@ void content_manager::load_spray_types(const string& folder, CONTENT_LOAD_LEVEL 
 
 /**
  * @brief Loads a status type.
- * 
+ *
  * @param path Path to the status type.
  * @param level Level to load at.
  */
-void content_manager::load_status_type(const string& path, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_status_type(const string &path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -514,11 +636,11 @@ void content_manager::load_status_type(const string& path, CONTENT_LOAD_LEVEL le
 
 /**
  * @brief Loads status types.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_status_types(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_status_types(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Status types");
     }
@@ -534,8 +656,8 @@ void content_manager::load_status_types(const string& folder, CONTENT_LOAD_LEVEL
             level
         );
     }
-
-    for(auto& s : status_types) {
+    
+    for(auto &s : status_types) {
         if(!s.second->replacement_on_timeout_str.empty()) {
             types_with_replacements.push_back(s.second);
             types_with_replacements_names.push_back(
@@ -573,11 +695,11 @@ void content_manager::load_status_types(const string& folder, CONTENT_LOAD_LEVEL
 
 /**
  * @brief Loads a weather condition.
- * 
+ *
  * @param path Path to the weather condition.
  * @param level Level to load at.
  */
-void content_manager::load_weather_condition(const string& path, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_weather_condition(const string &path, CONTENT_LOAD_LEVEL level) {
     data_node file = load_data_file(path);
     if(!file.file_was_opened) return;
     
@@ -590,11 +712,11 @@ void content_manager::load_weather_condition(const string& path, CONTENT_LOAD_LE
 
 /**
  * @brief Loads weather conditions.
- * 
+ *
  * @param folder Folder to load from.
  * @param level Level to load at.
  */
-void content_manager::load_weather_conditions(const string& folder, CONTENT_LOAD_LEVEL level) {
+void content_manager::load_weather_conditions(const string &folder, CONTENT_LOAD_LEVEL level) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Weather");
     }
@@ -617,41 +739,53 @@ void content_manager::load_weather_conditions(const string& folder, CONTENT_LOAD
 
 /**
  * @brief Unloads some loaded content.
- * 
+ *
  * @param type Type of content to unload.
- * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
+void content_manager::unload_all(CONTENT_TYPE type) {
     switch(type) {
     case CONTENT_TYPE_AREA: {
-        unload_areas(level);
+        unload_areas(load_levels[type]);
         break;
     } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
-        unload_custom_particle_generators(level);
+        unload_custom_particle_generators(load_levels[type]);
         break;
     } case CONTENT_TYPE_HAZARD: {
-        unload_hazards(level);
+        unload_hazards(load_levels[type]);
         break;
     } case CONTENT_TYPE_LIQUID: {
-        unload_liquids(level);
+        unload_liquids(load_levels[type]);
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
-        unload_mob_types(level);
+        unload_mob_types(load_levels[type]);
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
-        unload_spike_damage_types(level);
+        unload_spike_damage_types(load_levels[type]);
         break;
     } case CONTENT_TYPE_SPRAY_TYPE: {
-        unload_spray_types(level);
+        unload_spray_types(load_levels[type]);
         break;
     } case CONTENT_TYPE_STATUS_TYPE: {
-        unload_status_types(level);
+        unload_status_types(load_levels[type]);
         break;
     } case CONTENT_TYPE_WEATHER_CONDITION: {
-        unload_weather_conditions(level);
+        unload_weather_conditions(load_levels[type]);
+        break;
+    } case N_CONTENT_TYPES: {
         break;
     }
     }
+    
+    load_levels[type] = CONTENT_LOAD_LEVEL_UNLOADED;
+}
+
+
+/**
+ * @brief Unloads loaded areas.
+ * @param level Should match the level at which the content got loaded.
+ */
+void content_manager::unload_areas(CONTENT_LOAD_LEVEL level) {
+    areas.clear();
 }
 
 

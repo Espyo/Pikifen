@@ -1856,14 +1856,14 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
-    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
     
     load_custom_mob_cat_types(true);
     
@@ -1918,8 +1918,9 @@ void area_editor::load_area(
 ) {
     clear_current_area();
     
-    ::load_area(
-        requested_area_folder_name, requested_area_type, CONTENT_LOAD_LEVEL_MENUS, from_backup
+    game.content.load_area(
+        requested_area_folder_name, CONTENT_LOAD_LEVEL_EDITOR,
+        requested_area_type, from_backup
     );
     
     //Calculate texture suggestions.
@@ -1927,7 +1928,7 @@ void area_editor::load_area(
     vector<std::pair<string, size_t> > texture_uses_vector;
     
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        const string& n = game.cur_area_data.sectors[s]->texture_info.file_name;
+        const string &n = game.cur_area_data.sectors[s]->texture_info.file_name;
         if(n.empty()) continue;
         texture_uses_map[n]++;
     }
@@ -4509,14 +4510,14 @@ void area_editor::unload() {
     
     clear_current_area();
     
-    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.unload_all(CONTENT_TYPE_WEATHER_CONDITION);
+    game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
+    game.content.unload_all(CONTENT_TYPE_HAZARD);
+    game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
+    game.content.unload_all(CONTENT_TYPE_LIQUID);
+    game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
+    game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
+    game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
 }
 
 

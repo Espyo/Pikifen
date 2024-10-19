@@ -13,6 +13,7 @@
 #include <map>
 #include <string>
 
+#include "area/area.h"
 #include "hazard.h"
 #include "liquid.h"
 #include "mobs/mob_utils.h"
@@ -32,6 +33,12 @@ using std::string;
  * mobs, etc.
  */
 struct content_manager {
+
+    //--- Members ---
+    
+    //List of areas.
+    vector<map<string, area_data>> areas;
+    
     //List of particle generators declared by the user.
     map<string, particle_generator> custom_particle_generators;
     
@@ -55,21 +62,28 @@ struct content_manager {
     
     //List of weather conditions.
     map<string, weather> weather_conditions;
-
+    
     //--- Function declarations ---
     
     content_manager();
-    void load(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
-    void unload(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
+    void load_area(
+        const string &path, CONTENT_LOAD_LEVEL level,
+        AREA_TYPE type, bool from_backup
+    );
+    void load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
+    void unload_all(CONTENT_TYPE type);
     
-private:
-
+    private:
+    
     //--- Members ---
-
+    
     CONTENT_LOAD_LEVEL load_levels[N_CONTENT_TYPES];
-
+    
     //--- Function declarations ---
-
+    
+    void load_areas(
+        const string &folder, CONTENT_LOAD_LEVEL level
+    );
     void load_custom_particle_generator(
         const string &path, CONTENT_LOAD_LEVEL level
     );
@@ -90,7 +104,7 @@ private:
     );
     void load_mob_types(
         const string &folder, CONTENT_LOAD_LEVEL level
-        );
+    );
     void load_mob_types_of_category(
         const string &folder, mob_category* category, CONTENT_LOAD_LEVEL level
     );
@@ -118,6 +132,7 @@ private:
     void load_weather_conditions(
         const string &folder, CONTENT_LOAD_LEVEL level
     );
+    void unload_areas(CONTENT_LOAD_LEVEL level);
     void unload_custom_particle_generators(CONTENT_LOAD_LEVEL level);
     void unload_hazards(CONTENT_LOAD_LEVEL level);
     void unload_liquids(CONTENT_LOAD_LEVEL level);

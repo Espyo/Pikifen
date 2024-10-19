@@ -763,7 +763,9 @@ void gameplay_state::load() {
     get_area_info_from_path(
         path_of_area_to_load, &area_folder_name, &area_type
     );
-    load_area(area_folder_name, area_type, CONTENT_LOAD_LEVEL_FULL, false);
+    game.content.load_area(
+        area_folder_name, CONTENT_LOAD_LEVEL_FULL, area_type, false
+    );
     
     if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);
@@ -1092,16 +1094,16 @@ void gameplay_state::load() {
  * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
-    game.content.load(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_FULL);
     
     //Mob types.
-    game.content.load(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_FULL);
     
     //Register leader sub-group types.
     for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
@@ -1210,14 +1212,14 @@ void gameplay_state::unload() {
 void gameplay_state::unload_game_content() {
     subgroup_types.clear();
     
-    game.content.unload(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_FULL);
-    game.content.unload(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_FULL);
+    game.content.unload_all(CONTENT_TYPE_WEATHER_CONDITION);
+    game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
+    game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
+    game.content.unload_all(CONTENT_TYPE_HAZARD);
+    game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
+    game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
+    game.content.unload_all(CONTENT_TYPE_LIQUID);
+    game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
 }
 
 

@@ -15,6 +15,7 @@
 
 #include "../functions.h"
 #include "../game.h"
+#include "../utils/allegro_utils.h"
 #include "../utils/string_utils.h"
 
 
@@ -890,15 +891,520 @@ size_t area_data::get_nr_path_links() {
 
 
 /**
- * @brief Loads area data from a data node.
+ * @brief Loads the area's main data from a data node.
  *
  * @param node Data node to load from.
+ * @param level Level to load at.
  */
-void area_data::load_from_data_node(data_node* node) {
+void area_data::load_main_data_from_data_node(
+    data_node* node, CONTENT_LOAD_LEVEL level
+) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
-    //TODO move the rest of the area loading process here.
+    //Area configuration data.
+    reader_setter rs(node);
+    data_node* weather_node = nullptr;
+    data_node* song_node = nullptr;
+    
+    rs.set("subtitle", subtitle);
+    rs.set("difficulty", difficulty);
+    rs.set("spray_amounts", spray_amounts);
+    rs.set("song", song_name, &song_node);
+    rs.set("weather", weather_name, &weather_node);
+    rs.set("day_time_start", day_time_start);
+    rs.set("day_time_speed", day_time_speed);
+    rs.set("bg_bmp", bg_bmp_file_name);
+    rs.set("bg_color", bg_color);
+    rs.set("bg_dist", bg_dist);
+    rs.set("bg_zoom", bg_bmp_zoom);
+    
+    //load_area_mission_data(node, mission); //TODO
+    
+    //Weather.
+    if(weather_name.empty()) {
+        weather_condition = weather();
+        
+    } else if(
+        game.content.weather_conditions.find(weather_name) ==
+        game.content.weather_conditions.end()
+    ) {
+        game.errors.report(
+            "Unknown weather condition \"" + weather_name + "\"!",
+            weather_node
+        );
+        weather_condition = weather();
+        
+    } else {
+        weather_condition =
+            game.content.weather_conditions[weather_name];
+            
+    }
+    
+    //Song.
+    if(
+        !song_name.empty() &&
+        game.audio.songs.find(song_name) ==
+        game.audio.songs.end()
+    ) {
+        game.errors.report(
+            "Unknown song \"" + song_name + "\"!",
+            song_node
+        );
+    }
+    
+    if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_file_name.empty()) {
+        bg_bmp = game.textures.get(bg_bmp_file_name, node);
+    }
+}
+
+
+/**
+ * @brief Loads the area's geometry from a data node.
+ *
+ * @param node Data node to load from.
+ * @param level Level to load at.
+ */
+void area_data::load_geometry_from_data_node(
+    data_node* node, CONTENT_LOAD_LEVEL level
+) {
+    //Vertexes.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Vertexes");
+    }
+    
+    size_t n_vertexes =
+        node->get_child_by_name(
+            "vertexes"
+        )->get_nr_of_children_by_name("v");
+    for(size_t v = 0; v < n_vertexes; v++) {
+        data_node* vertex_data =
+            node->get_child_by_name(
+                "vertexes"
+            )->get_child_by_name("v", v);
+        vector<string> words = split(vertex_data->value);
+        if(words.size() == 2) {
+            vertexes.push_back(
+                new vertex(s2f(words[0]), s2f(words[1]))
+            );
+        }
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Edges.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Edges");
+    }
+    
+    size_t n_edges =
+        node->get_child_by_name(
+            "edges"
+        )->get_nr_of_children_by_name("e");
+    for(size_t e = 0; e < n_edges; e++) {
+        data_node* edge_data =
+            node->get_child_by_name(
+                "edges"
+            )->get_child_by_name("e", e);
+        edge* new_edge = new edge();
+        
+        vector<string> s_idxs = split(edge_data->get_child_by_name("s")->value);
+        if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
+        for(size_t s = 0; s < 2; s++) {
+            if(s_idxs[s] == "-1") new_edge->sector_idxs[s] = INVALID;
+            else new_edge->sector_idxs[s] = s2i(s_idxs[s]);
+        }
+        
+        vector<string> v_idxs = split(edge_data->get_child_by_name("v")->value);
+        if(v_idxs.size() < 2) v_idxs.insert(v_idxs.end(), 2, "0");
+        
+        new_edge->vertex_idxs[0] = s2i(v_idxs[0]);
+        new_edge->vertex_idxs[1] = s2i(v_idxs[1]);
+        
+        data_node* shadow_length =
+            edge_data->get_child_by_name("shadow_length");
+        if(!shadow_length->value.empty()) {
+            new_edge->wall_shadow_length =
+                s2f(shadow_length->value);
+        }
+        
+        data_node* shadow_color =
+            edge_data->get_child_by_name("shadow_color");
+        if(!shadow_color->value.empty()) {
+            new_edge->wall_shadow_color = s2c(shadow_color->value);
+        }
+        
+        data_node* smoothing_length =
+            edge_data->get_child_by_name("smoothing_length");
+        if(!smoothing_length->value.empty()) {
+            new_edge->ledge_smoothing_length =
+                s2f(smoothing_length->value);
+        }
+        
+        data_node* smoothing_color =
+            edge_data->get_child_by_name("smoothing_color");
+        if(!smoothing_color->value.empty()) {
+            new_edge->ledge_smoothing_color =
+                s2c(smoothing_color->value);
+        }
+        
+        edges.push_back(new_edge);
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Sectors.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Sectors");
+    }
+    
+    size_t n_sectors =
+        node->get_child_by_name(
+            "sectors"
+        )->get_nr_of_children_by_name("s");
+    for(size_t s = 0; s < n_sectors; s++) {
+        data_node* sector_data =
+            node->get_child_by_name(
+                "sectors"
+            )->get_child_by_name("s", s);
+        sector* new_sector = new sector();
+        
+        size_t new_type =
+            game.sector_types.get_idx(
+                sector_data->get_child_by_name("type")->value
+            );
+        if(new_type == INVALID) {
+            new_type = SECTOR_TYPE_NORMAL;
+        }
+        new_sector->type = (SECTOR_TYPE) new_type;
+        new_sector->is_bottomless_pit =
+            s2b(
+                sector_data->get_child_by_name(
+                    "is_bottomless_pit"
+                )->get_value_or_default("false")
+            );
+        new_sector->brightness =
+            s2f(
+                sector_data->get_child_by_name(
+                    "brightness"
+                )->get_value_or_default(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
+            );
+        new_sector->tag = sector_data->get_child_by_name("tag")->value;
+        new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
+        new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
+        
+        new_sector->texture_info.file_name =
+            sector_data->get_child_by_name("texture")->value;
+        new_sector->texture_info.rot =
+            s2f(sector_data->get_child_by_name("texture_rotate")->value);
+            
+        vector<string> scales =
+            split(sector_data->get_child_by_name("texture_scale")->value);
+        if(scales.size() >= 2) {
+            new_sector->texture_info.scale.x = s2f(scales[0]);
+            new_sector->texture_info.scale.y = s2f(scales[1]);
+        }
+        vector<string> translations =
+            split(sector_data->get_child_by_name("texture_trans")->value);
+        if(translations.size() >= 2) {
+            new_sector->texture_info.translation.x = s2f(translations[0]);
+            new_sector->texture_info.translation.y = s2f(translations[1]);
+        }
+        new_sector->texture_info.tint =
+            s2c(
+                sector_data->get_child_by_name("texture_tint")->
+                get_value_or_default("255 255 255")
+            );
+            
+        if(!new_sector->fade && !new_sector->is_bottomless_pit) {
+            new_sector->texture_info.bitmap =
+                game.textures.get(new_sector->texture_info.file_name, nullptr);
+        }
+        
+        data_node* hazards_node = sector_data->get_child_by_name("hazards");
+        vector<string> hazards_strs =
+            semicolon_list_to_vector(hazards_node->value);
+        for(size_t h = 0; h < hazards_strs.size(); h++) {
+            string hazard_name = hazards_strs[h];
+            if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
+                game.errors.report(
+                    "Unknown hazard \"" + hazard_name +
+                    "\"!", hazards_node
+                );
+            } else {
+                new_sector->hazards.push_back(&(game.content.hazards[hazard_name]));
+            }
+        }
+        new_sector->hazards_str = hazards_node->value;
+        new_sector->hazard_floor =
+            s2b(
+                sector_data->get_child_by_name(
+                    "hazards_floor"
+                )->get_value_or_default("true")
+            );
+            
+        sectors.push_back(new_sector);
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Mobs.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Object generators");
+    }
+    
+    vector<std::pair<size_t, size_t> > mob_links_buffer;
+    size_t n_mobs =
+        node->get_child_by_name("mobs")->get_nr_of_children();
+        
+    for(size_t m = 0; m < n_mobs; m++) {
+    
+        data_node* mob_node =
+            node->get_child_by_name("mobs")->get_child(m);
+            
+        mob_gen* mob_ptr = new mob_gen();
+        
+        mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
+        mob_ptr->angle =
+            s2f(
+                mob_node->get_child_by_name("angle")->get_value_or_default("0")
+            );
+        mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
+        
+        string category_name = mob_node->name;
+        string type_name;
+        mob_category* category =
+            game.mob_categories.get_from_name(category_name);
+        if(category) {
+            type_name = mob_node->get_child_by_name("type")->value;
+            mob_ptr->type = category->get_type(type_name);
+        } else {
+            category = game.mob_categories.get(MOB_CATEGORY_NONE);
+            mob_ptr->type = nullptr;
+        }
+        
+        vector<string> link_strs =
+            split(mob_node->get_child_by_name("links")->value);
+        for(size_t l = 0; l < link_strs.size(); l++) {
+            mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
+        }
+        
+        data_node* stored_inside_node =
+            mob_node->get_child_by_name("stored_inside");
+        if(!stored_inside_node->value.empty()) {
+            mob_ptr->stored_inside = s2i(stored_inside_node->value);
+        }
+        
+        bool valid =
+            category && category->id != MOB_CATEGORY_NONE &&
+            mob_ptr->type;
+            
+        if(!valid) {
+            //Error.
+            mob_ptr->type = nullptr;
+            if(level >= CONTENT_LOAD_LEVEL_FULL) {
+                game.errors.report(
+                    "Unknown mob type \"" + type_name + "\" of category \"" +
+                    mob_node->name + "\"!",
+                    mob_node
+                );
+            }
+        }
+        
+        mob_generators.push_back(mob_ptr);
+    }
+    
+    for(size_t l = 0; l < mob_links_buffer.size(); l++) {
+        size_t f = mob_links_buffer[l].first;
+        size_t s = mob_links_buffer[l].second;
+        mob_generators[f]->links.push_back(
+            mob_generators[s]
+        );
+        mob_generators[f]->link_idxs.push_back(s);
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Paths.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Paths");
+    }
+    
+    size_t n_stops =
+        node->get_child_by_name("path_stops")->get_nr_of_children();
+    for(size_t s = 0; s < n_stops; s++) {
+    
+        data_node* path_stop_node =
+            node->get_child_by_name("path_stops")->get_child(s);
+            
+        path_stop* s_ptr = new path_stop();
+        
+        s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
+        s_ptr->radius = s2f(path_stop_node->get_child_by_name("radius")->value);
+        s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
+        s_ptr->label = path_stop_node->get_child_by_name("label")->value;
+        data_node* links_node = path_stop_node->get_child_by_name("links");
+        size_t n_links = links_node->get_nr_of_children();
+        
+        for(size_t l = 0; l < n_links; l++) {
+        
+            string link_data = links_node->get_child(l)->value;
+            vector<string> link_data_parts = split(link_data);
+            
+            path_link* l_struct =
+                new path_link(
+                s_ptr, nullptr, s2i(link_data_parts[0])
+            );
+            if(link_data_parts.size() >= 2) {
+                l_struct->type = (PATH_LINK_TYPE) s2i(link_data_parts[1]);
+            }
+            
+            s_ptr->links.push_back(l_struct);
+            
+        }
+        
+        s_ptr->radius = std::max(s_ptr->radius, PATHS::MIN_STOP_RADIUS);
+        
+        path_stops.push_back(s_ptr);
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Tree shadows.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Tree shadows");
+    }
+    
+    size_t n_shadows =
+        node->get_child_by_name("tree_shadows")->get_nr_of_children();
+    for(size_t s = 0; s < n_shadows; s++) {
+    
+        data_node* shadow_node =
+            node->get_child_by_name("tree_shadows")->get_child(s);
+            
+        tree_shadow* s_ptr = new tree_shadow();
+        
+        vector<string> words =
+            split(shadow_node->get_child_by_name("pos")->value);
+        s_ptr->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        
+        words = split(shadow_node->get_child_by_name("size")->value);
+        s_ptr->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        
+        s_ptr->angle =
+            s2f(
+                shadow_node->get_child_by_name(
+                    "angle"
+                )->get_value_or_default("0")
+            );
+        s_ptr->alpha =
+            s2i(
+                shadow_node->get_child_by_name(
+                    "alpha"
+                )->get_value_or_default("255")
+            );
+        s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
+        s_ptr->bitmap = game.textures.get(s_ptr->file_name, nullptr);
+        
+        words = split(shadow_node->get_child_by_name("sway")->value);
+        s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        
+        if(s_ptr->bitmap == game.bmp_error && level >= CONTENT_LOAD_LEVEL_FULL) {
+            game.errors.report(
+                "Unknown tree shadow texture \"" + s_ptr->file_name + "\"!",
+                shadow_node
+            );
+        }
+        
+        tree_shadows.push_back(s_ptr);
+        
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Set up stuff.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Geometry calculations");
+    }
+    
+    for(size_t e = 0; e < edges.size(); e++) {
+        fix_edge_pointers(
+            edges[e]
+        );
+    }
+    for(size_t s = 0; s < sectors.size(); s++) {
+        connect_sector_edges(
+            sectors[s]
+        );
+    }
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        connect_vertex_edges(
+            vertexes[v]
+        );
+    }
+    for(size_t s = 0; s < path_stops.size(); s++) {
+        fix_path_stop_pointers(
+            path_stops[s]
+        );
+    }
+    for(size_t s = 0; s < path_stops.size(); s++) {
+        path_stops[s]->calculate_dists();
+    }
+    if(level >= CONTENT_LOAD_LEVEL_FULL) {
+        //Fade sectors that also fade brightness should be
+        //at midway between the two neighbors.
+        for(size_t s = 0; s < sectors.size(); s++) {
+            sector* s_ptr = sectors[s];
+            if(s_ptr->fade) {
+                sector* n1 = nullptr;
+                sector* n2 = nullptr;
+                s_ptr->get_texture_merge_sectors(&n1, &n2);
+                if(n1 && n2) {
+                    s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
+                }
+            }
+        }
+    }
+    
+    
+    //Triangulate everything and save bounding boxes.
+    set<edge*> lone_edges;
+    for(size_t s = 0; s < sectors.size(); s++) {
+        sector* s_ptr = sectors[s];
+        s_ptr->triangles.clear();
+        TRIANGULATION_ERROR res =
+            triangulate_sector(s_ptr, &lone_edges, false);
+            
+        if(res != TRIANGULATION_ERROR_NONE && level == CONTENT_LOAD_LEVEL_EDITOR) {
+            problems.non_simples[s_ptr] = res;
+            problems.lone_edges.insert(
+                lone_edges.begin(), lone_edges.end()
+            );
+        }
+        
+        s_ptr->calculate_bounding_box();
+    }
+    
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR) generate_blockmap();
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 
@@ -1338,9 +1844,10 @@ string get_base_area_folder_path(
     switch(type) {
     case AREA_TYPE_SIMPLE: {
         return result + SIMPLE_AREA_FOLDER_NAME;
-    }
-    case AREA_TYPE_MISSION: {
+    } case AREA_TYPE_MISSION: {
         return result + MISSION_AREA_FOLDER_NAME;
+    } case N_AREA_TYPES: {
+        break;
     }
     }
     return result;

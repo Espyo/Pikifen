@@ -29,6 +29,9 @@ enum AREA_TYPE {
     
     //An area that likely has a goal, constraints, and/or scoring.
     AREA_TYPE_MISSION,
+
+    //Total number of area types.
+    N_AREA_TYPES,
     
 };
 
@@ -279,7 +282,12 @@ struct area_data : public content {
     void generate_blockmap();
     void generate_edges_blockmap(const vector<edge*> &edges);
     size_t get_nr_path_links();
-    void load_from_data_node(data_node* node);
+    void load_main_data_from_data_node(
+        data_node* node, CONTENT_LOAD_LEVEL level
+    );
+    void load_geometry_from_data_node(
+        data_node* node, CONTENT_LOAD_LEVEL level
+    );
     void load_thumbnail(const string &thumbnail_path);
     edge* new_edge();
     sector* new_sector();

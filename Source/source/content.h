@@ -47,10 +47,10 @@ enum CONTENT_TYPE {
     
     //Weather condition.
     CONTENT_TYPE_WEATHER_CONDITION,
-
+    
     //Total number of content types.
     N_CONTENT_TYPES,
-
+    
 };
 
 
@@ -59,16 +59,16 @@ enum CONTENT_LOAD_LEVEL {
 
     //Not loaded in any way.
     CONTENT_LOAD_LEVEL_UNLOADED,
-
-    //Basic. Usually just the internal name and whatever free things come along.
+    
+    //Basic information.
     CONTENT_LOAD_LEVEL_BASIC,
-
-    //Sufficient for menus and/or editors, but not gameplay.
-    CONTENT_LOAD_LEVEL_MENUS,
-
+    
+    //Nearly fully loaded, but without things that aren't needed for editors.
+    CONTENT_LOAD_LEVEL_EDITOR,
+    
     //Fully loaded, including resources and dependencies.
     CONTENT_LOAD_LEVEL_FULL,
-
+    
 };
 
 

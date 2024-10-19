@@ -8,17 +8,20 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
+    Edit area, playtest, leave, reload area, it'll fail
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
     Check Helodity's particle editor
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.91.3
+    Update to Dear ImGui 1.91.4
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
         Use TextLink() and/or TextLinkOpenURL() for the editors' help dialogs?
         Change ImGuiChildFlags_Border to ImGuiChildFlags_Borders
+        Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
+        Add keyboard/gamepad navigation stuff?
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -195,6 +198,10 @@ Next tasks (roughly sorted most important first)
                 When makers want to share their content, they have to fish its requirements from several folders
                 When players want to install content, they have to place it in the right folders
         Implementation
+            Loading
+                When the game needs something to exist in memory, it calls the content manager to load it
+                Content manager is responsible for loading all X into memory, or a specific X, plus performance monitor and packages logic
+                The content's class is responsible only for being fed a data node and to load stuff from it
             All content will need to be able to:
                 Load from the base folder first and then from all packages, in alphabetical order
                 Load resources or not, based on the boolean given

@@ -579,6 +579,8 @@ void results_state::load() {
             conclusion =
                 "Saved this result as a new record!";
         }
+    } case N_AREA_TYPES: {
+        break;
     }
     }
     text_gui_item* conclusion_text =
