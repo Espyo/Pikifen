@@ -63,6 +63,9 @@ private:
     //File name of the file currently being edited.
     string file_name;
     
+    //Whether to use a background texture, if any.
+    ALLEGRO_BITMAP* bg = nullptr;
+
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     
@@ -108,6 +111,8 @@ private:
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     
+    //Whether to use a background texture.
+    bool use_bg = false;
     
     //--- Function declarations ---
     

@@ -44,19 +44,57 @@ void particle_editor::do_drawing() {
  * Dear ImGui rendering process.
  */
 void particle_editor::draw_canvas() {
-    al_use_transform(&game.world_to_screen_transform);
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
         canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
     );
     
     //Background.
-    al_clear_to_color(al_map_rgb(96, 128, 96));
+    if (use_bg && bg) {
+        point texture_tl = canvas_tl;
+        point texture_br = canvas_br;
+        al_transform_coordinates(
+            &game.screen_to_world_transform, &texture_tl.x, &texture_tl.y
+        );
+        al_transform_coordinates(
+            &game.screen_to_world_transform, &texture_br.x, &texture_br.y
+        );
+        ALLEGRO_VERTEX bg_vertexes[4];
+        for (size_t v = 0; v < 4; ++v) {
+            bg_vertexes[v].z = 0;
+            bg_vertexes[v].color = COLOR_WHITE;
+        }
+        //Top-left vertex.
+        bg_vertexes[0].x = canvas_tl.x;
+        bg_vertexes[0].y = canvas_tl.y;
+        bg_vertexes[0].u = texture_tl.x;
+        bg_vertexes[0].v = texture_tl.y;
+        //Top-right vertex.
+        bg_vertexes[1].x = canvas_br.x;
+        bg_vertexes[1].y = canvas_tl.y;
+        bg_vertexes[1].u = texture_br.x;
+        bg_vertexes[1].v = texture_tl.y;
+        //Bottom-right vertex.
+        bg_vertexes[2].x = canvas_br.x;
+        bg_vertexes[2].y = canvas_br.y;
+        bg_vertexes[2].u = texture_br.x;
+        bg_vertexes[2].v = texture_br.y;
+        //Bottom-left vertex.
+        bg_vertexes[3].x = canvas_tl.x;
+        bg_vertexes[3].y = canvas_br.y;
+        bg_vertexes[3].u = texture_tl.x;
+        bg_vertexes[3].v = texture_br.y;
+
+        al_draw_prim(
+            bg_vertexes, nullptr, bg,
+            0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+        );
+    }
+    else {
+        al_clear_to_color(al_map_rgb(128, 144, 128));
+    }
     
-    //Screen dimensions.
-    al_draw_filled_rectangle(
-        0.0f, 0.0f, 100.0f, 100.0f, al_map_rgb(96, 128, 96)
-    );
+    al_use_transform(&game.world_to_screen_transform);
     
     //Grid.
     draw_grid(

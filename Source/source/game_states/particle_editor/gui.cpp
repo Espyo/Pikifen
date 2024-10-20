@@ -15,6 +15,7 @@
 #include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
 #include "../../libs/imgui/imgui_stdlib.h"
+#include "../../load.h"
 
 /**
  * @brief Opens the "load" dialog.
@@ -383,8 +384,74 @@ void particle_editor::process_gui_options_dialog() {
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
-    
+
     process_gui_editor_style();
+
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+
+    //Misc. node.
+    if (saveable_tree_node("options", "Misc.")) {
+
+        //Background texture checkbox.
+        if (ImGui::Checkbox("Use background texture", &use_bg)) {
+            if (!use_bg) {
+                if (bg) {
+                    al_destroy_bitmap(bg);
+                    bg = NULL;
+                }
+                game.options.anim_editor_bg_texture.clear();
+            }
+        }
+        set_tooltip(
+            "Check this to use a repeating texture on the background\n"
+            "of the editor."
+        );
+
+        if (use_bg) {
+            ImGui::Indent();
+
+            //Background texture browse button.
+            if (ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
+                vector<string> f =
+                    prompt_file_dialog(
+                        TEXTURES_FOLDER_PATH,
+                        "Please choose a background texture.",
+                        "*.*", 0, game.display
+                    );
+
+                if (!f.empty() && !f[0].empty()) {
+                    game.options.anim_editor_bg_texture = f[0];
+                    if (bg) {
+                        al_destroy_bitmap(bg);
+                        bg = NULL;
+                    }
+                    bg =
+                        load_bmp(
+                            game.options.anim_editor_bg_texture,
+                            nullptr, false, false, false, true
+                        );
+                }
+            }
+            set_tooltip(
+                "Browse for which texture file to use."
+            );
+
+            //Background texture name.
+            string file_name;
+            if (!game.options.anim_editor_bg_texture.empty()) {
+                file_name =
+                    split(game.options.anim_editor_bg_texture, "/").back();
+            }
+            ImGui::SameLine();
+            ImGui::Text("%s", file_name.c_str());
+
+            ImGui::Unindent();
+        }
+
+        ImGui::TreePop();
+
+    }
 }
 
 

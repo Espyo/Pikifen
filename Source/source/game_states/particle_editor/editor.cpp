@@ -14,6 +14,7 @@
 #include "../../game.h"
 #include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
+#include "../../load.h"
 
 
 namespace PARTICLE_EDITOR {
@@ -174,6 +175,19 @@ void particle_editor::load() {
     game.audio.set_current_song(PARTICLE_EDITOR::SONG_NAME, false);
 
     part_manager = particle_manager(game.options.max_particles);
+
+    if (!game.options.anim_editor_bg_texture.empty()) {
+        bg =
+            load_bmp(
+                game.options.anim_editor_bg_texture,
+                nullptr, false, false, false, true
+            );
+        use_bg = true;
+    }
+    else {
+        use_bg = false;
+    }
+
     if(!auto_load_file.empty()) {
         file_name = auto_load_file;
         load_particle_generator(true);
