@@ -222,7 +222,8 @@ void particle_generator::emit(particle_manager &manager) {
 
         new_p.rotation +=     
             randomf(-rotation_deviation, rotation_deviation);
-
+        new_p.friction +=
+            randomf(-friction_deviation, friction_deviation);
 
         new_p.pos = base_p_pos;
         new_p.origin = base_p_pos;
@@ -349,6 +350,7 @@ void particle_generator::load_from_data_node(
         }
     } else {
         base_particle.file = "";
+        base_particle.bitmap = nullptr;
     }
     
     base_particle.time = base_particle.duration;

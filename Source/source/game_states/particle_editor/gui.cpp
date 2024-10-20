@@ -497,7 +497,8 @@ void particle_editor::process_gui_panel_item() {
 
     ImGui::SameLine();
 
-    ImGui::Text(("Particle Count: " + i2s(part_manager.get_count())).c_str());
+    ImGui::Text(
+        ("Particle Count: " + i2s(part_manager.get_count()) + " / " + i2s(game.options.max_particles)).c_str());
 
     ImGui::Dummy(ImVec2(0, 4));
 
