@@ -37,7 +37,7 @@ struct content_manager {
     //--- Members ---
     
     //List of areas.
-    vector<map<string, area_data>> areas;
+    vector<vector<area_data*> > areas;
     
     //List of particle generators declared by the user.
     map<string, particle_generator> custom_particle_generators;

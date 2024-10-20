@@ -1864,6 +1864,7 @@ void area_editor::load() {
     game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
     load_custom_mob_cat_types(true);
     
@@ -4510,6 +4511,7 @@ void area_editor::unload() {
     
     clear_current_area();
     
+    game.content.unload_all(CONTENT_TYPE_AREA);
     game.content.unload_all(CONTENT_TYPE_WEATHER_CONDITION);
     game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
     game.content.unload_all(CONTENT_TYPE_HAZARD);

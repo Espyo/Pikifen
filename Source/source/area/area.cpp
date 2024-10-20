@@ -919,42 +919,138 @@ void area_data::load_main_data_from_data_node(
     rs.set("bg_dist", bg_dist);
     rs.set("bg_zoom", bg_bmp_zoom);
     
-    //load_area_mission_data(node, mission); //TODO
-    
     //Weather.
-    if(weather_name.empty()) {
-        weather_condition = weather();
-        
-    } else if(
-        game.content.weather_conditions.find(weather_name) ==
-        game.content.weather_conditions.end()
-    ) {
-        game.errors.report(
-            "Unknown weather condition \"" + weather_name + "\"!",
-            weather_node
-        );
-        weather_condition = weather();
-        
-    } else {
-        weather_condition =
-            game.content.weather_conditions[weather_name];
+    if(level > CONTENT_LOAD_LEVEL_BASIC) {
+        if(weather_name.empty()) {
+            weather_condition = weather();
             
-    }
-    
-    //Song.
-    if(
-        !song_name.empty() &&
-        game.audio.songs.find(song_name) ==
-        game.audio.songs.end()
-    ) {
-        game.errors.report(
-            "Unknown song \"" + song_name + "\"!",
-            song_node
-        );
+        } else if(
+            game.content.weather_conditions.find(weather_name) ==
+            game.content.weather_conditions.end()
+        ) {
+            game.errors.report(
+                "Unknown weather condition \"" + weather_name + "\"!",
+                weather_node
+            );
+            weather_condition = weather();
+            
+        } else {
+            weather_condition =
+                game.content.weather_conditions[weather_name];
+                
+        }
+        
+        //Song.
+        if(
+            !song_name.empty() &&
+            game.audio.songs.find(song_name) ==
+            game.audio.songs.end()
+        ) {
+            game.errors.report(
+                "Unknown song \"" + song_name + "\"!",
+                song_node
+            );
+        }
     }
     
     if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_file_name.empty()) {
         bg_bmp = game.textures.get(bg_bmp_file_name, node);
+    }
+}
+
+
+/**
+ * @brief Loads the area's mission data from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void area_data::load_mission_data_from_data_node(data_node* node) {
+    mission.fail_hud_primary_cond = INVALID;
+    mission.fail_hud_secondary_cond = INVALID;
+    
+    reader_setter rs(node);
+    string goal_str;
+    string required_mobs_str;
+    int mission_grading_mode_int = MISSION_GRADING_MODE_GOAL;
+    
+    rs.set("mission_goal", goal_str);
+    rs.set("mission_goal_amount", mission.goal_amount);
+    rs.set("mission_goal_all_mobs", mission.goal_all_mobs);
+    rs.set("mission_required_mobs", required_mobs_str);
+    rs.set("mission_goal_exit_center", mission.goal_exit_center);
+    rs.set("mission_goal_exit_size", mission.goal_exit_size);
+    rs.set("mission_fail_conditions", mission.fail_conditions);
+    rs.set("mission_fail_too_few_pik_amount", mission.fail_too_few_pik_amount);
+    rs.set("mission_fail_too_many_pik_amount", mission.fail_too_many_pik_amount);
+    rs.set("mission_fail_pik_killed", mission.fail_pik_killed);
+    rs.set("mission_fail_leaders_kod", mission.fail_leaders_kod);
+    rs.set("mission_fail_enemies_killed", mission.fail_enemies_killed);
+    rs.set("mission_fail_time_limit", mission.fail_time_limit);
+    rs.set("mission_fail_hud_primary_cond", mission.fail_hud_primary_cond);
+    rs.set("mission_fail_hud_secondary_cond", mission.fail_hud_secondary_cond);
+    rs.set("mission_grading_mode", mission_grading_mode_int);
+    rs.set("mission_points_per_pikmin_born", mission.points_per_pikmin_born);
+    rs.set("mission_points_per_pikmin_death", mission.points_per_pikmin_death);
+    rs.set("mission_points_per_sec_left", mission.points_per_sec_left);
+    rs.set("mission_points_per_sec_passed", mission.points_per_sec_passed);
+    rs.set("mission_points_per_treasure_point", mission.points_per_treasure_point);
+    rs.set("mission_points_per_enemy_point", mission.points_per_enemy_point);
+    rs.set("mission_point_loss_data", mission.point_loss_data);
+    rs.set("mission_point_hud_data", mission.point_hud_data);
+    rs.set("mission_starting_points", mission.starting_points);
+    rs.set("mission_bronze_req", mission.bronze_req);
+    rs.set("mission_silver_req", mission.silver_req);
+    rs.set("mission_gold_req", mission.gold_req);
+    rs.set("mission_platinum_req", mission.platinum_req);
+    
+    mission.goal = MISSION_GOAL_END_MANUALLY;
+    for(size_t g = 0; g < game.mission_goals.size(); g++) {
+        if(game.mission_goals[g]->get_name() == goal_str) {
+            mission.goal = (MISSION_GOAL) g;
+            break;
+        }
+    }
+    vector<string> mission_required_mobs_strs =
+        split(required_mobs_str, ";");
+    mission.goal_mob_idxs.reserve(
+        mission_required_mobs_strs.size()
+    );
+    for(size_t m = 0; m < mission_required_mobs_strs.size(); m++) {
+        mission.goal_mob_idxs.insert(
+            s2i(mission_required_mobs_strs[m])
+        );
+    }
+    mission.grading_mode = (MISSION_GRADING_MODE) mission_grading_mode_int;
+    
+    //Automatically turn the pause menu fail condition on/off for convenience.
+    if(mission.goal == MISSION_GOAL_END_MANUALLY) {
+        disable_flag(
+            mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    } else {
+        enable_flag(
+            mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    }
+    
+    //Automatically turn off the seconds left score criterion for convenience.
+    if(
+        !has_flag(
+            mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        mission.points_per_sec_left = 0;
+        disable_flag(
+            mission.point_hud_data,
+            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
+        disable_flag(
+            mission.point_loss_data,
+            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
     }
 }
 

@@ -150,21 +150,22 @@ void area_menu_state::change_info(size_t area_idx) {
     }
     
     //Fill in the area's info.
-    info_name_text->text = area_names[area_idx];
+    area_data* area_ptr = game.content.areas[area_type][area_idx];
+    info_name_text->text = area_ptr->name;
     subtitle_text->text =
         get_subtitle_or_mission_goal(
-            area_subtitles[area_idx],
+            area_ptr->subtitle,
             area_type,
-            area_mission_data[area_idx].goal
+            area_ptr->mission.goal
         );
-    description_text->text = area_descriptions[area_idx];
-    if(area_difficulties[area_idx] == 0) {
+    description_text->text = area_ptr->description;
+    if(area_ptr->difficulty == 0) {
         difficulty_text->text.clear();
     } else {
         difficulty_text->text =
             "Difficulty: " +
-            i2s(area_difficulties[area_idx]) + "/5 - ";
-        switch(area_difficulties[area_idx]) {
+            i2s(area_ptr->difficulty) + "/5 - ";
+        switch(area_ptr->difficulty) {
         case 1: {
             difficulty_text->text += "Very easy";
             break;
@@ -184,31 +185,19 @@ void area_menu_state::change_info(size_t area_idx) {
         }
     }
     tags_text->text =
-        (
-            area_tags[area_idx].empty() ?
-            "" :
-            "Tags: " + area_tags[area_idx]
-        );
+        (area_ptr->tags.empty() ? "" : "Tags: " + area_ptr->tags);
     maker_text->text =
-        (
-            area_makers[area_idx].empty() ?
-            "" :
-            "Maker: " + area_makers[area_idx]
-        );
+        (area_ptr->maker.empty() ? "" : "Maker: " + area_ptr->maker);
     version_text->text =
-        (
-            area_versions[area_idx].empty() ?
-            "" :
-            "Version: " + area_versions[area_idx]
-        );
-    cur_thumb = area_thumbs[area_idx];
+        (area_ptr->version.empty() ? "" : "Version: " + area_ptr->version);
+    cur_thumb = area_ptr->thumbnail.get();
     if(area_type == AREA_TYPE_MISSION) {
         int score = area_records[area_idx].score;
         bool record_exists = !area_records[area_idx].date.empty();
         record_info_text->text =
             !record_exists ?
             "(None)" :
-            area_mission_data[area_idx].grading_mode ==
+            area_ptr->mission.grading_mode ==
             MISSION_GRADING_MODE_POINTS ?
             amount_str(score, "point") :
             "";
@@ -221,15 +210,15 @@ void area_menu_state::change_info(size_t area_idx) {
         if(!record_exists) {
             cur_medal = nullptr;
         } else {
-            switch(area_mission_data[area_idx].grading_mode) {
+            switch(area_ptr->mission.grading_mode) {
             case MISSION_GRADING_MODE_POINTS: {
-                if(score >= area_mission_data[area_idx].platinum_req) {
+                if(score >= area_ptr->mission.platinum_req) {
                     cur_medal = game.sys_assets.bmp_medal_platinum;
-                } else if(score >= area_mission_data[area_idx].gold_req) {
+                } else if(score >= area_ptr->mission.gold_req) {
                     cur_medal = game.sys_assets.bmp_medal_gold;
-                } else if(score >= area_mission_data[area_idx].silver_req) {
+                } else if(score >= area_ptr->mission.silver_req) {
                     cur_medal = game.sys_assets.bmp_medal_silver;
-                } else if(score >= area_mission_data[area_idx].bronze_req) {
+                } else if(score >= area_ptr->mission.bronze_req) {
                     cur_medal = game.sys_assets.bmp_medal_bronze;
                 } else {
                     cur_medal = game.sys_assets.bmp_medal_none;
@@ -251,8 +240,8 @@ void area_menu_state::change_info(size_t area_idx) {
     
     //Now fill in the mission specs.
     if(area_type == AREA_TYPE_MISSION) {
-        specs_name_text->text = area_names[area_idx];
-        mission_data &mission = area_mission_data[area_idx];
+        specs_name_text->text = area_ptr->name;
+        mission_data &mission = area_ptr->mission;
         goal_text->text =
             game.mission_goals[mission.goal]->
             get_player_description(&mission);
@@ -443,7 +432,7 @@ void area_menu_state::init_gui_info_page() {
         data_node(AREA_MENU::INFO_GUI_FILE_PATH).get_child_by_name("positions")
     );
     
-    if(!areas_to_pick.empty()) {
+    if(!game.content.areas[area_type].empty()) {
     
         //Name text.
         info_name_text =
@@ -612,7 +601,7 @@ void area_menu_state::init_gui_main() {
     );
     gui.add_item(header_text, "header");
     
-    if(!areas_to_pick.empty()) {
+    if(!game.content.areas[area_type].empty()) {
     
         //Area list box.
         list_box = new list_gui_item();
@@ -624,15 +613,14 @@ void area_menu_state::init_gui_main() {
         gui.add_item(list_scroll, "list_scroll");
         
         //Items for the various areas.
-        for(size_t a = 0; a < areas_to_pick.size(); a++) {
-            string area_name = area_names[a];
-            string area_folder = areas_to_pick[a];
+        for(size_t a = 0; a < game.content.areas[area_type].size(); a++) {
+            area_data* area_ptr = game.content.areas[area_type][a];
             const float BUTTON_HEIGHT = 0.09f;
             const float center_y = 0.045f + a * 0.10f;
             
             //Area button.
             button_gui_item* area_button =
-                new button_gui_item(area_name, game.sys_assets.fnt_standard);
+                new button_gui_item(area_ptr->name, game.sys_assets.fnt_standard);
             area_button->center =
                 point(
                     area_type == AREA_TYPE_MISSION ? 0.40f : 0.50f,
@@ -644,10 +632,10 @@ void area_menu_state::init_gui_main() {
                     BUTTON_HEIGHT
                 );
             area_button->on_activate =
-            [this, area_folder] (const point &) {
+            [this, area_ptr] (const point &) {
                 game.states.gameplay->path_of_area_to_load =
                     get_base_area_folder_path(area_type, true) + "/" +
-                    area_folder;
+                    area_ptr->path;
                 game.fade_mgr.start_fade(false, [] () {
                     game.change_state(game.states.gameplay);
                 });
@@ -655,7 +643,7 @@ void area_menu_state::init_gui_main() {
             area_button->on_selected =
             [this, a] () { change_info(a); };
             area_button->on_get_tooltip =
-            [area_name] () { return "Play " + area_name + "."; };
+            [area_ptr] () { return "Play " + area_ptr->name + "."; };
             list_box->add_child(area_button);
             gui.add_item(area_button);
             area_buttons.push_back(area_button);
@@ -689,18 +677,18 @@ void area_menu_state::init_gui_main() {
                 medal_item->size =
                     point(0.12f, BUTTON_HEIGHT * 0.60f);
                 medal_item->on_draw =
-                [this, a] (const point & center, const point & size) {
+                [this, area_ptr, a] (const point & center, const point & size) {
                     ALLEGRO_BITMAP* medal_bmp = nullptr;
-                    switch(area_mission_data[a].grading_mode) {
+                    switch(area_ptr->mission.grading_mode) {
                     case MISSION_GRADING_MODE_POINTS: {
                         int score = area_records[a].score;
-                        if(score >= area_mission_data[a].platinum_req) {
+                        if(score >= area_ptr->mission.platinum_req) {
                             medal_bmp = game.sys_assets.bmp_medal_platinum;
-                        } else if(score >= area_mission_data[a].gold_req) {
+                        } else if(score >= area_ptr->mission.gold_req) {
                             medal_bmp = game.sys_assets.bmp_medal_gold;
-                        } else if(score >= area_mission_data[a].silver_req) {
+                        } else if(score >= area_ptr->mission.silver_req) {
                             medal_bmp = game.sys_assets.bmp_medal_silver;
-                        } else if(score >= area_mission_data[a].bronze_req) {
+                        } else if(score >= area_ptr->mission.bronze_req) {
                             medal_bmp = game.sys_assets.bmp_medal_bronze;
                         }
                         break;
@@ -842,7 +830,7 @@ void area_menu_state::init_gui_specs_page() {
         data_node(AREA_MENU::SPECS_GUI_FILE_PATH).get_child_by_name("positions")
     );
     
-    if(!areas_to_pick.empty()) {
+    if(!game.content.areas[area_type].empty()) {
     
         //Name text.
         specs_name_text =
@@ -921,75 +909,26 @@ void area_menu_state::load() {
     cur_stamp = nullptr;
     cur_medal = nullptr;
     show_mission_specs = false;
-    
-    //Areas.
-    areas_to_pick =
-        folder_to_vector(
-            get_base_area_folder_path(area_type, true),
-            true
-        );
-        
-    for(size_t a = 0; a < areas_to_pick.size(); a++) {
-        string actual_name = areas_to_pick[a];
-        data_node data(
-            get_base_area_folder_path(area_type, true) +
-            "/" + actual_name + "/" + AREA_DATA_FILE_NAME
-        );
-        if(data.file_was_opened) {
-            const string& s = data.get_child_by_name("name")->value;
-            if(!s.empty()) {
-                actual_name = s;
-            }
-        }
-        
-        area_names.push_back(
-            actual_name
-        );
-        area_subtitles.push_back(
-            data.get_child_by_name("subtitle")->value
-        );
-        area_descriptions.push_back(
-            data.get_child_by_name("description")->value
-        );
-        area_difficulties.push_back(
-            s2i(data.get_child_by_name("difficulty")->value)
-        );
-        area_tags.push_back(
-            data.get_child_by_name("tags")->value
-        );
-        area_makers.push_back(
-            data.get_child_by_name("maker")->value
-        );
-        area_versions.push_back(
-            data.get_child_by_name("version")->value
-        );
-        
-        string thumbnail_path =
-            get_base_area_folder_path(area_type, true) +
-            "/" + areas_to_pick[a] + "/Thumbnail.png";
-            
-        area_thumbs.push_back(al_load_bitmap(thumbnail_path.c_str()));
-        
-        area_mission_data.push_back(mission_data());
-        load_area_mission_data(&data, area_mission_data.back());
-    }
+
+    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
     //Mission records.
     if(area_type == AREA_TYPE_MISSION) {
         data_node mission_records;
         mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
         
-        for(size_t a = 0; a < areas_to_pick.size(); a++) {
+        for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
+            area_data* area_ptr = game.content.areas[AREA_TYPE_MISSION][a];
             mission_record record;
             
             load_area_mission_record(
                 &mission_records,
-                area_names[a],
+                area_ptr->name,
                 get_subtitle_or_mission_goal(
-                    area_subtitles[a], area_type, area_mission_data[a].goal
+                    area_ptr->subtitle, area_type, area_ptr->mission.goal
                 ),
-                area_makers[a],
-                area_versions[a],
+                area_ptr->maker,
+                area_ptr->version,
                 record
             );
             
@@ -1001,7 +940,7 @@ void area_menu_state::load() {
     
     init_gui_main();
     init_gui_info_page();
-    if(area_type == AREA_TYPE_MISSION && !areas_to_pick.empty()) {
+    if(area_type == AREA_TYPE_MISSION && !game.content.areas[AREA_TYPE_MISSION].empty()) {
         init_gui_specs_page();
         specs_box->visible = false;
         specs_box->responsive = false;
@@ -1029,26 +968,13 @@ void area_menu_state::unload() {
     gui.destroy();
     
     //Misc
-    areas_to_pick.clear();
     area_buttons.clear();
-    area_names.clear();
-    area_subtitles.clear();
-    area_descriptions.clear();
-    area_difficulties.clear();
-    area_tags.clear();
-    area_makers.clear();
-    area_versions.clear();
-    area_mission_data.clear();
     area_records.clear();
     
     cur_thumb = nullptr;
     cur_stamp = nullptr;
     cur_medal = nullptr;
-    for(size_t a = 0; a < area_thumbs.size(); a++) {
-        if(area_thumbs[a]) {
-            al_destroy_bitmap(area_thumbs[a]);
-        }
-    }
-    area_thumbs.clear();
+
+    game.content.unload_all(CONTENT_TYPE_AREA);
     
 }

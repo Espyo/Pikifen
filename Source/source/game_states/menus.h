@@ -568,38 +568,8 @@ private:
     //Bitmap of the menu background,
     ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
     
-    //Folder name of each area available.
-    vector<string> areas_to_pick;
-    
     //Button for each area available.
     vector<gui_item*> area_buttons;
-    
-    //Display name of each area available.
-    vector<string> area_names;
-    
-    //Subtitle of each area available.
-    vector<string> area_subtitles;
-    
-    //Description of each area available.
-    vector<string> area_descriptions;
-    
-    //Difficulty of each area available.
-    vector<unsigned char> area_difficulties;
-    
-    //Tags of each area available.
-    vector<string> area_tags;
-    
-    //Maker of each area available.
-    vector<string> area_makers;
-    
-    //Version of each area available.
-    vector<string> area_versions;
-    
-    //Thumbnail of each area available.
-    vector<ALLEGRO_BITMAP*> area_thumbs;
-    
-    //Mission data of each area available.
-    vector<mission_data> area_mission_data;
     
     //Records of each area available.
     vector<mission_record> area_records;

@@ -22,7 +22,6 @@
 using std::string;
 
 
-void load_area_mission_data(data_node* node, mission_data &data);
 void load_area_mission_record(
     data_node* file,
     const string &area_name, const string &area_subtitle,

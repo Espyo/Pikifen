@@ -177,6 +177,8 @@ void stats_menu_state::load() {
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
     
+    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
+    
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
     gui.register_coords("header",      50,  5, 50,  6);
@@ -327,12 +329,6 @@ void stats_menu_state::populate_stats_list() {
         "Total amount of times a spray was used."
     );
     
-    vector<string> mission_folders =
-        folder_to_vector(
-            get_base_area_folder_path(AREA_TYPE_MISSION, true),
-            true
-        );
-        
     data_node mission_records_file;
     mission_records_file.load_file(
         MISSION_RECORDS_FILE_PATH, true, false, true
@@ -342,30 +338,20 @@ void stats_menu_state::populate_stats_list() {
     size_t mission_platinums = 0;
     long mission_scores = 0;
     
-    for(size_t a = 0; a < mission_folders.size(); a++) {
-        string name = mission_folders[a];
-        data_node data(
-            get_base_area_folder_path(AREA_TYPE_MISSION, true) +
-            "/" + mission_folders[a] + "/" + AREA_DATA_FILE_NAME
-        );
-        if(!data.file_was_opened) continue;
-        string s = data.get_child_by_name("name")->value;
-        if(!s.empty()) {
-            name = s;
-        }
+    for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
+        area_data* area_ptr = game.content.areas[AREA_TYPE_MISSION][a];
         mission_data mission;
         mission_record record;
-        load_area_mission_data(&data, mission);
         load_area_mission_record(
             &mission_records_file,
-            name,
+            area_ptr->name,
             get_subtitle_or_mission_goal(
-                data.get_child_by_name("subtitle")->value,
+                area_ptr->subtitle,
                 AREA_TYPE_MISSION,
                 mission.goal
             ),
-            data.get_child_by_name("maker")->value,
-            data.get_child_by_name("version")->value,
+            area_ptr->maker,
+            area_ptr->version,
             record
         );
         if(record.clear) {
@@ -382,12 +368,12 @@ void stats_menu_state::populate_stats_list() {
     add_header("Missions");
     add_stat(
         "Cleared",
-        i2s(mission_clears) + "/" + i2s(mission_folders.size()),
+        i2s(mission_clears) + "/" + i2s(game.content.areas[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a goal clear."
     );
     add_stat(
         "Platinum medals",
-        i2s(mission_platinums) + "/" + i2s(mission_folders.size()),
+        i2s(mission_platinums) + "/" + i2s(game.content.areas[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a platinum medal."
     );
     add_stat(
@@ -404,6 +390,8 @@ void stats_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
+    
+    game.content.unload_all(CONTENT_TYPE_AREA);
     
     //Menu items.
     gui.destroy();

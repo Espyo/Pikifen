@@ -27,7 +27,7 @@ content_manager::content_manager() {
     for(size_t c = 0; c < N_CONTENT_TYPES; c++) {
         load_levels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
-    areas.insert(areas.begin(), N_AREA_TYPES, map<string, area_data>());
+    areas.insert(areas.begin(), N_AREA_TYPES, vector<area_data*>());
 }
 
 
@@ -99,17 +99,18 @@ void content_manager::load_area(
     //Setup.
     string data_file_path;
     string geometry_file_path;
+    string folder_name = split(path, "/").back();;
     
     if(from_backup) {
         string base_folder =
             get_base_area_folder_path(type, false) +
-            "/" + path;
+            "/" + folder_name;
         data_file_path = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
         geometry_file_path = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
     } else {
         string base_folder =
             get_base_area_folder_path(type, true) +
-            "/" + path;
+            "/" + folder_name;
         data_file_path = base_folder + "/" + AREA_DATA_FILE_NAME;
         geometry_file_path = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
     }
@@ -119,52 +120,53 @@ void content_manager::load_area(
     data_node geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return;
     
-    area_data new_area;
+    area_data* new_area = new area_data();
     
-    new_area.folder_name = path;
-    new_area.path =
-        get_base_area_folder_path(type, true) +
-        "/" + path;
-    new_area.type = type;
+    new_area->folder_name = folder_name;
+    new_area->path = path;
+    new_area->type = type;
     
     //Main data.
     if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
-    new_area.load_main_data_from_data_node(&data_file, level);
+    new_area->load_main_data_from_data_node(&data_file, level);
+    new_area->load_mission_data_from_data_node(&data_file);
     if(game.perf_mon) game.perf_mon->finish_measurement();
     
     //Loading screen.
-    if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
-    if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
-    game.loading_text_bmp = nullptr;
-    game.loading_subtext_bmp = nullptr;
-    draw_loading_screen(
-        new_area.name,
-        get_subtitle_or_mission_goal(
-            new_area.subtitle,
-            new_area.type,
-            new_area.mission.goal
-        ),
-        1.0f
-    );
-    al_flip_display();
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
+        if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
+        if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
+        game.loading_text_bmp = nullptr;
+        game.loading_subtext_bmp = nullptr;
+        draw_loading_screen(
+            new_area->name,
+            get_subtitle_or_mission_goal(
+                new_area->subtitle,
+                new_area->type,
+                new_area->mission.goal
+            ),
+            1.0f
+        );
+        al_flip_display();
+    }
     
     //Thumbnail image.
     string thumbnail_path =
         get_base_area_folder_path(type, !from_backup) +
         "/" + path +
         (from_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
-    new_area.load_thumbnail(thumbnail_path);
+    new_area->load_thumbnail(thumbnail_path);
     
     //Geometry.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
         if(game.perf_mon) game.perf_mon->start_measurement("Area -- Geometry");
-        new_area.load_geometry_from_data_node(&geometry_file, level);
+        new_area->load_geometry_from_data_node(&geometry_file, level);
         if(game.perf_mon) game.perf_mon->finish_measurement();
     }
     
     //Finish up.
-    areas[type][new_area.name] = new_area;
-    game.cur_area_data = new_area; //TODO turn game.cur_area_data to a pointer
+    areas[type].push_back(new_area);
+    //game.cur_area_data = new_area; //TODO turn game.cur_area_data to a pointer
 }
 
 
@@ -178,7 +180,7 @@ void content_manager::load_areas(const string &folder, CONTENT_LOAD_LEVEL level)
     const string simple_areas_path =
         GAME_DATA_FOLDER_PATH + "/" + SIMPLE_AREA_FOLDER_NAME;
     vector<string> simple_area_files =
-        folder_to_vector(simple_areas_path, false);
+        folder_to_vector(simple_areas_path, true);
     for(size_t a = 0; a < simple_area_files.size(); a++) {
         load_area(
             folder + "/" + simple_area_files[a],
@@ -189,7 +191,7 @@ void content_manager::load_areas(const string &folder, CONTENT_LOAD_LEVEL level)
     const string mission_areas_path =
         GAME_DATA_FOLDER_PATH + "/" + MISSION_AREA_FOLDER_NAME;
     vector<string> mission_area_files =
-        folder_to_vector(mission_areas_path, false);
+        folder_to_vector(mission_areas_path, true);
     for(size_t a = 0; a < mission_area_files.size(); a++) {
         load_area(
             folder + "/" + mission_area_files[a],
@@ -785,7 +787,12 @@ void content_manager::unload_all(CONTENT_TYPE type) {
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_areas(CONTENT_LOAD_LEVEL level) {
-    areas.clear();
+    for(size_t t = 0; t < areas.size(); t++) {
+        for(size_t a = 0; a < areas[t].size(); a++) {
+            delete areas[t][a];
+        }
+        areas[t].clear();
+    }
 }
 
 

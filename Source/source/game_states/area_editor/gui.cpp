@@ -28,26 +28,11 @@
 void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
-    //Process the simple areas first.
-    vector<string> folders =
-        folder_to_vector(
-            get_base_area_folder_path(AREA_TYPE_SIMPLE, true),
-            true
-        );
-        
-    for(size_t f = 0; f < folders.size(); f++) {
-        areas.push_back(picker_item(folders[f], "Simple"));
+    for(size_t a = 0; a < game.content.areas[AREA_TYPE_SIMPLE].size(); a++) {
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->name, "Simple"));
     }
-    
-    //Now, the mission ones.
-    folders =
-        folder_to_vector(
-            get_base_area_folder_path(AREA_TYPE_MISSION, true),
-            true
-        );
-        
-    for(size_t f = 0; f < folders.size(); f++) {
-        areas.push_back(picker_item(folders[f], "Mission"));
+    for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->name, "Mission"));
     }
     
     //Set up the picker's behavior and data.
