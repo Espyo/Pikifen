@@ -82,7 +82,7 @@ private:
     bool leader_silhouette_visible = false;
 
     //Is the position offset visible?
-    bool position_outline_visible = false;
+    bool emission_offset_visible = false;
 
     //Selected color keyframe
     size_t selected_color_keyframe = 0;
@@ -134,6 +134,8 @@ private:
     void zoom_and_pos_reset_cmd(float input_value);
     void zoom_in_cmd(float input_value);
     void zoom_out_cmd(float input_value);
+    void clear_particles_cmd(float input_value);
+    void emission_outline_toggle_cmd(float input_value);
     void leader_silhouette_toggle_cmd(float input_value);
     void particle_playback_toggle_cmd(float input_value);
     void process_gui();

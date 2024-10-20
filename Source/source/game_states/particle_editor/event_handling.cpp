@@ -71,6 +71,18 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
         save_cmd(1.0f);
         
+    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
+        particle_playback_toggle_cmd(1.0f);
+
+    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
+        clear_particles_cmd(1.0f);
+
+    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        leader_silhouette_toggle_cmd(1.0f);
+
+    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
+        emission_outline_toggle_cmd(1.0f);
+
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
         

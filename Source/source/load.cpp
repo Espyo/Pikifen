@@ -1216,6 +1216,15 @@ void load_options() {
             game.states.gui_ed->history[h]
         );
     }
+    game.states.particle_ed->history.clear();
+    for (size_t h = 0; h < game.states.particle_ed->get_history_size(); ++h) {
+        game.states.particle_ed->history.push_back("");
+        rs.set(
+            game.states.particle_ed->get_history_option_prefix() +
+            i2s(h + 1),
+            game.states.particle_ed->history[h]
+        );
+    }
     
     //Final setup.
     controls_manager_options controls_mgr_options;

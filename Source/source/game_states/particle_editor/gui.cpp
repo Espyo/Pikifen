@@ -395,6 +395,7 @@ void particle_editor::process_gui_panel_item() {
     if(!loaded_content_yet)
         return;
 
+    ImGui::Dummy(ImVec2(0, 4));
     //Play/pause button.
     if (
         ImGui::ImageButton(
@@ -410,350 +411,412 @@ void particle_editor::process_gui_panel_item() {
         "Spacebar"
     );
 
-    if (ImGui::BeginTabBar("particleTabs")) {
-        if (ImGui::BeginTabItem("Emission")) {
+    ImGui::SameLine();
 
-            ImGui::Dummy(ImVec2(0, 4));
+    //Clear particles button.
+    if (
+        ImGui::ImageButton(
+            "clearParticlesButton",
+            editor_icons[EDITOR_ICON_REMOVE],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+        ) {
+        clear_particles_cmd(1.0f);
+    }
+    set_tooltip(
+        "Delete existing particles",
+        "Spacebar"
+    );
 
-            //Emission Interval value.
-            if (
-                ImGui::DragFloat(
-                    "Emission Interval", &loaded_gen.emission.interval, 0.01f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "How long between particle emissions, in seconds.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
+    ImGui::SameLine();
 
-            ImGui::Indent();
-            //Interval Deviation value.
+    ImGui::Text(("Particle Count: " + i2s(part_manager.get_count())).c_str());
+
+    ImGui::Dummy(ImVec2(0, 4));
+
+    if (saveable_tree_node("emission","Emission")) {
+
+        ImGui::Dummy(ImVec2(0, 4));
+
+        //Emission Interval value.
+        if (
+            ImGui::DragFloat(
+                "Emission Interval", &loaded_gen.emission.interval, 0.01f, 0.0f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "How long between particle emissions, in seconds.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        ImGui::Indent();
+        //Interval Deviation value.
+        ImGui::SetNextItemWidth(75);
+        if (
+            ImGui::DragFloat(
+                "Interval deviation", &loaded_gen.emission.interval_deviation, 0.01f, 0.0f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "The emission interval can vary by this amount.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+        ImGui::Dummy(ImVec2(0, 4));
+
+        //Number value.
+        int number = (int)loaded_gen.emission.number;
+        if (
+            ImGui::DragInt(
+                "Number", &number, 1, 1, game.options.max_particles
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "How many particles are emitted per interval.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        loaded_gen.emission.number = number;
+
+        ImGui::Indent();
+
+        //Number Deviation value.
+        ImGui::SetNextItemWidth(75);
+        int number_dev = (int)loaded_gen.emission.number_deviation;
+        if (
+            ImGui::DragInt(
+                "Number deviation", &number_dev, 1, 0.0f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "The amount of particles emitted is changed by this amount.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        loaded_gen.emission.number_deviation = number_dev;
+        ImGui::Unindent();
+        ImGui::Dummy(ImVec2(0, 4));
+
+        int shape = loaded_gen.emission.shape;
+        ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
+        ImGui::RadioButton("Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE);
+
+        loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
+
+        switch (loaded_gen.emission.shape)
+        {
+        case PARTICLE_EMISSION_SHAPE_CIRCLE:
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Interval deviation", &loaded_gen.emission.interval_deviation, 0.01f, 0.0f, FLT_MAX
+                    "Min radius", &loaded_gen.emission.min_circular_radius, 0.1f, 0.0f, loaded_gen.emission.max_circular_radius
                 )
                 ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "The emission interval can vary by this amount.",
+                "A particle's position varies by at least this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            ImGui::Unindent();
+
+            //DragFloat doesnt clamp 0s right so clamp them manually
+            loaded_gen.emission.min_circular_radius = std::max(loaded_gen.emission.min_circular_radius, 0.0f);
+            ImGui::SameLine();
+            if (
+                ImGui::SetNextItemWidth(75);
+                ImGui::DragFloat(
+                    "Max radius", &loaded_gen.emission.max_circular_radius, 0.1f, loaded_gen.emission.min_circular_radius, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's position varies by at most this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
             ImGui::Dummy(ImVec2(0, 4));
 
-            //Number value.
-            int number = (int)loaded_gen.emission.number;
+            //Emission arc value.
             if (
-                ImGui::DragInt(
-                    "Number", &number, 1, 1, game.options.max_particles
+                ImGui::SliderAngle(
+                    "Arc", &loaded_gen.emission.circular_arc, 0
                 )
                 ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "How many particles are emitted per interval.",
+                "Maximum degrees around the center particles can emit.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.emission.number = number;
 
-            ImGui::Indent();
+            //Emission arc rotation value.
+            if (
+                ImGui::SliderAngle(
+                    "Arc rotation", &loaded_gen.emission.circular_arc_rotation
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "Degress the emission arc is rotated by",
+                "", WIDGET_EXPLANATION_DRAG
+            );
 
-            //Number Deviation value.
+            break;
+        case PARTICLE_EMISSION_SHAPE_RECTANGLE:
+            float min_x = loaded_gen.emission.min_rectangular_offset.x;
+            float min_y = loaded_gen.emission.min_rectangular_offset.y;
+            float max_x = loaded_gen.emission.max_rectangular_offset.x;
+            float max_y = loaded_gen.emission.max_rectangular_offset.y;
             ImGui::SetNextItemWidth(75);
-            int number_dev = (int)loaded_gen.emission.number_deviation;
             if (
-                ImGui::DragInt(
-                    "Number deviation", &number_dev, 1, 0.0f, FLT_MAX
+                ImGui::DragFloat(
+                    "Min x", (float*)&min_x, 0.1f, 0.0f, max_x
                 )
                 ) {
                 changes_mgr.mark_as_changed();
             }
-            set_tooltip(
-                "The amount of particles emitted is changed by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            loaded_gen.emission.number_deviation = number_dev;
-            ImGui::Unindent();
-            ImGui::Dummy(ImVec2(0, 4));
-
-            int shape = loaded_gen.emission.shape;
-            ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
-            ImGui::RadioButton("Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE);
-
-            loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
-
-            switch (loaded_gen.emission.shape)
-            {
-            case PARTICLE_EMISSION_SHAPE_CIRCLE:
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Min radius", &loaded_gen.emission.min_circular_radius, 0.1f, 0.0f, loaded_gen.emission.max_circular_radius
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "A particle's position varies by at least this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-
-                //DragFloat doesnt clamp 0s right so clamp them manually
-                loaded_gen.emission.min_circular_radius = std::max(loaded_gen.emission.min_circular_radius, 0.0f);
-                ImGui::SameLine();
-                if (
-                    ImGui::SetNextItemWidth(75);
-                    ImGui::DragFloat(
-                        "Max radius", &loaded_gen.emission.max_circular_radius, 0.1f, loaded_gen.emission.min_circular_radius, FLT_MAX
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "A particle's position varies by at most this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                ImGui::Dummy(ImVec2(0, 4));
-
-                //Emission arc value.
-                if (
-                    ImGui::SliderAngle(
-                        "Arc", &loaded_gen.emission.circular_arc, 0
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "Maximum degrees around the center particles can emit.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-
-                //Emission arc rotation value.
-                if (
-                    ImGui::SliderAngle(
-                        "Arc rotation", &loaded_gen.emission.circular_arc_rotation
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "Degress the emission arc is rotated by",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-
-                break;
-            case PARTICLE_EMISSION_SHAPE_RECTANGLE:
-                float min_x = loaded_gen.emission.min_rectangular_offset.x;
-                float min_y = loaded_gen.emission.min_rectangular_offset.y;
-                float max_x = loaded_gen.emission.max_rectangular_offset.x;
-                float max_y = loaded_gen.emission.max_rectangular_offset.y;
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Min x", (float*)&min_x, 0.1f, 0.0f, max_x
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                ImGui::SameLine();
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Min y", (float*)&min_y, 0.1f, 0.0f, max_y
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Max x", (float*)&max_x, 0.1f, min_x, FLT_MAX
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                ImGui::SameLine();
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Max y", (float*)&max_y, 0.1f, min_y, FLT_MAX
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                //DragFloat doesnt clamp 0s right so clamp them manually
-                min_x = std::max(min_x, 0.0f);
-                min_y = std::max(min_y, 0.0f);
-                loaded_gen.emission.max_rectangular_offset = point(max_x, max_y);
-                loaded_gen.emission.min_rectangular_offset = point(min_x, min_y);
-
-                break;
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::DragFloat(
+                    "Min y", (float*)&min_y, 0.1f, 0.0f, max_y
+                )
+                ) {
+                changes_mgr.mark_as_changed();
             }
 
-            ImGui::EndTabItem();
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::DragFloat(
+                    "Max x", (float*)&max_x, 0.1f, min_x, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::DragFloat(
+                    "Max y", (float*)&max_y, 0.1f, min_y, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            //DragFloat doesnt clamp 0s right so clamp them manually
+            min_x = std::max(min_x, 0.0f);
+            min_y = std::max(min_y, 0.0f);
+            loaded_gen.emission.max_rectangular_offset = point(max_x, max_y);
+            loaded_gen.emission.min_rectangular_offset = point(min_x, min_y);
+
+            break;
         }
 
-        if (ImGui::BeginTabItem("Visuals", nullptr)) {
+        ImGui::TreePop();
+    }
 
-            ImGui::Dummy(ImVec2(0, 4));
+    if (saveable_tree_node("visuals", "Visuals")) {
 
-            //Remove bitmap button.
-            if (
-                ImGui::ImageButton(
-                    "removeBitmap",
-                    editor_icons[EDITOR_ICON_REMOVE],
-                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                )
-                ) {
-                loaded_gen.base_particle.set_bitmap("");
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Remove the current bitmap"
-            );
+        ImGui::Dummy(ImVec2(0, 4));
 
-            ImGui::SameLine();
-            //Browse for bitmap button.
-            if (ImGui::Button("...")) {
-                FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
-                vector<string> f =
-                    prompt_file_dialog_locked_to_folder(
-                        GRAPHICS_FOLDER_PATH,
-                        "Please choose the bitmap to get the sprites from.",
-                        "*.png",
-                        ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                        ALLEGRO_FILECHOOSER_PICTURES,
-                        &result, game.display
-                    );
+        //Remove bitmap button.
+        if (
+            ImGui::ImageButton(
+                "removeBitmap",
+                editor_icons[EDITOR_ICON_REMOVE],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+            ) {
+            loaded_gen.base_particle.set_bitmap("");
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Remove the current bitmap"
+        );
 
-                switch (result) {
-                case FILE_DIALOG_RESULT_WRONG_FOLDER: {
-                    //File doesn't belong to the folder.
-                    set_status("The chosen image is not in the graphics folder!", true);
-                    break;
-                } case FILE_DIALOG_RESULT_CANCELED: {
-                    //User canceled.
-                    break;
-                } case FILE_DIALOG_RESULT_SUCCESS: {
-                    loaded_gen.base_particle.set_bitmap(f[0]);
-                    set_status("Picked an image successfully.");
-                    changes_mgr.mark_as_changed();
-                    break;
-                }
-                }
-            }
-            set_tooltip("Browse for a spritesheet file to use.");
+        ImGui::SameLine();
+        //Browse for bitmap button.
+        if (ImGui::Button("...")) {
+            FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
+            vector<string> f =
+                prompt_file_dialog_locked_to_folder(
+                    GRAPHICS_FOLDER_PATH,
+                    "Please choose the bitmap to get the sprites from.",
+                    "*.png",
+                    ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                    ALLEGRO_FILECHOOSER_PICTURES,
+                    &result, game.display
+                );
 
-            //Spritesheet file name input.
-            string file_name = loaded_gen.base_particle.file;
-            ImGui::SameLine();
-            if (ImGui::InputText("File", &file_name)) {
-                loaded_gen.base_particle.set_bitmap(file_name);
+            switch (result) {
+            case FILE_DIALOG_RESULT_WRONG_FOLDER: {
+                //File doesn't belong to the folder.
+                set_status("The chosen image is not in the graphics folder!", true);
+                break;
+            } case FILE_DIALOG_RESULT_CANCELED: {
+                //User canceled.
+                break;
+            } case FILE_DIALOG_RESULT_SUCCESS: {
+                loaded_gen.base_particle.set_bitmap(f[0]);
                 set_status("Picked an image successfully.");
                 changes_mgr.mark_as_changed();
+                break;
             }
-            set_tooltip(
-                "File name of the bitmap to use as a spritesheet, in the "
-                "Graphics folder. Extension included. e.g. "
-                "\"Large_Fly.png\""
-            );
-
-            if(loaded_gen.base_particle.bitmap) {
-                //Angle value.
-                if (
-                    ImGui::SliderAngle(
-                        "Rotation", &loaded_gen.base_particle.rotation
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "The angle a particle is emitted at.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-
-                ImGui::Indent();
-                //Angle deviation value.
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::SliderAngle(
-                        "Rotation deviation", &loaded_gen.rotation_deviation, 0
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "The angle a particle is emitted at can vary by this much.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                ImGui::Unindent();
             }
+        }
+        set_tooltip("Browse for a spritesheet file to use.");
 
-            if(saveable_tree_node("particleColors", "Color")) {
-                int blend = loaded_gen.base_particle.blend_type;
-                ImGui::RadioButton("Normal", &blend, PARTICLE_BLEND_TYPE_NORMAL); ImGui::SameLine();
-                ImGui::RadioButton("Additive", &blend, PARTICLE_BLEND_TYPE_ADDITIVE);
+        //Spritesheet file name input.
+        string file_name = loaded_gen.base_particle.file;
+        ImGui::SameLine();
+        if (ImGui::InputText("File", &file_name)) {
+            loaded_gen.base_particle.set_bitmap(file_name);
+            set_status("Picked an image successfully.");
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "File name of the bitmap to use as a spritesheet, in the "
+            "Graphics folder. Extension included. e.g. "
+            "\"Large_Fly.png\""
+        );
 
-                loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
-
-                //Color gradient visualizer
-                keyframe_editor("Color", &loaded_gen.base_particle.color, selected_color_keyframe);
-
-                ImGui::TreePop();
-            }
-
-            ImGui::Dummy(ImVec2(0, 12));
-
-            if (saveable_tree_node("particleSize", "Size")) {
-                keyframe_editor("Size", &loaded_gen.base_particle.size, selected_size_keyframe);
-                loaded_gen.base_particle.size.set_keyframe_value(
-                    selected_size_keyframe,
-                    std::max(0.0f, loaded_gen.base_particle.size.get_keyframe(selected_size_keyframe).second)
-                );
-
-                //Size deviation value.
-                ImGui::Indent();
-                ImGui::SetNextItemWidth(75);
-                if (
-                    ImGui::DragFloat(
-                        "Size deviation", &loaded_gen.size_deviation, 0.5f, 0.0f, FLT_MAX
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "A particle's size can vary by this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                ImGui::Unindent();
-                ImGui::TreePop();
-            }
-
-            ImGui::Dummy(ImVec2(0, 12));
-            //Duration value.
+        if(loaded_gen.base_particle.bitmap) {
+            //Angle value.
             if (
-                ImGui::DragFloat(
-                    "Duration", &loaded_gen.base_particle.duration, 0.01f, 0.01f, FLT_MAX
+                ImGui::SliderAngle(
+                    "Rotation", &loaded_gen.base_particle.rotation
                 )
                 ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "How long each particle persists, in seconds.",
+                "The angle a particle is emitted at.",
                 "", WIDGET_EXPLANATION_DRAG
             );
 
             ImGui::Indent();
-            //Duration deviation value.
+            //Angle deviation value.
+            ImGui::SetNextItemWidth(75);
+            if (
+                ImGui::SliderAngle(
+                    "Rotation deviation", &loaded_gen.rotation_deviation, 0
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "The angle a particle is emitted at can vary by this much.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+
+        if(saveable_tree_node("particleColors", "Color")) {
+            int blend = loaded_gen.base_particle.blend_type;
+            ImGui::RadioButton("Normal", &blend, PARTICLE_BLEND_TYPE_NORMAL); ImGui::SameLine();
+            ImGui::RadioButton("Additive", &blend, PARTICLE_BLEND_TYPE_ADDITIVE);
+
+            loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
+
+            //Color gradient visualizer
+            keyframe_editor("Color", &loaded_gen.base_particle.color, selected_color_keyframe);
+
+            ImGui::TreePop();
+        }
+
+        ImGui::Dummy(ImVec2(0, 12));
+
+        if (saveable_tree_node("particleSize", "Size")) {
+            keyframe_editor("Size", &loaded_gen.base_particle.size, selected_size_keyframe);
+            loaded_gen.base_particle.size.set_keyframe_value(
+                selected_size_keyframe,
+                std::max(0.0f, loaded_gen.base_particle.size.get_keyframe(selected_size_keyframe).second)
+            );
+
+            //Size deviation value.
+            ImGui::Indent();
             ImGui::SetNextItemWidth(75);
             if (
                 ImGui::DragFloat(
-                    "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
+                    "Size deviation", &loaded_gen.size_deviation, 0.5f, 0.0f, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's size can vary by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+            ImGui::TreePop();
+        }
+
+        ImGui::Dummy(ImVec2(0, 12));
+        //Duration value.
+        if (
+            ImGui::DragFloat(
+                "Duration", &loaded_gen.base_particle.duration, 0.01f, 0.01f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "How long each particle persists, in seconds.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        ImGui::Indent();
+        //Duration deviation value.
+        ImGui::SetNextItemWidth(75);
+        if (
+            ImGui::DragFloat(
+                "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "A particle's lifespan can vary by this amount of seconds.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+
+        ImGui::TreePop();
+    }
+
+    if (saveable_tree_node("Motion", "Motion")) {
+
+        ImGui::Dummy(ImVec2(0, 4));
+
+        if (saveable_tree_node("lSpeed", "Linear Speed")) {
+            keyframe_editor("Linear Speed", &loaded_gen.base_particle.linear_speed, selected_linear_speed_keyframe);
+
+            ImGui::Indent();
+            //Angle deviation value.
+            ImGui::SetNextItemWidth(150);
+            if (
+                ImGui::DragFloat2(
+                    "Linear Speed deviation", (float*)&loaded_gen.linear_speed_deviation, 0.5f, 0.0f, FLT_MAX
+                )
+                ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "The linear speed a particle is emitted with can vary by this much.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+
+            //Angle deviation value.
+            if (
+                ImGui::SliderAngle(
+                    "Angle deviation", &loaded_gen.linear_speed_angle_deviation, 0, 180
                 )
                 ) {
                 changes_mgr.mark_as_changed();
@@ -762,95 +825,52 @@ void particle_editor::process_gui_panel_item() {
                 "A particle's lifespan can vary by this amount of seconds.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            ImGui::Unindent();
 
-            ImGui::EndTabItem();
+            ImGui::TreePop();
         }
+        ImGui::Dummy(ImVec2(0, 12));
 
-        if (ImGui::BeginTabItem("Motion", nullptr)) {
-
-            ImGui::Dummy(ImVec2(0, 4));
-
-            if (saveable_tree_node("lSpeed", "Linear Speed")) {
-                keyframe_editor("Linear Speed", &loaded_gen.base_particle.linear_speed, selected_linear_speed_keyframe);
-
-                ImGui::Indent();
-                //Angle deviation value.
-                ImGui::SetNextItemWidth(150);
-                if (
-                    ImGui::DragFloat2(
-                        "Linear Speed deviation", (float*)&loaded_gen.linear_speed_deviation, 0.5f, 0.0f, FLT_MAX
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "The linear speed a particle is emitted with can vary by this much.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                ImGui::Unindent();
-
-                //Angle deviation value.
-                if (
-                    ImGui::SliderAngle(
-                        "Angle deviation", &loaded_gen.linear_speed_angle_deviation, 0, 180
-                    )
-                    ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "A particle's lifespan can vary by this amount of seconds.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-
-                ImGui::TreePop();
-            }
-            ImGui::Dummy(ImVec2(0, 12));
-
-            if (saveable_tree_node("outSpeed", "Outwards Speed")) {
-                keyframe_editor("Outwards Speed", &loaded_gen.base_particle.outwards_speed, selected_outward_velocity_keyframe);
-                ImGui::TreePop();
-            }
-            ImGui::Dummy(ImVec2(0, 12));
-
-            if (saveable_tree_node("orbSpeed", "Orbital Speed")) {
-                keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_speed, selected_oribital_velocity_keyframe);
-                ImGui::TreePop();
-            }
-            ImGui::Dummy(ImVec2(0, 12));
-
-            //Friction value.
-            if (
-                ImGui::DragFloat(
-                    "Friction", &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Slowing factor applied to particles.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::EndTabItem();
-
-            //Friction deviation value.
-            ImGui::SetNextItemWidth(75);
-            if (
-                ImGui::DragFloat(
-                    "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
-                )
-                ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "A particle's friciton can vary by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-            ImGui::Dummy(ImVec2(0, 4));
-
+        if (saveable_tree_node("outSpeed", "Outwards Speed")) {
+            keyframe_editor("Outwards Speed", &loaded_gen.base_particle.outwards_speed, selected_outward_velocity_keyframe);
+            ImGui::TreePop();
         }
-        ImGui::EndTabBar();
+        ImGui::Dummy(ImVec2(0, 12));
+
+        if (saveable_tree_node("orbSpeed", "Orbital Speed")) {
+            keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_speed, selected_oribital_velocity_keyframe);
+            ImGui::TreePop();
+        }
+        ImGui::Dummy(ImVec2(0, 12));
+
+        //Friction value.
+        if (
+            ImGui::DragFloat(
+                "Friction", &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Slowing factor applied to particles.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+
+        //Friction deviation value.
+        ImGui::SetNextItemWidth(75);
+        if (
+            ImGui::DragFloat(
+                "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
+            )
+            ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "A particle's friciton can vary by this amount.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+        ImGui::Dummy(ImVec2(0, 4));
+        ImGui::TreePop();
     }
 }
 
@@ -959,7 +979,7 @@ void particle_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
         ) {
-        position_outline_visible = !position_outline_visible;
+        emission_outline_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Toggle visibility of position deviation.",

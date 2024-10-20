@@ -481,6 +481,33 @@ void particle_editor::leader_silhouette_toggle_cmd(float input_value) {
 
 
 /**
+ * @brief Code to run for the emission offset toggle command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void particle_editor::clear_particles_cmd(float input_value) {
+    if (input_value < 0.5f) return;
+
+    part_manager.clear();
+    set_status("Cleared particles.");
+}
+
+
+/**
+ * @brief Code to run for the emission offset toggle command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void particle_editor::emission_outline_toggle_cmd(float input_value) {
+    if (input_value < 0.5f) return;
+
+    emission_offset_visible = !emission_offset_visible;
+    string state_str = (emission_offset_visible ? "Enabled" : "Disabled");
+    set_status(state_str + " emission offset visibility.");
+}
+
+
+/**
  * @brief Code to run for the particle playback toggle command.
  *
  * @param input_value Value of the player input for the command.

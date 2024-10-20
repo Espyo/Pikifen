@@ -86,7 +86,7 @@ void particle_editor::draw_canvas() {
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
 
-    if (position_outline_visible) {
+    if (emission_offset_visible) {
         switch (loaded_gen.emission.shape)
         {
         case(PARTICLE_EMISSION_SHAPE_CIRCLE):
