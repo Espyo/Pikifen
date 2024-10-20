@@ -334,86 +334,11 @@ void particle_generator::load_from_data_node(
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
     base_particle.rotation = deg_to_rad(base_particle.rotation);
 
-    data_node* color_node = base_particle_node->get_child_by_name("color");
-    keyframe_interpolator<ALLEGRO_COLOR> ki_c(COLOR_WHITE);
-    for(size_t c = 0; c < color_node->get_nr_of_children(); c++) {
-        data_node* c_node = color_node->get_child(c);
-        ALLEGRO_COLOR color = s2c(c_node->value);
-
-        if (c == 0) {
-            ki_c.set_keyframe_value(0, color);
-            ki_c.set_keyframe_time(0, s2f(c_node->name));
-        }
-        else {
-            ki_c.add(s2f(c_node->name), color, EASE_METHOD_NONE);
-        }
-    }
-    base_particle.color = ki_c;
-
-    data_node* size_node = base_particle_node->get_child_by_name("size");
-    keyframe_interpolator<float> ki_s(32.0f);
-    for(size_t c = 0; c < size_node->get_nr_of_children(); c++) {
-        data_node* s_node = size_node->get_child(c);
-        float size = std::max(0.0f, (float)s2f(s_node->value));
-
-        if (c == 0) {
-            ki_s.set_keyframe_value(0, size);
-            ki_s.set_keyframe_time(0, s2f(s_node->name));
-        }
-        else {
-            ki_s.add(s2f(s_node->name), size, EASE_METHOD_NONE);
-        }
-    }
-    base_particle.size = ki_s;
-
-    data_node* linear_speed_node = base_particle_node->get_child_by_name("linear_speed");
-    keyframe_interpolator<point> ki_lin_v(point(0, 0));
-    for (size_t c = 0; c < linear_speed_node->get_nr_of_children(); c++) {
-        data_node* s_node = linear_speed_node->get_child(c);
-        point val = s2p(s_node->value);
-
-        if (c == 0) {
-            ki_lin_v.set_keyframe_value(0, val);
-            ki_lin_v.set_keyframe_time(0, s2f(s_node->name));
-        }
-        else {
-            ki_lin_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
-        }
-    }
-
-    base_particle.linear_speed = ki_lin_v;
-
-    data_node* outwards_speed_node = base_particle_node->get_child_by_name("outwards_speed");
-    keyframe_interpolator<float> ki_out_v(0.0f);
-    for (size_t c = 0; c < outwards_speed_node->get_nr_of_children(); c++) {
-        data_node* s_node = outwards_speed_node->get_child(c);
-        float val = s2f(s_node->value);
-
-        if (c == 0) {
-            ki_out_v.set_keyframe_value(0, val);
-            ki_out_v.set_keyframe_time(0, s2f(s_node->name));
-        }
-        else {
-            ki_out_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
-        }
-    }
-    base_particle.outwards_speed = ki_out_v;
-
-    data_node* orbital_speed_node = base_particle_node->get_child_by_name("orbital_speed");
-    keyframe_interpolator<float> ki_orb_v(0.0f);
-    for (size_t c = 0; c < orbital_speed_node->get_nr_of_children(); c++) {
-        data_node* s_node = orbital_speed_node->get_child(c);
-        float val = s2f(s_node->value);
-
-        if (c == 0) {
-            ki_orb_v.set_keyframe_value(0, val);
-            ki_orb_v.set_keyframe_time(0, s2f(s_node->name));
-        }
-        else {
-            ki_orb_v.add(s2f(s_node->name), val, EASE_METHOD_NONE);
-        }
-    }
-    base_particle.orbital_speed = ki_orb_v;
+    base_particle.color.load_from_data_node(base_particle_node->get_child_by_name("color"));
+    base_particle.size.load_from_data_node(base_particle_node->get_child_by_name("size"));
+    base_particle.linear_speed.load_from_data_node(base_particle_node->get_child_by_name("linear_speed"));
+    base_particle.outwards_speed.load_from_data_node(base_particle_node->get_child_by_name("outwards_speed"));
+    base_particle.orbital_speed.load_from_data_node(base_particle_node->get_child_by_name("orbital_speed"));
     
     if(bitmap_node) {
         if(load_resources) {

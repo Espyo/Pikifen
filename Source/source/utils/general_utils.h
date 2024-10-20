@@ -16,6 +16,8 @@
 #include "geometry_utils.h"
 #include "math_utils.h"
 #include "allegro_utils.h"
+#include "string_utils.h"
+#include "../libs/data_file.h"
 
 using std::string;
 using std::vector;
@@ -148,6 +150,34 @@ struct keyframe_interpolator {
 
         keyframe_times[cur_idx] = time;
     }
+
+    void load_from_data_node(data_node* node) {
+        //There are no values to load, lets not even try.
+        if(node->get_nr_of_children() == 0)
+            return;
+
+        keyframe_times.clear();
+        keyframe_values.clear();
+        keyframe_eases.clear();
+
+        for (size_t c = 0; c < node->get_nr_of_children(); c++) {
+            data_node* c_node = node->get_child(c);
+            inter_t value;
+
+            if constexpr (std::is_same_v<inter_t, float>) {
+                value = s2f(c_node->value);
+            }
+            else if constexpr (std::is_same_v<inter_t, ALLEGRO_COLOR>) {
+                value = s2c(c_node->value);
+            }
+            else if constexpr (std::is_same_v<inter_t, point>) {
+                value = s2p(c_node->value);
+            }
+
+            add(s2f(c_node->name), value, EASE_METHOD_NONE);
+        }
+    }
+
 
     private:
     
