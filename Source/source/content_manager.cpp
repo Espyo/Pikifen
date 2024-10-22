@@ -40,7 +40,7 @@ content_manager::content_manager() {
 void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
     engine_assert(
         load_levels[type] == CONTENT_LOAD_LEVEL_UNLOADED,
-        "Tried to load content of type " + i2s(type) + " even though it's "
+        "Tried to load all content of type " + i2s(type) + " even though it's "
         "already loaded!"
     );
     
@@ -48,7 +48,7 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
     
     switch(type) {
     case CONTENT_TYPE_AREA: {
-        load_areas(folder, level);
+        load_areas(folder);
         break;
     } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
         load_custom_particle_generators(folder, level);
@@ -86,6 +86,7 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Loads an area.
  *
+ * @param area_ptr Object to load into.
  * @param path Path to the area's folder.
  * @param level Level to load at.
  * @param type Type of area this is.
@@ -93,6 +94,7 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
  * @param from_backup If true, load from a backup, if any.
  */
 void content_manager::load_area(
+    area_data* area_ptr,
     const string &path, CONTENT_LOAD_LEVEL level,
     AREA_TYPE type, bool from_backup
 ) {
@@ -120,16 +122,14 @@ void content_manager::load_area(
     data_node geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return;
     
-    area_data* new_area = new area_data();
-    
-    new_area->folder_name = folder_name;
-    new_area->path = path;
-    new_area->type = type;
+    area_ptr->folder_name = folder_name;
+    area_ptr->path = path;
+    area_ptr->type = type;
     
     //Main data.
     if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
-    new_area->load_main_data_from_data_node(&data_file, level);
-    new_area->load_mission_data_from_data_node(&data_file);
+    area_ptr->load_main_data_from_data_node(&data_file, level);
+    area_ptr->load_mission_data_from_data_node(&data_file);
     if(game.perf_mon) game.perf_mon->finish_measurement();
     
     //Loading screen.
@@ -139,11 +139,11 @@ void content_manager::load_area(
         game.loading_text_bmp = nullptr;
         game.loading_subtext_bmp = nullptr;
         draw_loading_screen(
-            new_area->name,
+            area_ptr->name,
             get_subtitle_or_mission_goal(
-                new_area->subtitle,
-                new_area->type,
-                new_area->mission.goal
+                area_ptr->subtitle,
+                area_ptr->type,
+                area_ptr->mission.goal
             ),
             1.0f
         );
@@ -155,47 +155,87 @@ void content_manager::load_area(
         get_base_area_folder_path(type, !from_backup) +
         "/" + path +
         (from_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
-    new_area->load_thumbnail(thumbnail_path);
+    area_ptr->load_thumbnail(thumbnail_path);
     
     //Geometry.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
         if(game.perf_mon) game.perf_mon->start_measurement("Area -- Geometry");
-        new_area->load_geometry_from_data_node(&geometry_file, level);
+        area_ptr->load_geometry_from_data_node(&geometry_file, level);
         if(game.perf_mon) game.perf_mon->finish_measurement();
     }
-    
-    //Finish up.
-    areas[type].push_back(new_area);
-    //game.cur_area_data = new_area; //TODO turn game.cur_area_data to a pointer
 }
 
 
 /**
- * @brief Loads areas.
+ * @brief Loads an area as the "current area". This does not load it into
+ * the vector of areas.
+ *
+ * @param path Path to the area's folder.
+ * @param level Level to load at.
+ * @param type Type of area this is.
+ * What folder it loads from depends on this value.
+ * @param from_backup If true, load from a backup, if any.
+ */
+void content_manager::load_area_as_current(
+    const string &path, CONTENT_LOAD_LEVEL level,
+    AREA_TYPE type, bool from_backup
+) {
+    engine_assert(
+        game.cur_area_data == nullptr,
+        "Tried to load area \"" + path + "\" as the current one "
+        "even though there is already a loaded current area, \"" +
+        game.cur_area_data->path + "\"!"
+    );
+    
+    game.cur_area_data = new area_data();
+    load_area(game.cur_area_data, path, level, type, from_backup);
+}
+
+
+/**
+ * @brief Loads an area into the vector of areas. This does not load it as the
+ * "current" area.
+ *
+ * @param path Path to the area's folder.
+ * @param type Type of area this is.
+ * What folder it loads from depends on this value.
+ * @param from_backup If true, load from a backup, if any.
+ */
+void content_manager::load_area_into_vector(
+    const string &path, AREA_TYPE type, bool from_backup
+) {
+    area_data* new_area = new area_data();
+    areas[type].push_back(new_area);
+    load_area(new_area, path, CONTENT_LOAD_LEVEL_BASIC, type, from_backup);
+}
+
+
+/**
+ * @brief Loads areas into the areas vector. This does not load any area as the
+ * "current" area.
  *
  * @param folder Folder to load from.
- * @param level Level to load at.
  */
-void content_manager::load_areas(const string &folder, CONTENT_LOAD_LEVEL level) {
-    const string simple_areas_path =
+void content_manager::load_areas(const string &folder) {
+    const string simple_areas_base_path =
         GAME_DATA_FOLDER_PATH + "/" + SIMPLE_AREA_FOLDER_NAME;
-    vector<string> simple_area_files =
-        folder_to_vector(simple_areas_path, true);
-    for(size_t a = 0; a < simple_area_files.size(); a++) {
-        load_area(
-            folder + "/" + simple_area_files[a],
-            level, AREA_TYPE_SIMPLE, false
+    vector<string> simple_area_folders =
+        folder_to_vector(simple_areas_base_path, true);
+    for(size_t a = 0; a < simple_area_folders.size(); a++) {
+        load_area_into_vector(
+            simple_areas_base_path + "/" + simple_area_folders[a],
+            AREA_TYPE_SIMPLE, false
         );
     }
     
-    const string mission_areas_path =
+    const string mission_areas_base_path =
         GAME_DATA_FOLDER_PATH + "/" + MISSION_AREA_FOLDER_NAME;
-    vector<string> mission_area_files =
-        folder_to_vector(mission_areas_path, true);
-    for(size_t a = 0; a < mission_area_files.size(); a++) {
-        load_area(
-            folder + "/" + mission_area_files[a],
-            level, AREA_TYPE_MISSION, false
+    vector<string> mission_area_folders =
+        folder_to_vector(mission_areas_base_path, true);
+    for(size_t a = 0; a < mission_area_folders.size(); a++) {
+        load_area_into_vector(
+            mission_areas_base_path + "/" + mission_area_folders[a],
+            AREA_TYPE_MISSION, false
         );
     }
 }
@@ -740,6 +780,19 @@ void content_manager::load_weather_conditions(const string &folder, CONTENT_LOAD
 
 
 /**
+ * @brief Unloads the "current area".
+ *
+ * @param level Should match the level at which the content got loaded.
+ */
+void content_manager::unload_current_area(CONTENT_LOAD_LEVEL level) {
+    if(!game.cur_area_data) return;
+    game.cur_area_data->clear();
+    delete game.cur_area_data;
+    game.cur_area_data = nullptr;
+}
+
+
+/**
  * @brief Unloads some loaded content.
  *
  * @param type Type of content to unload.
@@ -783,9 +836,10 @@ void content_manager::unload_all(CONTENT_TYPE type) {
 
 
 /**
- * @brief Unloads loaded areas.
- * @param level Should match the level at which the content got loaded.
- */
+* @brief Unloads loaded areas.
+
+* @param level Should match the level at which the content got loaded.
+*/
 void content_manager::unload_areas(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < areas.size(); t++) {
         for(size_t a = 0; a < areas[t].size(); a++) {
@@ -798,6 +852,7 @@ void content_manager::unload_areas(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads loaded user-made particle generators.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_custom_particle_generators(CONTENT_LOAD_LEVEL level) {
@@ -814,6 +869,7 @@ void content_manager::unload_custom_particle_generators(CONTENT_LOAD_LEVEL level
 
 /**
  * @brief Unloads loaded hazards.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_hazards(CONTENT_LOAD_LEVEL level) {
@@ -823,6 +879,7 @@ void content_manager::unload_hazards(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads loaded liquids.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_liquids(CONTENT_LOAD_LEVEL level) {
@@ -857,6 +914,7 @@ void content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads loaded mob types.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_mob_types(CONTENT_LOAD_LEVEL level) {
@@ -892,6 +950,7 @@ void content_manager::unload_mob_types_of_category(mob_category* category, CONTE
 
 /**
  * @brief Unloads loaded spike damage types.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_spike_damage_types(CONTENT_LOAD_LEVEL level) {
@@ -901,6 +960,7 @@ void content_manager::unload_spike_damage_types(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloaded loaded spray types.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_spray_types(CONTENT_LOAD_LEVEL level) {
@@ -913,6 +973,7 @@ void content_manager::unload_spray_types(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloaded loaded status types.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_status_types(CONTENT_LOAD_LEVEL level) {
@@ -928,6 +989,7 @@ void content_manager::unload_status_types(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads loaded weather conditions.
+ *
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_weather_conditions(CONTENT_LOAD_LEVEL level) {

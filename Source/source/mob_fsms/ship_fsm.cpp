@@ -71,7 +71,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             tre_ptr->tre_type->points;
         game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
         
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             auto it =
                 game.states.gameplay->mission_remaining_mob_ids.find(
                     delivery->id
@@ -92,7 +92,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
                 res_ptr->res_type->point_amount;
             game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
             if(
-                game.cur_area_data.mission.goal ==
+                game.cur_area_data->mission.goal ==
                 MISSION_GOAL_COLLECT_TREASURE
             ) {
                 unordered_set<size_t> &goal_mobs =

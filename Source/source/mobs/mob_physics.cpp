@@ -119,7 +119,7 @@ H_MOVE_RESULT mob::get_movement_edge_intersections(
         type->terrain_radius;
         
     if(
-        !game.cur_area_data.bmap.get_edges_in_region(
+        !game.cur_area_data->bmap.get_edges_in_region(
             new_pos - radius_to_use,
             new_pos + radius_to_use,
             candidate_edges

@@ -1332,7 +1332,7 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
 string get_error_message_mob_info(mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
-        p2s(m->pos) + ", area \"" + game.cur_area_data.name + "\"";
+        p2s(m->pos) + ", area \"" + game.cur_area_data->name + "\"";
 }
 
 

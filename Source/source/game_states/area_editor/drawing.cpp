@@ -107,20 +107,26 @@ void area_editor::draw_canvas() {
     
     al_clear_to_color(COLOR_BLACK);
     
+    if(!game.cur_area_data) {
+        al_reset_clipping_rectangle();
+        al_use_transform(&game.identity_transform);
+        return;
+    }
+    
     float lowest_sector_z = 0.0f;
     float highest_sector_z = 0.0f;
     if(
         game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
-        !game.cur_area_data.sectors.empty()
+        !game.cur_area_data->sectors.empty()
     ) {
-        lowest_sector_z = game.cur_area_data.sectors[0]->z;
+        lowest_sector_z = game.cur_area_data->sectors[0]->z;
         highest_sector_z = lowest_sector_z;
         
-        for(size_t s = 1; s < game.cur_area_data.sectors.size(); s++) {
+        for(size_t s = 1; s < game.cur_area_data->sectors.size(); s++) {
             lowest_sector_z =
-                std::min(lowest_sector_z, game.cur_area_data.sectors[s]->z);
+                std::min(lowest_sector_z, game.cur_area_data->sectors[s]->z);
             highest_sector_z =
-                std::max(highest_sector_z, game.cur_area_data.sectors[s]->z);
+                std::max(highest_sector_z, game.cur_area_data->sectors[s]->z);
         }
     }
     
@@ -229,7 +235,7 @@ void area_editor::draw_canvas() {
             false
         );
     }
-    size_t n_sectors = game.cur_area_data.sectors.size();
+    size_t n_sectors = game.cur_area_data->sectors.size();
     for(size_t s = 0; s < n_sectors; s++) {
         sector* s_ptr;
         if(
@@ -241,7 +247,7 @@ void area_editor::draw_canvas() {
         ) {
             s_ptr = pre_move_area_data->sectors[s];
         } else {
-            s_ptr = game.cur_area_data.sectors[s];
+            s_ptr = game.cur_area_data->sectors[s];
         }
         
         bool view_heightmap = false;
@@ -284,8 +290,8 @@ void area_editor::draw_canvas() {
             state == EDITOR_STATE_LAYOUT;
             
         if(
-            game.cur_area_data.problems.non_simples.find(s_ptr) !=
-            game.cur_area_data.problems.non_simples.end()
+            game.cur_area_data->problems.non_simples.find(s_ptr) !=
+            game.cur_area_data->problems.non_simples.end()
         ) {
             valid = false;
         }
@@ -380,9 +386,9 @@ void area_editor::draw_canvas() {
     );
     
     //Edges.
-    size_t n_edges = game.cur_area_data.edges.size();
+    size_t n_edges = game.cur_area_data->edges.size();
     for(size_t e = 0; e < n_edges; e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+        edge* e_ptr = game.cur_area_data->edges[e];
         
         if(!e_ptr->is_valid()) continue;
         
@@ -415,17 +421,17 @@ void area_editor::draw_canvas() {
         }
         
         if(
-            game.cur_area_data.problems.lone_edges.find(e_ptr) !=
-            game.cur_area_data.problems.lone_edges.end()
+            game.cur_area_data->problems.lone_edges.find(e_ptr) !=
+            game.cur_area_data->problems.lone_edges.end()
         ) {
             valid = false;
         }
         
         if(
-            game.cur_area_data.problems.non_simples.find(e_ptr->sectors[0]) !=
-            game.cur_area_data.problems.non_simples.end() ||
-            game.cur_area_data.problems.non_simples.find(e_ptr->sectors[1]) !=
-            game.cur_area_data.problems.non_simples.end()
+            game.cur_area_data->problems.non_simples.find(e_ptr->sectors[0]) !=
+            game.cur_area_data->problems.non_simples.end() ||
+            game.cur_area_data->problems.non_simples.find(e_ptr->sectors[1]) !=
+            game.cur_area_data->problems.non_simples.end()
         ) {
             valid = false;
         }
@@ -575,9 +581,9 @@ void area_editor::draw_canvas() {
     
     //Vertexes.
     if(state == EDITOR_STATE_LAYOUT) {
-        size_t n_vertexes = game.cur_area_data.vertexes.size();
+        size_t n_vertexes = game.cur_area_data->vertexes.size();
         for(size_t v = 0; v < n_vertexes; v++) {
-            vertex* v_ptr = game.cur_area_data.vertexes[v];
+            vertex* v_ptr = game.cur_area_data->vertexes[v];
             bool selected =
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
@@ -636,8 +642,8 @@ void area_editor::draw_canvas() {
     
     //Mobs.
     if(state == EDITOR_STATE_MOBS && mob_opacity > 0.0f) {
-        for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-            mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+            mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
             mob_gen* m2_ptr = nullptr;
             
             if(!m_ptr->type) continue;
@@ -665,7 +671,7 @@ void area_editor::draw_canvas() {
             
             if(m_ptr->stored_inside != INVALID) {
                 m2_ptr =
-                    game.cur_area_data.mob_generators[m_ptr->stored_inside];
+                    game.cur_area_data->mob_generators[m_ptr->stored_inside];
                 if(!m2_ptr->type) continue;
                 
                 bool show_store =
@@ -684,8 +690,8 @@ void area_editor::draw_canvas() {
         }
     }
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         
         float radius = get_mob_gen_radius(m_ptr);
         ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
@@ -774,8 +780,8 @@ void area_editor::draw_canvas() {
             selected_mobs.find(m_ptr) != selected_mobs.end();
         bool is_mission_requirement =
             sub_state == EDITOR_SUB_STATE_MISSION_MOBS &&
-            game.cur_area_data.mission.goal_mob_idxs.find(m) !=
-            game.cur_area_data.mission.goal_mob_idxs.end();
+            game.cur_area_data->mission.goal_mob_idxs.find(m) !=
+            game.cur_area_data->mission.goal_mob_idxs.end();
         bool is_highlighted =
             highlighted_mob == m_ptr &&
             state == EDITOR_STATE_MOBS;
@@ -831,8 +837,8 @@ void area_editor::draw_canvas() {
     if(state == EDITOR_STATE_PATHS) {
     
         //Stops.
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+            path_stop* s_ptr = game.cur_area_data->path_stops[s];
             bool highlighted = highlighted_path_stop == s_ptr;
             ALLEGRO_COLOR color;
             if(has_flag(s_ptr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
@@ -883,8 +889,8 @@ void area_editor::draw_canvas() {
         }
         
         //Links.
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+            path_stop* s_ptr = game.cur_area_data->path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
                 path_link* l_ptr = s_ptr->links[l];
                 path_stop* s2_ptr = l_ptr->end_ptr;
@@ -1009,8 +1015,8 @@ void area_editor::draw_canvas() {
         if(show_closest_stop) {
             path_stop* closest = nullptr;
             float closest_dist;
-            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-                path_stop* s_ptr = game.cur_area_data.path_stops[s];
+            for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+                path_stop* s_ptr = game.cur_area_data->path_stops[s];
                 float d =
                     dist(game.mouse_cursor.w_pos, s_ptr->pos).to_float() -
                     s_ptr->radius;
@@ -1119,9 +1125,9 @@ void area_editor::draw_canvas() {
         state == EDITOR_STATE_DETAILS ||
         (preview_mode && show_shadows)
     ) {
-        for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
+        for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
         
-            tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
+            tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
             if(
                 !preview_mode &&
                 s_ptr == selected_shadow
@@ -1181,8 +1187,8 @@ void area_editor::draw_canvas() {
     //Mission exit region transformation widget.
     if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
         cur_transformation_widget.draw(
-            &game.cur_area_data.mission.goal_exit_center,
-            &game.cur_area_data.mission.goal_exit_size,
+            &game.cur_area_data->mission.goal_exit_center,
+            &game.cur_area_data->mission.goal_exit_size,
             nullptr,
             1.0f / game.cam.zoom
         );
@@ -1524,8 +1530,8 @@ void area_editor::draw_canvas() {
             
         };
         vector<split_t> splits;
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             float l1r = 0;
             float l2r = 0;
             if(

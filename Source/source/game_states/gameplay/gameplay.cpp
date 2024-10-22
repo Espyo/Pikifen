@@ -220,7 +220,7 @@ void gameplay_state::end_mission(bool cleared) {
     float new_cam_zoom = game.cam.target_zoom;
     if(cleared) {
         mission_goal* goal =
-            game.mission_goals[game.cur_area_data.mission.goal];
+            game.mission_goals[game.cur_area_data->mission.goal];
         if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
             game.cam.target_zoom = new_cam_zoom;
@@ -672,7 +672,7 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
         break;
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.states.area_ed->quick_play_area_path.empty()) {
-            game.states.area_menu->area_type = game.cur_area_data.type;
+            game.states.area_menu->area_type = game.cur_area_data->type;
             game.change_state(game.states.area_menu);
         } else {
             game.change_state(game.states.area_ed);
@@ -748,7 +748,7 @@ void gameplay_state::load() {
         if(name == GAMEPLAY::BOSS_VICTORY_SONG_NAME) {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.set_current_song(game.cur_area_data.song_name, false);
+                game.audio.set_current_song(game.cur_area_data->song_name, false);
                 boss_music_state = BOSS_MUSIC_STATE_PAUSED;
             } default: {
                 break;
@@ -763,18 +763,18 @@ void gameplay_state::load() {
     get_area_info_from_path(
         path_of_area_to_load, &area_folder_name, &area_type
     );
-    game.content.load_area(
+    game.content.load_area_as_current(
         area_folder_name, CONTENT_LOAD_LEVEL_FULL, area_type, false
     );
     
-    if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
+    if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);
     }
-    if(!game.cur_area_data.weather_condition.fog_color.empty()) {
+    if(!game.cur_area_data->weather_condition.fog_color.empty()) {
         bmp_fog =
             generate_fog_bitmap(
-                game.cur_area_data.weather_condition.fog_near,
-                game.cur_area_data.weather_condition.fog_far
+                game.cur_area_data->weather_condition.fog_near,
+                game.cur_area_data->weather_condition.fog_far
             );
     }
     
@@ -786,8 +786,8 @@ void gameplay_state::load() {
     
     vector<mob*> mobs_per_gen;
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         bool valid = true;
         
         if(!m_ptr->type) {
@@ -817,8 +817,8 @@ void gameplay_state::load() {
     //does not necessarily correspond to mob index X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* gen_ptr = game.cur_area_data->mob_generators[m];
         mob* mob_ptr = mobs_per_gen[m];
         if(!mob_ptr) continue;
         
@@ -830,8 +830,8 @@ void gameplay_state::load() {
     }
     
     //Mobs stored inside other. Same logic as mob links.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* holdee_gen_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* holdee_gen_ptr = game.cur_area_data->mob_generators[m];
         if(holdee_gen_ptr->stored_inside == INVALID) continue;
         mob* holdee_ptr = mobs_per_gen[m];
         mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
@@ -839,9 +839,9 @@ void gameplay_state::load() {
     }
     
     //Save each path stop's sector.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        game.cur_area_data.path_stops[s]->sector_ptr =
-            get_sector(game.cur_area_data.path_stops[s]->pos, nullptr, true);
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        game.cur_area_data->path_stops[s]->sector_ptr =
+            get_sector(game.cur_area_data->path_stops[s]->pos, nullptr, true);
     }
     
     //Sort leaders.
@@ -888,14 +888,14 @@ void gameplay_state::load() {
     game.cam.set_zoom(game.options.zoom_mid_level);
     
     //Memorize mobs required by the mission.
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
         
-        if(game.cur_area_data.mission.goal_all_mobs) {
+        if(game.cur_area_data->mission.goal_all_mobs) {
             for(size_t m = 0; m < mobs_per_gen.size(); m++) {
                 if(
                     mobs_per_gen[m] &&
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data->mission.goal]->
                     is_mob_applicable(mobs_per_gen[m]->type)
                 ) {
                     mission_required_mob_gen_idxs.insert(m);
@@ -904,7 +904,7 @@ void gameplay_state::load() {
             
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data.mission.goal_mob_idxs;
+                game.cur_area_data->mission.goal_mob_idxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
@@ -912,7 +912,7 @@ void gameplay_state::load() {
         }
         mission_required_mob_amount = mission_remaining_mob_ids.size();
         
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : mission_required_mob_gen_idxs) {
@@ -968,9 +968,9 @@ void gameplay_state::load() {
     
     //Initialize the area's active cells.
     float area_width =
-        game.cur_area_data.bmap.n_cols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.cur_area_data->bmap.n_cols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     float area_height =
-        game.cur_area_data.bmap.n_rows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.cur_area_data->bmap.n_rows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     size_t nr_area_cell_cols =
         ceil(area_width / GEOMETRY::AREA_CELL_SIZE) + 1;
     size_t nr_area_cell_rows =
@@ -986,10 +986,10 @@ void gameplay_state::load() {
     
     init_hud();
     
-    day_minutes = game.cur_area_data.day_time_start;
+    day_minutes = game.cur_area_data->day_time_start;
     
     map<string, string> spray_strs =
-        get_var_map(game.cur_area_data.spray_amounts);
+        get_var_map(game.cur_area_data->spray_amounts);
         
     for(auto &s : spray_strs) {
         size_t spray_id = 0;
@@ -1002,7 +1002,7 @@ void gameplay_state::load() {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
-                "area \"" + game.cur_area_data.name + "\"!", nullptr
+                "area \"" + game.cur_area_data->name + "\"!", nullptr
             );
             continue;
         }
@@ -1014,14 +1014,14 @@ void gameplay_state::load() {
     game.liquid_limit_effect_caches.clear();
     game.liquid_limit_effect_caches.insert(
         game.liquid_limit_effect_caches.begin(),
-        game.cur_area_data.edges.size(),
+        game.cur_area_data->edges.size(),
         edge_offset_cache()
     );
     update_offset_effect_caches(
         game.liquid_limit_effect_caches,
         unordered_set<vertex*>(
-            game.cur_area_data.vertexes.begin(),
-            game.cur_area_data.vertexes.end()
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
         ),
         does_edge_have_liquid_limit,
         get_liquid_limit_length,
@@ -1030,14 +1030,14 @@ void gameplay_state::load() {
     game.wall_smoothing_effect_caches.clear();
     game.wall_smoothing_effect_caches.insert(
         game.wall_smoothing_effect_caches.begin(),
-        game.cur_area_data.edges.size(),
+        game.cur_area_data->edges.size(),
         edge_offset_cache()
     );
     update_offset_effect_caches(
         game.wall_smoothing_effect_caches,
         unordered_set<vertex*>(
-            game.cur_area_data.vertexes.begin(),
-            game.cur_area_data.vertexes.end()
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
         ),
         does_edge_have_ledge_smoothing,
         get_ledge_smoothing_length,
@@ -1046,14 +1046,14 @@ void gameplay_state::load() {
     game.wall_shadow_effect_caches.clear();
     game.wall_shadow_effect_caches.insert(
         game.wall_shadow_effect_caches.begin(),
-        game.cur_area_data.edges.size(),
+        game.cur_area_data->edges.size(),
         edge_offset_cache()
     );
     update_offset_effect_caches(
         game.wall_shadow_effect_caches,
         unordered_set<vertex*>(
-            game.cur_area_data.vertexes.begin(),
-            game.cur_area_data.vertexes.end()
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
         ),
         does_edge_have_wall_shadow,
         get_wall_shadow_length,
@@ -1080,7 +1080,7 @@ void gameplay_state::load() {
     game.errors.report_area_load_errors();
     
     if(game.perf_mon) {
-        game.perf_mon->set_area_name(game.cur_area_data.name);
+        game.perf_mon->set_area_name(game.cur_area_data->name);
         game.perf_mon->leave_state();
     }
     
@@ -1171,10 +1171,7 @@ void gameplay_state::unload() {
         lightmap_bmp = nullptr;
     }
     
-    unload_area();
-    
     mission_remaining_mob_ids.clear();
-    
     path_mgr.clear();
     spray_stats.clear();
     particles.clear();
@@ -1182,6 +1179,7 @@ void gameplay_state::unload() {
     leader_movement.reset(); //TODO replace with a better solution.
     
     unload_game_content();
+    game.content.unload_current_area(CONTENT_LOAD_LEVEL_FULL);
     
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);

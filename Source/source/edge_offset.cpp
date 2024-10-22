@@ -35,7 +35,7 @@ void draw_edge_offset_on_buffer(
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
-    edge* e_ptr = game.cur_area_data.edges[e_idx];
+    edge* e_ptr = game.cur_area_data->edges[e_idx];
     
     //End vertexes. Like in update_offset_effect_caches, order is important.
     vertex* end_vertexes[2];
@@ -652,8 +652,8 @@ void update_offset_effect_buffer(
 ) {
     unordered_set<size_t> edges;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         
         if(
             !rectangles_intersect(
@@ -756,7 +756,7 @@ void update_offset_effect_buffer(
  */
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,
-    const unordered_set<vertex*>& vertexes_to_update,
+    const unordered_set<vertex*> &vertexes_to_update,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter
@@ -767,7 +767,7 @@ void update_offset_effect_caches (
     }
     
     for(size_t e : edges_to_update) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+        edge* e_ptr = game.cur_area_data->edges[e];
         
         sector* unaffected_sector = nullptr;
         sector* affected_sector = nullptr;

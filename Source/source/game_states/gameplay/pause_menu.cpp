@@ -100,7 +100,7 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
     pages.push_back(PAUSE_MENU_PAGE_STATUS);
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
         pages.push_back(PAUSE_MENU_PAGE_MISSION);
     }
     
@@ -116,8 +116,8 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     lowest_sector_z = FLT_MAX;
     highest_sector_z = -FLT_MAX;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
         lowest_sector_z = std::min(lowest_sector_z, s_ptr->z);
         highest_sector_z = std::max(highest_sector_z, s_ptr->z);
@@ -133,8 +133,8 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     radar_min_coords = point(FLT_MAX, FLT_MAX);
     radar_max_coords = point(-FLT_MAX, -FLT_MAX);
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) continue;
         if(
             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING &&
@@ -595,9 +595,9 @@ void pause_menu_t::confirm_or_leave() {
             confirmation_explanation_text->text =
                 "If you end now, you will stop playing and will go to the "
                 "results menu.";
-            if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+            if(game.cur_area_data->type == AREA_TYPE_MISSION) {
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data->mission.goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
                     confirmation_explanation_text->text +=
@@ -608,7 +608,7 @@ void pause_menu_t::confirm_or_leave() {
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
-                        game.cur_area_data.mission.grading_mode ==
+                        game.cur_area_data->mission.grading_mode ==
                         MISSION_GRADING_MODE_POINTS
                     ) {
                         confirmation_explanation_text->text +=
@@ -856,8 +856,8 @@ void pause_menu_t::draw_radar(
     al_clear_to_color(PAUSE_MENU::RADAR_BG_COLOR);
     
     //Draw each sector.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
         ALLEGRO_COLOR color =
@@ -895,8 +895,8 @@ void pause_menu_t::draw_radar(
     }
     
     //Draw each edge.
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
             //The other side is already the void, so no need for an edge.
@@ -1204,10 +1204,10 @@ void pause_menu_t::draw_radar(
             cell_y++
         ) {
             float start_x =
-                game.cur_area_data.bmap.top_left_corner.x +
+                game.cur_area_data->bmap.top_left_corner.x +
                 cell_x * GEOMETRY::AREA_CELL_SIZE;
             float start_y =
-                game.cur_area_data.bmap.top_left_corner.y +
+                game.cur_area_data->bmap.top_left_corner.y +
                 cell_y * GEOMETRY::AREA_CELL_SIZE;
             al_draw_rectangle(
                 start_x + (1.0f / radar_cam.zoom),
@@ -1269,7 +1269,7 @@ void pause_menu_t::draw_radar(
         12.0f, PAUSE_MENU::RADAR_BG_COLOR
     );
     draw_text(
-        game.cur_area_data.name, game.sys_assets.fnt_standard,
+        game.cur_area_data->name, game.sys_assets.fnt_standard,
         area_name_center, area_name_size, PAUSE_MENU::RADAR_HIGHEST_COLOR
     );
     
@@ -1370,14 +1370,14 @@ void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(f)
             )
         ) {
             mission_fail* cond = game.mission_fail_conds[f];
             
             string description =
-                cond->get_player_description(&game.cur_area_data.mission);
+                cond->get_player_description(&game.cur_area_data->mission);
             add_bullet(list, description, al_map_rgb(255, 200, 200));
             
             float percentage = 0.0f;
@@ -1396,7 +1396,7 @@ void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
         }
     }
     
-    if(game.cur_area_data.mission.fail_conditions == 0) {
+    if(game.cur_area_data->mission.fail_conditions == 0) {
         add_bullet(list, "(None)");
     }
 }
@@ -1408,7 +1408,7 @@ void pause_menu_t::fill_mission_fail_list(list_gui_item* list) {
  * @param list List item to fill.
  */
 void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
-    switch(game.cur_area_data.mission.grading_mode) {
+    switch(game.cur_area_data->mission.grading_mode) {
     case MISSION_GRADING_MODE_POINTS: {
         add_bullet(
             list,
@@ -1417,25 +1417,25 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
         add_bullet(
             list,
             "    Platinum: " +
-            i2s(game.cur_area_data.mission.platinum_req) + "+ points.",
+            i2s(game.cur_area_data->mission.platinum_req) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         add_bullet(
             list,
             "    Gold: " +
-            i2s(game.cur_area_data.mission.gold_req) + "+ points.",
+            i2s(game.cur_area_data->mission.gold_req) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         add_bullet(
             list,
             "    Silver: " +
-            i2s(game.cur_area_data.mission.silver_req) + "+ points.",
+            i2s(game.cur_area_data->mission.silver_req) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         add_bullet(
             list,
             "    Bronze: " +
-            i2s(game.cur_area_data.mission.bronze_req) + "+ points.",
+            i2s(game.cur_area_data->mission.bronze_req) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         
@@ -1443,7 +1443,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
         for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
             mission_score_criterion* c_ptr =
                 game.mission_score_criteria[c];
-            int mult = c_ptr->get_multiplier(&game.cur_area_data.mission);
+            int mult = c_ptr->get_multiplier(&game.cur_area_data->mission);
             if(mult != 0) {
                 score_notes.push_back(
                     "    " + c_ptr->get_name() + " x " + i2s(mult) + "."
@@ -1471,7 +1471,7 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
                 game.mission_score_criteria[c];
             if(
                 has_flag(
-                    game.cur_area_data.mission.point_loss_data,
+                    game.cur_area_data->mission.point_loss_data,
                     get_idx_bitmask(c)
                 )
             ) {
@@ -1518,17 +1518,17 @@ void pause_menu_t::fill_mission_grading_list(list_gui_item* list) {
 string pause_menu_t::get_mission_goal_status() {
     float percentage = 0.0f;
     int cur =
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data->mission.goal]->
         get_cur_amount(game.states.gameplay);
     int req =
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data->mission.goal]->
         get_req_amount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
     return
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data->mission.goal]->
         get_status(cur, req, percentage);
 }
 
@@ -2052,7 +2052,7 @@ void pause_menu_t::init_main_pause_menu() {
     //Area name.
     text_gui_item* area_name_text =
         new text_gui_item(
-        game.cur_area_data.name, game.sys_assets.fnt_area_name,
+        game.cur_area_data->name, game.sys_assets.fnt_area_name,
         change_alpha(COLOR_GOLD, 192)
     );
     gui.add_item(area_name_text, "area_name");
@@ -2061,8 +2061,8 @@ void pause_menu_t::init_main_pause_menu() {
     text_gui_item* area_subtitle_text =
         new text_gui_item(
         get_subtitle_or_mission_goal(
-            game.cur_area_data.subtitle, game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data->subtitle, game.cur_area_data->type,
+            game.cur_area_data->mission.goal
         ),
         game.sys_assets.fnt_area_name,
         change_alpha(COLOR_WHITE, 192)
@@ -2083,7 +2083,7 @@ void pause_menu_t::init_main_pause_menu() {
     //Retry button.
     button_gui_item* retry_button =
         new button_gui_item(
-        game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+        game.cur_area_data->type == AREA_TYPE_SIMPLE ?
         "Restart exploration" :
         "Retry mission",
         game.sys_assets.fnt_standard
@@ -2096,7 +2096,7 @@ void pause_menu_t::init_main_pause_menu() {
     retry_button->on_get_tooltip =
     [] () {
         return
-            game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+            game.cur_area_data->type == AREA_TYPE_SIMPLE ?
             "Restart this area's exploration." :
             "Retry the mission from the start.";
     };
@@ -2105,7 +2105,7 @@ void pause_menu_t::init_main_pause_menu() {
     //End button.
     button_gui_item* end_button =
         new button_gui_item(
-        game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+        game.cur_area_data->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
         "End mission",
         game.sys_assets.fnt_standard
@@ -2119,11 +2119,11 @@ void pause_menu_t::init_main_pause_menu() {
     [] () {
         bool as_fail =
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
-            game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+            game.cur_area_data->type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
             as_fail ?
             "End this mission as a fail." :
@@ -2257,8 +2257,8 @@ void pause_menu_t::init_mission_page() {
     //Goal explanation text.
     text_gui_item* goal_text =
         new text_gui_item(
-        game.mission_goals[game.cur_area_data.mission.goal]->
-        get_player_description(&game.cur_area_data.mission),
+        game.mission_goals[game.cur_area_data->mission.goal]->
+        get_player_description(&game.cur_area_data->mission),
         game.sys_assets.fnt_standard,
         al_map_rgb(255, 255, 200)
     );
@@ -2893,7 +2893,7 @@ void pause_menu_t::start_leaving_gameplay() {
     if(
         leave_target == GAMEPLAY_LEAVE_TARGET_END &&
         has_flag(
-            game.cur_area_data.mission.fail_conditions,
+            game.cur_area_data->mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {

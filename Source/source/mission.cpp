@@ -140,7 +140,7 @@ string mission_fail_kill_enemies::get_player_description(
 int mission_fail_kill_enemies::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_enemies_killed;
+    return (int) game.cur_area_data->mission.fail_enemies_killed;
 }
 
 
@@ -283,7 +283,7 @@ string mission_fail_lose_leaders::get_player_description(
 int mission_fail_lose_leaders::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_leaders_kod;
+    return (int) game.cur_area_data->mission.fail_leaders_kod;
 }
 
 
@@ -424,7 +424,7 @@ string mission_fail_lose_pikmin::get_player_description(
 int mission_fail_lose_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_pik_killed;
+    return (int) game.cur_area_data->mission.fail_pik_killed;
 }
 
 
@@ -845,7 +845,7 @@ string mission_fail_time_limit::get_player_description(
 int mission_fail_time_limit::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_time_limit;
+    return (int) game.cur_area_data->mission.fail_time_limit;
 }
 
 
@@ -986,7 +986,7 @@ string mission_fail_too_few_pikmin::get_player_description(
 int mission_fail_too_few_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_too_few_pik_amount;
+    return (int) game.cur_area_data->mission.fail_too_few_pik_amount;
 }
 
 
@@ -1129,7 +1129,7 @@ string mission_fail_too_many_pikmin::get_player_description(
 int mission_fail_too_many_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.fail_too_many_pik_amount;
+    return (int) game.cur_area_data->mission.fail_too_many_pik_amount;
 }
 
 
@@ -1899,7 +1899,7 @@ string mission_goal_grow_pikmin::get_player_description(
 int mission_goal_grow_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.goal_amount;
+    return (int) game.cur_area_data->mission.goal_amount;
 }
 
 
@@ -2041,7 +2041,7 @@ string mission_goal_timed_survival::get_player_description(
 int mission_goal_timed_survival::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) game.cur_area_data.mission.goal_amount;
+    return (int) game.cur_area_data->mission.goal_amount;
 }
 
 

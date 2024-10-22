@@ -941,13 +941,13 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
         //If there's no label, then any stop is eligible.
         choices.insert(
             choices.end(),
-            game.cur_area_data.path_stops.begin(),
-            game.cur_area_data.path_stops.end()
+            game.cur_area_data->path_stops.begin(),
+            game.cur_area_data->path_stops.end()
         );
     } else {
         //If there's a label, we should only pick stops that have the label.
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+            path_stop* s_ptr = game.cur_area_data->path_stops[s];
             if(s_ptr->label == label) {
                 choices.push_back(s_ptr);
             }

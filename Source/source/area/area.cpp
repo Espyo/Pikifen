@@ -1629,8 +1629,8 @@ void area_data::remove_edge(const edge* e_ptr) {
  */
 void area_data::remove_sector(size_t s_idx) {
     sectors.erase(sectors.begin() + s_idx);
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < edges.size(); e++) {
+        edge* e_ptr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(
                 e_ptr->sector_idxs[s] != INVALID &&
@@ -1751,17 +1751,17 @@ size_t blockmap::get_col(float x) const {
  *
  * @param tl Top-left coordinates of the region.
  * @param br Bottom-right coordinates of the region.
- * @param edges Set to fill the edges into.
+ * @param out_edges Set to fill the edges into.
  * @return Whether it succeeded.
  */
 bool blockmap::get_edges_in_region(
-    const point &tl, const point &br, set<edge*> &edges
+    const point &tl, const point &br, set<edge*> &out_edges
 ) const {
 
-    size_t bx1 = game.cur_area_data.bmap.get_col(tl.x);
-    size_t bx2 = game.cur_area_data.bmap.get_col(br.x);
-    size_t by1 = game.cur_area_data.bmap.get_row(tl.y);
-    size_t by2 = game.cur_area_data.bmap.get_row(br.y);
+    size_t bx1 = get_col(tl.x);
+    size_t bx2 = get_col(br.x);
+    size_t by1 = get_row(tl.y);
+    size_t by2 = get_row(br.y);
     
     if(
         bx1 == INVALID || bx2 == INVALID ||
@@ -1774,11 +1774,10 @@ bool blockmap::get_edges_in_region(
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
         
-            vector<edge*> &block_edges =
-                game.cur_area_data.bmap.edges[bx][by];
+            const vector<edge*> &block_edges = edges[bx][by];
                 
             for(size_t e = 0; e < block_edges.size(); e++) {
-                edges.insert(block_edges[e]);
+                out_edges.insert(block_edges[e]);
             }
         }
     }

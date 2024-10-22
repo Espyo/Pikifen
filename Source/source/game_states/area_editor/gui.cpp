@@ -29,10 +29,10 @@ void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
     for(size_t a = 0; a < game.content.areas[AREA_TYPE_SIMPLE].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->name, "Simple"));
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->folder_name, "Simple"));
     }
     for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->name, "Mission"));
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->folder_name, "Mission"));
     }
     
     //Set up the picker's behavior and data.
@@ -199,7 +199,7 @@ void area_editor::process_gui_delete_area_dialog() {
     //Final warning text.
     string final_warning_str =
         "Are you sure you want to delete the area \"" +
-        game.cur_area_data.folder_name + "\"?";
+        game.cur_area_data->folder_name + "\"?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -1565,15 +1565,15 @@ void area_editor::process_gui_panel_gameplay() {
         //Region center text.
         ImGui::Text(
             "Exit region center: %s,%s",
-            f2s(game.cur_area_data.mission.goal_exit_center.x).c_str(),
-            f2s(game.cur_area_data.mission.goal_exit_center.y).c_str()
+            f2s(game.cur_area_data->mission.goal_exit_center.x).c_str(),
+            f2s(game.cur_area_data->mission.goal_exit_center.y).c_str()
         );
         
         //Region center text.
         ImGui::Text(
             "Exit region size: %s x %s",
-            f2s(game.cur_area_data.mission.goal_exit_size.x).c_str(),
-            f2s(game.cur_area_data.mission.goal_exit_size.y).c_str()
+            f2s(game.cur_area_data->mission.goal_exit_size.x).c_str(),
+            f2s(game.cur_area_data->mission.goal_exit_size.y).c_str()
         );
         
         //Finish button.
@@ -1599,7 +1599,7 @@ void area_editor::process_gui_panel_gameplay() {
         if(saveable_tree_node("gameplay", "Starting sprays")) {
         
             map<string, string> spray_strs =
-                get_var_map(game.cur_area_data.spray_amounts);
+                get_var_map(game.cur_area_data->spray_amounts);
             for(size_t s = 0; s < game.content.spray_types.size(); s++) {
                 int amount = s2i(spray_strs[game.content.spray_types[s].name]);
                 ImGui::SetNextItemWidth(50);
@@ -1611,9 +1611,9 @@ void area_editor::process_gui_panel_gameplay() {
                 ) {
                     register_change("area spray amounts change");
                     spray_strs[game.content.spray_types[s].name] = i2s(amount);
-                    game.cur_area_data.spray_amounts.clear();
+                    game.cur_area_data->spray_amounts.clear();
                     for(auto const &v : spray_strs) {
-                        game.cur_area_data.spray_amounts +=
+                        game.cur_area_data->spray_amounts +=
                             v.first + "=" + v.second + ";";
                     }
                 }
@@ -1630,7 +1630,7 @@ void area_editor::process_gui_panel_gameplay() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        if(game.cur_area_data->type == AREA_TYPE_MISSION) {
             process_gui_panel_mission();
         }
         
@@ -1661,30 +1661,30 @@ void area_editor::process_gui_panel_info() {
     if(saveable_tree_node("info", "General")) {
     
         //Area name input.
-        string name = game.cur_area_data.name;
+        string name = game.cur_area_data->name;
         if(ImGui::InputText("Name", &name)) {
             register_change("area name change");
-            game.cur_area_data.name = name;
+            game.cur_area_data->name = name;
         }
         set_tooltip(
             "Name of the area."
         );
         
         //Area subtitle input.
-        string subtitle = game.cur_area_data.subtitle;
+        string subtitle = game.cur_area_data->subtitle;
         if(ImGui::InputText("Subtitle", &subtitle)) {
             register_change("area subtitle change");
-            game.cur_area_data.subtitle = subtitle;
+            game.cur_area_data->subtitle = subtitle;
         }
         set_tooltip(
             "Subtitle, if any. Appears on the loading screen."
         );
         
         //Area description input.
-        string description = game.cur_area_data.description;
+        string description = game.cur_area_data->description;
         if(ImGui::InputText("Description", &description)) {
             register_change("area description change");
-            game.cur_area_data.description = description;
+            game.cur_area_data->description = description;
         }
         set_tooltip(
             "A general description about the area, like what the player "
@@ -1758,10 +1758,10 @@ void area_editor::process_gui_panel_info() {
             
             if(!new_tag.empty()) {
                 register_change("area tags change");
-                if(!game.cur_area_data.tags.empty()) {
-                    game.cur_area_data.tags += "; ";
+                if(!game.cur_area_data->tags.empty()) {
+                    game.cur_area_data->tags += "; ";
                 }
-                game.cur_area_data.tags += new_tag;
+                game.cur_area_data->tags += new_tag;
                 ImGui::CloseCurrentPopup();
             }
             
@@ -1770,10 +1770,10 @@ void area_editor::process_gui_panel_info() {
         
         //Area tags input.
         ImGui::SameLine();
-        string tags = game.cur_area_data.tags;
+        string tags = game.cur_area_data->tags;
         if(ImGui::InputText("Tags", &tags)) {
             register_change("area tags change");
-            game.cur_area_data.tags = tags;
+            game.cur_area_data->tags = tags;
         }
         set_tooltip(
             "Short keywords that describe the area, separated by semicolon.\n"
@@ -1781,7 +1781,7 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Difficulty value.
-        int difficulty = game.cur_area_data.difficulty;
+        int difficulty = game.cur_area_data->difficulty;
         vector<string> difficulty_options = {
             "Not specified",
             "1 - Very easy",
@@ -1792,7 +1792,7 @@ void area_editor::process_gui_panel_info() {
         };
         if(ImGui::Combo("Difficulty", &difficulty, difficulty_options, 15)) {
             register_change("difficulty change");
-            game.cur_area_data.difficulty = difficulty;
+            game.cur_area_data->difficulty = difficulty;
         }
         set_tooltip(
             "How hard this area is. This is very subjective, and only\n"
@@ -1814,18 +1814,18 @@ void area_editor::process_gui_panel_info() {
     
         //Preview song button.
         bool valid_song_selected =
-            !game.cur_area_data.song_name.empty() &&
-            game.cur_area_data.song_name != NONE_OPTION;
+            !game.cur_area_data->song_name.empty() &&
+            game.cur_area_data->song_name != NONE_OPTION;
         bool previewing =
             !preview_song.empty();
         bool can_preview_selected_song =
             valid_song_selected &&
-            preview_song != game.cur_area_data.song_name;
+            preview_song != game.cur_area_data->song_name;
         bool can_stop_previewing =
             previewing &&
             (
                 !valid_song_selected ||
-                preview_song == game.cur_area_data.song_name
+                preview_song == game.cur_area_data->song_name
             );
         bool preview_button_valid =
             can_preview_selected_song || can_stop_previewing;
@@ -1842,7 +1842,7 @@ void area_editor::process_gui_panel_info() {
             )
         ) {
             if(can_preview_selected_song) {
-                preview_song = game.cur_area_data.song_name;
+                preview_song = game.cur_area_data->song_name;
                 game.audio.set_current_song(preview_song);
             } else if (can_stop_previewing) {
                 game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
@@ -1860,7 +1860,7 @@ void area_editor::process_gui_panel_info() {
         if(can_preview_selected_song) {
             preview_tooltip_str +=
                 "Click here to preview the song \"" +
-                game.cur_area_data.song_name + "\".";
+                game.cur_area_data->song_name + "\".";
         } else if(can_stop_previewing) {
             preview_tooltip_str +=
                 "Click here to stop.";
@@ -1877,13 +1877,13 @@ void area_editor::process_gui_panel_info() {
         for(auto &s : game.audio.songs) {
             song_names.push_back(s.first);
         }
-        if(game.cur_area_data.song_name.empty()) {
-            game.cur_area_data.song_name = NONE_OPTION;
+        if(game.cur_area_data->song_name.empty()) {
+            game.cur_area_data->song_name = NONE_OPTION;
         }
-        string song_name = game.cur_area_data.song_name;
+        string song_name = game.cur_area_data->song_name;
         if(ImGui::Combo("Song", &song_name, song_names, 15)) {
             register_change("area song change");
-            game.cur_area_data.song_name = song_name;
+            game.cur_area_data->song_name = song_name;
         }
         set_tooltip(
             "What song to play."
@@ -1895,13 +1895,13 @@ void area_editor::process_gui_panel_info() {
         for(auto &w : game.content.weather_conditions) {
             weather_conditions.push_back(w.first);
         }
-        if(game.cur_area_data.weather_name.empty()) {
-            game.cur_area_data.weather_name = NONE_OPTION;
+        if(game.cur_area_data->weather_name.empty()) {
+            game.cur_area_data->weather_name = NONE_OPTION;
         }
-        string weather_name = game.cur_area_data.weather_name;
+        string weather_name = game.cur_area_data->weather_name;
         if(ImGui::Combo("Weather", &weather_name, weather_conditions, 15)) {
             register_change("area weather change");
-            game.cur_area_data.weather_name = weather_name;
+            game.cur_area_data->weather_name = weather_name;
         }
         set_tooltip(
             "The weather condition to use."
@@ -1912,27 +1912,27 @@ void area_editor::process_gui_panel_info() {
         
         bool has_time_limit = false;
         float mission_min = 0;
-        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        if(game.cur_area_data->type == AREA_TYPE_MISSION) {
             if(
-                game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+                game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 has_time_limit = true;
                 mission_min =
-                    game.cur_area_data.mission.goal_amount / 60.0f;
+                    game.cur_area_data->mission.goal_amount / 60.0f;
             } else if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data->mission.fail_conditions,
                     get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 has_time_limit = true;
                 mission_min =
-                    game.cur_area_data.mission.fail_time_limit / 60.0f;
+                    game.cur_area_data->mission.fail_time_limit / 60.0f;
             }
         }
-        int day_start_min = (int) game.cur_area_data.day_time_start;
+        int day_start_min = (int) game.cur_area_data->day_time_start;
         day_start_min = wrap_float(day_start_min, 0, 60 * 24);
-        float day_speed = game.cur_area_data.day_time_speed;
+        float day_speed = game.cur_area_data->day_time_speed;
         int day_end_min = (int) (day_start_min + mission_min * day_speed);
         day_end_min = wrap_float(day_end_min, 0, 60 * 24);
         
@@ -1943,13 +1943,13 @@ void area_editor::process_gui_panel_info() {
             )
         ) {
             register_change("day time change");
-            game.cur_area_data.day_time_start = day_start_min;
+            game.cur_area_data->day_time_start = day_start_min;
             if(has_time_limit) {
                 day_speed =
                     calculate_day_speed(
                         day_start_min, day_end_min, mission_min
                     );
-                game.cur_area_data.day_time_speed = day_speed;
+                game.cur_area_data->day_time_speed = day_speed;
             }
         }
         set_tooltip(
@@ -1969,7 +1969,7 @@ void area_editor::process_gui_panel_info() {
                     calculate_day_speed(
                         day_start_min, day_end_min, mission_min
                     );
-                game.cur_area_data.day_time_speed = day_speed;
+                game.cur_area_data->day_time_speed = day_speed;
             }
             set_tooltip(
                 "Point of the (game world) day at which gameplay ends.\n"
@@ -1989,7 +1989,7 @@ void area_editor::process_gui_panel_info() {
                 )
             ) {
                 register_change("day time change");
-                game.cur_area_data.day_time_speed = day_speed;
+                game.cur_area_data->day_time_speed = day_speed;
             }
             set_tooltip(
                 "Speed at which the (game world) day passes.\n"
@@ -2024,7 +2024,7 @@ void area_editor::process_gui_panel_info() {
             if(!f.empty() && !f[0].empty()) {
                 register_change("area thumbnail change");
                 remove_thumbnail();
-                game.cur_area_data.load_thumbnail(f[0]);
+                game.cur_area_data->load_thumbnail(f[0]);
                 thumbnail_needs_saving = true;
                 thumbnail_backup_needs_saving = true;
             }
@@ -2053,7 +2053,7 @@ void area_editor::process_gui_panel_info() {
         //would be drawing it.
         ImGui::Text("Current thumbnail:");
         
-        if(!game.cur_area_data.thumbnail) {
+        if(!game.cur_area_data->thumbnail) {
             //No thumbnail text.
             ImGui::Text("None");
         } else {
@@ -2061,13 +2061,13 @@ void area_editor::process_gui_panel_info() {
             point size =
                 resize_to_box_keeping_aspect_ratio(
                     point(
-                        al_get_bitmap_width(game.cur_area_data.thumbnail.get()),
-                        al_get_bitmap_height(game.cur_area_data.thumbnail.get())
+                        al_get_bitmap_width(game.cur_area_data->thumbnail.get()),
+                        al_get_bitmap_height(game.cur_area_data->thumbnail.get())
                     ),
                     point(200, 200)
                 );
             ImGui::Image(
-                (void*) game.cur_area_data.thumbnail.get(),
+                (void*) game.cur_area_data->thumbnail.get(),
                 ImVec2(size.x, size.y)
             );
         }
@@ -2081,7 +2081,7 @@ void area_editor::process_gui_panel_info() {
     //Background node.
     if(saveable_tree_node("info", "Background")) {
     
-        string bg_file_name = game.cur_area_data.bg_bmp_file_name;
+        string bg_file_name = game.cur_area_data->bg_bmp_file_name;
         
         //Browse for background image button.
         if(ImGui::Button("...")) {
@@ -2129,13 +2129,13 @@ void area_editor::process_gui_panel_info() {
             "This repeating texture can be seen when looking at the void."
         );
         
-        if(bg_file_name != game.cur_area_data.bg_bmp_file_name) {
+        if(bg_file_name != game.cur_area_data->bg_bmp_file_name) {
             register_change("area background change");
-            game.cur_area_data.bg_bmp_file_name = bg_file_name;
+            game.cur_area_data->bg_bmp_file_name = bg_file_name;
         }
         
         //Background color value.
-        ALLEGRO_COLOR bg_color = game.cur_area_data.bg_color;
+        ALLEGRO_COLOR bg_color = game.cur_area_data->bg_color;
         if(
             ImGui::ColorEdit4(
                 "Color", (float*) &bg_color,
@@ -2143,7 +2143,7 @@ void area_editor::process_gui_panel_info() {
             )
         ) {
             register_change("area background color change");
-            game.cur_area_data.bg_color = bg_color;
+            game.cur_area_data->bg_color = bg_color;
         }
         set_tooltip(
             "Set the color of the void. If you have a background image,\n"
@@ -2151,10 +2151,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Background distance value.
-        float bg_dist = game.cur_area_data.bg_dist;
+        float bg_dist = game.cur_area_data->bg_dist;
         if(ImGui::DragFloat("Distance", &bg_dist)) {
             register_change("area background distance change");
-            game.cur_area_data.bg_dist = bg_dist;
+            game.cur_area_data->bg_dist = bg_dist;
         }
         set_tooltip(
             "How far away the background texture is. "
@@ -2164,10 +2164,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Background zoom value.
-        float bg_bmp_zoom = game.cur_area_data.bg_bmp_zoom;
+        float bg_bmp_zoom = game.cur_area_data->bg_bmp_zoom;
         if(ImGui::DragFloat("Zoom", &bg_bmp_zoom, 0.01)) {
             register_change("area background zoom change");
-            game.cur_area_data.bg_bmp_zoom = bg_bmp_zoom;
+            game.cur_area_data->bg_bmp_zoom = bg_bmp_zoom;
         }
         set_tooltip(
             "Scale the texture by this amount.",
@@ -2184,10 +2184,10 @@ void area_editor::process_gui_panel_info() {
     if(saveable_tree_node("info", "Metadata")) {
     
         //Maker input.
-        string maker = game.cur_area_data.maker;
+        string maker = game.cur_area_data->maker;
         if(ImGui::InputText("Maker", &maker)) {
             register_change("area maker change");
-            game.cur_area_data.maker = maker;
+            game.cur_area_data->maker = maker;
         }
         set_tooltip(
             "Name (or nickname) of who made this area. "
@@ -2195,10 +2195,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Version input.
-        string version = game.cur_area_data.version;
+        string version = game.cur_area_data->version;
         if(ImGui::InputText("Version", &version)) {
             register_change("area version change");
-            game.cur_area_data.version = version;
+            game.cur_area_data->version = version;
         }
         set_tooltip(
             "Version of the area, preferably in the \"X.Y.Z\" format. "
@@ -2206,10 +2206,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Maker notes input.
-        string maker_notes = game.cur_area_data.maker_notes;
+        string maker_notes = game.cur_area_data->maker_notes;
         if(ImGui::InputText("Maker notes", &maker_notes)) {
             register_change("area maker notes change");
-            game.cur_area_data.maker_notes = maker_notes;
+            game.cur_area_data->maker_notes = maker_notes;
         }
         set_tooltip(
             "Extra notes or comments about the area for other makers to see. "
@@ -2217,10 +2217,10 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Notes input.
-        string notes = game.cur_area_data.notes;
+        string notes = game.cur_area_data->notes;
         if(ImGui::InputText("Notes", &notes)) {
             register_change("area notes change");
-            game.cur_area_data.notes = notes;
+            game.cur_area_data->notes = notes;
         }
         set_tooltip(
             "Extra notes or comments of any kind. "
@@ -2501,15 +2501,17 @@ void area_editor::process_gui_panel_layout() {
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void area_editor::process_gui_panel_main() {
+    if(!game.cur_area_data) return;
+    
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area folder: %s", game.cur_area_data.folder_name.c_str());
+    ImGui::Text("Area folder: %s", game.cur_area_data->folder_name.c_str());
     set_tooltip(
-        "Full folder path: " + game.cur_area_data.path + "\n"
+        "Full folder path: " + game.cur_area_data->path + "\n"
         "Full user data folder path: " +
-        get_base_area_folder_path(game.cur_area_data.type, false) + "/" +
-        game.cur_area_data.folder_name + "\n"
+        get_base_area_folder_path(game.cur_area_data->type, false) + "/" +
+        game.cur_area_data->folder_name + "\n"
     );
     
     //Spacer dummy widget.
@@ -2662,9 +2664,9 @@ void area_editor::process_gui_panel_main() {
 void area_editor::process_gui_panel_mission() {
 
     float old_mission_survival_min =
-        game.cur_area_data.mission.goal_amount / 60.0f;
+        game.cur_area_data->mission.goal_amount / 60.0f;
     float old_mission_time_limit_min =
-        game.cur_area_data.mission.fail_time_limit / 60.0f;
+        game.cur_area_data->mission.fail_time_limit / 60.0f;
     bool day_duration_needs_update = false;
     
     //Mission goal node.
@@ -2675,21 +2677,21 @@ void area_editor::process_gui_panel_mission() {
         for(size_t g = 0; g < game.mission_goals.size(); g++) {
             goals_list.push_back(game.mission_goals[g]->get_name());
         }
-        int mission_goal = game.cur_area_data.mission.goal;
+        int mission_goal = game.cur_area_data->mission.goal;
         if(ImGui::Combo("Goal", &mission_goal, goals_list, 15)) {
             register_change("mission requirements change");
-            game.cur_area_data.mission.goal_mob_idxs.clear();
-            game.cur_area_data.mission.goal_amount = 1;
-            game.cur_area_data.mission.goal = (MISSION_GOAL) mission_goal;
+            game.cur_area_data->mission.goal_mob_idxs.clear();
+            game.cur_area_data->mission.goal_amount = 1;
+            game.cur_area_data->mission.goal = (MISSION_GOAL) mission_goal;
             if(
-                game.cur_area_data.mission.goal ==
+                game.cur_area_data->mission.goal ==
                 MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 day_duration_needs_update = true;
             }
         }
         
-        switch(game.cur_area_data.mission.goal) {
+        switch(game.cur_area_data->mission.goal) {
         case MISSION_GOAL_END_MANUALLY: {
     
             //Explanation text.
@@ -2715,12 +2717,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Treasure requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
                 
             //All treasures requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2735,7 +2737,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2744,7 +2746,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which treasures these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data->mission.goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick treasures...")) {
@@ -2780,12 +2782,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Enemy requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
                 
             //All enemies requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2800,7 +2802,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2809,7 +2811,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which enemies these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data->mission.goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick enemies...")) {
@@ -2842,11 +2844,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Time values.
             int total_seconds =
-                (int) game.cur_area_data.mission.goal_amount;
+                (int) game.cur_area_data->mission.goal_amount;
             if(ImGui::DragTime2("Time", &total_seconds)) {
                 register_change("mission requirements change");
                 total_seconds = std::max(total_seconds, 1);
-                game.cur_area_data.mission.goal_amount =
+                game.cur_area_data->mission.goal_amount =
                     (size_t) total_seconds;
                 day_duration_needs_update = true;
             }
@@ -2880,15 +2882,15 @@ void area_editor::process_gui_panel_mission() {
             //Region center text.
             ImGui::Text(
                 "Exit region center: %s,%s",
-                f2s(game.cur_area_data.mission.goal_exit_center.x).c_str(),
-                f2s(game.cur_area_data.mission.goal_exit_center.y).c_str()
+                f2s(game.cur_area_data->mission.goal_exit_center.x).c_str(),
+                f2s(game.cur_area_data->mission.goal_exit_center.y).c_str()
             );
             
             //Region center text.
             ImGui::Text(
                 "Exit region size: %s x %s",
-                f2s(game.cur_area_data.mission.goal_exit_size.x).c_str(),
-                f2s(game.cur_area_data.mission.goal_exit_size.y).c_str()
+                f2s(game.cur_area_data->mission.goal_exit_size.x).c_str(),
+                f2s(game.cur_area_data->mission.goal_exit_size.y).c_str()
             );
             
             //Spacer dummy widget.
@@ -2898,12 +2900,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Leader requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
                 
             //All leaders requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2918,7 +2920,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data->mission.goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2927,7 +2929,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which leaders these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data->mission.goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick leaders...")) {
@@ -2961,11 +2963,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.goal_amount;
+                (int) game.cur_area_data->mission.goal_amount;
             ImGui::SetNextItemWidth(80);
             if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_amount =
+                game.cur_area_data->mission.goal_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -2989,12 +2991,12 @@ void area_editor::process_gui_panel_mission() {
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
         unsigned int fail_flags =
-            (unsigned int) game.cur_area_data.mission.fail_conditions;
+            (unsigned int) game.cur_area_data->mission.fail_conditions;
         bool fail_flags_changed = false;
         
         //Pause menu end checkbox.
         bool pause_menu_end_is_fail =
-            game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY;
+            game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY;
         ImGui::BeginDisabled();
         ImGui::CheckboxFlags(
             "End from pause menu",
@@ -3004,7 +3006,7 @@ void area_editor::process_gui_panel_mission() {
         ImGui::EndDisabled();
         if(pause_menu_end_is_fail) {
             enable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
@@ -3015,7 +3017,7 @@ void area_editor::process_gui_panel_mission() {
             );
         } else {
             disable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
@@ -3025,13 +3027,13 @@ void area_editor::process_gui_panel_mission() {
         }
         
         //Time limit checkbox.
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             disable_flag(
                 fail_flags,
                 get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             disable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             ImGui::BeginDisabled();
@@ -3052,7 +3054,7 @@ void area_editor::process_gui_panel_mission() {
         ) {
             day_duration_needs_update = true;
         }
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             ImGui::EndDisabled();
             set_tooltip(
                 "The mission's goal is to survive for a certain amount of\n"
@@ -3074,12 +3076,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Time limit values.
             int seconds =
-                (int) game.cur_area_data.mission.fail_time_limit;
+                (int) game.cur_area_data->mission.fail_time_limit;
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission fail conditions change");
                 seconds = std::max(seconds, 1);
-                game.cur_area_data.mission.fail_time_limit = (size_t) seconds;
+                game.cur_area_data->mission.fail_time_limit = (size_t) seconds;
                 day_duration_needs_update = true;
             }
             set_tooltip(
@@ -3116,11 +3118,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.fail_too_few_pik_amount;
+                (int) game.cur_area_data->mission.fail_too_few_pik_amount;
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_too_few_pik_amount =
+                game.cur_area_data->mission.fail_too_few_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3154,11 +3156,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.fail_too_many_pik_amount;
+                (int) game.cur_area_data->mission.fail_too_many_pik_amount;
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_too_many_pik_amount =
+                game.cur_area_data->mission.fail_too_many_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3189,12 +3191,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Pikmin deaths value.
             int amount =
-                (int) game.cur_area_data.mission.fail_pik_killed;
+                (int) game.cur_area_data->mission.fail_pik_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_pik_killed =
+                game.cur_area_data->mission.fail_pik_killed =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3241,12 +3243,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Leader KOs value.
             int amount =
-                (int) game.cur_area_data.mission.fail_leaders_kod;
+                (int) game.cur_area_data->mission.fail_leaders_kod;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_leaders_kod =
+                game.cur_area_data->mission.fail_leaders_kod =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3277,12 +3279,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Enemy kills value.
             int amount =
-                (int) game.cur_area_data.mission.fail_enemies_killed;
+                (int) game.cur_area_data->mission.fail_enemies_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_enemies_killed =
+                game.cur_area_data->mission.fail_enemies_killed =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3295,7 +3297,7 @@ void area_editor::process_gui_panel_mission() {
         
         if(fail_flags_changed) {
             register_change("mission fail conditions change");
-            game.cur_area_data.mission.fail_conditions =
+            game.cur_area_data->mission.fail_conditions =
                 (bitmask_8_t) fail_flags;
         }
         
@@ -3303,7 +3305,7 @@ void area_editor::process_gui_panel_mission() {
         for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
             if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data->mission.fail_conditions,
                     get_idx_bitmask(c)
                 )
             ) {
@@ -3317,10 +3319,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Primary HUD condition checkbox.
             bool show_primary =
-                game.cur_area_data.mission.fail_hud_primary_cond != INVALID;
+                game.cur_area_data->mission.fail_hud_primary_cond != INVALID;
             if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_hud_primary_cond =
+                game.cur_area_data->mission.fail_hud_primary_cond =
                     show_primary ?
                     (size_t) active_conditions[0] :
                     INVALID;
@@ -3342,14 +3344,14 @@ void area_editor::process_gui_panel_mission() {
                     );
                     if(
                         cond_id ==
-                        game.cur_area_data.mission.fail_hud_primary_cond
+                        game.cur_area_data->mission.fail_hud_primary_cond
                     ) {
                         found = true;
                         selected = (int) c;
                     }
                 }
                 if(!found) {
-                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
+                    game.cur_area_data->mission.fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(
@@ -3358,7 +3360,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission fail conditions change");
-                    game.cur_area_data.mission.fail_hud_primary_cond =
+                    game.cur_area_data->mission.fail_hud_primary_cond =
                         active_conditions[selected];
                 }
                 set_tooltip(
@@ -3369,10 +3371,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Secondary HUD condition checkbox.
             bool show_secondary =
-                game.cur_area_data.mission.fail_hud_secondary_cond != INVALID;
+                game.cur_area_data->mission.fail_hud_secondary_cond != INVALID;
             if(ImGui::Checkbox("Show secondary HUD element", &show_secondary)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_hud_secondary_cond =
+                game.cur_area_data->mission.fail_hud_secondary_cond =
                     show_secondary ?
                     (size_t) active_conditions[0] :
                     INVALID;
@@ -3394,14 +3396,14 @@ void area_editor::process_gui_panel_mission() {
                     );
                     if(
                         cond_id ==
-                        game.cur_area_data.mission.fail_hud_secondary_cond
+                        game.cur_area_data->mission.fail_hud_secondary_cond
                     ) {
                         found = true;
                         selected = (int) c;
                     }
                 }
                 if(!found) {
-                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
+                    game.cur_area_data->mission.fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(
@@ -3410,7 +3412,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission fail conditions change");
-                    game.cur_area_data.mission.fail_hud_secondary_cond =
+                    game.cur_area_data->mission.fail_hud_secondary_cond =
                         active_conditions[selected];
                 }
                 set_tooltip(
@@ -3420,8 +3422,8 @@ void area_editor::process_gui_panel_mission() {
             }
             
         } else {
-            game.cur_area_data.mission.fail_hud_primary_cond = INVALID;
-            game.cur_area_data.mission.fail_hud_secondary_cond = INVALID;
+            game.cur_area_data->mission.fail_hud_primary_cond = INVALID;
+            game.cur_area_data->mission.fail_hud_secondary_cond = INVALID;
             
         }
         
@@ -3437,12 +3439,12 @@ void area_editor::process_gui_panel_mission() {
         //Grading mode text.
         ImGui::Text("Grading mode:");
         
-        int mode = game.cur_area_data.mission.grading_mode;
+        int mode = game.cur_area_data->mission.grading_mode;
         
         //Points mode radio button.
         if(ImGui::RadioButton("Points", &mode, 0)) {
             register_change("mission grading change");
-            game.cur_area_data.mission.grading_mode =
+            game.cur_area_data->mission.grading_mode =
                 (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
@@ -3455,7 +3457,7 @@ void area_editor::process_gui_panel_mission() {
         //Goal mode radio button.
         if(ImGui::RadioButton("Goal", &mode, 1)) {
             register_change("mission grading change");
-            game.cur_area_data.mission.grading_mode =
+            game.cur_area_data->mission.grading_mode =
                 (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
@@ -3468,7 +3470,7 @@ void area_editor::process_gui_panel_mission() {
         //Participation mode radio button.
         if(ImGui::RadioButton("Participation", &mode, 2)) {
             register_change("mission grading change");
-            game.cur_area_data.mission.grading_mode =
+            game.cur_area_data->mission.grading_mode =
                 (MISSION_GRADING_MODE) mode;
         }
         set_tooltip(
@@ -3476,17 +3478,17 @@ void area_editor::process_gui_panel_mission() {
             "the mission (platinum) or not (nothing)."
         );
         
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+        if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
         
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             
             //Points per Pikmin born value.
             ImGui::SetNextItemWidth(50);
-            int pppb = game.cur_area_data.mission.points_per_pikmin_born;
+            int pppb = game.cur_area_data->mission.points_per_pikmin_born;
             if(ImGui::DragInt("Points per Pikmin born", &pppb, 0.1f)) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.points_per_pikmin_born = pppb;
+                game.cur_area_data->mission.points_per_pikmin_born = pppb;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
@@ -3494,11 +3496,11 @@ void area_editor::process_gui_panel_mission() {
                 "points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
+            if(game.cur_area_data->mission.points_per_pikmin_born != 0) {
                 ImGui::Indent();
                 
                 //Pikmin born point loss on fail checkbox.
-                int flags = game.cur_area_data.mission.point_loss_data;
+                int flags = game.cur_area_data->mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofpb", &flags,
@@ -3506,7 +3508,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_loss_data = flags;
+                    game.cur_area_data->mission.point_loss_data = flags;
                 }
                 set_tooltip(
                     "If checked, the player will receive 0 points for\n"
@@ -3514,7 +3516,7 @@ void area_editor::process_gui_panel_mission() {
                 );
                 
                 //Pikmin born use in HUD checkbox.
-                flags = game.cur_area_data.mission.point_hud_data;
+                flags = game.cur_area_data->mission.point_hud_data;
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpb", &flags,
@@ -3522,7 +3524,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_hud_data = flags;
+                    game.cur_area_data->mission.point_hud_data = flags;
                 }
                 set_tooltip(
                     "If checked, the HUD item for the score counter will\n"
@@ -3536,10 +3538,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Points per Pikmin death value.
             ImGui::SetNextItemWidth(50);
-            int pppd = game.cur_area_data.mission.points_per_pikmin_death;
+            int pppd = game.cur_area_data->mission.points_per_pikmin_death;
             if(ImGui::DragInt("Points per Pikmin death", &pppd, 0.1f)) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.points_per_pikmin_death = pppd;
+                game.cur_area_data->mission.points_per_pikmin_death = pppd;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
@@ -3547,11 +3549,11 @@ void area_editor::process_gui_panel_mission() {
                 "points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
+            if(game.cur_area_data->mission.points_per_pikmin_death != 0) {
                 ImGui::Indent();
                 
                 //Pikmin death point loss on fail checkbox.
-                int flags = game.cur_area_data.mission.point_loss_data;
+                int flags = game.cur_area_data->mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofpd", &flags,
@@ -3559,7 +3561,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_loss_data = flags;
+                    game.cur_area_data->mission.point_loss_data = flags;
                 }
                 set_tooltip(
                     "If checked, the player will receive 0 points for\n"
@@ -3567,7 +3569,7 @@ void area_editor::process_gui_panel_mission() {
                 );
                 
                 //Pikmin death use in HUD checkbox.
-                flags = game.cur_area_data.mission.point_hud_data;
+                flags = game.cur_area_data->mission.point_hud_data;
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpd", &flags,
@@ -3575,7 +3577,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_hud_data = flags;
+                    game.cur_area_data->mission.point_hud_data = flags;
                 }
                 set_tooltip(
                     "If checked, the HUD item for the score counter will\n"
@@ -3589,16 +3591,16 @@ void area_editor::process_gui_panel_mission() {
             
             if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data->mission.fail_conditions,
                     get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 //Points per second of time left value.
                 ImGui::SetNextItemWidth(50);
-                int ppsl = game.cur_area_data.mission.points_per_sec_left;
+                int ppsl = game.cur_area_data->mission.points_per_sec_left;
                 if(ImGui::DragInt("Points per second left", &ppsl, 0.1f)) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.points_per_sec_left = ppsl;
+                    game.cur_area_data->mission.points_per_sec_left = ppsl;
                 }
                 set_tooltip(
                     "Amount of points that the player receives for each\n"
@@ -3607,11 +3609,11 @@ void area_editor::process_gui_panel_mission() {
                     "points. 0 means this criterion doesn't count.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
-                if(game.cur_area_data.mission.points_per_sec_left != 0) {
+                if(game.cur_area_data->mission.points_per_sec_left != 0) {
                     ImGui::Indent();
                     
                     //Seconds left point loss on fail checkbox.
-                    int flags = game.cur_area_data.mission.point_loss_data;
+                    int flags = game.cur_area_data->mission.point_loss_data;
                     if(
                         ImGui::CheckboxFlags(
                             "0 points on fail##zpofsl", &flags,
@@ -3619,7 +3621,7 @@ void area_editor::process_gui_panel_mission() {
                         )
                     ) {
                         register_change("mission grading change");
-                        game.cur_area_data.mission.point_loss_data = flags;
+                        game.cur_area_data->mission.point_loss_data = flags;
                     }
                     set_tooltip(
                         "If checked, the player will receive 0 points for\n"
@@ -3627,7 +3629,7 @@ void area_editor::process_gui_panel_mission() {
                     );
                     
                     //Seconds left use in HUD checkbox.
-                    flags = game.cur_area_data.mission.point_hud_data;
+                    flags = game.cur_area_data->mission.point_hud_data;
                     if(
                         ImGui::CheckboxFlags(
                             "Use in HUD counter##uihsl", &flags,
@@ -3635,7 +3637,7 @@ void area_editor::process_gui_panel_mission() {
                         )
                     ) {
                         register_change("mission grading change");
-                        game.cur_area_data.mission.point_hud_data = flags;
+                        game.cur_area_data->mission.point_hud_data = flags;
                     }
                     set_tooltip(
                         "If checked, the HUD item for the score counter will\n"
@@ -3650,10 +3652,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Points per second passed value.
             ImGui::SetNextItemWidth(50);
-            int ppss = game.cur_area_data.mission.points_per_sec_passed;
+            int ppss = game.cur_area_data->mission.points_per_sec_passed;
             if(ImGui::DragInt("Points per second passed", &ppss, 0.1f)) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.points_per_sec_passed = ppss;
+                game.cur_area_data->mission.points_per_sec_passed = ppss;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
@@ -3661,11 +3663,11 @@ void area_editor::process_gui_panel_mission() {
                 "player loses points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission.points_per_sec_passed != 0) {
+            if(game.cur_area_data->mission.points_per_sec_passed != 0) {
                 ImGui::Indent();
                 
                 //Seconds passed point loss on fail checkbox.
-                int flags = game.cur_area_data.mission.point_loss_data;
+                int flags = game.cur_area_data->mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofsp", &flags,
@@ -3673,7 +3675,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_loss_data = flags;
+                    game.cur_area_data->mission.point_loss_data = flags;
                 }
                 set_tooltip(
                     "If checked, the player will receive 0 points for\n"
@@ -3681,7 +3683,7 @@ void area_editor::process_gui_panel_mission() {
                 );
                 
                 //Seconds passed use in HUD checkbox.
-                flags = game.cur_area_data.mission.point_hud_data;
+                flags = game.cur_area_data->mission.point_hud_data;
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihsp", &flags,
@@ -3689,7 +3691,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_hud_data = flags;
+                    game.cur_area_data->mission.point_hud_data = flags;
                 }
                 set_tooltip(
                     "If checked, the HUD item for the score counter will\n"
@@ -3703,12 +3705,12 @@ void area_editor::process_gui_panel_mission() {
             
             //Points per treasure point gathered value.
             ImGui::SetNextItemWidth(50);
-            int pptp = game.cur_area_data.mission.points_per_treasure_point;
+            int pptp = game.cur_area_data->mission.points_per_treasure_point;
             if(
                 ImGui::DragInt("Points per treasure point", &pptp, 0.1f)
             ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.points_per_treasure_point = pptp;
+                game.cur_area_data->mission.points_per_treasure_point = pptp;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
@@ -3717,11 +3719,11 @@ void area_editor::process_gui_panel_mission() {
                 "player loses points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission.points_per_treasure_point != 0) {
+            if(game.cur_area_data->mission.points_per_treasure_point != 0) {
                 ImGui::Indent();
                 
                 //Treasure point point loss on fail checkbox.
-                int flags = game.cur_area_data.mission.point_loss_data;
+                int flags = game.cur_area_data->mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpoftp", &flags,
@@ -3731,7 +3733,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_loss_data = flags;
+                    game.cur_area_data->mission.point_loss_data = flags;
                 }
                 set_tooltip(
                     "If checked, the player will receive 0 points for\n"
@@ -3739,7 +3741,7 @@ void area_editor::process_gui_panel_mission() {
                 );
                 
                 //Treasure point use in HUD checkbox.
-                flags = game.cur_area_data.mission.point_hud_data;
+                flags = game.cur_area_data->mission.point_hud_data;
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihtp", &flags,
@@ -3749,7 +3751,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_hud_data = flags;
+                    game.cur_area_data->mission.point_hud_data = flags;
                 }
                 set_tooltip(
                     "If checked, the HUD item for the score counter will\n"
@@ -3763,10 +3765,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Points per enemy point gathered value.
             ImGui::SetNextItemWidth(50);
-            int ppep = game.cur_area_data.mission.points_per_enemy_point;
+            int ppep = game.cur_area_data->mission.points_per_enemy_point;
             if(ImGui::DragInt("Points per enemy point", &ppep, 0.1f)) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.points_per_enemy_point = ppep;
+                game.cur_area_data->mission.points_per_enemy_point = ppep;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
@@ -3775,11 +3777,11 @@ void area_editor::process_gui_panel_mission() {
                 "0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission.points_per_enemy_point != 0) {
+            if(game.cur_area_data->mission.points_per_enemy_point != 0) {
                 ImGui::Indent();
                 
                 //Enemy kill point point loss on fail checkbox.
-                int flags = game.cur_area_data.mission.point_loss_data;
+                int flags = game.cur_area_data->mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofep", &flags,
@@ -3787,7 +3789,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_loss_data = flags;
+                    game.cur_area_data->mission.point_loss_data = flags;
                 }
                 set_tooltip(
                     "If checked, the player will receive 0 points for\n"
@@ -3795,7 +3797,7 @@ void area_editor::process_gui_panel_mission() {
                 );
                 
                 //Enemy kill point use in HUD checkbox.
-                flags = game.cur_area_data.mission.point_hud_data;
+                flags = game.cur_area_data->mission.point_hud_data;
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihep", &flags,
@@ -3803,7 +3805,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission grading change");
-                    game.cur_area_data.mission.point_hud_data = flags;
+                    game.cur_area_data->mission.point_hud_data = flags;
                 }
                 set_tooltip(
                     "If checked, the HUD item for the score counter will\n"
@@ -3819,11 +3821,11 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Dummy(ImVec2(0, 16));
             
             //Starting score value.
-            int starting_points = game.cur_area_data.mission.starting_points;
+            int starting_points = game.cur_area_data->mission.starting_points;
             ImGui::SetNextItemWidth(60);
             if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.starting_points = starting_points;
+                game.cur_area_data->mission.starting_points = starting_points;
             }
             set_tooltip(
                 "Starting amount of points. It can be positive or negative.",
@@ -3837,17 +3839,17 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Medal point requirements:");
             
             //Bronze point requirement value.
-            int bronze_req = game.cur_area_data.mission.bronze_req;
+            int bronze_req = game.cur_area_data->mission.bronze_req;
             ImGui::SetNextItemWidth(90);
             if(
                 ImGui::DragInt(
                     "Bronze", &bronze_req, 1.0f,
                     INT_MIN,
-                    game.cur_area_data.mission.silver_req - 1
+                    game.cur_area_data->mission.silver_req - 1
                 )
             ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.bronze_req = bronze_req;
+                game.cur_area_data->mission.bronze_req = bronze_req;
             }
             set_tooltip(
                 "To get a bronze medal, the player needs at least these\n"
@@ -3856,17 +3858,17 @@ void area_editor::process_gui_panel_mission() {
             );
             
             //Silver point requirement value.
-            int silver_req = game.cur_area_data.mission.silver_req;
+            int silver_req = game.cur_area_data->mission.silver_req;
             ImGui::SetNextItemWidth(90);
             if(
                 ImGui::DragInt(
                     "Silver", &silver_req, 1.0f,
-                    game.cur_area_data.mission.bronze_req + 1,
-                    game.cur_area_data.mission.gold_req - 1
+                    game.cur_area_data->mission.bronze_req + 1,
+                    game.cur_area_data->mission.gold_req - 1
                 )
             ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.silver_req = silver_req;
+                game.cur_area_data->mission.silver_req = silver_req;
             }
             set_tooltip(
                 "To get a silver medal, the player needs at least these\n"
@@ -3875,17 +3877,17 @@ void area_editor::process_gui_panel_mission() {
             );
             
             //Gold point requirement value.
-            int gold_req = game.cur_area_data.mission.gold_req;
+            int gold_req = game.cur_area_data->mission.gold_req;
             ImGui::SetNextItemWidth(90);
             if(
                 ImGui::DragInt(
                     "Gold", &gold_req, 1.0f,
-                    game.cur_area_data.mission.silver_req + 1,
-                    game.cur_area_data.mission.platinum_req - 1
+                    game.cur_area_data->mission.silver_req + 1,
+                    game.cur_area_data->mission.platinum_req - 1
                 )
             ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.gold_req = gold_req;
+                game.cur_area_data->mission.gold_req = gold_req;
             }
             set_tooltip(
                 "To get a gold medal, the player needs at least these\n"
@@ -3894,17 +3896,17 @@ void area_editor::process_gui_panel_mission() {
             );
             
             //Platinum point requirement value.
-            int platinum_req = game.cur_area_data.mission.platinum_req;
+            int platinum_req = game.cur_area_data->mission.platinum_req;
             ImGui::SetNextItemWidth(90);
             if(
                 ImGui::DragInt(
                     "Platinum", &platinum_req, 1.0f,
-                    game.cur_area_data.mission.gold_req + 1,
+                    game.cur_area_data->mission.gold_req + 1,
                     INT_MAX
                 )
             ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission.platinum_req = platinum_req;
+                game.cur_area_data->mission.platinum_req = platinum_req;
             }
             set_tooltip(
                 "To get a platinum medal, the player needs at least these\n"
@@ -3918,23 +3920,23 @@ void area_editor::process_gui_panel_mission() {
     }
     
     if(day_duration_needs_update) {
-        float day_start_min = game.cur_area_data.day_time_start;
+        float day_start_min = game.cur_area_data->day_time_start;
         day_start_min = wrap_float(day_start_min, 0, 60 * 24);
-        float day_speed = game.cur_area_data.day_time_speed;
+        float day_speed = game.cur_area_data->day_time_speed;
         float old_mission_min = 0;
         size_t mission_seconds = 0;
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             old_mission_min = old_mission_survival_min;
-            mission_seconds = game.cur_area_data.mission.goal_amount;
+            mission_seconds = game.cur_area_data->mission.goal_amount;
         } else {
             old_mission_min = old_mission_time_limit_min;
-            mission_seconds = game.cur_area_data.mission.fail_time_limit;
+            mission_seconds = game.cur_area_data->mission.fail_time_limit;
         }
         float old_day_end_min = day_start_min + old_mission_min * day_speed;
         old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
         mission_seconds = std::max(mission_seconds, (size_t) 1);
         float new_mission_min = mission_seconds / 60.0f;
-        game.cur_area_data.day_time_speed =
+        game.cur_area_data->day_time_speed =
             calculate_day_speed(
                 day_start_min, old_day_end_min, new_mission_min
             );
@@ -3997,10 +3999,10 @@ void area_editor::process_gui_panel_mob() {
             bool has_links_to = false;
             for(
                 size_t m = 0;
-                m < game.cur_area_data.mob_generators.size();
+                m < game.cur_area_data->mob_generators.size();
                 m++
             ) {
-                mob_gen* other_m_ptr = game.cur_area_data.mob_generators[m];
+                mob_gen* other_m_ptr = game.cur_area_data->mob_generators[m];
                 for(size_t l = 0; l < other_m_ptr->links.size(); l++) {
                     if(other_m_ptr->links[l] == m_ptr) {
                         has_links_to = true;
@@ -4252,10 +4254,10 @@ void area_editor::process_gui_panel_mobs() {
     } else if(sub_state == EDITOR_SUB_STATE_MISSION_MOBS) {
     
         string cat_name =
-            game.cur_area_data.mission.goal ==
+            game.cur_area_data->mission.goal ==
             MISSION_GOAL_COLLECT_TREASURE ?
             "treasure/pile/resource" :
-            game.cur_area_data.mission.goal ==
+            game.cur_area_data->mission.goal ==
             MISSION_GOAL_BATTLE_ENEMIES ?
             "enemy" :
             "leader";
@@ -4271,7 +4273,7 @@ void area_editor::process_gui_panel_mobs() {
         //Total objects required text.
         ImGui::Text(
             "Total objects required: %lu",
-            game.cur_area_data.mission.goal_mob_idxs.size()
+            game.cur_area_data->mission.goal_mob_idxs.size()
         );
         
         //Finish button.
@@ -5115,27 +5117,27 @@ void area_editor::process_gui_panel_review() {
     
         //Sector amount text.
         ImGui::BulletText(
-            "Sectors: %i", (int) game.cur_area_data.sectors.size()
+            "Sectors: %i", (int) game.cur_area_data->sectors.size()
         );
         
         //Edge amount text.
         ImGui::BulletText(
-            "Edges: %i", (int) game.cur_area_data.edges.size()
+            "Edges: %i", (int) game.cur_area_data->edges.size()
         );
         
         //Vertex amount text.
         ImGui::BulletText(
-            "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
+            "Vertexes: %i", (int) game.cur_area_data->vertexes.size()
         );
         
         //Object amount text.
         ImGui::BulletText(
-            "Objects: %i", (int) game.cur_area_data.mob_generators.size()
+            "Objects: %i", (int) game.cur_area_data->mob_generators.size()
         );
         
         //Path stop amount text.
         ImGui::BulletText(
-            "Path stops: %i", (int) game.cur_area_data.path_stops.size()
+            "Path stops: %i", (int) game.cur_area_data->path_stops.size()
         );
         
         ImGui::TreePop();
@@ -5710,11 +5712,11 @@ void area_editor::process_gui_panel_tools() {
                 "loading the auto-backup", "load",
             [this] () {
                 bool backup_exists = false;
-                if(!game.cur_area_data.folder_name.empty()) {
+                if(!game.cur_area_data->folder_name.empty()) {
                     string file_path =
                         get_base_area_folder_path(
-                            game.cur_area_data.type, false
-                        ) + "/" + game.cur_area_data.folder_name + "/" +
+                            game.cur_area_data->type, false
+                        ) + "/" + game.cur_area_data->folder_name + "/" +
                         AREA_GEOMETRY_BACKUP_FILE_NAME;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;

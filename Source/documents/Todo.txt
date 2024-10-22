@@ -2,13 +2,13 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Move area saving to the area class
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
-    Edit area, playtest, leave, reload area, it'll fail
+    Starting Crash Landing makes the obstacle clear jingle play
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -208,7 +208,6 @@ Next tasks (roughly sorted most important first)
                 Check if content by that name already exists, and if so report it
                 Unload
             Make assets inherit from the plain_content class
-            Move area loading to area_data::load_from_data_node
             Add the new common content properties to everything in the engine
             A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
             Editors should separate creating and loading
@@ -223,6 +222,7 @@ Next tasks (roughly sorted most important first)
                 How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
                 What should happen when the player opens the texture selection dialog in the area editor?
         For later on, maybe, the content manager should be able to figure out a dependency tree
+        Run a memory leak check when this is done
     Rename every file to lowercase?
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
@@ -285,6 +285,7 @@ Next tasks (roughly sorted most important first)
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
         Allow the player to drag their mouse on the scrollbar GUI item
         In the results menu, show by how much you've beaten your previous best score
+        The difficulty listing in the area menu should use fire icons instead of numbers
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Controls improvements

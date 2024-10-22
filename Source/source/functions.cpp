@@ -58,7 +58,7 @@ bool are_walls_between(
     
     set<edge*> candidate_edges;
     if(
-        !game.cur_area_data.bmap.get_edges_in_region(
+        !game.cur_area_data->bmap.get_edges_in_region(
             bb_tl, bb_br,
             candidate_edges
         )
@@ -118,8 +118,10 @@ bool are_walls_between(
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    if(!game.cur_area_data) return;
+    
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         if(
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != game.bmp_error
@@ -175,10 +177,10 @@ void crash(const string &reason, const string &info, int exit_status) {
         i2s(game.bitmaps.get_total_uses()) + " total uses).\n" +
         "  Current area: ";
         
-    if(!game.cur_area_data.name.empty()) {
+    if(!game.cur_area_data->name.empty()) {
         error_str +=
-            game.cur_area_data.name + ", version " +
-            game.cur_area_data.version + ".\n";
+            game.cur_area_data->name + ", version " +
+            game.cur_area_data->version + ".\n";
     } else {
         error_str += "none.\n";
     }

@@ -345,7 +345,7 @@ hud_t::hud_t() :
             game.config.day_minutes_end - game.config.day_minutes_start;
         float pre_tick_day_minutes =
             game.states.gameplay->day_minutes -
-            game.cur_area_data.day_time_speed * delta_t / 60.0f;
+            game.cur_area_data->day_time_speed * delta_t / 60.0f;
         float post_tick_day_minutes =
             game.states.gameplay->day_minutes;
         const float checkpoints[3] = {0.25f, 0.50f, 0.75f};
@@ -954,7 +954,7 @@ hud_t::hud_t() :
     gui.add_item(next_spray_input, "spray_next_input");
     
     
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
     
         //Mission goal bubble.
         gui_item* mission_goal_bubble = new gui_item();
@@ -996,7 +996,7 @@ hud_t::hud_t() :
         
         
         string goal_cur_label_text =
-            game.mission_goals[game.cur_area_data.mission.goal]->
+            game.mission_goals[game.cur_area_data->mission.goal]->
             get_hud_label();
             
         if(!goal_cur_label_text.empty()) {
@@ -1019,11 +1019,11 @@ hud_t::hud_t() :
                 [this, mission_goal_cur]
             (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data->mission.goal]->
                     get_cur_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data->mission.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1059,11 +1059,11 @@ hud_t::hud_t() :
             mission_goal_req->on_draw =
             [this] (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data->mission.goal]->
                     get_req_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data->mission.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1094,7 +1094,7 @@ hud_t::hud_t() :
             mission_goal_name->on_draw =
             [this] (const point & center, const point & size) {
                 draw_text(
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data->mission.goal]->
                     get_name(), game.sys_assets.fnt_standard,
                     center, size, al_map_rgba(255, 255, 255, 128)
                 );
@@ -1106,9 +1106,9 @@ hud_t::hud_t() :
     }
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
-        game.cur_area_data.mission.point_hud_data != 0
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
+        game.cur_area_data->mission.point_hud_data != 0
     ) {
     
         //Mission score bubble.
@@ -1188,13 +1188,13 @@ hud_t::hud_t() :
             const float seg_limits[] = {
                 std::min(ruler_start_value, 0.0f),
                 0,
-                (float) game.cur_area_data.mission.bronze_req,
-                (float) game.cur_area_data.mission.silver_req,
-                (float) game.cur_area_data.mission.gold_req,
-                (float) game.cur_area_data.mission.platinum_req,
+                (float) game.cur_area_data->mission.bronze_req,
+                (float) game.cur_area_data->mission.silver_req,
+                (float) game.cur_area_data->mission.gold_req,
+                (float) game.cur_area_data->mission.platinum_req,
                 std::max(
                     ruler_end_value,
-                    (float) game.cur_area_data.mission.platinum_req
+                    (float) game.cur_area_data->mission.platinum_req
                 )
             };
             const ALLEGRO_COLOR seg_colors_top[] = {
@@ -1365,14 +1365,14 @@ hud_t::hud_t() :
     }
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_primary_cond != INVALID
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.fail_hud_primary_cond != INVALID
     ) {
         create_mission_fail_cond_items(true);
     }
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_secondary_cond != INVALID
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.fail_hud_secondary_cond != INVALID
     ) {
         create_mission_fail_cond_items(false);
     }
@@ -1441,9 +1441,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
     MISSION_FAIL_COND cond =
         primary ?
         (MISSION_FAIL_COND)
-        game.cur_area_data.mission.fail_hud_primary_cond :
+        game.cur_area_data->mission.fail_hud_primary_cond :
         (MISSION_FAIL_COND)
-        game.cur_area_data.mission.fail_hud_secondary_cond;
+        game.cur_area_data->mission.fail_hud_secondary_cond;
         
     //Mission fail condition bubble.
     gui_item* mission_fail_bubble = new gui_item();

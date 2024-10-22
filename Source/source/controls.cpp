@@ -430,7 +430,7 @@ void gameplay_state::process_system_key_press(int keycode) {
             ALLEGRO_BITMAP* bmp = draw_to_bitmap();
             string file_name =
                 USER_DATA_FOLDER_PATH + "/Area_" +
-                sanitize_file_name(game.cur_area_data.name) +
+                sanitize_file_name(game.cur_area_data->name) +
                 "_" + get_current_time(true) + ".png";
                 
             if(!al_save_bitmap(file_name.c_str(), bmp)) {

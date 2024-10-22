@@ -152,11 +152,11 @@ void area_editor::check_drawing_line(const point &pos) {
     }
     
     //Check for edge collisions in collinear lines.
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
         //We don't need to watch out for the edge of the current point
         //or the previous one, since this collinearity check doesn't
         //return true for line segments that touch in only one point.
-        edge* e_ptr = game.cur_area_data.edges[e];
+        edge* e_ptr = game.cur_area_data->edges[e];
         point ep1(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
         point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
         
@@ -175,8 +175,8 @@ void area_editor::check_drawing_line(const point &pos) {
     }
     
     //Check for edge collisions.
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         //If this edge is the same or a neighbor of the previous node,
         //then never mind.
         if(
@@ -447,7 +447,7 @@ void area_editor::copy_sector_properties() {
  * @return The created sector.
  */
 sector* area_editor::create_sector_for_layout_drawing(const sector* copy_from) {
-    sector* new_sector = game.cur_area_data.new_sector();
+    sector* new_sector = game.cur_area_data->new_sector();
     
     if(copy_from) {
         copy_from->clone(new_sector);
@@ -478,7 +478,7 @@ void area_editor::delete_edge(edge* e_ptr) {
     for(size_t s = 0; s < 2; s++) {
         if(!sectors[s]) continue;
         if(sectors[s]->edges.empty()) {
-            game.cur_area_data.remove_sector(sectors[s]);
+            game.cur_area_data->remove_sector(sectors[s]);
         }
     }
     
@@ -487,12 +487,12 @@ void area_editor::delete_edge(edge* e_ptr) {
     e_ptr->remove_from_vertexes();
     for(size_t v = 0; v < 2; v++) {
         if(vertexes[v]->edges.empty()) {
-            game.cur_area_data.remove_vertex(vertexes[v]);
+            game.cur_area_data->remove_vertex(vertexes[v]);
         }
     }
     
     //Finally, delete the edge proper.
-    game.cur_area_data.remove_edge(e_ptr);
+    game.cur_area_data->remove_edge(e_ptr);
 }
 
 
@@ -531,15 +531,15 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
     for(auto const &sm : which) {
         //Get its index.
         size_t m_idx = 0;
-        for(; m_idx < game.cur_area_data.mob_generators.size(); m_idx++) {
-            if(game.cur_area_data.mob_generators[m_idx] == sm) break;
+        for(; m_idx < game.cur_area_data->mob_generators.size(); m_idx++) {
+            if(game.cur_area_data->mob_generators[m_idx] == sm) break;
         }
         
         //Update links.
         for(
-            size_t m2 = 0; m2 < game.cur_area_data.mob_generators.size(); m2++
+            size_t m2 = 0; m2 < game.cur_area_data->mob_generators.size(); m2++
         ) {
-            mob_gen* m2_ptr = game.cur_area_data.mob_generators[m2];
+            mob_gen* m2_ptr = game.cur_area_data->mob_generators[m2];
             
             for(size_t l = 0; l < m2_ptr->links.size(); l++) {
             
@@ -565,19 +565,19 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
         
         //Check the list of mission requirement objects.
         unordered_set<size_t> new_mrmi;
-        new_mrmi.reserve(game.cur_area_data.mission.goal_mob_idxs.size());
-        for(size_t m2 : game.cur_area_data.mission.goal_mob_idxs) {
+        new_mrmi.reserve(game.cur_area_data->mission.goal_mob_idxs.size());
+        for(size_t m2 : game.cur_area_data->mission.goal_mob_idxs) {
             if(m2 > m_idx) {
                 new_mrmi.insert(m2 - 1);
             } else if (m2 != m_idx) {
                 new_mrmi.insert(m2);
             }
         }
-        game.cur_area_data.mission.goal_mob_idxs = new_mrmi;
+        game.cur_area_data->mission.goal_mob_idxs = new_mrmi;
         
         //Finally, delete it.
-        game.cur_area_data.mob_generators.erase(
-            game.cur_area_data.mob_generators.begin() + m_idx
+        game.cur_area_data->mob_generators.erase(
+            game.cur_area_data->mob_generators.begin() + m_idx
         );
         delete sm;
     }
@@ -604,25 +604,25 @@ void area_editor::delete_path_links(const set<path_link*> &which) {
 void area_editor::delete_path_stops(const set<path_stop*> &which) {
     for(auto &s : which) {
         //Check all links that end at this stop.
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); s2++) {
-            path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
             s2_ptr->remove_link(s);
         }
         
         //Finally, delete the stop.
         delete s;
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); s2++) {
-            if(game.cur_area_data.path_stops[s2] == s) {
-                game.cur_area_data.path_stops.erase(
-                    game.cur_area_data.path_stops.begin() + s2
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            if(game.cur_area_data->path_stops[s2] == s) {
+                game.cur_area_data->path_stops.erase(
+                    game.cur_area_data->path_stops.begin() + s2
                 );
                 break;
             }
         }
     }
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        game.cur_area_data.fix_path_stop_idxs(game.cur_area_data.path_stops[s]);
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        game.cur_area_data->fix_path_stop_idxs(game.cur_area_data->path_stops[s]);
     }
 }
 
@@ -673,11 +673,11 @@ void area_editor::find_problems() {
     }
     
     //Check overlapping vertexes.
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v1_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v1_ptr = game.cur_area_data->vertexes[v];
         
-        for(size_t v2 = v + 1; v2 < game.cur_area_data.vertexes.size(); v2++) {
-            vertex* v2_ptr = game.cur_area_data.vertexes[v2];
+        for(size_t v2 = v + 1; v2 < game.cur_area_data->vertexes.size(); v2++) {
+            vertex* v2_ptr = game.cur_area_data->vertexes[v2];
             
             if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
                 problem_vertex_ptr = v1_ptr;
@@ -694,10 +694,10 @@ void area_editor::find_problems() {
     }
     
     //Check non-simple sectors.
-    if(!game.cur_area_data.problems.non_simples.empty()) {
+    if(!game.cur_area_data->problems.non_simples.empty()) {
         problem_type = EPT_BAD_SECTOR;
         problem_title = "Non-simple sector!";
-        switch(game.cur_area_data.problems.non_simples.begin()->second) {
+        switch(game.cur_area_data->problems.non_simples.begin()->second) {
         case TRIANGULATION_ERROR_LONE_EDGES: {
             problem_description =
                 "It contains lone edges. Try clearing them up.";
@@ -725,7 +725,7 @@ void area_editor::find_problems() {
     }
     
     //Check lone edges.
-    if(!game.cur_area_data.problems.lone_edges.empty()) {
+    if(!game.cur_area_data->problems.lone_edges.empty()) {
         problem_type = EPT_LONE_EDGE;
         problem_title = "Lone edge!";
         problem_description =
@@ -736,10 +736,10 @@ void area_editor::find_problems() {
     
     //Check for the existence of a leader object.
     bool has_leader = false;
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         if(
-            game.cur_area_data.mob_generators[m]->type != nullptr &&
-            game.cur_area_data.mob_generators[m]->type->category->id ==
+            game.cur_area_data->mob_generators[m]->type != nullptr &&
+            game.cur_area_data->mob_generators[m]->type->category->id ==
             MOB_CATEGORY_LEADERS
         ) {
             has_leader = true;
@@ -755,9 +755,9 @@ void area_editor::find_problems() {
     }
     
     //Objects with no type.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        if(!game.cur_area_data.mob_generators[m]->type) {
-            problem_mob_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        if(!game.cur_area_data->mob_generators[m]->type) {
+            problem_mob_ptr = game.cur_area_data->mob_generators[m];
             problem_type = EPT_TYPELESS_MOB;
             problem_title = "Mob with no type!";
             problem_description =
@@ -768,8 +768,8 @@ void area_editor::find_problems() {
     }
     
     //Objects out of bounds.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(!get_sector(m_ptr->pos, nullptr, false)) {
             problem_mob_ptr = m_ptr;
             problem_type = EPT_MOB_OOB;
@@ -781,8 +781,8 @@ void area_editor::find_problems() {
     }
     
     //Objects inside walls.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(!m_ptr->type) continue;
         
         if(
@@ -792,8 +792,8 @@ void area_editor::find_problems() {
             continue;
         }
         
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             if(!e_ptr->is_valid()) continue;
             
             if(
@@ -872,8 +872,8 @@ void area_editor::find_problems() {
     }
     
     //Objects that link to themselves.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         for(size_t l = 0; l < m_ptr->links.size(); l++) {
             if(m_ptr->links[l] == m_ptr) {
                 problem_mob_ptr = m_ptr;
@@ -889,14 +889,14 @@ void area_editor::find_problems() {
     }
     
     //Objects stored inside other objects in a loop.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(m_ptr->stored_inside == INVALID) continue;
         unordered_set<mob_gen*> visited_mobs;
         visited_mobs.insert(m_ptr);
         size_t next_idx = m_ptr->stored_inside;
         while(next_idx != INVALID) {
-            mob_gen* next_ptr = game.cur_area_data.mob_generators[next_idx];
+            mob_gen* next_ptr = game.cur_area_data->mob_generators[next_idx];
             if(visited_mobs.find(next_ptr) != visited_mobs.end()) {
                 problem_mob_ptr = next_ptr;
                 problem_type = EPT_MOB_STORED_IN_LOOP;
@@ -917,8 +917,8 @@ void area_editor::find_problems() {
     
     //Over the limit of Pikmin.
     size_t n_pikmin_mobs = 0;
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
             n_pikmin_mobs++;
             if(n_pikmin_mobs > game.config.max_pikmin_in_field) {
@@ -934,8 +934,8 @@ void area_editor::find_problems() {
     }
     
     //Path from pile to bridge is blocked by said bridge.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(!m_ptr->type) continue;
         if(m_ptr->type->category->id != MOB_CATEGORY_PILES) {
             continue;
@@ -984,8 +984,8 @@ void area_editor::find_problems() {
     }
     
     //Path stops out of bounds.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         if(!get_sector(s_ptr->pos, nullptr, false)) {
             problem_path_stop_ptr = s_ptr;
             problem_type = EPT_PATH_STOP_OOB;
@@ -997,14 +997,14 @@ void area_editor::find_problems() {
     }
     
     //Lone path stops.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         bool has_link = false;
         
         if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
         
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); s2++) {
-            path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
             if(s2_ptr == s_ptr) continue;
             
             if(s2_ptr->get_link(s_ptr)) {
@@ -1026,10 +1026,10 @@ void area_editor::find_problems() {
     }
     
     //A stops intersects with an unrelated link.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); s2++) {
-            path_stop* link_start_ptr = game.cur_area_data.path_stops[s2];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* link_start_ptr = game.cur_area_data->path_stops[s2];
             if(link_start_ptr == s_ptr) continue;
             
             for(size_t l = 0; l < link_start_ptr->links.size(); l++) {
@@ -1057,9 +1057,9 @@ void area_editor::find_problems() {
     }
     
     //Check for missing textures.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
     
-        sector* s_ptr = game.cur_area_data.sectors[s];
+        sector* s_ptr = game.cur_area_data->sectors[s];
         if(s_ptr->edges.empty()) continue;
         if(s_ptr->is_bottomless_pit) continue;
         if(
@@ -1078,9 +1078,9 @@ void area_editor::find_problems() {
     //Check for unknown textures.
     vector<string> texture_file_names =
         folder_to_vector(TEXTURES_FOLDER_PATH, false);
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
     
-        sector* s_ptr = game.cur_area_data.sectors[s];
+        sector* s_ptr = game.cur_area_data->sectors[s];
         if(s_ptr->edges.empty()) continue;
         if(s_ptr->is_bottomless_pit) continue;
         
@@ -1102,10 +1102,10 @@ void area_editor::find_problems() {
     }
     
     //Two stops intersecting.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); s2++) {
-            path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
             if(s2_ptr == s_ptr) continue;
             
             if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
@@ -1120,25 +1120,25 @@ void area_editor::find_problems() {
     }
     
     //Check if there are tree shadows with invalid images.
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
-        if(game.cur_area_data.tree_shadows[s]->bitmap == game.bmp_error) {
-            problem_shadow_ptr = game.cur_area_data.tree_shadows[s];
+    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+        if(game.cur_area_data->tree_shadows[s]->bitmap == game.bmp_error) {
+            problem_shadow_ptr = game.cur_area_data->tree_shadows[s];
             problem_type = EPT_UNKNOWN_SHADOW;
             problem_title = "Tree shadow with invalid texture!";
             problem_description =
                 "Texture name: \"" +
-                game.cur_area_data.tree_shadows[s]->file_name + "\".";
+                game.cur_area_data->tree_shadows[s]->file_name + "\".";
             return;
         }
     }
     
     //Mission goal requires some mobs, but there are none.
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
         (
-            game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
         )
     ) {
         if(get_mission_required_mob_count() == 0) {
@@ -1152,14 +1152,14 @@ void area_editor::find_problems() {
     
     //Mission is graded by points, but with no active criterioa.
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
     ) {
         bool has_any_criterion = false;
         for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
             if(
                 game.mission_score_criteria[c]->get_multiplier(
-                    &game.cur_area_data.mission
+                    &game.cur_area_data->mission
                 ) != 0
             ) {
                 has_any_criterion = true;
@@ -1480,8 +1480,8 @@ edge* area_editor::get_edge_under_point(
 ) const {
     bool found_after = (!after ? true : false);
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         if(e_ptr == after) {
             found_after = true;
             continue;
@@ -1518,10 +1518,10 @@ edge* area_editor::get_edge_under_point(
 vector<edge_intersection> area_editor::get_intersecting_edges() const {
     vector<edge_intersection> intersections;
     
-    for(size_t e1 = 0; e1 < game.cur_area_data.edges.size(); e1++) {
-        edge* e1_ptr = game.cur_area_data.edges[e1];
-        for(size_t e2 = e1 + 1; e2 < game.cur_area_data.edges.size(); e2++) {
-            edge* e2_ptr = game.cur_area_data.edges[e2];
+    for(size_t e1 = 0; e1 < game.cur_area_data->edges.size(); e1++) {
+        edge* e1_ptr = game.cur_area_data->edges[e1];
+        for(size_t e2 = e1 + 1; e2 < game.cur_area_data->edges.size(); e2++) {
+            edge* e2_ptr = game.cur_area_data->edges[e2];
             if(e1_ptr->has_neighbor(e2_ptr)) continue;
             if(
                 line_segs_intersect(
@@ -1569,8 +1569,8 @@ bool area_editor::get_mob_link_under_point(
     const point &p,
     std::pair<mob_gen*, mob_gen*>* data1, std::pair<mob_gen*, mob_gen*>* data2
 ) const {
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         for(size_t l = 0; l < m_ptr->links.size(); l++) {
             mob_gen* m2_ptr = m_ptr->links[l];
             if(
@@ -1608,8 +1608,8 @@ bool area_editor::get_mob_link_under_point(
 mob_gen* area_editor::get_mob_under_point(
     const point &p, size_t* out_idx
 ) const {
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         
         if(
             dist(m_ptr->pos, p) <= get_mob_gen_radius(m_ptr)
@@ -1639,8 +1639,8 @@ mob_gen* area_editor::get_mob_under_point(
 bool area_editor::get_path_link_under_point(
     const point &p, path_link** link1, path_link** link2
 ) const {
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
             if(
@@ -1667,8 +1667,8 @@ bool area_editor::get_path_link_under_point(
  * @return The stop.
  */
 path_stop* area_editor::get_path_stop_under_point(const point &p) const {
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         
         if(dist(s_ptr->pos, p) <= s_ptr->radius) {
             return s_ptr;
@@ -1699,8 +1699,8 @@ sector* area_editor::get_sector_under_point(const point &p) const {
  * @return The vertex.
  */
 vertex* area_editor::get_vertex_under_point(const point &p) const {
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         
         if(
             rectangles_intersect(
@@ -1871,9 +1871,9 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
         e_ptr->transfer_sector(
             small_sector, main_sector,
             main_sector ?
-            game.cur_area_data.find_sector_idx(main_sector) :
+            game.cur_area_data->find_sector_idx(main_sector) :
             INVALID,
-            game.cur_area_data.find_edge_idx(e_ptr)
+            game.cur_area_data->find_edge_idx(e_ptr)
         );
     }
     
@@ -1883,7 +1883,7 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
     }
     
     //Delete the now-merged sector.
-    game.cur_area_data.remove_sector(small_sector);
+    game.cur_area_data->remove_sector(small_sector);
     
     //Update all affected sectors.
     affected_sectors.erase(small_sector);
@@ -1939,19 +1939,19 @@ void area_editor::merge_vertex(
                     
                     //Set the new sectors.
                     if(e_ptr->sectors[0] == de_ptr->sectors[0]) {
-                        game.cur_area_data.connect_edge_to_sector(
+                        game.cur_area_data->connect_edge_to_sector(
                             de_ptr, e_ptr->sectors[1], 0
                         );
                     } else if(e_ptr->sectors[0] == de_ptr->sectors[1]) {
-                        game.cur_area_data.connect_edge_to_sector(
+                        game.cur_area_data->connect_edge_to_sector(
                             de_ptr, e_ptr->sectors[1], 1
                         );
                     } else if(e_ptr->sectors[1] == de_ptr->sectors[0]) {
-                        game.cur_area_data.connect_edge_to_sector(
+                        game.cur_area_data->connect_edge_to_sector(
                             de_ptr, e_ptr->sectors[0], 0
                         );
                     } else if(e_ptr->sectors[1] == de_ptr->sectors[1]) {
-                        game.cur_area_data.connect_edge_to_sector(
+                        game.cur_area_data->connect_edge_to_sector(
                             de_ptr, e_ptr->sectors[0], 1
                         );
                     }
@@ -1966,7 +1966,7 @@ void area_editor::merge_vertex(
             //If it's matchless, that means it'll just be joined to
             //the group of edges on the destination vertex.
             if(!has_merged) {
-                game.cur_area_data.connect_edge_to_vertex(
+                game.cur_area_data->connect_edge_to_vertex(
                     e_ptr, v2, (e_ptr->vertexes[0] == v1 ? 0 : 1)
                 );
                 for(size_t v2e = 0; v2e < v2->edges.size(); v2e++) {
@@ -1990,21 +1990,21 @@ void area_editor::merge_vertex(
     }
     
     //Delete the old vertex.
-    game.cur_area_data.remove_vertex(v1);
+    game.cur_area_data->remove_vertex(v1);
     
     //If any vertex or sector is out of edges, delete it.
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size();) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size();) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         if(v_ptr->edges.empty()) {
-            game.cur_area_data.remove_vertex(v);
+            game.cur_area_data->remove_vertex(v);
         } else {
             v++;
         }
     }
-    for(size_t s = 0; s < game.cur_area_data.sectors.size();) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size();) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         if(s_ptr->edges.empty()) {
-            game.cur_area_data.remove_sector(s);
+            game.cur_area_data->remove_sector(s);
         } else {
             s++;
         }
@@ -2191,37 +2191,37 @@ void area_editor::paste_sector_texture() {
  * these values.
  */
 void area_editor::resize_everything(float mults[2]) {
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         v_ptr->x *= mults[0];
         v_ptr->y *= mults[1];
     }
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         s_ptr->texture_info.scale.x *= mults[0];
         s_ptr->texture_info.scale.y *= mults[1];
         triangulate_sector(s_ptr, nullptr, false);
         s_ptr->calculate_bounding_box();
     }
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         m_ptr->pos.x *= mults[0];
         m_ptr->pos.y *= mults[1];
     }
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         s_ptr->pos.x *= mults[0];
         s_ptr->pos.y *= mults[1];
     }
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        game.cur_area_data.path_stops[s]->calculate_dists();
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        game.cur_area_data->path_stops[s]->calculate_dists();
     }
     
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
-        tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
+    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
         s_ptr->center.x *= mults[0];
         s_ptr->center.y *= mults[1];
         s_ptr->size.x   *= mults[0];
@@ -2230,10 +2230,10 @@ void area_editor::resize_everything(float mults[2]) {
         s_ptr->sway.y   *= mults[1];
     }
     
-    game.cur_area_data.mission.goal_exit_center.x *= mults[0];
-    game.cur_area_data.mission.goal_exit_center.y *= mults[1];
-    game.cur_area_data.mission.goal_exit_size.x *= mults[0];
-    game.cur_area_data.mission.goal_exit_size.y *= mults[1];
+    game.cur_area_data->mission.goal_exit_center.x *= mults[0];
+    game.cur_area_data->mission.goal_exit_center.y *= mults[1];
+    game.cur_area_data->mission.goal_exit_size.x *= mults[0];
+    game.cur_area_data->mission.goal_exit_size.y *= mults[1];
 }
 
 
@@ -2309,7 +2309,7 @@ point area_editor::snap_point(const point &p, bool ignore_selected) {
         }
         cursor_snap_timer.start();
         
-        vector<vertex*> vertexes_to_check = game.cur_area_data.vertexes;
+        vector<vertex*> vertexes_to_check = game.cur_area_data->vertexes;
         if(ignore_selected) {
             for(const vertex* v : selected_vertexes) {
                 for(size_t v2 = 0; v2 < vertexes_to_check.size(); v2++) {
@@ -2357,8 +2357,8 @@ point area_editor::snap_point(const point &p, bool ignore_selected) {
         dist closest_dist;
         bool got_one = false;
         
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             float r;
             
             if(ignore_selected) {
@@ -2433,25 +2433,25 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
         );
         
     //Create the new vertex and the new edge.
-    vertex* new_v_ptr = game.cur_area_data.new_vertex();
+    vertex* new_v_ptr = game.cur_area_data->new_vertex();
     new_v_ptr->x = new_v_pos.x;
     new_v_ptr->y = new_v_pos.y;
-    edge* new_e_ptr = game.cur_area_data.new_edge();
+    edge* new_e_ptr = game.cur_area_data->new_edge();
     e_ptr->clone(new_e_ptr);
     
     //Connect the vertexes and edges.
-    game.cur_area_data.connect_edge_to_vertex(new_e_ptr, new_v_ptr, 0);
-    game.cur_area_data.connect_edge_to_vertex(new_e_ptr, e_ptr->vertexes[1], 1);
-    game.cur_area_data.connect_edge_to_vertex(e_ptr, new_v_ptr, 1);
+    game.cur_area_data->connect_edge_to_vertex(new_e_ptr, new_v_ptr, 0);
+    game.cur_area_data->connect_edge_to_vertex(new_e_ptr, e_ptr->vertexes[1], 1);
+    game.cur_area_data->connect_edge_to_vertex(e_ptr, new_v_ptr, 1);
     
     //Connect the sectors and new edge.
     if(e_ptr->sectors[0]) {
-        game.cur_area_data.connect_edge_to_sector(
+        game.cur_area_data->connect_edge_to_sector(
             new_e_ptr, e_ptr->sectors[0], 0
         );
     }
     if(e_ptr->sectors[1]) {
-        game.cur_area_data.connect_edge_to_sector(
+        game.cur_area_data->connect_edge_to_sector(
             new_e_ptr, e_ptr->sectors[1], 1
         );
     }
@@ -2485,7 +2485,7 @@ path_stop* area_editor::split_path_link(
         
     //Create the new stop.
     path_stop* new_stop_ptr = new path_stop(new_stop_pos);
-    game.cur_area_data.path_stops.push_back(new_stop_ptr);
+    game.cur_area_data->path_stops.push_back(new_stop_ptr);
     
     //Delete the old links.
     path_stop* old_start_ptr = l1->start_ptr;
@@ -2501,9 +2501,9 @@ path_stop* area_editor::split_path_link(
     new_stop_ptr->add_link(old_end_ptr, normal_link);
     
     //Fix the dangling path stop numbers in the links, and other properties.
-    game.cur_area_data.fix_path_stop_idxs(old_start_ptr);
-    game.cur_area_data.fix_path_stop_idxs(old_end_ptr);
-    game.cur_area_data.fix_path_stop_idxs(new_stop_ptr);
+    game.cur_area_data->fix_path_stop_idxs(old_start_ptr);
+    game.cur_area_data->fix_path_stop_idxs(old_end_ptr);
+    game.cur_area_data->fix_path_stop_idxs(new_stop_ptr);
     
     old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
     new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;
@@ -2538,16 +2538,16 @@ void area_editor::update_affected_sectors(
             triangulate_sector(s_ptr, &triangulation_lone_edges, true);
             
         if(triangulation_error == TRIANGULATION_ERROR_NONE) {
-            auto it = game.cur_area_data.problems.non_simples.find(s_ptr);
-            if(it != game.cur_area_data.problems.non_simples.end()) {
-                game.cur_area_data.problems.non_simples.erase(it);
+            auto it = game.cur_area_data->problems.non_simples.find(s_ptr);
+            if(it != game.cur_area_data->problems.non_simples.end()) {
+                game.cur_area_data->problems.non_simples.erase(it);
             }
         } else {
-            game.cur_area_data.problems.non_simples[s_ptr] =
+            game.cur_area_data->problems.non_simples[s_ptr] =
                 triangulation_error;
             last_triangulation_error = triangulation_error;
         }
-        game.cur_area_data.problems.lone_edges.insert(
+        game.cur_area_data->problems.lone_edges.insert(
             triangulation_lone_edges.begin(),
             triangulation_lone_edges.end()
         );
@@ -2594,7 +2594,7 @@ void area_editor::update_inner_sectors_outer_sector(
         ) {
             for(size_t s = 0; s < 2; s++) {
                 if(e_ptr->sectors[s] == old_outer) {
-                    game.cur_area_data.connect_edge_to_sector(
+                    game.cur_area_data->connect_edge_to_sector(
                         e_ptr, new_outer, s
                     );
                     break;

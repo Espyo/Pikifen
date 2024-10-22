@@ -37,14 +37,14 @@ const string SONG_NAME = "menus";
  */
 void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     if(
-        game.cur_area_data.type != AREA_TYPE_MISSION ||
-        game.cur_area_data.mission.grading_mode != MISSION_GRADING_MODE_POINTS
+        game.cur_area_data->type != AREA_TYPE_MISSION ||
+        game.cur_area_data->mission.grading_mode != MISSION_GRADING_MODE_POINTS
     ) {
         return;
     }
     
     mission_score_criterion* c_ptr = game.mission_score_criteria[criterion];
-    mission_data* mission = &game.cur_area_data.mission;
+    mission_data* mission = &game.cur_area_data->mission;
     int mult = c_ptr->get_multiplier(mission);
     
     if(mult == 0) return;
@@ -54,7 +54,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
         (MISSION_FAIL_COND) INVALID;
     bool lost =
         has_flag(
-            game.cur_area_data.mission.point_loss_data,
+            game.cur_area_data->mission.point_loss_data,
             get_idx_bitmask(criterion)
         ) &&
         !goal_was_cleared;
@@ -223,7 +223,7 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void results_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        AREA_TYPE area_type = game.cur_area_data.type;
+        AREA_TYPE area_type = game.cur_area_data->type;
         game.unload_loaded_state(game.states.gameplay);
         if(game.states.area_ed->quick_play_area_path.empty()) {
             game.states.area_menu->area_type = area_type;
@@ -244,16 +244,16 @@ void results_state::load() {
         (MISSION_FAIL_COND) INVALID;
         
     //Calculate score things.
-    final_mission_score = game.cur_area_data.mission.starting_points;
+    final_mission_score = game.cur_area_data->mission.starting_points;
     
     for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
         mission_score_criterion* c_ptr =
             game.mission_score_criteria[c];
         int c_score =
-            c_ptr->get_score(game.states.gameplay, &game.cur_area_data.mission);
+            c_ptr->get_score(game.states.gameplay, &game.cur_area_data->mission);
         bool lost =
             has_flag(
-                game.cur_area_data.mission.point_loss_data,
+                game.cur_area_data->mission.point_loss_data,
                 get_idx_bitmask(c)
             ) &&
             !goal_was_cleared;
@@ -270,13 +270,13 @@ void results_state::load() {
     data_node mission_records;
     mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
     string mission_record_entry_name =
-        game.cur_area_data.name + ";" +
+        game.cur_area_data->name + ";" +
         get_subtitle_or_mission_goal(
-            game.cur_area_data.subtitle, game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data->subtitle, game.cur_area_data->type,
+            game.cur_area_data->mission.goal
         ) + ";" +
-        game.cur_area_data.maker + ";" +
-        game.cur_area_data.version;
+        game.cur_area_data->maker + ";" +
+        game.cur_area_data->version;
     data_node* entry_node;
     if(
         mission_records.get_nr_of_children_by_name(mission_record_entry_name) >
@@ -301,7 +301,7 @@ void results_state::load() {
         is_new_record = true;
     } else if(old_record_clear == goal_was_cleared) {
         if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
+            game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
             old_record_score < final_mission_score
         ) {
             is_new_record = true;
@@ -366,7 +366,7 @@ void results_state::load() {
     //Area name text.
     text_gui_item* area_name_text =
         new text_gui_item(
-        game.cur_area_data.name, game.sys_assets.fnt_area_name, COLOR_GOLD
+        game.cur_area_data->name, game.sys_assets.fnt_area_name, COLOR_GOLD
     );
     gui.add_item(area_name_text, "area_name");
     text_to_animate.push_back(area_name_text);
@@ -374,9 +374,9 @@ void results_state::load() {
     //Area subtitle text.
     string subtitle =
         get_subtitle_or_mission_goal(
-            game.cur_area_data.subtitle,
-            game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data->subtitle,
+            game.cur_area_data->type,
+            game.cur_area_data->mission.goal
         );
     if(!subtitle.empty()) {
         text_gui_item* area_subtitle_text =
@@ -385,7 +385,7 @@ void results_state::load() {
         text_to_animate.push_back(area_subtitle_text);
     }
     
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
         //Goal stamp image item.
         gui_item* goal_stamp_item = new gui_item;
         goal_stamp_item->on_draw =
@@ -405,14 +405,14 @@ void results_state::load() {
         string end_reason;
         if(goal_was_cleared) {
             end_reason =
-                game.mission_goals[game.cur_area_data.mission.goal]->
-                get_end_reason(&game.cur_area_data.mission);
+                game.mission_goals[game.cur_area_data->mission.goal]->
+                get_end_reason(&game.cur_area_data->mission);
         } else {
             end_reason =
                 game.mission_fail_conds[
                     game.states.gameplay->mission_fail_reason
                 ]->get_end_reason(
-                    &game.cur_area_data.mission
+                    &game.cur_area_data->mission
                 );
         }
         
@@ -431,33 +431,33 @@ void results_state::load() {
         MISSION_MEDAL medal = MISSION_MEDAL_NONE;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
-        switch(game.cur_area_data.mission.grading_mode) {
+        switch(game.cur_area_data->mission.grading_mode) {
         case MISSION_GRADING_MODE_POINTS: {
             medal_reason = "Got " + i2s(final_mission_score) + " points";
             if(
                 final_mission_score >=
-                game.cur_area_data.mission.platinum_req
+                game.cur_area_data->mission.platinum_req
             ) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(145, 226, 210, 192);
             } else if(
                 final_mission_score >=
-                game.cur_area_data.mission.gold_req
+                game.cur_area_data->mission.gold_req
             ) {
                 medal = MISSION_MEDAL_GOLD;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(233, 200, 80, 192);
             } else if(
                 final_mission_score >=
-                game.cur_area_data.mission.silver_req
+                game.cur_area_data->mission.silver_req
             ) {
                 medal = MISSION_MEDAL_SILVER;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(216, 216, 200, 192);
             } else if(
                 final_mission_score >=
-                game.cur_area_data.mission.bronze_req
+                game.cur_area_data->mission.bronze_req
             ) {
                 medal = MISSION_MEDAL_BRONZE;
                 medal_reason += "!";
@@ -533,7 +533,7 @@ void results_state::load() {
     
     //Conclusion text.
     string conclusion;
-    switch(game.cur_area_data.type) {
+    switch(game.cur_area_data->type) {
     case AREA_TYPE_SIMPLE: {
         if(!game.states.area_ed->quick_play_area_path.empty()) {
             conclusion =
@@ -560,7 +560,7 @@ void results_state::load() {
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
+            game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
             old_record_clear &&
             !goal_was_cleared &&
             old_record_score < final_mission_score
@@ -614,13 +614,13 @@ void results_state::load() {
     gui.add_item(stats_scroll, "stats_scroll");
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.starting_points != 0
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.starting_points != 0
     ) {
         //Starting score bullet.
         add_stat(
             "Starting score: ",
-            i2s(game.cur_area_data.mission.starting_points),
+            i2s(game.cur_area_data->mission.starting_points),
             COLOR_GOLD
         );
     }
@@ -650,14 +650,14 @@ void results_state::load() {
     add_score_stat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_sec_left != 0
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.points_per_sec_left != 0
     ) {
         //Seconds left bullet.
         add_stat(
             "Seconds left:",
             i2s(
-                game.cur_area_data.mission.fail_time_limit -
+                game.cur_area_data->mission.fail_time_limit -
                 floor(game.states.gameplay->gameplay_time_passed)
             )
         );
@@ -667,8 +667,8 @@ void results_state::load() {
     }
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_sec_passed != 0
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.points_per_sec_passed != 0
     ) {
         //Seconds passed bullet.
         add_stat(
@@ -715,8 +715,8 @@ void results_state::load() {
     add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
     if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
     ) {
         add_stat(
             "Final score:",

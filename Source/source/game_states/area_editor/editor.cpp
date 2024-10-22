@@ -291,8 +291,10 @@ void area_editor::clear_current_area() {
     
     clear_area_textures();
     
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
-        game.textures.free(game.cur_area_data.tree_shadows[s]->file_name);
+    if(game.cur_area_data) {
+        for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+            game.textures.free(game.cur_area_data->tree_shadows[s]->file_name);
+        }
     }
     
     game.cam.set_pos(point());
@@ -310,7 +312,7 @@ void area_editor::clear_current_area() {
     
     clear_texture_suggestions();
     
-    game.cur_area_data.clear();
+    game.content.unload_current_area(CONTENT_LOAD_LEVEL_EDITOR);
     
     changes_mgr.reset();
     backup_timer.start(game.options.area_editor_backup_interval);
@@ -414,7 +416,7 @@ void area_editor::clear_undo_history() {
  * @brief Code to run when the area picker is closed.
  */
 void area_editor::close_load_dialog() {
-    if(!loaded_content_yet && game.cur_area_data.folder_name.empty()) {
+    if(!loaded_content_yet && game.cur_area_data->folder_name.empty()) {
         //The user cancelled the area selection picker
         //presented when you enter the area editor. Quit out.
         leave();
@@ -496,29 +498,29 @@ void area_editor::create_area(
     //Apply the texture.
     if(texture_to_use != INVALID) {
         update_sector_texture(
-            game.cur_area_data.sectors[0], textures[texture_to_use]
+            game.cur_area_data->sectors[0], textures[texture_to_use]
         );
         update_texture_suggestions(textures[texture_to_use]);
     }
     
     //Now add a leader. The first available.
-    game.cur_area_data.mob_generators.push_back(
+    game.cur_area_data->mob_generators.push_back(
         new mob_gen(point(), game.config.leader_order[0], 0, "")
     );
     
     //Set its name and type and whatnot.
-    game.cur_area_data.name = requested_area_folder_name;
-    game.cur_area_data.folder_name = requested_area_folder_name;
-    game.cur_area_data.path =
+    game.cur_area_data->name = requested_area_folder_name;
+    game.cur_area_data->folder_name = requested_area_folder_name;
+    game.cur_area_data->path =
         get_base_area_folder_path(requested_area_type, true) + "/" +
         requested_area_folder_name;
-    game.cur_area_data.type = requested_area_type;
+    game.cur_area_data->type = requested_area_type;
     
     //Finish up.
     clear_undo_history();
     update_undo_history();
     area_exists_on_disk = false;
-    update_history(game.cur_area_data.path);
+    update_history(game.cur_area_data->path);
     save_options(); //Save the history in the options.
     
     set_status(
@@ -551,7 +553,7 @@ void area_editor::create_drawing_vertexes() {
                 }
             }
         } else {
-            new_vertex = game.cur_area_data.new_vertex();
+            new_vertex = game.cur_area_data->new_vertex();
             new_vertex->x = n_ptr->snapped_spot.x;
             new_vertex->y = n_ptr->snapped_spot.y;
             n_ptr->is_new_vertex = true;
@@ -577,11 +579,11 @@ void area_editor::create_mob_under_cursor() {
             game.config.pikmin_order[0];
     }
     
-    game.cur_area_data.mob_generators.push_back(
+    game.cur_area_data->mob_generators.push_back(
         new mob_gen(hotspot, last_mob_type)
     );
     
-    selected_mobs.insert(game.cur_area_data.mob_generators.back());
+    selected_mobs.insert(game.cur_area_data->mob_generators.back());
     
     set_status("Created object.");
 }
@@ -627,7 +629,7 @@ void area_editor::delete_current_area() {
         //If the area doesn't exist, since it was never saved,
         //then there's nothing to delete.
         final_status_text =
-            "Deleted area \"" + game.cur_area_data.folder_name +
+            "Deleted area \"" + game.cur_area_data->folder_name +
             "\" successfully.";
         go_to_area_select = true;
         
@@ -638,8 +640,8 @@ void area_editor::delete_current_area() {
         non_important_files.push_back(AREA_GEOMETRY_BACKUP_FILE_NAME);
         non_important_files.push_back("Reference.txt");
         wipe_folder(
-            get_base_area_folder_path(game.cur_area_data.type, false) +
-            "/" + game.cur_area_data.folder_name,
+            get_base_area_folder_path(game.cur_area_data->type, false) +
+            "/" + game.cur_area_data->folder_name,
             non_important_files
         );
         
@@ -649,7 +651,7 @@ void area_editor::delete_current_area() {
         non_important_files.push_back(AREA_GEOMETRY_FILE_NAME);
         WIPE_FOLDER_RESULT result =
             wipe_folder(
-                game.cur_area_data.path,
+                game.cur_area_data->path,
                 non_important_files
             );
             
@@ -657,27 +659,27 @@ void area_editor::delete_current_area() {
         switch(result) {
         case WIPE_FOLDER_RESULT_OK: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data.folder_name +
+                "Deleted area \"" + game.cur_area_data->folder_name +
                 "\" successfully.";
             go_to_area_select = true;
             break;
         } case WIPE_FOLDER_RESULT_NOT_FOUND: {
             final_status_text =
-                "Area \"" + game.cur_area_data.folder_name +
+                "Area \"" + game.cur_area_data->folder_name +
                 "\" deletion failed; folder not found!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data.folder_name +
+                "Deleted area \"" + game.cur_area_data->folder_name +
                 "\", but folder still has user files!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
             final_status_text =
-                "Area \"" + game.cur_area_data.folder_name +
+                "Area \"" + game.cur_area_data->folder_name +
                 "\" deletion failed; error while deleting something! "
                 "(Permissions?)";
             final_status_error = true;
@@ -714,7 +716,8 @@ void area_editor::do_logic() {
     undo_save_lock_timer.tick(game.delta_t);
     
     if(
-        !game.cur_area_data.folder_name.empty() &&
+        game.cur_area_data &&
+        !game.cur_area_data->folder_name.empty() &&
         area_exists_on_disk &&
         game.options.area_editor_backup_interval > 0
     ) {
@@ -741,12 +744,12 @@ void area_editor::do_sector_split() {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         layout_drawing_node* next_node = &drawing_nodes[n + 1];
         
-        edge* new_node_edge = game.cur_area_data.new_edge();
+        edge* new_node_edge = game.cur_area_data->new_edge();
         
-        game.cur_area_data.connect_edge_to_vertex(
+        game.cur_area_data->connect_edge_to_vertex(
             new_node_edge, n_ptr->on_vertex, 0
         );
-        game.cur_area_data.connect_edge_to_vertex(
+        game.cur_area_data->connect_edge_to_vertex(
             new_node_edge, next_node->on_vertex, 1
         );
         
@@ -855,16 +858,16 @@ void area_editor::do_sector_split() {
         
         if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
             //If it's a new edge, set it up properly.
-            game.cur_area_data.connect_edge_to_sector(
+            game.cur_area_data->connect_edge_to_sector(
                 e_ptr, sector_split_info.working_sector, working_sector_side
             );
-            game.cur_area_data.connect_edge_to_sector(
+            game.cur_area_data->connect_edge_to_sector(
                 e_ptr, new_sector, new_sector_side
             );
             
         } else {
             //If not, let's transfer from the working sector to the new one.
-            game.cur_area_data.connect_edge_to_sector(
+            game.cur_area_data->connect_edge_to_sector(
                 e_ptr, new_sector, new_sector_side
             );
             
@@ -1033,7 +1036,7 @@ void area_editor::finish_layout_moving() {
         
         vector<std::pair<dist, vertex*> > merge_vertexes =
             get_merge_vertexes(
-                p, game.cur_area_data.vertexes,
+                p, game.cur_area_data->vertexes,
                 AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
             );
             
@@ -1094,8 +1097,8 @@ void area_editor::finish_layout_moving() {
     }
     
     set<edge*> moved_edges;
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         bool both_selected = true;
         for(size_t v = 0; v < 2; v++) {
             if(
@@ -1113,8 +1116,8 @@ void area_editor::finish_layout_moving() {
     
     //If an edge is moving into a stationary vertex, it needs to be split.
     //Let's find such edges.
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         point p(v_ptr->x, v_ptr->y);
         
         if(selected_vertexes.find(v_ptr) != selected_vertexes.end()) {
@@ -1223,7 +1226,7 @@ void area_editor::finish_layout_moving() {
             split_edge(v->second, point(v->first->x, v->first->y));
         //This split could've thrown off the edge pointer of a different
         //vertex to merge. Let's re-calculate.
-        edge* new_edge = game.cur_area_data.edges.back();
+        edge* new_edge = game.cur_area_data->edges.back();
         auto v2 = v;
         ++v2;
         for(; v2 != edges_to_split.end(); ++v2) {
@@ -1277,8 +1280,8 @@ void area_editor::finish_new_sector_drawing() {
     if(outer_sector) {
         outer_sector_old_edges = outer_sector->edges;
     } else {
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 outer_sector_old_edges.push_back(e_ptr);
             }
@@ -1305,12 +1308,12 @@ void area_editor::finish_new_sector_drawing() {
             n_ptr->on_vertex->get_edge_by_neighbor(prev_node->on_vertex);
             
         if(!prev_node_edge) {
-            prev_node_edge = game.cur_area_data.new_edge();
+            prev_node_edge = game.cur_area_data->new_edge();
             
-            game.cur_area_data.connect_edge_to_vertex(
+            game.cur_area_data->connect_edge_to_vertex(
                 prev_node_edge, prev_node->on_vertex, 0
             );
-            game.cur_area_data.connect_edge_to_vertex(
+            game.cur_area_data->connect_edge_to_vertex(
                 prev_node_edge, n_ptr->on_vertex, 1
             );
         }
@@ -1329,10 +1332,10 @@ void area_editor::finish_new_sector_drawing() {
     for(size_t e = 0; e < drawing_edges.size(); e++) {
         edge* e_ptr = drawing_edges[e];
         
-        game.cur_area_data.connect_edge_to_sector(
+        game.cur_area_data->connect_edge_to_sector(
             e_ptr, outer_sector, outer_sector_side
         );
-        game.cur_area_data.connect_edge_to_sector(
+        game.cur_area_data->connect_edge_to_sector(
             e_ptr, new_sector, inner_sector_side
         );
     }
@@ -1428,15 +1431,15 @@ void area_editor::get_hovered_layout_element(
 size_t area_editor::get_mission_required_mob_count() const {
     size_t total_required = 0;
     
-    if(game.cur_area_data.mission.goal_all_mobs) {
+    if(game.cur_area_data->mission.goal_all_mobs) {
         for(
             size_t m = 0;
-            m < game.cur_area_data.mob_generators.size();
+            m < game.cur_area_data->mob_generators.size();
             m++
         ) {
-            mob_gen* g = game.cur_area_data.mob_generators[m];
+            mob_gen* g = game.cur_area_data->mob_generators[m];
             if(
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data->mission.goal]->
                 is_mob_applicable(g->type)
             ) {
                 total_required++;
@@ -1444,7 +1447,7 @@ size_t area_editor::get_mission_required_mob_count() const {
         }
     } else {
         total_required =
-            game.cur_area_data.mission.goal_mob_idxs.size();
+            game.cur_area_data->mission.goal_mob_idxs.size();
     }
     
     return total_required;
@@ -1467,8 +1470,8 @@ string area_editor::get_name() const {
  * @return The path, or an empty string if none.
  */
 string area_editor::get_opened_folder_path() const {
-    if(!game.cur_area_data.folder_name.empty()) {
-        return game.cur_area_data.path;
+    if(!game.cur_area_data->folder_name.empty()) {
+        return game.cur_area_data->path;
     } else {
         return "";
     }
@@ -1642,14 +1645,14 @@ void area_editor::goto_problem() {
         
     } case EPT_BAD_SECTOR: {
 
-        if(game.cur_area_data.problems.non_simples.empty()) {
+        if(game.cur_area_data->problems.non_simples.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
             return;
         }
         
         change_state(EDITOR_STATE_LAYOUT);
-        sector* s_ptr = game.cur_area_data.problems.non_simples.begin()->first;
+        sector* s_ptr = game.cur_area_data->problems.non_simples.begin()->first;
         select_sector(s_ptr);
         center_camera(s_ptr->bbox[0], s_ptr->bbox[1]);
         
@@ -1657,13 +1660,13 @@ void area_editor::goto_problem() {
         
     } case EPT_LONE_EDGE: {
 
-        if(game.cur_area_data.problems.lone_edges.empty()) {
+        if(game.cur_area_data->problems.lone_edges.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
             return;
         }
         
-        edge* e_ptr = *game.cur_area_data.problems.lone_edges.begin();
+        edge* e_ptr = *game.cur_area_data->problems.lone_edges.begin();
         point min_coords, max_coords;
         min_coords.x = e_ptr->vertexes[0]->x;
         max_coords.x = min_coords.x;
@@ -1919,8 +1922,11 @@ void area_editor::load_area(
 ) {
     clear_current_area();
     
-    game.content.load_area(
-        requested_area_folder_name, CONTENT_LOAD_LEVEL_EDITOR,
+    game.content.load_area_as_current(
+        get_base_area_folder_path(
+            requested_area_type, !from_backup
+        ) + "/" + requested_area_folder_name,
+        CONTENT_LOAD_LEVEL_EDITOR,
         requested_area_type, from_backup
     );
     
@@ -1928,8 +1934,8 @@ void area_editor::load_area(
     map<string, size_t> texture_uses_map;
     vector<std::pair<string, size_t> > texture_uses_vector;
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        const string &n = game.cur_area_data.sectors[s]->texture_info.file_name;
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        const string &n = game.cur_area_data->sectors[s]->texture_info.file_name;
         if(n.empty()) continue;
         texture_uses_map[n]++;
     }
@@ -1986,8 +1992,12 @@ void area_editor::load_area(
  */
 void area_editor::load_backup() {
     load_area(
-        game.cur_area_data.folder_name, game.cur_area_data.type, true, false
+        string(game.cur_area_data->folder_name),
+        game.cur_area_data->type, true, false
     );
+    game.cur_area_data->path =
+        get_base_area_folder_path(game.cur_area_data->type, true) + "/" +
+        game.cur_area_data->folder_name;
     backup_timer.start(game.options.area_editor_backup_interval);
     changes_mgr.mark_as_changed();
     
@@ -2004,8 +2014,8 @@ void area_editor::load_backup() {
  */
 void area_editor::load_reference() {
     data_node file(
-        get_base_area_folder_path(game.cur_area_data.type, false) + "/" +
-        game.cur_area_data.folder_name + "/Reference.txt"
+        get_base_area_folder_path(game.cur_area_data->type, false) + "/" +
+        game.cur_area_data->folder_name + "/Reference.txt"
     );
     
     if(file.file_was_opened) {
@@ -2136,7 +2146,7 @@ void area_editor::pick_texture(
  */
 area_data* area_editor::prepare_state() {
     area_data* new_state = new area_data();
-    game.cur_area_data.clone(*new_state);
+    game.cur_area_data->clone(*new_state);
     return new_state;
 }
 
@@ -2161,8 +2171,8 @@ void area_editor::circle_sector_cmd(float input_value) {
     }
     
     if(
-        !game.cur_area_data.problems.non_simples.empty() ||
-        !game.cur_area_data.problems.lone_edges.empty()
+        !game.cur_area_data->problems.non_simples.empty() ||
+        !game.cur_area_data->problems.lone_edges.empty()
     ) {
         set_status(
             "Please fix any broken sectors or edges before trying to make "
@@ -2335,8 +2345,8 @@ void area_editor::layout_drawing_cmd(float input_value) {
     }
     
     if(
-        !game.cur_area_data.problems.non_simples.empty() ||
-        !game.cur_area_data.problems.lone_edges.empty()
+        !game.cur_area_data->problems.non_simples.empty() ||
+        !game.cur_area_data->problems.lone_edges.empty()
     ) {
         set_status(
             "Please fix any broken sectors or edges before trying to make "
@@ -2498,7 +2508,7 @@ void area_editor::quick_play_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!save_area(false)) return;
-    quick_play_area_path = game.cur_area_data.path;
+    quick_play_area_path = game.cur_area_data->path;
     quick_play_cam_pos = game.cam.pos;
     quick_play_cam_z = game.cam.zoom;
     leave();
@@ -2573,7 +2583,7 @@ void area_editor::reload_cmd(float input_value) {
         "reloading the current area", "reload",
     [this] () {
         load_area(
-            game.cur_area_data.folder_name, game.cur_area_data.type,
+            string(game.cur_area_data->folder_name), game.cur_area_data->type,
             false, false
         );
     },
@@ -2602,7 +2612,7 @@ void area_editor::delete_edge_cmd(float input_value) {
     
     //Prepare everything.
     register_change("edge deletion");
-    size_t n_before = game.cur_area_data.edges.size();
+    size_t n_before = game.cur_area_data->edges.size();
     size_t n_selected = selected_edges.size();
     
     //Delete!
@@ -2617,7 +2627,7 @@ void area_editor::delete_edge_cmd(float input_value) {
         set_status(
             "Deleted " +
             amount_str(
-                (int) (n_before - game.cur_area_data.edges.size()),
+                (int) (n_before - game.cur_area_data->edges.size()),
                 "edge"
             ) +
             " (" + i2s(n_selected) + " were selected)."
@@ -2646,7 +2656,7 @@ void area_editor::delete_mob_cmd(float input_value) {
     
     //Prepare everything.
     register_change("object deletion");
-    size_t n_before = game.cur_area_data.mob_generators.size();
+    size_t n_before = game.cur_area_data->mob_generators.size();
     
     //Delete!
     delete_mobs(selected_mobs);
@@ -2659,7 +2669,7 @@ void area_editor::delete_mob_cmd(float input_value) {
     set_status(
         "Deleted " +
         amount_str(
-            (int) (n_before - game.cur_area_data.mob_generators.size()),
+            (int) (n_before - game.cur_area_data->mob_generators.size()),
             "object"
         ) +
         "."
@@ -2687,8 +2697,8 @@ void area_editor::delete_path_cmd(float input_value) {
     
     //Prepare everything.
     register_change("path deletion");
-    size_t n_stops_before = game.cur_area_data.path_stops.size();
-    size_t n_links_before = game.cur_area_data.get_nr_path_links();
+    size_t n_stops_before = game.cur_area_data->path_stops.size();
+    size_t n_links_before = game.cur_area_data->get_nr_path_links();
     
     //Delete!
     delete_path_links(selected_path_links);
@@ -2704,12 +2714,12 @@ void area_editor::delete_path_cmd(float input_value) {
     set_status(
         "Deleted " +
         amount_str(
-            (int) (n_stops_before - game.cur_area_data.path_stops.size()),
+            (int) (n_stops_before - game.cur_area_data->path_stops.size()),
             "path stop"
         ) +
         ", " +
         amount_str(
-            (int) (n_links_before - game.cur_area_data.get_nr_path_links()),
+            (int) (n_links_before - game.cur_area_data->get_nr_path_links()),
             "path link"
         ) +
         "."
@@ -2735,15 +2745,15 @@ void area_editor::delete_tree_shadow_cmd(float input_value) {
         register_change("tree shadow deletion");
         for(
             size_t s = 0;
-            s < game.cur_area_data.tree_shadows.size();
+            s < game.cur_area_data->tree_shadows.size();
             s++
         ) {
             if(
-                game.cur_area_data.tree_shadows[s] ==
+                game.cur_area_data->tree_shadows[s] ==
                 selected_shadow
             ) {
-                game.cur_area_data.tree_shadows.erase(
-                    game.cur_area_data.tree_shadows.begin() + s
+                game.cur_area_data->tree_shadows.erase(
+                    game.cur_area_data->tree_shadows.begin() + s
                 );
                 delete selected_shadow;
                 selected_shadow = nullptr;
@@ -2780,28 +2790,28 @@ void area_editor::select_all_cmd(float input_value) {
     if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
         if(state == EDITOR_STATE_LAYOUT) {
             selected_edges.insert(
-                game.cur_area_data.edges.begin(),
-                game.cur_area_data.edges.end()
+                game.cur_area_data->edges.begin(),
+                game.cur_area_data->edges.end()
             );
             selected_sectors.insert(
-                game.cur_area_data.sectors.begin(),
-                game.cur_area_data.sectors.end()
+                game.cur_area_data->sectors.begin(),
+                game.cur_area_data->sectors.end()
             );
             selected_vertexes.insert(
-                game.cur_area_data.vertexes.begin(),
-                game.cur_area_data.vertexes.end()
+                game.cur_area_data->vertexes.begin(),
+                game.cur_area_data->vertexes.end()
             );
             
         } else if(state == EDITOR_STATE_MOBS) {
             selected_mobs.insert(
-                game.cur_area_data.mob_generators.begin(),
-                game.cur_area_data.mob_generators.end()
+                game.cur_area_data->mob_generators.begin(),
+                game.cur_area_data->mob_generators.end()
             );
             
         } else if(state == EDITOR_STATE_PATHS) {
             selected_path_stops.insert(
-                game.cur_area_data.path_stops.begin(),
-                game.cur_area_data.path_stops.end()
+                game.cur_area_data->path_stops.begin(),
+                game.cur_area_data->path_stops.end()
             );
         }
         
@@ -2813,14 +2823,14 @@ void area_editor::select_all_cmd(float input_value) {
     ) {
         register_change("mission object requirements change");
         for(
-            size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++
+            size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++
         ) {
-            mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+            mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
             if(
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data->mission.goal]->
                 is_mob_applicable(m_ptr->type)
             ) {
-                game.cur_area_data.mission.goal_mob_idxs.insert(m);
+                game.cur_area_data->mission.goal_mob_idxs.insert(m);
             }
         }
     }
@@ -2954,8 +2964,8 @@ void area_editor::zoom_everything_cmd(float input_value) {
     bool got_something = false;
     point min_coords, max_coords;
     
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         if(v_ptr->x < min_coords.x || !got_something) {
             min_coords.x = v_ptr->x;
         }
@@ -2971,8 +2981,8 @@ void area_editor::zoom_everything_cmd(float input_value) {
         got_something = true;
     }
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(m_ptr->pos.x < min_coords.x || !got_something) {
             min_coords.x = m_ptr->pos.x;
         }
@@ -2988,8 +2998,8 @@ void area_editor::zoom_everything_cmd(float input_value) {
         got_something = true;
     }
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         if(s_ptr->pos.x < min_coords.x || !got_something) {
             min_coords.x = s_ptr->pos.x;
         }
@@ -3071,7 +3081,7 @@ void area_editor::redo() {
     //Let's first save the state of things right now so we can feed it into
     //the undo history afterwards.
     area_data* new_state = new area_data();
-    game.cur_area_data.clone(*new_state);
+    game.cur_area_data->clone(*new_state);
     string operation_name = redo_history.front().second;
     
     //Change the area state.
@@ -3121,7 +3131,7 @@ void area_editor::register_change(
     area_data* new_state = pre_prepared_state;
     if(!pre_prepared_state) {
         new_state = new area_data();
-        game.cur_area_data.clone(*new_state);
+        game.cur_area_data->clone(*new_state);
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
@@ -3141,7 +3151,7 @@ void area_editor::register_change(
  * @brief Removes the current area thumbnail, if any.
  */
 void area_editor::remove_thumbnail() {
-    game.cur_area_data.thumbnail = nullptr;
+    game.cur_area_data->thumbnail = nullptr;
 }
 
 
@@ -3167,7 +3177,7 @@ void area_editor::reset_cam_zoom() {
  * @param prepared_state Prepared state to return to.
  */
 void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
-    prepared_state->clone(game.cur_area_data);
+    prepared_state->clone(*(game.cur_area_data));
 }
 
 
@@ -3182,9 +3192,9 @@ bool area_editor::save_area(bool to_backup) {
 
     //Before we start, let's get rid of unused sectors.
     bool deleted_sectors = false;
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ) {
-        if(game.cur_area_data.sectors[s]->edges.empty()) {
-            game.cur_area_data.remove_sector(s);
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); ) {
+        if(game.cur_area_data->sectors[s]->edges.empty()) {
+            game.cur_area_data->remove_sector(s);
             deleted_sectors = true;
         } else {
             s++;
@@ -3195,13 +3205,13 @@ bool area_editor::save_area(bool to_backup) {
     }
     
     //And some other cleanup.
-    if(game.cur_area_data.song_name == NONE_OPTION) {
-        game.cur_area_data.song_name.clear();
+    if(game.cur_area_data->song_name == NONE_OPTION) {
+        game.cur_area_data->song_name.clear();
     }
-    if(game.cur_area_data.weather_name == NONE_OPTION) {
-        game.cur_area_data.weather_name.clear();
+    if(game.cur_area_data->weather_name == NONE_OPTION) {
+        game.cur_area_data->weather_name.clear();
     }
-    game.cur_area_data.engine_version = get_engine_version_string();
+    game.cur_area_data->engine_version = get_engine_version_string();
     
     //First, the geometry file.
     data_node geometry_file("", "");
@@ -3210,8 +3220,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* vertexes_node = new data_node("vertexes", "");
     geometry_file.add(vertexes_node);
     
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         data_node* vertex_node =
             new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertexes_node->add(vertex_node);
@@ -3221,8 +3231,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* edges_node = new data_node("edges", "");
     geometry_file.add(edges_node);
     
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
         data_node* edge_node = new data_node("e", "");
         edges_node->add(edge_node);
         string s_str;
@@ -3275,8 +3285,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* sectors_node = new data_node("sectors", "");
     geometry_file.add(sectors_node);
     
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
         
@@ -3370,8 +3380,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* mobs_node = new data_node("mobs", "");
     geometry_file.add(mobs_node);
     
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         string cat_name = "(Unknown)";
         if(m_ptr->type && m_ptr->type->category) {
             cat_name = m_ptr->type->category->name;
@@ -3424,8 +3434,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* path_stops_node = new data_node("path_stops", "");
     geometry_file.add(path_stops_node);
     
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         data_node* path_stop_node = new data_node("s", "");
         path_stops_node->add(path_stop_node);
         
@@ -3467,8 +3477,8 @@ bool area_editor::save_area(bool to_backup) {
     data_node* shadows_node = new data_node("tree_shadows", "");
     geometry_file.add(shadows_node);
     
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
-        tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
+    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
         
@@ -3499,79 +3509,79 @@ bool area_editor::save_area(bool to_backup) {
     data_node data_file("", "");
     
     //Content metadata.
-    game.cur_area_data.save_to_data_node(&data_file);
+    game.cur_area_data->save_to_data_node(&data_file);
     
     data_file.add(
-        new data_node("subtitle", game.cur_area_data.subtitle)
+        new data_node("subtitle", game.cur_area_data->subtitle)
     );
     data_file.add(
         new data_node(
             "difficulty",
-            i2s(game.cur_area_data.difficulty)
+            i2s(game.cur_area_data->difficulty)
         )
     );
     data_file.add(
-        new data_node("bg_bmp", game.cur_area_data.bg_bmp_file_name)
+        new data_node("bg_bmp", game.cur_area_data->bg_bmp_file_name)
     );
     data_file.add(
-        new data_node("bg_color", c2s(game.cur_area_data.bg_color))
+        new data_node("bg_color", c2s(game.cur_area_data->bg_color))
     );
     data_file.add(
-        new data_node("bg_dist", f2s(game.cur_area_data.bg_dist))
+        new data_node("bg_dist", f2s(game.cur_area_data->bg_dist))
     );
     data_file.add(
-        new data_node("bg_zoom", f2s(game.cur_area_data.bg_bmp_zoom))
+        new data_node("bg_zoom", f2s(game.cur_area_data->bg_bmp_zoom))
     );
     data_file.add(
-        new data_node("song", game.cur_area_data.song_name)
+        new data_node("song", game.cur_area_data->song_name)
     );
     data_file.add(
-        new data_node("weather", game.cur_area_data.weather_name)
+        new data_node("weather", game.cur_area_data->weather_name)
     );
     data_file.add(
-        new data_node("day_time_start", i2s(game.cur_area_data.day_time_start))
+        new data_node("day_time_start", i2s(game.cur_area_data->day_time_start))
     );
     data_file.add(
-        new data_node("day_time_speed", i2s(game.cur_area_data.day_time_speed))
+        new data_node("day_time_speed", i2s(game.cur_area_data->day_time_speed))
     );
     data_file.add(
-        new data_node("spray_amounts", game.cur_area_data.spray_amounts)
+        new data_node("spray_amounts", game.cur_area_data->spray_amounts)
     );
     
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        if(game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY) {
+    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
+        if(game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY) {
             data_file.add(
                 new data_node(
                     "mission_goal",
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data->mission.goal]->
                     get_name()
                 )
             );
         }
         if(
-            game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_GROW_PIKMIN
+            game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_GROW_PIKMIN
         ) {
             data_file.add(
                 new data_node(
                     "mission_goal_amount",
-                    i2s(game.cur_area_data.mission.goal_amount)
+                    i2s(game.cur_area_data->mission.goal_amount)
                 )
             );
         }
         if(
-            game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             data_file.add(
                 new data_node(
                     "mission_goal_all_mobs",
-                    b2s(game.cur_area_data.mission.goal_all_mobs)
+                    b2s(game.cur_area_data->mission.goal_all_mobs)
                 )
             );
             string mission_mob_idxs;
-            for(size_t i : game.cur_area_data.mission.goal_mob_idxs) {
+            for(size_t i : game.cur_area_data->mission.goal_mob_idxs) {
                 if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
                 mission_mob_idxs += i2s(i);
             }
@@ -3584,225 +3594,225 @@ bool area_editor::save_area(bool to_backup) {
                 );
             }
         }
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT) {
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT) {
             data_file.add(
                 new data_node(
                     "mission_goal_exit_center",
-                    p2s(game.cur_area_data.mission.goal_exit_center)
+                    p2s(game.cur_area_data->mission.goal_exit_center)
                 )
             );
             data_file.add(
                 new data_node(
                     "mission_goal_exit_size",
-                    p2s(game.cur_area_data.mission.goal_exit_size)
+                    p2s(game.cur_area_data->mission.goal_exit_size)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_conditions > 0) {
+        if(game.cur_area_data->mission.fail_conditions > 0) {
             data_file.add(
                 new data_node(
                     "mission_fail_conditions",
-                    i2s(game.cur_area_data.mission.fail_conditions)
+                    i2s(game.cur_area_data->mission.fail_conditions)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_too_few_pik_amount",
-                    i2s(game.cur_area_data.mission.fail_too_few_pik_amount)
+                    i2s(game.cur_area_data->mission.fail_too_few_pik_amount)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_too_many_pik_amount",
-                    i2s(game.cur_area_data.mission.fail_too_many_pik_amount)
+                    i2s(game.cur_area_data->mission.fail_too_many_pik_amount)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_pik_killed",
-                    i2s(game.cur_area_data.mission.fail_pik_killed)
+                    i2s(game.cur_area_data->mission.fail_pik_killed)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_leaders_kod",
-                    i2s(game.cur_area_data.mission.fail_leaders_kod)
+                    i2s(game.cur_area_data->mission.fail_leaders_kod)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_enemies_killed",
-                    i2s(game.cur_area_data.mission.fail_enemies_killed)
+                    i2s(game.cur_area_data->mission.fail_enemies_killed)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_time_limit",
-                    i2s(game.cur_area_data.mission.fail_time_limit)
+                    i2s(game.cur_area_data->mission.fail_time_limit)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+        if(game.cur_area_data->mission.fail_hud_primary_cond != INVALID) {
             data_file.add(
                 new data_node(
                     "mission_fail_hud_primary_cond",
-                    i2s(game.cur_area_data.mission.fail_hud_primary_cond)
+                    i2s(game.cur_area_data->mission.fail_hud_primary_cond)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+        if(game.cur_area_data->mission.fail_hud_secondary_cond != INVALID) {
             data_file.add(
                 new data_node(
                     "mission_fail_hud_secondary_cond",
-                    i2s(game.cur_area_data.mission.fail_hud_secondary_cond)
+                    i2s(game.cur_area_data->mission.fail_hud_secondary_cond)
                 )
             );
         }
         data_file.add(
             new data_node(
                 "mission_grading_mode",
-                i2s(game.cur_area_data.mission.grading_mode)
+                i2s(game.cur_area_data->mission.grading_mode)
             )
         );
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
-            if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
+        if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+            if(game.cur_area_data->mission.points_per_pikmin_born != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_pikmin_born",
-                        i2s(game.cur_area_data.mission.points_per_pikmin_born)
+                        i2s(game.cur_area_data->mission.points_per_pikmin_born)
                     )
                 );
             }
-            if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
+            if(game.cur_area_data->mission.points_per_pikmin_death != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_pikmin_death",
-                        i2s(game.cur_area_data.mission.points_per_pikmin_death)
+                        i2s(game.cur_area_data->mission.points_per_pikmin_death)
                     )
                 );
             }
-            if(game.cur_area_data.mission.points_per_sec_left != 0) {
+            if(game.cur_area_data->mission.points_per_sec_left != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_sec_left",
-                        i2s(game.cur_area_data.mission.points_per_sec_left)
+                        i2s(game.cur_area_data->mission.points_per_sec_left)
                     )
                 );
             }
-            if(game.cur_area_data.mission.points_per_sec_passed != 0) {
+            if(game.cur_area_data->mission.points_per_sec_passed != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_sec_passed",
-                        i2s(game.cur_area_data.mission.points_per_sec_passed)
+                        i2s(game.cur_area_data->mission.points_per_sec_passed)
                     )
                 );
             }
-            if(game.cur_area_data.mission.points_per_treasure_point != 0) {
+            if(game.cur_area_data->mission.points_per_treasure_point != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_treasure_point",
                         i2s(
-                            game.cur_area_data.mission.points_per_treasure_point
+                            game.cur_area_data->mission.points_per_treasure_point
                         )
                     )
                 );
             }
-            if(game.cur_area_data.mission.points_per_enemy_point != 0) {
+            if(game.cur_area_data->mission.points_per_enemy_point != 0) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_enemy_point",
-                        i2s(game.cur_area_data.mission.points_per_enemy_point)
+                        i2s(game.cur_area_data->mission.points_per_enemy_point)
                     )
                 );
             }
-            if(game.cur_area_data.mission.point_loss_data > 0) {
+            if(game.cur_area_data->mission.point_loss_data > 0) {
                 data_file.add(
                     new data_node(
                         "mission_point_loss_data",
-                        i2s(game.cur_area_data.mission.point_loss_data)
+                        i2s(game.cur_area_data->mission.point_loss_data)
                     )
                 );
             }
-            if(game.cur_area_data.mission.point_hud_data != 255) {
+            if(game.cur_area_data->mission.point_hud_data != 255) {
                 data_file.add(
                     new data_node(
                         "mission_point_hud_data",
-                        i2s(game.cur_area_data.mission.point_hud_data)
+                        i2s(game.cur_area_data->mission.point_hud_data)
                     )
                 );
             }
-            if(game.cur_area_data.mission.starting_points != 0) {
+            if(game.cur_area_data->mission.starting_points != 0) {
                 data_file.add(
                     new data_node(
                         "mission_starting_points",
-                        i2s(game.cur_area_data.mission.starting_points)
+                        i2s(game.cur_area_data->mission.starting_points)
                     )
                 );
             }
             data_file.add(
                 new data_node(
                     "mission_bronze_req",
-                    i2s(game.cur_area_data.mission.bronze_req)
+                    i2s(game.cur_area_data->mission.bronze_req)
                 )
             );
             data_file.add(
                 new data_node(
                     "mission_silver_req",
-                    i2s(game.cur_area_data.mission.silver_req)
+                    i2s(game.cur_area_data->mission.silver_req)
                 )
             );
             data_file.add(
                 new data_node(
                     "mission_gold_req",
-                    i2s(game.cur_area_data.mission.gold_req)
+                    i2s(game.cur_area_data->mission.gold_req)
                 )
             );
             data_file.add(
                 new data_node(
                     "mission_platinum_req",
-                    i2s(game.cur_area_data.mission.platinum_req)
+                    i2s(game.cur_area_data->mission.platinum_req)
                 )
             );
         }
@@ -3816,12 +3826,12 @@ bool area_editor::save_area(bool to_backup) {
         (thumbnail_backup_needs_saving && to_backup)
     ) {
         string thumb_path =
-            get_base_area_folder_path(game.cur_area_data.type, !to_backup) +
-            "/" + game.cur_area_data.folder_name +
+            get_base_area_folder_path(game.cur_area_data->type, !to_backup) +
+            "/" + game.cur_area_data->folder_name +
             (to_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
-        if(game.cur_area_data.thumbnail) {
+        if(game.cur_area_data->thumbnail) {
             al_save_bitmap(
-                thumb_path.c_str(), game.cur_area_data.thumbnail.get()
+                thumb_path.c_str(), game.cur_area_data->thumbnail.get()
             );
         } else {
             al_remove_filename(thumb_path.c_str());
@@ -3837,12 +3847,12 @@ bool area_editor::save_area(bool to_backup) {
     string data_file_name;
     if(to_backup) {
         base_folder =
-            get_base_area_folder_path(game.cur_area_data.type, false) +
-            "/" + game.cur_area_data.folder_name;
+            get_base_area_folder_path(game.cur_area_data->type, false) +
+            "/" + game.cur_area_data->folder_name;
         geometry_file_name = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
         data_file_name = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
     } else {
-        base_folder = game.cur_area_data.path;
+        base_folder = game.cur_area_data->path;
         geometry_file_name = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
         data_file_name = base_folder + "/" + AREA_DATA_FILE_NAME;
     }
@@ -3906,8 +3916,8 @@ void area_editor::save_backup() {
     ALLEGRO_FS_ENTRY* folder_fs_entry =
         al_create_fs_entry(
             (
-                get_base_area_folder_path(game.cur_area_data.type, true) +
-                "/" + game.cur_area_data.folder_name
+                get_base_area_folder_path(game.cur_area_data->type, true) +
+                "/" + game.cur_area_data->folder_name
             ).c_str()
         );
     bool folder_exists = al_open_directory(folder_fs_entry);
@@ -3925,8 +3935,8 @@ void area_editor::save_backup() {
  */
 void area_editor::save_reference() {
     string file_name =
-        get_base_area_folder_path(game.cur_area_data.type, false) +
-        "/" + game.cur_area_data.folder_name + "/Reference.txt";
+        get_base_area_folder_path(game.cur_area_data->type, false) +
+        "/" + game.cur_area_data->folder_name + "/Reference.txt";
         
     if(!reference_bitmap) {
         //The user doesn't want a reference more.
@@ -3990,8 +4000,8 @@ void area_editor::select_edge(edge* e) {
  */
 void area_editor::select_path_stops_with_label(const string &label) {
     clear_selection();
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
         if(s_ptr->label == label) {
             selected_path_stops.insert(s_ptr);
         }
@@ -4082,8 +4092,8 @@ void area_editor::set_new_circle_sector_points() {
         point next = get_next_in_vector(new_circle_sector_points, p);
         bool valid = true;
         
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             
             if(
                 line_segs_intersect(
@@ -4113,9 +4123,9 @@ void area_editor::set_new_circle_sector_points() {
 void area_editor::set_selection_status_text() {
     set_status();
     
-    if(!game.cur_area_data.problems.non_simples.empty()) {
+    if(game.cur_area_data && !game.cur_area_data->problems.non_simples.empty()) {
         emit_triangulation_error_status_bar_message(
-            game.cur_area_data.problems.non_simples.begin()->second
+            game.cur_area_data->problems.non_simples.begin()->second
         );
     }
     
@@ -4193,7 +4203,7 @@ void area_editor::set_selection_status_text() {
  * @param state State to load.
  */
 void area_editor::set_state_from_undo_or_redo_history(area_data* state) {
-    state->clone(game.cur_area_data);
+    state->clone(*(game.cur_area_data));
     
     undo_save_lock_timer.stop();
     undo_save_lock_operation.clear();
@@ -4251,8 +4261,8 @@ void area_editor::setup_sector_split() {
         sector_split_info.working_sector_old_edges =
             sector_split_info.working_sector->edges;
     } else {
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+            edge* e_ptr = game.cur_area_data->edges[e];
             if(e_ptr->sectors[0] == nullptr || e_ptr->sectors[1] == nullptr) {
                 sector_split_info.working_sector_old_edges.push_back(e_ptr);
             }
@@ -4450,7 +4460,7 @@ void area_editor::undo() {
     //Let's first save the state of things right now so we can feed it into
     //the redo history afterwards.
     area_data* new_state = new area_data();
-    game.cur_area_data.clone(*new_state);
+    game.cur_area_data->clone(*new_state);
     string operation_name = undo_history.front().second;
     
     //Change the area state.
@@ -4530,14 +4540,14 @@ void area_editor::update_all_edge_offset_caches() {
     game.wall_smoothing_effect_caches.clear();
     game.wall_smoothing_effect_caches.insert(
         game.wall_smoothing_effect_caches.begin(),
-        game.cur_area_data.edges.size(),
+        game.cur_area_data->edges.size(),
         edge_offset_cache()
     );
     update_offset_effect_caches(
         game.wall_smoothing_effect_caches,
         unordered_set<vertex*>(
-            game.cur_area_data.vertexes.begin(),
-            game.cur_area_data.vertexes.end()
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
         ),
         does_edge_have_ledge_smoothing,
         get_ledge_smoothing_length,
@@ -4546,14 +4556,14 @@ void area_editor::update_all_edge_offset_caches() {
     game.wall_shadow_effect_caches.clear();
     game.wall_shadow_effect_caches.insert(
         game.wall_shadow_effect_caches.begin(),
-        game.cur_area_data.edges.size(),
+        game.cur_area_data->edges.size(),
         edge_offset_cache()
     );
     update_offset_effect_caches(
         game.wall_shadow_effect_caches,
         unordered_set<vertex*>(
-            game.cur_area_data.vertexes.begin(),
-            game.cur_area_data.vertexes.end()
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
         ),
         does_edge_have_wall_shadow,
         get_wall_shadow_length,
@@ -4727,7 +4737,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     
     vector<std::pair<dist, vertex*> > merge_vertexes =
         get_merge_vertexes(
-            mouse_click, game.cur_area_data.vertexes,
+            mouse_click, game.cur_area_data->vertexes,
             AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
         );
     if(!merge_vertexes.empty()) {
@@ -4738,7 +4748,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
         }
         );
         on_vertex = merge_vertexes[0].second;
-        on_vertex_idx = game.cur_area_data.find_vertex_idx(on_vertex);
+        on_vertex_idx = game.cur_area_data->find_vertex_idx(on_vertex);
     }
     
     if(on_vertex) {
@@ -4749,7 +4759,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
         on_edge = ae_ptr->get_edge_under_point(mouse_click);
         
         if(on_edge) {
-            on_edge_idx = game.cur_area_data.find_edge_idx(on_edge);
+            on_edge_idx = game.cur_area_data->find_edge_idx(on_edge);
             snapped_spot =
                 get_closest_point_in_line_seg(
                     point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),

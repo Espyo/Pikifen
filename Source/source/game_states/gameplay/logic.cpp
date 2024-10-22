@@ -566,7 +566,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         } else {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_PLAYING: {
-                game.audio.set_current_song(game.cur_area_data.song_name, false);
+                game.audio.set_current_song(game.cur_area_data->song_name, false);
                 boss_music_state = BOSS_MUSIC_STATE_PAUSED;
                 break;
             } default: {
@@ -636,7 +636,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         if(cur_interlude == INTERLUDE_NONE) {
             gameplay_time_passed += delta_t;
             day_minutes +=
-                (game.cur_area_data.day_time_speed * delta_t / 60.0f);
+                (game.cur_area_data->day_time_speed * delta_t / 60.0f);
             if(day_minutes > 60 * 24) {
                 day_minutes -= 60 * 24;
             }
@@ -667,8 +667,8 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             game.perf_mon->start_measurement("Logic -- Sector animation");
         }
         
-        for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-            sector* s_ptr = game.cur_area_data.sectors[s];
+        for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+            sector* s_ptr = game.cur_area_data->sectors[s];
             
             if(s_ptr->draining_liquid) {
             
@@ -854,8 +854,8 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         *              O  *
         *******************/
         if(
-            game.cur_area_data.type == AREA_TYPE_MISSION &&
-            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.cur_area_data->type == AREA_TYPE_MISSION &&
+            game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             cur_leaders_in_mission_exit = 0;
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
@@ -874,14 +874,14 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 if(
                     fabs(
                         l_ptr->pos.x -
-                        game.cur_area_data.mission.goal_exit_center.x
+                        game.cur_area_data->mission.goal_exit_center.x
                     ) <=
-                    game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
+                    game.cur_area_data->mission.goal_exit_size.x / 2.0f &&
                     fabs(
                         l_ptr->pos.y -
-                        game.cur_area_data.mission.goal_exit_center.y
+                        game.cur_area_data->mission.goal_exit_center.y
                     ) <=
-                    game.cur_area_data.mission.goal_exit_size.y / 2.0f
+                    game.cur_area_data->mission.goal_exit_size.y / 2.0f
                 ) {
                     cur_leaders_in_mission_exit++;
                 }
@@ -890,11 +890,11 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         
         float real_goal_ratio = 0.0f;
         int goal_cur_amount =
-            game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
+            game.mission_goals[game.cur_area_data->mission.goal]->get_cur_amount(
                 this
             );
         int goal_req_amount =
-            game.mission_goals[game.cur_area_data.mission.goal]->get_req_amount(
+            game.mission_goals[game.cur_area_data->mission.goal]->get_req_amount(
                 this
             );
         if(goal_req_amount != 0.0f) {
@@ -904,15 +904,15 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             (real_goal_ratio - goal_indicator_ratio) *
             (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
             
-        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+        if(game.cur_area_data->mission.fail_hud_primary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_primary_cond
+                    game.cur_area_data->mission.fail_hud_primary_cond
                 ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_primary_cond
+                    game.cur_area_data->mission.fail_hud_primary_cond
                 ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
@@ -922,15 +922,15 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
-        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+        if(game.cur_area_data->mission.fail_hud_secondary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_secondary_cond
+                    game.cur_area_data->mission.fail_hud_secondary_cond
                 ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_secondary_cond
+                    game.cur_area_data->mission.fail_hud_secondary_cond
                 ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
@@ -940,7 +940,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
-        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        if(game.cur_area_data->type == AREA_TYPE_MISSION) {
             if(cur_interlude == INTERLUDE_NONE) {
                 if(is_mission_clear_met()) {
                     end_mission(true);
@@ -957,11 +957,11 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
-            mission_score = game.cur_area_data.mission.starting_points;
+            mission_score = game.cur_area_data->mission.starting_points;
             for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
                 if(
                     !has_flag(
-                        game.cur_area_data.mission.point_hud_data,
+                        game.cur_area_data->mission.point_hud_data,
                         get_idx_bitmask(c)
                     )
                 ) {
@@ -970,7 +970,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 mission_score_criterion* c_ptr =
                     game.mission_score_criteria[c];
                 int c_score =
-                    c_ptr->get_score(this, &game.cur_area_data.mission);
+                    c_ptr->get_score(this, &game.cur_area_data->mission);
                 mission_score += c_score;
             }
             if(mission_score != old_mission_score) {
@@ -985,7 +985,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
                 
             int goal_cur =
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data->mission.goal]->
                 get_cur_amount(game.states.gameplay);
             if(goal_cur != old_mission_goal_cur) {
                 mission_goal_cur_text->start_juice_animation(
@@ -995,11 +995,11 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             }
             
             if(
-                game.cur_area_data.mission.fail_hud_primary_cond !=
+                game.cur_area_data->mission.fail_hud_primary_cond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.cur_area_data.mission.fail_hud_primary_cond;
+                    game.cur_area_data->mission.fail_hud_primary_cond;
                 int fail_1_cur =
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
@@ -1012,11 +1012,11 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                 }
             }
             if(
-                game.cur_area_data.mission.fail_hud_secondary_cond !=
+                game.cur_area_data->mission.fail_hud_secondary_cond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.cur_area_data.mission.fail_hud_secondary_cond;
+                    game.cur_area_data->mission.fail_hud_secondary_cond;
                 int fail_2_cur =
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
@@ -1178,13 +1178,13 @@ void gameplay_state::do_menu_logic() {
         string resolution_str =
             i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =
-            game.cur_area_data.version.empty() ?
+            game.cur_area_data->version.empty() ?
             "-" :
-            game.cur_area_data.version;
+            game.cur_area_data->version;
         string area_maker_str =
-            game.cur_area_data.maker.empty() ?
+            game.cur_area_data->maker.empty() ?
             "-" :
-            game.cur_area_data.maker;
+            game.cur_area_data->maker;
         string game_v_str =
             game.config.version.empty() ? "-" : game.config.version;
             
@@ -1354,10 +1354,10 @@ void gameplay_state::do_menu_logic() {
             box_string(f2s(game.mouse_cursor.w_pos.y), 6);
         string blockmap_str =
             box_string(
-                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor.w_pos.x)),
+                i2s(game.cur_area_data->bmap.get_col(game.mouse_cursor.w_pos.x)),
                 5, " "
             ) +
-            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor.w_pos.y));
+            i2s(game.cur_area_data->bmap.get_row(game.mouse_cursor.w_pos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =
@@ -1438,7 +1438,7 @@ void gameplay_state::do_menu_logic() {
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
             );
-            game.audio.set_current_song(game.cur_area_data.song_name);
+            game.audio.set_current_song(game.cur_area_data->song_name);
         }
         break;
     } case INTERLUDE_MISSION_END: {
@@ -1501,7 +1501,7 @@ void gameplay_state::is_near_enemy_and_boss(bool* near_enemy, bool* near_boss) {
  * @return Whether the goal is met.
  */
 bool gameplay_state::is_mission_clear_met() {
-    return game.mission_goals[game.cur_area_data.mission.goal]->is_met(this);
+    return game.mission_goals[game.cur_area_data->mission.goal]->is_met(this);
 }
 
 
@@ -1515,7 +1515,7 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_COND* reason) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data->mission.fail_conditions,
                 get_idx_bitmask(f)
             )
         ) {
@@ -1541,16 +1541,16 @@ void gameplay_state::mark_area_cells_active(
     const point &top_left, const point &bottom_right
 ) {
     int from_x =
-        (top_left.x - game.cur_area_data.bmap.top_left_corner.x) /
+        (top_left.x - game.cur_area_data->bmap.top_left_corner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int to_x =
-        (bottom_right.x - game.cur_area_data.bmap.top_left_corner.x) /
+        (bottom_right.x - game.cur_area_data->bmap.top_left_corner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int from_y =
-        (top_left.y - game.cur_area_data.bmap.top_left_corner.y) /
+        (top_left.y - game.cur_area_data->bmap.top_left_corner.y) /
         GEOMETRY::AREA_CELL_SIZE;
     int to_y =
-        (bottom_right.y - game.cur_area_data.bmap.top_left_corner.y) /
+        (bottom_right.y - game.cur_area_data->bmap.top_left_corner.y) /
         GEOMETRY::AREA_CELL_SIZE;
         
     mark_area_cells_active(from_x, to_x, from_y, to_y);
@@ -2420,10 +2420,10 @@ void gameplay_state::update_mob_is_active_flag() {
         mob* m_ptr = mobs.all[m];
         
         int cell_x =
-            (m_ptr->pos.x - game.cur_area_data.bmap.top_left_corner.x) /
+            (m_ptr->pos.x - game.cur_area_data->bmap.top_left_corner.x) /
             GEOMETRY::AREA_CELL_SIZE;
         int cell_y =
-            (m_ptr->pos.y - game.cur_area_data.bmap.top_left_corner.y) /
+            (m_ptr->pos.y - game.cur_area_data->bmap.top_left_corner.y) /
             GEOMETRY::AREA_CELL_SIZE;
         if(
             cell_x < 0 ||

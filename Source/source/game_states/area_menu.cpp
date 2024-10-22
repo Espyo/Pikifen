@@ -633,9 +633,7 @@ void area_menu_state::init_gui_main() {
                 );
             area_button->on_activate =
             [this, area_ptr] (const point &) {
-                game.states.gameplay->path_of_area_to_load =
-                    get_base_area_folder_path(area_type, true) + "/" +
-                    area_ptr->path;
+                game.states.gameplay->path_of_area_to_load = area_ptr->path;
                 game.fade_mgr.start_fade(false, [] () {
                     game.change_state(game.states.gameplay);
                 });
@@ -909,7 +907,7 @@ void area_menu_state::load() {
     cur_stamp = nullptr;
     cur_medal = nullptr;
     show_mission_specs = false;
-
+    
     game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
     //Mission records.
@@ -974,7 +972,7 @@ void area_menu_state::unload() {
     cur_thumb = nullptr;
     cur_stamp = nullptr;
     cur_medal = nullptr;
-
+    
     game.content.unload_all(CONTENT_TYPE_AREA);
     
 }

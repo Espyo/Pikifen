@@ -56,6 +56,5 @@ void load_songs();
 void load_statistics();
 void load_system_animations();
 
-void unload_area();
 void unload_misc_resources();
 void unload_songs();

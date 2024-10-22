@@ -61,7 +61,7 @@ void gameplay_state::do_game_drawing(
         );
     }
     
-    al_clear_to_color(game.cur_area_data.bg_color);
+    al_clear_to_color(game.cur_area_data->bg_color);
     
     //Layer 1 -- Background.
     if(game.perf_mon) {
@@ -181,11 +181,11 @@ void gameplay_state::do_game_drawing(
         
         if(area_title_fade_timer.time_left > 0) {
             draw_loading_screen(
-                game.cur_area_data.name,
+                game.cur_area_data->name,
                 get_subtitle_or_mission_goal(
-                    game.cur_area_data.subtitle,
-                    game.cur_area_data.type,
-                    game.cur_area_data.mission.goal
+                    game.cur_area_data->subtitle,
+                    game.cur_area_data->type,
+                    game.cur_area_data->mission.goal
                 ),
                 area_title_fade_timer.get_ratio_left()
             );
@@ -206,7 +206,7 @@ void gameplay_state::do_game_drawing(
  * @param bmp_output If not nullptr, draw the background onto this.
  */
 void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
-    if(!game.cur_area_data.bg_bmp) return;
+    if(!game.cur_area_data->bg_bmp) return;
     
     ALLEGRO_VERTEX bg_v[4];
     for(unsigned char v = 0; v < 4; v++) {
@@ -221,8 +221,8 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : game.win_h;
     float zoom_to_use = bmp_output ? 0.5 : game.cam.zoom;
     point final_zoom(
-        bmp_w * 0.5 * game.cur_area_data.bg_dist / zoom_to_use,
-        bmp_h * 0.5 * game.cur_area_data.bg_dist / zoom_to_use
+        bmp_w * 0.5 * game.cur_area_data->bg_dist / zoom_to_use,
+        bmp_h * 0.5 * game.cur_area_data->bg_dist / zoom_to_use
     );
     
     bg_v[0].x =
@@ -230,36 +230,36 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     bg_v[0].y =
         0;
     bg_v[0].u =
-        (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.x - final_zoom.x) / game.cur_area_data->bg_bmp_zoom;
     bg_v[0].v =
-        (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.y - final_zoom.y) / game.cur_area_data->bg_bmp_zoom;
     bg_v[1].x =
         bmp_w;
     bg_v[1].y =
         0;
     bg_v[1].u =
-        (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.x + final_zoom.x) / game.cur_area_data->bg_bmp_zoom;
     bg_v[1].v =
-        (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.y - final_zoom.y) / game.cur_area_data->bg_bmp_zoom;
     bg_v[2].x =
         bmp_w;
     bg_v[2].y =
         bmp_h;
     bg_v[2].u =
-        (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.x + final_zoom.x) / game.cur_area_data->bg_bmp_zoom;
     bg_v[2].v =
-        (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.y + final_zoom.y) / game.cur_area_data->bg_bmp_zoom;
     bg_v[3].x =
         0;
     bg_v[3].y =
         bmp_h;
     bg_v[3].u =
-        (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.x - final_zoom.x) / game.cur_area_data->bg_bmp_zoom;
     bg_v[3].v =
-        (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+        (game.cam.pos.y + final_zoom.y) / game.cur_area_data->bg_bmp_zoom;
         
     al_draw_prim(
-        bg_v, nullptr, game.cur_area_data.bg_bmp,
+        bg_v, nullptr, game.cur_area_data->bg_bmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
 }
@@ -330,7 +330,7 @@ void gameplay_state::draw_big_msg() {
         
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED: {
-        const string& TEXT =
+        const string &TEXT =
             cur_big_msg == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
@@ -1033,21 +1033,21 @@ void gameplay_state::draw_lighting_filter() {
     
     //Draw the fog effect.
     ALLEGRO_COLOR fog_c =
-        game.cur_area_data.weather_condition.get_fog_color();
+        game.cur_area_data->weather_condition.get_fog_color();
     if(fog_c.a > 0) {
         //Start by drawing the central fog fade out effect.
         
         point fog_top_left =
             game.cam.pos -
             point(
-                game.cur_area_data.weather_condition.fog_far,
-                game.cur_area_data.weather_condition.fog_far
+                game.cur_area_data->weather_condition.fog_far,
+                game.cur_area_data->weather_condition.fog_far
             );
         point fog_bottom_right =
             game.cam.pos +
             point(
-                game.cur_area_data.weather_condition.fog_far,
-                game.cur_area_data.weather_condition.fog_far
+                game.cur_area_data->weather_condition.fog_far,
+                game.cur_area_data->weather_condition.fog_far
             );
         al_transform_coordinates(
             &game.world_to_screen_transform,
@@ -1097,14 +1097,14 @@ void gameplay_state::draw_lighting_filter() {
     
     //Draw the daylight.
     ALLEGRO_COLOR daylight_c =
-        game.cur_area_data.weather_condition.get_daylight_color();
+        game.cur_area_data->weather_condition.get_daylight_color();
     if(daylight_c.a > 0) {
         al_draw_filled_rectangle(0, 0, game.win_w, game.win_h, daylight_c);
     }
     
     //Draw the blackout effect.
     unsigned char blackout_s =
-        game.cur_area_data.weather_condition.get_blackout_strength();
+        game.cur_area_data->weather_condition.get_blackout_strength();
     if(blackout_s > 0) {
         //First, we'll create the lightmap.
         //This is inverted (white = darkness, black = light), because we'll
@@ -1381,7 +1381,7 @@ void gameplay_state::draw_pause_menu() {
  */
 void gameplay_state::draw_precipitation() {
     if(
-        game.cur_area_data.weather_condition.precipitation_type !=
+        game.cur_area_data->weather_condition.precipitation_type !=
         PRECIPITATION_TYPE_NONE
     ) {
         size_t n_precipitation_particles = precipitation.size();
@@ -1507,7 +1507,7 @@ void gameplay_state::draw_throw_preview() {
     //Check which edges exist near the throw.
     set<edge*> candidate_edges;
     
-    game.cur_area_data.bmap.get_edges_in_region(
+    game.cur_area_data->bmap.get_edges_in_region(
         point(
             std::min(cur_leader_ptr->pos.x, throw_dest.x),
             std::min(cur_leader_ptr->pos.y, throw_dest.y)
@@ -1741,8 +1741,8 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     //First, get the full dimensions of the map.
     float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
     
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
         min_x = std::min(v_ptr->x, min_x);
         min_y = std::min(v_ptr->y, min_y);
         max_x = std::max(v_ptr->x, max_x);
@@ -1787,13 +1787,13 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
  * @brief Draws tree shadows.
  */
 void gameplay_state::draw_tree_shadows() {
-    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); s++) {
-        tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
+    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
         
         unsigned char alpha =
             (
                 (s_ptr->alpha / 255.0) *
-                game.cur_area_data.weather_condition.get_sun_strength()
+                game.cur_area_data->weather_condition.get_sun_strength()
             ) * 255;
             
         draw_bitmap(
@@ -1878,15 +1878,15 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
     components.reserve(
-        game.cur_area_data.sectors.size() + //Sectors.
+        game.cur_area_data->sectors.size() + //Sectors.
         mobs.all.size() + //Mob shadows.
         mobs.all.size() + //Mobs.
         particles.get_count() //Particles.
     );
     
     //Sectors.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
         
         if(
             !bmp_output &&

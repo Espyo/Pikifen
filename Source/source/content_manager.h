@@ -66,12 +66,13 @@ struct content_manager {
     //--- Function declarations ---
     
     content_manager();
-    void load_area(
+    void load_area_as_current(
         const string &path, CONTENT_LOAD_LEVEL level,
         AREA_TYPE type, bool from_backup
     );
     void load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);
     void unload_all(CONTENT_TYPE type);
+    void unload_current_area(CONTENT_LOAD_LEVEL level);
     
     private:
     
@@ -81,8 +82,16 @@ struct content_manager {
     
     //--- Function declarations ---
     
+    void load_area(
+        area_data* area_ptr,
+        const string &path, CONTENT_LOAD_LEVEL level,
+        AREA_TYPE type, bool from_backup
+    );
+    void load_area_into_vector(
+        const string &path, AREA_TYPE type, bool from_backup
+    );
     void load_areas(
-        const string &folder, CONTENT_LOAD_LEVEL level
+        const string &folder
     );
     void load_custom_particle_generator(
         const string &path, CONTENT_LOAD_LEVEL level

@@ -637,14 +637,6 @@ void load_system_animations() {
 
 
 /**
- * @brief Unloads the loaded area from memory.
- */
-void unload_area() {
-    game.cur_area_data.clear();
-}
-
-
-/**
  * @brief Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
