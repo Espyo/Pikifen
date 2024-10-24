@@ -262,6 +262,7 @@ struct area_data : public content {
     //--- Function declarations ---
     
     void check_stability();
+    void cleanup(bool* out_deleted_sectors = nullptr);
     void clone(area_data &other);
     void connect_edge_to_sector(edge* e_ptr, sector* s_ptr, size_t side);
     void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
@@ -299,7 +300,10 @@ struct area_data : public content {
     void remove_edge(const edge* e_ptr);
     void remove_sector(size_t s_idx);
     void remove_sector(const sector* s_ptr);
-    void save_to_data_node(data_node* node);
+    void save_geometry_to_data_node(data_node* node);
+    void save_main_data_to_data_node(data_node* node);
+    void save_mission_data_to_data_node(data_node* node);
+    void save_thumbnail(bool to_backup);
     void clear();
     
 };

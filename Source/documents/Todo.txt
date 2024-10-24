@@ -1,8 +1,8 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Move area saving to the area class
+    Get rid of get_base_area_folder_path
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -207,6 +207,7 @@ Next tasks (roughly sorted most important first)
                 Load resources or not, based on the boolean given
                 Check if content by that name already exists, and if so report it
                 Unload
+            Make the folder/file name be the internal name?
             Make assets inherit from the plain_content class
             Add the new common content properties to everything in the engine
             A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
@@ -226,6 +227,7 @@ Next tasks (roughly sorted most important first)
     Rename every file to lowercase?
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
+    Update screenshots in the manual that still show off the Play area
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
             "astyle.cmd_options": [
@@ -741,6 +743,7 @@ Misc things (so I don't forget)
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
         Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
+        The audio options menu should have a button to playback one or two sample sounds
     Radar
         Details
             Sparkles on treasures
@@ -868,6 +871,7 @@ Misc things (so I don't forget)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The spray HUD icons should show a tiny bar with concoction progress
+    The standby counter near the cursor should be disabled by default
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions
@@ -884,6 +888,7 @@ Misc things (so I don't forget)
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
+        A turnstyle mob
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent

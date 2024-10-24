@@ -128,7 +128,7 @@ public:
     //Game content.
     content_manager content;
     
-    //Data about the area that's currently being used. Cache for convenience.
+    //Data about the area that's currently being used.
     area_data* cur_area_data = nullptr;
     
     //Time between the previous frame and the current.

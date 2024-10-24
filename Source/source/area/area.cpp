@@ -182,6 +182,36 @@ void area_data::clear() {
 
 
 /**
+ * @brief Cleans up redundant data and such.
+ * 
+ * @param out_deleted_sectors If not nullptr, whether any sectors got deleted
+ * is returned here.
+ */
+void area_data::cleanup(bool* out_deleted_sectors) {
+    //Get rid of unused sectors.
+    bool deleted_sectors = false;
+    for(size_t s = 0; s < sectors.size(); ) {
+        if(sectors[s]->edges.empty()) {
+            remove_sector(s);
+            deleted_sectors = true;
+        } else {
+            s++;
+        }
+    }
+    if(out_deleted_sectors) *out_deleted_sectors = deleted_sectors;
+    
+    //And some other cleanup.
+    if(song_name == NONE_OPTION) {
+        song_name.clear();
+    }
+    if(weather_name == NONE_OPTION) {
+        weather_name.clear();
+    }
+    engine_version = get_engine_version_string();
+}
+
+
+/**
  * @brief Clones this area data into another area_data object.
  *
  * @param other The area data object to clone to.
@@ -1707,15 +1737,645 @@ void area_data::remove_vertex(const vertex* v_ptr) {
 
 
 /**
- * @brief Saves the area data to a data node.
+ * @brief Saves the area's geometry to a data node.
  *
  * @param node Data node to save to.
  */
-void area_data::save_to_data_node(data_node* node) {
+void area_data::save_geometry_to_data_node(data_node* node) {
+    //Vertexes.
+    data_node* vertexes_node = new data_node("vertexes", "");
+    node->add(vertexes_node);
+    
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data->vertexes[v];
+        data_node* vertex_node =
+            new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
+        vertexes_node->add(vertex_node);
+    }
+    
+    //Edges.
+    data_node* edges_node = new data_node("edges", "");
+    node->add(edges_node);
+    
+    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
+        edge* e_ptr = game.cur_area_data->edges[e];
+        data_node* edge_node = new data_node("e", "");
+        edges_node->add(edge_node);
+        string s_str;
+        for(size_t s = 0; s < 2; s++) {
+            if(e_ptr->sector_idxs[s] == INVALID) s_str += "-1";
+            else s_str += i2s(e_ptr->sector_idxs[s]);
+            s_str += " ";
+        }
+        s_str.erase(s_str.size() - 1);
+        edge_node->add(new data_node("s", s_str));
+        edge_node->add(
+            new data_node(
+                "v",
+                i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1])
+            )
+        );
+        
+        if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
+            edge_node->add(
+                new data_node("shadow_length", f2s(e_ptr->wall_shadow_length))
+            );
+        }
+        
+        if(e_ptr->wall_shadow_color != GEOMETRY::SHADOW_DEF_COLOR) {
+            edge_node->add(
+                new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
+            );
+        }
+        
+        if(e_ptr->ledge_smoothing_length != 0.0f) {
+            edge_node->add(
+                new data_node(
+                    "smoothing_length",
+                    f2s(e_ptr->ledge_smoothing_length)
+                )
+            );
+        }
+        
+        if(e_ptr->ledge_smoothing_color != GEOMETRY::SMOOTHING_DEF_COLOR) {
+            edge_node->add(
+                new data_node(
+                    "smoothing_color",
+                    c2s(e_ptr->ledge_smoothing_color)
+                )
+            );
+        }
+    }
+    
+    //Sectors.
+    data_node* sectors_node = new data_node("sectors", "");
+    node->add(sectors_node);
+    
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
+        data_node* sector_node = new data_node("s", "");
+        sectors_node->add(sector_node);
+        
+        if(s_ptr->type != SECTOR_TYPE_NORMAL) {
+            sector_node->add(
+                new data_node("type", game.sector_types.get_name(s_ptr->type))
+            );
+        }
+        if(s_ptr->is_bottomless_pit) {
+            sector_node->add(
+                new data_node("is_bottomless_pit", "true")
+            );
+        }
+        sector_node->add(new data_node("z", f2s(s_ptr->z)));
+        if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
+            sector_node->add(
+                new data_node("brightness", i2s(s_ptr->brightness))
+            );
+        }
+        if(!s_ptr->tag.empty()) {
+            sector_node->add(new data_node("tag", s_ptr->tag));
+        }
+        if(s_ptr->fade) {
+            sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
+        }
+        if(!s_ptr->hazards_str.empty()) {
+            sector_node->add(new data_node("hazards", s_ptr->hazards_str));
+            sector_node->add(
+                new data_node(
+                    "hazards_floor",
+                    b2s(s_ptr->hazard_floor)
+                )
+            );
+        }
+        
+        if(!s_ptr->texture_info.file_name.empty()) {
+            sector_node->add(
+                new data_node(
+                    "texture",
+                    s_ptr->texture_info.file_name
+                )
+            );
+        }
+        
+        if(s_ptr->texture_info.rot != 0) {
+            sector_node->add(
+                new data_node(
+                    "texture_rotate",
+                    f2s(s_ptr->texture_info.rot)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.scale.x != 1 ||
+            s_ptr->texture_info.scale.y != 1
+        ) {
+            sector_node->add(
+                new data_node(
+                    "texture_scale",
+                    f2s(s_ptr->texture_info.scale.x) + " " +
+                    f2s(s_ptr->texture_info.scale.y)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.translation.x != 0 ||
+            s_ptr->texture_info.translation.y != 0
+        ) {
+            sector_node->add(
+                new data_node(
+                    "texture_trans",
+                    f2s(s_ptr->texture_info.translation.x) + " " +
+                    f2s(s_ptr->texture_info.translation.y)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.tint.r != 1.0 ||
+            s_ptr->texture_info.tint.g != 1.0 ||
+            s_ptr->texture_info.tint.b != 1.0 ||
+            s_ptr->texture_info.tint.a != 1.0
+        ) {
+            sector_node->add(
+                new data_node("texture_tint", c2s(s_ptr->texture_info.tint))
+            );
+        }
+        
+    }
+    
+    //Mobs.
+    data_node* mobs_node = new data_node("mobs", "");
+    node->add(mobs_node);
+    
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        string cat_name = "(Unknown)";
+        if(m_ptr->type && m_ptr->type->category) {
+            cat_name = m_ptr->type->category->name;
+        }
+        data_node* mob_node = new data_node(cat_name, "");
+        mobs_node->add(mob_node);
+        
+        if(m_ptr->type) {
+            mob_node->add(
+                new data_node("type", m_ptr->type->name)
+            );
+        }
+        mob_node->add(
+            new data_node(
+                "p",
+                f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
+            )
+        );
+        if(m_ptr->angle != 0) {
+            mob_node->add(
+                new data_node("angle", f2s(m_ptr->angle))
+            );
+        }
+        if(m_ptr->vars.size()) {
+            mob_node->add(
+                new data_node("vars", m_ptr->vars)
+            );
+        }
+        
+        string links_str;
+        for(size_t l = 0; l < m_ptr->link_idxs.size(); l++) {
+            if(l > 0) links_str += " ";
+            links_str += i2s(m_ptr->link_idxs[l]);
+        }
+        
+        if(!links_str.empty()) {
+            mob_node->add(
+                new data_node("links", links_str)
+            );
+        }
+        
+        if(m_ptr->stored_inside != INVALID) {
+            mob_node->add(
+                new data_node("stored_inside", i2s(m_ptr->stored_inside))
+            );
+        }
+    }
+    
+    //Paths.
+    data_node* path_stops_node = new data_node("path_stops", "");
+    node->add(path_stops_node);
+    
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        data_node* path_stop_node = new data_node("s", "");
+        path_stops_node->add(path_stop_node);
+        
+        path_stop_node->add(
+            new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
+        );
+        if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
+            path_stop_node->add(
+                new data_node("radius", f2s(s_ptr->radius))
+            );
+        }
+        if(s_ptr->flags != 0) {
+            path_stop_node->add(
+                new data_node("flags", i2s(s_ptr->flags))
+            );
+        }
+        if(!s_ptr->label.empty()) {
+            path_stop_node->add(
+                new data_node("label", s_ptr->label)
+            );
+        }
+        
+        data_node* links_node = new data_node("links", "");
+        path_stop_node->add(links_node);
+        
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
+            path_link* l_ptr = s_ptr->links[l];
+            string link_data = i2s(l_ptr->end_idx);
+            if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
+                link_data += " " + i2s(l_ptr->type);
+            }
+            data_node* link_node = new data_node("nr", link_data);
+            links_node->add(link_node);
+        }
+        
+    }
+    
+    //Tree shadows.
+    data_node* shadows_node = new data_node("tree_shadows", "");
+    node->add(shadows_node);
+    
+    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
+        data_node* shadow_node = new data_node("shadow", "");
+        shadows_node->add(shadow_node);
+        
+        shadow_node->add(
+            new data_node(
+                "pos", f2s(s_ptr->center.x) + " " + f2s(s_ptr->center.y)
+            )
+        );
+        shadow_node->add(
+            new data_node(
+                "size", f2s(s_ptr->size.x) + " " + f2s(s_ptr->size.y)
+            )
+        );
+        if(s_ptr->angle != 0) {
+            shadow_node->add(new data_node("angle", f2s(s_ptr->angle)));
+        }
+        if(s_ptr->alpha != 255) {
+            shadow_node->add(new data_node("alpha", i2s(s_ptr->alpha)));
+        }
+        shadow_node->add(new data_node("file", s_ptr->file_name));
+        shadow_node->add(
+            new data_node("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
+        );
+        
+    }
+}
+
+
+/**
+ * @brief Saves the area's main data to a data node.
+ *
+ * @param node Data node to save to.
+ */
+void area_data::save_main_data_to_data_node(data_node* node) {
     //Content metadata.
     save_metadata_to_data_node(node);
     
-    //TODO move the rest of the area saving process here.
+    //Main data.
+    node->add(
+        new data_node("subtitle", game.cur_area_data->subtitle)
+    );
+    node->add(
+        new data_node(
+            "difficulty",
+            i2s(game.cur_area_data->difficulty)
+        )
+    );
+    node->add(
+        new data_node("bg_bmp", game.cur_area_data->bg_bmp_file_name)
+    );
+    node->add(
+        new data_node("bg_color", c2s(game.cur_area_data->bg_color))
+    );
+    node->add(
+        new data_node("bg_dist", f2s(game.cur_area_data->bg_dist))
+    );
+    node->add(
+        new data_node("bg_zoom", f2s(game.cur_area_data->bg_bmp_zoom))
+    );
+    node->add(
+        new data_node("song", game.cur_area_data->song_name)
+    );
+    node->add(
+        new data_node("weather", game.cur_area_data->weather_name)
+    );
+    node->add(
+        new data_node("day_time_start", i2s(game.cur_area_data->day_time_start))
+    );
+    node->add(
+        new data_node("day_time_speed", i2s(game.cur_area_data->day_time_speed))
+    );
+    node->add(
+        new data_node("spray_amounts", game.cur_area_data->spray_amounts)
+    );
+}
+
+
+/**
+ * @brief Saves the area's mission data to a data node.
+ *
+ * @param node Data node to save to.
+ */
+void area_data::save_mission_data_to_data_node(data_node* node) {
+    if(game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY) {
+        node->add(
+            new data_node(
+                "mission_goal",
+                game.mission_goals[game.cur_area_data->mission.goal]->
+                get_name()
+            )
+        );
+    }
+    if(
+        game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
+        game.cur_area_data->mission.goal == MISSION_GOAL_GROW_PIKMIN
+    ) {
+        node->add(
+            new data_node(
+                "mission_goal_amount",
+                i2s(game.cur_area_data->mission.goal_amount)
+            )
+        );
+    }
+    if(
+        game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+        game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+        game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
+    ) {
+        node->add(
+            new data_node(
+                "mission_goal_all_mobs",
+                b2s(game.cur_area_data->mission.goal_all_mobs)
+            )
+        );
+        string mission_mob_idxs;
+        for(size_t i : game.cur_area_data->mission.goal_mob_idxs) {
+            if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
+            mission_mob_idxs += i2s(i);
+        }
+        if(!mission_mob_idxs.empty()) {
+            node->add(
+                new data_node(
+                    "mission_required_mobs",
+                    mission_mob_idxs
+                )
+            );
+        }
+    }
+    if(game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT) {
+        node->add(
+            new data_node(
+                "mission_goal_exit_center",
+                p2s(game.cur_area_data->mission.goal_exit_center)
+            )
+        );
+        node->add(
+            new data_node(
+                "mission_goal_exit_size",
+                p2s(game.cur_area_data->mission.goal_exit_size)
+            )
+        );
+    }
+    if(game.cur_area_data->mission.fail_conditions > 0) {
+        node->add(
+            new data_node(
+                "mission_fail_conditions",
+                i2s(game.cur_area_data->mission.fail_conditions)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_too_few_pik_amount",
+                i2s(game.cur_area_data->mission.fail_too_few_pik_amount)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_too_many_pik_amount",
+                i2s(game.cur_area_data->mission.fail_too_many_pik_amount)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_pik_killed",
+                i2s(game.cur_area_data->mission.fail_pik_killed)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_leaders_kod",
+                i2s(game.cur_area_data->mission.fail_leaders_kod)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_enemies_killed",
+                i2s(game.cur_area_data->mission.fail_enemies_killed)
+            )
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        node->add(
+            new data_node(
+                "mission_fail_time_limit",
+                i2s(game.cur_area_data->mission.fail_time_limit)
+            )
+        );
+    }
+    if(game.cur_area_data->mission.fail_hud_primary_cond != INVALID) {
+        node->add(
+            new data_node(
+                "mission_fail_hud_primary_cond",
+                i2s(game.cur_area_data->mission.fail_hud_primary_cond)
+            )
+        );
+    }
+    if(game.cur_area_data->mission.fail_hud_secondary_cond != INVALID) {
+        node->add(
+            new data_node(
+                "mission_fail_hud_secondary_cond",
+                i2s(game.cur_area_data->mission.fail_hud_secondary_cond)
+            )
+        );
+    }
+    node->add(
+        new data_node(
+            "mission_grading_mode",
+            i2s(game.cur_area_data->mission.grading_mode)
+        )
+    );
+    if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+        if(game.cur_area_data->mission.points_per_pikmin_born != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_pikmin_born",
+                    i2s(game.cur_area_data->mission.points_per_pikmin_born)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.points_per_pikmin_death != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_pikmin_death",
+                    i2s(game.cur_area_data->mission.points_per_pikmin_death)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.points_per_sec_left != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_sec_left",
+                    i2s(game.cur_area_data->mission.points_per_sec_left)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.points_per_sec_passed != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_sec_passed",
+                    i2s(game.cur_area_data->mission.points_per_sec_passed)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.points_per_treasure_point != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_treasure_point",
+                    i2s(
+                        game.cur_area_data->mission.points_per_treasure_point
+                    )
+                )
+            );
+        }
+        if(game.cur_area_data->mission.points_per_enemy_point != 0) {
+            node->add(
+                new data_node(
+                    "mission_points_per_enemy_point",
+                    i2s(game.cur_area_data->mission.points_per_enemy_point)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.point_loss_data > 0) {
+            node->add(
+                new data_node(
+                    "mission_point_loss_data",
+                    i2s(game.cur_area_data->mission.point_loss_data)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.point_hud_data != 255) {
+            node->add(
+                new data_node(
+                    "mission_point_hud_data",
+                    i2s(game.cur_area_data->mission.point_hud_data)
+                )
+            );
+        }
+        if(game.cur_area_data->mission.starting_points != 0) {
+            node->add(
+                new data_node(
+                    "mission_starting_points",
+                    i2s(game.cur_area_data->mission.starting_points)
+                )
+            );
+        }
+        node->add(
+            new data_node(
+                "mission_bronze_req",
+                i2s(game.cur_area_data->mission.bronze_req)
+            )
+        );
+        node->add(
+            new data_node(
+                "mission_silver_req",
+                i2s(game.cur_area_data->mission.silver_req)
+            )
+        );
+        node->add(
+            new data_node(
+                "mission_gold_req",
+                i2s(game.cur_area_data->mission.gold_req)
+            )
+        );
+        node->add(
+            new data_node(
+                "mission_platinum_req",
+                i2s(game.cur_area_data->mission.platinum_req)
+            )
+        );
+    }
+}
+
+
+/**
+ * @brief Saves the area's thumbnail to the disk, or deletes it from the disk
+ * if it's meant to not exist.
+ * 
+ * @param to_backup Whether it's to save to the area backup.
+ */
+void area_data::save_thumbnail(bool to_backup) {
+    string thumb_path =
+        get_base_area_folder_path(game.cur_area_data->type, !to_backup) +
+        "/" + game.cur_area_data->folder_name +
+        (to_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
+    if(game.cur_area_data->thumbnail) {
+        al_save_bitmap(
+            thumb_path.c_str(), game.cur_area_data->thumbnail.get()
+        );
+    } else {
+        al_remove_filename(thumb_path.c_str());
+    }
 }
 
 
