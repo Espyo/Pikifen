@@ -42,7 +42,7 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         data_node anim_file =
-            load_data_file(ANIMATIONS_FOLDER_PATH + "/" + animation_str);
+            load_data_file(FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + animation_str); //TODO
             
         anim_db.load_from_data_node(&anim_file);
         if(!anim_db.animations.empty()) {

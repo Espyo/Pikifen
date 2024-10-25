@@ -18,7 +18,7 @@
 
     <h2 id="game">Game configuration</h2>
     
-    <p>This file controls some general settings about how the game works. It can be found in <code>Game_data/Misc/Config.txt</code>. Create it if it does not exist.</p>
+    <p>This file controls some general settings about how the game works. It can be found in <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Misc/Config.txt</code>. Create it if it does not exist.</p>
 
     <p>The following properties exist:</p>
 
@@ -294,7 +294,7 @@
     
     <p>"Spike damage" is a mechanic where objects that suffered damage can immediately retaliate by damaging their attacker. In the <i>Pikmin</i> games, this is used by a White Pikmin to release poison to the enemy that ate it, in order to cause poison damage. In the engine, the same can be done, but any object can retaliate in any way, whether it is swallowed or damaged normally.</p>
 
-    <p>The folder <code>Game_data/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="making.html#data-file">data file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
+    <p>The folder <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="making.html#data-file">data file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
 
     <p>The properties are:</p>
 
@@ -349,7 +349,7 @@
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>Game_data/Graphics</code> and <code>Game_data/Audio/Sounds</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Graphics</code> and <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Audio/Sounds</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image.</p>
     
     <h3 id="system-asset-graphics">Graphics</h3>
 

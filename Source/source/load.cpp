@@ -70,7 +70,7 @@ void load_area_mission_record(
  * @brief Loads asset file names.
  */
 void load_asset_file_names() {
-    data_node file(SYSTEM_ASSET_FILE_NAMES_FILE_PATH);
+    data_node file(FILE_PATHS_FROM_PKG::SYSTEM_ASSET_FILE_NAMES); //TODO
     
     game.asset_file_names.load(&file);
 }
@@ -90,7 +90,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
         al_load_audio_stream(
-            (AUDIO_TRACK_FOLDER_PATH + "/" + file_name).c_str(),
+            (FOLDER_PATHS_FROM_PKG::SONG_TRACKS + "/" + file_name).c_str(), //TODO
             4, 2048
         );
         
@@ -132,7 +132,7 @@ ALLEGRO_BITMAP* load_bmp(
         }
     }
     
-    string base_dir = (path_from_root ? "" : (GRAPHICS_FOLDER_PATH + "/"));
+    string base_dir = (path_from_root ? "" : (FOLDER_PATHS_FROM_PKG::GRAPHICS + "/")); //TODO
     ALLEGRO_BITMAP* b =
         al_load_bitmap((base_dir + file_name).c_str());
         
@@ -183,7 +183,7 @@ data_node load_data_file(const string &file_path) {
 ALLEGRO_FONT* load_font(
     const string &file_name, int n, const int ranges[], int size
 ) {
-    string full_path = GRAPHICS_FOLDER_PATH + "/" + file_name;
+    string full_path = FOLDER_PATHS_FROM_PKG::GRAPHICS + "/" + file_name; //TODO
     ALLEGRO_FONT* result = nullptr;
     
     //First, try to load it as a TTF font.
@@ -291,7 +291,7 @@ void load_fonts() {
  * @brief Loads the game's configuration file.
  */
 void load_game_config() {
-    data_node file = load_data_file(CONFIG_FILE);
+    data_node file = load_data_file(FILE_PATHS_FROM_PKG::GAME_CONFIG); //TODO
     
     game.config.load(&file);
     
@@ -306,7 +306,7 @@ void load_game_config() {
  * @brief Loads the maker tools from the tool config file.
  */
 void load_maker_tools() {
-    data_node file(MAKER_TOOLS_FILE_PATH);
+    data_node file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
     
     if(!file.file_was_opened) return;
     
@@ -486,7 +486,7 @@ void load_misc_sounds() {
  * @brief Loads the player's options.
  */
 void load_options() {
-    data_node file = data_node(OPTIONS_FILE_PATH);
+    data_node file = data_node(FILE_PATHS_FROM_ROOT::OPTIONS);
     if(!file.file_was_opened) return;
     
     //Init game controllers.
@@ -557,7 +557,7 @@ ALLEGRO_SAMPLE* load_sample(
     const string &file_name, data_node* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample =
-        al_load_sample((AUDIO_SOUNDS_FOLDER_PATH + "/" + file_name).c_str());
+        al_load_sample((FOLDER_PATHS_FROM_PKG::SOUNDS + "/" + file_name).c_str()); //TODO
         
     if(!sample && report_errors) {
         game.errors.report(
@@ -575,10 +575,10 @@ ALLEGRO_SAMPLE* load_sample(
  */
 void load_songs() {
     vector<string> song_files =
-        folder_to_vector(AUDIO_SONG_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::SONGS, false); //TODO
         
     for(size_t s = 0; s < song_files.size(); s++) {
-        string path = AUDIO_SONG_FOLDER_PATH + "/" + song_files[s];
+        string path = FOLDER_PATHS_FROM_PKG::SONGS + "/" + song_files[s]; //TODO
         data_node file = load_data_file(path);
         if(!file.file_was_opened) continue;
         
@@ -595,7 +595,7 @@ void load_songs() {
  */
 void load_statistics() {
     data_node stats_file;
-    stats_file.load_file(STATISTICS_FILE_PATH, true, false, true);
+    stats_file.load_file(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
     if(!stats_file.file_was_opened) return;
     
     statistics_t &s = game.statistics;
@@ -627,7 +627,7 @@ void load_statistics() {
  */
 void load_system_animations() {
     data_node system_animations_file =
-        load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
+        load_data_file(FILE_PATHS_FROM_PKG::SYSTEM_ANIMS); //TODO
         
     init_single_animation(
         &system_animations_file,

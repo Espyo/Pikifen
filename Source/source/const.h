@@ -55,174 +55,274 @@ constexpr int SMALLEST_WIN_WIDTH = 640;
 //Real-world centimeters per in-game-world pixel.
 constexpr float CM_PER_PIXEL = 0.05f;
 
-//Path to the folder with the game data,
-//relative to the program root folder.
-const string GAME_DATA_FOLDER_PATH = "Game_data";
+//Folder names (not paths).
+namespace FOLDER_NAMES {
 
-//Path to the folder with the user data,
-//relative to the program root folder.
-const string USER_DATA_FOLDER_PATH = "User_data";
+    //Game data folder.
+    const string GAME_DATA = "Game_data";
 
-//Name of the folder with area type folders inside.
-const string AREA_TYPES_FOLDER_NAME = "Areas";
+    //User data folder.
+    const string USER_DATA = "User_data";
 
-//Name of the folder with mission areas, be it in the game data or user data.
-const string MISSION_AREA_FOLDER_NAME = "Areas/Mission";
+    //Base content package folder.
+    const string BASE_PKG = "Base";
 
-//Name of the folder with simple areas, be it in the game data or user data.
-const string SIMPLE_AREA_FOLDER_NAME = "Areas/Simple";
+    //Audio folder.
+    const string AUDIO = "Audio";
 
-//Path to the folder with the global animations,
-//relative to the program root folder.
-const string ANIMATIONS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Animations";
+    //Music folder.
+    const string MUSIC = "Music";
 
-//Name of the file with an area's data.
-const string AREA_DATA_FILE_NAME =
-    "Data.txt";
+    //Songs folder.
+    const string SONGS = "Songs";
 
-//Name of the file with a backup of an area's data.
-const string AREA_DATA_BACKUP_FILE_NAME =
-    "Data_backup.txt";
+    //Song tracks folder.
+    const string SONG_TRACKS = "Tracks";
 
-//Name of the file with an area's geometry.
-const string AREA_GEOMETRY_FILE_NAME =
-    "Geometry.txt";
+    //Sound effects folder.
+    const string SOUNDS = "Sounds";
 
-//Name of the file with a backup of an area's geometry.
-const string AREA_GEOMETRY_BACKUP_FILE_NAME =
-    "Geometry_backup.txt";
+    //Areas folder.
+    const string AREAS = "Areas";
 
-//Path to the folder with the audio files,
-//relative to the program root folder.
-const string AUDIO_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Audio";
+    //Simple areas folder.
+    const string SIMPLE_AREAS = "Simple";
 
-//Path to the folder with the music files,
-//relative to the program root folder.
-const string AUDIO_MUSIC_FOLDER_PATH =
-    AUDIO_FOLDER_PATH + "/Music";
+    //Mission areas folder.
+    const string MISSION_AREAS = "Mission";
 
-//Path to the folder with the sound files,
-//relative to the program root folder.
-const string AUDIO_SOUNDS_FOLDER_PATH =
-    AUDIO_FOLDER_PATH + "/Sounds";
+    //Global animations folder.
+    const string ANIMATIONS = "Animations";
 
-//Path to the folder with the song files,
-//relative to the program root folder.
-const string AUDIO_SONG_FOLDER_PATH =
-    AUDIO_MUSIC_FOLDER_PATH + "/Songs";
+    //Graphics folder.
+    const string GRAPHICS = "Graphics";
 
-//Path to the folder with the music track files,
-//relative to the program root folder.
-const string AUDIO_TRACK_FOLDER_PATH =
-    AUDIO_MUSIC_FOLDER_PATH + "/Tracks";
+    //Textures folder.
+    const string TEXTURES = "Textures";
 
-//Path to the folder with the graphics,
-//relative to the program root folder.
-const string GRAPHICS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Graphics";
+    //GUI configurations folder.
+    const string GUI = "GUI";
 
-//Path to the folder with the GUI configurations,
-//relative to the program root folder.
-const string GUI_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/GUI";
+    //Hazards folder.
+    const string HAZARDS = "Hazards";
 
-//Path to the folder with the hazards,
-//relative to the program root folder.
-const string HAZARDS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Hazards";
+    //Liquids folder.
+    const string LIQUIDS = "Liquids";
 
-//Path to the folder with the liquids,
-//relative to the program root folder.
-const string LIQUIDS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Liquids";
+    //Misc. folder.
+    const string MISC = "Misc";
 
-//Path to the folder with the mob types,
-//relative to the program root folder.
-const string MOB_TYPES_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Types";
+    //Mob types folder.
+    const string MOB_TYPES = "Types";
 
-//Path to the folder with the misc. game data,
-//relative to the program root folder.
-const string MISC_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Misc";
+    //Particle generators folder.
+    const string PARTICLE_GENERATORS = "Particle_generators";
 
-//Path to the folder with the particle generators,
-//relative to the program root folder.
-const string PARTICLE_GENERATORS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Particle_generators";
+    //Spike damage types folder.
+    const string SPIKE_DAMAGES_TYPES = "Spike_damage_types";
 
-//Path to the folder with the spike damage types,
-//relative to the program root folder.
-const string SPIKE_DAMAGES_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Spike_damage_types";
+    //Spray types folder.
+    const string SPRAYS = "Sprays";
 
-//Path to the folder with the sprays,
-//relative to the program root folder.
-const string SPRAYS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Sprays";
+    //Statuses folder.
+    const string STATUSES = "Statuses";
 
-//Path to the folder with the status effects,
-//relative to the program root folder.
-const string STATUSES_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Statuses";
+    //Weather definitions.
+    const string WEATHER = "Weather";
 
-//Name of the folder with all sector textures.
-const string TEXTURES_FOLDER_NAME =
-    "Textures";
+}
 
-//Path to the folder with the sector textures,
-//relative to the program root folder.
-const string TEXTURES_FOLDER_PATH =
-    GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
+//File names (not paths).
+namespace FILE_NAMES {
 
-//Path to the folder with the weather conditions,
-//relative to the program root folder.
-const string WEATHER_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Weather";
+    //Area main data file.
+    const string AREA_MAIN_DATA = "Data.txt";
 
-//Path to the folder with the game configuration,
-//relative to the program root folder.
-const string CONFIG_FILE =
-    MISC_FOLDER_PATH + "/Config.txt";
+    //Area geometry file.
+    const string AREA_GEOMETRY = "Geometry.txt";
 
-//Path to the folder with the system animations list,
-//relative to the program root folder.
-const string SYSTEM_ANIMATIONS_FILE_PATH =
-    MISC_FOLDER_PATH + "/System_animations.txt";
+    //Area main data backup file.
+    const string AREA_MAIN_DATA_BACKUP = "Data_backup.txt";
 
-//Path to the folder with the system asset file names,
-//relative to the program root folder.
-const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
-    MISC_FOLDER_PATH + "/System_asset_file_names.txt";
+    //Area geometry backup file.
+    const string AREA_GEOMETRY_BACKUP = "Geometry_backup.txt";
 
-//Path to the file with the error log,
-//relative to the program root folder.
-const string ERROR_LOG_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Error_log.txt";
+    //Game configuration file.
+    const string GAME_CONFIG = "Config.txt";
 
-//Path to the file with the mission records,
-//relative to the program root folder.
-const string MISSION_RECORDS_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Mission_records.txt";
+    //System animations file.
+    const string SYSTEM_ANIMS = "System_animations.txt";
 
-//Path to the file with the maker tools configuration,
-//relative to the program root folder.
-const string MAKER_TOOLS_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Tools.txt";
+    //System animation file names file.
+    const string SYSTEM_ASSET_FILE_NAMES = "System_asset_file_names.txt";
 
-//Path to the file with the user options data,
-//relative to the program root folder.
-const string OPTIONS_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Options.txt";
+    //Error log file.
+    const string ERROR_LOG = "Error_log.txt";
+    
+    //Mission records file.
+    const string MISSION_RECORDS = "Mission_records.txt";
+    
+    //Maker tools file.
+    const string MAKER_TOOLS = "Tools.txt";
+    
+    //Options file.
+    const string OPTIONS = "Options.txt";
 
-//Path to the file with the performance log,
-//relative to the program root folder.
-const string PERFORMANCE_LOG_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Performance_log.txt";
+    //Performance log file.
+    const string PERFORMANCE_LOG = "Performance_log.txt";
 
-//Path to the file with the lifetime statistics,
-//relative to the program root folder.
-const string STATISTICS_FILE_PATH =
-    USER_DATA_FOLDER_PATH + "/Statistics.txt";
+    //Statistics file.
+    const string STATISTICS = "Statistics.txt";
+
+}
+
+//Paths to folders from the engine's root folder.
+namespace FOLDER_PATHS_FROM_ROOT {
+
+    //Game data folder.
+    const string GAME_DATA =
+        FOLDER_NAMES::GAME_DATA;
+
+    //Base package folder.
+    const string BASE_PKG =
+        GAME_DATA + "/" + FOLDER_NAMES::BASE_PKG;
+
+    //User data folder.
+    const string USER_DATA =
+        FOLDER_NAMES::USER_DATA;
+};
+
+//Paths to files from the engine's root folder.
+namespace FILE_PATHS_FROM_ROOT {
+
+    //Error log.
+    const string ERROR_LOG =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::ERROR_LOG;
+    
+    //Mission records.
+    const string MISSION_RECORDS =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::MISSION_RECORDS;
+    
+    //Options.
+    const string OPTIONS =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::OPTIONS;
+    
+    //Performance log.
+    const string PERFORMANCE_LOG =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::PERFORMANCE_LOG;
+    
+    //Statistics.
+    const string STATISTICS =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::STATISTICS;
+    
+    //Maker tools.
+    const string MAKER_TOOLS =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::MAKER_TOOLS;
+    
+};
+
+//Paths to game content folders from a package's folder.
+namespace FOLDER_PATHS_FROM_PKG {
+
+    //Audio folder.
+    const string AUDIO =
+        FOLDER_NAMES::AUDIO;
+
+    //Music folder.
+    const string MUSIC =
+        AUDIO + "/" + FOLDER_NAMES::MUSIC;
+
+    //Songs folder.
+    const string SONGS =
+        MUSIC + "/" + FOLDER_NAMES::SONGS;
+
+    //Song tracks folder.
+    const string SONG_TRACKS =
+        MUSIC + "/" + FOLDER_NAMES::SONG_TRACKS;
+
+    //Sound effects folder.
+    const string SOUNDS =
+        AUDIO + "/" + FOLDER_NAMES::SOUNDS;
+
+    //Areas folder.
+    const string AREAS =
+        FOLDER_NAMES::AREAS;
+
+    //Simple areas folder.
+    const string SIMPLE_AREAS =
+        AREAS + "/" + FOLDER_NAMES::SIMPLE_AREAS;
+
+    //Mission areas folder.
+    const string MISSION_AREAS =
+        AREAS + "/" + FOLDER_NAMES::MISSION_AREAS;
+
+    //Global animations folder.
+    const string ANIMATIONS =
+        FOLDER_NAMES::ANIMATIONS;
+
+    //Graphics folder.
+    const string GRAPHICS =
+        FOLDER_NAMES::GRAPHICS;
+
+    //Textures folder.
+    const string TEXTURES =
+        GRAPHICS + "/" + FOLDER_NAMES::TEXTURES;
+
+    //GUI configurations folder.
+    const string GUI =
+        FOLDER_NAMES::GUI;
+
+    //Hazards folder.
+    const string HAZARDS =
+        FOLDER_NAMES::HAZARDS;
+
+    //Liquids folder.
+    const string LIQUIDS =
+        FOLDER_NAMES::LIQUIDS;
+
+    //Misc. folder.
+    const string MISC =
+        FOLDER_NAMES::MISC;
+
+    //Mob types folder.
+    const string MOB_TYPES =
+        FOLDER_NAMES::MOB_TYPES;
+
+    //Particle generators folder.
+    const string PARTICLE_GENERATORS =
+        FOLDER_NAMES::PARTICLE_GENERATORS;
+
+    //Spike damage types folder.
+    const string SPIKE_DAMAGES_TYPES =
+        FOLDER_NAMES::SPIKE_DAMAGES_TYPES;
+
+    //Spray types folder.
+    const string SPRAYS =
+        FOLDER_NAMES::SPRAYS;
+
+    //Statuses folder.
+    const string STATUSES =
+        FOLDER_NAMES::STATUSES;
+
+    //Weather definitions.
+    const string WEATHER =
+        FOLDER_NAMES::WEATHER;
+
+};
+
+//Paths to game content files from a package's folder.
+namespace FILE_PATHS_FROM_PKG {
+    //Game configuration file.
+    const string GAME_CONFIG =
+        FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::GAME_CONFIG;
+
+    //System animations file.
+    const string SYSTEM_ANIMS =
+        FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::SYSTEM_ANIMS;
+
+    //System animation file names file.
+    const string SYSTEM_ASSET_FILE_NAMES =
+        FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
+
+    
+}

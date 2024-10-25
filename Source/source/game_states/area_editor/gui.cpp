@@ -1246,7 +1246,7 @@ void area_editor::process_gui_panel_details() {
                     FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
                     vector<string> f =
                         prompt_file_dialog_locked_to_folder(
-                            TEXTURES_FOLDER_PATH,
+                            FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                             "Please choose the texture to use for the "
                             "tree shadow.",
                             "*.png",
@@ -2088,7 +2088,7 @@ void area_editor::process_gui_panel_info() {
             FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
             vector<string> f =
                 prompt_file_dialog_locked_to_folder(
-                    TEXTURES_FOLDER_PATH,
+                    FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                     "Please choose the texture to use for the background.",
                     "*.*",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
@@ -2510,7 +2510,7 @@ void area_editor::process_gui_panel_main() {
     set_tooltip(
         "Full folder path: " + game.cur_area_data->path + "\n"
         "Full user data folder path: " +
-        get_base_area_folder_path(game.cur_area_data->type, false) + "/" +
+        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
         game.cur_area_data->folder_name + "\n"
     );
     
@@ -5715,9 +5715,9 @@ void area_editor::process_gui_panel_tools() {
                 if(!game.cur_area_data->folder_name.empty()) {
                     string file_path =
                         get_base_area_folder_path(
-                            game.cur_area_data->type, false
+                            game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG //TODO
                         ) + "/" + game.cur_area_data->folder_name + "/" +
-                        AREA_GEOMETRY_BACKUP_FILE_NAME;
+                        FILE_NAMES::AREA_GEOMETRY_BACKUP;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;
                     }

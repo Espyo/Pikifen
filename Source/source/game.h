@@ -225,7 +225,7 @@ public:
     string team_names[N_MOB_TEAMS];
     
     //Manager of all floor texture bitmaps.
-    bitmap_manager textures = bitmap_manager(TEXTURES_FOLDER_NAME);
+    bitmap_manager textures = bitmap_manager(FOLDER_PATHS_FROM_PKG::TEXTURES); //TODO
     
     //How much time has passed since the program booted.
     float time_passed = 0.0f;

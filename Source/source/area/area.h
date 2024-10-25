@@ -315,5 +315,5 @@ void get_area_info_from_path(
     AREA_TYPE* out_area_type
 );
 string get_base_area_folder_path(
-    const AREA_TYPE type, bool from_game_data
+    const AREA_TYPE type, bool from_game_data, const string& package
 );

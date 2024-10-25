@@ -21,7 +21,7 @@
 namespace ONION_MENU {
 
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Onion_menu.txt";
+const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Onion_menu.txt"; //TODO
 
 //How long to let text turn red for.
 const float RED_TEXT_DURATION = 1.0f;

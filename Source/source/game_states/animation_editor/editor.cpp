@@ -284,7 +284,7 @@ string animation_editor::get_opened_file_name() const {
  * @return The name.
  */
 string animation_editor::get_path_short_name(const string &p) const {
-    if(p.find(MOB_TYPES_FOLDER_PATH) != string::npos) {
+    if(p.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES) != string::npos) { //TODO
         vector<string> path_parts = split(p, "/");
         if(
             path_parts.size() > 3 &&
@@ -294,7 +294,7 @@ string animation_editor::get_path_short_name(const string &p) const {
                 path_parts[path_parts.size() - 3] + "/" +
                 path_parts[path_parts.size() - 2];
         }
-    } else if(p.find(ANIMATIONS_FOLDER_PATH) != string::npos) {
+    } else if(p.find(FOLDER_PATHS_FROM_PKG::ANIMATIONS) != string::npos) { //TODO
         vector<string> path_parts = split(p, "/");
         if(!path_parts.empty()) {
             return path_parts[path_parts.size() - 1];
@@ -516,7 +516,7 @@ void animation_editor::load_animation_database(
     
     vector<string> file_path_parts = split(file_path, "/");
     
-    if(file_path.find(MOB_TYPES_FOLDER_PATH) != string::npos) {
+    if(file_path.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES) != string::npos) { //TODO
         vector<string> path_parts = split(file_path, "/");
         if(
             path_parts.size() > 3 &&
@@ -524,7 +524,7 @@ void animation_editor::load_animation_database(
         ) {
             mob_category* cat =
                 game.mob_categories.get_from_folder_name(
-                    MOB_TYPES_FOLDER_PATH + "/" +
+                    FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" +
                     path_parts[path_parts.size() - 3]
                 );
             if(cat) {

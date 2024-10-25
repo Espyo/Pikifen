@@ -21,7 +21,7 @@
 namespace RESULTS {
 
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
+const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Results_menu.txt"; //TODO
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -268,7 +268,7 @@ void results_state::load() {
     int old_record_score = 0;
     
     data_node mission_records;
-    mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+    mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
     string mission_record_entry_name =
         game.cur_area_data->name + ";" +
         get_subtitle_or_mission_goal(
@@ -322,7 +322,7 @@ void results_state::load() {
         entry_node->value = clear_str + ";" + score_str + ";" + date_str;
         saved_successfully =
             mission_records.save_file(
-                MISSION_RECORDS_FILE_PATH, true, false, true
+                FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
             );
     }
     
@@ -332,7 +332,7 @@ void results_state::load() {
             "Could not save this result!",
             (
                 "An error occured while saving the mission record to the "
-                "file \"" + MISSION_RECORDS_FILE_PATH + "\". Make sure that "
+                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS + "\". Make sure that "
                 "the folder it is saving to exists and it is not read-only, "
                 "and try beating the mission again."
             ).c_str(),

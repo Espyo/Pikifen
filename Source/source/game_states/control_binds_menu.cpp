@@ -32,7 +32,7 @@ const float BIND_BUTTON_PADDING = 0.01f;
 const float CAPTURE_TIMEOUT_DURATION = 5.0f;
 
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Control_binds_menu.txt";
+const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Control_binds_menu.txt"; //TODO
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";

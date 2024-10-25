@@ -171,7 +171,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlay_animation.empty()) {
             overlay_anim_db.path =
-                ANIMATIONS_FOLDER_PATH + "/" + overlay_animation;
+                FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + overlay_animation; //TODO
             data_node anim_file = load_data_file(overlay_anim_db.path);
             overlay_anim_db.load_from_data_node(&anim_file);
             if(!overlay_anim_db.animations.empty()) {

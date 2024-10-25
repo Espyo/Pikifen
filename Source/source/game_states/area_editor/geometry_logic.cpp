@@ -1077,7 +1077,7 @@ void area_editor::find_problems() {
     
     //Check for unknown textures.
     vector<string> texture_file_names =
-        folder_to_vector(TEXTURES_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::TEXTURES, false); //TODO
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
     
         sector* s_ptr = game.cur_area_data->sectors[s];

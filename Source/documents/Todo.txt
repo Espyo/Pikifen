@@ -622,7 +622,7 @@ Next tasks (roughly sorted most important first)
             Wild Pikmin and sprouts should be immune to the sunset
         Catalogs
             There can be multiple catalogs -- Piklopedia and Treasure Hoard are two different catalogs
-            A file, likely Game_data/Misc/Catalogs.txt is responsible for:
+            A file, likely Game_data/<package>/Misc/Catalogs.txt is responsible for:
                 Which catalogs exist, as well as their icons, unlock criteria, etc.
                 What entries exist in each, in order
                 What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)

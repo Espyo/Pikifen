@@ -23,7 +23,7 @@
 namespace STATS_MENU {
 
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Statistics_menu.txt";
+const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Statistics_menu.txt"; //TODO
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -331,7 +331,7 @@ void stats_menu_state::populate_stats_list() {
     
     data_node mission_records_file;
     mission_records_file.load_file(
-        MISSION_RECORDS_FILE_PATH, true, false, true
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
     );
     
     size_t mission_clears = 0;

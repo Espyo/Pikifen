@@ -24,10 +24,10 @@
 namespace AREA_MENU {
 
 //Path to the main GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
+const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu.txt"; //TODO
 
 //Path to the area info GUI information file.
-const string INFO_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_info.txt";
+const string INFO_GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu_info.txt"; //TODO
 
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
@@ -36,7 +36,7 @@ const float PAGE_SWAP_DURATION = 0.5f;
 const string SONG_NAME = "menus";
 
 //Path to the mission specs GUI information file.
-const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
+const string SPECS_GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu_specs.txt"; //TODO
 
 }
 
@@ -913,7 +913,7 @@ void area_menu_state::load() {
     //Mission records.
     if(area_type == AREA_TYPE_MISSION) {
         data_node mission_records;
-        mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+        mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
         
         for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
             area_data* area_ptr = game.content.areas[AREA_TYPE_MISSION][a];

@@ -362,7 +362,7 @@ int game_class::start() {
     init_allegro();
     
     //Panic check: is there a Game_data folder?
-    if(folder_to_vector(GAME_DATA_FOLDER_PATH, true).empty()) {
+    if(folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
         show_message_box(
             nullptr, "Game_data folder not found!",
             "Game_data folder not found!",

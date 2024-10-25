@@ -1614,7 +1614,7 @@ void init_single_animation(
     single_animation_suite &anim
 ) {
     anim.database.path =
-        ANIMATIONS_FOLDER_PATH + "/" +
+        FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + //TODO
         anim_def_file->get_child_by_name(name)->value;
     data_node file(anim.database.path);
     anim.database.load_from_data_node(&file);

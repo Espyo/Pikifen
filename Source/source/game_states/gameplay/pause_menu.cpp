@@ -25,7 +25,7 @@ namespace PAUSE_MENU {
 
 //Path to the leaving confirmation page GUI information file.
 const string CONFIRMATION_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_confirmation.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_confirmation.txt"; //TODO
     
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;
@@ -35,15 +35,15 @@ const float GO_HERE_CALC_INTERVAL = 0.15f;
 
 //Path to the GUI information file.
 const string GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_menu.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_menu.txt"; //TODO
     
 //Path to the help page GUI information file.
 const string HELP_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_help.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_help.txt"; //TODO
     
 //Path to the mission page GUI information file.
 const string MISSION_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_mission.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_mission.txt"; //TODO
     
 //Background color of the radar.
 const ALLEGRO_COLOR RADAR_BG_COLOR =
@@ -54,7 +54,7 @@ const float RADAR_DEF_ZOOM = 0.4f;
 
 //Path to the radar page GUI information file.
 const string RADAR_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_radar.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_radar.txt"; //TODO
     
 //Color of the highest sector in the radar.
 const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
@@ -84,7 +84,7 @@ const float RADAR_ZOOM_SPEED = 2.5f;
 
 //Path to the status page GUI information file.
 const string STATUS_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_status.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_status.txt"; //TODO
     
 }
 

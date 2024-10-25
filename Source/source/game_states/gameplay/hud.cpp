@@ -24,7 +24,7 @@ namespace HUD {
 const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
 //Path to the GUI information file.
-const string GUI_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
+const string GUI_FILE_NAME = FOLDER_PATHS_FROM_PKG::GUI + "/Gameplay.txt"; //TODO
 
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;

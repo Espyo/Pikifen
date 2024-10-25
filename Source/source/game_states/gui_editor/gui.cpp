@@ -21,7 +21,7 @@
  */
 void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
-    vector<string> files = folder_to_vector(GUI_FOLDER_PATH, false);
+    vector<string> files = folder_to_vector(FOLDER_PATHS_FROM_PKG::GUI, false); //TODO
     vector<picker_item> file_items;
     for(size_t f = 0; f < files.size(); f++) {
         file_items.push_back(picker_item(files[f]));

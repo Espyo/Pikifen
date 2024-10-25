@@ -27,7 +27,7 @@
  */
 void animation_editor::open_load_dialog() {
     global_anim_files_cache =
-        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, nullptr);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::ANIMATIONS, false, nullptr); //TODO
     for(size_t f = 0; f < global_anim_files_cache.size(); f++) {
         global_anim_files_cache[f] =
             remove_extension(global_anim_files_cache[f]);
@@ -343,7 +343,7 @@ void animation_editor::process_gui_load_dialog() {
         if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
             if(!chosen_anim.empty()) {
                 loaded_mob_type = nullptr;
-                file_path = ANIMATIONS_FOLDER_PATH + "/" + chosen_anim + ".txt";
+                file_path = FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + chosen_anim + ".txt"; //TODO
                 load_animation_database(true);
                 close_top_dialog();
             }
@@ -620,7 +620,7 @@ void animation_editor::process_gui_options_dialog() {
             if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
                 vector<string> f =
                     prompt_file_dialog(
-                        TEXTURES_FOLDER_PATH,
+                        FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                         "Please choose a background texture.",
                         "*.*", 0, game.display
                     );
@@ -2003,7 +2003,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
-                GRAPHICS_FOLDER_PATH,
+                FOLDER_PATHS_FROM_PKG::GRAPHICS, //TODO
                 "Please choose the bitmap to get the sprites from.",
                 "*.png",
                 ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |

@@ -40,7 +40,7 @@ mob_category::mob_category(
     name(name),
     id(id),
     plural_name(plural_name),
-    folder_path(MOB_TYPES_FOLDER_PATH + "/" + folder_name),
+    folder_path(FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" + folder_name), //TODO
     editor_color(editor_color) {
     
 }

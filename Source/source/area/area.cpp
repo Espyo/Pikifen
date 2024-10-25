@@ -2366,7 +2366,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
  */
 void area_data::save_thumbnail(bool to_backup) {
     string thumb_path =
-        get_base_area_folder_path(game.cur_area_data->type, !to_backup) +
+        get_base_area_folder_path(game.cur_area_data->type, !to_backup, FOLDER_NAMES::BASE_PKG) + //TODO
         "/" + game.cur_area_data->folder_name +
         (to_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
     if(game.cur_area_data->thumbnail) {
@@ -2585,22 +2585,23 @@ void get_area_info_from_path(
  * @param type Type of area.
  * @param from_game_data If true, get the folder in the game data folder.
  * If false, get it from the user data folder.
+ * @param package Name of the package.
  * @return The folder path.
  */
 string get_base_area_folder_path(
-    const AREA_TYPE type, bool from_game_data
+    const AREA_TYPE type, bool from_game_data, const string& package
 ) {
     string result =
         from_game_data ?
-        GAME_DATA_FOLDER_PATH :
-        USER_DATA_FOLDER_PATH;
-    result += "/";
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA :
+        FOLDER_PATHS_FROM_ROOT::USER_DATA;
+    result += "/" + package + "/";
     
     switch(type) {
     case AREA_TYPE_SIMPLE: {
-        return result + SIMPLE_AREA_FOLDER_NAME;
+        return result + FOLDER_PATHS_FROM_PKG::SIMPLE_AREAS;
     } case AREA_TYPE_MISSION: {
-        return result + MISSION_AREA_FOLDER_NAME;
+        return result + FOLDER_PATHS_FROM_PKG::MISSION_AREAS;
     } case N_AREA_TYPES: {
         break;
     }

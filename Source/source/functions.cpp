@@ -148,7 +148,7 @@ void crash(const string &reason, const string &info, int exit_status) {
         if(backbuffer) {
             al_save_bitmap(
                 (
-                    USER_DATA_FOLDER_PATH + "/" +
+                    FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" +
                     "Crash_" + get_current_time(true) + ".png"
                 ).c_str(),
                 backbuffer
@@ -848,7 +848,7 @@ void save_maker_tools() {
         )
     );
     
-    file.save_file(MAKER_TOOLS_FILE_PATH, true, true);
+    file.save_file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
 }
 
 
@@ -899,7 +899,7 @@ void save_options() {
     }
     
     //Finally, save.
-    file.save_file(OPTIONS_FILE_PATH, true, true);
+    file.save_file(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
 }
 
 
@@ -911,7 +911,7 @@ void save_screenshot() {
     string base_file_name = "Screenshot_" + get_current_time(true);
     
     //Check if a file with this name already exists.
-    vector<string> files = folder_to_vector(USER_DATA_FOLDER_PATH, false);
+    vector<string> files = folder_to_vector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);
     size_t variant_nr = 1;
     string final_file_name = base_file_name;
     bool valid_name = false;
@@ -958,7 +958,7 @@ void save_screenshot() {
     al_unlock_bitmap(screenshot);
     
     al_save_bitmap(
-        (USER_DATA_FOLDER_PATH + "/" + final_file_name + ".png").c_str(),
+        (FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + final_file_name + ".png").c_str(),
         screenshot
     );
     
@@ -996,7 +996,7 @@ void save_statistics() {
     
 #undef save
     
-    stats_file.save_file(STATISTICS_FILE_PATH, true, true, true);
+    stats_file.save_file(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }
 
 

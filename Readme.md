@@ -3,7 +3,7 @@ Pikifen
 
 A fan-made _Pikmin_-based engine made by Espyo that allows users to make and play their own _Pikmin_ content.
 
-![Pikifen's logo](Game_data/Graphics/Icon.png)
+![Pikifen's logo](Game_data/Base/Graphics/Icon.png)
 
 [![GitHub Downloads (all assets, latest release)](
     https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads

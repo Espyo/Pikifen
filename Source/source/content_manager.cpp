@@ -44,7 +44,7 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
         "already loaded!"
     );
     
-    string folder = GAME_DATA_FOLDER_PATH;
+    string folder = FOLDER_PATHS_FROM_ROOT::GAME_DATA;
     
     switch(type) {
     case CONTENT_TYPE_AREA: {
@@ -105,16 +105,16 @@ void content_manager::load_area(
     
     if(from_backup) {
         string base_folder =
-            get_base_area_folder_path(type, false) +
+            get_base_area_folder_path(type, false, FOLDER_NAMES::BASE_PKG) + //TODO
             "/" + folder_name;
-        data_file_path = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
-        geometry_file_path = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
+        data_file_path = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA_BACKUP;
+        geometry_file_path = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY_BACKUP;
     } else {
         string base_folder =
-            get_base_area_folder_path(type, true) +
+            get_base_area_folder_path(type, true, FOLDER_NAMES::BASE_PKG) + //TODO
             "/" + folder_name;
-        data_file_path = base_folder + "/" + AREA_DATA_FILE_NAME;
-        geometry_file_path = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
+        data_file_path = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA;
+        geometry_file_path = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY;
     }
     
     data_node data_file = load_data_file(data_file_path);
@@ -152,7 +152,7 @@ void content_manager::load_area(
     
     //Thumbnail image.
     string thumbnail_path =
-        get_base_area_folder_path(type, !from_backup) +
+        get_base_area_folder_path(type, !from_backup, FOLDER_NAMES::BASE_PKG) + //TODO
         "/" + path +
         (from_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
     area_ptr->load_thumbnail(thumbnail_path);
@@ -218,7 +218,7 @@ void content_manager::load_area_into_vector(
  */
 void content_manager::load_areas(const string &folder) {
     const string simple_areas_base_path =
-        GAME_DATA_FOLDER_PATH + "/" + SIMPLE_AREA_FOLDER_NAME;
+        FOLDER_PATHS_FROM_PKG::SIMPLE_AREAS; //TODO
     vector<string> simple_area_folders =
         folder_to_vector(simple_areas_base_path, true);
     for(size_t a = 0; a < simple_area_folders.size(); a++) {
@@ -229,7 +229,7 @@ void content_manager::load_areas(const string &folder) {
     }
     
     const string mission_areas_base_path =
-        GAME_DATA_FOLDER_PATH + "/" + MISSION_AREA_FOLDER_NAME;
+        FOLDER_PATHS_FROM_PKG::MISSION_AREAS; //TODO
     vector<string> mission_area_folders =
         folder_to_vector(mission_areas_base_path, true);
     for(size_t a = 0; a < mission_area_folders.size(); a++) {
@@ -274,11 +274,11 @@ void content_manager::load_custom_particle_generators(
     }
     
     vector<string> generator_files =
-        folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::PARTICLE_GENERATORS, false); //TODO
         
     for(size_t g = 0; g < generator_files.size(); g++) {
         load_custom_particle_generator(
-            PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g],
+            FOLDER_PATHS_FROM_PKG::PARTICLE_GENERATORS + "/" + generator_files[g], //TODO
             level
         );
     }
@@ -320,11 +320,11 @@ void content_manager::load_hazards(const string &folder, CONTENT_LOAD_LEVEL leve
     }
     
     vector<string> hazard_files =
-        folder_to_vector(HAZARDS_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::HAZARDS, false); //TODO
         
     for(size_t h = 0; h < hazard_files.size(); h++) {
         load_hazard(
-            HAZARDS_FOLDER_PATH + "/" + hazard_files[h],
+            FOLDER_PATHS_FROM_PKG::HAZARDS + "/" + hazard_files[h], //TODO
             level
         );
     }
@@ -366,11 +366,11 @@ void content_manager::load_liquids(const string &folder, CONTENT_LOAD_LEVEL leve
     }
     
     vector<string> liquid_files =
-        folder_to_vector(LIQUIDS_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::LIQUIDS, false); //TODO
         
     for(size_t l = 0; l < liquid_files.size(); l++) {
         load_liquid(
-            LIQUIDS_FOLDER_PATH + "/" + liquid_files[l],
+            FOLDER_PATHS_FROM_PKG::LIQUIDS + "/" + liquid_files[l], //TODO
             level
         );
     }
@@ -555,11 +555,11 @@ void content_manager::load_spike_damage_types(const string &folder, CONTENT_LOAD
     }
     
     vector<string> type_files =
-        folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::SPIKE_DAMAGES_TYPES, false); //TODO
         
     for(size_t t = 0; t < type_files.size(); t++) {
         load_spike_damage_type(
-            SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t],
+            FOLDER_PATHS_FROM_PKG::SPIKE_DAMAGES_TYPES + "/" + type_files[t],
             level
         );
     }
@@ -599,11 +599,11 @@ void content_manager::load_spray_types(const string &folder, CONTENT_LOAD_LEVEL 
     }
     
     vector<string> type_files =
-        folder_to_vector(SPRAYS_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::SPRAYS, false); //TODO
         
     for(size_t t = 0; t < type_files.size(); t++) {
         load_spray_type(
-            SPRAYS_FOLDER_PATH + "/" + type_files[t],
+            FOLDER_PATHS_FROM_PKG::SPRAYS + "/" + type_files[t], //TODO
             level
         );
     }
@@ -688,13 +688,13 @@ void content_manager::load_status_types(const string &folder, CONTENT_LOAD_LEVEL
     }
     
     vector<string> type_files =
-        folder_to_vector(STATUSES_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::STATUSES, false); //TODO
     vector<status_type*> types_with_replacements;
     vector<string> types_with_replacements_names;
     
     for(size_t t = 0; t < type_files.size(); t++) {
         load_status_type(
-            STATUSES_FOLDER_PATH + "/" + type_files[t],
+            FOLDER_PATHS_FROM_PKG::STATUSES + "/" + type_files[t], //TODO
             level
         );
     }
@@ -764,11 +764,11 @@ void content_manager::load_weather_conditions(const string &folder, CONTENT_LOAD
     }
     
     vector<string> weather_files =
-        folder_to_vector(WEATHER_FOLDER_PATH, false);
+        folder_to_vector(FOLDER_PATHS_FROM_PKG::WEATHER, false); //TODO
         
     for(size_t w = 0; w < weather_files.size(); w++) {
         load_weather_condition(
-            WEATHER_FOLDER_PATH + "/" + weather_files[w],
+            FOLDER_PATHS_FROM_PKG::WEATHER + "/" + weather_files[w], //TODO
             level
         );
     }

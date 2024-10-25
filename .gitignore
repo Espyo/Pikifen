@@ -16,7 +16,7 @@ allegro.log
 *.o
 *.d
 *.aps
-Game_data/Areas/*/*test*
+Game_data/Base/Areas/*/*test*
 User_data/*
 /pikifen
 /pikifen_shortcut

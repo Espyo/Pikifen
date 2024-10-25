@@ -341,7 +341,7 @@ void error_manager::emit_in_gameplay(const string &s) {
     string info_str =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
-        "(Saved to \"" + ERROR_LOG_FILE_PATH + "\".)\n\n";
+        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
     print_info(info_str, 30.0f, 3.0f);
 }
 
@@ -367,7 +367,7 @@ void error_manager::log_to_file(const string &s) {
     
     //Get the previous contents of the log file, if any.
     ALLEGRO_FILE* file_i =
-        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
+        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "r");
     if(file_i) {
         while(!al_feof(file_i)) {
             string line;
@@ -402,7 +402,7 @@ void error_manager::log_to_file(const string &s) {
     
     //Save it.
     ALLEGRO_FILE* file_o =
-        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
+        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "w");
     if(file_o) {
         al_fwrite(file_o, prev_error_log + output);
         al_fclose(file_o);
@@ -463,7 +463,7 @@ void error_manager::report_area_load_errors() {
         info_str += "(+" + i2s(nr_errors_found - 1) + " more) ";
     }
     info_str +=
-        "(Saved to \"" + ERROR_LOG_FILE_PATH + "\".)\n\n";
+        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
         
     print_info(info_str, 30.0f, 3.0f);
 }
@@ -1007,7 +1007,7 @@ void performance_monitor_t::save_log() {
     //Finally, write the string to a file.
     string prev_log;
     ALLEGRO_FILE* file_i =
-        al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "r");
+        al_fopen(FILE_PATHS_FROM_ROOT::PERFORMANCE_LOG.c_str(), "r");
     if(file_i) {
         string line;
         while(!al_feof(file_i)) {
@@ -1019,7 +1019,7 @@ void performance_monitor_t::save_log() {
     }
     
     ALLEGRO_FILE* file_o =
-        al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "w");
+        al_fopen(FILE_PATHS_FROM_ROOT::PERFORMANCE_LOG.c_str(), "w");
     if(file_o) {
         al_fwrite(file_o, prev_log + s);
         al_fclose(file_o);

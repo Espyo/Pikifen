@@ -24,25 +24,25 @@ namespace MAIN_MENU {
 
 //Path to the GUI information file.
 const string GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Main_menu.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu.txt"; //TODO
     
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
 //Path to the make page GUI information file.
 const string MAKE_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Main_menu_make.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_make.txt"; //TODO
     
 //Path to the play page GUI information file.
 const string PLAY_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Main_menu_play.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_play.txt"; //TODO
     
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
 //Path to the tutorial question page GUI information file.
 const string TUTORIAL_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Main_menu_tutorial.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_tutorial.txt"; //TODO
     
 }
 
@@ -695,7 +695,7 @@ void main_menu_state::init_gui_tutorial_page() {
     yes_button->on_activate =
     [] (const point &) {
         game.states.gameplay->path_of_area_to_load =
-            get_base_area_folder_path(AREA_TYPE_MISSION, true) + "/" +
+            get_base_area_folder_path(AREA_TYPE_MISSION, true, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
             "Tutorial Meadow";
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.gameplay);

@@ -25,29 +25,29 @@ namespace OPTIONS_MENU {
 
 //Path to the audio menu GUI information file.
 const string AUDIO_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu_audio.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_audio.txt"; //TODO
     
 //Path to the controls menu GUI information file.
 const string CONTROLS_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu_controls.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_controls.txt"; //TODO
     
 //Path to the graphics menu GUI information file.
 const string GRAPHICS_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu_graphics.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_graphics.txt"; //TODO
     
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
 //Path to the misc menu GUI information file.
 const string MISC_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu_misc.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_misc.txt"; //TODO
     
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
 //Path to the top-level menu GUI information file.
 const string TOP_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu_top.txt";
+    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_top.txt"; //TODO
     
 }
 
