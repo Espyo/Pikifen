@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -548,6 +548,7 @@ Next tasks (roughly sorted most important first)
         Vignette
         [NEEDS BRAINSTORMING] Floating particles found in caves -- or should this count as something different from weather? Maybe it'd work better as an object that spawns them
         [NEEDS BRAINSTORMING] Position of the sun, and position of the moon?
+        Add the relevant particles to the base content's weather
         Set the entire area to a hazard during a part of the day (e.g. rain that drowns non-Blue Pikmin)
         Set the direction of the sun -- indoor lighting likely uses a fixed light direction
         A way to control what parts of the area use what weather -- that way, a cave can use a blackout, or stay out of rain

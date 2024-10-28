@@ -9679,7 +9679,7 @@ edges{
 }
 sectors{
 	s{
-		type=blocking
+		type=Blocking
 		z=200.0000
 		texture=textures/metal_clean.jpg
 	}
@@ -10302,7 +10302,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-100.0000
 		texture=textures/warning.png
 		texture_scale=0.7500 0.7500
@@ -11175,7 +11175,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-100.0000
 		texture=textures/warning.png
 		texture_scale=0.7500 0.7500

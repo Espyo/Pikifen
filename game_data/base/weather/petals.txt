@@ -19,4 +19,3 @@ sun_strength {
     1020 = 255
     1200 = 96
 }
-//TODO add petals

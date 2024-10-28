@@ -416,7 +416,7 @@ void area_editor::clear_undo_history() {
  * @brief Code to run when the area picker is closed.
  */
 void area_editor::close_load_dialog() {
-    if(!loaded_content_yet && game.cur_area_data->folder_name.empty()) {
+    if(!loaded_content_yet && game.cur_area_data->internal_name.empty()) {
         //The user cancelled the area selection picker
         //presented when you enter the area editor. Quit out.
         leave();
@@ -510,7 +510,7 @@ void area_editor::create_area(
     
     //Set its name and type and whatnot.
     game.cur_area_data->name = requested_area_folder_name;
-    game.cur_area_data->folder_name = requested_area_folder_name;
+    game.cur_area_data->internal_name = requested_area_folder_name;
     game.cur_area_data->path =
         get_base_area_folder_path(requested_area_type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
         requested_area_folder_name;
@@ -629,7 +629,7 @@ void area_editor::delete_current_area() {
         //If the area doesn't exist, since it was never saved,
         //then there's nothing to delete.
         final_status_text =
-            "Deleted area \"" + game.cur_area_data->folder_name +
+            "Deleted area \"" + game.cur_area_data->internal_name +
             "\" successfully.";
         go_to_area_select = true;
         
@@ -641,7 +641,7 @@ void area_editor::delete_current_area() {
         non_important_files.push_back("reference.txt");
         wipe_folder(
             get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
-            "/" + game.cur_area_data->folder_name,
+            "/" + game.cur_area_data->internal_name,
             non_important_files
         );
         
@@ -659,27 +659,27 @@ void area_editor::delete_current_area() {
         switch(result) {
         case WIPE_FOLDER_RESULT_OK: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data->folder_name +
+                "Deleted area \"" + game.cur_area_data->internal_name +
                 "\" successfully.";
             go_to_area_select = true;
             break;
         } case WIPE_FOLDER_RESULT_NOT_FOUND: {
             final_status_text =
-                "Area \"" + game.cur_area_data->folder_name +
+                "Area \"" + game.cur_area_data->internal_name +
                 "\" deletion failed; folder not found!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data->folder_name +
+                "Deleted area \"" + game.cur_area_data->internal_name +
                 "\", but folder still has user files!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
             final_status_text =
-                "Area \"" + game.cur_area_data->folder_name +
+                "Area \"" + game.cur_area_data->internal_name +
                 "\" deletion failed; error while deleting something! "
                 "(Permissions?)";
             final_status_error = true;
@@ -717,7 +717,7 @@ void area_editor::do_logic() {
     
     if(
         game.cur_area_data &&
-        !game.cur_area_data->folder_name.empty() &&
+        !game.cur_area_data->internal_name.empty() &&
         area_exists_on_disk &&
         game.options.area_editor_backup_interval > 0
     ) {
@@ -1474,7 +1474,7 @@ string area_editor::get_name() const {
  * @return The path, or an empty string if none.
  */
 string area_editor::get_opened_folder_path() const {
-    if(!game.cur_area_data->folder_name.empty()) {
+    if(!game.cur_area_data->internal_name.empty()) {
         return game.cur_area_data->path;
     } else {
         return "";
@@ -1998,12 +1998,12 @@ void area_editor::load_area(
  */
 void area_editor::load_backup() {
     load_area(
-        string(game.cur_area_data->folder_name),
+        string(game.cur_area_data->internal_name),
         game.cur_area_data->type, true, false
     );
     game.cur_area_data->path =
         get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
-        game.cur_area_data->folder_name;
+        game.cur_area_data->internal_name;
     backup_timer.start(game.options.area_editor_backup_interval);
     changes_mgr.mark_as_changed();
     
@@ -2021,7 +2021,7 @@ void area_editor::load_backup() {
 void area_editor::load_reference() {
     data_node file(
         get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
-        game.cur_area_data->folder_name + "/reference.txt"
+        game.cur_area_data->internal_name + "/reference.txt"
     );
     
     if(file.file_was_opened) {
@@ -2589,7 +2589,7 @@ void area_editor::reload_cmd(float input_value) {
         "reloading the current area", "reload",
     [this] () {
         load_area(
-            string(game.cur_area_data->folder_name), game.cur_area_data->type,
+            string(game.cur_area_data->internal_name), game.cur_area_data->type,
             false, false
         );
     },
@@ -3231,7 +3231,7 @@ bool area_editor::save_area(bool to_backup) {
     if(to_backup) {
         base_folder =
             get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
-            "/" + game.cur_area_data->folder_name;
+            "/" + game.cur_area_data->internal_name;
         geometry_file_name = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY_BACKUP;
         main_data_file_name = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA_BACKUP;
     } else {
@@ -3300,7 +3300,7 @@ void area_editor::save_backup() {
         al_create_fs_entry(
             (
                 get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
-                "/" + game.cur_area_data->folder_name
+                "/" + game.cur_area_data->internal_name
             ).c_str()
         );
     bool folder_exists = al_open_directory(folder_fs_entry);
@@ -3319,7 +3319,7 @@ void area_editor::save_backup() {
 void area_editor::save_reference() {
     string file_name =
         get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
-        "/" + game.cur_area_data->folder_name + "/reference.txt";
+        "/" + game.cur_area_data->internal_name + "/reference.txt";
         
     if(!reference_bitmap) {
         //The user doesn't want a reference more.

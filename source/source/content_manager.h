@@ -140,7 +140,7 @@ struct content_manager {
     map<string, spike_damage_type> spike_damage_types;
     
     //List of spray types.
-    vector<spray_type> spray_types;
+    map<string, spray_type> spray_types;
     
     //Manager of samples.
     sfx_sample_manager samples;

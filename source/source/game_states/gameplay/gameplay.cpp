@@ -706,8 +706,7 @@ void gameplay_state::load() {
     load_game_content();
     
     //Initialize some important things.
-    size_t n_spray_types = game.content.spray_types.size();
-    for(size_t s = 0; s < n_spray_types; s++) {
+    for(size_t s = 0; s < game.content.spray_types.size(); s++) {
         spray_stats.push_back(spray_stats_t());
     }
     
@@ -992,16 +991,14 @@ void gameplay_state::load() {
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data->spray_amounts);
         
-    //TODO
-    /*
     for(auto &s : spray_strs) {
-        size_t spray_id = 0;
-        for(; spray_id < game.content.spray_types.size(); spray_id++) {
-            if(game.content.spray_types[spray_id].name == s.first) {
+        size_t spray_idx = 0;
+        for(; spray_idx < game.config.spray_order.size(); spray_idx++) {
+            if(game.config.spray_order[spray_idx]->internal_name == s.first) {
                 break;
             }
         }
-        if(spray_id == game.content.spray_types.size()) {
+        if(spray_idx == game.content.spray_types.size()) {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
@@ -1009,10 +1006,9 @@ void gameplay_state::load() {
             );
             continue;
         }
-    
-        spray_stats[spray_id].nr_sprays = s2i(s.second);
+        
+        spray_stats[spray_idx].nr_sprays = s2i(s.second);
     }
-    */
     
     //Effect caches.
     game.liquid_limit_effect_caches.clear();

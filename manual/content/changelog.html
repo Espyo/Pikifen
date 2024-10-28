@@ -66,7 +66,6 @@
         Content organization:
         <ul>
           <li><span class="cl-a">Added</span> generic properties to all pieces of content that have their data read from a <a href="making.html#data-file">data file</a>.</li>
-          <li><span class="cl-c">Changed</span> the "maker notes" property for areas from <code>notes</code> to <code>maker_notes</code>.</li>
         </ul>
       </li>
       <li><span class="cl-a">Added</span> the <code>idle_bump_delay</code> property to the <a href="misc_config.html">game configuration</a>.</li>
@@ -80,9 +79,25 @@
       <li><span class="cl-a">Added</span> an option to set a custom background in the <a href="animation.html">animation editor</a>.</li>
       <li><span class="cl-a">Added</span> a <code>global</code> block to <a href="script.html">scripts</a>. Events in this block will have their actions run regardless of the current state.</li>
       <li><span class="cl-a">Added</span> a parameter to the <code>set_animation</code> <a href="script.html">script action</a> that makes the animation speed depend on the object's speed.</li>
-      <li><span class="cl-c">Changed</span> the <code>get_random_decimal</code> <a href="script.html">script action</a> to <code>get_random_real</code>.</li>
-      <li><span class="cl-c">Changed</span> the <code>decimal</code> type in an <a href="mob_type.html">object type</a>'s <code>area_editor_properties</code> block to <code>real</code>.</li>
-      <li><span class="cl-c">Changed</span> the <code>focus</code> and <code>get_mob_info</code> <a href="script.html">actions</a> to support the same set of target object types.</li>
+    </ul>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li>
+        Content organization:
+        <ul>
+          <li><span class="cl-c">Changed</span> the names and paths of all project files and folders to be in snake case.</li>
+          <li><span class="cl-c">Changed</span> where game content is loaded. Now it loads content from packages.</li>
+          <li><span class="cl-c">Changed</span> how content refers to each other. Instead of using the content's proper name, it uses the "internal name", which is just the file or folder's name. For instance, the cardboard box's <code>spawns</code> block refers to the flap object as <code>cardboard_box_flap</code> instead of <code>Cardboard box flap</code>.</li>
+          <li><span class="cl-c">Changed</span> the "maker notes" property for areas from <code>notes</code> to <code>maker_notes</code>.</li>
+          <li><span class="cl-c">Changed</span> how mobs are saved inside of an area. Their block now specifies the internal name of the category, instead of the proper name. The type proper was also naturally changed to be the mob type's internal name.</li>
+          <li><span class="cl-c">Changed</span> the way content refers to textures. Now, content can refer to any graphics in the <code>game_data/&lt;package&gt;/graphics</code> folders, and if needed, can include the subfolder.</li>
+        </ul>
+        <li><span class="cl-c">Changed</span> the <code>get_random_decimal</code> <a href="script.html">script action</a> to <code>get_random_real</code>.</li>
+        <li><span class="cl-c">Changed</span> the <code>decimal</code> type in an <a href="mob_type.html">object type</a>'s <code>area_editor_properties</code> block to <code>real</code>.</li>
+        <li><span class="cl-c">Changed</span> the <code>focus</code> and <code>get_mob_info</code> <a href="script.html">actions</a> to support the same set of target object types.</li>
+      </li>
     </ul>
     
     <h2 id="0.25.0">0.25.0</h2>

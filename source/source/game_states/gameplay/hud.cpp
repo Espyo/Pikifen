@@ -807,7 +807,8 @@ hud_t::hud_t() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.content.spray_types[bottom_spray_idx].bmp_spray, center, size, true,
+            game.config.spray_order[bottom_spray_idx]->bmp_spray,
+            center, size, true,
             0.0f,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
@@ -1807,7 +1808,7 @@ void hud_t::tick(float delta_t) {
         top_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[top_spray_idx],
         top_spray_idx == INVALID ? nullptr :
-        game.content.spray_types[top_spray_idx].bmp_spray
+        game.config.spray_order[top_spray_idx]->bmp_spray
     );
     
     size_t prev_spray_idx = INVALID;
@@ -1824,7 +1825,7 @@ void hud_t::tick(float delta_t) {
         prev_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[prev_spray_idx],
         prev_spray_idx == INVALID ? nullptr :
-        game.content.spray_types[prev_spray_idx].bmp_spray
+        game.config.spray_order[prev_spray_idx]->bmp_spray
     );
     
     size_t next_spray_idx = INVALID;
@@ -1841,7 +1842,7 @@ void hud_t::tick(float delta_t) {
         next_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[next_spray_idx],
         next_spray_idx == INVALID ? nullptr :
-        game.content.spray_types[next_spray_idx].bmp_spray
+        game.config.spray_order[next_spray_idx]->bmp_spray
     );
     
     spray_icon_mgr.tick(delta_t);

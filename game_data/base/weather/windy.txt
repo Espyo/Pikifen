@@ -19,4 +19,3 @@ sun_strength {
     1020 = 224
     1200 = 96
 }
-//TODO add wind

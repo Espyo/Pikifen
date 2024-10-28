@@ -129,9 +129,9 @@ void area_data::clear() {
     }
     
     reset_metadata();
-    name.clear();
+    internal_name.clear();
     path.clear();
-    folder_name.clear();
+    name.clear();
     type = AREA_TYPE_SIMPLE;
     subtitle.clear();
     difficulty = AREA::DEF_DIFFICULTY;
@@ -2369,9 +2369,9 @@ void area_data::save_thumbnail(bool to_backup) {
         get_base_area_folder_path(
             game.cur_area_data->type,
             !to_backup,
-            game.content.manifests.areas[game.cur_area_data->type][game.cur_area_data->folder_name].package
+            game.content.manifests.areas[game.cur_area_data->type][game.cur_area_data->internal_name].package
         ) +
-        "/" + game.cur_area_data->folder_name +
+        "/" + game.cur_area_data->internal_name +
         (to_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
     if(game.cur_area_data->thumbnail) {
         al_save_bitmap(

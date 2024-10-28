@@ -270,9 +270,6 @@ public:
     
     //- Basic information -
     
-    //Name of the folder its data is on.
-    string folder_name;
-    
     //Mob category.
     mob_category* category = nullptr;
     

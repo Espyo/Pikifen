@@ -184,7 +184,7 @@ void content_manager::load_area(
     data_node geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return;
     
-    area_ptr->folder_name = folder_name;
+    area_ptr->internal_name = folder_name;
     area_ptr->path = folder_path;
     area_ptr->type = type;
     
@@ -313,6 +313,7 @@ void content_manager::load_areas() {
 void content_manager::load_global_animation(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level) {
     data_node file(path);
     single_animation_suite anim;
+    anim.database.internal_name = internal_name;
     anim.database.path = path;
     anim.database.load_from_data_node(&file);
     anim.instance.cur_anim = anim.database.animations[0];
@@ -358,6 +359,7 @@ void content_manager::load_custom_particle_generator(
     if(!file.file_was_opened) return;
     
     particle_generator new_pg;
+    new_pg.internal_name = internal_name;
     new_pg.path = path;
     new_pg.load_from_data_node(&file, level);
     custom_particle_generators[internal_name] = new_pg;
@@ -415,6 +417,7 @@ void content_manager::load_hazard(
     if(!file.file_was_opened) return;
     
     hazard new_h;
+    new_h.internal_name = internal_name;
     new_h.path = path;
     new_h.load_from_data_node(&file);
     hazards[internal_name] = new_h;
@@ -651,7 +654,7 @@ void content_manager::load_mob_types_of_category(mob_category* category, CONTENT
         mt = category->create_type();
         mt->load_from_data_node(&file, level, t.second.path);
         category->register_type(t.first, mt);
-        mt->folder_name = t.first;
+        mt->internal_name = t.first;
         mt->path = t.second.path;
         
     }
@@ -670,6 +673,7 @@ void content_manager::load_song(const string &internal_name, const string &path,
     if(!file.file_was_opened) return;
     
     song new_song;
+    new_song.internal_name = internal_name;
     new_song.path = path;
     new_song.load_from_data_node(&file);
     songs[internal_name] = new_song;
@@ -721,6 +725,7 @@ void content_manager::load_spike_damage_type(const string &internal_name, const 
     if(!file.file_was_opened) return;
     
     spike_damage_type new_t;
+    new_t.internal_name = internal_name;
     new_t.path = path;
     new_t.load_from_data_node(&file);
     spike_damage_types[internal_name] = new_t;
@@ -760,9 +765,10 @@ void content_manager::load_spray_type(const string &internal_name, const string 
     if(!file.file_was_opened) return;
     
     spray_type new_t;
+    new_t.internal_name = internal_name;
     new_t.path = path;
     new_t.load_from_data_node(&file, level);
-    spray_types.push_back(new_t);
+    spray_types[internal_name] = new_t;
 }
 
 
@@ -784,16 +790,16 @@ void content_manager::load_spray_types(CONTENT_LOAD_LEVEL level) {
     
     //Spray type order.
     vector<string> missing_spray_order_types;
-    for(size_t t = 0; t < spray_types.size(); t++) {
+    for(auto &s : spray_types) {
         if(
             find(
                 game.config.spray_order_strings.begin(),
                 game.config.spray_order_strings.end(),
-                spray_types[t].name
+                s.first
             ) == game.config.spray_order_strings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_spray_order_types.push_back(spray_types[t].name);
+            missing_spray_order_types.push_back(s.first);
         }
     }
     if(!missing_spray_order_types.empty()) {
@@ -807,28 +813,18 @@ void content_manager::load_spray_types(CONTENT_LOAD_LEVEL level) {
             missing_spray_order_types.end()
         );
     }
-    //TODO
-    /*
-    vector<spray_type> temp;
     for(size_t o = 0; o < game.config.spray_order_strings.size(); o++) {
         string s = game.config.spray_order_strings[o];
-        bool found = false;
-        for(const auto &t : spray_types) {
-            if(s.first == s) {
-                temp.push_back(s.second);
-                found = true;
-            }
-        }
-    
-        if(!found) {
+        if(spray_types.find(s) != spray_types.end()) {
+            game.config.spray_order.push_back(&spray_types[s]);
+        } else {
             game.errors.report(
                 "Unknown spray type \"" + s + "\" found "
                 "in the spray order list in the config file!"
             );
         }
     }
-    spray_types = temp;
-    */
+    
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
@@ -846,6 +842,7 @@ void content_manager::load_status_type(const string &internal_name, const string
     if(!file.file_was_opened) return;
     
     status_type* new_t = new status_type();
+    new_t->internal_name = internal_name;
     new_t->path = path;
     new_t->load_from_data_node(&file, level);
     status_types[internal_name] = new_t;
@@ -918,6 +915,7 @@ void content_manager::load_weather_condition(const string &internal_name, const 
     if(!file.file_was_opened) return;
     
     weather new_w;
+    new_w.internal_name = internal_name;
     new_w.path = path;
     new_w.load_from_data_node(&file);
     weather_conditions[internal_name] = new_w;
@@ -1229,9 +1227,10 @@ void content_manager::unload_spike_damage_types(CONTENT_LOAD_LEVEL level) {
  * @param level Should match the level at which the content got loaded.
  */
 void content_manager::unload_spray_types(CONTENT_LOAD_LEVEL level) {
-    for(size_t s = 0; s < spray_types.size(); s++) {
-        bitmaps.free(spray_types[s].bmp_spray);
+    for(const auto &s : spray_types) {
+        bitmaps.free(s.second.bmp_spray);
     }
+    game.config.spray_order.clear();
     spray_types.clear();
     manifests.spray_types.clear();
 }

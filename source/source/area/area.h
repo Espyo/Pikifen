@@ -186,9 +186,6 @@ struct area_data : public content {
     //Type of area.
     AREA_TYPE type = AREA_TYPE_SIMPLE;
     
-    //Name of the folder with this area's data.
-    string folder_name;
-    
     //Blockmap.
     blockmap bmap;
     

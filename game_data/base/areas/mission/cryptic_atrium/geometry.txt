@@ -6054,7 +6054,7 @@ sectors{
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
@@ -6082,7 +6082,7 @@ sectors{
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6090,14 +6090,14 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6105,26 +6105,26 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=255.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
@@ -6327,13 +6327,13 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=260.0000
 		texture=textures/tile.jpg
@@ -6341,7 +6341,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6349,14 +6349,14 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=255.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
@@ -6398,13 +6398,13 @@ sectors{
 		texture_tint=246 184 159
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		texture=textures/stone.jpg
@@ -6414,14 +6414,14 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=260.0000
 		fade=true
@@ -6471,19 +6471,19 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6496,50 +6496,50 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=33 35 38
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6586,7 +6586,7 @@ sectors{
 		texture=textures/tile_dirty.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
@@ -6598,19 +6598,19 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
@@ -6623,14 +6623,14 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
@@ -6642,7 +6642,7 @@ sectors{
 		texture=textures/tile_dirty.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6678,21 +6678,21 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		brightness=100
 		texture=textures/metal_rusted.png
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6700,7 +6700,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
@@ -6708,26 +6708,26 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
@@ -6885,149 +6885,149 @@ sectors{
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/white.png
 		texture_tint=37 147 23
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/white.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/white.png
 	}
 	s{
-		type=blocking
-		z=0.0000
-		brightness=48
-		texture=textures/white.png
-		texture_tint=37 147 23
-	}
-	s{
-		type=blocking
-		z=0.0000
-		fade=true
-		texture=textures/tile.jpg
-	}
-	s{
-		type=blocking
-		z=0.0000
-		fade=true
-		texture=textures/tile.jpg
-	}
-	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/white.png
 		texture_tint=37 147 23
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/white.png
 		texture_tint=37 147 23
 	}
 	s{
-		type=blocking
+		type=Blocking
+		z=0.0000
+		fade=true
+		texture=textures/tile.jpg
+	}
+	s{
+		type=Blocking
+		z=0.0000
+		fade=true
+		texture=textures/tile.jpg
+	}
+	s{
+		type=Blocking
+		z=0.0000
+		brightness=48
+		texture=textures/white.png
+		texture_tint=37 147 23
+	}
+	s{
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		hazards=water
@@ -7035,7 +7035,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7044,7 +7044,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7053,7 +7053,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7062,7 +7062,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7071,7 +7071,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7080,7 +7080,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7089,7 +7089,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7098,7 +7098,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7107,7 +7107,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		is_bottomless_pit=true
 		z=0.0000
 		brightness=48
@@ -7116,7 +7116,7 @@ sectors{
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		fade=true
@@ -7125,136 +7125,136 @@ sectors{
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-200.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-200.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-200.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-200.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=-140.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
-		z=60.0000
-		brightness=48
-		fade=true
-		texture=textures/metal_rusted.png
-	}
-	s{
-		type=blocking
-		z=0.0000
-		brightness=48
-		fade=true
-		texture=textures/metal_rusted.png
-	}
-	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
+		z=0.0000
+		brightness=48
+		fade=true
+		texture=textures/metal_rusted.png
+	}
+	s{
+		type=Blocking
+		z=60.0000
+		brightness=48
+		fade=true
+		texture=textures/metal_rusted.png
+	}
+	s{
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7262,7 +7262,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7270,7 +7270,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7278,7 +7278,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7286,7 +7286,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7294,28 +7294,28 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/stone.jpg
 		texture_scale=0.5000 0.5000
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7328,182 +7328,182 @@ sectors{
 		texture=textures/stone.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=47 55 63
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=98 137 84
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7511,7 +7511,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/tile.jpg
@@ -7519,7 +7519,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		hazards=water
@@ -7528,113 +7528,113 @@ sectors{
 		texture_tint=0 0 0
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_tint=48 55 64
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=47 55 63
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=47 55 63
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		fade=true
 		texture=textures/tile.jpg
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
 		texture_tint=140 157 177
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=260.0000
 		texture=textures/tile.jpg
 		texture_scale=0.5000 0.5000
@@ -7649,55 +7649,55 @@ sectors{
 		texture_tint=139 113 101
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=0.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		brightness=48
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png
 	}
 	s{
-		type=blocking
+		type=Blocking
 		z=60.0000
 		fade=true
 		texture=textures/metal_rusted.png

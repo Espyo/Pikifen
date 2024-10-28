@@ -24,4 +24,3 @@ fog_color {
 }
 fog_near = 64
 fog_far = 256
-//TODO add sand

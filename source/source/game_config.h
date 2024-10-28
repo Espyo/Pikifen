@@ -18,6 +18,7 @@
 
 #include "mob_types/leader_type.h"
 #include "mob_types/pikmin_type.h"
+#include "spray_type.h"
 
 
 using std::size_t;
@@ -110,7 +111,7 @@ struct game_config {
     //Idle Pikmin will go for a task if they are within this distance of it.
     float idle_task_range = GAME_CONFIG::DEF_IDLE_TASK_RANGE;
     
-    //Standard leader order.
+    //List of leader types, ordered by the game configuration.
     vector<leader_type*> leader_order;
     
     //Loaded strings representing the standard leader order. Used for later.
@@ -143,7 +144,7 @@ struct game_config {
     //Pikmin will only chase enemies in this range.
     float pikmin_chase_range = GAME_CONFIG::DEF_PIKMIN_CHASE_RANGE;
     
-    //Standard Pikmin order.
+    //List of Pikmin types, ordered by the game configuration.
     vector<pikmin_type*> pikmin_order;
     
     //Loaded strings representing the standard Pikmin order. Used for later.
@@ -151,6 +152,9 @@ struct game_config {
     
     //A leader can start the plucking mode if they're this close.
     float pluck_range = GAME_CONFIG::DEF_PLUCK_RANGE;
+    
+    //List of spray types, ordered by the game configuration.
+    vector<spray_type*> spray_order;
     
     //Loaded strings representing the standard spray order. Used for later.
     vector<string> spray_order_strings;

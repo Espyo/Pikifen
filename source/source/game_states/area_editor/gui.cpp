@@ -29,10 +29,10 @@ void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
     for(size_t a = 0; a < game.content.areas[AREA_TYPE_SIMPLE].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->folder_name, "Simple"));
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->internal_name, "Simple"));
     }
     for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->folder_name, "Mission"));
+        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->internal_name, "Mission"));
     }
     
     //Set up the picker's behavior and data.
@@ -199,7 +199,7 @@ void area_editor::process_gui_delete_area_dialog() {
     //Final warning text.
     string final_warning_str =
         "Are you sure you want to delete the area \"" +
-        game.cur_area_data->folder_name + "\"?";
+        game.cur_area_data->internal_name + "\"?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -1602,17 +1602,17 @@ void area_editor::process_gui_panel_gameplay() {
         
             map<string, string> spray_strs =
                 get_var_map(game.cur_area_data->spray_amounts);
-            for(size_t s = 0; s < game.content.spray_types.size(); s++) {
-                int amount = s2i(spray_strs[game.content.spray_types[s].name]);
+            for(size_t s = 0; s < game.config.spray_order.size(); s++) {
+                int amount = s2i(spray_strs[game.config.spray_order[s]->name]);
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        game.content.spray_types[s].name.c_str(), &amount,
+                        game.config.spray_order[s]->name.c_str(), &amount,
                         0.1, 0, INT_MAX
                     )
                 ) {
                     register_change("area spray amounts change");
-                    spray_strs[game.content.spray_types[s].name] = i2s(amount);
+                    spray_strs[game.config.spray_order[s]->internal_name] = i2s(amount);
                     game.cur_area_data->spray_amounts.clear();
                     for(auto const &v : spray_strs) {
                         game.cur_area_data->spray_amounts +=
@@ -2508,12 +2508,12 @@ void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area folder: %s", game.cur_area_data->folder_name.c_str());
+    ImGui::Text("Area folder: %s", game.cur_area_data->internal_name.c_str());
     set_tooltip(
         "Full folder path: " + game.cur_area_data->path + "\n"
         "Full user data folder path: " +
         get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
-        game.cur_area_data->folder_name + "\n"
+        game.cur_area_data->internal_name + "\n"
     );
     
     //Spacer dummy widget.
@@ -5714,11 +5714,11 @@ void area_editor::process_gui_panel_tools() {
                 "loading the auto-backup", "load",
             [this] () {
                 bool backup_exists = false;
-                if(!game.cur_area_data->folder_name.empty()) {
+                if(!game.cur_area_data->internal_name.empty()) {
                     string file_path =
                         get_base_area_folder_path(
                             game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG //TODO
-                        ) + "/" + game.cur_area_data->folder_name + "/" +
+                        ) + "/" + game.cur_area_data->internal_name + "/" +
                         FILE_NAMES::AREA_GEOMETRY_BACKUP;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;

@@ -24,7 +24,7 @@
 namespace PAUSE_MENU {
 
 //Name of the leaving confirmation page GUI information file.
-const string CONFIRMATION_GUI_FILE_NAME = "pause_confirmation.txt"; //TODO
+const string CONFIRMATION_GUI_FILE_NAME = "pause_confirmation.txt";
 
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;

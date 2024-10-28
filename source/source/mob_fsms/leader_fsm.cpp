@@ -2126,7 +2126,7 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     size_t spray_idx = *((size_t*) info1);
-    spray_type &spray_type_ref = game.content.spray_types[spray_idx];
+    spray_type &spray_type_ref = *game.config.spray_order[spray_idx];
     
     if(game.states.gameplay->spray_stats[spray_idx].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -2190,7 +2190,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     for(auto &am : affected_mobs) {
         am->fsm.run_event(
-            MOB_EV_TOUCHED_SPRAY, (void*) &game.content.spray_types[spray_idx]
+            MOB_EV_TOUCHED_SPRAY, (void*) game.config.spray_order[spray_idx]
         );
     }
     

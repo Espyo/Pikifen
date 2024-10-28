@@ -7,7 +7,7 @@ effect = increase_sprays
 increase_amount = 1
 radius = 20
 shrink_speed = 120
-spray_type_to_increase = Ultra-Bitter Spray
+spray_type_to_increase = ultra-bitter_spray
 total_doses = 1
 
 sounds {
