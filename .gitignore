@@ -1,14 +1,9 @@
-Source/visual_studio_2022/.vs/
-Source/visual_studio_2022/packages/
-Source/visual_studio_2022/Win32/
-Source/visual_studio_2022/x64/
-Source/visual_studio_2022/Pikifen.vcxproj.user
-Source/codelite/Debug/
-Source/codelite/Release/
-Source/codelite/.codelite/
-Source/codelite/Pikifen.mk
-Source/codelite/Pikifen.txt
-Source/gnu_make/pikifen
+source/visual_studio_2022/.vs/
+source/visual_studio_2022/packages/
+source/visual_studio_2022/Win32/
+source/visual_studio_2022/x64/
+source/visual_studio_2022/pikifen.vcxproj.user
+source/gnu_make/pikifen
 *__pycache__*
 *.vscode*
 allegro.log
@@ -20,5 +15,5 @@ game_data/base/areas/*/*test*
 user_data/*
 /pikifen
 /pikifen_shortcut
-/Pikifen*.exe
+/pikifen*.exe
 .DS_Store

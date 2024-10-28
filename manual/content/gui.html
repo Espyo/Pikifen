@@ -14,7 +14,7 @@
 <body onload="setup('GUI', ['Making content'], ['making.html']);">
   <div id="content">
     
-    <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD has its own <a href="making.html#data-file">data file</a>, located in <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/GUI</code>.</p>
+    <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/gui</code>.</p>
 
     <p>To change the position and size of elements, you can just use the GUI editor, accessible from the main menu. To change other things, you will need to edit the data files by hand.</p>
     
@@ -302,7 +302,7 @@
         <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
         <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
         <li><code>pikmin_size</code>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
-        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="glossary.html#file-name">file name</a> of the image in the <code>/Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Graphics</code> folder.</li>
+        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="glossary.html#file-name">file name</a> of the image in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
         <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
       </ul>
       <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
@@ -538,7 +538,7 @@
         <li><code>list_scroll</code>: Scrollbar for the list.</li>
         <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
       </ul>
-      <li><b>Tidbits:</b> Tidbits of information in the help page are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="glossary.html#file-name">file name</a> of the file in the <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Graphics</code> folder.</li>
+      <li><b>Tidbits:</b> Tidbits of information in the help page are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="glossary.html#file-name">file name</a> of the file in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
     </ul>
 
     <h3 id="pause-menu-mission">Pause menu &ndash; mission page</h3>

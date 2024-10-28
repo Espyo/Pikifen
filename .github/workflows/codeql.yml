@@ -87,7 +87,7 @@ jobs:
         sudo add-apt-repository ppa:allegro/5.2 -y
         sudo apt install liballegro*5.2 liballegro*5-dev -y
         sudo apt install liballegro-ttf5-dev -y
-        make -f Source/gnu_make/makefile
+        make -f source/gnu_make/makefile
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

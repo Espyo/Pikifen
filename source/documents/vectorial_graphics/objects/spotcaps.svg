@@ -1,0 +1,1473 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="153"
+   height="360"
+   viewBox="0 0 153 360"
+   version="1.1"
+   id="svg2115"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="Spotcaps.svg"
+   inkscape:export-filename="../../../../Game_data/Graphics/Spotcaps.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1031">Spotcap and Kingcap spritesheet</title>
+  <defs
+     id="defs2109">
+    <linearGradient
+       inkscape:collect="always"
+       id="spot_lighting">
+      <stop
+         id="stop7830"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         id="stop7828"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0.25098041" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="spotcap">
+      <stop
+         style="stop-color:#9e452a;stop-opacity:1"
+         offset="0"
+         id="stop4557" />
+      <stop
+         id="stop5203"
+         offset="0.66429383"
+         style="stop-color:#9b542b;stop-opacity:1" />
+      <stop
+         id="stop4565"
+         offset="1"
+         style="stop-color:#c39368;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="spotcap_texture">
+      <stop
+         style="stop-color:#804226;stop-opacity:0"
+         offset="0"
+         id="stop5215" />
+      <stop
+         id="stop5223"
+         offset="0.65005797"
+         style="stop-color:#7f4024;stop-opacity:0.55050504" />
+      <stop
+         style="stop-color:#7f4024;stop-opacity:1"
+         offset="0.73795754"
+         id="stop5233" />
+      <stop
+         style="stop-color:#b97d4b;stop-opacity:1"
+         offset="1"
+         id="stop5217" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#shine_mask"
+       id="linearGradient5041"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.70710679,-0.70710679,-0.70710679,0.70710679,0,0)"
+       x1="97.060471"
+       y1="256.00677"
+       x2="113.99989"
+       y2="272.99985"
+       spreadMethod="reflect" />
+    <linearGradient
+       id="shine_mask"
+       inkscape:collect="always">
+      <stop
+         id="stop5013"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         style="stop-color:#030303;stop-opacity:1"
+         offset="0.31296599"
+         id="stop5015" />
+      <stop
+         id="stop5017"
+         offset="1"
+         style="stop-color:#f6f6f6;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spotcap_texture"
+       id="radialGradient7285-6"
+       cx="24.970234"
+       cy="1097.6124"
+       fx="24.970234"
+       fy="1097.6124"
+       r="25.945921"
+       gradientTransform="matrix(1,0,0,0.99488805,0,5.6109363)"
+       gradientUnits="userSpaceOnUse" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7289-1">
+      <use
+         transform="translate(0,2.6128452e-5)"
+         x="0"
+         y="0"
+         xlink:href="#path7121"
+         id="use7291-8"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7356-0">
+      <use
+         transform="translate(0,-2.6128452e-5)"
+         x="0"
+         y="0"
+         xlink:href="#path7121"
+         id="use7358-2"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <filter
+       inkscape:label="Mushroom Surface"
+       inkscape:menu="Bumps"
+       inkscape:menu-tooltip="Flexible bubbles effect with some displacement"
+       style="color-interpolation-filters:sRGB"
+       id="filter7352-3"
+       x="-0.072"
+       y="-0.072"
+       width="1.144"
+       height="1.144">
+      <feGaussianBlur
+         result="result0"
+         in="SourceGraphic"
+         stdDeviation="0.5"
+         id="feGaussianBlur7326-7" />
+      <feTurbulence
+         baseFrequency="0.10000000000000001"
+         seed="294"
+         numOctaves="10"
+         result="result1"
+         type="fractalNoise"
+         id="feTurbulence7328-5" />
+      <feGaussianBlur
+         stdDeviation="0.5"
+         result="result8"
+         id="feGaussianBlur7330-9" />
+      <feDisplacementMap
+         yChannelSelector="A"
+         result="result7"
+         in2="result8"
+         scale="5"
+         in="result0"
+         xChannelSelector="R"
+         id="feDisplacementMap7332-2" />
+      <feComposite
+         result="result2"
+         operator="in"
+         in2="result1"
+         in="result7"
+         id="feComposite7334-2" />
+      <feComposite
+         k4="0"
+         k2="0"
+         k1="0"
+         k3="3"
+         in2="result2"
+         in="result0"
+         operator="arithmetic"
+         id="feComposite7336-8" />
+      <feBlend
+         result="fbSourceGraphic"
+         mode="multiply"
+         in2="result2"
+         id="feBlend7338-9" />
+      <feColorMatrix
+         values="1 0 0 -1 0 1 0 1 -1 0 1 0 0 -1 0 -1.8 -0.5 0 5.7 -3.5 "
+         in="fbSourceGraphic"
+         result="fbSourceGraphicAlpha"
+         id="feColorMatrix7340-7" />
+      <feGaussianBlur
+         stdDeviation="0.5"
+         in="fbSourceGraphicAlpha"
+         result="result0"
+         id="feGaussianBlur7342-3" />
+      <feSpecularLighting
+         result="result6"
+         surfaceScale="5"
+         specularExponent="3"
+         id="feSpecularLighting7346-6"
+         specularConstant="0.66000003">
+        <feDistantLight
+           azimuth="225"
+           elevation="10"
+           id="feDistantLight7344-1" />
+      </feSpecularLighting>
+      <feComposite
+         in2="fbSourceGraphicAlpha"
+         in="result6"
+         result="result2"
+         operator="in"
+         id="feComposite7348-2" />
+      <feComposite
+         k4="0"
+         k1="0"
+         in="fbSourceGraphic"
+         result="result4"
+         operator="arithmetic"
+         k2="1"
+         k3="0.7"
+         in2="result2"
+         id="feComposite7350-9" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#shine_1"
+       id="radialGradient1149"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1159267,0.00617882,-0.006128,1.1067462,-298.76546,-189.84561)"
+       cx="24"
+       cy="273"
+       fx="24"
+       fy="273"
+       r="21.43582" />
+    <linearGradient
+       inkscape:collect="always"
+       id="shine_1">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0"
+         id="stop5047" />
+      <stop
+         id="stop5049"
+         offset="0.44606832"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         id="stop5052"
+         offset="0.69185734"
+         style="stop-color:#ffffff;stop-opacity:0.25098041" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.95231336"
+         id="stop5060" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.15686275"
+         offset="1"
+         id="stop5056" />
+    </linearGradient>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5037-3">
+      <path
+         style="opacity:1;fill:url(#linearGradient5041);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.76073;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         mask="none"
+         d="m -273.57481,88.444161 a 24,24 0 0 1 23.95923,24.000099 l -47.99863,1e-5 1e-5,-0.0522 a 24,24 0 0 1 24.03938,-23.947885 z"
+         id="path5039-1"
+         inkscape:connector-curvature="0" />
+    </mask>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spotcap"
+       id="radialGradient7618"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-2.6128452e-5)"
+       cx="25"
+       cy="1097.5197"
+       fx="25"
+       fy="1097.5197"
+       r="25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#shine_2"
+       id="radialGradient1137"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1159267,0.00617882,-0.006128,1.1067462,-298.76546,-189.84561)"
+       cx="24"
+       cy="273"
+       fx="24"
+       fy="273"
+       r="21.43582" />
+    <linearGradient
+       id="shine_2"
+       inkscape:collect="always">
+      <stop
+         id="stop4852"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.44606832"
+         id="stop4862" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.25098041"
+         offset="0.56661552"
+         id="stop4854" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.97119206"
+         id="stop4856" />
+      <stop
+         id="stop4858"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0.15686275" />
+    </linearGradient>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5037-8">
+      <path
+         style="opacity:1;fill:url(#linearGradient5041);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.76073;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         mask="none"
+         d="m -273.57481,88.444161 a 24,24 0 0 1 23.95923,24.000099 l -47.99863,1e-5 1e-5,-0.0522 a 24,24 0 0 1 24.03938,-23.947885 z"
+         id="path5039-4"
+         inkscape:connector-curvature="0" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5037-3-6">
+      <path
+         style="opacity:1;fill:url(#linearGradient5041);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.76073;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         mask="none"
+         d="m -273.57481,88.444161 a 24,24 0 0 1 23.95923,24.000099 l -47.99863,1e-5 1e-5,-0.0522 a 24,24 0 0 1 24.03938,-23.947885 z"
+         id="path5039-1-1"
+         inkscape:connector-curvature="0" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5037-8-4">
+      <path
+         style="opacity:1;fill:url(#linearGradient5041);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.76073;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         mask="none"
+         d="m -273.57481,88.444161 a 24,24 0 0 1 23.95923,24.000099 l -47.99863,1e-5 1e-5,-0.0522 a 24,24 0 0 1 24.03938,-23.947885 z"
+         id="path5039-4-5"
+         inkscape:connector-curvature="0" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       id="spot_shadow">
+      <stop
+         id="stop5280"
+         offset="0"
+         style="stop-color:#945832;stop-opacity:0" />
+      <stop
+         id="stop5278"
+         offset="1"
+         style="stop-color:#3f2515;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter8026"
+       x="-0.1199997"
+       width="1.2399994"
+       y="-0.1200003"
+       height="1.2400006">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.49999869"
+         id="feGaussianBlur8028" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spot_shadow"
+       id="radialGradient8067"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1111111,0,0,1.1111054,-5.1955986,797.30018)"
+       cx="24.476042"
+       cy="262.99896"
+       fx="24.476042"
+       fy="262.99896"
+       r="4.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spot_lighting"
+       id="radialGradient8069"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.83333328,0,0,0.83332902,2.8333342,182.42467)"
+       cx="23"
+       cy="1088.5197"
+       fx="23"
+       fy="1088.5197"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#shine_1"
+       id="radialGradient8071"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1159267,0.00617882,-0.006128,1.1067462,-298.76546,-189.84561)"
+       cx="24"
+       cy="273"
+       fx="24"
+       fy="273"
+       r="21.43582" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#shine_2"
+       id="radialGradient8073"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1159267,0.00617882,-0.006128,1.1067462,-298.76546,-189.84561)"
+       cx="24"
+       cy="273"
+       fx="24"
+       fy="273"
+       r="21.43582" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.5"
+     inkscape:cx="72"
+     inkscape:cy="135.33333"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true"
+     inkscape:window-width="1872"
+     inkscape:window-height="1051"
+     inkscape:window-x="48"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1945"
+       originx="0"
+       originy="-4.3554687e-06"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2112">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Spotcap and Kingcap spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Spotcaps and Kingcaps pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Grid"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline"
+     transform="translate(0,-763.51971)">
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:8.76907;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect572"
+       width="153"
+       height="360"
+       x="0"
+       y="763.51971"
+       inkscape:export-filename="../../../../Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       transform="translate(0,-288.84247)"
+       style="display:inline;opacity:1"
+       id="g4760">
+      <ellipse
+         ry="3.5000007"
+         rx="3.203124"
+         cy="1036.3622"
+         cx="-6.7031322"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3782"
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
+      <circle
+         r="15"
+         cy="1036.3622"
+         cx="-16"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3770"
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         r="9.5"
+         cy="1036.3622"
+         cx="-18"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3780"
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824-4"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041"
+       width="50"
+       height="50"
+       x="0"
+       y="1072.5198"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041-3"
+       width="50"
+       height="50"
+       x="51"
+       y="1072.5197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041-6"
+       width="50"
+       height="50"
+       x="102"
+       y="1072.5197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041-6-7"
+       width="102"
+       height="102"
+       x="0"
+       y="969.51971"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041-6-7-4"
+       width="102"
+       height="102"
+       x="0"
+       y="866.51971"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter5229-5);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect8041-6-7-43"
+       width="102"
+       height="102"
+       x="7.6605502e-05"
+       y="763.51971"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Sprites"
+     style="display:inline"
+     transform="translate(0,-763.51971)"
+     sodipodi:insensitive="true">
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient7618);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.65471;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path7121"
+       cx="25"
+       cy="1097.5197"
+       r="25"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       transform="translate(0,-2.6128452e-5)"
+       sodipodi:type="star"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient7285-6);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6.42716;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path7217"
+       sodipodi:sides="80"
+       sodipodi:cx="25"
+       sodipodi:cy="1097.5197"
+       sodipodi:r1="25"
+       sodipodi:r2="22.5"
+       sodipodi:arg1="0"
+       sodipodi:arg2="0.039269908"
+       inkscape:flatsided="false"
+       inkscape:rounded="0.1"
+       inkscape:randomized="0.015"
+       d="m 50.307879,1097.6892 c 0.0019,0.2658 -2.538273,0.755 -2.55434,1.0226 -0.01607,0.2675 2.028475,0.5276 2.008078,0.7939 -0.0204,0.2664 -2.25911,0.4651 -2.284687,0.732 -0.02558,0.2668 1.923533,0.5615 1.879696,0.824 -0.04384,0.2626 -2.425723,0.7168 -2.474216,0.9788 -0.04849,0.262 2.662324,1.1388 2.595985,1.3957 -0.06634,0.2568 -3.02111,-0.2355 -3.088346,0.024 -0.06723,0.2597 2.172541,1.3439 2.085846,1.5958 -0.08669,0.2518 -2.525396,0.1049 -2.619944,0.3528 -0.09455,0.2478 2.123773,1.3496 2.026414,1.5985 -0.09736,0.2489 -2.339598,-0.1169 -2.455298,0.1215 -0.115699,0.2384 1.61421,1.3857 1.490387,1.6232 -0.123823,0.2375 -1.867613,-0.8183 -1.996035,-0.5832 -0.128421,0.2352 1.569826,1.8143 1.43189,2.0427 -0.137935,0.2285 -2.486591,-0.6067 -2.632736,-0.3813 -0.146145,0.2253 1.780816,1.8988 1.628377,2.1153 -0.15244,0.2165 -2.743493,-0.6401 -2.904386,-0.4289 -0.160894,0.2113 2.08291,2.2202 1.904249,2.4206 -0.17866,0.2003 -3.003612,-1.5449 -3.181683,-1.3436 -0.17807,0.2013 1.843759,2.1135 1.65223,2.301 -0.191528,0.1875 -2.151104,-1.0252 -2.344643,-0.8389 -0.193538,0.1862 0.978515,2.2376 0.772972,2.4084 -0.205543,0.1709 -1.839141,-1.6269 -2.049303,-1.4639 -0.210162,0.163 1.027844,2.2679 0.808103,2.4215 -0.219742,0.1537 -1.919415,-1.2722 -2.139177,-1.1216 -0.219762,0.1505 0.251106,2.2655 0.02627,2.4063 -0.224841,0.1408 -1.413222,-2.0532 -1.649366,-1.9262 -0.236143,0.1271 0.0064,3.0176 -0.23022,3.1409 -0.236634,0.1233 -1.169318,-2.2455 -1.412244,-2.1346 -0.242926,0.111 -0.121089,3.0658 -0.365955,3.168 -0.244867,0.1022 -1.006931,-2.2726 -1.253807,-2.1766 -0.246876,0.096 0.01961,2.0987 -0.233718,2.1841 -0.253329,0.085 -1.368775,-1.6278 -1.626802,-1.5615 -0.258028,0.066 -0.05927,2.6098 -0.318414,2.6737 -0.259144,0.064 -0.83795,-2.368 -1.100373,-2.3216 -0.262423,0.046 -0.549154,2.1422 -0.812463,2.1868 -0.263308,0.045 -1.161001,-2.3025 -1.427293,-2.2715 -0.266291,0.031 -0.546572,2.7227 -0.81132,2.7445 -0.264748,0.022 -0.501967,-2.3231 -0.766767,-2.3189 -0.264801,0 -0.950093,2.731 -1.218834,2.7271 -0.26874,-0 0.05104,-3.0623 -0.216368,-3.0745 -0.267412,-0.012 -1.248721,2.7422 -1.512932,2.7196 -0.264211,-0.023 -0.523013,-2.6559 -0.789466,-2.6883 -0.266453,-0.032 -0.436334,2.6496 -0.699051,2.6141 -0.262717,-0.035 -0.528908,-2.4239 -0.79179,-2.4755 -0.262882,-0.052 -0.861698,2.3182 -1.121818,2.26 -0.260119,-0.058 -0.03869,-2.6612 -0.296969,-2.7327 -0.258274,-0.072 -1.546971,1.7199 -1.800686,1.6345 -0.253716,-0.085 0.03424,-2.6056 -0.214156,-2.7035 -0.248393,-0.098 -1.624733,2.118 -1.87187,2.0195 -0.247137,-0.099 0.645305,-2.0152 0.403656,-2.1306 -0.241649,-0.1154 -1.919994,1.4968 -2.158674,1.3802 -0.238681,-0.1166 0.747841,-2.4939 0.515245,-2.6215 -0.232597,-0.1276 -2.17218,1.7757 -2.396833,1.6326 -0.224653,-0.1431 0.99568,-1.9073 0.772671,-2.0565 -0.22301,-0.1492 -1.921463,1.505 -2.136427,1.347 -0.214964,-0.158 1.010237,-2.3108 0.802796,-2.4792 -0.207441,-0.1685 -1.8435568,1.5731 -2.0465531,1.401 -0.2029962,-0.1721 0.9664481,-2.8027 0.7694254,-2.9822 -0.1970225,-0.1794 -2.1546116,1.1364 -2.3436298,0.9476 -0.1890182,-0.1889 1.0821525,-2.1605 0.8993112,-2.3549 -0.1828413,-0.1943 -2.259554,1.7738 -2.4311038,1.5689 -0.1715498,-0.2049 1.3161614,-2.1501 1.1508484,-2.3609 -0.165313,-0.2108 -1.9915835,0.6924 -2.1528423,0.4807 -0.1612588,-0.2116 1.7768229,-1.7173 1.6248309,-1.938 -0.151992,-0.2208 -2.4878922,0.9455 -2.6318681,0.722 -0.1439759,-0.2235 1.5589184,-1.8649 1.4285129,-2.0965 -0.1304054,-0.2316 -2.6252148,0.4132 -2.7443943,0.1724 -0.1191796,-0.2408 2.3420892,-1.7217 2.2360688,-1.9663 -0.1060205,-0.2445 -3.2600646,0.083 -3.3568936,-0.1657 -0.096829,-0.2484 2.2721902,-1.0178 2.1768277,-1.267 -0.095363,-0.2492 -2.6905147,0.088 -2.77238455,-0.1664 -0.0818698,-0.2545 2.33449615,-1.2378 2.25905575,-1.4944 -0.07544,-0.2565 -2.42726041,-0.5048 -2.490111,-0.7627 -0.0628506,-0.2578 2.0466549,-1.0282 1.9958923,-1.2918 -0.050762,-0.2636 -2.58878448,-0.3563 -2.62680032,-0.6199 -0.03801583,-0.2636 2.81446482,-0.5748 2.77969942,-0.8385 -0.034765,-0.2637 -2.41409808,-0.7408 -2.43799518,-1.0082 -0.0238971,-0.2674 2.17225788,-0.4845 2.15837108,-0.7493 -0.013887,-0.2647 -2.96415053,-0.7981 -2.96501041,-1.0668 -8.5987e-4,-0.2688 2.95395451,-0.7274 2.96344241,-0.9956 0.00949,-0.2681 -2.17837005,-0.9433 -2.15964949,-1.2096 0.0187206,-0.2662 2.40315539,-0.6346 2.43628249,-0.9002 0.033127,-0.2655 -2.81820566,-0.3905 -2.78129144,-0.6558 0.03691421,-0.2653 2.57474964,-0.1368 2.62581134,-0.397 0.051062,-0.2603 -2.06540978,-1.7174 -1.99758088,-1.9774 0.0678289,-0.2601 2.41591378,0.064 2.48994218,-0.1925 0.074028,-0.257 -2.3375854,-1.4609 -2.2497929,-1.7142 0.0877925,-0.2532 2.681598,0.3779 2.772288,0.1277 0.09069,-0.2503 -2.2749688,-1.6117 -2.1671788,-1.8571 0.1077901,-0.2454 3.230713,0.4796 3.345315,0.2384 0.1146019,-0.2413 -2.3475771,-1.9493 -2.2272884,-2.1879 0.1202887,-0.2386 2.6187396,0.7551 2.7452628,0.5184 0.1265231,-0.2368 -1.5681105,-1.6495 -1.4318659,-1.8766 0.1362445,-0.2271 2.4821563,0.5169 2.6327244,0.2983 0.1505681,-0.2186 -1.7822914,-1.9795 -1.6283889,-2.1984 0.1539025,-0.2189 1.9846038,1.4699 2.1543982,1.2619 0.1697943,-0.208 -1.3224605,-2.215 -1.1542496,-2.4205 0.1682108,-0.2055 2.2556579,0.7744 2.4324425,0.5753 0.1767845,-0.1991 -1.0891429,-2.0928 -0.9029898,-2.2828 0.1861531,-0.19 2.1537566,1.7559 2.3454028,1.5707 0.1916466,-0.1851 -0.975894,-2.3018 -0.7737433,-2.4732 0.2021508,-0.1715 1.8400569,0.9645 2.0493149,0.797 0.209258,-0.1675 -1.021231,-2.2801 -0.807343,-2.4398 0.213888,-0.1598 1.91769,1.3526 2.139189,1.2047 0.221499,-0.148 -1.007574,-2.333 -0.777037,-2.4711 0.230538,-0.1381 2.165365,1.9742 2.399353,1.8431 0.233989,-0.1311 -0.759712,-2.2077 -0.519008,-2.3261 0.240705,-0.1184 1.919105,1.4276 2.161473,1.3198 0.242369,-0.1079 -0.64214,-2.4522 -0.395611,-2.5568 0.246529,-0.1046 1.615054,2.0964 1.863053,2.001 0.248,-0.095 -0.03212,-2.4019 0.222128,-2.489 0.254248,-0.087 1.533865,2.4855 1.791508,2.4117 0.257644,-0.074 0.04476,-3.0475 0.305279,-3.1082 0.260524,-0.061 0.852203,2.5782 1.112712,2.5252 0.260509,-0.053 0.538564,-2.4268 0.800112,-2.4735 0.261549,-0.047 0.424081,1.9913 0.690427,1.9561 0.266347,-0.035 0.532881,-2.2387 0.79821,-2.2629 0.26533,-0.024 1.251699,2.2523 1.516756,2.2358 0.265056,-0.016 0.201581,-2.6486 0.468845,-2.6441 0.267264,0 0.699795,2.9825 0.966357,2.9915 0.266562,0.01 0.496469,-2.6515 0.762944,-2.6365 0.266474,0.015 0.535677,2.1789 0.802576,2.2066 0.266899,0.028 1.171283,-2.3385 1.435916,-2.2986 0.264634,0.04 0.541909,2.7048 0.804141,2.7622 0.262232,0.057 0.850074,-2.5304 1.109479,-2.4636 0.259405,0.067 0.0521,3.1009 0.310103,3.1672 0.258008,0.066 1.381593,-2.5701 1.635981,-2.4846 0.254388,0.085 -0.02592,2.9172 0.225746,3.0083 0.25167,0.091 1.016104,-2.6967 1.262623,-2.5939 0.246519,0.1028 0.114387,2.9062 0.357911,3.0195 0.243523,0.1132 1.175629,-2.1911 1.409446,-2.0655 0.233818,0.1256 -0.0018,2.4313 0.233983,2.5567 0.235759,0.1254 1.416291,-1.6855 1.646845,-1.5496 0.230554,0.136 -0.246853,2.725 -0.0219,2.8714 0.224955,0.1464 1.919284,-1.5876 2.136415,-1.4301 0.217131,0.1576 -1.015371,2.3353 -0.803556,2.4975 0.211815,0.1622 1.847688,-1.6611 2.046541,-1.4841 0.198853,0.1771 -0.963604,2.1123 -0.768653,2.297 0.19495,0.1847 2.154362,-1.1182 2.34287,-0.9293 0.188507,0.1889 -1.827899,2.1371 -1.648552,2.3366 0.179347,0.1994 3.005185,-1.0019 3.180344,-0.8007 0.17516,0.2013 -2.066047,2.1523 -1.900848,2.361 0.165199,0.2086 2.744702,-0.7781 2.90283,-0.5638 0.158128,0.2142 -1.769409,1.7978 -1.624819,2.0211 0.14459,0.2233 2.494476,-0.8666 2.63188,-0.639 0.137405,0.2276 -1.554313,1.6954 -1.428537,1.9304 0.125777,0.235 1.872653,-0.3441 1.995166,-0.1075 0.122514,0.2365 -1.608279,1.5388 -1.499167,1.7808 0.109113,0.2421 2.359197,-0.4403 2.466877,-0.1941 0.107679,0.2462 -2.124673,1.272 -2.036063,1.5255 0.08861,0.2536 2.534184,0.1831 2.620041,0.436 0.08586,0.2528 -2.16918,1.3549 -2.095109,1.6128 0.07407,0.2578 3.023987,-0.08 3.088515,0.1809 0.06453,0.2607 -2.652202,0.8627 -2.594297,1.1236 0.0579,0.2609 2.439376,0.5229 2.475205,0.7882 0.03583,0.2653 -1.910041,1.1564 -1.878104,1.4202 0.03194,0.2638 2.265604,0.1617 2.286399,0.4265 0.0208,0.2647 -2.021876,0.8981 -2.006799,1.1649 0.01508,0.2668 2.554005,0.7739 2.555908,1.0398 z"
+       inkscape:transform-center-x="0.029766757"
+       inkscape:transform-center-y="0.092719831"
+       clip-path="url(#clipPath7289-1)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       transform="translate(0,-2.6128452e-5)"
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use7324"
+       style="opacity:0.3;filter:url(#filter7352-3)"
+       clip-path="url(#clipPath7356-0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       d="m -249.65619,112.44438 a 24,24 0 0 1 -23.98691,24 24,24 0 0 1 -24.01307,-23.97381 24,24 0 0 1 23.9607,-24.026156 24,24 0 0 1 24.03922,23.947596"
+       sodipodi:open="true"
+       sodipodi:end="6.2810032"
+       sodipodi:start="0"
+       sodipodi:ry="24"
+       sodipodi:rx="24"
+       sodipodi:cy="112.44438"
+       sodipodi:cx="-273.65619"
+       sodipodi:type="arc"
+       id="path1109"
+       style="opacity:0.8;fill:url(#radialGradient1149);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:6.38852;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       mask="url(#mask5037-3)"
+       transform="matrix(0.73656956,-0.73656956,0.73656956,0.73656956,143.74371,813.12976)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:arc-type="arc" />
+    <circle
+       id="path1091"
+       style="opacity:0.5;fill:url(#radialGradient1137);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:6.38852;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       mask="url(#mask5037-8)"
+       transform="matrix(-0.73656956,0.73656956,-0.73656956,-0.73656956,-93.74371,1381.9096)"
+       cx="-273.65619"
+       cy="112.44438"
+       r="24"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g8035"
+       transform="translate(2.1871774,-3.8448574)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="opacity:0.9;fill:url(#radialGradient8067);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.28545;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;filter:url(#filter8026)"
+         id="path1069"
+         sodipodi:type="arc"
+         sodipodi:cx="22"
+         sodipodi:cy="1089.5197"
+         sodipodi:rx="4.9999995"
+         sodipodi:ry="4.9999743"
+         sodipodi:start="0"
+         sodipodi:end="6.2810036"
+         sodipodi:open="true"
+         d="m 27,1089.5197 a 4.9999995,4.9999743 0 0 1 -4.997273,4.9999 4.9999995,4.9999743 0 0 1 -5.002724,-4.9945 4.9999995,4.9999743 0 0 1 4.991816,-5.0054 4.9999995,4.9999743 0 0 1 5.008169,4.989"
+         sodipodi:arc-type="arc" />
+      <path
+         style="opacity:1;fill:#d3bd95;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.28545;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         id="path1075"
+         sodipodi:type="arc"
+         sodipodi:cx="22"
+         sodipodi:cy="1089.5197"
+         sodipodi:rx="4.9999995"
+         sodipodi:ry="4.9999743"
+         sodipodi:start="0"
+         sodipodi:end="6.2810036"
+         sodipodi:open="true"
+         d="m 27,1089.5197 a 4.9999995,4.9999743 0 0 1 -4.997273,4.9999 4.9999995,4.9999743 0 0 1 -5.002724,-4.9945 4.9999995,4.9999743 0 0 1 4.991816,-5.0054 4.9999995,4.9999743 0 0 1 5.008169,4.989"
+         sodipodi:arc-type="arc" />
+      <path
+         d="m 27,1089.5197 a 4.9999995,4.9999743 0 0 1 -4.997273,4.9999 4.9999995,4.9999743 0 0 1 -5.002724,-4.9945 4.9999995,4.9999743 0 0 1 4.991816,-5.0054 4.9999995,4.9999743 0 0 1 5.008169,4.989"
+         sodipodi:open="true"
+         sodipodi:end="6.2810036"
+         sodipodi:start="0"
+         sodipodi:ry="4.9999743"
+         sodipodi:rx="4.9999995"
+         sodipodi:cy="1089.5197"
+         sodipodi:cx="22"
+         sodipodi:type="arc"
+         id="path7826"
+         style="opacity:1;fill:url(#radialGradient8069);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.28545;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         sodipodi:arc-type="arc" />
+      <path
+         transform="matrix(0.14731391,-0.14731315,0.14731391,0.14731315,45.748741,1032.642)"
+         mask="url(#mask5037-3-6)"
+         style="opacity:0.6;fill:url(#radialGradient8071);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:31.9427;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         id="path1109-7"
+         sodipodi:type="arc"
+         sodipodi:cx="-273.65619"
+         sodipodi:cy="112.44438"
+         sodipodi:rx="24"
+         sodipodi:ry="24"
+         sodipodi:start="0"
+         sodipodi:end="6.2810032"
+         sodipodi:open="true"
+         d="m -249.65619,112.44438 a 24,24 0 0 1 -23.98691,24 24,24 0 0 1 -24.01307,-23.97381 24,24 0 0 1 23.9607,-24.026156 24,24 0 0 1 24.03922,23.947596"
+         sodipodi:arc-type="arc" />
+      <circle
+         r="24"
+         cy="112.44438"
+         cx="-273.65619"
+         transform="matrix(-0.14731391,0.14731315,-0.14731391,-0.14731315,-1.7487414,1146.3974)"
+         mask="url(#mask5037-8-4)"
+         style="opacity:0.4;fill:url(#radialGradient8073);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:31.9427;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         id="path1091-7" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use8037"
+       transform="matrix(1.2438816,0,0,1.2438818,-13.052191,-247.98178)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.803935"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use8039"
+       transform="matrix(0.76450858,0,0,0.76450823,15.031353,277.16762)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.30803"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use1892"
+       transform="translate(51)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7217"
+       inkscape:transform-center-x="0.029766757"
+       inkscape:transform-center-y="0.092719831"
+       id="use1894"
+       transform="translate(51)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use7324"
+       id="use1896"
+       transform="translate(51)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1109"
+       id="use1898"
+       transform="translate(51)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1091"
+       id="use1900"
+       transform="translate(51)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1908"
+       transform="matrix(1.1587872,0,0,1.1587873,54.978275,-171.55267)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.862971"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1910"
+       transform="matrix(1.3612375,0,0,1.3612378,36.081573,-369.34808)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.734626"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1912"
+       transform="matrix(0.56121502,0,0,0.56121459,51.419727,482.22921)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.78185"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1914"
+       transform="matrix(0.76123669,0,0,0.76123645,67.593899,281.0583)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.31365"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use1916"
+       transform="translate(102)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7217"
+       inkscape:transform-center-x="0.029766757"
+       inkscape:transform-center-y="0.092719831"
+       id="use1918"
+       transform="translate(102)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use7324"
+       id="use1920"
+       transform="translate(102)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1109"
+       id="use1922"
+       transform="translate(102)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1091"
+       id="use1924"
+       transform="translate(102)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1932"
+       transform="translate(92.818888,4.8387334)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1934"
+       transform="matrix(0.75878828,0,0,0.75878804,96.653119,285.71648)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.31789"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1936"
+       transform="matrix(1.6076565,0,0,1.6076571,100.35361,-650.64705)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.622023"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1938"
+       transform="matrix(0.71478962,0,0,0.71478934,113.45201,333.22293)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.39901"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use1955"
+       transform="matrix(2.04,0,0,2.0399965,0,-1218.4164)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7217"
+       inkscape:transform-center-x="0.060724184"
+       inkscape:transform-center-y="0.18920964"
+       id="use1957"
+       transform="matrix(2.04,0,0,2.0399965,0,-1218.4164)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use7324"
+       id="use1959"
+       transform="matrix(2.04,0,0,2.0399965,0,-1218.4164)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1109"
+       id="use1961"
+       transform="matrix(2.04,0,0,2.0399965,0,-1218.4164)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1091"
+       id="use1963"
+       transform="matrix(2.04,0,0,2.0399965,0,-1218.4164)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1971"
+       transform="matrix(1.7612117,0,0,1.7612125,7.3951944,-889.57823)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.567791"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1973"
+       transform="matrix(1.5736716,0,0,1.5736721,-8.0566078,-665.98264)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.635457"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1975"
+       transform="matrix(1.4749987,0,0,1.4749992,26.261122,-551.56961)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.677967"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1977"
+       transform="matrix(1.5249986,0,0,1.5249991,45.301767,-631.85325)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.655738"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1979"
+       transform="matrix(1.4249988,0,0,1.4249992,-13.279522,-532.53597)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.701755"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1981"
+       transform="matrix(2.1999967,0,0,2.1999979,-14.899533,-1396.3074)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.454546"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use1983"
+       transform="matrix(1.4000005,0,0,1.4000009,38.200116,-518.14592)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.714285"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use2006"
+       transform="matrix(2.04,0,0,2.0399965,0,-1321.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7217"
+       inkscape:transform-center-x="0.060724184"
+       inkscape:transform-center-y="0.18919364"
+       id="use2008"
+       transform="matrix(2.04,0,0,2.0399965,0,-1321.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use7324"
+       id="use2010"
+       transform="matrix(2.04,0,0,2.0399965,0,-1321.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1109"
+       id="use2012"
+       transform="matrix(2.04,0,0,2.0399965,0,-1321.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1091"
+       id="use2014"
+       transform="matrix(2.04,0,0,2.0399965,0,-1321.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7121"
+       id="use2022"
+       transform="matrix(2.04,0,0,2.0399965,0,-1424.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path7217"
+       inkscape:transform-center-x="0.060724184"
+       inkscape:transform-center-y="0.18919364"
+       id="use2024"
+       transform="matrix(2.04,0,0,2.0399965,0,-1424.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use7324"
+       id="use2026"
+       transform="matrix(2.04,0,0,2.0399965,0,-1424.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1109"
+       id="use2028"
+       transform="matrix(2.04,0,0,2.0399965,0,-1424.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1091"
+       id="use2030"
+       transform="matrix(2.04,0,0,2.0399965,0,-1424.4165)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.490197"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use2038"
+       transform="matrix(1.6000008,0,0,1.6000014,-1.2623258,-786.65639)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.625"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.754717"
+       height="100%"
+       width="100%"
+       transform="matrix(1.3250005,0,0,1.3250008,38.764154,-496.47014)"
+       id="use2040"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.625"
+       height="100%"
+       width="100%"
+       transform="matrix(1.6000008,0,0,1.6000014,-21.137326,-815.65639)"
+       id="use2042"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.727272"
+       height="100%"
+       width="100%"
+       transform="matrix(1.3750006,0,0,1.3750009,13.429795,-565.75401)"
+       id="use2044"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.487804"
+       height="100%"
+       width="100%"
+       transform="matrix(2.0500013,0,0,2.0500024,27.603433,-1306.7112)"
+       id="use2046"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.625"
+       height="100%"
+       width="100%"
+       transform="matrix(1.6000008,0,0,1.6000014,19.987674,-830.53139)"
+       id="use2048"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.444444"
+       height="100%"
+       width="100%"
+       transform="matrix(2.2500015,0,0,2.2500029,-22.859007,-1549.5966)"
+       id="use2050"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.625"
+       height="100%"
+       width="100%"
+       transform="matrix(1.6000008,0,0,1.6000014,26.112674,-851.53139)"
+       id="use2052"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.625"
+       height="100%"
+       width="100%"
+       transform="matrix(1.6000008,0,0,1.6000014,20.487674,-887.78139)"
+       id="use2054"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use2056"
+       transform="matrix(2.3000015,0,0,2.300003,-23.068367,-1655.8805)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.434782"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.526315"
+       height="100%"
+       width="100%"
+       transform="matrix(1.9000026,0,0,1.9000035,-26.768522,-1249.7361)"
+       id="use2058"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use2060"
+       transform="matrix(0.97500175,0,0,0.97500141,11.729638,-269.60965)"
+       width="100%"
+       height="100%"
+       style="stroke-width:1.02564"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:1.02564"
+       height="100%"
+       width="100%"
+       transform="matrix(0.97500175,0,0,0.97500141,31.979638,-278.48465)"
+       id="use2062"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use2064"
+       transform="matrix(1.1750021,0,0,1.1750019,22.517195,-476.12012)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.851062"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.481928"
+       height="100%"
+       width="100%"
+       transform="matrix(2.0749996,0,0,2.0750002,26.123796,-1453.2256)"
+       id="use2066"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g8035"
+       id="use2068"
+       transform="matrix(1.1999987,0,0,1.1999982,26.787599,-480.25799)"
+       width="100%"
+       height="100%"
+       style="stroke-width:0.833334"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="stroke-width:0.833334"
+       height="100%"
+       width="100%"
+       transform="matrix(1.1999987,0,0,1.1999982,50.412599,-471.63299)"
+       id="use2070"
+       xlink:href="#g8035"
+       y="0"
+       x="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Spotcaps.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>
