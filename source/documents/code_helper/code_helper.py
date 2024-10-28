@@ -17,7 +17,7 @@ def change_version_numbers():
     system_call('sed -i "s/VERSION_MINOR = .*;/VERSION_MINOR = ' + new_parts[1] + ';/g" ' + source_dir_to_use + '/const.h')
     system_call('sed -i "s/VERSION_REV   = .*;/VERSION_REV   = ' + new_parts[2] + ';/g" ' + source_dir_to_use + '/const.h')
     
-    rc_files = [source_dir_to_use + '/Pikifen.rc', source_dir_to_use + '/../visual_studio_2019/resource.rc']
+    rc_files = [source_dir_to_use + '/pikifen.rc', source_dir_to_use + '/../visual_studio_2019/resource.rc']
     for fn in rc_files:
         rc_contents = []
         with open(fn, 'rt', encoding='utf-16') as i:
