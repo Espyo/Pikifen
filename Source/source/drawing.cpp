@@ -423,7 +423,7 @@ void draw_liquid(
         layer_speed[1] = l_ptr->surface_speed[1];
         float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
         
-        l_ptr->anim_instance.get_sprite_data(
+        l_ptr->anim->instance.get_sprite_data(
             &anim_sprite, nullptr, nullptr
         );
         if(anim_sprite && anim_sprite->bitmap) {

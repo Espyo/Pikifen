@@ -23,8 +23,8 @@ namespace HUD {
 //Dampen the mission goal indicator's movement by this much.
 const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
-//Path to the GUI information file.
-const string GUI_FILE_NAME = FOLDER_PATHS_FROM_PKG::GUI + "/Gameplay.txt"; //TODO
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "gameplay.txt";
 
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
@@ -74,7 +74,7 @@ hud_t::hud_t() :
     standby_icon_mgr(&gui),
     spray_icon_mgr(&gui) {
     
-    data_node hud_file_node(HUD::GUI_FILE_NAME);
+    data_node* hud_file_node = &game.content.gui[HUD::GUI_FILE_NAME];
     
     gui.register_coords("time",                          0,    0,  0,  0);
     gui.register_coords("day_bubble",                    0,    0,  0,  0);
@@ -140,7 +140,7 @@ hud_t::hud_t() :
     gui.register_coords("mission_fail_2_req",         90.5, 18.5, 13,  5);
     gui.register_coords("mission_fail_2_slash",         82, 18.5,  4,  5);
     gui.register_coords("mission_fail_2_name",          82,   20, 30,  8);
-    gui.read_coords(hud_file_node.get_child_by_name("positions"));
+    gui.read_coords(hud_file_node->get_child_by_name("positions"));
     
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
@@ -1378,14 +1378,14 @@ hud_t::hud_t() :
     }
     
     
-    data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
+    data_node* bitmaps_node = hud_file_node->get_child_by_name("files");
     
 #define loader(var, name) \
     var = \
-          game.bitmaps.get( \
-                            bitmaps_node->get_child_by_name(name)->value, \
-                            bitmaps_node->get_child_by_name(name) \
-                          );
+          game.content.bitmaps.get( \
+                                    bitmaps_node->get_child_by_name(name)->value, \
+                                    bitmaps_node->get_child_by_name(name) \
+                                  );
     
     loader(bmp_bubble,                 "bubble");
     loader(bmp_counter_bubble_field,   "counter_bubble_field");
@@ -1416,16 +1416,16 @@ hud_t::hud_t() :
  * @brief Destroys the HUD struct object.
  */
 hud_t::~hud_t() {
-    game.bitmaps.free(bmp_bubble);
-    game.bitmaps.free(bmp_counter_bubble_field);
-    game.bitmaps.free(bmp_counter_bubble_group);
-    game.bitmaps.free(bmp_counter_bubble_standby);
-    game.bitmaps.free(bmp_counter_bubble_total);
-    game.bitmaps.free(bmp_day_bubble);
-    game.bitmaps.free(bmp_distant_pikmin_marker);
-    game.bitmaps.free(bmp_hard_bubble);
-    game.bitmaps.free(bmp_no_pikmin_bubble);
-    game.bitmaps.free(bmp_sun);
+    game.content.bitmaps.free(bmp_bubble);
+    game.content.bitmaps.free(bmp_counter_bubble_field);
+    game.content.bitmaps.free(bmp_counter_bubble_group);
+    game.content.bitmaps.free(bmp_counter_bubble_standby);
+    game.content.bitmaps.free(bmp_counter_bubble_total);
+    game.content.bitmaps.free(bmp_day_bubble);
+    game.content.bitmaps.free(bmp_distant_pikmin_marker);
+    game.content.bitmaps.free(bmp_hard_bubble);
+    game.content.bitmaps.free(bmp_no_pikmin_bubble);
+    game.content.bitmaps.free(bmp_sun);
     
 }
 

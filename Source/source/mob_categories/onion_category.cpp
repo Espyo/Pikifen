@@ -21,8 +21,9 @@
  */
 onion_category::onion_category() :
     mob_category(
-        MOB_CATEGORY_ONIONS, "Onion", "Onions",
-        "Onions", al_map_rgb(178, 204, 73)
+        MOB_CATEGORY_ONIONS, "onion",
+        "Onion", "Onions",
+        "onions", al_map_rgb(178, 204, 73)
     ) {
     
 }
@@ -110,8 +111,9 @@ void onion_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of Onion.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void onion_category::register_type(mob_type* type) {
-    game.content.mob_types.onion[type->name] = (onion_type*) type;
+void onion_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.onion[internal_name] = (onion_type*) type;
 }

@@ -9,6 +9,7 @@
  */
 
 #include <algorithm>
+#include <unordered_set>
 
 #include "gameplay.h"
 
@@ -843,8 +844,12 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         *   Liquids    ~ ~  *
         *             ~ ~ ~ *
         ********************/
+        unordered_set<single_animation_suite*> liquid_anims;
         for(auto &l : game.content.liquids) {
-            l.second->anim_instance.tick(delta_t);
+            liquid_anims.insert(l.second->anim);
+        }
+        for(auto &a : liquid_anims) {
+            a->instance.tick(delta_t);
         }
         
         

@@ -222,8 +222,11 @@ Next tasks (roughly sorted most important first)
                 How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
                 How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
                 What should happen when the player opens the texture selection dialog in the area editor?
+                Area backups should be saved on a sub-folder matching the package
+        When it's all done
+            Organize the performance monitor start/end points
+            Run a memory leak check
         For later on, maybe, the content manager should be able to figure out a dependency tree
-        Run a memory leak check when this is done
     Rename every file to lowercase?
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme

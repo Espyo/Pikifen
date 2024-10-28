@@ -21,8 +21,9 @@
  */
 treasure_category::treasure_category() :
     mob_category(
-        MOB_CATEGORY_TREASURES, "Treasure", "Treasures",
-        "Treasures", al_map_rgb(204, 151, 71)
+        MOB_CATEGORY_TREASURES, "treasure",
+        "Treasure", "Treasures",
+        "treasures", al_map_rgb(204, 151, 71)
     ) {
     
 }
@@ -110,8 +111,9 @@ void treasure_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of treasure.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void treasure_category::register_type(mob_type* type) {
-    game.content.mob_types.treasure[type->name] = (treasure_type*) type;
+void treasure_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.treasure[internal_name] = (treasure_type*) type;
 }

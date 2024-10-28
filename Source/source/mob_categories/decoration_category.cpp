@@ -21,8 +21,9 @@
  */
 decoration_category::decoration_category() :
     mob_category(
-        MOB_CATEGORY_DECORATIONS, "Decoration", "Decorations",
-        "Decorations", al_map_rgb(191, 204, 139)
+        MOB_CATEGORY_DECORATIONS, "decoration",
+        "Decoration", "Decorations",
+        "decorations", al_map_rgb(191, 204, 139)
     ) {
     
 }
@@ -110,8 +111,9 @@ void decoration_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of decoration.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void decoration_category::register_type(mob_type* type) {
-    game.content.mob_types.decoration[type->name] = (decoration_type*) type;
+void decoration_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.decoration[internal_name] = (decoration_type*) type;
 }

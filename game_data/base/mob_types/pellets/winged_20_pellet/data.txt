@@ -1,0 +1,15 @@
+name = Winged 20 pellet
+description = A pink 20 pellet that can be used to grow more Pikmin. Generates more Winged Pikmin than other types.
+
+can_walk_on_others = true
+height = 64
+match_seeds = 20
+max_carriers = 50
+non_match_seeds = 10
+number = 20
+number_image = pellet_20.png
+pikmin_type = winged_pikmin
+pushable = true
+pushes = true
+pushes_softly = true
+radius = 64

@@ -205,7 +205,7 @@ void mob_type::load_cat_resources(data_node*) { }
 
 /**
  * @brief Loads mob type data from a data node.
- * 
+ *
  * @param node Data node to load from.
  * @param level Level to load at.
  * @param folder_path Path to the folder this mob type is in.
@@ -384,7 +384,7 @@ void mob_type::load_from_data_node(
             );
         }
     }
-
+    
     //Inactive logic.
     if(inactive_logic_node) {
         if(inactive_logic_str == "normal") {
@@ -666,7 +666,7 @@ void mob_type::load_from_data_node(
         sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
         sfx_rs.set("random_delay", new_sfx.config.random_delay);
         
-        new_sfx.sample = game.audio.samples.get(file_str, file_node);
+        new_sfx.sample = game.content.samples.get(file_str, file_node);
         
         if(type_node) {
             if(type_str == "world_global") {
@@ -834,14 +834,14 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        anims.path = folder_path + "/Animations.txt";
+        anims.path = folder_path + "/animations.txt";
         data_node anim_file = load_data_file(anims.path);
         anims.load_from_data_node(&anim_file);
         anims.fix_body_part_pointers();
         anims.fill_sound_idx_caches(this);
         
         data_node script_file;
-        script_file.load_file(folder_path + "/Script.txt", true, true);
+        script_file.load_file(folder_path + "/script.txt", true, true);
         size_t old_n_states = states.size();
         
         data_node* death_state_name_node =
@@ -939,7 +939,11 @@ void mob_type::load_from_data_node(
 /**
  * @brief Unloads loaded resources from memory.
  */
-void mob_type::unload_resources() { }
+void mob_type::unload_resources() {
+    for(size_t s = 0; s < sounds.size(); s++) {
+        game.content.samples.free(sounds[s].name);
+    }
+}
 
 
 /**
@@ -992,5 +996,5 @@ void create_special_mob_types() {
     bridge_component_type->draw_mob_callback = bridge::draw_component;
     bridge_component_type->pushes = true;
     bridge_component_type->pushes_softly = false;
-    custom_category->register_type(bridge_component_type);
+    custom_category->register_type("bridge_component", bridge_component_type);
 }

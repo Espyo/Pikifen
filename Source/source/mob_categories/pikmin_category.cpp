@@ -21,8 +21,9 @@
  */
 pikmin_category::pikmin_category() :
     mob_category(
-        MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin",
-        "Pikmin", al_map_rgb(100, 204, 73)
+        MOB_CATEGORY_PIKMIN, "pikmin",
+        "Pikmin", "Pikmin",
+        "pikmin", al_map_rgb(100, 204, 73)
     ) {
     
 }
@@ -110,8 +111,9 @@ void pikmin_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of Pikmin.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void pikmin_category::register_type(mob_type* type) {
-    game.content.mob_types.pikmin[type->name] = (pikmin_type*) type;
+void pikmin_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.pikmin[internal_name] = (pikmin_type*) type;
 }

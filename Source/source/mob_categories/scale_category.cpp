@@ -21,8 +21,9 @@
  */
 scale_category::scale_category() :
     mob_category(
-        MOB_CATEGORY_SCALES, "Scale", "Scales",
-        "Scales", al_map_rgb(139, 165, 204)
+        MOB_CATEGORY_SCALES, "scale",
+        "Scale", "Scales",
+        "scales", al_map_rgb(139, 165, 204)
     ) {
     
 }
@@ -110,8 +111,9 @@ void scale_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of scale.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void scale_category::register_type(mob_type* type) {
-    game.content.mob_types.scale[type->name] = (scale_type*) type;
+void scale_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.scale[internal_name] = (scale_type*) type;
 }

@@ -15,12 +15,12 @@
 
 /**
  * @brief Loads content metadata from a data node.
- * 
+ *
  * @param node Data node to load from.
  */
 void content::load_metadata_from_data_node(data_node* node) {
     reader_setter rs(node);
-
+    
     rs.set("name", name);
     rs.set("description", description);
     rs.set("tags", tags);
@@ -49,7 +49,7 @@ void content::reset_metadata() {
 
 /**
  * @brief Saves content metadata to a data node.
- * 
+ *
  * @param node Data node to save to.
  */
 void content::save_metadata_to_data_node(data_node* node) const {
@@ -64,7 +64,7 @@ void content::save_metadata_to_data_node(data_node* node) const {
     saver_o("engine_version", engine_version);
     saver_o("maker_notes", maker_notes);
     saver_o("notes", notes);
-
+    
 #undef saver_o
 #undef saver
 }

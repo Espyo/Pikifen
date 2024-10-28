@@ -21,8 +21,9 @@
  */
 bouncer_category::bouncer_category() :
     mob_category(
-        MOB_CATEGORY_BOUNCERS, "Bouncer", "Bouncers",
-        "Bouncers", al_map_rgb(192, 139, 204)
+        MOB_CATEGORY_BOUNCERS, "bouncer",
+        "Bouncer", "Bouncers",
+        "bouncers", al_map_rgb(192, 139, 204)
     ) {
     
 }
@@ -110,8 +111,9 @@ void bouncer_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of bouncer.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void bouncer_category::register_type(mob_type* type) {
-    game.content.mob_types.bouncer[type->name] = (bouncer_type*) type;
+void bouncer_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.bouncer[internal_name] = (bouncer_type*) type;
 }

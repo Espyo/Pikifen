@@ -1,7 +1,7 @@
 name = Crimson Candypop Bud
 description = Converts any Pikmin thrown inside into Red Pikmin seeds.
 
-available_pikmin_types = Red Pikmin
+available_pikmin_types = red_pikmin
 buffer_size = 5
 custom_category_name = Candypop Bud
 height = 32
@@ -34,7 +34,7 @@ sounds {
         volume = 40
     }
     bumped {
-        file = Low_boing_1.ogg
+        file = low_boing_1.ogg
         volume = 40
         speed_deviation = 8
     }

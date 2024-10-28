@@ -3904,321 +3904,321 @@ edges{
 sectors{
 	s{
 		z=50.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
-		texture=wood_stump.jpg
+		texture=textures/wood_stump.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-44.4726 20.9579
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=300.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-156.3803 191.0640
 	}
 	s{
 		z=0.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=150.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=700.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 		texture_tint=115 105 119
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=700.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 		texture_tint=115 105 119
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=700.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 		texture_tint=115 105 119
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=50.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=300.0000
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=600.0000
 		brightness=160
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=160.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=500.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=250.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=150.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=8.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=8.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=8.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=8.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=8.0000
-		texture=wood_stump.jpg
+		texture=textures/wood_stump.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-104.0607 -102.3264
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
-		z=400.0000
-		fade=true
-		texture=grass_dark.jpg
-		texture_scale=0.8000 0.8000
-	}
-	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
+		texture_scale=0.8000 0.8000
+	}
+	s{
+		type=blocking
+		z=400.0000
+		fade=true
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=160.0000
 		brightness=200
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=160.0000
 		brightness=160
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
@@ -4227,7 +4227,7 @@ sectors{
 		fade=true
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
@@ -4235,197 +4235,197 @@ sectors{
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=450.0000
 		brightness=160
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=500.0000
 		brightness=160
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
-		texture_scale=0.8000 0.8000
-	}
-	s{
-		z=100.0000
-		fade=true
-		texture=grass_light.jpg
-		texture_scale=0.8000 0.8000
-	}
-	s{
-		z=100.0000
-		texture=grass_light.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
+		texture_scale=0.8000 0.8000
+	}
+	s{
+		z=100.0000
+		texture=textures/grass_light.jpg
+		texture_scale=0.8000 0.8000
+	}
+	s{
+		z=100.0000
+		fade=true
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=grass_light.jpg
-		texture_scale=0.8000 0.8000
-	}
-	s{
-		z=100.0000
-		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
+		texture_scale=0.8000 0.8000
+	}
+	s{
+		z=100.0000
+		fade=true
+		texture=textures/grass_light.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=150.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=200.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=250.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=300.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
@@ -4433,7 +4433,7 @@ sectors{
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
@@ -4441,947 +4441,947 @@ sectors{
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		z=108.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_scale=0.8000 0.8000
 	}
 }
 mobs{
-	Leader{
-		type=Olimar
+	leader{
+		type=olimar
 		p=0.0000 0.0000
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=-1120.0000 384.0000
 		stored_inside=31
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=665.6000 435.2000
 		angle=2.4024
 		vars=maturity=0
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=32.0000 0.0000
 		vars=text=Welcome to Pikifen!\nIn this tutorial, your mission is to recover a missing treasure!\n\nAt any point during gameplay, you can pause with \k pause \k,\nand open the help page to get reminded on the basics,\nas well as to learn some tips.\nStart by moving to the right with \k move_right \k.
 	}
-	Ship{
-		type=Hocotate ship
+	ship{
+		type=hocotate_ship
 		p=128.0000 -288.0000
 		angle=1.5708
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=544.0000 0.0000
 		vars=text=You can move in other directions with \k move_up \k, \k move_left \k, \k move_down \k, and \k move_right \k.
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=576.0000 512.0000
 		vars=text=That over there is a Pikmin. Try whistling it with \k whistle \k.
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=1120.0000 192.0000
 		vars=text=Over that ledge is an Onion.\nThat's where Pikmin are stored, and where new ones can be created.
 	}
-	Pellet{
-		type=Red 1 pellet
+	pellet{
+		type=red_1_pellet
 		p=1408.0000 -192.0000
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=1568.0000 -352.0000
 		vars=text=Pellets, like the one below to the left, serve as food for the Pikmin.\nThrow the Pikmin at it with \k throw \k, and then watch.
 	}
-	Onion{
-		type=Red Onion
+	onion{
+		type=red_onion
 		p=1312.0000 160.0000
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=1696.0000 576.0000
 		vars=text=Some obstacles require multiple Pikmin to clear.\nDo you have 10 Pikmin with you to crush this paper bag with?\n\nIf not, try gathering more pellets and plucking\nthe Pikmin that came out of the Onion,\nand remember to whistle idle Pikmin near the Onion too.
 	}
-	Scale{
-		type=Paper bag
+	scale{
+		type=paper_bag
 		p=1824.0000 480.0000
 		vars=goal_number=10
 	}
-	Custom{
-		type=1 Pellet Posy
+	custom{
+		type=1_pellet_posy
 		p=1440.0000 448.0000
 		vars=bloom_time=0.0000;red=true
 	}
-	Pellet{
-		type=Red 5 pellet
+	pellet{
+		type=red_5_pellet
 		p=1350.4882 709.7982
 	}
-	Custom{
-		type=Electric gate
+	custom{
+		type=electric_gate
 		p=2208.0000 928.0000
 		angle=1.5708
 		vars=max_health=700.0000
 	}
-	Onion{
-		type=Yellow Onion
+	onion{
+		type=yellow_onion
 		p=1856.0000 1152.0000
 		vars=pikmin_inside=1 1 1
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=2304.0000 832.0000
 		vars=text=Not having luck with that electric gate?\nRed Pikmin are not resistent to electricity, but maybe others are...\nChange the current Pikmin type with \k next_type \k / \k prev_type \k.
 	}
-	Pellet{
-		type=Yellow 5 pellet
+	pellet{
+		type=yellow_5_pellet
 		p=2095.0857 1216.0000
 		vars=maturity=0;sprout=true
 	}
-	Pellet{
-		type=Yellow 1 pellet
+	pellet{
+		type=yellow_1_pellet
 		p=1984.6696 1333.2872
 	}
-	Pellet{
-		type=Yellow 1 pellet
+	pellet{
+		type=yellow_1_pellet
 		p=2007.4050 1404.7391
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=804.4946 1677.2607
 		angle=1.0103
 		vars=max_health=300.0000
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=953.7286 1821.1591
 		angle=-1.5167
 		vars=sprout=true
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=976.4084 1788.8446
 		angle=-1.7102
 		vars=sprout=true
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=992.0000 1760.0000
 		angle=-1.9424
 		vars=sprout=true
 	}
-	Leader{
-		type=Louie
+	leader{
+		type=louie
 		p=256.0000 2048.0000
 		angle=-2.3514
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=958.0566 1770.4521
 		angle=-1.5344
 		vars=sprout=true
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=939.8475 1798.0259
 		angle=-1.3891
 		vars=sprout=true
 	}
-	Scale{
-		type=Paper bag
+	scale{
+		type=paper_bag
 		p=1486.6770 1617.3230
 		angle=-1.0148
 		vars=goal_number=22
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=384.0000 1408.0000
 		vars=text=You can change which leader you are controlling with \k next_leader \k.\nOther leaders can also be whistled into the group, and thrown too.
 	}
-	Drop{
-		type=Nectar
+	drop{
+		type=nectar
 		p=116.5316 984.3973
 	}
-	Enemy{
-		type=Puffy Blowhog
+	enemy{
+		type=puffy_blowhog
 		p=-960.0000 480.0000
 	}
-	Scale{
-		type=Paper bag
+	scale{
+		type=paper_bag
 		p=-128.0000 896.0000
 		angle=0.4392
 		vars=goal_number=27
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=-320.0000 736.0000
 		vars=text=That beast has the treasure!\nObserve its patterns, and throw your Pikmin to have them fight!\nWhen you're done, order the Pikmin to retrieve the goods.
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-192.0000 -128.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-128.0000 -256.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=544.0000 -160.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=672.0000 32.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=256.0000 224.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-224.0000 160.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=587.4729 269.6433
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=690.2325 242.2325
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=792.6204 276.0883
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=898.2277 304.3988
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1216.0000 -448.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1536.0000 -512.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1696.0000 -352.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1568.0000 288.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1248.0000 544.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1184.0000 704.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1216.0000 832.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1333.1985 903.5610
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1449.7214 939.8816
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1501.4062 1062.0510
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1352.5819 1032.6169
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1233.7877 1013.7432
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1713.7523 1540.0857
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1685.4349 1644.9304
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1809.9692 1671.5974
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2013.2809 1547.7832
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1906.4041 1515.7832
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1812.4731 1559.9697
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1248.0000 1728.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-608.0000 864.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-416.0000 640.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-960.0000 992.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1280.0000 960.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1472.0000 736.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1504.0000 448.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1408.0000 160.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1216.0000 0.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-928.0000 -32.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-672.0000 0.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=32.0000 480.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=384.0000 736.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=864.0000 864.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1344.0000 1152.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1728.0000 1984.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1184.0000 2208.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-576.0000 1280.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1056.0000 1248.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1568.0000 1088.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1760.0000 736.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1696.0000 256.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1440.0000 -128.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1088.0000 -288.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-736.0000 -256.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-416.0000 -224.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-64.0000 -544.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=128.0000 -672.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=352.0000 -736.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=576.0000 -576.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=576.0000 -384.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=864.0000 -32.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=928.0000 -320.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1856.0000 -128.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1824.0000 96.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2024.8301 136.7485
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2176.0000 -32.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2464.0000 160.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2562.1086 334.1769
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2656.0000 480.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2496.0000 640.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2688.0000 768.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2592.0000 928.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2688.0000 1248.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2592.0000 1504.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2336.0000 1760.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=320.0000 -160.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=64.0000 192.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=928.0000 480.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1216.0000 -64.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1408.0000 -352.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=2133.4692 346.5716
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=2304.0000 1120.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1728.0000 992.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1600.0000 1408.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1184.0000 1536.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1088.0000 1376.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1088.0000 1184.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=544.0000 1024.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-384.0000 928.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-800.0000 800.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1088.0000 800.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1216.0000 640.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1376.0000 480.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1280.0000 416.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1152.0000 192.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-928.0000 96.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-704.0000 224.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-608.0000 288.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-512.0000 512.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-384.0000 192.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-320.0000 -96.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=320.0000 -384.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=288.0000 384.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=864.0000 160.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1120.0000 512.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1056.0000 -96.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1632.0000 32.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=2091.1016 607.6738
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1912.4807 1618.7864
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1792.0000 1472.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1408.0000 1856.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1312.0000 1600.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=992.0000 1024.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=416.0000 960.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=672.0000 1920.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=480.0000 2240.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=320.0000 2336.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=160.0000 2304.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-32.0000 2144.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-192.0000 1824.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-224.0000 1696.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-256.0000 1760.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=544.0000 2208.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-96.0000 1312.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-352.0000 1024.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1056.0000 1024.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1472.0000 896.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1632.0000 544.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1504.0000 352.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-1280.0000 32.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-992.0000 -64.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-480.0000 -96.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1449.0869 1412.0062
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-64.0000 288.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1376.0000 -512.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2275.6462 186.3269
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=704.0000 832.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-192.0000 416.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-768.0000 992.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1376.0000 864.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1632.0000 416.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1376.0000 32.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-768.0000 -64.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=2560.0000 1152.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1632.0000 1728.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1024.0000 864.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=32.0000 800.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=1056.0000 1984.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=896.0000 2048.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=800.0000 1984.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=544.0000 1984.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=416.0000 2240.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=576.0000 2112.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=256.0000 2272.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=64.0000 2240.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=-64.0000 2048.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=-96.0000 1920.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=-160.0000 1728.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=-128.0000 1600.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=-128.0000 1440.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=32.0000 1280.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=160.0000 1184.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=64.0000 1120.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=544.0000 960.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=704.0000 992.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=864.0000 1024.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=1184.0000 1216.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=1216.0000 1280.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=1312.0000 1312.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=1248.0000 1600.0000
 	}
-	Decoration{
-		type=Shoot
+	decoration{
+		type=shoot
 		p=256.0000 1600.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1457.4697 1164.8049
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1563.8518 1308.8301
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1439.4666 1300.6467
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1928.5212 1723.0520
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=2035.6052 1663.7732
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1344.0000 1408.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1280.0000 1504.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1088.0000 1024.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1536.0000 1824.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1600.0000 1952.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1696.0000 1824.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1440.0000 1952.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1312.0000 2016.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1184.0000 1984.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1088.0000 2080.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1664.0000 672.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=1824.0000 800.0000
 	}
-	Bouncer{
-		type=Geyser
+	bouncer{
+		type=geyser
 		p=972.2009 1506.0336
 		links=222
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=974.2344 1600.5084
 	}
-	Interactable{
-		type=Sign
+	interactable{
+		type=sign
 		p=1728.0000 1120.0000
 		vars=text=By standing under an Onion and pressing \k throw \k, you can interact with it.\nTry checking inside the Onion to see if there\nare any Yellow Pikmin you can use.
 	}
@@ -6003,7 +6003,7 @@ tree_shadows{
 		size=8001.5112 5344.2783
 		angle=3.1473
 		alpha=160
-		file=tree_shadow.png
+		file=textures/tree_shadow.png
 		sway=1.0000 1.0000
 	}
 }

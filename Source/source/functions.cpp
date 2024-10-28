@@ -126,7 +126,7 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != game.bmp_error
         ) {
-            game.textures.free(s_ptr->texture_info.file_name);
+            game.content.bitmaps.free(s_ptr->texture_info.file_name);
             s_ptr->texture_info.bitmap = nullptr;
         }
     }
@@ -149,7 +149,7 @@ void crash(const string &reason, const string &info, int exit_status) {
             al_save_bitmap(
                 (
                     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" +
-                    "Crash_" + get_current_time(true) + ".png"
+                    "crash_" + get_current_time(true) + ".png"
                 ).c_str(),
                 backbuffer
             );
@@ -173,11 +173,11 @@ void crash(const string &reason, const string &info, int exit_status) {
         "  Mob count: " +
         i2s(game.states.gameplay->mobs.all.size()) + ". Particle count: " +
         i2s(game.states.gameplay->particles.get_count()) + ".\n" +
-        "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
-        i2s(game.bitmaps.get_total_uses()) + " total uses).\n" +
+        "  Bitmaps loaded: " + i2s(game.content.bitmaps.get_list_size()) + " (" +
+        i2s(game.content.bitmaps.get_total_uses()) + " total uses).\n" +
         "  Current area: ";
         
-    if(!game.cur_area_data->name.empty()) {
+    if(game.cur_area_data && !game.cur_area_data->name.empty()) {
         error_str +=
             game.cur_area_data->name + ", version " +
             game.cur_area_data->version + ".\n";
@@ -908,7 +908,7 @@ void save_options() {
  * In other words, dumps a screenshot.
  */
 void save_screenshot() {
-    string base_file_name = "Screenshot_" + get_current_time(true);
+    string base_file_name = "screenshot_" + get_current_time(true);
     
     //Check if a file with this name already exists.
     vector<string> files = folder_to_vector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);

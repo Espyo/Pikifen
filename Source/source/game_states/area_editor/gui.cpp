@@ -246,10 +246,12 @@ void area_editor::process_gui_load_dialog() {
     [this](const string &name) {
         string folder_name;
         AREA_TYPE type;
+        string package;
         get_area_info_from_path(
             name,
             &folder_name,
-            &type
+            &type,
+            &package
         );
         create_or_load_area(folder_name, type);
         close_top_dialog();
@@ -1246,7 +1248,7 @@ void area_editor::process_gui_panel_details() {
                     FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
                     vector<string> f =
                         prompt_file_dialog_locked_to_folder(
-                            FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                            FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                             "Please choose the texture to use for the "
                             "tree shadow.",
                             "*.png",
@@ -1281,17 +1283,17 @@ void area_editor::process_gui_panel_details() {
                 set_tooltip(
                     "File name of the texture to use as a background, in the "
                     "Textures folder. Extension included. e.g. "
-                    "\"Palmtree_shadow.png\""
+                    "\"palmtree_shadow.png\""
                 );
                 
                 if(selected_shadow->file_name != old_shadow_file_name) {
                     //New image, delete the old one.
                     register_change("tree shadow file change");
                     if(selected_shadow->bitmap != game.bmp_error) {
-                        game.textures.free(selected_shadow->file_name);
+                        game.content.bitmaps.free(selected_shadow->file_name);
                     }
                     selected_shadow->bitmap =
-                        game.textures.get(
+                        game.content.bitmaps.get(
                             selected_shadow->file_name, nullptr, false
                         );
                 }
@@ -1874,7 +1876,7 @@ void area_editor::process_gui_panel_info() {
         ImGui::SameLine();
         vector<string> song_names;
         song_names.push_back(NONE_OPTION);
-        for(auto &s : game.audio.songs) {
+        for(auto &s : game.content.songs) {
             song_names.push_back(s.first);
         }
         if(game.cur_area_data->song_name.empty()) {
@@ -2032,7 +2034,7 @@ void area_editor::process_gui_panel_info() {
         }
         set_tooltip(
             "Press the Browse button to set the area's thumbnail. When you\n"
-            "save the area, the thumbnail gets saved into Thumbnail.png in\n"
+            "save the area, the thumbnail gets saved into thumbnail.png in\n"
             "the area's folder, but the original file you selected with the\n"
             "Browse button will be left untouched."
         );
@@ -2088,7 +2090,7 @@ void area_editor::process_gui_panel_info() {
             FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
             vector<string> f =
                 prompt_file_dialog_locked_to_folder(
-                    FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                    FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                     "Please choose the texture to use for the background.",
                     "*.*",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
@@ -2125,7 +2127,7 @@ void area_editor::process_gui_panel_info() {
         set_tooltip(
             "File name of the texture to use as a background, in the "
             "Textures folder.\n"
-            "Extension included. e.g. \"Kitchen_floor.jpg\"\n"
+            "Extension included. e.g. \"kitchen_floor.jpg\"\n"
             "This repeating texture can be seen when looking at the void."
         );
         
@@ -2510,7 +2512,7 @@ void area_editor::process_gui_panel_main() {
     set_tooltip(
         "Full folder path: " + game.cur_area_data->path + "\n"
         "Full user data folder path: " +
-        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
         game.cur_area_data->folder_name + "\n"
     );
     
@@ -5715,7 +5717,7 @@ void area_editor::process_gui_panel_tools() {
                 if(!game.cur_area_data->folder_name.empty()) {
                     string file_path =
                         get_base_area_folder_path(
-                            game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG //TODO
+                            game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG //TODO
                         ) + "/" + game.cur_area_data->folder_name + "/" +
                         FILE_NAMES::AREA_GEOMETRY_BACKUP;
                     if(al_filename_exists(file_path.c_str())) {

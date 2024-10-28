@@ -23,28 +23,24 @@
 
 namespace PAUSE_MENU {
 
-//Path to the leaving confirmation page GUI information file.
-const string CONFIRMATION_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_confirmation.txt"; //TODO
-    
+//Name of the leaving confirmation page GUI information file.
+const string CONFIRMATION_GUI_FILE_NAME = "pause_confirmation.txt"; //TODO
+
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;
 
 //Interval between calculations of the Go Here path.
 const float GO_HERE_CALC_INTERVAL = 0.15f;
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_menu.txt"; //TODO
-    
-//Path to the help page GUI information file.
-const string HELP_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_help.txt"; //TODO
-    
-//Path to the mission page GUI information file.
-const string MISSION_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_mission.txt"; //TODO
-    
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "pause_menu.txt";
+
+//Name of the help page GUI information file.
+const string HELP_GUI_FILE_NAME = "pause_help.txt";
+
+//Name of the mission page GUI information file.
+const string MISSION_GUI_FILE_NAME = "pause_mission.txt";
+
 //Background color of the radar.
 const ALLEGRO_COLOR RADAR_BG_COLOR =
     al_map_rgb(32, 24, 0);
@@ -52,10 +48,9 @@ const ALLEGRO_COLOR RADAR_BG_COLOR =
 //Default radar zoom level.
 const float RADAR_DEF_ZOOM = 0.4f;
 
-//Path to the radar page GUI information file.
-const string RADAR_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_radar.txt"; //TODO
-    
+//Name of the radar page GUI information file.
+const string RADAR_GUI_FILE_NAME = "pause_radar.txt";
+
 //Color of the highest sector in the radar.
 const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
     al_map_rgb(200, 200, 180);
@@ -82,10 +77,9 @@ const float RADAR_PAN_SPEED = 600.0f;
 //Max radar zoom speed when not using mouse, in amount per second.
 const float RADAR_ZOOM_SPEED = 2.5f;
 
-//Path to the status page GUI information file.
-const string STATUS_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Pause_status.txt"; //TODO
-    
+//Name of the status page GUI information file.
+const string STATUS_GUI_FILE_NAME = "pause_status.txt";
+
 }
 
 
@@ -191,9 +185,9 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
 pause_menu_t::~pause_menu_t() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(c == HELP_CATEGORY_PIKMIN) continue;
-        for(size_t t = 0; t < tidbits.size(); t++) {
+        for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.bitmaps.free(tidbits[(HELP_CATEGORY) c][t].image);
+                game.content.bitmaps.free(tidbits[(HELP_CATEGORY) c][t].image);
             }
         }
     }
@@ -206,15 +200,15 @@ pause_menu_t::~pause_menu_t() {
     help_gui.destroy();
     confirmation_gui.destroy();
     
-    game.bitmaps.free(bmp_radar_cursor);
-    game.bitmaps.free(bmp_radar_pikmin);
-    game.bitmaps.free(bmp_radar_treasure);
-    game.bitmaps.free(bmp_radar_enemy);
-    game.bitmaps.free(bmp_radar_leader_bubble);
-    game.bitmaps.free(bmp_radar_onion_skeleton);
-    game.bitmaps.free(bmp_radar_onion_bulb);
-    game.bitmaps.free(bmp_radar_ship);
-    game.bitmaps.free(bmp_radar_path);
+    game.content.bitmaps.free(bmp_radar_cursor);
+    game.content.bitmaps.free(bmp_radar_pikmin);
+    game.content.bitmaps.free(bmp_radar_treasure);
+    game.content.bitmaps.free(bmp_radar_enemy);
+    game.content.bitmaps.free(bmp_radar_leader_bubble);
+    game.content.bitmaps.free(bmp_radar_onion_skeleton);
+    game.content.bitmaps.free(bmp_radar_onion_bulb);
+    game.content.bitmaps.free(bmp_radar_ship);
+    game.content.bitmaps.free(bmp_radar_path);
     bmp_radar_cursor = nullptr;
     bmp_radar_pikmin = nullptr;
     bmp_radar_treasure = nullptr;
@@ -1718,7 +1712,7 @@ void pause_menu_t::handle_player_action(const player_action &action) {
  * @brief Initializes the leaving confirmation page.
  */
 void pause_menu_t::init_confirmation_page() {
-    data_node gui_file(PAUSE_MENU::CONFIRMATION_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
     
     //Menu items.
     confirmation_gui.register_coords("cancel",           19, 83, 30, 10);
@@ -1727,7 +1721,7 @@ void pause_menu_t::init_confirmation_page() {
     confirmation_gui.register_coords("explanation",      50, 40, 84, 20);
     confirmation_gui.register_coords("options_reminder", 50, 69, 92, 10);
     confirmation_gui.register_coords("tooltip",          50, 96, 96,  4);
-    confirmation_gui.read_coords(gui_file.get_child_by_name("positions"));
+    confirmation_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Cancel button.
     confirmation_gui.back_item =
@@ -1810,10 +1804,10 @@ void pause_menu_t::init_help_page() {
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
-    data_node gui_file(PAUSE_MENU::HELP_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[PAUSE_MENU::HELP_GUI_FILE_NAME];
     
     //Load the tidbits.
-    data_node* tidbits_node = gui_file.get_child_by_name("tidbits");
+    data_node* tidbits_node = gui_file->get_child_by_name("tidbits");
     
     for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(category_node_names[c].empty()) continue;
@@ -1828,7 +1822,7 @@ void pause_menu_t::init_help_page() {
             tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";
-            new_t.image = parts.size() > 2 ? game.bitmaps.get(parts[2]) : nullptr;
+            new_t.image = parts.size() > 2 ? game.content.bitmaps.get(parts[2]) : nullptr;
             category_tidbits.push_back(new_t);
         }
     }
@@ -1853,7 +1847,7 @@ void pause_menu_t::init_help_page() {
     help_gui.register_coords("list_scroll", 96, 39,  2, 54);
     help_gui.register_coords("image",       16, 83, 28, 30);
     help_gui.register_coords("tooltip",     65, 83, 66, 30);
-    help_gui.read_coords(gui_file.get_child_by_name("positions"));
+    help_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Back button.
     help_gui.back_item =
@@ -2022,7 +2016,7 @@ void pause_menu_t::init_main_pause_menu() {
     gui.register_coords("quit",             87, 88, 22,  8);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
-        data_node(PAUSE_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[PAUSE_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Header.
@@ -2192,7 +2186,7 @@ void pause_menu_t::init_main_pause_menu() {
  * @brief Initializes the mission page.
  */
 void pause_menu_t::init_mission_page() {
-    data_node gui_file(PAUSE_MENU::MISSION_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[PAUSE_MENU::MISSION_GUI_FILE_NAME];
     
     //Menu items.
     mission_gui.register_coords("header",           50,  5, 52,  6);
@@ -2212,7 +2206,7 @@ void pause_menu_t::init_mission_page() {
     mission_gui.register_coords("grading_list",     48, 80, 92, 24);
     mission_gui.register_coords("grading_scroll",   97, 80,  2, 24);
     mission_gui.register_coords("tooltip",          50, 96, 96,  4);
-    mission_gui.read_coords(gui_file.get_child_by_name("positions"));
+    mission_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Header.
     text_gui_item* header_text =
@@ -2318,17 +2312,17 @@ void pause_menu_t::init_mission_page() {
  * @brief Initializes the radar page.
  */
 void pause_menu_t::init_radar_page() {
-    data_node gui_file(PAUSE_MENU::RADAR_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[PAUSE_MENU::RADAR_GUI_FILE_NAME];
     
     //Assets.
-    data_node* bitmaps_node = gui_file.get_child_by_name("files");
+    data_node* bitmaps_node = gui_file->get_child_by_name("files");
     
 #define loader(var, name) \
     var = \
-          game.bitmaps.get( \
-                            bitmaps_node->get_child_by_name(name)->value, \
-                            bitmaps_node->get_child_by_name(name) \
-                          );
+          game.content.bitmaps.get( \
+                                    bitmaps_node->get_child_by_name(name)->value, \
+                                    bitmaps_node->get_child_by_name(name) \
+                                  );
     
     loader(bmp_radar_cursor,         "cursor");
     loader(bmp_radar_pikmin,         "pikmin");
@@ -2360,7 +2354,7 @@ void pause_menu_t::init_radar_page() {
     radar_gui.register_coords("cursor_info",         86.25, 33.75, 22.5, 17.5);
     radar_gui.register_coords("instructions",        58.75, 16,    77.5,  4);
     radar_gui.register_coords("tooltip",             50,    96,    96,    4);
-    radar_gui.read_coords(gui_file.get_child_by_name("positions"));
+    radar_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Header.
     text_gui_item* header_text =
@@ -2592,7 +2586,7 @@ void pause_menu_t::init_radar_page() {
  * @brief Initializes the status page.
  */
 void pause_menu_t::init_status_page() {
-    data_node gui_file(PAUSE_MENU::STATUS_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[PAUSE_MENU::STATUS_GUI_FILE_NAME];
     
     //Menu items.
     status_gui.register_coords("header",           50,     5,   52,    6);
@@ -2608,7 +2602,7 @@ void pause_menu_t::init_status_page() {
     status_gui.register_coords("totals",           50,    89,   88,    6);
     status_gui.register_coords("instructions",     58.75, 16,   77.5,  4);
     status_gui.register_coords("tooltip",          50,    96,   96,    4);
-    status_gui.read_coords(gui_file.get_child_by_name("positions"));
+    status_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Header.
     text_gui_item* header_text =

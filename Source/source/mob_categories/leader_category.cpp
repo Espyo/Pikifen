@@ -22,8 +22,9 @@
  */
 leader_category::leader_category() :
     mob_category(
-        MOB_CATEGORY_LEADERS, "Leader", "Leaders",
-        "Leaders", al_map_rgb(73, 204, 204)
+        MOB_CATEGORY_LEADERS, "leader",
+        "Leader", "Leaders",
+        "leaders", al_map_rgb(73, 204, 204)
     ) {
     
 }
@@ -113,8 +114,9 @@ void leader_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of leader.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void leader_category::register_type(mob_type* type) {
-    game.content.mob_types.leader[type->name] = (leader_type*) type;
+void leader_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.leader[internal_name] = (leader_type*) type;
 }

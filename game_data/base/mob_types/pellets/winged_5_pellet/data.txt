@@ -1,0 +1,15 @@
+name = Winged 5 pellet
+description = A pink 5 pellet that can be used to grow more Pikmin. Generates more Winged Pikmin than other types.
+
+can_walk_on_others = true
+height = 32
+match_seeds = 5
+max_carriers = 10
+non_match_seeds = 3
+number = 5
+number_image = pellet_5.png
+pikmin_type = winged_pikmin
+pushable = true
+pushes = true
+pushes_softly = true
+radius = 32

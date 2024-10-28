@@ -22,8 +22,8 @@
 
 namespace STATS_MENU {
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Statistics_menu.txt"; //TODO
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "statistics_menu.txt";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -175,7 +175,7 @@ void stats_menu_state::leave() {
  */
 void stats_menu_state::load() {
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
     
     game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
@@ -186,7 +186,7 @@ void stats_menu_state::load() {
     gui.register_coords("list_scroll", 91, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        data_node(STATS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Back button.
@@ -389,7 +389,7 @@ void stats_menu_state::populate_stats_list() {
 void stats_menu_state::unload() {
 
     //Resources.
-    al_destroy_bitmap(bmp_menu_bg);
+    game.content.bitmaps.free(bmp_menu_bg);
     
     game.content.unload_all(CONTENT_TYPE_AREA);
     

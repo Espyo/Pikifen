@@ -27,13 +27,13 @@ children {
 
 spawns {
     left_pillar {
-        object = Reinforced wall pillar
+        object = reinforced_wall_pillar
         relative = true
         coordinates = 0 -119
         angle = 0
     }
     right_pillar {
-        object = Reinforced wall pillar
+        object = reinforced_wall_pillar
         relative = true
         coordinates = 0 119
         angle = 180

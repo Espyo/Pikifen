@@ -31,8 +31,8 @@ const float BIND_BUTTON_PADDING = 0.01f;
 //Timeout before the input capturing cancels.
 const float CAPTURE_TIMEOUT_DURATION = 5.0f;
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Control_binds_menu.txt"; //TODO
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "control_binds_menu.txt";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -238,7 +238,7 @@ void control_binds_menu_state::load() {
     cur_bind_idx = INVALID;
     
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
@@ -247,7 +247,7 @@ void control_binds_menu_state::load() {
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        data_node(CONTROL_BINDS_MENU::GUI_FILE_PATH).
+        game.content.gui[CONTROL_BINDS_MENU::GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -676,7 +676,8 @@ void control_binds_menu_state::restore_defaults(
 void control_binds_menu_state::unload() {
 
     //Resources.
-    al_destroy_bitmap(bmp_menu_bg);
+    game.content.bitmaps.free(bmp_menu_bg);
+    bmp_menu_bg = nullptr;
     
     //Menu items.
     gui.destroy();

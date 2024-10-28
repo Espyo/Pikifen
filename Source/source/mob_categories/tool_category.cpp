@@ -21,8 +21,9 @@
  */
 tool_category::tool_category() :
     mob_category(
-        MOB_CATEGORY_TOOLS, "Tool", "Tools",
-        "Tools", al_map_rgb(204, 178, 139)
+        MOB_CATEGORY_TOOLS, "tool",
+        "Tool", "Tools",
+        "tools", al_map_rgb(204, 178, 139)
     ) {
     
 }
@@ -110,8 +111,9 @@ void tool_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of tool.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void tool_category::register_type(mob_type* type) {
-    game.content.mob_types.tool[type->name] = (tool_type*) type;
+void tool_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.tool[internal_name] = (tool_type*) type;
 }

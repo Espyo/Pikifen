@@ -7,7 +7,7 @@ can_walk_on_others = true
 casts_shadow = false
 custom_category_name = Bridge
 left_rail_texture = textures/ceramic_bridge_rail_red_left.png
-main_texture = ceramic_bridge_red.png
+main_texture = textures/ceramic_bridge_red.png
 max_health = 30
 radius = 32
 rail_width = 40
@@ -36,7 +36,7 @@ sounds {
 
 spawns {
     base {
-        object = Ceramic bridge base red
+        object = ceramic_bridge_base_red
         relative = true
         coordinates = 0 0
         angle = 0

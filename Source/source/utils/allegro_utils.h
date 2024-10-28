@@ -72,6 +72,9 @@ void getline(ALLEGRO_FILE* file, string &line);
 vector<string> folder_to_vector(
     string folder_name, bool folders, bool* out_folder_found = nullptr
 );
+vector<string> folder_to_vector_recursively(
+    string folder_name, bool folders, bool* out_folder_found = nullptr
+);
 ALLEGRO_COLOR interpolate_color(
     float input, float input_start, float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end

@@ -32,23 +32,22 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     //Standard data.
     reader_setter rs(node);
     string animation_str;
+    data_node* animation_node = nullptr;
     
-    rs.set("animation", animation_str);
+    rs.set("animation", animation_str, &animation_node);
     rs.set("color", main_color);
     rs.set("radar_color", radar_color);
     rs.set("surface_1_speed", surface_speed[0]);
     rs.set("surface_2_speed", surface_speed[1]);
     rs.set("surface_alpha", surface_alpha);
     
-    if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        data_node anim_file =
-            load_data_file(FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + animation_str); //TODO
-            
-        anim_db.load_from_data_node(&anim_file);
-        if(!anim_db.animations.empty()) {
-            anim_instance = animation_instance(&anim_db);
-            anim_instance.cur_anim = anim_db.animations[0];
-            anim_instance.to_start();
-        }
+    auto it = game.content.global_animations.find(animation_str);
+    if(it != game.content.global_animations.end()) {
+        anim = &game.content.global_animations[animation_str];
+    } else {
+        game.errors.report(
+            "Unknown animation \"" + animation_str + "\"!",
+            animation_node
+        );
     }
 }

@@ -23,11 +23,11 @@
 
 namespace AREA_MENU {
 
-//Path to the main GUI information file.
-const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu.txt"; //TODO
+//Name of the main GUI information file.
+const string GUI_FILE_NAME = "area_menu.txt";
 
 //Path to the area info GUI information file.
-const string INFO_GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu_info.txt"; //TODO
+const string INFO_GUI_FILE_NAME = "area_menu_info.txt";
 
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
@@ -36,7 +36,7 @@ const float PAGE_SWAP_DURATION = 0.5f;
 const string SONG_NAME = "menus";
 
 //Path to the mission specs GUI information file.
-const string SPECS_GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Area_menu_specs.txt"; //TODO
+const string SPECS_GUI_FILE_NAME = "area_menu_specs.txt";
 
 }
 
@@ -429,7 +429,7 @@ void area_menu_state::init_gui_info_page() {
     gui.register_coords("maker",        28, 95, 52,  6);
     gui.register_coords("version",      76, 95, 44,  6);
     gui.read_coords(
-        data_node(AREA_MENU::INFO_GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[AREA_MENU::INFO_GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     if(!game.content.areas[area_type].empty()) {
@@ -579,7 +579,7 @@ void area_menu_state::init_gui_main() {
     gui.register_coords("no_areas_text", 50, 50, 96, 10);
     
     gui.read_coords(
-        data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[AREA_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Back button.
@@ -825,7 +825,7 @@ void area_menu_state::init_gui_specs_page() {
     gui.register_coords("grading_list",   47, 85, 90, 26);
     gui.register_coords("grading_scroll", 96, 85,  4, 26);
     gui.read_coords(
-        data_node(AREA_MENU::SPECS_GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[AREA_MENU::SPECS_GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     if(!game.content.areas[area_type].empty()) {
@@ -908,6 +908,7 @@ void area_menu_state::load() {
     cur_medal = nullptr;
     show_mission_specs = false;
     
+    //Game content.
     game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
     //Mission records.
@@ -934,7 +935,7 @@ void area_menu_state::load() {
         }
     }
     
-    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
     
     init_gui_main();
     init_gui_info_page();
@@ -960,7 +961,8 @@ void area_menu_state::load() {
 void area_menu_state::unload() {
 
     //Resources.
-    al_destroy_bitmap(bmp_menu_bg);
+    game.content.bitmaps.free(bmp_menu_bg);
+    bmp_menu_bg = nullptr;
     
     //Menu items.
     gui.destroy();

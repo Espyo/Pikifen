@@ -26,6 +26,7 @@ using std::string;
  * @brief Constructs a new mob category object.
  *
  * @param id This category's ID.
+ * @param internal_name Internal name.
  * @param name Standard category name, in singular.
  * @param plural_name Standard category name, in plural.
  * @param folder_name Name of the folder where the mob types for this
@@ -34,13 +35,15 @@ using std::string;
  * this color.
  */
 mob_category::mob_category(
-    const MOB_CATEGORY id, const string &name, const string &plural_name,
+    const MOB_CATEGORY id, const string &internal_name,
+    const string &name, const string &plural_name,
     const string &folder_name, const ALLEGRO_COLOR editor_color
 ) :
+    internal_name(internal_name),
     name(name),
     id(id),
     plural_name(plural_name),
-    folder_path(FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" + folder_name), //TODO
+    folder_name(folder_name),
     editor_color(editor_color) {
     
 }
@@ -116,11 +119,27 @@ mob_category* mob_category_manager::get_from_folder_name(
     const string &name
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
-        if(categories[n]->folder_path == name) return categories[n];
+        if(categories[n]->folder_name == name) return categories[n];
     }
     game.errors.report(
         "Mob category with the folder name \"" + name + "\" not found!"
     );
+    return nullptr;
+}
+
+
+/**
+ * @brief Returns a category given its internal name.
+ *
+ * @param internal_name Internal name of the category.
+ * @return The category, or nullptr on error.
+ */
+mob_category* mob_category_manager::get_from_internal_name(
+    const string &internal_name
+) const {
+    for(size_t n = 0; n < categories.size(); n++) {
+        if(categories[n]->internal_name == internal_name) return categories[n];
+    }
     return nullptr;
 }
 
@@ -179,7 +198,7 @@ void mob_category_manager::register_category(
  */
 none_category::none_category() :
     mob_category(
-        MOB_CATEGORY_NONE, "None", "None",
+        MOB_CATEGORY_NONE, "none", "None", "None",
         "", al_map_rgb(255, 0, 0)
     ) {
     
@@ -241,6 +260,7 @@ void none_category::get_type_names(vector<string> &list) const { }
 /**
  * @brief Registers a created type of leader.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void none_category::register_type(mob_type* type) { }
+void none_category::register_type(const string &internal_name, mob_type* type) { }

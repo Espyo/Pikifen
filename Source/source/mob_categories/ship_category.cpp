@@ -21,8 +21,9 @@
  */
 ship_category::ship_category() :
     mob_category(
-        MOB_CATEGORY_SHIPS, "Ship", "Ships",
-        "Ships", al_map_rgb(100, 73, 204)
+        MOB_CATEGORY_SHIPS, "ship",
+        "Ship", "Ships",
+        "ships", al_map_rgb(100, 73, 204)
     ) {
     
 }
@@ -110,8 +111,9 @@ void ship_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of ship.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ship_category::register_type(mob_type* type) {
-    game.content.mob_types.ship[type->name] = (ship_type*) type;
+void ship_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.ship[internal_name] = (ship_type*) type;
 }

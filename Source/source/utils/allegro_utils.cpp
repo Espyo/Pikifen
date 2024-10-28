@@ -110,27 +110,27 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
 /**
  * @brief Stores the names of all files in a folder into a vector.
  *
- * @param folder_name Name of the folder.
+ * @param folder_path Path to the folder.
  * @param folders If true, only read folders. If false, only read files.
  * @param out_folder_found If not nullptr, whether the folder was
  * found or not is returned here.
  * @return The vector.
  */
 vector<string> folder_to_vector(
-    string folder_name, bool folders, bool* out_folder_found
+    string folder_path, bool folders, bool* out_folder_found
 ) {
     vector<string> v;
     
-    if(folder_name.empty()) {
+    if(folder_path.empty()) {
         if(out_folder_found) *out_folder_found = false;
         return v;
     }
     
     //Normalize the folder's path.
-    folder_name = standardize_path(folder_name);
+    folder_path = standardize_path(folder_path);
     
     ALLEGRO_FS_ENTRY* folder =
-        al_create_fs_entry(folder_name.c_str());
+        al_create_fs_entry(folder_path.c_str());
     if(!folder || !al_open_directory(folder)) {
         if(out_folder_found) *out_folder_found = false;
         return v;
@@ -166,6 +166,53 @@ vector<string> folder_to_vector(
         return str_to_lower(s1) < str_to_lower(s2);
     });
     
+    if(out_folder_found) *out_folder_found = true;
+    return v;
+}
+
+
+/**
+ * @brief Stores the names of all files in a folder into a vector, but also
+ * recursively enters sub-folders.
+ *
+ * @param folder_path Path to the folder.
+ * @param folders If true, only read folders. If false, only read files.
+ * @param out_folder_found If not nullptr, whether the folder was
+ * found or not is returned here.
+ * @return The vector.
+ */
+vector<string> folder_to_vector_recursively(
+    string folder_path, bool folders, bool* out_folder_found
+) {
+    //Figure out what subfolders exist, both to add to the list if needed, as
+    //well as to navigate recursively.
+    vector<string> v;
+    bool found;
+    vector<string> subfolders = folder_to_vector(folder_path, true, &found);
+    
+    if(!found) {
+        if(out_folder_found) *out_folder_found = false;
+        return v;
+    }
+    
+    //Add the current folder's things.
+    if(!folders) {
+        vector<string> files = folder_to_vector(folder_path, false);
+        v.insert(v.end(), files.begin(), files.end());
+    } else {
+        v.insert(v.end(), subfolders.begin(), subfolders.end());
+    }
+    
+    //Go recursively.
+    for(size_t s = 0; s < subfolders.size(); s++) {
+        vector<string> recursive_result =
+            folder_to_vector_recursively(folder_path + "/" + subfolders[s], folders);
+        for(size_t r = 0; r < recursive_result.size(); r++) {
+            v.push_back(subfolders[s] + "/" + recursive_result[r]);
+        }
+    }
+    
+    //Finish.
     if(out_folder_found) *out_folder_found = true;
     return v;
 }

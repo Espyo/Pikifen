@@ -37,7 +37,7 @@ sounds {
 
 spawns {
     second {
-        object = Electrical wire 2
+        object = electrical_wire_2
         relative = true
         coordinates = 0 80
         angle = 0

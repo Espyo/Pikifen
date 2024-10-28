@@ -34,7 +34,7 @@ sounds {
 
 spawns {
     left_pillar {
-        object = Electric gate pillar
+        object = electric_gate_pillar
         relative = true
         coordinates = 0 -119
         angle = 0
@@ -42,7 +42,7 @@ spawns {
         vars = is_left = true
     }
     right_pillar {
-        object = Electric gate pillar
+        object = electric_gate_pillar
         relative = true
         coordinates = 0 119
         angle = 180

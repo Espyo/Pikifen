@@ -327,7 +327,6 @@ void game_class::shutdown() {
     if(cur_state) {
         cur_state->unload();
     }
-    unload_songs();
     unload_misc_resources();
     destroy_mob_categories();
     states.destroy();
@@ -393,12 +392,14 @@ int game_class::start() {
     //Other fundamental initializations and loadings.
     init_misc();
     init_error_bitmap();
-    load_asset_file_names();
+    content.load_all(CONTENT_TYPE_MISC, CONTENT_LOAD_LEVEL_FULL);
+    content.load_all(CONTENT_TYPE_BITMAP, CONTENT_LOAD_LEVEL_BASIC);
+    content.load_all(CONTENT_TYPE_SOUND, CONTENT_LOAD_LEVEL_BASIC);
+    content.load_all(CONTENT_TYPE_SONG_TRACK, CONTENT_LOAD_LEVEL_FULL);
+    content.load_all(CONTENT_TYPE_SONG, CONTENT_LOAD_LEVEL_FULL);
     load_fonts();
     load_misc_graphics();
-    load_system_animations();
     load_misc_sounds();
-    load_songs();
     
     //Draw the basic loading screen.
     draw_loading_screen("", "", 1.0);
@@ -411,7 +412,6 @@ int game_class::start() {
     init_mob_actions();
     init_mob_categories();
     init_misc_databases();
-    load_game_config();
     load_maker_tools();
     save_maker_tools();
     

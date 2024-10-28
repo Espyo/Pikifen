@@ -179,7 +179,7 @@ void gui_editor::load_file(
 ) {
     items.clear();
     
-    file_node = data_node(FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name); //TODO
+    file_node = data_node(FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name); //TODO
     
     if(!file_node.file_was_opened) {
         set_status("Failed to load the file \"" + file_name + "\"!", true);
@@ -461,7 +461,7 @@ bool gui_editor::save_file() {
         item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
     }
     
-    string file_path = FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name; //TODO
+    string file_path = FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name; //TODO
     
     if(!file_node.save_file(file_path)) {
         show_message_box(

@@ -33,7 +33,7 @@ children {
 
 spawns {
     ropes {
-        object = Seesaw block ropes
+        object = seesaw_block_ropes
         relative = true
         coordinates = 0 0
         angle = 0

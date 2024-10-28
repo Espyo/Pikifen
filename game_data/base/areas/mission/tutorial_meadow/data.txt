@@ -6,11 +6,11 @@ version=1.1.0
 engine_version=0.25.0
 subtitle=Get the treasure
 difficulty=1
-bg_bmp=grass_dark.jpg
+bg_bmp=textures/grass_dark.jpg
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000
-song=Coastal Pavement in Early Fall
+song=coastal_pavement_in_early_fall
 weather
 day_time_start=420
 day_time_speed=0

@@ -22,28 +22,24 @@
 
 namespace MAIN_MENU {
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu.txt"; //TODO
-    
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "main_menu.txt";
+
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
-//Path to the make page GUI information file.
-const string MAKE_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_make.txt"; //TODO
-    
-//Path to the play page GUI information file.
-const string PLAY_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_play.txt"; //TODO
-    
+//Name of the make page GUI information file.
+const string MAKE_GUI_FILE_NAME = "main_menu_make.txt";
+
+//Name of the play page GUI information file.
+const string PLAY_GUI_FILE_NAME = "main_menu_play.txt";
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
-//Path to the tutorial question page GUI information file.
-const string TUTORIAL_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Main_menu_tutorial.txt"; //TODO
-    
+//Name of the tutorial question page GUI information file.
+const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial.txt";
+
 }
 
 
@@ -190,10 +186,10 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void main_menu_state::init_gui_main_page() {
-    data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[MAIN_MENU::GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -213,7 +209,7 @@ void main_menu_state::init_gui_main_page() {
     main_gui.register_coords("stats",   71, 83, 34,  6);
     main_gui.register_coords("exit",    91, 91, 14,  6);
     main_gui.register_coords("tooltip", 50, 96, 96,  4);
-    main_gui.read_coords(gui_file.get_child_by_name("positions"));
+    main_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play button.
     button_gui_item* play_button =
@@ -385,10 +381,10 @@ void main_menu_state::init_gui_main_page() {
  * @brief Loads the GUI elements for the main menu's make page.
  */
 void main_menu_state::init_gui_make_page() {
-    data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[MAIN_MENU::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -406,7 +402,7 @@ void main_menu_state::init_gui_make_page() {
     make_gui.register_coords("back",              9, 91,   14,  6);
     make_gui.register_coords("more",             91, 91,   14,  6);
     make_gui.register_coords("tooltip",          50, 96,   96,  4);
-    make_gui.read_coords(gui_file.get_child_by_name("positions"));
+    make_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Animation editor button.
     button_gui_item* anim_ed_button =
@@ -532,10 +528,10 @@ void main_menu_state::init_gui_make_page() {
  * @brief Loads the GUI elements for the main menu's play page.
  */
 void main_menu_state::init_gui_play_page() {
-    data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[MAIN_MENU::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -550,7 +546,7 @@ void main_menu_state::init_gui_play_page() {
     play_gui.register_coords("mission", 44, 78, 60, 12.5);
     play_gui.register_coords("back",     9, 91, 14,    6);
     play_gui.register_coords("tooltip", 50, 96, 96,    4);
-    play_gui.read_coords(gui_file.get_child_by_name("positions"));
+    play_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play a simple area button.
     button_gui_item* simple_button =
@@ -646,14 +642,14 @@ void main_menu_state::init_gui_play_page() {
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void main_menu_state::init_gui_tutorial_page() {
-    data_node gui_file(MAIN_MENU::TUTORIAL_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
     tutorial_gui.register_coords("no",       26, 80.875, 40, 10.25);
     tutorial_gui.register_coords("yes",      74,     81, 40,    10);
     tutorial_gui.register_coords("tooltip",  50,     96, 96,     4);
-    tutorial_gui.read_coords(gui_file.get_child_by_name("positions"));
+    tutorial_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Question text.
     text_gui_item* question_text =
@@ -695,7 +691,7 @@ void main_menu_state::init_gui_tutorial_page() {
     yes_button->on_activate =
     [] (const point &) {
         game.states.gameplay->path_of_area_to_load =
-            get_base_area_folder_path(AREA_TYPE_MISSION, true, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+            get_base_area_folder_path(AREA_TYPE_MISSION, true, FOLDER_NAMES::BASE_PKG) + "/" +
             "Tutorial Meadow";
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.gameplay);
@@ -727,6 +723,10 @@ void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
+    //Game content.
+    game.content.load_all(CONTENT_TYPE_GUI, CONTENT_LOAD_LEVEL_FULL);
+    
+    //Misc. initializations.
     init_gui_main_page();
     init_gui_play_page();
     init_gui_make_page();
@@ -749,13 +749,13 @@ void main_menu_state::load() {
     }
     page_to_load = MAIN_MENU_PAGE_MAIN;
     
-    data_node settings_file(MAIN_MENU::GUI_FILE_PATH);
+    data_node* settings_file = &game.content.gui[MAIN_MENU::GUI_FILE_NAME];
     
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
     
     //Logo pikmin.
-    data_node* logo_node = settings_file.get_child_by_name("logo");
+    data_node* logo_node = settings_file->get_child_by_name("logo");
     reader_setter logo_rs(logo_node);
     
     data_node* pik_types_node =
@@ -764,7 +764,7 @@ void main_menu_state::load() {
         data_node* type_node = pik_types_node->get_child(t);
         if(type_node->name.empty()) continue;
         logo_type_bitmaps[type_node->name[0]] =
-            load_bmp(type_node->value, type_node);
+            game.content.bitmaps.get(type_node->value, type_node);
     }
     
     data_node* map_node =
@@ -867,7 +867,12 @@ void main_menu_state::load() {
 void main_menu_state::unload() {
 
     //Resources.
-    al_destroy_bitmap(bmp_menu_bg);
+    game.content.bitmaps.free(bmp_menu_bg);
+    bmp_menu_bg = nullptr;
+    for(const auto &t : logo_type_bitmaps) {
+        game.content.bitmaps.free(t.second);
+    }
+    logo_type_bitmaps.clear();
     
     //Menu items.
     main_gui.destroy();
@@ -877,5 +882,8 @@ void main_menu_state::unload() {
     
     //Misc.
     logo_pikmin.clear();
+    
+    //Game content.
+    game.content.unload_all(CONTENT_TYPE_GUI);
     
 }

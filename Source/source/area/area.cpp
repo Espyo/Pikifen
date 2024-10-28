@@ -121,7 +121,7 @@ void area_data::clear() {
     bmap.clear();
     
     if(bg_bmp) {
-        game.bitmaps.free(bg_bmp);
+        game.content.bitmaps.free(bg_bmp);
         bg_bmp = nullptr;
     }
     if(thumbnail) {
@@ -183,7 +183,7 @@ void area_data::clear() {
 
 /**
  * @brief Cleans up redundant data and such.
- * 
+ *
  * @param out_deleted_sectors If not nullptr, whether any sectors got deleted
  * is returned here.
  */
@@ -220,13 +220,13 @@ void area_data::clone(area_data &other) {
     other.clear();
     
     if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        game.bitmaps.free(other.bg_bmp_file_name);
+        game.content.bitmaps.free(other.bg_bmp_file_name);
     }
     other.bg_bmp_file_name = bg_bmp_file_name;
     if(other.bg_bmp_file_name.empty()) {
         other.bg_bmp = nullptr;
     } else {
-        other.bg_bmp = game.bitmaps.get(bg_bmp_file_name, nullptr, false);
+        other.bg_bmp = game.content.bitmaps.get(bg_bmp_file_name, nullptr, false);
     }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
@@ -300,7 +300,7 @@ void area_data::clone(area_data &other) {
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
         os_ptr->texture_info.bitmap =
-            game.textures.get(s_ptr->texture_info.file_name, nullptr, false);
+            game.content.bitmaps.get(s_ptr->texture_info.file_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_idxs.reserve(s_ptr->edge_idxs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
@@ -365,7 +365,7 @@ void area_data::clone(area_data &other) {
         ot_ptr->file_name = t_ptr->file_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = game.textures.get(t_ptr->file_name, nullptr, false);
+        ot_ptr->bitmap = game.content.bitmaps.get(t_ptr->file_name, nullptr, false);
     }
     
     other.type = type;
@@ -973,8 +973,8 @@ void area_data::load_main_data_from_data_node(
         //Song.
         if(
             !song_name.empty() &&
-            game.audio.songs.find(song_name) ==
-            game.audio.songs.end()
+            game.content.songs.find(song_name) ==
+            game.content.songs.end()
         ) {
             game.errors.report(
                 "Unknown song \"" + song_name + "\"!",
@@ -984,7 +984,7 @@ void area_data::load_main_data_from_data_node(
     }
     
     if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_file_name.empty()) {
-        bg_bmp = game.textures.get(bg_bmp_file_name, node);
+        bg_bmp = game.content.bitmaps.get(bg_bmp_file_name, node);
     }
 }
 
@@ -1248,7 +1248,7 @@ void area_data::load_geometry_from_data_node(
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
-                game.textures.get(new_sector->texture_info.file_name, nullptr);
+                game.content.bitmaps.get(new_sector->texture_info.file_name, nullptr);
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -1306,7 +1306,7 @@ void area_data::load_geometry_from_data_node(
         string category_name = mob_node->name;
         string type_name;
         mob_category* category =
-            game.mob_categories.get_from_name(category_name);
+            game.mob_categories.get_from_internal_name(category_name);
         if(category) {
             type_name = mob_node->get_child_by_name("type")->value;
             mob_ptr->type = category->get_type(type_name);
@@ -1442,7 +1442,7 @@ void area_data::load_geometry_from_data_node(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = game.textures.get(s_ptr->file_name, nullptr);
+        s_ptr->bitmap = game.content.bitmaps.get(s_ptr->file_name, nullptr);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
@@ -2361,14 +2361,18 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
 /**
  * @brief Saves the area's thumbnail to the disk, or deletes it from the disk
  * if it's meant to not exist.
- * 
+ *
  * @param to_backup Whether it's to save to the area backup.
  */
 void area_data::save_thumbnail(bool to_backup) {
     string thumb_path =
-        get_base_area_folder_path(game.cur_area_data->type, !to_backup, FOLDER_NAMES::BASE_PKG) + //TODO
+        get_base_area_folder_path(
+            game.cur_area_data->type,
+            !to_backup,
+            game.content.manifests.areas[game.cur_area_data->type][game.cur_area_data->folder_name].package
+        ) +
         "/" + game.cur_area_data->folder_name +
-        (to_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
+        (to_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
     if(game.cur_area_data->thumbnail) {
         al_save_bitmap(
             thumb_path.c_str(), game.cur_area_data->thumbnail.get()
@@ -2435,7 +2439,7 @@ bool blockmap::get_edges_in_region(
         for(size_t by = by1; by <= by2; by++) {
         
             const vector<edge*> &block_edges = edges[bx][by];
-                
+            
             for(size_t e = 0; e < block_edges.size(); e++) {
                 out_edges.insert(block_edges[e]);
             }
@@ -2543,7 +2547,7 @@ tree_shadow::tree_shadow(
  *
  */
 tree_shadow::~tree_shadow() {
-    game.textures.free(file_name);
+    game.content.bitmaps.free(file_name);
 }
 
 
@@ -2555,25 +2559,29 @@ tree_shadow::~tree_shadow() {
  * @param out_area_folder_name If not nullptr, the area's folder name is
  * returned here.
  * @param out_area_type If not nullptr, the area's type is returned here.
+ * @param out_package If not nullptr, the package is returned here.
  */
 void get_area_info_from_path(
     const string &requested_area_path,
     string* out_area_folder_name,
-    AREA_TYPE* out_area_type
+    AREA_TYPE* out_area_type,
+    string* out_package
 ) {
     if(out_area_folder_name) *out_area_folder_name = requested_area_path;
     if(out_area_type) *out_area_type = AREA_TYPE_SIMPLE;
+    if(out_package) *out_package = "";
     
     vector<string> parts = split(requested_area_path, "/");
     
-    if(parts.size() <= 1) return;
+    if(parts.size() <= 2) return;
     
     if(out_area_folder_name) *out_area_folder_name = parts.back();
     if(out_area_type) {
-        if(parts[parts.size() - 2] == "Mission") {
+        if(parts[parts.size() - 2] == FOLDER_NAMES::MISSION_AREAS) {
             *out_area_type = AREA_TYPE_MISSION;
         }
     }
+    if(out_package) *out_package = parts[parts.size() - 4];
 }
 
 
@@ -2589,7 +2597,7 @@ void get_area_info_from_path(
  * @return The folder path.
  */
 string get_base_area_folder_path(
-    const AREA_TYPE type, bool from_game_data, const string& package
+    const AREA_TYPE type, bool from_game_data, const string &package
 ) {
     string result =
         from_game_data ?

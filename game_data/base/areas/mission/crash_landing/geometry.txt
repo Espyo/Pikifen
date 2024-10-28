@@ -2615,995 +2615,995 @@ edges{
 }
 sectors{
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=0.2449
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=250.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=1.5708
 		texture_tint=0 255 255
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=250.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_tint=100 255 255
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
 		z=200.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_trans=75.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
-		texture=wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail.jpg
 	}
 	s{
 		z=200.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_trans=-66.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
-		texture=concrete.jpg
+		texture=textures/concrete.jpg
 	}
 	s{
 		z=200.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_scale=1.0800 1.0000
 		texture_tint=167 125 78
 	}
 	s{
 		z=200.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_scale=1.0000 1.4400
 		texture_trans=205.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=100.0000
-		texture=wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail.jpg
 		texture_trans=205.0000 0.0000
 	}
 	s{
 		z=150.0000
-		texture=wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail.jpg
 		texture_trans=205.0000 0.0000
 	}
 	s{
 		z=50.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_tint=128 128 128
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=0.0000
-		texture=ceramic_bridge_red.png
+		texture=textures/ceramic_bridge_red.png
 		texture_tint=205 205 205
 	}
 	s{
 		z=5.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=192 192 192
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=186 186 186
 	}
 	s{
 		z=0.0000
-		texture=ceramic_bridge_red.png
+		texture=textures/ceramic_bridge_red.png
 		texture_tint=161 161 161
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=0 158 158
 	}
 	s{
 		z=0.0000
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=0 158 158
 	}
 	s{
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=glass.jpg
+		texture=textures/glass.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 		texture_rotate=1.5708
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=25.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=white.png
+		texture=textures/white.png
 		texture_scale=0.2000 1.0000
 		texture_tint=74 74 22
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=75 75 22
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=25.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=30 255 255
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=0 255 255
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=600.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 		texture_rotate=1.0472
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=250.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.5379
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.5379
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.7124
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=85 85 85
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
 		z=0.0000
-		texture=metal_clean.jpg
-		texture_rotate=4.7124
-		texture_tint=100 100 100
-	}
-	s{
-		type=Blocking
-		z=400.0000
-		texture=metal_clean.jpg
-		texture_rotate=4.1015
-	}
-	s{
-		type=Blocking
-		z=400.0000
-		texture=metal_clean.jpg
-		texture_rotate=4.1015
-	}
-	s{
-		type=Blocking
-		z=0.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
-		type=Blocking
+		type=blocking
+		z=400.0000
+		texture=textures/metal_clean.jpg
+		texture_rotate=4.1015
+	}
+	s{
+		type=blocking
+		z=400.0000
+		texture=textures/metal_clean.jpg
+		texture_rotate=4.1015
+	}
+	s{
+		type=blocking
+		z=0.0000
+		texture=textures/metal_clean.jpg
+		texture_rotate=4.7124
+		texture_tint=100 100 100
+	}
+	s{
+		type=blocking
 		z=500.0000
 		fade=true
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
 		z=50.0000
-		texture=metal_rusted.png
+		texture=textures/metal_rusted.png
 		texture_rotate=2.7925
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=500.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		z=0.0000
-		texture=white.png
+		texture=textures/white.png
 		texture_tint=0 158 158
 	}
 }
 mobs{
-	Leader{
-		type=Brittany
+	leader{
+		type=brittany
 		p=160.0000 -336.0000
 		angle=0.6144
 	}
-	Custom{
-		type=Electric gate
+	custom{
+		type=electric_gate
 		p=-80.0000 -176.0000
 		angle=1.5708
 		vars=max_health=500.0000
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=-432.0000 -112.0000
 		vars=max_health=500.0000
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-304.0000 -320.0000
 		angle=1.5641
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-326.2376 -320.7147
 		angle=-2.0978
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-331.6063 -368.5118
 		angle=-1.7960
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-312.8448 -372.1423
 		angle=-0.5421
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-363.9151 -364.1665
 		angle=2.4213
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-360.9506 -340.8569
 		angle=-0.5737
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-339.7364 -352.8691
 		angle=-0.5606
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-290.4042 -353.0235
 		angle=1.0958
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-347.2005 -326.9523
 		angle=2.8343
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-308.2481 -353.8925
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-325.1171 -337.2264
 		angle=-2.5806
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-301.8075 -337.2264
 		angle=2.7965
 	}
-	Ship{
-		type=S.S. Drake
+	ship{
+		type=ss_drake
 		p=1480.0000 -48.0000
 		angle=3.1416
 	}
-	Converter{
-		type=Gray Candypop Bud
+	converter{
+		type=gray_candypop_bud
 		p=60.4883 -382.6116
 		angle=0.1299
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-573.5958 -193.5837
 		angle=-3.0689
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-572.5239 -165.9289
 		angle=2.4343
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-521.7623 -223.1310
 		angle=1.4486
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-544.0000 -192.0000
 		angle=1.7868
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-603.3460 -209.3808
 		angle=-1.4784
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-616.3331 -175.3339
 		angle=-1.4194
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-584.5845 -234.7858
 		angle=2.8157
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-541.0355 -240.5118
 		angle=-2.5224
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-632.5845 -202.7858
 		angle=2.2290
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-565.2628 -214.5950
 		angle=-0.5672
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-597.5716 -185.9168
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=-617.6079 -237.5473
 		angle=1.6712
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=-320.0000 160.0000
 		angle=1.5708
 		vars=max_health=500.0000
 	}
-	Group task{
-		type=Bamboo gate
+	group_task{
+		type=bamboo_gate
 		p=128.0000 208.0000
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=40.2391 345.9574
 		angle=-2.2763
 	}
-	Leader{
-		type=Alph
+	leader{
+		type=alph
 		p=-264.0000 -472.0000
 		angle=2.0612
 	}
-	Leader{
-		type=Charlie
+	leader{
+		type=charlie
 		p=-264.0000 304.0000
 		angle=2.3561
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=270.6678 -303.8456
 		angle=2.8395
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=297.5594 -323.1188
 		angle=-0.9976
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=263.2037 -277.9288
 		angle=1.5173
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=285.2871 -288.2029
 		angle=-2.9317
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=306.4042 -270.9765
 		angle=-2.6295
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=308.5967 -288.2029
 		angle=2.4236
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=320.0000 -272.0000
 		angle=-1.3064
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=320.0000 -304.0000
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=302.1561 -304.8690
 		angle=1.6616
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=284.1666 -271.6912
 		angle=-2.0509
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=278.7979 -319.4883
 		angle=0.7154
 	}
-	Pikmin{
-		type=Red Pikmin
+	pikmin{
+		type=red_pikmin
 		p=249.4536 -291.8334
 		angle=1.8146
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=456.0000 240.0000
 		angle=1.7273
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=-57.6735 154.7822
 		angle=-0.6429
 	}
-	Custom{
-		type=Crystal wall
+	custom{
+		type=crystal_wall
 		p=256.0000 88.0000
 		angle=1.5708
 		vars=max_health=100.0000
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=218.6460 385.5209
 		angle=2.1342
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-371.8335 397.5473
 		angle=-2.3810
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-448.0000 368.0000
 		angle=-0.1354
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-368.0000 416.0000
 		angle=1.0942
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-342.2377 399.1310
 		angle=-0.4184
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-414.5708 415.7971
 		angle=1.6643
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-382.8222 356.3452
 		angle=1.5810
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-430.8222 388.3452
 		angle=-1.7837
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-363.5005 376.5360
 		angle=0.8110
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-415.8456 353.5837
 		angle=0.6093
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-432.0000 352.0000
 		angle=-1.2028
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-401.5837 381.7502
 		angle=2.5375
 	}
-	Pikmin{
-		type=Yellow Pikmin
+	pikmin{
+		type=yellow_pikmin
 		p=-395.8093 405.2142
 		angle=-3.0159
 	}
-	Converter{
-		type=Pink Candypop Bud
+	converter{
+		type=pink_candypop_bud
 		p=-74.8488 -422.1186
 		angle=2.2686
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=768.0000 -192.0000
 		angle=1.5708
 		vars=max_health=500.0000
 	}
-	Group task{
-		type=Bamboo gate
+	group_task{
+		type=bamboo_gate
 		p=528.0000 -184.0000
 		angle=1.5708
 	}
-	Converter{
-		type=Pink Candypop Bud
+	converter{
+		type=pink_candypop_bud
 		p=-596.0000 68.0000
 		angle=-0.9490
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=768.0000 96.0000
 		angle=-1.5708
 		vars=max_health=500.0000
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=456.0000 -368.0000
 		angle=1.0437
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=715.3754 256.0621
 		angle=-2.4032
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=304.0000 -464.0000
 		angle=2.4693
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=812.9583 -308.5626
 		angle=3.0763
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=-624.0000 272.0000
 		angle=0.8256
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=-113.0056 323.6722
 		angle=0.2405
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=504.0000 -416.0000
 		angle=-0.8944
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=537.8546 270.4791
 		angle=-1.7578
 	}
-	Treasure{
-		type=2 Euro
+	treasure{
+		type=2_euro
 		p=734.4791 -374.0834
 		angle=-0.3096
 	}
-	Converter{
-		type=Ivory Candypop Bud
+	converter{
+		type=ivory_candypop_bud
 		p=-704.0000 -100.0000
 		angle=0.9243
 	}
-	Custom{
-		type=White bramble gate
+	custom{
+		type=white_bramble_gate
 		p=256.0000 320.0000
 		angle=1.5708
 		vars=max_health=500.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-482.8266 -461.8304
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-1048.0000 -320.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-301.2041 -577.4619
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-46.9528 -598.8373
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=66.0943 -601.1934
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-853.7748 -436.9164
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-895.3961 -145.5098
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-596.0000 -388.0000
 	}
-	Custom{
-		type=Reinforced wall
+	custom{
+		type=reinforced_wall
 		p=1152.0000 -48.0000
 		vars=health=0.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-1160.0000 -312.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-1248.0000 -328.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-912.0000 -416.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-877.3874 -4.8918
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-851.6923 114.4617
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-384.0000 -480.0000
 	}
-	Custom{
-		type=Smoke generator
+	custom{
+		type=smoke_generator
 		p=-192.0000 -592.0000
 	}
 }

@@ -20,8 +20,9 @@
  */
 custom_category::custom_category() :
     mob_category(
-        MOB_CATEGORY_CUSTOM, "Custom", "Custom",
-        "Custom", al_map_rgb(178, 73, 204)
+        MOB_CATEGORY_CUSTOM, "custom",
+        "Custom", "Custom",
+        "custom", al_map_rgb(178, 73, 204)
     ) {
     
 }
@@ -100,8 +101,9 @@ void custom_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created custom type.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void custom_category::register_type(mob_type* type) {
-    game.content.mob_types.custom[type->name] = type;
+void custom_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.custom[internal_name] = type;
 }

@@ -70,6 +70,6 @@ void spray_type::load_from_data_node(
     angle_range = deg_to_rad(angle_range);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        bmp_spray = game.bitmaps.get(icon_str, icon_node);
+        bmp_spray = game.content.bitmaps.get(icon_str, icon_node);
     }
 }

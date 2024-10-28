@@ -429,7 +429,7 @@ void gameplay_state::process_system_key_press(int keycode) {
         case MAKER_TOOL_TYPE_AREA_IMAGE: {
             ALLEGRO_BITMAP* bmp = draw_to_bitmap();
             string file_name =
-                FOLDER_PATHS_FROM_ROOT::USER_DATA + "/Area_" +
+                FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
                 sanitize_file_name(game.cur_area_data->name) +
                 "_" + get_current_time(true) + ".png";
                 

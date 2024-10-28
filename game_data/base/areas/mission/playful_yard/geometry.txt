@@ -6567,206 +6567,206 @@ edges{
 }
 sectors{
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=257.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 		texture_rotate=4.1830
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=260.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=150.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=220.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=50.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=100.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=192.0000
 		brightness=160
-		texture=wood_stump.jpg
+		texture=textures/wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
 	s{
 		z=96.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 	}
 	s{
 		z=96.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 	}
 	s{
 		z=16.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=60.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 	}
 	s{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=100.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=150.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=200.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=300.0000
-		texture=stone.jpg
+		texture=textures/stone.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=300.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=250.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=200.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=-100.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
@@ -6774,658 +6774,658 @@ sectors{
 		fade=true
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=400.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=50.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.0659
 		texture_tint=116 38 22
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=4.4904
 		texture_tint=18 106 107
 	}
 	s{
 		z=60.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=4.2172
 		texture_tint=46 175 55
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=60.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.9732
 		texture_tint=175 46 46
 	}
 	s{
 		z=60.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.3245
 		texture_tint=137 46 175
 	}
 	s{
 		z=60.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=60.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.7831
 		texture_tint=187 133 65
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_rotate=1.6406
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_rotate=1.6406
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=-50.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=16.0000
 		brightness=160
 		fade=true
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=16.0000
 		brightness=160
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=200.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=50.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=400.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.7244
 		texture_tint=64 45 175
 	}
 	s{
 		z=200.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=200.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.1878
 		texture_tint=80 18 107
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.7683
 		texture_tint=18 107 24
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.0220
 		texture_tint=107 68 18
 	}
 	s{
 		z=600.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=4.9684
 		texture_tint=30 18 107
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.5001
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.3782
 		texture_tint=80 18 107
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.0756
 		texture_tint=107 68 18
 	}
 	s{
 		z=302.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=4.6953
 		texture_tint=116 38 22
 	}
 	s{
 		z=400.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_tint=175 167 45
 	}
 	s{
 		z=400.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.3391
 		texture_tint=116 38 22
 	}
 	s{
 		z=400.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=18 107 24
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.4660
 		texture_tint=30 18 107
 	}
 	s{
 		z=550.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.8759
 		texture_tint=175 167 45
 	}
 	s{
 		z=200.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.7928
 		texture_tint=177 127 81
 	}
 	s{
 		z=301.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=79 23 11
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=250.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=202.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.4807
 		texture_tint=177 127 81
 	}
 	s{
 		z=2.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.4172
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=202.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=4.8660
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=200.0000
-		texture=wood_bark.jpg
+		texture=textures/wood_bark.jpg
 		texture_rotate=1.7928
 		texture_tint=177 127 81
 	}
 	s{
 		z=300.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=5.1051
 		texture_tint=30 18 107
 	}
 	s{
 		z=552.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
 	s{
 		z=552.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
 		fade=true
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
 		z=200.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 		texture_tint=210 252 206
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=grass_light.jpg
+		texture=textures/grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=dirt.jpg
+		texture=textures/dirt.jpg
 	}
 	s{
 		z=300.0000
-		texture=dirt_soft.jpg
-	}
-	s{
-		z=300.0000
-		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=300.0000
 		brightness=160
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
+	}
+	s{
+		z=300.0000
+		brightness=160
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=192.0000
-		texture=wood_stump.jpg
+		texture=textures/wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
@@ -7433,7 +7433,7 @@ sectors{
 		z=192.0000
 		brightness=160
 		fade=true
-		texture=wood_stump.jpg
+		texture=textures/wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
@@ -7441,882 +7441,882 @@ sectors{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=127 88 52
 	}
 	s{
 		z=200.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=127 88 52
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.6367
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.6367
 		texture_tint=177 127 81
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=410.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 140 107
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=440.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=410.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 140 107
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=460.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_tint=132 103 87
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=460.0000
-		texture=wood_plank.jpg
+		texture=textures/wood_plank.jpg
 		texture_rotate=1.8953
 		texture_tint=132 103 87
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=350.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=520.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=520.0000
-		texture=metal_clean.jpg
+		texture=textures/metal_clean.jpg
 	}
 	s{
 		z=0.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=50.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=50.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=50.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=50.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 	s{
 		z=100.0000
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=100.0000
 		brightness=160
 		fade=true
-		texture=dirt_soft.jpg
+		texture=textures/dirt_soft.jpg
 	}
 }
 mobs{
-	Leader{
-		type=Alph
+	leader{
+		type=alph
 		p=-32.0000 560.0000
 	}
-	Custom{
-		type=Crystal wall
+	custom{
+		type=crystal_wall
 		p=864.0000 -768.0000
 	}
-	Custom{
-		type=Crystal wall
+	custom{
+		type=crystal_wall
 		p=-576.0000 -48.0000
 	}
-	Ship{
-		type=Hocotate ship
+	ship{
+		type=hocotate_ship
 		p=-64.0000 288.0000
 	}
-	Leader{
-		type=Brittany
+	leader{
+		type=brittany
 		p=352.0000 560.0000
 	}
-	Onion{
-		type=Blue Onion
+	onion{
+		type=blue_onion
 		p=240.0000 496.0000
 	}
-	Onion{
-		type=Rock Onion
+	onion{
+		type=rock_onion
 		p=272.0000 320.0000
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=80.0000 512.0000
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=48.0000 480.0000
 		angle=-0.7838
 	}
-	Pikmin{
-		type=Blue Pikmin
+	pikmin{
+		type=blue_pikmin
 		p=16.0000 448.0000
 		angle=-1.5494
 	}
-	Pikmin{
-		type=Rock Pikmin
+	pikmin{
+		type=rock_pikmin
 		p=80.0000 448.0000
 		angle=2.3774
 	}
-	Custom{
-		type=Egg
+	custom{
+		type=egg
 		p=160.0000 752.0000
 		vars=contents=nectar_2
 	}
-	Pellet{
-		type=Rock 1 pellet
+	pellet{
+		type=rock_1_pellet
 		p=256.0000 672.0000
 		vars=bloom_time=0.0000;rock=true
 	}
-	Bouncer{
-		type=Bouncy Mushroom
+	bouncer{
+		type=bouncy_mushroom
 		p=232.0000 -1272.0000
 		links=14
 	}
-	Bouncer{
-		type=Bouncy Mushroom
+	bouncer{
+		type=bouncy_mushroom
 		p=232.0000 -600.0000
 		links=15
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=640.0000 96.0000
 	}
-	Bouncer{
-		type=Bouncy Mushroom
+	bouncer{
+		type=bouncy_mushroom
 		p=766.7123 -1234.4580
 		links=17
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=1024.0000 -1008.0000
 	}
-	Bouncer{
-		type=Bouncy Mushroom
+	bouncer{
+		type=bouncy_mushroom
 		p=1344.0000 -744.0000
 		links=19
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=1144.0000 -704.0000
 	}
-	Bouncer{
-		type=Bouncy Mushroom
+	bouncer{
+		type=bouncy_mushroom
 		p=-288.0000 1376.0000
 		links=21
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=-864.0000 1008.0000
 	}
-	Custom{
-		type=Egg
+	custom{
+		type=egg
 		p=736.0000 -208.0000
 		angle=1.9443
 		vars=contents=nectar
 	}
-	Enemy{
-		type=Red Bulborb
+	enemy{
+		type=red_bulborb
 		p=-136.0000 -368.0000
 		angle=0.5312
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=608.0000 -360.0000
 		angle=0.6408
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=760.0000 -664.0000
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=728.0000 -600.0000
 		angle=1.6738
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=688.0000 -392.0000
 		angle=-2.7275
 	}
-	Enemy{
-		type=Skutterchuck
+	enemy{
+		type=skutterchuck
 		p=688.0000 -336.0000
 		angle=-1.6513
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=416.0000 -1360.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=432.0000 -1416.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=480.0000 -1448.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-432.0000 1304.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-560.0000 1312.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-304.0000 1088.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-752.0000 1440.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-400.0000 872.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-640.0000 688.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-552.0000 592.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-544.0000 680.0000
 	}
-	Bridge{
-		type=Wood bridge
+	bridge{
+		type=wood_bridge
 		p=-152.0000 936.0000
 		angle=0.7854
 		vars=chunks=5
 		links=41
 	}
-	Custom{
-		type=Dummy
+	custom{
+		type=dummy
 		p=-56.0000 1032.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=1200.0000 -1008.0000
 		angle=-2.5233
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=-144.0000 -1104.0000
 	}
-	Enemy{
-		type=Crumbug
+	enemy{
+		type=crumbug
 		p=608.0000 928.0000
 	}
-	Enemy{
-		type=Skutterchuck
+	enemy{
+		type=skutterchuck
 		p=-112.0000 -784.0000
 		angle=-1.6513
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=-112.0000 -832.0000
 		angle=-2.7275
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=-320.0000 -96.0000
 		angle=0.6408
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=-368.0000 -160.0000
 		angle=0.6408
 	}
-	Enemy{
-		type=Skutterchuck
+	enemy{
+		type=skutterchuck
 		p=-928.0000 992.0000
 		angle=-0.4983
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=-928.0000 928.0000
 		angle=-2.7275
 	}
-	Pellet{
-		type=Blue 1 pellet
+	pellet{
+		type=blue_1_pellet
 		p=496.0000 400.0000
 		vars=bloom_time=0.0000;rock=true
 	}
-	Pellet{
-		type=Rock 5 pellet
+	pellet{
+		type=rock_5_pellet
 		p=-8.0000 -136.0000
 		vars=bloom_time=0.0000;rock=true
 	}
-	Custom{
-		type=5 Pellet Posy
+	custom{
+		type=5_pellet_posy
 		p=-384.0000 -864.0000
 		angle=0.8067
 		vars=bloom_time=0.0000;blue=true;rock=true
 	}
-	Pellet{
-		type=Rock 5 pellet
+	pellet{
+		type=rock_5_pellet
 		p=-320.0000 784.0000
 		vars=bloom_time=0.0000;rock=true
 	}
-	Pellet{
-		type=Blue 5 pellet
+	pellet{
+		type=blue_5_pellet
 		p=-688.0000 1368.0000
 		vars=bloom_time=0.0000;rock=true
 	}
-	Custom{
-		type=5 Pellet Posy
+	custom{
+		type=5_pellet_posy
 		p=1072.0000 -1008.0000
 		angle=-2.7078
 		vars=bloom_time=0.0000;blue=true;rock=true
 	}
-	Custom{
-		type=Egg
+	custom{
+		type=egg
 		p=752.0000 -912.0000
 		angle=1.9443
 		vars=contents=nectar
 	}
-	Custom{
-		type=Egg
+	custom{
+		type=egg
 		p=-992.0000 1216.0000
 		angle=1.9443
 		vars=contents=nectar
 	}
-	Custom{
-		type=Egg
+	custom{
+		type=egg
 		p=-784.0000 752.0000
 		angle=-0.3740
 		vars=contents=nectar
 	}
-	Pile{
-		type=Spicy Burgeoning Spiderwort
+	pile{
+		type=spicy_burgeoning_spiderwort
 		p=624.0000 448.0000
 		angle=2.0030
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=464.0000 -1680.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1056.0000 -1584.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=896.0000 -1680.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1296.0000 -1584.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1728.0000 -944.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1680.0000 -800.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1392.0000 -352.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1040.0000 -432.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=880.0000 -144.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=912.0000 0.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=896.0000 144.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=864.0000 304.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=704.0000 832.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=560.0000 1024.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=192.0000 1168.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-44.0000 1544.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=172.0000 1576.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-160.0000 1600.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-64.0000 1760.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-320.0000 1920.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-304.0000 1760.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-624.0000 1968.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-432.0000 2112.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-96.0000 1984.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=160.0000 1760.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-752.0000 1792.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1104.0000 1584.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-928.0000 1600.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1264.0000 1488.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1392.0000 1360.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1168.0000 1744.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1216.0000 1280.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1456.0000 1184.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1424.0000 920.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1296.0000 1104.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1136.0000 896.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1256.0000 648.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-968.0000 676.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-1132.0000 520.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-900.0000 504.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-816.0000 304.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-608.0000 352.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-576.0000 -272.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-544.0000 -624.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-528.0000 -752.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-288.0000 -1216.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-144.0000 -1392.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-48.0000 -1504.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=784.0000 576.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=416.0000 1120.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=80.0000 1364.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-512.0000 1856.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-760.0000 1640.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1056.0000 1440.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1544.0000 1024.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-1168.0000 732.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-688.0000 464.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1088.0000 288.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=944.0000 832.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=736.0000 1200.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=464.0000 1328.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-944.0000 0.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-880.0000 -480.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-752.0000 -960.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-592.0000 -1120.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-416.0000 -1472.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-128.0000 -1840.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=208.0000 -1920.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=720.0000 -1904.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1104.0000 -1888.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1600.0000 -1616.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=1952.0000 -1312.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1216.0000 -272.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1776.0000 -560.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1696.0000 -1376.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=1472.0000 -1712.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=192.0000 -1744.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-480.0000 -1280.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-496.0000 -1040.0000
 	}
-	Decoration{
-		type=Margaret
+	decoration{
+		type=margaret
 		p=-800.0000 -256.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=128.0000 -1008.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=480.0000 -752.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-320.0000 -976.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-288.0000 -816.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-272.0000 -416.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-272.0000 -496.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=320.0000 -112.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-160.0000 224.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-160.0000 368.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=384.0000 448.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=560.0000 720.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=432.0000 896.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=16.0000 832.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-192.0000 640.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-304.0000 528.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-416.0000 416.0000
 	}
-	Decoration{
-		type=Leaves
+	decoration{
+		type=leaves
 		p=-160.0000 -16.0000
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=704.0000 -944.0000
 		angle=0.9260
 		vars=random_rotation=false;random_scale=false
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=-248.0000 196.0000
 		angle=0.9260
 		vars=random_rotation=false;random_scale=false
 	}
-	Decoration{
-		type=Clover
+	decoration{
+		type=clover
 		p=48.0000 -624.0000
 		angle=0.9260
 		vars=random_rotation=false;random_scale=false
 	}
-	Decoration{
-		type=Common Glowcap
+	decoration{
+		type=common_glowcap
 		p=1064.0000 -1272.0000
 	}
-	Decoration{
-		type=Common Glowcap
+	decoration{
+		type=common_glowcap
 		p=1328.0000 -1256.0000
 	}
-	Decoration{
-		type=Common Glowcap
+	decoration{
+		type=common_glowcap
 		p=1208.0000 -824.0000
 	}
-	Decoration{
-		type=Common Glowcap
+	decoration{
+		type=common_glowcap
 		p=480.0000 -1344.0000
 	}
-	Treasure{
-		type=Yo-yo
+	treasure{
+		type=yo-yo
 		p=-800.0000 944.0000
 		angle=1.2430
 	}
-	Treasure{
-		type=Billiards Ball
+	treasure{
+		type=billiards_ball
 		p=-224.0000 -1024.0000
 		angle=-0.1917
 	}
-	Treasure{
-		type=Jigsaw Puzzle Piece
+	treasure{
+		type=jigsaw_puzzle_piece
 		p=-432.0000 1600.0000
 		angle=-2.5114
 	}
-	Treasure{
-		type=Jigsaw Puzzle Piece
+	treasure{
+		type=jigsaw_puzzle_piece
 		p=-720.0000 -64.0000
 		angle=-1.6883
 	}
-	Treasure{
-		type=Billiards Ball
+	treasure{
+		type=billiards_ball
 		p=668.1446 37.3976
 		angle=2.8515
 	}
-	Treasure{
-		type=Yo-yo
+	treasure{
+		type=yo-yo
 		p=717.8794 158.4578
 		angle=1.4110
 	}
-	Treasure{
-		type=Fidget Spinner
+	treasure{
+		type=fidget_spinner
 		p=1232.0000 -1080.0000
 		angle=-2.0226
 	}
-	Treasure{
-		type=Jigsaw Puzzle Piece
+	treasure{
+		type=jigsaw_puzzle_piece
 		p=1112.0000 -704.0000
 		angle=2.0702
 	}
-	Enemy{
-		type=White Spectralid
+	enemy{
+		type=white_spectralid
 		p=-240.0000 204.0000
 	}
-	Custom{
-		type=Crystal nodule
+	custom{
+		type=crystal_nodule
 		p=-704.0000 1008.0000
 		angle=-2.7275
 	}
@@ -9546,35 +9546,35 @@ tree_shadows{
 		pos=104.0000 -232.0000
 		size=1936.0000 2480.0000
 		alpha=192
-		file=tree_shadow.png
+		file=textures/tree_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=-1040.0000 2064.0000
 		size=4224.0000 2112.0000
 		alpha=192
-		file=only_shadow.png
+		file=textures/only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=-2008.0000 -1704.0000
 		size=2288.0000 5424.0000
 		alpha=192
-		file=only_shadow.png
+		file=textures/only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=2400.0000 824.0000
 		size=2656.0000 4592.0000
 		alpha=192
-		file=only_shadow.png
+		file=textures/only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=1432.0000 -2944.0000
 		size=4592.0000 2944.0000
 		alpha=192
-		file=only_shadow.png
+		file=textures/only_shadow.png
 		sway=1.0000 1.0000
 	}
 }

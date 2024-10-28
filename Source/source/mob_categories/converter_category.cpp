@@ -22,8 +22,9 @@
  */
 converter_category::converter_category() :
     mob_category(
-        MOB_CATEGORY_CONVERTERS, "Converter", "Converters",
-        "Converters", al_map_rgb(73, 126, 204)
+        MOB_CATEGORY_CONVERTERS, "converter",
+        "Converter", "Converters",
+        "converters", al_map_rgb(73, 126, 204)
     ) {
     
 }
@@ -111,8 +112,9 @@ void converter_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of converter.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void converter_category::register_type(mob_type* type) {
-    game.content.mob_types.converter[type->name] = (converter_type*) type;
+void converter_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.converter[internal_name] = (converter_type*) type;
 }

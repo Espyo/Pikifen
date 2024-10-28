@@ -293,7 +293,7 @@ void area_editor::clear_current_area() {
     
     if(game.cur_area_data) {
         for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
-            game.textures.free(game.cur_area_data->tree_shadows[s]->file_name);
+            game.content.bitmaps.free(game.cur_area_data->tree_shadows[s]->file_name);
         }
     }
     
@@ -471,7 +471,7 @@ void area_editor::create_area(
     
     //Find a texture to give to this sector.
     vector<string> textures =
-        folder_to_vector(FOLDER_PATHS_FROM_PKG::TEXTURES, false); //TODO
+        folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, false); //TODO
     size_t texture_to_use = INVALID;
     //First, if there's any "grass" texture, use that.
     for(size_t t = 0; t < textures.size(); t++) {
@@ -512,7 +512,7 @@ void area_editor::create_area(
     game.cur_area_data->name = requested_area_folder_name;
     game.cur_area_data->folder_name = requested_area_folder_name;
     game.cur_area_data->path =
-        get_base_area_folder_path(requested_area_type, true, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+        get_base_area_folder_path(requested_area_type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
         requested_area_folder_name;
     game.cur_area_data->type = requested_area_type;
     
@@ -601,7 +601,7 @@ void area_editor::create_or_load_area(
     const AREA_TYPE requested_area_type
 ) {
     string file_to_check =
-        get_base_area_folder_path(requested_area_type, true, FOLDER_NAMES::BASE_PKG) + //TODO
+        get_base_area_folder_path(requested_area_type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
         "/" + requested_area_folder_name + "/" + FILE_NAMES::AREA_GEOMETRY;
     if(al_filename_exists(file_to_check.c_str())) {
         //Area exists, load it.
@@ -638,9 +638,9 @@ void area_editor::delete_current_area() {
         vector<string> non_important_files;
         non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA_BACKUP);
         non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY_BACKUP);
-        non_important_files.push_back("Reference.txt");
+        non_important_files.push_back("reference.txt");
         wipe_folder(
-            get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + //TODO
+            get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
             "/" + game.cur_area_data->folder_name,
             non_important_files
         );
@@ -724,8 +724,12 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    for(auto const &l : game.content.liquids) {
-        l.second->anim_instance.tick(game.delta_t);
+    unordered_set<single_animation_suite*> liquid_anims;
+    for(auto &l : game.content.liquids) {
+        liquid_anims.insert(l.second->anim);
+    }
+    for(auto &a : liquid_anims) {
+        a->instance.tick(game.delta_t);
     }
     
     selection_effect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.delta_t;
@@ -1486,13 +1490,13 @@ string area_editor::get_opened_folder_path() const {
  * @return The name.
  */
 string area_editor::get_path_short_name(const string &p) const {
-    string match = FOLDER_PATHS_FROM_PKG::AREAS; //TODO
+    string match = FOLDER_PATHS_FROM_PKG::AREAS + "/";
     size_t start = p.find(match);
     if(start == string::npos) {
         return p;
     }
     
-    return p.substr(start + match.size() + 1);
+    return p.substr(start + match.size());
 }
 
 
@@ -1862,6 +1866,7 @@ void area_editor::load() {
     game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_FULL);
     game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
@@ -1878,10 +1883,12 @@ void area_editor::load() {
     if(!quick_play_area_path.empty()) {
         string folder_name;
         AREA_TYPE type;
+        string package;
         get_area_info_from_path(
             quick_play_area_path,
             &folder_name,
-            &type
+            &type,
+            &package
         );
         create_or_load_area(folder_name, type);
         game.cam.set_pos(quick_play_cam_pos);
@@ -1891,10 +1898,12 @@ void area_editor::load() {
     } else if(!auto_load_area.empty()) {
         string folder_name;
         AREA_TYPE type;
+        string package;
         get_area_info_from_path(
             auto_load_area,
             &folder_name,
-            &type
+            &type,
+            &package
         );
         create_or_load_area(folder_name, type);
         
@@ -1923,11 +1932,8 @@ void area_editor::load_area(
     clear_current_area();
     
     game.content.load_area_as_current(
-        get_base_area_folder_path(
-            requested_area_type, !from_backup, FOLDER_NAMES::BASE_PKG //TODO
-        ) + "/" + requested_area_folder_name,
-        CONTENT_LOAD_LEVEL_EDITOR,
-        requested_area_type, from_backup
+        requested_area_folder_name, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG, //TODO
+        requested_area_type, CONTENT_LOAD_LEVEL_EDITOR, from_backup
     );
     
     //Calculate texture suggestions.
@@ -1973,7 +1979,7 @@ void area_editor::load_area(
     
     if(should_update_history) {
         update_history(
-            get_base_area_folder_path(requested_area_type, true, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+            get_base_area_folder_path(requested_area_type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
             requested_area_folder_name
         );
         save_options(); //Save the history in the options.
@@ -1996,7 +2002,7 @@ void area_editor::load_backup() {
         game.cur_area_data->type, true, false
     );
     game.cur_area_data->path =
-        get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+        get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
         game.cur_area_data->folder_name;
     backup_timer.start(game.options.area_editor_backup_interval);
     changes_mgr.mark_as_changed();
@@ -2014,8 +2020,8 @@ void area_editor::load_backup() {
  */
 void area_editor::load_reference() {
     data_node file(
-        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + "/" + //TODO
-        game.cur_area_data->folder_name + "/Reference.txt"
+        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
+        game.cur_area_data->folder_name + "/reference.txt"
     );
     
     if(file.file_was_opened) {
@@ -2100,7 +2106,7 @@ void area_editor::pick_texture(
         FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
-                FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
                 "Please choose the texture to use for the sector.",
                 "*.*",
                 ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
@@ -3196,7 +3202,7 @@ bool area_editor::save_area(bool to_backup) {
     if(deleted_sectors && !selected_sectors.empty()) {
         clear_selection();
     }
-
+    
     //Store everything into the relevant data nodes.
     data_node geometry_file("", "");
     data_node main_data_file("", "");
@@ -3224,7 +3230,7 @@ bool area_editor::save_area(bool to_backup) {
     string main_data_file_name;
     if(to_backup) {
         base_folder =
-            get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + //TODO
+            get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
             "/" + game.cur_area_data->folder_name;
         geometry_file_name = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY_BACKUP;
         main_data_file_name = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA_BACKUP;
@@ -3293,7 +3299,7 @@ void area_editor::save_backup() {
     ALLEGRO_FS_ENTRY* folder_fs_entry =
         al_create_fs_entry(
             (
-                get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_NAMES::BASE_PKG) + //TODO
+                get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
                 "/" + game.cur_area_data->folder_name
             ).c_str()
         );
@@ -3312,8 +3318,8 @@ void area_editor::save_backup() {
  */
 void area_editor::save_reference() {
     string file_name =
-        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_NAMES::BASE_PKG) + //TODO
-        "/" + game.cur_area_data->folder_name + "/Reference.txt";
+        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
+        "/" + game.cur_area_data->folder_name + "/reference.txt";
         
     if(!reference_bitmap) {
         //The user doesn't want a reference more.
@@ -3904,6 +3910,7 @@ void area_editor::unload() {
     game.content.unload_all(CONTENT_TYPE_HAZARD);
     game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
     game.content.unload_all(CONTENT_TYPE_LIQUID);
+    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
     game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
     game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
     game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
@@ -3988,7 +3995,7 @@ void area_editor::update_reference() {
     
     if(!reference_file_name.empty()) {
         reference_bitmap =
-            load_bmp(reference_file_name, nullptr, false, true, true, true);
+            load_bmp(reference_file_name, nullptr, false, true, true);
             
         if(
             reference_size.x == 0 ||
@@ -4015,9 +4022,9 @@ void area_editor::update_reference() {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
-    game.textures.free(s_ptr->texture_info.file_name);
+    game.content.bitmaps.free(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap = game.textures.get(file_name);
+    s_ptr->texture_info.bitmap = game.content.bitmaps.get(file_name);
 }
 
 
@@ -4171,7 +4178,7 @@ area_editor::texture_suggestion::texture_suggestion(
     bmp(nullptr),
     name(n) {
     
-    bmp = game.textures.get(name, nullptr, false);
+    bmp = game.content.bitmaps.get(name, nullptr, false);
 }
 
 
@@ -4179,5 +4186,5 @@ area_editor::texture_suggestion::texture_suggestion(
  * @brief Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    game.textures.free(name);
+    game.content.bitmaps.free(name);
 }

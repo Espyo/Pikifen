@@ -21,8 +21,9 @@
  */
 track_category::track_category() :
     mob_category(
-        MOB_CATEGORY_TRACKS, "Track", "Tracks",
-        "Tracks", al_map_rgb(152, 139, 204)
+        MOB_CATEGORY_TRACKS, "track",
+        "Track", "Tracks",
+        "tracks", al_map_rgb(152, 139, 204)
     ) {
     
 }
@@ -110,8 +111,9 @@ void track_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of track.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void track_category::register_type(mob_type* type) {
-    game.content.mob_types.track[type->name] = (track_type*) type;
+void track_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.track[internal_name] = (track_type*) type;
 }

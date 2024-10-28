@@ -21,8 +21,9 @@
  */
 group_task_category::group_task_category() :
     mob_category(
-        MOB_CATEGORY_GROUP_TASKS, "Group task", "Group tasks",
-        "Group_tasks", al_map_rgb(152, 204, 139)
+        MOB_CATEGORY_GROUP_TASKS, "group_task",
+        "Group task", "Group tasks",
+        "group_tasks", al_map_rgb(152, 204, 139)
     ) {
     
 }
@@ -110,8 +111,9 @@ void group_task_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of group task.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type The mob type to register.
  */
-void group_task_category::register_type(mob_type* type) {
-    game.content.mob_types.group_task[type->name] = (group_task_type*) type;
+void group_task_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.group_task[internal_name] = (group_task_type*) type;
 }

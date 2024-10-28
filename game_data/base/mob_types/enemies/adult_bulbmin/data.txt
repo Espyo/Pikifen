@@ -69,13 +69,13 @@ sounds {
 
 spawns {
     stem {
-        object = Adult Bulbmin stem
+        object = adult_bulbmin_stem
         relative = true
         coordinates = 0 0 0
         angle = 0
     }
     young {
-        object = Bulbmin
+        object = bulbmin
         relative = true
         coordinates = -50 0 0
         angle = 0

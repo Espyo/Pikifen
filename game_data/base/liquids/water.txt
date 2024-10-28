@@ -1,7 +1,7 @@
 name = water
 description = Everyday body of water.
 
-animation = Water
+animation = water
 color = 0 0 64 96
 radar_color = 32 64 180
 surface_1_speed = 10

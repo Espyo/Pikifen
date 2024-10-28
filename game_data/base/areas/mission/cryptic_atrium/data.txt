@@ -11,7 +11,7 @@ bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=1.0000
 song
-weather=Cave, normal
+weather=cave_normal
 day_time_start=420
 day_time_speed=120
 spray_amounts

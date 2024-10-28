@@ -111,6 +111,9 @@ public:
 
     //--- Members ---
     
+    //Internal name.
+    string internal_name;
+    
     //Name of the mob category.
     string name;
     
@@ -120,8 +123,8 @@ public:
     //Name used when referring to objects of this category in plural.
     string plural_name;
     
-    //Path to the folder for this category, relative to the program root folder.
-    string folder_path;
+    //Name of the folder for this category.
+    string folder_name;
     
     //Color used to represent objects of this category in the area editor.
     ALLEGRO_COLOR editor_color = COLOR_WHITE;
@@ -130,14 +133,15 @@ public:
     //--- Function declarations ---
     
     mob_category(
-        const MOB_CATEGORY id, const string &name, const string &plural_name,
+        const MOB_CATEGORY id, const string &internal_name,
+        const string &name, const string &plural_name,
         const string &folder_name, const ALLEGRO_COLOR editor_color
     );
     virtual ~mob_category() = default;
     virtual void get_type_names(vector<string> &list) const = 0;
     virtual mob_type* get_type(const string &name) const = 0;
     virtual mob_type* create_type() = 0;
-    virtual void register_type(mob_type* type) = 0;
+    virtual void register_type(const string &internal_name, mob_type* type) = 0;
     virtual mob* create_mob(
         const point &pos, mob_type* type, float angle
     ) = 0;
@@ -165,7 +169,8 @@ struct mob_category_manager {
         const mob_category* cat, const string &name
     ) const;
     mob_category* get(const MOB_CATEGORY id) const;
-    mob_category* get_from_folder_name(const string &name) const;
+    mob_category* get_from_folder_name(const string &internal_name) const;
+    mob_category* get_from_internal_name(const string &name) const;
     mob_category* get_from_name(const string &name) const;
     mob_category* get_from_pname(const string &pname) const;
     void clear();
@@ -193,7 +198,7 @@ public:
     void get_type_names(vector<string> &list) const override;
     mob_type* get_type(const string &name) const override;
     mob_type* create_type() override;
-    void register_type(mob_type* type) override;
+    void register_type(const string &internal_name, mob_type* type) override;
     mob* create_mob(
         const point &pos, mob_type* type, float angle
     ) override;

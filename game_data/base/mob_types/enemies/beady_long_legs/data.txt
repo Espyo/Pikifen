@@ -91,7 +91,7 @@ sounds {
 
 spawns {
     foot_fr {
-        object = Beady Long Legs foot
+        object = beady_long_legs_foot
         relative = true
         coordinates = 120 120
         angle = 225
@@ -100,7 +100,7 @@ spawns {
         link_spawn_to_object = true
     }
     foot_fl {
-        object = Beady Long Legs foot
+        object = beady_long_legs_foot
         relative = true
         coordinates = 120 -120
         angle = 135
@@ -109,7 +109,7 @@ spawns {
         link_spawn_to_object = true
     }
     foot_br {
-        object = Beady Long Legs foot
+        object = beady_long_legs_foot
         relative = true
         coordinates = -120 120
         angle = 315
@@ -118,7 +118,7 @@ spawns {
         link_spawn_to_object = true
     }
     foot_bl {
-        object = Beady Long Legs foot
+        object = beady_long_legs_foot
         relative = true
         coordinates = -120 -120
         angle = 45

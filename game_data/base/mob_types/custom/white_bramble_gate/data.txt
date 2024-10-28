@@ -26,13 +26,13 @@ children {
 
 spawns {
     left_pillar {
-        object = White bramble gate pillar
+        object = white_bramble_gate_pillar
         relative = true
         coordinates = 0 -119
         angle = 0
     }
     right_pillar {
-        object = White bramble gate pillar
+        object = white_bramble_gate_pillar
         relative = true
         coordinates = 0 119
         angle = 180

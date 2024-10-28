@@ -889,7 +889,7 @@ void editor::load() {
     game.mouse_cursor.show();
     
     bmp_editor_icons =
-        load_bmp(game.asset_file_names.bmp_editor_icons, nullptr, true, false);
+        game.content.bitmaps.get(game.asset_file_names.bmp_editor_icons);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
             editor_icons[i] =
@@ -1534,9 +1534,9 @@ void editor::process_gui_unsaved_changes_dialog() {
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Save", ImVec2(180, 30))) {
         close_top_dialog();
-        const std::function<bool()>& save_callback =
+        const std::function<bool()> &save_callback =
             changes_mgr.get_unsaved_warning_save_callback();
-        const std::function<void()>& action_callback =
+        const std::function<void()> &action_callback =
             changes_mgr.get_unsaved_warning_action_callback();
         if(save_callback()) {
             action_callback();
@@ -1719,7 +1719,7 @@ void editor::unload() {
             al_destroy_bitmap(editor_icons[i]);
             editor_icons[i] = nullptr;
         }
-        al_destroy_bitmap(bmp_editor_icons);
+        game.content.bitmaps.free(bmp_editor_icons);
         bmp_editor_icons = nullptr;
     }
     custom_cat_name_idxs.clear();
@@ -2029,9 +2029,9 @@ bool editor::changes_manager::ask_if_unsaved(
                     ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
                 ) {
                     ed->close_top_dialog();
-                    const std::function<bool()>& save_callback =
+                    const std::function<bool()> &save_callback =
                         this->get_unsaved_warning_save_callback();
-                    const std::function<void()>& action_callback =
+                    const std::function<void()> &action_callback =
                         this->get_unsaved_warning_action_callback();
                     if(save_callback()) {
                         action_callback();
@@ -2040,7 +2040,7 @@ bool editor::changes_manager::ask_if_unsaved(
                     ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
                 ) {
                     ed->close_top_dialog();
-                    const std::function<void()>& action_callback =
+                    const std::function<void()> &action_callback =
                         this->get_unsaved_warning_action_callback();
                     action_callback();
                 }

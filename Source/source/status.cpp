@@ -170,15 +170,12 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlay_animation.empty()) {
-            overlay_anim_db.path =
-                FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + overlay_animation; //TODO
-            data_node anim_file = load_data_file(overlay_anim_db.path);
-            overlay_anim_db.load_from_data_node(&anim_file);
-            if(!overlay_anim_db.animations.empty()) {
+            overlay_anim_db = &game.content.global_animations[overlay_animation].database;
+            if(!overlay_anim_db->animations.empty()) {
                 overlay_anim_instance =
-                    animation_instance(&overlay_anim_db);
+                    animation_instance(overlay_anim_db);
                 overlay_anim_instance.cur_anim =
-                    overlay_anim_db.animations[0];
+                    overlay_anim_db->animations[0];
                 overlay_anim_instance.to_start();
             }
         }

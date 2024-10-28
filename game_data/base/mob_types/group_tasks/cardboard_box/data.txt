@@ -47,7 +47,7 @@ sounds {
 
 spawns {
     flap {
-        object = Cardboard box flap
+        object = cardboard_box_flap
         relative = true
         coordinates = 140 0
         angle = 0

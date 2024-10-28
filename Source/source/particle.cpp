@@ -281,7 +281,7 @@ void particle_generator::emit(particle_manager &manager) {
 
 /**
  * @brief Loads particle generator data from a data node.
- * 
+ *
  * @param node Data node to load from.
  * @param level Level to load at.
  */
@@ -290,7 +290,7 @@ void particle_generator::load_from_data_node(
 ) {
     //Content metadata.
     load_metadata_from_data_node(node);
-
+    
     //Standard data.
     reader_setter grs(node);
     data_node* p_node = node->get_child_by_name("base");
@@ -316,7 +316,7 @@ void particle_generator::load_from_data_node(
     if(bitmap_node) {
         if(level >= CONTENT_LOAD_LEVEL_FULL) {
             base_particle.bitmap =
-                game.bitmaps.get(
+                game.content.bitmaps.get(
                     bitmap_str, bitmap_node
                 );
         }

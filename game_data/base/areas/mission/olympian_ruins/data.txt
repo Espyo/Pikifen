@@ -6,12 +6,12 @@ version=1.0.0
 engine_version=0.25.0
 subtitle
 difficulty=4
-bg_bmp=grass_light.jpg
+bg_bmp=textures/grass_light.jpg
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000
 song
-weather=Dripping
+weather=dripping
 day_time_start=990
 day_time_speed=0
 spray_amounts

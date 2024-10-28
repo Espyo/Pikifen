@@ -760,11 +760,12 @@ void gameplay_state::load() {
     //Load the area.
     string area_folder_name;
     AREA_TYPE area_type;
+    string package;
     get_area_info_from_path(
-        path_of_area_to_load, &area_folder_name, &area_type
+        path_of_area_to_load, &area_folder_name, &area_type, &package
     );
     game.content.load_area_as_current(
-        area_folder_name, CONTENT_LOAD_LEVEL_FULL, area_type, false
+        area_folder_name, package, area_type, CONTENT_LOAD_LEVEL_FULL, false
     );
     
     if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {
@@ -991,6 +992,8 @@ void gameplay_state::load() {
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data->spray_amounts);
         
+    //TODO
+    /*
     for(auto &s : spray_strs) {
         size_t spray_id = 0;
         for(; spray_id < game.content.spray_types.size(); spray_id++) {
@@ -1006,9 +1009,10 @@ void gameplay_state::load() {
             );
             continue;
         }
-        
+    
         spray_stats[spray_id].nr_sprays = s2i(s.second);
     }
+    */
     
     //Effect caches.
     game.liquid_limit_effect_caches.clear();
@@ -1094,7 +1098,9 @@ void gameplay_state::load() {
  * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
+    game.content.load_all(CONTENT_TYPE_GUI, CONTENT_LOAD_LEVEL_FULL);
     game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_FULL);
     game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_FULL);
     game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_FULL);
     game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_FULL);
@@ -1217,7 +1223,9 @@ void gameplay_state::unload_game_content() {
     game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
     game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
     game.content.unload_all(CONTENT_TYPE_LIQUID);
+    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
     game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
+    game.content.unload_all(CONTENT_TYPE_GUI);
 }
 
 

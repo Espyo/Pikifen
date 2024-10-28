@@ -45,13 +45,13 @@ sounds {
 
 spawns {
     handle {
-        object = Paper bag handle
+        object = paper_bag_handle
         relative = true
         coordinates = 0 0
         angle = 0
     }
     barrier {
-        object = Paper bag barrier
+        object = paper_bag_barrier
         relative = true
         coordinates = 0 0
         angle = 0

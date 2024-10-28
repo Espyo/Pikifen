@@ -21,8 +21,9 @@
  */
 interactable_category::interactable_category() :
     mob_category(
-        MOB_CATEGORY_INTERACTABLES, "Interactable", "Interactables",
-        "Interactables", al_map_rgb(204, 139, 178)
+        MOB_CATEGORY_INTERACTABLES, "interactable",
+        "Interactable", "Interactables",
+        "interactables", al_map_rgb(204, 139, 178)
     ) {
     
 }
@@ -110,8 +111,9 @@ void interactable_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of interactable.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void interactable_category::register_type(mob_type* type) {
-    game.content.mob_types.interactable[type->name] = (interactable_type*) type;
+void interactable_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.interactable[internal_name] = (interactable_type*) type;
 }

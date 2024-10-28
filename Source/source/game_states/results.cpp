@@ -20,8 +20,8 @@
 
 namespace RESULTS {
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Results_menu.txt"; //TODO
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "results_menu.txt";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -360,7 +360,7 @@ void results_state::load() {
     gui.register_coords("pick_area",        80, 88, 24,  8);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
-        data_node(RESULTS::GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[RESULTS::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Area name text.

@@ -21,11 +21,26 @@ using std::string;
 //Type of content.
 enum CONTENT_TYPE {
 
+    //Global animation.
+    CONTENT_TYPE_GLOBAL_ANIMATION,
+    
     //Area.
     CONTENT_TYPE_AREA,
     
-    //Custom particle generator.
-    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    //Song.
+    CONTENT_TYPE_SONG,
+    
+    //Song track.
+    CONTENT_TYPE_SONG_TRACK,
+    
+    //Sound.
+    CONTENT_TYPE_SOUND,
+    
+    //Bitmap.
+    CONTENT_TYPE_BITMAP,
+    
+    //GUI definition.
+    CONTENT_TYPE_GUI,
     
     //Hazard.
     CONTENT_TYPE_HAZARD,
@@ -33,8 +48,11 @@ enum CONTENT_TYPE {
     //Liquid.
     CONTENT_TYPE_LIQUID,
     
-    //Mob type.
-    CONTENT_TYPE_MOB_TYPE,
+    //Misc. configuration.
+    CONTENT_TYPE_MISC,
+    
+    //Custom particle generator.
+    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
     
     //Spike damage type.
     CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
@@ -44,6 +62,9 @@ enum CONTENT_TYPE {
     
     //Status type.
     CONTENT_TYPE_STATUS_TYPE,
+    
+    //Mob type.
+    CONTENT_TYPE_MOB_TYPE,
     
     //Weather condition.
     CONTENT_TYPE_WEATHER_CONDITION,
@@ -81,6 +102,9 @@ public:
 
     //--- Members ---
     
+    //Internal name. Basically the file or folder name.
+    string internal_name;
+    
     //Path to the folder or file, relative to the program root folder.
     string path;
     
@@ -96,7 +120,7 @@ public:
 
     //--- Members ---
     
-    //Name.
+    //Optional player/maker-facing name.
     string name;
     
     //Optional description.

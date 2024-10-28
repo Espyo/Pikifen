@@ -25,21 +25,21 @@ edges{
 sectors{
 	s{
 		z=0.0000
-		texture=grass_dark.jpg
+		texture=textures/grass_dark.jpg
 	}
 }
 mobs{
-	Leader{
-		type=Olimar
+	leader{
+		type=olimar
 		p=-64.0000 0.0000
 	}
-	Scale{
-		type=Seesaw block
+	scale{
+		type=seesaw_block
 		p=80.0000 0.0000
 		vars=start_down=true
 	}
-	Pikmin{
-		type=Winged Pikmin
+	pikmin{
+		type=winged_pikmin
 		p=-96.0000 -0.0000
 	}
 }

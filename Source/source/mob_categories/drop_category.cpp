@@ -21,8 +21,9 @@
  */
 drop_category::drop_category() :
     mob_category(
-        MOB_CATEGORY_DROPS, "Drop", "Drops",
-        "Drops", al_map_rgb(204, 145, 145)
+        MOB_CATEGORY_DROPS, "drop",
+        "Drop", "Drops",
+        "drops", al_map_rgb(204, 145, 145)
     ) {
     
 }
@@ -110,8 +111,9 @@ void drop_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of drop.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void drop_category::register_type(mob_type* type) {
-    game.content.mob_types.drop[type->name] = (drop_type*) type;
+void drop_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.drop[internal_name] = (drop_type*) type;
 }

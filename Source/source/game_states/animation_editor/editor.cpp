@@ -284,17 +284,17 @@ string animation_editor::get_opened_file_name() const {
  * @return The name.
  */
 string animation_editor::get_path_short_name(const string &p) const {
-    if(p.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES) != string::npos) { //TODO
+    if(p.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/") != string::npos) {
         vector<string> path_parts = split(p, "/");
         if(
             path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == "Animations.txt"
+            path_parts[path_parts.size() - 1] == "animations.txt"
         ) {
             return
                 path_parts[path_parts.size() - 3] + "/" +
                 path_parts[path_parts.size() - 2];
         }
-    } else if(p.find(FOLDER_PATHS_FROM_PKG::ANIMATIONS) != string::npos) { //TODO
+    } else if(p.find(FOLDER_PATHS_FROM_PKG::GLOBAL_ANIMATIONS + "/") != string::npos) {
         vector<string> path_parts = split(p, "/");
         if(!path_parts.empty()) {
             return path_parts[path_parts.size() - 1];
@@ -414,6 +414,7 @@ void animation_editor::load() {
     game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
     game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
@@ -433,7 +434,7 @@ void animation_editor::load() {
         bg =
             load_bmp(
                 game.options.anim_editor_bg_texture,
-                nullptr, false, false, false, true
+                nullptr, false, false, false
             );
         use_bg = true;
     } else {
@@ -516,15 +517,14 @@ void animation_editor::load_animation_database(
     
     vector<string> file_path_parts = split(file_path, "/");
     
-    if(file_path.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES) != string::npos) { //TODO
+    if(file_path.find(FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/") != string::npos) {
         vector<string> path_parts = split(file_path, "/");
         if(
             path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == "Animations.txt"
+            path_parts[path_parts.size() - 1] == "animations.txt"
         ) {
             mob_category* cat =
                 game.mob_categories.get_from_folder_name(
-                    FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" +
                     path_parts[path_parts.size() - 3]
                 );
             if(cat) {
@@ -540,7 +540,7 @@ void animation_editor::load_animation_database(
     //Top bitmap.
     for(unsigned char t = 0; t < NR_MATURITIES; t++) {
         if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
-            al_destroy_bitmap(top_bmp[t]);
+            game.content.bitmaps.free(top_bmp[t]);
             top_bmp[t] = nullptr;
         }
     }
@@ -551,14 +551,20 @@ void animation_editor::load_animation_database(
     ) {
         data_node data =
             load_data_file(
-                loaded_mob_type->path + "/Data.txt"
+                loaded_mob_type->path + "/data.txt"
             );
         top_bmp[0] =
-            load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+            game.content.bitmaps.get(
+                data.get_child_by_name("top_leaf")->value, &data
+            );
         top_bmp[1] =
-            load_bmp(data.get_child_by_name("top_bud")->value, &data);
+            game.content.bitmaps.get(
+                data.get_child_by_name("top_bud")->value, &data
+            );
         top_bmp[2] =
-            load_bmp(data.get_child_by_name("top_flower")->value, &data);
+            game.content.bitmaps.get(
+                data.get_child_by_name("top_flower")->value, &data
+            );
     }
     
     if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
@@ -1439,6 +1445,7 @@ void animation_editor::unload() {
     game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
     game.content.unload_all(CONTENT_TYPE_HAZARD);
     game.content.unload_all(CONTENT_TYPE_LIQUID);
+    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
     game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
     game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
     game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);

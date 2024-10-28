@@ -21,8 +21,9 @@
  */
 resource_category::resource_category() :
     mob_category(
-        MOB_CATEGORY_RESOURCES, "Resource", "Resources",
-        "Resources", al_map_rgb(139, 204, 204)
+        MOB_CATEGORY_RESOURCES, "resource",
+        "Resource", "Resources",
+        "resources", al_map_rgb(139, 204, 204)
     ) {
     
 }
@@ -110,8 +111,9 @@ void resource_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of resource.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void resource_category::register_type(mob_type* type) {
-    game.content.mob_types.resource[type->name] = (resource_type*) type;
+void resource_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.resource[internal_name] = (resource_type*) type;
 }

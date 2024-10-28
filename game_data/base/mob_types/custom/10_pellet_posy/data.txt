@@ -1,0 +1,91 @@
+name = 10 Pellet Posy
+description = This plant, when mature, houses a 10 pellet between its petals.
+
+custom_category_name = Pellet Posy
+height = 128
+inactive_logic = ticks
+max_health = 300
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 10
+target_type = weak_plain_obstacle
+team = obstacle
+
+area_editor_properties {
+    Bloom time {
+        var = bloom_time
+        type = real
+        def_value = 240
+        min_value = 0
+        tooltip = Time left until the posy blooms.
+    }
+    Red {
+        var = red
+        type = bool
+        def_value = false
+        tooltip = Does it have a red pellet?
+    }
+    Yellow {
+        var = yellow
+        type = bool
+        def_value = false
+        tooltip = Does it have a yellow pellet?
+    }
+    Blue {
+        var = blue
+        type = bool
+        def_value = false
+        tooltip = Does it have a blue pellet?
+    }
+    Rock {
+        var = rock
+        type = bool
+        def_value = false
+        tooltip = Does it have a rock pellet?
+    }
+    Winged {
+        var = winged
+        type = bool
+        def_value = false
+        tooltip = Does it have a winged pellet?
+    }
+}
+
+spawns {
+    red {
+        object = red_10_pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    yellow {
+        object = yellow_10_pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    blue {
+        object = blue_10_pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    rock {
+        object = rock_10_pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    winged {
+        object = winged_10_pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+}

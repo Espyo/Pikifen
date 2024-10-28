@@ -86,7 +86,7 @@ void pellet_type::load_cat_resources(data_node* file) {
     
     rs.set("number_image", number_image_str, &number_image_node);
     
-    bmp_number = game.bitmaps.get(number_image_str, number_image_node);
+    bmp_number = game.content.bitmaps.get(number_image_str, number_image_node);
 }
 
 
@@ -94,5 +94,5 @@ void pellet_type::load_cat_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void pellet_type::unload_resources() {
-    game.bitmaps.free(bmp_number);
+    game.content.bitmaps.free(bmp_number);
 }

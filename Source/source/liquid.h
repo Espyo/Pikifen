@@ -43,21 +43,18 @@ struct liquid : public content {
     //Color used for this liquid in the radar.
     ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
-    //Animation database containing its liquid surface animation.
-    animation_database anim_db;
-    
-    //Animation instance for the liquid surface.
-    animation_instance anim_instance;
+    //Animation database and instance containing its liquid surface animation.
+    single_animation_suite* anim;
     
     //Speed at which to scroll each layer of the surface.
     float surface_speed[2] = { 10.0f, -13.0f };
     
     //Opacity of the surface.
     unsigned char surface_alpha = 255;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
     
 };

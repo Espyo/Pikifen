@@ -28,13 +28,13 @@ children {
 
 spawns {
     left_pillar {
-        object = Crystal wall pillar
+        object = crystal_wall_pillar
         relative = true
         coordinates = 0 -120
         angle = 0
     }
     right_pillar {
-        object = Crystal wall pillar
+        object = crystal_wall_pillar
         relative = true
         coordinates = 0 120
         angle = 180

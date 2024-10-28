@@ -2,7 +2,7 @@ name = Chocolate Bar
 description = A pile of chocolate square treasures.
 
 can_drop_multiple = true
-contents = Chocolate Square
+contents = chocolate_square
 custom_category_name = Treasure
 delete_when_finished = true
 health_per_resource = 40

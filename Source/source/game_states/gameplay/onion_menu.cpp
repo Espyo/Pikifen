@@ -20,8 +20,8 @@
 
 namespace ONION_MENU {
 
-//Path to the GUI information file.
-const string GUI_FILE_PATH = FOLDER_PATHS_FROM_PKG::GUI + "/Onion_menu.txt"; //TODO
+//Name of the GUI information file.
+const string GUI_FILE_NAME = "onion_menu.txt";
 
 //How long to let text turn red for.
 const float RED_TEXT_DURATION = 1.0f;
@@ -87,7 +87,7 @@ onion_menu_t::onion_menu_t(
     gui.register_coords("group_right_more", 95, 60,  3,  4);
     gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(
-        data_node(ONION_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        game.content.gui[ONION_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Instructions text.

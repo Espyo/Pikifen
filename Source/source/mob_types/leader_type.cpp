@@ -120,7 +120,7 @@ void leader_type::load_cat_resources(data_node* file) {
     rs.set("name_call_sfx", name_call_sfx_str);
     rs.set("whistle_sfx", whistle_sfx_str);
     
-    bmp_icon = game.bitmaps.get(icon_str, icon_node);
+    bmp_icon = game.content.bitmaps.get(icon_str, icon_node);
 }
 
 
@@ -128,5 +128,5 @@ void leader_type::load_cat_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void leader_type::unload_resources() {
-    game.bitmaps.free(bmp_icon);
+    game.content.bitmaps.free(bmp_icon);
 }

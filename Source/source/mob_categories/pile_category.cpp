@@ -21,8 +21,9 @@
  */
 pile_category::pile_category() :
     mob_category(
-        MOB_CATEGORY_PILES, "Pile", "Piles",
-        "Piles", al_map_rgb(139, 204, 165)
+        MOB_CATEGORY_PILES, "pile",
+        "Pile", "Piles",
+        "piles", al_map_rgb(139, 204, 165)
     ) {
     
 }
@@ -110,8 +111,9 @@ void pile_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of pile.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void pile_category::register_type(mob_type* type) {
-    game.content.mob_types.pile[type->name] = (pile_type*) type;
+void pile_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.pile[internal_name] = (pile_type*) type;
 }

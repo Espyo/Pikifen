@@ -38,13 +38,13 @@ children {
 
 spawns {
     left_pillar {
-        object = Bamboo gate pillar
+        object = bamboo_gate_pillar
         relative = true
         coordinates = 0 -119
         angle = 0
     }
     right_pillar {
-        object = Bamboo gate pillar
+        object = bamboo_gate_pillar
         relative = true
         coordinates = 0 119
         angle = 180

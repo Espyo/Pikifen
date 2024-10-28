@@ -329,6 +329,8 @@ struct song : public content {
     //--- Function declarations ---
     
     void load_from_data_node(data_node* node);
+    void unload();
+    
 };
 
 
@@ -341,22 +343,12 @@ public:
 
     //--- Members ---
     
-    //Manager of samples.
-    sfx_sample_manager samples;
-    
-    //Manager of streams.
-    audio_stream_manager streams;
-    
-    //Loaded songs.
-    map<string, song> songs;
-
     //Callback for when a song ends, if any.
-    std::function<void(const string& name)> on_song_finished = nullptr;
+    std::function<void(const string &name)> on_song_finished = nullptr;
     
     
     //--- Function declarations ---
     
-    audio_manager();
     size_t create_ui_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const sfx_source_config_t &config = sfx_source_config_t()

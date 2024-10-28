@@ -1324,14 +1324,6 @@ public:
     //--- Function definitions ---
     
     /**
-     * @brief Constructs a new asset manager object.
-     *
-     * @param base_dir Base folder path its files belong to,
-     * relative to the program root folder.
-     */
-    explicit asset_manager(const string &base_dir) : base_dir(base_dir) {}
-    
-    /**
      * @brief Returns the specified asset, by name.
      *
      * @param name Name of the asset to get.
@@ -1348,7 +1340,7 @@ public:
         
         if(list.find(name) == list.end()) {
             asset_t asset_ptr =
-                do_load(base_dir + "/" + name, node, report_errors);
+                do_load(name, node, report_errors);
             list[name] = asset_use_t(asset_ptr);
             total_uses++;
             return asset_ptr;
@@ -1445,10 +1437,6 @@ protected:
     
     //--- Members ---
     
-    //Base folder path that this manager works on,
-    //relative to the program root folder.
-    string base_dir;
-    
     //List of loaded assets.
     map<string, asset_use_t> list;
     
@@ -1482,19 +1470,12 @@ protected:
  */
 class audio_stream_manager : public asset_manager<ALLEGRO_AUDIO_STREAM*> {
 
-public:
-
-    //--- Function definitions ---
-    
-    audio_stream_manager(const string &base_dir) : asset_manager(base_dir) {}
-    
-    
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_AUDIO_STREAM* do_load(
-        const string &path, data_node* node, bool report_errors
+        const string &name, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
     
@@ -1506,19 +1487,12 @@ protected:
  */
 class bitmap_manager : public asset_manager<ALLEGRO_BITMAP*> {
 
-public:
-
-    //--- Function definitions ---
-    
-    bitmap_manager(const string &base_dir) : asset_manager(base_dir) {}
-    
-    
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* do_load(
-        const string &path, data_node* node, bool report_errors
+        const string &name, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_BITMAP* asset) override;
     
@@ -1530,19 +1504,12 @@ protected:
  */
 class sfx_sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
 
-public:
-
-    //--- Function definitions ---
-    
-    sfx_sample_manager(const string &base_dir) : asset_manager(base_dir) {}
-    
-    
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_SAMPLE* do_load(
-        const string &path, data_node* node, bool report_errors
+        const string &name, data_node* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_SAMPLE* asset) override;
     

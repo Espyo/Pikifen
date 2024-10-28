@@ -104,9 +104,6 @@ public:
     //Audio.
     audio_manager audio;
     
-    //Manager of all main bitmaps (not floor textures).
-    bitmap_manager bitmaps = bitmap_manager("");
-    
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error = nullptr;
     
@@ -223,9 +220,6 @@ public:
     
     //List of all mob team names, in proper English.
     string team_names[N_MOB_TEAMS];
-    
-    //Manager of all floor texture bitmaps.
-    bitmap_manager textures = bitmap_manager(FOLDER_PATHS_FROM_PKG::TEXTURES); //TODO
     
     //How much time has passed since the program booted.
     float time_passed = 0.0f;

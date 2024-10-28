@@ -520,7 +520,7 @@ void init_controls() {
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
     for(size_t a = 0; a < action_types.size(); a++) {
-        const string& def = action_types[a].default_bind_str;
+        const string &def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
         control_bind bind;
@@ -1613,11 +1613,11 @@ void init_single_animation(
     data_node* anim_def_file, const string &name,
     single_animation_suite &anim
 ) {
-    anim.database.path =
-        FOLDER_PATHS_FROM_PKG::ANIMATIONS + "/" + //TODO
-        anim_def_file->get_child_by_name(name)->value;
-    data_node file(anim.database.path);
-    anim.database.load_from_data_node(&file);
-    anim.instance.cur_anim = anim.database.animations[0];
+    const string &anim_name =
+        anim_def_file->get_child_by_name("leader_damage_sparks")->value;
+    anim.database = game.content.global_animations[anim_name].database;
+    if(!anim.database.animations.empty()) {
+        anim.instance.cur_anim = anim.database.animations[0];
+    }
     anim.instance.to_start();
 }

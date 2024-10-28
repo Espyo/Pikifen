@@ -26,11 +26,11 @@ using std::vector;
 
 
 namespace AREA_MENU {
-extern const string GUI_FILE_PATH;
-extern const string INFO_GUI_FILE_PATH;
+extern const string GUI_FILE_NAME;
+extern const string INFO_GUI_FILE_NAME;
 extern const float PAGE_SWAP_DURATION;
 extern const string SONG_NAME;
-extern const string SPECS_GUI_FILE_PATH;
+extern const string SPECS_GUI_FILE_NAME;
 }
 
 
@@ -38,40 +38,40 @@ namespace CONTROL_BINDS_MENU {
 extern const float BIND_BUTTON_HEIGHT;
 extern const float BIND_BUTTON_PADDING;
 extern const float CAPTURE_TIMEOUT_DURATION;
-extern const string GUI_FILE_PATH;
+extern const string GUI_FILE_NAME;
 extern const string SONG_NAME;
 }
 
 
 namespace MAIN_MENU {
-extern const string GUI_FILE_PATH;
+extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
-extern const string MAKE_GUI_FILE_PATH;
-extern const string PLAY_GUI_FILE_PATH;
+extern const string MAKE_GUI_FILE_NAME;
+extern const string PLAY_GUI_FILE_NAME;
 extern const string SONG_NAME;
-extern const string TUTORIAL_GUI_FILE_PATH;
+extern const string TUTORIAL_GUI_FILE_NAME;
 }
 
 
 namespace OPTIONS_MENU {
-extern const string AUDIO_GUI_FILE_PATH;
-extern const string CONTROLS_GUI_FILE_PATH;
-extern const string GRAPHICS_GUI_FILE_PATH;
+extern const string AUDIO_GUI_FILE_NAME;
+extern const string CONTROLS_GUI_FILE_NAME;
+extern const string GRAPHICS_GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
-extern const string MISC_GUI_FILE_PATH;
+extern const string MISC_GUI_FILE_NAME;
 extern const string SONG_NAME;
-extern const string TOP_GUI_FILE_PATH;
+extern const string TOP_GUI_FILE_NAME;
 }
 
 
 namespace RESULTS {
-extern const string GUI_FILE_PATH;
+extern const string GUI_FILE_NAME;
 extern const string SONG_NAME;
 }
 
 
 namespace STATS_MENU {
-extern const string GUI_FILE_PATH;
+extern const string GUI_FILE_NAME;
 extern const string SONG_NAME;
 }
 

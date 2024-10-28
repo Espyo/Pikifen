@@ -2,7 +2,7 @@ name = Bitter Burgeoning Spiderwort
 description = This Burgeoning Spiderwort grows ultra-bitter berries, which can be harvested.
 
 can_drop_multiple = true
-contents = Bitter berry
+contents = bitter_berry
 custom_category_name = Useful
 delete_when_finished = false
 health_per_resource = 200

@@ -21,8 +21,9 @@
  */
 pellet_category::pellet_category() :
     mob_category(
-        MOB_CATEGORY_PELLETS, "Pellet", "Pellets",
-        "Pellets", al_map_rgb(73, 204, 126)
+        MOB_CATEGORY_PELLETS, "pellet",
+        "Pellet", "Pellets",
+        "pellets", al_map_rgb(73, 204, 126)
     ) {
     
 }
@@ -110,8 +111,9 @@ void pellet_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of pellet.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void pellet_category::register_type(mob_type* type) {
-    game.content.mob_types.pellet[type->name] = (pellet_type*) type;
+void pellet_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.pellet[internal_name] = (pellet_type*) type;
 }

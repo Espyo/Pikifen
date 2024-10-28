@@ -23,32 +23,27 @@
 
 namespace OPTIONS_MENU {
 
-//Path to the audio menu GUI information file.
-const string AUDIO_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_audio.txt"; //TODO
-    
-//Path to the controls menu GUI information file.
-const string CONTROLS_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_controls.txt"; //TODO
-    
-//Path to the graphics menu GUI information file.
-const string GRAPHICS_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_graphics.txt"; //TODO
-    
+//Name of the audio menu GUI information file.
+const string AUDIO_GUI_FILE_NAME = "options_menu_audio.txt";
+
+//Name of the controls menu GUI information file.
+const string CONTROLS_GUI_FILE_NAME = "options_menu_controls.txt";
+
+//Name of the graphics menu GUI information file.
+const string GRAPHICS_GUI_FILE_NAME = "options_menu_graphics.txt";
+
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
-//Path to the misc menu GUI information file.
-const string MISC_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_misc.txt"; //TODO
-    
+//Name of the misc menu GUI information file.
+const string MISC_GUI_FILE_NAME = "options_menu_misc.txt";
+
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
-//Path to the top-level menu GUI information file.
-const string TOP_GUI_FILE_PATH =
-    FOLDER_PATHS_FROM_PKG::GUI + "/Options_menu_top.txt"; //TODO
-    
+//Name of the top-level menu GUI information file.
+const string TOP_GUI_FILE_NAME = "options_menu_top.txt";
+
 }
 
 
@@ -197,7 +192,7 @@ void options_menu_state::init_gui_audio_page() {
     audio_gui.register_coords("ui_sfx_volume",    50, 75,   65, 10);
     audio_gui.register_coords("tooltip",          50, 96,   96,  4);
     audio_gui.read_coords(
-        data_node(OPTIONS_MENU::AUDIO_GUI_FILE_PATH).
+        game.content.gui[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -343,7 +338,7 @@ void options_menu_state::init_gui_controls_page() {
     controls_gui.register_coords("auto_throw",    50, 65,   70, 10);
     controls_gui.register_coords("tooltip",       50, 96,   96,  4);
     controls_gui.read_coords(
-        data_node(OPTIONS_MENU::CONTROLS_GUI_FILE_PATH).
+        game.content.gui[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -443,7 +438,7 @@ void options_menu_state::init_gui_graphics_page() {
     graphics_gui.register_coords("tooltip",         50, 96,   96,  4);
     graphics_gui.register_coords("restart_warning", 50, 85,   70,  6);
     graphics_gui.read_coords(
-        data_node(OPTIONS_MENU::GRAPHICS_GUI_FILE_PATH).
+        game.content.gui[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -561,7 +556,7 @@ void options_menu_state::init_gui_misc_page() {
     misc_gui.register_coords("leaving_confirmation", 50, 57.5, 70, 10);
     misc_gui.register_coords("tooltip",              50, 96,   96,  4);
     misc_gui.read_coords(
-        data_node(OPTIONS_MENU::MISC_GUI_FILE_PATH).
+        game.content.gui[OPTIONS_MENU::MISC_GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -660,10 +655,10 @@ void options_menu_state::init_gui_misc_page() {
  * @brief Initializes the top-level menu GUI.
  */
 void options_menu_state::init_gui_top_page() {
-    data_node gui_file(OPTIONS_MENU::TOP_GUI_FILE_PATH);
+    data_node* gui_file = &game.content.gui[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file.get_child_by_name("icons_to_the_left");
+    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -684,7 +679,7 @@ void options_menu_state::init_gui_top_page() {
     top_gui.register_coords("misc",     50, 72.5, 60, 10);
     top_gui.register_coords("advanced", 87, 86,   22,  8);
     top_gui.register_coords("tooltip",  50, 96,   96,  4);
-    top_gui.read_coords(gui_file.get_child_by_name("positions"));
+    top_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Back button.
     top_gui.back_item =
@@ -871,7 +866,7 @@ void options_menu_state::leave() {
  */
 void options_menu_state::load() {
     //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
     
     init_gui_top_page();
     init_gui_controls_page();
@@ -916,7 +911,7 @@ void options_menu_state::trigger_restart_warning() {
 void options_menu_state::unload() {
 
     //Resources.
-    al_destroy_bitmap(bmp_menu_bg);
+    game.content.bitmaps.free(bmp_menu_bg);
     
     //Menu items.
     top_gui.destroy();

@@ -21,8 +21,9 @@
  */
 bridge_category::bridge_category() :
     mob_category(
-        MOB_CATEGORY_BRIDGES, "Bridge", "Bridges",
-        "Bridges", al_map_rgb(204, 73, 152)
+        MOB_CATEGORY_BRIDGES, "bridge",
+        "Bridge", "Bridges",
+        "bridges", al_map_rgb(204, 73, 152)
     ) {
     
 }
@@ -110,8 +111,9 @@ void bridge_category::get_type_names(vector<string> &list) const {
 /**
  * @brief Registers a created type of bridge.
  *
+ * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void bridge_category::register_type(mob_type* type) {
-    game.content.mob_types.bridge[type->name] = (bridge_type*) type;
+void bridge_category::register_type(const string &internal_name, mob_type* type) {
+    game.content.mob_types.bridge[internal_name] = (bridge_type*) type;
 }
