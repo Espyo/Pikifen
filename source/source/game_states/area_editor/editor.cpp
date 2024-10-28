@@ -416,7 +416,7 @@ void area_editor::clear_undo_history() {
  * @brief Code to run when the area picker is closed.
  */
 void area_editor::close_load_dialog() {
-    if(!loaded_content_yet && game.cur_area_data->internal_name.empty()) {
+    if(!loaded_content_yet && !game.cur_area_data) {
         //The user cancelled the area selection picker
         //presented when you enter the area editor. Quit out.
         leave();
@@ -601,7 +601,7 @@ void area_editor::create_or_load_area(
     const AREA_TYPE requested_area_type
 ) {
     string file_to_check =
-        get_base_area_folder_path(requested_area_type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
+        get_base_area_folder_path(requested_area_type, true, FOLDER_NAMES::BASE_PKG) + //TODO
         "/" + requested_area_folder_name + "/" + FILE_NAMES::AREA_GEOMETRY;
     if(al_filename_exists(file_to_check.c_str())) {
         //Area exists, load it.
@@ -614,6 +614,11 @@ void area_editor::create_or_load_area(
     }
     
     state = EDITOR_STATE_MAIN;
+    
+    //At this point we'll have unloaded some assets like the thumbnail.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    game.skip_dear_imgui_frame = true;
 }
 
 
@@ -1932,7 +1937,7 @@ void area_editor::load_area(
     clear_current_area();
     
     game.content.load_area_as_current(
-        requested_area_folder_name, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG, //TODO
+        requested_area_folder_name, FOLDER_NAMES::BASE_PKG, //TODO
         requested_area_type, CONTENT_LOAD_LEVEL_EDITOR, from_backup
     );
     

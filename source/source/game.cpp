@@ -164,7 +164,11 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 void game_class::do_global_drawing() {
     //Dear ImGui.
     ImGui::Render();
-    ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+    if(!skip_dear_imgui_frame) {
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+    } else {
+        skip_dear_imgui_frame = false;
+    }
     
     //Fade manager.
     game.fade_mgr.draw();

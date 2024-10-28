@@ -2763,7 +2763,7 @@ sectors{
 	}
 	s{
 		z=100.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 		texture_rotate=1.5010
 	}
 	s{
@@ -2812,7 +2812,7 @@ sectors{
 	}
 	s{
 		z=100.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=100.0000
@@ -2821,7 +2821,7 @@ sectors{
 	}
 	s{
 		z=100.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=100.0000
@@ -2835,7 +2835,7 @@ sectors{
 	}
 	s{
 		z=100.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=50.0000
@@ -2843,22 +2843,22 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=50.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=50.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 		texture_rotate=1.5010
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 		texture_rotate=1.5010
 		texture_tint=156 165 175
 	}
@@ -2923,11 +2923,11 @@ sectors{
 	s{
 		z=100.0000
 		fade=true
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=100.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 	}
 	s{
 		z=100.0000
@@ -3016,7 +3016,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=textures/stone_2.png
+		texture=textures/stone_2.jpg
 		texture_rotate=1.5010
 	}
 	s{

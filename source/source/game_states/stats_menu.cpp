@@ -340,15 +340,12 @@ void stats_menu_state::populate_stats_list() {
     
     for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
         area_data* area_ptr = game.content.areas[AREA_TYPE_MISSION][a];
-        mission_data mission;
         mission_record record;
         load_area_mission_record(
             &mission_records_file,
             area_ptr->name,
             get_subtitle_or_mission_goal(
-                area_ptr->subtitle,
-                AREA_TYPE_MISSION,
-                mission.goal
+                area_ptr->subtitle, AREA_TYPE_MISSION, area_ptr->mission.goal
             ),
             area_ptr->maker,
             area_ptr->version,
@@ -357,10 +354,10 @@ void stats_menu_state::populate_stats_list() {
         if(record.clear) {
             mission_clears++;
         }
-        if(record.is_platinum(mission)) {
+        if(record.is_platinum(area_ptr->mission)) {
             mission_platinums++;
         }
-        if(mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+        if(area_ptr->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
             mission_scores += record.score;
         }
     }

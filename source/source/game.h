@@ -206,6 +206,10 @@ public:
     //Should we be showing system info? (Framerate, version, etc.)
     bool show_system_info = false;
     
+    //Skip rendering the scene with Dear ImGui for this frame.
+    //It's a bit of a hack that fixes some corner cases.
+    bool skip_dear_imgui_frame = false;
+    
     //List of game states.
     game_state_list states;
     

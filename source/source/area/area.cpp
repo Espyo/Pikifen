@@ -1908,16 +1908,16 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
-        string cat_name = "(Unknown)";
+        string cat_name = "unknown";
         if(m_ptr->type && m_ptr->type->category) {
-            cat_name = m_ptr->type->category->name;
+            cat_name = m_ptr->type->category->internal_name;
         }
         data_node* mob_node = new data_node(cat_name, "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {
             mob_node->add(
-                new data_node("type", m_ptr->type->name)
+                new data_node("type", m_ptr->type->internal_name)
             );
         }
         mob_node->add(

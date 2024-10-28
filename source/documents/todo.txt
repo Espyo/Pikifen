@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -207,10 +207,8 @@ Next tasks (roughly sorted most important first)
                 Load resources or not, based on the boolean given
                 Check if content by that name already exists, and if so report it
                 Unload
-            Make the folder/file name be the internal name?
-            Make assets inherit from the plain_content class
+            Make assets inherit from the plain_content class?
             Add the new common content properties to everything in the engine
-            A "load level" var in the basic_content class? To indicate whether it's loaded fully, or just has the basic metadata, or has that + text-only stuff and no assets
             Editors should separate creating and loading
             Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing Game_data/<package name>/Package.txt
             Editors should warn if you try to edit or create something in the base package, saying how it'll affect the usual experience, may affect all packages, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true
@@ -227,7 +225,6 @@ Next tasks (roughly sorted most important first)
             Organize the performance monitor start/end points
             Run a memory leak check
         For later on, maybe, the content manager should be able to figure out a dependency tree
-    Rename every file to lowercase?
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Update screenshots in the manual that still show off the Play area
