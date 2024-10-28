@@ -3,7 +3,7 @@ Pikifen
 
 A fan-made _Pikmin_-based engine made by Espyo that allows users to make and play their own _Pikmin_ content.
 
-![Pikifen's logo](Game_data/Base/Graphics/Icon.png)
+![Pikifen's logo](game_data/base/graphics/icon.png)
 
 [![GitHub Downloads (all assets, latest release)](
     https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads
@@ -44,7 +44,7 @@ A fan-made _Pikmin_-based engine made by Espyo that allows users to make and pla
 > * [Contributing](#contributing)
 > * [Disclaimer](#disclaimer)
 
-The included manual (download _Pikifen_ and open `Manual.html`) contains, amongst other things, tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
+The included manual (download _Pikifen_ and open `manual.html`) contains, amongst other things, tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
 
 ## Overview
 
@@ -82,7 +82,7 @@ If you are upgrading from an older version of the engine, you should extract it 
 If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, as well as keeping old files that the new version doesn't use and end up wasting space.
 
 ### Windows
-The latest version available for download for Windows is shown at the top of the [GitHub releases page](https://github.com/Espyo/Pikifen/releases). Just unzip the downloaded zip file onto a folder, and double-click `Pikifen.exe` to start running. If you have downloaded a zip file in hopes of just playing the engine, but can't find any `Pikifen.exe` file to double-click, then check if there's a `Source` folder. If there is, you've downloaded the wrong zip file. Use the one in the [releases page](https://github.com/Espyo/Pikifen/releases).
+The latest version available for download for Windows is shown at the top of the [GitHub releases page](https://github.com/Espyo/Pikifen/releases). Just unzip the downloaded zip file onto a folder, and double-click `pikifen.exe` to start running. If you have downloaded a zip file in hopes of just playing the engine, but can't find any `pikifen.exe` file to double-click, then check if there's a `Source` folder. If there is, you've downloaded the wrong zip file. Use the one in the [releases page](https://github.com/Espyo/Pikifen/releases).
 
 Alternatively, you can download the source code and compile it to get the most up-to-date features; compilation instructions can be found in the included manual.
         
@@ -92,7 +92,7 @@ Alternatively, you can run the Windows executable under Wine. It works fairly we
 
 ## Playing and making
 
-* To play, just double-click `Pikifen.exe` (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
+* To play, just double-click `pikifen.exe` (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
 * To make content for the engine, just edit the image, sound, or text files in the `Game_data` folder. Some things can also be edited using the built-in editors.
 * Alternatively, you can download some content made by other players (check the [Discord server](https://discord.gg/qbhz4u3)!)
 * This project is still under construction, so expect some things to be incomplete!

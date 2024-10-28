@@ -24,12 +24,12 @@ children {
 
 sounds {
     electricity {
-        file = Electricity.ogg
+        file = electricity.ogg
         loop = true
         volume = 80
     }
     sparks {
-        file = Electric_sparks.ogg
+        file = electric_sparks.ogg
         loop = true
         volume = 80
     }

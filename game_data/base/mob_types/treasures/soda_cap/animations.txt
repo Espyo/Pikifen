@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Soda_Cap.png
+		file=soda_cap.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}

@@ -98,7 +98,7 @@ animations{
 }
 sprites{
 	burying_01{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=55.0000 0.0000
 		file_size=36.0000 31.0000
 		offset=4.5000 0.0000
@@ -113,7 +113,7 @@ sprites{
 		}
 	}
 	burying_02{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=55.0000 0.0000
 		file_size=36.0000 31.0000
 		offset=4.5000 0.0000
@@ -129,7 +129,7 @@ sprites{
 		}
 	}
 	burying_03{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=92.0000 3.0000
 		file_size=26.0000 28.0000
 		offset=9.0000 0.0000
@@ -144,7 +144,7 @@ sprites{
 		}
 	}
 	burying_04{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=92.0000 3.0000
 		file_size=26.0000 28.0000
 		offset=9.0000 0.0000
@@ -160,7 +160,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=0.0000 61.0000
 		file_size=38.0000 28.0000
 		hitboxes{
@@ -174,7 +174,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=39.0000 63.0000
 		file_size=38.0000 26.0000
 		hitboxes{
@@ -188,7 +188,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=78.0000 63.0000
 		file_size=38.0000 26.0000
 		hitboxes{
@@ -202,7 +202,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=117.0000 61.0000
 		file_size=38.0000 28.0000
 		hitboxes{
@@ -216,7 +216,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=78.0000 63.0000
 		file_size=38.0000 26.0000
 		scale=1.0000 -1.0000
@@ -231,7 +231,7 @@ sprites{
 		}
 	}
 	emerging_01{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=0.0000 4.0000
 		file_size=20.0000 27.0000
 		offset=-9.0000 0.0000
@@ -246,7 +246,7 @@ sprites{
 		}
 	}
 	emerging_02{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=0.0000 4.0000
 		file_size=20.0000 27.0000
 		offset=-9.0000 0.0000
@@ -262,7 +262,7 @@ sprites{
 		}
 	}
 	emerging_03{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=21.0000 2.0000
 		file_size=33.0000 29.0000
 		offset=-4.5000 0.0000
@@ -277,7 +277,7 @@ sprites{
 		}
 	}
 	emerging_04{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=21.0000 2.0000
 		file_size=33.0000 29.0000
 		offset=-4.5000 0.0000
@@ -293,7 +293,7 @@ sprites{
 		}
 	}
 	idling{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=0.0000 32.0000
 		file_size=38.0000 28.0000
 		hitboxes{
@@ -307,7 +307,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=39.0000 32.0000
 		file_size=41.0000 28.0000
 		offset=0.7500 0.0000
@@ -322,7 +322,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=81.0000 32.0000
 		file_size=44.0000 28.0000
 		offset=1.5000 0.0000
@@ -337,7 +337,7 @@ sprites{
 		}
 	}
 	underground{
-		file=Female_Sheargrub.png
+		file=female_sheargrub.png
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{

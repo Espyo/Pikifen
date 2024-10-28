@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	main{
-		file=Bubble.png
+		file=bubble.png
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 		scale=0.5000 0.5000

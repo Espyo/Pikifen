@@ -29,27 +29,27 @@ animations{
 }
 sprites{
 	left_destroyed{
-		file=Electric_gate.png
+		file=electric_gate.png
 		file_pos=98.0000 579.0000
 		file_size=48.0000 48.0000
 	}
 	left_idling_01{
-		file=Electric_gate.png
+		file=electric_gate.png
 		file_pos=49.0000 579.0000
 		file_size=48.0000 48.0000
 	}
 	left_idling_02{
-		file=Electric_gate.png
+		file=electric_gate.png
 		file_pos=49.0000 628.0000
 		file_size=48.0000 48.0000
 	}
 	left_idling_03{
-		file=Electric_gate.png
+		file=electric_gate.png
 		file_pos=49.0000 677.0000
 		file_size=48.0000 48.0000
 	}
 	right_idling{
-		file=Electric_gate.png
+		file=electric_gate.png
 		file_pos=98.0000 628.0000
 		file_size=48.0000 48.0000
 	}

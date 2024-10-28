@@ -30,7 +30,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=Spotcaps.png
+		file=spotcaps.png
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -44,7 +44,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=Spotcaps.png
+		file=spotcaps.png
 		file_pos=0.0000 206.0000
 		file_size=102.0000 102.0000
 		hitboxes{
@@ -59,7 +59,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=Spotcaps.png
+		file=spotcaps.png
 		file_pos=0.0000 103.0000
 		file_size=102.0000 102.0000
 		hitboxes{
@@ -74,7 +74,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=Spotcaps.png
+		file=spotcaps.png
 		file_pos=0.0000 0.0000
 		file_size=102.0000 102.0000
 		hitboxes{

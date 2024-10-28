@@ -34,7 +34,7 @@ reaches {
 
 sounds {
     thump {
-        file = Thump.ogg
+        file = thump.ogg
         speed_deviation = 10
     }
 }

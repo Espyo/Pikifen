@@ -479,7 +479,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 0.0000
@@ -506,7 +506,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 0.0000
@@ -533,7 +533,7 @@ sprites{
 		}
 	}
 	crushed_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=154.0000 0.0000
 		file_size=34.0000 59.0000
 		offset=-6.0000 -1.0000
@@ -561,7 +561,7 @@ sprites{
 		}
 	}
 	crushed_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=154.0000 0.0000
 		file_size=34.0000 59.0000
 		offset=-6.0000 -1.0000
@@ -589,7 +589,7 @@ sprites{
 		}
 	}
 	crushed_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=154.0000 0.0000
 		file_size=34.0000 59.0000
 		offset=-0.4905 -0.1712
@@ -617,7 +617,7 @@ sprites{
 		}
 	}
 	drinking_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=4.5000 0.0000
@@ -644,7 +644,7 @@ sprites{
 		}
 	}
 	drinking_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.0000 0.0000
@@ -671,7 +671,7 @@ sprites{
 		}
 	}
 	flailing_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=35.0000 89.0000
 		file_size=36.0000 28.0000
 		offset=-0.5000 0.0000
@@ -698,7 +698,7 @@ sprites{
 		}
 	}
 	flailing_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=72.0000 89.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 0.5000
@@ -725,7 +725,7 @@ sprites{
 		}
 	}
 	flailing_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=35.0000 89.0000
 		file_size=36.0000 28.0000
 		offset=-0.5000 0.0000
@@ -752,7 +752,7 @@ sprites{
 		}
 	}
 	flailing_04{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=72.0000 89.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 -0.5000
@@ -779,7 +779,7 @@ sprites{
 		}
 	}
 	grabbing{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -806,7 +806,7 @@ sprites{
 		}
 	}
 	grabbing_far{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=13.0000 30.0000
 		file_size=36.0000 28.0000
 		offset=-3.5000 0.0000
@@ -833,7 +833,7 @@ sprites{
 		}
 	}
 	grabbing_near{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 0.0000
@@ -860,7 +860,7 @@ sprites{
 		}
 	}
 	half_lying{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
 		offset=1.0000 0.0000
@@ -888,7 +888,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -915,7 +915,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.5000 0.0000
@@ -942,7 +942,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=1.5000 0.0000
@@ -969,7 +969,7 @@ sprites{
 		}
 	}
 	idling_rev{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -996,7 +996,7 @@ sprites{
 		}
 	}
 	looking_around_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=1.5000 1.0000
@@ -1024,7 +1024,7 @@ sprites{
 		}
 	}
 	looking_around_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.2839 1.7445
@@ -1052,7 +1052,7 @@ sprites{
 		}
 	}
 	looking_around_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 2.0000
@@ -1080,7 +1080,7 @@ sprites{
 		}
 	}
 	looking_around_04{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 2.0000
@@ -1108,7 +1108,7 @@ sprites{
 		}
 	}
 	looking_around_05{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 2.0000
@@ -1136,7 +1136,7 @@ sprites{
 		}
 	}
 	looking_around_06{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=1.5000 1.0000
@@ -1164,7 +1164,7 @@ sprites{
 		}
 	}
 	looking_around_07{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=1.5000 1.0000
@@ -1192,7 +1192,7 @@ sprites{
 		}
 	}
 	looking_around_08{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -1220,7 +1220,7 @@ sprites{
 		}
 	}
 	looking_around_09{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 -1.0000
@@ -1248,7 +1248,7 @@ sprites{
 		}
 	}
 	looking_around_10{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 -1.5000
@@ -1276,7 +1276,7 @@ sprites{
 		}
 	}
 	looking_around_11{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 89.0000
 		file_size=34.0000 28.0000
 		offset=1.0000 -1.5000
@@ -1304,7 +1304,7 @@ sprites{
 		}
 	}
 	looking_around_12{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 -0.5000
@@ -1332,7 +1332,7 @@ sprites{
 		}
 	}
 	lying_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=119.0000 0.0000
 		file_size=34.0000 59.0000
 		offset=-6.0000 -1.0000
@@ -1360,7 +1360,7 @@ sprites{
 		}
 	}
 	lying_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=119.0000 0.0000
 		file_size=34.0000 59.0000
 		offset=-6.0000 -1.0000
@@ -1388,7 +1388,7 @@ sprites{
 		}
 	}
 	mid_bend{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=85.0000 30.0000
 		file_size=33.0000 28.0000
 		offset=3.0000 0.0000
@@ -1415,7 +1415,7 @@ sprites{
 		}
 	}
 	mob_landing{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -1442,7 +1442,7 @@ sprites{
 		}
 	}
 	picking_up{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=5.0000 0.0000
@@ -1469,7 +1469,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 2.5000
@@ -1497,7 +1497,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 -2.5000
@@ -1525,7 +1525,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=85.0000 30.0000
 		file_size=33.0000 28.0000
 		offset=3.0000 -2.0000
@@ -1553,7 +1553,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=85.0000 30.0000
 		file_size=33.0000 28.0000
 		offset=3.0000 2.0000
@@ -1581,7 +1581,7 @@ sprites{
 		}
 	}
 	shaking_05{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=3.0000 -2.0000
@@ -1609,7 +1609,7 @@ sprites{
 		}
 	}
 	shaking_06{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=3.0000 1.0000
@@ -1637,7 +1637,7 @@ sprites{
 		}
 	}
 	sighing_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 1.0000
@@ -1665,7 +1665,7 @@ sprites{
 		}
 	}
 	sighing_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=50.0000 30.0000
 		file_size=34.0000 28.0000
 		offset=3.5000 -1.0000
@@ -1693,7 +1693,7 @@ sprites{
 		}
 	}
 	sighing_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.6583 0.0000
@@ -1720,7 +1720,7 @@ sprites{
 		}
 	}
 	sliding_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
 		offset=-4.0000 0.0000
@@ -1748,7 +1748,7 @@ sprites{
 		}
 	}
 	sliding_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
 		offset=-5.0000 0.0000
@@ -1776,7 +1776,7 @@ sprites{
 		}
 	}
 	sprout_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -1802,7 +1802,7 @@ sprites{
 		}
 	}
 	sprout_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -1828,7 +1828,7 @@ sprites{
 		}
 	}
 	sprout_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 29.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -1854,7 +1854,7 @@ sprites{
 		}
 	}
 	thrown_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=0.0000 60.0000
 		file_size=33.0000 28.0000
 		scale=0.5000 0.5000
@@ -1880,7 +1880,7 @@ sprites{
 		}
 	}
 	thrown_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=34.0000 60.0000
 		file_size=35.0000 28.0000
 		scale=0.5000 0.5000
@@ -1906,7 +1906,7 @@ sprites{
 		}
 	}
 	thrown_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 60.0000
 		file_size=33.0000 28.0000
 		scale=0.5000 0.5000
@@ -1932,7 +1932,7 @@ sprites{
 		}
 	}
 	thrown_04{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=104.0000 60.0000
 		file_size=35.0000 28.0000
 		scale=0.5000 0.5000
@@ -1958,7 +1958,7 @@ sprites{
 		}
 	}
 	walking_01{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=35.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -1985,7 +1985,7 @@ sprites{
 		}
 	}
 	walking_02{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
 		offset=2.0000 0.0000
@@ -2012,7 +2012,7 @@ sprites{
 		}
 	}
 	walking_03{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=35.0000 0.0000
 		file_size=34.0000 28.0000
 		offset=2.0000 0.0000
@@ -2039,7 +2039,7 @@ sprites{
 		}
 	}
 	walking_04{
-		file=Bulbmin.png
+		file=bulbmin.png
 		file_pos=70.0000 0.0000
 		file_size=32.0000 29.0000
 		offset=2.0000 0.0000

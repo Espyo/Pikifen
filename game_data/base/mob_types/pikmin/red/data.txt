@@ -6,11 +6,11 @@ can_walk_on_others = true
 carry_strength = 1
 health_regen = 10
 height = 24
-icon = Red_Pikmin_icon.png
-icon_bud = Bud_icon.png
-icon_flower = Flower_icon.png
-icon_leaf = Leaf_icon.png
-icon_onion = Red_Onion_icon.png
+icon = red_pikmin_icon.png
+icon_bud = bud_icon.png
+icon_flower = flower_icon.png
+icon_leaf = leaf_icon.png
+icon_onion = red_onion_icon.png
 main_color = 252 34 29
 max_health = 100
 max_throw_height = 260
@@ -21,40 +21,40 @@ radius = 5
 sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
-top_bud = White_bud_top.png
-top_flower = White_flower_top.png
-top_leaf = Leaf_top.png
+top_bud = white_bud_top.png
+top_flower = white_flower_top.png
+top_leaf = leaf_top.png
 
 sounds {
     attack {
-        file = Pikmin_attack.ogg
+        file = pikmin_attack.ogg
     }
     called {
-        file = Pikmin_called.ogg
+        file = pikmin_called.ogg
     }
     carrying {
-        file = Pikmin_carrying.ogg
+        file = pikmin_carrying.ogg
     }
     carrying_grab {
-        file = Pikmin_carrying_grab.ogg
+        file = pikmin_carrying_grab.ogg
     }
     caught {
-        file = Pikmin_caught.ogg
+        file = pikmin_caught.ogg
     }
     dying {
-        file = Pikmin_dying.ogg
+        file = pikmin_dying.ogg
     }
     held {
-        file = Pikmin_held.ogg
+        file = pikmin_held.ogg
     }
     idle {
-        file = Pikmin_idle.ogg
+        file = pikmin_idle.ogg
     }
     plucked {
-        file = Pikmin_plucked.ogg
+        file = pikmin_plucked.ogg
     }
     thrown {
-        file = Pikmin_thrown.ogg
+        file = pikmin_thrown.ogg
     }
 }
 

@@ -4,7 +4,7 @@ description = A sturdy captain from Koppai. Has a hardy exterior, but a soft hea
 acceleration = 800
 can_walk_on_others = true
 height = 46
-icon = Charlie_icon.png
+icon = charlie_icon.png
 main_color = 119 238 102
 max_carriers = 5
 max_health = 2000
@@ -19,10 +19,10 @@ weight = 1
 
 sounds {
     dismissing {
-        file = Olimar_dismiss.ogg
+        file = olimar_dismiss.ogg
     }
     whistling {
-        file = Olimar_whistle.ogg
+        file = olimar_whistle.ogg
     }
     footstep_1 {
         file = Footstep_1.ogg
@@ -37,7 +37,7 @@ sounds {
         speed_deviation = 30
     }
     thump {
-        file = Thump.ogg
+        file = thump.ogg
         volume = 45
     }
 }

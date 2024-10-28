@@ -22,7 +22,7 @@
 
     <h2 id="creating">Creating a new object type</h2>
     
-    <p>To create a new object type, make a folder for it in the right category, and create an empty <a href="making.html#data-file">data file</a> inside called <code>Data.txt</code>. Inside, you will write all of the object's properties, like the name, its movement speed, etc. These take on the form of <code>property = value</code>, and there is one property per line. So for instance, to name Louie's object type, you'd have the line <code>name = Louie</code> in the file.</p>
+    <p>To create a new object type, make a folder for it in the right category, and create an empty <a href="making.html#data-file">data file</a> inside called <code>data.txt</code>. Inside, you will write all of the object's properties, like the name, its movement speed, etc. These take on the form of <code>property = value</code>, and there is one property per line. So for instance, to name Louie's object type, you'd have the line <code>name = Louie</code> in the file.</p>
 
     <p>Some properties are mandatory, some are optional, some apply to all object types, and some only apply to certain categories of object type. You can get a list of properties that apply to all object types in the following sub-sections of this page, and then check what properties exist for that category by visiting the category's article from the <a href="#mob-categories">list</a>. After you're done setting the properties, you must create the animations for the object type; use the <a href="animation.html">animation tutorial</a> for this. Finally, some object types will also need a script to run. To figure out if your object will need a script or not, check the <a href="#mob-categories">list of categories</a> and if it does, read the <a href="script.html">object script tutorial</a> to learn what you need to do.</p>
 
@@ -444,12 +444,12 @@
     
     <h3 id="spawning">Spawning other objects</h3>
     
-    <p>If you want your object to spawn other objects, you need to specify their spawn data. In <code>Data.txt</code>, include a block titled <code>spawns</code>. Inside, you will write a series of blocks, each one with a unique name that will identify that spawn data. Later, when you want to spawn an object using the <a href="script.html">script</a>, you need to refer to this name.</p>
+    <p>If you want your object to spawn other objects, you need to specify their spawn data. In <code>data.txt</code>, include a block titled <code>spawns</code>. Inside, you will write a series of blocks, each one with a unique name that will identify that spawn data. Later, when you want to spawn an object using the <a href="script.html">script</a>, you need to refer to this name.</p>
 
     <p>These spawn data blocks must have the following properties inside:</p>
     
     <ul>
-      <li><b><code>object</code></b>: Name of the type of object to be spawned. This is the formal name, i.e. the name provided in the <code>name</code> property in the mob type's <code>Data.txt</code> file.</li>
+      <li><b><code>object</code></b>: Name of the type of object to be spawned. This is the formal name, i.e. the name provided in the <code>name</code> property in the mob type's <code>data.txt</code> file.</li>
     </ul>
 
     <p>It can also optionally have these properties:</p>
@@ -507,7 +507,7 @@
 
     <p>Children objects can also be connected to a specific body part in the parent. Because children objects are commonly used as appendages of the creature, it is possible to draw a "limb" connecting a parent object to a child object. This limb is a rectangular shaped sprite that stretches and rotates accordingly.</p>
 
-    <p>To make your object type a parent, go to <code>Data.txt</code>, and add a block called <code>children</code>. Inside, you will include a series of blocks, each one with a unique name that represents the child, e.g. "left_foot". Now, when your object is spawned, it will spawn these children along with it. Each of these children blocks needs to have the following properties:</p>
+    <p>To make your object type a parent, go to <code>data.txt</code>, and add a block called <code>children</code>. Inside, you will include a series of blocks, each one with a unique name that represents the child, e.g. "left_foot". Now, when your object is spawned, it will spawn these children along with it. Each of these children blocks needs to have the following properties:</p>
 
     <table class="props-t props-t-m">
       <tr>
@@ -650,7 +650,7 @@
     
     <p>You can make it so that an object is completely invulnerable to a hazard, more vulnerable to another, etc.</p>
 
-    <p>In <code>Data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each property has the hazard's name as its name, and the vulnerability data as its value, e.g. <code>fire = 50 sweating true</code>. The vulnerability data consists of one to three words:</p>
+    <p>In <code>data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each property has the hazard's name as its name, and the vulnerability data as its value, e.g. <code>fire = 50 sweating true</code>. The vulnerability data consists of one to three words:</p>
     <ol>
       <li>The first word is the damage percentage. When the object is hurt by an attack with this hazard, its damage will be changed by the specified percentage, so 50 would make it take half damage. You can make this negative to get the object to heal instead! If this value is 0, the object will completely ignore this hazard in its entirety, even if it's not an attack.</li>
       <li>The second word, optional, is the name of a status effect. When the object interacts with this hazard, it will receive this status effect.</li>
@@ -663,7 +663,7 @@
 
     <p>To make your object play sounds, you need to specify information about them. Typically you just specify what the sound file is, but more properties exist to make the object play sounds in more interesting ways.</p>
 
-    <p>In <code>Data.txt</code>, add a block titled <code>sounds</code>. Inside will be a list of blocks, where the name of a block is the name of the sound (which you will use later to refer to this sound). Each sound block must have the following properties.
+    <p>In <code>data.txt</code>, add a block titled <code>sounds</code>. Inside will be a list of blocks, where the name of a block is the name of the sound (which you will use later to refer to this sound). Each sound block must have the following properties.
 
     <table class="props-t props-t-m">
       <tr>
@@ -736,7 +736,7 @@
     
     <p>Some objects require certain things to be set up in certain ways in the area editor before they work as intended. e.g. bridge fragment piles need to know what bridge they belong to, seesaw blocks need to link to each other before they work together, etc. Users who are not very familiar with these tricks may take a while to realize what's wrong. To help with this, you can also specify a property that, when read by the area editor, will make it so users can place their mouse over a text widget, and they will see some helpful tips about how to make use of the object.</p>
     
-    <p>In <code>Data.txt</code>, add a property titled <code>area_editor_tips</code>. Then, simply write the tip(s) you want as the value. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>.</p>
+    <p>In <code>data.txt</code>, add a property titled <code>area_editor_tips</code>. Then, simply write the tip(s) you want as the value. You can use <code>\n</code> to cause a line break and start a new line. To write a literal backslash, you will need to type <code>\\</code>.</p>
 
     <p>You can also add the <code>area_editor_recommend_links_from</code> property and give it the value <code>true</code> so that the area editor warns whenever the maker places this object and it has no links going from it to another object. Likewise, the <code>area_editor_recommend_links_to</code> property makes the editor warn when there are no objects linking to it.</p>
     
@@ -744,7 +744,7 @@
     
     <p>Some object types can make use of <a href="script.html#vars">script variables</a> to make specific objects have different behavior. For instance, with script variables, you can place two Pellet Posies in an area, and one of them can start already fully bloomed. When an object spawns, the engine itself or the object's script may read any declared script variables and use them as they see fit. In the area editor, you can write down the script variables you want a specific object to declare, along with their values, but having to memorize the names of the variables &ndash; as well as what each value means &ndash; is a bit of a pain. To remedy this, you can add some properties to the object type's data with information about important script variables. Then, when the area editor loads, it will use that information to present the user with some helpful widgets to set those special behaviors with, each widget in charge of one script variable.</p>
     
-    <p>In <code>Data.txt</code>, add a block titled <code>area_editor_properties</code>. Inside, you will write one block per script variable, with each block's name being the name of the widget responsible. Then, add the following properties:</p>
+    <p>In <code>data.txt</code>, add a block titled <code>area_editor_properties</code>. Inside, you will write one block per script variable, with each block's name being the name of the widget responsible. Then, add the following properties:</p>
 
     <table class="props-t props-t-m">
       <tr>

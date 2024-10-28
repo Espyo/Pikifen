@@ -33,15 +33,15 @@ reaches {
 
 sounds {
     swish {
-        file = Swish.ogg
+        file = swish.ogg
         volume = 50
     }
     shaking {
-        file = Shaking.ogg
+        file = shaking.ogg
         volume = 60
     }
     burying {
-        file = Burying.ogg
+        file = burying.ogg
         speed_deviation = 20
         volume = 30
     }

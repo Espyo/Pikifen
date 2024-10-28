@@ -71,7 +71,7 @@
 
     <ol>
       <li>Create a folder for your object's type in <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Types/&lt;category&gt;</code>.
-      <li>Inside, create <code>Data.txt</code>.
+      <li>Inside, create <code>data.txt</code>.
       <li>
         Inside, write the necessary properties, which take on the format <code>property = value</code>, one per line.
         <ul>
@@ -144,14 +144,14 @@
 
     <ol>
       <li>Go to <code>Game_data/&lt;<a href="making.html#packages">package</a>&gt;/Types/&lt;category&gt;/&lt;type&gt;</code>.</li>
-      <li>Inside, create a file called <code>Script.txt</code>.</li>
+      <li>Inside, create a file called <code>script.txt</code>.</li>
       <li>Inside, add a <code>script</code> block. This means one line has <code>script {</code>, and another has <code>}</code>.</li>
       <li>Inside the script block, create a block for the name of a state.</li>
       <li>Inside a state's block, create a block for an event. See <a href="events_and_actions.html#events">here</a> for a list of events.</li>
       <li>Inside an event's block, write one action per line. See <a href="events_and_actions.html#actions">here</a> for a list of actions.</li>
       <li>In the same file, add the <code>first_state</code> property, which specifies what the starting state is, and <code>death_state</code>, which is the state to go to when the health reches zero.</li>
       <li>
-        In <code>Data.txt</code> in the same folder, next to the existing object properties, add the following properties:
+        In <code>data.txt</code> in the same folder, next to the existing object properties, add the following properties:
         <ul>
           <li><code>territory_radius</code>.</li>
           <li><code>reaches</code>, which is a block with named "reaches". Each reach uses the format <code>&lt;pie-slice 1 radius&gt; &lt;pie-slice 1 angle&gt; &lt;pie-slice 2 radius&gt; &lt;pie-slice 2 angle&gt;</code> (the latter two are optional).</li>

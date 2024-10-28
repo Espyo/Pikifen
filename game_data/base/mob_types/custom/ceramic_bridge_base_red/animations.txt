@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Ceramic_bridge_red.png
+		file=ceramic_bridge_red.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
 		offset=-20.0000 0.0000

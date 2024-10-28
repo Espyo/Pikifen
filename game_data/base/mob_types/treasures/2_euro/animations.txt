@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=2_Euro.png
+		file=2_euro.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.8100 0.8100

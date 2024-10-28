@@ -5,7 +5,7 @@ emission_interval = 0.1
 number = 1
 number_deviation = 0
 base {
-    bitmap = Sparkle.png
+    bitmap = sparkle.png
     duration = 0.3
     friction = 1
     gravity = 0

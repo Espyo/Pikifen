@@ -754,7 +754,7 @@ animations{
 }
 sprites{
 	bumping_01_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -770,7 +770,7 @@ sprites{
 		}
 	}
 	bumping_01_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -786,7 +786,7 @@ sprites{
 		}
 	}
 	bumping_01_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -802,7 +802,7 @@ sprites{
 		}
 	}
 	bumping_01_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -818,7 +818,7 @@ sprites{
 		}
 	}
 	bumping_01_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -834,7 +834,7 @@ sprites{
 		}
 	}
 	bumping_02_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -850,7 +850,7 @@ sprites{
 		}
 	}
 	bumping_02_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -866,7 +866,7 @@ sprites{
 		}
 	}
 	bumping_02_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -882,7 +882,7 @@ sprites{
 		}
 	}
 	bumping_02_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -898,7 +898,7 @@ sprites{
 		}
 	}
 	bumping_02_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -914,7 +914,7 @@ sprites{
 		}
 	}
 	closed_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -929,7 +929,7 @@ sprites{
 		}
 	}
 	closed_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -944,7 +944,7 @@ sprites{
 		}
 	}
 	closed_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -959,7 +959,7 @@ sprites{
 		}
 	}
 	closed_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -974,7 +974,7 @@ sprites{
 		}
 	}
 	closed_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -989,7 +989,7 @@ sprites{
 		}
 	}
 	closing_01_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1004,7 +1004,7 @@ sprites{
 		}
 	}
 	closing_01_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1019,7 +1019,7 @@ sprites{
 		}
 	}
 	closing_01_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1034,7 +1034,7 @@ sprites{
 		}
 	}
 	closing_01_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1049,7 +1049,7 @@ sprites{
 		}
 	}
 	closing_01_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1064,7 +1064,7 @@ sprites{
 		}
 	}
 	closing_02_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 326.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1079,7 +1079,7 @@ sprites{
 		}
 	}
 	closing_02_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1094,7 +1094,7 @@ sprites{
 		}
 	}
 	closing_02_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 489.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1109,7 +1109,7 @@ sprites{
 		}
 	}
 	closing_02_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 652.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1124,7 +1124,7 @@ sprites{
 		}
 	}
 	closing_02_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 163.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1139,7 +1139,7 @@ sprites{
 		}
 	}
 	closing_03_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1154,7 +1154,7 @@ sprites{
 		}
 	}
 	closing_03_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1169,7 +1169,7 @@ sprites{
 		}
 	}
 	closing_03_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1184,7 +1184,7 @@ sprites{
 		}
 	}
 	closing_03_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1199,7 +1199,7 @@ sprites{
 		}
 	}
 	closing_03_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1214,7 +1214,7 @@ sprites{
 		}
 	}
 	closing_04_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1229,7 +1229,7 @@ sprites{
 		}
 	}
 	closing_04_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1244,7 +1244,7 @@ sprites{
 		}
 	}
 	closing_04_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1259,7 +1259,7 @@ sprites{
 		}
 	}
 	closing_04_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1274,7 +1274,7 @@ sprites{
 		}
 	}
 	closing_04_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1289,7 +1289,7 @@ sprites{
 		}
 	}
 	closing_05_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1305,7 +1305,7 @@ sprites{
 		}
 	}
 	closing_05_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1321,7 +1321,7 @@ sprites{
 		}
 	}
 	closing_05_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1337,7 +1337,7 @@ sprites{
 		}
 	}
 	closing_05_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1353,7 +1353,7 @@ sprites{
 		}
 	}
 	closing_05_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1369,7 +1369,7 @@ sprites{
 		}
 	}
 	dying_01_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1385,7 +1385,7 @@ sprites{
 		}
 	}
 	dying_01_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1401,7 +1401,7 @@ sprites{
 		}
 	}
 	dying_01_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1417,7 +1417,7 @@ sprites{
 		}
 	}
 	dying_01_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1433,7 +1433,7 @@ sprites{
 		}
 	}
 	dying_01_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1449,7 +1449,7 @@ sprites{
 		}
 	}
 	dying_02_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1465,7 +1465,7 @@ sprites{
 		}
 	}
 	dying_02_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1481,7 +1481,7 @@ sprites{
 		}
 	}
 	dying_02_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1497,7 +1497,7 @@ sprites{
 		}
 	}
 	dying_02_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1513,7 +1513,7 @@ sprites{
 		}
 	}
 	dying_02_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=645.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1529,7 +1529,7 @@ sprites{
 		}
 	}
 	dying_03_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1545,7 +1545,7 @@ sprites{
 		}
 	}
 	dying_03_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1561,7 +1561,7 @@ sprites{
 		}
 	}
 	dying_03_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1577,7 +1577,7 @@ sprites{
 		}
 	}
 	dying_03_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1593,7 +1593,7 @@ sprites{
 		}
 	}
 	dying_03_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=542.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1609,7 +1609,7 @@ sprites{
 		}
 	}
 	dying_04_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 326.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -1625,7 +1625,7 @@ sprites{
 		}
 	}
 	dying_04_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -1641,7 +1641,7 @@ sprites{
 		}
 	}
 	dying_04_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 489.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -1657,7 +1657,7 @@ sprites{
 		}
 	}
 	dying_04_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 652.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -1673,7 +1673,7 @@ sprites{
 		}
 	}
 	dying_04_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=439.0000 163.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -1689,7 +1689,7 @@ sprites{
 		}
 	}
 	dying_05_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 326.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -1705,7 +1705,7 @@ sprites{
 		}
 	}
 	dying_05_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -1721,7 +1721,7 @@ sprites{
 		}
 	}
 	dying_05_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 489.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -1737,7 +1737,7 @@ sprites{
 		}
 	}
 	dying_05_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 652.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -1753,7 +1753,7 @@ sprites{
 		}
 	}
 	dying_05_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=316.0000 163.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -1769,7 +1769,7 @@ sprites{
 		}
 	}
 	dying_06_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -1785,7 +1785,7 @@ sprites{
 		}
 	}
 	dying_06_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -1801,7 +1801,7 @@ sprites{
 		}
 	}
 	dying_06_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -1817,7 +1817,7 @@ sprites{
 		}
 	}
 	dying_06_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -1833,7 +1833,7 @@ sprites{
 		}
 	}
 	dying_06_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -1849,7 +1849,7 @@ sprites{
 		}
 	}
 	dying_07_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 326.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -1865,7 +1865,7 @@ sprites{
 		}
 	}
 	dying_07_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -1881,7 +1881,7 @@ sprites{
 		}
 	}
 	dying_07_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 489.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -1897,7 +1897,7 @@ sprites{
 		}
 	}
 	dying_07_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 652.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -1913,7 +1913,7 @@ sprites{
 		}
 	}
 	dying_07_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=171.0000 163.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -1929,7 +1929,7 @@ sprites{
 		}
 	}
 	idling_01_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1944,7 +1944,7 @@ sprites{
 		}
 	}
 	idling_01_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1959,7 +1959,7 @@ sprites{
 		}
 	}
 	idling_01_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1974,7 +1974,7 @@ sprites{
 		}
 	}
 	idling_01_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -1989,7 +1989,7 @@ sprites{
 		}
 	}
 	idling_01_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2004,7 +2004,7 @@ sprites{
 		}
 	}
 	idling_02_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2020,7 +2020,7 @@ sprites{
 		}
 	}
 	idling_02_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2036,7 +2036,7 @@ sprites{
 		}
 	}
 	idling_02_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2052,7 +2052,7 @@ sprites{
 		}
 	}
 	idling_02_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2068,7 +2068,7 @@ sprites{
 		}
 	}
 	idling_02_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2084,7 +2084,7 @@ sprites{
 		}
 	}
 	idling_03_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2100,7 +2100,7 @@ sprites{
 		}
 	}
 	idling_03_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2116,7 +2116,7 @@ sprites{
 		}
 	}
 	idling_03_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2132,7 +2132,7 @@ sprites{
 		}
 	}
 	idling_03_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2148,7 +2148,7 @@ sprites{
 		}
 	}
 	idling_03_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2164,7 +2164,7 @@ sprites{
 		}
 	}
 	idling_big_blue{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 326.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2180,7 +2180,7 @@ sprites{
 		}
 	}
 	idling_big_red{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2196,7 +2196,7 @@ sprites{
 		}
 	}
 	idling_big_rock{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 489.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2212,7 +2212,7 @@ sprites{
 		}
 	}
 	idling_big_winged{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 652.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -2228,7 +2228,7 @@ sprites{
 		}
 	}
 	idling_big_yellow{
-		file=Queen_Candypop_Bud.png
+		file=queen_candypop_bud.png
 		file_pos=0.0000 163.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000

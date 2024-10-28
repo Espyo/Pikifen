@@ -11,7 +11,7 @@ If you found a problem while using _Pikifen_, please refer to the included manua
 
 ## Suggesting features or improvements
 
-If you have any feedback, suggestions, or ideas, feel free to open a [GitHub issue](https://github.com/Espyo/Pikifen/issues) with them. Though the easiest and most direct way is to just tell me about it on the [Discord server](https://discord.gg/qbhz4u3). No need to be formal with these suggestions, but check `Source/documents/Todo.txt` to make sure it's not already there, and also please let me know why you think _Pikifen_ would be better with them.
+If you have any feedback, suggestions, or ideas, feel free to open a [GitHub issue](https://github.com/Espyo/Pikifen/issues) with them. Though the easiest and most direct way is to just tell me about it on the [Discord server](https://discord.gg/qbhz4u3). No need to be formal with these suggestions, but check `source/documents/todo.txt` to make sure it's not already there, and also please let me know why you think _Pikifen_ would be better with them.
 
 ## Contributing with code
 
@@ -21,7 +21,7 @@ If you want to make your own code changes to _Pikifen_ and you want them include
 
 1. Contact me on the [Discord server](https://discord.gg/qbhz4u3) first. I may have feedback on how to organize things, or may not even want the changes in the first place.
 2. Make your changes (see [Writing code](#writing-code) and [Commits](#commits) below).
-3. Update `Source/documents/Todo.txt` if necessary.
+3. Update `source/documents/todo.txt` if necessary.
 4. Update the manual if necessary.
 4. Update the manual's changelog if necessary.
 5. Open a pull request with your changes.

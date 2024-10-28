@@ -61,7 +61,7 @@ animations{
 }
 sprites{
 	crumbling_01{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=498.0000 286.0000
 		file_size=75.0000 75.0000
 		hitboxes{
@@ -75,7 +75,7 @@ sprites{
 		}
 	}
 	crumbling_02{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=574.0000 286.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 207
@@ -90,7 +90,7 @@ sprites{
 		}
 	}
 	crumbling_03{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=650.0000 286.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 159
@@ -105,7 +105,7 @@ sprites{
 		}
 	}
 	crumbling_04{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=422.0000 362.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 111
@@ -120,7 +120,7 @@ sprites{
 		}
 	}
 	crumbling_05{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=498.0000 362.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 63
@@ -135,7 +135,7 @@ sprites{
 		}
 	}
 	idling{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=422.0000 286.0000
 		file_size=75.0000 75.0000
 		hitboxes{
@@ -149,7 +149,7 @@ sprites{
 		}
 	}
 	invisible{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=422.0000 286.0000
 		file_size=75.0000 75.0000
 		tint=255 255 255 0
@@ -164,7 +164,7 @@ sprites{
 		}
 	}
 	landing{
-		file=Beady_Long_Legs.png
+		file=beady_long_legs.png
 		file_pos=422.0000 286.0000
 		file_size=75.0000 75.0000
 		hitboxes{

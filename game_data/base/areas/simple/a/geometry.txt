@@ -25,7 +25,7 @@ edges{
 sectors{
 	s{
 		z=0.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 }
 mobs{

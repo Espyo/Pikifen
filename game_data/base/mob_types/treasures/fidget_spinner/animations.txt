@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Fidget_spinner.png
+		file=fidget_spinner.png
 		file_pos=0.0000 0.0000
 		file_size=140.0000 140.0000
 	}

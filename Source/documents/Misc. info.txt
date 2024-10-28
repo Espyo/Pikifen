@@ -480,7 +480,7 @@ Procedure for every version release
         Point down all changes that were necessary for this to compile
         Create a zip file (see below)
         Send it to beta testers so they can check for stuff that's immediately wrong
-        After they're done, tell them to confirm that Error_log.txt reported nothing
+        After they're done, tell them to confirm that error_log.txt reported nothing
     Final preparations
         Change version number in the code
             Use the helper tool, or edit const.h and Pikifen.rc
@@ -496,10 +496,10 @@ Procedure for every version release
         Check any changes made on Windows in order to compile, and port them over
     Final build
         Compile it once more on Linux just to be sure (full build)
-        Delete Error_log.txt
+        Delete error_log.txt
         Make sure the title screen shows the right version
         Test it out by playing a bit
-        Confirm that Error_log.txt reported no errors
+        Confirm that error_log.txt reported no errors
     Release
         Commit all changes made in preparation for the next version, and push
         Compile it on Windows with a release x64 target build
@@ -557,7 +557,7 @@ Procedure for every version release
                 Sans testing areas
             README file
             LICENSE file
-            Manual.html file
+            manual.html file
         Zip the folder, not the content inside
         Name the zip file the same as the folder
         The file format is .zip, not .7z

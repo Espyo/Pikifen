@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 386.0000
 		file_size=76.0000 43.0000
 		angle=1.5708

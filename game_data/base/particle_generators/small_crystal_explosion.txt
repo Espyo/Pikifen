@@ -5,7 +5,7 @@ emission_interval = 0
 number = 8
 number_deviation = 1
 base {
-    bitmap = Crystal_nodule.png
+    bitmap = crystal_nodule.png
     duration = 0.75
     friction = 1
     gravity = 100

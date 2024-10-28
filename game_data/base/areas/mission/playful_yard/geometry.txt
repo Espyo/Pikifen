@@ -6569,204 +6569,204 @@ sectors{
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=257.0000
-		texture=Stone.jpg
+		texture=stone.jpg
 		texture_rotate=4.1830
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=260.0000
-		texture=Stone.jpg
+		texture=stone.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=150.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=220.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=50.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=100.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=192.0000
 		brightness=160
-		texture=Wood_stump.jpg
+		texture=wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
 	s{
 		z=96.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 	}
 	s{
 		z=96.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 	}
 	s{
 		z=16.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=60.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 	}
 	s{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=100.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=150.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=200.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=300.0000
-		texture=Stone.jpg
+		texture=stone.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=300.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=250.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=200.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		type=Blocking
 		z=350.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=-100.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
@@ -6774,434 +6774,434 @@ sectors{
 		fade=true
 		hazards=water
 		hazards_floor=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=50.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.0659
 		texture_tint=116 38 22
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=4.4904
 		texture_tint=18 106 107
 	}
 	s{
 		z=60.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=4.2172
 		texture_tint=46 175 55
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=60.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.9732
 		texture_tint=175 46 46
 	}
 	s{
 		z=60.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.3245
 		texture_tint=137 46 175
 	}
 	s{
 		z=60.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=60.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.7831
 		texture_tint=187 133 65
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_rotate=1.6406
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_rotate=1.6406
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		hazards=water
 		hazards_floor=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=-50.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=16.0000
 		brightness=160
 		fade=true
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=16.0000
 		brightness=160
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
 		z=200.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=50.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=100.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=150.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=400.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.7244
 		texture_tint=64 45 175
 	}
 	s{
 		z=200.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=200.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.1878
 		texture_tint=80 18 107
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.7683
 		texture_tint=18 107 24
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.0220
 		texture_tint=107 68 18
 	}
 	s{
 		z=600.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=4.9684
 		texture_tint=30 18 107
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.5001
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.3782
 		texture_tint=80 18 107
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.0756
 		texture_tint=107 68 18
 	}
 	s{
 		z=302.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=4.6953
 		texture_tint=116 38 22
 	}
 	s{
 		z=400.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_tint=175 167 45
 	}
 	s{
 		z=400.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.3391
 		texture_tint=116 38 22
 	}
 	s{
 		z=400.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=18 107 24
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.4660
 		texture_tint=30 18 107
 	}
 	s{
 		z=550.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.8759
 		texture_tint=175 167 45
 	}
 	s{
 		z=200.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.7928
 		texture_tint=177 127 81
 	}
 	s{
 		z=301.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=79 23 11
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.6173
 		texture_tint=175 167 45
 	}
 	s{
 		z=250.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.5879
 		texture_tint=116 38 22
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=202.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.4807
 		texture_tint=177 127 81
 	}
 	s{
 		z=2.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.4172
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		type=Blocking
 		z=202.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=5.1051
 		texture_tint=199 147 122
 	}
 	s{
 		type=Blocking
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=4.8660
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
@@ -7210,13 +7210,13 @@ sectors{
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
@@ -7224,66 +7224,66 @@ sectors{
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=700.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.5197
 		texture_tint=198 147 121
 	}
 	s{
 		z=200.0000
-		texture=Wood_bark.jpg
+		texture=wood_bark.jpg
 		texture_rotate=1.7928
 		texture_tint=177 127 81
 	}
 	s{
 		z=300.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=5.1051
 		texture_tint=30 18 107
 	}
 	s{
 		z=552.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
 	s{
 		z=552.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=2.8513
 		texture_tint=177 127 81
 	}
@@ -7292,140 +7292,140 @@ sectors{
 		z=350.0000
 		hazards=water
 		hazards_floor=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		type=Blocking
 		z=350.0000
 		fade=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		type=Blocking
 		z=350.0000
 		fade=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		type=Blocking
 		z=350.0000
 		fade=true
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		z=200.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=Dirt.jpg
+		texture=dirt.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=175 175 175
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 		texture_tint=210 252 206
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Grass_light.jpg
+		texture=grass_light.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=Dirt.jpg
+		texture=dirt.jpg
 	}
 	s{
 		z=300.0000
-		texture=Dirt_soft.jpg
-	}
-	s{
-		z=300.0000
-		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=300.0000
 		brightness=160
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
+	}
+	s{
+		z=300.0000
+		brightness=160
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=192.0000
-		texture=Wood_stump.jpg
+		texture=wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
@@ -7433,7 +7433,7 @@ sectors{
 		z=192.0000
 		brightness=160
 		fade=true
-		texture=Wood_stump.jpg
+		texture=wood_stump.jpg
 		texture_scale=0.4000 0.4000
 		texture_trans=327.6375 -358.8571
 	}
@@ -7441,125 +7441,125 @@ sectors{
 		z=200.0000
 		hazards=water
 		hazards_floor=true
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=127 88 52
 	}
 	s{
 		z=200.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=127 88 52
 	}
 	s{
 		z=200.0000
 		fade=true
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=0.2220
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.6367
 		texture_tint=177 127 81
 	}
 	s{
 		z=202.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.6367
 		texture_tint=177 127 81
 	}
 	s{
 		type=Blocking
 		z=410.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 140 107
 	}
 	s{
 		type=Blocking
 		z=440.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		type=Blocking
 		z=410.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=3.9099
 		texture_tint=177 140 107
 	}
 	s{
 		type=Blocking
 		z=460.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_tint=132 103 87
 	}
 	s{
 		type=Blocking
 		z=460.0000
-		texture=Wood_plank.jpg
+		texture=wood_plank.jpg
 		texture_rotate=1.8953
 		texture_tint=132 103 87
 	}
 	s{
 		type=Blocking
 		z=350.0000
-		texture=Grass_dark.jpg
+		texture=grass_dark.jpg
 	}
 	s{
 		type=Blocking
 		z=520.0000
-		texture=Metal_clean.jpg
+		texture=metal_clean.jpg
 	}
 	s{
 		type=Blocking
 		z=520.0000
-		texture=Metal_clean.jpg
+		texture=metal_clean.jpg
 	}
 	s{
 		z=0.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=0.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=50.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=50.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=50.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=50.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 	s{
 		z=100.0000
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 		texture_tint=188 255 255
 	}
 	s{
 		z=100.0000
 		brightness=160
 		fade=true
-		texture=Dirt_soft.jpg
+		texture=dirt_soft.jpg
 	}
 }
 mobs{
@@ -9546,35 +9546,35 @@ tree_shadows{
 		pos=104.0000 -232.0000
 		size=1936.0000 2480.0000
 		alpha=192
-		file=Tree_shadow.png
+		file=tree_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=-1040.0000 2064.0000
 		size=4224.0000 2112.0000
 		alpha=192
-		file=Only_shadow.png
+		file=only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=-2008.0000 -1704.0000
 		size=2288.0000 5424.0000
 		alpha=192
-		file=Only_shadow.png
+		file=only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=2400.0000 824.0000
 		size=2656.0000 4592.0000
 		alpha=192
-		file=Only_shadow.png
+		file=only_shadow.png
 		sway=1.0000 1.0000
 	}
 	shadow{
 		pos=1432.0000 -2944.0000
 		size=4592.0000 2944.0000
 		alpha=192
-		file=Only_shadow.png
+		file=only_shadow.png
 		sway=1.0000 1.0000
 	}
 }

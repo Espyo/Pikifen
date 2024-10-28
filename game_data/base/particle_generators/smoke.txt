@@ -5,7 +5,7 @@ emission_interval = 0.06
 number = 1
 number_deviation = 0
 base {
-    bitmap = Smoke.png
+    bitmap = smoke.png
     duration = 0.7
     friction = 1
     gravity = 0

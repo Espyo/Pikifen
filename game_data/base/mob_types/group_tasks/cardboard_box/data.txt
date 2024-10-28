@@ -40,7 +40,7 @@ children {
 
 sounds {
     obstacle_cleared {
-        file = Obstacle_cleared.ogg
+        file = obstacle_cleared.ogg
         type = world_global
     }
 }

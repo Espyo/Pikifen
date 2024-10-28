@@ -12,12 +12,12 @@ riders = leaders
 
 sounds {
     steam {
-        file = Steam.ogg
+        file = steam.ogg
         loop = true
         volume = 40
     }
     fountain {
-        file = Fountain.ogg
+        file = fountain.ogg
         loop = true
     }
 }

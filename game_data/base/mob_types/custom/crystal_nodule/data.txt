@@ -23,7 +23,7 @@ vulnerabilities {
 
 sounds {
     thump {
-        file = Thump.ogg
+        file = thump.ogg
     }
 }
 

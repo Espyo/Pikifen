@@ -29,17 +29,17 @@ reaches {
 
 sounds {
     bite {
-        file = Bite.ogg
+        file = bite.ogg
         volume = 40
         speed = 150
     }
     chew {
-        file = Bite.ogg
+        file = bite.ogg
         volume = 20
         speed = 140
     }
     swallow {
-        file = Swallow.ogg
+        file = swallow.ogg
         volume = 20
         speed = 140
         speed_deviation = 20

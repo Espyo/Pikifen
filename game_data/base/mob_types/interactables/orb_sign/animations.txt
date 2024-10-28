@@ -24,27 +24,27 @@ animations{
 }
 sprites{
 	idling_01{
-		file=Orb_sign.png
+		file=orb_sign.png
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.5000 1.5000
 	}
 	idling_02{
-		file=Orb_sign.png
+		file=orb_sign.png
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.6000 1.6000
 		angle=5.9341
 	}
 	idling_03{
-		file=Orb_sign.png
+		file=orb_sign.png
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.5000 1.5000
 		angle=5.5851
 	}
 	idling_04{
-		file=Orb_sign.png
+		file=orb_sign.png
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
 		scale=1.4000 1.4000

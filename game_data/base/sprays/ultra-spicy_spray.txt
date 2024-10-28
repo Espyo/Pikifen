@@ -8,5 +8,5 @@ distance_range = 128
 effects = spicy
 group = true
 group_pikmin_only = true
-icon = Ultra-spicy_spray.png
+icon = ultra-spicy_spray.png
 ingredients = 10

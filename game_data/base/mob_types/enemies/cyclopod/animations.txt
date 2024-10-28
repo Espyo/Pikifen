@@ -322,7 +322,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 726.0000
 		file_size=91.0000 120.0000
 		offset=0.0000 4.0000
@@ -345,7 +345,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=92.0000 726.0000
 		file_size=97.0000 120.0000
 		offset=0.0000 5.0000
@@ -369,7 +369,7 @@ sprites{
 		}
 	}
 	attacking_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=190.0000 726.0000
 		file_size=105.0000 120.0000
 		offset=-0.4451 6.1473
@@ -395,7 +395,7 @@ sprites{
 		}
 	}
 	attacking_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=190.0000 726.0000
 		file_size=105.0000 120.0000
 		offset=-4.6117 4.0132
@@ -421,7 +421,7 @@ sprites{
 		}
 	}
 	attacking_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=190.0000 726.0000
 		file_size=105.0000 120.0000
 		offset=-4.7304 -5.0089
@@ -447,7 +447,7 @@ sprites{
 		}
 	}
 	attacking_06{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=190.0000 726.0000
 		file_size=105.0000 120.0000
 		offset=4.6478 -4.6527
@@ -473,7 +473,7 @@ sprites{
 		}
 	}
 	attacking_07{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=190.0000 726.0000
 		file_size=105.0000 120.0000
 		offset=4.5291 4.6068
@@ -498,7 +498,7 @@ sprites{
 		}
 	}
 	coiling_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 605.0000
 		file_size=115.0000 120.0000
 		offset=7.0000 4.0000
@@ -521,7 +521,7 @@ sprites{
 		}
 	}
 	coiling_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=116.0000 605.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 4.0000
@@ -544,7 +544,7 @@ sprites{
 		}
 	}
 	coiling_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=232.0000 605.0000
 		file_size=106.0000 120.0000
 		offset=4.0000 4.0000
@@ -567,7 +567,7 @@ sprites{
 		}
 	}
 	coiling_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=339.0000 605.0000
 		file_size=95.0000 120.0000
 		offset=-2.0000 4.0000
@@ -590,7 +590,7 @@ sprites{
 		}
 	}
 	coiling_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=435.0000 605.0000
 		file_size=87.0000 120.0000
 		offset=-1.0000 4.0000
@@ -613,7 +613,7 @@ sprites{
 		}
 	}
 	coiling_06{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=523.0000 605.0000
 		file_size=80.0000 120.0000
 		offset=0.0000 4.0000
@@ -636,7 +636,7 @@ sprites{
 		}
 	}
 	coiling_07{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=523.0000 605.0000
 		file_size=80.0000 120.0000
 		offset=0.0000 4.0000
@@ -660,7 +660,7 @@ sprites{
 		}
 	}
 	dizzy_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.3212 -2.5033
@@ -684,7 +684,7 @@ sprites{
 		}
 	}
 	dizzy_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.5845 1.1834
@@ -708,7 +708,7 @@ sprites{
 		}
 	}
 	dizzy_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.8478 0.3934
@@ -731,7 +731,7 @@ sprites{
 		}
 	}
 	dizzy_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=107.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.5845 0.6567
@@ -754,7 +754,7 @@ sprites{
 		}
 	}
 	dizzy_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=214.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=1.1112 1.1834
@@ -777,7 +777,7 @@ sprites{
 		}
 	}
 	dizzy_06{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=321.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.0578 1.9734
@@ -800,7 +800,7 @@ sprites{
 		}
 	}
 	dizzy_07{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=428.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=0.8478 1.4467
@@ -823,7 +823,7 @@ sprites{
 		}
 	}
 	dizzy_08{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=535.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=1.3745 2.2367
@@ -846,7 +846,7 @@ sprites{
 		}
 	}
 	dizzy_09{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=642.0000 847.0000
 		file_size=106.0000 120.0000
 		offset=2.1645 1.7100
@@ -869,7 +869,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=0.0000 5.0000
@@ -891,7 +891,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=126.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=0.0000 5.0000
@@ -913,7 +913,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=252.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=0.0000 5.0000
@@ -935,7 +935,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=252.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=1.0000 5.0000
@@ -957,7 +957,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=378.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=0.0000 5.0000
@@ -979,7 +979,7 @@ sprites{
 		}
 	}
 	dying_06{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=378.0000 1089.0000
 		file_size=125.0000 120.0000
 		offset=1.0000 5.0000
@@ -1001,7 +1001,7 @@ sprites{
 		}
 	}
 	dying_07{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=504.0000 1089.0000
 		file_size=102.0000 120.0000
 		offset=-1.0000 5.0000
@@ -1023,7 +1023,7 @@ sprites{
 		}
 	}
 	dying_08{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=607.0000 1089.0000
 		file_size=84.0000 120.0000
 		offset=-2.0000 5.0000
@@ -1045,7 +1045,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 0.0000
 		file_size=114.0000 120.0000
 		offset=8.0000 5.0000
@@ -1068,7 +1068,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=115.0000 0.0000
 		file_size=114.0000 120.0000
 		offset=9.0000 5.5000
@@ -1092,7 +1092,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=230.0000 0.0000
 		file_size=114.0000 120.0000
 		offset=10.0000 4.5000
@@ -1116,7 +1116,7 @@ sprites{
 		}
 	}
 	idling_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=345.0000 0.0000
 		file_size=114.0000 120.0000
 		offset=5.0000 4.0000
@@ -1139,7 +1139,7 @@ sprites{
 		}
 	}
 	idling_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=460.0000 0.0000
 		file_size=114.0000 120.0000
 		offset=3.5000 4.0000
@@ -1163,7 +1163,7 @@ sprites{
 		}
 	}
 	looking_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 121.0000
 		file_size=115.0000 120.0000
 		offset=9.0000 5.0000
@@ -1186,7 +1186,7 @@ sprites{
 		}
 	}
 	looking_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=116.0000 121.0000
 		file_size=115.0000 120.0000
 		offset=9.0000 4.0000
@@ -1209,7 +1209,7 @@ sprites{
 		}
 	}
 	looking_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=232.0000 121.0000
 		file_size=115.0000 120.0000
 		offset=9.0000 5.0000
@@ -1232,7 +1232,7 @@ sprites{
 		}
 	}
 	looking_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=348.0000 121.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 5.0000
@@ -1255,7 +1255,7 @@ sprites{
 		}
 	}
 	looking_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=464.0000 121.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 4.0000
@@ -1278,7 +1278,7 @@ sprites{
 		}
 	}
 	looking_06{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 242.0000
 		file_size=115.0000 120.0000
 		offset=9.0000 4.0000
@@ -1301,7 +1301,7 @@ sprites{
 		}
 	}
 	looking_07{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=116.0000 242.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 4.0000
@@ -1324,7 +1324,7 @@ sprites{
 		}
 	}
 	looking_08{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=232.0000 242.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 5.0000
@@ -1347,7 +1347,7 @@ sprites{
 		}
 	}
 	looking_09{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=348.0000 242.0000
 		file_size=115.0000 120.0000
 		offset=9.0000 5.0000
@@ -1370,7 +1370,7 @@ sprites{
 		}
 	}
 	looking_10{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=464.0000 242.0000
 		file_size=115.0000 120.0000
 		offset=8.0000 5.0000
@@ -1393,7 +1393,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 484.0000
 		file_size=128.0000 120.0000
 		offset=-16.0000 5.0000
@@ -1416,7 +1416,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=129.0000 484.0000
 		file_size=128.0000 120.0000
 		offset=-15.0000 5.0000
@@ -1439,7 +1439,7 @@ sprites{
 		}
 	}
 	moving_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=258.0000 484.0000
 		file_size=128.0000 120.0000
 		offset=-16.0000 5.0000
@@ -1462,7 +1462,7 @@ sprites{
 		}
 	}
 	moving_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=387.0000 484.0000
 		file_size=128.0000 120.0000
 		offset=-16.0000 4.0000
@@ -1485,7 +1485,7 @@ sprites{
 		}
 	}
 	moving_05{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=516.0000 484.0000
 		file_size=128.0000 120.0000
 		offset=-15.0000 4.0000
@@ -1508,7 +1508,7 @@ sprites{
 		}
 	}
 	moving_start_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 363.0000
 		file_size=115.0000 120.0000
 		offset=7.0000 4.0000
@@ -1531,7 +1531,7 @@ sprites{
 		}
 	}
 	moving_start_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=116.0000 363.0000
 		file_size=99.0000 120.0000
 		offset=0.0000 3.0000
@@ -1554,7 +1554,7 @@ sprites{
 		}
 	}
 	moving_start_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=216.0000 363.0000
 		file_size=97.0000 120.0000
 		offset=-10.0000 2.0000
@@ -1577,7 +1577,7 @@ sprites{
 		}
 	}
 	moving_start_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=314.0000 363.0000
 		file_size=122.0000 120.0000
 		offset=-15.0000 3.0000
@@ -1600,7 +1600,7 @@ sprites{
 		}
 	}
 	recovering_01{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=0.0000 968.0000
 		file_size=99.0000 120.0000
 		offset=0.5000 5.0000
@@ -1623,7 +1623,7 @@ sprites{
 		}
 	}
 	recovering_02{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=100.0000 968.0000
 		file_size=87.0000 120.0000
 		offset=0.0000 5.0000
@@ -1646,7 +1646,7 @@ sprites{
 		}
 	}
 	recovering_03{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=100.0000 968.0000
 		file_size=87.0000 120.0000
 		offset=0.0000 5.0000
@@ -1670,7 +1670,7 @@ sprites{
 		}
 	}
 	recovering_04{
-		file=Cyclopod.png
+		file=cyclopod.png
 		file_pos=188.0000 968.0000
 		file_size=102.0000 120.0000
 		offset=2.0000 5.0000

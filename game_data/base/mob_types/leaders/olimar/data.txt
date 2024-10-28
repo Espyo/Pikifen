@@ -4,7 +4,7 @@ description = A veteran freight worker from Hocotate. Works hard and has a knack
 acceleration = 500
 can_walk_on_others = true
 height = 46
-icon = Olimar_icon.png
+icon = olimar_icon.png
 main_color = 221 17 17
 max_carriers = 5
 max_health = 2000
@@ -18,13 +18,13 @@ weight = 1
 
 sounds {
     dismissing {
-        file = Olimar_dismiss.ogg
+        file = olimar_dismiss.ogg
     }
     name_call {
-        file = Olimar_name_call.ogg
+        file = olimar_name_call.ogg
     }
     whistling {
-        file = Olimar_whistle.ogg
+        file = olimar_whistle.ogg
     }
     footstep_1 {
         file = Footstep_1.ogg
@@ -39,7 +39,7 @@ sounds {
         speed_deviation = 30
     }
     thump {
-        file = Thump.ogg
+        file = thump.ogg
         volume = 40
     }
 }

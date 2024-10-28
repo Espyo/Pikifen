@@ -174,7 +174,7 @@ animations{
 }
 sprites{
 	blooming_01{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=65.0000 0.0000
 		file_size=24.0000 29.0000
 		offset=5.5000 1.5000
@@ -196,7 +196,7 @@ sprites{
 		}
 	}
 	blooming_02{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=90.0000 0.0000
 		file_size=31.0000 29.0000
 		offset=9.0000 1.5000
@@ -218,7 +218,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=122.0000 0.0000
 		file_size=43.0000 36.0000
 		offset=15.0000 0.0000
@@ -240,7 +240,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=166.0000 0.0000
 		file_size=51.0000 35.0000
 		offset=19.0000 0.5000
@@ -262,7 +262,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=218.0000 0.0000
 		file_size=31.0000 27.0000
 		offset=10.0000 0.5000
@@ -284,7 +284,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=250.0000 0.0000
 		file_size=21.0000 19.0000
 		offset=8.0000 0.0000
@@ -306,7 +306,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=250.0000 20.0000
 		file_size=10.0000 11.0000
 		offset=3.0000 0.0000
@@ -328,7 +328,7 @@ sprites{
 		}
 	}
 	idling_01_blue{
-		file=Pellet_Posy_Blue.png
+		file=pellet_posy_blue.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=104.5000 0.0000
@@ -351,7 +351,7 @@ sprites{
 		}
 	}
 	idling_01_red{
-		file=Pellet_Posy_Red.png
+		file=pellet_posy_red.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=104.5000 0.0000
@@ -374,7 +374,7 @@ sprites{
 		}
 	}
 	idling_01_rock{
-		file=Pellet_Posy_Rock.png
+		file=pellet_posy_rock.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=104.5000 0.0000
@@ -397,7 +397,7 @@ sprites{
 		}
 	}
 	idling_01_winged{
-		file=Pellet_Posy_Winged.png
+		file=pellet_posy_winged.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=104.5000 0.0000
@@ -420,7 +420,7 @@ sprites{
 		}
 	}
 	idling_01_yellow{
-		file=Pellet_Posy_Yellow.png
+		file=pellet_posy_yellow.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=104.5000 0.0000
@@ -443,7 +443,7 @@ sprites{
 		}
 	}
 	idling_02_blue{
-		file=Pellet_Posy_Blue.png
+		file=pellet_posy_blue.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=105.6000 0.0000
@@ -467,7 +467,7 @@ sprites{
 		}
 	}
 	idling_02_red{
-		file=Pellet_Posy_Red.png
+		file=pellet_posy_red.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=105.6000 0.0000
@@ -491,7 +491,7 @@ sprites{
 		}
 	}
 	idling_02_rock{
-		file=Pellet_Posy_Rock.png
+		file=pellet_posy_rock.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=105.6000 0.0000
@@ -515,7 +515,7 @@ sprites{
 		}
 	}
 	idling_02_winged{
-		file=Pellet_Posy_Winged.png
+		file=pellet_posy_winged.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=105.6000 0.0000
@@ -539,7 +539,7 @@ sprites{
 		}
 	}
 	idling_02_yellow{
-		file=Pellet_Posy_Yellow.png
+		file=pellet_posy_yellow.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=105.6000 0.0000
@@ -563,7 +563,7 @@ sprites{
 		}
 	}
 	idling_03_blue{
-		file=Pellet_Posy_Blue.png
+		file=pellet_posy_blue.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=106.7000 0.0000
@@ -587,7 +587,7 @@ sprites{
 		}
 	}
 	idling_03_red{
-		file=Pellet_Posy_Red.png
+		file=pellet_posy_red.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=106.7000 0.0000
@@ -611,7 +611,7 @@ sprites{
 		}
 	}
 	idling_03_rock{
-		file=Pellet_Posy_Rock.png
+		file=pellet_posy_rock.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=106.7000 0.0000
@@ -635,7 +635,7 @@ sprites{
 		}
 	}
 	idling_03_winged{
-		file=Pellet_Posy_Winged.png
+		file=pellet_posy_winged.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=106.7000 0.0000
@@ -659,7 +659,7 @@ sprites{
 		}
 	}
 	idling_03_yellow{
-		file=Pellet_Posy_Yellow.png
+		file=pellet_posy_yellow.png
 		file_pos=0.0000 0.0000
 		file_size=222.0000 232.0000
 		offset=106.7000 0.0000
@@ -683,7 +683,7 @@ sprites{
 		}
 	}
 	sapling_01{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=19.0000 0.0000
 		file_size=20.0000 29.0000
 		offset=3.5000 1.5000
@@ -705,7 +705,7 @@ sprites{
 		}
 	}
 	sapling_02{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=40.0000 0.0000
 		file_size=24.0000 29.0000
 		offset=5.5000 1.5000
@@ -727,7 +727,7 @@ sprites{
 		}
 	}
 	sapling_03{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=40.0000 0.0000
 		file_size=24.0000 29.0000
 		offset=5.7500 1.5000
@@ -750,7 +750,7 @@ sprites{
 		}
 	}
 	sapling_04{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=40.0000 0.0000
 		file_size=24.0000 29.0000
 		offset=6.0000 1.5000
@@ -773,7 +773,7 @@ sprites{
 		}
 	}
 	sprout_01{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=0.0000 0.0000
 		file_size=18.0000 29.0000
 		offset=2.5000 1.5000
@@ -795,7 +795,7 @@ sprites{
 		}
 	}
 	sprout_02{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=0.0000 0.0000
 		file_size=18.0000 29.0000
 		offset=2.7000 1.5000
@@ -818,7 +818,7 @@ sprites{
 		}
 	}
 	sprout_03{
-		file=Pellet_Posy_common.png
+		file=pellet_posy_common.png
 		file_pos=0.0000 0.0000
 		file_size=18.0000 29.0000
 		offset=2.9000 1.5000

@@ -1,1 +1,1 @@
-leader_damage_sparks = Sparks.txt
+leader_damage_sparks = sparks.txt

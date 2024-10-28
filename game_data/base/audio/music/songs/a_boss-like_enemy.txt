@@ -9,4 +9,4 @@ notes = This song is an original creation for Pikifen.
 title = A Boss-like Enemy!
 loop_start = 4.8
 
-main_track = A_Boss-like_Enemy.ogg
+main_track = a_boss-like_enemy.ogg

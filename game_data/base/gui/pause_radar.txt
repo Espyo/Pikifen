@@ -18,13 +18,13 @@ positions{
 	tooltip=50.0000 96.0000 96.0000 4.0000
 }
 files{
-	cursor=Radar/Cursor.png
-	pikmin=Radar/Pikmin.png
-	treasure=Radar/Treasure.png
-	enemy=Radar/Enemy.png
-	leader_bubble=Bubble.png
-	onion_skeleton=Radar/Onion_skeleton.png
-	onion_bulb=Radar/Onion_bulb.png
-	ship=Radar/Ship.png
-	path=Radar/Path.png
+	cursor=radar/cursor.png
+	pikmin=radar/pikmin.png
+	treasure=radar/treasure.png
+	enemy=radar/enemy.png
+	leader_bubble=bubble.png
+	onion_skeleton=radar/onion_skeleton.png
+	onion_bulb=radar/onion_bulb.png
+	ship=radar/ship.png
+	path=radar/path.png
 }

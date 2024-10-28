@@ -21,7 +21,7 @@ reaches {
 
 sounds {
     rolling {
-        file = Rolling_boulder.ogg
+        file = rolling_boulder.ogg
         volume = 30
         loop = true
     }

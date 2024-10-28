@@ -65,58 +65,58 @@ animations{
 }
 sprites{
 	closed{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 	}
 	open_01{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		tint=255 255 255 128
 	}
 	open_02{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 0.0000
 		tint=255 255 255 128
 	}
 	open_03{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=2.0000 0.0000
 		tint=255 255 255 128
 	}
 	open_04{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=-1.0000 0.0000
 		tint=255 255 255 128
 	}
 	open_05{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=-2.0000 0.0000
 		tint=255 255 255 128
 	}
 	rattling_01{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 1.0000
 	}
 	rattling_02{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=1.0000 -1.0000
 	}
 	rattling_03{
-		file=Automatic_gate.png
+		file=automatic_gate.png
 		file_pos=0.0000 0.0000
 		file_size=40.0000 192.0000
 		offset=-1.0000 0.0000

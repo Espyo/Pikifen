@@ -46,40 +46,40 @@ animations{
 }
 sprites{
 	bumped_01{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 113.0000
 		file_size=124.0000 112.0000
 	}
 	bumped_02{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 226.0000
 		file_size=124.0000 112.0000
 	}
 	bumped_03{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 113.0000
 		file_size=124.0000 112.0000
 		scale=-1.0000 1.0000
 	}
 	bumped_04{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 226.0000
 		file_size=124.0000 112.0000
 		scale=-1.0000 1.0000
 	}
 	idling_01{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
 	}
 	idling_02{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
 		offset=-0.8000 0.0000
 	}
 	idling_03{
-		file=Common_Glowcap.png
+		file=common_glowcap.png
 		file_pos=0.0000 0.0000
 		file_size=124.0000 112.0000
 		offset=0.8000 0.0000

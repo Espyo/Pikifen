@@ -23,7 +23,7 @@ animations{
 }
 sprites{
 	safe{
-		file=Gas_pipe.png
+		file=gas_pipe.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -45,7 +45,7 @@ sprites{
 		}
 	}
 	shooting_01{
-		file=Gas_pipe.png
+		file=gas_pipe.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -68,7 +68,7 @@ sprites{
 		}
 	}
 	shooting_02{
-		file=Gas_pipe.png
+		file=gas_pipe.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 		scale=1.1000 1.1000

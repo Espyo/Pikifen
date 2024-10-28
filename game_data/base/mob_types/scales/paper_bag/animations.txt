@@ -97,54 +97,54 @@ animations{
 }
 sprites{
 	down_01{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		scale=0.9800 0.9800
 	}
 	down_02{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=1.0000 0.0000
 		scale=0.9800 0.9800
 	}
 	down_03{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=1.0000 1.0000
 		scale=0.9800 0.9800
 	}
 	down_04{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 193.0000
 		file_size=95.0000 192.0000
 		offset=-1.0000 0.0000
 		scale=0.9800 0.9800
 	}
 	up_01{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		scale=1.0100 1.0100
 	}
 	up_02{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		offset=1.0000 0.0000
 		scale=1.0100 1.0100
 	}
 	up_03{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		offset=1.0000 1.0000
 		scale=1.0100 1.0100
 	}
 	up_04{
-		file=Paper_bag.png
+		file=paper_bag.png
 		file_pos=0.0000 0.0000
 		file_size=96.0000 192.0000
 		offset=-1.0000 0.0000

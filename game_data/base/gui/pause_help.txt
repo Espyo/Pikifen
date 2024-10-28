@@ -14,63 +14,63 @@ positions{
 }
 tidbits{
 	gameplay_basics{
-		Controlling leaders;You take control of a leader, and your job is to order your Pikmin to do tasks. Organization, planning, and multitasking are essential to make the most out of your time!;Help/Leader.jpg
-		Calling idle Pikmin;You can call an idle Pikmin to your group by whistling it or bumping against it. Afterwards, it will start following you.;Help/Whistling.jpg
-		Throwing;Throw a Pikmin in your group towards a task or wildlife, in order to have it work on it or start attacking.;Help/Throwing_Pikmin.jpg
-		Idle Pikmin habits;Idle Pikmin have a glow to them. When idle, they will also work on nearby things on their own.;Help/Idle_Pikmin.jpg
-		Making Pikmin idle;Throwing a Pikmin at an empty spot will leave it idling where it lands. It's also possible to dismiss them all directly.;Help/Idle_Pikmin.jpg
-		Onion;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.;Help/Onion.jpg
-		Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!;Help/Carrying.jpg
-		Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!;Help/Pikmin_types.jpg
-		Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.;Help/Pikmin_types_HUD.jpg
-		Carrying target;Some items need multiple Pikmin to carry. The type of Pikmin receiving the object at the Onion matches the majority of carriers.;Help/Carrying_rules.jpg
-		Obstacles;Some obstacles will require multiple Pikmin to work together to clear them, sometimes by combining their strengths, sometimes their weights.;Help/Obstacle.jpg
-		Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin so you can multitask.;Help/Leaders_HUD.jpg
-		Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin. Use this to reach new places.;Help/Throwing_leaders.jpg
-		Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!;Help/Combat.jpg
-		Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.;Help/Weak_spots.jpg
-		Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.;Help/Pikmin_counters.jpg
-		Radar;Keep an eye out on your Pikmin and objectives with the radar in the pause menu.;Help/Radar.jpg
+		Controlling leaders;You take control of a leader, and your job is to order your Pikmin to do tasks. Organization, planning, and multitasking are essential to make the most out of your time!;help/leader.jpg
+		Calling idle Pikmin;You can call an idle Pikmin to your group by whistling it or bumping against it. Afterwards, it will start following you.;help/whistling.jpg
+		Throwing;Throw a Pikmin in your group towards a task or wildlife, in order to have it work on it or start attacking.;help/throwing_pikmin.jpg
+		Idle Pikmin habits;Idle Pikmin have a glow to them. When idle, they will also work on nearby things on their own.;help/idle_pikmin.jpg
+		Making Pikmin idle;Throwing a Pikmin at an empty spot will leave it idling where it lands. It's also possible to dismiss them all directly.;help/idle_pikmin.jpg
+		Onion;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.;help/onion.jpg
+		Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!;help/carrying.jpg
+		Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!;help/pikmin_types.jpg
+		Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.;help/pikmin_types_hud.jpg
+		Carrying target;Some items need multiple Pikmin to carry. The type of Pikmin receiving the object at the Onion matches the majority of carriers.;help/carrying_rules.jpg
+		Obstacles;Some obstacles will require multiple Pikmin to work together to clear them, sometimes by combining their strengths, sometimes their weights.;help/obstacle.jpg
+		Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin so you can multitask.;help/leaders_hud.jpg
+		Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin. Use this to reach new places.;help/throwing_leaders.jpg
+		Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!;help/combat.jpg
+		Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.;help/weak_spots.jpg
+		Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.;help/pikmin_counters.jpg
+		Radar;Keep an eye out on your Pikmin and objectives with the radar in the pause menu.;help/radar.jpg
 	}
 	advanced_gameplay{
-		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!;Help/Pikmin_balance.jpg
-		Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!;Help/Saving_Pikmin.jpg
-		Maturity;Pikmin with a leaf on their head walk and carry objects slowly. Bud Pikmin are a bit faster, and flower Pikmin are the fastest. To increase a Pikmin's maturity, let it stay underground for a while before plucking, or feed it nectar.;Help/Maturity.jpg
-		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;Help/Sprays.jpg
-		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;Help/Paths.jpg
-		Stuck on a path;Are Pikmin stuck moving in a circle? The path is probably blocked and they are waiting for it to be cleared!;Help/Carrying.jpg
-		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;Help/Saving_Pikmin.jpg
-		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.;Help/Getting_up.jpg
-		Onion menu;Whether you're ordering Pikmin to go in the Onion or calling some out, try holding down the button on-screen to choose your numbers faster.;Help/Onion_menu.jpg
-		Go Here;Using the radar, command a leader to go somewhere and then change to a different leader. While they're busy walking, you're busy working!;Help/Radar.jpg
+		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!;help/pikmin_balance.jpg
+		Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!;help/saving_pikmin.jpg
+		Maturity;Pikmin with a leaf on their head walk and carry objects slowly. Bud Pikmin are a bit faster, and flower Pikmin are the fastest. To increase a Pikmin's maturity, let it stay underground for a while before plucking, or feed it nectar.;help/maturity.jpg
+		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;help/sprays.jpg
+		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;help/paths.jpg
+		Stuck on a path;Are Pikmin stuck moving in a circle? The path is probably blocked and they are waiting for it to be cleared!;help/carrying.jpg
+		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;help/saving_pikmin.jpg
+		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.;help/getting_up.jpg
+		Onion menu;Whether you're ordering Pikmin to go in the Onion or calling some out, try holding down the button on-screen to choose your numbers faster.;help/onion_menu.jpg
+		Go Here;Using the radar, command a leader to go somewhere and then change to a different leader. While they're busy walking, you're busy working!;help/radar.jpg
 	}
 	controls{
-		Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.;Help/Moving.jpg
-		Whistle;Whistle Pikmin with \k whistle \k. Hold to expand the whistle.;Help/Whistling.jpg
-		Throw;Throw a Pikmin of the currently selected standby type with \k throw \k.;Help/Throwing_Pikmin.jpg
-		Swap Pikmin type;Change the current Pikmin type on standby with \k prev_type \k and \k next_type \k. You can also put a leader in the group on standby this way.;Help/Pikmin_types_HUD.jpg
-		Swarm;Swarm your group of Pikmin towards the cursor with \k swarm_cursor \k, or in a specific direction with \k swarm_up \k \k swarm_left \k \k swarm_down \k \k swarm_right \k. They'll start working on whatever they touch.;Help/Swarming.jpg
-		Swap leader;Change to a different leader in the area with \k next_leader \k.;Help/Leaders_HUD.jpg
-		Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.;Help/Dismissing.jpg
-		Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.;Help/Sprays.jpg
-		Punch;When you have no Pikmin in your group, throw a punch with \k throw \k.;Help/Punching.jpg
-		Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.;Help/Lying_down.jpg
-		Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!;Help/Mouse_cursor.jpg
-		Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.;Help/Throwing_Pikmin.jpg
-		Radar with a mouse;When playing with a mouse, click somewhere on the radar and drag to pan around. Use the mouse wheel to zoom in and out. Click on a single spot to start Go Here or to pick a leader.;Help/Radar.jpg
+		Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.;help/moving.jpg
+		Whistle;Whistle Pikmin with \k whistle \k. Hold to expand the whistle.;help/whistling.jpg
+		Throw;Throw a Pikmin of the currently selected standby type with \k throw \k.;help/throwing_pikmin.jpg
+		Swap Pikmin type;Change the current Pikmin type on standby with \k prev_type \k and \k next_type \k. You can also put a leader in the group on standby this way.;help/pikmin_types_hud.jpg
+		Swarm;Swarm your group of Pikmin towards the cursor with \k swarm_cursor \k, or in a specific direction with \k swarm_up \k \k swarm_left \k \k swarm_down \k \k swarm_right \k. They'll start working on whatever they touch.;help/swarming.jpg
+		Swap leader;Change to a different leader in the area with \k next_leader \k.;help/leaders_hud.jpg
+		Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.;help/dismissing.jpg
+		Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.;help/sprays.jpg
+		Punch;When you have no Pikmin in your group, throw a punch with \k throw \k.;help/punching.jpg
+		Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.;help/lying_down.jpg
+		Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!;help/mouse_cursor.jpg
+		Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.;help/throwing_pikmin.jpg
+		Radar with a mouse;When playing with a mouse, click somewhere on the radar and drag to pan around. Use the mouse wheel to zoom in and out. Click on a single spot to start Go Here or to pick a leader.;help/radar.jpg
 	}
 	objects{
-		Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching the receiving Pikmin type with their color!;Help/Pellet.jpg
-		Nectar;Pikmin that drink nectar will go up in maturity. The more mature a Pikmin, the faster it'll move.;Help/Nectar.jpg
-		Egg;Eggs usually have nectar inside, but if you're lucky, they can drop some spray drops.;Help/Egg.jpg
-		Bomb rock;Bomb rocks can be picked up by any Pikmin. Throw a Pikmin with one to drop it and start its fuse. If a bomb rock Pikmin gets bit by an enemy, it'll snatch the bomb instead!;Help/Bomb_rock.jpg
-		Reinforced wall;Reinforced walls cannot be destroyed by Pikmin directly. Try some explosive force instead.;Help/Reinforced_wall.jpg
-		Fire geyser;There are geysers that shoot out fire from beneath the earth. Red Pikmin can resist the heat, though if you time your attacks, you can destroy it with any Pikmin.;Help/Fire_geyser.jpg
-		Electrical wire;Exposed wires will sometimes cause sparks. Afterwards, they'll form a fatal electrical arc! You can either time your attacks, or just use Yellow Pikmin to be safe.;Help/Electrical_wire.jpg
-		Clog;Stones and debris can build up on top of a lake's draining spot. When cleared, the water around it will drain out. Since it's on water, Blue Pikmin should be tasked with destroying it.;Help/Clog.jpg
-		Gas pipe;Pipes coming out from the floor that continuously spew gas can prove deadly to most Pikmin. White Pikmin can destroy them, however.;Help/Gas_pipe.jpg
-		Crystal;If you see a lump of crystal, or anything that looks glass-like, try throwing Rock Pikmin at it to break it!;Help/Crystal.jpg
-		Flukeweed;Flukeweeds look like spiraling plants, and usually hide something underneath their roots. Winged Pikmin can pull these plants out.;Help/Flukeweed.jpg
-		Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.;Help/Bamboo_gate.jpg
+		Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching the receiving Pikmin type with their color!;help/pellet.jpg
+		Nectar;Pikmin that drink nectar will go up in maturity. The more mature a Pikmin, the faster it'll move.;help/nectar.jpg
+		Egg;Eggs usually have nectar inside, but if you're lucky, they can drop some spray drops.;help/egg.jpg
+		Bomb rock;Bomb rocks can be picked up by any Pikmin. Throw a Pikmin with one to drop it and start its fuse. If a bomb rock Pikmin gets bit by an enemy, it'll snatch the bomb instead!;help/bomb_rock.jpg
+		Reinforced wall;Reinforced walls cannot be destroyed by Pikmin directly. Try some explosive force instead.;help/reinforced_wall.jpg
+		Fire geyser;There are geysers that shoot out fire from beneath the earth. Red Pikmin can resist the heat, though if you time your attacks, you can destroy it with any Pikmin.;help/fire_geyser.jpg
+		Electrical wire;Exposed wires will sometimes cause sparks. Afterwards, they'll form a fatal electrical arc! You can either time your attacks, or just use Yellow Pikmin to be safe.;help/electrical_wire.jpg
+		Clog;Stones and debris can build up on top of a lake's draining spot. When cleared, the water around it will drain out. Since it's on water, Blue Pikmin should be tasked with destroying it.;help/clog.jpg
+		Gas pipe;Pipes coming out from the floor that continuously spew gas can prove deadly to most Pikmin. White Pikmin can destroy them, however.;help/gas_pipe.jpg
+		Crystal;If you see a lump of crystal, or anything that looks glass-like, try throwing Rock Pikmin at it to break it!;help/crystal.jpg
+		Flukeweed;Flukeweeds look like spiraling plants, and usually hide something underneath their roots. Winged Pikmin can pull these plants out.;help/flukeweed.jpg
+		Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.;help/bamboo_gate.jpg
 	}
 }

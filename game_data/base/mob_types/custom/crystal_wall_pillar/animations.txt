@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Crystal_wall.png
+		file=crystal_wall.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 	}

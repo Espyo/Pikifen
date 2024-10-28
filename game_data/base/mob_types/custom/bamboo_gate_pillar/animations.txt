@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Bamboo_gate.png
+		file=bamboo_gate.png
 		file_pos=0.0000 0.0000
 		file_size=48.0000 57.0000
 		offset=0.0000 4.0000

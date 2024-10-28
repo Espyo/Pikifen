@@ -152,200 +152,200 @@ struct asset_file_names_t {
     //Graphics.
     
     //Area name font.
-    string bmp_area_name_font = "Area_name_font.png";
+    string bmp_area_name_font = "area_name_font.png";
     
     //Bright circle.
-    string bmp_bright_circle = "Bright_circle.png";
+    string bmp_bright_circle = "bright_circle.png";
     
     //Bright ring.
-    string bmp_bright_ring = "Bright_ring.png";
+    string bmp_bright_ring = "bright_ring.png";
     
     //Bubble box.
-    string bmp_bubble_box = "Bubble_box.png";
+    string bmp_bubble_box = "bubble_box.png";
     
     //Texture box for player input buttons.
-    string bmp_button_box = "Button_box.png";
+    string bmp_button_box = "button_box.png";
     
     //Checkbox with a checkmark.
-    string bmp_checkbox_check = "Checkbox_check.png";
+    string bmp_checkbox_check = "checkbox_check.png";
     
     //Checkbox without a checkmark.
-    string bmp_checkbox_no_check = "Checkbox_no_check.png";
+    string bmp_checkbox_no_check = "checkbox_no_check.png";
     
     //Counter font.
-    string bmp_counter_font = "Counter_font.png";
+    string bmp_counter_font = "counter_font.png";
     
     //Leader cursor.
-    string bmp_cursor = "Cursor.png";
+    string bmp_cursor = "cursor.png";
     
     //Cursor counter font.
-    string bmp_cursor_counter_font = "Cursor_counter_font.png";
+    string bmp_cursor_counter_font = "cursor_counter_font.png";
     
     //Editor icons.
-    string bmp_editor_icons = "Editor_icons.png";
+    string bmp_editor_icons = "editor_icons.png";
     
     //Enemy spirit.
-    string bmp_enemy_spirit = "Enemy_spirit.png";
+    string bmp_enemy_spirit = "enemy_spirit.png";
     
     //GUI focus box.
-    string bmp_focus_box = "Focus_box.png";
+    string bmp_focus_box = "focus_box.png";
     
     //Texture box for GUI frames.
-    string bmp_frame_box = "Frame_box.png";
+    string bmp_frame_box = "frame_box.png";
     
     //A hard bubble.
-    string bmp_hard_bubble = "HUD/Hard_bubble.png";
+    string bmp_hard_bubble = "hud/hard_bubble.png";
     
     //Pikifen icon.
-    string bmp_icon = "Icon.png";
+    string bmp_icon = "icon.png";
     
     //Idle glow.
-    string bmp_idle_glow = "Idle_glow.png";
+    string bmp_idle_glow = "idle_glow.png";
     
     //Texture box for player input keys.
-    string bmp_key_box = "Key_box.png";
+    string bmp_key_box = "key_box.png";
     
     //Leader silhouette from the side.
-    string bmp_leader_silhouette_side = "Leader_silhouette_side.png";
+    string bmp_leader_silhouette_side = "leader_silhouette_side.png";
     
     //Leader silhouette from the top.
-    string bmp_leader_silhouette_top = "Leader_silhouette_top.png";
+    string bmp_leader_silhouette_top = "leader_silhouette_top.png";
     
     //Main font.
-    string bmp_main_font = "Font.png";
+    string bmp_main_font = "font.png";
     
     //Main menu background.
-    string bmp_main_menu = "Main_menu.jpg";
+    string bmp_main_menu = "main_menu.jpg";
     
     //Bronze medal.
-    string bmp_medal_bronze = "Medal_bronze.png";
+    string bmp_medal_bronze = "medal_bronze.png";
     
     //Gold medal.
-    string bmp_medal_gold = "Medal_gold.png";
+    string bmp_medal_gold = "medal_gold.png";
     
     //No medal.
-    string bmp_medal_none = "Medal_none.png";
+    string bmp_medal_none = "medal_none.png";
     
     //Platinum medal.
-    string bmp_medal_platinum = "Medal_platinum.png";
+    string bmp_medal_platinum = "medal_platinum.png";
     
     //Silver medal.
-    string bmp_medal_silver = "Medal_silver.png";
+    string bmp_medal_silver = "medal_silver.png";
     
     //Icons for menu buttons.
-    string bmp_menu_icons = "Menu_icons.png";
+    string bmp_menu_icons = "menu_icons.png";
     
     //Mission clear stamp.
-    string bmp_mission_clear = "Mission_clear.png";
+    string bmp_mission_clear = "mission_clear.png";
     
     //Mission fail stamp.
-    string bmp_mission_fail = "Mission_fail.png";
+    string bmp_mission_fail = "mission_fail.png";
     
     //"More..." icon.
-    string bmp_more = "More.png";
+    string bmp_more = "more.png";
     
     //Mouse cursor.
-    string bmp_mouse_cursor = "Mouse_cursor.png";
+    string bmp_mouse_cursor = "mouse_cursor.png";
     
     //Notification.
-    string bmp_notification = "Notification.png";
+    string bmp_notification = "notification.png";
     
     //Pikmin spirit.
-    string bmp_pikmin_spirit = "Pikmin_spirit.png";
+    string bmp_pikmin_spirit = "pikmin_spirit.png";
     
     //Misc. specific player input icons.
-    string bmp_player_input_icons = "Player_input_icons.png";
+    string bmp_player_input_icons = "player_input_icons.png";
     
     //Randomness symbol.
-    string bmp_random = "Random.png";
+    string bmp_random = "random.png";
     
     //A rock.
-    string bmp_rock = "Rock.png";
+    string bmp_rock = "rock.png";
     
     //Mob shadow.
-    string bmp_shadow = "Shadow.png";
+    string bmp_shadow = "shadow.png";
     
     //Rectangular mob shadow.
-    string bmp_shadow_square = "Shadow_square.png";
+    string bmp_shadow_square = "shadow_square.png";
     
     //Smack effect.
-    string bmp_smack = "Smack.png";
+    string bmp_smack = "smack.png";
     
     //Smoke.
-    string bmp_smoke = "Smoke.png";
+    string bmp_smoke = "smoke.png";
     
     //Sparkle effect.
-    string bmp_sparkle = "Sparkle.png";
+    string bmp_sparkle = "sparkle.png";
     
     //Spotlight for blackout.
-    string bmp_spotlight = "Spotlight.png";
+    string bmp_spotlight = "spotlight.png";
     
     //Swarm arrow.
-    string bmp_swarm_arrow = "Swarm_arrow.png";
+    string bmp_swarm_arrow = "swarm_arrow.png";
     
     //Invalid throw marker.
-    string bmp_throw_invalid = "Throw_invalid.png";
+    string bmp_throw_invalid = "throw_invalid.png";
     
     //Throw preview texture.
-    string bmp_throw_preview = "Throw_preview.png";
+    string bmp_throw_preview = "throw_preview.png";
     
     //Dashed throw preview texture.
-    string bmp_throw_preview_dashed = "Throw_preview_dashed.png";
+    string bmp_throw_preview_dashed = "throw_preview_dashed.png";
     
     //Value font.
-    string bmp_value_font = "Value_font.png";
+    string bmp_value_font = "value_font.png";
     
     //Wave ring.
-    string bmp_wave_ring = "Wave_ring.png";
+    string bmp_wave_ring = "wave_ring.png";
     
     //Fonts.
     
     //Font for area names.
-    string fnt_area_name = "Area_name_font.png";
+    string fnt_area_name = "area_name_font.png";
     
     //Font for HUD counters.
-    string fnt_counter = "Counter_font.png";
+    string fnt_counter = "counter_font.png";
     
     //Font displayed next to the cursor.
-    string fnt_cursor_counter = "Cursor_counter_font.png";
+    string fnt_cursor_counter = "cursor_counter_font.png";
     
     //Font for slim text.
-    string fnt_slim = "Slim_font.otf";
+    string fnt_slim = "slim_font.otf";
     
     //Font for standard text.
-    string fnt_standard = "Font.png";
+    string fnt_standard = "font.png";
     
     //Font for the carrying / money values.
-    string fnt_value = "Value_font.png";
+    string fnt_value = "value_font.png";
     
     //Sound effects.
     
     //Attack.
-    string sfx_attack = "Attack.ogg";
+    string sfx_attack = "attack.ogg";
     
     //Camera zoom level.
-    string sfx_camera = "Camera.ogg";
+    string sfx_camera = "camera.ogg";
     
     //Menu item activation.
-    string sfx_menu_activate = "Menu_activate.ogg";
+    string sfx_menu_activate = "menu_activate.ogg";
     
     //Menu item back.
-    string sfx_menu_back = "Menu_back.ogg";
+    string sfx_menu_back = "menu_back.ogg";
     
     //Menu item selection.
-    string sfx_menu_select = "Menu_select.ogg";
+    string sfx_menu_select = "menu_select.ogg";
     
     //Pluck sound effect.
-    string sfx_pluck = "Pluck.ogg";
+    string sfx_pluck = "pluck.ogg";
     
     //Using a spray.
-    string sfx_spray = "Spray.ogg";
+    string sfx_spray = "spray.ogg";
     
     //Switching standby Pikmin type.
-    string sfx_switch_pikmin = "Switch_Pikmin.ogg";
+    string sfx_switch_pikmin = "switch_pikmin.ogg";
     
     //Throwing.
-    string sfx_throw = "Throw.ogg";
+    string sfx_throw = "throw.ogg";
     
     
     //--- Function declarations ---

@@ -5,7 +5,7 @@ emission_interval = 0
 number = 16
 number_deviation = 1
 base {
-    bitmap = Rock.png
+    bitmap = rock.png
     duration = 1
     friction = 3
     gravity = 100

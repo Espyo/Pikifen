@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Climbing_stick.png
+		file=climbing_stick.png
 		file_pos=73.0000 0.0000
 		file_size=138.0000 29.0000
 		offset=64.0000 8.0000

@@ -6,7 +6,7 @@ version=1.0.0
 engine_version=0.25.0
 subtitle
 difficulty=4
-bg_bmp=Grass_light.jpg
+bg_bmp=grass_light.jpg
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000

@@ -331,7 +331,7 @@
       <li>The mouse cursor graphic now displays at full-size, all the time. If you made a custom one, you'll probably want to resize its image file to 70% its old size.</li>
       <li>The pre-packaged Pellet Posy graphics files are now split per-type, as opposed to per-size. This makes more sense for adding new types of Pikmin/pellet. (Thanks Kman)</li>
       <li>The counter font now also includes a dot and a colon. If you changed this font, please update it accordingly.</li>
-      <li>The gameplay HUD information is now stored in <code>Game_data/GUI/Gameplay.txt</code>, and the title screen logo information now goes in <code>Game_data/GUI/Main_menu.txt</code>.</li>
+      <li>The gameplay HUD information is now stored in <code>game_data/gui/gameplay.txt</code>, and the title screen logo information now goes in <code>game_data/gui/main_menu.txt</code>.</li>
       <li>The sector property "always casts shadow" has been removed, and wall shadows should be slightly less dark than before in general. If you have walls that you need to look the same as before, you'll want to go to the edge properties and tweak their shadow's length and color.</li>
     </ul>
     
@@ -683,7 +683,7 @@
     <ul>
       <li>The <code>increment_var</code> script action has been removed. In its place, <code>set_var</code> can now update the variable to be the same value plus one.</li>
       <li>The Pikmin hazard resistance info has been removed in favor of the global vulnerabilities system. To get the same result, instead of having an attribute called <code>resistances</code> and a semicolon-list of hazards, you should now have a <code>vulnerabilities</code> block, and add one hazard per line, in the format <code>hazard = 0</code>.</li>
-      <li>The gate category is now gone. The pre-packaged gates have been moved to the custom category. You can update your areas easily by editing the area's <code>Geometry.txt</code> file with a decent text editor, and replacing all instances of <code>Gate{</code> with <code>Custom{</code>.</li>
+      <li>The gate category is now gone. The pre-packaged gates have been moved to the custom category. You can update your areas easily by editing the area's <code>geometry.txt</code> file with a decent text editor, and replacing all instances of <code>Gate{</code> with <code>Custom{</code>.</li>
       <li>The info spot object type is now gone. Instead, use the "Sign" object type from the Interactables category. In addition, the trigger range for an interactable object has been moved from the game configuration file to the interactable object type's data file.</li>
       <li>The nectar object type is now gone. Instead, use the "Nectar" object type from the Drops category.</li>
       <li>The pre-packaged pellets were renamed to include "pellet" in the name (e.g. "Red 1" to "Red 1 pellet"). Update your areas and object script spawn information blocks accordingly.</li>
@@ -888,7 +888,7 @@
     <ul>
       <li>Sprites no longer use a "game size", but rather, a "scale". If you made custom animations that changed the size of the sprite, you'll have to re-specify the size with the scale.</li>
       <li>In animation text files, the parameters "outward" and "angle" regarding hitbox data are now "knockback_outward" and "knockback_angle". If you have animations with hitboxes that cause knockback, redo the knockback data.</li>
-      <li>Area backups have been moved from <code>User_data/Area_backups/*</code> to <code>User_data/Areas/*</code>, and the file names went from <code>Geometry.txt</code> and <code>Data.txt</code> to <code>Geometry_backup.txt</code> and <code>Data_backup.txt</code>. If you care about your backups, make this change accordingly.</li>
+      <li>Area backups have been moved from <code>User_data/Area_backups/*</code> to <code>User_data/Areas/*</code>, and the file names went from <code>geometry.txt</code> and <code>data.txt</code> to <code>geometry_backup.txt</code> and <code>data_backup.txt</code>. If you care about your backups, make this change accordingly.</li>
       <li>Area reference image data was moved from <code>User_data/Area_editor_references/*</code> to <code>User_data/Areas/*</code>. The reference configuration text file is the same, except it now has an extra parameter, <code>file</code>, where you specify the path to the image to serve as a reference. Also, the reference no longer needs to be <code>Reference.png</code> in the area's reference user data folder. It can be anything on-disk. (Thanks, Neo)</li>
     </ul>
     
@@ -992,10 +992,10 @@
     <p><b>Format change warnings</b></p>
 
     <ul>
-      <li>The area editor backup files have moved to <code>/User_data/Area_backups/&lt;area name&gt;</code>, and are called <code>Data.txt</code> and <code>Geometry.txt</code>. Move your existing backups over if you care about them.</li>
-      <li>The area editor reference images and their position data have been moved to <code>/User_data/Area_editor_references/&lt;area name&gt;</code>. If you care about a reference image, move the image file here, and rename it to <code>Reference.png</code>, and if you want to port the center, size, and opacity data, find it in the area's <code>Data.txt</code> file and port it to its own file called <code>Reference.txt</code> in this folder.</li>
-      <li>Your options will now be loaded from <code>/User_data/Options.txt</code>. Move the file there if you care about your settings.</li>
-      <li>Your creator tool configurations will now be loaded from <code>/User_data/Tools.txt</code>. Move the file there if you care about your tools settings.</li>
+      <li>The area editor backup files have moved to <code>/User_data/Area_backups/&lt;area name&gt;</code>, and are called <code>data.txt</code> and <code>geometry.txt</code>. Move your existing backups over if you care about them.</li>
+      <li>The area editor reference images and their position data have been moved to <code>/User_data/Area_editor_references/&lt;area name&gt;</code>. If you care about a reference image, move the image file here, and rename it to <code>Reference.png</code>, and if you want to port the center, size, and opacity data, find it in the area's <code>data.txt</code> file and port it to its own file called <code>reference.txt</code> in this folder.</li>
+      <li>Your options will now be loaded from <code>/user_data/options.txt</code>. Move the file there if you care about your settings.</li>
+      <li>Your creator tool configurations will now be loaded from <code>/user_data/tools.txt</code>. Move the file there if you care about your tools settings.</li>
     </ul>
     
     <p><b> Changelog</b></p>
@@ -1040,10 +1040,10 @@
         <ul>
           <li>The leaf shadow texture was renamed from <code>Leaf shadow.png</code> to <code>Tree_shadow.png</code>.</li>
           <li>Area backgrounds are now fetched from the <code>Game_data/Images/Textures</code> folder.</li>
-          <li>An area's reference image coordinates now specify the center, not the top-left. The parameter in <code>Geometry.txt</code> is now called <code>reference_center</code> instead of <code>reference_pos</code>.</li>
+          <li>An area's reference image coordinates now specify the center, not the top-left. The parameter in <code>geometry.txt</code> is now called <code>reference_center</code> instead of <code>reference_pos</code>.</li>
         </ul>
       </li>
-      <li>In <code>Game_data/Misc/HUD.txt</code>, the HUD items that had <code>key</code> in the name now have <code>button</code>. The coordinates also now specify an invisible box from which the HUD item cannot go beyond; most HUD items will maintain aspect ratio and still fill this box.</li>
+      <li>In <code>game_data/misc/hud.txt</code>, the HUD items that had <code>key</code> in the name now have <code>button</code>. The coordinates also now specify an invisible box from which the HUD item cannot go beyond; most HUD items will maintain aspect ratio and still fill this box.</li>
       <li>Pikmin animations for sprouts renamed from <code>buried</code> to <code>sprout</code>. Similarly, the script variable <code>buried</code> in the area editor, used to spawn sprout Pikmin, has been renamed to <code>sprout</code>.</li>
     </ul>
     
@@ -1099,7 +1099,7 @@
           <li>Any mob type can also use a list of vulnerability modifiers, making it more or less vulnerable to certain types of spike damage.</li>
         </ul>
       </li>
-      <li>The file <code>Misc/System_asset_file_names.txt</code> can now be used to override system asset file names. For instance, instead of the game icon being loaded from Icon.png, it can be loaded from some other image.</li>
+      <li>The file <code>misc/system_asset_file_names.txt</code> can now be used to override system asset file names. For instance, instead of the game icon being loaded from Icon.png, it can be loaded from some other image.</li>
       <li>Sprouts now evolve in stage over time. Pikmin types have new parameters: <code>sprout_evolution_time_1</code> specifies how long a leaf Pikmin must wait before evolving, in seconds. <code>sprout_evolution_time_2</code> is the wait time for bud Pikmin, and <code>3</code> is for a flower to wither back.</li>
       <li>New creator tool options: <code>area_image_mobs</code>, if set to false, hides mobs, particle effects, etc. from the final area image. <code>mob_hurting_percentage</code> lets you change how much health the mob will lose with the "hurt mob" tool; the default is also now 50% instead of 20%.</li>
       <li>
@@ -1125,7 +1125,7 @@
 
     <ul>
       <li>Your old right/up/left/down controls will not be recognized in this version. Please re-map them in the options menu.</li>
-      <li>If you made custom weather conditions, you'll need to edit <code>Weather.txt</code> as per the changelog.</li>
+      <li>If you made custom weather conditions, you'll need to edit <code>weather.txt</code> as per the changelog.</li>
     </ul>
     
     <p><b>Changes</b></p>
@@ -1140,13 +1140,13 @@
           <li>Bridges will now use the background in their seams instead of the sector under them -- this will be fixed in the future.</li>
         </ul>
       </li>
-      <li>The <code>mipmaps</code> option was added to <code>Options.txt</code>. Set this to "false" to disable mipmaps (for slightly higher CPU usage, but lower VRAM usage).</li>
+      <li>The <code>mipmaps</code> option was added to <code>options.txt</code>. Set this to "false" to disable mipmaps (for slightly higher CPU usage, but lower VRAM usage).</li>
       <li>
         Improved controller support:
         <ul>
-          <li>Analog sticks now obey deadzones -- these can be set with the <code>joystick_min_deadzone</code> and <code>joystick_max_deadzone</code> options in Options.txt. This way, analog sticks won't have loose wiggle accounted for, and some joysticks (like the Switch Pro Controller) can be considered "fully tilted" when they're technically only sending around 70% tilt.</li>
+          <li>Analog sticks now obey deadzones -- these can be set with the <code>joystick_min_deadzone</code> and <code>joystick_max_deadzone</code> options in options.txt. This way, analog sticks won't have loose wiggle accounted for, and some joysticks (like the Switch Pro Controller) can be considered "fully tilted" when they're technically only sending around 70% tilt.</li>
           <li>Added menu navigation controls.</li>
-          <li>In <code>Options.txt</code>, controls for player 1's movement are no longer called <code>p1_right</code>, <code>p1_up</code>, etc., but rather <code>p1_move_right</code>, <code>p1_move_up</code>, etc. The same change was made for the other player numbers.</li>
+          <li>In <code>options.txt</code>, controls for player 1's movement are no longer called <code>p1_right</code>, <code>p1_up</code>, etc., but rather <code>p1_move_right</code>, <code>p1_move_up</code>, etc. The same change was made for the other player numbers.</li>
         </ul>
       </li>
       <li>
@@ -1168,7 +1168,7 @@
         Weather changes:
         <ul>
           <li>Added fog. <code>fog_color</code> is a table, much like <code>lighting</code>, that controls the fog's color at 100% density throughout the day, and <code>fog_near</code> and <code>fog_far</code> control the distance at which 0% density ends and 100% density starts, respectively.</li>
-          <li>In <code>Weather.txt</code>, a weather condition's name is now the same name as the block, instead of being a <code>name</code> parameter inside a <code>weather</code> block.</li>
+          <li>In <code>weather.txt</code>, a weather condition's name is now the same name as the block, instead of being a <code>name</code> parameter inside a <code>weather</code> block.</li>
           <li>If a weather condition has no lighting table an error will no longer be logged.</li>
         </ul>
       </li>
@@ -1251,7 +1251,7 @@
         New features and content:
         <ul>
           <li>"Blackout" effect for weather &#8211; everything is dark, but objects give off light.</li>
-          <li>Added specialized HUD bubbles for the different parts of the Pikmin counter, and the ability to specify your own HUD graphic file names on <code>Game_data/Misc/HUD.txt</code>.</li>
+          <li>Added specialized HUD bubbles for the different parts of the Pikmin counter, and the ability to specify your own HUD graphic file names on <code>game_data/misc/hud.txt</code>.</li>
           <li><code>disables_attack</code> parameter for status effects; I've also added this parameter to petrified enemies to stop them from hurting unfairly.</li>
           <li>Cursor now gains an "X" if the held Pikmin/leader cannot reach the cursor's ledge.</li>
           <li>Idle leaders now pluck Pikmin on their own.</li>
@@ -1490,7 +1490,7 @@
       <li>A special tools menu on the animation editor, to resize all images, hitboxes, etc.</li>
       <li>Increased gate size (so that 20 pellets may pass).</li>
       <li>Shrunk Female Sheargrubs to resemble the canon games better.</li>
-      <li>It's now possible to enter an area or editor straight away (<code>auto_start_mode</code> and <code>auto_start_option</code> on <code><a href="maker_toolkit.html">Tools.txt</a></code>).</li>
+      <li>It's now possible to enter an area or editor straight away (<code>auto_start_mode</code> and <code>auto_start_option</code> on <code><a href="maker_toolkit.html">tools.txt</a></code>).</li>
       <li>Added a document with misc. code-related info to the git repository.</li>
       <li>Minor bugfixes.</li>
     </ul>
@@ -1521,7 +1521,7 @@
         </ul>
       </li>
       <li>Pikmin now sigh (for 2 seconds) if they fail to join an object's carriers.</li>
-      <li>Made the starting number of Pikmin on Onions editable (<code>Game_data/Types/Pikmin/&lt;type&gt;/Data.txt</code>, <code>onion_starting_number</code>).</li>
+      <li>Made the starting number of Pikmin on Onions editable (<code>Game_data/Types/Pikmin/&lt;type&gt;/data.txt</code>, <code>onion_starting_number</code>).</li>
       <li>Increased task detection range, and made it into two parameters &#8211; idle (<code>idle_task_range</code>) and group moving (<code>group_move_task_range</code>).</li>
       <li>Increased shaking and attacking hitbox sizes for prepackaged enemies.</li>
     </ul>

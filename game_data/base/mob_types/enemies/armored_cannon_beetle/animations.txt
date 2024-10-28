@@ -351,7 +351,7 @@ animations{
 }
 sprites{
 	bored_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=855.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 0.0000
@@ -387,7 +387,7 @@ sprites{
 		}
 	}
 	bored_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=855.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 0.0000
@@ -424,7 +424,7 @@ sprites{
 		}
 	}
 	closing_cool_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 1161.0000
 		file_size=285.0000 386.0000
 		offset=35.0000 0.0000
@@ -469,7 +469,7 @@ sprites{
 		}
 	}
 	closing_cool_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1141.0000 1161.0000
 		file_size=285.0000 386.0000
 		offset=28.0000 0.0000
@@ -514,7 +514,7 @@ sprites{
 		}
 	}
 	closing_hot_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 774.0000
 		file_size=303.0000 386.0000
 		offset=26.0000 0.0000
@@ -559,7 +559,7 @@ sprites{
 		}
 	}
 	closing_hot_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1422.0000 387.0000
 		file_size=285.0000 386.0000
 		offset=28.0000 0.0000
@@ -604,7 +604,7 @@ sprites{
 		}
 	}
 	cooling{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1246.0000 774.0000
 		file_size=312.0000 386.0000
 		offset=22.0000 0.0000
@@ -642,7 +642,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 1548.0000
 		file_size=287.0000 326.0000
 		offset=32.0000 0.0000
@@ -678,7 +678,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=288.0000 1548.0000
 		file_size=264.0000 338.0000
 		offset=26.0000 0.0000
@@ -714,7 +714,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=553.0000 1548.0000
 		file_size=281.0000 232.0000
 		offset=-25.0000 0.0000
@@ -750,7 +750,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=835.0000 1548.0000
 		file_size=283.0000 234.0000
 		offset=-36.0000 0.0000
@@ -786,7 +786,7 @@ sprites{
 		}
 	}
 	idling{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 0.0000
@@ -822,7 +822,7 @@ sprites{
 		}
 	}
 	idling_cool{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=286.0000 1161.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 0.0000
@@ -860,7 +860,7 @@ sprites{
 		}
 	}
 	idling_hot{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=304.0000 774.0000
 		file_size=312.0000 386.0000
 		offset=22.0000 0.0000
@@ -899,7 +899,7 @@ sprites{
 		}
 	}
 	inhale_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1139.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=32.0000 0.0000
@@ -935,7 +935,7 @@ sprites{
 		}
 	}
 	inhale_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1423.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=28.0000 0.0000
@@ -971,7 +971,7 @@ sprites{
 		}
 	}
 	inhale_03{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 387.0000
 		file_size=284.0000 386.0000
 		offset=26.0000 0.0000
@@ -1007,7 +1007,7 @@ sprites{
 		}
 	}
 	inhale_04{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=285.0000 387.0000
 		file_size=283.0000 386.0000
 		offset=28.0000 0.0000
@@ -1043,7 +1043,7 @@ sprites{
 		}
 	}
 	inhale_05{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=569.0000 387.0000
 		file_size=284.0000 386.0000
 		offset=26.0000 0.0000
@@ -1079,7 +1079,7 @@ sprites{
 		}
 	}
 	moving4{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=568.0000 0.0000
 		file_size=286.0000 386.0000
 		offset=37.0000 -4.0000
@@ -1116,7 +1116,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=284.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 2.0000
@@ -1152,7 +1152,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=568.0000 0.0000
 		file_size=286.0000 386.0000
 		offset=37.0000 4.0000
@@ -1188,7 +1188,7 @@ sprites{
 		}
 	}
 	moving_03{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=284.0000 0.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 -2.0000
@@ -1225,7 +1225,7 @@ sprites{
 		}
 	}
 	moving_cool_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=570.0000 1161.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 2.0000
@@ -1263,7 +1263,7 @@ sprites{
 		}
 	}
 	moving_cool_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=854.0000 1161.0000
 		file_size=286.0000 386.0000
 		offset=37.0000 4.0000
@@ -1301,7 +1301,7 @@ sprites{
 		}
 	}
 	moving_cool_03{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=570.0000 1161.0000
 		file_size=283.0000 386.0000
 		offset=36.0000 -2.0000
@@ -1340,7 +1340,7 @@ sprites{
 		}
 	}
 	moving_cool_04{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=854.0000 1161.0000
 		file_size=286.0000 386.0000
 		offset=37.0000 -4.0000
@@ -1379,7 +1379,7 @@ sprites{
 		}
 	}
 	moving_hot_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=617.0000 774.0000
 		file_size=312.0000 386.0000
 		offset=22.0000 2.0000
@@ -1418,7 +1418,7 @@ sprites{
 		}
 	}
 	moving_hot_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=930.0000 774.0000
 		file_size=315.0000 386.0000
 		offset=23.0000 4.0000
@@ -1457,7 +1457,7 @@ sprites{
 		}
 	}
 	moving_hot_03{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=617.0000 774.0000
 		file_size=312.0000 386.0000
 		offset=22.0000 -2.0000
@@ -1497,7 +1497,7 @@ sprites{
 		}
 	}
 	moving_hot_04{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=930.0000 774.0000
 		file_size=315.0000 386.0000
 		offset=23.0000 -4.0000
@@ -1537,7 +1537,7 @@ sprites{
 		}
 	}
 	opening_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1422.0000 387.0000
 		file_size=285.0000 386.0000
 		offset=28.0000 0.0000
@@ -1573,7 +1573,7 @@ sprites{
 		}
 	}
 	opening_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=0.0000 774.0000
 		file_size=303.0000 386.0000
 		offset=26.0000 0.0000
@@ -1612,7 +1612,7 @@ sprites{
 		}
 	}
 	spitting_01{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=854.0000 387.0000
 		file_size=283.0000 386.0000
 		offset=40.0000 0.0000
@@ -1648,7 +1648,7 @@ sprites{
 		}
 	}
 	spitting_02{
-		file=Armored_Cannon_Beetle.png
+		file=armored_cannon_beetle.png
 		file_pos=1138.0000 387.0000
 		file_size=283.0000 386.0000
 		offset=44.0000 0.0000

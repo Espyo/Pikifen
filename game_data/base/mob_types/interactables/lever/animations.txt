@@ -30,7 +30,7 @@ animations{
 }
 sprites{
 	flipping_off{
-		file=Lever.png
+		file=lever.png
 		file_pos=65.0000 33.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -44,7 +44,7 @@ sprites{
 		}
 	}
 	flipping_on{
-		file=Lever.png
+		file=lever.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -58,7 +58,7 @@ sprites{
 		}
 	}
 	off{
-		file=Lever.png
+		file=lever.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -72,7 +72,7 @@ sprites{
 		}
 	}
 	on{
-		file=Lever.png
+		file=lever.png
 		file_pos=0.0000 33.0000
 		file_size=64.0000 32.0000
 		hitboxes{
