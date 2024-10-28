@@ -1,9 +1,0 @@
-name = water
-description = Everyday body of water.
-
-animation = Water.txt
-color = 0 0 64 96
-radar_color = 32 64 180
-surface_1_speed = 10
-surface_2_speed = -13
-surface_alpha = 64
