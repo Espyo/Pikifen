@@ -2364,13 +2364,10 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
  */
 void area_data::save_thumbnail(bool to_backup) {
     string thumb_path =
-        get_base_area_folder_path(type, !to_backup, manifest->package) +
-        "/" + manifest->internal_name +
-        (to_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
+        (to_backup ? user_data_path : manifest->path) +
+        "/" + FILE_NAMES::AREA_THUMBNAIL;
     if(thumbnail) {
-        al_save_bitmap(
-            thumb_path.c_str(), thumbnail.get()
-        );
+        al_save_bitmap(thumb_path.c_str(), thumbnail.get());
     } else {
         al_remove_filename(thumb_path.c_str());
     }
@@ -2569,37 +2566,4 @@ void get_area_info_from_path(
             *out_area_type = AREA_TYPE_SIMPLE;
         }
     }
-}
-
-
-/**
- * @brief Returns the folder path where certain area folders are stored,
- * relative to the program root folder. This is based on the type of area
- * and whether it's to load from the game data folder or the user data folder.
- *
- * @param type Type of area.
- * @param from_game_data If true, get the folder in the game data folder.
- * If false, get it from the user data folder.
- * @param package Name of the package.
- * @return The folder path.
- */
-string get_base_area_folder_path(
-    const AREA_TYPE type, bool from_game_data, const string &package
-) {
-    string result =
-        from_game_data ?
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA :
-        FOLDER_PATHS_FROM_ROOT::USER_DATA;
-    result += "/" + package + "/";
-    
-    switch(type) {
-    case AREA_TYPE_SIMPLE: {
-        return result + FOLDER_PATHS_FROM_PKG::SIMPLE_AREAS;
-    } case AREA_TYPE_MISSION: {
-        return result + FOLDER_PATHS_FROM_PKG::MISSION_AREAS;
-    } case N_AREA_TYPES: {
-        break;
-    }
-    }
-    return result;
 }

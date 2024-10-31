@@ -38,7 +38,6 @@
         info += "). Extra info: "; \
         info += (message); \
         crash("Assert", info, 1); \
-        return; \
     }
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.

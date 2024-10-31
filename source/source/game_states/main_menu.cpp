@@ -691,8 +691,7 @@ void main_menu_state::init_gui_tutorial_page() {
     yes_button->on_activate =
     [] (const point &) {
         game.states.gameplay->path_of_area_to_load =
-            get_base_area_folder_path(AREA_TYPE_MISSION, true, FOLDER_NAMES::BASE_PKG) + "/" +
-            "Tutorial Meadow";
+            game.content.areas.manifests[AREA_TYPE_MISSION]["tutorial_meadow"].path;
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.gameplay);
         });

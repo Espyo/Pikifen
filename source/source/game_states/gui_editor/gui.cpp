@@ -138,8 +138,8 @@ void gui_editor::process_gui_control_panel() {
     //Current file text.
     ImGui::Text("Current file: %s", manifest.internal_name.c_str());
     set_tooltip(
-        "Package: \"" + manifest.package + "\"\n"
-        "Path: \"" + manifest.path + "\"\n"
+        "Package: " + manifest.package + "\n"
+        "Path: " + manifest.path
     );
     
     //Spacer dummy widget.

@@ -17,6 +17,7 @@
 
 #include "allegro_utils.h"
 
+#include "../functions.h"
 #include "general_utils.h"
 #include "math_utils.h"
 #include "string_utils.h"
@@ -653,6 +654,13 @@ int show_message_box(
 WIPE_FOLDER_RESULT wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 ) {
+    //Panic check to make sure nothing went wrong and it's an important folder.
+    //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
+    engine_assert(
+        folder_path.size() >= 4,
+        "Tried to wipe the folder \"" + folder_path + "\"!"
+    );
+
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_path.c_str());
     if(!folder || !al_open_directory(folder)) {

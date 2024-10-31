@@ -141,11 +141,11 @@ const string AREA_MAIN_DATA = "data.txt";
 //Area geometry file.
 const string AREA_GEOMETRY = "geometry.txt";
 
-//Area main data backup file.
-const string AREA_MAIN_DATA_BACKUP = "data_backup.txt";
+//Area thumbnail file.
+const string AREA_THUMBNAIL = "thumbnail.png";
 
-//Area geometry backup file.
-const string AREA_GEOMETRY_BACKUP = "geometry_backup.txt";
+//Area reference config file.
+const string AREA_REFERENCE_CONFIG = "reference.txt";
 
 //Game configuration file.
 const string GAME_CONFIG = "config.txt";
@@ -190,6 +190,11 @@ const string BASE_PKG =
 //User data folder.
 const string USER_DATA =
     FOLDER_NAMES::USER_DATA;
+
+//Area user data folder.
+const string AREA_USER_DATA =
+    USER_DATA + "/" + FOLDER_NAMES::AREAS;
+
 };
 
 //Paths to files from the engine's root folder.

@@ -1,8 +1,8 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Get rid of get_base_area_folder_path
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -209,6 +209,7 @@ Next tasks (roughly sorted most important first)
                 Unload
             Make assets inherit from the plain_content class?
             Add the new common content properties to everything in the engine
+            Internal names should be sanitized
             Editors should separate creating and loading
             Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing Game_data/<package name>/Package.txt
             Editors should warn if you try to edit or create something in the base package, saying how it'll affect the usual experience, may affect all packages, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true

@@ -637,12 +637,11 @@ void area_editor::delete_current_area() {
     } else {
         //Start by deleting the user data folder.
         vector<string> non_important_files;
-        non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA_BACKUP);
-        non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY_BACKUP);
-        non_important_files.push_back("reference.txt");
+        non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA);
+        non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
+        non_important_files.push_back(FILE_NAMES::AREA_REFERENCE_CONFIG);
         wipe_folder(
-            get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) +
-            "/" + game.cur_area_data->manifest->internal_name,
+            game.cur_area_data->user_data_path,
             non_important_files
         );
         
@@ -2008,10 +2007,7 @@ void area_editor::load_backup() {
  * @brief Loads the reference image data from the reference configuration file.
  */
 void area_editor::load_reference() {
-    data_node file(
-        get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) + "/" +
-        game.cur_area_data->manifest->internal_name + "/reference.txt"
-    );
+    data_node file(game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG);
     
     if(file.file_was_opened) {
         reference_file_name = file.get_child_by_name("file")->value;
@@ -3214,22 +3210,15 @@ bool area_editor::save_area(bool to_backup) {
     }
     
     //Finally, actually save to disk.
-    string base_folder;
-    string geometry_file_name;
-    string main_data_file_name;
-    if(to_backup) {
-        base_folder =
-            get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) +
-            "/" + game.cur_area_data->manifest->internal_name;
-        geometry_file_name = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY_BACKUP;
-        main_data_file_name = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA_BACKUP;
-    } else {
-        base_folder = game.cur_area_data->manifest->path;
-        geometry_file_name = base_folder + "/" + FILE_NAMES::AREA_GEOMETRY;
-        main_data_file_name = base_folder + "/" + FILE_NAMES::AREA_MAIN_DATA;
-    }
-    bool geo_save_ok = geometry_file.save_file(geometry_file_name);
-    bool main_data_save_ok = main_data_file.save_file(main_data_file_name);
+    string base_folder_path =
+        to_backup ? game.cur_area_data->user_data_path : game.cur_area_data->manifest->path;
+    string main_data_file_path =
+        base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
+    string geometry_file_path =
+        base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
+    
+    bool geo_save_ok = geometry_file.save_file(geometry_file_path);
+    bool main_data_save_ok = main_data_file.save_file(main_data_file_path);
     
     if(!geo_save_ok || !main_data_save_ok) {
         show_message_box(
@@ -3237,7 +3226,7 @@ bool area_editor::save_area(bool to_backup) {
             "Could not save the area!",
             (
                 "An error occured while saving the area to the folder \"" +
-                base_folder + "\". "
+                base_folder_path + "\". "
                 "Make sure that the folder exists and it is not read-only, "
                 "and try again."
             ).c_str(),
@@ -3287,12 +3276,7 @@ void area_editor::save_backup() {
     
     //TODO replace with something better.
     ALLEGRO_FS_ENTRY* folder_fs_entry =
-        al_create_fs_entry(
-            (
-                get_base_area_folder_path(game.cur_area_data->type, true, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + //TODO
-                "/" + game.cur_area_data->manifest->internal_name
-            ).c_str()
-        );
+        al_create_fs_entry(game.cur_area_data->user_data_path.c_str());
     bool folder_exists = al_open_directory(folder_fs_entry);
     al_close_directory(folder_fs_entry);
     al_destroy_fs_entry(folder_fs_entry);
@@ -3307,14 +3291,13 @@ void area_editor::save_backup() {
  * @brief Saves the reference data to disk, in the area's reference config file.
  */
 void area_editor::save_reference() {
-    string file_name =
-        get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) +
-        "/" + game.cur_area_data->manifest->internal_name + "/reference.txt";
+    string file_path =
+        game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG;
         
     if(!reference_bitmap) {
-        //The user doesn't want a reference more.
+        //The user doesn't want a reference any more.
         //Delete its config file.
-        al_remove_filename(file_name.c_str());
+        al_remove_filename(file_path.c_str());
         return;
     }
     
@@ -3347,7 +3330,7 @@ void area_editor::save_reference() {
         )
     );
     
-    reference_file.save_file(file_name);
+    reference_file.save_file(file_path);
 }
 
 

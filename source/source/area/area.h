@@ -254,6 +254,9 @@ struct area_data : public content {
     
     //Mission data.
     mission_data mission;
+
+    //Path to the user data folder for this area.
+    string user_data_path;
     
     
     //--- Function declarations ---
@@ -310,7 +313,4 @@ void get_area_info_from_path(
     const string &requested_area_path,
     content_manifest* out_manifest,
     AREA_TYPE* out_area_type
-);
-string get_base_area_folder_path(
-    const AREA_TYPE type, bool from_game_data, const string &package
 );

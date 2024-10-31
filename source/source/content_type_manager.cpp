@@ -115,31 +115,27 @@ void area_content_manager::load_area(
     CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     //Setup.
-    string data_file_path;
-    string geometry_file_path;
-    string folder_path;
+    string user_data_path =
+        FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
+        manifest->package + "/" +
+        (
+            type == AREA_TYPE_SIMPLE ?
+            FOLDER_NAMES::SIMPLE_AREAS :
+            FOLDER_NAMES::MISSION_AREAS
+        );
+    string base_folder_path = from_backup ? user_data_path : manifest->path;
     
-    if(from_backup) {
-        folder_path =
-            get_base_area_folder_path(type, false, manifest->package) +
-            "/" + manifest->internal_name;
-        data_file_path = folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA_BACKUP;
-        geometry_file_path = folder_path + "/" + FILE_NAMES::AREA_GEOMETRY_BACKUP;
-    } else {
-        folder_path =
-            get_base_area_folder_path(type, true, manifest->package) +
-            "/" + manifest->internal_name;
-        data_file_path = folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
-        geometry_file_path = folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
-    }
-    
+    string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     data_node data_file = load_data_file(data_file_path);
     if(!data_file.file_was_opened) return;
+
+    string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
     data_node geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return;
     
     area_ptr->manifest = manifest;
     area_ptr->type = type;
+    area_ptr->user_data_path = user_data_path;
     
     //Main data.
     if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
@@ -166,9 +162,7 @@ void area_content_manager::load_area(
     }
     
     //Thumbnail image.
-    string thumbnail_path =
-        folder_path +
-        (from_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
+    string thumbnail_path = base_folder_path + FILE_NAMES::AREA_THUMBNAIL;
     area_ptr->load_thumbnail(thumbnail_path);
     
     //Geometry.

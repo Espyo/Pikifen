@@ -2503,9 +2503,7 @@ void area_editor::process_gui_panel_main() {
     ImGui::Text("Area folder: %s", game.cur_area_data->manifest->internal_name.c_str());
     set_tooltip(
         "Full folder path: " + game.cur_area_data->manifest->path + "\n"
-        "Full user data folder path: " +
-        get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) + "/" +
-        game.cur_area_data->manifest->internal_name + "\n"
+        "Full user data folder path: " + game.cur_area_data->user_data_path
     );
     
     //Spacer dummy widget.
@@ -5709,10 +5707,7 @@ void area_editor::process_gui_panel_tools() {
                 bool backup_exists = false;
                 if(!game.cur_area_data->manifest->internal_name.empty()) {
                     string file_path =
-                        get_base_area_folder_path(
-                            game.cur_area_data->type, false, game.cur_area_data->manifest->package
-                        ) + "/" + game.cur_area_data->manifest->internal_name + "/" +
-                        FILE_NAMES::AREA_GEOMETRY_BACKUP;
+                        game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_GEOMETRY;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;
                     }
