@@ -21,10 +21,9 @@
  */
 void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
-    vector<string> files = folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::GUI, false); //TODO
     vector<picker_item> file_items;
-    for(size_t f = 0; f < files.size(); f++) {
-        file_items.push_back(picker_item(files[f]));
+    for(const auto &f : game.content.gui.manifests) {
+        file_items.push_back(picker_item(f.first, "", (void*) &f.second));
     }
     load_dialog_picker = picker_info(this);
     load_dialog_picker.can_make_new = false;
@@ -34,7 +33,8 @@ void gui_editor::open_load_dialog() {
             &gui_editor::pick_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
-            std::placeholders::_3
+            std::placeholders::_3,
+            std::placeholders::_4
         );
         
     //Open the dialog that will contain the picker and history.
@@ -136,7 +136,11 @@ void gui_editor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
     
     //Current file text.
-    ImGui::Text("Current file: %s", file_name.c_str());
+    ImGui::Text("Current file: %s", manifest.internal_name.c_str());
+    set_tooltip(
+        "Package: \"" + manifest.package + "\"\n"
+        "Path: \"" + manifest.path + "\"\n"
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -160,11 +164,11 @@ void gui_editor::process_gui_control_panel() {
 void gui_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
-    [this](const string &name) -> string {
-        return name;
+    [this](const string &path) -> string {
+        return path;
     },
-    [this](const string &name) {
-        file_name = name;
+    [this](const string &path) {
+        manifest.fill_from_path(path);
         load_file(true);
         close_top_dialog();
     }

@@ -105,7 +105,7 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
         " even though it's already loaded!"
     );
     
-    mgr_ptr->fill_manifest();
+    mgr_ptr->fill_manifests();
     mgr_ptr->load_all(level);
     
     load_levels[type] = level;
@@ -116,26 +116,29 @@ void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
  * @brief Loads an area as the "current area". This does not load it into
  * the vector of areas.
  *
- * @param folder_name Name of the area's folder.
- * @param package_name Name of the package it is in.
+ * @param manifest Manifest of the area.
  * @param type Type of area this is.
  * @param level Level to load at.
  * @param from_backup If true, load from a backup, if any.
  */
 void content_manager::load_area_as_current(
-    const string &folder_name, const string &package_name, AREA_TYPE type,
+    content_manifest* manifest, AREA_TYPE type,
     CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     engine_assert(
         game.cur_area_data == nullptr,
-        "Tried to load area \"" + folder_name + "\" (package \"" +
-        package_name + "\") as the current one even though there is "
-        "already a loaded current area, \"" + game.cur_area_data->path + "\"!"
+        "Tried to load area \"" + manifest->path + "\" as the current "
+        "one even though there is already a loaded current area, \"" +
+        (
+            game.cur_area_data->manifest ?
+            game.cur_area_data->manifest->path :
+            "(unsaved)"
+        ) + "\"!"
     );
     
     game.cur_area_data = new area_data();
     areas.load_area(
-        game.cur_area_data, folder_name, package_name, type, level, from_backup
+        game.cur_area_data, manifest, type, level, from_backup
     );
 }
 
@@ -168,26 +171,7 @@ void content_manager::unload_all(CONTENT_TYPE type) {
     );
     
     mgr_ptr->unload_all(load_levels[type]);
-    mgr_ptr->clear_manifest();
+    mgr_ptr->clear_manifests();
     
     load_levels[type] = CONTENT_LOAD_LEVEL_UNLOADED;
-}
-
-
-/**
- * @brief Constructs a new content manifest object.
- */
-content_manifest::content_manifest() {}
-
-
-/**
- * @brief Constructs a new content manifest object.
- *
- * @param path Path to the content, relative to the packages folder.
- * @param package Package it belongs to.
- */
-content_manifest::content_manifest(const string &path, const string &package) :
-    path(path),
-    package(package) {
-    
 }

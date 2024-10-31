@@ -352,6 +352,9 @@ protected:
         
         //What category it belongs to, or empty string for none.
         string category;
+
+        //Information to pass to the code when the item is picked, if any.
+        void* info;
         
         //Bitmap, if any.
         ALLEGRO_BITMAP* bitmap = nullptr;
@@ -361,7 +364,8 @@ protected:
         
         explicit picker_item(
             const string &name,
-            const string &category = "", ALLEGRO_BITMAP* bitmap = nullptr
+            const string &category = "", void* info = nullptr,
+            ALLEGRO_BITMAP* bitmap = nullptr
         );
         
     };
@@ -393,7 +397,7 @@ protected:
         
         //Callback for when the user picks an item from the picker dialog.
         std::function<void(
-            const string &, const string &, bool
+            const string &, const string &, void*, bool
         )> pick_callback = nullptr;
         
         //Text to display above the picker dialog list.
@@ -584,6 +588,9 @@ protected:
     //Has the user picked any content to load yet?
     bool loaded_content_yet = false;
     
+    //Manifest for the current content.
+    content_manifest manifest;
+    
     //Is this a real mouse drag, or just a shaky click?
     bool mouse_drag_confirmed = false;
     
@@ -604,7 +611,7 @@ protected:
     
     //Current sub-state.
     size_t sub_state = 0;
-    
+
     //Maximum zoom level allowed.
     float zoom_max_level = 0.0f;
     
@@ -647,7 +654,7 @@ protected:
         const string &title,
         const vector<picker_item> &items,
         const std::function<void(
-            const string &, const string &, bool
+            const string &, const string &, void*, bool
         )> &pick_callback,
         const string &list_header = "",
         bool can_make_new = false,

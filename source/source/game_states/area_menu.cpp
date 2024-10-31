@@ -633,7 +633,7 @@ void area_menu_state::init_gui_main() {
                 );
             area_button->on_activate =
             [this, area_ptr] (const point &) {
-                game.states.gameplay->path_of_area_to_load = area_ptr->path;
+                game.states.gameplay->path_of_area_to_load = area_ptr->manifest->path;
                 game.fade_mgr.start_fade(false, [] () {
                     game.change_state(game.states.gameplay);
                 });

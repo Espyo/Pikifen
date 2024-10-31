@@ -476,7 +476,6 @@ void animation_editor::load_animation_database(
         file.save_file(file_path, true);
     }
     anims.load_from_data_node(&file);
-    anims.path = file_path;
     
     cur_anim_i.clear();
     anim_playing = false;
@@ -551,7 +550,7 @@ void animation_editor::load_animation_database(
     ) {
         data_node data =
             load_data_file(
-                loaded_mob_type->path + "/data.txt"
+                loaded_mob_type->manifest->path + "/data.txt"
             );
         top_bmp[0] =
             game.content.bitmaps.list.get(

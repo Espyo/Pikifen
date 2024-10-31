@@ -170,7 +170,7 @@ ALLEGRO_FONT* load_font(
     const string &path, int n, const int ranges[], int size
 ) {
     const string &final_path =
-        game.content.bitmaps.manifest[path].path;
+        game.content.bitmaps.manifests[path].path;
         
     ALLEGRO_FONT* result = nullptr;
     

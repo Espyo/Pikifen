@@ -1009,7 +1009,8 @@ void editor::open_dialog(
  * or enters a new one.
  * This function's first argument is the name of the item.
  * Its second argument is the category of the item, or an empty string.
- * Its third argument is whether it's a new item or not.
+ * Its third argument is a void pointer to any custom info, or nullptr.
+ * Its fourth argument is whether it's a new item or not.
  * @param list_header If not-empty, display this text above the list.
  * @param can_make_new If true, the user can create a new element,
  * by writing its name on the textbox, and pressing the "+" button.
@@ -1019,7 +1020,7 @@ void editor::open_picker_dialog(
     const string &title,
     const vector<picker_item> &items,
     const std::function <void(
-        const string &, const string &, bool
+        const string &, const string &, void*, bool
     )> &pick_callback,
     const string &list_header,
     bool can_make_new,
@@ -1286,7 +1287,7 @@ bool editor::process_gui_mob_type_widgets(
         }
         open_picker_dialog(
             "Pick an object type", items,
-        [this] (const string  &n, const string  &c, bool) {
+        [this] (const string  &n, const string  &c, void*, bool) {
             //For clarity, this code will NOT be run within the context
             //of editor::process_gui_mob_type_widgets, but will instead
             //be run wherever dialogs are processed.
@@ -2309,7 +2310,7 @@ void editor::picker_info::process() {
             }
         }
         
-        pick_callback(filter, new_item_category, is_really_new);
+        pick_callback(filter, new_item_category, nullptr, is_really_new);
         if(dialog_ptr) {
             dialog_ptr->is_open = false;
         }
@@ -2360,6 +2361,7 @@ void editor::picker_info::process() {
                 pick_callback(
                     final_items[0][0].name,
                     final_items[0][0].category,
+                    final_items[0][0].info,
                     false
                 );
                 if(dialog_ptr) {
@@ -2466,7 +2468,7 @@ void editor::picker_info::process() {
                     
                     if(button_pressed) {
                         pick_callback(
-                            i_ptr->name, i_ptr->category, false
+                            i_ptr->name, i_ptr->category, i_ptr->info, false
                         );
                         if(dialog_ptr) {
                             dialog_ptr->is_open = false;
@@ -2482,7 +2484,7 @@ void editor::picker_info::process() {
                     button_size = ImVec2(168.0f, 32.0f);
                     if(ImGui::Button(i_ptr->name.c_str(), button_size)) {
                         pick_callback(
-                            i_ptr->name, i_ptr->category, false
+                            i_ptr->name, i_ptr->category, i_ptr->info, false
                         );
                         if(dialog_ptr) {
                             dialog_ptr->is_open = false;
@@ -2515,13 +2517,16 @@ void editor::picker_info::process() {
  *
  * @param name Name of the item.
  * @param category Category it belongs to. If none, use an empty string.
+ * @param info Information to pass to the code when the item is picked, if any.
  * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 editor::picker_item::picker_item(
-    const string &name, const string &category, ALLEGRO_BITMAP* bitmap
+    const string &name, const string &category, void* info,
+    ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
     category(category),
+    info(info),
     bitmap(bitmap) {
     
 }

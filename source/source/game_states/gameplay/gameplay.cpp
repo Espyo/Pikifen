@@ -757,14 +757,14 @@ void gameplay_state::load() {
     };
     
     //Load the area.
-    string area_folder_name;
+    content_manifest area_manifest;
     AREA_TYPE area_type;
-    string package;
     get_area_info_from_path(
-        path_of_area_to_load, &area_folder_name, &area_type, &package
+        path_of_area_to_load, &area_manifest, &area_type
     );
     game.content.load_area_as_current(
-        area_folder_name, package, area_type, CONTENT_LOAD_LEVEL_FULL, false
+        game.content.areas.find_manifest(area_manifest.internal_name, area_manifest.package, area_type),
+        area_type, CONTENT_LOAD_LEVEL_FULL, false
     );
     
     if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {
@@ -994,7 +994,7 @@ void gameplay_state::load() {
     for(auto &s : spray_strs) {
         size_t spray_idx = 0;
         for(; spray_idx < game.config.spray_order.size(); spray_idx++) {
-            if(game.config.spray_order[spray_idx]->internal_name == s.first) {
+            if(game.config.spray_order[spray_idx]->manifest->internal_name == s.first) {
                 break;
             }
         }

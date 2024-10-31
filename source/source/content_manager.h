@@ -81,7 +81,7 @@ struct content_manager {
     
     content_manager();
     void load_area_as_current(
-        const string &folder_name, const string &package_name, AREA_TYPE type,
+        content_manifest* manifest, AREA_TYPE type,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level);

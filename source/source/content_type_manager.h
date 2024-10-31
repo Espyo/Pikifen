@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "audio.h"
+#include "content.h"
 #include "area/area.h"
 #include "mobs/mob_utils.h"
 #include "misc_structs.h"
@@ -27,28 +28,6 @@ using std::vector;
 
 
 /**
- * @brief A manifest record of a piece of content on the disk.
- */
-struct content_manifest {
-
-    //--- Members ---
-    
-    //Path to the content, relative to the packages folder.
-    string path;
-    
-    //Package it belongs to.
-    string package;
-    
-
-    //--- Function declarations ---
-    
-    content_manifest();
-    content_manifest(const string &path, const string &package);
-    
-};
-
-
-/**
  * @brief Responsible for loading and storing game content of a given type
  * into memory.
  */
@@ -58,8 +37,8 @@ public:
 
     //--- Function declarations ---
 
-    virtual void clear_manifest() = 0;
-    virtual void fill_manifest() = 0;
+    virtual void clear_manifests() = 0;
+    virtual void fill_manifests() = 0;
     virtual string get_name() const = 0;
     virtual string get_perf_mon_measurement_name() const = 0;
     virtual void load_all(CONTENT_LOAD_LEVEL level) = 0;
@@ -69,11 +48,11 @@ public:
 protected:
     
     //--- Function declarations ---
-    void fill_manifest_map(
-        map<string, content_manifest> &manifest, const string &content_path, bool folders
+    void fill_manifests_map(
+        map<string, content_manifest> &manifests, const string &content_path, bool folders
     );
-    void fill_manifest_map_from_pkg(
-        map<string, content_manifest> &manifest, const string &package_name,
+    void fill_manifests_map_from_pkg(
+        map<string, content_manifest> &manifests, const string &package_name,
         const string &content_rel_path, bool folders
     );
     
@@ -93,20 +72,20 @@ public:
     //List of loaded areas.
     vector<vector<area_data*> > list;
 
-    //Manifest, by area type.
-    vector<map<string, content_manifest>> manifest;
+    //Manifests, by area type.
+    vector<map<string, content_manifest>> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
+    content_manifest* find_manifest(const string& area_name, const string& package, AREA_TYPE type);
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
     void load_area(
-        area_data* area_ptr,
-        const string &internal_name, const string &package_name, AREA_TYPE type,
+        area_data* area_ptr, content_manifest* manifest, AREA_TYPE type,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void unload_all(CONTENT_LOAD_LEVEL level) override;
@@ -117,8 +96,7 @@ private:
     //--- Function declarations ---
 
     void load_area_into_vector(
-        const string &internal_name, const string &package_name, AREA_TYPE type,
-        bool from_backup
+        content_manifest* manifest, AREA_TYPE type, bool from_backup
     );
 
 };
@@ -137,14 +115,14 @@ public:
     //Manager proper.
     bitmap_manager list;
     
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -166,14 +144,14 @@ public:
     //List of custom particle generators.
     map<string, particle_generator> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -183,9 +161,7 @@ public:
 private:
     
     //--- Function declarations ---
-    void load_generator(
-        const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level
-    );
+    void load_generator(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -203,14 +179,14 @@ public:
     //List of global animations.
     map<string, single_animation_suite> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -220,7 +196,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_global_animation(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_global_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -238,14 +214,14 @@ public:
     //List of GUI definitions.
     map<string, data_node> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -267,14 +243,14 @@ public:
     //List of hazards.
     map<string, hazard> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -284,7 +260,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_hazard(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_hazard(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -302,14 +278,14 @@ public:
     //List of liquids.
     map<string, liquid*> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -319,7 +295,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_liquid(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_liquid(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -334,14 +310,14 @@ public:
 
     //--- Members ---
 
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -364,14 +340,14 @@ public:
     //List of all mob types.
     mob_type_lists list;
         
-    //Manifest, by category.
-    vector<map<string, content_manifest> > manifest;
+    //Manifests, by category.
+    vector<map<string, content_manifest> > manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -400,14 +376,14 @@ public:
     //Manager proper.
     sfx_sample_manager list;
     
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -429,14 +405,14 @@ public:
     //List of liquids.
     map<string, song> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -446,7 +422,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_song(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_song(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -464,14 +440,14 @@ public:
     //Manager proper.
     audio_stream_manager list;
     
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -493,14 +469,14 @@ public:
     //List of spike damage types.
     map<string, spike_damage_type> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -510,7 +486,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_spike_damage_type(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_spike_damage_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -528,14 +504,14 @@ public:
     //List of spray types.
     map<string, spray_type> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -545,7 +521,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_spray_type(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_spray_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -563,14 +539,14 @@ public:
     //List of status types.
     map<string, status_type*> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -580,7 +556,7 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_status_type(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_status_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };
 
@@ -598,14 +574,14 @@ public:
     //List of weather conditions.
     map<string, weather> list;
         
-    //Manifest.
-    map<string, content_manifest> manifest;
+    //Manifests.
+    map<string, content_manifest> manifests;
 
 
     //--- Function declarations ---
 
-    void clear_manifest() override;
-    void fill_manifest() override;
+    void clear_manifests() override;
+    void fill_manifests() override;
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
@@ -615,6 +591,6 @@ public:
 private:
 
     //--- Function declarations ---
-    void load_weather_condition(const string &internal_name, const string &path, CONTENT_LOAD_LEVEL level);
+    void load_weather_condition(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
 
 };

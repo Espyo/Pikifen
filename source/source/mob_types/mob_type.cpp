@@ -834,8 +834,7 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        anims.path = folder_path + "/animations.txt";
-        data_node anim_file = load_data_file(anims.path);
+        data_node anim_file = load_data_file(folder_path + "/animations.txt");
         anims.load_from_data_node(&anim_file);
         anims.fix_body_part_pointers();
         anims.fill_sound_idx_caches(this);

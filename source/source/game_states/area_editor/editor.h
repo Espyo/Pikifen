@@ -879,13 +879,10 @@ private:
     void copy_path_link_properties();
     void copy_sector_properties();
     void create_area(
-        const string &requested_area_folder_name,
-        const AREA_TYPE requested_area_type
+        const content_manifest& requested_area_manifest,
+        AREA_TYPE requested_area_type
     );
-    void create_or_load_area(
-        const string &requested_area_folder_name,
-        const AREA_TYPE requested_area_type
-    );
+    void create_or_load_area(const string &requested_area_path);
     void create_drawing_vertexes();
     void create_mob_under_cursor();
     sector* create_sector_for_layout_drawing(const sector* copy_from);
@@ -958,7 +955,7 @@ private:
     void homogenize_selected_path_stops();
     void homogenize_selected_sectors();
     void load_area(
-        const string &requested_area_folder_name,
+        content_manifest* manifest,
         const AREA_TYPE requested_area_type,
         bool from_backup, bool should_update_history
     );
@@ -1047,10 +1044,10 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_area(
-        const string &name, const string &category, bool is_new
+        const string &name, const string &category, void* info, bool is_new
     );
     void pick_texture(
-        const string &name, const string &category, bool is_new
+        const string &name, const string &category, void* info, bool is_new
     );
     void circle_sector_cmd(float input_value);
     void copy_properties_cmd(float input_value);

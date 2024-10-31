@@ -94,6 +94,33 @@ enum CONTENT_LOAD_LEVEL {
 
 
 /**
+ * @brief A manifest record of a piece of content on the disk.
+ */
+struct content_manifest {
+
+    //--- Members ---
+
+    //Internal name. Basically file name sans extension or folder name.
+    string internal_name;
+    
+    //Path to the content, relative to the packages folder.
+    string path;
+    
+    //Package it belongs to.
+    string package;
+    
+
+    //--- Function declarations ---
+    
+    content_manifest();
+    content_manifest(const string& name, const string &path, const string &package);
+    void clear();
+    void fill_from_path(const string& path);
+    
+};
+
+
+/**
  * @brief Represents any piece of game content that can be used in the engine,
  * shared around, belong as part of another piece of content, etc.
  */
@@ -101,12 +128,9 @@ class plain_content {
 public:
 
     //--- Members ---
-    
-    //Internal name. Basically the file or folder name.
-    string internal_name;
-    
-    //Path to the folder or file, relative to the program root folder.
-    string path;
+
+    //The content's manifest.
+    content_manifest* manifest;
     
 };
 

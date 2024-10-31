@@ -11,6 +11,7 @@
 #include "content.h"
 
 #include "misc_structs.h"
+#include "utils/string_utils.h"
 
 
 /**
@@ -67,4 +68,59 @@ void content::save_metadata_to_data_node(data_node* node) const {
     
 #undef saver_o
 #undef saver
+}
+
+
+/**
+ * @brief Constructs a new content manifest object.
+ */
+content_manifest::content_manifest() {}
+
+
+/**
+ * @brief Constructs a new content manifest object.
+ *
+ * @param name Internal name. Basically file name sans extension or folder name.
+ * @param path Path to the content, relative to the packages folder.
+ * @param package Package it belongs to.
+ */
+content_manifest::content_manifest(const string& name, const string &path, const string &package) :
+    internal_name(name),
+    path(path),
+    package(package) {
+    
+}
+
+
+/**
+ * @brief Clears all the information in a manifest.
+ */
+void content_manifest::clear() {
+    internal_name.clear();
+    path.clear();
+    package.clear();
+}
+
+
+/**
+ * @brief Fills in the information using the provided path. It'll all be empty
+ * if the path is not valid.
+ */
+void content_manifest::fill_from_path(const string& path) {
+    clear();
+
+    vector<string> parts = split(path, "/");
+    size_t game_data_idx = string::npos;
+    for(size_t p = 0; p < parts.size(); p++) {
+        if(parts[p] == FOLDER_NAMES::GAME_DATA) {
+            game_data_idx = p;
+            break;
+        }
+    }
+    if(game_data_idx == string::npos) return;
+    if((int) game_data_idx >= (int) parts.size() - 2) return;
+
+    this->path = path;
+    this->package = parts[game_data_idx + 1];
+    this->internal_name = remove_extension(parts.back());
 }

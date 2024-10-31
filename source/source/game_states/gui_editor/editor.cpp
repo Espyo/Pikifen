@@ -75,7 +75,7 @@ gui_editor::gui_editor() :
  * @brief Code to run when the load dialog is closed.
  */
 void gui_editor::close_load_dialog() {
-    if(!loaded_content_yet && file_name.empty()) {
+    if(!loaded_content_yet && manifest.internal_name.empty()) {
         //The user cancelled the load dialog
         //presented when you enter the GUI editor. Quit out.
         leave();
@@ -144,7 +144,7 @@ string gui_editor::get_name() const {
  * @return The name.
  */
 string gui_editor::get_opened_file_name() const {
-    return file_name;
+    return manifest.internal_name;
 }
 
 
@@ -154,13 +154,13 @@ string gui_editor::get_opened_file_name() const {
 void gui_editor::load() {
     editor::load();
     
-    file_name.clear();
+    manifest.clear();
     loaded_content_yet = false;
     must_recenter_cam = true;
     game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
     
     if(!auto_load_file.empty()) {
-        file_name = auto_load_file;
+        manifest.fill_from_path(auto_load_file);
         load_file(true);
     } else {
         open_load_dialog();
@@ -179,10 +179,10 @@ void gui_editor::load_file(
 ) {
     items.clear();
     
-    file_node = data_node(FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name); //TODO
+    file_node = data_node(manifest.path);
     
     if(!file_node.file_was_opened) {
-        set_status("Failed to load the file \"" + file_name + "\"!", true);
+        set_status("Failed to load the file \"" + manifest.path + "\"!", true);
         open_load_dialog();
         return;
     }
@@ -216,7 +216,7 @@ void gui_editor::load_file(
     must_recenter_cam = true;
     
     if(should_update_history) {
-        update_history(file_name);
+        update_history(manifest.path);
         save_options(); //Save the history in the options.
     }
     
@@ -244,12 +244,13 @@ void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  *
  * @param name Name of the file.
  * @param category Unused.
+ * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
 void gui_editor::pick_file(
-    const string &name, const string &category, bool is_new
+    const string &name, const string &category, void* info, bool is_new
 ) {
-    file_name = name;
+    manifest = *((content_manifest*) info);
     load_file(true);
     close_top_dialog();
 }
@@ -461,16 +462,14 @@ bool gui_editor::save_file() {
         item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
     }
     
-    string file_path = FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::GUI + "/" + file_name; //TODO
-    
-    if(!file_node.save_file(file_path)) {
+    if(!file_node.save_file(manifest.path)) {
         show_message_box(
             nullptr, "Save failed!",
             "Could not save the GUI file!",
             (
                 "An error occured while saving the GUI data to the file \"" +
-                file_path + "\". Make sure that the folder it is saving to "
-                "exists and it is not read-only, and try again."
+                manifest.path + "\". Make sure that the folder it is saving "
+                "to exists and it is not read-only, and try again."
             ).c_str(),
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN

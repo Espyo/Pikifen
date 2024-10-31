@@ -78,9 +78,6 @@ private:
     //Currently selected item, or INVALID for none.
     size_t cur_item = INVALID;
     
-    //File name of the file currently being edited.
-    string file_name;
-    
     //Data node for the contents of this GUI file.
     data_node file_node;
     
@@ -117,7 +114,7 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_file(
-        const string &name, const string &category, bool is_new
+        const string &name, const string &category, void* info, bool is_new
     );
     bool save_file();
     point snap_point(const point &p);

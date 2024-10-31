@@ -29,10 +29,10 @@ void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
-        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_SIMPLE][a]->internal_name, "Simple"));
+        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_SIMPLE][a]->manifest->internal_name, "Simple"));
     }
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_MISSION][a]->internal_name, "Mission"));
+        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_MISSION][a]->manifest->internal_name, "Mission"));
     }
     
     //Set up the picker's behavior and data.
@@ -47,7 +47,8 @@ void area_editor::open_load_dialog() {
             &area_editor::pick_area, this,
             std::placeholders::_1,
             std::placeholders::_2,
-            std::placeholders::_3
+            std::placeholders::_3,
+            std::placeholders::_4
         );
         
     //Open the dialog that will contain the picker and history.
@@ -199,7 +200,7 @@ void area_editor::process_gui_delete_area_dialog() {
     //Final warning text.
     string final_warning_str =
         "Are you sure you want to delete the area \"" +
-        game.cur_area_data->internal_name + "\"?";
+        game.cur_area_data->manifest->internal_name + "\"?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -243,17 +244,8 @@ void area_editor::process_gui_load_dialog() {
     [this](const string &name) -> string {
         return get_path_short_name(name);
     },
-    [this](const string &name) {
-        string folder_name;
-        AREA_TYPE type;
-        string package;
-        get_area_info_from_path(
-            name,
-            &folder_name,
-            &type,
-            &package
-        );
-        create_or_load_area(folder_name, type);
+    [this](const string &path) {
+        create_or_load_area(path);
         close_top_dialog();
     }
     );
@@ -1612,7 +1604,7 @@ void area_editor::process_gui_panel_gameplay() {
                     )
                 ) {
                     register_change("area spray amounts change");
-                    spray_strs[game.config.spray_order[s]->internal_name] = i2s(amount);
+                    spray_strs[game.config.spray_order[s]->manifest->internal_name] = i2s(amount);
                     game.cur_area_data->spray_amounts.clear();
                     for(auto const &v : spray_strs) {
                         game.cur_area_data->spray_amounts +=
@@ -2508,12 +2500,12 @@ void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area folder: %s", game.cur_area_data->internal_name.c_str());
+    ImGui::Text("Area folder: %s", game.cur_area_data->manifest->internal_name.c_str());
     set_tooltip(
-        "Full folder path: " + game.cur_area_data->path + "\n"
+        "Full folder path: " + game.cur_area_data->manifest->path + "\n"
         "Full user data folder path: " +
-        get_base_area_folder_path(game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG) + "/" + //TODO
-        game.cur_area_data->internal_name + "\n"
+        get_base_area_folder_path(game.cur_area_data->type, false, game.cur_area_data->manifest->package) + "/" +
+        game.cur_area_data->manifest->internal_name + "\n"
     );
     
     //Spacer dummy widget.
@@ -5428,7 +5420,8 @@ void area_editor::process_gui_panel_sector() {
                         &area_editor::pick_texture, this,
                         std::placeholders::_1,
                         std::placeholders::_2,
-                        std::placeholders::_3
+                        std::placeholders::_3,
+                        std::placeholders::_4
                     ),
                     "Suggestions:"
                 );
@@ -5714,11 +5707,11 @@ void area_editor::process_gui_panel_tools() {
                 "loading the auto-backup", "load",
             [this] () {
                 bool backup_exists = false;
-                if(!game.cur_area_data->internal_name.empty()) {
+                if(!game.cur_area_data->manifest->internal_name.empty()) {
                     string file_path =
                         get_base_area_folder_path(
-                            game.cur_area_data->type, false, FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_NAMES::BASE_PKG //TODO
-                        ) + "/" + game.cur_area_data->internal_name + "/" +
+                            game.cur_area_data->type, false, game.cur_area_data->manifest->package
+                        ) + "/" + game.cur_area_data->manifest->internal_name + "/" +
                         FILE_NAMES::AREA_GEOMETRY_BACKUP;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;

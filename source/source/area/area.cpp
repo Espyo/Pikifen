@@ -129,8 +129,7 @@ void area_data::clear() {
     }
     
     reset_metadata();
-    internal_name.clear();
-    path.clear();
+    manifest = nullptr;
     name.clear();
     type = AREA_TYPE_SIMPLE;
     subtitle.clear();
@@ -368,9 +367,8 @@ void area_data::clone(area_data &other) {
         ot_ptr->bitmap = game.content.bitmaps.list.get(t_ptr->file_name, nullptr, false);
     }
     
+    other.manifest = manifest;
     other.type = type;
-    other.name = name;
-    other.path = path;
     other.name = name;
     other.subtitle = subtitle;
     other.description = description;
@@ -1746,8 +1744,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* vertexes_node = new data_node("vertexes", "");
     node->add(vertexes_node);
     
-    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data->vertexes[v];
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        vertex* v_ptr = vertexes[v];
         data_node* vertex_node =
             new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertexes_node->add(vertex_node);
@@ -1757,8 +1755,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* edges_node = new data_node("edges", "");
     node->add(edges_node);
     
-    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
-        edge* e_ptr = game.cur_area_data->edges[e];
+    for(size_t e = 0; e < edges.size(); e++) {
+        edge* e_ptr = edges[e];
         data_node* edge_node = new data_node("e", "");
         edges_node->add(edge_node);
         string s_str;
@@ -1811,8 +1809,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* sectors_node = new data_node("sectors", "");
     node->add(sectors_node);
     
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data->sectors[s];
+    for(size_t s = 0; s < sectors.size(); s++) {
+        sector* s_ptr = sectors[s];
         data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
         
@@ -1906,8 +1904,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* mobs_node = new data_node("mobs", "");
     node->add(mobs_node);
     
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+    for(size_t m = 0; m < mob_generators.size(); m++) {
+        mob_gen* m_ptr = mob_generators[m];
         string cat_name = "unknown";
         if(m_ptr->type && m_ptr->type->category) {
             cat_name = m_ptr->type->category->internal_name;
@@ -1917,7 +1915,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(m_ptr->type) {
             mob_node->add(
-                new data_node("type", m_ptr->type->internal_name)
+                new data_node("type", m_ptr->type->manifest->internal_name)
             );
         }
         mob_node->add(
@@ -1960,8 +1958,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* path_stops_node = new data_node("path_stops", "");
     node->add(path_stops_node);
     
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+    for(size_t s = 0; s < path_stops.size(); s++) {
+        path_stop* s_ptr = path_stops[s];
         data_node* path_stop_node = new data_node("s", "");
         path_stops_node->add(path_stop_node);
         
@@ -2003,8 +2001,8 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     data_node* shadows_node = new data_node("tree_shadows", "");
     node->add(shadows_node);
     
-    for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
-        tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
+    for(size_t s = 0; s < tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
         
@@ -2044,40 +2042,40 @@ void area_data::save_main_data_to_data_node(data_node* node) {
     
     //Main data.
     node->add(
-        new data_node("subtitle", game.cur_area_data->subtitle)
+        new data_node("subtitle", subtitle)
     );
     node->add(
         new data_node(
             "difficulty",
-            i2s(game.cur_area_data->difficulty)
+            i2s(difficulty)
         )
     );
     node->add(
-        new data_node("bg_bmp", game.cur_area_data->bg_bmp_file_name)
+        new data_node("bg_bmp", bg_bmp_file_name)
     );
     node->add(
-        new data_node("bg_color", c2s(game.cur_area_data->bg_color))
+        new data_node("bg_color", c2s(bg_color))
     );
     node->add(
-        new data_node("bg_dist", f2s(game.cur_area_data->bg_dist))
+        new data_node("bg_dist", f2s(bg_dist))
     );
     node->add(
-        new data_node("bg_zoom", f2s(game.cur_area_data->bg_bmp_zoom))
+        new data_node("bg_zoom", f2s(bg_bmp_zoom))
     );
     node->add(
-        new data_node("song", game.cur_area_data->song_name)
+        new data_node("song", song_name)
     );
     node->add(
-        new data_node("weather", game.cur_area_data->weather_name)
+        new data_node("weather", weather_name)
     );
     node->add(
-        new data_node("day_time_start", i2s(game.cur_area_data->day_time_start))
+        new data_node("day_time_start", i2s(day_time_start))
     );
     node->add(
-        new data_node("day_time_speed", i2s(game.cur_area_data->day_time_speed))
+        new data_node("day_time_speed", i2s(day_time_speed))
     );
     node->add(
-        new data_node("spray_amounts", game.cur_area_data->spray_amounts)
+        new data_node("spray_amounts", spray_amounts)
     );
 }
 
@@ -2088,39 +2086,39 @@ void area_data::save_main_data_to_data_node(data_node* node) {
  * @param node Data node to save to.
  */
 void area_data::save_mission_data_to_data_node(data_node* node) {
-    if(game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY) {
+    if(mission.goal != MISSION_GOAL_END_MANUALLY) {
         node->add(
             new data_node(
                 "mission_goal",
-                game.mission_goals[game.cur_area_data->mission.goal]->
+                game.mission_goals[mission.goal]->
                 get_name()
             )
         );
     }
     if(
-        game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
-        game.cur_area_data->mission.goal == MISSION_GOAL_GROW_PIKMIN
+        mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
+        mission.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
         node->add(
             new data_node(
                 "mission_goal_amount",
-                i2s(game.cur_area_data->mission.goal_amount)
+                i2s(mission.goal_amount)
             )
         );
     }
     if(
-        game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-        game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-        game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
+        mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+        mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+        mission.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         node->add(
             new data_node(
                 "mission_goal_all_mobs",
-                b2s(game.cur_area_data->mission.goal_all_mobs)
+                b2s(mission.goal_all_mobs)
             )
         );
         string mission_mob_idxs;
-        for(size_t i : game.cur_area_data->mission.goal_mob_idxs) {
+        for(size_t i : mission.goal_mob_idxs) {
             if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
             mission_mob_idxs += i2s(i);
         }
@@ -2133,225 +2131,225 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
             );
         }
     }
-    if(game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT) {
+    if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
         node->add(
             new data_node(
                 "mission_goal_exit_center",
-                p2s(game.cur_area_data->mission.goal_exit_center)
+                p2s(mission.goal_exit_center)
             )
         );
         node->add(
             new data_node(
                 "mission_goal_exit_size",
-                p2s(game.cur_area_data->mission.goal_exit_size)
+                p2s(mission.goal_exit_size)
             )
         );
     }
-    if(game.cur_area_data->mission.fail_conditions > 0) {
+    if(mission.fail_conditions > 0) {
         node->add(
             new data_node(
                 "mission_fail_conditions",
-                i2s(game.cur_area_data->mission.fail_conditions)
+                i2s(mission.fail_conditions)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_too_few_pik_amount",
-                i2s(game.cur_area_data->mission.fail_too_few_pik_amount)
+                i2s(mission.fail_too_few_pik_amount)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_too_many_pik_amount",
-                i2s(game.cur_area_data->mission.fail_too_many_pik_amount)
+                i2s(mission.fail_too_many_pik_amount)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_pik_killed",
-                i2s(game.cur_area_data->mission.fail_pik_killed)
+                i2s(mission.fail_pik_killed)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_leaders_kod",
-                i2s(game.cur_area_data->mission.fail_leaders_kod)
+                i2s(mission.fail_leaders_kod)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_enemies_killed",
-                i2s(game.cur_area_data->mission.fail_enemies_killed)
+                i2s(mission.fail_enemies_killed)
             )
         );
     }
     if(
         has_flag(
-            game.cur_area_data->mission.fail_conditions,
+            mission.fail_conditions,
             get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         node->add(
             new data_node(
                 "mission_fail_time_limit",
-                i2s(game.cur_area_data->mission.fail_time_limit)
+                i2s(mission.fail_time_limit)
             )
         );
     }
-    if(game.cur_area_data->mission.fail_hud_primary_cond != INVALID) {
+    if(mission.fail_hud_primary_cond != INVALID) {
         node->add(
             new data_node(
                 "mission_fail_hud_primary_cond",
-                i2s(game.cur_area_data->mission.fail_hud_primary_cond)
+                i2s(mission.fail_hud_primary_cond)
             )
         );
     }
-    if(game.cur_area_data->mission.fail_hud_secondary_cond != INVALID) {
+    if(mission.fail_hud_secondary_cond != INVALID) {
         node->add(
             new data_node(
                 "mission_fail_hud_secondary_cond",
-                i2s(game.cur_area_data->mission.fail_hud_secondary_cond)
+                i2s(mission.fail_hud_secondary_cond)
             )
         );
     }
     node->add(
         new data_node(
             "mission_grading_mode",
-            i2s(game.cur_area_data->mission.grading_mode)
+            i2s(mission.grading_mode)
         )
     );
-    if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
-        if(game.cur_area_data->mission.points_per_pikmin_born != 0) {
+    if(mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+        if(mission.points_per_pikmin_born != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_pikmin_born",
-                    i2s(game.cur_area_data->mission.points_per_pikmin_born)
+                    i2s(mission.points_per_pikmin_born)
                 )
             );
         }
-        if(game.cur_area_data->mission.points_per_pikmin_death != 0) {
+        if(mission.points_per_pikmin_death != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_pikmin_death",
-                    i2s(game.cur_area_data->mission.points_per_pikmin_death)
+                    i2s(mission.points_per_pikmin_death)
                 )
             );
         }
-        if(game.cur_area_data->mission.points_per_sec_left != 0) {
+        if(mission.points_per_sec_left != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_sec_left",
-                    i2s(game.cur_area_data->mission.points_per_sec_left)
+                    i2s(mission.points_per_sec_left)
                 )
             );
         }
-        if(game.cur_area_data->mission.points_per_sec_passed != 0) {
+        if(mission.points_per_sec_passed != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_sec_passed",
-                    i2s(game.cur_area_data->mission.points_per_sec_passed)
+                    i2s(mission.points_per_sec_passed)
                 )
             );
         }
-        if(game.cur_area_data->mission.points_per_treasure_point != 0) {
+        if(mission.points_per_treasure_point != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_treasure_point",
                     i2s(
-                        game.cur_area_data->mission.points_per_treasure_point
+                        mission.points_per_treasure_point
                     )
                 )
             );
         }
-        if(game.cur_area_data->mission.points_per_enemy_point != 0) {
+        if(mission.points_per_enemy_point != 0) {
             node->add(
                 new data_node(
                     "mission_points_per_enemy_point",
-                    i2s(game.cur_area_data->mission.points_per_enemy_point)
+                    i2s(mission.points_per_enemy_point)
                 )
             );
         }
-        if(game.cur_area_data->mission.point_loss_data > 0) {
+        if(mission.point_loss_data > 0) {
             node->add(
                 new data_node(
                     "mission_point_loss_data",
-                    i2s(game.cur_area_data->mission.point_loss_data)
+                    i2s(mission.point_loss_data)
                 )
             );
         }
-        if(game.cur_area_data->mission.point_hud_data != 255) {
+        if(mission.point_hud_data != 255) {
             node->add(
                 new data_node(
                     "mission_point_hud_data",
-                    i2s(game.cur_area_data->mission.point_hud_data)
+                    i2s(mission.point_hud_data)
                 )
             );
         }
-        if(game.cur_area_data->mission.starting_points != 0) {
+        if(mission.starting_points != 0) {
             node->add(
                 new data_node(
                     "mission_starting_points",
-                    i2s(game.cur_area_data->mission.starting_points)
+                    i2s(mission.starting_points)
                 )
             );
         }
         node->add(
             new data_node(
                 "mission_bronze_req",
-                i2s(game.cur_area_data->mission.bronze_req)
+                i2s(mission.bronze_req)
             )
         );
         node->add(
             new data_node(
                 "mission_silver_req",
-                i2s(game.cur_area_data->mission.silver_req)
+                i2s(mission.silver_req)
             )
         );
         node->add(
             new data_node(
                 "mission_gold_req",
-                i2s(game.cur_area_data->mission.gold_req)
+                i2s(mission.gold_req)
             )
         );
         node->add(
             new data_node(
                 "mission_platinum_req",
-                i2s(game.cur_area_data->mission.platinum_req)
+                i2s(mission.platinum_req)
             )
         );
     }
@@ -2366,16 +2364,12 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
  */
 void area_data::save_thumbnail(bool to_backup) {
     string thumb_path =
-        get_base_area_folder_path(
-            game.cur_area_data->type,
-            !to_backup,
-            game.content.areas.manifest[game.cur_area_data->type][game.cur_area_data->internal_name].package
-        ) +
-        "/" + game.cur_area_data->internal_name +
+        get_base_area_folder_path(type, !to_backup, manifest->package) +
+        "/" + manifest->internal_name +
         (to_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
-    if(game.cur_area_data->thumbnail) {
+    if(thumbnail) {
         al_save_bitmap(
-            thumb_path.c_str(), game.cur_area_data->thumbnail.get()
+            thumb_path.c_str(), thumbnail.get()
         );
     } else {
         al_remove_filename(thumb_path.c_str());
@@ -2556,32 +2550,25 @@ tree_shadow::~tree_shadow() {
  * given its path.
  *
  * @param requested_area_path Relative path to the requested area.
- * @param out_area_folder_name If not nullptr, the area's folder name is
- * returned here.
- * @param out_area_type If not nullptr, the area's type is returned here.
+ * @param out_area_folder_name If not nullptr, a manifest is returned here.
  * @param out_package If not nullptr, the package is returned here.
  */
 void get_area_info_from_path(
     const string &requested_area_path,
-    string* out_area_folder_name,
-    AREA_TYPE* out_area_type,
-    string* out_package
+    content_manifest* out_manifest,
+    AREA_TYPE* out_area_type
 ) {
-    if(out_area_folder_name) *out_area_folder_name = requested_area_path;
-    if(out_area_type) *out_area_type = AREA_TYPE_SIMPLE;
-    if(out_package) *out_package = "";
+    if(out_manifest) {
+        out_manifest->fill_from_path(requested_area_path);
+    }
     
-    vector<string> parts = split(requested_area_path, "/");
-    
-    if(parts.size() <= 2) return;
-    
-    if(out_area_folder_name) *out_area_folder_name = parts.back();
     if(out_area_type) {
-        if(parts[parts.size() - 2] == FOLDER_NAMES::MISSION_AREAS) {
+        if(requested_area_path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/")) {
             *out_area_type = AREA_TYPE_MISSION;
+        } else {
+            *out_area_type = AREA_TYPE_SIMPLE;
         }
     }
-    if(out_package) *out_package = parts[parts.size() - 4];
 }
 
 

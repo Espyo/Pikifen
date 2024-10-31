@@ -91,7 +91,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
     cat->get_type_names(types);
     for(size_t t = 0 ; t < types.size(); t++) {
         mob_type* mt = cat->get_type(types[t]);
-        if(mt->internal_name == name) return mt;
+        if(mt->manifest->internal_name == name) return mt;
     }
     return nullptr;
 }

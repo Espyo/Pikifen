@@ -308,9 +308,8 @@ struct area_data : public content {
 
 void get_area_info_from_path(
     const string &requested_area_path,
-    string* out_area_folder_name,
-    AREA_TYPE* out_area_type,
-    string* out_package
+    content_manifest* out_manifest,
+    AREA_TYPE* out_area_type
 );
 string get_base_area_folder_path(
     const AREA_TYPE type, bool from_game_data, const string &package
