@@ -498,14 +498,14 @@ void animation_database::load_from_data_node(data_node* node) {
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
             for(size_t hs = 0; hs < hazards_strs.size(); hs++) {
                 const string &hazard_name = hazards_strs[hs];
-                if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
+                if(game.content.hazards.list.find(hazard_name) == game.content.hazards.list.end()) {
                     game.errors.report(
                         "Unknown hazard \"" + hazard_name + "\"!",
                         hazards_node
                     );
                 } else {
                     cur_hitbox.hazards.push_back(
-                        &(game.content.hazards[hazard_name])
+                        &(game.content.hazards.list[hazard_name])
                     );
                 }
             }
@@ -1242,7 +1242,7 @@ void sprite::set_bitmap(
         bitmap = nullptr;
     }
     if(new_file_name != file && parent_bmp) {
-        game.content.bitmaps.free(file);
+        game.content.bitmaps.list.free(file);
         parent_bmp = nullptr;
     }
     
@@ -1254,7 +1254,7 @@ void sprite::set_bitmap(
     }
     
     if(new_file_name != file || !parent_bmp) {
-        parent_bmp = game.content.bitmaps.get(new_file_name, node, node != nullptr);
+        parent_bmp = game.content.bitmaps.list.get(new_file_name, node, node != nullptr);
     }
     
     int parent_w = al_get_bitmap_width(parent_bmp);

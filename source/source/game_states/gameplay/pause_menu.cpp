@@ -187,7 +187,7 @@ pause_menu_t::~pause_menu_t() {
         if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.content.bitmaps.free(tidbits[(HELP_CATEGORY) c][t].image);
+                game.content.bitmaps.list.free(tidbits[(HELP_CATEGORY) c][t].image);
             }
         }
     }
@@ -200,15 +200,15 @@ pause_menu_t::~pause_menu_t() {
     help_gui.destroy();
     confirmation_gui.destroy();
     
-    game.content.bitmaps.free(bmp_radar_cursor);
-    game.content.bitmaps.free(bmp_radar_pikmin);
-    game.content.bitmaps.free(bmp_radar_treasure);
-    game.content.bitmaps.free(bmp_radar_enemy);
-    game.content.bitmaps.free(bmp_radar_leader_bubble);
-    game.content.bitmaps.free(bmp_radar_onion_skeleton);
-    game.content.bitmaps.free(bmp_radar_onion_bulb);
-    game.content.bitmaps.free(bmp_radar_ship);
-    game.content.bitmaps.free(bmp_radar_path);
+    game.content.bitmaps.list.free(bmp_radar_cursor);
+    game.content.bitmaps.list.free(bmp_radar_pikmin);
+    game.content.bitmaps.list.free(bmp_radar_treasure);
+    game.content.bitmaps.list.free(bmp_radar_enemy);
+    game.content.bitmaps.list.free(bmp_radar_leader_bubble);
+    game.content.bitmaps.list.free(bmp_radar_onion_skeleton);
+    game.content.bitmaps.list.free(bmp_radar_onion_bulb);
+    game.content.bitmaps.list.free(bmp_radar_ship);
+    game.content.bitmaps.list.free(bmp_radar_path);
     bmp_radar_cursor = nullptr;
     bmp_radar_pikmin = nullptr;
     bmp_radar_treasure = nullptr;
@@ -1712,7 +1712,7 @@ void pause_menu_t::handle_player_action(const player_action &action) {
  * @brief Initializes the leaving confirmation page.
  */
 void pause_menu_t::init_confirmation_page() {
-    data_node* gui_file = &game.content.gui[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
     
     //Menu items.
     confirmation_gui.register_coords("cancel",           19, 83, 30, 10);
@@ -1804,7 +1804,7 @@ void pause_menu_t::init_help_page() {
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
-    data_node* gui_file = &game.content.gui[PAUSE_MENU::HELP_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[PAUSE_MENU::HELP_GUI_FILE_NAME];
     
     //Load the tidbits.
     data_node* tidbits_node = gui_file->get_child_by_name("tidbits");
@@ -1822,7 +1822,7 @@ void pause_menu_t::init_help_page() {
             tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";
-            new_t.image = parts.size() > 2 ? game.content.bitmaps.get(parts[2]) : nullptr;
+            new_t.image = parts.size() > 2 ? game.content.bitmaps.list.get(parts[2]) : nullptr;
             category_tidbits.push_back(new_t);
         }
     }
@@ -2016,7 +2016,7 @@ void pause_menu_t::init_main_pause_menu() {
     gui.register_coords("quit",             87, 88, 22,  8);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui[PAUSE_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui.list[PAUSE_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Header.
@@ -2186,7 +2186,7 @@ void pause_menu_t::init_main_pause_menu() {
  * @brief Initializes the mission page.
  */
 void pause_menu_t::init_mission_page() {
-    data_node* gui_file = &game.content.gui[PAUSE_MENU::MISSION_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
     
     //Menu items.
     mission_gui.register_coords("header",           50,  5, 52,  6);
@@ -2312,14 +2312,14 @@ void pause_menu_t::init_mission_page() {
  * @brief Initializes the radar page.
  */
 void pause_menu_t::init_radar_page() {
-    data_node* gui_file = &game.content.gui[PAUSE_MENU::RADAR_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
     
     //Assets.
     data_node* bitmaps_node = gui_file->get_child_by_name("files");
     
 #define loader(var, name) \
     var = \
-          game.content.bitmaps.get( \
+          game.content.bitmaps.list.get( \
                                     bitmaps_node->get_child_by_name(name)->value, \
                                     bitmaps_node->get_child_by_name(name) \
                                   );
@@ -2586,7 +2586,7 @@ void pause_menu_t::init_radar_page() {
  * @brief Initializes the status page.
  */
 void pause_menu_t::init_status_page() {
-    data_node* gui_file = &game.content.gui[PAUSE_MENU::STATUS_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
     
     //Menu items.
     status_gui.register_coords("header",           50,     5,   52,    6);

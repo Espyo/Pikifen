@@ -28,11 +28,11 @@
 void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
-    for(size_t a = 0; a < game.content.areas[AREA_TYPE_SIMPLE].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_SIMPLE][a]->internal_name, "Simple"));
+    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
+        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_SIMPLE][a]->internal_name, "Simple"));
     }
-    for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
-        areas.push_back(picker_item(game.content.areas[AREA_TYPE_MISSION][a]->internal_name, "Mission"));
+    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_MISSION][a]->internal_name, "Mission"));
     }
     
     //Set up the picker's behavior and data.
@@ -1290,10 +1290,10 @@ void area_editor::process_gui_panel_details() {
                     //New image, delete the old one.
                     register_change("tree shadow file change");
                     if(selected_shadow->bitmap != game.bmp_error) {
-                        game.content.bitmaps.free(selected_shadow->file_name);
+                        game.content.bitmaps.list.free(selected_shadow->file_name);
                     }
                     selected_shadow->bitmap =
-                        game.content.bitmaps.get(
+                        game.content.bitmaps.list.get(
                             selected_shadow->file_name, nullptr, false
                         );
                 }
@@ -1876,7 +1876,7 @@ void area_editor::process_gui_panel_info() {
         ImGui::SameLine();
         vector<string> song_names;
         song_names.push_back(NONE_OPTION);
-        for(auto &s : game.content.songs) {
+        for(auto &s : game.content.songs.list) {
             song_names.push_back(s.first);
         }
         if(game.cur_area_data->song_name.empty()) {
@@ -1894,7 +1894,7 @@ void area_editor::process_gui_panel_info() {
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);
-        for(auto &w : game.content.weather_conditions) {
+        for(auto &w : game.content.weather_conditions.list) {
             weather_conditions.push_back(w.first);
         }
         if(game.cur_area_data->weather_name.empty()) {
@@ -5225,7 +5225,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector hazard addition popup.
             vector<string> all_hazards_list;
-            for(auto &h : game.content.hazards) {
+            for(auto &h : game.content.hazards.list) {
                 all_hazards_list.push_back(h.first);
             }
             string picked_hazard;
@@ -5246,7 +5246,7 @@ void area_editor::process_gui_panel_sector() {
                         s_ptr->hazards_str += ";";
                     }
                     s_ptr->hazards_str += picked_hazard;
-                    s_ptr->hazards.push_back(&(game.content.hazards[picked_hazard]));
+                    s_ptr->hazards.push_back(&(game.content.hazards.list[picked_hazard]));
                     selected_hazard_idx = (int) list.size();
                     set_status(
                         "Added hazard \"" + picked_hazard +
@@ -5278,7 +5278,7 @@ void area_editor::process_gui_panel_sector() {
                         for(size_t h = 0; h < list.size(); h++) {
                             if(h == (size_t) selected_hazard_idx) continue;
                             s_ptr->hazards_str += list[h] + ";";
-                            s_ptr->hazards.push_back(&(game.content.hazards[list[h]]));
+                            s_ptr->hazards.push_back(&(game.content.hazards.list[list[h]]));
                         }
                         if(!s_ptr->hazards_str.empty()) {
                             //Delete the trailing semicolon.

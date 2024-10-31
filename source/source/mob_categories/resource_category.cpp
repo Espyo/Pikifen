@@ -33,10 +33,10 @@ resource_category::resource_category() :
  * @brief Clears the list of registered types of resource.
  */
 void resource_category::clear_types() {
-    for(auto &t : game.content.mob_types.resource) {
+    for(auto &t : game.content.mob_types.list.resource) {
         delete t.second;
     }
-    game.content.mob_types.resource.clear();
+    game.content.mob_types.list.resource.clear();
 }
 
 
@@ -90,8 +90,8 @@ void resource_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* resource_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.resource.find(name);
-    if(it == game.content.mob_types.resource.end()) return nullptr;
+    auto it = game.content.mob_types.list.resource.find(name);
+    if(it == game.content.mob_types.list.resource.end()) return nullptr;
     return it->second;
 }
 
@@ -102,7 +102,7 @@ mob_type* resource_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void resource_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.resource) {
+    for(auto &t : game.content.mob_types.list.resource) {
         list.push_back(t.first);
     }
 }
@@ -115,5 +115,5 @@ void resource_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void resource_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.resource[internal_name] = (resource_type*) type;
+    game.content.mob_types.list.resource[internal_name] = (resource_type*) type;
 }

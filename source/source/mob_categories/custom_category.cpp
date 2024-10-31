@@ -32,10 +32,10 @@ custom_category::custom_category() :
  * @brief Clears the list of registered types of custom mob.
  */
 void custom_category::clear_types() {
-    for(auto &t : game.content.mob_types.custom) {
+    for(auto &t : game.content.mob_types.list.custom) {
         delete t.second;
     }
-    game.content.mob_types.custom.clear();
+    game.content.mob_types.list.custom.clear();
 }
 
 
@@ -80,8 +80,8 @@ void custom_category::erase_mob(mob* m) { }
  * @return The type.
  */
 mob_type* custom_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.custom.find(name);
-    if(it == game.content.mob_types.custom.end()) return nullptr;
+    auto it = game.content.mob_types.list.custom.find(name);
+    if(it == game.content.mob_types.list.custom.end()) return nullptr;
     return it->second;
 }
 
@@ -92,7 +92,7 @@ mob_type* custom_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void custom_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.custom) {
+    for(auto &t : game.content.mob_types.list.custom) {
         list.push_back(t.first);
     }
 }
@@ -105,5 +105,5 @@ void custom_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void custom_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.custom[internal_name] = type;
+    game.content.mob_types.list.custom[internal_name] = type;
 }

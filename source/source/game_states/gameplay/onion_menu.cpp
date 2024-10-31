@@ -87,7 +87,7 @@ onion_menu_t::onion_menu_t(
     gui.register_coords("group_right_more", 95, 60,  3,  4);
     gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(
-        game.content.gui[ONION_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui.list[ONION_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Instructions text.

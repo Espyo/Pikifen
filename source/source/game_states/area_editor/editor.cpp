@@ -293,7 +293,7 @@ void area_editor::clear_current_area() {
     
     if(game.cur_area_data) {
         for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
-            game.content.bitmaps.free(game.cur_area_data->tree_shadows[s]->file_name);
+            game.content.bitmaps.list.free(game.cur_area_data->tree_shadows[s]->file_name);
         }
     }
     
@@ -730,7 +730,7 @@ void area_editor::do_logic() {
     }
     
     unordered_set<single_animation_suite*> liquid_anims;
-    for(auto &l : game.content.liquids) {
+    for(auto &l : game.content.liquids.list) {
         liquid_anims.insert(l.second->anim);
     }
     for(auto &a : liquid_anims) {
@@ -4027,9 +4027,9 @@ void area_editor::update_reference() {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
-    game.content.bitmaps.free(s_ptr->texture_info.file_name);
+    game.content.bitmaps.list.free(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap = game.content.bitmaps.get(file_name);
+    s_ptr->texture_info.bitmap = game.content.bitmaps.list.get(file_name);
 }
 
 
@@ -4183,7 +4183,7 @@ area_editor::texture_suggestion::texture_suggestion(
     bmp(nullptr),
     name(n) {
     
-    bmp = game.content.bitmaps.get(name, nullptr, false);
+    bmp = game.content.bitmaps.list.get(name, nullptr, false);
 }
 
 
@@ -4191,5 +4191,5 @@ area_editor::texture_suggestion::texture_suggestion(
  * @brief Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    game.content.bitmaps.free(name);
+    game.content.bitmaps.list.free(name);
 }

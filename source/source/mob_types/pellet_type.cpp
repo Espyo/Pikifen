@@ -58,15 +58,15 @@ void pellet_type::load_cat_properties(data_node* file) {
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     
     if(
-        game.content.mob_types.pikmin.find(pik_type_str) ==
-        game.content.mob_types.pikmin.end()
+        game.content.mob_types.list.pikmin.find(pik_type_str) ==
+        game.content.mob_types.list.pikmin.end()
     ) {
         game.errors.report(
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     } else {
-        pik_type = game.content.mob_types.pikmin[pik_type_str];
+        pik_type = game.content.mob_types.list.pikmin[pik_type_str];
     }
     
     weight = number;
@@ -86,7 +86,7 @@ void pellet_type::load_cat_resources(data_node* file) {
     
     rs.set("number_image", number_image_str, &number_image_node);
     
-    bmp_number = game.content.bitmaps.get(number_image_str, number_image_node);
+    bmp_number = game.content.bitmaps.list.get(number_image_str, number_image_node);
 }
 
 
@@ -94,5 +94,5 @@ void pellet_type::load_cat_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void pellet_type::unload_resources() {
-    game.content.bitmaps.free(bmp_number);
+    game.content.bitmaps.list.free(bmp_number);
 }

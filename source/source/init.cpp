@@ -1615,7 +1615,7 @@ void init_single_animation(
 ) {
     const string &anim_name =
         anim_def_file->get_child_by_name("leader_damage_sparks")->value;
-    anim.database = game.content.global_animations[anim_name].database;
+    anim.database = game.content.global_anims.list[anim_name].database;
     if(!anim.database.animations.empty()) {
         anim.instance.cur_anim = anim.database.animations[0];
     }

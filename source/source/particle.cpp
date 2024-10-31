@@ -316,7 +316,7 @@ void particle_generator::load_from_data_node(
     if(bitmap_node) {
         if(level >= CONTENT_LOAD_LEVEL_FULL) {
             base_particle.bitmap =
-                game.content.bitmaps.get(
+                game.content.bitmaps.list.get(
                     bitmap_str, bitmap_node
                 );
         }
@@ -350,7 +350,7 @@ void particle_generator::load_from_data_node(
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
             MOB_PARTICLE_GENERATOR_ID_STATUS +
-            game.content.custom_particle_generators.size()
+            game.content.custom_particle_gen.list.size()
         );
 }
 

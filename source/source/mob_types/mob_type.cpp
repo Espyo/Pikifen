@@ -318,7 +318,7 @@ void mob_type::load_from_data_node(
     for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); h++) {
     
         data_node* vuln_node = vulnerabilities_node->get_child(h);
-        auto hazard_it = game.content.hazards.find(vuln_node->name);
+        auto hazard_it = game.content.hazards.list.find(vuln_node->name);
         vector<string> words = split(vuln_node->value);
         float percentage = default_vulnerability;
         string status_name;
@@ -332,16 +332,16 @@ void mob_type::load_from_data_node(
         if(words.size() >= 3) {
             status_overrides = s2b(words[2]);
         }
-        auto status_it = game.content.status_types.find(status_name);
+        auto status_it = game.content.status_types.list.find(status_name);
         
-        if(hazard_it == game.content.hazards.end()) {
+        if(hazard_it == game.content.hazards.list.end()) {
             game.errors.report(
                 "Unknown hazard \"" + vuln_node->name + "\"!",
                 vuln_node
             );
             
         } else if(
-            !status_name.empty() && status_it == game.content.status_types.end()
+            !status_name.empty() && status_it == game.content.status_types.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -360,9 +360,9 @@ void mob_type::load_from_data_node(
     }
     
     //Spike damage.
-    auto sd_it = game.content.spike_damage_types.find(spike_damage_str);
+    auto sd_it = game.content.spike_damage_types.list.find(spike_damage_str);
     if(spike_damage_node) {
-        if(sd_it == game.content.spike_damage_types.end()) {
+        if(sd_it == game.content.spike_damage_types.list.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + spike_damage_str + "\"!",
                 spike_damage_node
@@ -415,7 +415,7 @@ void mob_type::load_from_data_node(
     for(size_t v = 0; v < n_sd_vuln; v++) {
     
         data_node* vul_node = spike_damage_vuln_node->get_child(v);
-        auto sdv_it = game.content.spike_damage_types.find(vul_node->name);
+        auto sdv_it = game.content.spike_damage_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_name;
@@ -425,16 +425,16 @@ void mob_type::load_from_data_node(
         if(words.size() >= 2) {
             status_name = words[1];
         }
-        auto status_it = game.content.status_types.find(status_name);
+        auto status_it = game.content.status_types.list.find(status_name);
         
-        if(sdv_it == game.content.spike_damage_types.end()) {
+        if(sdv_it == game.content.spike_damage_types.list.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
             
         } else if(
-            !status_name.empty() && status_it == game.content.status_types.end()
+            !status_name.empty() && status_it == game.content.status_types.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -457,7 +457,7 @@ void mob_type::load_from_data_node(
     for(size_t v = 0; v < n_s_vuln; v++) {
     
         data_node* vul_node = status_vuln_node->get_child(v);
-        auto sv_it = game.content.status_types.find(vul_node->name);
+        auto sv_it = game.content.status_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_override_name;
@@ -467,9 +467,9 @@ void mob_type::load_from_data_node(
         if(words.size() >= 2) {
             status_override_name = words[1];
         }
-        auto status_override_it = game.content.status_types.find(status_override_name);
+        auto status_override_it = game.content.status_types.list.find(status_override_name);
         
-        if(sv_it == game.content.status_types.end()) {
+        if(sv_it == game.content.status_types.list.end()) {
             game.errors.report(
                 "Unknown status type \"" + vul_node->name + "\"!",
                 vul_node
@@ -477,7 +477,7 @@ void mob_type::load_from_data_node(
             
         } else if(
             !status_override_name.empty() &&
-            status_override_it == game.content.status_types.end()
+            status_override_it == game.content.status_types.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_override_name + "\"!",
@@ -487,7 +487,7 @@ void mob_type::load_from_data_node(
         } else {
             auto &s = status_vulnerabilities[sv_it->second];
             s.damage_mult = percentage / 100.0f;
-            if(status_override_it != game.content.status_types.end()) {
+            if(status_override_it != game.content.status_types.list.end()) {
                 s.status_to_apply = status_override_it->second;
             }
             s.status_overrides = true;
@@ -666,7 +666,7 @@ void mob_type::load_from_data_node(
         sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
         sfx_rs.set("random_delay", new_sfx.config.random_delay);
         
-        new_sfx.sample = game.content.samples.get(file_str, file_node);
+        new_sfx.sample = game.content.samples.list.get(file_str, file_node);
         
         if(type_node) {
             if(type_str == "world_global") {
@@ -941,7 +941,7 @@ void mob_type::load_from_data_node(
  */
 void mob_type::unload_resources() {
     for(size_t s = 0; s < sounds.size(); s++) {
-        game.content.samples.free(sounds[s].name);
+        game.content.samples.list.free(sounds[s].name);
     }
 }
 

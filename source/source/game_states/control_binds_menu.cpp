@@ -238,7 +238,7 @@ void control_binds_menu_state::load() {
     cur_bind_idx = INVALID;
     
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
@@ -247,7 +247,7 @@ void control_binds_menu_state::load() {
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui[CONTROL_BINDS_MENU::GUI_FILE_NAME].
+        game.content.gui.list[CONTROL_BINDS_MENU::GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     
@@ -676,7 +676,7 @@ void control_binds_menu_state::restore_defaults(
 void control_binds_menu_state::unload() {
 
     //Resources.
-    game.content.bitmaps.free(bmp_menu_bg);
+    game.content.bitmaps.list.free(bmp_menu_bg);
     bmp_menu_bg = nullptr;
     
     //Menu items.

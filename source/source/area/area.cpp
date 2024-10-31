@@ -121,7 +121,7 @@ void area_data::clear() {
     bmap.clear();
     
     if(bg_bmp) {
-        game.content.bitmaps.free(bg_bmp);
+        game.content.bitmaps.list.free(bg_bmp);
         bg_bmp = nullptr;
     }
     if(thumbnail) {
@@ -220,13 +220,13 @@ void area_data::clone(area_data &other) {
     other.clear();
     
     if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        game.content.bitmaps.free(other.bg_bmp_file_name);
+        game.content.bitmaps.list.free(other.bg_bmp_file_name);
     }
     other.bg_bmp_file_name = bg_bmp_file_name;
     if(other.bg_bmp_file_name.empty()) {
         other.bg_bmp = nullptr;
     } else {
-        other.bg_bmp = game.content.bitmaps.get(bg_bmp_file_name, nullptr, false);
+        other.bg_bmp = game.content.bitmaps.list.get(bg_bmp_file_name, nullptr, false);
     }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
@@ -300,7 +300,7 @@ void area_data::clone(area_data &other) {
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
         os_ptr->texture_info.bitmap =
-            game.content.bitmaps.get(s_ptr->texture_info.file_name, nullptr, false);
+            game.content.bitmaps.list.get(s_ptr->texture_info.file_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_idxs.reserve(s_ptr->edge_idxs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
@@ -365,7 +365,7 @@ void area_data::clone(area_data &other) {
         ot_ptr->file_name = t_ptr->file_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = game.content.bitmaps.get(t_ptr->file_name, nullptr, false);
+        ot_ptr->bitmap = game.content.bitmaps.list.get(t_ptr->file_name, nullptr, false);
     }
     
     other.type = type;
@@ -955,8 +955,8 @@ void area_data::load_main_data_from_data_node(
             weather_condition = weather();
             
         } else if(
-            game.content.weather_conditions.find(weather_name) ==
-            game.content.weather_conditions.end()
+            game.content.weather_conditions.list.find(weather_name) ==
+            game.content.weather_conditions.list.end()
         ) {
             game.errors.report(
                 "Unknown weather condition \"" + weather_name + "\"!",
@@ -966,15 +966,15 @@ void area_data::load_main_data_from_data_node(
             
         } else {
             weather_condition =
-                game.content.weather_conditions[weather_name];
+                game.content.weather_conditions.list[weather_name];
                 
         }
         
         //Song.
         if(
             !song_name.empty() &&
-            game.content.songs.find(song_name) ==
-            game.content.songs.end()
+            game.content.songs.list.find(song_name) ==
+            game.content.songs.list.end()
         ) {
             game.errors.report(
                 "Unknown song \"" + song_name + "\"!",
@@ -984,7 +984,7 @@ void area_data::load_main_data_from_data_node(
     }
     
     if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_file_name.empty()) {
-        bg_bmp = game.content.bitmaps.get(bg_bmp_file_name, node);
+        bg_bmp = game.content.bitmaps.list.get(bg_bmp_file_name, node);
     }
 }
 
@@ -1248,7 +1248,7 @@ void area_data::load_geometry_from_data_node(
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
-                game.content.bitmaps.get(new_sector->texture_info.file_name, nullptr);
+                game.content.bitmaps.list.get(new_sector->texture_info.file_name, nullptr);
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -1256,13 +1256,13 @@ void area_data::load_geometry_from_data_node(
             semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); h++) {
             string hazard_name = hazards_strs[h];
-            if(game.content.hazards.find(hazard_name) == game.content.hazards.end()) {
+            if(game.content.hazards.list.find(hazard_name) == game.content.hazards.list.end()) {
                 game.errors.report(
                     "Unknown hazard \"" + hazard_name +
                     "\"!", hazards_node
                 );
             } else {
-                new_sector->hazards.push_back(&(game.content.hazards[hazard_name]));
+                new_sector->hazards.push_back(&(game.content.hazards.list[hazard_name]));
             }
         }
         new_sector->hazards_str = hazards_node->value;
@@ -1442,7 +1442,7 @@ void area_data::load_geometry_from_data_node(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = game.content.bitmaps.get(s_ptr->file_name, nullptr);
+        s_ptr->bitmap = game.content.bitmaps.list.get(s_ptr->file_name, nullptr);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
@@ -2369,7 +2369,7 @@ void area_data::save_thumbnail(bool to_backup) {
         get_base_area_folder_path(
             game.cur_area_data->type,
             !to_backup,
-            game.content.manifests.areas[game.cur_area_data->type][game.cur_area_data->internal_name].package
+            game.content.areas.manifest[game.cur_area_data->type][game.cur_area_data->internal_name].package
         ) +
         "/" + game.cur_area_data->internal_name +
         (to_backup ? "/thumbnail_backup.png" : "/thumbnail.png");
@@ -2547,7 +2547,7 @@ tree_shadow::tree_shadow(
  *
  */
 tree_shadow::~tree_shadow() {
-    game.content.bitmaps.free(file_name);
+    game.content.bitmaps.list.free(file_name);
 }
 
 

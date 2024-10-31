@@ -151,8 +151,8 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     
     if(particle_gen_node) {
         if(
-            game.content.custom_particle_generators.find(particle_gen_str) ==
-            game.content.custom_particle_generators.end()
+            game.content.custom_particle_gen.list.find(particle_gen_str) ==
+            game.content.custom_particle_gen.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
@@ -162,7 +162,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
             generates_particles =
                 true;
             particle_gen =
-                &game.content.custom_particle_generators[particle_gen_str];
+                &game.content.custom_particle_gen.list[particle_gen_str];
             particle_offset_pos =
                 s2p(particle_offset_str, &particle_offset_z);
         }
@@ -170,7 +170,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlay_animation.empty()) {
-            overlay_anim_db = &game.content.global_animations[overlay_animation].database;
+            overlay_anim_db = &game.content.global_anims.list[overlay_animation].database;
             if(!overlay_anim_db->animations.empty()) {
                 overlay_anim_instance =
                     animation_instance(overlay_anim_db);

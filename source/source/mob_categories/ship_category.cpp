@@ -33,10 +33,10 @@ ship_category::ship_category() :
  * @brief Clears the list of registered types of ship.
  */
 void ship_category::clear_types() {
-    for(auto &t : game.content.mob_types.ship) {
+    for(auto &t : game.content.mob_types.list.ship) {
         delete t.second;
     }
-    game.content.mob_types.ship.clear();
+    game.content.mob_types.list.ship.clear();
 }
 
 
@@ -90,8 +90,8 @@ void ship_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* ship_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.ship.find(name);
-    if(it == game.content.mob_types.ship.end()) return nullptr;
+    auto it = game.content.mob_types.list.ship.find(name);
+    if(it == game.content.mob_types.list.ship.end()) return nullptr;
     return it->second;
 }
 
@@ -102,7 +102,7 @@ mob_type* ship_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void ship_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.ship) {
+    for(auto &t : game.content.mob_types.list.ship) {
         list.push_back(t.first);
     }
 }
@@ -115,5 +115,5 @@ void ship_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void ship_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.ship[internal_name] = (ship_type*) type;
+    game.content.mob_types.list.ship[internal_name] = (ship_type*) type;
 }

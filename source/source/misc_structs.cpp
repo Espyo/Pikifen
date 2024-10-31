@@ -223,9 +223,9 @@ void asset_file_names_t::load(data_node* file) {
 ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
     const string &name, data_node* node, bool report_errors
 ) {
-    const auto &it = game.content.manifests.song_tracks.find(name);
+    const auto &it = game.content.song_tracks.manifest.find(name);
     string path =
-        it != game.content.manifests.song_tracks.end() ?
+        it != game.content.song_tracks.manifest.end() ?
         it->second.path :
         name;
     ALLEGRO_AUDIO_STREAM* stream = load_audio_stream(path, node, report_errors);
@@ -259,9 +259,9 @@ void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
 ALLEGRO_BITMAP* bitmap_manager::do_load(
     const string &name, data_node* node, bool report_errors
 ) {
-    const auto &it = game.content.manifests.bitmaps.find(name);
+    const auto &it = game.content.bitmaps.manifest.find(name);
     string path =
-        it != game.content.manifests.bitmaps.end() ?
+        it != game.content.bitmaps.manifest.end() ?
         it->second.path :
         name;
     return load_bmp(path, node, report_errors);
@@ -1536,9 +1536,9 @@ bool script_var_reader::get(const string &name, point &dest) const {
 ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
     const string &name, data_node* node, bool report_errors
 ) {
-    const auto &it = game.content.manifests.sounds.find(name);
+    const auto &it = game.content.samples.manifest.find(name);
     string path =
-        it != game.content.manifests.sounds.end() ?
+        it != game.content.samples.manifest.end() ?
         it->second.path :
         name;
     return load_sample(path, node, report_errors);

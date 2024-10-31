@@ -540,7 +540,7 @@ void animation_editor::load_animation_database(
     //Top bitmap.
     for(unsigned char t = 0; t < NR_MATURITIES; t++) {
         if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
-            game.content.bitmaps.free(top_bmp[t]);
+            game.content.bitmaps.list.free(top_bmp[t]);
             top_bmp[t] = nullptr;
         }
     }
@@ -554,15 +554,15 @@ void animation_editor::load_animation_database(
                 loaded_mob_type->path + "/data.txt"
             );
         top_bmp[0] =
-            game.content.bitmaps.get(
+            game.content.bitmaps.list.get(
                 data.get_child_by_name("top_leaf")->value, &data
             );
         top_bmp[1] =
-            game.content.bitmaps.get(
+            game.content.bitmaps.list.get(
                 data.get_child_by_name("top_bud")->value, &data
             );
         top_bmp[2] =
-            game.content.bitmaps.get(
+            game.content.bitmaps.list.get(
                 data.get_child_by_name("top_flower")->value, &data
             );
     }

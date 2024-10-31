@@ -1085,8 +1085,8 @@ void area_editor::find_problems() {
         if(s_ptr->texture_info.file_name.empty()) continue;
         
         const auto &texture_it =
-            game.content.manifests.bitmaps.find(s_ptr->texture_info.file_name);
-        if(texture_it == game.content.manifests.bitmaps.end()) {
+            game.content.bitmaps.manifest.find(s_ptr->texture_info.file_name);
+        if(texture_it == game.content.bitmaps.manifest.end()) {
             problem_sector_ptr = s_ptr;
             problem_type = EPT_UNKNOWN_TEXTURE;
             problem_title = "Sector with unknown texture!";

@@ -33,10 +33,10 @@ pellet_category::pellet_category() :
  * @brief Clears the list of registered types of pellet.
  */
 void pellet_category::clear_types() {
-    for(auto &t : game.content.mob_types.pellet) {
+    for(auto &t : game.content.mob_types.list.pellet) {
         delete t.second;
     }
-    game.content.mob_types.pellet.clear();
+    game.content.mob_types.list.pellet.clear();
 }
 
 
@@ -90,8 +90,8 @@ void pellet_category::erase_mob(mob* m) {
  * @return The type, or nullptr on error.
  */
 mob_type* pellet_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.pellet.find(name);
-    if(it == game.content.mob_types.pellet.end()) return nullptr;
+    auto it = game.content.mob_types.list.pellet.find(name);
+    if(it == game.content.mob_types.list.pellet.end()) return nullptr;
     return it->second;
 }
 
@@ -102,7 +102,7 @@ mob_type* pellet_category::get_type(const string &name) const {
  * @param list This list gets filled with the mob type names.
  */
 void pellet_category::get_type_names(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.pellet) {
+    for(auto &t : game.content.mob_types.list.pellet) {
         list.push_back(t.first);
     }
 }
@@ -115,5 +115,5 @@ void pellet_category::get_type_names(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void pellet_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.pellet[internal_name] = (pellet_type*) type;
+    game.content.mob_types.list.pellet[internal_name] = (pellet_type*) type;
 }

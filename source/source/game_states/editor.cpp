@@ -889,7 +889,7 @@ void editor::load() {
     game.mouse_cursor.show();
     
     bmp_editor_icons =
-        game.content.bitmaps.get(game.asset_file_names.bmp_editor_icons);
+        game.content.bitmaps.list.get(game.asset_file_names.bmp_editor_icons);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
             editor_icons[i] =
@@ -1719,7 +1719,7 @@ void editor::unload() {
             al_destroy_bitmap(editor_icons[i]);
             editor_icons[i] = nullptr;
         }
-        game.content.bitmaps.free(bmp_editor_icons);
+        game.content.bitmaps.list.free(bmp_editor_icons);
         bmp_editor_icons = nullptr;
     }
     custom_cat_name_idxs.clear();

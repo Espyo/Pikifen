@@ -360,7 +360,7 @@ void results_state::load() {
     gui.register_coords("pick_area",        80, 88, 24,  8);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui[RESULTS::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui.list[RESULTS::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Area name text.

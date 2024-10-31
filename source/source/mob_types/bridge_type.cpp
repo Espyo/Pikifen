@@ -91,15 +91,15 @@ void bridge_type::load_cat_resources(data_node* file) {
     rs.set("right_rail_texture", right_rail_texture_file_name);
     
     if(!main_texture_file_name.empty()) {
-        bmp_main_texture = game.content.bitmaps.get(main_texture_file_name);
+        bmp_main_texture = game.content.bitmaps.list.get(main_texture_file_name);
     }
     if(!left_rail_texture_file_name.empty()) {
         bmp_left_rail_texture =
-            game.content.bitmaps.get(left_rail_texture_file_name);
+            game.content.bitmaps.list.get(left_rail_texture_file_name);
     }
     if(!right_rail_texture_file_name.empty()) {
         bmp_right_rail_texture =
-            game.content.bitmaps.get(right_rail_texture_file_name);
+            game.content.bitmaps.list.get(right_rail_texture_file_name);
     }
 }
 
@@ -108,7 +108,7 @@ void bridge_type::load_cat_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
-    game.content.bitmaps.free(main_texture_file_name);
-    game.content.bitmaps.free(left_rail_texture_file_name);
-    game.content.bitmaps.free(right_rail_texture_file_name);
+    game.content.bitmaps.list.free(main_texture_file_name);
+    game.content.bitmaps.list.free(left_rail_texture_file_name);
+    game.content.bitmaps.list.free(right_rail_texture_file_name);
 }

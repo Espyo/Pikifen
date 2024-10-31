@@ -446,7 +446,7 @@ void audio_manager::handle_mob_deletion(const mob* m_ptr) {
  * @param stream Stream that finished.
  */
 void audio_manager::handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream) {
-    for(const auto &s : game.content.songs) {
+    for(const auto &s : game.content.songs.list) {
         if(s.second.main_track == stream) {
             if(on_song_finished) on_song_finished(s.first);
         }
@@ -478,7 +478,7 @@ void audio_manager::handle_world_pause() {
     }
     
     //Soften songs.
-    for(auto &s : game.content.songs) {
+    for(auto &s : game.content.songs.list) {
         if(
             s.second.state == SONG_STATE_STOPPING ||
             s.second.state == SONG_STATE_STOPPED
@@ -522,7 +522,7 @@ void audio_manager::handle_world_unpause() {
     }
     
     //Unsoften songs.
-    for(auto &s : game.content.songs) {
+    for(auto &s : game.content.songs.list) {
         if(
             s.second.state == SONG_STATE_STOPPING ||
             s.second.state == SONG_STATE_STOPPED
@@ -622,8 +622,8 @@ void audio_manager::mark_mix_track_status(MIX_TRACK_TYPE track_type) {
  * @return Whether it succeeded.
  */
 bool audio_manager::rewind_song(const string &name) {
-    auto song_it = game.content.songs.find(name);
-    if(song_it == game.content.songs.end()) return false;
+    auto song_it = game.content.songs.list.find(name);
+    if(song_it == game.content.songs.list.end()) return false;
     song* song_ptr = &song_it->second;
     
     song_ptr->stop_point = 0.0f;
@@ -690,7 +690,7 @@ bool audio_manager::set_current_song(
 ) {
 
     //Stop all other songs first.
-    for(auto &s : game.content.songs) {
+    for(auto &s : game.content.songs.list) {
         song* song_ptr = &s.second;
         if(song_ptr->name == name) {
             //This is the song we want to play. Let's not handle it here.
@@ -719,8 +719,8 @@ bool audio_manager::set_current_song(
         return true;
     }
     
-    auto song_it = game.content.songs.find(name);
-    if(song_it == game.content.songs.end()) return false;
+    auto song_it = game.content.songs.list.find(name);
+    if(song_it == game.content.songs.list.end()) return false;
     song* song_ptr = &song_it->second;
     
     //Play it.
@@ -760,7 +760,7 @@ bool audio_manager::set_current_song(
  * This is helpful for when you want to test said loop point.
  */
 void audio_manager::set_song_pos_near_loop() {
-    for(auto s : game.content.songs) {
+    for(auto s : game.content.songs.list) {
         double pos = std::max(0.0, s.second.loop_end - 4.0f);
         al_seek_audio_stream_secs(s.second.main_track, pos);
         for(auto const &m : s.second.mix_tracks) {
@@ -992,7 +992,7 @@ void audio_manager::tick(float delta_t) {
     }
     
     //Update the volume of songs depending on their state.
-    for(auto &s : game.content.songs) {
+    for(auto &s : game.content.songs.list) {
         song* song_ptr = &s.second;
         
         switch(song_ptr->state) {
@@ -1074,7 +1074,7 @@ void audio_manager::tick(float delta_t) {
                 AUDIO::MIX_TRACK_GAIN_SPEED * delta_t
             );
             
-        for(auto &s : game.content.songs) {
+        for(auto &s : game.content.songs.list) {
             song* song_ptr = &s.second;
             if(song_ptr->state == SONG_STATE_STOPPED) {
                 continue;
@@ -1224,7 +1224,7 @@ void song::load_from_data_node(data_node* node) {
     rs.set("title", title);
     
     main_track =
-        game.content.song_tracks.get(main_track_str, main_track_node);
+        game.content.song_tracks.list.get(main_track_str, main_track_node);
         
     data_node* mix_tracks_node = node->get_child_by_name("mix_tracks");
     size_t n_mix_tracks = mix_tracks_node->get_nr_of_children();
@@ -1245,7 +1245,7 @@ void song::load_from_data_node(data_node* node) {
         }
         
         mix_tracks[trigger] =
-            game.content.song_tracks.get(mix_track_node->value, mix_track_node);
+            game.content.song_tracks.list.get(mix_track_node->value, mix_track_node);
     }
     
     if(loop_end == 0.0f) {
@@ -1261,8 +1261,8 @@ void song::load_from_data_node(data_node* node) {
  * @brief Unloads the song.
  */
 void song::unload() {
-    game.content.song_tracks.free(main_track);
+    game.content.song_tracks.list.free(main_track);
     for(auto &t : mix_tracks) {
-        game.content.song_tracks.free(t.second);
+        game.content.song_tracks.list.free(t.second);
     }
 }

@@ -186,7 +186,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void main_menu_state::init_gui_main_page() {
-    data_node* gui_file = &game.content.gui[MAIN_MENU::GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -381,7 +381,7 @@ void main_menu_state::init_gui_main_page() {
  * @brief Loads the GUI elements for the main menu's make page.
  */
 void main_menu_state::init_gui_make_page() {
-    data_node* gui_file = &game.content.gui[MAIN_MENU::MAKE_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[MAIN_MENU::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -528,7 +528,7 @@ void main_menu_state::init_gui_make_page() {
  * @brief Loads the GUI elements for the main menu's play page.
  */
 void main_menu_state::init_gui_play_page() {
-    data_node* gui_file = &game.content.gui[MAIN_MENU::PLAY_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[MAIN_MENU::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -642,7 +642,7 @@ void main_menu_state::init_gui_play_page() {
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void main_menu_state::init_gui_tutorial_page() {
-    data_node* gui_file = &game.content.gui[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
@@ -749,10 +749,10 @@ void main_menu_state::load() {
     }
     page_to_load = MAIN_MENU_PAGE_MAIN;
     
-    data_node* settings_file = &game.content.gui[MAIN_MENU::GUI_FILE_NAME];
+    data_node* settings_file = &game.content.gui.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
     
     //Logo pikmin.
     data_node* logo_node = settings_file->get_child_by_name("logo");
@@ -764,7 +764,7 @@ void main_menu_state::load() {
         data_node* type_node = pik_types_node->get_child(t);
         if(type_node->name.empty()) continue;
         logo_type_bitmaps[type_node->name[0]] =
-            game.content.bitmaps.get(type_node->value, type_node);
+            game.content.bitmaps.list.get(type_node->value, type_node);
     }
     
     data_node* map_node =
@@ -867,10 +867,10 @@ void main_menu_state::load() {
 void main_menu_state::unload() {
 
     //Resources.
-    game.content.bitmaps.free(bmp_menu_bg);
+    game.content.bitmaps.list.free(bmp_menu_bg);
     bmp_menu_bg = nullptr;
     for(const auto &t : logo_type_bitmaps) {
-        game.content.bitmaps.free(t.second);
+        game.content.bitmaps.list.free(t.second);
     }
     logo_type_bitmaps.clear();
     

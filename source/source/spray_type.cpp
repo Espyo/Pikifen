@@ -53,15 +53,15 @@ void spray_type::load_from_data_node(
         for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(
-                game.content.status_types.find(effect_name) ==
-                game.content.status_types.end()
+                game.content.status_types.list.find(effect_name) ==
+                game.content.status_types.list.end()
             ) {
                 game.errors.report(
                     "Unknown status effect \"" + effect_name + "\"!",
                     effects_node
                 );
             } else {
-                effects.push_back(game.content.status_types[effect_name]);
+                effects.push_back(game.content.status_types.list[effect_name]);
             }
         }
     }
@@ -70,6 +70,6 @@ void spray_type::load_from_data_node(
     angle_range = deg_to_rad(angle_range);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        bmp_spray = game.content.bitmaps.get(icon_str, icon_node);
+        bmp_spray = game.content.bitmaps.list.get(icon_str, icon_node);
     }
 }

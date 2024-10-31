@@ -244,16 +244,16 @@ void pikmin_type::load_cat_resources(data_node* file) {
     rs.set("top_flower", top_flower_str, &top_flower_node);
     rs.set("top_leaf", top_leaf_str, &top_leaf_node);
     
-    bmp_icon = game.content.bitmaps.get(icon_str, icon_node);
-    bmp_maturity_icon[0] = game.content.bitmaps.get(icon_leaf_str, icon_leaf_node);
-    bmp_maturity_icon[1] = game.content.bitmaps.get(icon_bud_str, icon_bud_node);
-    bmp_maturity_icon[2] = game.content.bitmaps.get(icon_flower_str, icon_flower_node);
-    bmp_top[0] = game.content.bitmaps.get(top_leaf_str, top_leaf_node);
-    bmp_top[1] = game.content.bitmaps.get(top_bud_str, top_bud_node);
-    bmp_top[2] = game.content.bitmaps.get(top_flower_str, top_flower_node);
+    bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmp_maturity_icon[0] = game.content.bitmaps.list.get(icon_leaf_str, icon_leaf_node);
+    bmp_maturity_icon[1] = game.content.bitmaps.list.get(icon_bud_str, icon_bud_node);
+    bmp_maturity_icon[2] = game.content.bitmaps.list.get(icon_flower_str, icon_flower_node);
+    bmp_top[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
+    bmp_top[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
+    bmp_top[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
     
     if(icon_onion_node) {
-        bmp_onion_icon = game.content.bitmaps.get(icon_onion_str, icon_onion_node);
+        bmp_onion_icon = game.content.bitmaps.list.get(icon_onion_str, icon_onion_node);
     }
 }
 
@@ -262,14 +262,14 @@ void pikmin_type::load_cat_resources(data_node* file) {
  * @brief Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
-    game.content.bitmaps.free(bmp_icon);
-    game.content.bitmaps.free(bmp_maturity_icon[0]);
-    game.content.bitmaps.free(bmp_maturity_icon[1]);
-    game.content.bitmaps.free(bmp_maturity_icon[2]);
-    game.content.bitmaps.free(bmp_top[0]);
-    game.content.bitmaps.free(bmp_top[1]);
-    game.content.bitmaps.free(bmp_top[2]);
+    game.content.bitmaps.list.free(bmp_icon);
+    game.content.bitmaps.list.free(bmp_maturity_icon[0]);
+    game.content.bitmaps.list.free(bmp_maturity_icon[1]);
+    game.content.bitmaps.list.free(bmp_maturity_icon[2]);
+    game.content.bitmaps.list.free(bmp_top[0]);
+    game.content.bitmaps.list.free(bmp_top[1]);
+    game.content.bitmaps.list.free(bmp_top[2]);
     if(bmp_onion_icon) {
-        game.content.bitmaps.free(bmp_onion_icon);
+        game.content.bitmaps.list.free(bmp_onion_icon);
     }
 }

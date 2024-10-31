@@ -175,7 +175,7 @@ void stats_menu_state::leave() {
  */
 void stats_menu_state::load() {
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
     
     game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
     
@@ -186,7 +186,7 @@ void stats_menu_state::load() {
     gui.register_coords("list_scroll", 91, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Back button.
@@ -338,8 +338,8 @@ void stats_menu_state::populate_stats_list() {
     size_t mission_platinums = 0;
     long mission_scores = 0;
     
-    for(size_t a = 0; a < game.content.areas[AREA_TYPE_MISSION].size(); a++) {
-        area_data* area_ptr = game.content.areas[AREA_TYPE_MISSION][a];
+    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+        area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
         mission_record record;
         load_area_mission_record(
             &mission_records_file,
@@ -365,12 +365,12 @@ void stats_menu_state::populate_stats_list() {
     add_header("Missions");
     add_stat(
         "Cleared",
-        i2s(mission_clears) + "/" + i2s(game.content.areas[AREA_TYPE_MISSION].size()),
+        i2s(mission_clears) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a goal clear."
     );
     add_stat(
         "Platinum medals",
-        i2s(mission_platinums) + "/" + i2s(game.content.areas[AREA_TYPE_MISSION].size()),
+        i2s(mission_platinums) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a platinum medal."
     );
     add_stat(
@@ -386,7 +386,7 @@ void stats_menu_state::populate_stats_list() {
 void stats_menu_state::unload() {
 
     //Resources.
-    game.content.bitmaps.free(bmp_menu_bg);
+    game.content.bitmaps.list.free(bmp_menu_bg);
     
     game.content.unload_all(CONTENT_TYPE_AREA);
     

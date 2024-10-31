@@ -67,5 +67,5 @@ void tool_type::load_cat_resources(data_node* file) {
     
     rs.set("icon", icon_str, &icon_node);
     
-    bmp_icon = game.content.bitmaps.get(icon_str, icon_node);
+    bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
 }

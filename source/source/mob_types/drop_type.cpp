@@ -105,8 +105,8 @@ void drop_type::load_cat_properties(data_node* file) {
     }
     
     if(status_name_node) {
-        auto s = game.content.status_types.find(status_name_str);
-        if(s != game.content.status_types.end()) {
+        auto s = game.content.status_types.list.find(status_name_str);
+        if(s != game.content.status_types.list.end()) {
             status_to_give = s->second;
         } else {
             game.errors.report(

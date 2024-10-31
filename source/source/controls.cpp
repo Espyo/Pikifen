@@ -494,13 +494,13 @@ void gameplay_state::process_system_key_press(int keycode) {
         } case MAKER_TOOL_TYPE_NEW_PIKMIN: {
             if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
                 pikmin_type* new_pikmin_type =
-                    game.content.mob_types.pikmin.begin()->second;
+                    game.content.mob_types.list.pikmin.begin()->second;
                     
-                auto p = game.content.mob_types.pikmin.begin();
-                for(; p != game.content.mob_types.pikmin.end(); ++p) {
+                auto p = game.content.mob_types.list.pikmin.begin();
+                for(; p != game.content.mob_types.list.pikmin.end(); ++p) {
                     if(p->second == game.maker_tools.last_pikmin_type) {
                         ++p;
-                        if(p != game.content.mob_types.pikmin.end()) {
+                        if(p != game.content.mob_types.list.pikmin.end()) {
                             new_pikmin_type = p->second;
                         }
                         break;
