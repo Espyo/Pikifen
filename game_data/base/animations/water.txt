@@ -54,82 +54,82 @@ animations{
 }
 sprites{
 	main_01{
-		file=water_1.png
+		file=water_1
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_02{
-		file=water_2.png
+		file=water_2
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_03{
-		file=water_3.png
+		file=water_3
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_04{
-		file=water_4.png
+		file=water_4
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_05{
-		file=water_5.png
+		file=water_5
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_06{
-		file=water_6.png
+		file=water_6
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_07{
-		file=water_7.png
+		file=water_7
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_08{
-		file=water_8.png
+		file=water_8
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_09{
-		file=water_9.png
+		file=water_9
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_10{
-		file=water_10.png
+		file=water_10
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_11{
-		file=water_11.png
+		file=water_11
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_12{
-		file=water_12.png
+		file=water_12
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_13{
-		file=water_13.png
+		file=water_13
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_14{
-		file=water_14.png
+		file=water_14
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_15{
-		file=water_15.png
+		file=water_15
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}
 	main_16{
-		file=water_16.png
+		file=water_16
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 	}

@@ -21,7 +21,7 @@
 namespace ONION_MENU {
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "onion_menu.txt";
+const string GUI_FILE_NAME = "onion_menu";
 
 //How long to let text turn red for.
 const float RED_TEXT_DURATION = 1.0f;

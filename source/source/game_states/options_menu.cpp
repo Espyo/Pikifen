@@ -24,25 +24,25 @@
 namespace OPTIONS_MENU {
 
 //Name of the audio menu GUI information file.
-const string AUDIO_GUI_FILE_NAME = "options_menu_audio.txt";
+const string AUDIO_GUI_FILE_NAME = "options_menu_audio";
 
 //Name of the controls menu GUI information file.
-const string CONTROLS_GUI_FILE_NAME = "options_menu_controls.txt";
+const string CONTROLS_GUI_FILE_NAME = "options_menu_controls";
 
 //Name of the graphics menu GUI information file.
-const string GRAPHICS_GUI_FILE_NAME = "options_menu_graphics.txt";
+const string GRAPHICS_GUI_FILE_NAME = "options_menu_graphics";
 
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
 //Name of the misc menu GUI information file.
-const string MISC_GUI_FILE_NAME = "options_menu_misc.txt";
+const string MISC_GUI_FILE_NAME = "options_menu_misc";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
 //Name of the top-level menu GUI information file.
-const string TOP_GUI_FILE_NAME = "options_menu_top.txt";
+const string TOP_GUI_FILE_NAME = "options_menu_top";
 
 }
 

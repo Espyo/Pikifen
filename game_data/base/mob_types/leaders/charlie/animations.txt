@@ -294,7 +294,7 @@ animations{
 }
 sprites{
 	ducking{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=7.0000 0.0000
@@ -317,7 +317,7 @@ sprites{
 		}
 	}
 	ducking_squashed{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=4.5000 0.0000
@@ -340,7 +340,7 @@ sprites{
 		}
 	}
 	ducking_squashed_02{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=7.0000 0.0000
@@ -363,7 +363,7 @@ sprites{
 		}
 	}
 	ducking_stretched{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=8.5000 0.0000
@@ -386,7 +386,7 @@ sprites{
 		}
 	}
 	half_limbo{
-		file=charlie.png
+		file=charlie
 		file_pos=148.0000 65.0000
 		file_size=90.0000 64.0000
 		offset=-13.0000 0.0000
@@ -409,7 +409,7 @@ sprites{
 		}
 	}
 	half_lying{
-		file=charlie.png
+		file=charlie
 		file_pos=195.0000 0.0000
 		file_size=100.0000 64.0000
 		offset=-5.0000 0.0000
@@ -432,7 +432,7 @@ sprites{
 		}
 	}
 	idling{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -454,7 +454,7 @@ sprites{
 		}
 	}
 	idling_lean_b{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		offset=-0.5000 0.0000
@@ -477,7 +477,7 @@ sprites{
 		}
 	}
 	idling_lean_f{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		offset=0.5000 0.0000
@@ -500,7 +500,7 @@ sprites{
 		}
 	}
 	limbo{
-		file=charlie.png
+		file=charlie
 		file_pos=239.0000 65.0000
 		file_size=112.0000 64.0000
 		offset=-19.0000 0.0000
@@ -523,7 +523,7 @@ sprites{
 		}
 	}
 	lying{
-		file=charlie.png
+		file=charlie
 		file_pos=296.0000 0.0000
 		file_size=134.0000 64.0000
 		offset=-12.0000 0.0000
@@ -546,7 +546,7 @@ sprites{
 		}
 	}
 	lying_squashed_01{
-		file=charlie.png
+		file=charlie
 		file_pos=296.0000 0.0000
 		file_size=134.0000 64.0000
 		offset=-8.0000 0.0000
@@ -569,7 +569,7 @@ sprites{
 		}
 	}
 	lying_squashed_02{
-		file=charlie.png
+		file=charlie
 		file_pos=296.0000 0.0000
 		file_size=134.0000 64.0000
 		offset=-9.0000 0.0000
@@ -592,7 +592,7 @@ sprites{
 		}
 	}
 	lying_stretched{
-		file=charlie.png
+		file=charlie
 		file_pos=296.0000 0.0000
 		file_size=134.0000 64.0000
 		offset=-15.5000 0.0000
@@ -615,7 +615,7 @@ sprites{
 		}
 	}
 	punch{
-		file=charlie.png
+		file=charlie
 		file_pos=445.0000 65.0000
 		file_size=86.0000 64.0000
 		offset=12.0000 0.0000
@@ -638,7 +638,7 @@ sprites{
 		}
 	}
 	punch_stretched{
-		file=charlie.png
+		file=charlie
 		file_pos=445.0000 65.0000
 		file_size=86.0000 64.0000
 		offset=14.0000 0.0000
@@ -661,7 +661,7 @@ sprites{
 		}
 	}
 	spraying_01{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=6.5000 0.0000
@@ -685,7 +685,7 @@ sprites{
 		}
 	}
 	spraying_02{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=6.5000 0.0000
@@ -709,7 +709,7 @@ sprites{
 		}
 	}
 	walking_01{
-		file=charlie.png
+		file=charlie
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -731,7 +731,7 @@ sprites{
 		}
 	}
 	walking_02{
-		file=charlie.png
+		file=charlie
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -753,7 +753,7 @@ sprites{
 		}
 	}
 	whistling_01{
-		file=charlie.png
+		file=charlie
 		file_pos=0.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=7.0000 0.0000
@@ -776,7 +776,7 @@ sprites{
 		}
 	}
 	whistling_02{
-		file=charlie.png
+		file=charlie
 		file_pos=74.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=7.0000 0.0000
@@ -799,7 +799,7 @@ sprites{
 		}
 	}
 	whistling_03{
-		file=charlie.png
+		file=charlie
 		file_pos=74.0000 65.0000
 		file_size=73.0000 64.0000
 		offset=7.0000 0.0000
@@ -822,7 +822,7 @@ sprites{
 		}
 	}
 	wind-up{
-		file=charlie.png
+		file=charlie
 		file_pos=352.0000 65.0000
 		file_size=92.0000 64.0000
 		offset=-13.0000 0.0000

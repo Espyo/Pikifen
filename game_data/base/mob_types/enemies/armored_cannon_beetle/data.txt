@@ -33,38 +33,38 @@ reaches {
 
 sounds {
     inhaling {
-        file = inhaling.ogg
+        file = inhaling
         loop = true
         volume = 50
     }
     spit {
-        file = spit.ogg
+        file = spit
         volume = 60
     }
     stomp {
-        file = stomp_quick.ogg
+        file = stomp_quick
         volume = 70
         speed = 30
         speed_deviation = 5
         stack_min_pos = 0.01
     }
     wings {
-        file = page_flip.ogg
+        file = page_flip
         volume = 30
         speed = 25
     }
     steam {
-        file = steam.ogg
+        file = steam
         loop = true
         volume = 40
     }
     dying {
-        file = stomp_long.ogg
+        file = stomp_long
         volume = 80
         speed = 120
     }
     shaking {
-        file = shaking.ogg
+        file = shaking
         volume = 30
         speed = 50
     }

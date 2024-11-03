@@ -58,7 +58,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=294.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -79,7 +79,7 @@ sprites{
 		}
 	}
 	low{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=49.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -101,7 +101,7 @@ sprites{
 		}
 	}
 	safe{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=0.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -122,7 +122,7 @@ sprites{
 		}
 	}
 	shooting_01{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=98.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -144,7 +144,7 @@ sprites{
 		}
 	}
 	shooting_02{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=147.0000 0.0000
 		file_size=48.0000 48.0000
 		scale=1.0500 1.0500
@@ -168,7 +168,7 @@ sprites{
 		}
 	}
 	shooting_03{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=196.0000 0.0000
 		file_size=48.0000 48.0000
 		hitboxes{
@@ -191,7 +191,7 @@ sprites{
 		}
 	}
 	shooting_04{
-		file=fire_geyser.png
+		file=fire_geyser
 		file_pos=245.0000 0.0000
 		file_size=48.0000 48.0000
 		scale=0.9500 0.9500

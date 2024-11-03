@@ -66,7 +66,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=51.0000 49.0000
 		file_size=16.0000 240.0000
 		hitboxes{
@@ -108,7 +108,7 @@ sprites{
 		}
 	}
 	stage_1_01{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
 		hitboxes{
@@ -150,7 +150,7 @@ sprites{
 		}
 	}
 	stage_1_02{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=0.7000 0.0000
@@ -193,7 +193,7 @@ sprites{
 		}
 	}
 	stage_1_03{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=0.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=-0.7000 0.0000
@@ -236,7 +236,7 @@ sprites{
 		}
 	}
 	stage_2_01{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=17.0000 49.0000
 		file_size=16.0000 240.0000
 		hitboxes{
@@ -278,7 +278,7 @@ sprites{
 		}
 	}
 	stage_2_02{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=17.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=0.7000 0.0000
@@ -321,7 +321,7 @@ sprites{
 		}
 	}
 	stage_2_03{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=17.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=-0.7000 0.0000
@@ -364,7 +364,7 @@ sprites{
 		}
 	}
 	stage_3_01{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
 		hitboxes{
@@ -406,7 +406,7 @@ sprites{
 		}
 	}
 	stage_3_02{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=0.7000 0.0000
@@ -449,7 +449,7 @@ sprites{
 		}
 	}
 	stage_3_03{
-		file=crystal_wall.png
+		file=crystal_wall
 		file_pos=34.0000 49.0000
 		file_size=16.0000 240.0000
 		offset=-0.7000 0.0000

@@ -154,7 +154,7 @@ animations{
 }
 sprites{
 	bumping_01{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -170,7 +170,7 @@ sprites{
 		}
 	}
 	bumping_02{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -186,7 +186,7 @@ sprites{
 		}
 	}
 	closed{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -201,7 +201,7 @@ sprites{
 		}
 	}
 	closing_01{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
@@ -216,7 +216,7 @@ sprites{
 		}
 	}
 	closing_02{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
@@ -231,7 +231,7 @@ sprites{
 		}
 	}
 	closing_03{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -246,7 +246,7 @@ sprites{
 		}
 	}
 	closing_04{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -261,7 +261,7 @@ sprites{
 		}
 	}
 	closing_05{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -277,7 +277,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -293,7 +293,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -309,7 +309,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
@@ -325,7 +325,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
@@ -341,7 +341,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
@@ -357,7 +357,7 @@ sprites{
 		}
 	}
 	dying_06{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
@@ -373,7 +373,7 @@ sprites{
 		}
 	}
 	dying_07{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
@@ -389,7 +389,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -404,7 +404,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -420,7 +420,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
@@ -436,7 +436,7 @@ sprites{
 		}
 	}
 	idling_big{
-		file=lapis_lazuli_candypop_bud.png
+		file=lapis_lazuli_candypop_bud
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000

@@ -47,37 +47,37 @@ animations{
 }
 sprites{
 	bumped_01{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 537.0000
 		file_size=199.0000 178.0000
 	}
 	bumped_02{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 716.0000
 		file_size=199.0000 178.0000
 	}
 	bumped_03{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 895.0000
 		file_size=199.0000 178.0000
 	}
 	bumped_04{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 1074.0000
 		file_size=199.0000 178.0000
 	}
 	idling_01{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 0.0000
 		file_size=199.0000 178.0000
 	}
 	idling_02{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 179.0000
 		file_size=199.0000 178.0000
 	}
 	idling_03{
-		file=clover.png
+		file=clover
 		file_pos=0.0000 358.0000
 		file_size=199.0000 178.0000
 	}

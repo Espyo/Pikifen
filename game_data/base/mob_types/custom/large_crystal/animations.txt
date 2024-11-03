@@ -47,7 +47,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=crystal_nodule.png
+		file=crystal_nodule
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -61,7 +61,7 @@ sprites{
 		}
 	}
 	stage_1_01{
-		file=crystal.png
+		file=crystal
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
 		hitboxes{
@@ -75,7 +75,7 @@ sprites{
 		}
 	}
 	stage_1_02{
-		file=crystal.png
+		file=crystal
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
 		offset=0.7000 0.0000
@@ -90,7 +90,7 @@ sprites{
 		}
 	}
 	stage_1_03{
-		file=crystal.png
+		file=crystal
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
 		offset=-0.7000 0.0000
@@ -105,7 +105,7 @@ sprites{
 		}
 	}
 	stage_2_01{
-		file=crystal.png
+		file=crystal
 		file_pos=101.0000 0.0000
 		file_size=100.0000 100.0000
 		hitboxes{
@@ -119,7 +119,7 @@ sprites{
 		}
 	}
 	stage_2_02{
-		file=crystal.png
+		file=crystal
 		file_pos=101.0000 0.0000
 		file_size=100.0000 100.0000
 		offset=0.7000 0.0000
@@ -134,7 +134,7 @@ sprites{
 		}
 	}
 	stage_2_03{
-		file=crystal.png
+		file=crystal
 		file_pos=101.0000 0.0000
 		file_size=100.0000 100.0000
 		offset=-0.7000 0.0000

@@ -36,7 +36,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=crystal_nodule.png
+		file=crystal_nodule
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -50,7 +50,7 @@ sprites{
 		}
 	}
 	idling{
-		file=crystal_nodule.png
+		file=crystal_nodule
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 		hitboxes{
@@ -64,7 +64,7 @@ sprites{
 		}
 	}
 	landing{
-		file=crystal_nodule.png
+		file=crystal_nodule
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 		hitboxes{

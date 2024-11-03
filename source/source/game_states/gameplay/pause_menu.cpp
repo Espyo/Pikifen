@@ -24,7 +24,7 @@
 namespace PAUSE_MENU {
 
 //Name of the leaving confirmation page GUI information file.
-const string CONFIRMATION_GUI_FILE_NAME = "pause_confirmation.txt";
+const string CONFIRMATION_GUI_FILE_NAME = "pause_confirmation";
 
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;
@@ -33,13 +33,13 @@ const float ENTRY_LOCKOUT_TIME = 0.15f;
 const float GO_HERE_CALC_INTERVAL = 0.15f;
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "pause_menu.txt";
+const string GUI_FILE_NAME = "pause_menu";
 
 //Name of the help page GUI information file.
-const string HELP_GUI_FILE_NAME = "pause_help.txt";
+const string HELP_GUI_FILE_NAME = "pause_help";
 
 //Name of the mission page GUI information file.
-const string MISSION_GUI_FILE_NAME = "pause_mission.txt";
+const string MISSION_GUI_FILE_NAME = "pause_mission";
 
 //Background color of the radar.
 const ALLEGRO_COLOR RADAR_BG_COLOR =
@@ -49,7 +49,7 @@ const ALLEGRO_COLOR RADAR_BG_COLOR =
 const float RADAR_DEF_ZOOM = 0.4f;
 
 //Name of the radar page GUI information file.
-const string RADAR_GUI_FILE_NAME = "pause_radar.txt";
+const string RADAR_GUI_FILE_NAME = "pause_radar";
 
 //Color of the highest sector in the radar.
 const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
@@ -78,7 +78,7 @@ const float RADAR_PAN_SPEED = 600.0f;
 const float RADAR_ZOOM_SPEED = 2.5f;
 
 //Name of the status page GUI information file.
-const string STATUS_GUI_FILE_NAME = "pause_status.txt";
+const string STATUS_GUI_FILE_NAME = "pause_status";
 
 }
 
@@ -2320,9 +2320,9 @@ void pause_menu_t::init_radar_page() {
 #define loader(var, name) \
     var = \
           game.content.bitmaps.list.get( \
-                                    bitmaps_node->get_child_by_name(name)->value, \
-                                    bitmaps_node->get_child_by_name(name) \
-                                  );
+                                         bitmaps_node->get_child_by_name(name)->value, \
+                                         bitmaps_node->get_child_by_name(name) \
+                                       );
     
     loader(bmp_radar_cursor,         "cursor");
     loader(bmp_radar_pikmin,         "pikmin");

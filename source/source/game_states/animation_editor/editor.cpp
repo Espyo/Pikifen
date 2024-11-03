@@ -411,14 +411,20 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
-    game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_MOB_TYPE,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     load_custom_mob_cat_types(false);
     
@@ -548,6 +554,7 @@ void animation_editor::load_animation_database(
         loaded_mob_type &&
         loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     ) {
+        //TODO adjust for the new loading logic
         data_node data =
             load_data_file(
                 loaded_mob_type->manifest->path + "/data.txt"
@@ -1440,14 +1447,19 @@ void animation_editor::unload() {
     
     anims.destroy();
     
-    game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
-    game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
-    game.content.unload_all(CONTENT_TYPE_HAZARD);
-    game.content.unload_all(CONTENT_TYPE_LIQUID);
-    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
-    game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
-    game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
-    game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_MOB_TYPE,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    }
+    );
     
     if(bg) {
         al_destroy_bitmap(bg);

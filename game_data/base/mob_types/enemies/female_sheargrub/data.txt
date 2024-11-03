@@ -27,7 +27,7 @@ reaches {
 
 sounds {
     burying {
-        file = burying.ogg
+        file = burying
         speed_deviation = 20
         volume = 30
     }

@@ -207,7 +207,7 @@ animations{
 }
 sprites{
 	idling_01{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -228,7 +228,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=29.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -249,7 +249,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=58.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -270,7 +270,7 @@ sprites{
 		}
 	}
 	idling_04{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=87.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -291,7 +291,7 @@ sprites{
 		}
 	}
 	idling_05{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=116.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -312,7 +312,7 @@ sprites{
 		}
 	}
 	idling_no_hit_01{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -333,7 +333,7 @@ sprites{
 		}
 	}
 	idling_no_hit_02{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=29.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -354,7 +354,7 @@ sprites{
 		}
 	}
 	idling_no_hit_03{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=58.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -375,7 +375,7 @@ sprites{
 		}
 	}
 	idling_no_hit_04{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=87.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -396,7 +396,7 @@ sprites{
 		}
 	}
 	idling_no_hit_05{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=116.0000 0.0000
 		file_size=28.0000 28.0000
 		hitboxes{
@@ -417,7 +417,7 @@ sprites{
 		}
 	}
 	primed_01{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 29.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 0.0000
@@ -439,7 +439,7 @@ sprites{
 		}
 	}
 	primed_02{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 29.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 1.0000
@@ -461,7 +461,7 @@ sprites{
 		}
 	}
 	primed_03{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=69.0000 29.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 0.0000
@@ -483,7 +483,7 @@ sprites{
 		}
 	}
 	primed_04{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=69.0000 29.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 1.0000
@@ -505,7 +505,7 @@ sprites{
 		}
 	}
 	primed_05{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 98.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 0.0000
@@ -527,7 +527,7 @@ sprites{
 		}
 	}
 	primed_06{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=0.0000 98.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 1.0000
@@ -549,7 +549,7 @@ sprites{
 		}
 	}
 	primed_07{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=69.0000 98.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 0.0000
@@ -571,7 +571,7 @@ sprites{
 		}
 	}
 	primed_08{
-		file=bomb_rock.png
+		file=bomb_rock
 		file_pos=69.0000 98.0000
 		file_size=68.0000 68.0000
 		offset=2.0000 1.0000

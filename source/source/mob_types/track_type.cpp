@@ -103,11 +103,11 @@ void track_type::load_cat_resources(data_node* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.
-    if(anims.body_parts.size() < 2) {
+    if(anims->body_parts.size() < 2) {
         game.errors.report(
             "The track type \"" + name + "\" needs to have at least 2 "
             "checkpoints (body parts), but it only has " +
-            i2s(anims.body_parts.size()) + "!"
+            i2s(anims->body_parts.size()) + "!"
         );
     }
 }

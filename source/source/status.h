@@ -180,11 +180,8 @@ public:
     //Scale the overlay animation by this much, related to the mob's size.
     float overlay_anim_mob_scale = 1.0f;
     
-    //Animation database for the overlay animation.
-    animation_database* overlay_anim_db;
-    
     //Animation instance for the overlay animation.
-    animation_instance overlay_anim_instance;
+    animation_instance overlay_anim;
     
     //Replace with this other status effect, when its time is over.
     status_type* replacement_on_timeout = nullptr;

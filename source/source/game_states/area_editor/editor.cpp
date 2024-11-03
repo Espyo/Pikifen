@@ -439,7 +439,7 @@ void area_editor::close_options_dialog() {
  * @param requested_area_type Type of the requested area.
  */
 void area_editor::create_area(
-    const content_manifest& requested_area_manifest,
+    const content_manifest &requested_area_manifest,
     AREA_TYPE requested_area_type
 ) {
     clear_current_area();
@@ -724,12 +724,8 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    unordered_set<single_animation_suite*> liquid_anims;
     for(auto &l : game.content.liquids.list) {
-        liquid_anims.insert(l.second->anim);
-    }
-    for(auto &a : liquid_anims) {
-        a->instance.tick(game.delta_t);
+        l.second->anim.tick(game.delta_t);
     }
     
     selection_effect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.delta_t;
@@ -1863,16 +1859,22 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
-    game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_BASIC);
-    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_MOB_TYPE,
+        CONTENT_TYPE_WEATHER_CONDITION,
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     load_custom_mob_cat_types(true);
     
@@ -3216,7 +3218,7 @@ bool area_editor::save_area(bool to_backup) {
         base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     string geometry_file_path =
         base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
-    
+        
     bool geo_save_ok = geometry_file.save_file(geometry_file_path);
     bool main_data_save_ok = main_data_file.save_file(main_data_file_path);
     
@@ -3877,16 +3879,21 @@ void area_editor::unload() {
     
     clear_current_area();
     
-    game.content.unload_all(CONTENT_TYPE_AREA);
-    game.content.unload_all(CONTENT_TYPE_WEATHER_CONDITION);
-    game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
-    game.content.unload_all(CONTENT_TYPE_HAZARD);
-    game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
-    game.content.unload_all(CONTENT_TYPE_LIQUID);
-    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
-    game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
-    game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
-    game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+        CONTENT_TYPE_WEATHER_CONDITION,
+        CONTENT_TYPE_MOB_TYPE,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    }
+    );
 }
 
 

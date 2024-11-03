@@ -55,6 +55,7 @@ constexpr int SMALLEST_WIN_WIDTH = 640;
 //Real-world centimeters per in-game-world pixel.
 constexpr float CM_PER_PIXEL = 0.05f;
 
+
 //Folder names (not paths).
 namespace FOLDER_NAMES {
 
@@ -132,6 +133,7 @@ const string WEATHER = "weather";
 
 }
 
+
 //File names (not paths).
 namespace FILE_NAMES {
 
@@ -176,6 +178,7 @@ const string STATISTICS = "statistics.txt";
 
 }
 
+
 //Paths to folders from the engine's root folder.
 namespace FOLDER_PATHS_FROM_ROOT {
 
@@ -190,12 +193,13 @@ const string BASE_PKG =
 //User data folder.
 const string USER_DATA =
     FOLDER_NAMES::USER_DATA;
-
+    
 //Area user data folder.
 const string AREA_USER_DATA =
     USER_DATA + "/" + FOLDER_NAMES::AREAS;
-
+    
 };
+
 
 //Paths to files from the engine's root folder.
 namespace FILE_PATHS_FROM_ROOT {
@@ -225,6 +229,7 @@ const string MAKER_TOOLS =
     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::MAKER_TOOLS;
     
 };
+
 
 //Paths to game content folders from a package's folder.
 namespace FOLDER_PATHS_FROM_PKG {
@@ -315,6 +320,7 @@ const string WEATHER =
     
 };
 
+
 //Paths to game content files from a package's folder.
 namespace FILE_PATHS_FROM_PKG {
 //Game configuration file.
@@ -328,6 +334,5 @@ const string SYSTEM_ANIMS =
 //System animation file names file.
 const string SYSTEM_ASSET_FILE_NAMES =
     FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
-    
     
 }

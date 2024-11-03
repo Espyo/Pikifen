@@ -605,7 +605,7 @@ void leader::draw_mob() {
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s;
-        game.sys_assets.spark_animation.instance.get_sprite_data(
+        game.sys_assets.spark_animation.get_sprite_data(
             &spark_s, nullptr, nullptr
         );
         

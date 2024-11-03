@@ -29,7 +29,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=electrical_wire.png
+		file=electrical_wire
 		file_pos=132.0000 0.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 80.0000
@@ -79,7 +79,7 @@ sprites{
 		}
 	}
 	safe{
-		file=electrical_wire.png
+		file=electrical_wire
 		file_pos=0.0000 0.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 80.0000
@@ -129,7 +129,7 @@ sprites{
 		}
 	}
 	zapping_01{
-		file=electrical_wire.png
+		file=electrical_wire
 		file_pos=33.0000 0.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 80.0000
@@ -194,7 +194,7 @@ sprites{
 		}
 	}
 	zapping_02{
-		file=electrical_wire.png
+		file=electrical_wire
 		file_pos=66.0000 0.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 80.0000
@@ -259,7 +259,7 @@ sprites{
 		}
 	}
 	zapping_03{
-		file=electrical_wire.png
+		file=electrical_wire
 		file_pos=99.0000 0.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 80.0000

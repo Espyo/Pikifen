@@ -65,16 +65,16 @@ positions{
 	mission_fail_2_name=82.0000 20.0000 30.0000 8.0000
 }
 files{
-	bubble=bubble.png
-	checkbox_check=hud/checkbox_check.png
-	checkbox_no_check=hud/checkbox_no_check.png
-	counter_bubble_field=hud/counter_bubble_field.png
-	counter_bubble_group=hud/counter_bubble_group.png
-	counter_bubble_standby=hud/counter_bubble.png
-	counter_bubble_total=hud/counter_bubble_total.png
-	day_bubble=hud/day_bubble.png
-	distant_pikmin_marker=hud/distant_pikmin_marker.png
-	hard_bubble=hud/hard_bubble.png
-	no_pikmin_bubble=hud/no_pikmin.png
-	sun=hud/sun.png
+	bubble=bubble
+	checkbox_check=hud/checkbox_check
+	checkbox_no_check=hud/checkbox_no_check
+	counter_bubble_field=hud/counter_bubble_field
+	counter_bubble_group=hud/counter_bubble_group
+	counter_bubble_standby=hud/counter_bubble
+	counter_bubble_total=hud/counter_bubble_total
+	day_bubble=hud/day_bubble
+	distant_pikmin_marker=hud/distant_pikmin_marker
+	hard_bubble=hud/hard_bubble
+	no_pikmin_bubble=hud/no_pikmin
+	sun=hud/sun
 }

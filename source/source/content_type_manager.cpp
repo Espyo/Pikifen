@@ -48,16 +48,16 @@ void area_content_manager::fill_manifests() {
 /**
  * @brief Returns the manifest matching the specified area, or nullptr if none
  * was found.
- * 
+ *
  * @param area_name Name of the area.
  * @param package Package it belongs to.
  * @param type Area type.
  * @return The manifest, or nullptr.
  */
 content_manifest* area_content_manager::find_manifest(
-    const string& area_name, const string& package, AREA_TYPE type
+    const string &area_name, const string &package, AREA_TYPE type
 ) {
-    for(auto& m : manifests[type]) {
+    for(auto &m : manifests[type]) {
         if(m.first == area_name && m.second.package == package) {
             return &m.second;
         }
@@ -68,7 +68,7 @@ content_manifest* area_content_manager::find_manifest(
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string area_content_manager::get_name() const {
@@ -78,7 +78,7 @@ string area_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string area_content_manager::get_perf_mon_measurement_name() const {
@@ -88,7 +88,7 @@ string area_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void area_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -128,7 +128,7 @@ void area_content_manager::load_area(
     string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     data_node data_file = load_data_file(data_file_path);
     if(!data_file.file_was_opened) return;
-
+    
     string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
     data_node geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return;
@@ -197,7 +197,7 @@ void area_content_manager::load_area_into_vector(
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void area_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -228,7 +228,7 @@ void bitmap_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string bitmap_content_manager::get_name() const {
@@ -238,7 +238,7 @@ string bitmap_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string bitmap_content_manager::get_perf_mon_measurement_name() const {
@@ -248,7 +248,7 @@ string bitmap_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void bitmap_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -257,7 +257,7 @@ void bitmap_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void bitmap_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -324,7 +324,7 @@ void custom_particle_gen_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string custom_particle_gen_content_manager::get_name() const {
@@ -334,7 +334,7 @@ string custom_particle_gen_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string custom_particle_gen_content_manager::get_perf_mon_measurement_name() const {
@@ -344,7 +344,7 @@ string custom_particle_gen_content_manager::get_perf_mon_measurement_name() cons
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void custom_particle_gen_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -375,7 +375,7 @@ void custom_particle_gen_content_manager::load_generator(
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void custom_particle_gen_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -404,7 +404,7 @@ void global_anim_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string global_anim_content_manager::get_name() const {
@@ -414,7 +414,7 @@ string global_anim_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string global_anim_content_manager::get_perf_mon_measurement_name() const {
@@ -424,12 +424,12 @@ string global_anim_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &a : manifests) {
-        load_global_animation(&a.second, level);
+        load_animation(&a.second, level);
     }
 }
 
@@ -440,20 +440,17 @@ void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the animation.
  * @param level Level to load at.
  */
-void global_anim_content_manager::load_global_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
+void global_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
     data_node file(manifest->path);
-    single_animation_suite anim;
-    anim.database.manifest = manifest;
-    anim.database.load_from_data_node(&file);
-    anim.instance.cur_anim = anim.database.animations[0];
-    anim.instance.to_start();
-    list[manifest->internal_name] = anim;
+    animation_database db;
+    db.load_from_data_node(&file);
+    list[manifest->internal_name] = db;
 }
 
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void global_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -479,7 +476,7 @@ void gui_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string gui_content_manager::get_name() const {
@@ -489,7 +486,7 @@ string gui_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string gui_content_manager::get_perf_mon_measurement_name() const {
@@ -499,7 +496,7 @@ string gui_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void gui_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -511,7 +508,7 @@ void gui_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void gui_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -537,7 +534,7 @@ void hazard_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string hazard_content_manager::get_name() const {
@@ -547,7 +544,7 @@ string hazard_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string hazard_content_manager::get_perf_mon_measurement_name() const {
@@ -557,7 +554,7 @@ string hazard_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void hazard_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -588,7 +585,7 @@ void hazard_content_manager::load_hazard(
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void hazard_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -614,7 +611,7 @@ void liquid_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string liquid_content_manager::get_name() const {
@@ -624,7 +621,7 @@ string liquid_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string liquid_content_manager::get_perf_mon_measurement_name() const {
@@ -634,7 +631,7 @@ string liquid_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void liquid_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -665,11 +662,11 @@ void liquid_content_manager::load_liquid(
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void liquid_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
-    for(const auto& l : list) {
+    for(const auto &l : list) {
         delete l.second;
     }
     list.clear();
@@ -694,7 +691,7 @@ void misc_config_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string misc_config_content_manager::get_name() const {
@@ -704,7 +701,7 @@ string misc_config_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string misc_config_content_manager::get_perf_mon_measurement_name() const {
@@ -714,13 +711,13 @@ string misc_config_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     //Game config.
     data_node game_config_file =
-        load_data_file(manifests[FILE_NAMES::GAME_CONFIG].path);
+        load_data_file(manifests[remove_extension(FILE_NAMES::GAME_CONFIG)].path);
     game.config.load(&game_config_file);
     al_set_window_title(
         game.display,
@@ -729,25 +726,125 @@ void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     
     //System animations.
     data_node system_animations_file =
-        load_data_file(manifests[FILE_NAMES::SYSTEM_ANIMS].path);
-    init_single_animation(
+        load_data_file(manifests[remove_extension(FILE_NAMES::SYSTEM_ANIMS)].path);
+    load_system_anim(
         &system_animations_file, "leader_damage_sparks",
         game.sys_assets.spark_animation
     );
     
     //System asset file names.
     data_node system_asset_fn_file =
-        load_data_file(manifests[FILE_NAMES::SYSTEM_ASSET_FILE_NAMES].path);
+        load_data_file(manifests[remove_extension(FILE_NAMES::SYSTEM_ASSET_FILE_NAMES)].path);
     game.asset_file_names.load(&system_asset_fn_file);
 }
 
 
 /**
+ * @brief Loads an animation from the system animations definition file.
+ *
+ * @param anim_def_file The animation definition file.
+ * @param name Name of the animation property on this file.
+ * @param anim The animation instance structure to fill.
+ */
+void misc_config_content_manager::load_system_anim(
+    data_node* anim_def_file, const string &name,
+    animation_instance &anim
+) {
+    const string &anim_db_name =
+        anim_def_file->get_child_by_name(name)->value;
+    anim.init_to_first_anim(&game.content.global_anims.list[anim_db_name]);
+}
+
+
+/**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void misc_config_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+}
+
+
+/**
+ * @brief Clears the manifests.
+ */
+void mob_anim_content_manager::clear_manifests() {
+    manifests.clear();
+}
+
+
+/**
+ * @brief Fills in the manifests.
+ */
+void mob_anim_content_manager::fill_manifests() {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        if(c == MOB_CATEGORY_NONE) continue;
+        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
+        if(category->folder_name.empty()) return;
+        
+        const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + FOLDER_NAMES::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" + category->folder_name;
+        vector<string> type_folders = folder_to_vector_recursively(category_path, true);
+        for(size_t f = 0; f < type_folders.size(); f++) {
+            string internal_name = type_folders[f];
+            manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PKG);
+        }
+    }
+}
+
+
+/**
+ * @brief Returns the content type's name.
+ *
+ * @return The name.
+ */
+string mob_anim_content_manager::get_name() const {
+    return "mob animation";
+}
+
+
+/**
+ * @brief Returns the name to use for the performance monitor, if any.
+ *
+ * @return The name.
+ */
+string mob_anim_content_manager::get_perf_mon_measurement_name() const {
+    return "Mob animations";
+}
+
+
+/**
+ * @brief Loads all content in the manifests.
+ *
+ * @param level Level to load at.
+ */
+void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+    for(auto &a : manifests) {
+        load_animation(&a.second, level);
+    }
+}
+
+
+/**
+ * @brief Loads a mob animation.
+ *
+ * @param manifest Manifest of the animation.
+ * @param level Level to load at.
+ */
+void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
+    data_node file(manifest->path);
+    animation_database db;
+    db.load_from_data_node(&file);
+    list[manifest->internal_name] = db;
+}
+
+
+/**
+ * @brief Unloads all loaded content.
+ *
+ * @param level Load level. Should match the level used to load the content.
+ */
+void mob_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+    list.clear();
 }
 
 
@@ -777,7 +874,7 @@ void mob_type_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string mob_type_content_manager::get_name() const {
@@ -787,7 +884,7 @@ string mob_type_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string mob_type_content_manager::get_perf_mon_measurement_name() const {
@@ -797,7 +894,7 @@ string mob_type_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void mob_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -916,9 +1013,9 @@ void mob_type_content_manager::load_mob_types_of_category(mob_category* category
         
         mob_type* mt;
         mt = category->create_type();
+        mt->manifest = &t.second;
         mt->load_from_data_node(&file, level, t.second.path);
         category->register_type(t.first, mt);
-        mt->manifest = &t.second;
         
     }
 }
@@ -926,7 +1023,7 @@ void mob_type_content_manager::load_mob_types_of_category(mob_category* category
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void mob_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -953,9 +1050,7 @@ void mob_type_content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL 
         game.content.samples.list.free(s_ptr);
     }
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        mt->anims.destroy();
         unload_script(mt);
-        
         mt->unload_resources();
     }
 }
@@ -999,7 +1094,7 @@ void sample_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string sample_content_manager::get_name() const {
@@ -1009,7 +1104,7 @@ string sample_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string sample_content_manager::get_perf_mon_measurement_name() const {
@@ -1019,7 +1114,7 @@ string sample_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void sample_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -1028,7 +1123,7 @@ void sample_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void sample_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -1053,7 +1148,7 @@ void song_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string song_content_manager::get_name() const {
@@ -1063,7 +1158,7 @@ string song_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string song_content_manager::get_perf_mon_measurement_name() const {
@@ -1073,7 +1168,7 @@ string song_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void song_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -1102,7 +1197,7 @@ void song_content_manager::load_song(content_manifest* manifest, CONTENT_LOAD_LE
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void song_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -1131,7 +1226,7 @@ void song_track_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string song_track_content_manager::get_name() const {
@@ -1141,7 +1236,7 @@ string song_track_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string song_track_content_manager::get_perf_mon_measurement_name() const {
@@ -1151,7 +1246,7 @@ string song_track_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void song_track_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -1160,11 +1255,11 @@ void song_track_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void song_track_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
-    
+
 }
 
 
@@ -1186,7 +1281,7 @@ void spike_damage_type_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string spike_damage_type_content_manager::get_name() const {
@@ -1196,7 +1291,7 @@ string spike_damage_type_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string spike_damage_type_content_manager::get_perf_mon_measurement_name() const {
@@ -1206,7 +1301,7 @@ string spike_damage_type_content_manager::get_perf_mon_measurement_name() const 
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void spike_damage_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -1235,7 +1330,7 @@ void spike_damage_type_content_manager::load_spike_damage_type(content_manifest*
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void spike_damage_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -1261,7 +1356,7 @@ void spray_type_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string spray_type_content_manager::get_name() const {
@@ -1271,7 +1366,7 @@ string spray_type_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string spray_type_content_manager::get_perf_mon_measurement_name() const {
@@ -1281,14 +1376,14 @@ string spray_type_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void spray_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : manifests) {
         load_spray_type(&s.second, level);
     }
-
+    
     //Spray type order.
     vector<string> missing_spray_order_types;
     for(auto &s : list) {
@@ -1347,7 +1442,7 @@ void spray_type_content_manager::load_spray_type(content_manifest* manifest, CON
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void spray_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -1377,7 +1472,7 @@ void status_type_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string status_type_content_manager::get_name() const {
@@ -1387,7 +1482,7 @@ string status_type_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string status_type_content_manager::get_perf_mon_measurement_name() const {
@@ -1397,13 +1492,13 @@ string status_type_content_manager::get_perf_mon_measurement_name() const {
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void status_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     vector<status_type*> types_with_replacements;
     vector<string> types_with_replacements_names;
-
+    
     for(auto &s : manifests) {
         load_status_type(&s.second, level);
     }
@@ -1459,7 +1554,7 @@ void status_type_content_manager::load_status_type(content_manifest* manifest, C
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void status_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
@@ -1485,7 +1580,7 @@ void weather_condition_content_manager::fill_manifests() {
 
 /**
  * @brief Returns the content type's name.
- * 
+ *
  * @return The name.
  */
 string weather_condition_content_manager::get_name() const {
@@ -1495,7 +1590,7 @@ string weather_condition_content_manager::get_name() const {
 
 /**
  * @brief Returns the name to use for the performance monitor, if any.
- * 
+ *
  * @return The name.
  */
 string weather_condition_content_manager::get_perf_mon_measurement_name() const {
@@ -1505,7 +1600,7 @@ string weather_condition_content_manager::get_perf_mon_measurement_name() const 
 
 /**
  * @brief Loads all content in the manifests.
- * 
+ *
  * @param level Level to load at.
  */
 void weather_condition_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
@@ -1534,7 +1629,7 @@ void weather_condition_content_manager::load_weather_condition(content_manifest*
 
 /**
  * @brief Unloads all loaded content.
- * 
+ *
  * @param level Load level. Should match the level used to load the content.
  */
 void weather_condition_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {

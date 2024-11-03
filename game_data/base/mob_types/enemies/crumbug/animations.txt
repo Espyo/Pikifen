@@ -84,7 +84,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=crumbug.png
+		file=crumbug
 		file_pos=0.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -105,7 +105,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=crumbug.png
+		file=crumbug
 		file_pos=31.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -126,7 +126,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=crumbug.png
+		file=crumbug
 		file_pos=0.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -147,7 +147,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=crumbug.png
+		file=crumbug
 		file_pos=31.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -168,7 +168,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=crumbug.png
+		file=crumbug
 		file_pos=62.0000 33.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -189,7 +189,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=crumbug.png
+		file=crumbug
 		file_pos=95.0000 33.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -210,7 +210,7 @@ sprites{
 		}
 	}
 	eating_01{
-		file=crumbug.png
+		file=crumbug
 		file_pos=0.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -231,7 +231,7 @@ sprites{
 		}
 	}
 	eating_02{
-		file=crumbug.png
+		file=crumbug
 		file_pos=31.0000 33.0000
 		file_size=30.0000 32.0000
 		hitboxes{
@@ -252,7 +252,7 @@ sprites{
 		}
 	}
 	idling{
-		file=crumbug.png
+		file=crumbug
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -273,7 +273,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=crumbug.png
+		file=crumbug
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -294,7 +294,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=crumbug.png
+		file=crumbug
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -315,7 +315,7 @@ sprites{
 		}
 	}
 	moving_03{
-		file=crumbug.png
+		file=crumbug
 		file_pos=99.0000 0.0000
 		file_size=33.0000 32.0000
 		hitboxes{
@@ -336,7 +336,7 @@ sprites{
 		}
 	}
 	moving_04{
-		file=crumbug.png
+		file=crumbug
 		file_pos=133.0000 0.0000
 		file_size=34.0000 32.0000
 		hitboxes{

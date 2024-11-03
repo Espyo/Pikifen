@@ -225,6 +225,7 @@ Next tasks (roughly sorted most important first)
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check
+            Test editing every single piece of content, both in the base package, and in a new package
         For later on, maybe, the content manager should be able to figure out a dependency tree
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme

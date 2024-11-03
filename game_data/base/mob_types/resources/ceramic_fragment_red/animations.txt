@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=ceramic_fragment_red.png
+		file=ceramic_fragment_red
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 	}

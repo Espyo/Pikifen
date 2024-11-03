@@ -147,7 +147,7 @@ void gameplay_state::do_aesthetic_logic(float delta_t) {
     do_aesthetic_leader_logic(delta_t);
     
     //Specific animations.
-    game.sys_assets.spark_animation.instance.tick(delta_t);
+    game.sys_assets.spark_animation.tick(delta_t);
 }
 
 
@@ -656,7 +656,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         
         //Tick all status effect animations.
         for(auto &s : game.content.status_types.list) {
-            s.second->overlay_anim_instance.tick(delta_t);
+            s.second->overlay_anim.tick(delta_t);
         }
         
         /*******************
@@ -844,12 +844,8 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         *   Liquids    ~ ~  *
         *             ~ ~ ~ *
         ********************/
-        unordered_set<single_animation_suite*> liquid_anims;
         for(auto &l : game.content.liquids.list) {
-            liquid_anims.insert(l.second->anim);
-        }
-        for(auto &a : liquid_anims) {
-            a->instance.tick(delta_t);
+            l.second->anim.tick(delta_t);
         }
         
         

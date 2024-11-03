@@ -32,7 +32,7 @@ const float BIND_BUTTON_PADDING = 0.01f;
 const float CAPTURE_TIMEOUT_DURATION = 5.0f;
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "control_binds_menu.txt";
+const string GUI_FILE_NAME = "control_binds_menu";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";

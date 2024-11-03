@@ -3,7 +3,7 @@ subtitle
 description=In the forest, a few creatures found some large wooden object... While its origin is mysterious, it does give this otherwise drab place some playful life!
 tags=Standard; Forest
 difficulty=2
-bg_bmp=textures/grass_dark.jpg
+bg_bmp=textures/grass_dark
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000

@@ -1600,24 +1600,3 @@ void init_mob_categories() {
         MOB_CATEGORY_CUSTOM, new custom_category()
     );
 }
-
-
-/**
- * @brief Loads a single animation from the system animations definition file.
- *
- * @param anim_def_file The animation definition file.
- * @param name Name of the animation on this file.
- * @param anim The single animation suite structure to fill.
- */
-void init_single_animation(
-    data_node* anim_def_file, const string &name,
-    single_animation_suite &anim
-) {
-    const string &anim_name =
-        anim_def_file->get_child_by_name("leader_damage_sparks")->value;
-    anim.database = game.content.global_anims.list[anim_name].database;
-    if(!anim.database.animations.empty()) {
-        anim.instance.cur_anim = anim.database.animations[0];
-    }
-    anim.instance.to_start();
-}

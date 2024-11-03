@@ -6,12 +6,12 @@ area_editor_recommend_links_to = true
 can_walk_on_others = true
 casts_shadow = false
 custom_category_name = Bridge
-left_rail_texture = textures/ceramic_bridge_rail_red_left.png
-main_texture = textures/ceramic_bridge_red.png
+left_rail_texture = textures/ceramic_bridge_rail_red_left
+main_texture = textures/ceramic_bridge_red
 max_health = 30
 radius = 32
 rail_width = 40
-right_rail_texture = textures/ceramic_bridge_rail_red_right.png
+right_rail_texture = textures/ceramic_bridge_rail_red_right
 show_health = false
 target_type = none
 
@@ -24,12 +24,12 @@ children {
 
 sounds {
     click {
-        file = ceramic.ogg
+        file = ceramic
         speed_deviation = 10
         volume = 50
     }
     obstacle_cleared {
-        file = obstacle_cleared.ogg
+        file = obstacle_cleared
         type = world_global
     }
 }

@@ -194,26 +194,26 @@ ALLEGRO_FONT* load_font(
  */
 void load_fonts() {
     const int STANDARD_FONT_RANGES_SIZE = 2;
-    const int standard_font_ranges[STANDARD_FONT_RANGES_SIZE] = {
+    const int STANDARD_FONT_RANGES[STANDARD_FONT_RANGES_SIZE] = {
         0x0020, 0x007E, //ASCII
         /*0x00A0, 0x00A1, //Non-breaking space and inverted !
         0x00BF, 0x00FF, //Inverted ? and European vowels and such*/
     };
     
     const int COUNTER_FONT_RANGES_SIZE = 6;
-    const int counter_font_ranges[COUNTER_FONT_RANGES_SIZE] = {
+    const int COUNTER_FONT_RANGES[COUNTER_FONT_RANGES_SIZE] = {
         0x002D, 0x0039, //Dash, dot, slash, numbers
         0x003A, 0x003A, //Colon
         0x0078, 0x0078, //Lowercase x
     };
     
     const int JUST_NUMBERS_FONT_RANGES_SIZE = 2;
-    const int just_numbers_font_ranges[JUST_NUMBERS_FONT_RANGES_SIZE] = {
+    const int JUST_NUMBERS_FONT_RANGES[JUST_NUMBERS_FONT_RANGES_SIZE] = {
         0x0030, 0x0039, //0 to 9
     };
     
     const int VALUE_FONT_RANGES_SIZE = 6;
-    const int value_font_ranges[VALUE_FONT_RANGES_SIZE] = {
+    const int VALUE_FONT_RANGES[VALUE_FONT_RANGES_SIZE] = {
         0x0024, 0x0024, //Dollar sign
         0x002D, 0x002D, //Dash
         0x0030, 0x0039, //Numbers
@@ -226,7 +226,7 @@ void load_fonts() {
     game.sys_assets.fnt_area_name =
         load_font(
             game.asset_file_names.fnt_area_name,
-            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             34
         );
         
@@ -237,7 +237,7 @@ void load_fonts() {
     game.sys_assets.fnt_counter =
         load_font(
             game.asset_file_names.fnt_counter,
-            COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges,
+            COUNTER_FONT_RANGES_SIZE / 2, COUNTER_FONT_RANGES,
             32
         );
         
@@ -245,7 +245,7 @@ void load_fonts() {
     game.sys_assets.fnt_cursor_counter =
         load_font(
             game.asset_file_names.fnt_cursor_counter,
-            JUST_NUMBERS_FONT_RANGES_SIZE / 2, just_numbers_font_ranges,
+            JUST_NUMBERS_FONT_RANGES_SIZE / 2, JUST_NUMBERS_FONT_RANGES,
             16
         );
         
@@ -253,7 +253,7 @@ void load_fonts() {
     game.sys_assets.fnt_slim =
         load_font(
             game.asset_file_names.fnt_slim,
-            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
         );
         
@@ -261,7 +261,7 @@ void load_fonts() {
     game.sys_assets.fnt_standard =
         load_font(
             game.asset_file_names.fnt_standard,
-            STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges,
+            STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
         );
         
@@ -269,7 +269,7 @@ void load_fonts() {
     game.sys_assets.fnt_value =
         load_font(
             game.asset_file_names.fnt_value,
-            VALUE_FONT_RANGES_SIZE / 2, value_font_ranges,
+            VALUE_FONT_RANGES_SIZE / 2, VALUE_FONT_RANGES,
             16
         );
 }

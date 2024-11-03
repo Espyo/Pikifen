@@ -23,7 +23,7 @@
 namespace STATS_MENU {
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "statistics_menu.txt";
+const string GUI_FILE_NAME = "statistics_menu";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
@@ -177,7 +177,12 @@ void stats_menu_state::load() {
     //Resources.
     bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
     
-    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
@@ -388,7 +393,11 @@ void stats_menu_state::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmp_menu_bg);
     
-    game.content.unload_all(CONTENT_TYPE_AREA);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    }
+    );
     
     //Menu items.
     gui.destroy();

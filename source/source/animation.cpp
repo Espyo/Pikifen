@@ -604,6 +604,7 @@ void animation_database::load_from_data_node(data_node* node) {
     }
     
     //Finish up.
+    fix_body_part_pointers();
     calculate_hitbox_span();
 }
 
@@ -961,6 +962,22 @@ size_t animation_instance::get_next_frame_idx(bool* out_reached_end) const {
             return 0;
         }
     }
+}
+
+
+/**
+ * @brief Initializes the instance by setting its database to the given one,
+ * its animation to the first one in the database, and setting the time
+ * to the beginning.
+ *
+ * @param db Pointer to the animation database.
+ */
+void animation_instance::init_to_first_anim(animation_database* db) {
+    anim_db = db;
+    if(db && !anim_db->animations.empty()) {
+        cur_anim = anim_db->animations[0];
+    }
+    to_start();
 }
 
 

@@ -23,22 +23,22 @@
 namespace MAIN_MENU {
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "main_menu.txt";
+const string GUI_FILE_NAME = "main_menu";
 
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
 //Name of the make page GUI information file.
-const string MAKE_GUI_FILE_NAME = "main_menu_make.txt";
+const string MAKE_GUI_FILE_NAME = "main_menu_make";
 
 //Name of the play page GUI information file.
-const string PLAY_GUI_FILE_NAME = "main_menu_play.txt";
+const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";
 
 //Name of the tutorial question page GUI information file.
-const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial.txt";
+const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 
 }
 
@@ -723,7 +723,12 @@ void main_menu_state::load() {
     al_flip_display();
     
     //Game content.
-    game.content.load_all(CONTENT_TYPE_GUI, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    },
+    CONTENT_LOAD_LEVEL_FULL
+    );
     
     //Misc. initializations.
     init_gui_main_page();
@@ -883,6 +888,10 @@ void main_menu_state::unload() {
     logo_pikmin.clear();
     
     //Game content.
-    game.content.unload_all(CONTENT_TYPE_GUI);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    }
+    );
     
 }

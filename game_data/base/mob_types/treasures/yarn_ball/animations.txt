@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=yarn_ball.png
+		file=yarn_ball
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 	}

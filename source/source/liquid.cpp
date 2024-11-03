@@ -43,7 +43,7 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     
     auto it = game.content.global_anims.list.find(animation_str);
     if(it != game.content.global_anims.list.end()) {
-        anim = &game.content.global_anims.list[animation_str];
+        anim.init_to_first_anim(&game.content.global_anims.list[animation_str]);
     } else {
         game.errors.report(
             "Unknown animation \"" + animation_str + "\"!",

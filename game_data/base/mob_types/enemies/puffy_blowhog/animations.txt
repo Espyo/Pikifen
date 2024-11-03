@@ -384,7 +384,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=0.0000 231.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -415,7 +415,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=361.0000 231.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -446,7 +446,7 @@ sprites{
 		}
 	}
 	attacking_03{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=722.0000 231.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -477,7 +477,7 @@ sprites{
 		}
 	}
 	attacking_04{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1083.0000 231.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -508,7 +508,7 @@ sprites{
 		}
 	}
 	attacking_05{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1083.0000 231.0000
 		file_size=360.0000 230.0000
 		offset=37.0000 0.0000
@@ -540,7 +540,7 @@ sprites{
 		}
 	}
 	attacking_06{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1444.0000 231.0000
 		file_size=374.0000 230.0000
 		offset=40.0000 0.0000
@@ -571,7 +571,7 @@ sprites{
 		}
 	}
 	attacking_07{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1819.0000 231.0000
 		file_size=387.0000 230.0000
 		offset=48.0000 0.0000
@@ -605,7 +605,7 @@ sprites{
 		}
 	}
 	attacking_08{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1819.0000 231.0000
 		file_size=387.0000 230.0000
 		offset=49.0000 0.0000
@@ -639,7 +639,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=93.0000 0.0000
@@ -668,7 +668,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=41.0622 -2.4886
@@ -698,7 +698,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-32.6539 -21.5815
@@ -728,7 +728,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-171.0579 -185.0300
@@ -759,7 +759,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-203.7457 -446.7411
@@ -790,7 +790,7 @@ sprites{
 		}
 	}
 	dying_06{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=42.4971 -697.8225
@@ -821,7 +821,7 @@ sprites{
 		}
 	}
 	dying_07{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=451.0068 -657.7234
@@ -852,7 +852,7 @@ sprites{
 		}
 	}
 	dying_08{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=679.0705 -377.0297
@@ -883,7 +883,7 @@ sprites{
 		}
 	}
 	dying_09{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=667.4161 14.5023
@@ -914,7 +914,7 @@ sprites{
 		}
 	}
 	dying_10{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=566.1327 446.4530
@@ -945,7 +945,7 @@ sprites{
 		}
 	}
 	dying_11{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=261.8260 760.3694
@@ -976,7 +976,7 @@ sprites{
 		}
 	}
 	dying_12{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-161.0000 907.7177
@@ -1007,7 +1007,7 @@ sprites{
 		}
 	}
 	dying_13{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-500.5421 744.3530
@@ -1038,7 +1038,7 @@ sprites{
 		}
 	}
 	dying_14{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-761.4789 410.5073
@@ -1069,7 +1069,7 @@ sprites{
 		}
 	}
 	dying_15{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-873.6282 3.6401
@@ -1100,7 +1100,7 @@ sprites{
 		}
 	}
 	dying_16{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-850.1550 -447.5653
@@ -1131,7 +1131,7 @@ sprites{
 		}
 	}
 	dying_17{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-647.7220 -797.6241
@@ -1162,7 +1162,7 @@ sprites{
 		}
 	}
 	dying_18{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=-358.5078 -942.2322
@@ -1193,7 +1193,7 @@ sprites{
 		}
 	}
 	dying_19{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=47.8860 -999.5762
@@ -1224,7 +1224,7 @@ sprites{
 		}
 	}
 	dying_20{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=386.9631 -874.9155
@@ -1255,7 +1255,7 @@ sprites{
 		}
 	}
 	dying_21{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=651.2438 -690.4167
@@ -1286,7 +1286,7 @@ sprites{
 		}
 	}
 	dying_22{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=798.3434 -428.6292
@@ -1317,7 +1317,7 @@ sprites{
 		}
 	}
 	dying_23{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=716.9882 -261.1346
@@ -1348,7 +1348,7 @@ sprites{
 		}
 	}
 	dying_24{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=614.0165 -167.5739
@@ -1379,7 +1379,7 @@ sprites{
 		}
 	}
 	dying_25{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1442.0000 462.0000
 		file_size=474.0000 230.0000
 		offset=429.6636 -86.7465
@@ -1410,7 +1410,7 @@ sprites{
 		}
 	}
 	dying_26{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=429.6636 -86.7465
@@ -1440,7 +1440,7 @@ sprites{
 		}
 	}
 	dying_27{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=286.6436 -44.9266
@@ -1470,7 +1470,7 @@ sprites{
 		}
 	}
 	dying_28{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=150.7975 -19.5009
@@ -1500,7 +1500,7 @@ sprites{
 		}
 	}
 	dying_29{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=87.2329 -4.2454
@@ -1530,7 +1530,7 @@ sprites{
 		}
 	}
 	dying_30{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=25.4846 0.4765
@@ -1560,7 +1560,7 @@ sprites{
 		}
 	}
 	dying_31{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=13.0000 0.0000
@@ -1589,7 +1589,7 @@ sprites{
 		}
 	}
 	dying_32{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1917.0000 462.0000
 		file_size=73.0000 32.0000
 		offset=7.0000 0.0000
@@ -1618,7 +1618,7 @@ sprites{
 		}
 	}
 	dying_pre{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1819.0000 231.0000
 		file_size=387.0000 230.0000
 		offset=49.0000 0.0000
@@ -1648,7 +1648,7 @@ sprites{
 		}
 	}
 	falling_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=735.0000 462.0000
 		file_size=345.0000 230.0000
 		offset=28.0000 0.0000
@@ -1679,7 +1679,7 @@ sprites{
 		}
 	}
 	falling_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=735.0000 462.0000
 		file_size=345.0000 230.0000
 		offset=28.0000 0.0000
@@ -1711,7 +1711,7 @@ sprites{
 		}
 	}
 	grounded_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
 		offset=36.0000 0.0000
@@ -1742,7 +1742,7 @@ sprites{
 		}
 	}
 	grounded_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
 		offset=36.0000 0.0000
@@ -1774,7 +1774,7 @@ sprites{
 		}
 	}
 	grounded_03{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
 		offset=36.0000 0.0000
@@ -1806,7 +1806,7 @@ sprites{
 		}
 	}
 	grounded_landing{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
 		offset=36.0000 0.0000
@@ -1838,7 +1838,7 @@ sprites{
 		}
 	}
 	grounded_stretch{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1081.0000 462.0000
 		file_size=360.0000 208.0000
 		offset=49.0000 0.0000
@@ -1870,7 +1870,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=0.0000 0.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -1901,7 +1901,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=361.0000 0.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -1933,7 +1933,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=722.0000 0.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -1965,7 +1965,7 @@ sprites{
 		}
 	}
 	idling_04{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1083.0000 0.0000
 		file_size=360.0000 230.0000
 		offset=36.0000 0.0000
@@ -1997,7 +1997,7 @@ sprites{
 		}
 	}
 	idling_05{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=1444.0000 0.0000
 		file_size=358.0000 230.0000
 		offset=36.0000 0.0000
@@ -2029,7 +2029,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=0.0000 462.0000
 		file_size=370.0000 224.0000
 		offset=38.0000 0.0000
@@ -2060,7 +2060,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=371.0000 461.0000
 		file_size=363.0000 220.0000
 		offset=31.0000 -1.0000
@@ -2095,7 +2095,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=0.0000 462.0000
 		file_size=370.0000 224.0000
 		offset=38.0000 0.0000
@@ -2127,7 +2127,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=puffy_blowhog.png
+		file=puffy_blowhog
 		file_pos=371.0000 461.0000
 		file_size=363.0000 220.0000
 		offset=31.0000 1.0000

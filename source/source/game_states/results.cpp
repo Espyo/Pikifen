@@ -21,7 +21,7 @@
 namespace RESULTS {
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "results_menu.txt";
+const string GUI_FILE_NAME = "results_menu";
 
 //Name of the song to play in this state.
 const string SONG_NAME = "menus";

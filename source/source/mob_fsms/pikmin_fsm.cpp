@@ -3723,11 +3723,11 @@ void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     size_t looking_around_anim_idx =
-        m->type->anims.find_animation("looking_around");
+        m->type->anims->find_animation("looking_around");
     size_t sitting_anim_idx =
-        m->type->anims.find_animation("sitting");
+        m->type->anims->find_animation("sitting");
     size_t lounging_anim_idx =
-        m->type->anims.find_animation("lounging");
+        m->type->anims->find_animation("lounging");
     vector<size_t> boredom_anims;
     if(looking_around_anim_idx != INVALID) {
         boredom_anims.push_back(looking_around_anim_idx);
@@ -3960,7 +3960,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->start_height_effect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); c++) {
+    for(size_t c = 0; c < tra_ptr->type->anims->body_parts.size(); c++) {
         checkpoints.push_back(c);
     }
     m->track_info =

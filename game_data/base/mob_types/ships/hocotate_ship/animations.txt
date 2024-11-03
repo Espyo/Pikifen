@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=hocotate_ship.png
+		file=hocotate_ship
 		file_pos=0.0000 0.0000
 		file_size=274.0000 225.0000
 		scale=0.5000 0.5000

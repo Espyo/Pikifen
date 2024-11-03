@@ -5,24 +5,24 @@ area_editor_recommend_links_from = true
 can_walk_on_others = true
 custom_category_name = Bridge
 height = 32
-left_rail_texture = textures/wood_bridge_rail.jpg
-main_texture = textures/wood_bridge.png
+left_rail_texture = textures/wood_bridge_rail
+main_texture = textures/wood_bridge
 max_health = 2000
 pushable = false
 pushes = true
 radius = 32
 rectangular_dimensions = 42 192
-right_rail_texture = textures/wood_bridge_rail.jpg
+right_rail_texture = textures/wood_bridge_rail
 show_health = false
 
 sounds {
     sticks {
-        file = sticks.ogg
+        file = sticks
         speed_deviation = 10
         volume = 35
     }
     obstacle_cleared {
-        file = obstacle_cleared.ogg
+        file = obstacle_cleared
         type = world_global
     }
 }

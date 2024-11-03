@@ -24,10 +24,10 @@
 namespace AREA_MENU {
 
 //Name of the main GUI information file.
-const string GUI_FILE_NAME = "area_menu.txt";
+const string GUI_FILE_NAME = "area_menu";
 
 //Path to the area info GUI information file.
-const string INFO_GUI_FILE_NAME = "area_menu_info.txt";
+const string INFO_GUI_FILE_NAME = "area_menu_info";
 
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
@@ -36,7 +36,7 @@ const float PAGE_SWAP_DURATION = 0.5f;
 const string SONG_NAME = "menus";
 
 //Path to the mission specs GUI information file.
-const string SPECS_GUI_FILE_NAME = "area_menu_specs.txt";
+const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 }
 
@@ -909,7 +909,12 @@ void area_menu_state::load() {
     show_mission_specs = false;
     
     //Game content.
-    game.content.load_all(CONTENT_TYPE_AREA, CONTENT_LOAD_LEVEL_BASIC);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     //Mission records.
     if(area_type == AREA_TYPE_MISSION) {
@@ -975,6 +980,10 @@ void area_menu_state::unload() {
     cur_stamp = nullptr;
     cur_medal = nullptr;
     
-    game.content.unload_all(CONTENT_TYPE_AREA);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    }
+    );
     
 }

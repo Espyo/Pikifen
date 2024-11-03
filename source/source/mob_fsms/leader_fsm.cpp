@@ -2322,7 +2322,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->start_height_effect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); c++) {
+    for(size_t c = 0; c < tra_ptr->type->anims->body_parts.size(); c++) {
         checkpoints.push_back(c);
     }
     m->track_info =

@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=chocolate_square.png
+		file=chocolate_square
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 	}

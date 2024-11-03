@@ -13,7 +13,7 @@ team = obstacle
 
 sounds {
     flamethrower {
-        file = flamethrower.ogg
+        file = flamethrower
         loop = true
     }
 }

@@ -30,23 +30,23 @@ reaches {
 
 sounds {
     swish {
-        file = swish.ogg
+        file = swish
         speed = 110
         speed_deviation = 5
         stack_min_pos = 0.001
     }
     stretch {
-        file = stretch.ogg
+        file = stretch
         speed = 120
         volume = 50
     }
     cuckoo {
-        file = cuckoo.ogg
+        file = cuckoo
         speed = 75
         volume = 15
     }
     slosh {
-        file = slosh.ogg
+        file = slosh
         speed_deviation = 10
         stack_min_pos = 1
         volume = 50

@@ -24,10 +24,6 @@ void init_misc();
 void init_misc_databases();
 void init_mob_actions();
 void init_mob_categories();
-void init_single_animation(
-    data_node* anim_def_file, const string &name,
-    single_animation_suite &anim
-);
 
 void destroy_allegro();
 void destroy_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);

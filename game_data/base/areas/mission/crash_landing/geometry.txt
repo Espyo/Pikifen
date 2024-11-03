@@ -2618,509 +2618,509 @@ sectors{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=0.2449
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=250.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=1.5708
 		texture_tint=0 255 255
 	}
 	s{
 		type=Blocking
 		z=250.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_tint=100 255 255
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		z=200.0000
-		texture=textures/wood_plank.jpg
+		texture=textures/wood_plank
 		texture_trans=75.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
-		texture=textures/wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail
 	}
 	s{
 		z=200.0000
-		texture=textures/wood_plank.jpg
+		texture=textures/wood_plank
 		texture_trans=-66.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
-		texture=textures/concrete.jpg
+		texture=textures/concrete
 	}
 	s{
 		z=200.0000
-		texture=textures/wood_plank.jpg
+		texture=textures/wood_plank
 		texture_scale=1.0800 1.0000
 		texture_tint=167 125 78
 	}
 	s{
 		z=200.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 	}
 	s{
 		z=300.0000
-		texture=textures/wood_plank.jpg
+		texture=textures/wood_plank
 		texture_scale=1.0000 1.4400
 		texture_trans=205.0000 0.0000
 		texture_tint=168 126 79
 	}
 	s{
 		z=100.0000
-		texture=textures/wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail
 		texture_trans=205.0000 0.0000
 	}
 	s{
 		z=150.0000
-		texture=textures/wood_bridge_rail.jpg
+		texture=textures/wood_bridge_rail
 		texture_trans=205.0000 0.0000
 	}
 	s{
 		z=50.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_tint=128 128 128
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=0.0000
-		texture=textures/ceramic_bridge_red.png
+		texture=textures/ceramic_bridge_red
 		texture_tint=205 205 205
 	}
 	s{
 		z=5.0000
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=192 192 192
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=5.0000
 		fade=true
-		texture=textures/grass_light.jpg
+		texture=textures/grass_light
 		texture_tint=222 222 222
 	}
 	s{
 		z=0.0000
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 		texture_tint=186 186 186
 	}
 	s{
 		z=0.0000
-		texture=textures/ceramic_bridge_red.png
+		texture=textures/ceramic_bridge_red
 		texture_tint=161 161 161
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/dirt.jpg
+		texture=textures/dirt
 	}
 	s{
 		z=0.0000
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=0 158 158
 	}
 	s{
 		z=0.0000
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=0 158 158
 	}
 	s{
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/glass.jpg
+		texture=textures/glass
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 		texture_rotate=1.5708
 	}
 	s{
 		type=Blocking
 		z=25.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=161 161 161
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=230 230 230
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/white.png
+		texture=textures/white
 		texture_scale=0.2000 1.0000
 		texture_tint=74 74 22
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=230 230 230
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=75 75 22
 	}
 	s{
 		type=Blocking
 		z=25.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=161 161 161
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=230 230 230
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/stone.jpg
+		texture=textures/stone
 		texture_tint=230 230 230
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=30 255 255
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=0 255 255
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 		texture_rotate=1.0472
 	}
 	s{
 		type=Blocking
 		z=250.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.5379
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.5379
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=85 85 85
 	}
 	s{
 		z=0.0000
 		fade=true
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=85 85 85
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.1015
 	}
 	s{
 		type=Blocking
 		z=400.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.1015
 	}
 	s{
 		type=Blocking
 		z=0.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
@@ -3128,23 +3128,23 @@ sectors{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 	}
 	s{
 		z=50.0000
-		texture=textures/metal_rusted.png
+		texture=textures/metal_rusted
 		texture_rotate=2.7925
 	}
 	s{
 		type=Blocking
 		z=500.0000
-		texture=textures/metal_clean.jpg
+		texture=textures/metal_clean
 		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		z=0.0000
-		texture=textures/white.png
+		texture=textures/white
 		texture_tint=0 158 158
 	}
 }

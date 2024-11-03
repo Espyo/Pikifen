@@ -64,7 +64,6 @@ mob_type::mob_type(MOB_CATEGORY category_id) :
  */
 mob_type::~mob_type() {
     states.clear();
-    anims.destroy();
     for(size_t a = 0; a < init_actions.size(); a++) {
         delete init_actions[a];
     }
@@ -834,10 +833,8 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        data_node anim_file = load_data_file(folder_path + "/animations.txt");
-        anims.load_from_data_node(&anim_file);
-        anims.fix_body_part_pointers();
-        anims.fill_sound_idx_caches(this);
+        anims = &game.content.mob_anims.list[manifest->internal_name];
+        anims->fill_sound_idx_caches(this);
         
         data_node script_file;
         script_file.load_file(folder_path + "/script.txt", true, true);
@@ -919,13 +916,13 @@ void mob_type::load_from_data_node(
     //Category-specific resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         load_cat_resources(node);
-        anims.create_conversions(get_anim_conversions(), node);
+        anims->create_conversions(get_anim_conversions(), node);
     }
     
     physical_span =
         calculate_mob_physical_span(
             radius,
-            (level >= CONTENT_LOAD_LEVEL_FULL ? anims.hitbox_span : 0),
+            (level >= CONTENT_LOAD_LEVEL_FULL ? anims->hitbox_span : 0),
             rectangular_dim
         );
         

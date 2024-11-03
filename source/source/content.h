@@ -21,23 +21,17 @@ using std::string;
 //Type of content.
 enum CONTENT_TYPE {
 
-    //Global animation.
-    CONTENT_TYPE_GLOBAL_ANIMATION,
-    
     //Area.
     CONTENT_TYPE_AREA,
     
-    //Song.
-    CONTENT_TYPE_SONG,
-    
-    //Song track.
-    CONTENT_TYPE_SONG_TRACK,
-    
-    //Sound.
-    CONTENT_TYPE_SOUND,
-    
     //Bitmap.
     CONTENT_TYPE_BITMAP,
+    
+    //Custom particle generator.
+    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    
+    //Global animation.
+    CONTENT_TYPE_GLOBAL_ANIMATION,
     
     //GUI definition.
     CONTENT_TYPE_GUI,
@@ -51,8 +45,20 @@ enum CONTENT_TYPE {
     //Misc. configuration.
     CONTENT_TYPE_MISC,
     
-    //Custom particle generator.
-    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+    //Mob animation.
+    CONTENT_TYPE_MOB_ANIMATION,
+    
+    //Mob type.
+    CONTENT_TYPE_MOB_TYPE,
+    
+    //Sample.
+    CONTENT_TYPE_SAMPLE,
+    
+    //Song.
+    CONTENT_TYPE_SONG,
+    
+    //Song track.
+    CONTENT_TYPE_SONG_TRACK,
     
     //Spike damage type.
     CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
@@ -62,9 +68,6 @@ enum CONTENT_TYPE {
     
     //Status type.
     CONTENT_TYPE_STATUS_TYPE,
-    
-    //Mob type.
-    CONTENT_TYPE_MOB_TYPE,
     
     //Weather condition.
     CONTENT_TYPE_WEATHER_CONDITION,
@@ -99,7 +102,7 @@ enum CONTENT_LOAD_LEVEL {
 struct content_manifest {
 
     //--- Members ---
-
+    
     //Internal name. Basically file name sans extension or folder name.
     string internal_name;
     
@@ -109,13 +112,13 @@ struct content_manifest {
     //Package it belongs to.
     string package;
     
-
+    
     //--- Function declarations ---
     
     content_manifest();
-    content_manifest(const string& name, const string &path, const string &package);
+    content_manifest(const string &name, const string &path, const string &package);
     void clear();
-    void fill_from_path(const string& path);
+    void fill_from_path(const string &path);
     
 };
 
@@ -128,7 +131,7 @@ class plain_content {
 public:
 
     //--- Members ---
-
+    
     //The content's manifest.
     content_manifest* manifest;
     

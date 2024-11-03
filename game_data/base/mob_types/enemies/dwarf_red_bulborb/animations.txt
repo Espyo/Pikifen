@@ -222,7 +222,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 116.0000
 		file_size=160.0000 103.0000
 		offset=6.0000 0.0000
@@ -245,7 +245,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=161.0000 116.0000
 		file_size=174.0000 110.0000
 		offset=8.0000 0.0000
@@ -268,7 +268,7 @@ sprites{
 		}
 	}
 	attacking_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=336.0000 116.0000
 		file_size=174.0000 103.0000
 		offset=8.0000 0.0000
@@ -291,7 +291,7 @@ sprites{
 		}
 	}
 	attacking_04{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
 		offset=7.0000 0.0000
@@ -314,7 +314,7 @@ sprites{
 		}
 	}
 	chomping_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
 		offset=6.0000 0.0000
@@ -337,7 +337,7 @@ sprites{
 		}
 	}
 	chomping_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 252.0000
 		file_size=124.0000 103.0000
 		scale=0.3000 0.3000
@@ -359,7 +359,7 @@ sprites{
 		}
 	}
 	chomping_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=125.0000 252.0000
 		file_size=100.0000 103.0000
 		offset=-3.0000 0.0000
@@ -382,7 +382,7 @@ sprites{
 		}
 	}
 	chomping_04{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=226.0000 252.0000
 		file_size=115.0000 103.0000
 		offset=-1.0000 0.0000
@@ -405,7 +405,7 @@ sprites{
 		}
 	}
 	crushed_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=295.0000 358.0000
 		file_size=159.0000 163.0000
 		offset=6.0000 0.0000
@@ -428,7 +428,7 @@ sprites{
 		}
 	}
 	crushed_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=295.0000 358.0000
 		file_size=159.0000 163.0000
 		offset=6.0000 0.0000
@@ -451,7 +451,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 252.0000
 		file_size=124.0000 103.0000
 		scale=0.3000 0.3000
@@ -473,7 +473,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=125.0000 252.0000
 		file_size=100.0000 103.0000
 		offset=-3.0000 0.0000
@@ -496,7 +496,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=226.0000 252.0000
 		file_size=115.0000 103.0000
 		offset=-1.0000 0.0000
@@ -519,7 +519,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 0.0000
 		file_size=153.0000 103.0000
 		offset=5.0000 0.0000
@@ -542,7 +542,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=342.0000 252.0000
 		file_size=172.0000 103.0000
 		offset=4.0000 0.0000
@@ -565,7 +565,7 @@ sprites{
 		}
 	}
 	grazing_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=675.0000 252.0000
 		file_size=164.0000 103.0000
 		offset=7.0000 0.0000
@@ -588,7 +588,7 @@ sprites{
 		}
 	}
 	grazing_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
 		offset=7.0000 0.0000
@@ -611,7 +611,7 @@ sprites{
 		}
 	}
 	grazing_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
 		offset=7.0000 0.0000
@@ -634,7 +634,7 @@ sprites{
 		}
 	}
 	idling{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 0.0000
 		file_size=153.0000 103.0000
 		offset=5.0000 0.0000
@@ -657,7 +657,7 @@ sprites{
 		}
 	}
 	looking_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=158.0000 358.0000
 		file_size=135.0000 131.0000
 		offset=2.0000 4.0000
@@ -680,7 +680,7 @@ sprites{
 		}
 	}
 	looking_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 358.0000
 		file_size=157.0000 121.0000
 		offset=5.0000 3.0000
@@ -703,7 +703,7 @@ sprites{
 		}
 	}
 	looking_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=158.0000 358.0000
 		file_size=135.0000 131.0000
 		offset=2.0000 -4.0000
@@ -726,7 +726,7 @@ sprites{
 		}
 	}
 	looking_04{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 358.0000
 		file_size=157.0000 121.0000
 		offset=5.0000 -3.0000
@@ -749,7 +749,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=154.0000 0.0000
 		file_size=153.0000 104.0000
 		offset=5.0000 -1.0000
@@ -772,7 +772,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=308.0000 0.0000
 		file_size=153.0000 115.0000
 		offset=5.0000 -2.0000
@@ -795,7 +795,7 @@ sprites{
 		}
 	}
 	moving_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=154.0000 0.0000
 		file_size=153.0000 104.0000
 		offset=5.0000 1.0000
@@ -818,7 +818,7 @@ sprites{
 		}
 	}
 	moving_04{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=308.0000 0.0000
 		file_size=153.0000 115.0000
 		offset=5.0000 2.0000
@@ -841,7 +841,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=0.0000 0.0000
 		file_size=153.0000 103.0000
 		offset=5.0000 1.0000
@@ -864,7 +864,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=515.0000 252.0000
 		file_size=159.0000 105.0000
 		offset=4.0000 0.0000
@@ -890,7 +890,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=red_bulborb.png
+		file=red_bulborb
 		file_pos=515.0000 252.0000
 		file_size=159.0000 105.0000
 		offset=4.0000 0.0000

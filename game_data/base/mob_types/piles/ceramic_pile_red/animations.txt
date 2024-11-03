@@ -30,7 +30,7 @@ animations{
 }
 sprites{
 	idling_empty{
-		file=ceramic_pile_red.png
+		file=ceramic_pile_red
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -46,7 +46,7 @@ sprites{
 		}
 	}
 	idling_high{
-		file=ceramic_pile_red.png
+		file=ceramic_pile_red
 		file_pos=0.0000 0.0000
 		file_size=160.0000 160.0000
 		hitboxes{
@@ -62,7 +62,7 @@ sprites{
 		}
 	}
 	idling_low{
-		file=ceramic_pile_red.png
+		file=ceramic_pile_red
 		file_pos=322.0000 0.0000
 		file_size=160.0000 160.0000
 		hitboxes{
@@ -78,7 +78,7 @@ sprites{
 		}
 	}
 	idling_mid{
-		file=ceramic_pile_red.png
+		file=ceramic_pile_red
 		file_pos=161.0000 0.0000
 		file_size=160.0000 160.0000
 		hitboxes{

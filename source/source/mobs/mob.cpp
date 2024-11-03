@@ -179,7 +179,7 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     health(type->max_health),
     max_health(type->max_health),
     itch_time(type->itch_time),
-    anim(&type->anims),
+    anim(type->anims),
     physical_span(type->physical_span) {
     
     game.states.gameplay->next_mob_id++;
@@ -2382,7 +2382,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
         status_type* t = this->statuses[st].type;
         if(t->overlay_animation.empty()) continue;
         sprite* sp;
-        t->overlay_anim_instance.get_sprite_data(&sp, nullptr, nullptr);
+        t->overlay_anim.get_sprite_data(&sp, nullptr, nullptr);
         if(!sp) return nullptr;
         *bmp_scale = t->overlay_anim_mob_scale;
         return sp->bitmap;
@@ -2908,7 +2908,7 @@ void mob::set_animation(
     size_t idx, const START_ANIM_OPTION options, bool pre_named,
     float mob_speed_anim_baseline
 ) {
-    if(idx >= type->anims.animations.size()) return;
+    if(idx >= type->anims->animations.size()) return;
     
     size_t final_idx;
     if(pre_named) {
@@ -3027,7 +3027,7 @@ void mob::set_radius(float radius) {
     physical_span =
         calculate_mob_physical_span(
             radius,
-            type->anims.hitbox_span,
+            type->anims->hitbox_span,
             rectangular_dim
         );
     update_interaction_span();
@@ -3044,7 +3044,7 @@ void mob::set_rectangular_dim(const point &rectangular_dim) {
     physical_span =
         calculate_mob_physical_span(
             radius,
-            type->anims.hitbox_span,
+            type->anims->hitbox_span,
             rectangular_dim
         );
     update_interaction_span();

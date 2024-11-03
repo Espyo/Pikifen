@@ -125,7 +125,7 @@ animations{
 }
 sprites{
 	idling_01{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=0.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.0000 0.0000
@@ -176,7 +176,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=0.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
@@ -227,7 +227,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=282.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.0000 0.0000
@@ -278,7 +278,7 @@ sprites{
 		}
 	}
 	idling_04{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=282.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
@@ -329,7 +329,7 @@ sprites{
 		}
 	}
 	idling_05{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=564.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.0000 0.0000
@@ -380,7 +380,7 @@ sprites{
 		}
 	}
 	idling_06{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=564.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
@@ -431,7 +431,7 @@ sprites{
 		}
 	}
 	idling_07{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=846.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.0000 0.0000
@@ -482,7 +482,7 @@ sprites{
 		}
 	}
 	idling_08{
-		file=blue_onion.png
+		file=blue_onion
 		file_pos=846.0000 0.0000
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000

@@ -201,7 +201,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 51.0000
 		file_size=60.0000 51.0000
 		offset=-3.0000 0.0000
@@ -224,7 +224,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=61.0000 52.0000
 		file_size=96.0000 50.0000
 		offset=15.0000 0.0000
@@ -248,7 +248,7 @@ sprites{
 		}
 	}
 	attacking_03{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=158.0000 52.0000
 		file_size=100.0000 50.0000
 		offset=17.0000 0.0000
@@ -272,7 +272,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 0.0000
 		file_size=66.0000 50.0000
 		scale=1.1000 1.1000
@@ -301,7 +301,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 0.0000
 		file_size=66.0000 50.0000
 		hitboxes{
@@ -329,7 +329,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 0.0000
 		file_size=66.0000 50.0000
 		scale=1.1000 0.9000
@@ -358,7 +358,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=135.0000 103.0000
 		file_size=66.0000 51.0000
 		hitboxes{
@@ -379,7 +379,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=202.0000 104.0000
 		file_size=66.0000 36.0000
 		hitboxes{
@@ -400,7 +400,7 @@ sprites{
 		}
 	}
 	dying_06{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
 		hitboxes{
@@ -421,7 +421,7 @@ sprites{
 		}
 	}
 	dying_07{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=336.0000 112.0000
 		file_size=66.0000 50.0000
 		hitboxes{
@@ -442,7 +442,7 @@ sprites{
 		}
 	}
 	dying_08{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
 		scale=1.0000 -1.0000
@@ -464,7 +464,7 @@ sprites{
 		}
 	}
 	eating_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 103.0000
 		file_size=66.0000 50.0000
 		hitboxes{
@@ -486,7 +486,7 @@ sprites{
 		}
 	}
 	eating_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=67.0000 103.0000
 		file_size=67.0000 50.0000
 		offset=1.0000 0.0000
@@ -509,7 +509,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=0.0000 0.0000
 		file_size=66.0000 50.0000
 		hitboxes{
@@ -531,7 +531,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=67.0000 0.0000
 		file_size=67.0000 51.0000
 		offset=0.5000 0.5000
@@ -554,7 +554,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=135.0000 0.0000
 		file_size=65.0000 51.0000
 		offset=-0.5000 -0.5000
@@ -577,7 +577,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=201.0000 0.0000
 		file_size=72.0000 50.0000
 		offset=3.0000 0.0000
@@ -600,7 +600,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=274.0000 0.0000
 		file_size=79.0000 50.0000
 		offset=6.0000 0.0000
@@ -623,7 +623,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
 		angle=0.1396
@@ -646,7 +646,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
 		angle=6.1436
@@ -669,7 +669,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=327.0000 51.0000
 		file_size=68.0000 55.0000
 		offset=-1.0000 0.0000
@@ -694,7 +694,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=water_dumple.png
+		file=water_dumple
 		file_pos=396.0000 51.0000
 		file_size=71.0000 60.0000
 		offset=-2.0000 0.0000

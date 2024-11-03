@@ -396,11 +396,16 @@ int game_class::start() {
     //Other fundamental initializations and loadings.
     init_misc();
     init_error_bitmap();
-    content.load_all(CONTENT_TYPE_MISC, CONTENT_LOAD_LEVEL_FULL);
-    content.load_all(CONTENT_TYPE_BITMAP, CONTENT_LOAD_LEVEL_BASIC);
-    content.load_all(CONTENT_TYPE_SOUND, CONTENT_LOAD_LEVEL_BASIC);
-    content.load_all(CONTENT_TYPE_SONG_TRACK, CONTENT_LOAD_LEVEL_FULL);
-    content.load_all(CONTENT_TYPE_SONG, CONTENT_LOAD_LEVEL_FULL);
+    content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_MISC,
+        CONTENT_TYPE_BITMAP,
+        CONTENT_TYPE_SAMPLE,
+        CONTENT_TYPE_SONG_TRACK,
+        CONTENT_TYPE_SONG,
+    },
+    CONTENT_LOAD_LEVEL_FULL
+    );
     load_fonts();
     load_misc_graphics();
     load_misc_sounds();

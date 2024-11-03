@@ -16,7 +16,7 @@ animations{
 }
 sprites{
 	idling{
-		file=leaves.png
+		file=leaves
 		file_pos=0.0000 0.0000
 		file_size=68.0000 68.0000
 	}

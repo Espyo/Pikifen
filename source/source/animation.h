@@ -274,7 +274,7 @@ public:
     size_t find_body_part(const string &name) const;
     void calculate_hitbox_span();
     void create_conversions(
-        const vector<std::pair<size_t, string> >& conversions,
+        const vector<std::pair<size_t, string> > &conversions,
         const data_node* file
     );
     void delete_sprite(size_t idx);
@@ -329,25 +329,9 @@ public:
         float* out_interpolation_factor
     ) const;
     size_t get_next_frame_idx(bool* out_reached_end = nullptr) const;
+    void init_to_first_anim(animation_database* db);
     
 };
-
-
-/**
- * @brief An animation_database and an animation_instance.
- */
-struct single_animation_suite {
-
-    //--- Members ---
-    
-    //Animation database.
-    animation_database database;
-    
-    //Animation instance.
-    animation_instance instance;
-    
-};
-
 
 
 void get_sprite_basic_effects(

@@ -16,26 +16,26 @@ type_animation_suffixes = _red;_yellow;_blue;_rock;_winged
 
 sounds {
     pop {
-        file = seed_pop.ogg
+        file = seed_pop
         volume = 40
         speed_deviation = 5
     }
     rustling_short {
-        file = foliage_short.ogg
+        file = foliage_short
         volume = 20
         speed = 75
     }
     rustling {
-        file = foliage_long.ogg
+        file = foliage_long
         volume = 20
         speed = 75
     }
     dying {
-        file = plant_dying.ogg
+        file = plant_dying
         volume = 40
     }
     bumped {
-        file = low_boing_1.ogg
+        file = low_boing_1
         volume = 40
         speed_deviation = 8
     }

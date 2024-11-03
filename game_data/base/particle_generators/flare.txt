@@ -5,7 +5,7 @@ emission_interval = 0
 number = 1
 number_deviation = 0
 base {
-    bitmap = flare.png
+    bitmap = flare
     duration = 0.4
     friction = 0
     gravity = 0

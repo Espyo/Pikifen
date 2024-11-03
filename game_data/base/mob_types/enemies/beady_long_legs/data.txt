@@ -83,7 +83,7 @@ reaches {
 
 sounds {
     shaking {
-        file = shaking.ogg
+        file = shaking
         volume = 30
         speed = 50
     }

@@ -757,13 +757,13 @@ void gameplay_state::load() {
     };
     
     //Load the area.
-    content_manifest area_manifest;
+    content_manifest temp_manifest;
     AREA_TYPE area_type;
     get_area_info_from_path(
-        path_of_area_to_load, &area_manifest, &area_type
+        path_of_area_to_load, &temp_manifest, &area_type
     );
     game.content.load_area_as_current(
-        game.content.areas.find_manifest(area_manifest.internal_name, area_manifest.package, area_type),
+        game.content.areas.find_manifest(temp_manifest.internal_name, temp_manifest.package, area_type),
         area_type, CONTENT_LOAD_LEVEL_FULL, false
     );
     
@@ -1094,18 +1094,37 @@ void gameplay_state::load() {
  * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
-    game.content.load_all(CONTENT_TYPE_GUI, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_GLOBAL_ANIMATION, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_LIQUID, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_STATUS_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_SPRAY_TYPE, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_HAZARD, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_WEATHER_CONDITION, CONTENT_LOAD_LEVEL_FULL);
-    game.content.load_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_WEATHER_CONDITION,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+    },
+    CONTENT_LOAD_LEVEL_FULL
+    );
+    
+    //Area manifests.
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     //Mob types.
-    game.content.load_all(CONTENT_TYPE_MOB_TYPE, CONTENT_LOAD_LEVEL_FULL);
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_MOB_TYPE,
+    },
+    CONTENT_LOAD_LEVEL_FULL
+    );
     
     //Register leader sub-group types.
     for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
@@ -1212,16 +1231,22 @@ void gameplay_state::unload() {
 void gameplay_state::unload_game_content() {
     subgroup_types.clear();
     
-    game.content.unload_all(CONTENT_TYPE_WEATHER_CONDITION);
-    game.content.unload_all(CONTENT_TYPE_MOB_TYPE);
-    game.content.unload_all(CONTENT_TYPE_SPIKE_DAMAGE_TYPE);
-    game.content.unload_all(CONTENT_TYPE_HAZARD);
-    game.content.unload_all(CONTENT_TYPE_SPRAY_TYPE);
-    game.content.unload_all(CONTENT_TYPE_STATUS_TYPE);
-    game.content.unload_all(CONTENT_TYPE_LIQUID);
-    game.content.unload_all(CONTENT_TYPE_GLOBAL_ANIMATION);
-    game.content.unload_all(CONTENT_TYPE_CUSTOM_PARTICLE_GEN);
-    game.content.unload_all(CONTENT_TYPE_GUI);
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+        CONTENT_TYPE_WEATHER_CONDITION,
+        CONTENT_TYPE_MOB_TYPE,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_HAZARD,
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_GUI,
+    }
+    );
 }
 
 

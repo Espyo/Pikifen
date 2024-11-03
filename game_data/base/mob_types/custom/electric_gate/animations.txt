@@ -96,7 +96,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 579.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -183,7 +183,7 @@ sprites{
 		}
 	}
 	stage_1_idling_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -280,7 +280,7 @@ sprites{
 		}
 	}
 	stage_1_idling_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 0.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -377,7 +377,7 @@ sprites{
 		}
 	}
 	stage_1_idling_03{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=98.0000 0.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -474,7 +474,7 @@ sprites{
 		}
 	}
 	stage_1_shaking_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
 		offset=0.7000 0.0000
@@ -572,7 +572,7 @@ sprites{
 		}
 	}
 	stage_1_shaking_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 0.0000
 		file_size=48.0000 192.0000
 		offset=-0.7000 0.0000
@@ -670,7 +670,7 @@ sprites{
 		}
 	}
 	stage_2_idling_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 193.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -767,7 +767,7 @@ sprites{
 		}
 	}
 	stage_2_idling_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 193.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -864,7 +864,7 @@ sprites{
 		}
 	}
 	stage_2_idling_03{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=98.0000 193.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -961,7 +961,7 @@ sprites{
 		}
 	}
 	stage_2_shaking_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 193.0000
 		file_size=48.0000 192.0000
 		offset=0.7000 0.0000
@@ -1059,7 +1059,7 @@ sprites{
 		}
 	}
 	stage_2_shaking_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 193.0000
 		file_size=48.0000 192.0000
 		offset=-0.7000 0.0000
@@ -1157,7 +1157,7 @@ sprites{
 		}
 	}
 	stage_3_idling_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 386.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -1254,7 +1254,7 @@ sprites{
 		}
 	}
 	stage_3_idling_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 386.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -1351,7 +1351,7 @@ sprites{
 		}
 	}
 	stage_3_idling_03{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=98.0000 386.0000
 		file_size=48.0000 192.0000
 		hitboxes{
@@ -1448,7 +1448,7 @@ sprites{
 		}
 	}
 	stage_3_shaking_01{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=0.0000 386.0000
 		file_size=48.0000 192.0000
 		offset=0.7000 0.0000
@@ -1546,7 +1546,7 @@ sprites{
 		}
 	}
 	stage_3_shaking_02{
-		file=electric_gate.png
+		file=electric_gate
 		file_pos=49.0000 386.0000
 		file_size=48.0000 192.0000
 		offset=-0.7000 0.0000

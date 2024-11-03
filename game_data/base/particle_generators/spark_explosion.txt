@@ -5,7 +5,7 @@ emission_interval = 0
 number = 60
 number_deviation = 3
 base {
-    bitmap = smack.png
+    bitmap = smack
     duration = 0.75
     friction = 1.2
     gravity = 0

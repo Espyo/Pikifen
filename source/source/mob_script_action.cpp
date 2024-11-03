@@ -387,7 +387,7 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::hold_focus(mob_action_call &call) {
-    size_t p_idx = call.mt->anims.find_body_part(call.args[0]);
+    size_t p_idx = call.mt->anims->find_body_part(call.args[0]);
     if(p_idx == INVALID) {
         call.custom_error =
             "Unknown body part \"" + call.args[0] + "\"!";
@@ -554,7 +554,7 @@ void mob_action_loaders::report_enum_error(
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::set_animation(mob_action_call &call) {
-    size_t a_pos = call.mt->anims.find_animation(call.args[0]);
+    size_t a_pos = call.mt->anims->find_animation(call.args[0]);
     if(a_pos == INVALID) {
         call.custom_error =
             "Unknown animation \"" + call.args[0] + "\"!";
@@ -698,7 +698,7 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
  */
 bool mob_action_loaders::start_chomping(mob_action_call &call) {
     for(size_t s = 1; s < call.args.size(); s++) {
-        size_t p_nr = call.mt->anims.find_body_part(call.args[s]);
+        size_t p_nr = call.mt->anims->find_body_part(call.args[s]);
         if(p_nr == INVALID) {
             call.custom_error =
                 "Unknown body part \"" + call.args[s] + "\"!";

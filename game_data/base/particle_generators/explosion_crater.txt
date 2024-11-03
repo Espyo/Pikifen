@@ -5,7 +5,7 @@ emission_interval = 0
 number = 1
 number_deviation = 0
 base {
-    bitmap = explosion_crater.png
+    bitmap = explosion_crater
     duration = 30
     friction = 0
     gravity = 0

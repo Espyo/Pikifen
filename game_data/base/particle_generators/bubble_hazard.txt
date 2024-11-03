@@ -5,7 +5,7 @@ emission_interval = 0.1
 number = 1
 number_deviation = 0
 base {
-    bitmap = bubble.png
+    bitmap = bubble
     duration = 1
     friction = 0
     gravity = 1

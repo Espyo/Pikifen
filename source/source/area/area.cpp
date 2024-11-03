@@ -2560,7 +2560,7 @@ void get_area_info_from_path(
     }
     
     if(out_area_type) {
-        if(requested_area_path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/")) {
+        if(requested_area_path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") != string::npos) {
             *out_area_type = AREA_TYPE_MISSION;
         } else {
             *out_area_type = AREA_TYPE_SIMPLE;

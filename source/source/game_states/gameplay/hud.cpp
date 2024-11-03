@@ -24,7 +24,7 @@ namespace HUD {
 const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "gameplay.txt";
+const string GUI_FILE_NAME = "gameplay";
 
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
@@ -1384,9 +1384,9 @@ hud_t::hud_t() :
 #define loader(var, name) \
     var = \
           game.content.bitmaps.list.get( \
-                                    bitmaps_node->get_child_by_name(name)->value, \
-                                    bitmaps_node->get_child_by_name(name) \
-                                  );
+                                         bitmaps_node->get_child_by_name(name)->value, \
+                                         bitmaps_node->get_child_by_name(name) \
+                                       );
     
     loader(bmp_bubble,                 "bubble");
     loader(bmp_counter_bubble_field,   "counter_bubble_field");

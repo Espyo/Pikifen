@@ -26,32 +26,23 @@ content_manager::content_manager() {
 
 /**
  * @brief Returns the relevant content type manager for a given content type.
- * 
+ *
  * @param type The content type.
  * @return Pointer to the manager.
  */
 content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
     switch(type) {
-    case CONTENT_TYPE_GLOBAL_ANIMATION: {
-        return &global_anims;
-        break;
-    } case CONTENT_TYPE_AREA: {
+    case CONTENT_TYPE_AREA: {
         return &areas;
-        break;
-    } case CONTENT_TYPE_SONG: {
-        return &songs;
-        break;
-    } case CONTENT_TYPE_SONG_TRACK: {
-        return &song_tracks;
-        break;
-    } case CONTENT_TYPE_SOUND: {
-        return &samples;
         break;
     } case CONTENT_TYPE_BITMAP: {
         return &bitmaps;
         break;
     } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
         return &custom_particle_gen;
+        break;
+    } case CONTENT_TYPE_GLOBAL_ANIMATION: {
+        return &global_anims;
         break;
     } case CONTENT_TYPE_GUI: {
         return &gui;
@@ -65,8 +56,20 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
     } case CONTENT_TYPE_MISC: {
         return &misc_configs;
         break;
+    } case CONTENT_TYPE_MOB_ANIMATION: {
+        return &mob_anims;
+        break;
     } case CONTENT_TYPE_MOB_TYPE: {
         return &mob_types;
+        break;
+    } case CONTENT_TYPE_SAMPLE: {
+        return &samples;
+        break;
+    } case CONTENT_TYPE_SONG: {
+        return &songs;
+        break;
+    } case CONTENT_TYPE_SONG_TRACK: {
+        return &song_tracks;
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
         return &spike_damage_types;
@@ -93,22 +96,29 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
  * This begins by generating a manifest of all content on disk, with packages
  * in mind, and then reads all the files in the manifest.
  *
- * @param type Type of game content to load.
+ * @param types Types of game content to load.
  * @param level Level to load at.
  */
-void content_manager::load_all(CONTENT_TYPE type, CONTENT_LOAD_LEVEL level) {
-    content_type_manager* mgr_ptr = get_mgr_ptr(type);
-
-    engine_assert(
-        load_levels[type] == CONTENT_LOAD_LEVEL_UNLOADED,
-        "Tried to load all content of type " + mgr_ptr->get_name() +
-        " even though it's already loaded!"
-    );
+void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level) {
+    //Fill in all manifests first. This is because some content may rely on
+    //another's manifest.
+    for(size_t t = 0; t < types.size(); t++) {
+        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        engine_assert(
+            load_levels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
+            "Tried to load all content of type " + mgr_ptr->get_name() +
+            " even though it's already loaded!"
+        );
+        mgr_ptr->fill_manifests();
+    }
     
-    mgr_ptr->fill_manifests();
-    mgr_ptr->load_all(level);
+    //Now load the content.
+    for(size_t t = 0; t < types.size(); t++) {
+        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        mgr_ptr->load_all(level);
+        load_levels[types[t]] = level;
+    }
     
-    load_levels[type] = level;
 }
 
 
@@ -159,19 +169,21 @@ void content_manager::unload_current_area(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Unloads some loaded content.
  *
- * @param type Type of content to unload.
+ * @param types Types of content to unload.
  */
-void content_manager::unload_all(CONTENT_TYPE type) {
-    content_type_manager* mgr_ptr = get_mgr_ptr(type);
-
-    engine_assert(
-        load_levels[type] != CONTENT_LOAD_LEVEL_UNLOADED,
-        "Tried to unload all content of type " + mgr_ptr->get_name() +
-        " even though it's already unloaded!"
-    );
-    
-    mgr_ptr->unload_all(load_levels[type]);
-    mgr_ptr->clear_manifests();
-    
-    load_levels[type] = CONTENT_LOAD_LEVEL_UNLOADED;
+void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
+    for(size_t t = 0; t < types.size(); t++) {
+        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        
+        engine_assert(
+            load_levels[types[t]] != CONTENT_LOAD_LEVEL_UNLOADED,
+            "Tried to unload all content of type " + mgr_ptr->get_name() +
+            " even though it's already unloaded!"
+        );
+        
+        mgr_ptr->unload_all(load_levels[types[t]]);
+        mgr_ptr->clear_manifests();
+        
+        load_levels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
+    }
 }

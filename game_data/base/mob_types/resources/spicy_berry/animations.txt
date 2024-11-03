@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=spicy_berry.png
+		file=spicy_berry
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 	}
