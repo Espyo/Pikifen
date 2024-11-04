@@ -1221,7 +1221,7 @@ void song::load_from_data_node(data_node* node) {
     rs.set("main_track", main_track_str, &main_track_node);
     rs.set("loop_start", loop_start);
     rs.set("loop_end", loop_end);
-    rs.set("title", title);
+    rs.set("name", name);
     
     main_track =
         game.content.song_tracks.list.get(main_track_str, main_track_node);

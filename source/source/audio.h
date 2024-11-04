@@ -167,7 +167,7 @@ enum SONG_STATE {
 };
 
 
-//Ways for a music track to be a part of the mix.
+//Ways for a song track to be a part of the mix.
 enum MIX_TRACK_TYPE {
 
     //Enemy nearby.
@@ -321,9 +321,6 @@ struct song : public content {
     
     //Loop region end point, in seconds. 0 = end of song.
     double loop_end = 0;
-    
-    //Display name.
-    string title;
     
     
     //--- Function declarations ---
