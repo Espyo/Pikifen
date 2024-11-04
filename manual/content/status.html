@@ -12,15 +12,15 @@
 </head>
 
 <body onload="setup('Status effects', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>This page will guide you in making status effects for <i>Pikifen</i>.</p>
+    <p>This page will guide you in making status effects for <i>Pikifen</i>. Each status type is a piece of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting.</p>
 
     <h2 id="intro">Introduction</h2>
     
     <p>Status effects temporarily change an object's properties. While under a status effect, an object can be slower, stronger, colored differently, etc. Objects can be under multiple status effects at once. Examples of status effects are: on fire, spicy, petrified, drowning, etc.</p>
 
-    <p>Status effects are defined in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/statuses</code> folder. Every <a href="making.html#data-file">data file</a> defines a status effect, and the file's name can be anything you want.</p>
+    <p>Status effects are defined in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/statuses</code> folder. Every <a href="making.html#data-file">data file</a> defines a status effect, with its file name representing the effect's <a href="making.html#content">internal name</a>.</p>
 
     <h2 id="props">Properties</h2>
     
@@ -75,7 +75,7 @@
       <tr>
         <td>replacement_on_timeout</td>
         <td>If you want this status effect to be replaced by another one when its time reaches 0, specify the replacement's name here. It will not be replaced if the status effect is removed via other means.</td>
-        <td>Text</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
     </table>
@@ -211,7 +211,7 @@
       <tr>
         <td>overlay_animation</td>
         <td>Animation to draw on top of the object affected by this status effect, if any. This animation must be defined in <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/animations</code>.</td>
-        <td>File name</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>

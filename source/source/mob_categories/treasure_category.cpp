@@ -84,22 +84,23 @@ void treasure_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of treasure given its name.
+ * @brief Returns a type of treasure given its name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* treasure_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.treasure.find(name);
+mob_type* treasure_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.treasure.find(internal_name);
     if(it == game.content.mob_types.list.treasure.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of treasure by name.
+ * @brief Returns all types of treasure by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void treasure_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.treasure) {

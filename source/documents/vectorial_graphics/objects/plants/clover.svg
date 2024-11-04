@@ -438,7 +438,7 @@
             <rdf:li>Pikifen spritesheet</rdf:li>
           </rdf:Bag>
         </dc:subject>
-        <dc:description>Spritesheet for the Clover pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+        <dc:description>Spritesheet for the Clover in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>

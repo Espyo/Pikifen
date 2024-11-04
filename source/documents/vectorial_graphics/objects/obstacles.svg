@@ -5065,7 +5065,7 @@
             <rdf:li>Pikifen spritesheet</rdf:li>
           </rdf:Bag>
         </dc:subject>
-        <dc:description>Spritesheet for the various obstacles pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+        <dc:description>Spritesheet for the various obstacles in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>

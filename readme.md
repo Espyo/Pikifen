@@ -50,7 +50,7 @@ The included manual (download _Pikifen_ and open `manual.html`) contains, amongs
 
 **_Pikifen_** (formerly Pikmin fangame engine) is an engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin Maker_". It is an open-source engine, currently under development, with gameplay very similar to the _Pikmin_ games, in that leaders can whistle and throw Pikmin, Pikmin can carry objects, and so on.
 
-The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (like physics, scripting, and so on) as well as reading the game data to turn it all into something playable. That said, the project also comes with some pre-packaged content, so you can experiment with its features right away.
+The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (like physics, scripting, and so on) as well as reading the game data to turn it all into something playable. That said, the project also comes with some base content, so you can experiment with its features right away.
 
 Its most recent version, in alpha, is available for download with the methods later in this readme. The engine can run on Windows, Linux, and Mac. Being a PC game, it is played using a keyboard, mouse, and/or a controller.
     

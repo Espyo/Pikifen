@@ -84,22 +84,23 @@ void ship_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of ship given its name.
+ * @brief Returns a type of ship given its name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* ship_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.ship.find(name);
+mob_type* ship_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.ship.find(internal_name);
     if(it == game.content.mob_types.list.ship.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of ship by name.
+ * @brief Returns all types of ship by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void ship_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.ship) {

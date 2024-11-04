@@ -12,20 +12,48 @@
 </head>
 
 <body onload="setup('Making content');">
-  <div id="content">
+  <div id="page-content">
     
     <h2 id="overview">Overview</h2>
     
-    <p>You can make Pikmin types, leaders, areas, and so much more, so they can then be used in-game. The ways to make content vary, but are in general made to be easy and intuitive. Content like types of objects, sprays, and so on can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic.</p>
+    <p>You can make Pikmin types, leaders, areas, and so much more, so they can then be used in-game. The ways to make this sort of <a href="#content">content</a> vary, but are in general made to be easy and intuitive. Content like types of objects, sprays, and so on can be freely made, but new game mechanics and logic cannot; this also includes enemies, areas, etc. that make use of any new mechanic.</p>
     <p>Content, as well as most customizable things in the engine, are just standard graphics, audio, or text files &ndash; you can use your favorite programs to edit them or create new ones. Knowledge about how files and folders work in your operative system is recommended, almost a requirement. That said, some content is a bit too complex for you to edit by hand with a standard program, so instead you will want to use one of the editors inside the engine, which are specialized for the job.</p>
-    <p>A good starting point is to check out the pre-packaged base content that can be found in the <code>game_data/base</code> folder included with the engine. From there, you can add your own spin to the content that is already there by changing the files. Or you can make new content blindly by yourself. Or copy-paste the content that already exists to serve as a basis for new things. Or check the <a href="quick_start.html">quick start guide</a> to get some pointers so you can figure out the rest for yourself. Or read any of the in-depth tutorials <a href="#tutorials">here</a> to have a more guided experience. Or enter one of the aforementioned editors and feel your way around.</p>
-    <p>As long as the right content is in the right folder, and/or has the name that the other content or engine expects it to, you can just work on it, save, and at any moment start the engine and test it right away. As you make content, keep in mind that most user-made mistakes will be caught by the engine and reported in the file <code>/user_data/error_log.txt</code>. You should make a point to fix these problems as soon as possible, otherwise the engine might behave erratically or even crash.</p>
+    <p>A good starting point is to check out the base content that can be found in the <code>game_data/base</code> folder included with the engine. From there, you can add your own spin to the content that is already there by changing the files. Or you can make new content blindly by yourself. Or copy-paste the content that already exists to serve as a basis for new things. Or check the <a href="quick_start.html">quick start guide</a> to get some pointers so you can figure out the rest for yourself. Or read any of the in-depth tutorials <a href="#tutorials">here</a> to have a more guided experience. Or enter one of the aforementioned editors and feel your way around.</p>
+    <p>As long as the right content is in the right folder, and/or has the name that the other content or engine expects it to, you can just work on it, save, and at any moment start the engine and test it right away. As you make content, keep in mind that most user-made mistakes will be caught by the engine and reported in the file <code>user_data/error_log.txt</code>. You should make a point to fix these problems as soon as possible, otherwise the engine might behave erratically or even crash.</p>
+
+    <h2 id="content">Content</h2>
+
+    <p>"Content" refers to the things that make up a game &ndash; Pikmin types, areas, sound effects, scripts, animations, game configurations, and so on.</p>
+
+    <dl>
+      <dt><b>Content lives in the <code>game_data</code> folder as plain old files and folders.</b></dt>
+      <dd>Content is just made up of files and folders inside of your hard drive, particularly inside of <i>Pikifen</i>'s <code>game_data</code> folder, inside the various <a href="#packages">package</a> subfolders. For instance, the regular cave ambiance weather condition in the base content is stored in <code>game_data/base/weather/cave_normal.txt</code>.</dd>
+      <dt><b>Every piece of content has an internal name, which is referred to by other content.</b></dt>
+      <dd>When other content needs to refer to this content, it does so by using the internal name. For example, the spicy status's data refers to the spicy sparkles particles it generates as <code>spicy_sparkles</code>, since that's the internal name of that particle generator.</dd>
+      <dt><b>Internal names are the file names without extension or the folder names.</b></dt>
+      <dd>Whether a piece of content's internal name comes from its file name or from its folder name depends on the type of content. In the case of file names, the file proper must have an <a href="glossary.html#file-name">extension</a> but the internal name will not include it.</dd>
+      <dt><b>Internal names should ideally be in lowercase and use underscores.</b></dt>
+      <dd>To avoid mishaps with case sensitivity and spaces for separating arguments in different parts of the engine, internal names (and thus content file and folder names) should use lowercase letters only, use underscores instead of spaces, and avoid more "exotic" characters like symbols.</dd>
+      <dt><b>Most content has a data file with some metadata.</b></dt>
+      <dd>Besides things like images and sounds, all pieces of game content have a data file that contains metadata, i.e. information about what this content is, what version it is, who made it, and so on. See <a href="#content-props">here</a> for details.</dd>
+      <dt><b>Content can exist in multiple packages.</b></dt>
+      <dd>For more information, see <a href="#packages">here</a>.</dd>
+    </dl>
 
     <h2 id="data-file">Data file</h2>
 
-    <p>Data files usually contain information about how some content or engine feature works. They are actually just everyday text files, with a <a href="glossary.html#file-name">file name</a> ending in <code>.txt</code>, though with a specific format. The engine reads a data file one line at a time. The most basic type of line is a simple property and its value. The property's name comes first, followed by an equals sign, and then the value. Data files may also contain blocks, which in turn can contain properties or other blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</p>
-    
-    <p>Example:</p>
+    <dl>
+      <dt><b>Data files usually contain information about how some content or engine feature works.</b></dt>
+      <dd>Using simple terms, numbers, and symbols, these files dictate the numbers and data that make the engine and its content tick.</dd>
+      <dt><b>Data files are text files but following a certain format.</b></dt>
+      <dd>They are actually just everyday text files, with a <a href="glossary.html#file-name">file name</a> ending in <code>.txt</code>, though the stuff inside follows a specific format. The engine reads a data file one line at a time.</dd>
+      <dt><b>Each property follows the format <code>name = value</code>.</b></dt>
+      <dd>The most basic type of line is a simple property and its value. The property's name comes first, followed by an equals sign, and then the value. e.g. <code>max_pikmin = 5</code>.</dd>
+      <dt><b>Blocks start with the format <code>name {</code>, and end with a line with just <code>}</code>.</b></dt>
+      <dd>Data files may also contain blocks, which in turn can contain properties or other blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</dd>
+    </dl>
+
+    <p>Here's an example:</p>
     
 <pre>property = value 1
 block {
@@ -34,10 +62,19 @@ block {
         property_inside_sub_block = another value
     }
 }</pre>
-    
-    <p>It is good practice to <a href="http://en.wikipedia.org/wiki/Indentation_style">indent</a> the lines inside a block. The deeper the block, the deeper the indentation. The engine ignores any spaces or tabs before the first word in the line, so add as many as you want. The engine will also not read empty lines. As a final note, the engine will not read lines that have two slashes before the first word. Meaning that something like <code>//This is a comment.</code> will not be read. You can use these comments to explain or label parts of the file to make it easier to understand.</p>
+
+    <dl>
+      <dt><b>It is good practice to <a href="http://en.wikipedia.org/wiki/Indentation_style">indent</a> the lines inside a block.</b></dt>
+      <dd>The deeper the block, the deeper the indentation. The engine ignores any spaces or tabs before the first word in the line, so add as many as you want.</dd>
+      <dt><b>Use empty lines and spaces for spacing.</b></dt>
+      <dd>The engine will not read empty lines, and it won't care if there's a space before or after the equals sign in a property's line, so feel free to make use of that to pad things out and make the file easier to read.</dd>
+      <dt><b>Comments follow the format <code>//comment</code>.</b></dt>
+      <dd>The engine will also not read lines that have two slashes before the first word. Meaning that something like <code>//This is a comment.</code> will not be read. You can use these comments to explain or label parts of the file to make it easier to understand.</dd>
+    </dl>
     
     <p><b>Warning</b>: avoid Windows's "Notepad" program to edit these data files, since they usually show up broken or all in a single line. Try something like <a href="https://notepad-plus-plus.org">Notepad++</a> instead.</p>
+
+    <h3 id="data-file-properties">Property types</h3>
 
     <p>Throughout this manual you'll find tables listing some properties. One of the columns refers to the type of the value. Types include:</p>
 
@@ -46,34 +83,65 @@ block {
       <li id="data-file-number">Number: A number. Both positive and negative numbers work, and both <a href="glossary.html#integer">integers</a> and <a href="glossary.html#real-number">real numbers</a> are allowed.</li>
       <li id="data-file-boolean">Boolean: A <a href="https://en.wikipedia.org/wiki/Boolean_data_type">Boolean</a> (or "bool") is a value that's just either true or false. So, write <code>true</code> or <code>false</code>.</li>
       <li id="data-file-color">Color: A color, represented by its <a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB</a> values. Either write it in the format <code>r g b</code>, or if you want to include alpha (opacity), <code>r g b a</code>. e.g. <code>255 128 0</code> (orange), <code>255 255 255 64</code> (transparent white). You can also write the name of a color (though only a few basic ones are known), and if you want alpha, the number afterwards. e.g. <code>cyan</code> (cyan), <code>yellow 192</code> (slightly transparent yellow).</li>
+      <li id="data-file-internal-name">Internal name: The <a href="#content">internal name</a> of some piece of content. e.g. <code>red_bulborb</code></li>
       <li id="data-file-file-name">File name: A <a href="glossary.html#file-name">file name</a>. e.g. <code>grass.jpg</code></li>
       <li id="data-file-list">List: A list of some values, separated by a semicolon. e.g. <code>Olimar; Louie; President</code></li>
     </ul>
-
+    
     <h2 id="content-props">Content properties</h2>
 
-    <p>Most pieces of content have a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files. Please check the relevant content type's page in this manual since it may mention some special considerations you can or should have about these properties.</p>
+    <p>Most pieces of <a href="#content">content</a> are, or have, a <a href="#data-file">data file</a> that describes them. The following properties apply to all such files. Please check the relevant content type's page in this manual since it may mention some special considerations you can or should have about these properties.</p>
 
-    <ul>
-      <li>
-        Almost always mandatory:
-        <ul>
-          <li><b><code>name</code></b>: The content's name, like "Red Pikmin", "Lava", "Ultra-Spicy Spray", etc. Almost all pieces of content require this property.</li>
-        </ul>
-      </li>
-      <li>
-        Optional:
-        <ul>
-          <li><b><code>description</code></b>: A basic description of the content, suitable for both players and makers (even if players may not see it most of the time).</li>
-          <li><b><code>tags</code></b>: A list of tags, separated by semicolon, e.g. <code>Colorful;Advanced;Gimmick</code>. What exactly this entails, and what tags are recommended varies with the type of content. The idea is that when a player or a maker want to find some content that fits their needs, they can search for these tags.</li>
-          <li><b><code>maker</code></b>: Name or nickname of the person or persons who made this content. If this content is based off of something, like a port of The Impact Site's theme song, this property still refers to who created the <i>Pikifen</i> content; credits for the original creation can be added in the <code>notes</code> property.</li>
-          <li><b><code>version</code></b>: Version name or number, e.g. <code>1.2.3</code>. It's a good idea to increase this whenever you create a new version.</li>
-          <li><b><code>engine_version</code></b>: Version of <i>Pikifen</i> that this content was made for. In a way, this is also the most recent version of the engine that this content is known to run in. The engine may use this information to port content that was made in an older version. This information is also automatically filled in for content created via one of the in-game editors.</li>
-          <li><b><code>maker_notes</code></b>: Any notes about the content that other makers should know about, like a special way to use it, any precautions, etc.</li>
-          <li><b><code>notes</code></b>: Extra notes or comments of any kind. For example, the license if you want to or can give it one.</li>
-        </ul>
-      </li>
-    </ul>
+    <table class="props-t props-t-o">
+      <tr>
+        <td>name</td>
+        <td>Proper name for the content. This is not the internal name, and is meant to be a name for the player or maker to see. e.g. "Red Pikmin", "Lava", "Ultra-Spicy Spray", etc.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>description</td>
+        <td>A basic description of the content. Like the name, this is meant for both players and makers to read (even if players may not see it most of the time).</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>tags</td>
+        <td>A list of tags, separated by semicolon, e.g. <code>Colorful; Advanced; Gimmick</code>. What exactly this entails, and what tags are recommended varies with the type of content. The idea is that when a player or a maker want to find some content that fits their needs, they can search for these tags.</td>
+        <td>List</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>maker</td>
+        <td>Name or nickname of the person or persons who made this content. If this content is based off of something, like a port of The Impact Site's theme song, this property still refers to who created the <i>Pikifen</i> content; credits for the original creation can be added in the <code>notes</code> property.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>version</td>
+        <td>Version name or number, e.g. <code>1.2.3</code>. It's a good idea to increase this whenever you create a new version.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>engine_version</td>
+        <td>Version of <i>Pikifen</i> that this content was made for. In a way, this is also the most recent version of the engine that this content is known to run in. The engine may use this information to port content that was made in an older version. This information is also automatically filled in for content created via one of the in-game editors.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>maker_notes</td>
+        <td>Any notes about the content that other makers should know about, like a special way to use it, any precautions, etc.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>notes</td>
+        <td>Extra notes or comments of any kind. For example, the license if you want to or can give it one.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
 
     <h2 id="tutorials">Tutorials</h2>
     
@@ -112,38 +180,20 @@ block {
 
     <p>In addition, the <a href="maker_toolkit.html">maker toolkit</a> is a collection of tools to help you make and debug content.</p>
 
-    <h2 id="sharing">Sharing with others</h2>
+    <h2 id="packages">Packages</h2>
 
-    <p>TODO!</p>
+    <p>You can edit the base content package that comes with the engine if you want, but you can also create your own package. The base content, that lives in <code>game_data/base</code>, is meant to contain some, well, base content; basic stuff for players to get a feel of the game and have something to play with, as well as building blocks for people who want to create their own content with. It's recommended to let this content be and instead create your own package, so that if something goes wrong with your creation or you want to share it, you won't have to wade through hundreds of files in search of what's what and can instead focus solely on what's yours. Likewise, players will be able to just place your folder in their own machine and play your content right away!</p>
 
-    <p>You may want to share custom content you've made with others across the web. You could just toss them the files you made or edited, and let them sort it out, but not everyone has the technical context you have to know what does what, what depends on which content, and which files go where. Plus having to work it out will discourage people from trying out your stuff. So here's a nice procedure you can follow to make everyone's life easier:</p>
+    <p>To create your own package, simply create a new folder within the <code>game_data</code> folder; this will be the package's internal name. TODO expand with information about data.txt</p>
 
-    <ol>
-      <li>Start by creating a folder somewhere, like on your desktop, with the name of your content.</li>
-      <li>Inside, create a <code>game_data</code> folder. All of the content you're sharing will go here.</li>
-      <li>
-        Every component that your custom content has will need to be copied here. This goes for graphics, areas, objects, particle generators, etc. The folders you create here should have the same names and organization as your <i>Pikifen</i> installation's <code>game_data</code> folder. So for instance, <code>My mod/game_data/graphics/textures</code> would have any custom textures you have created or edited that are required for your content.
-        <ul>
-          <li>Does your creation have custom graphics? If so, create the folder <code>My mod/game_data/graphics</code> and put them inside.</li>
-          <li>Does your creation have custom textures? If so, create the folder <code>My mod/game_data/graphics/textures</code> and put them inside.</li>
-          <li>Does your creation have custom areas? If so, create the folder <code>My mod/game_data/areas</code> and put them inside.</li>
-          <li>Does your creation have custom objects? If so, create the folder <code>My mod/game_data/types/&lt;object category&gt;/&lt;object type&gt;</code> and put them inside.</li>
-          <li>Does your creation have custom particle generators? If so, create the folder <code>My mod/game_data/particle_generators</code> and put them inside.</li>
-          <li>And so on, and so forth, for stuff like hazards, liquids, status effects, and anything else you've made for your custom content.</li>
-        </ul>
-      </li>
-      <li>Right-click your content's <code>game_data</code> folder and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file.</li>
-      <li>Share it around!</li>
-    </ol>
+    <p>When <i>Pikifen</i> loads something, it will start by checking all the files and folders that exist in the base package. Then it will do the same for every existing package. In the end, it will figure out what file to load for every <code>internal name</code> that exists. In other words, if the base package has a <code>crumbug</code> and a <code>water_dumple</code> enemy, and a given package has a <code>water_dumple</code> and a <code>rainbow_bulborb</code> enemy, the engine will load the Crumbug, the Water Dumple from your package (and completely ignore the base Water Dumple), and the Rainbow Bulborb.</p>
 
-    <p>With this sort of zip file, any player that wants to try your content out simply needs to download your zip file, extract its <code>game_data</code> folder into their <i>Pikifen</i> installation folder, and all of your custom content will be dumped into their own <code>game_data</code> folder, with every file already in the correct spot.</p>
-
-    <p>More complex or unique creations may require different procedures. Feel free to do what you feel is best, but try to make life simple for the person installing it on the other end!</p>
+    <p>When you want to share your content with others, it's recommended that you right-click your package's folder, and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file. Once you share it, any player that wants to try your content simply needs to download your zip file, extract it, and place the extracted folder in their own <code>game_data</code> folder!</p>
 
     <h2 id="tips">Tips</h2>
 
     <ul>
-      <li>If you've made changes to a data file, you don't need to close the engine to test your changes (with a few exceptions). Simply reload the current area.</li>
+      <li>If you've made changes to a piece of content, chances are you don't need to close the engine to test your changes (with a few exceptions). Simply reload the current area.</li>
       <li>Avoid using highly-saturated or bright colors in general. Those colors work better to call attention to the player, like a Pikmin's idle glow, or some HUD element. If everything is bright, not only does it make it so no element can call the player's attention, but also gives the game a sort of "plastic" look.</li>
       <li>When making Pikmin types, avoid making them solid green or black. Green Pikmin blend too much with grass, a floor texture encountered in a lot of places, and black Pikmin are too hard to see in darker places. If you want, you can add some details so at least some part of the Pikmin can be seen clearly.</li>
       <li>When creating some content that will only be used as a gimmick in a specific area, try naming it after the area's name. e.g. "Backyard Garden sprinkler". This way, your name doesn't clash with other content that has a similar name but is used in some other area. Plus, if someone checks the list of objects, textures, etc., they can right away understand what that specific niche thing is used for.</li>

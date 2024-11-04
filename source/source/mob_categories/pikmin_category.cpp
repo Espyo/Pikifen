@@ -84,22 +84,23 @@ void pikmin_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of Pikmin given its name.
+ * @brief Returns a type of Pikmin given its name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* pikmin_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.pikmin.find(name);
+mob_type* pikmin_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.pikmin.find(internal_name);
     if(it == game.content.mob_types.list.pikmin.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of Pikmin by name.
+ * @brief Returns all types of Pikmin by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void pikmin_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.pikmin) {

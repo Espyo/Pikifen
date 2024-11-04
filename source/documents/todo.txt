@@ -165,7 +165,7 @@ Next tasks (roughly sorted most important first)
         There should be some petal particle effects when a Pikmin loses their maturity
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         More across the board
-    Other demo content changes
+    Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
             Shake hitboxes last way too long across the board
@@ -183,17 +183,21 @@ Next tasks (roughly sorted most important first)
         Leaf Pikmin should be able to follow leaders in walking
         Rename the Spectralid to Spectralids
         Water Dumples should wander around a small bit
-        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
         When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
         Bitter sprays should last for a short time
         Add some randomness to the pitch of mob sounds?
         Make Rock Pikmin colors darker (thanks Nataly171)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
+    Barely important format changes
+        Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
+        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
+        bud_icon.png and flower_icon.png should be white_bud_icon.png and white_flower_icon.png, to fit with the pink and purple buds and flowers
     Find some way of making content sharing easier
         The idea
             The Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-            Some sort of Package.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
+            Some sort of data.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
             Problems with the current way of doing things "by hand"
                 When makers want to share their content, they have to fish its requirements from several folders
                 When players want to install content, they have to place it in the right folders
@@ -211,7 +215,7 @@ Next tasks (roughly sorted most important first)
             Add the new common content properties to everything in the engine
             Internal names should be sanitized
             Editors should separate creating and loading
-            Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing Game_data/<package name>/Package.txt
+            Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing game_data/<package name>/data.txt
             Editors should warn if you try to edit or create something in the base package, saying how it'll affect the usual experience, may affect all packages, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true
         Other info
             Right now, this is how each type of content works:
@@ -625,7 +629,7 @@ Next tasks (roughly sorted most important first)
             Wild Pikmin and sprouts should be immune to the sunset
         Catalogs
             There can be multiple catalogs -- Piklopedia and Treasure Hoard are two different catalogs
-            A file, likely Game_data/<package>/Misc/Catalogs.txt is responsible for:
+            A file, likely game_data/<package>/misc/catalogs.txt is responsible for:
                 Which catalogs exist, as well as their icons, unlock criteria, etc.
                 What entries exist in each, in order
                 What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)
@@ -882,7 +886,7 @@ Misc things (so I don't forget)
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
-    Demo game content to add
+    Base game content to add
         Enemies
             Scuttlebug?
         Areas
@@ -930,7 +934,6 @@ Misc things (so I don't forget)
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
-    Spray types, damage spike types, weather, etc. should all have a version, engine version, maker, and comments property, but it doesn't really make sense to add them. Nothing in the engine needs that info, and the pre-packaged content wouldn't really benefit from it (and from it being changed literally every release). Still, it's important to add this info for custom content...
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     Option to pause the game if the window is not focused
@@ -1069,16 +1072,10 @@ Tasks for later on (I might never implement these)
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Good luck with floating point determinism lol
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
-    Barely important format changes
-        Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
-        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
-        Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
     Possible cleanup
-        If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
-            Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.
         Timers
             Have a timer manager, so I don't have to remember to do a .tick() to every single one
                 Remember that the fade manager can unload the current game state!

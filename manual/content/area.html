@@ -12,7 +12,7 @@
 </head>
 
 <body onload="setup('Areas', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
     <p>This page will explain how areas work in <i>Pikifen</i>, and how you can make your own. If you're in a hurry, feel free to read just the lines in bold, and even skip ahead to the section you need. Otherwise, read every step in the tutorial and follow along! Feel free to save your area after a section, and use the button in the toolbar to check out how it looks in-game.</p>
 
@@ -30,8 +30,10 @@
     <p>Before you go on, you should know the following concepts:</p>
 
     <dl>
+      <dt><b>Areas are pieces of <a href="making.html#content">content</a>.</b></dt>
+      <dd>You should know how content works in the engine in general before starting.</dd>
       <dt><b>To create the area's geometry, you draw the polygons that make out the floors.</b></dt>
-      <dd>Each "floor" (called a "sector") of the area is made up of a polygon. Imagine you're in a square room. This would be represented with a square sector in the engine. In that room is a carpet; this would be defined by a different sector inside of it, and with a different texture. Like real-world polygons, there are edges and vertexes. An edge makes up a line of the polygon, and a vertex is a point that joins two edges.<dd>
+      <dd>Each "floor" (called a "sector") of the area is made up of a polygon. Imagine you're in a square room. This would be represented with a square sector in the engine. In that room is a carpet; this would be defined by a different sector inside of it, and with a different texture image. Like real-world polygons, there are edges and vertexes. An edge makes up a line of the polygon, and a vertex is a point that joins two edges.<dd>
       <dt><b>Polygons cannot overlap. They can only have neighbors.</b></dt>
       <dd>If you want a triangle shape overlapping a rectangle shape, you need to know that the intersection between the two must be an entirely separate sector. Check the diagram on the right.</dd>
       <dt><b>A floor that is higher than its neighbor creates a wall.</b></dt>
@@ -78,7 +80,7 @@
       <dt><b>Open the area editor.</b></dt>
       <dd>To do so, from the engine's main menu, choose the "Area editor" option.</dd>
       <dt><b>In the dialog, type in the name of the new area and press Return.</b></dt>
-      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key. When asked what type of area to create, just pick simple for now. Let's call it <code>forest</code>. This is the internal name of the area, not the name that will appear on the loading screen.</dd>
+      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key. When asked what type of area to create, just pick simple for now. Let's call it <code>forest</code>. This is the <a href="making.html#content">internal name</a> of the area, not the name that will appear on the loading screen.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>A new area will already have a default sector with a grassy texture, as well as a leader object.</li>
@@ -172,7 +174,7 @@
       <dt><b>Click the texture button in the "Appearance" section of the panel.</b></dt>
       <dd>This button will allow you to set the sector's texture.</dd>
       <dt><b>Choose a texture from the suggestions list, or browse for a new one.</b></dt>
-      <dd>Most likely, only the grassy texture will be available in the list. Textures can be found in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics/textures</code> folder. Click on "Browse..." to browse for the file to use. Let's pick <code>stone.jpg</code>.</dd>
+      <dd>Most likely, only the grassy texture will be available in the list for now. Textures can be found in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder, though for the sake of organization they're usually placed in the <code>textures</code> subfolder. Click on "Browse..." to browse for the file to use. Let's pick <code>stone.jpg</code>.</dd>
     </dl>
 
     <h3 id="sector-height">Sector height</h3>
@@ -180,7 +182,7 @@
     <p>To make the rock protrude from the ground, lets give it a height higher than the grassy ground. This will also make all of the rock's edges serve as walls.</p>
 
     <dl>
-      <dt><b>Select the sector whose texture you want to change.</b></dt>
+      <dt><b>Select the sector whose height you want to change.</b></dt>
       <dd>Like before, click inside a sector to select it. If you check the panel's "Behavior" section, the sector's height should be 0, the same as the ground.</dd>
       <dt><b>Change the number inside the "Height" textbox. Higher number means higher height.</b></dt>
       <dd>For our rock, set it to something like 200. It may be hard to visualize how it ended up in your head, but know that 200 is much taller than a leader, but not tall enough that most Pikmin can't be thrown on top of it.</dd>
@@ -368,7 +370,7 @@
       <dt><b>Press the "+" button in the panel to place a new tree shadow where you click.</b></dt>
       <dd>Click more or less in the center of the area, since this will also be the center of our tree shadow.</dd>
       <dt><b>Set its texture in the "Bitmap" textbox.</b></dt>
-      <dd>Write down the <a href="glossary.html#file-name">file name</a> of the texture, which must be in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics/textures</code> folder. Until you give a valid texture, it will just be a black-and-violet pattern. Try using <code>tree_shadow.png</code>, which should come with the engine. Alternatively, use the "..." button to browse for a texture which, once more, needs to be in the textures folder.</dd>
+      <dd>Write down the <a href="making.html#content">internal name</a> of the texture, which must be in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder, though again they're typically in the <code>textures</code> subfolder. Until you give a valid texture, it will just be a black-and-violet pattern. Try using <code>tree_shadow</code>, which should come with the engine. Alternatively, use the "..." button to browse for a texture which, once more, needs to be in the textures folder.</dd>
       <dt><b>Use the handles around the tree shadow to move it (center handle), rotate it (large circle around it), or scale it (edge and corner handles).</b></dt>
       <dd>Use these to make the shadows cover the terrain, the outer rim, and even a bit of the void, just so the player cannot see when the shadow texture ends, even as it sways left and right. To scale the width and height independently, uncheck the "Keep aspect ratio" option. Alternatively, you can use the panel widgets to set these properties.</dd>
       <dt><b>Notes:</b></dt>
@@ -428,7 +430,7 @@
     
     <p>If instead of a black void, you want the area to have a background, like the steel plates at the background of sublevel 1 of the <a href="https://www.pikminwiki.com/Secret_Testing_Range">Secret Testing Range</a>, or if you just want the background to be a color that isn't black, you can.</p>
 
-    <p>In the area information panel, you can set the background's information here. Write the background's texture <a href="glossary.html#file-name">file name</a>, which must be a file in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics/textures</code> folder. Alternatively, use "..." to pick a file from that folder. This texture will be tiled across the background, and you can change how far away the texture is (which affects the scrolling when you move the camera around), as well as how zoomed in it is. You will not be able to see the background in the area editor.</p>
+    <p>In the area information panel, you can set the background's information here. Write the background's texture <a href="making.html#content">internal name</a>, which must be a file in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics/textures</code> folder. Alternatively, use "..." to pick a file from that folder. This texture will be tiled across the background, and you can change how far away the texture is (which affects the scrolling when you move the camera around), as well as how zoomed in it is. You will not be able to see the background in the area editor.</p>
 
     <h3 id="weather">Subtitle, weather, and more</h3>
     
@@ -460,7 +462,7 @@
 
     <h3 id="references">Reference</h3>
     
-    <p>If you made a reference image for your area, like a sketch, you can place it on top of the editor, so that you may draw through it. The information for the reference will be saved in your user data folder, and will not show up in-game, only in the editor. To use one in your area, go to the Tools panel, and specify the file name there. It can be any file in your computer, so it doesn't even need to be in the engine's folder. Next, you can either edit the position and size of the reference using the textboxes, or you can drag the handles; they should work just like transforming a <a href="#tree-shadows">tree shadow</a>. While you're working, if your reference is in the way, remember that there are controls in the toolbar to quickly change its visibility.</p>
+    <p>If you made a reference image for your area, like a sketch, you can place it on top of the editor, so that you may draw through it. The information for the reference will be saved in your user data folder, and will not show up in-game, only in the editor. To use one in your area, go to the Tools panel, and specify the file path there. It can be any file in your computer, so it doesn't even need to be in the engine's folder. Next, you can either edit the position and size of the reference using the textboxes, or you can drag the handles; they should work just like transforming a <a href="#tree-shadows">tree shadow</a>. While you're working, if your reference is in the way, remember that there are controls in the toolbar to quickly change its visibility.</p>
     
     <h3 id="vertex-transform">Vertex transformation</h3>
     
@@ -546,7 +548,7 @@
       <li>A "texture fader" sector will also fade between levels of brightness and texture tints. Use this creatively.</li>
       <li>Avoid making choke points that are smaller than 192 units in width. This is the typical width of gates, and is the expected width for most carriable objects to fit through.</li>
       <li>Area descriptions can make use of <a href="misc_features.html#markup">markup</a>.</li>
-      <li>With the pre-packaged content that comes with the engine, Pikmin or leaders thrown by the player's leader can reach a maximum height of:
+      <li>With the base content that comes with the engine, Pikmin or leaders thrown by the player's leader can reach a maximum height of:
         <ul>
           <li>Leaders: 130</li>
           <li>Purple Pikmin: 210</li>

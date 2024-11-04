@@ -12,9 +12,9 @@
 </head>
 
 <body onload="setup('Particle generators', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>This page will guide you on how to make a particle generator for <i>Pikifen</i>. A particle generator is a set of information about how the engine should throw particles into the game world. Particles are small images that don't interact with the environment, like rocks flying around, clouds of gas floating by, or even the trail left behind by thrown Pikmin and leaders. Then, in-game, enemies, or obstacles, or what have you can call one of these generators in order to generate particles.</p>
+    <p>This page will guide you on how to make a particle generator for <i>Pikifen</i>. These are pieces of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting. A particle generator is a set of information about how the engine should throw particles into the game world. Particles are small images that don't interact with the environment, like rocks flying around, clouds of gas floating by, or even the trail left behind by thrown Pikmin and leaders. Then, in-game, enemies, or obstacles, or what have you can call one of these generators in order to generate particles.</p>
 
     <h2 id="intro">Introduction</h2>
     
@@ -22,7 +22,7 @@
 
     <p>Particles are static images, but they can move, change size, and change opacity over time, and can also be tinted with a certain color. Each generator can only emit one type of particle, but their properties (size, position, etc.) are randomly decided every time one is created, according to the generator's settings. This decision is based on the deviation properties. For instance, when a particle of size 32 is created, if the size deviation property is set to 3, that means the particle can spawn with 3 fewer pixels in size, 3 more pixels in size, or anything in between. 0, for any deviation property, means no deviation, naturally.</p>
 
-    <p>The folder that has a list of all particle generators is <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/particle_generators</code>. This contains all custom-made particle generators but does not contain particle generators hardcoded inside the engine's logic itself, for internal use. Each one per <a href="making.html#data-file">data file</a> in the folder is a generator; its file name does not matter.</p>
+    <p>The folder that has a list of all particle generators is <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/particle_generators</code>. This contains all custom-made particle generators but does not contain particle generators hardcoded inside the engine's logic itself, for internal use. Each one per <a href="making.html#data-file">data file</a> in the folder is a generator, with the file's name representing the generator's <a href="making.html#content">internal name</a>.</p>
 
     <h2 id="base">Base particle</h2>
     
@@ -34,7 +34,7 @@
       <tr>
         <td>bitmap</td>
         <td>Image to use, on the </code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder. If empty, the particle won't use an image, but will use a colored, solid circle instead.</td>
-        <td>File name</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>

@@ -545,7 +545,7 @@ Procedure for every version release
                     Title: <Object name> spritesheet
                     Author: Andr� "Espyo" Silva
                     Keywords: Pikifen spritesheet
-                    Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
+                    Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
             
     
     When creating a zip

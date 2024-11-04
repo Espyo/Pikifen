@@ -84,22 +84,23 @@ void enemy_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of enemy given its name.
+ * @brief Returns a type of enemy given its internal name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* enemy_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.enemy.find(name);
+mob_type* enemy_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.enemy.find(internal_name);
     if(it == game.content.mob_types.list.enemy.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of enemy by name.
+ * @brief Returns all types of enemy by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void enemy_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.enemy) {

@@ -708,7 +708,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>Shoot spritesheet</dc:title>
-        <dc:description>Spritesheet for the Shoot pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+        <dc:description>Spritesheet for the Shoot in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <dc:creator>
           <cc:Agent>
             <dc:title>André &quot;Espyo&quot; Silva</dc:title>

@@ -12,7 +12,7 @@
 </head>
 
 <body onload="setup('Animations', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
     <p>This page will explain how animations work in <i>Pikifen</i>, and how you can make your own. If you're in a hurry, feel free to read just the lines in bold, and even skip to the section you need. Otherwise, read every step in the tutorial and follow along!</p>
 
@@ -31,6 +31,8 @@
     </figure>
     
     <dl>
+      <dt><b>Animations are pieces of <a href="making.html#content">content</a>.</b></dt>
+      <dd>You should know how content works in the engine in general before starting.</dd>
       <dt><b>Animations are just static frames shown in quick succession.</b></dt>
       <dd>An <a href="http://en.wikipedia.org/wiki/Animation">animation</a> is a collection of images that flip in quick succession to give the illusion of movement. For instance, for a Pikmin's attack animation, it would consist of an image (also called a <b>frame</b>) with the Pikmin clinging on, an image with it reeling its head back, an image with it swinging the head forward, and an image where the stem is smacking. By quickly flipping through these images, it gives the illusion that the Pikmin is animated.</dd>
       <dt><b>Frames come from sprites, which are reusable.</b><dt>
@@ -45,11 +47,11 @@
       <dt><b>You'll need a spritesheet &ndash; an image file with the sprite graphics within.</b></dt>
       <dd>Before beginning to animate an object, you must have some images to be used as the sprites. Although it is possible to place each image in a different file, it is a lot more efficient to have all (or most) images for the object within the same file. These are what are known as "spritesheets". For examples, see the spritesheets that come with the engine. You probably also want to actually have the object's data in the game's data (see the <a href="mob_type.html">object types tutorial</a>).</dd>
       <dt><b>Sprite images should be in a top-down perspective and show the object facing the right.</b></dt>
-      <dd>During gameplay, the sprites as the object rotates, and they need to be facing to the right as the default position so the engine knows how to rotate.</dd>
+      <dd>During gameplay, the sprites rotate as the object rotates, and they need to be facing to the right as the default position so the engine knows how to rotate.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>If your object is a recolor of an existing one, you can make a copy of the original object's spritesheet and use any painting program to change the colors.</li>
-        <li>You can also edit the <a href="https://github.com/Espyo/Pikifen/tree/master/source/documents/vectorial_graphics">SVG files</a> used for the prepackaged enemy graphics with a vectorial art editing program to change the color schemes.</li>
+        <li>You can also edit the <a href="https://github.com/Espyo/Pikifen/tree/master/source/documents/vectorial_graphics">SVG files</a> used for the base content enemy graphics with a vectorial art editing program to change the color schemes.</li>
       </ul></dd>
     </dl>
     
@@ -76,7 +78,7 @@
     
     <h3 id="picking-file">Picking the animation file</h3>
     
-    <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the prepackaged Red Bulborb spritesheet. For that, you should probably <a href="mob_type.html">create a new Red Bulborb enemy</a>, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
+    <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the base content's Red Bulborb spritesheet. For that, you should probably <a href="mob_type.html">create a new Red Bulborb enemy</a>, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
     
     <dl>
       <dt><b>Open the animation editor.</b></dt>
@@ -108,11 +110,11 @@
       <dt><b>In the sprite panel, the large button at the top lets you choose/create a sprite.</b></dt>
       <dd>Since we have no sprite chosen, it should just read "(None)". Clicking on it will give you a list of sprites to choose from, but because there are none the list will be empty. There is however a textbox at the top which you can use to create a new one. Just give it a name &ndash; let's start with the most basic pose, which would be the idle position. Type <code>idle</code> for the name of this sprite.</dd>
       <dt><b>You can choose the graphics file in "Bitmap" mode.</b></dt>
-      <dd>To specify what image represents this sprite, click the "Bitmap" button to enter the Bitmap panel. Use the "File" textbox to specify where the bitmap file is, so in other words, our spritesheet. You can also use the "..." button to browse for a file. To use the pre-packaged Red Bulborb spritesheet, we'll want <code>red_bulborb.png</code>.</dd>
+      <dd>To specify what image represents this sprite, click the "Bitmap" button to enter the Bitmap panel. Use the "File" textbox to specify where the bitmap file is, so in other words, our spritesheet. You can also use the "..." button to browse for a file. To use the base content's Red Bulborb spritesheet, we'll want <code>red_bulborb.png</code>.</dd>
       <dt><b>A sprite may use just a rectangular portion of the image. You can click on the canvas to select parts, with the help of the panel.</b></dt>
       <dd>To tell the engine exactly what part of this bitmap file constitutes the sprite we need, you can go to the panel and specify the coordinates (drag or double-click the widgets) of the top-left corner of the region, along with the width and height. Alternatively, you can click on that exact sprite in the canvas, and the editor will select that region for you. For our case, we want the Bulborb's idle pose, which is the one in the top-left corner. Now that the engine knows what image to use, when you back out, you should see the Bulborb's idle pose on the canvas.</dd>
       <dt><b>In "Transformation" mode, you can resize, flip, align, and rotate the sprite.</b></dt>
-      <dd>This is useful, for example, with the pre-packaged Dwarf Red Bulborb, which simply uses the Red Bulborb graphics, but scales down every sprite to be the size of a Dwarf Red Bulborb. You can use the widgets in the panel to resize, as well as perform other transformation operations. You can also use the handles present on the canvas. The middle blue dot lets you move the sprite horizontally, the edge and corner dots let you resize, and the circle handle lets you rotate.</dd>
+      <dd>This is useful, for example, with the base content's Dwarf Red Bulborb, which simply uses the Red Bulborb graphics but scales down every sprite to be the size of a Dwarf Red Bulborb. You can use the widgets in the panel to resize, as well as perform other transformation operations. You can also use the handles present on the canvas. The middle blue dot lets you move the sprite horizontally, the edge and corner dots let you resize, and the circle handle lets you rotate.</dd>
       <dt><b>The white plus-shaped lines in the canvas indicate where the center of the object is.</b></dt>
       <dd>When the object rotates, it does so around this point. As a general rule, this point should be located at the center of the creature's legs, so for the Red Bulborb, you should offset the sprite horizontally by 16 (drag or double-click the widget), so the object center is around the center of its backside.</dd>
       <dt><b>Notes:</b></dt>
@@ -194,9 +196,9 @@
 
     <p>To create enemies, you can make whatever animations you wish, and you can call them whatever. As long as you use the correct names in the script, all is good. But for Pikmin, leaders, and most other objects, the engine is the one that decides what animations to switch to, and it expects to find them with specific names on the object's animation data. To know what animations your object needs, check the corresponding article in the <a href="mob_type.html#mob-categories">list of object categories</a>.</p>
 
-    <h2 id="special">Special animations</h2>
+    <h2 id="global">Global animations</h2>
 
-    <p>The folder <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/animations</code> contains a list of custom animations that aren't necessarily bound to an object. These can include animations expected by the engine, like the status effects or liquids.</p>
+    <p>The folder <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/animations</code> contains a list of custom animations that aren't necessarily bound to an object. These can include animations expected by other types of content, like the status effects or liquids, or even things expected by the engine, like the sparks around a hurt leader. These follow the same rules as all <a href="making.html#content">content</a>.</p>
 
     <h2 id="controls">Controls</h2>
 
@@ -217,14 +219,15 @@
     <h2 id="tips">Tips</h2>
     
     <ul>
-      <li>Remember to save periodically. Although rare, it is possible for the editor to crash, or for you to quit accidentally, causing you to lose unsaved progress.</li>
+      <li>Remember to save periodically. Although rare, it is possible for the editor to crash, or for you to quit accidentally, causing you to lose unsaved progress. Plus if you make a mistake, you can always go back that way.</li>
       <li>When making a spritesheet, try to add at least one row or column of empty pixels between each frame. Without this padding, some in-game sprites will have artifacts from a sprite right next to them, and when you click a section of the spritesheet to specify the bitmap, the editor could interpret a nearby pose as part of the same one.</li>
+      <li>Due to the way graphics rendering works, it's recommended that spritesheets have a row and a column of empty pixels at the far bottom and far right.</li>
       <li>If your graphics are twice the resolution of your in-game size, you can enter the special tools from the main menu, and use the "Set all scales" tool. If they're twice as big, use the value "0.5" in this tool.</li>
       <li>If you have an enemy shaking animation, and only want a percentage of the Pikmin to be shaken of, you can lower the shake animation's "hit rate". For instance, if you use <code>70</code>, that means only 70% of the Pikmin that are latched on will get knocked off, on average. This can be used for other attacks too, not just shaking. This feature only affects Pikmin.</li>
       <li>When editing a sprite's hitboxes, if you have a large hitbox selected and you want to select one that's covered up by it, you can just click an area that is overlapped by both hitboxes, and the editor will toggle between the hitboxes in that spot.</li>
-      <li>Pikmin immune to the hazards of a hitbox will completely ignore that hitbox. If you want immune Pikmin to still be hurt in some way, you should make a new hitbox (without hazards) and overlap it with the regular hazard hitbox. This is useful for example if you want a Pikmin that's immune to stabbing to still get knocked backwards when hit.</li>
+      <li>Pikmin immune to the hazards of a hitbox will completely ignore that hitbox. If you want immune Pikmin to still be hurt in some way, you should make a new hitbox (without hazards) and overlap it with the regular hazard hitbox. This is useful for example if you want a Pikmin that's immune to stabbing to still get knocked backwards when hit. Make this hitbox lower priority than the hazard one, otherwise all Pikmin will get hit by it first and never get the chance to interact with the hazard one!</li>
       <li>Use the options (in the menu bar) to customize the editor to your liking.</li>
-      <li>Due to the way graphics rendering works, it's recommended that spritesheets have a row and a column of empty pixels at the far bottom and far right.</li>
+      <li>Although most of the work is done in the editor, you are free to edit the <a href="making.html#data-file">data file</a> manually if you need to fine-tune some numbers. Be careful, though!</li>
     </ul>
 
   </div>

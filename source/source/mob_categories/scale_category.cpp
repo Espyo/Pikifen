@@ -84,22 +84,23 @@ void scale_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of scale given its name.
+ * @brief Returns a type of scale given its name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* scale_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.scale.find(name);
+mob_type* scale_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.scale.find(internal_name);
     if(it == game.content.mob_types.list.scale.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of scale by name.
+ * @brief Returns all types of scale by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void scale_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.scale) {

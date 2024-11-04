@@ -84,22 +84,23 @@ void bridge_category::erase_mob(mob* m) {
 
 
 /**
- * @brief Returns a type of bridge given its name.
+ * @brief Returns a type of bridge given its internal name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* bridge_category::get_type(const string &name) const {
-    auto it = game.content.mob_types.list.bridge.find(name);
+mob_type* bridge_category::get_type(const string &internal_name) const {
+    auto it = game.content.mob_types.list.bridge.find(internal_name);
     if(it == game.content.mob_types.list.bridge.end()) return nullptr;
     return it->second;
 }
 
 
 /**
- * @brief Returns all types of bridge by name.
+ * @brief Returns all types of bridge by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void bridge_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.bridge) {

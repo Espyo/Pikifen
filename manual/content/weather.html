@@ -12,9 +12,9 @@
 </head>
 
 <body onload="setup('Weather', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>This page will guide you on how to make a weather condition for <i>Pikifen</i>. A weather condition lasts throughout the entire day.</p>
+    <p>This page will guide you on how to make a weather condition for <i>Pikifen</i>. Weather conditions are pieces of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting. A weather condition lasts throughout the entire day.</p>
 
     <h2 id="intro">Introduction</h2>
     
@@ -36,7 +36,7 @@
 
     <h3 id="making">Making a weather condition</h3>
     
-    <p>The engine will find the existing weather conditions in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/weather</code> folder. Each file is a weather condition, so create a new <a href="making.html#data-file">data file</a> for your new weather condition; its name can be whatever you want. Inside the file is where you'll add information about the lighting, sun's strength, etc.</p>
+    <p>The engine will find the existing weather conditions in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/weather</code> folder. Each file is a weather condition, so create a new <a href="making.html#data-file">data file</a> for your new weather condition. Its name is the weather condition's <a href="making.html#content">internal name</a>. Inside the file is where you'll add information about the lighting, sun's strength, etc.</p>
     
     <p>Before moving on to those information tables however, you should fill in the <a href="making.html#content-props">common content properties</a>.</p>
 

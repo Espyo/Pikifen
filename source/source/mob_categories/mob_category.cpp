@@ -241,18 +241,21 @@ void none_category::erase_mob(mob* m) { }
 
 
 /**
- * @brief Returns a type of mob given its name.
+ * @brief Returns a type of mob given its internal name,
+ * or nullptr on error.
  *
- * @param name Name of the mob type to get.
+ * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* none_category::get_type(const string &name) const { return nullptr; }
+mob_type* none_category::get_type(const string &internal_name) const {
+    return nullptr;
+}
 
 
 /**
- * @brief Returns all types of leader by name.
+ * @brief Returns all types of leader by internal name.
  *
- * @param list This list gets filled with the mob type names.
+ * @param list This list gets filled with the mob type internal names.
  */
 void none_category::get_type_names(vector<string> &list) const { }
 

@@ -12,9 +12,9 @@
 </head>
 
 <body onload="setup('Misc. configurations', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>This article explains how miscellaneous configuration files on <i>Pikifen</i> work. These are plain engine <a href="making.html#data-file">data files</a>.</p>
+    <p>This article explains how miscellaneous configuration files on <i>Pikifen</i> work. These are plain engine <a href="making.html#data-file">data files</a>. They are also pieces of <a href="making.html#content">content</a>, so you should know how content works in the engine in general before starting.</p>
 
     <h2 id="game">Game configuration</h2>
     
@@ -328,7 +328,7 @@
       <tr>
         <td>particle_generator</td>
         <td>When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</td>
-        <td>Text</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>
@@ -349,7 +349,7 @@
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/misc/system_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> and <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/audio/sounds</code>. Example: <code>mouse_cursor = asterisk.png</code> will make the mouse cursor in-game use the <code>asterisk.png</code> image.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/misc/system_asset_file_names.txt</code> you can specify the <a href="making.html#content">internal name</a> of some or all of these assets. This <a href="making.html#data-file">data file</a> has two blocks, <code>graphics</code> and <code>sounds</code>, and each block has a list of properties, where each property's name is the name of the asset, and the value is the file name. The files must be inside of the folder <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> and <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/audio/sounds</code>. Example: <code>mouse_cursor = bud_icon</code> will make the mouse cursor in-game use the <code>bud_icon.png</code> image.</p>
     
     <h3 id="system-asset-graphics">Graphics</h3>
 
@@ -360,259 +360,259 @@
         <td>bright_circle</td>
         <td>A bright circular shape. Used for the whistle's dots.</td>
         <td>Text</td>
-        <td>bright_circle.png</td>
+        <td>bright_circle</td>
       </tr>
       <tr>
         <td>bright_ring</td>
         <td>A bright ring shape. Used for the control point in front of a ship.</td>
         <td>Text</td>
-        <td>bright_ring.png</td>
+        <td>bright_ring</td>
       </tr>
       <tr>
         <td>bubble_box</td>
         <td>Bubble-like box. In-engine, it is split into three equal-sized rows and three equal-sized columns, and uses that split to texture the boxes.</td>
         <td>Text</td>
-        <td>bubble_box.png</td>
+        <td>bubble_box</td>
       </tr>
       <tr>
         <td>button_box</td>
         <td>Texture box for player inputs that look like buttons.</td>
         <td>Text</td>
-        <td>button_box.png</td>
+        <td>button_box</td>
       </tr>
       <tr>
         <td>checkbox_check</td>
         <td>A checkbox with a checkmark in it. Used in menus.</td>
         <td>Text</td>
-        <td>checkbox_check.png</td>
+        <td>checkbox_check</td>
       </tr>
       <tr>
         <td>checkbox_no_check</td>
         <td>A checkbox without a checkmark in it. Used in menus.</td>
         <td>Text</td>
-        <td>checkbox_no_check.png</td>
+        <td>checkbox_no_check</td>
       </tr>
       <tr>
         <td>cursor</td>
         <td>Leader cursor.</td>
         <td>Text</td>
-        <td>cursor.png</td>
+        <td>cursor</td>
       </tr>
       <tr>
         <td>editor_icons</td>
         <td>Spritesheet where all editor icons are.</td>
         <td>Text</td>
-        <td>editor_icons.png</td>
+        <td>editor_icons</td>
       </tr>
       <tr>
         <td>enemy_spirit</td>
         <td>Enemy spirit.</td>
         <td>Text</td>
-        <td>enemy_spirit.png</td>
+        <td>enemy_spirit</td>
       </tr>
       <tr>
         <td>focus_box</td>
         <td>Focus indicator that surrounds a selected GUI item.</td>
         <td>Text</td>
-        <td>focus_box.png</td>
+        <td>focus_box</td>
       </tr>
       <tr>
         <td>frame_box</td>
         <td>Texture box for when something in a GUI or HUD needs to be framed.</td>
         <td>Text</td>
-        <td>frame_box.png</td>
+        <td>frame_box</td>
       </tr>
       <tr>
         <td>hard_bubble</td>
         <td>A hard bubble.</td>
         <td>Text</td>
-        <td>hud/hard_bubble.png</td>
+        <td>hud/hard_bubble</td>
       </tr>
       <tr>
         <td>icon</td>
         <td>The game's icon.</td>
         <td>Text</td>
-        <td>icon.png</td>
+        <td>icon</td>
       </tr>
       <tr>
         <td>idle_glow</td>
         <td>Glowing effect on idle Pikmin.</td>
         <td>Text</td>
-        <td>idle_glow.png</td>
+        <td>idle_glow</td>
       </tr>
       <tr>
         <td>key_box</td>
         <td>Texture box for player inputs that look like keyboard keys.</td>
         <td>Text</td>
-        <td>key_box.png</td>
+        <td>key_box</td>
       </tr>
       <tr>
         <td>leader_silhouette_side</td>
         <td>Silhouette of a leader seen from the side. Used in the area editor's cross-section feature.</td>
         <td>Text</td>
-        <td>leader_silhouette_side.png</td>
+        <td>leader_silhouette_side</td>
       </tr>
       <tr>
         <td>leader_silhouette_top</td>
         <td>Silhouette of a leader seen from the top. Used in the animation editor has a visual reference.</td>
         <td>Text</td>
-        <td>leader_silhouette_top.png</td>
+        <td>leader_silhouette_top</td>
       </tr>
       <tr>
         <td>main_menu</td>
         <td>Background for the main menu.</td>
         <td>Text</td>
-        <td>main_menu.jpg</td>
+        <td>main_menu</td>
       </tr>
       <tr>
         <td>medal_bronze</td>
         <td>Icon for the bronze medal in missions.</td>
         <td>Text</td>
-        <td>medal_bronze.png</td>
+        <td>medal_bronze</td>
       </tr>
       <tr>
         <td>medal_gold</td>
         <td>Icon for the gold medal in missions.</td>
         <td>Text</td>
-        <td>medal_gold.png</td>
+        <td>medal_gold</td>
       </tr>
       <tr>
         <td>medal_platinum</td>
         <td>Icon for the platinum medal in missions.</td>
         <td>Text</td>
-        <td>medal_platinum.png</td>
+        <td>medal_platinum</td>
       </tr>
       <tr>
         <td>medal_silver</td>
         <td>Icon for the silver medal in missions.</td>
         <td>Text</td>
-        <td>medal_silver.png</td>
+        <td>medal_silver</td>
       </tr>
       <tr>
         <td>menu_icons</td>
         <td>Spritesheet where all the menu button icons are.</td>
         <td>Text</td>
-        <td>menu_icons.png</td>
+        <td>menu_icons</td>
       </tr>
       <tr>
         <td>mission_clear</td>
         <td>Mission clear stamp mark on a mission's results screen.</td>
         <td>Text</td>
-        <td>mission_clear.png</td>
+        <td>mission_clear</td>
       </tr>
       <tr>
         <td>mission_fail</td>
         <td>Mission fail stamp mark on a mission's results screen.</td>
         <td>Text</td>
-        <td>mission_fail.png</td>
+        <td>mission_fail</td>
       </tr>
       <tr>
         <td>more</td>
         <td>Icon used in menus to indicate there is still more content beyond. This graphic faces the right, and gets flipped in-engine when needed.</td>
         <td>Text</td>
-        <td>more.png</td>
+        <td>more</td>
       </tr>
       <tr>
         <td>mouse_cursor</td>
         <td>Mouse cursor.</td>
         <td>Text</td>
-        <td>mouse_cursor.png</td>
+        <td>mouse_cursor</td>
       </tr>
       <tr>
         <td>notification</td>
         <td>Notification bubble.</td>
         <td>Text</td>
-        <td>notification.png</td>
+        <td>notification</td>
       </tr>
       <tr>
         <td>pikmin_spirit</td>
         <td>Pikmin spirit.</td>
         <td>Text</td>
-        <td>pikmin_spirit.png</td>
+        <td>pikmin_spirit</td>
       </tr>
       <tr>
         <td>player_input_icons</td>
         <td>A spritesheet of icons for specific player inputs, like mouse buttons, certain keys, etc.</td>
         <td>Text</td>
-        <td>player_input_icons.png</td>
+        <td>player_input_icons</td>
       </tr>
       <tr>
         <td>random</td>
         <td>Randomness icon. Used in the area selection menu.</td>
         <td>Text</td>
-        <td>random.png</td>
+        <td>random</td>
       </tr>
       <tr>
         <td>rock</td>
         <td>Rock particle.</td>
         <td>Text</td>
-        <td>rock.png</td>
+        <td>rock</td>
       </tr>
       <tr>
         <td>shadow</td>
         <td>Circular shadow for most objects.</td>
         <td>Text</td>
-        <td>shadow.png</td>
+        <td>shadow</td>
       </tr>
       <tr>
         <td>shadow_square</td>
         <td>Rectangular shadow for rectangular objects.</td>
         <td>Text</td>
-        <td>shadow_square.png</td>
+        <td>shadow_square</td>
       </tr>
       <tr>
         <td>smack</td>
         <td>Smack particle.</td>
         <td>Text</td>
-        <td>smack.png</td>
+        <td>smack</td>
       </tr>
       <tr>
         <td>smoke</td>
         <td>Smoke particle.</td>
         <td>Text</td>
-        <td>smoke.png</td>
+        <td>smoke</td>
       </tr>
       <tr>
         <td>sparkle</td>
         <td>Sparkle particle.</td>
         <td>Text</td>
-        <td>sparkle.png</td>
+        <td>sparkle</td>
       </tr>
       <tr>
         <td>spotlight</td>
         <td>Spotlight texture to use for blackout weather.</td>
         <td>Text</td>
-        <td>spotlight.png</td>
+        <td>spotlight</td>
       </tr>
       <tr>
         <td>swarm_arrow</td>
         <td>Arrow that comes out from the leader when swarming.</td>
         <td>Text</td>
-        <td>swarm_arrow.png</td>
+        <td>swarm_arrow</td>
       </tr>
       <tr>
         <td>throw_invalid</td>
         <td>Used on the throw preview when a throw won't reach.</td>
         <td>Text</td>
-        <td>throw_invalid.png</td>
+        <td>throw_invalid</td>
       </tr>
       <tr>
         <td>throw_preview</td>
         <td>Used on the throw preview as the main line.</td>
         <td>Text</td>
-        <td>throw_preview.png</td>
+        <td>throw_preview</td>
       </tr>
       <tr>
         <td>throw_preview_dashed</td>
         <td>Used on the throw preview when a throw's trajectory is uncertain.</td>
         <td>Text</td>
-        <td>throw_preview_dashed.png</td>
+        <td>throw_preview_dashed</td>
       </tr>
       <tr>
         <td>wave_ring</td>
         <td>Particle for waves in water, used when objects are standing in water.</td>
         <td>Text</td>
-        <td>wave_ring.png</td>
+        <td>wave_ring</td>
       </tr>
     </table>
 
@@ -625,37 +625,37 @@
         <td>area_name</td>
         <td>Font for the area's name in loading screens.</td>
         <td>Text</td>
-        <td>area_name_font.png</td>
+        <td>area_name_font</td>
       </tr>
       <tr>
         <td>counter</td>
         <td>Font for HUD counters. This only needs a dash, a dot, a slash, numbers, a colon, and a multiplication sign.</td>
         <td>Text</td>
-        <td>counter_font.png</td>
+        <td>counter_font</td>
       </tr>
       <tr>
         <td>counter</td>
         <td>Font for the counter displayed next to the cursor. This only needs numbers.</td>
         <td>Text</td>
-        <td>cursor_counter_font.png</td>
+        <td>cursor_counter_font</td>
       </tr>
       <tr>
         <td>slim_font</td>
         <td>Font for slim text.</td>
         <td>Text</td>
-        <td>slim_font.otf</td>
+        <td>slim_font</td>
       </tr>
       <tr>
         <td>standard</td>
         <td>Font for standard text.</td>
         <td>Text</td>
-        <td>font.png</td>
+        <td>font</td>
       </tr>
       <tr>
         <td>value</td>
         <td>Font for the carrying / money values. This only needs a currency icon, a dash, and numbers.</td>
         <td>Text</td>
-        <td>value_font.png</td>
+        <td>value_font</td>
       </tr>
     </table>
 
@@ -668,55 +668,55 @@
         <td>attack</td>
         <td>Smack for when an attack lands.</td>
         <td>Text</td>
-        <td>attack.ogg</td>
+        <td>attack</td>
       </tr>
       <tr>
         <td>camera</td>
         <td>Camera zoom level change click.</td>
         <td>Text</td>
-        <td>camera.ogg</td>
+        <td>camera</td>
       </tr>
       <tr>
         <td>menu_activate</td>
         <td>Sound of a GUI item in a menu being activated.</td>
         <td>Text</td>
-        <td>menu_activate.ogg</td>
+        <td>menu_activate</td>
       </tr>
       <tr>
         <td>menu_back</td>
         <td>Sound of the current menu's "back" GUI item being activated.</td>
         <td>Text</td>
-        <td>menu_back.ogg</td>
+        <td>menu_back</td>
       </tr>
       <tr>
         <td>menu_select</td>
         <td>Sound of a GUI item in a menu being selected.</td>
         <td>Text</td>
-        <td>menu_select.ogg</td>
+        <td>menu_select</td>
       </tr>
       <tr>
         <td>pluck</td>
         <td>Ground pop for when a Pikmin gets plucked.</td>
         <td>Text</td>
-        <td>pluck.ogg</td>
+        <td>pluck</td>
       </tr>
       <tr>
         <td>spray</td>
         <td>A leader using a spray.</td>
         <td>Text</td>
-        <td>spray.ogg</td>
+        <td>spray</td>
       </tr>
       <tr>
         <td>switch_pikmin</td>
         <td>Plop for when the current standby Pikmin type is switched.</td>
         <td>Text</td>
-        <td>switch_pikmin.ogg</td>
+        <td>switch_pikmin</td>
       </tr>
       <tr>
         <td>throw</td>
         <td>Swoosh for a Pikmin or leader being thrown.</td>
         <td>Text</td>
-        <td>throw.ogg</td>
+        <td>throw</td>
       </tr>
     </table>
     

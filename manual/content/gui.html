@@ -12,9 +12,9 @@
 </head>
 
 <body onload="setup('GUI', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/gui</code>.</p>
+    <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD is a piece of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting. Each one has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/gui</code>.</p>
 
     <p>To change the position and size of elements, you can just use the GUI editor, accessible from the main menu. To change other things, you will need to edit the data files by hand.</p>
     
@@ -30,8 +30,8 @@
       <dt><b>When you open the menu, you'll be asked what GUI to edit.</b></dt>
       <dd>You can access the GUI editor from the main menu. Once you do, you'll be shown a list of menus and HUDs whose GUIs you can edit.</dd>
 
-      <dt><b>The editor only knows each GUI's file name, but these are usually obvious.</b></dt>
-      <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI data folder. So this dialog will show you the text file names instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#files">GUI data files section</a> of this page, since that lists what each menu's file is.</dd>
+      <dt><b>The editor only knows each GUI's internal name, but these are usually obvious.</b></dt>
+      <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI data folder. So this dialog will show you the text file names, i.e. the internal names, instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#files">GUI data files section</a> of this page, since that lists what each menu's file is.</dd>
     </dl>
     
     <h3 id="coordinates">Canvas and coordinates</h3>
@@ -116,7 +116,7 @@
     <p>The area menu's information page &ndash; the stuff with basic information on an area.</p>
     
     <ul>
-      <li><b>File name:</b> <code>area_menu_info.txt</code></li>
+      <li><b>Internal name:</b> <code>area_menu_info</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>info_name</code>: Area name (info page version).</li>
@@ -135,7 +135,7 @@
     <p>The menu in which players can choose what area to play. This only includes the main stuff, that's common to all area types and menu pages, like the list of areas and the menu buttons. The items that make up the list of areas are created on-the-fly, so they aren't included in the data file.</p>
     
     <ul>
-      <li><b>File name:</b> <code>area_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>area_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -155,7 +155,7 @@
     <p>The area menu's specs page &ndash; the stuff with detailed mission information.</p>
     
     <ul>
-      <li><b>File name:</b> <code>area_menu_specs.txt</code></li>
+      <li><b>Internal name:</b> <code>area_menu_specs</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>specs_name</code>: Area name (specs page version).</li>
@@ -175,7 +175,7 @@
     <p>The menu where players choose their control binds.</p>
     
     <ul>
-      <li><b>File name:</b> <code>control_binds_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>control_binds_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -191,7 +191,7 @@
     <p>Actual gameplay. This is not a menu, but every HUD element can be customized in just the same way.</p>
     
     <ul>
-      <li><b>File name:</b> <code>gameplay.txt</code></li>
+      <li><b>Internal name:</b> <code>gameplay</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>time</code>: Time of day, represented by the Sun Meter.</li>
@@ -281,7 +281,7 @@
     <p>The main menu, entered when you start the game.</p>
     
     <ul>
-      <li><b>File name:</b> <code>main_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>main_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>play</code>: Play button.</li>
@@ -302,7 +302,7 @@
         <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
         <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
         <li><code>pikmin_size</code>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
-        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="glossary.html#file-name">file name</a> of the image in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
+        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
         <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
       </ul>
       <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
@@ -320,7 +320,7 @@
     <p>The main menu's "make" page.</p>
     
     <ul>
-      <li><b>File name:</b> <code>main_menu_make.txt</code></li>
+      <li><b>Internal name:</b> <code>main_menu_make</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>animation_editor</code>: Animation editor button.</li>
@@ -342,7 +342,7 @@
     <p>The main menu's "play" page.</p>
     
     <ul>
-      <li><b>File name:</b> <code>main_menu_play.txt</code></li>
+      <li><b>Internal name:</b> <code>main_menu_play</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>simple</code>: Play a simple area button.</li>
@@ -362,7 +362,7 @@
     <p>The menu accessed by having the player's leader interact with an Onion. Note that due to the way the Onion menu's layout is dynamically generated based on the Pikmin types the Onion has, some of these settings will be overriden by the game in real time. These settings will also change the look of ship Pikmin management menus.</p>
     
     <ul>
-      <li><b>File name:</b> <code>onion_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>onion_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>instructions</code>: Text with instructions about what to do in the menu.</li>
@@ -391,7 +391,7 @@
     <p>The menu where players set audio-related options.</p>
     
     <ul>
-      <li><b>File name:</b> <code>options_menu_audio.txt</code></li>
+      <li><b>Internal name:</b> <code>options_menu_audio</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -405,7 +405,7 @@
     <p>The menu where players set controls-related options.</p>
     
     <ul>
-      <li><b>File name:</b> <code>options_menu_controls.txt</code></li>
+      <li><b>Internal name:</b> <code>options_menu_controls</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -422,7 +422,7 @@
     <p>The menu where players set graphics-related options.</p>
     
     <ul>
-      <li><b>File name:</b> <code>options_menu_graphics.txt</code></li>
+      <li><b>Internal name:</b> <code>options_menu_graphics</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -439,7 +439,7 @@
     <p>The menu where players set some misc. options.</p>
     
     <ul>
-      <li><b>File name:</b> <code>options_menu_misc.txt</code></li>
+      <li><b>Internal name:</b> <code>options_menu_misc</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -456,7 +456,7 @@
     <p>The top-level menu where players choose what type of options they want to tinker with.</p>
     
     <ul>
-      <li><b>File name:</b> <code>options_menu_top.txt</code></li>
+      <li><b>Internal name:</b> <code>options_menu_top</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Back button.</li>
@@ -482,7 +482,7 @@
     <p>The menu that shows when the player pauses the game. This is only the system page, not the help page or the confirmation page.</p>
     
     <ul>
-      <li><b>File name:</b> <code>pause_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "PAUSED".</li>
@@ -507,7 +507,7 @@
     <p>The leaving confirmation page of the pause menu.</p>
 
     <ul>
-      <li><b>File name:</b> <code>pause_confirmation.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_confirmation</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>cancel</code>: Cancel button.</li>
@@ -524,7 +524,7 @@
     <p>The help page of the pause menu.</p>
 
     <ul>
-      <li><b>File name:</b> <code>pause_help.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_help</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Button to return to the pause menu.</li>
@@ -538,7 +538,7 @@
         <li><code>list_scroll</code>: Scrollbar for the list.</li>
         <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
       </ul>
-      <li><b>Tidbits:</b> Tidbits of information in the help page are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="glossary.html#file-name">file name</a> of the file in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
+      <li><b>Tidbits:</b> Tidbits of information in the help page are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the file in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code> folder.</li>
     </ul>
 
     <h3 id="pause-menu-mission">Pause menu &ndash; mission page</h3>
@@ -546,7 +546,7 @@
     <p>The mission page of the pause menu.</p>
 
     <ul>
-      <li><b>File name:</b> <code>pause_mission.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_mission</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "MISSION".</li>
@@ -574,7 +574,7 @@
     <p>The radar page of the pause menu.</p>
 
     <ul>
-      <li><b>File name:</b> <code>pause_radar.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_radar</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "RADAR".</li>
@@ -612,7 +612,7 @@
     <p>The Pikmin status page of the pause menu.</p>
 
     <ul>
-      <li><b>File name:</b> <code>pause_status.txt</code></li>
+      <li><b>Internal name:</b> <code>pause_status</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "STATUS".</li>
@@ -646,7 +646,7 @@
     <p>The menu shown when players end an exploration/mission and get some results.</p>
     
     <ul>
-      <li><b>File name:</b> <code>results_menu.txt</code></li>
+      <li><b>Internal name:</b> <code>results_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>area_name</code>: Name of the area.</li>

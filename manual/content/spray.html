@@ -12,15 +12,15 @@
 </head>
 
 <body onload="setup('Sprays', ['Making content'], ['making.html']);">
-  <div id="content">
+  <div id="page-content">
     
-    <p>This page will guide you in making spray types for <i>Pikifen</i>.</p>
+    <p>This page will guide you in making spray types for <i>Pikifen</i>. Each spray type is a piece of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting.</p>
 
     <h2 id="intro">Introduction</h2>
     
     <p>Whenever a leader uses a spray, they spray a bunch of particles in a given direction, and certain objects, dictated by the rules of the spray, will befall under some status effect. A status effect can make them faster (like an ultra-spicy spray), or make them stop on their tracks (like an ultra-bitter spray), amongst other things. Before creating sprays, you must have some status effect definitions. If you don't, please read the <a href="status.html">status effects guide</a> for information on how to create some.</p>
 
-    <p>Spray definitions can be found in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/sprays</code> folder. Every <a href="making.html#data-file">data file</a> here defines a spray, and the file's name is not important.</p>
+    <p>Spray definitions can be found in the <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/sprays</code> folder. Every <a href="making.html#data-file">data file</a> here defines a spray, with its file name representing the spray type's <a href="making.html#content">internal name</a>.</p>
 
     <h2 id="props">Properties</h2>
     
@@ -44,7 +44,7 @@
       <tr>
         <td>icon</td>
         <td>Image used for its icon on the HUD. This file must be in <code>game_data/&lt;<a href="making.html#packages">package</a>&gt;/graphics</code>.</td>
-        <td>File name</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>

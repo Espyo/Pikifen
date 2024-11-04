@@ -12,7 +12,7 @@
 </head>
 
 <body onload="setup('Resource object category', ['Making content', 'Object types'], ['making.html', 'mob_type.html']);">
-  <div id="content">
+  <div id="page-content">
     
     <b>Resources</b> are objects that Pikmin can carry somewhere, and once delivered, they cause something to happen. These resources are almost always provided by a <a href="mob_pile.html">pile</a>.
 
@@ -39,7 +39,7 @@
     <table class="props-t props-t-m">
       <tr>
         <td>carrying_destination</td>
-        <td>Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship. <code>linked_mob</code> means it gets taken to whatever object is linked to the this object or the pile that originated this resource. <code>linked_mob_matching_type</code> means it goes to whichever of the object or the pile's linked objects matches the Pikmin type decided from the carrier Pikmin (i.e. which object has the <code>carry_destination_type</code> <a href="script.html">script variable</a> set to the Pikmin type's name).</td>
+        <td>Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship. <code>linked_mob</code> means it gets taken to whatever object is linked to the this object or the pile that originated this resource. <code>linked_mob_matching_type</code> means it goes to whichever of the object or the pile's linked objects matches the Pikmin type decided from the carrier Pikmin (i.e. which object has the <code>carry_destination_type</code> <a href="script.html">script variable</a> set to the Pikmin type's internal name).</td>
         <td>Text</td>
       </tr>
       <tr>
@@ -72,8 +72,8 @@
       </tr>
       <tr>
         <td>spray_to_concoct</td>
-        <td>If the resource's delivery increases a spray's ingredient count, this specifies the name of the spray type.</td>
-        <td>Text</td>
+        <td>If the resource's delivery increases a spray's ingredient count, this specifies the spray type.</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>

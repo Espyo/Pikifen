@@ -73,7 +73,7 @@ function create_header(title, bc_names, bc_links) {
     '<span style="margin-left: 10px; margin-right: 10px;">|</span> ' +
     '<span id="breadcrumbs"></span>';
   header_div.id = 'header';
-  content_div = document.getElementById('content');
+  content_div = document.getElementById('page-content');
   content_div.parentNode.insertBefore(header_div, content_div);
 
   var bc_span = document.getElementById('breadcrumbs');
@@ -126,6 +126,9 @@ function populate_prop_tables() {
         case "File name":
           tds[2].innerHTML = "<a href=\"making.html#data-file-file-name\">File name</a>";
           break;
+        case "Internal name":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-internal-name\">Internal name</a>";
+          break;
         case "List":
           tds[2].innerHTML = "<a href=\"making.html#data-file-list\">List</a>";
           break;
@@ -162,7 +165,7 @@ function set_title(title) {
   document.title = title + ' - Pikifen manual';
   var title_h1 = document.createElement('h1');
   title_h1.innerHTML = title;
-  var content_div = document.getElementById('content');
+  var content_div = document.getElementById('page-content');
   content_div.insertBefore(title_h1, content_div.firstChild);
 }
 
