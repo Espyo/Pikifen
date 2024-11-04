@@ -714,10 +714,10 @@ void init_misc() {
 void init_misc_databases() {
     //Sector types.
     game.sector_types.register_item(
-        SECTOR_TYPE_NORMAL, "Normal"
+        SECTOR_TYPE_NORMAL, "normal"
     );
     game.sector_types.register_item(
-        SECTOR_TYPE_BLOCKING, "Blocking"
+        SECTOR_TYPE_BLOCKING, "blocking"
     );
     
     //Mission goals.

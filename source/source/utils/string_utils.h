@@ -65,6 +65,7 @@ vector<string> split(
 );
 bool str_peek(const string &s, size_t where, const string &match);
 string str_to_lower(string s);
+string str_to_sentence(string s);
 string str_to_title(string s);
 string str_to_upper(string s);
 string time_to_str2(

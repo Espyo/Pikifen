@@ -9679,7 +9679,7 @@ edges{
 }
 sectors{
 	s{
-		type=Blocking
+		type=blocking
 		z=200.0000
 		texture=textures/metal_clean
 	}
@@ -10302,7 +10302,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=-100.0000
 		texture=textures/warning
 		texture_scale=0.7500 0.7500
@@ -11175,7 +11175,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		type=Blocking
+		type=blocking
 		z=-100.0000
 		texture=textures/warning
 		texture_scale=0.7500 0.7500
@@ -13340,7 +13340,7 @@ mobs{
 		type=carry_target
 		p=-928.0000 928.0000
 		angle=1.5708
-		vars=carry_destination_type=Red Pikmin
+		vars=carry_destination_type=red_pikmin
 	}
 	custom{
 		type=carry_target

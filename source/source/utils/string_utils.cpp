@@ -346,6 +346,21 @@ string str_to_lower(string s) {
 
 
 /**
+ * @brief Converts an entire string into sentence case.
+ *
+ * @param s String to convert.
+ * @return The string in sentence case.
+ */
+string str_to_sentence(string s) {
+    if(!s.empty()) {
+        s = str_to_lower(s);
+        s[0] = (char) toupper(s[0]);
+    }
+    return s;
+}
+
+
+/**
  * @brief Converts an entire string into title case.
  *
  * @param s String to convert.

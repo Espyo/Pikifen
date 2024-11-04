@@ -5329,7 +5329,7 @@ void area_editor::process_gui_panel_sector() {
                 size_t t = 0; t < game.sector_types.get_nr_of_items(); t++
             ) {
                 types_list.push_back(
-                    game.sector_types.get_name((SECTOR_TYPE) t)
+                    str_to_sentence(game.sector_types.get_name((SECTOR_TYPE) t))
                 );
             }
             int sector_type = s_ptr->type;
