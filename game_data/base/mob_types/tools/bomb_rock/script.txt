@@ -18,7 +18,7 @@ script {
         }
         on_held {
             get_mob_info h trigger mob_category
-            if $h = Pikmin
+            if $h = pikmin
                 set_state held_by_pikmin
             end_if
         }

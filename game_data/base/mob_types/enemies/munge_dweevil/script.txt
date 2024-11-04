@@ -22,7 +22,7 @@ script {
         on_object_in_reach {
             if $has_treasure = false
                 get_mob_info t trigger mob_category
-                if $t = Treasure
+                if $t = treasure
                     focus trigger
                     save_focused_mob_memory 1
                     set_state chasing_treasure
@@ -86,7 +86,7 @@ script {
         }
         on_object_in_reach {
             get_mob_info t trigger mob_category
-            if $t = Treasure
+            if $t = treasure
                 set_state picking_up
             end_if
         }

@@ -19,7 +19,7 @@ script {
         }
 		on_pikmin_land {
             get_mob_info t trigger mob_type
-			if $t != White Pikmin
+			if $t != white_pikmin
 				set_state destroyed
 			end_if
 		}

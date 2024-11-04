@@ -1283,11 +1283,11 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
-        *var = target->type->category->name;
+        *var = target->type->category->internal_name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
-        *var = target->type->name;
+        *var = target->type->manifest->internal_name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {
