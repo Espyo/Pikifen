@@ -20,7 +20,7 @@ target_type = fragile
 
 spawns {
     explosion {
-        object = Explosion
+        object = explosion
         relative = true
         coordinates = 0 0 0
     }

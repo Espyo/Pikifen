@@ -24,19 +24,19 @@ area_editor_properties {
 
 spawns {
     nectar {
-        object = Nectar
+        object = nectar
         relative = true
         coordinates = 0
         momentum = 100
     }
     spicy_drop {
-        object = Ultra-spicy nectar
+        object = ultra-spicy_nectar
         relative = true
         coordinates = 0
         momentum = 100
     }
     bitter_drop {
-        object = Ultra-bitter nectar
+        object = ultra-bitter_nectar
         relative = true
         coordinates = 0
         momentum = 100

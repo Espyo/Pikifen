@@ -72,7 +72,7 @@ sounds {
 
 spawns {
     boulder {
-        object = Rolling boulder
+        object = rolling_boulder
         relative = true
         coordinates = 140 0 0
         angle = 0

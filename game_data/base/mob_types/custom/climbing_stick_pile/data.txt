@@ -26,7 +26,7 @@ sounds {
 
 spawns {
     full_stick {
-        object = Climbing stick
+        object = climbing_stick
         relative = true
         coordinates = 0 0
         angle = 0
