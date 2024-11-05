@@ -157,6 +157,14 @@ void gui_editor::load() {
     manifest.clear();
     loaded_content_yet = false;
     must_recenter_cam = true;
+    
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    },
+    CONTENT_LOAD_LEVEL_EDITOR
+    );
+    
     game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
     
     if(!auto_load_file.empty()) {
@@ -530,4 +538,10 @@ void gui_editor::unload() {
     
     items.clear();
     cur_item = INVALID;
+    
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    }
+    );
 }

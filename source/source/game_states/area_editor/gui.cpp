@@ -29,10 +29,14 @@ void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
-        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_SIMPLE][a]->manifest->internal_name, "Simple"));
+        area_data* area_ptr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
+        content_manifest* man = area_ptr->manifest;
+        areas.push_back(picker_item(area_ptr->name, "Simple", (void*) man, area_ptr->thumbnail.get()));
     }
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-        areas.push_back(picker_item(game.content.areas.list[AREA_TYPE_MISSION][a]->manifest->internal_name, "Mission"));
+        area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+        content_manifest* man = area_ptr->manifest;
+        areas.push_back(picker_item(area_ptr->name, "Mission", (void*) man, area_ptr->thumbnail.get()));
     }
     
     //Set up the picker's behavior and data.

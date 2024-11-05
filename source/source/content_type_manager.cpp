@@ -162,7 +162,7 @@ void area_content_manager::load_area(
     }
     
     //Thumbnail image.
-    string thumbnail_path = base_folder_path + FILE_NAMES::AREA_THUMBNAIL;
+    string thumbnail_path = base_folder_path + "/" + FILE_NAMES::AREA_THUMBNAIL;
     area_ptr->load_thumbnail(thumbnail_path);
     
     //Geometry.

@@ -91,7 +91,7 @@ void group_task_category::erase_mob(mob* m) {
  * @return The type.
  */
 mob_type* group_task_category::get_type(const string &internal_name) const {
-    auto it = game.content.mob_types.list.group_task.find(name);
+    auto it = game.content.mob_types.list.group_task.find(internal_name);
     if(it == game.content.mob_types.list.group_task.end()) return nullptr;
     return it->second;
 }
