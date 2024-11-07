@@ -411,6 +411,7 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
@@ -1460,6 +1461,7 @@ void animation_editor::unload() {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
     }
     );
+    game.content.unload_packs();
     
     if(bg) {
         al_destroy_bitmap(bg);

@@ -12,6 +12,8 @@
 
 #include "functions.h"
 #include "game.h"
+#include "load.h"
+#include "utils/allegro_utils.h"
 
 
 /**
@@ -154,6 +156,16 @@ void content_manager::load_area_as_current(
 
 
 /**
+ * @brief Loads all packs.
+ * This only loads their manifests and metadata, not their content!
+ */
+void content_manager::load_packs() {
+    packs.fill_manifests();
+    packs.load_all();
+}
+
+
+/**
  * @brief Unloads the "current area".
  *
  * @param level Should match the level at which the content got loaded.
@@ -186,4 +198,75 @@ void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
         
         load_levels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
+}
+
+
+/**
+ * @brief Unloads all packs.
+ * This only unloads their metadata and manifests, not their content!
+ */
+void content_manager::unload_packs() {
+    packs.clear_manifests();
+    packs.unload_all();
+}
+
+
+/**
+ * @brief Clears all loaded manifests.
+ */
+void pack_manager::clear_manifests() {
+    manifests.clear();
+}
+
+
+/**
+ * @brief Fills in the manifests.
+ */
+void pack_manager::fill_manifests() {
+    vector<string> folders = folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
+    
+    for(size_t f = 0; f < folders.size(); f++) {
+        if(folders[f] != FOLDER_NAMES::BASE_PACK) {
+            manifests.push_back(folders[f]);
+        }
+    }
+}
+
+
+/**
+ * @brief Loads all packs in the manifests.
+ * This only loads their metadata, not their content!
+ */
+void pack_manager::load_all() {
+    for(size_t p = 0; p < manifests.size(); p++) {
+        data_node pack_file =
+            load_data_file(
+                FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+                manifests[p] + "/" +
+                FILE_NAMES::PACK_DATA
+            );
+            
+        pack pack_data;
+        reader_setter rs(&pack_file);
+        rs.set("name", pack_data.name);
+        rs.set("description", pack_data.description);
+        rs.set("tags", pack_data.tags);
+        rs.set("maker", pack_data.maker);
+        rs.set("version", pack_data.version);
+        rs.set("engine_version", pack_data.engine_version);
+        rs.set("dependencies", pack_data.dependencies);
+        rs.set("conflicts", pack_data.conflicts);
+        rs.set("notes", pack_data.notes);
+        
+        list[manifests[p]] = pack_data;
+    }
+}
+
+
+/**
+ * @brief Unloads all loaded packs.
+ * This only unloads their metadata, not their content!
+ */
+void pack_manager::unload_all() {
+    list.clear();
 }

@@ -366,6 +366,9 @@ public:
 private:
 
     //--- Function declarations ---
+    void fill_cat_manifests_from_pack(
+        mob_category* category, const string &pack_name
+    );
     void load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };

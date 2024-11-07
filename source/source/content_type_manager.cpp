@@ -276,6 +276,9 @@ void content_type_manager::fill_manifests_map(
     map<string, content_manifest> &manifests, const string &content_rel_path, bool folders
 ) {
     fill_manifests_map_from_pack(manifests, FOLDER_NAMES::BASE_PACK, content_rel_path, folders);
+    for(const auto &p : game.content.packs.manifests) {
+        fill_manifests_map_from_pack(manifests, p, content_rel_path, folders);
+    }
 }
 
 
@@ -782,12 +785,22 @@ void mob_anim_content_manager::fill_manifests() {
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(category->folder_name.empty()) return;
         
-        const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + FOLDER_NAMES::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" + category->folder_name;
-        vector<string> type_folders = folder_to_vector_recursively(category_path, true);
-        for(size_t f = 0; f < type_folders.size(); f++) {
-            string internal_name = type_folders[f];
-            manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
-        }
+        fill_cat_manifests_from_pack(category, FOLDER_NAMES::BASE_PACK);
+    }
+}
+
+
+/**
+ * @brief Fills in the manifests from a specific pack.
+ */
+void mob_anim_content_manager::fill_cat_manifests_from_pack(
+    mob_category* category, const string &pack_name
+) {
+    const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack_name + "/" + FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" + category->folder_name;
+    vector<string> type_folders = folder_to_vector_recursively(category_path, true);
+    for(size_t f = 0; f < type_folders.size(); f++) {
+        string internal_name = type_folders[f];
+        manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
     }
 }
 

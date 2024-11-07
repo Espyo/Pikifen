@@ -909,6 +909,7 @@ void area_menu_state::load() {
     show_mission_specs = false;
     
     //Game content.
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
@@ -985,5 +986,6 @@ void area_menu_state::unload() {
         CONTENT_TYPE_AREA,
     }
     );
+    game.content.unload_packs();
     
 }

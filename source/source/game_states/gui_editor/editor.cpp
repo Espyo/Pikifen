@@ -158,6 +158,7 @@ void gui_editor::load() {
     loaded_content_yet = false;
     must_recenter_cam = true;
     
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
@@ -544,4 +545,5 @@ void gui_editor::unload() {
         CONTENT_TYPE_GUI,
     }
     );
+    game.content.unload_packs();
 }

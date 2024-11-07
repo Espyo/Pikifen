@@ -1,8 +1,32 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Editor load dialogs
+        Load dialog should have:
+            History
+            A button to create, which opens a new dialog
+            Selection of items
+                A way to show what pack it's from
+                A search filter, which is highlighted by default when the dialog opens
+            If you choose the base pack, complain
+        For loading, each editor has:
+            Anim: globals, mobs per category
+            Area: simple, mission
+            GUI: one list
+            Particle: one list
+        For creating, each editor needs:
+            Common: internal name, pack, highlight name red if it already exists in this pack
+            Anim: (global only) common
+            Area: common + type
+            GUI: N/A (allow copying to a different pack instead?)
+            Particle: common
+        Pack creation dialog
+            Ask the internal name (highlight red if it already exists)
+            Ask maker, name, etc.
+            Note saying how you can change this later by editing X.txt
+            If you chose the base pack, complain
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -14,7 +38,7 @@ Next tasks (roughly sorted most important first)
     Test -S-'s get_onion_info branch
     Check Helodity's particle editor
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update to Dear ImGui 1.91.4
+    Update to Dear ImGui 1.91.5
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
@@ -155,6 +179,7 @@ Next tasks (roughly sorted most important first)
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New mobs
         Burrowing Snagret
+        Bulbears
         A tall grass mob
         Nuggets
         Add Helodity's Plasm Wraith
@@ -197,40 +222,46 @@ Next tasks (roughly sorted most important first)
     Find some way of making content sharing easier
         The idea
             The Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-            Some sort of data.txt where you can write the author, version, engine version, what other packages it depends on (including optionally specific versions), what packages it's incompatible with, license
+            Some sort of data.txt where you can write the author, version, engine version, what other packs it depends on (including optionally specific versions), what packs it's incompatible with, license
             Problems with the current way of doing things "by hand"
                 When makers want to share their content, they have to fish its requirements from several folders
                 When players want to install content, they have to place it in the right folders
         Implementation
             Loading
                 When the game needs something to exist in memory, it calls the content manager to load it
-                Content manager is responsible for loading all X into memory, or a specific X, plus performance monitor and packages logic
+                Content manager is responsible for loading all X into memory, or a specific X, plus performance monitor and packs logic
                 The content's class is responsible only for being fed a data node and to load stuff from it
             All content will need to be able to:
-                Load from the base folder first and then from all packages, in alphabetical order
+                Load from the base folder first and then from all packs, in alphabetical order
                 Load resources or not, based on the boolean given
                 Check if content by that name already exists, and if so report it
                 Unload
-            Make assets inherit from the plain_content class?
             Add the new common content properties to everything in the engine
             Internal names should be sanitized
             Editors should separate creating and loading
-            Editors should have a unified dialog (in the editor class) that can create a new package, with some basic fields, and some text saying how you can change this later by editing game_data/<package name>/data.txt
-            Editors should warn if you try to edit or create something in the base package, saying how it'll affect the usual experience, may affect all packages, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true
+            Editors should have a unified dialog (in the editor class) that can create a new pack, with some basic fields, and some text saying how you can change this later by editing game_data/<pack name>/data.txt
+            Editors should warn if you try to edit or create something in the base pack, saying how it'll affect the usual experience, may affect all packs, and will make it harder for you to share stuff in the future. Are you sure? This dialog shouldn't appear if, in the options, engine_developer = true
+            Allow pack thumbnails
         Other info
             Right now, this is how each type of content works:
                 One per file: global anims, sounds, songs, graphics, GUI, hazards, liquids, particle generators, spike damage types, sprays, statuses, weather
                 Other ways: areas, mob types
             Problems to watch out for
-                How do you create packages that extend scripts, or replace parameters in existing mobs or the game config?
-                How do you choose what package, if any, do you create a new area/animation/GUI setting in when you're in an editor?
+                How do you create packs that extend scripts, or replace parameters in existing mobs or the game config?
+                How do you choose what pack, if any, do you create a new area/animation/GUI setting in when you're in an editor?
                 What should happen when the player opens the texture selection dialog in the area editor?
-                Area backups should be saved on a sub-folder matching the package
+                Area backups should be saved on a sub-folder matching the pack
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check
-            Test editing every single piece of content, both in the base package, and in a new package
+            Test editing every single piece of content, both in the base pack, and in a new pack
         For later on, maybe, the content manager should be able to figure out a dependency tree
+    Find a way to manage the installed packs
+        Players should be able to choose which ones are enabled or disabled, and their load order
+            The load order (bottom first vs. top first) should be explained
+            It should also show and/or explain in some way how there's the base content
+        When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
+        There should be a button to open the packs folder
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Update screenshots in the manual that still show off the Play area
@@ -258,7 +289,7 @@ Next tasks (roughly sorted most important first)
     
     --- Future ---
     A way to port content from previous versions
-        It could check each loaded package's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
+        It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -292,7 +323,8 @@ Next tasks (roughly sorted most important first)
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
         Allow the player to drag their mouse on the scrollbar GUI item
-        In the results menu, show by how much you've beaten your previous best score
+        Results menu
+            Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
         The difficulty listing in the area menu should use fire icons instead of numbers
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
@@ -320,7 +352,7 @@ Next tasks (roughly sorted most important first)
                 The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
                 When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
                 A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
-                It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc.
+                It should come pre-packed with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc.
                     Confirm that these work both on Linux and on Windows
                 If the player assigns an input that is already assigned to something else, it should give a warning
                 If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
@@ -629,7 +661,7 @@ Next tasks (roughly sorted most important first)
             Wild Pikmin and sprouts should be immune to the sunset
         Catalogs
             There can be multiple catalogs -- Piklopedia and Treasure Hoard are two different catalogs
-            A file, likely game_data/<package>/misc/catalogs.txt is responsible for:
+            A file, likely game_data/<pack>/misc/catalogs.txt is responsible for:
                 Which catalogs exist, as well as their icons, unlock criteria, etc.
                 What entries exist in each, in order
                 What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)

@@ -1859,6 +1859,7 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
@@ -3894,6 +3895,7 @@ void area_editor::unload() {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
     }
     );
+    game.content.unload_packs();
 }
 
 

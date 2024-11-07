@@ -170,6 +170,9 @@ const string MAKER_TOOLS = "tools.txt";
 //Options file.
 const string OPTIONS = "options.txt";
 
+//Pack data file.
+const string PACK_DATA = "data.txt";
+
 //Performance log file.
 const string PERFORMANCE_LOG = "performance_log.txt";
 

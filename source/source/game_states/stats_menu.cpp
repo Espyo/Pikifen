@@ -177,6 +177,7 @@ void stats_menu_state::load() {
     //Resources.
     bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
     
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
@@ -398,6 +399,7 @@ void stats_menu_state::unload() {
         CONTENT_TYPE_AREA,
     }
     );
+    game.content.unload_packs();
     
     //Menu items.
     gui.destroy();

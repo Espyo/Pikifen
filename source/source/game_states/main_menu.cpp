@@ -723,6 +723,7 @@ void main_menu_state::load() {
     al_flip_display();
     
     //Game content.
+    game.content.load_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
@@ -893,5 +894,5 @@ void main_menu_state::unload() {
         CONTENT_TYPE_GUI,
     }
     );
-    
+    game.content.unload_packs();
 }

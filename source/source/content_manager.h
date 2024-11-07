@@ -21,6 +21,29 @@ using std::string;
 
 
 /**
+ * @brief Manages everything regarding the installed game content packs.
+ */
+struct pack_manager {
+
+    //--- Members ---
+    
+    //Manifests.
+    vector<string> manifests;
+    
+    //List of loaded packs.
+    map<string, pack> list;
+    
+    //--- Function declarations ---
+    
+    void clear_manifests();
+    void fill_manifests();
+    void load_all();
+    void unload_all();
+    
+};
+
+
+/**
  * @brief Manages everything regarding game content, be it assets, types of
  * mobs, etc.
  */
@@ -79,6 +102,9 @@ struct content_manager {
     //Weather conditions.
     weather_condition_content_manager weather_conditions;
     
+    //Packs.
+    pack_manager packs;
+    
     
     //--- Function declarations ---
     
@@ -88,8 +114,10 @@ struct content_manager {
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
+    void load_packs();
     void unload_all(const vector<CONTENT_TYPE> &types);
     void unload_current_area(CONTENT_LOAD_LEVEL level);
+    void unload_packs();
     
     private:
     

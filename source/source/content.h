@@ -181,3 +181,40 @@ protected:
     void save_metadata_to_data_node(data_node* node) const;
     
 };
+
+
+/**
+ * @brief Data about an installed pack.
+ */
+struct pack {
+
+    //--- Members ---
+    
+    //Optional player/maker-facing name.
+    string name;
+    
+    //Optional description.
+    string description;
+    
+    //Optional tags, separated by semicolon.
+    string tags;
+    
+    //Optional person(s) who made it.
+    string maker;
+    
+    //Optional version name or number.
+    string version;
+    
+    //Optional version of the engine it was made for.
+    string engine_version;
+    
+    //Optional list of packs it depends on, separated by semicolon.
+    string dependencies;
+    
+    //Optional list of packs it conflicts with.
+    string conflicts;
+    
+    //Optional notes of any kind.
+    string notes;
+    
+};
