@@ -1244,7 +1244,7 @@ void area_editor::process_gui_panel_details() {
                     FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
                     vector<string> f =
                         prompt_file_dialog_locked_to_folder(
-                            FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                            FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
                             "Please choose the texture to use for the "
                             "tree shadow.",
                             "*.png",
@@ -2086,7 +2086,7 @@ void area_editor::process_gui_panel_info() {
             FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
             vector<string> f =
                 prompt_file_dialog_locked_to_folder(
-                    FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                    FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
                     "Please choose the texture to use for the background.",
                     "*.*",
                     ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |

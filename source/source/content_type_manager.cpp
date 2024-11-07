@@ -37,8 +37,8 @@ void area_content_manager::fill_manifests() {
         fill_manifests_map(
             manifests[t],
             t == AREA_TYPE_SIMPLE ?
-            FOLDER_PATHS_FROM_PKG::SIMPLE_AREAS :
-            FOLDER_PATHS_FROM_PKG::MISSION_AREAS,
+            FOLDER_PATHS_FROM_PACK::SIMPLE_AREAS :
+            FOLDER_PATHS_FROM_PACK::MISSION_AREAS,
             true
         );
     }
@@ -50,15 +50,15 @@ void area_content_manager::fill_manifests() {
  * was found.
  *
  * @param area_name Name of the area.
- * @param package Package it belongs to.
+ * @param pack Pack it belongs to.
  * @param type Area type.
  * @return The manifest, or nullptr.
  */
 content_manifest* area_content_manager::find_manifest(
-    const string &area_name, const string &package, AREA_TYPE type
+    const string &area_name, const string &pack, AREA_TYPE type
 ) {
     for(auto &m : manifests[type]) {
-        if(m.first == area_name && m.second.package == package) {
+        if(m.first == area_name && m.second.pack == pack) {
             return &m.second;
         }
     }
@@ -117,7 +117,7 @@ void area_content_manager::load_area(
     //Setup.
     string user_data_path =
         FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
-        manifest->package + "/" +
+        manifest->pack + "/" +
         (
             type == AREA_TYPE_SIMPLE ?
             FOLDER_NAMES::SIMPLE_AREAS :
@@ -222,7 +222,7 @@ void bitmap_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void bitmap_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::GRAPHICS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GRAPHICS, false);
 }
 
 
@@ -269,31 +269,31 @@ void bitmap_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
  *
  * @param manifests Manifests map to fill.
  * @param content_rel_path Path to the content, relative to the start
- * of the package.
+ * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
 void content_type_manager::fill_manifests_map(
     map<string, content_manifest> &manifests, const string &content_rel_path, bool folders
 ) {
-    fill_manifests_map_from_pkg(manifests, FOLDER_NAMES::BASE_PKG, content_rel_path, folders);
+    fill_manifests_map_from_pack(manifests, FOLDER_NAMES::BASE_PACK, content_rel_path, folders);
 }
 
 
 /**
- * @brief Fills in a given manifests map from within a package folder.
+ * @brief Fills in a given manifests map from within a pack folder.
  *
  * @param manifests Manifests map to fill.
- * @param package_name Name of the package folder.
+ * @param pack_name Name of the pack folder.
  * @param content_rel_path Path to the content, relative to the start
- * of the package.
+ * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
-void content_type_manager::fill_manifests_map_from_pkg(
-    map<string, content_manifest> &manifests, const string &package_name,
+void content_type_manager::fill_manifests_map_from_pack(
+    map<string, content_manifest> &manifests, const string &pack_name,
     const string &content_rel_path, bool folders
 ) {
     const string folder_path =
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + package_name +
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack_name +
         "/" + content_rel_path;
         
     vector<string> items =
@@ -301,7 +301,7 @@ void content_type_manager::fill_manifests_map_from_pkg(
         
     for(size_t i = 0; i < items.size(); i++) {
         string internal_name = remove_extension(items[i]);
-        manifests[internal_name] = content_manifest(internal_name, folder_path + "/" + items[i], package_name);
+        manifests[internal_name] = content_manifest(internal_name, folder_path + "/" + items[i], pack_name);
     }
 }
 
@@ -318,7 +318,7 @@ void custom_particle_gen_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void custom_particle_gen_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::PARTICLE_GENERATORS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false);
 }
 
 
@@ -398,7 +398,7 @@ void global_anim_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void global_anim_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::GLOBAL_ANIMATIONS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS, false);
 }
 
 
@@ -470,7 +470,7 @@ void gui_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void gui_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::GUI, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GUI, false);
 }
 
 
@@ -528,7 +528,7 @@ void hazard_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void hazard_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::HAZARDS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::HAZARDS, false);
 }
 
 
@@ -605,7 +605,7 @@ void liquid_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void liquid_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::LIQUIDS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::LIQUIDS, false);
 }
 
 
@@ -685,7 +685,7 @@ void misc_config_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void misc_config_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::MISC, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::MISC, false);
 }
 
 
@@ -782,11 +782,11 @@ void mob_anim_content_manager::fill_manifests() {
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(category->folder_name.empty()) return;
         
-        const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + FOLDER_NAMES::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" + category->folder_name;
+        const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + FOLDER_NAMES::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" + category->folder_name;
         vector<string> type_folders = folder_to_vector_recursively(category_path, true);
         for(size_t f = 0; f < type_folders.size(); f++) {
             string internal_name = type_folders[f];
-            manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PKG);
+            manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
         }
     }
 }
@@ -864,7 +864,7 @@ void mob_type_content_manager::fill_manifests() {
         manifests.push_back(map<string, content_manifest>());
         fill_manifests_map(
             manifests[c],
-            FOLDER_PATHS_FROM_PKG::MOB_TYPES + "/" +
+            FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
             game.mob_categories.get((MOB_CATEGORY) c)->folder_name,
             true
         );
@@ -1088,7 +1088,7 @@ void sample_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void sample_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::SOUNDS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SOUNDS, false);
 }
 
 
@@ -1142,7 +1142,7 @@ void song_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void song_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::SONGS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SONGS, false);
 }
 
 
@@ -1220,7 +1220,7 @@ void song_track_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void song_track_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::SONG_TRACKS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SONG_TRACKS, false);
 }
 
 
@@ -1275,7 +1275,7 @@ void spike_damage_type_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void spike_damage_type_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::SPIKE_DAMAGES_TYPES, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES, false);
 }
 
 
@@ -1350,7 +1350,7 @@ void spray_type_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void spray_type_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::SPRAYS, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SPRAYS, false);
 }
 
 
@@ -1466,7 +1466,7 @@ void status_type_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void status_type_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::STATUSES, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::STATUSES, false);
 }
 
 
@@ -1574,7 +1574,7 @@ void weather_condition_content_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void weather_condition_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PKG::WEATHER, false);
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::WEATHER, false);
 }
 
 

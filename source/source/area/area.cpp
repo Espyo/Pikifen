@@ -2547,8 +2547,8 @@ tree_shadow::~tree_shadow() {
  * given its path.
  *
  * @param requested_area_path Relative path to the requested area.
- * @param out_area_folder_name If not nullptr, a manifest is returned here.
- * @param out_package If not nullptr, the package is returned here.
+ * @param out_manifest If not nullptr, a manifest is returned here.
+ * @param out_area_type If not nullptr, the area type is returned here.
  */
 void get_area_info_from_path(
     const string &requested_area_path,

@@ -65,8 +65,8 @@ const string GAME_DATA = "game_data";
 //User data folder.
 const string USER_DATA = "user_data";
 
-//Base content package folder.
-const string BASE_PKG = "base";
+//Base content pack folder.
+const string BASE_PACK = "base";
 
 //Audio folder.
 const string AUDIO = "audio";
@@ -186,9 +186,9 @@ namespace FOLDER_PATHS_FROM_ROOT {
 const string GAME_DATA =
     FOLDER_NAMES::GAME_DATA;
     
-//Base package folder.
-const string BASE_PKG =
-    GAME_DATA + "/" + FOLDER_NAMES::BASE_PKG;
+//Base pack folder.
+const string BASE_PACK =
+    GAME_DATA + "/" + FOLDER_NAMES::BASE_PACK;
     
 //User data folder.
 const string USER_DATA =
@@ -231,8 +231,8 @@ const string MAKER_TOOLS =
 };
 
 
-//Paths to game content folders from a package's folder.
-namespace FOLDER_PATHS_FROM_PKG {
+//Paths to game content folders from a pack's folder.
+namespace FOLDER_PATHS_FROM_PACK {
 
 //Audio folder.
 const string AUDIO =
@@ -321,18 +321,18 @@ const string WEATHER =
 };
 
 
-//Paths to game content files from a package's folder.
-namespace FILE_PATHS_FROM_PKG {
+//Paths to game content files from a pack's folder.
+namespace FILE_PATHS_FROM_PACK {
 //Game configuration file.
 const string GAME_CONFIG =
-    FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::GAME_CONFIG;
+    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::GAME_CONFIG;
     
 //System animations file.
 const string SYSTEM_ANIMS =
-    FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::SYSTEM_ANIMS;
+    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_ANIMS;
     
 //System animation file names file.
 const string SYSTEM_ASSET_FILE_NAMES =
-    FOLDER_PATHS_FROM_PKG::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
+    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
     
 }

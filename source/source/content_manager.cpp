@@ -93,7 +93,7 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
 
 /**
  * @brief Loads all pieces of game content of some type.
- * This begins by generating a manifest of all content on disk, with packages
+ * This begins by generating a manifest of all content on disk, with packs
  * in mind, and then reads all the files in the manifest.
  *
  * @param types Types of game content to load.

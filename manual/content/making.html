@@ -27,7 +27,7 @@
 
     <dl>
       <dt><b>Content lives in the <code>game_data</code> folder as plain old files and folders.</b></dt>
-      <dd>Content is just made up of files and folders inside of your hard drive, particularly inside of <i>Pikifen</i>'s <code>game_data</code> folder, inside the various <a href="#packages">package</a> subfolders. For instance, the regular cave ambiance weather condition in the base content is stored in <code>game_data/base/weather/cave_normal.txt</code>.</dd>
+      <dd>Content is just made up of files and folders inside of your hard drive, particularly inside of <i>Pikifen</i>'s <code>game_data</code> folder, inside the various <a href="#packs">pack</a> subfolders. For instance, the regular cave ambiance weather condition in the base content is stored in <code>game_data/base/weather/cave_normal.txt</code>.</dd>
       <dt><b>Every piece of content has an internal name, which is referred to by other content.</b></dt>
       <dd>When other content needs to refer to this content, it does so by using the internal name. For example, the spicy status's data refers to the spicy sparkles particles it generates as <code>spicy_sparkles</code>, since that's the internal name of that particle generator.</dd>
       <dt><b>Internal names are the file names without extension or the folder names.</b></dt>
@@ -36,8 +36,8 @@
       <dd>To avoid mishaps with case sensitivity and spaces for separating arguments in different parts of the engine, internal names (and thus content file and folder names) should use lowercase letters only, use underscores instead of spaces, and avoid more "exotic" characters like symbols.</dd>
       <dt><b>Most content has a data file with some metadata.</b></dt>
       <dd>Besides things like images and sounds, all pieces of game content have a data file that contains metadata, i.e. information about what this content is, what version it is, who made it, and so on. See <a href="#content-props">here</a> for details.</dd>
-      <dt><b>Content can exist in multiple packages.</b></dt>
-      <dd>For more information, see <a href="#packages">here</a>.</dd>
+      <dt><b>Content can exist in multiple packs.</b></dt>
+      <dd>For more information, see <a href="#packs">here</a>.</dd>
     </dl>
 
     <h2 id="data-file">Data file</h2>
@@ -180,15 +180,15 @@ block {
 
     <p>In addition, the <a href="maker_toolkit.html">maker toolkit</a> is a collection of tools to help you make and debug content.</p>
 
-    <h2 id="packages">Packages</h2>
+    <h2 id="packs">Packs</h2>
 
-    <p>You can edit the base content package that comes with the engine if you want, but you can also create your own package. The base content, that lives in <code>game_data/base</code>, is meant to contain some, well, base content; basic stuff for players to get a feel of the game and have something to play with, as well as building blocks for people who want to create their own content with. It's recommended to let this content be and instead create your own package, so that if something goes wrong with your creation or you want to share it, you won't have to wade through hundreds of files in search of what's what and can instead focus solely on what's yours. Likewise, players will be able to just place your folder in their own machine and play your content right away!</p>
+    <p>You can edit the base content pack that comes with the engine if you want, but you can also create your own pack. The base content, that lives in <code>game_data/base</code>, is meant to contain some, well, base content; basic stuff for players to get a feel of the game and have something to play with, as well as building blocks for people who want to create their own content with. It's recommended to let this content be and instead create your own pack, so that if something goes wrong with your creation or you want to share it, you won't have to wade through hundreds of files in search of what's what and can instead focus solely on what's yours. Likewise, players will be able to just place your folder in their own machine and play your content right away!</p>
 
-    <p>To create your own package, simply create a new folder within the <code>game_data</code> folder; this will be the package's internal name. TODO expand with information about data.txt</p>
+    <p>To create your own pack, simply create a new folder within the <code>game_data</code> folder; this will be the pack's internal name. TODO expand with information about data.txt</p>
 
-    <p>When <i>Pikifen</i> loads something, it will start by checking all the files and folders that exist in the base package. Then it will do the same for every existing package. In the end, it will figure out what file to load for every <code>internal name</code> that exists. In other words, if the base package has a <code>crumbug</code> and a <code>water_dumple</code> enemy, and a given package has a <code>water_dumple</code> and a <code>rainbow_bulborb</code> enemy, the engine will load the Crumbug, the Water Dumple from your package (and completely ignore the base Water Dumple), and the Rainbow Bulborb.</p>
+    <p>When <i>Pikifen</i> loads something, it will start by checking all the files and folders that exist in the base pack. Then it will do the same for every existing pack. In the end, it will figure out what file to load for every <code>internal name</code> that exists. In other words, if the base pack has a <code>crumbug</code> and a <code>water_dumple</code> enemy, and a given pack has a <code>water_dumple</code> and a <code>rainbow_bulborb</code> enemy, the engine will load the Crumbug, the Water Dumple from your pack (and completely ignore the base Water Dumple), and the Rainbow Bulborb.</p>
 
-    <p>When you want to share your content with others, it's recommended that you right-click your package's folder, and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file. Once you share it, any player that wants to try your content simply needs to download your zip file, extract it, and place the extracted folder in their own <code>game_data</code> folder!</p>
+    <p>When you want to share your content with others, it's recommended that you right-click your pack's folder, and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file. Once you share it, any player that wants to try your content simply needs to download your zip file, extract it, and place the extracted folder in their own <code>game_data</code> folder!</p>
 
     <h2 id="tips">Tips</h2>
 

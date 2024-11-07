@@ -106,17 +106,17 @@ struct content_manifest {
     //Internal name. Basically file name sans extension or folder name.
     string internal_name;
     
-    //Path to the content, relative to the packages folder.
+    //Path to the content, relative to the packs folder.
     string path;
     
-    //Package it belongs to.
-    string package;
+    //Pack it belongs to.
+    string pack;
     
     
     //--- Function declarations ---
     
     content_manifest();
-    content_manifest(const string &name, const string &path, const string &package);
+    content_manifest(const string &name, const string &path, const string &pack);
     void clear();
     void fill_from_path(const string &path);
     

@@ -51,8 +51,8 @@ protected:
     void fill_manifests_map(
         map<string, content_manifest> &manifests, const string &content_path, bool folders
     );
-    void fill_manifests_map_from_pkg(
-        map<string, content_manifest> &manifests, const string &package_name,
+    void fill_manifests_map_from_pack(
+        map<string, content_manifest> &manifests, const string &pack_name,
         const string &content_rel_path, bool folders
     );
     
@@ -80,7 +80,7 @@ public:
     
     void clear_manifests() override;
     void fill_manifests() override;
-    content_manifest* find_manifest(const string &area_name, const string &package, AREA_TYPE type);
+    content_manifest* find_manifest(const string &area_name, const string &pack, AREA_TYPE type);
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;

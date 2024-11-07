@@ -763,7 +763,7 @@ void gameplay_state::load() {
         path_of_area_to_load, &temp_manifest, &area_type
     );
     game.content.load_area_as_current(
-        game.content.areas.find_manifest(temp_manifest.internal_name, temp_manifest.package, area_type),
+        game.content.areas.find_manifest(temp_manifest.internal_name, temp_manifest.pack, area_type),
         area_type, CONTENT_LOAD_LEVEL_FULL, false
     );
     

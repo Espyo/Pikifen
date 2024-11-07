@@ -81,13 +81,13 @@ content_manifest::content_manifest() {}
  * @brief Constructs a new content manifest object.
  *
  * @param name Internal name. Basically file name sans extension or folder name.
- * @param path Path to the content, relative to the packages folder.
- * @param package Package it belongs to.
+ * @param path Path to the content, relative to the packs folder.
+ * @param pack Pack it belongs to.
  */
-content_manifest::content_manifest(const string& name, const string &path, const string &package) :
+content_manifest::content_manifest(const string &name, const string &path, const string &pack) :
     internal_name(name),
     path(path),
-    package(package) {
+    pack(pack) {
     
 }
 
@@ -98,7 +98,7 @@ content_manifest::content_manifest(const string& name, const string &path, const
 void content_manifest::clear() {
     internal_name.clear();
     path.clear();
-    package.clear();
+    pack.clear();
 }
 
 
@@ -106,9 +106,9 @@ void content_manifest::clear() {
  * @brief Fills in the information using the provided path. It'll all be empty
  * if the path is not valid.
  */
-void content_manifest::fill_from_path(const string& path) {
+void content_manifest::fill_from_path(const string &path) {
     clear();
-
+    
     vector<string> parts = split(path, "/");
     size_t game_data_idx = string::npos;
     for(size_t p = 0; p < parts.size(); p++) {
@@ -119,8 +119,8 @@ void content_manifest::fill_from_path(const string& path) {
     }
     if(game_data_idx == string::npos) return;
     if((int) game_data_idx >= (int) parts.size() - 2) return;
-
+    
     this->path = path;
-    this->package = parts[game_data_idx + 1];
+    this->pack = parts[game_data_idx + 1];
     this->internal_name = remove_extension(parts.back());
 }

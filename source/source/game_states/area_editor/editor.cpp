@@ -471,7 +471,7 @@ void area_editor::create_area(
     
     //Find a texture to give to this sector.
     vector<string> textures =
-        folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, false); //TODO
+        folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, false); //TODO
     size_t texture_to_use = INVALID;
     //First, if there's any "grass" texture, use that.
     for(size_t t = 0; t < textures.size(); t++) {
@@ -1486,7 +1486,7 @@ string area_editor::get_opened_folder_path() const {
  * @return The name.
  */
 string area_editor::get_path_short_name(const string &p) const {
-    string match = FOLDER_PATHS_FROM_PKG::AREAS + "/";
+    string match = FOLDER_PATHS_FROM_PACK::AREAS + "/";
     size_t start = p.find(match);
     if(start == string::npos) {
         return p;
@@ -2092,7 +2092,7 @@ void area_editor::pick_texture(
         FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
-                FOLDER_PATHS_FROM_ROOT::BASE_PKG + "/" + FOLDER_PATHS_FROM_PKG::TEXTURES, //TODO
+                FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
                 "Please choose the texture to use for the sector.",
                 "*.*",
                 ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
