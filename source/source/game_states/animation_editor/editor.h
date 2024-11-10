@@ -109,7 +109,7 @@ private:
     
     //Does the animation exist on disk, or RAM only?
     bool animation_exists_on_disk = false;
-
+    
     //Whether to use a background texture, if any.
     ALLEGRO_BITMAP* bg = nullptr;
     
@@ -164,12 +164,6 @@ private:
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     
-    //File path of the file currently being edited.
-    string file_path;
-    
-    //Cache with the names of all global animation files (sans extension).
-    vector<string> global_anim_files_cache;
-    
     //Is the grid visible?
     bool grid_visible = true;
     
@@ -178,6 +172,9 @@ private:
     
     //Last file used as for a spritesheet.
     string last_spritesheet_used;
+    
+    //Picker info for the picker in the "load" dialog.
+    picker_info load_dialog_picker;
     
     //Mob type of the currently loaded animation file, if any.
     mob_type* loaded_mob_type = nullptr;
@@ -193,9 +190,6 @@ private:
     
     //Before entering the sprite bitmap state, this was the camera zoom.
     float pre_sprite_bmp_cam_zoom = 1.0f;
-    
-    //Should the load dialog's GUI variables be reset?
-    bool reset_load_dialog = true;
     
     //Is side view on?
     bool side_view = false;
@@ -238,6 +232,10 @@ private:
     void import_sprite_transformation_data(const string &name);
     bool is_cursor_in_timeline();
     void load_animation_database(bool should_update_history);
+    void pick_file(
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
+    );
     void play_sound(size_t sound_idx);
     void rename_animation(animation* anim, const string &new_name);
     void rename_body_part(body_part* part, const string &new_name);
@@ -274,10 +272,12 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_animation(
-        const string &name, const string &category, bool is_new
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
     );
     void pick_sprite(
-        const string &name, const string &category, bool is_new
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
     );
     void grid_toggle_cmd(float input_value);
     void hitboxes_toggle_cmd(float input_value);

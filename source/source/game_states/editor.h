@@ -350,9 +350,12 @@ protected:
         //Its name.
         string name;
         
-        //What category it belongs to, or empty string for none.
-        string category;
-
+        //What top-level category it belongs to, or empty string for none.
+        string top_category;
+        
+        //What second-level category it belongs to, or empty string for none.
+        string sec_category;
+        
         //Information to pass to the code when the item is picked, if any.
         void* info;
         
@@ -364,8 +367,8 @@ protected:
         
         explicit picker_item(
             const string &name,
-            const string &category = "", void* info = nullptr,
-            ALLEGRO_BITMAP* bitmap = nullptr
+            const string &top_category = "", const string &second_category = "",
+            void* info = nullptr, ALLEGRO_BITMAP* bitmap = nullptr
         );
         
     };
@@ -382,8 +385,11 @@ protected:
         //Pointer to the editor that's using it.
         editor* editor_ptr = nullptr;
         
-        //Category the user picked for the new item, if applicable.
-        string new_item_category;
+        //Top-level category the user picked for the new item, if applicable.
+        string new_item_top_cat;
+        
+        //Second-level category the user picked for the new item, if applicable.
+        string new_item_sec_cat;
         
         //Do we need to focus on the filter text box?
         bool needs_filter_box_focus = true;
@@ -397,7 +403,7 @@ protected:
         
         //Callback for when the user picks an item from the picker dialog.
         std::function<void(
-            const string &, const string &, void*, bool
+            const string &, const string &, const string &, void*, bool
         )> pick_callback = nullptr;
         
         //Text to display above the picker dialog list.
@@ -406,8 +412,9 @@ protected:
         //Can the user make a new item in the picker dialog?
         bool can_make_new = false;
         
-        //When making a new item, the user must pick between these, if any.
-        vector<string> new_item_category_choices;
+        //When making a new item, the user must pick between these
+        //top-level category choices, if applicable.
+        vector<string> new_item_top_cat_choices;
         
         //Only show picker dialog items matching this filter.
         string filter;
@@ -611,7 +618,7 @@ protected:
     
     //Current sub-state.
     size_t sub_state = 0;
-
+    
     //Maximum zoom level allowed.
     float zoom_max_level = 0.0f;
     
@@ -654,7 +661,7 @@ protected:
         const string &title,
         const vector<picker_item> &items,
         const std::function<void(
-            const string &, const string &, void*, bool
+            const string &, const string &, const string &, void*, bool
         )> &pick_callback,
         const string &list_header = "",
         bool can_make_new = false,

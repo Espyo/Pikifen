@@ -446,6 +446,7 @@ void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 void global_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
     data_node file(manifest->path);
     animation_database db;
+    db.manifest = manifest;
     db.load_from_data_node(&file);
     list[manifest->internal_name] = db;
 }
@@ -781,6 +782,7 @@ void mob_anim_content_manager::clear_manifests() {
  */
 void mob_anim_content_manager::fill_manifests() {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        manifests.push_back(map<string, content_manifest>());
         if(c == MOB_CATEGORY_NONE) continue;
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(category->folder_name.empty()) return;
@@ -800,7 +802,7 @@ void mob_anim_content_manager::fill_cat_manifests_from_pack(
     vector<string> type_folders = folder_to_vector_recursively(category_path, true);
     for(size_t f = 0; f < type_folders.size(); f++) {
         string internal_name = type_folders[f];
-        manifests[internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
+        manifests[category->id][internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
     }
 }
 
@@ -831,8 +833,11 @@ string mob_anim_content_manager::get_perf_mon_measurement_name() const {
  * @param level Level to load at.
  */
 void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
-    for(auto &a : manifests) {
-        load_animation(&a.second, level);
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        list.push_back(map<string, animation_database>());
+        for(auto &a : manifests[c]) {
+            load_animation(&a.second, level, (MOB_CATEGORY) c);
+        }
     }
 }
 
@@ -842,12 +847,14 @@ void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  *
  * @param manifest Manifest of the animation.
  * @param level Level to load at.
+ * @param category_id Mob category ID.
  */
-void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
+void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
     data_node file(manifest->path);
     animation_database db;
+    db.manifest = manifest;
     db.load_from_data_node(&file);
-    list[manifest->internal_name] = db;
+    list[category_id][manifest->internal_name] = db;
 }
 
 
@@ -875,6 +882,7 @@ void mob_type_content_manager::clear_manifests() {
 void mob_type_content_manager::fill_manifests() {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         manifests.push_back(map<string, content_manifest>());
+        if(c == MOB_CATEGORY_NONE) continue;
         fill_manifests_map(
             manifests[c],
             FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +

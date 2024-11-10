@@ -26,20 +26,50 @@
  * @brief Opens the "load" dialog.
  */
 void animation_editor::open_load_dialog() {
-    global_anim_files_cache =
-        folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS, false, nullptr); //TODO
-    for(size_t f = 0; f < global_anim_files_cache.size(); f++) {
-        global_anim_files_cache[f] =
-            remove_extension(global_anim_files_cache[f]);
+    //Set up the picker's behavior and data.
+    vector<picker_item> file_items;
+    for(const auto &a : game.content.global_anims.list) {
+        file_items.push_back(
+            picker_item(
+                a.second.name,
+                "Pack: " + a.second.manifest->pack, "Global animations",
+                (void*) a.second.manifest
+            )
+        );
     }
-    
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        if(c == MOB_CATEGORY_NONE) continue;
+        mob_category* cat = game.mob_categories.get((MOB_CATEGORY) c);
+        for(const auto &a : game.content.mob_anims.list[c]) {
+            mob_type* type = cat->get_type(a.first);
+            file_items.push_back(
+                picker_item(
+                    type->name,
+                    "Pack: " + a.second.manifest->pack, cat->name + " objects",
+                    (void*) a.second.manifest
+                )
+            );
+        }
+    }
+    load_dialog_picker = picker_info(this);
+    load_dialog_picker.items = file_items;
+    load_dialog_picker.pick_callback =
+        std::bind(
+            &animation_editor::pick_file, this,
+            std::placeholders::_1,
+            std::placeholders::_2,
+            std::placeholders::_3,
+            std::placeholders::_4,
+            std::placeholders::_5
+        );
+        
+    //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load a file or create a new one",
         std::bind(&animation_editor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
         std::bind(&animation_editor::close_load_dialog, this);
-    reset_load_dialog = true;
 }
 
 
@@ -284,7 +314,7 @@ void animation_editor::process_gui_load_dialog() {
         return get_path_short_name(name);
     },
     [this](const string  &name) {
-        file_path = name;
+        manifest.clear();
         loaded_mob_type = nullptr;
         load_animation_database(true);
         close_top_dialog();
@@ -294,102 +324,27 @@ void animation_editor::process_gui_load_dialog() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Object animation node.
-    if(saveable_tree_node("load", "Object animation")) {
-        static string custom_cat_name;
-        static mob_type* type = nullptr;
-        
-        if(reset_load_dialog) {
-            custom_cat_name = game.config.pikmin_order[0]->custom_category_name;
-            type = game.config.pikmin_order[0];
-            reset_load_dialog = false;
+    //New node.
+    if(saveable_tree_node("load", "New")) {
+        if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
+            //TODO
         }
-        
-        //Category and type comboboxes.
-        process_gui_mob_type_widgets(&custom_cat_name, &type);
-        
-        //Load button.
-        if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
-            if(type) {
-                loaded_mob_type = type;
-                file_path =
-                    loaded_mob_type->manifest->path + "/animations.txt";
-                load_animation_database(true);
-                close_top_dialog();
-            }
-        }
-        set_tooltip(
-            "Load/create the animation file for the chosen mob type."
-        );
         
         ImGui::TreePop();
-        
     }
+    set_tooltip(
+        "Creates a new animation.\n"
+        "This works for global animations only."
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Global animation node.
-    if(saveable_tree_node("load", "Global animation")) {
-    
-        //Animations combobox.
-        static string chosen_anim;
-        if(!global_anim_files_cache.empty() && chosen_anim.empty()) {
-            chosen_anim = global_anim_files_cache[0];
-        }
-        ImGui::Combo("Animation", &chosen_anim, global_anim_files_cache, 20);
-        
-        //Load button.
-        if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
-            if(!chosen_anim.empty()) {
-                loaded_mob_type = nullptr;
-                file_path = FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/" + chosen_anim + ".txt"; //TODO
-                load_animation_database(true);
-                close_top_dialog();
-            }
-        }
-        set_tooltip(
-            "Load the animation file for the chosen generic global animation."
-        );
+    //Load node.
+    if(saveable_tree_node("load", "Load")) {
+        load_dialog_picker.process();
         
         ImGui::TreePop();
-        
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Other node.
-    if(saveable_tree_node("load", "Other")) {
-    
-        //Load button.
-        if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
-            string last_file_opened;
-            if(history.size()) {
-                last_file_opened = history[0];
-            }
-            
-            vector<string> f =
-                prompt_file_dialog(
-                    last_file_opened,
-                    "Please choose an animation data file to load or create.",
-                    "*.txt", 0, game.display
-                );
-                
-            if(!f.empty() && !f[0].empty()) {
-                file_path = f[0];
-                
-                loaded_mob_type = nullptr;
-                load_animation_database(true);
-                close_top_dialog();
-            }
-        }
-        set_tooltip(
-            "Browse your disk for an animation file to load/create."
-        );
-        
-        ImGui::TreePop();
-        
     }
 }
 
@@ -696,7 +651,7 @@ void animation_editor::process_gui_panel_animation() {
     ) {
         if(!anims.animations.empty()) {
             if(!cur_anim_i.cur_anim) {
-                pick_animation(anims.animations[0]->name, "", false);
+                pick_animation(anims.animations[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
@@ -704,7 +659,7 @@ void animation_editor::process_gui_panel_animation() {
                         -1,
                         (int) anims.animations.size()
                     );
-                pick_animation(anims.animations[new_idx]->name, "", false);
+                pick_animation(anims.animations[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -737,7 +692,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
             }
             anim_names.push_back(
-                picker_item(anims.animations[a]->name, "", anim_frame_1)
+                picker_item(anims.animations[a]->name, "", "", anim_frame_1)
             );
         }
         open_picker_dialog(
@@ -747,7 +702,9 @@ void animation_editor::process_gui_panel_animation() {
                 &animation_editor::pick_animation, this,
                 std::placeholders::_1,
                 std::placeholders::_2,
-                std::placeholders::_3
+                std::placeholders::_3,
+                std::placeholders::_4,
+                std::placeholders::_5
             ),
             "",
             true
@@ -768,7 +725,7 @@ void animation_editor::process_gui_panel_animation() {
     ) {
         if(!anims.animations.empty()) {
             if(!cur_anim_i.cur_anim) {
-                pick_animation(anims.animations[0]->name, "", false);
+                pick_animation(anims.animations[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
@@ -776,7 +733,7 @@ void animation_editor::process_gui_panel_animation() {
                         1,
                         (int) anims.animations.size()
                     );
-                pick_animation(anims.animations[new_idx]->name, "", false);
+                pick_animation(anims.animations[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -804,7 +761,7 @@ void animation_editor::process_gui_panel_animation() {
                 cur_anim_i.clear();
             } else {
                 nr = std::min(nr, anims.animations.size() - 1);
-                pick_animation(anims.animations[nr]->name, "", false);
+                pick_animation(anims.animations[nr]->name, "", "", nullptr, false);
             }
             anim_playing = false;
             changes_mgr.mark_as_changed();
@@ -1534,8 +1491,11 @@ void animation_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Current file text.
-    ImGui::Text("Current file: %s", get_path_short_name(file_path).c_str());
-    set_tooltip("Full file path: " + file_path);
+    ImGui::Text("File: %s", manifest.internal_name.c_str());
+    set_tooltip(
+        "Pack: " + manifest.pack + "\n"
+        "File path: " + manifest.path
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -1551,7 +1511,7 @@ void animation_editor::process_gui_panel_main() {
         )
     ) {
         if(!cur_anim_i.cur_anim && !anims.animations.empty()) {
-            pick_animation(anims.animations[0]->name, "", false);
+            pick_animation(anims.animations[0]->name, "", "", nullptr, false);
         }
         change_state(EDITOR_STATE_ANIMATION);
     }
@@ -1689,7 +1649,7 @@ void animation_editor::process_gui_panel_sprite() {
     ) {
         if(!anims.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, "", false);
+                pick_sprite(anims.sprites[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
@@ -1697,7 +1657,7 @@ void animation_editor::process_gui_panel_sprite() {
                         -1,
                         (int) anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_idx]->name, "", false);
+                pick_sprite(anims.sprites[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -1718,7 +1678,7 @@ void animation_editor::process_gui_panel_sprite() {
             sprite_names.push_back(
                 picker_item(
                     anims.sprites[s]->name,
-                    "",
+                    "", "",
                     anims.sprites[s]->bitmap
                 )
             );
@@ -1730,7 +1690,9 @@ void animation_editor::process_gui_panel_sprite() {
                 &animation_editor::pick_sprite, this,
                 std::placeholders::_1,
                 std::placeholders::_2,
-                std::placeholders::_3
+                std::placeholders::_3,
+                std::placeholders::_4,
+                std::placeholders::_5
             ),
             "",
             true
@@ -1751,7 +1713,7 @@ void animation_editor::process_gui_panel_sprite() {
     ) {
         if(!anims.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, "", false);
+                pick_sprite(anims.sprites[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
@@ -1759,7 +1721,7 @@ void animation_editor::process_gui_panel_sprite() {
                         1,
                         (int) anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_idx]->name, "", false);
+                pick_sprite(anims.sprites[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -1789,7 +1751,7 @@ void animation_editor::process_gui_panel_sprite() {
                 cur_hitbox_idx = INVALID;
             } else {
                 nr = std::min(nr, anims.sprites.size() - 1);
-                pick_sprite(anims.sprites[nr]->name, "", false);
+                pick_sprite(anims.sprites[nr]->name, "", "", nullptr, false);
             }
             changes_mgr.mark_as_changed();
             set_status("Deleted sprite \"" + deleted_sprite_name + "\".");

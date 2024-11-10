@@ -252,12 +252,14 @@ void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @brief Callback for when the user picks a file from the picker.
  *
  * @param name Name of the file.
- * @param category Unused.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
 void gui_editor::pick_file(
-    const string &name, const string &category, void* info, bool is_new
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
 ) {
     manifest = *((content_manifest*) info);
     load_file(true);

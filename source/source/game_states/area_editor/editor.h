@@ -879,7 +879,7 @@ private:
     void copy_path_link_properties();
     void copy_sector_properties();
     void create_area(
-        const content_manifest& requested_area_manifest,
+        const content_manifest &requested_area_manifest,
         AREA_TYPE requested_area_type
     );
     void create_or_load_area(const string &requested_area_path);
@@ -1044,10 +1044,12 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_area(
-        const string &name, const string &category, void* info, bool is_new
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
     );
     void pick_texture(
-        const string &name, const string &category, void* info, bool is_new
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
     );
     void circle_sector_cmd(float input_value);
     void copy_properties_cmd(float input_value);

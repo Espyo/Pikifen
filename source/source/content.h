@@ -133,7 +133,7 @@ public:
     //--- Members ---
     
     //The content's manifest.
-    content_manifest* manifest;
+    content_manifest* manifest = nullptr;
     
 };
 

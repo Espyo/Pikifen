@@ -346,11 +346,11 @@ public:
 
     //--- Members ---
     
-    //List of animations.
-    map<string, animation_database> list;
+    //List of animations, by category.
+    vector<map<string, animation_database> > list;
     
-    //Manifests.
-    map<string, content_manifest> manifests;
+    //Manifests, by category.
+    vector<map<string, content_manifest> > manifests;
     
     
     //--- Function declarations ---
@@ -369,7 +369,7 @@ private:
     void fill_cat_manifests_from_pack(
         mob_category* category, const string &pack_name
     );
-    void load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
+    void load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id);
     
 };
 

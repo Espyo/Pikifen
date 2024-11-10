@@ -5,10 +5,13 @@ Current tasks (tasks being worked on, but not yet committed)
     Editor load dialogs
         Load dialog should have:
             History
+                The history should be saved as path;name, so the entry in the history can have a pretty name instead of a cryptic path
+                It should also list the item's pack
             A button to create, which opens a new dialog
             Selection of items
                 A way to show what pack it's from
                 A search filter, which is highlighted by default when the dialog opens
+                Mouse-overing the item should show the path
             If you choose the base pack, complain
         For loading, each editor has:
             Anim: globals, mobs per category

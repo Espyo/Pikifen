@@ -114,7 +114,7 @@ private:
     void open_load_dialog();
     void open_options_dialog();
     void pick_file(
-        const string &name, const string &category, void* info, bool is_new
+        const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
     );
     bool save_file();
     point snap_point(const point &p);

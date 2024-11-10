@@ -26,33 +26,42 @@
  * @brief Shows the "load" dialog.
  */
 void area_editor::open_load_dialog() {
+    //Set up the picker's behavior and data.
     vector<picker_item> areas;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
         area_data* area_ptr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
         content_manifest* man = area_ptr->manifest;
-        areas.push_back(picker_item(area_ptr->name, "Simple", (void*) man, area_ptr->thumbnail.get()));
+        areas.push_back(
+            picker_item(
+                area_ptr->name,
+                "Pack: " + man->pack, "Simple",
+                (void*) man, area_ptr->thumbnail.get()
+            )
+        );
     }
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
         area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
         content_manifest* man = area_ptr->manifest;
-        areas.push_back(picker_item(area_ptr->name, "Mission", (void*) man, area_ptr->thumbnail.get()));
+        areas.push_back(
+            picker_item(
+                area_ptr->name,
+                "Pack: " + man->pack, "Mission",
+                (void*) man, area_ptr->thumbnail.get()
+            )
+        );
     }
     
-    //Set up the picker's behavior and data.
     load_dialog_picker = picker_info(this);
-    load_dialog_picker.can_make_new = true;
     load_dialog_picker.items = areas;
-    load_dialog_picker.new_item_category_choices = {
-        "Simple", "Mission"
-    };
     load_dialog_picker.pick_callback =
         std::bind(
             &area_editor::pick_area, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
-            std::placeholders::_4
+            std::placeholders::_4,
+            std::placeholders::_5
         );
         
     //Open the dialog that will contain the picker and history.
@@ -257,8 +266,21 @@ void area_editor::process_gui_load_dialog() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Open or create node.
-    if(saveable_tree_node("load", "Open or create")) {
+    //New node.
+    if(saveable_tree_node("load", "New")) {
+        if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
+            //TODO
+        }
+        
+        ImGui::TreePop();
+    }
+    set_tooltip("Creates a new area.");
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Load node.
+    if(saveable_tree_node("load", "Load")) {
         load_dialog_picker.process();
         
         ImGui::TreePop();
@@ -2506,8 +2528,9 @@ void area_editor::process_gui_panel_main() {
     //Area name text.
     ImGui::Text("Area folder: %s", game.cur_area_data->manifest->internal_name.c_str());
     set_tooltip(
-        "Full folder path: " + game.cur_area_data->manifest->path + "\n"
-        "Full user data folder path: " + game.cur_area_data->user_data_path
+        "Pack: " + game.cur_area_data->manifest->pack + "\n"
+        "Folder path: " + game.cur_area_data->manifest->path + "\n"
+        "User data folder path: " + game.cur_area_data->user_data_path
     );
     
     //Spacer dummy widget.
@@ -5410,7 +5433,7 @@ void area_editor::process_gui_panel_sector() {
                     picker_buttons.push_back(
                         picker_item(
                             texture_suggestions[s].name,
-                            "",
+                            "", "", nullptr,
                             texture_suggestions[s].bmp
                         )
                     );
@@ -5423,7 +5446,8 @@ void area_editor::process_gui_panel_sector() {
                         std::placeholders::_1,
                         std::placeholders::_2,
                         std::placeholders::_3,
-                        std::placeholders::_4
+                        std::placeholders::_4,
+                        std::placeholders::_5
                     ),
                     "Suggestions:"
                 );

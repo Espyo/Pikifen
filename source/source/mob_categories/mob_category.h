@@ -139,7 +139,7 @@ public:
     );
     virtual ~mob_category() = default;
     virtual void get_type_names(vector<string> &list) const = 0;
-    virtual mob_type* get_type(const string &name) const = 0;
+    virtual mob_type* get_type(const string &internal_name) const = 0;
     virtual mob_type* create_type() = 0;
     virtual void register_type(const string &internal_name, mob_type* type) = 0;
     virtual mob* create_mob(

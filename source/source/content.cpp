@@ -22,6 +22,7 @@
 void content::load_metadata_from_data_node(data_node* node) {
     reader_setter rs(node);
     
+    if(manifest) name = manifest->internal_name;
     rs.set("name", name);
     rs.set("description", description);
     rs.set("tags", tags);

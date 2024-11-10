@@ -1470,7 +1470,11 @@ string area_editor::get_name() const {
  * @return The path, or an empty string if none.
  */
 string area_editor::get_opened_folder_path() const {
-    if(!game.cur_area_data->manifest->internal_name.empty()) {
+    if(
+        game.cur_area_data &&
+        game.cur_area_data->manifest &&
+        !game.cur_area_data->manifest->internal_name.empty()
+    ) {
         return game.cur_area_data->manifest->path;
     } else {
         return "";
@@ -2055,12 +2059,14 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @brief Callback for when the user picks an area from the picker.
  *
  * @param name Name of the area.
- * @param category Unused.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
  * @param info Unused.
  * @param is_new Is it a new area, or an existing one?
  */
 void area_editor::pick_area(
-    const string &name, const string &category, void* info, bool is_new
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
 ) {
     content_manifest* manif_ptr = (content_manifest*) info;
     create_or_load_area(manif_ptr->path);
@@ -2072,12 +2078,14 @@ void area_editor::pick_area(
  * @brief Callback for when the user picks a texture from the picker.
  *
  * @param name Name of the texture.
- * @param category Unused.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
  * @param info Unused.
  * @param is_new Unused.
  */
 void area_editor::pick_texture(
-    const string &name, const string &category, void* info, bool is_new
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
 ) {
     sector* s_ptr = nullptr;
     string final_name = name;

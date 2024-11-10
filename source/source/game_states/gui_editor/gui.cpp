@@ -23,8 +23,15 @@ void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
     for(const auto &f : game.content.gui.manifests) {
-        file_items.push_back(picker_item(f.first, "", (void*) &f.second));
+        file_items.push_back(
+            picker_item(
+                f.first,
+                "Pack: " + f.second.pack, "",
+                (void*) &f.second
+            )
+        );
     }
+    
     load_dialog_picker = picker_info(this);
     load_dialog_picker.can_make_new = false;
     load_dialog_picker.items = file_items;
@@ -34,7 +41,8 @@ void gui_editor::open_load_dialog() {
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
-            std::placeholders::_4
+            std::placeholders::_4,
+            std::placeholders::_5
         );
         
     //Open the dialog that will contain the picker and history.
@@ -139,7 +147,7 @@ void gui_editor::process_gui_control_panel() {
     ImGui::Text("Current file: %s", manifest.internal_name.c_str());
     set_tooltip(
         "Pack: " + manifest.pack + "\n"
-        "Path: " + manifest.path
+        "File path: " + manifest.path
     );
     
     //Spacer dummy widget.
@@ -177,8 +185,24 @@ void gui_editor::process_gui_load_dialog() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //List node.
-    if(saveable_tree_node("load", "Full list")) {
+    //New node.
+    if(saveable_tree_node("load", "New")) {
+        if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
+            //TODO
+        }
+        
+        ImGui::TreePop();
+    }
+    set_tooltip(
+        "Creates a new GUI definition file.\n"
+        "This works by copying an existing one to a new package."
+    );
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Load node.
+    if(saveable_tree_node("load", "Load")) {
         load_dialog_picker.process();
         
         ImGui::TreePop();

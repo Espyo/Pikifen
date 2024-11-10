@@ -1008,9 +1008,10 @@ void editor::open_dialog(
  * @param pick_callback A function to call when the user clicks an item
  * or enters a new one.
  * This function's first argument is the name of the item.
- * Its second argument is the category of the item, or an empty string.
- * Its third argument is a void pointer to any custom info, or nullptr.
- * Its fourth argument is whether it's a new item or not.
+ * Its second argument is the top-level category of the item, or empty string.
+ * Its third argument is the second-level category of the item, or empty string.
+ * Its fourth argument is a void pointer to any custom info, or nullptr.
+ * Its fifth argument is whether it's a new item or not.
  * @param list_header If not-empty, display this text above the list.
  * @param can_make_new If true, the user can create a new element,
  * by writing its name on the textbox, and pressing the "+" button.
@@ -1020,7 +1021,7 @@ void editor::open_picker_dialog(
     const string &title,
     const vector<picker_item> &items,
     const std::function <void(
-        const string &, const string &, void*, bool
+        const string &, const string &, const string &, void*, bool
     )> &pick_callback,
     const string &list_header,
     bool can_make_new,
@@ -1281,20 +1282,26 @@ bool editor::process_gui_mob_type_widgets(
             for(size_t n = 0; n < custom_cat_types[c].size(); n++) {
                 mob_type* mt_ptr = custom_cat_types[c][n];
                 items.push_back(
-                    picker_item(mt_ptr->name, mt_ptr->custom_category_name)
+                    picker_item(
+                mt_ptr->name, {
+                    mt_ptr->custom_category_name
+                }
+                    )
                 );
             }
         }
         open_picker_dialog(
             "Pick an object type", items,
-        [this] (const string  &n, const string  &c, void*, bool) {
+            [this] (
+                const string &n, const string &tc, const string &sc, void*, bool
+        ) {
             //For clarity, this code will NOT be run within the context
             //of editor::process_gui_mob_type_widgets, but will instead
             //be run wherever dialogs are processed.
             internal_changed_by_dialog = true;
-            internal_custom_cat_name = c;
+            internal_custom_cat_name = tc;
             internal_mob_type = nullptr;
-            size_t custom_cat_idx = custom_cat_name_idxs[c];
+            size_t custom_cat_idx = custom_cat_name_idxs[tc];
             const vector<mob_type*> &types =
                 custom_cat_types[custom_cat_idx];
             for(size_t t = 0; t < types.size(); t++) {
@@ -2257,8 +2264,9 @@ editor::picker_info::picker_info(editor* editor_ptr) :
  */
 void editor::picker_info::process() {
     ImGuiStyle &style = ImGui::GetStyle();
-    vector<string> category_names;
-    vector<vector<picker_item> > final_items;
+    vector<string> top_cat_names;
+    vector<vector<string> > sec_cat_names;
+    vector<vector<vector<picker_item> > > final_items;
     string filter_lower = str_to_lower(filter);
     
     for(size_t i = 0; i < items.size(); i++) {
@@ -2269,29 +2277,44 @@ void editor::picker_info::process() {
             }
         }
         
-        size_t cat_idx = INVALID;
-        for(size_t c = 0; c < category_names.size(); c++) {
-            if(category_names[c] == items[i].category) {
-                cat_idx = c;
+        size_t top_cat_idx = INVALID;
+        for(size_t c = 0; c < top_cat_names.size(); c++) {
+            if(top_cat_names[c] == items[i].top_category) {
+                top_cat_idx = c;
                 break;
             }
         }
         
-        if(cat_idx == INVALID) {
-            category_names.push_back(items[i].category);
-            final_items.push_back(vector<picker_item>());
-            cat_idx = category_names.size() - 1;
+        if(top_cat_idx == INVALID) {
+            top_cat_names.push_back(items[i].top_category);
+            sec_cat_names.push_back(vector<string>());
+            final_items.push_back(vector<vector<picker_item> >());
+            top_cat_idx = top_cat_names.size() - 1;
         }
         
-        final_items[cat_idx].push_back(items[i]);
+        size_t sec_cat_idx = INVALID;
+        for(size_t c = 0; c < sec_cat_names[top_cat_idx].size(); c++) {
+            if(sec_cat_names[top_cat_idx][c] == items[i].sec_category) {
+                sec_cat_idx = c;
+                break;
+            }
+        }
+        
+        if(sec_cat_idx == INVALID) {
+            sec_cat_names[top_cat_idx].push_back(items[i].sec_category);
+            final_items[top_cat_idx].push_back(vector<picker_item>());
+            sec_cat_idx = sec_cat_names[top_cat_idx].size() - 1;
+        }
+        
+        final_items[top_cat_idx][sec_cat_idx].push_back(items[i]);
     }
     
     auto try_make_new = [this] () {
         if(filter.empty()) return;
         
         if(
-            !new_item_category_choices.empty() &&
-            new_item_category.empty()
+            !new_item_top_cat_choices.empty() &&
+            new_item_top_cat.empty()
         ) {
             //The user has to pick a category, but hasn't picked yet.
             //Let's show the pop-up and leave.
@@ -2303,14 +2326,14 @@ void editor::picker_info::process() {
         for(size_t i = 0; i < items.size(); i++) {
             if(
                 filter == items[i].name &&
-                new_item_category == items[i].category
+                new_item_top_cat == items[i].top_category
             ) {
                 is_really_new = false;
                 break;
             }
         }
         
-        pick_callback(filter, new_item_category, nullptr, is_really_new);
+        pick_callback(filter, new_item_top_cat, "", nullptr, is_really_new);
         if(dialog_ptr) {
             dialog_ptr->is_open = false;
         }
@@ -2359,9 +2382,10 @@ void editor::picker_info::process() {
             }
             if(possible_choices == 1) {
                 pick_callback(
-                    final_items[0][0].name,
-                    final_items[0][0].category,
-                    final_items[0][0].info,
+                    final_items[0][0][0].name,
+                    final_items[0][0][0].top_category,
+                    final_items[0][0][0].sec_category,
+                    final_items[0][0][0].info,
                     false
                 );
                 if(dialog_ptr) {
@@ -2379,9 +2403,9 @@ void editor::picker_info::process() {
                 "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
             )
         ) {
-            for(size_t c = 0; c < new_item_category_choices.size(); c++) {
-                if(ImGui::Selectable(new_item_category_choices[c].c_str())) {
-                    new_item_category = new_item_category_choices[c];
+            for(size_t c = 0; c < new_item_top_cat_choices.size(); c++) {
+                if(ImGui::Selectable(new_item_top_cat_choices[c].c_str())) {
+                    new_item_top_cat = new_item_top_cat_choices[c];
                     ImGui::CloseCurrentPopup();
                     try_make_new();
                 }
@@ -2403,18 +2427,29 @@ void editor::picker_info::process() {
     float picker_x2 =
         ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
         
-    for(size_t c = 0; c < final_items.size(); c++) {
+    for(size_t tc = 0; tc < final_items.size(); tc++) {
     
-        bool show = true;
-        if(!category_names[c].empty()) {
+        bool top_cat_opened = true;
+        if(!top_cat_names[tc].empty()) {
             ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-            show = ImGui::TreeNode(category_names[c].c_str());
+            top_cat_opened = ImGui::TreeNode(top_cat_names[tc].c_str());
         }
         
-        if(show) {
-            for(size_t i = 0; i < final_items[c].size(); i++) {
-                picker_item* i_ptr = &final_items[c][i];
-                string widgetId = i2s(c) + "-" + i2s(i);
+        if(!top_cat_opened) continue;
+        
+        for(size_t sc = 0; sc < final_items[tc].size(); sc++) {
+        
+            bool sec_cat_opened = true;
+            if(!sec_cat_names[tc][sc].empty()) {
+                ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+                sec_cat_opened = ImGui::TreeNode(sec_cat_names[tc][sc].c_str());
+            }
+            
+            if(!sec_cat_opened) continue;
+            
+            for(size_t i = 0; i < final_items[tc][sc].size(); i++) {
+                picker_item* i_ptr = &final_items[tc][sc][i];
+                string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
                 
                 ImVec2 button_size;
@@ -2468,7 +2503,7 @@ void editor::picker_info::process() {
                     
                     if(button_pressed) {
                         pick_callback(
-                            i_ptr->name, i_ptr->category, i_ptr->info, false
+                            i_ptr->name, i_ptr->top_category, i_ptr->sec_category, i_ptr->info, false
                         );
                         if(dialog_ptr) {
                             dialog_ptr->is_open = false;
@@ -2484,7 +2519,7 @@ void editor::picker_info::process() {
                     button_size = ImVec2(168.0f, 32.0f);
                     if(ImGui::Button(i_ptr->name.c_str(), button_size)) {
                         pick_callback(
-                            i_ptr->name, i_ptr->category, i_ptr->info, false
+                            i_ptr->name, i_ptr->top_category, i_ptr->sec_category, i_ptr->info, false
                         );
                         if(dialog_ptr) {
                             dialog_ptr->is_open = false;
@@ -2495,16 +2530,19 @@ void editor::picker_info::process() {
                 
                 float last_x2 = ImGui::GetItemRectMax().x;
                 float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
-                if(i + 1 < final_items[c].size() && next_x2 < picker_x2) {
+                if(i + 1 < final_items[tc][sc].size() && next_x2 < picker_x2) {
                     ImGui::SameLine();
                 }
                 ImGui::PopID();
             }
             
-            if(!category_names[c].empty()) {
+            if(!sec_cat_names[tc][sc].empty() && sec_cat_opened) {
                 ImGui::TreePop();
             }
-            
+        }
+        
+        if(!top_cat_names[tc].empty() && top_cat_opened) {
+            ImGui::TreePop();
         }
     }
     
@@ -2516,16 +2554,20 @@ void editor::picker_info::process() {
  * @brief Constructs a new picker item object.
  *
  * @param name Name of the item.
- * @param category Category it belongs to. If none, use an empty string.
+ * @param top_category Top-level category it belongs to.
+ * If none, use an empty string.
+ * @param sec_category Second-level category it belongs to.
+ * If none, use an empty string.
  * @param info Information to pass to the code when the item is picked, if any.
  * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 editor::picker_item::picker_item(
-    const string &name, const string &category, void* info,
-    ALLEGRO_BITMAP* bitmap
+    const string &name, const string &top_category, const string &sec_category,
+    void* info, ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
-    category(category),
+    top_category(top_category),
+    sec_category(sec_category),
     info(info),
     bitmap(bitmap) {
     

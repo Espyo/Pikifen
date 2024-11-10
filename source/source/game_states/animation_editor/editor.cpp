@@ -70,8 +70,9 @@ const float ZOOM_MIN_LEVEL = 0.05f;
 /**
  * @brief Constructs a new animation editor object.
  */
-animation_editor::animation_editor() {
-
+animation_editor::animation_editor() :
+    load_dialog_picker(this) {
+    
     comparison_blink_timer =
         timer(
             0.6,
@@ -159,7 +160,7 @@ void animation_editor::change_state(const EDITOR_STATE new_state) {
  * @brief Code to run when the load dialog is closed.
  */
 void animation_editor::close_load_dialog() {
-    if(!loaded_content_yet && file_path.empty()) {
+    if(!loaded_content_yet && manifest.internal_name.empty()) {
         //The user cancelled the load dialog
         //presented when you enter the animation editor. Quit out.
         leave();
@@ -270,7 +271,7 @@ string animation_editor::get_name() const {
  * @return The name, or an empty string if none.
  */
 string animation_editor::get_opened_file_name() const {
-    return file_path;
+    return manifest.internal_name;
 }
 
 
@@ -429,7 +430,7 @@ void animation_editor::load() {
     
     load_custom_mob_cat_types(false);
     
-    file_path.clear();
+    manifest.clear();
     animation_exists_on_disk = false;
     can_save = false;
     loaded_content_yet = false;
@@ -450,7 +451,7 @@ void animation_editor::load() {
     
     if(!auto_load_anim.empty()) {
         loaded_mob_type = nullptr;
-        file_path = auto_load_anim;
+        manifest.fill_from_path(auto_load_anim);
         load_animation_database(true);
     } else {
         open_load_dialog();
@@ -474,14 +475,13 @@ void animation_editor::load_animation_database(
         game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
     }
     
-    file_path = standardize_path(file_path);
-    
     anims.destroy();
     
-    data_node file = data_node(file_path);
+    data_node file = data_node(manifest.path);
     if(!file.file_was_opened) {
-        file.save_file(file_path, true);
+        file.save_file(manifest.path, true);
     }
+    anims.manifest = &manifest;
     anims.load_from_data_node(&file);
     
     cur_anim_i.clear();
@@ -521,10 +521,10 @@ void animation_editor::load_animation_database(
         last_spritesheet_used = file_uses_vector[0].second;
     }
     
-    vector<string> file_path_parts = split(file_path, "/");
+    vector<string> file_path_parts = split(manifest.path, "/");
     
-    if(file_path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
-        vector<string> path_parts = split(file_path, "/");
+    if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
+        vector<string> path_parts = split(manifest.path, "/");
         if(
             path_parts.size() > 3 &&
             path_parts[path_parts.size() - 1] == "animations.txt"
@@ -577,7 +577,7 @@ void animation_editor::load_animation_database(
     if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
     
     if(should_update_history) {
-        update_history(file_path);
+        update_history(manifest.path);
         save_options(); //Save the history in the options.
     }
     
@@ -607,11 +607,14 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @brief Callback for when the user picks an animation from the picker.
  *
  * @param name Name of the animation.
- * @param category Unused.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
+ * @param info Unused.
  * @param is_new Is this a new animation or an existing one?
  */
 void animation_editor::pick_animation(
-    const string &name, const string &category, bool is_new
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
 ) {
     if(is_new) {
         anims.animations.push_back(new animation(name));
@@ -629,11 +632,14 @@ void animation_editor::pick_animation(
  * @brief Callback for when the user picks a sprite from the picker.
  *
  * @param name Name of the sprite.
- * @param category Unused.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
+ * @param info Unused.
  * @param is_new Is this a new sprite or an existing one?
  */
 void animation_editor::pick_sprite(
-    const string &name, const string &category, bool is_new
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
 ) {
     if(is_new) {
         if(anims.find_sprite(name) == INVALID) {
@@ -744,6 +750,25 @@ void animation_editor::mob_radius_toggle_cmd(float input_value) {
     mob_radius_visible = !mob_radius_visible;
     string state_str = (mob_radius_visible ? "Enabled" : "Disabled");
     set_status(state_str + " object radius visibility.");
+}
+
+
+/**
+ * @brief Callback for when the user picks a file from the picker.
+ *
+ * @param name Name of the file.
+ * @param top_cat Unused.
+ * @param sec_cat Unused.
+ * @param info Pointer to the file's content manifest.
+ * @param is_new Unused.
+ */
+void animation_editor::pick_file(
+    const string &name, const string &top_cat, const string &sec_cat,
+    void* info, bool is_new
+) {
+    manifest = *((content_manifest*) info);
+    load_animation_database(true);
+    close_top_dialog();
 }
 
 
@@ -1173,13 +1198,13 @@ bool animation_editor::save_animation_database() {
         loaded_mob_type && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     );
     
-    if(!file_node.save_file(file_path)) {
+    if(!file_node.save_file(manifest.path)) {
         show_message_box(
             nullptr, "Save failed!",
             "Could not save the animation!",
             (
                 "An error occured while saving the animation to the file \"" +
-                file_path + "\". Make sure that the folder it is saving to "
+                manifest.path + "\". Make sure that the folder it is saving to "
                 "exists and it is not read-only, and try again."
             ).c_str(),
             nullptr,

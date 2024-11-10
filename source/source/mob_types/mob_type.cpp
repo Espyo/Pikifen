@@ -833,7 +833,7 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        anims = &game.content.mob_anims.list[manifest->internal_name];
+        anims = &game.content.mob_anims.list[category->id][manifest->internal_name];
         anims->fill_sound_idx_caches(this);
         
         data_node script_file;
