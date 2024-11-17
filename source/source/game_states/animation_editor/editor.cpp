@@ -537,10 +537,7 @@ void animation_editor::load_animation_database_file(
                 );
             if(cat) {
                 loaded_mob_type =
-                    game.mob_categories.find_mob_type_from_folder_name(
-                        cat,
-                        path_parts[path_parts.size() - 2]
-                    );
+                    cat->get_type(path_parts[path_parts.size() - 2]);
             }
         }
     }
