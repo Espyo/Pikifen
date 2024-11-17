@@ -69,6 +69,8 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l);
 string get_key_name(int keycode, bool condensed);
 void getline(ALLEGRO_FILE* file, string &line);
+bool file_exists(const string &path);
+bool folder_exists(const string &path);
 vector<string> folder_to_vector(
     string folder_name, bool folders, bool* out_folder_found = nullptr
 );

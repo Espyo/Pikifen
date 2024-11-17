@@ -1000,6 +1000,18 @@ void editor::open_dialog(
 
 
 /**
+ * @brief Opens a dialog where the user can create a new pack.
+ */
+void editor::open_new_pack_dialog() {
+    open_dialog(
+        "Create a new pack",
+        std::bind(&editor::process_gui_new_pack_dialog, this)
+    );
+    dialogs.back()->custom_size = point(520, 250);
+}
+
+
+/**
  * @brief Opens a dialog with "picker" widgets inside, with the given content.
  *
  * @param title Title of the picker's dialog window.
@@ -1378,6 +1390,128 @@ bool editor::process_gui_mob_type_widgets(
     }
     
     return result;
+}
+
+
+/**
+ * @brief Processes the widgets for the pack selection, in a "new" dialog.
+ *
+ * @param pack Pointer to the internal name of the pack in the combobox.
+ */
+bool editor::process_gui_new_dialog_pack_widgets(string* pack) {
+    static int pack_idx = 0;
+    bool changed = false;
+    
+    //Pack combo.
+    vector<string> packs;
+    for(const auto &p : game.content.packs.manifests_with_base) {
+        packs.push_back(game.content.packs.list[p].name);
+    }
+    if(packs.empty()) {
+        //Failsafe.
+        packs.push_back(FOLDER_NAMES::BASE_PACK);
+    }
+    changed = ImGui::Combo("Pack", &pack_idx, packs);
+    set_tooltip("What pack it will belong to.");
+    
+    //New pack button.
+    ImGui::SameLine();
+    if(ImGui::Button("New pack...")) {
+        open_new_pack_dialog();
+    }
+    set_tooltip("Create a new pack.");
+    
+    *pack = game.content.packs.manifests_with_base[pack_idx];
+    return changed;
+}
+
+
+/**
+ * @brief Processes the dialog for creating a new pack.
+ */
+void editor::process_gui_new_pack_dialog() {
+    static string internal_name;
+    static string name;
+    static string description;
+    static string maker;
+    
+    //Internal name input.
+    ImGui::InputText("Internal name", &internal_name);
+    set_tooltip(
+        "Internal name of the new pack.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Name input.
+    ImGui::InputText("Name", &name);
+    set_tooltip("Proper name of the new pack.");
+    
+    //Description input.
+    ImGui::InputText("Description", &description);
+    set_tooltip("A description of the pack.");
+    
+    //Maker input.
+    ImGui::InputText("Maker", &maker);
+    set_tooltip("Who made the pack. So really, type your name or nickname.");
+    
+    //File explanation text.
+    string explanation =
+        "These properties can be changed later by editing the "
+        "pack's data file.\n"
+        "There are also more properties; check the manual "
+        "for more information!\n"
+        "Pack data file path: " +
+        (
+            internal_name.empty() ?
+            "" :
+            FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+            internal_name + "/" +
+            FILE_NAMES::PACK_DATA
+        );
+    ImGui::TextWrapped("%s", explanation.c_str());
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Create button.
+    string problem;
+    if(internal_name.empty()) {
+        problem = "You have to type an internal name first!";
+    } else {
+        for(const auto &p : game.content.packs.manifests_with_base) {
+            if(internal_name == p) {
+                problem = "There is already a pack with that internal name!";
+                break;
+            }
+        }
+    }
+    if(name.empty()) {
+        problem = "You have to type a name first!";
+    }
+    
+    ImGui::SetupCentering(100);
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create pack", ImVec2(100, 40))) {
+        game.content.create_pack(
+            internal_name, name, description, maker
+        );
+        internal_name.clear();
+        name.clear();
+        description.clear();
+        maker.clear();
+        close_top_dialog();
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        problem.empty() ? "Create the pack!" : problem
+    );
 }
 
 
@@ -2346,8 +2480,8 @@ void editor::picker_info::process() {
         ImGui::PushStyleColor(
             ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48)
         );
-        ImGui::PushStyleColor
-        (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
+        ImGui::PushStyleColor(
+            ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
         if(ImGui::Button("+", ImVec2(64.0f, 32.0f))) {
             try_make_new();

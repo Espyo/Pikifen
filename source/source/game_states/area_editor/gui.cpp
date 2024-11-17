@@ -23,7 +23,7 @@
 
 
 /**
- * @brief Shows the "load" dialog.
+ * @brief Opens the "load" dialog.
  */
 void area_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
@@ -71,6 +71,18 @@ void area_editor::open_load_dialog() {
     );
     dialogs.back()->close_callback =
         std::bind(&area_editor::close_load_dialog, this);
+}
+
+
+/**
+ * @brief Opens the "new" dialog.
+ */
+void area_editor::open_new_dialog() {
+    open_dialog(
+        "Create a new area",
+        std::bind(&area_editor::process_gui_new_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 210);
 }
 
 
@@ -269,12 +281,12 @@ void area_editor::process_gui_load_dialog() {
     //New node.
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
-            //TODO
+            open_new_dialog();
         }
         
         ImGui::TreePop();
     }
-    set_tooltip("Creates a new area.");
+    set_tooltip("Create a new area.");
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -285,6 +297,100 @@ void area_editor::process_gui_load_dialog() {
         
         ImGui::TreePop();
     }
+    
+    if(just_created_area) {
+        close_top_dialog();
+        just_created_area = false;
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void area_editor::process_gui_new_dialog() {
+    static string pack;
+    static string internal_name;
+    static int type = AREA_TYPE_SIMPLE;
+    static string problem;
+    static string area_path;
+    bool must_update = true;
+    
+    //Pack widgets.
+    must_update |= process_gui_new_dialog_pack_widgets(&pack);
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Internal name input.
+    must_update |= ImGui::InputText("Internal name", &internal_name);
+    set_tooltip(
+        "Internal name of the new area.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Simple area radio.
+    must_update |=
+        ImGui::RadioButton("Simple area", &type, AREA_TYPE_SIMPLE);
+    set_tooltip("Choose this to make your area a simple area.");
+    
+    //Mission area radio.
+    ImGui::SameLine();
+    must_update |=
+        ImGui::RadioButton("Mission", &type, AREA_TYPE_MISSION);
+    set_tooltip("Choose this to make your area a mission area.");
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Check if everything's ok.
+    if(must_update) {
+        problem.clear();
+        if(internal_name.empty()) {
+            problem = "You have to type an internal name first!";
+        } else {
+            area_path =
+                game.content.areas.get_area_path(
+                    pack, (AREA_TYPE) type, internal_name
+                );
+            if(folder_exists(area_path)) {
+                problem =
+                    "There is already an area of that type with\n"
+                    "that internal name in that pack!";
+            }
+        }
+        must_update = false;
+    }
+    
+    //Create button.
+    ImGui::SetupCentering(100);
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create area", ImVec2(100, 40))) {
+        content_manifest man;
+        man.internal_name = internal_name;
+        man.pack = pack;
+        man.path = area_path;
+        create_area(man, (AREA_TYPE) type);
+        close_top_dialog();
+        just_created_area = true;
+        pack.clear();
+        internal_name.clear();
+        type = AREA_TYPE_SIMPLE;
+        problem.clear();
+        area_path.clear();
+        must_update = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        problem.empty() ? "Create the area!" : problem
+    );
 }
 
 
@@ -1734,6 +1840,7 @@ void area_editor::process_gui_panel_info() {
                 "Battle",
                 "Challenge",
                 "Gimmick",
+                "Role-playing",
                 "Custom game mode",
             };
             int gameplay_tag_idx = -1;

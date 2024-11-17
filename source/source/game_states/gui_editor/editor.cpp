@@ -92,6 +92,35 @@ void gui_editor::close_options_dialog() {
 
 
 /**
+ * @brief Copies an existing GUI definition file from the base pack onto
+ * a different pack.
+ *
+ * @param internal_name Internal name of the GUI definition.
+ * @param dest_pack The destination pack's internal name.
+ * @return Whether it succeeded.
+ */
+bool gui_editor::copy_gui_file_from_base(
+    const string &internal_name, const string &dest_pack
+) {
+    string source_path =
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        FOLDER_NAMES::BASE_PACK + "/" +
+        FOLDER_PATHS_FROM_PACK::GUI + "/" +
+        internal_name + ".txt";
+    string dest_path =
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        dest_pack + "/" +
+        FOLDER_PATHS_FROM_PACK::GUI + "/" +
+        internal_name + ".txt";
+        
+    data_node source(source_path);
+    if(!source.file_was_opened) return false;
+    if(!source.save_file(dest_path)) return false;
+    return true;
+}
+
+
+/**
  * @brief Handles the logic part of the main loop of the GUI editor.
  */
 void gui_editor::do_logic() {
@@ -158,7 +187,7 @@ void gui_editor::load() {
     loaded_content_yet = false;
     must_recenter_cam = true;
     
-    game.content.load_packs();
+    game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
@@ -169,8 +198,7 @@ void gui_editor::load() {
     game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
     
     if(!auto_load_file.empty()) {
-        manifest.fill_from_path(auto_load_file);
-        load_file(true);
+        load_gui_file(auto_load_file, true);
     } else {
         open_load_dialog();
     }
@@ -180,12 +208,15 @@ void gui_editor::load() {
 /**
  * @brief Loads the GUI file.
  *
+ * @param path Path to the file.
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void gui_editor::load_file(
-    bool should_update_history
+void gui_editor::load_gui_file(
+    const string &path, bool should_update_history
 ) {
+    manifest.fill_from_path(path);
+    
     items.clear();
     
     file_node = data_node(manifest.path);
@@ -261,8 +292,8 @@ void gui_editor::pick_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
-    manifest = *((content_manifest*) info);
-    load_file(true);
+    content_manifest* temp_manif = (content_manifest*) info;
+    load_gui_file(temp_manif->path, true);
     close_top_dialog();
 }
 
@@ -364,7 +395,7 @@ void gui_editor::reload_cmd(float input_value) {
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_file(false); },
+    [this] () { load_gui_file(string(manifest.path), false); },
     std::bind(&gui_editor::save_file, this)
     );
 }
@@ -547,5 +578,4 @@ void gui_editor::unload() {
         CONTENT_TYPE_GUI,
     }
     );
-    game.content.unload_packs();
 }

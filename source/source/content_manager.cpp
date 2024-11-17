@@ -125,6 +125,48 @@ void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_L
 
 
 /**
+ * @brief Creates a new pack and updates the list of packs.
+ *
+ * @param internal_name Internal name of the pack, i.e. the pack's folder name.
+ * @param name Proper name of the pack.
+ * @param description Description.
+ * @param maker Maker(s).
+ * @return Whether it succeeded.
+ */
+bool content_manager::create_pack(
+    const string &internal_name, const string &name,
+    const string &description, const string &maker
+) {
+    string pack_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internal_name;
+    
+    //Create the folder first.
+    bool could_make_folder = al_make_directory(pack_path.c_str());
+    if(!could_make_folder) return false;
+    
+    //Create the data file.
+    data_node data;
+    data.add(new data_node("name", name));
+    data.add(new data_node("description", description));
+    data.add(new data_node("maker", maker));
+    data.add(new data_node("version", "1.0.0"));
+    data.add(new data_node("engine_version", get_engine_version_string()));
+    data.add(new data_node("tags", ""));
+    data.add(new data_node("dependencies", ""));
+    data.add(new data_node("conflicts", ""));
+    data.add(new data_node("notes", ""));
+    data.save_file(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
+    
+    //Update the list and manifest.
+    packs.unload_all();
+    packs.clear_manifests();
+    packs.fill_manifests();
+    packs.load_all();
+    
+    return true;
+}
+
+
+/**
  * @brief Loads an area as the "current area". This does not load it into
  * the vector of areas.
  *
@@ -156,10 +198,13 @@ void content_manager::load_area_as_current(
 
 
 /**
- * @brief Loads all packs.
+ * @brief Reloads all packs.
  * This only loads their manifests and metadata, not their content!
  */
-void content_manager::load_packs() {
+void content_manager::reload_packs() {
+    packs.unload_all();
+    packs.clear_manifests();
+    
     packs.fill_manifests();
     packs.load_all();
 }
@@ -202,20 +247,11 @@ void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
 
 
 /**
- * @brief Unloads all packs.
- * This only unloads their metadata and manifests, not their content!
- */
-void content_manager::unload_packs() {
-    packs.clear_manifests();
-    packs.unload_all();
-}
-
-
-/**
  * @brief Clears all loaded manifests.
  */
 void pack_manager::clear_manifests() {
-    manifests.clear();
+    manifests_sans_base.clear();
+    manifests_with_base.clear();
 }
 
 
@@ -227,26 +263,34 @@ void pack_manager::fill_manifests() {
     
     for(size_t f = 0; f < folders.size(); f++) {
         if(folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifests.push_back(folders[f]);
+            manifests_sans_base.push_back(folders[f]);
         }
     }
+    
+    manifests_with_base.push_back(FOLDER_NAMES::BASE_PACK);
+    manifests_with_base.insert(
+        manifests_with_base.end(),
+        manifests_sans_base.begin(),
+        manifests_sans_base.end()
+    );
 }
 
 
 /**
- * @brief Loads all packs in the manifests.
+ * @brief Loads all packs in the manifests, including the base pack.
  * This only loads their metadata, not their content!
  */
 void pack_manager::load_all() {
-    for(size_t p = 0; p < manifests.size(); p++) {
+    for(size_t p = 0; p < manifests_with_base.size(); p++) {
         data_node pack_file =
             load_data_file(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                manifests[p] + "/" +
+                manifests_with_base[p] + "/" +
                 FILE_NAMES::PACK_DATA
             );
             
         pack pack_data;
+        pack_data.name = manifests_with_base[p];
         reader_setter rs(&pack_file);
         rs.set("name", pack_data.name);
         rs.set("description", pack_data.description);
@@ -258,7 +302,7 @@ void pack_manager::load_all() {
         rs.set("conflicts", pack_data.conflicts);
         rs.set("notes", pack_data.notes);
         
-        list[manifests[p]] = pack_data;
+        list[manifests_with_base[p]] = pack_data;
     }
 }
 

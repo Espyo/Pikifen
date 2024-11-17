@@ -196,9 +196,6 @@ struct pack {
     //Optional description.
     string description;
     
-    //Optional tags, separated by semicolon.
-    string tags;
-    
     //Optional person(s) who made it.
     string maker;
     
@@ -207,6 +204,9 @@ struct pack {
     
     //Optional version of the engine it was made for.
     string engine_version;
+    
+    //Optional tags, separated by semicolon.
+    string tags;
     
     //Optional list of packs it depends on, separated by semicolon.
     string dependencies;

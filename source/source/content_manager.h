@@ -27,10 +27,13 @@ struct pack_manager {
 
     //--- Members ---
     
-    //Manifests.
-    vector<string> manifests;
+    //Manifests, sans the base pack.
+    vector<string> manifests_sans_base;
     
-    //List of loaded packs.
+    //Manifests, with the base pack.
+    vector<string> manifests_with_base;
+    
+    //List of loaded packs, with the base pack.
     map<string, pack> list;
     
     //--- Function declarations ---
@@ -109,15 +112,18 @@ struct content_manager {
     //--- Function declarations ---
     
     content_manager();
+    bool create_pack(
+        const string &internal_name, const string &name,
+        const string &description = "", const string &maker = ""
+    );
     void load_area_as_current(
         content_manifest* manifest, AREA_TYPE type,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
-    void load_packs();
+    void reload_packs();
     void unload_all(const vector<CONTENT_TYPE> &types);
     void unload_current_area(CONTENT_LOAD_LEVEL level);
-    void unload_packs();
     
     private:
     

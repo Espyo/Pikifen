@@ -1,7 +1,10 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Creating a new area crashes
+    The spacer dummy widget should really be a function in the editor class. Also maybe use ImGui::Spacing?
+    Refactor everything that has to do with paths for different content
     Editor load dialogs
         Load dialog should have:
             History
@@ -40,6 +43,7 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Test -S-'s get_onion_info branch
     Check Helodity's particle editor
+        Add a way to move the emitter with the mouse
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Update to Dear ImGui 1.91.5
         Implement shortcuts?
@@ -258,6 +262,7 @@ Next tasks (roughly sorted most important first)
             Organize the performance monitor start/end points
             Run a memory leak check
             Test editing every single piece of content, both in the base pack, and in a new pack
+            Test the suggestion to play Tutorial Meadow
         For later on, maybe, the content manager should be able to figure out a dependency tree
     Find a way to manage the installed packs
         Players should be able to choose which ones are enabled or disabled, and their load order
@@ -268,6 +273,9 @@ Next tasks (roughly sorted most important first)
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Update screenshots in the manual that still show off the Play area
+    Add the help menu to the main menu
+    Remove the word "editor" in the buttons in the main menu. Like "Areas" instead of "Area editor"
+    Cook up a better logo?
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
             "astyle.cmd_options": [
@@ -877,6 +885,7 @@ Misc things (so I don't forget)
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic
             A better font than just the built-in one
+            The theme should definitely be green-based
             Juice
                 Pop sound and pop line particles when something gets created
                 Poof sound and puff of smoke particles when something gets deleted

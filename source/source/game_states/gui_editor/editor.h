@@ -84,6 +84,9 @@ private:
     //List of items for the current file.
     vector<item> items;
     
+    //Has a new file just been created?
+    bool just_created_file = false;
+    
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     
@@ -110,8 +113,10 @@ private:
     
     void close_load_dialog();
     void close_options_dialog();
-    void load_file(bool should_update_history);
+    bool copy_gui_file_from_base(const string &internal_name, const string &dest_pack);
+    void load_gui_file(const string &path, bool should_update_history);
     void open_load_dialog();
+    void open_new_dialog();
     void open_options_dialog();
     void pick_file(
         const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
@@ -135,6 +140,7 @@ private:
     void process_gui_control_panel();
     void process_gui_load_dialog();
     void process_gui_menu_bar();
+    void process_gui_new_dialog();
     void process_gui_options_dialog();
     void process_gui_panel_item();
     void process_gui_panel_items();

@@ -1094,7 +1094,7 @@ void gameplay_state::load() {
  * @brief Loads all of the game's content.
  */
 void gameplay_state::load_game_content() {
-    game.content.load_packs();
+    game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
@@ -1248,7 +1248,6 @@ void gameplay_state::unload_game_content() {
         CONTENT_TYPE_GUI,
     }
     );
-    game.content.unload_packs();
 }
 
 

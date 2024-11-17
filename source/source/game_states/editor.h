@@ -657,6 +657,7 @@ protected:
         const string &title,
         const std::function<void()> &process_callback
     );
+    void open_new_pack_dialog();
     void open_picker_dialog(
         const string &title,
         const vector<picker_item> &items,
@@ -677,6 +678,8 @@ protected:
     bool process_gui_mob_type_widgets(
         string* custom_cat_name, mob_type** type
     );
+    bool process_gui_new_dialog_pack_widgets(string* pack);
+    void process_gui_new_pack_dialog();
     bool process_gui_size_widgets(
         const char* label, point &size, float v_speed,
         bool keep_aspect_ratio, bool keep_area,

@@ -77,6 +77,29 @@ string area_content_manager::get_name() const {
 
 
 /**
+ * @brief Returns the path to an area's folder.
+ *
+ * @param pack_name Name of the pack it's in.
+ * @param type Type of area.
+ * @param internal_name Internal name of the area.
+ * @return The path.
+ */
+string area_content_manager::get_area_path(
+    const string &pack_name, AREA_TYPE type, const string &internal_name
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        pack_name + "/" +
+        (
+            type == AREA_TYPE_SIMPLE ?
+            FOLDER_PATHS_FROM_PACK::SIMPLE_AREAS :
+            FOLDER_PATHS_FROM_PACK::MISSION_AREAS
+        ) + "/" +
+        internal_name;
+}
+
+
+/**
  * @brief Returns the name to use for the performance monitor, if any.
  *
  * @return The name.
@@ -275,8 +298,7 @@ void bitmap_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 void content_type_manager::fill_manifests_map(
     map<string, content_manifest> &manifests, const string &content_rel_path, bool folders
 ) {
-    fill_manifests_map_from_pack(manifests, FOLDER_NAMES::BASE_PACK, content_rel_path, folders);
-    for(const auto &p : game.content.packs.manifests) {
+    for(const auto &p : game.content.packs.manifests_with_base) {
         fill_manifests_map_from_pack(manifests, p, content_rel_path, folders);
     }
 }
@@ -787,7 +809,9 @@ void mob_anim_content_manager::fill_manifests() {
         mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(category->folder_name.empty()) return;
         
-        fill_cat_manifests_from_pack(category, FOLDER_NAMES::BASE_PACK);
+        for(const auto &p : game.content.packs.manifests_with_base) {
+            fill_cat_manifests_from_pack(category, p);
+        }
     }
 }
 
@@ -802,7 +826,7 @@ void mob_anim_content_manager::fill_cat_manifests_from_pack(
     vector<string> type_folders = folder_to_vector_recursively(category_path, true);
     for(size_t f = 0; f < type_folders.size(); f++) {
         string internal_name = type_folders[f];
-        manifests[category->id][internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/animations.txt", FOLDER_NAMES::BASE_PACK);
+        manifests[category->id][internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/" + FILE_NAMES::MOB_TYPE_ANIMATION, FOLDER_NAMES::BASE_PACK);
     }
 }
 

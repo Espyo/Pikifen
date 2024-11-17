@@ -82,6 +82,9 @@ public:
     void fill_manifests() override;
     content_manifest* find_manifest(const string &area_name, const string &pack, AREA_TYPE type);
     string get_name() const override;
+    string get_area_path(
+        const string &pack_name, AREA_TYPE type, const string &internal_name
+    ) const;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
     void load_area(

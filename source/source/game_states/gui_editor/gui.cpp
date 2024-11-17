@@ -13,6 +13,7 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../utils/allegro_utils.h"
+#include "../../utils/imgui_utils.h"
 #include "../../utils/string_utils.h"
 
 
@@ -52,6 +53,18 @@ void gui_editor::open_load_dialog() {
     );
     dialogs.back()->close_callback =
         std::bind(&gui_editor::close_load_dialog, this);
+}
+
+
+/**
+ * @brief Opens the "new" dialog.
+ */
+void gui_editor::open_new_dialog() {
+    open_dialog(
+        "Create a new GUI definition file",
+        std::bind(&gui_editor::process_gui_new_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 164);
 }
 
 
@@ -176,8 +189,7 @@ void gui_editor::process_gui_load_dialog() {
         return path;
     },
     [this](const string &path) {
-        manifest.fill_from_path(path);
-        load_file(true);
+        load_gui_file(path, true);
         close_top_dialog();
     }
     );
@@ -188,7 +200,7 @@ void gui_editor::process_gui_load_dialog() {
     //New node.
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
-            //TODO
+            open_new_dialog();
         }
         
         ImGui::TreePop();
@@ -206,6 +218,11 @@ void gui_editor::process_gui_load_dialog() {
         load_dialog_picker.process();
         
         ImGui::TreePop();
+    }
+    
+    if(just_created_file) {
+        close_top_dialog();
+        just_created_file = false;
     }
 }
 
@@ -359,6 +376,83 @@ void gui_editor::process_gui_menu_bar() {
         
         ImGui::EndMenuBar();
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void gui_editor::process_gui_new_dialog() {
+    static string pack;
+    static string internal_name;
+    static string problem;
+    static string file_path;
+    bool must_update = true;
+    
+    //Pack widgets.
+    must_update |= process_gui_new_dialog_pack_widgets(&pack);
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //GUI definition combo.
+    vector<string> gui_files;
+    for(const auto &g : game.content.gui.manifests) {
+        gui_files.push_back(g.first);
+    }
+    must_update |= ImGui::Combo("File", &internal_name, gui_files);
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Check if everything's ok.
+    if(must_update) {
+        problem.clear();
+        if(internal_name.empty()) {
+            problem =
+                "You have to select a file!";
+        } else if(pack == FOLDER_NAMES::BASE_PACK) {
+            problem =
+                "All the GUI definition files already live in the\n"
+                "base pack! The idea is you pick one of those so it'll\n"
+                "be copied onto a different pack for you to edit.";
+        } else {
+            file_path =
+                FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+                pack + "/" +
+                FOLDER_PATHS_FROM_PACK::GUI + "/" +
+                internal_name + ".txt";
+            if(file_exists(file_path)) {
+                problem =
+                    "There is already a GUI definition\n"
+                    "file for that GUI in that pack!";
+            }
+        }
+        must_update = false;
+    }
+    
+    //Create button.
+    ImGui::SetupCentering(180);
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
+        copy_gui_file_from_base(internal_name, pack);
+        load_gui_file(file_path, true);
+        close_top_dialog();
+        just_created_file = true;
+        pack.clear();
+        internal_name.clear();
+        problem.clear();
+        file_path.clear();
+        must_update = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        problem.empty() ? "Create the file!" : problem
+    );
 }
 
 

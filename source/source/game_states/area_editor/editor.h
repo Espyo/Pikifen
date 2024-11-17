@@ -556,6 +556,9 @@ private:
     //Currently highlighted vertex, if any.
     vertex* highlighted_vertex = nullptr;
     
+    //Has a new area just been created?
+    bool just_created_area = false;
+    
     //Category name of the last mob placed.
     string last_mob_custom_cat_name;
     
@@ -1042,6 +1045,7 @@ private:
         const point &focus, const point &other, const string &prefix = ""
     );
     void open_load_dialog();
+    void open_new_dialog();
     void open_options_dialog();
     void pick_area(
         const string &name, const string &top_cat, const string &sec_cat,
@@ -1087,6 +1091,7 @@ private:
     void process_gui_control_panel();
     void process_gui_delete_area_dialog();
     void process_gui_load_dialog();
+    void process_gui_new_dialog();
     void process_gui_menu_bar();
     void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();

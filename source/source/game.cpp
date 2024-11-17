@@ -396,7 +396,7 @@ int game_class::start() {
     //Other fundamental initializations and loadings.
     init_misc();
     init_error_bitmap();
-    content.load_packs();
+    content.reload_packs();
     content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,

@@ -109,6 +109,35 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
 
 
 /**
+ * @brief Returns whether a given file exists.
+ *
+ * @param path Path to the file.
+ * @return Whether it exists.
+ */
+bool file_exists(const string &path) {
+    return al_filename_exists(path.c_str());
+}
+
+
+/**
+ * @brief Returns whether a given folder exists.
+ *
+ * @param path Path to the folder.
+ * @return Whether it exists.
+ */
+bool folder_exists(const string &path) {
+    bool result = true;
+    ALLEGRO_FS_ENTRY* fs_entry = al_create_fs_entry(path.c_str());
+    if(!fs_entry || !al_open_directory(fs_entry)) {
+        result = false;
+    }
+    al_close_directory(fs_entry);
+    al_destroy_fs_entry(fs_entry);
+    return result;
+}
+
+
+/**
  * @brief Stores the names of all files in a folder into a vector.
  *
  * @param folder_path Path to the folder.
@@ -660,7 +689,7 @@ WIPE_FOLDER_RESULT wipe_folder(
         folder_path.size() >= 4,
         "Tried to wipe the folder \"" + folder_path + "\"!"
     );
-
+    
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_path.c_str());
     if(!folder || !al_open_directory(folder)) {

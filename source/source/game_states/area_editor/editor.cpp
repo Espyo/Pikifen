@@ -509,8 +509,8 @@ void area_editor::create_area(
     );
     
     //Set its name and type and whatnot.
-    this->manifest = manifest;
-    game.cur_area_data->manifest = &this->manifest;
+    manifest = requested_area_manifest;
+    game.cur_area_data->manifest = &manifest;
     game.cur_area_data->type = requested_area_type;
     
     //Finish up.
@@ -1863,7 +1863,7 @@ void area_editor::load() {
     game.cam.set_zoom(1.0f);
     
     //Load necessary game content.
-    game.content.load_packs();
+    game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
@@ -2068,8 +2068,8 @@ void area_editor::pick_area(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
-    content_manifest* manif_ptr = (content_manifest*) info;
-    create_or_load_area(manif_ptr->path);
+    content_manifest* temp_manif = (content_manifest*) info;
+    create_or_load_area(temp_manif->path);
     close_top_dialog();
 }
 
@@ -3903,7 +3903,6 @@ void area_editor::unload() {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
     }
     );
-    game.content.unload_packs();
 }
 
 

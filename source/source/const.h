@@ -152,6 +152,9 @@ const string AREA_REFERENCE_CONFIG = "reference.txt";
 //Game configuration file.
 const string GAME_CONFIG = "config.txt";
 
+//Mob type animation file.
+const string MOB_TYPE_ANIMATION = "animations.txt";
+
 //System animations file.
 const string SYSTEM_ANIMS = "system_animations.txt";
 

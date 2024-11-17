@@ -42,6 +42,7 @@ void animation_editor::open_load_dialog() {
         mob_category* cat = game.mob_categories.get((MOB_CATEGORY) c);
         for(const auto &a : game.content.mob_anims.list[c]) {
             mob_type* type = cat->get_type(a.first);
+            if(!type) continue;
             file_items.push_back(
                 picker_item(
                     type->name,
@@ -70,6 +71,18 @@ void animation_editor::open_load_dialog() {
     );
     dialogs.back()->close_callback =
         std::bind(&animation_editor::close_load_dialog, this);
+}
+
+
+/**
+ * @brief Opens the "new" dialog.
+ */
+void animation_editor::open_new_dialog() {
+    open_dialog(
+        "Create a new animation file",
+        std::bind(&animation_editor::process_gui_new_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 230);
 }
 
 
@@ -310,13 +323,11 @@ void animation_editor::process_gui_hitbox_hazards() {
 void animation_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
-    [this](const string  &name) -> string {
-        return get_path_short_name(name);
+    [this](const string &path) -> string {
+        return get_path_short_name(path);
     },
-    [this](const string  &name) {
-        manifest.clear();
-        loaded_mob_type = nullptr;
-        load_animation_database(true);
+    [this](const string &path) {
+        load_animation_database_file(path, true);
         close_top_dialog();
     }
     );
@@ -327,7 +338,7 @@ void animation_editor::process_gui_load_dialog() {
     //New node.
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
-            //TODO
+            open_new_dialog();
         }
         
         ImGui::TreePop();
@@ -345,6 +356,11 @@ void animation_editor::process_gui_load_dialog() {
         load_dialog_picker.process();
         
         ImGui::TreePop();
+    }
+    
+    if(just_created_file) {
+        close_top_dialog();
+        just_created_file = false;
     }
 }
 
@@ -447,7 +463,7 @@ void animation_editor::process_gui_menu_bar() {
                 zoom_everything_cmd(1.0f);
             }
             set_tooltip(
-                "Move and zoom the camera so that everything in the area\n"
+                "Move and zoom the camera so that everything in the animation\n"
                 "fits nicely into view.",
                 "Home"
             );
@@ -504,6 +520,123 @@ void animation_editor::process_gui_menu_bar() {
         ImGui::EndMenuBar();
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void animation_editor::process_gui_new_dialog() {
+    static string pack;
+    static int type = 0;
+    static string custom_mob_cat;
+    static mob_type* mob_type_ptr = nullptr;
+    static string problem;
+    static string internal_name;
+    static string anim_path;
+    bool must_update = true;
+    
+    //Pack widgets.
+    must_update |= process_gui_new_dialog_pack_widgets(&pack);
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Global animation radio.
+    must_update |= ImGui::RadioButton("Global animation", &type, 0);
+    
+    //Mob type animation radio.
+    ImGui::SameLine();
+    must_update |= ImGui::RadioButton("Object type", &type, 1);
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    if(type == 0) {
+        //Internal name input.
+        must_update |= ImGui::InputText("Internal name", &internal_name);
+        set_tooltip(
+            "Internal name of the new animation.\n"
+            "Remember to keep it simple, type in lowercase, "
+            "and use underscores!"
+        );
+        
+        //Small spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 19));
+        
+    } else {
+        //Mob type widgets.
+        must_update |=
+            process_gui_mob_type_widgets(&custom_mob_cat, &mob_type_ptr);
+            
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Check if everything's ok.
+    if(must_update) {
+        problem.clear();
+        if(type == 0) {
+            if(internal_name.empty()) {
+                problem = "You have to type an internal name first!";
+            } else {
+                anim_path =
+                    FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+                    pack + "/" +
+                    FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/" +
+                    internal_name + ".txt";
+                if(file_exists(anim_path)) {
+                    problem =
+                        "There is already a global animation with\n"
+                        "that internal name in that pack!";
+                }
+            }
+        } else {
+            if(!mob_type_ptr) {
+                problem = "You have to choose an object type first!";
+            } else {
+                anim_path =
+                    FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+                    pack + "/" +
+                    FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
+                    mob_type_ptr->category->folder_name + "/" +
+                    mob_type_ptr->manifest->internal_name + "/" +
+                    FILE_NAMES::MOB_TYPE_ANIMATION;
+                if(file_exists(anim_path)) {
+                    problem =
+                        "There is already an animation file for\n"
+                        "that object type in that pack!";
+                }
+            }
+        }
+        must_update = false;
+    }
+    
+    //Create button.
+    ImGui::SetupCentering(140);
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create animation", ImVec2(140, 40))) {
+        load_animation_database_file(anim_path, true);
+        close_top_dialog();
+        just_created_file = true;
+        pack.clear();
+        type = 0;
+        custom_mob_cat.clear();
+        mob_type_ptr = nullptr;
+        problem.clear();
+        internal_name.clear();
+        anim_path.clear();
+        must_update = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        problem.empty() ? "Create the animation!" : problem
+    );
 }
 
 
@@ -1491,7 +1624,12 @@ void animation_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Current file text.
-    ImGui::Text("File: %s", manifest.internal_name.c_str());
+    ImGui::Text(
+        "File: %s",
+        loaded_mob_type ?
+        loaded_mob_type->manifest->internal_name.c_str() :
+        manifest.internal_name.c_str()
+    );
     set_tooltip(
         "Pack: " + manifest.pack + "\n"
         "File path: " + manifest.path

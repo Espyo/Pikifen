@@ -289,7 +289,7 @@ string animation_editor::get_path_short_name(const string &p) const {
         vector<string> path_parts = split(p, "/");
         if(
             path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == "animations.txt"
+            path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
         ) {
             return
                 path_parts[path_parts.size() - 3] + "/" +
@@ -412,7 +412,7 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
-    game.content.load_packs();
+    game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
@@ -450,9 +450,7 @@ void animation_editor::load() {
     }
     
     if(!auto_load_anim.empty()) {
-        loaded_mob_type = nullptr;
-        manifest.fill_from_path(auto_load_anim);
-        load_animation_database(true);
+        load_animation_database_file(auto_load_anim, true);
     } else {
         open_load_dialog();
     }
@@ -462,12 +460,15 @@ void animation_editor::load() {
 /**
  * @brief Loads the animation database for the current object.
  *
+ * @param path Path to the file.
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void animation_editor::load_animation_database(
-    bool should_update_history
+void animation_editor::load_animation_database_file(
+    const string &path, bool should_update_history
 ) {
+    manifest.fill_from_path(path);
+    
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
@@ -489,6 +490,7 @@ void animation_editor::load_animation_database(
     cur_sprite = nullptr;
     cur_hitbox = nullptr;
     cur_hitbox_idx = 0;
+    loaded_mob_type = nullptr;
     
     animation_exists_on_disk = true;
     can_save = true;
@@ -527,7 +529,7 @@ void animation_editor::load_animation_database(
         vector<string> path_parts = split(manifest.path, "/");
         if(
             path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == "animations.txt"
+            path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
         ) {
             mob_category* cat =
                 game.mob_categories.get_from_folder_name(
@@ -766,8 +768,8 @@ void animation_editor::pick_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
-    manifest = *((content_manifest*) info);
-    load_animation_database(true);
+    content_manifest* temp_manif = (content_manifest*) info;
+    load_animation_database_file(temp_manif->path, true);
     close_top_dialog();
 }
 
@@ -827,7 +829,7 @@ void animation_editor::reload_cmd(float input_value) {
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_animation_database(false); },
+    [this] () { load_animation_database_file(string(manifest.path), false); },
     std::bind(&animation_editor::save_animation_database, this)
     );
 }
@@ -1486,7 +1488,6 @@ void animation_editor::unload() {
         CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
     }
     );
-    game.content.unload_packs();
     
     if(bg) {
         al_destroy_bitmap(bg);
