@@ -82,15 +82,19 @@ public:
     void fill_manifests() override;
     content_manifest* find_manifest(const string &area_name, const string &pack, AREA_TYPE type);
     string get_name() const override;
-    string get_area_path(
-        const string &pack_name, AREA_TYPE type, const string &internal_name
-    ) const;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
     void load_area(
         area_data* area_ptr, content_manifest* manifest, AREA_TYPE type,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
+    string manifest_to_path(
+        const content_manifest &manifest, AREA_TYPE type
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        AREA_TYPE* out_type = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -129,6 +133,14 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest,
+        const string &extension
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_extension = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
 };
@@ -158,6 +170,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -193,6 +209,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -228,6 +248,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
 };
@@ -257,6 +281,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -292,6 +320,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -324,6 +356,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -363,6 +399,14 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest, const string &category,
+        const string &type
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_category = nullptr, string* out_type = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -401,6 +445,13 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest, const string &category
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_category = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -437,6 +488,13 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest, const string &extension
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_extension = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
 };
@@ -466,6 +524,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -501,6 +563,13 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest, const string &extension
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_extension = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
 };
@@ -530,6 +599,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -565,6 +638,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -600,6 +677,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     
@@ -635,6 +716,10 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
     

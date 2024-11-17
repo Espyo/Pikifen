@@ -307,10 +307,3 @@ struct area_data : public content {
     void clear();
     
 };
-
-
-void get_area_info_from_path(
-    const string &requested_area_path,
-    content_manifest* out_manifest,
-    AREA_TYPE* out_area_type
-);

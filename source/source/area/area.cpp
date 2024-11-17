@@ -2540,30 +2540,3 @@ tree_shadow::tree_shadow(
 tree_shadow::~tree_shadow() {
     game.content.bitmaps.list.free(file_name);
 }
-
-
-/**
- * @brief Returns the folder name and area type of an area on disk,
- * given its path.
- *
- * @param requested_area_path Relative path to the requested area.
- * @param out_manifest If not nullptr, a manifest is returned here.
- * @param out_area_type If not nullptr, the area type is returned here.
- */
-void get_area_info_from_path(
-    const string &requested_area_path,
-    content_manifest* out_manifest,
-    AREA_TYPE* out_area_type
-) {
-    if(out_manifest) {
-        out_manifest->fill_from_path(requested_area_path);
-    }
-    
-    if(out_area_type) {
-        if(requested_area_path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") != string::npos) {
-            *out_area_type = AREA_TYPE_MISSION;
-        } else {
-            *out_area_type = AREA_TYPE_SIMPLE;
-        }
-    }
-}

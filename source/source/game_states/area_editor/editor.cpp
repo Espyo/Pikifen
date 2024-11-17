@@ -596,7 +596,7 @@ void area_editor::create_or_load_area(const string &requested_area_path) {
     string file_to_check = requested_area_path + "/" + FILE_NAMES::AREA_GEOMETRY;
     content_manifest temp_manif;
     AREA_TYPE requested_area_type;
-    get_area_info_from_path(
+    game.content.areas.path_to_manifest(
         requested_area_path, &temp_manif, &requested_area_type
     );
     auto existing_manif_it = game.content.areas.manifests[requested_area_type].find(temp_manif.internal_name);
@@ -1889,7 +1889,7 @@ void area_editor::load() {
     
     if(!quick_play_area_path.empty()) {
         AREA_TYPE type;
-        get_area_info_from_path(
+        game.content.areas.path_to_manifest(
             quick_play_area_path,
             &manifest,
             &type
@@ -1901,7 +1901,7 @@ void area_editor::load() {
         
     } else if(!auto_load_area.empty()) {
         AREA_TYPE type;
-        get_area_info_from_path(
+        game.content.areas.path_to_manifest(
             auto_load_area,
             &manifest,
             &type

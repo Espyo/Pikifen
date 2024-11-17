@@ -314,7 +314,7 @@ void area_editor::process_gui_new_dialog() {
     static int type = AREA_TYPE_SIMPLE;
     static string problem;
     static string area_path;
-    bool must_update = true;
+    static bool must_update = true;
     
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
@@ -352,9 +352,12 @@ void area_editor::process_gui_new_dialog() {
         if(internal_name.empty()) {
             problem = "You have to type an internal name first!";
         } else {
+            content_manifest temp_man;
+            temp_man.pack = pack;
+            temp_man.internal_name = internal_name;
             area_path =
-                game.content.areas.get_area_path(
-                    pack, (AREA_TYPE) type, internal_name
+                game.content.areas.manifest_to_path(
+                    temp_man, (AREA_TYPE) type
                 );
             if(folder_exists(area_path)) {
                 problem =

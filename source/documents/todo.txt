@@ -1,10 +1,10 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Refactor -- sometimes they're referred to as "sounds", other times as "samples", other times as "sfx"
     Creating a new area crashes
     The spacer dummy widget should really be a function in the editor class. Also maybe use ImGui::Spacing?
-    Refactor everything that has to do with paths for different content
     Editor load dialogs
         Load dialog should have:
             History

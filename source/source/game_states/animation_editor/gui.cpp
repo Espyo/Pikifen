@@ -534,7 +534,7 @@ void animation_editor::process_gui_new_dialog() {
     static string problem;
     static string internal_name;
     static string anim_path;
-    bool must_update = true;
+    static bool must_update = true;
     
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
@@ -581,11 +581,11 @@ void animation_editor::process_gui_new_dialog() {
             if(internal_name.empty()) {
                 problem = "You have to type an internal name first!";
             } else {
+                content_manifest temp_man;
+                temp_man.internal_name = internal_name;
+                temp_man.pack = pack;
                 anim_path =
-                    FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                    pack + "/" +
-                    FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/" +
-                    internal_name + ".txt";
+                    game.content.global_anims.manifest_to_path(temp_man);
                 if(file_exists(anim_path)) {
                     problem =
                         "There is already a global animation with\n"
@@ -596,13 +596,15 @@ void animation_editor::process_gui_new_dialog() {
             if(!mob_type_ptr) {
                 problem = "You have to choose an object type first!";
             } else {
+                content_manifest temp_man;
+                temp_man.internal_name = FILE_NAMES::MOB_TYPE_ANIMATION;
+                temp_man.pack = pack;
                 anim_path =
-                    FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                    pack + "/" +
-                    FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
-                    mob_type_ptr->category->folder_name + "/" +
-                    mob_type_ptr->manifest->internal_name + "/" +
-                    FILE_NAMES::MOB_TYPE_ANIMATION;
+                    game.content.mob_anims.manifest_to_path(
+                        temp_man,
+                        mob_type_ptr->category->folder_name,
+                        mob_type_ptr->manifest->internal_name
+                    );
                 if(file_exists(anim_path)) {
                     problem =
                         "There is already an animation file for\n"

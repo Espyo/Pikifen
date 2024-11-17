@@ -102,16 +102,17 @@ void gui_editor::close_options_dialog() {
 bool gui_editor::copy_gui_file_from_base(
     const string &internal_name, const string &dest_pack
 ) {
+    content_manifest temp_source_man;
+    temp_source_man.internal_name = internal_name;
+    temp_source_man.pack = FOLDER_NAMES::BASE_PACK;
     string source_path =
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        FOLDER_NAMES::BASE_PACK + "/" +
-        FOLDER_PATHS_FROM_PACK::GUI + "/" +
-        internal_name + ".txt";
+        game.content.gui.manifest_to_path(temp_source_man);
+        
+    content_manifest temp_dest_man;
+    temp_dest_man.internal_name = internal_name;
+    temp_dest_man.pack = dest_pack;
     string dest_path =
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        dest_pack + "/" +
-        FOLDER_PATHS_FROM_PACK::GUI + "/" +
-        internal_name + ".txt";
+        game.content.gui.manifest_to_path(temp_dest_man);
         
     data_node source(source_path);
     if(!source.file_was_opened) return false;

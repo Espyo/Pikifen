@@ -387,7 +387,7 @@ void gui_editor::process_gui_new_dialog() {
     static string internal_name;
     static string problem;
     static string file_path;
-    bool must_update = true;
+    static bool must_update = true;
     
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
@@ -417,11 +417,11 @@ void gui_editor::process_gui_new_dialog() {
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
+            content_manifest temp_man;
+            temp_man.internal_name = internal_name;
+            temp_man.pack = pack;
             file_path =
-                FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                pack + "/" +
-                FOLDER_PATHS_FROM_PACK::GUI + "/" +
-                internal_name + ".txt";
+                game.content.gui.manifest_to_path(temp_man);
             if(file_exists(file_path)) {
                 problem =
                     "There is already a GUI definition\n"

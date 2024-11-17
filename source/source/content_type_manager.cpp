@@ -77,29 +77,6 @@ string area_content_manager::get_name() const {
 
 
 /**
- * @brief Returns the path to an area's folder.
- *
- * @param pack_name Name of the pack it's in.
- * @param type Type of area.
- * @param internal_name Internal name of the area.
- * @return The path.
- */
-string area_content_manager::get_area_path(
-    const string &pack_name, AREA_TYPE type, const string &internal_name
-) const {
-    return
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        pack_name + "/" +
-        (
-            type == AREA_TYPE_SIMPLE ?
-            FOLDER_PATHS_FROM_PACK::SIMPLE_AREAS :
-            FOLDER_PATHS_FROM_PACK::MISSION_AREAS
-        ) + "/" +
-        internal_name;
-}
-
-
-/**
  * @brief Returns the name to use for the performance monitor, if any.
  *
  * @return The name.
@@ -219,6 +196,53 @@ void area_content_manager::load_area_into_vector(
 
 
 /**
+ * @brief Returns the path to an area given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the area.
+ * @param type Type of area.
+ * @return The path.
+ */
+string area_content_manager::manifest_to_path(
+    const content_manifest &manifest, AREA_TYPE type
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        (
+            type == AREA_TYPE_SIMPLE ?
+            FOLDER_PATHS_FROM_PACK::SIMPLE_AREAS :
+            FOLDER_PATHS_FROM_PACK::MISSION_AREAS
+        ) + "/" +
+        manifest.internal_name;
+}
+
+
+/**
+ * @brief Returns the manifest of an area given its path.
+ *
+ * @param path Path to the area.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_type If not nullptr, the area type is returned here.
+ */
+void area_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest, AREA_TYPE* out_type
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_type) {
+        if(path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") != string::npos) {
+            *out_type = AREA_TYPE_MISSION;
+        } else {
+            *out_type = AREA_TYPE_SIMPLE;
+        }
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -275,6 +299,51 @@ string bitmap_content_manager::get_perf_mon_measurement_name() const {
  * @param level Level to load at.
  */
 void bitmap_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+}
+
+
+/**
+ * @brief Returns the path to a bitmap given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the bitmap.
+ * @param extension Extension of the bitmap file, dot included.
+ * @return The path.
+ */
+string bitmap_content_manager::manifest_to_path(
+    const content_manifest &manifest,
+    const string &extension
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::GRAPHICS + "/" +
+        manifest.internal_name + extension;
+}
+
+
+/**
+ * @brief Returns the manifest of a bitmap given its path.
+ *
+ * @param path Path to the bitmap.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_type If not nullptr, the file extension is returned here.
+ */
+void bitmap_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest, string* out_extension
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_extension) {
+        size_t i = path.find_last_of(".");
+        if(i == string::npos) {
+            *out_extension = "";
+        } else {
+            *out_extension = path.substr(i);
+        }
+    }
 }
 
 
@@ -399,6 +468,39 @@ void custom_particle_gen_content_manager::load_generator(
 
 
 /**
+ * @brief Returns the path to a custom particle generator given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the generator.
+ * @return The path.
+ */
+string custom_particle_gen_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a custom particle generator given its path.
+ *
+ * @param path Path to the generator.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void custom_particle_gen_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -475,6 +577,39 @@ void global_anim_content_manager::load_animation(content_manifest* manifest, CON
 
 
 /**
+ * @brief Returns the path to a global animation given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the animation.
+ * @return The path.
+ */
+string global_anim_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a global animation given its path.
+ *
+ * @param path Path to the animation.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void global_anim_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -528,6 +663,39 @@ string gui_content_manager::get_perf_mon_measurement_name() const {
 void gui_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     for(const auto &g : manifests) {
         list[g.first] = load_data_file(g.second.path);
+    }
+}
+
+
+/**
+ * @brief Returns the path to a GUI definition given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the definition.
+ * @return The path.
+ */
+string gui_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::GUI + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a GUI definition given its path.
+ *
+ * @param path Path to the definition.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void gui_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
     }
 }
 
@@ -610,6 +778,39 @@ void hazard_content_manager::load_hazard(
 
 
 /**
+ * @brief Returns the path to a hazard given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the hazard.
+ * @return The path.
+ */
+string hazard_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::HAZARDS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a hazard given its path.
+ *
+ * @param path Path to the hazard.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void hazard_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -683,6 +884,39 @@ void liquid_content_manager::load_liquid(
     new_l->manifest = manifest;
     new_l->load_from_data_node(&file, level);
     list[manifest->internal_name] = new_l;
+}
+
+
+/**
+ * @brief Returns the path to a liquid given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the liquid.
+ * @return The path.
+ */
+string liquid_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::LIQUIDS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a liquid given its path.
+ *
+ * @param path Path to the liquid.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void liquid_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
 }
 
 
@@ -783,6 +1017,39 @@ void misc_config_content_manager::load_system_anim(
 
 
 /**
+ * @brief Returns the path to a misc. config given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the config.
+ * @return The path.
+ */
+string misc_config_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::MISC + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a misc. config given its path.
+ *
+ * @param path Path to the config.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void misc_config_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -822,11 +1089,22 @@ void mob_anim_content_manager::fill_manifests() {
 void mob_anim_content_manager::fill_cat_manifests_from_pack(
     mob_category* category, const string &pack_name
 ) {
-    const string category_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack_name + "/" + FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" + category->folder_name;
+    const string category_path =
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        pack_name + "/" +
+        FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
+        category->folder_name;
     vector<string> type_folders = folder_to_vector_recursively(category_path, true);
     for(size_t f = 0; f < type_folders.size(); f++) {
         string internal_name = type_folders[f];
-        manifests[category->id][internal_name] = content_manifest(internal_name, category_path + "/" + internal_name + "/" + FILE_NAMES::MOB_TYPE_ANIMATION, FOLDER_NAMES::BASE_PACK);
+        manifests[category->id][internal_name] =
+            content_manifest(
+                internal_name,
+                category_path + "/" +
+                internal_name + "/" +
+                FILE_NAMES::MOB_TYPE_ANIMATION,
+                FOLDER_NAMES::BASE_PACK
+            );
     }
 }
 
@@ -879,6 +1157,65 @@ void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTEN
     db.manifest = manifest;
     db.load_from_data_node(&file);
     list[category_id][manifest->internal_name] = db;
+}
+
+
+/**
+ * @brief Returns the path to a mob animation a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the animation.
+ * @param category Mob category folder name.
+ * @param type Mob type folder name.
+ * @return The path.
+ */
+string mob_anim_content_manager::manifest_to_path(
+    const content_manifest &manifest, const string &category,
+    const string &type
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
+        category + "/" +
+        type + "/" +
+        FILE_NAMES::MOB_TYPE_ANIMATION;
+}
+
+
+/**
+ * @brief Returns the manifest of a mob animation given its path.
+ *
+ * @param path Path to the animation.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_category If not nullptr, the mob category folder name
+ * is returned here.
+ * @param out_type If not nullptr, the mob type folder name
+ * is returned here.
+ */
+void mob_anim_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest,
+    string* out_category, string* out_type
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_category || out_type) {
+        vector<string> parts = split(path, "/");
+        if(out_category) {
+            *out_category = "";
+            if(parts.size() >= 3) {
+                *out_category = parts[parts.size() - 3];
+            }
+        }
+        if(out_type) {
+            *out_type = "";
+            if(parts.size() >= 2) {
+                *out_type = parts[parts.size() - 2];
+            }
+        }
+    }
 }
 
 
@@ -1067,6 +1404,51 @@ void mob_type_content_manager::load_mob_types_of_category(mob_category* category
 
 
 /**
+ * @brief Returns the path to a mob type given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the mob type.
+ * @param category Mob category folder name.
+ * @return The path.
+ */
+string mob_type_content_manager::manifest_to_path(
+    const content_manifest &manifest, const string &category
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
+        category + "/" +
+        manifest.internal_name;
+}
+
+
+/**
+ * @brief Returns the manifest of a mob type given its path.
+ *
+ * @param path Path to the mob type.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_category If not nullptr, the mob category folder name
+ * is returned here.
+ */
+void mob_type_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest, string* out_category
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_category) {
+        vector<string> parts = split(path, "/");
+        *out_category = "";
+        if(parts.size() >= 2) {
+            *out_category = parts[parts.size() - 2];
+        }
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -1167,6 +1549,51 @@ void sample_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 
 
 /**
+ * @brief Returns the path to a sample given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the sample.
+ * @param extension Extension of the sample file, dot included.
+ * @return The path.
+ */
+string sample_content_manager::manifest_to_path(
+    const content_manifest &manifest,
+    const string &extension
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SOUNDS + "/" +
+        manifest.internal_name + extension;
+}
+
+
+/**
+ * @brief Returns the manifest of a sample given its path.
+ *
+ * @param path Path to the sample.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_type If not nullptr, the file extension is returned here.
+ */
+void sample_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest, string* out_extension
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_extension) {
+        size_t i = path.find_last_of(".");
+        if(i == string::npos) {
+            *out_extension = "";
+        } else {
+            *out_extension = path.substr(i);
+        }
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -1241,6 +1668,39 @@ void song_content_manager::load_song(content_manifest* manifest, CONTENT_LOAD_LE
 
 
 /**
+ * @brief Returns the path to a song given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the song.
+ * @return The path.
+ */
+string song_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SONGS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a song given its path.
+ *
+ * @param path Path to the song.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void song_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -1295,6 +1755,51 @@ string song_track_content_manager::get_perf_mon_measurement_name() const {
  * @param level Level to load at.
  */
 void song_track_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+}
+
+
+/**
+ * @brief Returns the path to a song track given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the song track.
+ * @param extension Extension of the song track file, dot included.
+ * @return The path.
+ */
+string song_track_content_manager::manifest_to_path(
+    const content_manifest &manifest,
+    const string &extension
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SONG_TRACKS + "/" +
+        manifest.internal_name + extension;
+}
+
+
+/**
+ * @brief Returns the manifest of a song track given its path.
+ *
+ * @param path Path to the song track.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param out_type If not nullptr, the file extension is returned here.
+ */
+void song_track_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest, string* out_extension
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+    
+    if(out_extension) {
+        size_t i = path.find_last_of(".");
+        if(i == string::npos) {
+            *out_extension = "";
+        } else {
+            *out_extension = path.substr(i);
+        }
+    }
 }
 
 
@@ -1370,6 +1875,39 @@ void spike_damage_type_content_manager::load_spike_damage_type(content_manifest*
     new_t.manifest = manifest;
     new_t.load_from_data_node(&file);
     list[manifest->internal_name] = new_t;
+}
+
+
+/**
+ * @brief Returns the path to a spike damage type given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the spike damage type.
+ * @return The path.
+ */
+string spike_damage_type_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a spike damage type given its path.
+ *
+ * @param path Path to the spike damage type.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void spike_damage_type_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
 }
 
 
@@ -1486,6 +2024,39 @@ void spray_type_content_manager::load_spray_type(content_manifest* manifest, CON
 
 
 /**
+ * @brief Returns the path to a spray type given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the spray type.
+ * @return The path.
+ */
+string spray_type_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SPRAYS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a spray type given its path.
+ *
+ * @param path Path to the spray type.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void spray_type_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -1598,6 +2169,39 @@ void status_type_content_manager::load_status_type(content_manifest* manifest, C
 
 
 /**
+ * @brief Returns the path to a status type given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the status type.
+ * @return The path.
+ */
+string status_type_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::STATUSES + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a status type given its path.
+ *
+ * @param path Path to the status type.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void status_type_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
  * @brief Unloads all loaded content.
  *
  * @param level Load level. Should match the level used to load the content.
@@ -1669,6 +2273,39 @@ void weather_condition_content_manager::load_weather_condition(content_manifest*
     new_w.manifest = manifest;
     new_w.load_from_data_node(&file);
     list[manifest->internal_name] = new_w;
+}
+
+
+/**
+ * @brief Returns the path to a weather condition given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the weather condition.
+ * @return The path.
+ */
+string weather_condition_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::WEATHER + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a weather condition given its path.
+ *
+ * @param path Path to the weather condition.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void weather_condition_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
 }
 
 
