@@ -200,15 +200,15 @@ void asset_file_names_t::load(data_node* file) {
     
     reader_setter srs(file->get_child_by_name("sounds"));
     
-    srs.set("attack", sfx_attack);
-    srs.set("camera", sfx_camera);
-    srs.set("menu_activate", sfx_menu_activate);
-    srs.set("menu_back", sfx_menu_back);
-    srs.set("menu_select", sfx_menu_select);
-    srs.set("pluck", sfx_pluck);
-    srs.set("spray", sfx_spray);
-    srs.set("switch_pikmin", sfx_switch_pikmin);
-    srs.set("throw", sfx_throw);
+    srs.set("attack", sound_attack);
+    srs.set("camera", sound_camera);
+    srs.set("menu_activate", sound_menu_activate);
+    srs.set("menu_back", sound_menu_back);
+    srs.set("menu_select", sound_menu_select);
+    srs.set("pluck", sound_pluck);
+    srs.set("spray", sound_spray);
+    srs.set("switch_pikmin", sound_switch_pikmin);
+    srs.set("throw", sound_throw);
 }
 
 
@@ -1533,12 +1533,12 @@ bool script_var_reader::get(const string &name, point &dest) const {
  * @param report_errors Only issues errors if this is true.
  * @return The audio sample.
  */
-ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
+ALLEGRO_SAMPLE* sample_manager::do_load(
     const string &name, data_node* node, bool report_errors
 ) {
-    const auto &it = game.content.samples.manifests.find(name);
+    const auto &it = game.content.sounds.manifests.find(name);
     string path =
-        it != game.content.samples.manifests.end() ?
+        it != game.content.sounds.manifests.end() ?
         it->second.path :
         name;
     return load_sample(path, node, report_errors);
@@ -1550,7 +1550,7 @@ ALLEGRO_SAMPLE* sfx_sample_manager::do_load(
  *
  * @param asset Audio sample to unload.
  */
-void sfx_sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
+void sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
     al_destroy_sample(asset);
 }
 

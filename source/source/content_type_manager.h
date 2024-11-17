@@ -466,42 +466,6 @@ private:
 
 /**
  * @brief Responsible for loading and storing game content
- * audio samples into memory.
- */
-class sample_content_manager : public content_type_manager {
-
-public:
-
-    //--- Members ---
-    
-    //Manager proper.
-    sfx_sample_manager list;
-    
-    //Manifests.
-    map<string, content_manifest> manifests;
-    
-    
-    //--- Function declarations ---
-    
-    void clear_manifests() override;
-    void fill_manifests() override;
-    string get_name() const override;
-    string get_perf_mon_measurement_name() const override;
-    void load_all(CONTENT_LOAD_LEVEL level) override;
-    string manifest_to_path(
-        const content_manifest &manifest, const string &extension
-    ) const;
-    void path_to_manifest(
-        const string &path, content_manifest* out_manifest = nullptr,
-        string* out_extension = nullptr
-    ) const;
-    void unload_all(CONTENT_LOAD_LEVEL level) override;
-    
-};
-
-
-/**
- * @brief Responsible for loading and storing game content
  * songs into memory.
  */
 class song_content_manager : public content_type_manager {
@@ -551,6 +515,42 @@ public:
     
     //Manager proper.
     audio_stream_manager list;
+    
+    //Manifests.
+    map<string, content_manifest> manifests;
+    
+    
+    //--- Function declarations ---
+    
+    void clear_manifests() override;
+    void fill_manifests() override;
+    string get_name() const override;
+    string get_perf_mon_measurement_name() const override;
+    void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(
+        const content_manifest &manifest, const string &extension
+    ) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr,
+        string* out_extension = nullptr
+    ) const;
+    void unload_all(CONTENT_LOAD_LEVEL level) override;
+    
+};
+
+
+/**
+ * @brief Responsible for loading and storing game content
+ * sound effects into memory.
+ */
+class sound_content_manager : public content_type_manager {
+
+public:
+
+    //--- Members ---
+    
+    //Manager proper.
+    sample_manager list;
     
     //Manifests.
     map<string, content_manifest> manifests;

@@ -544,7 +544,7 @@ void leader::dismiss() {
     }
     
     //Final things.
-    play_sound(lea_type->sfx_data_idxs[LEADER_SOUND_DISMISSING]);
+    play_sound(lea_type->sound_data_idxs[LEADER_SOUND_DISMISSING]);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
         particle par;
         const unsigned char* color_idx =
@@ -825,16 +825,16 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
-    size_t whistling_sfx_idx =
-        lea_type->sfx_data_idxs[LEADER_SOUND_WHISTLING];
-    if(whistling_sfx_idx != INVALID) {
-        mob_type::sfx_t* whistling_sfx =
-            &type->sounds[whistling_sfx_idx];
-        whistle_sfx_source_id =
-            game.audio.create_world_pos_sfx_source(
-                whistling_sfx->sample,
+    size_t whistling_sound_idx =
+        lea_type->sound_data_idxs[LEADER_SOUND_WHISTLING];
+    if(whistling_sound_idx != INVALID) {
+        mob_type::sound_t* whistling_sound =
+            &type->sounds[whistling_sound_idx];
+        whistle_sound_source_id =
+            game.audio.create_world_pos_sound_source(
+                whistling_sound->sample,
                 game.states.gameplay->leader_cursor_w,
-                whistling_sfx->config
+                whistling_sound->config
             );
     }
     set_animation(LEADER_ANIM_WHISTLING);
@@ -857,8 +857,8 @@ void leader::stop_auto_throwing() {
 void leader::stop_whistling() {
     if(!game.states.gameplay->whistle.whistling) return;
     game.states.gameplay->whistle.stop_whistling();
-    game.audio.destroy_sfx_source(whistle_sfx_source_id);
-    whistle_sfx_source_id = 0;
+    game.audio.destroy_sound_source(whistle_sound_source_id);
+    whistle_sound_source_id = 0;
 }
 
 
@@ -940,8 +940,8 @@ void leader::tick_class_specifics(float delta_t) {
     }
     
     if(game.states.gameplay->whistle.whistling) {
-        game.audio.set_sfx_source_pos(
-            whistle_sfx_source_id,
+        game.audio.set_sound_source_pos(
+            whistle_sound_source_id,
             game.states.gameplay->leader_cursor_w
         );
     }

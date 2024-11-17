@@ -5,12 +5,12 @@ init {
 script {
     bouncing {
         on_enter {
-            play_sound steam sfx_id
-            play_sound fountain sfx_id2
+            play_sound steam sound_id
+            play_sound fountain sound_id2
         }
         on_leave {
-            stop_sound $sfx_id
-            stop_sound $sfx_id2
+            stop_sound $sound_id
+            stop_sound $sound_id2
         }
     }
 }

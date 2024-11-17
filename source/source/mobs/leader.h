@@ -67,76 +67,76 @@ extern const float THROW_PREVIEW_DEF_MAX_THICKNESS;
 class leader : public mob {
 
 public:
-    
-    //--- Members ---
 
+    //--- Members ---
+    
     //What type of leader it is.
     leader_type* lea_type = nullptr;
     
     //Is it active? i.e. being controlled by a player.
     bool active = false;
-
+    
     //Is it currently auto-plucking?
     bool auto_plucking = false;
-
+    
     //Pikmin it wants to pluck.
     pikmin* pluck_target = nullptr;
-
+    
     //Has the player asked for the auto-plucking to stop?
     bool queued_pluck_cancel = false;
-
+    
     //Mid Go Here.
     bool mid_go_here = false;
-
+    
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim = false;
-
+    
     //Time until the next arrow in the list of swarm arrows appears.
     timer swarm_next_arrow_timer = timer(LEADER::SWARM_ARROW_INTERVAL);
-
+    
     //List of swarm mode arrows.
     vector<float> swarm_arrows;
-
+    
     //Time left before the leader can throw again.
     float throw_cooldown = 0.0f;
-
+    
     //Whether or not a throw has been queued to be pulled off.
     bool throw_queued = false;
-
+    
     //Is auto-throw mode on?
     bool auto_throwing = false;
-
+    
     //Time left before the next auto-throw.
     float auto_throw_cooldown = 0.0f;
-
+    
     //When the auto-throw cooldown restarts, set it to this value.
     float auto_throw_cooldown_duration = 0.0f;
-
+    
     //Provided there's a throw, this is the mob to throw.
     mob* throwee = nullptr;
-
+    
     //Provided there's a throw, this is the angle.
     float throwee_angle = 0.0f;
-
+    
     //Provided there's a throw, this is the max Z.
     float throwee_max_z = 0.0f;
-
+    
     //Provided there's a throw, this is the horizontal speed.
     point throwee_speed;
-
+    
     //Provided there's a throw, this is the vertical speed.
     float throwee_speed_z = 0.0f;
-
+    
     //Provided there's a throw, this indicates whether it's low enough to reach.
     bool throwee_can_reach = false;
-
+    
     //How much the health wheel is filled. Gradually moves to the target amount.
     float health_wheel_visible_ratio = 1.0f;
-
+    
     //Timer for the animation of the health wheel's caution ring.
     float health_wheel_caution_timer = 0.0f;
     
-
+    
     //--- Function declarations ---
     
     leader(const point &pos, leader_type* type, float angle);
@@ -165,15 +165,15 @@ public:
 protected:
 
     //--- Function declarations ---
-
+    
     void tick_class_specifics(float delta_t) override;
     
 private:
 
     //--- Members ---
-
+    
     //Sound effect source ID of the whistle, or 0 for none.
-    size_t whistle_sfx_source_id = 0;
+    size_t whistle_sound_source_id = 0;
     
     //Returns how many rows are needed for all members' dismissal.
     size_t get_dismiss_rows(size_t n_members) const;

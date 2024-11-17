@@ -230,7 +230,7 @@ public:
     ALLEGRO_BITMAP* bmp_icon = nullptr;
     
     //Sound data index for each sound. Cache for performance.
-    size_t sfx_data_idxs[N_LEADER_SOUNDS];
+    size_t sound_data_idxs[N_LEADER_SOUNDS];
     
     
     //--- Function declarations ---

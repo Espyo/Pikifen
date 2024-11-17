@@ -105,11 +105,11 @@ script {
         on_enter {
             stop
             set_animation inhaling
-            play_sound inhaling sfx_id
+            play_sound inhaling sound_id
             start_chomping 1 blowhole
         }
         on_leave {
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_tick {
             get_mob_info t self chomped_pikmin
@@ -144,7 +144,7 @@ script {
             set_animation catching
         }
         on_frame_signal {
-            play_sound steam sfx_id
+            play_sound steam sound_id
         }
         on_animation_end {
             set_state moving_hot
@@ -184,7 +184,7 @@ script {
             set_animation moving_cool
             set_timer 1
             stop_particles
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_timer {
             get_random_real x -1000 1000
@@ -203,7 +203,7 @@ script {
             stop
             if $hot = true
                 set_animation closing_hot
-                stop_sound $sfx_id
+                stop_sound $sound_id
             else
                 set_animation closing_cool
             end_if

@@ -66,76 +66,76 @@ extern const float SONG_SOFTENED_GAIN;
 
 
 //Types of sound effects.
-enum SFX_TYPE {
+enum SOUND_TYPE {
 
     //In-world global sound effect, like a chime or name call.
-    SFX_TYPE_WORLD_GLOBAL,
+    SOUND_TYPE_WORLD_GLOBAL,
     
     //In-world sound effect from a specific position in the game world.
-    SFX_TYPE_WORLD_POS,
+    SOUND_TYPE_WORLD_POS,
     
     //In-world ambient sound effect.
-    SFX_TYPE_WORLD_AMBIANCE,
+    SOUND_TYPE_WORLD_AMBIANCE,
     
     //UI sound effect, that persists through pausing the gameplay.
-    SFX_TYPE_UI,
+    SOUND_TYPE_UI,
     
 };
 
 
 //Ways to handle sound effect playback stacking.
-enum SFX_STACK_MODE {
+enum SOUND_STACK_MODE {
 
     //Stack like normal. Maybe with a minimum time threshold.
-    SFX_STACK_MODE_NORMAL,
+    SOUND_STACK_MODE_NORMAL,
     
     //Any new playback overrides any existing one, forcing them to stop.
-    SFX_STACK_MODE_OVERRIDE,
+    SOUND_STACK_MODE_OVERRIDE,
     
     //New playback is forbidden if other playbacks exist.
-    SFX_STACK_MODE_NEVER,
+    SOUND_STACK_MODE_NEVER,
     
 };
 
 
 //Flags for sound effects.
-enum SFX_FLAG {
+enum SOUND_FLAG {
 
     //Normally, sources are destroyed when playback ends. This keeps them.
-    SFX_FLAG_KEEP_ON_PLAYBACK_END = 1 << 0,
+    SOUND_FLAG_KEEP_ON_PLAYBACK_END = 1 << 0,
     
     //Normally, playbacks stop when the source is destroyed. This keeps them.
-    SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY = 1 << 1,
+    SOUND_FLAG_KEEP_PLAYBACK_ON_DESTROY = 1 << 1,
     
     //Normally, creating a sound source emits a playback. This prevents that.
-    SFX_FLAG_DONT_EMIT_ON_CREATION = 1 << 2,
+    SOUND_FLAG_DONT_EMIT_ON_CREATION = 1 << 2,
     
     //Loops. You probably want one of the other "keep" flags too.
-    SFX_FLAG_LOOP = 1 << 3,
+    SOUND_FLAG_LOOP = 1 << 3,
     
 };
 
 
 //Possible states for a playback.
-enum SFX_PLAYBACK_STATE {
+enum SOUND_PLAYBACK_STATE {
 
     //Playing like normal.
-    SFX_PLAYBACK_STATE_PLAYING,
+    SOUND_PLAYBACK_STATE_PLAYING,
     
     //In the process of fading out to pause.
-    SFX_PLAYBACK_STATE_PAUSING,
+    SOUND_PLAYBACK_STATE_PAUSING,
     
     //Paused.
-    SFX_PLAYBACK_STATE_PAUSED,
+    SOUND_PLAYBACK_STATE_PAUSED,
     
     //In the process of fading in to unpause.
-    SFX_PLAYBACK_STATE_UNPAUSING,
+    SOUND_PLAYBACK_STATE_UNPAUSING,
     
     //In the process of fading out to stop.
-    SFX_PLAYBACK_STATE_STOPPING,
+    SOUND_PLAYBACK_STATE_STOPPING,
     
     //Finished playing and needs to be destroyed.
-    SFX_PLAYBACK_STATE_DESTROYED,
+    SOUND_PLAYBACK_STATE_DESTROYED,
     
 };
 
@@ -182,15 +182,15 @@ enum MIX_TRACK_TYPE {
 /**
  * @brief Configuration about a given sound effect source.
  */
-struct sfx_source_config_t {
+struct sound_source_config_t {
 
     //--- Members ---
     
-    //Flags. Use SFX_FLAG.
+    //Flags. Use SOUND_FLAG.
     bitmask_8_t flags = 0;
     
     //How it should stack with other playbacks.
-    SFX_STACK_MODE stack_mode = SFX_STACK_MODE_NORMAL;
+    SOUND_STACK_MODE stack_mode = SOUND_STACK_MODE_NORMAL;
     
     //Minimum time of other playbacks before stacking. Avoid 0 (always stack).
     float stack_min_pos = AUDIO::DEF_STACK_MIN_POS;
@@ -222,7 +222,7 @@ struct sfx_source_config_t {
  * Typically this is tied to a mob, but it could also just be an
  * abstract source. All sound playback needs to come from a source.
  */
-struct sfx_source_t {
+struct sound_source_t {
 
     //--- Members ---
     
@@ -230,10 +230,10 @@ struct sfx_source_t {
     ALLEGRO_SAMPLE* sample = nullptr;
     
     //Type of sound effect.
-    SFX_TYPE type = SFX_TYPE_WORLD_GLOBAL;
+    SOUND_TYPE type = SOUND_TYPE_WORLD_GLOBAL;
     
     //Configuration.
-    sfx_source_config_t config;
+    sound_source_config_t config;
     
     //Position in the game world, if applicable.
     point pos;
@@ -251,7 +251,7 @@ struct sfx_source_t {
  * @brief An instance of a sound effect's playback.
  * This needs to be emitted from a sound source.
  */
-struct sfx_playback_t {
+struct sound_playback_t {
 
     //--- Members ---
     
@@ -262,7 +262,7 @@ struct sfx_playback_t {
     ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = nullptr;
     
     //State.
-    SFX_PLAYBACK_STATE state = SFX_PLAYBACK_STATE_PLAYING;
+    SOUND_PLAYBACK_STATE state = SOUND_PLAYBACK_STATE_PLAYING;
     
     //Current gain.
     float gain = 1.0f;
@@ -346,29 +346,29 @@ public:
     
     //--- Function declarations ---
     
-    size_t create_ui_sfx_source(
+    size_t create_ui_sound_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_t &config = sfx_source_config_t()
+        const sound_source_config_t &config = sound_source_config_t()
     );
-    size_t create_mob_sfx_source(
+    size_t create_mob_sound_source(
         ALLEGRO_SAMPLE* sample,
         mob* m_ptr,
-        const sfx_source_config_t &config = sfx_source_config_t()
+        const sound_source_config_t &config = sound_source_config_t()
     );
-    size_t create_world_ambiance_sfx_source(
+    size_t create_world_ambiance_sound_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_t &config = sfx_source_config_t()
+        const sound_source_config_t &config = sound_source_config_t()
     );
-    size_t create_world_global_sfx_source(
+    size_t create_world_global_sound_source(
         ALLEGRO_SAMPLE* sample,
-        const sfx_source_config_t &config = sfx_source_config_t()
+        const sound_source_config_t &config = sound_source_config_t()
     );
-    size_t create_world_pos_sfx_source(
+    size_t create_world_pos_sound_source(
         ALLEGRO_SAMPLE* sample,
         const point &pos,
-        const sfx_source_config_t &config = sfx_source_config_t()
+        const sound_source_config_t &config = sound_source_config_t()
     );
-    bool destroy_sfx_source(size_t source_id);
+    bool destroy_sound_source(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
     void handle_mob_deletion(const mob* m_ptr);
@@ -376,8 +376,8 @@ public:
     void handle_world_pause();
     void handle_world_unpause();
     void init(
-        float master_volume, float world_sfx_volume, float music_volume,
-        float ambiance_volume, float ui_sfx_volume
+        float master_volume, float world_sound_volume, float music_volume,
+        float ambiance_volume, float ui_sound_volume
     );
     void mark_mix_track_status(MIX_TRACK_TYPE track_type);
     bool rewind_song(const string &name);
@@ -388,12 +388,12 @@ public:
         bool loop = true
     );
     void set_song_pos_near_loop();
-    bool set_sfx_source_pos(size_t source_id, const point &pos);
+    bool set_sound_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);
     void update_volumes(
-        float master_volume, float world_sfx_volume, float music_volume,
-        float ambiance_volume, float ui_sfx_volume
+        float master_volume, float world_sound_volume, float music_volume,
+        float ambiance_volume, float ui_sound_volume
     );
     
 private:
@@ -404,31 +404,31 @@ private:
     ALLEGRO_MIXER* master_mixer = nullptr;
     
     //General in-world sound effect mixer.
-    ALLEGRO_MIXER* world_sfx_mixer = nullptr;
+    ALLEGRO_MIXER* world_sound_mixer = nullptr;
     
     //Music mixer.
     ALLEGRO_MIXER* music_mixer = nullptr;
     
     //In-world ambiance sound effect mixer.
-    ALLEGRO_MIXER* world_ambiance_sfx_mixer = nullptr;
+    ALLEGRO_MIXER* world_ambiance_sound_mixer = nullptr;
     
     //UI sound effect mixer.
-    ALLEGRO_MIXER* ui_sfx_mixer = nullptr;
+    ALLEGRO_MIXER* ui_sound_mixer = nullptr;
     
     //Allegro voice from which the sound effects play.
     ALLEGRO_VOICE* voice = nullptr;
     
     //Incremental ID, used for the next source to create.
-    size_t next_sfx_source_id = 1;
+    size_t next_sound_source_id = 1;
     
     //Mob-specific sound effect sources.
     map<size_t, mob*> mob_sources;
     
     //All sound effect sources.
-    map<size_t, sfx_source_t> sources;
+    map<size_t, sound_source_t> sources;
     
     //All sound effects being played right now.
-    vector<sfx_playback_t> playbacks;
+    vector<sound_playback_t> playbacks;
     
     //Status for things that affect mix tracks this frame.
     vector<bool> mix_statuses;
@@ -445,19 +445,19 @@ private:
     
     //--- Function declarations ---
     
-    size_t create_sfx_source(
+    size_t create_sound_source(
         ALLEGRO_SAMPLE* sample,
-        SFX_TYPE type,
-        const sfx_source_config_t &config,
+        SOUND_TYPE type,
+        const sound_source_config_t &config,
         const point &pos
     );
-    bool destroy_sfx_playback(size_t playback_idx);
-    sfx_source_t* get_source(size_t source_id);
+    bool destroy_sound_playback(size_t playback_idx);
+    sound_source_t* get_source(size_t source_id);
     void start_song_track(
         song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
         bool from_start, bool fade_in, bool loop
     );
-    bool stop_sfx_playback(size_t playback_idx);
+    bool stop_sound_playback(size_t playback_idx);
     void update_playback_gain_and_pan(size_t playback_idx);
     void update_playback_target_gain_and_pan(size_t playback_idx);
     

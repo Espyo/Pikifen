@@ -1584,9 +1584,9 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
-    size_t sfx_id = data.m->play_sound(s2i(data.args[0]));
+    size_t sound_id = data.m->play_sound(s2i(data.args[0]));
     if(data.args.size() >= 2) {
-        data.m->set_var(data.args[1], i2s(sfx_id));
+        data.m->set_var(data.args[1], i2s(sound_id));
     }
 }
 
@@ -2153,7 +2153,7 @@ void mob_action_runners::stop_particles(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::stop_sound(mob_action_run_data &data) {
-    game.audio.destroy_sfx_source(s2i(data.args[0]));
+    game.audio.destroy_sound_source(s2i(data.args[0]));
 }
 
 

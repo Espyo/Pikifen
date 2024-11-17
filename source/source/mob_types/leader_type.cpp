@@ -49,7 +49,7 @@ leader_type::leader_type() :
         MOB_TARGET_FLAG_FRAGILE;
         
     for(size_t s = 0; s < N_LEADER_SOUNDS; s++) {
-        sfx_data_idxs[s] = INVALID;
+        sound_data_idxs[s] = INVALID;
     }
     
     leader_fsm::create_fsm(this);
@@ -91,11 +91,11 @@ void leader_type::load_cat_properties(data_node* file) {
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "whistling") {
-            sfx_data_idxs[LEADER_SOUND_WHISTLING] = s;
+            sound_data_idxs[LEADER_SOUND_WHISTLING] = s;
         } else if(sounds[s].name == "dismissing") {
-            sfx_data_idxs[LEADER_SOUND_DISMISSING] = s;
+            sound_data_idxs[LEADER_SOUND_DISMISSING] = s;
         } else if(sounds[s].name == "name_call") {
-            sfx_data_idxs[LEADER_SOUND_NAME_CALL] = s;
+            sound_data_idxs[LEADER_SOUND_NAME_CALL] = s;
         }
     }
 }
@@ -109,16 +109,16 @@ void leader_type::load_cat_properties(data_node* file) {
 void leader_type::load_cat_resources(data_node* file) {
     reader_setter rs(file);
     
-    string dismiss_sfx_str;
+    string dismiss_sound_str;
     string icon_str;
-    string name_call_sfx_str;
-    string whistle_sfx_str;
+    string name_call_sound_str;
+    string whistle_sound_str;
     data_node* icon_node = nullptr;
     
-    rs.set("dismiss_sfx", dismiss_sfx_str);
+    rs.set("dismiss_sound", dismiss_sound_str);
     rs.set("icon", icon_str, &icon_node);
-    rs.set("name_call_sfx", name_call_sfx_str);
-    rs.set("whistle_sfx", whistle_sfx_str);
+    rs.set("name_call_sound", name_call_sound_str);
+    rs.set("whistle_sound", whistle_sound_str);
     
     bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
 }

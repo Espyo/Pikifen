@@ -247,7 +247,7 @@ public:
     /**
      * @brief Info on a sound effect this mob can emit.
      */
-    struct sfx_t {
+    struct sound_t {
     
         //--- Members ---
         
@@ -258,10 +258,10 @@ public:
         ALLEGRO_SAMPLE* sample = nullptr;
         
         //Type of sound.
-        SFX_TYPE type = SFX_TYPE_WORLD_POS;
+        SOUND_TYPE type = SOUND_TYPE_WORLD_POS;
         
         //Configuration.
-        sfx_source_config_t config;
+        sound_source_config_t config;
         
     };
     
@@ -294,7 +294,7 @@ public:
     float blackout_radius = -1.0f;
     
     //List of sounds it can play.
-    vector<sfx_t> sounds;
+    vector<sound_t> sounds;
     
     //- Movement -
     

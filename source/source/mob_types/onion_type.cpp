@@ -76,7 +76,7 @@ void onion_type::load_cat_properties(data_node* file) {
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
-            sfx_pop_idx = s;
+            sound_pop_idx = s;
         }
     }
 }

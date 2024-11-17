@@ -20,10 +20,10 @@ script {
         on_enter {
             set_timer 1.5
             start_particles electrical_wire_sparks 0 0 32
-            play_sound sparks sfx_id
+            play_sound sparks sound_id
         }
         on_leave {
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_timer {
             set_state zapping
@@ -33,10 +33,10 @@ script {
         on_enter {
             set_timer 2.5
             set_animation zapping
-            play_sound electricity sfx_id
+            play_sound electricity sound_id
         }
         on_leave {
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_timer {
             set_state safe

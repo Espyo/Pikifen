@@ -51,8 +51,8 @@ enum CONTENT_TYPE {
     //Mob type.
     CONTENT_TYPE_MOB_TYPE,
     
-    //Sample.
-    CONTENT_TYPE_SAMPLE,
+    //Sound.
+    CONTENT_TYPE_SOUND,
     
     //Song.
     CONTENT_TYPE_SONG,

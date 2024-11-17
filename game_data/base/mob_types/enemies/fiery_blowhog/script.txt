@@ -82,20 +82,20 @@ script {
         on_enter {
             stop
             set_animation attacking
-            play_sound inhaling sfx_id
+            play_sound inhaling sound_id
         }
         on_frame_signal {
             get_event_info signal frame_signal
-            stop_sound $sfx_id
-            stop_sound $sfx_id2
+            stop_sound $sound_id
+            stop_sound $sound_id2
             if $signal = 0
-                play_sound exhaling sfx_id
-                play_sound flamethrower sfx_id2
+                play_sound exhaling sound_id
+                play_sound flamethrower sound_id2
             end_if
         }
         on_leave {
-            stop_sound $sfx_id
-            stop_sound $sfx_id2
+            stop_sound $sound_id
+            stop_sound $sound_id2
         }
         on_animation_end {
             set_state examining

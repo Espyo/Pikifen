@@ -145,7 +145,7 @@ const unsigned int DEF_TARGET_FPS = 60;
 const bool DEF_TRUE_FULLSCREEN = false;
 
 //Default value for UI sound effects volume.
-const float DEF_UI_SFX_VOLUME = 1.0f;
+const float DEF_UI_SOUND_VOLUME = 1.0f;
 
 //Default value for whether to use the window position hack.
 const bool DEF_WINDOW_POSITION_HACK = false;
@@ -160,7 +160,7 @@ const unsigned int DEF_WIN_H = 768;
 const unsigned int DEF_WIN_W = 1024;
 
 //Default value for world sound effects volume.
-const float DEF_WORLD_SFX_VOLUME = 1.0f;
+const float DEF_WORLD_SOUND_VOLUME = 1.0f;
 
 //Default value for the middle zoom level.
 const float DEF_ZOOM_MID_LEVEL = 1.4f;
@@ -283,9 +283,9 @@ void options_t::load(data_node* file) {
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
     rs.set("true_fullscreen", true_fullscreen);
-    rs.set("ui_sfx_volume", ui_sfx_volume);
+    rs.set("ui_sound_volume", ui_sound_volume);
     rs.set("window_position_hack", window_position_hack);
-    rs.set("world_sfx_volume", world_sfx_volume);
+    rs.set("world_sound_volume", world_sound_volume);
     
     auto_throw_mode =
         (AUTO_THROW_MODE)
@@ -332,8 +332,8 @@ void options_t::load(data_node* file) {
     ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
     master_volume = clamp(master_volume, 0.0f, 1.0f);
     music_volume = clamp(music_volume, 0.0f, 1.0f);
-    ui_sfx_volume = clamp(ui_sfx_volume, 0.0f, 1.0f);
-    world_sfx_volume = clamp(world_sfx_volume, 0.0f, 1.0f);
+    ui_sound_volume = clamp(ui_sound_volume, 0.0f, 1.0f);
+    world_sound_volume = clamp(world_sound_volume, 0.0f, 1.0f);
     
     //Force the editor styles to be opaque, otherwise there can be problems.
     editor_primary_color.a = 1.0f;
@@ -672,8 +672,8 @@ void options_t::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "ui_sfx_volume",
-            f2s(ui_sfx_volume)
+            "ui_sound_volume",
+            f2s(ui_sound_volume)
         )
     );
     file->add(
@@ -684,8 +684,8 @@ void options_t::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "world_sfx_volume",
-            f2s(world_sfx_volume)
+            "world_sound_volume",
+            f2s(world_sound_volume)
         )
     );
 }

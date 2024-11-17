@@ -401,7 +401,7 @@ int game_class::start() {
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
         CONTENT_TYPE_BITMAP,
-        CONTENT_TYPE_SAMPLE,
+        CONTENT_TYPE_SOUND,
         CONTENT_TYPE_SONG_TRACK,
         CONTENT_TYPE_SONG,
     },

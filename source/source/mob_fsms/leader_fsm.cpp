@@ -1470,14 +1470,14 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     ) {
         //Play the name call as a global sound, so that even leaders far away
         //can have their name call play clearly.
-        size_t name_call_sfx_idx =
-            lea_ptr->lea_type->sfx_data_idxs[LEADER_SOUND_NAME_CALL];
-        if(name_call_sfx_idx != INVALID) {
-            mob_type::sfx_t* name_call_sfx =
-                &m->type->sounds[name_call_sfx_idx];
-            game.audio.create_world_global_sfx_source(
-                name_call_sfx->sample,
-                name_call_sfx->config
+        size_t name_call_sound_idx =
+            lea_ptr->lea_type->sound_data_idxs[LEADER_SOUND_NAME_CALL];
+        if(name_call_sound_idx != INVALID) {
+            mob_type::sound_t* name_call_sound =
+                &m->type->sounds[name_call_sound_idx];
+            game.audio.create_world_global_sound_source(
+                name_call_sound->sample,
+                name_call_sound->config
             );
         }
     }
@@ -1629,12 +1629,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->release(holding_ptr);
     
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
-    sfx_source_config_t throw_sfx_config;
-    throw_sfx_config.stack_mode = SFX_STACK_MODE_OVERRIDE;
-    game.audio.create_mob_sfx_source(
-        game.sys_assets.sfx_throw,
+    sound_source_config_t throw_sound_config;
+    throw_sound_config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
+    game.audio.create_mob_sound_source(
+        game.sys_assets.sound_throw,
         leader_ptr,
-        throw_sfx_config
+        throw_sound_config
     );
     
     if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
@@ -2209,7 +2209,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
-    game.audio.create_mob_sfx_source(game.sys_assets.sfx_spray, m);
+    game.audio.create_mob_sound_source(game.sys_assets.sound_spray, m);
     
     game.states.gameplay->change_spray_count(spray_idx, -1);
     

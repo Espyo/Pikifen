@@ -24,10 +24,10 @@ script {
             set_timer 3
             set_animation shooting
             start_particles fire_geyser_smoke 0 0 300
-            play_sound flamethrower sfx_id
+            play_sound flamethrower sound_id
         }
         on_leave {
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_timer {
             set_state stopping

@@ -90,13 +90,13 @@ script {
         on_frame_signal {
             get_event_info signal frame_signal
             if $signal = 0
-                play_sound electricity sfx_id
+                play_sound electricity sound_id
             else
-                stop_sound $sfx_id
+                stop_sound $sound_id
             end_if
         }
         on_leave {
-            stop_sound $sfx_id
+            stop_sound $sound_id
         }
         on_animation_end {
             set_state idling

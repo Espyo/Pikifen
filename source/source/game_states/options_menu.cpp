@@ -183,14 +183,14 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void options_menu_state::init_gui_audio_page() {
     //Menu items.
-    audio_gui.register_coords("back",             12,  5,   20,  6);
-    audio_gui.register_coords("header",           50, 10,   50,  6);
-    audio_gui.register_coords("master_volume",    50, 25,   70, 10);
-    audio_gui.register_coords("world_sfx_volume", 50, 37.5, 65, 10);
-    audio_gui.register_coords("music_volume",     50, 50,   65, 10);
-    audio_gui.register_coords("ambiance_volume",  50, 62.5, 65, 10);
-    audio_gui.register_coords("ui_sfx_volume",    50, 75,   65, 10);
-    audio_gui.register_coords("tooltip",          50, 96,   96,  4);
+    audio_gui.register_coords("back",               12,  5,   20,  6);
+    audio_gui.register_coords("header",             50, 10,   50,  6);
+    audio_gui.register_coords("master_volume",      50, 25,   70, 10);
+    audio_gui.register_coords("world_sound_volume", 50, 37.5, 65, 10);
+    audio_gui.register_coords("music_volume",       50, 50,   65, 10);
+    audio_gui.register_coords("ambiance_volume",    50, 62.5, 65, 10);
+    audio_gui.register_coords("ui_sound_volume",    50, 75,   65, 10);
+    audio_gui.register_coords("tooltip",            50, 96,   96,  4);
     audio_gui.read_coords(
         game.content.gui.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
         get_child_by_name("positions")
@@ -237,10 +237,10 @@ void options_menu_state::init_gui_audio_page() {
     auto update_volumes = [this] () {
         game.audio.update_volumes(
             game.options.master_volume,
-            game.options.world_sfx_volume,
+            game.options.world_sound_volume,
             game.options.music_volume,
             game.options.ambiance_volume,
-            game.options.ui_sfx_volume
+            game.options.ui_sound_volume
         );
     };
     
@@ -259,18 +259,18 @@ void options_menu_state::init_gui_audio_page() {
     audio_gui.add_item(master_vol_picker, "master_volume");
     
     //World sound effects volume picker.
-    world_sfx_vol_picker =
+    world_sound_vol_picker =
         new options_menu_picker_gui_item<float>(
         "World sound effects volume: ",
-        &game.options.world_sfx_volume,
-        OPTIONS::DEF_WORLD_SFX_VOLUME,
+        &game.options.world_sound_volume,
+        OPTIONS::DEF_WORLD_SOUND_VOLUME,
         preset_volume_values,
         preset_volume_names,
         "Volume for in-world sound effects specifically."
     );
-    world_sfx_vol_picker->after_change = update_volumes;
-    world_sfx_vol_picker->init();
-    audio_gui.add_item(world_sfx_vol_picker, "world_sfx_volume");
+    world_sound_vol_picker->after_change = update_volumes;
+    world_sound_vol_picker->init();
+    audio_gui.add_item(world_sound_vol_picker, "world_sound_volume");
     
     //Music volume picker.
     music_vol_picker =
@@ -301,18 +301,18 @@ void options_menu_state::init_gui_audio_page() {
     audio_gui.add_item(ambiance_vol_picker, "ambiance_volume");
     
     //UI sound effects volume picker.
-    ui_sfx_vol_picker =
+    ui_sound_vol_picker =
         new options_menu_picker_gui_item<float>(
         "UI sound effects volume: ",
-        &game.options.ui_sfx_volume,
-        OPTIONS::DEF_UI_SFX_VOLUME,
+        &game.options.ui_sound_volume,
+        OPTIONS::DEF_UI_SOUND_VOLUME,
         preset_volume_values,
         preset_volume_names,
         "Volume for interface sound effects specifically."
     );
-    ui_sfx_vol_picker->after_change = update_volumes;
-    ui_sfx_vol_picker->init();
-    audio_gui.add_item(ui_sfx_vol_picker, "ui_sfx_volume");
+    ui_sound_vol_picker->after_change = update_volumes;
+    ui_sound_vol_picker->init();
+    audio_gui.add_item(ui_sound_vol_picker, "ui_sound_volume");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =

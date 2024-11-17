@@ -102,12 +102,12 @@ extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
 extern const bool DEF_TRUE_FULLSCREEN;
-extern const float DEF_UI_SFX_VOLUME;
+extern const float DEF_UI_SOUND_VOLUME;
 extern const bool DEF_WIN_FULLSCREEN;
 extern const unsigned int DEF_WIN_H;
 extern const bool DEF_WINDOW_POSITION_HACK;
 extern const unsigned int DEF_WIN_W;
-extern const float DEF_WORLD_SFX_VOLUME;
+extern const float DEF_WORLD_SOUND_VOLUME;
 extern const float DEF_ZOOM_MID_LEVEL;
 }
 
@@ -257,14 +257,14 @@ struct options_t {
     bool true_fullscreen = OPTIONS::DEF_TRUE_FULLSCREEN;
     
     //UI sound effects volume (0 - 1).
-    float ui_sfx_volume = OPTIONS::DEF_UI_SFX_VOLUME;
+    float ui_sound_volume = OPTIONS::DEF_UI_SOUND_VOLUME;
     
     //Should we force the window's positioning?
     //(on some machines it appears out-of-bounds by default)
     bool window_position_hack = OPTIONS::DEF_WINDOW_POSITION_HACK;
     
     //World sound effects volume (0 - 1).
-    float world_sfx_volume = OPTIONS::DEF_WORLD_SFX_VOLUME;
+    float world_sound_volume = OPTIONS::DEF_WORLD_SOUND_VOLUME;
     
     //Set the camera's middle zoom level to this amount.
     float zoom_mid_level = OPTIONS::DEF_ZOOM_MID_LEVEL;

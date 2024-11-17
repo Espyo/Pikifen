@@ -1832,7 +1832,7 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(*((point*) info1), m->z);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
-    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_IDLE]);
+    m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_IDLE]);
 }
 
 
@@ -1857,7 +1857,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pik_ptr->leave_group();
     
     pik_ptr->set_animation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
-    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_CAUGHT]);
+    m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_CAUGHT]);
     
 }
 
@@ -1873,7 +1873,7 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD]);
+    m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD]);
 }
 
 
@@ -1888,11 +1888,11 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     ((pikmin*) m)->is_grabbed_by_enemy = false;
     
-    size_t held_sfx_idx =
-        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD];
-    if(held_sfx_idx != INVALID) {
+    size_t held_sound_idx =
+        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD];
+    if(held_sound_idx != INVALID) {
         game.audio.stop_all_playbacks(
-            pik_ptr->type->sounds[held_sfx_idx].sample
+            pik_ptr->type->sounds[held_sound_idx].sample
         );
     }
 }
@@ -1911,25 +1911,25 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     
     m->set_animation(PIKMIN_ANIM_THROWN);
     
-    size_t held_sfx_idx =
-        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_HELD];
-    if(held_sfx_idx != INVALID) {
+    size_t held_sound_idx =
+        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD];
+    if(held_sound_idx != INVALID) {
         game.audio.stop_all_playbacks(
-            pik_ptr->type->sounds[held_sfx_idx].sample
+            pik_ptr->type->sounds[held_sound_idx].sample
         );
     }
     
-    size_t throw_sfx_idx =
-        pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_THROWN];
-    if(throw_sfx_idx != INVALID) {
-        mob_type::sfx_t* throw_sfx =
-            &pik_ptr->type->sounds[throw_sfx_idx];
-        sfx_source_config_t throw_sfx_config;
-        throw_sfx_config.stack_mode = SFX_STACK_MODE_OVERRIDE;
-        game.audio.create_mob_sfx_source(
-            throw_sfx->sample,
+    size_t throw_sound_idx =
+        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_THROWN];
+    if(throw_sound_idx != INVALID) {
+        mob_type::sound_t* throw_sound =
+            &pik_ptr->type->sounds[throw_sound_idx];
+        sound_source_config_t throw_sound_config;
+        throw_sound_config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
+        game.audio.create_mob_sound_source(
+            throw_sound->sample,
             m,
-            throw_sfx_config
+            throw_sound_config
         );
     }
     
@@ -1952,9 +1952,9 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     m->face(throw_angle, nullptr, true);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_PLUCKED]);
-    game.audio.create_world_pos_sfx_source(
-        game.sys_assets.sfx_pluck,
+    m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_PLUCKED]);
+    game.audio.create_world_pos_sound_source(
+        game.sys_assets.sound_pluck,
         m->pos
     );
     ((pikmin*) m)->start_throw_trail();
@@ -2103,7 +2103,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     caller->add_to_group(pik_ptr);
     
     if(info2 == nullptr) {
-        m->play_sound(pik_ptr->pik_type->sfx_data_idxs[PIKMIN_SOUND_CALLED]);
+        m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_CALLED]);
     }
 }
 

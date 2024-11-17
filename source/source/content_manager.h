@@ -84,14 +84,14 @@ struct content_manager {
     //Mob types.
     mob_type_content_manager mob_types;
     
-    //Samples.
-    sample_content_manager samples;
-    
     //Songs.
     song_content_manager songs;
     
     //Song tracks.
     song_track_content_manager song_tracks;
+    
+    //Sounds.
+    sound_content_manager sounds;
     
     //Spike damage types.
     spike_damage_type_content_manager spike_damage_types;

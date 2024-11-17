@@ -1474,7 +1474,7 @@ void mob_type_content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL 
     for(size_t s = 0; s < mt->sounds.size(); s++) {
         ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
         if(!s) continue;
-        game.content.samples.list.free(s_ptr);
+        game.content.sounds.list.free(s_ptr);
     }
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         unload_script(mt);
@@ -1506,7 +1506,7 @@ void mob_type_content_manager::unload_mob_types_of_category(mob_category* catego
 /**
  * @brief Clears the manifests.
  */
-void sample_content_manager::clear_manifests() {
+void sound_content_manager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1514,7 +1514,7 @@ void sample_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void sample_content_manager::fill_manifests() {
+void sound_content_manager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SOUNDS, false);
 }
 
@@ -1524,7 +1524,7 @@ void sample_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string sample_content_manager::get_name() const {
+string sound_content_manager::get_name() const {
     return "audio sample";
 }
 
@@ -1534,7 +1534,7 @@ string sample_content_manager::get_name() const {
  *
  * @return The name.
  */
-string sample_content_manager::get_perf_mon_measurement_name() const {
+string sound_content_manager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -1544,7 +1544,7 @@ string sample_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void sample_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void sound_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
@@ -1556,7 +1556,7 @@ void sample_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param extension Extension of the sample file, dot included.
  * @return The path.
  */
-string sample_content_manager::manifest_to_path(
+string sound_content_manager::manifest_to_path(
     const content_manifest &manifest,
     const string &extension
 ) const {
@@ -1575,7 +1575,7 @@ string sample_content_manager::manifest_to_path(
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_type If not nullptr, the file extension is returned here.
  */
-void sample_content_manager::path_to_manifest(
+void sound_content_manager::path_to_manifest(
     const string &path, content_manifest* out_manifest, string* out_extension
 ) const {
     if(out_manifest) {
@@ -1598,7 +1598,7 @@ void sample_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void sample_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void sound_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 }
 
 

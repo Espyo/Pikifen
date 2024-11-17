@@ -634,13 +634,13 @@ void mob_type::load_from_data_node(
     }
     
     //Sounds.
-    data_node* sfxs_node = node->get_child_by_name("sounds");
-    size_t n_sounds = sfxs_node->get_nr_of_children();
+    data_node* sounds_node = node->get_child_by_name("sounds");
+    size_t n_sounds = sounds_node->get_nr_of_children();
     for(size_t s = 0; s < n_sounds; s++) {
     
-        data_node* sfx_node = sfxs_node->get_child(s);
-        reader_setter sfx_rs(sfx_node);
-        mob_type::sfx_t new_sfx;
+        data_node* sound_node = sounds_node->get_child(s);
+        reader_setter sound_rs(sound_node);
+        mob_type::sound_t new_sound;
         
         string file_str;
         data_node* file_node;
@@ -652,30 +652,30 @@ void mob_type::load_from_data_node(
         float speed_float = 100.0f;
         bool loop_bool = false;
         
-        new_sfx.name = sfx_node->name;
+        new_sound.name = sound_node->name;
         
-        sfx_rs.set("file", file_str, &file_node);
-        sfx_rs.set("type", type_str, &type_node);
-        sfx_rs.set("stack_mode", stack_mode_str, &stack_mode_node);
-        sfx_rs.set("stack_min_pos", new_sfx.config.stack_min_pos);
-        sfx_rs.set("loop", loop_bool);
-        sfx_rs.set("volume", volume_float);
-        sfx_rs.set("speed", speed_float);
-        sfx_rs.set("volume_deviation", new_sfx.config.gain_deviation);
-        sfx_rs.set("speed_deviation", new_sfx.config.speed_deviation);
-        sfx_rs.set("random_delay", new_sfx.config.random_delay);
+        sound_rs.set("file", file_str, &file_node);
+        sound_rs.set("type", type_str, &type_node);
+        sound_rs.set("stack_mode", stack_mode_str, &stack_mode_node);
+        sound_rs.set("stack_min_pos", new_sound.config.stack_min_pos);
+        sound_rs.set("loop", loop_bool);
+        sound_rs.set("volume", volume_float);
+        sound_rs.set("speed", speed_float);
+        sound_rs.set("volume_deviation", new_sound.config.gain_deviation);
+        sound_rs.set("speed_deviation", new_sound.config.speed_deviation);
+        sound_rs.set("random_delay", new_sound.config.random_delay);
         
-        new_sfx.sample = game.content.samples.list.get(file_str, file_node);
+        new_sound.sample = game.content.sounds.list.get(file_str, file_node);
         
         if(type_node) {
             if(type_str == "world_global") {
-                new_sfx.type = SFX_TYPE_WORLD_GLOBAL;
+                new_sound.type = SOUND_TYPE_WORLD_GLOBAL;
             } else if(type_str == "world_pos") {
-                new_sfx.type = SFX_TYPE_WORLD_POS;
+                new_sound.type = SOUND_TYPE_WORLD_POS;
             } else if(type_str == "world_ambiance") {
-                new_sfx.type = SFX_TYPE_WORLD_AMBIANCE;
+                new_sound.type = SOUND_TYPE_WORLD_AMBIANCE;
             } else if(type_str == "ui") {
-                new_sfx.type = SFX_TYPE_UI;
+                new_sound.type = SOUND_TYPE_UI;
             } else {
                 game.errors.report(
                     "Unknow sound effect type \"" +
@@ -686,11 +686,11 @@ void mob_type::load_from_data_node(
         
         if(stack_mode_node) {
             if(stack_mode_str == "normal") {
-                new_sfx.config.stack_mode = SFX_STACK_MODE_NORMAL;
+                new_sound.config.stack_mode = SOUND_STACK_MODE_NORMAL;
             } else if(stack_mode_str == "override") {
-                new_sfx.config.stack_mode = SFX_STACK_MODE_OVERRIDE;
+                new_sound.config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
             } else if(stack_mode_str == "never") {
-                new_sfx.config.stack_mode = SFX_STACK_MODE_NEVER;
+                new_sound.config.stack_mode = SOUND_STACK_MODE_NEVER;
             } else {
                 game.errors.report(
                     "Unknow sound effect stack mode \"" +
@@ -700,19 +700,19 @@ void mob_type::load_from_data_node(
         }
         
         if(loop_bool) {
-            enable_flag(new_sfx.config.flags, SFX_FLAG_LOOP);
+            enable_flag(new_sound.config.flags, SOUND_FLAG_LOOP);
         }
         
-        new_sfx.config.gain = volume_float / 100.0f;
-        new_sfx.config.gain = clamp(new_sfx.config.gain, 0.0f, 1.0f);
+        new_sound.config.gain = volume_float / 100.0f;
+        new_sound.config.gain = clamp(new_sound.config.gain, 0.0f, 1.0f);
         
-        new_sfx.config.speed = speed_float / 100.0f;
-        new_sfx.config.speed = std::max(0.0f, new_sfx.config.speed);
+        new_sound.config.speed = speed_float / 100.0f;
+        new_sound.config.speed = std::max(0.0f, new_sound.config.speed);
         
-        new_sfx.config.gain_deviation /= 100.0f;
-        new_sfx.config.speed_deviation /= 100.0f;
+        new_sound.config.gain_deviation /= 100.0f;
+        new_sound.config.speed_deviation /= 100.0f;
         
-        sounds.push_back(new_sfx);
+        sounds.push_back(new_sound);
     }
     
     //Area editor properties.
@@ -937,7 +937,7 @@ void mob_type::load_from_data_node(
  */
 void mob_type::unload_resources() {
     for(size_t s = 0; s < sounds.size(); s++) {
-        game.content.samples.list.free(sounds[s].name);
+        game.content.sounds.list.free(sounds[s].name);
     }
 }
 

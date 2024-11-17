@@ -10,7 +10,6 @@ max_carriers = 5
 max_health = 2000
 max_throw_height = 130
 move_speed = 130
-name_call_sfx = 
 pushable = true
 pushes = false
 radius = 16

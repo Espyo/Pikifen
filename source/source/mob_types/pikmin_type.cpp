@@ -47,7 +47,7 @@ pikmin_type::pikmin_type() :
         bmp_maturity_icon[m] = nullptr;
     }
     for(size_t s = 0; s < N_PIKMIN_SOUNDS; s++) {
-        sfx_data_idxs[s] = INVALID;
+        sound_data_idxs[s] = INVALID;
     }
     
     inactive_logic =
@@ -186,25 +186,25 @@ void pikmin_type::load_cat_properties(data_node* file) {
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "attack") {
-            sfx_data_idxs[PIKMIN_SOUND_ATTACK] = s;
+            sound_data_idxs[PIKMIN_SOUND_ATTACK] = s;
         } else if(sounds[s].name == "called") {
-            sfx_data_idxs[PIKMIN_SOUND_CALLED] = s;
+            sound_data_idxs[PIKMIN_SOUND_CALLED] = s;
         } else if(sounds[s].name == "carrying") {
-            sfx_data_idxs[PIKMIN_SOUND_CARRYING] = s;
+            sound_data_idxs[PIKMIN_SOUND_CARRYING] = s;
         } else if(sounds[s].name == "carrying_grab") {
-            sfx_data_idxs[PIKMIN_SOUND_CARRYING_GRAB] = s;
+            sound_data_idxs[PIKMIN_SOUND_CARRYING_GRAB] = s;
         } else if(sounds[s].name == "caught") {
-            sfx_data_idxs[PIKMIN_SOUND_CAUGHT] = s;
+            sound_data_idxs[PIKMIN_SOUND_CAUGHT] = s;
         } else if(sounds[s].name == "dying") {
-            sfx_data_idxs[PIKMIN_SOUND_DYING] = s;
+            sound_data_idxs[PIKMIN_SOUND_DYING] = s;
         } else if(sounds[s].name == "held") {
-            sfx_data_idxs[PIKMIN_SOUND_HELD] = s;
+            sound_data_idxs[PIKMIN_SOUND_HELD] = s;
         } else if(sounds[s].name == "idle") {
-            sfx_data_idxs[PIKMIN_SOUND_IDLE] = s;
+            sound_data_idxs[PIKMIN_SOUND_IDLE] = s;
         } else if(sounds[s].name == "plucked") {
-            sfx_data_idxs[PIKMIN_SOUND_PLUCKED] = s;
+            sound_data_idxs[PIKMIN_SOUND_PLUCKED] = s;
         } else if(sounds[s].name == "thrown") {
-            sfx_data_idxs[PIKMIN_SOUND_THROWN] = s;
+            sound_data_idxs[PIKMIN_SOUND_THROWN] = s;
         }
     }
 }

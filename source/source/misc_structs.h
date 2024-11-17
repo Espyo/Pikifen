@@ -321,31 +321,31 @@ struct asset_file_names_t {
     //Sound effects.
     
     //Attack.
-    string sfx_attack = "attack";
+    string sound_attack = "attack";
     
     //Camera zoom level.
-    string sfx_camera = "camera";
+    string sound_camera = "camera";
     
     //Menu item activation.
-    string sfx_menu_activate = "menu_activate";
+    string sound_menu_activate = "menu_activate";
     
     //Menu item back.
-    string sfx_menu_back = "menu_back";
+    string sound_menu_back = "menu_back";
     
     //Menu item selection.
-    string sfx_menu_select = "menu_select";
+    string sound_menu_select = "menu_select";
     
     //Pluck sound effect.
-    string sfx_pluck = "pluck";
+    string sound_pluck = "pluck";
     
     //Using a spray.
-    string sfx_spray = "spray";
+    string sound_spray = "spray";
     
     //Switching standby Pikmin type.
-    string sfx_switch_pikmin = "switch_pikmin";
+    string sound_switch_pikmin = "switch_pikmin";
     
     //Throwing.
-    string sfx_throw = "throw";
+    string sound_throw = "throw";
     
     
     //--- Function declarations ---
@@ -809,31 +809,31 @@ struct system_asset_list {
     //Sound effects.
     
     //Attack.
-    ALLEGRO_SAMPLE* sfx_attack = nullptr;
+    ALLEGRO_SAMPLE* sound_attack = nullptr;
     
     //Camera zoom level.
-    ALLEGRO_SAMPLE* sfx_camera = nullptr;
+    ALLEGRO_SAMPLE* sound_camera = nullptr;
     
     //Menu item activation.
-    ALLEGRO_SAMPLE* sfx_menu_activate = nullptr;
+    ALLEGRO_SAMPLE* sound_menu_activate = nullptr;
     
     //Menu item back.
-    ALLEGRO_SAMPLE* sfx_menu_back = nullptr;
+    ALLEGRO_SAMPLE* sound_menu_back = nullptr;
     
     //Menu item selection.
-    ALLEGRO_SAMPLE* sfx_menu_select = nullptr;
+    ALLEGRO_SAMPLE* sound_menu_select = nullptr;
     
     //Pluck sound effect.
-    ALLEGRO_SAMPLE* sfx_pluck = nullptr;
+    ALLEGRO_SAMPLE* sound_pluck = nullptr;
     
     //Using a spray.
-    ALLEGRO_SAMPLE* sfx_spray = nullptr;
+    ALLEGRO_SAMPLE* sound_spray = nullptr;
     
     //Switching standby Pikmin type.
-    ALLEGRO_SAMPLE* sfx_switch_pikmin = nullptr;
+    ALLEGRO_SAMPLE* sound_switch_pikmin = nullptr;
     
     //Throwing.
-    ALLEGRO_SAMPLE* sfx_throw = nullptr;
+    ALLEGRO_SAMPLE* sound_throw = nullptr;
     
     //Animations.
     
@@ -1502,7 +1502,7 @@ protected:
 /**
  * @brief Sound effect sample manager. See asset_manager.
  */
-class sfx_sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
+class sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
 
 protected:
 

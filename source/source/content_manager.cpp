@@ -64,14 +64,14 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
     } case CONTENT_TYPE_MOB_TYPE: {
         return &mob_types;
         break;
-    } case CONTENT_TYPE_SAMPLE: {
-        return &samples;
-        break;
     } case CONTENT_TYPE_SONG: {
         return &songs;
         break;
     } case CONTENT_TYPE_SONG_TRACK: {
         return &song_tracks;
+        break;
+    } case CONTENT_TYPE_SOUND: {
+        return &sounds;
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
         return &spike_damage_types;

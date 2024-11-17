@@ -427,31 +427,31 @@ void load_misc_graphics() {
 void load_misc_sounds() {
     game.audio.init(
         game.options.master_volume,
-        game.options.world_sfx_volume,
+        game.options.world_sound_volume,
         game.options.music_volume,
         game.options.ambiance_volume,
-        game.options.ui_sfx_volume
+        game.options.ui_sound_volume
     );
     
     //Sound effects.
-    game.sys_assets.sfx_attack =
-        game.content.samples.list.get(game.asset_file_names.sfx_attack);
-    game.sys_assets.sfx_camera =
-        game.content.samples.list.get(game.asset_file_names.sfx_camera);
-    game.sys_assets.sfx_menu_activate =
-        game.content.samples.list.get(game.asset_file_names.sfx_menu_activate);
-    game.sys_assets.sfx_menu_back =
-        game.content.samples.list.get(game.asset_file_names.sfx_menu_back);
-    game.sys_assets.sfx_menu_select =
-        game.content.samples.list.get(game.asset_file_names.sfx_menu_select);
-    game.sys_assets.sfx_pluck =
-        game.content.samples.list.get(game.asset_file_names.sfx_pluck);
-    game.sys_assets.sfx_throw =
-        game.content.samples.list.get(game.asset_file_names.sfx_throw);
-    game.sys_assets.sfx_spray =
-        game.content.samples.list.get(game.asset_file_names.sfx_spray);
-    game.sys_assets.sfx_switch_pikmin =
-        game.content.samples.list.get(game.asset_file_names.sfx_switch_pikmin);
+    game.sys_assets.sound_attack =
+        game.content.sounds.list.get(game.asset_file_names.sound_attack);
+    game.sys_assets.sound_camera =
+        game.content.sounds.list.get(game.asset_file_names.sound_camera);
+    game.sys_assets.sound_menu_activate =
+        game.content.sounds.list.get(game.asset_file_names.sound_menu_activate);
+    game.sys_assets.sound_menu_back =
+        game.content.sounds.list.get(game.asset_file_names.sound_menu_back);
+    game.sys_assets.sound_menu_select =
+        game.content.sounds.list.get(game.asset_file_names.sound_menu_select);
+    game.sys_assets.sound_pluck =
+        game.content.sounds.list.get(game.asset_file_names.sound_pluck);
+    game.sys_assets.sound_throw =
+        game.content.sounds.list.get(game.asset_file_names.sound_throw);
+    game.sys_assets.sound_spray =
+        game.content.sounds.list.get(game.asset_file_names.sound_spray);
+    game.sys_assets.sound_switch_pikmin =
+        game.content.sounds.list.get(game.asset_file_names.sound_switch_pikmin);
 }
 
 
@@ -631,12 +631,12 @@ void unload_misc_resources() {
     al_destroy_font(game.sys_assets.fnt_value);
     
     //Sounds effects.
-    game.content.samples.list.free(game.sys_assets.sfx_attack);
-    game.content.samples.list.free(game.sys_assets.sfx_camera);
-    game.content.samples.list.free(game.sys_assets.sfx_menu_activate);
-    game.content.samples.list.free(game.sys_assets.sfx_menu_back);
-    game.content.samples.list.free(game.sys_assets.sfx_menu_select);
-    game.content.samples.list.free(game.sys_assets.sfx_spray);
-    game.content.samples.list.free(game.sys_assets.sfx_switch_pikmin);
-    game.content.samples.list.free(game.sys_assets.sfx_throw);
+    game.content.sounds.list.free(game.sys_assets.sound_attack);
+    game.content.sounds.list.free(game.sys_assets.sound_camera);
+    game.content.sounds.list.free(game.sys_assets.sound_menu_activate);
+    game.content.sounds.list.free(game.sys_assets.sound_menu_back);
+    game.content.sounds.list.free(game.sys_assets.sound_menu_select);
+    game.content.sounds.list.free(game.sys_assets.sound_spray);
+    game.content.sounds.list.free(game.sys_assets.sound_switch_pikmin);
+    game.content.sounds.list.free(game.sys_assets.sound_throw);
 }

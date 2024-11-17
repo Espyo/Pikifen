@@ -444,7 +444,7 @@ private:
     options_menu_picker_gui_item<float>* master_vol_picker = nullptr;
     
     //World sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* world_sfx_vol_picker = nullptr;
+    options_menu_picker_gui_item<float>* world_sound_vol_picker = nullptr;
     
     //Music volume picker widget.
     options_menu_picker_gui_item<float>* music_vol_picker = nullptr;
@@ -453,7 +453,7 @@ private:
     options_menu_picker_gui_item<float>* ambiance_vol_picker = nullptr;
     
     //UI sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* ui_sfx_vol_picker = nullptr;
+    options_menu_picker_gui_item<float>* ui_sound_vol_picker = nullptr;
     
     //Restart warning text widget.
     text_gui_item* warning_text = nullptr;

@@ -2,7 +2,6 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Refactor -- sometimes they're referred to as "sounds", other times as "samples", other times as "sfx"
     Creating a new area crashes
     Editor load dialogs
         Load dialog should have:
@@ -786,13 +785,13 @@ Misc things (so I don't forget)
             Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
-        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
-            However, I may want to play the same long sample multiple times with like a .5s interval between each one, which won't burst anyone's ears...
+        Add a safeguard -- if the same sound is playing like 4 times, don't allow any more
+            However, I may want to play the same long sound multiple times with like a .5s interval between each one, which won't burst anyone's ears...
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
         Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
-        The audio options menu should have a button to playback one or two sample sounds
+        The audio options menu should have a button to playback one or two sound sounds
     Radar
         Details
             Sparkles on treasures

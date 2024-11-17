@@ -196,7 +196,7 @@ void onion::generate() {
         next_spew_angle += ONION::SPEW_ANGLE_SHIFT;
         next_spew_angle = normalize_angle(next_spew_angle);
         
-        play_sound(oni_type->sfx_pop_idx);
+        play_sound(oni_type->sound_pop_idx);
         
         return;
     }

@@ -1,0 +1,10 @@
+name = Base
+description = This is the base pack that comes included with Pikifen. It has a bunch of diverse and assorted content for players to play with, and for makers to make use of in their own creations!
+
+maker = Espyo
+version = 1.0.0
+engine_version = 0.25.0
+tags = Engine
+dependencies = 
+conflicts = 
+notes = Avoid editing this pack! Please read the manual's "Making" page for more information.

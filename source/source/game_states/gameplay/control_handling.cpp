@@ -370,7 +370,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
             }
             
-            game.audio.create_ui_sfx_source(game.sys_assets.sfx_camera);
+            game.audio.create_ui_sound_source(game.sys_assets.sound_camera);
             
             break;
             
@@ -406,11 +406,11 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 game.cam.target_zoom = game.config.zoom_min_level;
             }
             
-            sfx_source_config_t cam_sfx_config;
-            cam_sfx_config.stack_mode = SFX_STACK_MODE_NEVER;
-            game.audio.create_ui_sfx_source(
-                game.sys_assets.sfx_camera,
-                cam_sfx_config
+            sound_source_config_t cam_sound_config;
+            cam_sound_config.stack_mode = SOUND_STACK_MODE_NEVER;
+            game.audio.create_ui_sound_source(
+                game.sys_assets.sound_camera,
+                cam_sound_config
             );
             
             break;
@@ -499,8 +499,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
                 
                 if(switch_successful) {
-                    game.audio.create_ui_sfx_source(
-                        game.sys_assets.sfx_switch_pikmin
+                    game.audio.create_ui_sound_source(
+                        game.sys_assets.sound_switch_pikmin
                     );
                 }
             }

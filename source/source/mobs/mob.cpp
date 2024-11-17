@@ -1386,12 +1386,12 @@ void mob::do_attack_effects(
     if(!useless) {
         //Play the sound.
         
-        sfx_source_config_t attack_sfx_config;
-        attack_sfx_config.gain = 0.6f;
-        game.audio.create_world_pos_sfx_source(
-            game.sys_assets.sfx_attack,
+        sound_source_config_t attack_sound_config;
+        attack_sound_config.gain = 0.6f;
+        game.audio.create_world_pos_sound_source(
+            game.sys_assets.sound_attack,
             pos,
-            attack_sfx_config
+            attack_sound_config
         );
         
         //Damage squash and stretch animation.
@@ -2700,37 +2700,37 @@ void mob::move_to_path_end(float speed, float acceleration) {
 /**
  * @brief Plays a sound from the list of sounds in the mob type's data.
  *
- * @param sfx_data_idx Index of the sound data in the list.
+ * @param sound_data_idx Index of the sound data in the list.
  * @return The sound source ID.
  */
-size_t mob::play_sound(size_t sfx_data_idx) {
-    if(sfx_data_idx >= type->sounds.size()) return 0;
+size_t mob::play_sound(size_t sound_data_idx) {
+    if(sound_data_idx >= type->sounds.size()) return 0;
     
-    mob_type::sfx_t* sfx = &type->sounds[sfx_data_idx];
+    mob_type::sound_t* sound = &type->sounds[sound_data_idx];
     
-    switch(sfx->type) {
-    case SFX_TYPE_WORLD_GLOBAL: {
+    switch(sound->type) {
+    case SOUND_TYPE_WORLD_GLOBAL: {
         return
-            game.audio.create_world_global_sfx_source(
-                sfx->sample, sfx->config
+            game.audio.create_world_global_sound_source(
+                sound->sample, sound->config
             );
         break;
-    } case SFX_TYPE_WORLD_POS: {
+    } case SOUND_TYPE_WORLD_POS: {
         return
-            game.audio.create_mob_sfx_source(
-                sfx->sample, this, sfx->config
+            game.audio.create_mob_sound_source(
+                sound->sample, this, sound->config
             );
         break;
-    } case SFX_TYPE_WORLD_AMBIANCE: {
+    } case SOUND_TYPE_WORLD_AMBIANCE: {
         return
-            game.audio.create_world_ambiance_sfx_source(
-                sfx->sample, sfx->config
+            game.audio.create_world_ambiance_sound_source(
+                sound->sample, sound->config
             );
         break;
-    } case SFX_TYPE_UI: {
+    } case SOUND_TYPE_UI: {
         return
-            game.audio.create_ui_sfx_source(
-                sfx->sample, sfx->config
+            game.audio.create_ui_sound_source(
+                sound->sample, sound->config
             );
     }
     }

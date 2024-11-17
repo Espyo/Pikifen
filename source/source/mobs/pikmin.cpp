@@ -520,15 +520,15 @@ void pikmin::tick_class_specifics(float delta_t) {
         
         //Create a positional sound source instead of a mob sound source,
         //since the Pikmin is basically deleted.
-        size_t dying_sfx_idx =
-            pik_type->sfx_data_idxs[PIKMIN_SOUND_DYING];
-        if(dying_sfx_idx != INVALID) {
-            mob_type::sfx_t* dying_sfx =
-                &type->sounds[dying_sfx_idx];
-            game.audio.create_world_pos_sfx_source(
-                dying_sfx->sample,
+        size_t dying_sound_idx =
+            pik_type->sound_data_idxs[PIKMIN_SOUND_DYING];
+        if(dying_sound_idx != INVALID) {
+            mob_type::sound_t* dying_sound =
+                &type->sounds[dying_sound_idx];
+            game.audio.create_world_pos_sound_source(
+                dying_sound->sample,
                 pos,
-                dying_sfx->config
+                dying_sound->config
             );
         }
         

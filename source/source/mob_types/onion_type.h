@@ -64,7 +64,7 @@ public:
     pikmin_nest_type_t* nest = nullptr;
     
     //Sound data index for the pop sound. Cache for performance.
-    size_t sfx_pop_idx = INVALID;
+    size_t sound_pop_idx = INVALID;
     
     
     //--- Function declarations ---
