@@ -33,7 +33,10 @@ void animation_editor::open_load_dialog() {
             picker_item(
                 a.second.name,
                 "Pack: " + a.second.manifest->pack, "Global animations",
-                (void*) a.second.manifest
+                (void*) a.second.manifest,
+                "Internal name: " + a.first + "\n"
+                "Path: " +
+                game.content.global_anims.manifest_to_path(*a.second.manifest)
             )
         );
     }
@@ -47,7 +50,13 @@ void animation_editor::open_load_dialog() {
                 picker_item(
                     type->name,
                     "Pack: " + a.second.manifest->pack, cat->name + " objects",
-                    (void*) a.second.manifest
+                    (void*) a.second.manifest,
+                    "Internal name: " + a.first + "\n"
+                    "Path: " +
+                    game.content.mob_anims.manifest_to_path(
+                        *a.second.manifest, cat->folder_name,
+                        type->manifest->internal_name
+                    )
                 )
             );
         }

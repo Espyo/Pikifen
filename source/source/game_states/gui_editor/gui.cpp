@@ -28,7 +28,9 @@ void gui_editor::open_load_dialog() {
             picker_item(
                 f.first,
                 "Pack: " + f.second.pack, "",
-                (void*) &f.second
+                (void*) &f.second,
+                "Internal name: " + f.first + "\n"
+                "Path: " + game.content.gui.manifest_to_path(f.second)
             )
         );
     }

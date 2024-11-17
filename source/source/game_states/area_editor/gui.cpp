@@ -35,8 +35,11 @@ void area_editor::open_load_dialog() {
         areas.push_back(
             picker_item(
                 area_ptr->name,
-                "Pack: " + man->pack, "Simple",
-                (void*) man, area_ptr->thumbnail.get()
+                "Pack: " + man->pack, "Simple", (void*) man,
+                "Internal name: " + man->internal_name + "\n"
+                "Path: " +
+                game.content.areas.manifest_to_path(*man, AREA_TYPE_SIMPLE),
+                area_ptr->thumbnail.get()
             )
         );
     }
@@ -46,8 +49,11 @@ void area_editor::open_load_dialog() {
         areas.push_back(
             picker_item(
                 area_ptr->name,
-                "Pack: " + man->pack, "Mission",
-                (void*) man, area_ptr->thumbnail.get()
+                "Pack: " + man->pack, "Mission", (void*) man,
+                "Internal name: " + man->internal_name + "\n"
+                "Path: " +
+                game.content.areas.manifest_to_path(*man, AREA_TYPE_MISSION),
+                area_ptr->thumbnail.get()
             )
         );
     }
@@ -5435,6 +5441,7 @@ void area_editor::process_gui_panel_sector() {
                         picker_item(
                             texture_suggestions[s].name,
                             "", "", nullptr,
+                            "",
                             texture_suggestions[s].bmp
                         )
                     );

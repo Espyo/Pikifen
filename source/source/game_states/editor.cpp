@@ -2659,6 +2659,10 @@ void editor::picker_info::process() {
                     
                 }
                 
+                if(!i_ptr->tooltip.empty()) {
+                    editor_ptr->set_tooltip(i_ptr->tooltip);
+                }
+                
                 float last_x2 = ImGui::GetItemRectMax().x;
                 float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
                 if(i + 1 < final_items[tc][sc].size() && next_x2 < picker_x2) {
@@ -2690,16 +2694,18 @@ void editor::picker_info::process() {
  * @param sec_category Second-level category it belongs to.
  * If none, use an empty string.
  * @param info Information to pass to the code when the item is picked, if any.
+ * @param tooltip Tooltip, if any.
  * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 editor::picker_item::picker_item(
     const string &name, const string &top_category, const string &sec_category,
-    void* info, ALLEGRO_BITMAP* bitmap
+    void* info, const string &tooltip, ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
     top_category(top_category),
     sec_category(sec_category),
     info(info),
+    tooltip(tooltip),
     bitmap(bitmap) {
     
 }

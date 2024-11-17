@@ -359,6 +359,9 @@ protected:
         //Information to pass to the code when the item is picked, if any.
         void* info;
         
+        //Tooltip, if any.
+        string tooltip;
+        
         //Bitmap, if any.
         ALLEGRO_BITMAP* bitmap = nullptr;
         
@@ -368,7 +371,8 @@ protected:
         explicit picker_item(
             const string &name,
             const string &top_category = "", const string &second_category = "",
-            void* info = nullptr, ALLEGRO_BITMAP* bitmap = nullptr
+            void* info = nullptr, const string &tooltip = "",
+            ALLEGRO_BITMAP* bitmap = nullptr
         );
         
     };
