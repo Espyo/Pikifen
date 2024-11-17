@@ -2,7 +2,6 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Creating a new area crashes
     Editor load dialogs
         Load dialog should have:
             History

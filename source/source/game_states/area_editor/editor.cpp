@@ -443,7 +443,19 @@ void area_editor::create_area(
     AREA_TYPE requested_area_type
 ) {
     clear_current_area();
-    
+    game.cur_area_data = new area_data();
+    manifest = requested_area_manifest;
+    game.cur_area_data->manifest = &manifest;
+    game.cur_area_data->type = requested_area_type;
+    game.cur_area_data->user_data_path =
+        FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
+        manifest.pack + "/" +
+        (
+            requested_area_type == AREA_TYPE_SIMPLE ?
+            FOLDER_NAMES::SIMPLE_AREAS :
+            FOLDER_NAMES::MISSION_AREAS
+        );
+        
     //Create a sector for it.
     clear_layout_drawing();
     float r = AREA_EDITOR::COMFY_DIST * 10;
@@ -470,37 +482,47 @@ void area_editor::create_area(
     clear_selection();
     
     //Find a texture to give to this sector.
-    vector<string> textures =
-        folder_to_vector(FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, false); //TODO
-    size_t texture_to_use = INVALID;
+    string texture_to_use;
     //First, if there's any "grass" texture, use that.
-    for(size_t t = 0; t < textures.size(); t++) {
-        string lc_name = str_to_lower(textures[t]);
-        if(lc_name.find("grass") != string::npos) {
-            texture_to_use = t;
+    for(const auto &g : game.content.bitmaps.manifests) {
+        string lc_name = str_to_lower(g.first);
+        if(
+            lc_name.find("texture") != string::npos &&
+            lc_name.find("grass") != string::npos
+        ) {
+            texture_to_use = g.first;
             break;
         }
     }
     //No grass texture? Try one with "dirt".
-    if(texture_to_use == INVALID) {
-        for(size_t t = 0; t < textures.size(); t++) {
-            string lc_name = str_to_lower(textures[t]);
-            if(lc_name.find("dirt") != string::npos) {
-                texture_to_use = t;
+    if(texture_to_use.empty()) {
+        for(const auto &g : game.content.bitmaps.manifests) {
+            string lc_name = str_to_lower(g.first);
+            if(
+                lc_name.find("texture") != string::npos &&
+                lc_name.find("dirt") != string::npos
+            ) {
+                texture_to_use = g.first;
                 break;
             }
         }
     }
     //If there's no good texture, just pick the first one.
-    if(texture_to_use == INVALID) {
-        if(!textures.empty()) texture_to_use = 0;
+    if(texture_to_use.empty()) {
+        for(const auto &g : game.content.bitmaps.manifests) {
+            string lc_name = str_to_lower(g.first);
+            if(lc_name.find("texture") != string::npos) {
+                texture_to_use = g.first;
+                break;
+            }
+        }
     }
     //Apply the texture.
-    if(texture_to_use != INVALID) {
+    if(!texture_to_use.empty()) {
         update_sector_texture(
-            game.cur_area_data->sectors[0], textures[texture_to_use]
+            game.cur_area_data->sectors[0], texture_to_use
         );
-        update_texture_suggestions(textures[texture_to_use]);
+        update_texture_suggestions(texture_to_use);
     }
     
     //Now add a leader. The first available.
