@@ -255,3 +255,11 @@ void ImGui::SetupCentering(int upcoming_items_width) {
     int window_width = ImGui::GetWindowSize().x;
     ImGui::SetCursorPosX((window_width - upcoming_items_width) * 0.5f);
 }
+
+
+/**
+ * @brief Places a dummy widget designed to space things vertically.
+ */
+void ImGui::Spacer() {
+    ImGui::Dummy(ImVec2(0, 16));
+}

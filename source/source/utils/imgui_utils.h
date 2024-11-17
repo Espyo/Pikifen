@@ -48,5 +48,6 @@ bool ListBox(
 );
 void Reset();
 void SetupCentering(int upcoming_items_width);
+void Spacer();
 
 };

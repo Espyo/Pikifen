@@ -232,10 +232,8 @@ void area_editor::process_gui_delete_area_dialog() {
         "%s", final_warning_str.c_str()
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Cancel button.
+    ImGui::Spacer();
     ImGui::SetupCentering(100 + 100 + 30);
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         close_top_dialog();
@@ -275,10 +273,8 @@ void area_editor::process_gui_load_dialog() {
     }
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //New node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
             open_new_dialog();
@@ -288,10 +284,8 @@ void area_editor::process_gui_load_dialog() {
     }
     set_tooltip("Create a new area.");
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Load node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "Load")) {
         load_dialog_picker.process();
         
@@ -319,20 +313,16 @@ void area_editor::process_gui_new_dialog() {
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Internal name input.
+    ImGui::Spacer();
     must_update |= ImGui::InputText("Internal name", &internal_name);
     set_tooltip(
         "Internal name of the new area.\n"
         "Remember to keep it simple, type in lowercase, and use underscores!"
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Simple area radio.
+    ImGui::Spacer();
     must_update |=
         ImGui::RadioButton("Simple area", &type, AREA_TYPE_SIMPLE);
     set_tooltip("Choose this to make your area a simple area.");
@@ -342,9 +332,6 @@ void area_editor::process_gui_new_dialog() {
     must_update |=
         ImGui::RadioButton("Mission", &type, AREA_TYPE_MISSION);
     set_tooltip("Choose this to make your area a mission area.");
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
     
     //Check if everything's ok.
     if(must_update) {
@@ -369,6 +356,7 @@ void area_editor::process_gui_new_dialog() {
     }
     
     //Create button.
+    ImGui::Spacer();
     ImGui::SetupCentering(100);
     if(!problem.empty()) {
         ImGui::BeginDisabled();
@@ -987,11 +975,9 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         m_ptr->vars.pop_back();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Finally, a widget for the entire list.
     string mob_vars = m_ptr->vars;
+    ImGui::Spacer();
     if(ImGui::InputText("Full list", &mob_vars)) {
         register_change("object script vars change");
         m_ptr->vars = mob_vars;
@@ -1056,10 +1042,8 @@ void area_editor::process_gui_options_dialog() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //View node.
+    ImGui::Spacer();
     if(saveable_tree_node("options", "View")) {
     
         //Show edge length checkbox.
@@ -1178,13 +1162,11 @@ void area_editor::process_gui_options_dialog() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     process_gui_editor_style();
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
@@ -1283,8 +1265,7 @@ void area_editor::process_gui_options_dialog() {
             update_undo_history();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         ImGui::TreePop();
         
@@ -1363,8 +1344,7 @@ void area_editor::process_gui_panel_details() {
                 );
             }
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             if(selected_shadow) {
             
@@ -1592,11 +1572,9 @@ void area_editor::process_gui_panel_edge() {
             );
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Shadow color.
         ALLEGRO_COLOR color = e_ptr->wall_shadow_color;
+        ImGui::Spacer();
         if(
             ImGui::ColorEdit4(
                 "Color", (float*) &color,
@@ -1617,10 +1595,8 @@ void area_editor::process_gui_panel_edge() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Ledge smoothing node.
+    ImGui::Spacer();
     if(saveable_tree_node("layout", "Ledge smoothing")) {
     
         //Length value.
@@ -1642,11 +1618,9 @@ void area_editor::process_gui_panel_edge() {
             "", WIDGET_EXPLANATION_DRAG
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Smoothing color.
         ALLEGRO_COLOR color = e_ptr->ledge_smoothing_color;
+        ImGui::Spacer();
         if(
             ImGui::ColorEdit4(
                 "Color", (float*) &color,
@@ -1721,10 +1695,8 @@ void area_editor::process_gui_panel_gameplay() {
             change_state(EDITOR_STATE_MAIN);
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sprays node.
+        ImGui::Spacer();
         if(saveable_tree_node("gameplay", "Starting sprays")) {
         
             map<string, string> spray_strs =
@@ -1756,8 +1728,7 @@ void area_editor::process_gui_panel_gameplay() {
             ImGui::TreePop();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         if(game.cur_area_data->type == AREA_TYPE_MISSION) {
             process_gui_panel_mission();
@@ -1936,10 +1907,8 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Ambiance node.
+    ImGui::Spacer();
     if(saveable_tree_node("info", "Ambiance")) {
     
         //Preview song button.
@@ -2037,8 +2006,7 @@ void area_editor::process_gui_panel_info() {
             "The weather condition to use."
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         bool has_time_limit = false;
         float mission_min = 0;
@@ -2132,10 +2100,8 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Thumbnail node.
+    ImGui::Spacer();
     if(saveable_tree_node("info", "Thumbnail")) {
     
         //Thumbnail browse button.
@@ -2205,10 +2171,8 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Background node.
+    ImGui::Spacer();
     if(saveable_tree_node("info", "Background")) {
     
         string bg_file_name = game.cur_area_data->bg_bmp_file_name;
@@ -2307,10 +2271,8 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Metadata node.
+    ImGui::Spacer();
     if(saveable_tree_node("info", "Metadata")) {
     
         //Maker input.
@@ -2540,10 +2502,8 @@ void area_editor::process_gui_panel_layout() {
             );
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sectors/edges tabs.
+        ImGui::Spacer();
         if(ImGui::BeginTabBar("tabTabs")) {
         
             //Sectors tab.
@@ -2643,10 +2603,8 @@ void area_editor::process_gui_panel_main() {
         "User data folder path: " + game.cur_area_data->user_data_path
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Layout button.
+    ImGui::Spacer();
     if(
         ImGui::ImageButtonAndText(
             "layoutButton",
@@ -2694,10 +2652,8 @@ void area_editor::process_gui_panel_main() {
         "Draw movement paths, and their stops."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Details button.
+    ImGui::Spacer();
     if(
         ImGui::ImageButtonAndText(
             "detailsButton",
@@ -2745,10 +2701,8 @@ void area_editor::process_gui_panel_main() {
         "Specify how the player's gameplay experience in this area will be."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Review button.
+    ImGui::Spacer();
     if(
         ImGui::ImageButtonAndText(
             "reviewButton",
@@ -2780,8 +2734,7 @@ void area_editor::process_gui_panel_main() {
         "Special tools to help you make the area."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     ImGui::EndChild();
 }
@@ -2839,10 +2792,8 @@ void area_editor::process_gui_panel_mission() {
                 "The player must collect certain treasures, or all of them."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Treasure requirements text.
+            ImGui::Spacer();
             ImGui::Text("Treasure requirements:");
             
             int requires_all_option =
@@ -2904,10 +2855,8 @@ void area_editor::process_gui_panel_mission() {
                 "The player must defeat certain enemies, or all of them."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Enemy requirements text.
+            ImGui::Spacer();
             ImGui::Text("Enemy requirements:");
             
             int requires_all_option =
@@ -2968,10 +2917,8 @@ void area_editor::process_gui_panel_mission() {
                 "The player must survive for a certain amount of time."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Time values.
+            ImGui::Spacer();
             int total_seconds =
                 (int) game.cur_area_data->mission.goal_amount;
             if(ImGui::DragTime2("Time", &total_seconds)) {
@@ -2997,10 +2944,8 @@ void area_editor::process_gui_panel_mission() {
                 "to the exit point."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Start exit region selector mode button.
+            ImGui::Spacer();
             if(ImGui::Button("Pick region...")) {
                 sub_state = EDITOR_SUB_STATE_MISSION_EXIT;
             }
@@ -3022,10 +2967,8 @@ void area_editor::process_gui_panel_mission() {
                 f2s(game.cur_area_data->mission.goal_exit_size.y).c_str()
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Leader requirements text.
+            ImGui::Spacer();
             ImGui::Text("Leader requirements:");
             
             int requires_all_option =
@@ -3087,10 +3030,8 @@ void area_editor::process_gui_panel_mission() {
                 "total Pikmin."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Pikmin amount value.
+            ImGui::Spacer();
             int amount =
                 (int) game.cur_area_data->mission.goal_amount;
             ImGui::SetNextItemWidth(80);
@@ -3113,10 +3054,8 @@ void area_editor::process_gui_panel_mission() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Mission fail conditions node.
+    ImGui::Spacer();
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
         unsigned int fail_flags =
@@ -3443,10 +3382,9 @@ void area_editor::process_gui_panel_mission() {
         }
         
         if(!active_conditions.empty()) {
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
+        
             //Primary HUD condition checkbox.
+            ImGui::Spacer();
             bool show_primary =
                 game.cur_area_data->mission.fail_hud_primary_cond != INVALID;
             if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
@@ -3559,10 +3497,8 @@ void area_editor::process_gui_panel_mission() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Mission grading node.
+    ImGui::Spacer();
     if(saveable_tree_node("gameplay", "Mission grading")) {
     
         //Grading mode text.
@@ -3609,10 +3545,8 @@ void area_editor::process_gui_panel_mission() {
         
         if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
         
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Points per Pikmin born value.
+            ImGui::Spacer();
             ImGui::SetNextItemWidth(50);
             int pppb = game.cur_area_data->mission.points_per_pikmin_born;
             if(ImGui::DragInt("Points per Pikmin born", &pppb, 0.1f)) {
@@ -3946,10 +3880,8 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::Unindent();
             }
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Starting score value.
+            ImGui::Spacer();
             int starting_points = game.cur_area_data->mission.starting_points;
             ImGui::SetNextItemWidth(60);
             if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
@@ -3961,10 +3893,8 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
             //Medal point requirements text.
+            ImGui::Spacer();
             ImGui::Text("Medal point requirements:");
             
             //Bronze point requirement value.
@@ -4161,11 +4091,9 @@ void area_editor::process_gui_panel_mob() {
         }
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Object angle value.
     float mob_angle = normalize_angle(m_ptr->angle);
+    ImGui::Spacer();
     if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360, "%.2f")) {
         register_change("object angle change");
         m_ptr->angle = mob_angle;
@@ -4177,10 +4105,8 @@ void area_editor::process_gui_panel_mob() {
         "", WIDGET_EXPLANATION_SLIDER
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Object script vars node.
+    ImGui::Spacer();
     if(saveable_tree_node("mobs", "Script vars")) {
     
         process_gui_mob_script_vars(m_ptr);
@@ -4189,10 +4115,8 @@ void area_editor::process_gui_panel_mob() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Object advanced node.
+    ImGui::Spacer();
     if(saveable_tree_node("mobs", "Advanced")) {
     
         if(m_ptr->stored_inside == INVALID) {
@@ -4218,10 +4142,8 @@ void area_editor::process_gui_panel_mob() {
             );
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Object link amount text.
+        ImGui::Spacer();
         ImGui::Text(
             "%i link%s", (int) m_ptr->links.size(),
             m_ptr->links.size() == 1 ? "" : "s"
@@ -4474,8 +4396,7 @@ void area_editor::process_gui_panel_mobs() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         if(selected_mobs.size() == 1 || selection_homogenized) {
         
@@ -4621,10 +4542,8 @@ void area_editor::process_gui_panel_paths() {
             "Use the following widgets the change how new links will be."
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Link settings text.
+        ImGui::Spacer();
         ImGui::Text("New path link settings:");
         ImGui::Indent();
         
@@ -4660,10 +4579,8 @@ void area_editor::process_gui_panel_paths() {
         );
         ImGui::Unindent();
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Stop settings text.
+        ImGui::Spacer();
         ImGui::Text("New path stop settings:");
         
         //Script use only checkbox.
@@ -4719,10 +4636,8 @@ void area_editor::process_gui_panel_paths() {
         );
         ImGui::Unindent();
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Drawing stop button.
+        ImGui::Spacer();
         if(ImGui::Button("Done", ImVec2(-1.0f, 32.0f))) {
             set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
@@ -4779,10 +4694,8 @@ void area_editor::process_gui_panel_paths() {
             );
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Stop properties node.
+        ImGui::Spacer();
         if(saveable_tree_node("paths", "Stop properties")) {
         
             bool ok_to_edit =
@@ -4822,10 +4735,8 @@ void area_editor::process_gui_panel_paths() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Link properties node.
+        ImGui::Spacer();
         if(saveable_tree_node("paths", "Link properties")) {
         
             bool ok_to_edit =
@@ -4882,10 +4793,8 @@ void area_editor::process_gui_panel_paths() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Path preview node.
+        ImGui::Spacer();
         if(saveable_tree_node("paths", "Path preview")) {
         
             //Show preview path checkbox.
@@ -4913,8 +4822,7 @@ void area_editor::process_gui_panel_paths() {
                 "when calculating the preview path."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             if(show_path_preview) {
             
@@ -4984,9 +4892,6 @@ void area_editor::process_gui_panel_paths() {
                     "for no label enforcement."
                 );
                 
-                //Spacer dummy widget.
-                ImGui::Dummy(ImVec2(0, 16));
-                
                 string result;
                 float total_dist = 0.0f;
                 size_t total_nr_stops = 0;
@@ -5001,6 +4906,7 @@ void area_editor::process_gui_panel_paths() {
                 result = path_result_to_string(path_preview_result);
                 
                 //Path result header text.
+                ImGui::Spacer();
                 ImGui::Text("Result:");
                 
                 //Path result text.
@@ -5030,10 +4936,8 @@ void area_editor::process_gui_panel_paths() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Path tools node.
+        ImGui::Spacer();
         if(saveable_tree_node("paths", "Tools")) {
         
             //Show closest stop checkbox.
@@ -5125,10 +5029,8 @@ void area_editor::process_gui_panel_review() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Preview node.
+    ImGui::Spacer();
     if(saveable_tree_node("review", "Preview")) {
     
         //Area preview checkbox.
@@ -5153,10 +5055,8 @@ void area_editor::process_gui_panel_review() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Cross-section node.
+    ImGui::Spacer();
     if(saveable_tree_node("review", "Cross-section")) {
     
         //Show cross-section checkbox.
@@ -5206,8 +5106,7 @@ void area_editor::process_gui_panel_review() {
             ImGui::Unindent();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         ImGui::TreePop();
         
@@ -5234,8 +5133,7 @@ void area_editor::process_gui_panel_review() {
             ImGui::Unindent();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         ImGui::TreePop();
         
@@ -5327,10 +5225,8 @@ void area_editor::process_gui_panel_sector() {
             "", WIDGET_EXPLANATION_DRAG
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sector hazards node.
+        ImGui::Spacer();
         if(saveable_tree_node("layout", "Hazards")) {
         
             static int selected_hazard_idx = 0;
@@ -5454,10 +5350,8 @@ void area_editor::process_gui_panel_sector() {
             ImGui::TreePop();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sector advanced behavior node.
+        ImGui::Spacer();
         if(saveable_tree_node("layout", "Advanced")) {
         
             //Sector type combobox.
@@ -5492,8 +5386,7 @@ void area_editor::process_gui_panel_sector() {
                 "Pikmin die when they fall in, and you can see the void."
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             ImGui::TreePop();
         }
@@ -5501,10 +5394,8 @@ void area_editor::process_gui_panel_sector() {
         ImGui::TreePop();
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Sector appearance node.
+    ImGui::Spacer();
     if(saveable_tree_node("layout", "Appearance")) {
     
         int texture_type = !s_ptr->fade;
@@ -5577,10 +5468,8 @@ void area_editor::process_gui_panel_sector() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sector texture effects node.
+        ImGui::Spacer();
         if(saveable_tree_node("layout", "Texture effects")) {
         
             //Sector texture offset value.
@@ -5702,10 +5591,8 @@ void area_editor::process_gui_panel_sector() {
             ImGui::TreePop();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Sector mood node.
+        ImGui::Spacer();
         if(saveable_tree_node("layout", "Sector mood")) {
         
             //Sector brightness value.
@@ -5722,14 +5609,12 @@ void area_editor::process_gui_panel_sector() {
                 "", WIDGET_EXPLANATION_SLIDER
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             ImGui::TreePop();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         ImGui::TreePop();
     }
@@ -5830,10 +5715,8 @@ void area_editor::process_gui_panel_tools() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Misc. node.
+    ImGui::Spacer();
     if(saveable_tree_node("tools", "Misc.")) {
     
         //Load auto-backup button.
@@ -5902,8 +5785,7 @@ void area_editor::process_gui_panel_tools() {
             "0.5 will resize everything to half size, 2.0 to double, etc."
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Spacer();
         
         ImGui::TreePop();
         

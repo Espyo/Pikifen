@@ -163,14 +163,12 @@ void gui_editor::process_gui_control_panel() {
         "File path: " + manifest.path
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     //Process the list of items.
     process_gui_panel_items();
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     //Process the currently selected item.
     process_gui_panel_item();
@@ -194,10 +192,8 @@ void gui_editor::process_gui_load_dialog() {
     }
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //New node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
             open_new_dialog();
@@ -210,10 +206,8 @@ void gui_editor::process_gui_load_dialog() {
         "This works by copying an existing one to a new package."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Load node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "Load")) {
         load_dialog_picker.process();
         
@@ -392,18 +386,13 @@ void gui_editor::process_gui_new_dialog() {
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //GUI definition combo.
     vector<string> gui_files;
     for(const auto &g : game.content.gui.manifests) {
         gui_files.push_back(g.first);
     }
+    ImGui::Spacer();
     must_update |= ImGui::Combo("File", &internal_name, gui_files);
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
     
     //Check if everything's ok.
     if(must_update) {
@@ -432,6 +421,7 @@ void gui_editor::process_gui_new_dialog() {
     }
     
     //Create button.
+    ImGui::Spacer();
     ImGui::SetupCentering(180);
     if(!problem.empty()) {
         ImGui::BeginDisabled();
@@ -505,8 +495,7 @@ void gui_editor::process_gui_options_dialog() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     process_gui_editor_style();
 }
@@ -553,9 +542,6 @@ void gui_editor::process_gui_panel_item() {
         WIDGET_EXPLANATION_DRAG
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     point top_left(
         cur_item_ptr->center.x - cur_item_ptr->size.x / 2.0f,
         cur_item_ptr->center.y - cur_item_ptr->size.y / 2.0f
@@ -567,6 +553,7 @@ void gui_editor::process_gui_panel_item() {
     bool update_from_corners = false;
     
     //Top-left coordinates values.
+    ImGui::Spacer();
     if(ImGui::DragFloat2("Top-left", (float*) &top_left, 0.10f)) {
         update_from_corners = true;
     }

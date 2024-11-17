@@ -332,10 +332,8 @@ void animation_editor::process_gui_load_dialog() {
     }
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //New node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
             open_new_dialog();
@@ -348,10 +346,8 @@ void animation_editor::process_gui_load_dialog() {
         "This works for global animations only."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Load node.
+    ImGui::Spacer();
     if(saveable_tree_node("load", "Load")) {
         load_dialog_picker.process();
         
@@ -539,18 +535,15 @@ void animation_editor::process_gui_new_dialog() {
     //Pack widgets.
     must_update |= process_gui_new_dialog_pack_widgets(&pack);
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Global animation radio.
+    ImGui::Spacer();
     must_update |= ImGui::RadioButton("Global animation", &type, 0);
     
     //Mob type animation radio.
     ImGui::SameLine();
     must_update |= ImGui::RadioButton("Object type", &type, 1);
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     if(type == 0) {
         //Internal name input.
@@ -570,9 +563,6 @@ void animation_editor::process_gui_new_dialog() {
             process_gui_mob_type_widgets(&custom_mob_cat, &mob_type_ptr);
             
     }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
     
     //Check if everything's ok.
     if(must_update) {
@@ -616,6 +606,7 @@ void animation_editor::process_gui_new_dialog() {
     }
     
     //Create button.
+    ImGui::Spacer();
     ImGui::SetupCentering(140);
     if(!problem.empty()) {
         ImGui::BeginDisabled();
@@ -677,13 +668,11 @@ void animation_editor::process_gui_options_dialog() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     process_gui_editor_style();
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
@@ -876,8 +865,7 @@ void animation_editor::process_gui_panel_animation() {
         "Next\nanimation."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     if(cur_anim_i.cur_anim) {
     
@@ -1022,10 +1010,8 @@ void animation_editor::process_gui_panel_animation() {
             ImGui::TreePop();
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Frame list node.
+        ImGui::Spacer();
         if(saveable_tree_node("animation", "Frame list")) {
         
             frame* frame_ptr = nullptr;
@@ -1341,10 +1327,8 @@ void animation_editor::process_gui_panel_animation() {
                     
                 }
                 
-                //Spacer dummy widget.
-                ImGui::Dummy(ImVec2(0, 16));
-                
                 //Apply duration to all button.
+                ImGui::Spacer();
                 if(ImGui::Button("Apply duration to all frames")) {
                     float d =
                         cur_anim_i.cur_anim->frames[
@@ -1544,10 +1528,8 @@ void animation_editor::process_gui_panel_body_part() {
     
     if(anims.body_parts.size() > 1) {
     
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Explanation text.
+        ImGui::Spacer();
         ImGui::TextWrapped(
             "The higher on the list, the more priority that body "
             "part's hitboxes have when the game checks collisions. "
@@ -1637,10 +1619,8 @@ void animation_editor::process_gui_panel_main() {
         "File path: " + manifest.path
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Animations button.
+    ImGui::Spacer();
     if(
         ImGui::ImageButtonAndText(
             "animsButton",
@@ -1694,10 +1674,8 @@ void animation_editor::process_gui_panel_main() {
         "Change what body parts exist, and their order."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Information button.
+    ImGui::Spacer();
     if(
         ImGui::ImageButtonAndText(
             "infoButton",
@@ -1869,8 +1847,7 @@ void animation_editor::process_gui_panel_sprite() {
         "Next\nsprite."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     if(cur_sprite) {
         //Delete sprite button.
@@ -2097,10 +2074,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Browse for spritesheet button.
+    ImGui::Spacer();
     if(ImGui::Button("...")) {
         FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
         vector<string> f =
@@ -2190,10 +2165,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         "", WIDGET_EXPLANATION_DRAG
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Canvas explanation text.
+    ImGui::Spacer();
     ImGui::TextWrapped(
         "Click parts of the image on the left to %s the selection limits.",
         sprite_bmp_add_mode ? "expand" : "set"
@@ -2340,10 +2313,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Side view checkbox.
+    ImGui::Spacer();
     ImGui::Checkbox("Use side view", &side_view);
     set_tooltip(
         "Use a side view of the object, so you can adjust hitboxes "
@@ -2395,10 +2366,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         );
         cur_hitbox->height = std::max(0.0f, cur_hitbox->height);
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Hitbox type text.
+        ImGui::Spacer();
         ImGui::Text("Hitbox type:");
         
         //Normal hitbox radio button.
@@ -2458,8 +2427,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 "Can the Pikmin latch on to this hitbox?"
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             //Hazards list.
             process_gui_hitbox_hazards();
@@ -2536,8 +2504,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 "", WIDGET_EXPLANATION_SLIDER
             );
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Spacer();
             
             //Hazards list.
             process_gui_hitbox_hazards();
@@ -2607,10 +2574,8 @@ void animation_editor::process_gui_panel_sprite_top() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Visible checkbox.
+    ImGui::Spacer();
     if(ImGui::Checkbox("Visible", &cur_sprite->top_visible)) {
         changes_mgr.mark_as_changed();
     }
@@ -2666,10 +2631,8 @@ void animation_editor::process_gui_panel_sprite_top() {
             "", WIDGET_EXPLANATION_SLIDER
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Toggle maturity button.
+        ImGui::Spacer();
         if(ImGui::Button("Toggle maturity")) {
             cur_maturity = sum_and_wrap(cur_maturity, 1, NR_MATURITIES);
         }
@@ -2734,10 +2697,8 @@ void animation_editor::process_gui_panel_sprite_transform() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Sprite offset value.
+    ImGui::Spacer();
     if(
         ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.05f)
     ) {
@@ -2820,8 +2781,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     }
     set_tooltip("Color to tint it by. White makes it look normal.");
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     if(anims.sprites.size() > 1) {
     

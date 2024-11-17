@@ -1442,10 +1442,8 @@ void editor::process_gui_new_pack_dialog() {
         "Remember to keep it simple, type in lowercase, and use underscores!"
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Name input.
+    ImGui::Spacer();
     ImGui::InputText("Name", &name);
     set_tooltip("Proper name of the new pack.");
     
@@ -1473,10 +1471,7 @@ void editor::process_gui_new_pack_dialog() {
         );
     ImGui::TextWrapped("%s", explanation.c_str());
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Create button.
+    //Check if everything's ok.
     string problem;
     if(internal_name.empty()) {
         problem = "You have to type an internal name first!";
@@ -1492,6 +1487,8 @@ void editor::process_gui_new_pack_dialog() {
         problem = "You have to type a name first!";
     }
     
+    //Create button.
+    ImGui::Spacer();
     ImGui::SetupCentering(100);
     if(!problem.empty()) {
         ImGui::BeginDisabled();
