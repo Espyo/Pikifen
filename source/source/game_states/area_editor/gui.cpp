@@ -297,11 +297,6 @@ void area_editor::process_gui_load_dialog() {
         
         ImGui::TreePop();
     }
-    
-    if(just_created_area) {
-        close_top_dialog();
-        just_created_area = false;
-    }
 }
 
 
@@ -368,19 +363,27 @@ void area_editor::process_gui_new_dialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create area", ImVec2(100, 40))) {
-        content_manifest man;
-        man.internal_name = internal_name;
-        man.pack = pack;
-        man.path = area_path;
-        create_area(man, (AREA_TYPE) type);
-        close_top_dialog();
-        just_created_area = true;
-        pack.clear();
-        internal_name.clear();
-        type = AREA_TYPE_SIMPLE;
-        problem.clear();
-        area_path.clear();
-        must_update = true;
+        auto really_create = [ = ] () {
+            content_manifest man;
+            man.internal_name = internal_name;
+            man.pack = pack;
+            man.path = area_path;
+            create_area(man, (AREA_TYPE) type);
+            close_top_dialog();
+            close_top_dialog(); //Close the load dialog.
+            pack.clear();
+            internal_name.clear();
+            type = AREA_TYPE_SIMPLE;
+            problem.clear();
+            area_path.clear();
+            must_update = true;
+        };
+        
+        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+            open_base_content_warning_dialog(really_create);
+        } else {
+            really_create();
+        }
     }
     if(!problem.empty()) {
         ImGui::EndDisabled();

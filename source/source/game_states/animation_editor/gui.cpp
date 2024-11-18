@@ -336,8 +336,8 @@ void animation_editor::process_gui_load_dialog() {
         return get_path_short_name(path);
     },
     [this](const string &path) {
-        load_animation_database_file(path, true);
         close_top_dialog();
+        load_animation_database_file(path, true);
     }
     );
     
@@ -361,11 +361,6 @@ void animation_editor::process_gui_load_dialog() {
         load_dialog_picker.process();
         
         ImGui::TreePop();
-    }
-    
-    if(just_created_file) {
-        close_top_dialog();
-        just_created_file = false;
     }
 }
 
@@ -621,17 +616,25 @@ void animation_editor::process_gui_new_dialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create animation", ImVec2(140, 40))) {
-        load_animation_database_file(anim_path, true);
-        close_top_dialog();
-        just_created_file = true;
-        pack.clear();
-        type = 0;
-        custom_mob_cat.clear();
-        mob_type_ptr = nullptr;
-        problem.clear();
-        internal_name.clear();
-        anim_path.clear();
-        must_update = true;
+        auto really_create = [ = ] () {
+            close_top_dialog();
+            close_top_dialog(); //Close the load dialog.
+            load_animation_database_file(anim_path, true);
+            pack.clear();
+            type = 0;
+            custom_mob_cat.clear();
+            mob_type_ptr = nullptr;
+            problem.clear();
+            internal_name.clear();
+            anim_path.clear();
+            must_update = true;
+        };
+        
+        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+            open_base_content_warning_dialog(really_create);
+        } else {
+            really_create();
+        }
     }
     if(!problem.empty()) {
         ImGui::EndDisabled();

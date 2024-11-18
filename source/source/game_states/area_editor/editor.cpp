@@ -2091,8 +2091,20 @@ void area_editor::pick_area(
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
-    create_or_load_area(temp_manif->path);
-    close_top_dialog();
+    
+    auto really_load = [ = ] () {
+        create_or_load_area(temp_manif->path);
+        close_top_dialog();
+    };
+    
+    if(
+        temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
+        !game.options.engine_developer
+    ) {
+        open_base_content_warning_dialog(really_load);
+    } else {
+        really_load();
+    }
 }
 
 

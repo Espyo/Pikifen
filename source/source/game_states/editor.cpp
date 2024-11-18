@@ -138,11 +138,16 @@ void editor::center_camera(
 
 
 /**
- * @brief Closes the topmost dialog.
+ * @brief Closes the topmost dialog that is still open.
  */
 void editor::close_top_dialog() {
-    if(dialogs.empty()) return;
-    dialogs.back()->is_open = false;
+    for(size_t d = 0; d < dialogs.size(); d++) {
+        dialog_info* d_ptr = dialogs[dialogs.size() - (d + 1)];
+        if(d_ptr->is_open) {
+            d_ptr->is_open = false;
+            return;
+        }
+    }
 }
 
 
@@ -979,6 +984,29 @@ void editor::load_custom_mob_cat_types(bool is_area_editor) {
 
 
 /**
+ * @brief Opens a dialog warning the maker that they're editing something
+ * in the base pack. Does not do anything if the player is an engine developer.
+ *
+ * @param do_pick_callback Callback for if we actually have to do the pick.
+ */
+void editor::open_base_content_warning_dialog(
+    const std::function<void()> &do_pick_callback
+) {
+    if(game.options.engine_developer) {
+        do_pick_callback();
+        return;
+    }
+    
+    open_dialog(
+        "Base pack warning",
+        std::bind(&editor::process_gui_base_content_warning_dialog, this)
+    );
+    dialogs.back()->custom_size = point(320, 235);
+    base_content_warning_do_pick_callback = do_pick_callback;
+}
+
+
+/**
  * @brief Opens a dialog.
  *
  * @param title Title of the dialog window.
@@ -1113,6 +1141,39 @@ void editor::process_dialogs() {
     //Process the latest one.
     if(!dialogs.empty()) {
         dialogs.back()->process();
+    }
+}
+
+
+/**
+ * @brief Processes the base content editing warning dialog for this frame.
+ */
+void editor::process_gui_base_content_warning_dialog() {
+    //Explanation text.
+    ImGui::TextWrapped(
+        "You're editing content in the base pack! The base pack is meant to "
+        "contain stuff packaged with the engine, designed for other content "
+        "to make use of. It's recommended that you don't change it! (Though "
+        "you are free to look around.)\n"
+        "\n"
+        "Please read the manual for more information.\n"
+        "\n"
+        "Do you want to continue?"
+    );
+    
+    //Go back button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(148);
+    if(ImGui::Button("Go back", ImVec2(70, 30))) {
+        close_top_dialog();
+    }
+    
+    //Continue button.
+    ImGui::SameLine();
+    if(ImGui::Button("Continue", ImVec2(70, 30))) {
+        base_content_warning_do_pick_callback();
+        base_content_warning_do_pick_callback = nullptr;
+        close_top_dialog();
     }
 }
 

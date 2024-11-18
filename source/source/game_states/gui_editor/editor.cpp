@@ -294,8 +294,20 @@ void gui_editor::pick_file(
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
-    load_gui_file(temp_manif->path, true);
-    close_top_dialog();
+    
+    auto really_load = [ = ] () {
+        load_gui_file(temp_manif->path, true);
+        close_top_dialog();
+    };
+    
+    if(
+        temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
+        !game.options.engine_developer
+    ) {
+        open_base_content_warning_dialog(really_load);
+    } else {
+        really_load();
+    }
 }
 
 

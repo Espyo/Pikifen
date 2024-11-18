@@ -88,6 +88,7 @@ extern const ALLEGRO_COLOR DEF_EDITOR_SECONDARY_COLOR;
 extern const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR;
 extern const bool DEF_EDITOR_USE_CUSTOM_STYLE;
 extern const bool DEF_EDITOR_SHOW_TOOLTIPS;
+extern const bool DEF_ENGINE_DEVELOPER;
 extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
 extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
@@ -199,6 +200,9 @@ struct options_t {
     
     //Should the editors use a custom style, or the default?
     bool editor_use_custom_style = OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE;
+
+    //Is the player a developer of the engine?
+    bool engine_developer = OPTIONS::DEF_ENGINE_DEVELOPER;
     
     //Grid interval in the GUI editor, in units.
     float gui_editor_grid_interval = OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL;

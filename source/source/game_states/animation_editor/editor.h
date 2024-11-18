@@ -170,9 +170,6 @@ private:
     //Are the hitboxes currently visible?
     bool hitboxes_visible = true;
     
-    //Has a new file just been created?
-    bool just_created_file = false;
-    
     //Last file used as for a spritesheet.
     string last_spritesheet_used;
     

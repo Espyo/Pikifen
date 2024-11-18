@@ -382,22 +382,6 @@ protected:
      */
     class picker_info {
     
-    private:
-    
-        //--- Members ---
-        
-        //Pointer to the editor that's using it.
-        editor* editor_ptr = nullptr;
-        
-        //Top-level category the user picked for the new item, if applicable.
-        string new_item_top_cat;
-        
-        //Second-level category the user picked for the new item, if applicable.
-        string new_item_sec_cat;
-        
-        //Do we need to focus on the filter text box?
-        bool needs_filter_box_focus = true;
-        
     public:
     
         //--- Members ---
@@ -426,11 +410,26 @@ protected:
         //If there's an associated dialog meant to auto-close, specify it here.
         dialog_info* dialog_ptr = nullptr;
         
-        
         //--- Function declarations ---
         
         explicit picker_info(editor* editor_ptr);
         void process();
+        
+    private:
+    
+        //--- Members ---
+        
+        //Pointer to the editor that's using it.
+        editor* editor_ptr = nullptr;
+        
+        //Top-level category the user picked for the new item, if applicable.
+        string new_item_top_cat;
+        
+        //Second-level category the user picked for the new item, if applicable.
+        string new_item_sec_cat;
+        
+        //Do we need to focus on the filter text box?
+        bool needs_filter_box_focus = true;
         
     };
     
@@ -526,6 +525,10 @@ protected:
     
     
     //--- Members ---
+    
+    //Callback for when the item is really meant to be picked, in the base
+    //content warning dialog.
+    std::function<void()> base_content_warning_do_pick_callback = nullptr;
     
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons = nullptr;
@@ -657,6 +660,9 @@ protected:
     );
     void leave();
     void load_custom_mob_cat_types(bool is_area_editor);
+    void open_base_content_warning_dialog(
+        const std::function<void()> &do_pick_callback
+    );
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback
@@ -674,6 +680,7 @@ protected:
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
     void process_dialogs();
+    void process_gui_base_content_warning_dialog();
     void process_gui_editor_style();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,

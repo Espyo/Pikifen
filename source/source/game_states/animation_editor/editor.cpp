@@ -766,8 +766,20 @@ void animation_editor::pick_file(
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
-    load_animation_database_file(temp_manif->path, true);
-    close_top_dialog();
+    string path = temp_manif->path;
+    auto really_load = [ = ] () {
+        load_animation_database_file(path, true);
+        close_top_dialog();
+    };
+    
+    if(
+        temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
+        !game.options.engine_developer
+    ) {
+        open_base_content_warning_dialog(really_load);
+    } else {
+        really_load();
+    }
 }
 
 

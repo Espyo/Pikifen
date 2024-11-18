@@ -84,9 +84,6 @@ private:
     //List of items for the current file.
     vector<item> items;
     
-    //Has a new file just been created?
-    bool just_created_file = false;
-    
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     

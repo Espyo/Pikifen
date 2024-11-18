@@ -556,9 +556,6 @@ private:
     //Currently highlighted vertex, if any.
     vertex* highlighted_vertex = nullptr;
     
-    //Has a new area just been created?
-    bool just_created_area = false;
-    
     //Category name of the last mob placed.
     string last_mob_custom_cat_name;
     

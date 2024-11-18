@@ -205,7 +205,7 @@ void gui_editor::process_gui_load_dialog() {
     }
     set_tooltip(
         "Creates a new GUI definition file.\n"
-        "This works by copying an existing one to a new package."
+        "This works by copying an existing one to a new pack."
     );
     
     //Load node.
@@ -214,11 +214,6 @@ void gui_editor::process_gui_load_dialog() {
         load_dialog_picker.process();
         
         ImGui::TreePop();
-    }
-    
-    if(just_created_file) {
-        close_top_dialog();
-        just_created_file = false;
     }
 }
 
@@ -429,15 +424,23 @@ void gui_editor::process_gui_new_dialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
-        copy_gui_file_from_base(internal_name, pack);
-        load_gui_file(file_path, true);
-        close_top_dialog();
-        just_created_file = true;
-        pack.clear();
-        internal_name.clear();
-        problem.clear();
-        file_path.clear();
-        must_update = true;
+        auto really_create = [ = ] () {
+            copy_gui_file_from_base(internal_name, pack);
+            load_gui_file(file_path, true);
+            close_top_dialog();
+            close_top_dialog(); //Close the load dialog.
+            pack.clear();
+            internal_name.clear();
+            problem.clear();
+            file_path.clear();
+            must_update = true;
+        };
+        
+        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+            open_base_content_warning_dialog(really_create);
+        } else {
+            really_create();
+        }
     }
     if(!problem.empty()) {
         ImGui::EndDisabled();

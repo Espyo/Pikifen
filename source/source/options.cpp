@@ -101,6 +101,9 @@ const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR = {1.0f, 1.0f, 1.0f, 1.0f};
 //Default value for whether to use custom styles in editors.
 const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
 
+//Default value for whether the player is an engine developer.
+const bool DEF_ENGINE_DEVELOPER = false;
+
 //Default value for the GUI editor grid interval.
 const float DEF_GUI_EDITOR_GRID_INTERVAL = 2.5f;
 
@@ -267,6 +270,7 @@ void options_t::load(data_node* file) {
     rs.set("editor_show_tooltips", editor_show_tooltips);
     rs.set("editor_text_color", editor_text_color);
     rs.set("editor_use_custom_style", editor_use_custom_style);
+    rs.set("engine_developer", engine_developer);
     rs.set("fps", target_fps);
     rs.set("fullscreen", intended_win_fullscreen);
     rs.set("gui_editor_grid_interval", gui_editor_grid_interval);
@@ -571,6 +575,12 @@ void options_t::save(data_node* file) const {
         new data_node(
             "editor_use_custom_style",
             b2s(editor_use_custom_style)
+        )
+    );
+    file->add(
+        new data_node(
+            "engine_developer",
+            b2s(engine_developer)
         )
     );
     file->add(
