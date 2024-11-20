@@ -712,6 +712,12 @@ void area_editor::delete_current_area() {
         
     }
     
+    game.content.areas.manifests[game.cur_area_data->type].erase(
+        game.content.areas.manifests[game.cur_area_data->type].find(
+            game.cur_area_data->manifest->internal_name
+        )
+    );
+    
     if(go_to_area_select) {
         clear_current_area();
         area_exists_on_disk = false;
@@ -3318,15 +3324,7 @@ void area_editor::save_backup() {
     //Plus, creating the backup will create the area's folder on the disk,
     //which will basically mean the area exists, even though this might not be
     //what the user wants, since they haven't saved proper yet.
-    
-    //TODO replace with something better.
-    ALLEGRO_FS_ENTRY* folder_fs_entry =
-        al_create_fs_entry(game.cur_area_data->user_data_path.c_str());
-    bool folder_exists = al_open_directory(folder_fs_entry);
-    al_close_directory(folder_fs_entry);
-    al_destroy_fs_entry(folder_fs_entry);
-    
-    if(!folder_exists) return;
+    if(!folder_exists(game.cur_area_data->user_data_path)) return;
     
     save_area(true);
 }

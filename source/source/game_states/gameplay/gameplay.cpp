@@ -476,7 +476,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
             if(filter && o_ptr->oni_type->nest->pik_types[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < NR_MATURITIES; m++) {
+            for(size_t m = 0; m < N_MATURITIES; m++) {
                 total += o_ptr->nest->pikmin_inside[t][m];
             }
         }
@@ -494,7 +494,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
             if(filter && s_ptr->shi_type->nest->pik_types[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < NR_MATURITIES; m++) {
+            for(size_t m = 0; m < N_MATURITIES; m++) {
                 total += s_ptr->nest->pikmin_inside[t][m];
             }
         }
@@ -540,9 +540,9 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     mob* result = nullptr;
     
     //Closest members so far for each maturity.
-    dist closest_dists[NR_MATURITIES];
-    mob* closest_ptrs[NR_MATURITIES];
-    for(unsigned char m = 0; m < NR_MATURITIES; m++) {
+    dist closest_dists[N_MATURITIES];
+    mob* closest_ptrs[N_MATURITIES];
+    for(unsigned char m = 0; m < N_MATURITIES; m++) {
         closest_ptrs[m] = nullptr;
     }
     
@@ -570,7 +570,7 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     
     //Now, try to get the one with the highest maturity within reach.
     dist closest_dist;
-    for(unsigned char m = 0; m < NR_MATURITIES; m++) {
+    for(unsigned char m = 0; m < N_MATURITIES; m++) {
         if(!closest_ptrs[2 - m]) continue;
         if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
         result = closest_ptrs[2 - m];
@@ -581,7 +581,7 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     if(!result) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
-        for(unsigned char m = 0; m < NR_MATURITIES; m++) {
+        for(unsigned char m = 0; m < N_MATURITIES; m++) {
             if(!closest_ptrs[m]) continue;
             
             if(!result || closest_dists[m] < closest_dist) {

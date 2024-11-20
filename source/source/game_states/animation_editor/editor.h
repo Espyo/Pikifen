@@ -198,7 +198,7 @@ private:
     bool sprite_bmp_add_mode = false;
     
     //Top bitmaps for the current Pikmin type.
-    ALLEGRO_BITMAP* top_bmp[NR_MATURITIES] = { nullptr, nullptr, nullptr };
+    ALLEGRO_BITMAP* top_bmp[N_MATURITIES] = { nullptr, nullptr, nullptr };
     
     //Keep the aspect ratio when resizing the Pikmin top?
     bool top_keep_aspect_ratio = true;

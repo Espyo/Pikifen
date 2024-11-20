@@ -2646,7 +2646,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         //Toggle maturity button.
         ImGui::Spacer();
         if(ImGui::Button("Toggle maturity")) {
-            cur_maturity = sum_and_wrap(cur_maturity, 1, NR_MATURITIES);
+            cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
         }
         set_tooltip(
             "View a different maturity top."

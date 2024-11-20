@@ -30,7 +30,7 @@ const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
 }
 
 
-const float DEFAULT_SPROUT_EVOLUTION_TIME[NR_MATURITIES] =
+const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
 { 2 * 60, 2 * 60, 3 * 60 };
 
 
@@ -41,7 +41,7 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[NR_MATURITIES] =
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN) {
     
-    for(size_t m = 0; m < NR_MATURITIES; m++) {
+    for(size_t m = 0; m < N_MATURITIES; m++) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
         bmp_top[m] = nullptr;
         bmp_maturity_icon[m] = nullptr;
@@ -157,7 +157,13 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
 void pikmin_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     string attack_method_str;
+    string top_leaf_str;
+    string top_bud_str;
+    string top_flower_str;
     data_node* attack_method_node = nullptr;
+    data_node* top_leaf_node = nullptr;
+    data_node* top_bud_node = nullptr;
+    data_node* top_flower_node = nullptr;
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
     rs.set("knocked_down_duration", knocked_down_duration);
@@ -170,6 +176,9 @@ void pikmin_type::load_cat_properties(data_node* file) {
     rs.set("sprout_evolution_time_1", sprout_evolution_time[0]);
     rs.set("sprout_evolution_time_2", sprout_evolution_time[1]);
     rs.set("sprout_evolution_time_3", sprout_evolution_time[2]);
+    rs.set("top_bud", top_bud_str, &top_bud_node);
+    rs.set("top_flower", top_flower_str, &top_flower_node);
+    rs.set("top_leaf", top_leaf_str, &top_leaf_node);
     
     if(attack_method_node) {
         if(attack_method_str == "latch") {
@@ -207,6 +216,11 @@ void pikmin_type::load_cat_properties(data_node* file) {
             sound_data_idxs[PIKMIN_SOUND_THROWN] = s;
         }
     }
+    
+    //Always load these since they're necessary for the animation editor.
+    bmp_top[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
+    bmp_top[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
+    bmp_top[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
 }
 
 
@@ -218,17 +232,11 @@ void pikmin_type::load_cat_properties(data_node* file) {
 void pikmin_type::load_cat_resources(data_node* file) {
     reader_setter rs(file);
     
-    string top_leaf_str;
-    string top_bud_str;
-    string top_flower_str;
     string icon_str;
     string icon_leaf_str;
     string icon_bud_str;
     string icon_flower_str;
     string icon_onion_str;
-    data_node* top_leaf_node = nullptr;
-    data_node* top_bud_node = nullptr;
-    data_node* top_flower_node = nullptr;
     data_node* icon_node = nullptr;
     data_node* icon_leaf_node = nullptr;
     data_node* icon_bud_node = nullptr;
@@ -240,17 +248,11 @@ void pikmin_type::load_cat_resources(data_node* file) {
     rs.set("icon_flower", icon_flower_str, &icon_flower_node);
     rs.set("icon_leaf", icon_leaf_str, &icon_leaf_node);
     rs.set("icon_onion", icon_onion_str, &icon_onion_node);
-    rs.set("top_bud", top_bud_str, &top_bud_node);
-    rs.set("top_flower", top_flower_str, &top_flower_node);
-    rs.set("top_leaf", top_leaf_str, &top_leaf_node);
     
     bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
     bmp_maturity_icon[0] = game.content.bitmaps.list.get(icon_leaf_str, icon_leaf_node);
     bmp_maturity_icon[1] = game.content.bitmaps.list.get(icon_bud_str, icon_bud_node);
     bmp_maturity_icon[2] = game.content.bitmaps.list.get(icon_flower_str, icon_flower_node);
-    bmp_top[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
-    bmp_top[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
-    bmp_top[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
     
     if(icon_onion_node) {
         bmp_onion_icon = game.content.bitmaps.list.get(icon_onion_str, icon_onion_node);

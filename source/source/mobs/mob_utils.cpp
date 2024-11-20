@@ -789,7 +789,7 @@ pikmin_nest_t::pikmin_nest_t(
     nest_type(type) {
     
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
-        pikmin_inside.push_back(vector<size_t>(NR_MATURITIES, 0));
+        pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
         call_queue.push_back(0);
     }
 }
@@ -811,9 +811,9 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
         return false;
     }
     
-    for(size_t m = 0; m < NR_MATURITIES; m++) {
+    for(size_t m = 0; m < N_MATURITIES; m++) {
         //Let's check the maturities in reverse order.
-        size_t cur_m = NR_MATURITIES - m - 1;
+        size_t cur_m = N_MATURITIES - m - 1;
         
         if(pikmin_inside[type_idx][cur_m] == 0) continue;
         
@@ -876,7 +876,7 @@ size_t pikmin_nest_t::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(nest_type->pik_types[t] == type) {
-            for(size_t m = 0; m < NR_MATURITIES; m++) {
+            for(size_t m = 0; m < N_MATURITIES; m++) {
                 amount += pikmin_inside[t][m];
             }
             break;
@@ -900,7 +900,7 @@ void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
         size_t word = 0;
         
         for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
-            for(size_t m = 0; m < NR_MATURITIES; m++) {
+            for(size_t m = 0; m < N_MATURITIES; m++) {
                 if(word < pikmin_inside_vars.size()) {
                     pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
                     word++;

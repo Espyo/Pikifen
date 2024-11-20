@@ -528,9 +528,9 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding[0];
             
-            pikmin* closest_members[NR_MATURITIES];
-            dist closest_dists[NR_MATURITIES];
-            for(size_t m = 0; m < NR_MATURITIES; m++) {
+            pikmin* closest_members[N_MATURITIES];
+            dist closest_dists[N_MATURITIES];
+            for(size_t m = 0; m < N_MATURITIES; m++) {
                 closest_members[m] = nullptr;
             }
             
@@ -563,7 +563,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                             action.action_type_id ==
                             PLAYER_ACTION_TYPE_NEXT_MATURITY ? 1 : -1
                         ),
-                        NR_MATURITIES
+                        N_MATURITIES
                     );
                     
                 //Back to the start?

@@ -109,7 +109,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         
         switch(dro_ptr->dro_type->effect) {
         case DROP_EFFECT_MATURATE: {
-            if(pik_ptr->maturity < NR_MATURITIES - 1) {
+            if(pik_ptr->maturity < N_MATURITIES - 1) {
                 will_drink = true;
             }
             break;

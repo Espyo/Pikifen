@@ -38,7 +38,7 @@ constexpr unsigned char VERSION_REV   = 0;
 //they fit here in and of themselves.
 
 //Number of Pikmin maturities.
-constexpr size_t NR_MATURITIES = 3;
+constexpr size_t N_MATURITIES = 3;
 
 //Maximum number of players that can play the game.
 constexpr size_t MAX_PLAYERS = 4;
