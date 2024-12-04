@@ -113,7 +113,7 @@ public:
     //--- Members ---
     
     //Load this area when the area editor loads.
-    string auto_load_area;
+    string auto_load_folder;
     
     //Area being edited when using the quick-play button.
     string quick_play_area_path;
@@ -152,7 +152,7 @@ private:
         //Bitmap of the texture.
         ALLEGRO_BITMAP* bmp = nullptr;
         
-        //File name of the texture.
+        //Internal name of the texture.
         string name;
         
         
@@ -298,7 +298,7 @@ private:
         //No leader mob found.
         EPT_MISSING_LEADER,
         
-        //A texture is not found in the game files.
+        //A texture is not found in the game content.
         EPT_UNKNOWN_TEXTURE,
         
         //Mob with no type.
@@ -474,9 +474,6 @@ private:
     
     //Time left until a backup is generated.
     timer backup_timer;
-    
-    //Does the area exist on disk, or RAM only?
-    bool area_exists_on_disk = false;
     
     //When the player copies an edge's properties, they go here.
     edge* copy_buffer_edge = nullptr;
@@ -878,11 +875,7 @@ private:
     void copy_mob_properties();
     void copy_path_link_properties();
     void copy_sector_properties();
-    void create_area(
-        const content_manifest &requested_area_manifest,
-        AREA_TYPE requested_area_type
-    );
-    void create_or_load_area(const string &requested_area_path);
+    void create_area(const string &requested_area_path);
     void create_drawing_vertexes();
     void create_mob_under_cursor();
     sector* create_sector_for_layout_drawing(const sector* copy_from);
@@ -896,6 +889,7 @@ private:
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERROR error
     );
+    string find_good_first_texture();
     void find_problems();
     void finish_circle_sector();
     void finish_layout_moving();
@@ -954,9 +948,8 @@ private:
     void homogenize_selected_path_links();
     void homogenize_selected_path_stops();
     void homogenize_selected_sectors();
-    void load_area(
-        content_manifest* manifest,
-        const AREA_TYPE requested_area_type,
+    void load_area_folder(
+        const string &requested_area_path,
         bool from_backup, bool should_update_history
     );
     void load_backup();
@@ -991,6 +984,8 @@ private:
     void set_new_circle_sector_points();
     void set_selection_status_text();
     void set_state_from_undo_or_redo_history(area_data* state);
+    void setup_new_area_post();
+    void setup_new_area_pre();
     void setup_sector_split();
     point snap_point(const point &p, bool ignore_selected = false);
     vertex* split_edge(edge* e_ptr, const point &where);
@@ -1018,7 +1013,7 @@ private:
     );
     void update_reference();
     void update_layout_drawing_status_text();
-    void update_sector_texture(sector* s_ptr, const string &file_name);
+    void update_sector_texture(sector* s_ptr, const string &internal_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
     void update_vertex_selection();
@@ -1044,7 +1039,7 @@ private:
     void open_load_dialog();
     void open_new_dialog();
     void open_options_dialog();
-    void pick_area(
+    void pick_area_folder(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );

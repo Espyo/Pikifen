@@ -62,7 +62,7 @@ void area_editor::open_load_dialog() {
     load_dialog_picker.items = areas;
     load_dialog_picker.pick_callback =
         std::bind(
-            &area_editor::pick_area, this,
+            &area_editor::pick_area_folder, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -88,7 +88,7 @@ void area_editor::open_new_dialog() {
         "Create a new area",
         std::bind(&area_editor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 210);
+    dialogs.back()->custom_size = point(400, 0);
 }
 
 
@@ -216,7 +216,7 @@ void area_editor::process_gui_control_panel() {
 void area_editor::process_gui_delete_area_dialog() {
     //Explanation text.
     string explanation_str;
-    if(!area_exists_on_disk) {
+    if(!changes_mgr.exists_on_disk()) {
         explanation_str =
             "You have never saved this area to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
@@ -231,7 +231,7 @@ void area_editor::process_gui_delete_area_dialog() {
     //Final warning text.
     string final_warning_str =
         "Are you sure you want to delete the area \"" +
-        game.cur_area_data->manifest->internal_name + "\"?";
+        manifest.internal_name + "\"?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -274,8 +274,8 @@ void area_editor::process_gui_load_dialog() {
         return get_path_short_name(name);
     },
     [this](const string &path) {
-        create_or_load_area(path);
         close_top_dialog();
+        load_area_folder(path, false, true);
     }
     );
     
@@ -364,11 +364,7 @@ void area_editor::process_gui_new_dialog() {
     }
     if(ImGui::Button("Create area", ImVec2(100, 40))) {
         auto really_create = [ = ] () {
-            content_manifest man;
-            man.internal_name = internal_name;
-            man.pack = pack;
-            man.path = area_path;
-            create_area(man, (AREA_TYPE) type);
+            create_area(area_path);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
             pack.clear();
@@ -2600,17 +2596,25 @@ void area_editor::process_gui_panel_layout() {
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void area_editor::process_gui_panel_main() {
-    if(!game.cur_area_data) return;
+    if(manifest.internal_name.empty() || !game.cur_area_data) return;
     
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area folder: %s", game.cur_area_data->manifest->internal_name.c_str());
-    set_tooltip(
-        "Pack: " + game.cur_area_data->manifest->pack + "\n"
-        "Folder path: " + game.cur_area_data->manifest->path + "\n"
-        "User data folder path: " + game.cur_area_data->user_data_path
-    );
+    ImGui::Text("Area folder: %s", manifest.internal_name.c_str());
+    string folder_tooltip =
+        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
+        "Folder path: " + manifest.path + "\n"
+        "User data folder path: " + game.cur_area_data->user_data_path + "\n\n"
+        "Folder state: ";
+    if(!changes_mgr.exists_on_disk()) {
+        folder_tooltip += "Not saved to disk yet!";
+    } else if(changes_mgr.has_unsaved_changes()) {
+        folder_tooltip += "You have unsaved changes.";
+    } else {
+        folder_tooltip += "Everything ok.";
+    }
+    set_tooltip(folder_tooltip);
     
     //Layout button.
     ImGui::Spacer();
@@ -5736,7 +5740,7 @@ void area_editor::process_gui_panel_tools() {
                 "loading the auto-backup", "load",
             [this] () {
                 bool backup_exists = false;
-                if(!game.cur_area_data->manifest->internal_name.empty()) {
+                if(!manifest.internal_name.empty()) {
                     string file_path =
                         game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_GEOMETRY;
                     if(al_filename_exists(file_path.c_str())) {
@@ -5835,6 +5839,8 @@ void area_editor::process_gui_status_bar() {
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void area_editor::process_gui_toolbar() {
+    if(manifest.internal_name.empty() || !game.cur_area_data) return;
+    
     //Quit button.
     if(
         ImGui::ImageButton(

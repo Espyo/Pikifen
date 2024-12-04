@@ -416,9 +416,12 @@ void area_editor::clear_undo_history() {
  * @brief Code to run when the area picker is closed.
  */
 void area_editor::close_load_dialog() {
-    if(!loaded_content_yet && !game.cur_area_data) {
-        //The user cancelled the area selection picker
-        //presented when you enter the area editor. Quit out.
+    if(manifest.internal_name.empty() && dialogs.size() == 1) {
+        //If nothing got loaded, we can't return to the editor proper.
+        //Quit out, since most of the time that's the user's intent. (e.g.
+        //they entered the editor and want to leave without doing anything.)
+        //Also make sure no other dialogs are trying to show up, like the load
+        //failed dialog.
         leave();
     }
 }
@@ -435,26 +438,28 @@ void area_editor::close_options_dialog() {
 /**
  * @brief Creates a new area to work on.
  *
- * @param requested_area_manifest Manifest of the requested area.
- * @param requested_area_type Type of the requested area.
+ * @param requested_area_path Path to the requested area's folder.
  */
-void area_editor::create_area(
-    const content_manifest &requested_area_manifest,
-    AREA_TYPE requested_area_type
-) {
-    clear_current_area();
+void area_editor::create_area(const string &requested_area_path) {
+    //Setup.
+    setup_new_area_pre();
+    changes_mgr.mark_as_non_existent();
+    
+    //Basic area data.
     game.cur_area_data = new area_data();
-    manifest = requested_area_manifest;
+    game.content.areas.path_to_manifest(
+        requested_area_path, &manifest, &game.cur_area_data->type
+    );
     game.cur_area_data->manifest = &manifest;
-    game.cur_area_data->type = requested_area_type;
     game.cur_area_data->user_data_path =
         FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
         manifest.pack + "/" +
         (
-            requested_area_type == AREA_TYPE_SIMPLE ?
+            game.cur_area_data->type == AREA_TYPE_SIMPLE ?
             FOLDER_NAMES::SIMPLE_AREAS :
             FOLDER_NAMES::MISSION_AREAS
-        );
+        ) + "/" +
+        manifest.internal_name;
         
     //Create a sector for it.
     clear_layout_drawing();
@@ -481,47 +486,10 @@ void area_editor::create_area(
     
     clear_selection();
     
-    //Find a texture to give to this sector.
-    string texture_to_use;
-    //First, if there's any "grass" texture, use that.
-    for(const auto &g : game.content.bitmaps.manifests) {
-        string lc_name = str_to_lower(g.first);
-        if(
-            lc_name.find("texture") != string::npos &&
-            lc_name.find("grass") != string::npos
-        ) {
-            texture_to_use = g.first;
-            break;
-        }
-    }
-    //No grass texture? Try one with "dirt".
-    if(texture_to_use.empty()) {
-        for(const auto &g : game.content.bitmaps.manifests) {
-            string lc_name = str_to_lower(g.first);
-            if(
-                lc_name.find("texture") != string::npos &&
-                lc_name.find("dirt") != string::npos
-            ) {
-                texture_to_use = g.first;
-                break;
-            }
-        }
-    }
-    //If there's no good texture, just pick the first one.
-    if(texture_to_use.empty()) {
-        for(const auto &g : game.content.bitmaps.manifests) {
-            string lc_name = str_to_lower(g.first);
-            if(lc_name.find("texture") != string::npos) {
-                texture_to_use = g.first;
-                break;
-            }
-        }
-    }
-    //Apply the texture.
+    //Give a texture to give to this sector.
+    string texture_to_use = find_good_first_texture();
     if(!texture_to_use.empty()) {
-        update_sector_texture(
-            game.cur_area_data->sectors[0], texture_to_use
-        );
+        update_sector_texture(game.cur_area_data->sectors[0], texture_to_use);
         update_texture_suggestions(texture_to_use);
     }
     
@@ -530,18 +498,9 @@ void area_editor::create_area(
         new mob_gen(point(), game.config.leader_order[0], 0, "")
     );
     
-    //Set its name and type and whatnot.
-    manifest = requested_area_manifest;
-    game.cur_area_data->manifest = &manifest;
-    game.cur_area_data->type = requested_area_type;
-    
     //Finish up.
-    clear_undo_history();
-    update_undo_history();
-    area_exists_on_disk = false;
+    setup_new_area_post();
     update_history(game.cur_area_data->manifest->path);
-    save_options(); //Save the history in the options.
-    
     set_status(
         "Created area \"" + manifest.internal_name + "\" successfully."
     );
@@ -609,38 +568,6 @@ void area_editor::create_mob_under_cursor() {
 
 
 /**
- * @brief Creates a new area or loads an existing one, depending on whether the
- * specified area exists or not.
- *
- * @param requested_area_path Path to the folder of the requested area.
- */
-void area_editor::create_or_load_area(const string &requested_area_path) {
-    string file_to_check = requested_area_path + "/" + FILE_NAMES::AREA_GEOMETRY;
-    content_manifest temp_manif;
-    AREA_TYPE requested_area_type;
-    game.content.areas.path_to_manifest(
-        requested_area_path, &temp_manif, &requested_area_type
-    );
-    auto existing_manif_it = game.content.areas.manifests[requested_area_type].find(temp_manif.internal_name);
-    
-    if(existing_manif_it != game.content.areas.manifests[requested_area_type].end()) {
-        //Area exists, load it.
-        load_area(&existing_manif_it->second, requested_area_type, false, true);
-    } else {
-        //Area doesn't exist, create it.
-        create_area(temp_manif, requested_area_type);
-    }
-    
-    state = EDITOR_STATE_MAIN;
-    
-    //At this point we'll have unloaded some assets like the thumbnail.
-    //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets on-screen, if it tries now it'll crash. So skip.
-    game.skip_dear_imgui_frame = true;
-}
-
-
-/**
  * @brief Deletes the current area.
  */
 void area_editor::delete_current_area() {
@@ -648,7 +575,7 @@ void area_editor::delete_current_area() {
     string final_status_text;
     bool final_status_error = false;
     
-    if(!area_exists_on_disk) {
+    if(!changes_mgr.exists_on_disk()) {
         //If the area doesn't exist, since it was never saved,
         //then there's nothing to delete.
         final_status_text =
@@ -720,7 +647,6 @@ void area_editor::delete_current_area() {
     
     if(go_to_area_select) {
         clear_current_area();
-        area_exists_on_disk = false;
         open_load_dialog();
     }
     
@@ -746,7 +672,7 @@ void area_editor::do_logic() {
     if(
         game.cur_area_data &&
         !game.cur_area_data->manifest->internal_name.empty() &&
-        area_exists_on_disk &&
+        changes_mgr.exists_on_disk() &&
         game.options.area_editor_backup_interval > 0
     ) {
         backup_timer.tick(game.delta_t);
@@ -1865,31 +1791,6 @@ void area_editor::handle_line_error() {
 void area_editor::load() {
     editor::load();
     
-    //Reset some variables.
-    is_alt_pressed = false;
-    is_ctrl_pressed = false;
-    is_shift_pressed = false;
-    last_mob_custom_cat_name.clear();
-    last_mob_type = nullptr;
-    loaded_content_yet = false;
-    selected_shadow = nullptr;
-    selection_effect = 0.0;
-    selection_homogenized = false;
-    show_closest_stop = false;
-    show_path_preview = false;
-    preview_mode = false;
-    quick_preview_timer.stop();
-    preview_song.clear();
-    state = EDITOR_STATE_MAIN;
-    set_status();
-    
-    //Reset some other states.
-    clear_problems();
-    clear_selection();
-    
-    game.cam.set_pos(point());
-    game.cam.set_zoom(1.0f);
-    
     //Load necessary game content.
     game.content.reload_packs();
     game.content.load_all(
@@ -1911,30 +1812,32 @@ void area_editor::load() {
     
     load_custom_mob_cat_types(true);
     
+    //Misc. setup.
+    last_mob_custom_cat_name.clear();
+    last_mob_type = nullptr;
+    selected_shadow = nullptr;
+    selection_effect = 0.0;
+    selection_homogenized = false;
+    show_closest_stop = false;
+    show_path_preview = false;
+    preview_mode = false;
+    quick_preview_timer.stop();
+    preview_song.clear();
+    clear_problems();
+    clear_selection();
+    
+    change_state(EDITOR_STATE_MAIN);
     game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
     
-    //Set up stuff to show the player.
-    
+    //Automatically load a file if needed, or show the load dialog.
     if(!quick_play_area_path.empty()) {
-        AREA_TYPE type;
-        game.content.areas.path_to_manifest(
-            quick_play_area_path,
-            &manifest,
-            &type
-        );
-        create_or_load_area(quick_play_area_path);
+        load_area_folder(quick_play_area_path, false, true);
         game.cam.set_pos(quick_play_cam_pos);
         game.cam.set_zoom(quick_play_cam_z);
         quick_play_area_path.clear();
         
-    } else if(!auto_load_area.empty()) {
-        AREA_TYPE type;
-        game.content.areas.path_to_manifest(
-            auto_load_area,
-            &manifest,
-            &type
-        );
-        create_or_load_area(auto_load_area);
+    } else if(!auto_load_folder.empty()) {
+        load_area_folder(auto_load_folder, false, true);
         
     } else {
         open_load_dialog();
@@ -1946,24 +1849,39 @@ void area_editor::load() {
 /**
  * @brief Load the area from the disk.
  *
- * @param requested_area_manifest Manifest of the requested area.
- * @param requested_area_type Type of the requested area.
+ * @param requested_area_path Path to the requested area's folder.
  * @param from_backup If false, load it normally.
  * If true, load from a backup, if any.
  * @param should_update_history If true, this loading process should update
  * the user's folder open history.
  */
-void area_editor::load_area(
-    content_manifest* requested_area_manifest,
-    const AREA_TYPE requested_area_type,
+void area_editor::load_area_folder(
+    const string &requested_area_path,
     bool from_backup, bool should_update_history
 ) {
-    clear_current_area();
+    //Setup.
+    setup_new_area_pre();
+    changes_mgr.mark_as_non_existent();
     
-    game.content.load_area_as_current(
-        requested_area_manifest, requested_area_type,
-        CONTENT_LOAD_LEVEL_EDITOR, from_backup
+    //Load.
+    AREA_TYPE requested_area_type;
+    game.content.areas.path_to_manifest(
+        requested_area_path, &manifest, &requested_area_type
     );
+    if(
+        !game.content.load_area_as_current(
+            requested_area_path, &manifest,
+            CONTENT_LOAD_LEVEL_EDITOR, from_backup
+        )
+    ) {
+        open_message_dialog(
+            "Load failed!",
+            "Failed to load the area folder \"" + manifest.path + "\"!",
+        [this] () { open_load_dialog(); }
+        );
+        manifest.clear();
+        return;
+    }
     
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
@@ -1995,22 +1913,15 @@ void area_editor::load_area(
         );
     }
     
+    //Other tasks.
     load_reference();
     
-    update_all_edge_offset_caches();
-    
-    clear_undo_history();
-    update_undo_history();
-    area_exists_on_disk = true;
-    
-    game.cam.zoom = 1.0f;
-    game.cam.pos = point();
-    
+    //Finish up.
+    changes_mgr.reset();
+    setup_new_area_post();
     if(should_update_history) {
         update_history(game.cur_area_data->manifest->path);
-        save_options(); //Save the history in the options.
     }
-    
     set_status(
         "Loaded area \"" + game.cur_area_data->manifest->internal_name + "\" " +
         (from_backup ? "from a backup " : "") +
@@ -2023,9 +1934,9 @@ void area_editor::load_area(
  * @brief Loads a backup file.
  */
 void area_editor::load_backup() {
-    load_area(
-        game.cur_area_data->manifest,
-        game.cur_area_data->type, true, false
+    load_area_folder(
+        game.cur_area_data->manifest->path,
+        true, false
     );
     backup_timer.start(game.options.area_editor_backup_interval);
     changes_mgr.mark_as_changed();
@@ -2089,17 +2000,17 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param name Name of the area.
  * @param top_cat Unused.
  * @param sec_cat Unused.
- * @param info Unused.
+ * @param info Pointer to the area's manifest.
  * @param is_new Is it a new area, or an existing one?
  */
-void area_editor::pick_area(
+void area_editor::pick_area_folder(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
     
     auto really_load = [ = ] () {
-        create_or_load_area(temp_manif->path);
+        load_area_folder(temp_manif->path, false, true);
         close_top_dialog();
     };
     
@@ -2269,7 +2180,7 @@ void area_editor::delete_area_cmd(float input_value) {
         "Delete area?",
         std::bind(&area_editor::process_gui_delete_area_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 150);
+    dialogs.back()->custom_size = point(400, 0);
 }
 
 
@@ -2616,17 +2527,14 @@ void area_editor::reference_toggle_cmd(float input_value) {
 void area_editor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!area_exists_on_disk) {
-        return;
-    }
+    if(!changes_mgr.exists_on_disk()) return;
+    
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current area", "reload",
     [this] () {
-        load_area(
-            game.cur_area_data->manifest,
-            game.cur_area_data->type,
-            false, false
+        load_area_folder(
+            game.cur_area_data->manifest->path, false, false
         );
     },
     [this] () { return save_area(false); }
@@ -3291,7 +3199,6 @@ bool area_editor::save_area(bool to_backup) {
     
     //Set up some things post-save.
     backup_timer.start(game.options.area_editor_backup_interval);
-    area_exists_on_disk = true;
     
     save_reference();
     
@@ -3303,6 +3210,8 @@ bool area_editor::save_area(bool to_backup) {
         
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
+        
+        update_history(manifest.path);
     }
     
     return save_successful;
@@ -3674,6 +3583,37 @@ void area_editor::setup_sector_split() {
 
 
 /**
+ * @brief Sets up the editor for a new area,
+ * be it from an existing file or from scratch, after the actual creation/load
+ * takes place.
+ */
+void area_editor::setup_new_area_post() {
+    clear_undo_history();
+    update_undo_history();
+    update_all_edge_offset_caches();
+    
+    state = EDITOR_STATE_MAIN;
+    
+    //At this point we'll have unloaded some assets like the thumbnail.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    game.skip_dear_imgui_frame = true;
+}
+
+
+/**
+ * @brief Sets up the editor for a new area,
+ * be it from an existing file or from scratch, before the actual creation/load
+ * takes place.
+ */
+void area_editor::setup_new_area_pre() {
+    clear_current_area();
+    game.cam.zoom = 1.0f;
+    game.cam.pos = point();
+}
+
+
+/**
  * @brief Procedure to start moving the selected mobs.
  */
 void area_editor::start_mob_move() {
@@ -4038,14 +3978,14 @@ void area_editor::update_reference() {
  * @brief Updates a sector's texture.
  *
  * @param s_ptr Sector to update.
- * @param file_name New file name of the texture.
+ * @param internal_name Internal name of the new texture.
  */
 void area_editor::update_sector_texture(
-    sector* s_ptr, const string &file_name
+    sector* s_ptr, const string &internal_name
 ) {
     game.content.bitmaps.list.free(s_ptr->texture_info.file_name);
-    s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap = game.content.bitmaps.list.get(file_name);
+    s_ptr->texture_info.file_name = internal_name;
+    s_ptr->texture_info.bitmap = game.content.bitmaps.list.get(internal_name);
 }
 
 

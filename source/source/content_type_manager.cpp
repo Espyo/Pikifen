@@ -105,36 +105,41 @@ void area_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @brief Loads an area.
  *
  * @param area_ptr Object to load into.
- * @param manifest Manifest of the area.
- * @param type Type of area this is.
+ * @param requested_area_path Path to the area's folder.
+ * @param manif_ptr Set the manifest pointer to this. If nullptr, it'll be
+ * set from the list of manifests.
  * @param level Level to load at.
  * @param from_backup If true, load from a backup, if any.
+ * @return Whether it succeeded.
  */
-void area_content_manager::load_area(
-    area_data* area_ptr, content_manifest* manifest, AREA_TYPE type,
-    CONTENT_LOAD_LEVEL level, bool from_backup
+bool area_content_manager::load_area(
+    area_data* area_ptr, const string &requested_area_path,
+    content_manifest* manif_ptr, CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     //Setup.
+    content_manifest temp_manif;
+    AREA_TYPE requested_area_type;
+    path_to_manifest(requested_area_path, &temp_manif, &requested_area_type);
     string user_data_path =
         FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
-        manifest->pack + "/" +
+        temp_manif.pack + "/" +
         (
-            type == AREA_TYPE_SIMPLE ?
+            requested_area_type == AREA_TYPE_SIMPLE ?
             FOLDER_NAMES::SIMPLE_AREAS :
             FOLDER_NAMES::MISSION_AREAS
-        );
-    string base_folder_path = from_backup ? user_data_path : manifest->path;
+        ) + "/" +
+        temp_manif.internal_name;
+    string base_folder_path = from_backup ? user_data_path : temp_manif.path;
     
     string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     data_node data_file = load_data_file(data_file_path);
-    if(!data_file.file_was_opened) return;
+    if(!data_file.file_was_opened) return false;
     
     string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
     data_node geometry_file = load_data_file(geometry_file_path);
-    if(!geometry_file.file_was_opened) return;
+    if(!geometry_file.file_was_opened) return false;
     
-    area_ptr->manifest = manifest;
-    area_ptr->type = type;
+    area_ptr->type = requested_area_type;
     area_ptr->user_data_path = user_data_path;
     
     //Main data.
@@ -171,6 +176,17 @@ void area_content_manager::load_area(
         area_ptr->load_geometry_from_data_node(&geometry_file, level);
         if(game.perf_mon) game.perf_mon->finish_measurement();
     }
+    
+    if(manif_ptr) {
+        area_ptr->manifest = manif_ptr;
+    } else {
+        area_ptr->manifest =
+            find_manifest(
+                temp_manif.internal_name, temp_manif.pack, requested_area_type
+            );
+    }
+    
+    return true;
 }
 
 
@@ -189,7 +205,7 @@ void area_content_manager::load_area_into_vector(
     area_data* new_area = new area_data();
     list[type].push_back(new_area);
     load_area(
-        new_area, manifest, type,
+        new_area, manifest->path, manifest,
         CONTENT_LOAD_LEVEL_BASIC, from_backup
     );
 }

@@ -40,7 +40,7 @@ void gui_editor::open_load_dialog() {
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &gui_editor::pick_file, this,
+            &gui_editor::pick_gui_def_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -66,7 +66,7 @@ void gui_editor::open_new_dialog() {
         "Create a new GUI definition file",
         std::bind(&gui_editor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 164);
+    dialogs.back()->custom_size = point(400, 0);
 }
 
 
@@ -156,14 +156,24 @@ void gui_editor::process_gui() {
  * @brief Processes the Dear ImGui control panel for this frame.
  */
 void gui_editor::process_gui_control_panel() {
+    if(manifest.internal_name.empty()) return;
+    
     ImGui::BeginChild("panel");
     
     //Current file text.
     ImGui::Text("Current file: %s", manifest.internal_name.c_str());
-    set_tooltip(
-        "Pack: " + manifest.pack + "\n"
-        "File path: " + manifest.path
-    );
+    string file_tooltip =
+        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
+        "File path: " + manifest.path + "\n\n"
+        "File state: ";
+    if(!changes_mgr.exists_on_disk()) {
+        file_tooltip += "Not saved to disk yet!";
+    } else if(changes_mgr.has_unsaved_changes()) {
+        file_tooltip += "You have unsaved changes.";
+    } else {
+        file_tooltip += "Everything ok.";
+    }
+    set_tooltip(file_tooltip);
     
     ImGui::Spacer();
     
@@ -189,8 +199,8 @@ void gui_editor::process_gui_load_dialog() {
         return path;
     },
     [this](const string &path) {
-        load_gui_file(path, true);
         close_top_dialog();
+        load_gui_def_file(path, true);
     }
     );
     
@@ -425,8 +435,7 @@ void gui_editor::process_gui_new_dialog() {
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
         auto really_create = [ = ] () {
-            copy_gui_file_from_base(internal_name, pack);
-            load_gui_file(file_path, true);
+            create_gui_def(string(internal_name), pack);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
             pack.clear();
@@ -677,6 +686,8 @@ void gui_editor::process_gui_status_bar() {
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void gui_editor::process_gui_toolbar() {
+    if(manifest.internal_name.empty()) return;
+    
     //Quit button.
     if(
         ImGui::ImageButton(

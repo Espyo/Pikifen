@@ -757,14 +757,9 @@ void gameplay_state::load() {
     };
     
     //Load the area.
-    content_manifest temp_manifest;
-    AREA_TYPE area_type;
-    game.content.areas.path_to_manifest(
-        path_of_area_to_load, &temp_manifest, &area_type
-    );
     game.content.load_area_as_current(
-        game.content.areas.find_manifest(temp_manifest.internal_name, temp_manifest.pack, area_type),
-        area_type, CONTENT_LOAD_LEVEL_FULL, false
+        path_of_area_to_load, nullptr,
+        CONTENT_LOAD_LEVEL_FULL, false
     );
     
     if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {

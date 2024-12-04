@@ -888,11 +888,10 @@ bool editor::list_popup(
 
 
 /**
- * @brief Loads content common for all editors.
+ * @brief Loads things common for all editors.
  */
 void editor::load() {
-    game.mouse_cursor.show();
-    
+    //Icon sub-bitmaps.
     bmp_editor_icons =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_editor_icons);
     if(bmp_editor_icons) {
@@ -909,14 +908,20 @@ void editor::load() {
         }
     }
     
+    //Misc. setup.
+    is_alt_pressed = false;
+    is_ctrl_pressed = false;
+    is_shift_pressed = false;
     last_input_was_keyboard = false;
+    manifest.clear();
+    set_status();
     changes_mgr.reset();
-    
-    game.fade_mgr.start_fade(true, nullptr);
-    
-    //Set the editor style.
+    game.mouse_cursor.show();
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
     update_style();
     
+    game.fade_mgr.start_fade(true, nullptr);
     ImGui::Reset();
 }
 
@@ -1001,7 +1006,7 @@ void editor::open_base_content_warning_dialog(
         "Base pack warning",
         std::bind(&editor::process_gui_base_content_warning_dialog, this)
     );
-    dialogs.back()->custom_size = point(320, 235);
+    dialogs.back()->custom_size = point(320, 0);
     base_content_warning_do_pick_callback = do_pick_callback;
 }
 
@@ -1028,14 +1033,32 @@ void editor::open_dialog(
 
 
 /**
- * @brief Opens a dialog where the user can create a new pack.
+ * @brief Opens a dialog with a simple message and an ok button.
+ *
+ * @param title Message box title.
+ * @param message Text message.
+ * @param close_callback Code to run when the dialog is closed, if any.
  */
+void editor::open_message_dialog(
+    const string &title, const string &message,
+    const std::function<void()> &close_callback
+) {
+    message_dialog_message = message;
+    open_dialog(title, std::bind(&editor::process_gui_message_dialog, this));
+    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = close_callback;
+}
+
+
+/**
+* @brief Opens a dialog where the user can create a new pack.
+*/
 void editor::open_new_pack_dialog() {
     open_dialog(
         "Create a new pack",
         std::bind(&editor::process_gui_new_pack_dialog, this)
     );
-    dialogs.back()->custom_size = point(520, 250);
+    dialogs.back()->custom_size = point(520, 0);
 }
 
 
@@ -1297,6 +1320,27 @@ void editor::process_gui_history(
         
         ImGui::TreePop();
         
+    }
+}
+
+
+/**
+ * @brief Processes the message dialog widgets.
+ */
+void editor::process_gui_message_dialog() {
+    //Text.
+    static int text_width = 0;
+    if(text_width != 0) {
+        ImGui::SetupCentering(text_width);
+    }
+    ImGui::TextWrapped("%s", message_dialog_message.c_str());
+    text_width = ImGui::GetItemRectSize().x;
+    
+    //Ok button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(100);
+    if(ImGui::Button("Ok", ImVec2(100, 40))) {
+        close_top_dialog();
     }
 }
 
@@ -1931,14 +1975,14 @@ void editor::unload() {
 /**
  * @brief Updates the history list, by adding a new entry or bumping it up.
  *
- * @param n Name of the entry.
+ * @param name Name of the entry.
  */
-void editor::update_history(const string &n) {
+void editor::update_history(const string &name) {
     //First, check if it exists.
     size_t pos = INVALID;
     
     for(size_t h = 0; h < history.size(); h++) {
-        if(history[h] == n) {
+        if(history[h] == name) {
             pos = h;
             break;
         }
@@ -1949,16 +1993,18 @@ void editor::update_history(const string &n) {
         return;
     } else if(pos == INVALID) {
         //If it doesn't exist, create it and add it to the top.
-        history.insert(history.begin(), n);
+        history.insert(history.begin(), name);
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
         history.erase(history.begin() + pos);
-        history.insert(history.begin(), n);
+        history.insert(history.begin(), name);
     }
     
     if(history.size() > get_history_size()) {
         history.erase(history.begin() + history.size() - 1);
     }
+    
+    save_options(); //Save the history in the options.
 }
 
 
@@ -2221,7 +2267,7 @@ bool editor::changes_manager::ask_if_unsaved(
             std::bind(&editor::process_gui_unsaved_changes_dialog, ed)
         );
         ed->dialogs.back()->custom_pos = game.mouse_cursor.s_pos;
-        ed->dialogs.back()->custom_size = point(580, 100);
+        ed->dialogs.back()->custom_size = point(580, 0);
         ed->dialogs.back()->event_callback =
         [this] (const ALLEGRO_EVENT * ev) {
             if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -2255,6 +2301,16 @@ bool editor::changes_manager::ask_if_unsaved(
         
         return false;
     }
+}
+
+
+/**
+ * @brief Returns whether the content exists on the disk.
+ *
+ * @return Whether it exists.
+ */
+bool editor::changes_manager::exists_on_disk() const {
+    return on_disk;
 }
 
 
@@ -2350,6 +2406,16 @@ void editor::changes_manager::mark_as_changed() {
 
 
 /**
+ * @brief Marks the state of the editor's file as not existing on disk yet.
+ * This also marks it as having unsaved changes.
+ */
+void editor::changes_manager::mark_as_non_existent() {
+    on_disk = false;
+    mark_as_changed();
+}
+
+
+/**
  * @brief Marks the state of the editor's file as saved.
  * The unsaved changes warning dialog does not set this, so this should be
  * called manually in those cases.
@@ -2357,6 +2423,7 @@ void editor::changes_manager::mark_as_changed() {
 void editor::changes_manager::mark_as_saved() {
     unsaved_changes = 0;
     unsaved_time = 0.0f;
+    on_disk = true;
 }
 
 
@@ -2366,6 +2433,7 @@ void editor::changes_manager::mark_as_saved() {
 void editor::changes_manager::reset() {
     unsaved_changes = 0;
     unsaved_time = 0.0f;
+    on_disk = true;
 }
 
 
@@ -2398,7 +2466,7 @@ void editor::dialog_info::process() {
     if(!is_open) return;
     
     point size = custom_size;
-    if(custom_size.x == 0.0f && custom_size.y == 0.0f) {
+    if(custom_size.x == -1.0f && custom_size.y == -1.0f) {
         size.x = game.win_w * 0.8;
         size.y = game.win_h * 0.8;
     }

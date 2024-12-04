@@ -160,9 +160,12 @@ void animation_editor::change_state(const EDITOR_STATE new_state) {
  * @brief Code to run when the load dialog is closed.
  */
 void animation_editor::close_load_dialog() {
-    if(!loaded_content_yet && manifest.internal_name.empty()) {
-        //The user cancelled the load dialog
-        //presented when you enter the animation editor. Quit out.
+    if(manifest.internal_name.empty() && dialogs.size() == 1) {
+        //If nothing got loaded, we can't return to the editor proper.
+        //Quit out, since most of the time that's the user's intent. (e.g.
+        //they entered the editor and want to leave without doing anything.)
+        //Also make sure no other dialogs are trying to show up, like the load
+        //failed dialog.
         leave();
     }
 }
@@ -173,6 +176,19 @@ void animation_editor::close_load_dialog() {
  */
 void animation_editor::close_options_dialog() {
     save_options();
+}
+
+
+/**
+ * @brief Creates a new, empty animation database.
+ */
+void animation_editor::create_anim_db(const string &path) {
+    setup_new_anim_db_pre();
+    changes_mgr.mark_as_non_existent();
+    
+    manifest.fill_from_path(path);
+    anims.manifest = &manifest;
+    setup_new_anim_db_post();
 }
 
 
@@ -412,6 +428,7 @@ bool animation_editor::is_cursor_in_timeline() {
 void animation_editor::load() {
     editor::load();
     
+    //Load necessary game content.
     game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
@@ -430,14 +447,13 @@ void animation_editor::load() {
     
     load_custom_mob_cat_types(false);
     
-    manifest.clear();
-    animation_exists_on_disk = false;
-    can_save = false;
-    loaded_content_yet = false;
+    //Misc. setup.
     side_view = false;
+    
     change_state(EDITOR_STATE_MAIN);
     game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
     
+    //Set the background.
     if(!game.options.anim_editor_bg_texture.empty()) {
         bg =
             load_bmp(
@@ -449,8 +465,9 @@ void animation_editor::load() {
         use_bg = false;
     }
     
-    if(!auto_load_anim.empty()) {
-        load_animation_database_file(auto_load_anim, true);
+    //Automatically load a file if needed, or show the load dialog.
+    if(!auto_load_file.empty()) {
+        load_anim_db_file(auto_load_file, true);
     } else {
         open_load_dialog();
     }
@@ -464,40 +481,29 @@ void animation_editor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void animation_editor::load_animation_database_file(
+void animation_editor::load_anim_db_file(
     const string &path, bool should_update_history
 ) {
+    //Setup.
+    setup_new_anim_db_pre();
+    changes_mgr.mark_as_non_existent();
+    
+    //Load.
     manifest.fill_from_path(path);
-    
-    if(state == EDITOR_STATE_SPRITE_BITMAP) {
-        //Ideally, states would be handled by a state machine, and this
-        //logic would be placed in the sprite bitmap state's "on exit" code...
-        game.cam.set_pos(pre_sprite_bmp_cam_pos);
-        game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
-    }
-    
-    anims.destroy();
-    
     data_node file = data_node(manifest.path);
+    
     if(!file.file_was_opened) {
-        file.save_file(manifest.path, true);
+        open_message_dialog(
+            "Load failed!",
+            "Failed to load the animation file \"" + manifest.path + "\"!",
+        [this] () { open_load_dialog(); }
+        );
+        manifest.clear();
+        return;
     }
+    
     anims.manifest = &manifest;
     anims.load_from_data_node(&file);
-    
-    cur_anim_i.clear();
-    anim_playing = false;
-    cur_sprite = nullptr;
-    cur_hitbox = nullptr;
-    cur_hitbox_idx = 0;
-    loaded_mob_type = nullptr;
-    
-    animation_exists_on_disk = true;
-    can_save = true;
-    changes_mgr.reset();
-    
-    game.cam.set_pos(point());
-    game.cam.set_zoom(1.0f);
     
     //Find the most popular file name to suggest for new sprites.
     last_spritesheet_used.clear();
@@ -523,51 +529,13 @@ void animation_editor::load_animation_database_file(
         last_spritesheet_used = file_uses_vector[0].second;
     }
     
-    vector<string> file_path_parts = split(manifest.path, "/");
-    
-    if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
-        vector<string> path_parts = split(manifest.path, "/");
-        if(
-            path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
-        ) {
-            mob_category* cat =
-                game.mob_categories.get_from_folder_name(
-                    path_parts[path_parts.size() - 3]
-                );
-            if(cat) {
-                loaded_mob_type =
-                    cat->get_type(path_parts[path_parts.size() - 2]);
-            }
-        }
-    }
-    
-    //Top bitmap.
-    for(unsigned char t = 0; t < N_MATURITIES; t++) {
-        if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
-            game.content.bitmaps.list.free(top_bmp[t]);
-            top_bmp[t] = nullptr;
-        }
-    }
-    
-    if(
-        loaded_mob_type &&
-        loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
-    ) {
-        for(size_t m = 0; m < N_MATURITIES; m++) {
-            top_bmp[m] = ((pikmin_type*) loaded_mob_type)->bmp_top[m];
-        }
-    }
-    
-    if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
-    
+    //Finish up.
+    changes_mgr.reset();
+    setup_new_anim_db_post();
     if(should_update_history) {
         update_history(manifest.path);
-        save_options(); //Save the history in the options.
     }
-    
     change_state(EDITOR_STATE_MAIN);
-    loaded_content_yet = true;
     
     set_status("Loaded file successfully.");
 }
@@ -719,7 +687,7 @@ void animation_editor::load_cmd(float input_value) {
         load_widget_pos,
         "loading a file", "load",
         std::bind(&animation_editor::open_load_dialog, this),
-        std::bind(&animation_editor::save_animation_database, this)
+        std::bind(&animation_editor::save_anim_db, this)
     );
 }
 
@@ -747,14 +715,14 @@ void animation_editor::mob_radius_toggle_cmd(float input_value) {
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
-void animation_editor::pick_file(
+void animation_editor::pick_anim_db_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
     string path = temp_manif->path;
     auto really_load = [ = ] () {
-        load_animation_database_file(path, true);
+        load_anim_db_file(path, true);
         close_top_dialog();
     };
     
@@ -807,7 +775,7 @@ void animation_editor::quit_cmd(float input_value) {
         quit_widget_pos,
         "quitting", "quit",
         std::bind(&animation_editor::leave, this),
-        std::bind(&animation_editor::save_animation_database, this)
+        std::bind(&animation_editor::save_anim_db, this)
     );
 }
 
@@ -820,12 +788,13 @@ void animation_editor::quit_cmd(float input_value) {
 void animation_editor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!animation_exists_on_disk) return;
+    if(!changes_mgr.exists_on_disk()) return;
+    
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_animation_database_file(string(manifest.path), false); },
-    std::bind(&animation_editor::save_animation_database, this)
+    [this] () { load_anim_db_file(string(manifest.path), false); },
+    std::bind(&animation_editor::save_anim_db, this)
     );
 }
 
@@ -838,8 +807,7 @@ void animation_editor::reload_cmd(float input_value) {
 void animation_editor::save_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!can_save) return;
-    save_animation_database();
+    save_anim_db();
 }
 
 
@@ -1184,7 +1152,7 @@ void animation_editor::resize_sprite(sprite* s, float mult) {
  *
  * @return Whether it succeded.
  */
-bool animation_editor::save_animation_database() {
+bool animation_editor::save_anim_db() {
     anims.engine_version = get_engine_version_string();
     anims.sort_alphabetically();
     
@@ -1213,9 +1181,82 @@ bool animation_editor::save_animation_database() {
     } else {
         set_status("Saved file successfully.");
         changes_mgr.mark_as_saved();
+        update_history(manifest.path);
         return true;
         
     }
+}
+
+
+/**
+ * @brief Sets up the editor for a new animation database,
+ * be it from an existing file or from scratch, after the actual creation/load
+ * takes place.
+ */
+void animation_editor::setup_new_anim_db_post() {
+    vector<string> file_path_parts = split(manifest.path, "/");
+    
+    if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
+        vector<string> path_parts = split(manifest.path, "/");
+        if(
+            path_parts.size() > 3 &&
+            path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
+        ) {
+            mob_category* cat =
+                game.mob_categories.get_from_folder_name(
+                    path_parts[path_parts.size() - 3]
+                );
+            if(cat) {
+                loaded_mob_type =
+                    cat->get_type(path_parts[path_parts.size() - 2]);
+            }
+        }
+    }
+    
+    //Top bitmaps.
+    for(unsigned char t = 0; t < N_MATURITIES; t++) {
+        if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
+            game.content.bitmaps.list.free(top_bmp[t]);
+            top_bmp[t] = nullptr;
+        }
+    }
+    
+    if(
+        loaded_mob_type &&
+        loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+    ) {
+        for(size_t m = 0; m < N_MATURITIES; m++) {
+            top_bmp[m] = ((pikmin_type*) loaded_mob_type)->bmp_top[m];
+        }
+    }
+    
+    if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
+}
+
+
+/**
+ * @brief Sets up the editor for a new animation database,
+ * be it from an existing file or from scratch, before the actual creation/load
+ * takes place.
+ */
+void animation_editor::setup_new_anim_db_pre() {
+    if(state == EDITOR_STATE_SPRITE_BITMAP) {
+        //Ideally, states would be handled by a state machine, and this
+        //logic would be placed in the sprite bitmap state's "on exit" code...
+        game.cam.set_pos(pre_sprite_bmp_cam_pos);
+        game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
+    }
+    
+    anims.destroy();
+    cur_anim_i.clear();
+    anim_playing = false;
+    cur_sprite = nullptr;
+    cur_hitbox = nullptr;
+    cur_hitbox_idx = 0;
+    loaded_mob_type = nullptr;
+    
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
 }
 
 

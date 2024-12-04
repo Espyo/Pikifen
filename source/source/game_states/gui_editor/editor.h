@@ -78,10 +78,10 @@ private:
     //Currently selected item, or INVALID for none.
     size_t cur_item = INVALID;
     
-    //Data node for the contents of this GUI file.
+    //Data node for the contents of the current GUI definition.
     data_node file_node;
     
-    //List of items for the current file.
+    //List of items for the current GUI definition.
     vector<item> items;
     
     //Picker info for the picker in the "load" dialog.
@@ -110,15 +110,16 @@ private:
     
     void close_load_dialog();
     void close_options_dialog();
-    bool copy_gui_file_from_base(const string &internal_name, const string &dest_pack);
-    void load_gui_file(const string &path, bool should_update_history);
+    void create_gui_def(const string &internal_name, const string &pack);
+    void load_gui_def_file(const string &path, bool should_update_history);
     void open_load_dialog();
     void open_new_dialog();
     void open_options_dialog();
-    void pick_file(
+    void pick_gui_def_file(
         const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
     );
-    bool save_file();
+    bool save_gui_def();
+    void setup_new_gui_def();
     point snap_point(const point &p);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd

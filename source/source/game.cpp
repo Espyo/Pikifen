@@ -444,7 +444,7 @@ int game_class::start() {
         maker_tools.enabled &&
         maker_tools.auto_start_mode == "animation_editor"
     ) {
-        states.animation_ed->auto_load_anim =
+        states.animation_ed->auto_load_file =
             maker_tools.auto_start_option;
         change_state(states.animation_ed);
         
@@ -452,7 +452,7 @@ int game_class::start() {
         maker_tools.enabled &&
         maker_tools.auto_start_mode == "area_editor"
     ) {
-        states.area_ed->auto_load_area =
+        states.area_ed->auto_load_folder =
             maker_tools.auto_start_option;
         change_state(states.area_ed);
         

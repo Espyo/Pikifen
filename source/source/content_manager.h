@@ -116,8 +116,8 @@ struct content_manager {
         const string &internal_name, const string &name,
         const string &description = "", const string &maker = ""
     );
-    void load_area_as_current(
-        content_manifest* manifest, AREA_TYPE type,
+    bool load_area_as_current(
+        const string &requested_area_path, content_manifest* manif_ptr,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);

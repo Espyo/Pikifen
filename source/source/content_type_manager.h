@@ -84,8 +84,9 @@ public:
     string get_name() const override;
     string get_perf_mon_measurement_name() const override;
     void load_all(CONTENT_LOAD_LEVEL level) override;
-    void load_area(
-        area_data* area_ptr, content_manifest* manifest, AREA_TYPE type,
+    bool load_area(
+        area_data* area_ptr, const string &requested_area_path,
+        content_manifest* manif_ptr,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     string manifest_to_path(

@@ -170,18 +170,21 @@ bool content_manager::create_pack(
  * @brief Loads an area as the "current area". This does not load it into
  * the vector of areas.
  *
- * @param manifest Manifest of the area.
+ * @param requested_area_path Path to the area folder.
+ * @param manif_ptr Set the manifest pointer to this. If nullptr, it'll be
+ * set from the list of manifests.
  * @param type Type of area this is.
  * @param level Level to load at.
  * @param from_backup If true, load from a backup, if any.
+ * @return Whether it succeeded.
  */
-void content_manager::load_area_as_current(
-    content_manifest* manifest, AREA_TYPE type,
+bool content_manager::load_area_as_current(
+    const string &requested_area_path, content_manifest* manif_ptr,
     CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     engine_assert(
         game.cur_area_data == nullptr,
-        "Tried to load area \"" + manifest->path + "\" as the current "
+        "Tried to load area \"" + requested_area_path + "\" as the current "
         "one even though there is already a loaded current area, \"" +
         (
             game.cur_area_data->manifest ?
@@ -191,9 +194,16 @@ void content_manager::load_area_as_current(
     );
     
     game.cur_area_data = new area_data();
-    areas.load_area(
-        game.cur_area_data, manifest, type, level, from_backup
-    );
+    bool success =
+        areas.load_area(
+            game.cur_area_data, requested_area_path, manif_ptr,
+            level, from_backup
+        );
+        
+    if(!success) {
+        unload_current_area(level);
+    }
+    return success;
 }
 
 

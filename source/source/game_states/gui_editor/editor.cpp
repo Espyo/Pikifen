@@ -75,9 +75,12 @@ gui_editor::gui_editor() :
  * @brief Code to run when the load dialog is closed.
  */
 void gui_editor::close_load_dialog() {
-    if(!loaded_content_yet && manifest.internal_name.empty()) {
-        //The user cancelled the load dialog
-        //presented when you enter the GUI editor. Quit out.
+    if(manifest.internal_name.empty() && dialogs.size() == 1) {
+        //If nothing got loaded, we can't return to the editor proper.
+        //Quit out, since most of the time that's the user's intent. (e.g.
+        //they entered the editor and want to leave without doing anything.)
+        //Also make sure no other dialogs are trying to show up, like the load
+        //failed dialog.
         leave();
     }
 }
@@ -92,32 +95,27 @@ void gui_editor::close_options_dialog() {
 
 
 /**
- * @brief Copies an existing GUI definition file from the base pack onto
- * a different pack.
+ * @brief Creates a new GUI definition file, with the data from an existing
+ * one in the base pack.
  *
  * @param internal_name Internal name of the GUI definition.
- * @param dest_pack The destination pack's internal name.
- * @return Whether it succeeded.
+ * @param dest_pack The new file's pack.
  */
-bool gui_editor::copy_gui_file_from_base(
-    const string &internal_name, const string &dest_pack
+void gui_editor::create_gui_def(
+    const string &internal_name, const string &pack
 ) {
-    content_manifest temp_source_man;
-    temp_source_man.internal_name = internal_name;
-    temp_source_man.pack = FOLDER_NAMES::BASE_PACK;
-    string source_path =
-        game.content.gui.manifest_to_path(temp_source_man);
+    content_manifest temp_orig_man;
+    temp_orig_man.internal_name = internal_name;
+    temp_orig_man.pack = FOLDER_NAMES::BASE_PACK;
+    string orig_path =
+        game.content.gui.manifest_to_path(temp_orig_man);
         
-    content_manifest temp_dest_man;
-    temp_dest_man.internal_name = internal_name;
-    temp_dest_man.pack = dest_pack;
-    string dest_path =
-        game.content.gui.manifest_to_path(temp_dest_man);
-        
-    data_node source(source_path);
-    if(!source.file_was_opened) return false;
-    if(!source.save_file(dest_path)) return false;
-    return true;
+    load_gui_def_file(orig_path, false);
+    
+    manifest.pack = pack;
+    manifest.path = game.content.gui.manifest_to_path(manifest);
+    
+    changes_mgr.mark_as_non_existent();
 }
 
 
@@ -184,10 +182,7 @@ string gui_editor::get_opened_file_name() const {
 void gui_editor::load() {
     editor::load();
     
-    manifest.clear();
-    loaded_content_yet = false;
-    must_recenter_cam = true;
-    
+    //Load necessary game content.
     game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
@@ -196,10 +191,14 @@ void gui_editor::load() {
     CONTENT_LOAD_LEVEL_EDITOR
     );
     
+    //Misc. setup.
+    must_recenter_cam = true;
+    
     game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
     
+    //Automatically load a file if needed, or show the load dialog.
     if(!auto_load_file.empty()) {
-        load_gui_file(auto_load_file, true);
+        load_gui_def_file(auto_load_file, true);
     } else {
         open_load_dialog();
     }
@@ -213,18 +212,24 @@ void gui_editor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void gui_editor::load_gui_file(
+void gui_editor::load_gui_def_file(
     const string &path, bool should_update_history
 ) {
+    //Setup.
+    setup_new_gui_def();
+    changes_mgr.mark_as_non_existent();
+    
+    //Load.
     manifest.fill_from_path(path);
-    
-    items.clear();
-    
     file_node = data_node(manifest.path);
     
     if(!file_node.file_was_opened) {
-        set_status("Failed to load the file \"" + manifest.path + "\"!", true);
-        open_load_dialog();
+        open_message_dialog(
+            "Load failed!",
+            "Failed to load the GUI definition file \"" + manifest.path + "\"!",
+        [this] () { open_load_dialog(); }
+        );
+        manifest.clear();
         return;
     }
     
@@ -244,23 +249,11 @@ void gui_editor::load_gui_file(
         items.push_back(new_item);
     }
     
-    cur_item = INVALID;
-    
+    //Finish up.
     changes_mgr.reset();
-    loaded_content_yet = true;
-    
-    //We could reset the camera now, but if the player enters the editor via
-    //the auto start maker tool, process_gui() won't have a chance
-    //to run before we load the file, and that function is what gives
-    //us the canvas coordinates necessary for camera centering.
-    //Let's flag the need for recentering so it gets handled when possible.
-    must_recenter_cam = true;
-    
     if(should_update_history) {
         update_history(manifest.path);
-        save_options(); //Save the history in the options.
     }
-    
     set_status("Loaded GUI file successfully.");
 }
 
@@ -289,14 +282,14 @@ void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
-void gui_editor::pick_file(
+void gui_editor::pick_gui_def_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     content_manifest* temp_manif = (content_manifest*) info;
     
     auto really_load = [ = ] () {
-        load_gui_file(temp_manif->path, true);
+        load_gui_def_file(temp_manif->path, true);
         close_top_dialog();
     };
     
@@ -375,7 +368,7 @@ void gui_editor::load_cmd(float input_value) {
         load_widget_pos,
         "loading a file", "load",
         std::bind(&gui_editor::open_load_dialog, this),
-        std::bind(&gui_editor::save_file, this)
+        std::bind(&gui_editor::save_gui_def, this)
     );
 }
 
@@ -392,7 +385,7 @@ void gui_editor::quit_cmd(float input_value) {
         quit_widget_pos,
         "quitting", "quit",
         std::bind(&gui_editor::leave, this),
-        std::bind(&gui_editor::save_file, this)
+        std::bind(&gui_editor::save_gui_def, this)
     );
 }
 
@@ -405,11 +398,13 @@ void gui_editor::quit_cmd(float input_value) {
 void gui_editor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
+    if(!changes_mgr.exists_on_disk()) return;
+    
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_gui_file(string(manifest.path), false); },
-    std::bind(&gui_editor::save_file, this)
+    [this] () { load_gui_def_file(string(manifest.path), false); },
+    std::bind(&gui_editor::save_gui_def, this)
     );
 }
 
@@ -422,7 +417,7 @@ void gui_editor::reload_cmd(float input_value) {
 void gui_editor::save_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!save_file()) {
+    if(!save_gui_def()) {
         return;
     }
 }
@@ -510,7 +505,7 @@ void gui_editor::reset_cam(bool instantaneous) {
  *
  * @return Whether it succeded.
  */
-bool gui_editor::save_file() {
+bool gui_editor::save_gui_def() {
     data_node* positions_node = file_node.get_child_by_name("positions");
     for(size_t i = 0; i < items.size(); i++) {
         data_node* item_node = positions_node->get_child(i);
@@ -536,6 +531,25 @@ bool gui_editor::save_file() {
         changes_mgr.mark_as_saved();
         return true;
     }
+    
+    update_history(manifest.path);
+}
+
+
+/**
+ * @brief Sets up the editor for a new GUI definition,
+ * be it from an existing file or from scratch.
+ */
+void gui_editor::setup_new_gui_def() {
+    items.clear();
+    cur_item = INVALID;
+    
+    //We could reset the camera directly, but if the player enters the editor
+    //via the auto start maker tool, process_gui() won't have a chance
+    //to run before we load the file, and that function is what gives
+    //us the canvas coordinates necessary for camera centering.
+    //Let's flag the need for recentering so it gets handled when possible.
+    must_recenter_cam = true;
 }
 
 

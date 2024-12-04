@@ -330,8 +330,8 @@ protected:
         //Custom dialog position (center point). -1,-1 for default.
         point custom_pos = point(-1.0f, -1.0f);
         
-        //Custom dialog size. 0,0 for default.
-        point custom_size;
+        //Custom dialog size. -1,-1 for default.
+        point custom_size = point(-1.0f, -1.0f);
         
         
         //--- Function declarations ---
@@ -449,6 +449,7 @@ protected:
             const std::function<void()> &action_callback,
             const std::function<bool()> &save_callback
         );
+        bool exists_on_disk() const;
         size_t get_unsaved_changes() const;
         float get_unsaved_time_delta() const;
         const string &get_unsaved_warning_action_long() const;
@@ -459,8 +460,10 @@ protected:
         get_unsaved_warning_save_callback() const;
         bool has_unsaved_changes();
         void mark_as_changed();
+        void mark_as_non_existent();
         void mark_as_saved();
         void reset();
+        
         
         private:
         
@@ -468,6 +471,9 @@ protected:
         
         //Editor it belongs to.
         editor* ed = nullptr;
+        
+        //Whether the content exists on the disk.
+        bool on_disk = true;
         
         //Cummulative number of unsaved changes since the last save.
         size_t unsaved_changes = 0;
@@ -599,11 +605,11 @@ protected:
     //Was the last user input a keyboard press?
     bool last_input_was_keyboard = false;
     
-    //Has the user picked any content to load yet?
-    bool loaded_content_yet = false;
-    
     //Manifest for the current content.
     content_manifest manifest;
+    
+    //Message text in the message dialog.
+    string message_dialog_message;
     
     //Is this a real mouse drag, or just a shaky click?
     bool mouse_drag_confirmed = false;
@@ -667,6 +673,10 @@ protected:
         const string &title,
         const std::function<void()> &process_callback
     );
+    void open_message_dialog(
+        const string &title, const string &message,
+        const std::function<void()> &ok_callback
+    );
     void open_new_pack_dialog();
     void open_picker_dialog(
         const string &title,
@@ -686,6 +696,7 @@ protected:
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback
     );
+    void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
         string* custom_cat_name, mob_type** type
     );
@@ -707,7 +718,7 @@ protected:
     );
     point snap_point_to_axis(const point &p, const point &anchor);
     point snap_point_to_grid(const point &p, float grid_interval);
-    void update_history(const string &n);
+    void update_history(const string &name);
     void zoom_with_cursor(float new_zoom);
     virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
     virtual void handle_key_char_canvas(const ALLEGRO_EVENT &ev);

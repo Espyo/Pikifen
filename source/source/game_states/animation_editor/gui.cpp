@@ -65,7 +65,7 @@ void animation_editor::open_load_dialog() {
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &animation_editor::pick_file, this,
+            &animation_editor::pick_anim_db_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -91,7 +91,7 @@ void animation_editor::open_new_dialog() {
         "Create a new animation file",
         std::bind(&animation_editor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 230);
+    dialogs.back()->custom_size = point(400, 0);
 }
 
 
@@ -337,7 +337,7 @@ void animation_editor::process_gui_load_dialog() {
     },
     [this](const string &path) {
         close_top_dialog();
-        load_animation_database_file(path, true);
+        load_anim_db_file(path, true);
     }
     );
     
@@ -619,7 +619,7 @@ void animation_editor::process_gui_new_dialog() {
         auto really_create = [ = ] () {
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
-            load_animation_database_file(anim_path, true);
+            create_anim_db(anim_path);
             pack.clear();
             type = 0;
             custom_mob_cat.clear();
@@ -1617,6 +1617,8 @@ void animation_editor::process_gui_panel_info() {
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
 void animation_editor::process_gui_panel_main() {
+    if(manifest.internal_name.empty()) return;
+    
     ImGui::BeginChild("main");
     
     //Current file text.
@@ -1626,10 +1628,18 @@ void animation_editor::process_gui_panel_main() {
         loaded_mob_type->manifest->internal_name.c_str() :
         manifest.internal_name.c_str()
     );
-    set_tooltip(
-        "Pack: " + manifest.pack + "\n"
-        "File path: " + manifest.path
-    );
+    string file_tooltip =
+        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
+        "File path: " + manifest.path + "\n\n"
+        "File state: ";
+    if(!changes_mgr.exists_on_disk()) {
+        file_tooltip += "Not saved to disk yet!";
+    } else if(changes_mgr.has_unsaved_changes()) {
+        file_tooltip += "You have unsaved changes.";
+    } else {
+        file_tooltip += "Everything ok.";
+    }
+    set_tooltip(file_tooltip);
     
     //Animations button.
     ImGui::Spacer();
@@ -1720,6 +1730,7 @@ void animation_editor::process_gui_panel_main() {
     );
     
     //Stats node.
+    ImGui::Spacer();
     if(saveable_tree_node("main", "Stats")) {
     
         //Animation amount text.
@@ -2986,6 +2997,8 @@ void animation_editor::process_gui_status_bar() {
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void animation_editor::process_gui_toolbar() {
+    if(manifest.internal_name.empty()) return;
+    
     //Quit button.
     if(
         ImGui::ImageButton(

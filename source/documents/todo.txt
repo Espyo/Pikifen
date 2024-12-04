@@ -1,8 +1,12 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    When creating or deleting, update the manifests
+    If you open a new GUI def file, set the selected GUI item to none
+    Add editor status bar messages for _creating_ successfully
+    Are timed levers ticking while off-camera?
+    In the area editor if you change multiple sectors' heights with H, it should change them all by that amount, if it's not already
+    When deleting an area, update the manifests
     The history should be saved as path;name, so the entry in the history can have a pretty name instead of a cryptic path
     A history item should list the item's pack
     Find some way of making content sharing easier
@@ -170,6 +174,7 @@ Next tasks (roughly sorted most important first)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
         Turning (maybe just the walking animation)
+        Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
@@ -351,6 +356,7 @@ Next tasks (roughly sorted most important first)
         When switching to a leader, all nearby idle Pikmin should be called over too
     An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Enemy revival
+        drops_corpse could probably be revamped or removed entirely
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         Maximum Pikmin in field

@@ -44,7 +44,7 @@ public:
     //--- Members ---
     
     //Automatically load this animation file upon boot-up of the editor, if any.
-    string auto_load_anim;
+    string auto_load_file;
     
     
     //--- Function declarations ---
@@ -107,14 +107,8 @@ private:
     //Is the current animation playing?
     bool anim_playing = false;
     
-    //Does the animation exist on disk, or RAM only?
-    bool animation_exists_on_disk = false;
-    
     //Whether to use a background texture, if any.
     ALLEGRO_BITMAP* bg = nullptr;
-    
-    //Can the user use the "save" button?
-    bool can_save = false;
     
     //Is the sprite comparison mode on?
     bool comparison = false;
@@ -176,7 +170,7 @@ private:
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     
-    //Mob type of the currently loaded animation file, if any.
+    //Mob type of the currently loaded animation database, if any.
     mob_type* loaded_mob_type = nullptr;
     
     //Is the mob radius visible?
@@ -222,6 +216,7 @@ private:
     void change_state(const EDITOR_STATE new_state);
     void close_load_dialog();
     void close_options_dialog();
+    void create_anim_db(const string &path);
     float get_cursor_timeline_time();
     string get_path_short_name(const string &p) const;
     void handle_lmb_drag_in_timeline();
@@ -231,10 +226,10 @@ private:
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
     bool is_cursor_in_timeline();
-    void load_animation_database_file(
+    void load_anim_db_file(
         const string &path, bool should_update_history
     );
-    void pick_file(
+    void pick_anim_db_file(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
@@ -244,7 +239,9 @@ private:
     void rename_sprite(sprite* spr, const string &new_name);
     void resize_everything(float mult);
     void resize_sprite(sprite* s, float mult);
-    bool save_animation_database();
+    bool save_anim_db();
+    void setup_new_anim_db_post();
+    void setup_new_anim_db_pre();
     void set_all_sprite_scales(float scale);
     void set_best_frame_sprite();
     void sprite_bmp_flood_fill(

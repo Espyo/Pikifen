@@ -628,6 +628,48 @@ void area_editor::delete_path_stops(const set<path_stop*> &which) {
 
 
 /**
+ * @brief Tries to find a good texture for the first sector in a
+ * newly-created area.
+ *
+ * @return The texture's internal name, or empty if none was found.
+ */
+string area_editor::find_good_first_texture() {
+    //First, if there's any "grass" texture, use that.
+    for(const auto &g : game.content.bitmaps.manifests) {
+        string lc_name = str_to_lower(g.first);
+        if(
+            lc_name.find("texture") != string::npos &&
+            lc_name.find("grass") != string::npos
+        ) {
+            return g.first;
+        }
+    }
+    
+    //No grass texture? Try one with "dirt".
+    for(const auto &g : game.content.bitmaps.manifests) {
+        string lc_name = str_to_lower(g.first);
+        if(
+            lc_name.find("texture") != string::npos &&
+            lc_name.find("dirt") != string::npos
+        ) {
+            return g.first;
+        }
+    }
+    
+    //If there's no good texture, just pick the first one.
+    for(const auto &g : game.content.bitmaps.manifests) {
+        string lc_name = str_to_lower(g.first);
+        if(lc_name.find("texture") != string::npos) {
+            return g.first;
+        }
+    }
+    
+    //Still no good? Give up.
+    return "";
+}
+
+
+/**
  * @brief Tries to find problems with the area.
  * When it's done, sets the appropriate problem-related variables.
  */
