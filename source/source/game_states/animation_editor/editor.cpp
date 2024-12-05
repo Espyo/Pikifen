@@ -183,12 +183,17 @@ void animation_editor::close_options_dialog() {
  * @brief Creates a new, empty animation database.
  */
 void animation_editor::create_anim_db(const string &path) {
-    setup_new_anim_db_pre();
+    setup_for_new_anim_db_pre();
     changes_mgr.mark_as_non_existent();
     
     manifest.fill_from_path(path);
-    anims.manifest = &manifest;
-    setup_new_anim_db_post();
+    db.manifest = &manifest;
+    setup_for_new_anim_db_post();
+
+    set_status(
+        "Created animation database \"" +
+        manifest.internal_name + "\" successfully."
+    );
 }
 
 
@@ -282,12 +287,13 @@ string animation_editor::get_name() const {
 
 
 /**
- * @brief Returns the name of the currently opened file.
- *
- * @return The name, or an empty string if none.
+ * @brief Returns the path to the currently opened content,
+ * or an empty string if none.
+ * 
+ * @return The path.
  */
-string animation_editor::get_opened_file_name() const {
-    return manifest.internal_name;
+string animation_editor::get_opened_content_path() const {
+    return manifest.path;
 }
 
 
@@ -332,7 +338,7 @@ string animation_editor::get_path_short_name(const string &p) const {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_animation_data(const string &name) {
-    animation* a = anims.animations[anims.find_animation(name)];
+    animation* a = db.animations[db.find_animation(name)];
     
     cur_anim_i.cur_anim->frames = a->frames;
     cur_anim_i.cur_anim->hit_rate = a->hit_rate;
@@ -348,7 +354,7 @@ void animation_editor::import_animation_data(const string &name) {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_file_data(const string &name) {
-    sprite* s = anims.sprites[anims.find_sprite(name)];
+    sprite* s = db.sprites[db.find_sprite(name)];
     
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     
@@ -362,9 +368,9 @@ void animation_editor::import_sprite_file_data(const string &name) {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_hitbox_data(const string &name) {
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
-        if(anims.sprites[s]->name == name) {
-            cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        if(db.sprites[s]->name == name) {
+            cur_sprite->hitboxes = db.sprites[s]->hitboxes;
         }
     }
     
@@ -380,7 +386,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_top_data(const string &name) {
-    sprite* s = anims.sprites[anims.find_sprite(name)];
+    sprite* s = db.sprites[db.find_sprite(name)];
     cur_sprite->top_visible = s->top_visible;
     cur_sprite->top_pos = s->top_pos;
     cur_sprite->top_size = s->top_size;
@@ -397,7 +403,7 @@ void animation_editor::import_sprite_top_data(const string &name) {
  * @param name Name of the animation to import.
  */
 void animation_editor::import_sprite_transformation_data(const string &name) {
-    sprite* s = anims.sprites[anims.find_sprite(name)];
+    sprite* s = db.sprites[db.find_sprite(name)];
     cur_sprite->offset = s->offset;
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
@@ -485,7 +491,7 @@ void animation_editor::load_anim_db_file(
     const string &path, bool should_update_history
 ) {
     //Setup.
-    setup_new_anim_db_pre();
+    setup_for_new_anim_db_pre();
     changes_mgr.mark_as_non_existent();
     
     //Load.
@@ -495,24 +501,25 @@ void animation_editor::load_anim_db_file(
     if(!file.file_was_opened) {
         open_message_dialog(
             "Load failed!",
-            "Failed to load the animation file \"" + manifest.path + "\"!",
+            "Failed to load the animation database file \"" +
+            manifest.path + "\"!",
         [this] () { open_load_dialog(); }
         );
         manifest.clear();
         return;
     }
     
-    anims.manifest = &manifest;
-    anims.load_from_data_node(&file);
+    db.manifest = &manifest;
+    db.load_from_data_node(&file);
     
     //Find the most popular file name to suggest for new sprites.
     last_spritesheet_used.clear();
     
-    if(!anims.sprites.empty()) {
+    if(!db.sprites.empty()) {
         map<string, size_t> file_uses_map;
         vector<std::pair<size_t, string> > file_uses_vector;
-        for(size_t f = 0; f < anims.sprites.size(); f++) {
-            file_uses_map[anims.sprites[f]->file]++;
+        for(size_t f = 0; f < db.sprites.size(); f++) {
+            file_uses_map[db.sprites[f]->file]++;
         }
         for(auto &u : file_uses_map) {
             file_uses_vector.push_back(make_pair(u.second, u.first));
@@ -531,13 +538,13 @@ void animation_editor::load_anim_db_file(
     
     //Finish up.
     changes_mgr.reset();
-    setup_new_anim_db_post();
+    setup_for_new_anim_db_post();
     if(should_update_history) {
         update_history(manifest.path);
     }
     change_state(EDITOR_STATE_MAIN);
     
-    set_status("Loaded file successfully.");
+    set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
 
 
@@ -570,14 +577,14 @@ void animation_editor::pick_animation(
     void* info, bool is_new
 ) {
     if(is_new) {
-        anims.animations.push_back(new animation(name));
-        anims.sort_alphabetically();
+        db.animations.push_back(new animation(name));
+        db.sort_alphabetically();
         changes_mgr.mark_as_changed();
         set_status("Created animation \"" + name + "\".");
     }
     cur_anim_i.clear();
-    cur_anim_i.anim_db = &anims;
-    cur_anim_i.cur_anim = anims.animations[anims.find_animation(name)];
+    cur_anim_i.anim_db = &db;
+    cur_anim_i.cur_anim = db.animations[db.find_animation(name)];
 }
 
 
@@ -595,19 +602,19 @@ void animation_editor::pick_sprite(
     void* info, bool is_new
 ) {
     if(is_new) {
-        if(anims.find_sprite(name) == INVALID) {
-            anims.sprites.push_back(new sprite(name));
-            anims.sprites.back()->create_hitboxes(
-                &anims,
+        if(db.find_sprite(name) == INVALID) {
+            db.sprites.push_back(new sprite(name));
+            db.sprites.back()->create_hitboxes(
+                &db,
                 loaded_mob_type ? loaded_mob_type->height : 128,
                 loaded_mob_type ? loaded_mob_type->radius : 32
             );
-            anims.sort_alphabetically();
+            db.sort_alphabetically();
             changes_mgr.mark_as_changed();
             set_status("Created sprite \"" + name + "\".");
         }
     }
-    cur_sprite = anims.sprites[anims.find_sprite(name)];
+    cur_sprite = db.sprites[db.find_sprite(name)];
     update_cur_hitbox();
     
     if(is_new) {
@@ -839,8 +846,8 @@ void animation_editor::zoom_everything_cmd(float input_value) {
     if(!s_ptr && cur_anim_i.valid_frame()) {
         const string &name =
             cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_name;
-        size_t s_pos = anims.find_sprite(name);
-        if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
+        size_t s_pos = db.find_sprite(name);
+        if(s_pos != INVALID) s_ptr = db.sprites[s_pos];
     }
     if(!s_ptr || !s_ptr->bitmap) return;
     
@@ -938,8 +945,8 @@ void animation_editor::rename_animation(
     }
     
     //Check if the name already exists.
-    for(size_t a = 0; a < anims.animations.size(); a++) {
-        if(anims.animations[a]->name == new_name) {
+    for(size_t a = 0; a < db.animations.size(); a++) {
+        if(db.animations[a]->name == new_name) {
             set_status(
                 "An animation by the name \"" + new_name + "\" already exists!",
                 true
@@ -987,8 +994,8 @@ void animation_editor::rename_body_part(
     }
     
     //Check if the name already exists.
-    for(size_t b = 0; b < anims.body_parts.size(); b++) {
-        if(anims.body_parts[b]->name == new_name) {
+    for(size_t b = 0; b < db.body_parts.size(); b++) {
+        if(db.body_parts[b]->name == new_name) {
             set_status(
                 "A body part by the name \"" + new_name + "\" already exists!",
                 true
@@ -998,10 +1005,10 @@ void animation_editor::rename_body_part(
     }
     
     //Rename!
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
-        for(size_t h = 0; h < anims.sprites[s]->hitboxes.size(); h++) {
-            if(anims.sprites[s]->hitboxes[h].body_part_name == old_name) {
-                anims.sprites[s]->hitboxes[h].body_part_name = new_name;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        for(size_t h = 0; h < db.sprites[s]->hitboxes.size(); h++) {
+            if(db.sprites[s]->hitboxes[h].body_part_name == old_name) {
+                db.sprites[s]->hitboxes[h].body_part_name = new_name;
             }
         }
     }
@@ -1044,8 +1051,8 @@ void animation_editor::rename_sprite(
     }
     
     //Check if the name already exists.
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
-        if(anims.sprites[s]->name == new_name) {
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        if(db.sprites[s]->name == new_name) {
             set_status(
                 "A sprite by the name \"" + new_name + "\" already exists!",
                 true
@@ -1056,8 +1063,8 @@ void animation_editor::rename_sprite(
     
     //Rename!
     spr->name = new_name;
-    for(size_t a = 0; a < anims.animations.size(); a++) {
-        animation* a_ptr = anims.animations[a];
+    for(size_t a = 0; a < db.animations.size(); a++) {
+        animation* a_ptr = db.animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             if(a_ptr->frames[f].sprite_name == old_name) {
                 a_ptr->frames[f].sprite_name = new_name;
@@ -1105,8 +1112,8 @@ void animation_editor::resize_everything(float mult) {
         return;
     }
     
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
-        resize_sprite(anims.sprites[s], mult);
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        resize_sprite(db.sprites[s], mult);
     }
     
     changes_mgr.mark_as_changed();
@@ -1153,12 +1160,12 @@ void animation_editor::resize_sprite(sprite* s, float mult) {
  * @return Whether it succeded.
  */
 bool animation_editor::save_anim_db() {
-    anims.engine_version = get_engine_version_string();
-    anims.sort_alphabetically();
+    db.engine_version = get_engine_version_string();
+    db.sort_alphabetically();
     
     data_node file_node = data_node("", "");
     
-    anims.save_to_data_node(
+    db.save_to_data_node(
         &file_node,
         loaded_mob_type && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     );
@@ -1166,11 +1173,12 @@ bool animation_editor::save_anim_db() {
     if(!file_node.save_file(manifest.path)) {
         show_message_box(
             nullptr, "Save failed!",
-            "Could not save the animation!",
+            "Could not save the animation database!",
             (
-                "An error occured while saving the animation to the file \"" +
-                manifest.path + "\". Make sure that the folder it is saving to "
-                "exists and it is not read-only, and try again."
+                "An error occured while saving the animation database to "
+                "the file \"" + manifest.path + "\". Make sure that the "
+                "folder it is saving to exists and it is not read-only, "
+                "and try again."
             ).c_str(),
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN
@@ -1193,7 +1201,7 @@ bool animation_editor::save_anim_db() {
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
  */
-void animation_editor::setup_new_anim_db_post() {
+void animation_editor::setup_for_new_anim_db_post() {
     vector<string> file_path_parts = split(manifest.path, "/");
     
     if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
@@ -1230,7 +1238,7 @@ void animation_editor::setup_new_anim_db_post() {
         }
     }
     
-    if(loaded_mob_type) anims.fill_sound_idx_caches(loaded_mob_type);
+    if(loaded_mob_type) db.fill_sound_idx_caches(loaded_mob_type);
 }
 
 
@@ -1239,7 +1247,7 @@ void animation_editor::setup_new_anim_db_post() {
  * be it from an existing file or from scratch, before the actual creation/load
  * takes place.
  */
-void animation_editor::setup_new_anim_db_pre() {
+void animation_editor::setup_for_new_anim_db_pre() {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
@@ -1247,7 +1255,7 @@ void animation_editor::setup_new_anim_db_pre() {
         game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
     }
     
-    anims.destroy();
+    db.destroy();
     cur_anim_i.clear();
     anim_playing = false;
     cur_sprite = nullptr;
@@ -1271,8 +1279,8 @@ void animation_editor::set_all_sprite_scales(float scale) {
         return;
     }
     
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
-        sprite* s_ptr = anims.sprites[s];
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        sprite* s_ptr = db.sprites[s];
         s_ptr->scale.x = scale;
         s_ptr->scale.y = scale;
     }
@@ -1290,7 +1298,7 @@ void animation_editor::set_all_sprite_scales(float scale) {
  * the current animation.
  */
 void animation_editor::set_best_frame_sprite() {
-    if(anims.sprites.empty()) return;
+    if(db.sprites.empty()) return;
     
     //Find the sprites that match the most characters with the animation name.
     //Let's set the starting best score to 3, as an arbitrary way to
@@ -1303,20 +1311,20 @@ void animation_editor::set_best_frame_sprite() {
     size_t final_sprite_idx = 0;
     vector<size_t> best_sprite_idxs;
     
-    if(anims.sprites.size() > 1) {
+    if(db.sprites.size() > 1) {
         size_t best_score = 3;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
+        for(size_t s = 0; s < db.sprites.size(); s++) {
             size_t score = 0;
             if(
                 str_to_lower(cur_anim_i.cur_anim->name) ==
-                str_to_lower(anims.sprites[s]->name)
+                str_to_lower(db.sprites[s]->name)
             ) {
                 score = 9999;
             } else {
                 score =
                     get_matching_string_starts(
                         str_to_lower(cur_anim_i.cur_anim->name),
-                        str_to_lower(anims.sprites[s]->name)
+                        str_to_lower(db.sprites[s]->name)
                     ).size();
             }
             
@@ -1342,8 +1350,8 @@ void animation_editor::set_best_frame_sprite() {
             best_sprite_idxs.end(),
         [this, &best_sprite_idxs] (size_t s1, size_t s2) {
             return
-                str_to_lower(anims.sprites[s1]->name) <
-                str_to_lower(anims.sprites[s2]->name);
+                str_to_lower(db.sprites[s1]->name) <
+                str_to_lower(db.sprites[s2]->name);
         });
         final_sprite_idx = best_sprite_idxs[0];
     }
@@ -1352,8 +1360,8 @@ void animation_editor::set_best_frame_sprite() {
     frame* cur_frame_ptr =
         &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
     cur_frame_ptr->sprite_idx = final_sprite_idx;
-    cur_frame_ptr->sprite_ptr = anims.sprites[final_sprite_idx];
-    cur_frame_ptr->sprite_name = anims.sprites[final_sprite_idx]->name;
+    cur_frame_ptr->sprite_ptr = db.sprites[final_sprite_idx];
+    cur_frame_ptr->sprite_name = db.sprites[final_sprite_idx]->name;
 }
 
 
@@ -1509,7 +1517,7 @@ void animation_editor::sprite_bmp_flood_fill(
 void animation_editor::unload() {
     editor::unload();
     
-    anims.destroy();
+    db.destroy();
     
     game.content.unload_all(
     vector<CONTENT_TYPE> {
@@ -1554,17 +1562,17 @@ void animation_editor::update_cur_hitbox() {
  * @brief Update every frame's hitbox instances in light of new hitbox info.
  */
 void animation_editor::update_hitboxes() {
-    for(size_t s = 0; s < anims.sprites.size(); s++) {
+    for(size_t s = 0; s < db.sprites.size(); s++) {
     
-        sprite* s_ptr = anims.sprites[s];
+        sprite* s_ptr = db.sprites[s];
         
         //Start by deleting non-existent hitboxes.
         for(size_t h = 0; h < s_ptr->hitboxes.size();) {
             string h_name = s_ptr->hitboxes[h].body_part_name;
             bool name_found = false;
             
-            for(size_t b = 0; b < anims.body_parts.size(); b++) {
-                if(anims.body_parts[b]->name == h_name) {
+            for(size_t b = 0; b < db.body_parts.size(); b++) {
+                if(db.body_parts[b]->name == h_name) {
                     name_found = true;
                     break;
                 }
@@ -1580,9 +1588,9 @@ void animation_editor::update_hitboxes() {
         }
         
         //Add missing hitboxes.
-        for(size_t b = 0; b < anims.body_parts.size(); b++) {
+        for(size_t b = 0; b < db.body_parts.size(); b++) {
             bool hitbox_found = false;
-            const string &name = anims.body_parts[b]->name;
+            const string &name = db.body_parts[b]->name;
             
             for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
                 if(s_ptr->hitboxes[h].body_part_name == name) {
@@ -1608,9 +1616,9 @@ void animation_editor::update_hitboxes() {
             s_ptr->hitboxes.end(),
         [this] (const hitbox & h1, const hitbox & h2) -> bool {
             size_t pos1 = 0, pos2 = 1;
-            for(size_t b = 0; b < anims.body_parts.size(); b++) {
-                if(anims.body_parts[b]->name == h1.body_part_name) pos1 = b;
-                if(anims.body_parts[b]->name == h2.body_part_name) pos2 = b;
+            for(size_t b = 0; b < db.body_parts.size(); b++) {
+                if(db.body_parts[b]->name == h1.body_part_name) pos1 = b;
+                if(db.body_parts[b]->name == h2.body_part_name) pos2 = b;
             }
             return pos1 < pos2;
         }

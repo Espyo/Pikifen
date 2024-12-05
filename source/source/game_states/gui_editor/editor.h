@@ -48,7 +48,7 @@ public:
     string get_name() const override;
     void draw_canvas();
     string get_history_option_prefix() const override;
-    string get_opened_file_name() const;
+    string get_opened_content_path() const;
     
 private:
 
@@ -119,7 +119,7 @@ private:
         const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
     );
     bool save_gui_def();
-    void setup_new_gui_def();
+    void setup_for_new_gui_def();
     point snap_point(const point &p);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd

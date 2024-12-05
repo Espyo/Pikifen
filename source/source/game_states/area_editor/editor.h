@@ -137,7 +137,7 @@ public:
     void unload() override;
     string get_name() const override;
     void draw_canvas();
-    string get_opened_folder_path() const;
+    string get_opened_content_path() const;
     string get_history_option_prefix() const override;
     
 private:
@@ -984,8 +984,8 @@ private:
     void set_new_circle_sector_points();
     void set_selection_status_text();
     void set_state_from_undo_or_redo_history(area_data* state);
-    void setup_new_area_post();
-    void setup_new_area_pre();
+    void setup_for_new_area_post();
+    void setup_for_new_area_pre();
     void setup_sector_split();
     point snap_point(const point &p, bool ignore_selected = false);
     vertex* split_edge(edge* e_ptr, const point &where);

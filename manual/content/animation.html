@@ -31,7 +31,7 @@
     </figure>
     
     <dl>
-      <dt><b>Animations are pieces of <a href="making.html#content">content</a>.</b></dt>
+      <dt><b>Animation databases are pieces of <a href="making.html#content">content</a>.</b></dt>
       <dd>You should know how content works in the engine in general before starting.</dd>
       <dt><b>Animations are just static frames shown in quick succession.</b></dt>
       <dd>An <a href="http://en.wikipedia.org/wiki/Animation">animation</a> is a collection of images that flip in quick succession to give the illusion of movement. For instance, for a Pikmin's attack animation, it would consist of an image (also called a <b>frame</b>) with the Pikmin clinging on, an image with it reeling its head back, an image with it swinging the head forward, and an image where the stem is smacking. By quickly flipping through these images, it gives the illusion that the Pikmin is animated.</dd>
@@ -76,7 +76,7 @@
     
     <h2 id="guide">Guide</h2>
     
-    <h3 id="picking-file">Picking the animation file</h3>
+    <h3 id="picking-file">Picking the animation database file</h3>
     
     <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the base content's Red Bulborb spritesheet. For that, you should probably <a href="mob_type.html">create a new Red Bulborb enemy</a>, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
     
@@ -163,7 +163,7 @@
     
     <dl>
       <dt><b>In the animation panel, the large button at the top lets you choose/create an animation.</b></dt>
-      <dd>This is the same case as with the sprite panel. Click on the button (which should be titled "(None)", and write <code>walk</code> as the name of our new animation, the walking animation.</dd>
+      <dd>This is the same case as with the sprite panel. Click on the button (which should be titled "(None)"), and write <code>walk</code> as the name of our new animation, the walking animation.</dd>
       <dt><b>The frame list contains all sprites used in this animation. You can add one with the "+" button.</b></dt>
       <dd>The frame list is a list of the frames that this animation is composed of; each one of these makes use of a sprite we created earlier. Add the first frame by pressing the "+" button in the frame list section. In the "Sprite" option, choose our "idle" sprite, making this the first frame of our walking animation.</dd>
       <dt><b>Different frames of animation last for different durations before the next frame shows up.</b></dt>
@@ -198,7 +198,7 @@
 
     <h2 id="global">Global animations</h2>
 
-    <p>The folder <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/animations</code> contains a list of custom animations that aren't necessarily bound to an object. These can include animations expected by other types of content, like the status effects or liquids, or even things expected by the engine, like the sparks around a hurt leader. These follow the same rules as all <a href="making.html#content">content</a>.</p>
+    <p>The folder <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/animations</code> contains a list of custom animation databases that aren't necessarily bound to an object. These can include animations expected by other types of content, like the status effects or liquids, or even things expected by the engine, like the sparks around a hurt leader. These follow the same rules as all <a href="making.html#content">content</a>.</p>
 
     <h2 id="controls">Controls</h2>
 

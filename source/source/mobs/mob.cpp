@@ -179,7 +179,7 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     health(type->max_health),
     max_health(type->max_health),
     itch_time(type->itch_time),
-    anim(type->anims),
+    anim(type->anim_db),
     physical_span(type->physical_span) {
     
     game.states.gameplay->next_mob_id++;
@@ -2908,7 +2908,7 @@ void mob::set_animation(
     size_t idx, const START_ANIM_OPTION options, bool pre_named,
     float mob_speed_anim_baseline
 ) {
-    if(idx >= type->anims->animations.size()) return;
+    if(idx >= type->anim_db->animations.size()) return;
     
     size_t final_idx;
     if(pre_named) {
@@ -3027,7 +3027,7 @@ void mob::set_radius(float radius) {
     physical_span =
         calculate_mob_physical_span(
             radius,
-            type->anims->hitbox_span,
+            type->anim_db->hitbox_span,
             rectangular_dim
         );
     update_interaction_span();
@@ -3044,7 +3044,7 @@ void mob::set_rectangular_dim(const point &rectangular_dim) {
     physical_span =
         calculate_mob_physical_span(
             radius,
-            type->anims->hitbox_span,
+            type->anim_db->hitbox_span,
             rectangular_dim
         );
     update_interaction_span();

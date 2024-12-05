@@ -74,7 +74,7 @@ hud_t::hud_t() :
     standby_icon_mgr(&gui),
     spray_icon_mgr(&gui) {
     
-    data_node* hud_file_node = &game.content.gui.list[HUD::GUI_FILE_NAME];
+    data_node* hud_file_node = &game.content.gui_defs.list[HUD::GUI_FILE_NAME];
     
     gui.register_coords("time",                          0,    0,  0,  0);
     gui.register_coords("day_bubble",                    0,    0,  0,  0);

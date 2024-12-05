@@ -63,11 +63,11 @@ struct content_manager {
     //Custom particle generators.
     custom_particle_gen_content_manager custom_particle_gen;
     
-    //Animations.
-    global_anim_content_manager global_anims;
+    //Global animation databases.
+    global_anim_content_manager global_anim_dbs;
     
     //GUI definitions.
-    gui_content_manager gui;
+    gui_content_manager gui_defs;
     
     //Hazards.
     hazard_content_manager hazards;
@@ -78,8 +78,8 @@ struct content_manager {
     //Misc. configurations.
     misc_config_content_manager misc_configs;
     
-    //Mob animations.
-    mob_anim_content_manager mob_anims;
+    //Mob animation databases.
+    mob_anim_content_manager mob_anim_dbs;
     
     //Mob types.
     mob_type_content_manager mob_types;

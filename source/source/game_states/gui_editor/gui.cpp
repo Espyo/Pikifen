@@ -23,14 +23,14 @@
 void gui_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
-    for(const auto &f : game.content.gui.manifests) {
+    for(const auto &f : game.content.gui_defs.manifests) {
         file_items.push_back(
             picker_item(
                 f.first,
                 "Pack: " + f.second.pack, "",
                 (void*) &f.second,
                 "Internal name: " + f.first + "\n"
-                "Path: " + game.content.gui.manifest_to_path(f.second)
+                "Path: " + game.content.gui_defs.manifest_to_path(f.second)
             )
         );
     }
@@ -50,7 +50,7 @@ void gui_editor::open_load_dialog() {
         
     //Open the dialog that will contain the picker and history.
     open_dialog(
-        "Load a GUI file",
+        "Load a GUI definition file",
         std::bind(&gui_editor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
@@ -63,7 +63,7 @@ void gui_editor::open_load_dialog() {
  */
 void gui_editor::open_new_dialog() {
     open_dialog(
-        "Create a new GUI definition file",
+        "Create a new GUI definition",
         std::bind(&gui_editor::process_gui_new_dialog, this)
     );
     dialogs.back()->custom_size = point(400, 0);
@@ -214,7 +214,7 @@ void gui_editor::process_gui_load_dialog() {
         ImGui::TreePop();
     }
     set_tooltip(
-        "Creates a new GUI definition file.\n"
+        "Creates a new GUI definition.\n"
         "This works by copying an existing one to a new pack."
     );
     
@@ -243,7 +243,7 @@ void gui_editor::process_gui_menu_bar() {
                 load_cmd(1.0f);
             }
             set_tooltip(
-                "Pick a GUI file to load.",
+                "Pick a GUI definition file to load.",
                 "Ctrl + L"
             );
             
@@ -261,7 +261,7 @@ void gui_editor::process_gui_menu_bar() {
                 save_cmd(1.0f);
             }
             set_tooltip(
-                "Save the GUI into the file on disk.",
+                "Save the GUI definition into the file on disk.",
                 "Ctrl + S"
             );
             
@@ -395,7 +395,7 @@ void gui_editor::process_gui_new_dialog() {
     
     //GUI definition combo.
     vector<string> gui_files;
-    for(const auto &g : game.content.gui.manifests) {
+    for(const auto &g : game.content.gui_defs.manifests) {
         gui_files.push_back(g.first);
     }
     ImGui::Spacer();
@@ -417,7 +417,7 @@ void gui_editor::process_gui_new_dialog() {
             temp_man.internal_name = internal_name;
             temp_man.pack = pack;
             file_path =
-                game.content.gui.manifest_to_path(temp_man);
+                game.content.gui_defs.manifest_to_path(temp_man);
             if(file_exists(file_path)) {
                 problem =
                     "There is already a GUI definition\n"
@@ -455,7 +455,7 @@ void gui_editor::process_gui_new_dialog() {
         ImGui::EndDisabled();
     }
     set_tooltip(
-        problem.empty() ? "Create the file!" : problem
+        problem.empty() ? "Create the GUI definition!" : problem
     );
 }
 
@@ -717,7 +717,7 @@ void gui_editor::process_gui_toolbar() {
         load_cmd(1.0f);
     }
     set_tooltip(
-        "Pick a GUI file to load.",
+        "Pick a GUI definition file to load.",
         "Ctrl + L"
     );
     
@@ -735,7 +735,7 @@ void gui_editor::process_gui_toolbar() {
         save_cmd(1.0f);
     }
     set_tooltip(
-        "Save the GUI into the file on disk.",
+        "Save the GUI definition into the file on disk.",
         "Ctrl + S"
     );
     

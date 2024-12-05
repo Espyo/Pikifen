@@ -28,7 +28,7 @@
 void animation_editor::open_load_dialog() {
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
-    for(const auto &a : game.content.global_anims.list) {
+    for(const auto &a : game.content.global_anim_dbs.list) {
         file_items.push_back(
             picker_item(
                 a.second.name,
@@ -36,14 +36,14 @@ void animation_editor::open_load_dialog() {
                 (void*) a.second.manifest,
                 "Internal name: " + a.first + "\n"
                 "Path: " +
-                game.content.global_anims.manifest_to_path(*a.second.manifest)
+                game.content.global_anim_dbs.manifest_to_path(*a.second.manifest)
             )
         );
     }
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         if(c == MOB_CATEGORY_NONE) continue;
         mob_category* cat = game.mob_categories.get((MOB_CATEGORY) c);
-        for(const auto &a : game.content.mob_anims.list[c]) {
+        for(const auto &a : game.content.mob_anim_dbs.list[c]) {
             mob_type* type = cat->get_type(a.first);
             if(!type) continue;
             file_items.push_back(
@@ -53,7 +53,7 @@ void animation_editor::open_load_dialog() {
                     (void*) a.second.manifest,
                     "Internal name: " + a.first + "\n"
                     "Path: " +
-                    game.content.mob_anims.manifest_to_path(
+                    game.content.mob_anim_dbs.manifest_to_path(
                         *a.second.manifest, cat->folder_name,
                         type->manifest->internal_name
                     )
@@ -88,7 +88,7 @@ void animation_editor::open_load_dialog() {
  */
 void animation_editor::open_new_dialog() {
     open_dialog(
-        "Create a new animation file",
+        "Create a new animation database",
         std::bind(&animation_editor::process_gui_new_dialog, this)
     );
     dialogs.back()->custom_size = point(400, 0);
@@ -350,10 +350,7 @@ void animation_editor::process_gui_load_dialog() {
         
         ImGui::TreePop();
     }
-    set_tooltip(
-        "Creates a new animation.\n"
-        "This works for global animations only."
-    );
+    set_tooltip("Creates a new animation database.");
     
     //Load node.
     ImGui::Spacer();
@@ -398,7 +395,7 @@ void animation_editor::process_gui_menu_bar() {
                 save_cmd(1.0f);
             }
             set_tooltip(
-                "Save the animation data into the files on disk.",
+                "Save the animation database into the file on disk.",
                 "Ctrl + S"
             );
             
@@ -553,7 +550,7 @@ void animation_editor::process_gui_new_dialog() {
         //Internal name input.
         must_update |= ImGui::InputText("Internal name", &internal_name);
         set_tooltip(
-            "Internal name of the new animation.\n"
+            "Internal name of the new animation database.\n"
             "Remember to keep it simple, type in lowercase, "
             "and use underscores!"
         );
@@ -579,11 +576,11 @@ void animation_editor::process_gui_new_dialog() {
                 temp_man.internal_name = internal_name;
                 temp_man.pack = pack;
                 anim_path =
-                    game.content.global_anims.manifest_to_path(temp_man);
+                    game.content.global_anim_dbs.manifest_to_path(temp_man);
                 if(file_exists(anim_path)) {
                     problem =
-                        "There is already a global animation with\n"
-                        "that internal name in that pack!";
+                        "There is already a global animation database\n"
+                        "with that internal name in that pack!";
                 }
             }
         } else {
@@ -594,15 +591,15 @@ void animation_editor::process_gui_new_dialog() {
                 temp_man.internal_name = FILE_NAMES::MOB_TYPE_ANIMATION;
                 temp_man.pack = pack;
                 anim_path =
-                    game.content.mob_anims.manifest_to_path(
+                    game.content.mob_anim_dbs.manifest_to_path(
                         temp_man,
                         mob_type_ptr->category->folder_name,
                         mob_type_ptr->manifest->internal_name
                     );
                 if(file_exists(anim_path)) {
                     problem =
-                        "There is already an animation file for\n"
-                        "that object type in that pack!";
+                        "There is already an animation database\n"
+                        "file for that object type in that pack!";
                 }
             }
         }
@@ -615,7 +612,7 @@ void animation_editor::process_gui_new_dialog() {
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
-    if(ImGui::Button("Create animation", ImVec2(140, 40))) {
+    if(ImGui::Button("Create animation database", ImVec2(140, 40))) {
         auto really_create = [ = ] () {
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
@@ -640,7 +637,7 @@ void animation_editor::process_gui_new_dialog() {
         ImGui::EndDisabled();
     }
     set_tooltip(
-        problem.empty() ? "Create the animation!" : problem
+        problem.empty() ? "Create the animation database!" : problem
     );
 }
 
@@ -769,12 +766,12 @@ void animation_editor::process_gui_panel_animation() {
     //Current animation text.
     size_t cur_anim_idx = INVALID;
     if(cur_anim_i.cur_anim) {
-        cur_anim_idx = anims.find_animation(cur_anim_i.cur_anim->name);
+        cur_anim_idx = db.find_animation(cur_anim_i.cur_anim->name);
     }
     ImGui::Text(
         "Current animation: %s / %i",
         (cur_anim_idx == INVALID ? "--" : i2s(cur_anim_idx + 1).c_str()),
-        (int) anims.animations.size()
+        (int) db.animations.size()
     );
     
     //Previous animation button.
@@ -785,17 +782,17 @@ void animation_editor::process_gui_panel_animation() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        if(!anims.animations.empty()) {
+        if(!db.animations.empty()) {
             if(!cur_anim_i.cur_anim) {
-                pick_animation(anims.animations[0]->name, "", "", nullptr, false);
+                pick_animation(db.animations[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
-                        (int) anims.find_animation(cur_anim_i.cur_anim->name),
+                        (int) db.find_animation(cur_anim_i.cur_anim->name),
                         -1,
-                        (int) anims.animations.size()
+                        (int) db.animations.size()
                     );
-                pick_animation(anims.animations[new_idx]->name, "", "", nullptr, false);
+                pick_animation(db.animations[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -816,19 +813,19 @@ void animation_editor::process_gui_panel_animation() {
     ImGui::SameLine();
     if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
-        for(size_t a = 0; a < anims.animations.size(); a++) {
+        for(size_t a = 0; a < db.animations.size(); a++) {
             ALLEGRO_BITMAP* anim_frame_1 = nullptr;
-            if(!anims.animations[a]->frames.empty()) {
+            if(!db.animations[a]->frames.empty()) {
                 size_t s_pos =
-                    anims.find_sprite(
-                        anims.animations[a]->frames[0].sprite_name
+                    db.find_sprite(
+                        db.animations[a]->frames[0].sprite_name
                     );
                 if(s_pos != INVALID) {
-                    anim_frame_1 = anims.sprites[s_pos]->bitmap;
+                    anim_frame_1 = db.sprites[s_pos]->bitmap;
                 }
             }
             anim_names.push_back(
-                picker_item(anims.animations[a]->name, "", "", anim_frame_1)
+                picker_item(db.animations[a]->name, "", "", anim_frame_1)
             );
         }
         open_picker_dialog(
@@ -859,17 +856,17 @@ void animation_editor::process_gui_panel_animation() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        if(!anims.animations.empty()) {
+        if(!db.animations.empty()) {
             if(!cur_anim_i.cur_anim) {
-                pick_animation(anims.animations[0]->name, "", "", nullptr, false);
+                pick_animation(db.animations[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
-                        (int) anims.find_animation(cur_anim_i.cur_anim->name),
+                        (int) db.find_animation(cur_anim_i.cur_anim->name),
                         1,
-                        (int) anims.animations.size()
+                        (int) db.animations.size()
                     );
-                pick_animation(anims.animations[new_idx]->name, "", "", nullptr, false);
+                pick_animation(db.animations[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -890,13 +887,13 @@ void animation_editor::process_gui_panel_animation() {
             )
         ) {
             string cur_anim_name = cur_anim_i.cur_anim->name;
-            size_t nr = anims.find_animation(cur_anim_name);
-            anims.animations.erase(anims.animations.begin() + nr);
-            if(anims.animations.empty()) {
+            size_t nr = db.find_animation(cur_anim_name);
+            db.animations.erase(db.animations.begin() + nr);
+            if(db.animations.empty()) {
                 cur_anim_i.clear();
             } else {
-                nr = std::min(nr, anims.animations.size() - 1);
-                pick_animation(anims.animations[nr]->name, "", "", nullptr, false);
+                nr = std::min(nr, db.animations.size() - 1);
+                pick_animation(db.animations[nr]->name, "", "", nullptr, false);
             }
             anim_playing = false;
             changes_mgr.mark_as_changed();
@@ -910,7 +907,7 @@ void animation_editor::process_gui_panel_animation() {
     
     if(cur_anim_i.cur_anim) {
     
-        if(anims.animations.size() > 1) {
+        if(db.animations.size() > 1) {
         
             //Import animation button.
             ImGui::SameLine();
@@ -929,9 +926,9 @@ void animation_editor::process_gui_panel_animation() {
             
             //Import animation popup.
             vector<string> import_anim_names;
-            for(size_t a = 0; a < anims.animations.size(); a++) {
-                if(anims.animations[a] == cur_anim_i.cur_anim) continue;
-                import_anim_names.push_back(anims.animations[a]->name);
+            for(size_t a = 0; a < db.animations.size(); a++) {
+                if(db.animations[a] == cur_anim_i.cur_anim) continue;
+                import_anim_names.push_back(db.animations[a]->name);
             }
             string picked_anim;
             if(list_popup("importAnim", import_anim_names, &picked_anim)) {
@@ -1215,8 +1212,8 @@ void animation_editor::process_gui_panel_animation() {
             
                 //Sprite combobox.
                 vector<string> sprite_names;
-                for(size_t s = 0; s < anims.sprites.size(); s++) {
-                    sprite_names.push_back(anims.sprites[s]->name);
+                for(size_t s = 0; s < db.sprites.size(); s++) {
+                    sprite_names.push_back(db.sprites[s]->name);
                 }
                 if(
                     ImGui::Combo(
@@ -1224,9 +1221,9 @@ void animation_editor::process_gui_panel_animation() {
                     )
                 ) {
                     frame_ptr->sprite_idx =
-                        anims.find_sprite(frame_ptr->sprite_name);
+                        db.find_sprite(frame_ptr->sprite_name);
                     frame_ptr->sprite_ptr =
-                        anims.sprites[frame_ptr->sprite_idx];
+                        db.sprites[frame_ptr->sprite_idx];
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
@@ -1303,7 +1300,7 @@ void animation_editor::process_gui_panel_animation() {
                             frame_ptr->sound.clear();
                         }
                         changes_mgr.mark_as_changed();
-                        anims.fill_sound_idx_caches(loaded_mob_type);
+                        db.fill_sound_idx_caches(loaded_mob_type);
                     }
                     set_tooltip(
                         "Whether a sound should play when this frame starts."
@@ -1329,7 +1326,7 @@ void animation_editor::process_gui_panel_animation() {
                                 15
                             )
                         ) {
-                            anims.fill_sound_idx_caches(loaded_mob_type);
+                            db.fill_sound_idx_caches(loaded_mob_type);
                             changes_mgr.mark_as_changed();
                         }
                         set_tooltip(
@@ -1406,20 +1403,20 @@ void animation_editor::process_gui_panel_body_part() {
     if(input_popup("newPartName", "New body part's name:", &new_part_name)) {
         if(!new_part_name.empty()) {
             bool already_exists = false;
-            for(size_t b = 0; b < anims.body_parts.size(); b++) {
-                if(anims.body_parts[b]->name == new_part_name) {
+            for(size_t b = 0; b < db.body_parts.size(); b++) {
+                if(db.body_parts[b]->name == new_part_name) {
                     selected_part = (int) b;
                     already_exists = true;
                 }
             }
             if(!already_exists) {
                 selected_part = std::max(0, selected_part);
-                anims.body_parts.insert(
-                    anims.body_parts.begin() + selected_part +
-                    (anims.body_parts.empty() ? 0 : 1),
+                db.body_parts.insert(
+                    db.body_parts.begin() + selected_part +
+                    (db.body_parts.empty() ? 0 : 1),
                     new body_part(new_part_name)
                 );
-                if(anims.body_parts.size() == 1) {
+                if(db.body_parts.size() == 1) {
                     selected_part = 0;
                 } else {
                     selected_part++;
@@ -1438,7 +1435,7 @@ void animation_editor::process_gui_panel_body_part() {
         }
     }
     
-    if(!anims.body_parts.empty()) {
+    if(!db.body_parts.empty()) {
     
         //Delete body part button.
         ImGui::SameLine();
@@ -1449,14 +1446,14 @@ void animation_editor::process_gui_panel_body_part() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            if(selected_part >= 0 && !anims.body_parts.empty()) {
+            if(selected_part >= 0 && !db.body_parts.empty()) {
                 string deleted_part_name =
-                    anims.body_parts[selected_part]->name;
-                delete anims.body_parts[selected_part];
-                anims.body_parts.erase(
-                    anims.body_parts.begin() + selected_part
+                    db.body_parts[selected_part]->name;
+                delete db.body_parts[selected_part];
+                db.body_parts.erase(
+                    db.body_parts.begin() + selected_part
                 );
-                if(anims.body_parts.empty()) {
+                if(db.body_parts.empty()) {
                     selected_part = -1;
                 } else if(selected_part > 0) {
                     selected_part--;
@@ -1483,7 +1480,7 @@ void animation_editor::process_gui_panel_body_part() {
             )
         ) {
             duplicate_string(
-                anims.body_parts[selected_part]->name, rename_part_name
+                db.body_parts[selected_part]->name, rename_part_name
             );
             ImGui::OpenPopup("renamePart");
         }
@@ -1494,7 +1491,7 @@ void animation_editor::process_gui_panel_body_part() {
         //Rename body part popup.
         if(input_popup("renamePart", "New name:", &rename_part_name)) {
             rename_body_part(
-                anims.body_parts[selected_part], rename_part_name
+                db.body_parts[selected_part], rename_part_name
             );
         }
         
@@ -1505,12 +1502,12 @@ void animation_editor::process_gui_panel_body_part() {
             )
         ) {
         
-            for(size_t p = 0; p < anims.body_parts.size(); p++) {
+            for(size_t p = 0; p < db.body_parts.size(); p++) {
             
                 //Body part selectable.
                 bool is_selected = (p == (size_t) selected_part);
                 ImGui::Selectable(
-                    anims.body_parts[p]->name.c_str(), &is_selected
+                    db.body_parts[p]->name.c_str(), &is_selected
                 );
                 
                 if(ImGui::IsItemActive()) {
@@ -1519,10 +1516,10 @@ void animation_editor::process_gui_panel_body_part() {
                         int p2 =
                             (int) p +
                             (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
-                        if(p2 >= 0 && p2 < (int) anims.body_parts.size()) {
-                            body_part* p_ptr = anims.body_parts[p];
-                            anims.body_parts[p] = anims.body_parts[p2];
-                            anims.body_parts[p2] = p_ptr;
+                        if(p2 >= 0 && p2 < (int) db.body_parts.size()) {
+                            body_part* p_ptr = db.body_parts[p];
+                            db.body_parts[p] = db.body_parts[p2];
+                            db.body_parts[p2] = p_ptr;
                             ImGui::ResetMouseDragDelta();
                             update_hitboxes();
                             changes_mgr.mark_as_changed();
@@ -1538,7 +1535,7 @@ void animation_editor::process_gui_panel_body_part() {
         
     }
     
-    if(anims.body_parts.size() > 1) {
+    if(db.body_parts.size() > 1) {
     
         //Explanation text.
         ImGui::Spacer();
@@ -1570,9 +1567,9 @@ void animation_editor::process_gui_panel_info() {
     panel_title("INFO");
     
     //Version input.
-    string version = anims.version;
+    string version = db.version;
     if(ImGui::InputText("Version", &version)) {
-        anims.version = version;
+        db.version = version;
     }
     set_tooltip(
         "Version of the file, preferably in the \"X.Y.Z\" format. "
@@ -1580,9 +1577,9 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Maker input.
-    string maker = anims.maker;
+    string maker = db.maker;
     if(ImGui::InputText("Maker", &maker)) {
-        anims.maker = maker;
+        db.maker = maker;
     }
     set_tooltip(
         "Name (or nickname) of who made this file. "
@@ -1590,9 +1587,9 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Maker notes input.
-    string maker_notes = anims.maker_notes;
+    string maker_notes = db.maker_notes;
     if(ImGui::InputText("Maker notes", &maker_notes)) {
-        anims.maker_notes = maker_notes;
+        db.maker_notes = maker_notes;
     }
     set_tooltip(
         "Extra notes or comments about the file for other makers to see. "
@@ -1600,9 +1597,9 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Notes input.
-    string notes = anims.notes;
+    string notes = db.notes;
     if(ImGui::InputText("Notes", &notes)) {
-        anims.notes = notes;
+        db.notes = notes;
     }
     set_tooltip(
         "Extra notes or comments of any kind. "
@@ -1652,8 +1649,8 @@ void animation_editor::process_gui_panel_main() {
             "Animations"
         )
     ) {
-        if(!cur_anim_i.cur_anim && !anims.animations.empty()) {
-            pick_animation(anims.animations[0]->name, "", "", nullptr, false);
+        if(!cur_anim_i.cur_anim && !db.animations.empty()) {
+            pick_animation(db.animations[0]->name, "", "", nullptr, false);
         }
         change_state(EDITOR_STATE_ANIMATION);
     }
@@ -1671,8 +1668,8 @@ void animation_editor::process_gui_panel_main() {
             "Sprites"
         )
     ) {
-        if(!cur_sprite && !anims.sprites.empty()) {
-            cur_sprite = anims.sprites[0];
+        if(!cur_sprite && !db.sprites.empty()) {
+            cur_sprite = db.sprites[0];
         }
         change_state(EDITOR_STATE_SPRITE);
     }
@@ -1710,7 +1707,7 @@ void animation_editor::process_gui_panel_main() {
         change_state(EDITOR_STATE_INFO);
     }
     set_tooltip(
-        "Set the animation file's information here, if you want."
+        "Set the animation database's information here, if you want."
     );
     
     //Tools button.
@@ -1735,17 +1732,17 @@ void animation_editor::process_gui_panel_main() {
     
         //Animation amount text.
         ImGui::BulletText(
-            "Animations: %i", (int) anims.animations.size()
+            "Animations: %i", (int) db.animations.size()
         );
         
         //Sprite amount text.
         ImGui::BulletText(
-            "Sprites: %i", (int) anims.sprites.size()
+            "Sprites: %i", (int) db.sprites.size()
         );
         
         //Body part amount text.
         ImGui::BulletText(
-            "Body parts: %i", (int) anims.body_parts.size()
+            "Body parts: %i", (int) db.body_parts.size()
         );
         
         ImGui::TreePop();
@@ -1772,12 +1769,12 @@ void animation_editor::process_gui_panel_sprite() {
     //Current sprite text.
     size_t cur_sprite_idx = INVALID;
     if(cur_sprite) {
-        cur_sprite_idx = anims.find_sprite(cur_sprite->name);
+        cur_sprite_idx = db.find_sprite(cur_sprite->name);
     }
     ImGui::Text(
         "Current sprite: %s / %i",
         (cur_sprite_idx == INVALID ? "--" : i2s(cur_sprite_idx + 1).c_str()),
-        (int) anims.sprites.size()
+        (int) db.sprites.size()
     );
     
     //Previous sprite button.
@@ -1788,17 +1785,17 @@ void animation_editor::process_gui_panel_sprite() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        if(!anims.sprites.empty()) {
+        if(!db.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, "", "", nullptr, false);
+                pick_sprite(db.sprites[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
-                        (int) anims.find_sprite(cur_sprite->name),
+                        (int) db.find_sprite(cur_sprite->name),
                         -1,
-                        (int) anims.sprites.size()
+                        (int) db.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_idx]->name, "", "", nullptr, false);
+                pick_sprite(db.sprites[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -1815,12 +1812,12 @@ void animation_editor::process_gui_panel_sprite() {
     ImGui::SameLine();
     if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
         vector<picker_item> sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
+        for(size_t s = 0; s < db.sprites.size(); s++) {
             sprite_names.push_back(
                 picker_item(
-                    anims.sprites[s]->name,
+                    db.sprites[s]->name,
                     "", "",
-                    anims.sprites[s]->bitmap
+                    db.sprites[s]->bitmap
                 )
             );
         }
@@ -1852,17 +1849,17 @@ void animation_editor::process_gui_panel_sprite() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        if(!anims.sprites.empty()) {
+        if(!db.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, "", "", nullptr, false);
+                pick_sprite(db.sprites[0]->name, "", "", nullptr, false);
             } else {
                 size_t new_idx =
                     sum_and_wrap(
-                        (int) anims.find_sprite(cur_sprite->name),
+                        (int) db.find_sprite(cur_sprite->name),
                         1,
-                        (int) anims.sprites.size()
+                        (int) db.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_idx]->name, "", "", nullptr, false);
+                pick_sprite(db.sprites[new_idx]->name, "", "", nullptr, false);
             }
         }
     }
@@ -1882,16 +1879,16 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             string deleted_sprite_name = cur_sprite->name;
-            size_t nr = anims.find_sprite(deleted_sprite_name);
-            anims.delete_sprite(nr);
+            size_t nr = db.find_sprite(deleted_sprite_name);
+            db.delete_sprite(nr);
             cur_anim_i.cur_frame_idx = 0;
-            if(anims.sprites.empty()) {
+            if(db.sprites.empty()) {
                 cur_sprite = nullptr;
                 cur_hitbox = nullptr;
                 cur_hitbox_idx = INVALID;
             } else {
-                nr = std::min(nr, anims.sprites.size() - 1);
-                pick_sprite(anims.sprites[nr]->name, "", "", nullptr, false);
+                nr = std::min(nr, db.sprites.size() - 1);
+                pick_sprite(db.sprites[nr]->name, "", "", nullptr, false);
             }
             changes_mgr.mark_as_changed();
             set_status("Deleted sprite \"" + deleted_sprite_name + "\".");
@@ -1905,7 +1902,7 @@ void animation_editor::process_gui_panel_sprite() {
     
     if(cur_sprite) {
     
-        if(anims.sprites.size() > 1) {
+        if(db.sprites.size() > 1) {
         
             //Import sprite button.
             ImGui::SameLine();
@@ -1924,9 +1921,9 @@ void animation_editor::process_gui_panel_sprite() {
             
             //Import sprite popup.
             vector<string> import_sprite_names;
-            for(size_t s = 0; s < anims.sprites.size(); s++) {
-                if(anims.sprites[s] == cur_sprite) continue;
-                import_sprite_names.push_back(anims.sprites[s]->name);
+            for(size_t s = 0; s < db.sprites.size(); s++) {
+                if(db.sprites[s] == cur_sprite) continue;
+                import_sprite_names.push_back(db.sprites[s]->name);
             }
             string picked_sprite;
             if(
@@ -2010,7 +2007,7 @@ void animation_editor::process_gui_panel_sprite() {
             );
         }
         
-        if(!anims.body_parts.empty()) {
+        if(!db.body_parts.empty()) {
             //Sprite hitboxes button.
             if(ImGui::Button("Hitboxes", mode_buttons_size)) {
                 if(cur_sprite && !cur_sprite->hitboxes.empty()) {
@@ -2060,7 +2057,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     //Panel title text.
     panel_title("BITMAP");
     
-    if(anims.sprites.size() > 1) {
+    if(db.sprites.size() > 1) {
     
         //Import bitmap data button.
         if(
@@ -2078,9 +2075,9 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         
         //Import bitmap popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
-            if(anims.sprites[s] == cur_sprite) continue;
-            import_sprite_names.push_back(anims.sprites[s]->name);
+        for(size_t s = 0; s < db.sprites.size(); s++) {
+            if(db.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(db.sprites[s]->name);
         }
         string picked_sprite;
         if(
@@ -2299,7 +2296,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         "Select the next hitbox."
     );
     
-    if(cur_hitbox && anims.sprites.size() > 1) {
+    if(cur_hitbox && db.sprites.size() > 1) {
     
         //Import hitbox data button.
         ImGui::SameLine();
@@ -2318,9 +2315,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
-            if(anims.sprites[s] == cur_sprite) continue;
-            import_sprite_names.push_back(anims.sprites[s]->name);
+        for(size_t s = 0; s < db.sprites.size(); s++) {
+            if(db.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(db.sprites[s]->name);
         }
         string picked_sprite;
         if(
@@ -2561,7 +2558,7 @@ void animation_editor::process_gui_panel_sprite_top() {
     //Panel title text.
     panel_title("TOP");
     
-    if(anims.sprites.size() > 1) {
+    if(db.sprites.size() > 1) {
     
         //Import top data button.
         if(
@@ -2579,9 +2576,9 @@ void animation_editor::process_gui_panel_sprite_top() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
-            if(anims.sprites[s] == cur_sprite) continue;
-            import_sprite_names.push_back(anims.sprites[s]->name);
+        for(size_t s = 0; s < db.sprites.size(); s++) {
+            if(db.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(db.sprites[s]->name);
         }
         string picked_sprite;
         if(
@@ -2684,7 +2681,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     //Panel title text.
     panel_title("TRANSFORM");
     
-    if(anims.sprites.size() > 1) {
+    if(db.sprites.size() > 1) {
     
         //Import transformation data button.
         if(
@@ -2702,9 +2699,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
         
         //Import sprite popup.
         vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); s++) {
-            if(anims.sprites[s] == cur_sprite) continue;
-            import_sprite_names.push_back(anims.sprites[s]->name);
+        for(size_t s = 0; s < db.sprites.size(); s++) {
+            if(db.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(db.sprites[s]->name);
         }
         string picked_sprite;
         if(
@@ -2806,7 +2803,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
     ImGui::Spacer();
     
-    if(anims.sprites.size() > 1) {
+    if(db.sprites.size() > 1) {
     
         //Comparison sprite node.
         if(saveable_tree_node("transformation", "Comparison sprite")) {
@@ -2822,9 +2819,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
             
                 //Comparison sprite combobox.
                 vector<string> all_sprites;
-                for(size_t s = 0; s < anims.sprites.size(); s++) {
-                    if(cur_sprite == anims.sprites[s]) continue;
-                    all_sprites.push_back(anims.sprites[s]->name);
+                for(size_t s = 0; s < db.sprites.size(); s++) {
+                    if(cur_sprite == db.sprites[s]) continue;
+                    all_sprites.push_back(db.sprites[s]->name);
                 }
                 static string comparison_sprite_name;
                 ImGui::Combo(
@@ -2834,9 +2831,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
                     "Choose another sprite to serve as a comparison."
                 );
                 size_t comparison_sprite_idx =
-                    anims.find_sprite(comparison_sprite_name);
+                    db.find_sprite(comparison_sprite_name);
                 if(comparison_sprite_idx != INVALID) {
-                    comparison_sprite = anims.sprites[comparison_sprite_idx];
+                    comparison_sprite = db.sprites[comparison_sprite_idx];
                 } else {
                     comparison_sprite = nullptr;
                 }
@@ -3046,7 +3043,7 @@ void animation_editor::process_gui_toolbar() {
         save_cmd(1.0f);
     }
     set_tooltip(
-        "Save the animation data into the files on disk.",
+        "Save the animation database into the file on disk.",
         "Ctrl + S"
     );
     

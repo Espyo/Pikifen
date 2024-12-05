@@ -429,7 +429,7 @@ void area_menu_state::init_gui_info_page() {
     gui.register_coords("maker",        28, 95, 52,  6);
     gui.register_coords("version",      76, 95, 44,  6);
     gui.read_coords(
-        game.content.gui.list[AREA_MENU::INFO_GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[AREA_MENU::INFO_GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     if(!game.content.areas.list[area_type].empty()) {
@@ -579,7 +579,7 @@ void area_menu_state::init_gui_main() {
     gui.register_coords("no_areas_text", 50, 50, 96, 10);
     
     gui.read_coords(
-        game.content.gui.list[AREA_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[AREA_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     //Back button.
@@ -825,7 +825,7 @@ void area_menu_state::init_gui_specs_page() {
     gui.register_coords("grading_list",   47, 85, 90, 26);
     gui.register_coords("grading_scroll", 96, 85,  4, 26);
     gui.read_coords(
-        game.content.gui.list[AREA_MENU::SPECS_GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[AREA_MENU::SPECS_GUI_FILE_NAME].get_child_by_name("positions")
     );
     
     if(!game.content.areas.list[area_type].empty()) {

@@ -833,8 +833,8 @@ void mob_type::load_from_data_node(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        anims = &game.content.mob_anims.list[category->id][manifest->internal_name];
-        anims->fill_sound_idx_caches(this);
+        anim_db = &game.content.mob_anim_dbs.list[category->id][manifest->internal_name];
+        anim_db->fill_sound_idx_caches(this);
         
         data_node script_file;
         script_file.load_file(folder_path + "/script.txt", true, true);
@@ -916,13 +916,13 @@ void mob_type::load_from_data_node(
     //Category-specific resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         load_cat_resources(node);
-        anims->create_conversions(get_anim_conversions(), node);
+        anim_db->create_conversions(get_anim_conversions(), node);
     }
     
     physical_span =
         calculate_mob_physical_span(
             radius,
-            (level >= CONTENT_LOAD_LEVEL_FULL ? anims->hitbox_span : 0),
+            (level >= CONTENT_LOAD_LEVEL_FULL ? anim_db->hitbox_span : 0),
             rectangular_dim
         );
         

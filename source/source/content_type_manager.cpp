@@ -551,7 +551,7 @@ void global_anim_content_manager::fill_manifests() {
  * @return The name.
  */
 string global_anim_content_manager::get_name() const {
-    return "global animation";
+    return "global animation database";
 }
 
 
@@ -561,7 +561,7 @@ string global_anim_content_manager::get_name() const {
  * @return The name.
  */
 string global_anim_content_manager::get_perf_mon_measurement_name() const {
-    return "Global animations";
+    return "Global animation databases";
 }
 
 
@@ -572,18 +572,18 @@ string global_anim_content_manager::get_perf_mon_measurement_name() const {
  */
 void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &a : manifests) {
-        load_animation(&a.second, level);
+        load_animation_db(&a.second, level);
     }
 }
 
 
 /**
- * @brief Loads a global animation.
+ * @brief Loads a global animation database.
  *
- * @param manifest Manifest of the animation.
+ * @param manifest Manifest of the animation database.
  * @param level Level to load at.
  */
-void global_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
+void global_anim_content_manager::load_animation_db(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
     data_node file(manifest->path);
     animation_database db;
     db.manifest = manifest;
@@ -593,10 +593,10 @@ void global_anim_content_manager::load_animation(content_manifest* manifest, CON
 
 
 /**
- * @brief Returns the path to a global animation given a manifest
+ * @brief Returns the path to a global animation database given a manifest
  * (that's missing the path).
  *
- * @param manifest Manifest of the animation.
+ * @param manifest Manifest of the animation database.
  * @return The path.
  */
 string global_anim_content_manager::manifest_to_path(
@@ -611,9 +611,9 @@ string global_anim_content_manager::manifest_to_path(
 
 
 /**
- * @brief Returns the manifest of a global animation given its path.
+ * @brief Returns the manifest of a global animation database given its path.
  *
- * @param path Path to the animation.
+ * @param path Path to the animation database.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
 void global_anim_content_manager::path_to_manifest(
@@ -1028,7 +1028,7 @@ void misc_config_content_manager::load_system_anim(
 ) {
     const string &anim_db_name =
         anim_def_file->get_child_by_name(name)->value;
-    anim.init_to_first_anim(&game.content.global_anims.list[anim_db_name]);
+    anim.init_to_first_anim(&game.content.global_anim_dbs.list[anim_db_name]);
 }
 
 
@@ -1131,7 +1131,7 @@ void mob_anim_content_manager::fill_cat_manifests_from_pack(
  * @return The name.
  */
 string mob_anim_content_manager::get_name() const {
-    return "mob animation";
+    return "mob animation database";
 }
 
 
@@ -1141,7 +1141,7 @@ string mob_anim_content_manager::get_name() const {
  * @return The name.
  */
 string mob_anim_content_manager::get_perf_mon_measurement_name() const {
-    return "Mob animations";
+    return "Mob animation databases";
 }
 
 
@@ -1154,20 +1154,20 @@ void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         list.push_back(map<string, animation_database>());
         for(auto &a : manifests[c]) {
-            load_animation(&a.second, level, (MOB_CATEGORY) c);
+            load_animation_db(&a.second, level, (MOB_CATEGORY) c);
         }
     }
 }
 
 
 /**
- * @brief Loads a mob animation.
+ * @brief Loads a mob animation database.
  *
- * @param manifest Manifest of the animation.
+ * @param manifest Manifest of the animation database.
  * @param level Level to load at.
  * @param category_id Mob category ID.
  */
-void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
+void mob_anim_content_manager::load_animation_db(content_manifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
     data_node file(manifest->path);
     animation_database db;
     db.manifest = manifest;
@@ -1177,10 +1177,10 @@ void mob_anim_content_manager::load_animation(content_manifest* manifest, CONTEN
 
 
 /**
- * @brief Returns the path to a mob animation a manifest
+ * @brief Returns the path to a mob animation database a manifest
  * (that's missing the path).
  *
- * @param manifest Manifest of the animation.
+ * @param manifest Manifest of the animation database.
  * @param category Mob category folder name.
  * @param type Mob type folder name.
  * @return The path.
@@ -1200,9 +1200,9 @@ string mob_anim_content_manager::manifest_to_path(
 
 
 /**
- * @brief Returns the manifest of a mob animation given its path.
+ * @brief Returns the manifest of a mob animation database given its path.
  *
- * @param path Path to the animation.
+ * @param path Path to the animation database.
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_category If not nullptr, the mob category folder name
  * is returned here.

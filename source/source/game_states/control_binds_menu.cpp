@@ -247,7 +247,7 @@ void control_binds_menu_state::load() {
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui.list[CONTROL_BINDS_MENU::GUI_FILE_NAME].
+        game.content.gui_defs.list[CONTROL_BINDS_MENU::GUI_FILE_NAME].
         get_child_by_name("positions")
     );
     

@@ -44,10 +44,10 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
         return &custom_particle_gen;
         break;
     } case CONTENT_TYPE_GLOBAL_ANIMATION: {
-        return &global_anims;
+        return &global_anim_dbs;
         break;
     } case CONTENT_TYPE_GUI: {
-        return &gui;
+        return &gui_defs;
         break;
     } case CONTENT_TYPE_HAZARD: {
         return &hazards;
@@ -59,7 +59,7 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
         return &misc_configs;
         break;
     } case CONTENT_TYPE_MOB_ANIMATION: {
-        return &mob_anims;
+        return &mob_anim_dbs;
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
         return &mob_types;

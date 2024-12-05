@@ -1195,10 +1195,10 @@ mob* create_mob(
         }
         p_info->limb_thickness = child_info->limb_thickness;
         p_info->limb_parent_body_part =
-            type->anims->find_body_part(child_info->limb_parent_body_part);
+            type->anim_db->find_body_part(child_info->limb_parent_body_part);
         p_info->limb_parent_offset = child_info->limb_parent_offset;
         p_info->limb_child_body_part =
-            new_mob->type->anims->find_body_part(
+            new_mob->type->anim_db->find_body_part(
                 child_info->limb_child_body_part
             );
         p_info->limb_child_offset = child_info->limb_child_offset;
@@ -1207,7 +1207,7 @@ mob* create_mob(
         if(child_info->parent_holds) {
             m_ptr->hold(
                 new_mob,
-                type->anims->find_body_part(child_info->hold_body_part),
+                type->anim_db->find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
                 child_info->hold_offset_angle,
                 child_info->hold_offset_vert_dist,

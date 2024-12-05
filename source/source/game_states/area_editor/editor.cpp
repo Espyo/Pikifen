@@ -442,7 +442,7 @@ void area_editor::close_options_dialog() {
  */
 void area_editor::create_area(const string &requested_area_path) {
     //Setup.
-    setup_new_area_pre();
+    setup_for_new_area_pre();
     changes_mgr.mark_as_non_existent();
     
     //Basic area data.
@@ -499,8 +499,9 @@ void area_editor::create_area(const string &requested_area_path) {
     );
     
     //Finish up.
-    setup_new_area_post();
-    update_history(game.cur_area_data->manifest->path);
+    setup_for_new_area_post();
+    update_history(manifest.path);
+    
     set_status(
         "Created area \"" + manifest.internal_name + "\" successfully."
     );
@@ -579,7 +580,7 @@ void area_editor::delete_current_area() {
         //If the area doesn't exist, since it was never saved,
         //then there's nothing to delete.
         final_status_text =
-            "Deleted area \"" + game.cur_area_data->manifest->internal_name +
+            "Deleted area \"" + manifest.internal_name +
             "\" successfully.";
         go_to_area_select = true;
         
@@ -600,7 +601,7 @@ void area_editor::delete_current_area() {
         non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
         WIPE_FOLDER_RESULT result =
             wipe_folder(
-                game.cur_area_data->manifest->path,
+                manifest.path,
                 non_important_files
             );
             
@@ -608,27 +609,27 @@ void area_editor::delete_current_area() {
         switch(result) {
         case WIPE_FOLDER_RESULT_OK: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data->manifest->internal_name +
+                "Deleted area \"" + manifest.internal_name +
                 "\" successfully.";
             go_to_area_select = true;
             break;
         } case WIPE_FOLDER_RESULT_NOT_FOUND: {
             final_status_text =
-                "Area \"" + game.cur_area_data->manifest->internal_name +
+                "Area \"" + manifest.internal_name +
                 "\" deletion failed; folder not found!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
             final_status_text =
-                "Deleted area \"" + game.cur_area_data->manifest->internal_name +
+                "Deleted area \"" + manifest.internal_name +
                 "\", but folder still has user files!";
             final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
             final_status_text =
-                "Area \"" + game.cur_area_data->manifest->internal_name +
+                "Area \"" + manifest.internal_name +
                 "\" deletion failed; error while deleting something! "
                 "(Permissions?)";
             final_status_error = true;
@@ -641,7 +642,7 @@ void area_editor::delete_current_area() {
     
     game.content.areas.manifests[game.cur_area_data->type].erase(
         game.content.areas.manifests[game.cur_area_data->type].find(
-            game.cur_area_data->manifest->internal_name
+            manifest.internal_name
         )
     );
     
@@ -671,7 +672,7 @@ void area_editor::do_logic() {
     
     if(
         game.cur_area_data &&
-        !game.cur_area_data->manifest->internal_name.empty() &&
+        !manifest.internal_name.empty() &&
         changes_mgr.exists_on_disk() &&
         game.options.area_editor_backup_interval > 0
     ) {
@@ -1419,17 +1420,18 @@ string area_editor::get_name() const {
 
 
 /**
- * @brief Returns the path to the currently opened folder.
+ * @brief Returns the path to the currently opened content,
+ * or an empty string if none.
  *
- * @return The path, or an empty string if none.
+ * @return The path.
  */
-string area_editor::get_opened_folder_path() const {
+string area_editor::get_opened_content_path() const {
     if(
         game.cur_area_data &&
         game.cur_area_data->manifest &&
-        !game.cur_area_data->manifest->internal_name.empty()
+        !manifest.internal_name.empty()
     ) {
-        return game.cur_area_data->manifest->path;
+        return manifest.path;
     } else {
         return "";
     }
@@ -1860,7 +1862,7 @@ void area_editor::load_area_folder(
     bool from_backup, bool should_update_history
 ) {
     //Setup.
-    setup_new_area_pre();
+    setup_for_new_area_pre();
     changes_mgr.mark_as_non_existent();
     
     //Load.
@@ -1918,12 +1920,12 @@ void area_editor::load_area_folder(
     
     //Finish up.
     changes_mgr.reset();
-    setup_new_area_post();
+    setup_for_new_area_post();
     if(should_update_history) {
-        update_history(game.cur_area_data->manifest->path);
+        update_history(manifest.path);
     }
     set_status(
-        "Loaded area \"" + game.cur_area_data->manifest->internal_name + "\" " +
+        "Loaded area \"" + manifest.internal_name + "\" " +
         (from_backup ? "from a backup " : "") +
         "successfully."
     );
@@ -1935,7 +1937,7 @@ void area_editor::load_area_folder(
  */
 void area_editor::load_backup() {
     load_area_folder(
-        game.cur_area_data->manifest->path,
+        manifest.path,
         true, false
     );
     backup_timer.start(game.options.area_editor_backup_interval);
@@ -2460,7 +2462,7 @@ void area_editor::quick_play_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!save_area(false)) return;
-    quick_play_area_path = game.cur_area_data->manifest->path;
+    quick_play_area_path = manifest.path;
     quick_play_cam_pos = game.cam.pos;
     quick_play_cam_z = game.cam.zoom;
     leave();
@@ -2533,9 +2535,7 @@ void area_editor::reload_cmd(float input_value) {
         reload_widget_pos,
         "reloading the current area", "reload",
     [this] () {
-        load_area_folder(
-            game.cur_area_data->manifest->path, false, false
-        );
+        load_area_folder(manifest.path, false, false);
     },
     [this] () { return save_area(false); }
     );
@@ -3170,7 +3170,7 @@ bool area_editor::save_area(bool to_backup) {
     
     //Finally, actually save to disk.
     string base_folder_path =
-        to_backup ? game.cur_area_data->user_data_path : game.cur_area_data->manifest->path;
+        to_backup ? game.cur_area_data->user_data_path : manifest.path;
     string main_data_file_path =
         base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     string geometry_file_path =
@@ -3587,7 +3587,7 @@ void area_editor::setup_sector_split() {
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
  */
-void area_editor::setup_new_area_post() {
+void area_editor::setup_for_new_area_post() {
     clear_undo_history();
     update_undo_history();
     update_all_edge_offset_caches();
@@ -3606,8 +3606,9 @@ void area_editor::setup_new_area_post() {
  * be it from an existing file or from scratch, before the actual creation/load
  * takes place.
  */
-void area_editor::setup_new_area_pre() {
+void area_editor::setup_for_new_area_pre() {
     clear_current_area();
+
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
 }

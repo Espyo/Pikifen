@@ -14,7 +14,7 @@
 <body onload="setup('GUI', ['Making content'], ['making.html']);">
   <div id="page-content">
     
-    <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD is a piece of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting. Each one has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/gui</code>.</p>
+    <p>All menus and HUDs (heads-up displays) in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD has a GUI (graphical user interface), and each GUI definition is a piece of <a href="making.html#content">content</a>, so you should know how content works in the engine in general before starting. Each one has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/gui</code>.</p>
 
     <p>To change the position and size of elements, you can just use the GUI editor, accessible from the main menu. To change other things, you will need to edit the data files by hand.</p>
     
@@ -24,14 +24,14 @@
 
     <p>The GUI editor is a simple tool that allows you to change the position and size of each item in a menu/HUD.</p>
 
-    <h3 id="opening">Opening a GUI file</h3>
+    <h3 id="opening">Opening a GUI definition file</h3>
 
     <dl>
       <dt><b>When you open the menu, you'll be asked what GUI to edit.</b></dt>
       <dd>You can access the GUI editor from the main menu. Once you do, you'll be shown a list of menus and HUDs whose GUIs you can edit.</dd>
 
-      <dt><b>The editor only knows each GUI's internal name, but these are usually obvious.</b></dt>
-      <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI data folder. So this dialog will show you the text file names, i.e. the internal names, instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#files">GUI data files section</a> of this page, since that lists what each menu's file is.</dd>
+      <dt><b>The editor only knows each GUI definition's internal name, but these are usually obvious.</b></dt>
+      <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI definitions folder. So this dialog will show you the text file names, i.e. the internal names, instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#definitions">GUI definitions section</a> of this page, since that lists what each menu's file is.</dd>
     </dl>
     
     <h3 id="coordinates">Canvas and coordinates</h3>
@@ -54,7 +54,7 @@
 
     <dl>
       <dt><b>The panel on the right lists all items.</b></dt>
-      <dd>The right side of the editor has a panel that includes a list of all the items in the current GUI file, as well as their internal names.</dd>
+      <dd>The right side of the editor has a panel that includes a list of all the items in the current GUI definition, as well as their internal names.</dd>
 
       <dt><b>In the list, checkboxes specify whether an item is visible.</b></dt>
       <dd>You can click on an item's checkbox in the list to make it visible or invisible. If it is invisible, it won't show up in the canvas nor in-game.</dd>
@@ -92,24 +92,24 @@
 
     <dl>
       <dt><b>When you're done, save with the button in the toolbar.</b></dt>
-      <dd>When you press the save button, the GUI file gets saved to the disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
+      <dd>When you press the save button, the GUI definition gets saved to a file on the disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
 
       <dt><b>The editor can only uses an item's internal name and draw a vague shape representing it.</b></dt>
-      <dd>Because each GUI item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#files">GUI data files section</a> of this document.</dd>
+      <dd>Because each GUI item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#definitions">GUI definitions section</a> of this document.</dd>
 
       <dt><b>An item's size only specifies its maximum size.</b></dt>
-      <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI file simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>
+      <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI definition simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>
 
       <dt><b>GUI items can animate, including moving around.</b></dt>
-      <dd>When gameplay starts, the HUD moves into view from the edges of the screen. When you pause, the menu slides into view from off-screen. A GUI's data file does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
+      <dd>When gameplay starts, the HUD moves into view from the edges of the screen. When you pause, the menu slides into view from off-screen. A GUI's definition does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
 
       <dt><b>If you want an item gone, mark it as invisible instead of placing it off-screen.</b></dt>
       <dd>While a GUI item can be partially off-screen if you want, they shouldn't be entirely off-screen. Because GUI items can animate and move during transitions, an item that is placed off-screen might come into view during these times, which can confuse the player. Plus, having these items off-screen will still make the engine waste resources on processing them, even if they're practically useless in-game. Instead, untick its checkbox in the list of items, in the panel.</dd>
     </dl>
 
-    <h2 id="files">GUI data files</h2>
+    <h2 id="definitions">GUI definitions</h2>
 
-    <p>Each of these sections refers to a menu/HUD, and explains what data file controls it, the internal names of each item, and what properties can be changed in the file. The <code>positions</code> block in a file controls the position and size of each item in that menu/HUD, but as explained before, you're better off using the editor for these.</p>
+    <p>Each of these sections refers to a menu/HUD, and explains what GUI definition controls it, the internal names of each item, and what properties can be changed in the GUI definition's data file. The <code>positions</code> block in a data file controls the position and size of each item in that menu/HUD, but as explained before, you're better off using the editor for these.</p>
 
     <h3 id="area-menu-info">Area menu &ndash; info page</h3>
 
@@ -595,7 +595,7 @@
         <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
-      <li><b>Files:</b> You can specify what bitmap files some of the radar icons should use in the <code>files</code> block.</li>
+      <li><b>Files:</b> You can specify the internal name of the bitmap files some of the radar icons should use in the <code>files</code> block.</li>
       <ul>
         <li><code>pikmin</code>: Icon representing a Pikmin.</li>
         <li><code>treasure</code>: Icon representing a treasure.</li>
@@ -628,16 +628,6 @@
         <li><code>totals</code>: Row containing the grand totals.</li>
         <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
-      </ul>
-      <li><b>Files:</b> You can specify what bitmap files some of the radar icons should use in the <code>files</code> block.</li>
-      <ul>
-        <li><code>pikmin</code>: Icon representing a Pikmin.</li>
-        <li><code>treasure</code>: Icon representing a treasure.</li>
-        <li><code>enemy</code>: Icon representing an enemy.</li>
-        <li><code>leader_bubble</code>: Bubble to place around a leader's icon.</li>
-        <li><code>onion_skeleton</code>: Skeleton part of the icon that represents an Onion. This is the part of the icon that doesn't change color, i.e. the legs and other details.</li>
-        <li><code>onion_bulb</code>: Bulb part of the icon that represents an Onion. This is the part that changes color depending on the Pikmin it can manage.</li>
-        <li><code>ship</code>: Icon representing a ship.</li>
       </ul>
     </ul>
 

@@ -95,27 +95,34 @@ void gui_editor::close_options_dialog() {
 
 
 /**
- * @brief Creates a new GUI definition file, with the data from an existing
+ * @brief Creates a new GUI definition, with the data from an existing
  * one in the base pack.
  *
  * @param internal_name Internal name of the GUI definition.
- * @param dest_pack The new file's pack.
+ * @param dest_pack The new definition's pack.
  */
 void gui_editor::create_gui_def(
     const string &internal_name, const string &pack
 ) {
+    //Load the base pack one first.
     content_manifest temp_orig_man;
     temp_orig_man.internal_name = internal_name;
     temp_orig_man.pack = FOLDER_NAMES::BASE_PACK;
     string orig_path =
-        game.content.gui.manifest_to_path(temp_orig_man);
+        game.content.gui_defs.manifest_to_path(temp_orig_man);
         
     load_gui_def_file(orig_path, false);
     
+    //Change the manifest under the hood so it's pointing to the new one.
     manifest.pack = pack;
-    manifest.path = game.content.gui.manifest_to_path(manifest);
+    manifest.path = game.content.gui_defs.manifest_to_path(manifest);
     
     changes_mgr.mark_as_non_existent();
+
+    set_status(
+        "Created GUI definition \"" +
+        manifest.internal_name + "\" successfully."
+    );
 }
 
 
@@ -166,13 +173,13 @@ string gui_editor::get_name() const {
 
 
 /**
- * @brief Returns the name of the currently opened file, or an empty string
- * if none.
+ * @brief Returns the path to the currently opened content,
+ * or an empty string if none.
  *
- * @return The name.
+ * @return The path.
  */
-string gui_editor::get_opened_file_name() const {
-    return manifest.internal_name;
+string gui_editor::get_opened_content_path() const {
+    return manifest.path;
 }
 
 
@@ -206,7 +213,7 @@ void gui_editor::load() {
 
 
 /**
- * @brief Loads the GUI file.
+ * @brief Loads a GUI definition file.
  *
  * @param path Path to the file.
  * @param should_update_history If true, this loading process should update
@@ -216,7 +223,7 @@ void gui_editor::load_gui_def_file(
     const string &path, bool should_update_history
 ) {
     //Setup.
-    setup_new_gui_def();
+    setup_for_new_gui_def();
     changes_mgr.mark_as_non_existent();
     
     //Load.
@@ -254,7 +261,7 @@ void gui_editor::load_gui_def_file(
     if(should_update_history) {
         update_history(manifest.path);
     }
-    set_status("Loaded GUI file successfully.");
+    set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
 
 
@@ -540,7 +547,7 @@ bool gui_editor::save_gui_def() {
  * @brief Sets up the editor for a new GUI definition,
  * be it from an existing file or from scratch.
  */
-void gui_editor::setup_new_gui_def() {
+void gui_editor::setup_for_new_gui_def() {
     items.clear();
     cur_item = INVALID;
     

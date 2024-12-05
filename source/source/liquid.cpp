@@ -41,9 +41,9 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     rs.set("surface_2_speed", surface_speed[1]);
     rs.set("surface_alpha", surface_alpha);
     
-    auto it = game.content.global_anims.list.find(animation_str);
-    if(it != game.content.global_anims.list.end()) {
-        anim.init_to_first_anim(&game.content.global_anims.list[animation_str]);
+    auto it = game.content.global_anim_dbs.list.find(animation_str);
+    if(it != game.content.global_anim_dbs.list.end()) {
+        anim.init_to_first_anim(&game.content.global_anim_dbs.list[animation_str]);
     } else {
         game.errors.report(
             "Unknown animation \"" + animation_str + "\"!",

@@ -57,7 +57,7 @@ public:
     string get_name() const override;
     void draw_canvas();
     string get_history_option_prefix() const override;
-    string get_opened_file_name() const;
+    string get_opened_content_path() const;
     
 private:
 
@@ -102,7 +102,7 @@ private:
     //--- Members ---
     
     //Currently loaded animation database.
-    animation_database anims;
+    animation_database db;
     
     //Is the current animation playing?
     bool anim_playing = false;
@@ -240,8 +240,8 @@ private:
     void resize_everything(float mult);
     void resize_sprite(sprite* s, float mult);
     bool save_anim_db();
-    void setup_new_anim_db_post();
-    void setup_new_anim_db_pre();
+    void setup_for_new_anim_db_post();
+    void setup_for_new_anim_db_pre();
     void set_all_sprite_scales(float scale);
     void set_best_frame_sprite();
     void sprite_bmp_flood_fill(

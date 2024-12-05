@@ -186,7 +186,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void main_menu_state::init_gui_main_page() {
-    data_node* gui_file = &game.content.gui.list[MAIN_MENU::GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -381,7 +381,7 @@ void main_menu_state::init_gui_main_page() {
  * @brief Loads the GUI elements for the main menu's make page.
  */
 void main_menu_state::init_gui_make_page() {
-    data_node* gui_file = &game.content.gui.list[MAIN_MENU::MAKE_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -528,7 +528,7 @@ void main_menu_state::init_gui_make_page() {
  * @brief Loads the GUI elements for the main menu's play page.
  */
 void main_menu_state::init_gui_play_page() {
-    data_node* gui_file = &game.content.gui.list[MAIN_MENU::PLAY_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -642,7 +642,7 @@ void main_menu_state::init_gui_play_page() {
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void main_menu_state::init_gui_tutorial_page() {
-    data_node* gui_file = &game.content.gui.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
+    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
@@ -754,7 +754,7 @@ void main_menu_state::load() {
     }
     page_to_load = MAIN_MENU_PAGE_MAIN;
     
-    data_node* settings_file = &game.content.gui.list[MAIN_MENU::GUI_FILE_NAME];
+    data_node* settings_file = &game.content.gui_defs.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Resources.
     bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);

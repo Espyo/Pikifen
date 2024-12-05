@@ -170,7 +170,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlay_animation.empty()) {
-            overlay_anim.init_to_first_anim(&game.content.global_anims.list[overlay_animation]);
+            overlay_anim.init_to_first_anim(&game.content.global_anim_dbs.list[overlay_animation]);
         }
     }
 }

@@ -840,7 +840,7 @@ void animation_database::sort_alphabetically() {
 
 
 /**
- * @brief Constructs a new animation instance::animation instance object.
+ * @brief Constructs a new animation instance object.
  *
  * @param anim_db The animation database. Used when changing animations.
  */
@@ -852,7 +852,7 @@ animation_instance::animation_instance(animation_database* anim_db) :
 
 
 /**
- * @brief Constructs a new animation instance::animation instance object.
+ * @brief Constructs a new animation instance object.
  *
  * @param ai2 The other animation instance.
  */

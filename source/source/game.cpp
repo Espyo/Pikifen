@@ -131,15 +131,15 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
             if(cur_state_name == states.animation_ed->get_name()) {
                 maker_tools.auto_start_mode = "animation_editor";
                 maker_tools.auto_start_option =
-                    states.animation_ed->get_opened_file_name();
+                    states.animation_ed->get_opened_content_path();
             } else if(cur_state_name == states.area_ed->get_name()) {
                 maker_tools.auto_start_mode = "area_editor";
                 maker_tools.auto_start_option =
-                    states.area_ed->get_opened_folder_path();
+                    states.area_ed->get_opened_content_path();
             } else if(cur_state_name == states.gui_ed->get_name()) {
                 maker_tools.auto_start_mode = "gui_editor";
                 maker_tools.auto_start_option =
-                    states.gui_ed->get_opened_file_name();
+                    states.gui_ed->get_opened_content_path();
             } else if(cur_state_name == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
