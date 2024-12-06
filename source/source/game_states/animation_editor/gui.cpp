@@ -32,11 +32,10 @@ void animation_editor::open_load_dialog() {
         file_items.push_back(
             picker_item(
                 a.second.name,
-                "Pack: " + a.second.manifest->pack, "Global animations",
+                "Pack: " + a.second.manifest->pack,
+                "Global animations",
                 (void*) a.second.manifest,
-                "Internal name: " + a.first + "\n"
-                "Path: " +
-                game.content.global_anim_dbs.manifest_to_path(*a.second.manifest)
+                get_file_tooltip(a.second.manifest->path)
             )
         );
     }
@@ -51,12 +50,7 @@ void animation_editor::open_load_dialog() {
                     type->name,
                     "Pack: " + a.second.manifest->pack, cat->name + " objects",
                     (void*) a.second.manifest,
-                    "Internal name: " + a.first + "\n"
-                    "Path: " +
-                    game.content.mob_anim_dbs.manifest_to_path(
-                        *a.second.manifest, cat->folder_name,
-                        type->manifest->internal_name
-                    )
+                    get_file_tooltip(a.second.manifest->path)
                 )
             );
         }
@@ -333,11 +327,14 @@ void animation_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &path) -> string {
-        return get_path_short_name(path);
+        return path;
     },
     [this](const string &path) {
         close_top_dialog();
         load_anim_db_file(path, true);
+    },
+    [this](const string &path) {
+        return get_file_tooltip(path);
     }
     );
     
@@ -612,7 +609,7 @@ void animation_editor::process_gui_new_dialog() {
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
-    if(ImGui::Button("Create animation database", ImVec2(140, 40))) {
+    if(ImGui::Button("Create animation database", ImVec2(200, 40))) {
         auto really_create = [ = ] () {
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
@@ -1626,8 +1623,7 @@ void animation_editor::process_gui_panel_main() {
         manifest.internal_name.c_str()
     );
     string file_tooltip =
-        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
-        "File path: " + manifest.path + "\n\n"
+        get_file_tooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changes_mgr.exists_on_disk()) {
         file_tooltip += "Not saved to disk yet!";

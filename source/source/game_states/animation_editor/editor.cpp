@@ -189,7 +189,7 @@ void animation_editor::create_anim_db(const string &path) {
     manifest.fill_from_path(path);
     db.manifest = &manifest;
     setup_for_new_anim_db_post();
-
+    
     set_status(
         "Created animation database \"" +
         manifest.internal_name + "\" successfully."
@@ -266,6 +266,38 @@ float animation_editor::get_cursor_timeline_time() {
 
 
 /**
+ * @brief Returns some tooltip text that represents an animation database
+ * file's manifest.
+ *
+ * @param path Path to the file.
+ * @return The tooltip text.
+ */
+string animation_editor::get_file_tooltip(const string &path) const {
+    if(path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
+        content_manifest temp_manif;
+        string cat;
+        string type;
+        game.content.mob_anim_dbs.path_to_manifest(
+            path, &temp_manif, &cat, &type
+        );
+        return
+            "File path: " + path + "\n"
+            "Pack: " + temp_manif.pack + "\n"
+            "Mob's internal name: " + type + " (category " + cat + ")";
+    } else {
+        content_manifest temp_manif;
+        game.content.global_anim_dbs.path_to_manifest(
+            path, &temp_manif
+        );
+        return
+            "Internal name: " + temp_manif.internal_name + "\n"
+            "File path: " + path + "\n"
+            "Pack: " + temp_manif.pack;
+    }
+}
+
+
+/**
  * @brief In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
  *
@@ -287,48 +319,33 @@ string animation_editor::get_name() const {
 
 
 /**
- * @brief Returns the path to the currently opened content,
- * or an empty string if none.
- * 
- * @return The path.
+ * @brief Returns the name to give the current database's entry for the history.
+ *
+ * @return The name.
  */
-string animation_editor::get_opened_content_path() const {
-    return manifest.path;
+string animation_editor::get_name_for_history() const {
+    if(loaded_mob_type) {
+        return
+            loaded_mob_type->name.empty() ?
+            loaded_mob_type->manifest->internal_name :
+            loaded_mob_type->name;
+    } else {
+        return
+            db.name.empty() ?
+            manifest.internal_name :
+            db.name;
+    }
 }
 
 
 /**
- * @brief Returns a file path, but shortened in such a way that only the text
- * file's name and brief context about its folder remain. If that's not
- * possible, it is returned as is, though its beginning may be cropped off
- * with ellipsis if it's too big.
+ * @brief Returns the path to the currently opened content,
+ * or an empty string if none.
  *
- * @param p The long path name.
- * @return The name.
+ * @return The path.
  */
-string animation_editor::get_path_short_name(const string &p) const {
-    if(p.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
-        vector<string> path_parts = split(p, "/");
-        if(
-            path_parts.size() > 3 &&
-            path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
-        ) {
-            return
-                path_parts[path_parts.size() - 3] + "/" +
-                path_parts[path_parts.size() - 2];
-        }
-    } else if(p.find(FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/") != string::npos) {
-        vector<string> path_parts = split(p, "/");
-        if(!path_parts.empty()) {
-            return path_parts[path_parts.size() - 1];
-        }
-    }
-    
-    if(p.size() > 33) {
-        return "..." + p.substr(p.size() - 30, 30);
-    }
-    
-    return p;
+string animation_editor::get_opened_content_path() const {
+    return manifest.path;
 }
 
 
@@ -540,7 +557,7 @@ void animation_editor::load_anim_db_file(
     changes_mgr.reset();
     setup_for_new_anim_db_post();
     if(should_update_history) {
-        update_history(manifest.path);
+        update_history(manifest, get_name_for_history());
     }
     change_state(EDITOR_STATE_MAIN);
     
@@ -1189,7 +1206,7 @@ bool animation_editor::save_anim_db() {
     } else {
         set_status("Saved file successfully.");
         changes_mgr.mark_as_saved();
-        update_history(manifest.path);
+        update_history(manifest, get_name_for_history());
         return true;
         
     }

@@ -921,6 +921,9 @@ private:
     edge* get_edge_under_point(
         const point &p, const edge* after = nullptr
     ) const;
+    string get_folder_tooltip(
+        const string &path, const string &user_data_path
+    ) const;
     vector<edge_intersection> get_intersecting_edges() const;
     size_t get_mission_required_mob_count() const;
     float get_mob_gen_radius(mob_gen* m) const;
@@ -935,7 +938,6 @@ private:
     bool get_path_link_under_point(
         const point &p, path_link** link1, path_link** link2
     ) const;
-    string get_path_short_name(const string &p) const;
     path_stop* get_path_stop_under_point(const point &p) const;
     SECTOR_SPLIT_RESULT get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;

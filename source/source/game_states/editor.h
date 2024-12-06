@@ -19,6 +19,7 @@
 
 
 using std::map;
+using std::pair;
 using std::string;
 using std::vector;
 
@@ -54,7 +55,8 @@ public:
     //--- Members ---
     
     //History for the last content entries that were opened.
-    vector<string> history;
+    //Saves pairs of path-name.
+    vector<pair<string, string> > history;
     
     
     //--- Function declarations ---
@@ -694,7 +696,8 @@ protected:
     void process_gui_editor_style();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,
-        const std::function<void(const string &)> &pick_callback
+        const std::function<void(const string &)> &pick_callback,
+        const std::function<string(const string &)> &tooltip_callback
     );
     void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
@@ -718,7 +721,9 @@ protected:
     );
     point snap_point_to_axis(const point &p, const point &anchor);
     point snap_point_to_grid(const point &p, float grid_interval);
-    void update_history(const string &name);
+    void update_history(
+        const content_manifest &manifest, const string &name
+    );
     void zoom_with_cursor(float new_zoom);
     virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
     virtual void handle_key_char_canvas(const ALLEGRO_EVENT &ev);

@@ -36,9 +36,7 @@ void area_editor::open_load_dialog() {
             picker_item(
                 area_ptr->name,
                 "Pack: " + man->pack, "Simple", (void*) man,
-                "Internal name: " + man->internal_name + "\n"
-                "Path: " +
-                game.content.areas.manifest_to_path(*man, AREA_TYPE_SIMPLE),
+                get_folder_tooltip(man->path, ""),
                 area_ptr->thumbnail.get()
             )
         );
@@ -50,9 +48,7 @@ void area_editor::open_load_dialog() {
             picker_item(
                 area_ptr->name,
                 "Pack: " + man->pack, "Mission", (void*) man,
-                "Internal name: " + man->internal_name + "\n"
-                "Path: " +
-                game.content.areas.manifest_to_path(*man, AREA_TYPE_MISSION),
+                get_folder_tooltip(man->path, ""),
                 area_ptr->thumbnail.get()
             )
         );
@@ -271,11 +267,14 @@ void area_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &name) -> string {
-        return get_path_short_name(name);
+        return name;
     },
     [this](const string &path) {
         close_top_dialog();
         load_area_folder(path, false, true);
+    },
+    [this](const string &path) {
+        return get_folder_tooltip(path, "");
     }
     );
     
@@ -2603,9 +2602,8 @@ void area_editor::process_gui_panel_main() {
     //Area name text.
     ImGui::Text("Area folder: %s", manifest.internal_name.c_str());
     string folder_tooltip =
-        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
-        "Folder path: " + manifest.path + "\n"
-        "User data folder path: " + game.cur_area_data->user_data_path + "\n\n"
+        get_folder_tooltip(manifest.path, game.cur_area_data->user_data_path) +
+        "\n\n"
         "Folder state: ";
     if(!changes_mgr.exists_on_disk()) {
         folder_tooltip += "Not saved to disk yet!";

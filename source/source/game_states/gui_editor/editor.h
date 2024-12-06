@@ -124,6 +124,7 @@ private:
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
+    string get_file_tooltip(const string &path) const;
     void grid_interval_decrease_cmd(float input_value);
     void grid_interval_increase_cmd(float input_value);
     void load_cmd(float input_value);

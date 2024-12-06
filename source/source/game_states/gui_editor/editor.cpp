@@ -118,7 +118,7 @@ void gui_editor::create_gui_def(
     manifest.path = game.content.gui_defs.manifest_to_path(manifest);
     
     changes_mgr.mark_as_non_existent();
-
+    
     set_status(
         "Created GUI definition \"" +
         manifest.internal_name + "\" successfully."
@@ -148,6 +148,25 @@ void gui_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
     game.states.gui_ed->draw_canvas();
+}
+
+
+/**
+ * @brief Returns some tooltip text that represents a GUI definition
+ * file's manifest.
+ *
+ * @param path Path to the file.
+ * @return The tooltip text.
+ */
+string gui_editor::get_file_tooltip(const string &path) const {
+    content_manifest temp_manif;
+    game.content.gui_defs.path_to_manifest(
+        path, &temp_manif
+    );
+    return
+        "Internal name: " + temp_manif.internal_name + "\n"
+        "File path: " + path + "\n"
+        "Pack: " + temp_manif.pack;
 }
 
 
@@ -259,7 +278,7 @@ void gui_editor::load_gui_def_file(
     //Finish up.
     changes_mgr.reset();
     if(should_update_history) {
-        update_history(manifest.path);
+        update_history(manifest, "");
     }
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
@@ -539,7 +558,7 @@ bool gui_editor::save_gui_def() {
         return true;
     }
     
-    update_history(manifest.path);
+    update_history(manifest, "");
 }
 
 

@@ -29,8 +29,7 @@ void gui_editor::open_load_dialog() {
                 f.first,
                 "Pack: " + f.second.pack, "",
                 (void*) &f.second,
-                "Internal name: " + f.first + "\n"
-                "Path: " + game.content.gui_defs.manifest_to_path(f.second)
+                get_file_tooltip(f.second.path)
             )
         );
     }
@@ -163,8 +162,7 @@ void gui_editor::process_gui_control_panel() {
     //Current file text.
     ImGui::Text("Current file: %s", manifest.internal_name.c_str());
     string file_tooltip =
-        "Pack: " + game.content.packs.list[manifest.pack].name + "\n"
-        "File path: " + manifest.path + "\n\n"
+        get_file_tooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changes_mgr.exists_on_disk()) {
         file_tooltip += "Not saved to disk yet!";
@@ -201,6 +199,9 @@ void gui_editor::process_gui_load_dialog() {
     [this](const string &path) {
         close_top_dialog();
         load_gui_def_file(path, true);
+    },
+    [this](const string &path) {
+        return get_file_tooltip(path);
     }
     );
     

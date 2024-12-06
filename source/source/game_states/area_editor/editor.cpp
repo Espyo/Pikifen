@@ -500,7 +500,7 @@ void area_editor::create_area(const string &requested_area_path) {
     
     //Finish up.
     setup_for_new_area_post();
-    update_history(manifest.path);
+    update_history(manifest, "");
     
     set_status(
         "Created area \"" + manifest.internal_name + "\" successfully."
@@ -1339,6 +1339,34 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
 
 
 /**
+ * @brief Returns some tooltip text that represents an area folder's manifest.
+ *
+ * @param path Path to the folder.
+ * @param user_data_path Path to the area's user data folder, if applicable.
+ * @return The tooltip text.
+ */
+string area_editor::get_folder_tooltip(
+    const string &path, const string &user_data_path
+) const {
+    content_manifest temp_manif;
+    AREA_TYPE type;
+    game.content.areas.path_to_manifest(
+        path, &temp_manif, &type
+    );
+    string result =
+        "Internal name: " + temp_manif.internal_name + "\n"
+        "Area type: " + (type == AREA_TYPE_SIMPLE ? "simple" : "mission") + "\n"
+        "Folder path: " + path + "\n"
+        "Pack: " + game.content.packs.list[temp_manif.pack].name;
+    if(!user_data_path.empty()) {
+        result +=
+            "\nUser data folder path: " + user_data_path;
+    }
+    return result;
+}
+
+
+/**
  * @brief In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
  *
@@ -1435,24 +1463,6 @@ string area_editor::get_opened_content_path() const {
     } else {
         return "";
     }
-}
-
-
-/**
- * @brief Returns a file path, but shortened in such a way that only the text
- * file's name and brief context about its folder remain.
- *
- * @param p The long path name.
- * @return The name.
- */
-string area_editor::get_path_short_name(const string &p) const {
-    string match = FOLDER_PATHS_FROM_PACK::AREAS + "/";
-    size_t start = p.find(match);
-    if(start == string::npos) {
-        return p;
-    }
-    
-    return p.substr(start + match.size());
 }
 
 
@@ -1922,7 +1932,7 @@ void area_editor::load_area_folder(
     changes_mgr.reset();
     setup_for_new_area_post();
     if(should_update_history) {
-        update_history(manifest.path);
+        update_history(manifest, game.cur_area_data->name);
     }
     set_status(
         "Loaded area \"" + manifest.internal_name + "\" " +
@@ -3211,7 +3221,7 @@ bool area_editor::save_area(bool to_backup) {
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
         
-        update_history(manifest.path);
+        update_history(manifest, game.cur_area_data->name);
     }
     
     return save_successful;
@@ -3608,7 +3618,7 @@ void area_editor::setup_for_new_area_post() {
  */
 void area_editor::setup_for_new_area_pre() {
     clear_current_area();
-
+    
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
 }

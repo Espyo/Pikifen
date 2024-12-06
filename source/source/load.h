@@ -15,6 +15,7 @@
 #include <allegro5/allegro.h>
 
 #include "area/area.h"
+#include "game_states/editor.h"
 #include "misc_structs.h"
 #include "libs/data_file.h"
 
@@ -38,6 +39,7 @@ ALLEGRO_BITMAP* load_bmp(
     bool error_bmp_on_empty = true
 );
 data_node load_data_file(const string &file_path);
+void load_editor_history(editor* ed_ptr, reader_setter &rs);
 void load_maker_tools();
 ALLEGRO_FONT* load_font(
     const string &file_name, int n, const int ranges[], int size

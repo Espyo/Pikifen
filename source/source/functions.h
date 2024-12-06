@@ -18,6 +18,7 @@
 
 #include "area/area.h"
 #include "controls.h"
+#include "game_states/editor.h"
 #include "mob_script.h"
 #include "mobs/leader.h"
 #include "mobs/onion.h"
@@ -48,7 +49,7 @@
 
 /**
  * @brief Function that checks if an edge should use a given edge offset effect.
- * 
+ *
  * The first parameter is the edge to check.
  * The second parameter is where the affected sector gets returned to.
  * The third parameter is where the unaffected sector gets returned to.
@@ -58,7 +59,7 @@ typedef bool (*offset_effect_checker_t)(edge*, sector**, sector**);
 
 /**
  * @brief Function that returns an edge's edge offset effect color.
- * 
+ *
  * The first parameter is the edge to check.
  * Returns the color.
  */
@@ -66,7 +67,7 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_t)(edge*);
 
 /**
  * @brief Function that returns an edge's edge offset effect length.
- * 
+ *
  * The first parameter is the edge to check.
  * Returns the length.
  */
@@ -145,6 +146,7 @@ void print_info(
     float fade_duration = 3.0f
 );
 void report_fatal_error(const string &s, const data_node* dn = nullptr);
+void save_editor_history(editor* ed_ptr, data_node* file);
 void save_maker_tools();
 void save_options();
 void save_screenshot();
@@ -172,7 +174,7 @@ void update_offset_effect_buffer(
 );
 void update_offset_effect_caches (
     vector<edge_offset_cache> &caches,
-    const unordered_set<vertex*>& vertexes_to_update,
+    const unordered_set<vertex*> &vertexes_to_update,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter

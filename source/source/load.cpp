@@ -25,6 +25,7 @@
 #include "utils/string_utils.h"
 
 
+using std::make_pair;
 using std::set;
 
 
@@ -152,6 +153,32 @@ data_node load_data_file(const string &file_path) {
     }
     
     return n;
+}
+
+
+/**
+ * @brief Loads an editor's history from the options file.
+ *
+ * @param ed_ptr Pointer to the editor.
+ * @param rs The file's reader setter.
+ */
+void load_editor_history(editor* ed_ptr, reader_setter &rs) {
+    ed_ptr->history.clear();
+    for(size_t h = 0; h < ed_ptr->get_history_size(); h++) {
+        ed_ptr->history.push_back(
+            make_pair("", "")
+        );
+        string option_name = ed_ptr->get_history_option_prefix() + i2s(h + 1);
+        string option_value;
+        rs.set(option_name, option_value);
+        vector<string> parts = split(option_value, ";");
+        if(parts.size() >= 1) {
+            ed_ptr->history[h].first = parts[0];
+        }
+        if(parts.size() >= 2) {
+            ed_ptr->history[h].second = parts[1];
+        }
+    }
 }
 
 
@@ -478,34 +505,9 @@ void load_options() {
     
     //Set up the editor histories.
     reader_setter rs(&file);
-    
-    game.states.animation_ed->history.clear();
-    for(size_t h = 0; h < game.states.animation_ed->get_history_size(); h++) {
-        game.states.animation_ed->history.push_back("");
-        rs.set(
-            game.states.animation_ed->get_history_option_prefix() +
-            i2s(h + 1),
-            game.states.animation_ed->history[h]
-        );
-    }
-    game.states.area_ed->history.clear();
-    for(size_t h = 0; h < game.states.area_ed->get_history_size(); h++) {
-        game.states.area_ed->history.push_back("");
-        rs.set(
-            game.states.area_ed->get_history_option_prefix() +
-            i2s(h + 1),
-            game.states.area_ed->history[h]
-        );
-    }
-    game.states.gui_ed->history.clear();
-    for(size_t h = 0; h < game.states.gui_ed->get_history_size(); h++) {
-        game.states.gui_ed->history.push_back("");
-        rs.set(
-            game.states.gui_ed->get_history_option_prefix() +
-            i2s(h + 1),
-            game.states.gui_ed->history[h]
-        );
-    }
+    load_editor_history(game.states.animation_ed, rs);
+    load_editor_history(game.states.area_ed, rs);
+    load_editor_history(game.states.gui_ed, rs);
     
     //Final setup.
     controls_manager_options controls_mgr_options;

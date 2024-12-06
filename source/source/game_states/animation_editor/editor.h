@@ -55,6 +55,7 @@ public:
     void load() override;
     void unload() override;
     string get_name() const override;
+    string get_name_for_history() const;
     void draw_canvas();
     string get_history_option_prefix() const override;
     string get_opened_content_path() const;
@@ -218,7 +219,7 @@ private:
     void close_options_dialog();
     void create_anim_db(const string &path);
     float get_cursor_timeline_time();
-    string get_path_short_name(const string &p) const;
+    string get_file_tooltip(const string &path) const;
     void handle_lmb_drag_in_timeline();
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);

@@ -777,6 +777,24 @@ void report_fatal_error(const string &s, const data_node* dn) {
 
 
 /**
+ * @brief Saves an editor's history to the options file.
+ *
+ * @param ed_ptr Pointer to the editor.
+ * @param file Data file to save to.
+ */
+void save_editor_history(editor* ed_ptr, data_node* file) {
+    for(size_t h = 0; h < ed_ptr->history.size(); h++) {
+        file->add(
+            new data_node(
+                ed_ptr->get_history_option_prefix() + i2s(h + 1),
+                ed_ptr->history[h].first + ";" + ed_ptr->history[h].second
+            )
+        );
+    }
+}
+
+
+/**
  * @brief Saves the maker tools settings.
  */
 void save_maker_tools() {
@@ -862,41 +880,9 @@ void save_options() {
     game.options.save(&file);
     
     //Also add the editor histories.
-    for(
-        size_t h = 0; h < game.states.animation_ed->history.size(); h++
-    ) {
-        file.add(
-            new data_node(
-                game.states.animation_ed->get_history_option_prefix() +
-                i2s(h + 1),
-                game.states.animation_ed->history[h]
-            )
-        );
-    }
-    
-    for(
-        size_t h = 0; h < game.states.area_ed->history.size(); h++
-    ) {
-        file.add(
-            new data_node(
-                game.states.area_ed->get_history_option_prefix() +
-                i2s(h + 1),
-                game.states.area_ed->history[h]
-            )
-        );
-    }
-    
-    for(
-        size_t h = 0; h < game.states.gui_ed->history.size(); h++
-    ) {
-        file.add(
-            new data_node(
-                game.states.gui_ed->get_history_option_prefix() +
-                i2s(h + 1),
-                game.states.gui_ed->history[h]
-            )
-        );
-    }
+    save_editor_history(game.states.animation_ed, &file);
+    save_editor_history(game.states.area_ed, &file);
+    save_editor_history(game.states.gui_ed, &file);
     
     //Finally, save.
     file.save_file(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);

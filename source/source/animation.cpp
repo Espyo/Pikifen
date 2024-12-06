@@ -278,6 +278,7 @@ void animation_database::create_conversions(
  * @brief Destroys an animation database and all of its content.
  */
 void animation_database::destroy() {
+    reset_metadata();
     for(size_t a = 0; a < animations.size(); a++) {
         delete animations[a];
     }

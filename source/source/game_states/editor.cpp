@@ -25,6 +25,8 @@
 #include "../utils/imgui_utils.h"
 #include "../utils/string_utils.h"
 
+using std::make_pair;
+
 
 namespace EDITOR {
 
@@ -1286,28 +1288,35 @@ void editor::process_gui_editor_style() {
  * button text, this function gets called with the entry name as an argument,
  * to determine what the final button text will be.
  * @param pick_callback Code to run when an entry is picked.
+ * @param tooltip_callback Code to obtain an entry's tooltip with, if any.
  */
 void editor::process_gui_history(
     const std::function<string(const string &)> &name_display_callback,
-    const std::function<void(const string &)> &pick_callback
+    const std::function<void(const string &)> &pick_callback,
+    const std::function<string(const string &)> &tooltip_callback
 ) {
     if(saveable_tree_node("load", "History")) {
     
-        if(!history.empty() && !history[0].empty()) {
+        if(!history.empty() && !history[0].first.empty()) {
         
             for(size_t h = 0; h < history.size(); h++) {
-                string name = history[h];
-                if(name.empty()) continue;
+                string path = history[h].first;
+                if(path.empty()) continue;
                 
-                string button_text = name_display_callback(name);
+                string name = history[h].second;
+                if(name.empty()) name = history[h].first;
+                name = name_display_callback(name);
                 
                 //History number text.
                 ImGui::Text("%i.", (int) (h + 1));
                 
                 //History entry button.
                 ImGui::SameLine();
-                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
-                    pick_callback(name);
+                if(ImGui::Button((name + "##" + i2s(h)).c_str())) {
+                    pick_callback(path);
+                }
+                if(tooltip_callback) {
+                    set_tooltip(tooltip_callback(path));
                 }
             }
             
@@ -1975,36 +1984,48 @@ void editor::unload() {
 /**
  * @brief Updates the history list, by adding a new entry or bumping it up.
  *
- * @param name Name of the entry.
+ * @param manifest Manifest of the entry's content.
+ * @param name Proper name of the entry.
  */
-void editor::update_history(const string &name) {
+void editor::update_history(
+    const content_manifest &manifest, const string &name
+) {
+    string final_name = name.empty() ? manifest.internal_name : name;
+    
     //First, check if it exists.
     size_t pos = INVALID;
     
     for(size_t h = 0; h < history.size(); h++) {
-        if(history[h] == name) {
+        if(history[h].first == manifest.path) {
             pos = h;
             break;
         }
     }
     
     if(pos == 0) {
-        //Already #1? Never mind.
-        return;
+        //Already #1? Just update the name.
+        history[0].second = final_name;
     } else if(pos == INVALID) {
         //If it doesn't exist, create it and add it to the top.
-        history.insert(history.begin(), name);
+        history.insert(
+            history.begin(),
+            make_pair(manifest.path, final_name)
+        );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
         history.erase(history.begin() + pos);
-        history.insert(history.begin(), name);
+        history.insert(
+            history.begin(),
+            make_pair(manifest.path, final_name)
+        );
     }
     
     if(history.size() > get_history_size()) {
         history.erase(history.begin() + history.size() - 1);
     }
     
-    save_options(); //Save the history in the options.
+    //Save the history in the options.
+    save_options();
 }
 
 
