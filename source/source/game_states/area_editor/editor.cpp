@@ -3601,13 +3601,6 @@ void area_editor::setup_for_new_area_post() {
     clear_undo_history();
     update_undo_history();
     update_all_edge_offset_caches();
-    
-    state = EDITOR_STATE_MAIN;
-    
-    //At this point we'll have unloaded some assets like the thumbnail.
-    //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets on-screen, if it tries now it'll crash. So skip.
-    game.skip_dear_imgui_frame = true;
 }
 
 
@@ -3621,6 +3614,13 @@ void area_editor::setup_for_new_area_pre() {
     
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
+    
+    state = EDITOR_STATE_MAIN;
+    
+    //At this point we'll have nearly unloaded some assets like the thumbnail.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    game.skip_dear_imgui_frame = true;
 }
 
 

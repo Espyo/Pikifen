@@ -559,7 +559,6 @@ void animation_editor::load_anim_db_file(
     if(should_update_history) {
         update_history(manifest, get_name_for_history());
     }
-    change_state(EDITOR_STATE_MAIN);
     
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
@@ -1282,6 +1281,12 @@ void animation_editor::setup_for_new_anim_db_pre() {
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
+    change_state(EDITOR_STATE_MAIN);
+    
+    //At this point we'll have nearly unloaded stuff like the current sprite.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    game.skip_dear_imgui_frame = true;
 }
 
 
