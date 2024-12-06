@@ -130,6 +130,7 @@ private:
     void load_cmd(float input_value);
     void quit_cmd(float input_value);
     void reload_cmd(float input_value);
+    void reload_gui_defs();
     void save_cmd(float input_value);
     void snap_mode_cmd(float input_value);
     void zoom_and_pos_reset_cmd(float input_value);

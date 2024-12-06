@@ -3108,6 +3108,24 @@ void area_editor::register_change(
 
 
 /**
+ * @brief Reloads all loaded areas.
+ */
+void area_editor::reload_areas() {
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    }
+    );
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
  * @brief Removes the current area thumbnail, if any.
  */
 void area_editor::remove_thumbnail() {

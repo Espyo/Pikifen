@@ -26,6 +26,8 @@
  * @brief Opens the "load" dialog.
  */
 void animation_editor::open_load_dialog() {
+    reload_anim_dbs();
+    
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
     for(const auto &a : game.content.global_anim_dbs.list) {

@@ -933,6 +933,26 @@ void animation_editor::zoom_out_cmd(float input_value) {
 
 
 /**
+ * @brief Reloads all loaded animation databases.
+ */
+void animation_editor::reload_anim_dbs() {
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+        CONTENT_TYPE_MOB_ANIMATION,
+    }
+    );
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_GLOBAL_ANIMATION,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
  * @brief Renames an animation to the given name.
  *
  * @param anim Animation to rename.

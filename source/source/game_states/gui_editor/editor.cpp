@@ -436,6 +436,24 @@ void gui_editor::reload_cmd(float input_value) {
 
 
 /**
+ * @brief Reloads all loaded GUI definitions.
+ */
+void gui_editor::reload_gui_defs() {
+    game.content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    }
+    );
+    game.content.load_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
  * @brief Code to run for the save command.
  *
  * @param input_value Value of the player input for the command.

@@ -26,6 +26,8 @@
  * @brief Opens the "load" dialog.
  */
 void area_editor::open_load_dialog() {
+    reload_areas();
+    
     //Set up the picker's behavior and data.
     vector<picker_item> areas;
     

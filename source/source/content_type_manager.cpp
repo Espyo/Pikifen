@@ -142,6 +142,15 @@ bool area_content_manager::load_area(
     area_ptr->type = requested_area_type;
     area_ptr->user_data_path = user_data_path;
     
+    if(manif_ptr) {
+        area_ptr->manifest = manif_ptr;
+    } else {
+        area_ptr->manifest =
+            find_manifest(
+                temp_manif.internal_name, temp_manif.pack, requested_area_type
+            );
+    }
+    
     //Main data.
     if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
     area_ptr->load_main_data_from_data_node(&data_file, level);
@@ -175,15 +184,6 @@ bool area_content_manager::load_area(
         if(game.perf_mon) game.perf_mon->start_measurement("Area -- Geometry");
         area_ptr->load_geometry_from_data_node(&geometry_file, level);
         if(game.perf_mon) game.perf_mon->finish_measurement();
-    }
-    
-    if(manif_ptr) {
-        area_ptr->manifest = manif_ptr;
-    } else {
-        area_ptr->manifest =
-            find_manifest(
-                temp_manif.internal_name, temp_manif.pack, requested_area_type
-            );
     }
     
     return true;

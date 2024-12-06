@@ -971,6 +971,7 @@ private:
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = nullptr
     );
+    void reload_areas();
     void remove_thumbnail();
     void resize_everything(float mults[2]);
     void rollback_to_prepared_state(area_data* prepared_state);

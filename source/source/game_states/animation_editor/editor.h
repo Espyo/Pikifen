@@ -235,6 +235,7 @@ private:
         void* info, bool is_new
     );
     void play_sound(size_t sound_idx);
+    void reload_anim_dbs();
     void rename_animation(animation* anim, const string &new_name);
     void rename_body_part(body_part* part, const string &new_name);
     void rename_sprite(sprite* spr, const string &new_name);

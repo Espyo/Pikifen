@@ -2,13 +2,8 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    If you open a new GUI def file, set the selected GUI item to none
-    Add editor status bar messages for _creating_ successfully
     Are timed levers ticking while off-camera?
     In the area editor if you change multiple sectors' heights with H, it should change them all by that amount, if it's not already
-    When deleting an area, update the manifests
-    The history should be saved as path;name, so the entry in the history can have a pretty name instead of a cryptic path
-    A history item should list the item's pack
     Find some way of making content sharing easier
         Implementation
             Internal names should be sanitized
@@ -278,6 +273,7 @@ Next tasks (roughly sorted most important first)
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
         Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies
         Show how close you are to concocting a new spray
+    Discontinue system message boxes in favor of Dear ImGui ones
     Other menu improvements
         Add the help menu to the main menu
             The tooltip for it should mention it's also in the pause menu so players don't feel pressured to learn everything now before jumping in

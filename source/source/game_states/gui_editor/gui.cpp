@@ -21,6 +21,8 @@
  * @brief Opens the "load" dialog.
  */
 void gui_editor::open_load_dialog() {
+    reload_gui_defs();
+    
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
     for(const auto &f : game.content.gui_defs.manifests) {
