@@ -1,0 +1,14 @@
+name = Red Alert
+description = Groove out to this electro song with growing intensity.
+
+tags = Area; Energetic
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_start = 52
+
+main_track = red_alert
+mix_tracks {
+    enemy = red_alert_enemy
+}

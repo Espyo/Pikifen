@@ -70,7 +70,7 @@ Content should have a minimum level of quality to make it into _Pikifen_. The id
 * For songs:
   * Ideally, add your DAW's song project to `source/documents/music`, provided it's possible and it's not bloated with embedded samples or anything.
   * Ideally, use OGG.
-  * Looped sections, if only, should play only once to help keep the file size small.
+  * Looped sections, if any, should play only once to help keep the file size small.
   * Credit the instruments used in the manual's credits page.
   * Edit every track files' metadata:
     * Title: e.g. "My Song", "My Song (enemy track)", etc.
