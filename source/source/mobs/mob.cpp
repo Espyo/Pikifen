@@ -2706,6 +2706,11 @@ void mob::move_to_path_end(float speed, float acceleration) {
 size_t mob::play_sound(size_t sound_data_idx) {
     if(sound_data_idx >= type->sounds.size()) return 0;
     
+    //If the area just loaded, don't play any mob sounds. This allows stuff
+    //like obstacles being cleared upon area load and not playing the
+    //obstacle clear jingle.
+    if(game.states.gameplay->area_time_passed <= 0.2f) return 0;
+    
     mob_type::sound_t* sound = &type->sounds[sound_data_idx];
     
     switch(sound->type) {

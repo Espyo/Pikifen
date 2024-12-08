@@ -2,44 +2,40 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Are timed levers ticking while off-camera?
     In the area editor if you change multiple sectors' heights with H, it should change them all by that amount, if it's not already
-    Find some way of making content sharing easier
-        Implementation
-            Internal names should be sanitized
-            Allow pack thumbnails
-        The idea
-            The Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
-            Some sort of data.txt where you can write the author, version, engine version, what other packs it depends on (including optionally specific versions), what packs it's incompatible with, license
-            Problems with the current way of doing things "by hand"
-                When makers want to share their content, they have to fish its requirements from several folders
-                When players want to install content, they have to place it in the right folders
-        Other info
-            Right now, this is how each type of content works:
-                One per file: global anims, sounds, songs, graphics, GUI, hazards, liquids, particle generators, spike damage types, sprays, statuses, weather
-                Other ways: areas, mob types
-            Problems to watch out for
-                How do you create packs that extend scripts, or replace parameters in existing mobs or the game config?
-                How do you choose what pack, if any, do you create a new area/animation/GUI setting in when you're in an editor?
-                What should happen when the player opens the texture selection dialog in the area editor?
-                Area backups should be saved on a sub-folder matching the pack
+    Songs and weather in the area editor should use the proper name
+    Packs
+        When creating a new mob animation, it should only list mob types in that pack, otherwise it'll be creating new, empty mob types
+        A custom dialog for players to choose textures with, in the area editor
+            One section list them all separated by pack, as usual
+            Another section has a textbox with the texture internal name, and a preview of that texture, if valid, plus an OK button
+            When the player presses a button in the list, it fills the textbox with that name
+        Internal names should be sanitized wherever the player can insert them
+        Area backups should be saved on a sub-folder matching the pack
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check
             Test editing every single piece of content, both in the base pack, and in a new pack
             Test the suggestion to play Tutorial Meadow
 
+
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
-    Starting Crash Landing makes the obstacle clear jingle play
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
     Check Helodity's particle editor
         Add a way to move the emitter with the mouse
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
+    Find a way to manage the installed packs
+        Allow pack thumbnails
+        Players should be able to choose which ones are enabled or disabled, and their load order
+            The load order (bottom first vs. top first) should be explained
+            It should also show and/or explain in some way how there's the base content
+        When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
+        There should be a button to open the packs folder
     Update to Dear ImGui 1.91.5
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
@@ -144,32 +140,34 @@ Next tasks (roughly sorted most important first)
         Helodity's tropical song
         Other people's songs
     Use a screenshot for the title screen
-    Pikmin animation improvements
-        Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
-            If necessary, seeds should have their own animation
-        The "grabbing_near" sprite is unused for all bar Bulbmin
-        More frames, for more fluidity
-    Pikmin missing animations
-        Carrying (walking while carrying)
-            Note that there is currently a "grabbing" (unused) and a "carrying" animation
-            Also use it for when they're carrying tools
-        Celebrating
-        Climbing (add the track logic too)
-        Sliding (add the track logic too)
-        Pushing (add the group task logic too)
-        Arms outstretched (add the group task logic too)
-        Dying? (like shrinking or something)
-    Leader animation improvements
-        More frames, for more fluidity
-        Add a mid_bend sprite
-    Leader missing animations
-        Idling (bobbing a bit so they aren't static)
-        Bored
-        Thrown (add to the logic of bouncers too)
-        Climbing (add the track logic too)
-        Sliding (add the track logic too)
-        Turning (maybe just the walking animation)
-        Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
+    Pikmin animations
+        Improvements
+            Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
+                If necessary, seeds should have their own animation
+            The "grabbing_near" sprite is unused for all bar Bulbmin
+            More frames, for more fluidity
+        New animations
+            Carrying (walking while carrying)
+                Note that there is currently a "grabbing" (unused) and a "carrying" animation
+                Also use it for when they're carrying tools
+            Celebrating
+            Climbing (add the track logic too)
+            Sliding (add the track logic too)
+            Pushing (add the group task logic too)
+            Arms outstretched (add the group task logic too)
+            Dying? (like shrinking or something)
+    Leader animations
+        Improvements
+            More frames, for more fluidity
+            Add a mid_bend sprite
+        New animations
+            Idling (bobbing a bit so they aren't static)
+            Bored
+            Thrown (add to the logic of bouncers too)
+            Climbing (add the track logic too)
+            Sliding (add the track logic too)
+            Turning (maybe just the walking animation)
+            Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
@@ -222,12 +220,6 @@ Next tasks (roughly sorted most important first)
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         bud_icon.png and flower_icon.png should be white_bud_icon.png and white_flower_icon.png, to fit with the pink and purple buds and flowers
-    Find a way to manage the installed packs
-        Players should be able to choose which ones are enabled or disabled, and their load order
-            The load order (bottom first vs. top first) should be explained
-            It should also show and/or explain in some way how there's the base content
-        When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
-        There should be a button to open the packs folder
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Update screenshots in the manual that still show off the Play area

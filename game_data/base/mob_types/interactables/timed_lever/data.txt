@@ -5,6 +5,7 @@ area_editor_tips = You can link an object to this so that when it receives power
 area_editor_recommend_links_from = true
 custom_category_name = Puzzle
 height = 16
+inactive_logic = ticks
 max_health = 1
 prompt_text = Flip lever
 pushable = false
