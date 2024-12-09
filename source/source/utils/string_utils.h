@@ -23,7 +23,7 @@ using std::vector;
 
 //Flags for the time-to-string functions. This is a bitmask.
 enum TIME_TO_STR_FLAG {
-    
+
     //If true, leading zeros will not appear.
     TIME_TO_STR_FLAG_NO_LEADING_ZEROS = 1 << 0,
     
@@ -79,4 +79,5 @@ string time_to_str3(
     uint8_t flags = 0
 );
 string trim_spaces(const string &s, bool left_only = false);
+string trim_with_ellipsis(const string &s, size_t size);
 string word_wrap(const string &s, size_t n_chars_per_line);

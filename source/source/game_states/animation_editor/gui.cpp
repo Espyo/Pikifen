@@ -71,7 +71,7 @@ void animation_editor::open_load_dialog() {
         
     //Open the dialog that will contain the picker and history.
     open_dialog(
-        "Load a file or create a new one",
+        "Load an animation database or create a new one",
         std::bind(&animation_editor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =

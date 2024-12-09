@@ -533,6 +533,23 @@ string trim_spaces(const string &s, bool left_only) {
 
 
 /**
+ * @brief Trims the left side of a string, if necessary. Trimmed content is
+ * replaced by an ellipsis.
+ *
+ * @param str String to trim.
+ * @param size Maximum size allowed.
+ * @return The trimmed string.
+ */
+string trim_with_ellipsis(const string &str, size_t size) {
+    if(str.size() <= size) return str;
+    
+    string result = str;
+    int start_idx = std::max((int) 0, (int) (str.size() - (size - 3)));
+    return "..." + result.substr(start_idx);
+}
+
+
+/**
  * @brief Given a string, representing a long line of text, it automatically
  * adds line breaks along the text in order to break it up into smaller lines,
  * such that no line exceeds the number of characters in nr_chars_per_line

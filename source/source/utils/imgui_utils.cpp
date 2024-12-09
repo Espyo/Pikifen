@@ -258,6 +258,29 @@ void ImGui::SetupCentering(int upcoming_items_width) {
 
 
 /**
+ * @brief Prepares the state of the GUI to either place the next button
+ * on the same line, or to break to a new line if it wouldn't fit.
+ *
+ * @param next_button_width Width of the next button.
+ * @param next_button_idx Index of the next button.
+ * @param total_n_buttons Total amount of buttons.
+ */
+void ImGui::SetupButtonWrapping(
+    int next_button_width, int next_button_idx, int total_n_buttons
+) {
+    float last_x2 =
+        ImGui::GetItemRectMax().x;
+    float next_x2 =
+        last_x2 + ImGui::GetStyle().ItemSpacing.x + next_button_width;
+    float window_x2 =
+        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+    if(next_button_idx < total_n_buttons && next_x2 < window_x2) {
+        ImGui::SameLine();
+    }
+}
+
+
+/**
  * @brief Places a dummy widget designed to space things vertically.
  */
 void ImGui::Spacer() {

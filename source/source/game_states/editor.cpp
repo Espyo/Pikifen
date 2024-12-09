@@ -1306,18 +1306,17 @@ void editor::process_gui_history(
                 string name = history[h].second;
                 if(name.empty()) name = history[h].first;
                 name = name_display_callback(name);
-                
-                //History number text.
-                ImGui::Text("%i.", (int) (h + 1));
+                name = trim_with_ellipsis(name, 16);
                 
                 //History entry button.
-                ImGui::SameLine();
-                if(ImGui::Button((name + "##" + i2s(h)).c_str())) {
+                const ImVec2 button_size(120, 24);
+                if(ImGui::Button((name + "##" + i2s(h)).c_str(), button_size)) {
                     pick_callback(path);
                 }
                 if(tooltip_callback) {
                     set_tooltip(tooltip_callback(path));
                 }
+                ImGui::SetupButtonWrapping(button_size.x, h + 1, history.size());
             }
             
         } else {
@@ -2544,7 +2543,6 @@ editor::picker_info::picker_info(editor* editor_ptr) :
  * @brief Processes the picker for this frame.
  */
 void editor::picker_info::process() {
-    ImGuiStyle &style = ImGui::GetStyle();
     vector<string> top_cat_names;
     vector<vector<string> > sec_cat_names;
     vector<vector<vector<picker_item> > > final_items;
@@ -2705,9 +2703,6 @@ void editor::picker_info::process() {
     
     ImGui::BeginChild("list");
     
-    float picker_x2 =
-        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-        
     for(size_t tc = 0; tc < final_items.size(); tc++) {
     
         bool top_cat_opened = true;
@@ -2813,11 +2808,9 @@ void editor::picker_info::process() {
                     editor_ptr->set_tooltip(i_ptr->tooltip);
                 }
                 
-                float last_x2 = ImGui::GetItemRectMax().x;
-                float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
-                if(i + 1 < final_items[tc][sc].size() && next_x2 < picker_x2) {
-                    ImGui::SameLine();
-                }
+                ImGui::SetupButtonWrapping(
+                    button_size.x, i + 1, final_items[tc][sc].size()
+                );
                 ImGui::PopID();
             }
             
