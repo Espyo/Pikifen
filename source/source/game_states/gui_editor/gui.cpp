@@ -29,7 +29,7 @@ void gui_editor::open_load_dialog() {
         file_items.push_back(
             picker_item(
                 f.first,
-                "Pack: " + f.second.pack, "",
+                "Pack: " + game.content.packs.list[f.second.pack].name, "",
                 (void*) &f.second,
                 get_file_tooltip(f.second.path)
             )

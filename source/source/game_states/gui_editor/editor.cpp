@@ -166,7 +166,7 @@ string gui_editor::get_file_tooltip(const string &path) const {
     return
         "Internal name: " + temp_manif.internal_name + "\n"
         "File path: " + path + "\n"
-        "Pack: " + temp_manif.pack;
+        "Pack: " + game.content.packs.list[temp_manif.pack].name;
 }
 
 

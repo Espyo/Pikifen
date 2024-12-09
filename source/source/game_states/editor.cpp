@@ -1408,9 +1408,7 @@ bool editor::process_gui_mob_type_widgets(
                 mob_type* mt_ptr = custom_cat_types[c][n];
                 items.push_back(
                     picker_item(
-                mt_ptr->name, {
-                    mt_ptr->custom_category_name
-                }
+                        mt_ptr->name, mt_ptr->custom_category_name
                     )
                 );
             }

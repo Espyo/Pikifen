@@ -34,7 +34,7 @@ void animation_editor::open_load_dialog() {
         file_items.push_back(
             picker_item(
                 a.second.name,
-                "Pack: " + a.second.manifest->pack,
+                "Pack: " + game.content.packs.list[a.second.manifest->pack].name,
                 "Global animations",
                 (void*) a.second.manifest,
                 get_file_tooltip(a.second.manifest->path)
@@ -50,7 +50,8 @@ void animation_editor::open_load_dialog() {
             file_items.push_back(
                 picker_item(
                     type->name,
-                    "Pack: " + a.second.manifest->pack, cat->name + " objects",
+                    "Pack: " + game.content.packs.list[a.second.manifest->pack].name,
+                    cat->name + " objects",
                     (void*) a.second.manifest,
                     get_file_tooltip(a.second.manifest->path)
                 )
@@ -824,7 +825,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
             }
             anim_names.push_back(
-                picker_item(db.animations[a]->name, "", "", anim_frame_1)
+                picker_item(db.animations[a]->name, "", "", nullptr, "", anim_frame_1)
             );
         }
         open_picker_dialog(
@@ -1814,7 +1815,7 @@ void animation_editor::process_gui_panel_sprite() {
             sprite_names.push_back(
                 picker_item(
                     db.sprites[s]->name,
-                    "", "",
+                    "", "", nullptr, "",
                     db.sprites[s]->bitmap
                 )
             );

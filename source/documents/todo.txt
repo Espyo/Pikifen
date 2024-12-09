@@ -21,6 +21,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
 
@@ -145,11 +146,8 @@ Next tasks (roughly sorted most important first)
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
             The "grabbing_near" sprite is unused for all bar Bulbmin
-            More frames, for more fluidity
         New animations
-            Carrying (walking while carrying)
-                Note that there is currently a "grabbing" (unused) and a "carrying" animation
-                Also use it for when they're carrying tools
+            Struggling to lift
             Celebrating
             Climbing (add the track logic too)
             Sliding (add the track logic too)

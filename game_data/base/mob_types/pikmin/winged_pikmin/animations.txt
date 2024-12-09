@@ -1,4 +1,4 @@
-name
+name=Winged Pikmin animations
 engine_version=0.25.0
 animations{
 	attacking{
@@ -945,33 +945,6 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	grabbing_near{
-		file=winged_pikmin
-		file_pos=43.0000 147.0000
-		file_size=31.0000 28.0000
-		offset=2.5000 0.0000
-		scale=0.5000 0.5000
-		top_visible=true
-		top_pos=11.0000 0.0000
-		top_size=5.5000 10.0000
-		top_angle=3.1400
-		hitboxes{
-			top{
-				coords=11.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-			}
-			body{
-				coords=2.0000 0.0000 0.0000
-				height=24.0000
-				radius=6.0000
 				type=0
 				value=1.0000
 			}

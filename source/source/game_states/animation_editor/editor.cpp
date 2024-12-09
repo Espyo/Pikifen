@@ -282,7 +282,7 @@ string animation_editor::get_file_tooltip(const string &path) const {
         );
         return
             "File path: " + path + "\n"
-            "Pack: " + temp_manif.pack + "\n"
+            "Pack: " + game.content.packs.list[temp_manif.pack].name + "\n"
             "Mob's internal name: " + type + " (category " + cat + ")";
     } else {
         content_manifest temp_manif;
@@ -292,7 +292,7 @@ string animation_editor::get_file_tooltip(const string &path) const {
         return
             "Internal name: " + temp_manif.internal_name + "\n"
             "File path: " + path + "\n"
-            "Pack: " + temp_manif.pack;
+            "Pack: " + game.content.packs.list[temp_manif.pack].name;
     }
 }
 

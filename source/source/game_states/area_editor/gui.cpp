@@ -37,7 +37,8 @@ void area_editor::open_load_dialog() {
         areas.push_back(
             picker_item(
                 area_ptr->name,
-                "Pack: " + man->pack, "Simple", (void*) man,
+                "Pack: " + game.content.packs.list[man->pack].name,
+                "Simple", (void*) man,
                 get_folder_tooltip(man->path, ""),
                 area_ptr->thumbnail.get()
             )
@@ -49,7 +50,8 @@ void area_editor::open_load_dialog() {
         areas.push_back(
             picker_item(
                 area_ptr->name,
-                "Pack: " + man->pack, "Mission", (void*) man,
+                "Pack: " + game.content.packs.list[man->pack].name,
+                "Mission", (void*) man,
                 get_folder_tooltip(man->path, ""),
                 area_ptr->thumbnail.get()
             )

@@ -3074,7 +3074,8 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     m->set_timer(PIKMIN::DISMISS_TIMEOUT);
     
     m->set_animation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
+        START_ANIM_OPTION_NORMAL, true, m->type->move_speed
     );
 }
 
@@ -3759,7 +3760,8 @@ void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     pikmin_fsm::update_in_group_chasing(m, nullptr, nullptr);
     m->set_animation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
+        START_ANIM_OPTION_NORMAL, true, m->type->move_speed
     );
 }
 
