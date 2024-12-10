@@ -209,6 +209,9 @@ enum PIKMIN_ANIM {
     //Backflip celebration.
     PIKMIN_ANIM_BACKFLIP,
     
+    //Twirling celebration.
+    PIKMIN_ANIM_TWIRLING,
+    
     //Sighing.
     PIKMIN_ANIM_SIGHING,
     

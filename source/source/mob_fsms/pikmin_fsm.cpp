@@ -2179,7 +2179,11 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::celebrate(mob* m, void* info1, void* info2) {
-    m->set_animation(PIKMIN_ANIM_BACKFLIP);
+    if(randomi(0, 1) == 0) {
+        m->set_animation(PIKMIN_ANIM_BACKFLIP);
+    } else {
+        m->set_animation(PIKMIN_ANIM_TWIRLING);
+    }
 }
 
 

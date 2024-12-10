@@ -133,6 +133,7 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
     v.push_back(std::make_pair(PIKMIN_ANIM_ATTACKING,       "attacking"));
     v.push_back(std::make_pair(PIKMIN_ANIM_GRABBING,        "grabbing"));
     v.push_back(std::make_pair(PIKMIN_ANIM_BACKFLIP,        "backflip"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_TWIRLING,        "twirling"));
     v.push_back(std::make_pair(PIKMIN_ANIM_SIGHING,         "sighing"));
     v.push_back(std::make_pair(PIKMIN_ANIM_SHAKING,         "shaking"));
     v.push_back(std::make_pair(PIKMIN_ANIM_CARRYING,        "carrying"));

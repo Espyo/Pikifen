@@ -614,6 +614,46 @@ animations{
 			}
 		}
 	}
+	twirling{
+		frames{
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			twirling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_02{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_03{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_04{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_05{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_06{
+				duration=0.1000
+				interpolate=true
+			}
+			twirling_07{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 	walking{
 		frames{
 			idling_01{
@@ -2509,6 +2549,194 @@ sprites{
 				coords=-2.0000 0.0000 0.0000
 				height=24.0000
 				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_01{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=5.9341
+		top_visible=true
+		top_pos=-4.0000 1.5000
+		top_size=5.5000 10.0000
+		top_angle=5.9590
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_02{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=0.3491
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=6.1087
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_03{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=1.3963
+		top_visible=true
+		top_pos=-2.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=5.9643
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_04{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=2.6180
+		top_visible=true
+		top_pos=0.5000 -3.0000
+		top_size=5.5000 10.0000
+		top_angle=1.3963
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_05{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=4.0143
+		top_visible=true
+		top_pos=2.5000 -1.0000
+		top_size=5.5000 10.0000
+		top_angle=2.2689
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_06{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		angle=5.6723
+		top_visible=true
+		top_pos=0.5000 3.0000
+		top_size=5.5000 10.0000
+		top_angle=4.1888
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	twirling_07{
+		file=white_pikmin
+		file_pos=0.0000 106.0000
+		file_size=16.0000 30.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 1.0000
+		top_size=5.5000 10.0000
+		top_angle=5.8469
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
 				value=1.0000
 			}
