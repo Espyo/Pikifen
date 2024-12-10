@@ -23,6 +23,34 @@ animations{
 			}
 		}
 	}
+	backflip{
+		frames{
+			idling_01{
+				duration=0.0500
+			}
+			mid_bend{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			backflip_01{
+				duration=0.1000
+			}
+			backflip_02{
+				duration=0.1000
+			}
+			backflip_03{
+				duration=0.1000
+			}
+			backflip_04{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.2000
+			}
+		}
+	}
 	carrying{
 		frames{
 			idling_01{
@@ -313,6 +341,22 @@ animations{
 			}
 		}
 	}
+	plucking_thrown{
+		frames{
+			backflip_01{
+				duration=0.1000
+			}
+			backflip_02{
+				duration=0.1000
+			}
+			backflip_03{
+				duration=0.1000
+			}
+			backflip_04{
+				duration=0.1000
+			}
+		}
+	}
 	shaking{
 		frames{
 			idling_01{
@@ -546,6 +590,110 @@ sprites{
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_01{
+		file=bulbmin
+		file_pos=0.0000 118.0000
+		file_size=36.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=5.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_02{
+		file=bulbmin
+		file_pos=73.0000 118.0000
+		file_size=35.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-6.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=-6.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_03{
+		file=bulbmin
+		file_pos=70.0000 60.0000
+		file_size=33.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=false
+		top_pos=5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=-5.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_04{
+		file=bulbmin
+		file_pos=37.0000 118.0000
+		file_size=35.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=9.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
+		hitboxes{
+			top{
+				coords=8.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=7.0000
 				type=0

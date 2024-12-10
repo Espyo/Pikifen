@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -145,10 +145,9 @@ Next tasks (roughly sorted most important first)
         Improvements
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
-            The "grabbing_near" sprite is unused for all bar Bulbmin
         New animations
-            Struggling to lift
-            Celebrating
+            Twirling (for celebrating)
+            Called to attention
             Climbing (add the track logic too)
             Sliding (add the track logic too)
             Pushing (add the group task logic too)
@@ -718,6 +717,8 @@ Misc things (so I don't forget)
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         Leaders should have their antenna light separated like Pikmin do
+        Pikmin animations
+            Struggling to lift
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
             The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks

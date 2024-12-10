@@ -443,7 +443,7 @@ void area_editor::process_gui_menu_bar() {
                 quick_play_cmd(1.0f);
             }
             set_tooltip(
-                "Save, quit, and start playing the area. Leaving will return"
+                "Save, quit, and start playing the area. Leaving will return "
                 "to the editor.",
                 "Ctrl + P"
             );

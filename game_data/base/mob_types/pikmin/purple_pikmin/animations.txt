@@ -23,6 +23,34 @@ animations{
 			}
 		}
 	}
+	backflip{
+		frames{
+			idling_01{
+				duration=0.0500
+			}
+			mid_bend{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			backflip_01{
+				duration=0.1000
+			}
+			backflip_02{
+				duration=0.1000
+			}
+			backflip_03{
+				duration=0.1000
+			}
+			backflip_04{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.2000
+			}
+		}
+	}
 	carrying{
 		frames{
 			grabbing{
@@ -347,6 +375,22 @@ animations{
 			}
 		}
 	}
+	plucking_thrown{
+		frames{
+			backflip_01{
+				duration=0.1000
+			}
+			backflip_02{
+				duration=0.1000
+			}
+			backflip_03{
+				duration=0.1000
+			}
+			backflip_04{
+				duration=0.1000
+			}
+		}
+	}
 	shaking{
 		frames{
 			idling_01{
@@ -622,6 +666,110 @@ sprites{
 			}
 		}
 	}
+	backflip_01{
+		file=purple_pikmin
+		file_pos=83.0000 113.0000
+		file_size=31.0000 32.0000
+		scale=0.5000 0.5000
+		top_visible=false
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_02{
+		file=purple_pikmin
+		file_pos=115.0000 111.0000
+		file_size=31.0000 36.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=10.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
+		hitboxes{
+			top{
+				coords=9.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_03{
+		file=purple_pikmin
+		file_pos=147.0000 113.0000
+		file_size=31.0000 32.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=3.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=3.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	backflip_04{
+		file=purple_pikmin
+		file_pos=179.0000 111.0000
+		file_size=31.0000 36.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-10.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-9.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	crouching{
 		file=purple_pikmin
 		file_pos=0.0000 37.0000
@@ -651,7 +799,7 @@ sprites{
 	}
 	crushed_01{
 		file=purple_pikmin
-		file_pos=0.0000 112.0000
+		file_pos=0.0000 113.0000
 		file_size=82.0000 32.0000
 		offset=-8.0000 0.0000
 		scale=0.6000 0.6000
@@ -678,7 +826,7 @@ sprites{
 	}
 	crushed_02{
 		file=purple_pikmin
-		file_pos=0.0000 112.0000
+		file_pos=0.0000 113.0000
 		file_size=82.0000 32.0000
 		offset=-8.0000 0.0000
 		scale=0.5000 0.5000
@@ -705,7 +853,7 @@ sprites{
 	}
 	crushed_03{
 		file=purple_pikmin
-		file_pos=0.0000 112.0000
+		file_pos=0.0000 113.0000
 		file_size=82.0000 32.0000
 		offset=-0.5000 0.0000
 		scale=0.0500 0.0500

@@ -1324,6 +1324,38 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("celebrating", PIKMIN_STATE_CELEBRATING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::stand_still);
+            efc.run(pikmin_fsm::celebrate);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
+            efc.run(pikmin_fsm::check_leader_bump);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
     }
     
     efc.new_state("in_group_chasing_h", PIKMIN_STATE_IN_GROUP_CHASING_H); {
@@ -1949,9 +1981,9 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     float throw_angle = get_angle(m->pos, m->focused_mob->pos);
     m->speed_z = PIKMIN::THROW_VER_SPEED;
     m->speed = angle_to_coordinates(throw_angle, PIKMIN::THROW_HOR_SPEED);
-    m->face(throw_angle, nullptr, true);
+    m->face(throw_angle + TAU / 2.0f, nullptr, true);
     
-    m->set_animation(PIKMIN_ANIM_THROWN);
+    m->set_animation(PIKMIN_ANIM_PLUCKING_THROWN);
     m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_PLUCKED]);
     game.audio.create_world_pos_sound_source(
         game.sys_assets.sound_pluck,
@@ -2136,6 +2168,18 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
         );
         
     pik_ptr->temp_i = 1;
+}
+
+
+/**
+ * @brief When a Pikmin should celebrate.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::celebrate(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_BACKFLIP);
 }
 
 
@@ -2539,7 +2583,7 @@ void pikmin_fsm::finish_carrying(mob* m, void* info1, void* info2) {
         
     } else {
         //The Pikmin can just sit and chill.
-        p->fsm.set_state(PIKMIN_STATE_IDLING);
+        p->fsm.set_state(PIKMIN_STATE_CELEBRATING);
     }
 }
 

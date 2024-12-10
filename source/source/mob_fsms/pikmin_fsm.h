@@ -34,6 +34,7 @@ void become_sprout(            mob* m, void* info1, void* info2);
 void begin_pluck(              mob* m, void* info1, void* info2);
 void called(                   mob* m, void* info1, void* info2);
 void called_while_knocked_down(mob* m, void* info1, void* info2);
+void celebrate(                mob* m, void* info1, void* info2);
 void check_boredom_anim_end(   mob* m, void* info1, void* info2);
 void check_incoming_attack(    mob* m, void* info1, void* info2);
 void check_leader_bump(        mob* m, void* info1, void* info2);

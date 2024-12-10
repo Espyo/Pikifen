@@ -206,6 +206,9 @@ enum PIKMIN_ANIM {
     //Carrying.
     PIKMIN_ANIM_CARRYING,
     
+    //Backflip celebration.
+    PIKMIN_ANIM_BACKFLIP,
+    
     //Sighing.
     PIKMIN_ANIM_SIGHING,
     
@@ -217,6 +220,9 @@ enum PIKMIN_ANIM {
     
     //Being plucked.
     PIKMIN_ANIM_PLUCKING,
+    
+    //Backflipping after being thrown.
+    PIKMIN_ANIM_PLUCKING_THROWN,
     
     //Getting knocked back.
     PIKMIN_ANIM_KNOCKED_BACK,
