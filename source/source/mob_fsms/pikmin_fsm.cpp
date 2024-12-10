@@ -4019,7 +4019,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         m->set_animation(PIKMIN_ANIM_WALKING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->set_animation(PIKMIN_ANIM_WALKING);
+        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
         m->set_animation(PIKMIN_ANIM_SLIDING);
@@ -4454,10 +4454,22 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
         nullptr
     );
     
-    if(
-        tas_ptr->tas_type->worker_pikmin_pose ==
-        GROUP_TASK_PIKMIN_POSE_STOPPED
-    ) {
+    switch(tas_ptr->tas_type->worker_pikmin_pose) {
+    case GROUP_TASK_PIKMIN_POSE_STOPPED: {
         pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+        break;
+    }
+    case GROUP_TASK_PIKMIN_POSE_ARMS_OUT: {
+        pik_ptr->set_animation(PIKMIN_ANIM_ARMS_OUT);
+        break;
+    }
+    case GROUP_TASK_PIKMIN_POSE_PUSHING: {
+        pik_ptr->set_animation(PIKMIN_ANIM_IDLING); //TODO
+        break;
+    }
+    case GROUP_TASK_PIKMIN_POSE_CARRYING: {
+        pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
+        break;
+    }
     }
 }

@@ -19,8 +19,8 @@ enum GROUP_TASK_PIKMIN_POSE {
     //Stopped.
     GROUP_TASK_PIKMIN_POSE_STOPPED,
     
-    //Arms stretched sideways.
-    GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED,
+    //Arms stretched out sideways.
+    GROUP_TASK_PIKMIN_POSE_ARMS_OUT,
     
     //Pushing forward.
     GROUP_TASK_PIKMIN_POSE_PUSHING,

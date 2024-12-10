@@ -151,7 +151,6 @@ Next tasks (roughly sorted most important first)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
             Pushing (add the group task logic too)
-            Arms outstretched (add the group task logic too)
             Dying? (like shrinking or something)
     Leader animations
         Improvements

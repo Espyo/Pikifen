@@ -1,6 +1,26 @@
 name=Yellow Pikmin animations
 engine_version=0.25.0
 animations{
+	arms_out{
+		frames{
+			idling_01{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1700
+				interpolate=true
+			}
+			idling_03{
+				duration=0.1700
+				interpolate=true
+			}
+		}
+	}
 	attacking{
 		frames{
 			grabbing_far{

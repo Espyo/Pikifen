@@ -1,6 +1,26 @@
 name=Blue Pikmin animations
 engine_version=0.25.0
 animations{
+	arms_out{
+		frames{
+			arms_out_01{
+				duration=0.1700
+				interpolate=true
+			}
+			arms_out_02{
+				duration=0.1700
+				interpolate=true
+			}
+			arms_out_01{
+				duration=0.1700
+				interpolate=true
+			}
+			arms_out_03{
+				duration=0.1700
+				interpolate=true
+			}
+		}
+	}
 	attacking{
 		frames{
 			grabbing_far{
@@ -612,6 +632,86 @@ animations{
 	}
 }
 sprites{
+	arms_out_01{
+		file=blue_pikmin
+		file_pos=0.0000 112.0000
+		file_size=20.0000 32.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	arms_out_02{
+		file=blue_pikmin
+		file_pos=0.0000 112.0000
+		file_size=20.0000 32.0000
+		offset=0.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-5.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	arms_out_03{
+		file=blue_pikmin
+		file_pos=0.0000 112.0000
+		file_size=20.0000 32.0000
+		offset=-0.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-3.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	attacking_01{
 		file=blue_pikmin
 		file_pos=206.0000 31.0000

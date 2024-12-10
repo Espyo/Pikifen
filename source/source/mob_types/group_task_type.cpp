@@ -87,8 +87,8 @@ void group_task_type::load_cat_properties(data_node* file) {
     if(worker_pikmin_pose_node) {
         if(worker_pikmin_pose_str == "stopped") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
-        } else if(worker_pikmin_pose_str == "arms_stretched") {
-            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED;
+        } else if(worker_pikmin_pose_str == "arms_out") {
+            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_ARMS_OUT;
         } else if(worker_pikmin_pose_str == "pushing") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_PUSHING;
         } else if(worker_pikmin_pose_str == "carrying") {

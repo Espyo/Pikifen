@@ -242,6 +242,9 @@ enum PIKMIN_ANIM {
     //Picking something up.
     PIKMIN_ANIM_PICKING_UP,
     
+    //Arms stretched out sideways.
+    PIKMIN_ANIM_ARMS_OUT,
+    
     //Sliding.
     PIKMIN_ANIM_SLIDING,
     

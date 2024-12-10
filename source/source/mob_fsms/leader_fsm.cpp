@@ -2335,10 +2335,10 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         m->set_animation(LEADER_ANIM_WALKING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->set_animation(LEADER_ANIM_WALKING);
+        m->set_animation(LEADER_ANIM_WALKING); //TODO
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        m->set_animation(LEADER_ANIM_WALKING);
+        m->set_animation(LEADER_ANIM_WALKING); //TODO
         break;
     }
     }
