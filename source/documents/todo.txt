@@ -146,7 +146,6 @@ Next tasks (roughly sorted most important first)
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
         New animations
-            Climbing (add the track logic too)
             Pushing (add the group task logic too)
             Dying? (like shrinking or something)
     Leader animations
@@ -155,8 +154,9 @@ Next tasks (roughly sorted most important first)
             Add a mid_bend sprite
         New animations
             Idling (bobbing a bit so they aren't static)
+            Called
             Bored
-            Thrown (add to the logic of bouncers too)
+            Thrown (add to the logic of bouncers too, including Pikmin)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
             Turning (maybe just the walking animation)

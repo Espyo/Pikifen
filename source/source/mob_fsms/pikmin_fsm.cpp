@@ -2599,7 +2599,7 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
         oni_ptr, checkpoints, oni_ptr->oni_type->nest->pikmin_enter_speed
     );
     
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING); //TODO
+    pik_ptr->set_animation(PIKMIN_ANIM_CLIMBING);
 }
 
 
@@ -4068,7 +4068,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         m->set_animation(PIKMIN_ANIM_WALKING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
+        m->set_animation(PIKMIN_ANIM_CLIMBING);
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
         m->set_animation(PIKMIN_ANIM_SLIDING);

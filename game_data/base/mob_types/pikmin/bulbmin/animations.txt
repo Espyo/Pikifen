@@ -115,6 +115,22 @@ animations{
 			}
 		}
 	}
+	climbing{
+		frames{
+			climbing_01{
+				duration=0.1000
+			}
+			climbing_02{
+				duration=0.1000
+			}
+			climbing_01{
+				duration=0.1000
+			}
+			climbing_03{
+				duration=0.1000
+			}
+		}
+	}
 	crushed{
 		frames{
 			crushed_01{
@@ -844,6 +860,87 @@ sprites{
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	climbing_01{
+		file=bulbmin
+		file_pos=35.0000 147.0000
+		file_size=34.0000 52.0000
+		offset=0.5000 -10.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-6.0000 -22.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-5.0000 -22.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 -7.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	climbing_02{
+		file=bulbmin
+		file_pos=70.0000 147.0000
+		file_size=34.0000 52.0000
+		offset=0.5000 -10.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-8.0000 -22.0000
+		top_size=5.5000 10.0000
+		top_angle=0.2094
+		hitboxes{
+			top{
+				coords=-7.5000 -22.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 -7.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	climbing_03{
+		file=bulbmin
+		file_pos=105.0000 147.0000
+		file_size=34.0000 52.0000
+		offset=0.5000 -10.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-2.0000 -24.0000
+		top_size=5.5000 10.0000
+		top_angle=0.9224
+		hitboxes{
+			top{
+				coords=-2.0000 -24.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 -7.0000 0.0000
 				height=24.0000
 				radius=7.0000
 				type=0
