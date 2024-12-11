@@ -71,6 +71,22 @@ animations{
 			}
 		}
 	}
+	called{
+		frames{
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_big{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
 	carrying{
 		frames{
 			grabbing{
@@ -185,13 +201,6 @@ animations{
 			}
 			idling_01{
 				duration=0.1000
-			}
-		}
-	}
-	grabbing{
-		frames{
-			grabbing{
-				duration=0.0000
 			}
 		}
 	}
@@ -1403,7 +1412,7 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=28.0000 20.0000
 		offset=2.0000 0.0000
-		scale=0.5500 0.5500
+		scale=0.6500 0.6500
 		top_visible=true
 		top_pos=-5.0000 0.0000
 		top_size=5.5000 10.0000

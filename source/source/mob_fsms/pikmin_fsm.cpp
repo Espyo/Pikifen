@@ -451,8 +451,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         "going_to_dismiss_spot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT
     ); {
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::going_to_dismiss_spot);
@@ -539,8 +538,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("riding_track");
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::check_leader_bump);
@@ -582,13 +580,42 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("called", PIKMIN_STATE_CALLED); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::called);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
     efc.new_state("going_to_opponent", PIKMIN_STATE_GOING_TO_OPPONENT); {
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(pikmin_fsm::decide_attack);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FOCUS_OFF_REACH); {
             efc.change_state("idling");
@@ -627,8 +654,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::decide_attack);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FOCUS_OFF_REACH); {
             efc.change_state("idling");
@@ -679,8 +705,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::forget_carriable_object);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -720,8 +745,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::forget_tool);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -761,8 +785,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::forget_group_task);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
             efc.run(pikmin_fsm::forget_group_task);
@@ -804,8 +827,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("entering_onion");
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -839,8 +861,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::check_leader_bump);
@@ -871,8 +892,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stand_still);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FINISHED_CARRYING); {
             efc.run(pikmin_fsm::finish_carrying);
@@ -924,8 +944,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::forget_group_task);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
             efc.run(pikmin_fsm::forget_group_task);
@@ -962,8 +981,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stand_still);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.change_state("idling");
@@ -1002,8 +1020,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::rechase_opponent);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -1036,8 +1053,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::unlatch);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_FOCUS_DIED); {
             efc.run(pikmin_fsm::lose_latched_mob);
@@ -1332,8 +1348,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(MOB_EV_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::check_leader_bump);
@@ -1650,8 +1665,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         "going_to_dismiss_spot_h", PIKMIN_STATE_GOING_TO_DISMISS_SPOT_H
     ); {
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing_h");
+            efc.change_state("called_h");
         }
         efc.new_event(MOB_EV_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
@@ -1733,6 +1747,36 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::release_tool);
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("called_h", PIKMIN_STATE_CALLED_H); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::called);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
     }
@@ -2130,10 +2174,11 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     pik_ptr->was_last_hit_dud = false;
     pik_ptr->consecutive_dud_hits = 0;
-    pik_ptr->stop_circling();
+    pikmin_fsm::stand_still(m, info1, info2);
     
     caller->add_to_group(pik_ptr);
     
+    pik_ptr->set_animation(PIKMIN_ANIM_CALLED);
     if(info2 == nullptr) {
         m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_CALLED]);
     }
@@ -2261,9 +2306,9 @@ void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
         !pik_ptr->holding.empty() &&
         pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
     ) {
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+        m->fsm.set_state(PIKMIN_STATE_CALLED_H, info1, info2);
     } else {
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        m->fsm.set_state(PIKMIN_STATE_CALLED, info1, info2);
     }
 }
 
@@ -4170,9 +4215,9 @@ void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
                 !pik_ptr->holding.empty() &&
                 pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
-                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+                m->fsm.set_state(PIKMIN_STATE_CALLED_H, info1, info2);
             } else {
-                m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+                m->fsm.set_state(PIKMIN_STATE_CALLED, info1, info2);
             }
         }
     }
@@ -4397,9 +4442,9 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
         !pik_ptr->holding.empty() &&
         pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
     ) {
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+        m->fsm.set_state(PIKMIN_STATE_CALLED_H, info1, info2);
     } else {
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        m->fsm.set_state(PIKMIN_STATE_CALLED, info1, info2);
     }
     
 }
@@ -4425,9 +4470,9 @@ void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
             !pik_ptr->holding.empty() &&
             pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
         ) {
-            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
+            m->fsm.set_state(PIKMIN_STATE_CALLED_H, info1, info2);
         } else {
-            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            m->fsm.set_state(PIKMIN_STATE_CALLED, info1, info2);
         }
     }
 }

@@ -37,7 +37,7 @@ Next tasks (roughly sorted most important first)
             It should also show and/or explain in some way how there's the base content
         When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
         There should be a button to open the packs folder
-    Update to Dear ImGui 1.91.5
+    Update to Dear ImGui 1.91.6
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
@@ -146,7 +146,6 @@ Next tasks (roughly sorted most important first)
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
         New animations
-            Called to attention
             Climbing (add the track logic too)
             Pushing (add the group task logic too)
             Dying? (like shrinking or something)

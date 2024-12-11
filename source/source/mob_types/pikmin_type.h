@@ -44,6 +44,9 @@ enum PIKMIN_STATE {
     //Idling.
     PIKMIN_STATE_IDLING,
     
+    //Called.
+    PIKMIN_STATE_CALLED,
+    
     //As a seed.
     PIKMIN_STATE_SEED,
     
@@ -164,6 +167,9 @@ enum PIKMIN_STATE {
     //Idling, whilst holding a tool.
     PIKMIN_STATE_IDLING_H,
     
+    //Called, whilst holding a tool.
+    PIKMIN_STATE_CALLED_H,
+    
     //Grabbed by a leader, whilst holding a tool.
     PIKMIN_STATE_GRABBED_BY_LEADER_H,
     
@@ -188,6 +194,9 @@ enum PIKMIN_ANIM {
     //Idling.
     PIKMIN_ANIM_IDLING,
     
+    //Called.
+    PIKMIN_ANIM_CALLED,
+    
     //Walking.
     PIKMIN_ANIM_WALKING,
     
@@ -199,9 +208,6 @@ enum PIKMIN_ANIM {
     
     //Attacking.
     PIKMIN_ANIM_ATTACKING,
-    
-    //Grabbing.
-    PIKMIN_ANIM_GRABBING,
     
     //Carrying.
     PIKMIN_ANIM_CARRYING,
