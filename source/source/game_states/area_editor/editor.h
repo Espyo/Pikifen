@@ -703,8 +703,8 @@ private:
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr = nullptr;
     
-    //Sector height when the quick height set mode was entered.
-    float quick_height_set_start_height = 0.0f;
+    //Sector heights when the quick height set mode was entered.
+    map<sector*, float> quick_height_set_start_heights;
     
     //Mouse coordinates (screen) when the quick height set mode was entered.
     point quick_height_set_start_pos;
@@ -939,6 +939,7 @@ private:
         const point &p, path_link** link1, path_link** link2
     ) const;
     path_stop* get_path_stop_under_point(const point &p) const;
+    float get_quick_height_set_offset() const;
     SECTOR_SPLIT_RESULT get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;
     vertex* get_vertex_under_point(const point &p) const;

@@ -284,15 +284,12 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                     "To set a sector's height, you must first select a sector!",
                     true
                 );
-            } else if(selected_sectors.size() > 1) {
-                set_status(
-                    "To set a sector's height, you can only select 1 sector!",
-                    true
-                );
             } else {
                 sub_state = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
                 quick_height_set_start_pos = game.mouse_cursor.s_pos;
-                quick_height_set_start_height = (*selected_sectors.begin())->z;
+                for(const auto& s: selected_sectors) {
+                    quick_height_set_start_heights[s] = s->z;
+                }
                 set_status(
                     "Move the cursor up or down to change the sector's height."
                 );
@@ -384,6 +381,7 @@ void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
             state == EDITOR_STATE_LAYOUT &&
             sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET
         ) {
+            quick_height_set_start_heights.clear();
             sub_state = EDITOR_SUB_STATE_NONE;
             set_status();
         }
@@ -1854,12 +1852,11 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     }
     
     if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
-        float offset = quick_height_set_start_pos.y - game.mouse_cursor.s_pos.y;
-        offset = floor(offset / 2.0f);
-        offset = floor(offset / 10.0f);
-        offset *= 10.0f;
+        float offset = get_quick_height_set_offset();
         register_change("quick sector height set");
-        (*selected_sectors.begin())->z = quick_height_set_start_height + offset;
+        for(auto& s : selected_sectors) {
+            s->z = quick_height_set_start_heights[s] + offset;
+        }
         update_all_edge_offset_caches();
     }
 }

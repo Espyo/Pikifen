@@ -1359,10 +1359,17 @@ void area_editor::draw_canvas() {
         al_transform_coordinates(
             &game.screen_to_world_transform, &nr_coords.x, &nr_coords.y
         );
+        float offset = get_quick_height_set_offset();
         draw_debug_text(
             al_map_rgb(64, 255, 64),
             nr_coords,
-            "Height: " + f2s((*selected_sectors.begin())->z)
+            "Height " +
+            string(offset < 0 ? "" : "+") + i2s(offset) + "" +
+            (
+                selected_sectors.size() == 1 ?
+                " (" + f2s((*selected_sectors.begin())->z) + ")" :
+                ""
+            )
         );
     }
     

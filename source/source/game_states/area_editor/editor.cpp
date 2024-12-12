@@ -1467,6 +1467,21 @@ string area_editor::get_opened_content_path() const {
 
 
 /**
+ * @brief Returns the current height offset for the quick sector height set
+ * mode.
+ * 
+ * @return The offset.
+ */
+float area_editor::get_quick_height_set_offset() const {
+    float offset = quick_height_set_start_pos.y - game.mouse_cursor.s_pos.y;
+    offset = floor(offset / 2.0f);
+    offset = floor(offset / 10.0f);
+    offset *= 10.0f;
+    return offset;
+}
+
+
+/**
  * @brief Evaluates the user's drawing to figure out how the split is
  * going to work.
  *
