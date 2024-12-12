@@ -1962,12 +1962,15 @@ void area_editor::process_gui_panel_info() {
         string preview_tooltip_str;
         if(previewing) {
             preview_tooltip_str +=
-                "Currently previewing the song \"" + preview_song + "\".\n";
+                "Currently previewing the song \"" +
+                game.content.songs.list[preview_song].name +
+                "\".\n";
         }
         if(can_preview_selected_song) {
             preview_tooltip_str +=
                 "Click here to preview the song \"" +
-                game.cur_area_data->song_name + "\".";
+                game.content.songs.list[game.cur_area_data->song_name].name +
+                "\".";
         } else if(can_stop_previewing) {
             preview_tooltip_str +=
                 "Click here to stop.";
@@ -1979,16 +1982,16 @@ void area_editor::process_gui_panel_info() {
         
         //Music combobox.
         ImGui::SameLine();
+        vector<string> song_internals;
         vector<string> song_names;
+        song_internals.push_back("");
         song_names.push_back(NONE_OPTION);
         for(auto &s : game.content.songs.list) {
-            song_names.push_back(s.first);
-        }
-        if(game.cur_area_data->song_name.empty()) {
-            game.cur_area_data->song_name = NONE_OPTION;
+            song_internals.push_back(s.first);
+            song_names.push_back(s.second.name);
         }
         string song_name = game.cur_area_data->song_name;
-        if(ImGui::Combo("Song", &song_name, song_names, 15)) {
+        if(ImGui::Combo("Song", &song_name, song_internals, song_names, 15)) {
             register_change("area song change");
             game.cur_area_data->song_name = song_name;
         }
@@ -1997,16 +2000,21 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Area weather combobox.
-        vector<string> weather_conditions;
-        weather_conditions.push_back(NONE_OPTION);
+        vector<string> weather_cond_internals;
+        vector<string> weather_cond_names;
+        weather_cond_internals.push_back("");
+        weather_cond_names.push_back(NONE_OPTION);
         for(auto &w : game.content.weather_conditions.list) {
-            weather_conditions.push_back(w.first);
-        }
-        if(game.cur_area_data->weather_name.empty()) {
-            game.cur_area_data->weather_name = NONE_OPTION;
+            weather_cond_internals.push_back(w.first);
+            weather_cond_names.push_back(w.second.name);
         }
         string weather_name = game.cur_area_data->weather_name;
-        if(ImGui::Combo("Weather", &weather_name, weather_conditions, 15)) {
+        if(
+            ImGui::Combo(
+                "Weather", &weather_name,
+                weather_cond_internals, weather_cond_names, 15
+            )
+        ) {
             register_change("area weather change");
             game.cur_area_data->weather_name = weather_name;
         }
