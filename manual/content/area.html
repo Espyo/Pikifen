@@ -171,10 +171,10 @@
     <dl>
       <dt><b>Select the sector whose texture you want to change.</b></dt>
       <dd>To select a sector, just click inside it. Once you do, the panel will show the sector's properties.</dd>
-      <dt><b>Click the texture button in the "Appearance" section of the panel.</b></dt>
+      <dt><b>Click the "Choose image..." button in the "Appearance" section of the panel.</b></dt>
       <dd>This button will allow you to set the sector's texture.</dd>
       <dt><b>Choose a texture from the suggestions list, or browse for a new one.</b></dt>
-      <dd>Most likely, only the grassy texture will be available in the list for now. Textures can be found in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folder, though for the sake of organization they're usually placed in the <code>textures</code> subfolder. Click on "Browse..." to browse for the file to use. Let's pick <code>stone.jpg</code>.</dd>
+      <dd>Most likely, only the grassy texture will be available in the list for now. Textures can be found in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, though for the sake of organization they're usually placed in the <code>textures</code> subfolder. Click on "Choose another..." to pick a new file to use. Let's pick <code>stone</code>.</dd>
     </dl>
 
     <h3 id="sector-height">Sector height</h3>
@@ -213,7 +213,7 @@
       <figcaption>Blending the two ground textures.</figcaption>
     </figure>
     
-    <p>The ground looks a bit bland. Let's add a patch of dirt in the corner. Draw a triangular sector hugging the southwest corner of the area by spitting the ground sector using one line, from its western edge to its southern edge. Set the triangle's texture to dirt (e.g. <code>dirt.jpg</code>). But because the dirt and grass textures are so different, you'll see a clear split where one texture starts and the other begins. Let's smoothen this out.</p>
+    <p>The ground looks a bit bland. Let's add a patch of dirt in the corner. Draw a triangular sector hugging the southwest corner of the area by spitting the ground sector using one line, from its western edge to its southern edge. Set the triangle's texture to dirt (e.g. the <code>dirt</code> texture). But because the dirt and grass textures are so different, you'll see a clear split where one texture starts and the other begins. Let's smoothen this out.</p>
     
     <dl>
       <dt><b>Create a thin and long sector between the two sectors whose textures you want to blend.</b></dt>
@@ -239,7 +239,7 @@
       <dt><b>Draw a sector around the entire area.</b></dt>
       <dd>Make it big enough that it is hard for the player to see where it ends from within the play area. Making it the same shape as the general outline of your area is usually a good choice, but you can make it in any shape.</dd>
       <dt><b>Set its height to something tall, but reasonable.</b></dt>
-      <dd>Something like 500 units above the usual ground level is a good number, and will ensure most of your area gets a wall shadow cast onto it. While you're here, set its texture to something different, like <code>grass_light.jpg</code>.</dd>
+      <dd>Something like 500 units above the usual ground level is a good number, and will ensure most of your area gets a wall shadow cast onto it. While you're here, set its texture to something different, like <code>grass_light</code>.</dd>
       <dt><b>In the sector panel, go to the advanced behavior settings, and set the sector type to "Blocking".</b></dt>
       <dd>This will ensure that nothing can go through this sector, even if the floor is within reach. This way, players won't accidentally throw Pikmin at the out-of-bounds area and exploit it, and Pikmin knocked by enemies won't be thrown too far to be reached.</dd>
     </dl>
@@ -369,8 +369,8 @@
     <dl>
       <dt><b>Press the "+" button in the panel to place a new tree shadow where you click.</b></dt>
       <dd>Click more or less in the center of the area, since this will also be the center of our tree shadow.</dd>
-      <dt><b>Set its texture in the "Bitmap" textbox.</b></dt>
-      <dd>Write down the <a href="making.html#content">internal name</a> of the texture, which must be in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folder, though again they're typically in the <code>textures</code> subfolder. Until you give a valid texture, it will just be a black-and-violet pattern. Try using <code>tree_shadow</code>, which should come with the engine. Alternatively, use the "..." button to browse for a texture which, once more, needs to be in the textures folder.</dd>
+      <dt><b>Set its texture with the "Choose image..." button.</b></dt>
+      <dd>This will list all bitmaps in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, though the dialog will recommend those in the <code>textures</code> subfolder. Until you choose a valid texture, the tree shadow will just be a black-and-violet pattern. Try using <code>textures/tree_shadow</code>, which comes with the engine.</dd>
       <dt><b>Use the handles around the tree shadow to move it (center handle), rotate it (large circle around it), or scale it (edge and corner handles).</b></dt>
       <dd>Use these to make the shadows cover the terrain, the outer rim, and even a bit of the void, just so the player cannot see when the shadow texture ends, even as it sways left and right. To scale the width and height independently, uncheck the "Keep aspect ratio" option. Alternatively, you can use the panel widgets to set these properties.</dd>
       <dt><b>Notes:</b></dt>
@@ -430,7 +430,7 @@
     
     <p>If instead of a black void, you want the area to have a background, like the steel plates at the background of sublevel 1 of the <a href="https://www.pikminwiki.com/Secret_Testing_Range">Secret Testing Range</a>, or if you just want the background to be a color that isn't black, you can.</p>
 
-    <p>In the area information panel, you can set the background's information here. Write the background's texture <a href="making.html#content">internal name</a>, which must be a file in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics/textures</code> folder. Alternatively, use "..." to pick a file from that folder. This texture will be tiled across the background, and you can change how far away the texture is (which affects the scrolling when you move the camera around), as well as how zoomed in it is. You will not be able to see the background in the area editor.</p>
+    <p>In the area information panel, you can set the background's information here. Press "Choose image..." and you will be given a list of bitmaps in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, filtered by default for the <code>textures</code> subfolder. This texture will be tiled across the background, and you can change how far away the texture is (which affects the scrolling when you move the camera around), as well as how zoomed in it is. You will not be able to see the background in the area editor.</p>
 
     <h3 id="weather">Subtitle, weather, and more</h3>
     

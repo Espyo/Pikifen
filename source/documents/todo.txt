@@ -1,17 +1,11 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    In the area editor if you change multiple sectors' heights with H, it should change them all by that amount, if it's not already
-    Songs and weather in the area editor should use the proper name
     Packs
         When creating a new mob animation, it should only list mob types in that pack, otherwise it'll be creating new, empty mob types
-        A custom dialog for players to choose textures with, in the area editor
-            One section list them all separated by pack, as usual
-            Another section has a textbox with the texture internal name, and a preview of that texture, if valid, plus an OK button
-            When the player presses a button in the list, it fills the textbox with that name
         Internal names should be sanitized wherever the player can insert them
-        Area backups should be saved on a sub-folder matching the pack
+        Area backups should be saved on a subfolder matching the pack
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check
@@ -21,6 +15,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If you close the game through the X on the window, the process will remain alive
+    Editing a spritesheet in the animation editor, changing the spritesheet externally, then leaving and re-entering the editor, the spritesheet in memory will be the same
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
@@ -32,6 +28,7 @@ Next tasks (roughly sorted most important first)
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Find a way to manage the installed packs
         Allow pack thumbnails
+            Only load the thumbnails when you enter the pack management screen, and don't use game.content.bitmaps, since they are not game content. Unload when the screen is exited
         Players should be able to choose which ones are enabled or disabled, and their load order
             The load order (bottom first vs. top first) should be explained
             It should also show and/or explain in some way how there's the base content
@@ -45,6 +42,7 @@ Next tasks (roughly sorted most important first)
         Change ImGuiChildFlags_Border to ImGuiChildFlags_Borders
         Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
         Add keyboard/gamepad navigation stuff?
+        Switch from columns to tables
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

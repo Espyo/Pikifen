@@ -1014,6 +1014,44 @@ void editor::open_base_content_warning_dialog(
 
 
 /**
+ * @brief Opens a dialog where the user can choose a bitmap from the
+ * game content.
+ *
+ * @param ok_callback Callback for when the user chooses a bitmap.
+ * @param recommended_folder If not empty, recommend that the user picks bitmaps
+ * with this folder name. Use "." for the graphics root folder.
+ */
+void editor::open_bitmap_dialog(
+    std::function<void(const string &)> ok_callback,
+    const string &recommended_folder
+) {
+    bitmap_dialog_ok_callback = ok_callback;
+    bitmap_dialog_recommended_folder = recommended_folder;
+    bitmap_dialog_picker.pick_callback =
+    [this] (
+        const string& new_bmp_name, const string&, const string&, void*, bool
+    ) {
+        bitmap_dialog_new_bmp_name = new_bmp_name;
+    };
+    
+    open_dialog(
+        "Choose a bitmap",
+        std::bind(&editor::process_gui_bitmap_dialog, this)
+    );
+    dialogs.back()->close_callback = [this] () {
+        if(!bitmap_dialog_cur_bmp_name.empty()) {
+            game.content.bitmaps.list.free(bitmap_dialog_cur_bmp_name);
+            bitmap_dialog_cur_bmp_name.clear();
+            bitmap_dialog_cur_bmp_ptr = nullptr;
+            bitmap_dialog_new_bmp_name.clear();
+            bitmap_dialog_ok_callback = nullptr;
+            bitmap_dialog_recommended_folder = "";
+        }
+    };
+}
+
+
+/**
  * @brief Opens a dialog.
  *
  * @param title Title of the dialog window.
@@ -1053,8 +1091,8 @@ void editor::open_message_dialog(
 
 
 /**
-* @brief Opens a dialog where the user can create a new pack.
-*/
+ * @brief Opens a dialog where the user can create a new pack.
+ */
 void editor::open_new_pack_dialog() {
     open_dialog(
         "Create a new pack",
@@ -1106,6 +1144,9 @@ void editor::open_picker_dialog(
     new_dialog->title = title;
     new_dialog->process_callback =
         std::bind(&editor::picker_info::process, new_picker);
+    new_dialog->close_callback = [new_picker] () {
+        delete new_picker;
+    };
     new_picker->dialog_ptr = new_dialog;
 }
 
@@ -1200,6 +1241,114 @@ void editor::process_gui_base_content_warning_dialog() {
         base_content_warning_do_pick_callback = nullptr;
         close_top_dialog();
     }
+}
+
+
+/**
+ * @brief Processes the bitmap picker dialog for this frame.
+ */
+void editor::process_gui_bitmap_dialog() {
+    static bool filter_with_recommended_folder = true;
+
+    //Fill the picker's items.
+    bitmap_dialog_picker.items.clear();
+    for(auto &b : game.content.bitmaps.manifests) {
+        if(
+            !bitmap_dialog_recommended_folder.empty() &&
+            filter_with_recommended_folder
+        ) {
+            vector<string> parts = split(b.first, "/");
+            string folder = parts.size() == 1 ? "." : parts[0];
+            if(folder != bitmap_dialog_recommended_folder) continue;
+        }
+
+        bitmap_dialog_picker.items.push_back(
+            picker_item(
+                b.first,
+                "Pack: " + game.content.packs.list[b.second.pack].name
+            )
+        );
+    }
+
+    //Update the image if needed.
+    if(bitmap_dialog_new_bmp_name != bitmap_dialog_cur_bmp_name) {
+        if(!bitmap_dialog_cur_bmp_name.empty()) {
+            game.content.bitmaps.list.free(bitmap_dialog_cur_bmp_name);
+        }
+        if(bitmap_dialog_new_bmp_name.empty()) {
+            bitmap_dialog_cur_bmp_ptr = nullptr;
+            bitmap_dialog_cur_bmp_name.clear();
+        } else {
+            bitmap_dialog_cur_bmp_ptr =
+                game.content.bitmaps.list.get(bitmap_dialog_new_bmp_name);
+            bitmap_dialog_cur_bmp_name = bitmap_dialog_new_bmp_name;
+        }
+    }
+
+    //Column setup.
+    ImGui::Columns(2, "colBitmaps");
+    ImGui::BeginChild("butOk");
+    
+    //Ok button.
+    ImGui::SetupCentering(200);
+    if(!bitmap_dialog_cur_bmp_ptr) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Ok", ImVec2(200, 40))) {
+        if(bitmap_dialog_ok_callback) {
+            bitmap_dialog_ok_callback(bitmap_dialog_cur_bmp_name);
+        }
+        close_top_dialog();
+    }
+    if(!bitmap_dialog_cur_bmp_ptr) {
+        ImGui::EndDisabled();
+    }
+
+    //Recommended folder text.
+    string folder_str =
+        bitmap_dialog_recommended_folder == "." ?
+        "(root)" : bitmap_dialog_recommended_folder;
+    ImGui::Spacer();
+    ImGui::Text("Recommended folder: %s", folder_str.c_str());
+
+    //Recommended folder only checkbox.
+    if(!bitmap_dialog_recommended_folder.empty()) {
+        ImGui::Checkbox(
+            "That folder only", &filter_with_recommended_folder
+        );
+        set_tooltip(
+            "If checked, only images that belong to the\n"
+            "recommended folder will be shown in the list."
+        );
+    }
+
+    //Preview text.
+    ImGui::Spacer();
+    ImGui::Text("Preview:");
+
+    //Preview image.
+    if(bitmap_dialog_cur_bmp_ptr) {
+        const int thumb_max_size = 300;
+        point size =
+            resize_to_box_keeping_aspect_ratio(
+                point(
+                    al_get_bitmap_width(bitmap_dialog_cur_bmp_ptr),
+                    al_get_bitmap_height(bitmap_dialog_cur_bmp_ptr)
+                ),
+                point(thumb_max_size, thumb_max_size)
+            );
+        ImGui::Image(bitmap_dialog_cur_bmp_ptr, ImVec2(size.x, size.y));
+    }
+
+    //Next column.
+    ImGui::EndChild();
+    ImGui::NextColumn();
+    
+    //Bitmap picker.
+    bitmap_dialog_picker.process();
+
+    //Reset columns.
+    ImGui::Columns(1);
 }
 
 

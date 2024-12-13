@@ -85,6 +85,49 @@ bool ImGui::Combo(
 
 
 /**
+ * @brief Helps creating an ImGui combo box, using a string to control the
+ * selection, as well as two vector of strings for the list of items, one with
+ * the internal values of each item, another with the names to display.
+ *
+ * @param label Combo widget label.
+ * @param current_item Internal value of the current selected item.
+ * @param item_internal_values List of internal values for each item.
+ * @param item_display_names List of names to show the user for each item.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
+ */
+bool ImGui::Combo(
+    const string &label, string* current_item,
+    const vector<string> &item_internal_values,
+    const vector<string> &item_display_names,
+    int popup_max_height_in_items
+) {
+    int current_item_idx = -1;
+    for(size_t i = 0; i < item_internal_values.size(); i++) {
+        if(item_internal_values[i] == *current_item) {
+            current_item_idx = i;
+            break;
+        }
+    }
+    
+    bool result =
+        ImGui::Combo(
+            label, &current_item_idx, item_display_names,
+            popup_max_height_in_items
+        );
+    
+    if(current_item_idx == -1) {
+        current_item->clear();
+    } else {
+        *current_item = item_internal_values[current_item_idx];
+    }
+
+    return result;
+}
+
+
+/**
  * @brief Creates two ImGui drag ints, one that sets the number of minutes,
  * one that sets the number of seconds. Though with some arguments,
  * this can be changed to hours and minutes.

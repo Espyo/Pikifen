@@ -33,6 +33,12 @@ bool Combo(
     const string &label, string* current_item, const vector<string> &items,
     int popup_max_height_in_items = -1
 );
+bool Combo(
+    const string &label, string* current_item,
+    const vector<string> &item_internal_values,
+    const vector<string> &item_display_names,
+    int popup_max_height_in_items = -1
+);
 bool DragTime2(
     const string &label, int* total_amount,
     const string &format1 = "m", const string &format2 = "s",

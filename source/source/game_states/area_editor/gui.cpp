@@ -1356,62 +1356,32 @@ void area_editor::process_gui_panel_details() {
             
             if(selected_shadow) {
             
-                string old_shadow_file_name = selected_shadow->file_name;
-                
-                //Browse for tree shadow texture button.
-                if(ImGui::Button("...")) {
-                    FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
-                    vector<string> f =
-                        prompt_file_dialog_locked_to_folder(
-                            FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
-                            "Please choose the texture to use for the "
-                            "tree shadow.",
-                            "*.png",
-                            ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                            ALLEGRO_FILECHOOSER_PICTURES,
-                            &result, game.display
-                        );
-                        
-                    switch(result) {
-                    case FILE_DIALOG_RESULT_WRONG_FOLDER: {
-                        //File doesn't belong to the folder.
-                        set_status(
-                            "The chosen image is not in the textures folder!",
-                            true
-                        );
-                        break;
-                    } case FILE_DIALOG_RESULT_CANCELED: {
-                        //User canceled.
-                        break;
-                    } case FILE_DIALOG_RESULT_SUCCESS: {
-                        selected_shadow->file_name = f[0];
-                        set_status("Picked an image successfully.");
-                        break;
-                    }
-                    }
+                //Choose the tree shadow image button.
+                if(ImGui::Button("Choose image...")) {
+                    open_bitmap_dialog(
+                    [this] (const string &bmp) {
+                        if(bmp != selected_shadow->file_name) {
+                            //New image, delete the old one.
+                            register_change("tree shadow image change");
+                            if(selected_shadow->bitmap != game.bmp_error) {
+                                game.content.bitmaps.list.free(
+                                    selected_shadow->file_name
+                                );
+                            }
+                            selected_shadow->file_name = bmp;
+                            selected_shadow->bitmap =
+                                game.content.bitmaps.list.get(
+                                    selected_shadow->file_name, nullptr, false
+                                );
+                        }
+                        set_status("Picked a tree shadow image successfully.");
+                    },
+                    FOLDER_NAMES::TEXTURES
+                    );
                 }
-                set_tooltip("Browse for a file to use.");
-                
-                //Tree shadow texture file name input.
-                ImGui::SameLine();
-                ImGui::InputText("Bitmap", &selected_shadow->file_name);
                 set_tooltip(
-                    "File name of the texture to use as a background, in the "
-                    "Textures folder. Extension included. e.g. "
-                    "\"palmtree_shadow.png\""
+                    "Choose which texture to use from the game's content."
                 );
-                
-                if(selected_shadow->file_name != old_shadow_file_name) {
-                    //New image, delete the old one.
-                    register_change("tree shadow file change");
-                    if(selected_shadow->bitmap != game.bmp_error) {
-                        game.content.bitmaps.list.free(selected_shadow->file_name);
-                    }
-                    selected_shadow->bitmap =
-                        game.content.bitmaps.list.get(
-                            selected_shadow->file_name, nullptr, false
-                        );
-                }
                 
                 //Tree shadow center value.
                 point shadow_center = selected_shadow->center;
@@ -2143,10 +2113,11 @@ void area_editor::process_gui_panel_info() {
             
         }
         set_tooltip(
-            "Press the Browse button to set the area's thumbnail. When you\n"
-            "save the area, the thumbnail gets saved into thumbnail.png in\n"
-            "the area's folder, but the original file you selected with the\n"
-            "Browse button will be left untouched."
+            "Press the Browse... button to set the area's thumbnail from\n"
+            "a file on your disk. When you save the area, the thumbnail\n"
+            "gets saved into thumbnail.png in the area's folder, \n"
+            "but the original file you selected with the\n"
+            "Browse... button will be left untouched."
         );
         
         //Thumbnail remove button.
@@ -2191,58 +2162,21 @@ void area_editor::process_gui_panel_info() {
     ImGui::Spacer();
     if(saveable_tree_node("info", "Background")) {
     
-        string bg_file_name = game.cur_area_data->bg_bmp_file_name;
-        
-        //Browse for background image button.
-        if(ImGui::Button("...")) {
-            FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
-            vector<string> f =
-                prompt_file_dialog_locked_to_folder(
-                    FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
-                    "Please choose the texture to use for the background.",
-                    "*.*",
-                    ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                    ALLEGRO_FILECHOOSER_PICTURES,
-                    &result, game.display
-                );
-                
-            switch(result) {
-            case FILE_DIALOG_RESULT_WRONG_FOLDER: {
-                //File doesn't belong to the folder.
-                set_status(
-                    "The chosen image is not in the textures folder!",
-                    true
-                );
-                break;
-            } case FILE_DIALOG_RESULT_CANCELED: {
-                //User canceled.
-                break;
-            } case FILE_DIALOG_RESULT_SUCCESS: {
-                bg_file_name = f[0];
-                set_status("Picked an image successfully.");
-                break;
-            }
-            }
+        //Choose background image button.
+        if(ImGui::Button("Choose image...")) {
+            open_bitmap_dialog(
+            [this] (const string &bmp) {
+                register_change("area background change");
+                game.cur_area_data->bg_bmp_file_name = bmp;
+                set_status("Picked a background image successfully.");
+            },
+            FOLDER_NAMES::TEXTURES
+            );
         }
         set_tooltip(
-            "Browse for a file to use as the image of the background.\n"
+            "Choose which background image to use from the game's content.\n"
             "This repeating texture can be seen when looking at the void."
         );
-        
-        //Background image file name input.
-        ImGui::SameLine();
-        ImGui::InputText("Bitmap", &bg_file_name);
-        set_tooltip(
-            "File name of the texture to use as a background, in the "
-            "Textures folder.\n"
-            "Extension included. e.g. \"kitchen_floor.jpg\"\n"
-            "This repeating texture can be seen when looking at the void."
-        );
-        
-        if(bg_file_name != game.cur_area_data->bg_bmp_file_name) {
-            register_change("area background change");
-            game.cur_area_data->bg_bmp_file_name = bg_file_name;
-        }
         
         //Background color value.
         ALLEGRO_COLOR bg_color = game.cur_area_data->bg_color;
@@ -5448,10 +5382,10 @@ void area_editor::process_gui_panel_sector() {
             ImGui::Indent();
             
             //Sector texture button.
-            if(ImGui::Button("Change")) {
+            if(ImGui::Button("Choose image...")) {
                 vector<picker_item> picker_buttons;
                 
-                picker_buttons.push_back(picker_item("Browse..."));
+                picker_buttons.push_back(picker_item("Choose another..."));
                 
                 for(size_t s = 0; s < texture_suggestions.size(); s++) {
                     picker_buttons.push_back(
@@ -5668,7 +5602,7 @@ void area_editor::process_gui_panel_tools() {
         string old_ref_file_name = reference_file_name;
         
         //Browse for a reference image button.
-        if(ImGui::Button("...")) {
+        if(ImGui::Button("Browse...")) {
             vector<string> f =
                 prompt_file_dialog(
                     "",
@@ -5684,7 +5618,7 @@ void area_editor::process_gui_panel_tools() {
             }
         }
         set_tooltip(
-            "Browse for a file to use."
+            "Browse for a file on your disk to use."
         );
         
         //Reference image file name input.

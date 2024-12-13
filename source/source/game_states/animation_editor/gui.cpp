@@ -708,7 +708,8 @@ void animation_editor::process_gui_options_dialog() {
             if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
                 vector<string> f =
                     prompt_file_dialog(
-                        FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES,
+                        FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
+                        FOLDER_PATHS_FROM_PACK::TEXTURES,
                         "Please choose a background texture.",
                         "*.*", 0, game.display
                     );
@@ -727,7 +728,7 @@ void animation_editor::process_gui_options_dialog() {
                 }
             }
             set_tooltip(
-                "Browse for which texture file to use."
+                "Browse for which texture file on your disk to use."
             );
             
             //Background texture name.
@@ -2093,58 +2094,23 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         
     }
     
-    //Browse for spritesheet button.
+    //Choose spritesheet image button.
     ImGui::Spacer();
-    if(ImGui::Button("...")) {
-        FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
-        vector<string> f =
-            prompt_file_dialog_locked_to_folder(
-                FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::GRAPHICS, //TODO
-                "Please choose the bitmap to get the sprites from.",
-                "*.png",
-                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                ALLEGRO_FILECHOOSER_PICTURES,
-                &result, game.display
-            );
-            
-        switch(result) {
-        case FILE_DIALOG_RESULT_WRONG_FOLDER: {
-            //File doesn't belong to the folder.
-            set_status("The chosen image is not in the graphics folder!", true);
-            break;
-        } case FILE_DIALOG_RESULT_CANCELED: {
-            //User canceled.
-            break;
-        } case FILE_DIALOG_RESULT_SUCCESS: {
+    if(ImGui::Button("Choose image...")) {
+        open_bitmap_dialog(
+        [this] (const string& bmp) {
             cur_sprite->set_bitmap(
-                f[0], cur_sprite->file_pos, cur_sprite->file_size
+                bmp, cur_sprite->file_pos, cur_sprite->file_size
             );
-            last_spritesheet_used = f[0];
+            last_spritesheet_used = bmp;
             center_camera_on_sprite_bitmap(true);
             changes_mgr.mark_as_changed();
-            set_status("Picked an image successfully.");
-            break;
-        }
-        }
-    }
-    set_tooltip("Browse for a spritesheet file to use.");
-    
-    //Spritesheet file name input.
-    string file_name = cur_sprite->file;
-    ImGui::SameLine();
-    if(ImGui::InputText("File", &file_name)) {
-        cur_sprite->set_bitmap(
-            file_name, cur_sprite->file_pos, cur_sprite->file_size
+            set_status("Picked a spritesheet image successfully.");
+        },
+            "."
         );
-        last_spritesheet_used = file_name;
-        center_camera_on_sprite_bitmap(true);
-        changes_mgr.mark_as_changed();
     }
-    set_tooltip(
-        "File name of the bitmap to use as a spritesheet, in the "
-        "Graphics folder. Extension included. e.g. "
-        "\"large_fly.png\""
-    );
+    set_tooltip("Choose which spritesheet to use from the game's content.");
     
     //Sprite top-left coordinates value.
     int top_left[2] =

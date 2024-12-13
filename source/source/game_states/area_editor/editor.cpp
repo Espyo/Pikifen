@@ -1469,7 +1469,7 @@ string area_editor::get_opened_content_path() const {
 /**
  * @brief Returns the current height offset for the quick sector height set
  * mode.
- * 
+ *
  * @return The offset.
  */
 float area_editor::get_quick_height_set_offset() const {
@@ -2066,54 +2066,24 @@ void area_editor::pick_texture(
     void* info, bool is_new
 ) {
     sector* s_ptr = nullptr;
-    string final_name = name;
     if(selected_sectors.size() == 1 || selection_homogenized) {
         s_ptr = *selected_sectors.begin();
     }
+    if(!s_ptr) return;
     
-    if(!s_ptr) {
-        return;
-    }
-    
-    if(final_name == "Browse...") {
-        FILE_DIALOG_RESULT result = FILE_DIALOG_RESULT_SUCCESS;
-        vector<string> f =
-            prompt_file_dialog_locked_to_folder(
-                FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" + FOLDER_PATHS_FROM_PACK::TEXTURES, //TODO
-                "Please choose the texture to use for the sector.",
-                "*.*",
-                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                ALLEGRO_FILECHOOSER_PICTURES,
-                &result, game.display
-            );
-            
-        switch(result) {
-        case FILE_DIALOG_RESULT_WRONG_FOLDER: {
-            //File doesn't belong to the folder.
-            set_status("The chosen image is not in the textures folder!", true);
-            return;
-        } case FILE_DIALOG_RESULT_CANCELED: {
-            //User canceled.
-            return;
-        } case FILE_DIALOG_RESULT_SUCCESS: {
-            final_name = f[0];
+    if(name == "Choose another...") {
+        open_bitmap_dialog(
+        [this, s_ptr] (const string &bmp) {
+            if(s_ptr->texture_info.file_name == bmp) return;
+            register_change("sector texture change");
+            update_texture_suggestions(bmp);
+            update_sector_texture(s_ptr, bmp);
+            homogenize_selected_sectors();
             set_status("Picked an image successfully.");
-            break;
-        }
-        }
+        },
+        FOLDER_NAMES::TEXTURES
+        );
     }
-    
-    if(s_ptr->texture_info.file_name == final_name) {
-        return;
-    }
-    
-    register_change("sector texture change");
-    
-    update_texture_suggestions(final_name);
-    
-    update_sector_texture(s_ptr, final_name);
-    
-    homogenize_selected_sectors();
 }
 
 

@@ -7736,23 +7736,23 @@ mobs{
 	}
 	pikmin{
 		type=red_pikmin
-		p=464.0000 -672.0000
+		p=468.9243 -683.5866
 	}
 	pikmin{
 		type=red_pikmin
-		p=496.0000 -656.0000
+		p=512.0000 -688.0000
 	}
 	pikmin{
 		type=red_pikmin
-		p=480.0000 -640.0000
+		p=496.0000 -672.0000
 	}
 	pikmin{
 		type=red_pikmin
-		p=448.0000 -624.0000
+		p=453.2140 -648.3318
 	}
 	pikmin{
 		type=red_pikmin
-		p=496.0000 -624.0000
+		p=519.7524 -647.1732
 	}
 	pikmin{
 		type=blue_pikmin

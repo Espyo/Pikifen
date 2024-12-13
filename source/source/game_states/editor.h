@@ -537,6 +537,24 @@ protected:
     //Callback for when the item is really meant to be picked, in the base
     //content warning dialog.
     std::function<void()> base_content_warning_do_pick_callback = nullptr;
+
+    //Currently-chosen bitmap name in the bitmap dialog.
+    string bitmap_dialog_cur_bmp_name;
+    
+    //Currently-chosen bitmap pointer in the bitmap dialog.
+    ALLEGRO_BITMAP* bitmap_dialog_cur_bmp_ptr = nullptr;
+
+    //Name of the newly-chosen bitmap in the bitmap dialog.
+    string bitmap_dialog_new_bmp_name;
+
+    //Callback for when the user chooses a bitmap in the bitmap dialog.
+    std::function<void(const string&)> bitmap_dialog_ok_callback = nullptr;
+
+    //Picker for the bitmap dialog.
+    picker_info bitmap_dialog_picker = picker_info(this);
+
+    //Recommended folder in the bitmap dialog, if any. "." for graphics root.
+    string bitmap_dialog_recommended_folder;
     
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons = nullptr;
@@ -671,6 +689,10 @@ protected:
     void open_base_content_warning_dialog(
         const std::function<void()> &do_pick_callback
     );
+    void open_bitmap_dialog(
+        std::function<void(const string&)> ok_callback,
+        const string& recommended_folder
+    );
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback
@@ -693,6 +715,7 @@ protected:
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
     void process_dialogs();
     void process_gui_base_content_warning_dialog();
+    void process_gui_bitmap_dialog();
     void process_gui_editor_style();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,

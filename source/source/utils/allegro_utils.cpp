@@ -203,7 +203,7 @@ vector<string> folder_to_vector(
 
 /**
  * @brief Stores the names of all files in a folder into a vector, but also
- * recursively enters sub-folders.
+ * recursively enters subfolders.
  *
  * @param folder_path Path to the folder.
  * @param folders If true, only read folders. If false, only read files.
