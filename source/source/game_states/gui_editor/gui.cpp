@@ -63,11 +63,19 @@ void gui_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void gui_editor::open_new_dialog() {
+    new_dialog.must_update = true;
     open_dialog(
         "Create a new GUI definition",
         std::bind(&gui_editor::process_gui_new_dialog, this)
     );
     dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = [this] () {
+        new_dialog.pack.clear();
+        new_dialog.internal_name.clear();
+        new_dialog.problem.clear();
+        new_dialog.def_path.clear();
+        new_dialog.must_update = true;
+    };
 }
 
 
@@ -387,14 +395,9 @@ void gui_editor::process_gui_menu_bar() {
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void gui_editor::process_gui_new_dialog() {
-    static string pack;
-    static string internal_name;
-    static string problem;
-    static string file_path;
-    static bool must_update = true;
-    
     //Pack widgets.
-    must_update |= process_gui_new_dialog_pack_widgets(&pack);
+    new_dialog.must_update |=
+        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
     
     //GUI definition combo.
     vector<string> gui_files;
@@ -402,63 +405,64 @@ void gui_editor::process_gui_new_dialog() {
         gui_files.push_back(g.first);
     }
     ImGui::Spacer();
-    must_update |= ImGui::Combo("File", &internal_name, gui_files);
+    new_dialog.must_update |=
+        ImGui::Combo("File", &new_dialog.internal_name, gui_files);
     
     //Check if everything's ok.
-    if(must_update) {
-        problem.clear();
-        if(internal_name.empty()) {
-            problem =
+    if(new_dialog.must_update) {
+        new_dialog.problem.clear();
+        if(new_dialog.internal_name.empty()) {
+            new_dialog.problem =
                 "You have to select a file!";
-        } else if(pack == FOLDER_NAMES::BASE_PACK) {
-            problem =
+        } else if(new_dialog.pack == FOLDER_NAMES::BASE_PACK) {
+            new_dialog.problem =
                 "All the GUI definition files already live in the\n"
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
             content_manifest temp_man;
-            temp_man.internal_name = internal_name;
-            temp_man.pack = pack;
-            file_path =
+            temp_man.internal_name = new_dialog.internal_name;
+            temp_man.pack = new_dialog.pack;
+            new_dialog.def_path =
                 game.content.gui_defs.manifest_to_path(temp_man);
-            if(file_exists(file_path)) {
-                problem =
+            if(file_exists(new_dialog.def_path)) {
+                new_dialog.problem =
                     "There is already a GUI definition\n"
                     "file for that GUI in that pack!";
             }
         }
-        must_update = false;
+        new_dialog.must_update = false;
     }
     
     //Create button.
     ImGui::Spacer();
     ImGui::SetupCentering(180);
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
         auto really_create = [ = ] () {
-            create_gui_def(string(internal_name), pack);
+            create_gui_def(string(new_dialog.internal_name), new_dialog.pack);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
-            pack.clear();
-            internal_name.clear();
-            problem.clear();
-            file_path.clear();
-            must_update = true;
         };
         
-        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+        if(
+            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.engine_developer
+        ) {
             open_base_content_warning_dialog(really_create);
         } else {
             really_create();
         }
     }
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::EndDisabled();
     }
     set_tooltip(
-        problem.empty() ? "Create the GUI definition!" : problem
+        new_dialog.problem.empty() ?
+        "Create the GUI definition!" :
+        new_dialog.problem
     );
 }
 

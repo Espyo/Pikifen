@@ -1028,8 +1028,8 @@ void editor::open_bitmap_dialog(
     bitmap_dialog_ok_callback = ok_callback;
     bitmap_dialog_recommended_folder = recommended_folder;
     bitmap_dialog_picker.pick_callback =
-    [this] (
-        const string& new_bmp_name, const string&, const string&, void*, bool
+        [this] (
+            const string &new_bmp_name, const string &, const string &, void*, bool
     ) {
         bitmap_dialog_new_bmp_name = new_bmp_name;
     };
@@ -1249,7 +1249,7 @@ void editor::process_gui_base_content_warning_dialog() {
  */
 void editor::process_gui_bitmap_dialog() {
     static bool filter_with_recommended_folder = true;
-
+    
     //Fill the picker's items.
     bitmap_dialog_picker.items.clear();
     for(auto &b : game.content.bitmaps.manifests) {
@@ -1261,7 +1261,7 @@ void editor::process_gui_bitmap_dialog() {
             string folder = parts.size() == 1 ? "." : parts[0];
             if(folder != bitmap_dialog_recommended_folder) continue;
         }
-
+        
         bitmap_dialog_picker.items.push_back(
             picker_item(
                 b.first,
@@ -1269,7 +1269,7 @@ void editor::process_gui_bitmap_dialog() {
             )
         );
     }
-
+    
     //Update the image if needed.
     if(bitmap_dialog_new_bmp_name != bitmap_dialog_cur_bmp_name) {
         if(!bitmap_dialog_cur_bmp_name.empty()) {
@@ -1284,7 +1284,7 @@ void editor::process_gui_bitmap_dialog() {
             bitmap_dialog_cur_bmp_name = bitmap_dialog_new_bmp_name;
         }
     }
-
+    
     //Column setup.
     ImGui::Columns(2, "colBitmaps");
     ImGui::BeginChild("butOk");
@@ -1303,14 +1303,14 @@ void editor::process_gui_bitmap_dialog() {
     if(!bitmap_dialog_cur_bmp_ptr) {
         ImGui::EndDisabled();
     }
-
+    
     //Recommended folder text.
     string folder_str =
         bitmap_dialog_recommended_folder == "." ?
         "(root)" : bitmap_dialog_recommended_folder;
     ImGui::Spacer();
     ImGui::Text("Recommended folder: %s", folder_str.c_str());
-
+    
     //Recommended folder only checkbox.
     if(!bitmap_dialog_recommended_folder.empty()) {
         ImGui::Checkbox(
@@ -1321,11 +1321,11 @@ void editor::process_gui_bitmap_dialog() {
             "recommended folder will be shown in the list."
         );
     }
-
+    
     //Preview text.
     ImGui::Spacer();
     ImGui::Text("Preview:");
-
+    
     //Preview image.
     if(bitmap_dialog_cur_bmp_ptr) {
         const int thumb_max_size = 300;
@@ -1339,14 +1339,14 @@ void editor::process_gui_bitmap_dialog() {
             );
         ImGui::Image(bitmap_dialog_cur_bmp_ptr, ImVec2(size.x, size.y));
     }
-
+    
     //Next column.
     ImGui::EndChild();
     ImGui::NextColumn();
     
     //Bitmap picker.
     bitmap_dialog_picker.process();
-
+    
     //Reset columns.
     ImGui::Columns(1);
 }
@@ -1509,10 +1509,11 @@ void editor::process_gui_message_dialog() {
  * @param custom_cat_name Pointer to the custom category name reflected
  * in the combo box.
  * @param type Pointer to the type reflected in the combo box.
+ * @param pack_filter If not empty, only show mob types from this pack.
  * @return Whether the user changed the category/type.
  */
 bool editor::process_gui_mob_type_widgets(
-    string* custom_cat_name, mob_type** type
+    string* custom_cat_name, mob_type** type, const string &pack_filter
 ) {
     bool result = false;
     
@@ -1550,11 +1551,26 @@ bool editor::process_gui_mob_type_widgets(
         );
     ImGui::PopStyleVar();
     
-    if(search_button_pressed) {
-        vector<picker_item> items;
+    vector<vector<mob_type*> > final_list;
+    if(!pack_filter.empty()) {
         for(size_t c = 0; c < custom_cat_types.size(); c++) {
+            final_list.push_back(vector<mob_type*>());
             for(size_t n = 0; n < custom_cat_types[c].size(); n++) {
                 mob_type* mt_ptr = custom_cat_types[c][n];
+                if(mt_ptr->manifest && mt_ptr->manifest->pack == pack_filter) {
+                    final_list[c].push_back(mt_ptr);
+                }
+            }
+        }
+    } else {
+        final_list = custom_cat_types;
+    }
+    
+    if(search_button_pressed) {
+        vector<picker_item> items;
+        for(size_t c = 0; c < final_list.size(); c++) {
+            for(size_t n = 0; n < final_list[c].size(); n++) {
+                mob_type* mt_ptr = final_list[c][n];
                 items.push_back(
                     picker_item(
                         mt_ptr->name, mt_ptr->custom_category_name
@@ -1564,7 +1580,7 @@ bool editor::process_gui_mob_type_widgets(
         }
         open_picker_dialog(
             "Pick an object type", items,
-            [this] (
+            [this, final_list] (
                 const string &n, const string &tc, const string &sc, void*, bool
         ) {
             //For clarity, this code will NOT be run within the context
@@ -1575,7 +1591,7 @@ bool editor::process_gui_mob_type_widgets(
             internal_mob_type = nullptr;
             size_t custom_cat_idx = custom_cat_name_idxs[tc];
             const vector<mob_type*> &types =
-                custom_cat_types[custom_cat_idx];
+                final_list[custom_cat_idx];
             for(size_t t = 0; t < types.size(); t++) {
                 if(types[t]->name == n) {
                     internal_mob_type = types[t];
@@ -1595,7 +1611,7 @@ bool editor::process_gui_mob_type_widgets(
     //Object category combobox.
     vector<string> categories;
     int selected_category_idx = -1;
-    for(size_t c = 0; c < custom_cat_types.size(); c++) {
+    for(size_t c = 0; c < final_list.size(); c++) {
         string cn =
             custom_cat_types[c].front()->custom_category_name;
         categories.push_back(cn);
@@ -1607,7 +1623,10 @@ bool editor::process_gui_mob_type_widgets(
     if(ImGui::Combo("Category", &selected_category_idx, categories, 15)) {
         result = true;
         internal_custom_cat_name = categories[selected_category_idx];
-        internal_mob_type = custom_cat_types[selected_category_idx][0];
+        internal_mob_type =
+            final_list[selected_category_idx].empty() ?
+            nullptr :
+            final_list[selected_category_idx][0];
     }
     set_tooltip(
         "What category this object belongs to: a Pikmin, a leader, etc."
@@ -1618,7 +1637,7 @@ bool editor::process_gui_mob_type_widgets(
         //Object type combobox.
         vector<string> type_names;
         size_t custom_cat_idx = custom_cat_name_idxs[internal_custom_cat_name];
-        const vector<mob_type*> &types = custom_cat_types[custom_cat_idx];
+        const vector<mob_type*> &types = final_list[custom_cat_idx];
         for(size_t t = 0; t < types.size(); t++) {
             mob_type* t_ptr = types[t];
             type_names.push_back(t_ptr->name);

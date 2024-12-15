@@ -724,7 +724,7 @@ protected:
     );
     void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
-        string* custom_cat_name, mob_type** type
+        string* custom_cat_name, mob_type** type, const string& pack_filter = ""
     );
     bool process_gui_new_dialog_pack_widgets(string* pack);
     void process_gui_new_pack_dialog();

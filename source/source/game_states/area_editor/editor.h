@@ -844,6 +844,29 @@ private:
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
     
+    struct {
+    
+        //Selected pack.
+        string pack;
+        
+        //Internal name of the new area.
+        string internal_name;
+        
+        //Selected area type.
+        int type = AREA_TYPE_SIMPLE;
+        
+        //Problem found, if any.
+        string problem;
+        
+        //Path to the new area.
+        
+        string area_path;
+        
+        //Whether the dialog needs updating.
+        bool must_update = true;
+        
+    } new_dialog;
+    
     
     //--- Function declarations ---
     

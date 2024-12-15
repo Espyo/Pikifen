@@ -84,11 +84,22 @@ void animation_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void animation_editor::open_new_dialog() {
+    new_dialog.must_update = true;
     open_dialog(
         "Create a new animation database",
         std::bind(&animation_editor::process_gui_new_dialog, this)
     );
     dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = [this] () {
+        new_dialog.pack.clear();
+        new_dialog.type = 0;
+        new_dialog.custom_mob_cat.clear();
+        new_dialog.mob_type_ptr = nullptr;
+        new_dialog.problem.clear();
+        new_dialog.internal_name.clear();
+        new_dialog.anim_path.clear();
+        new_dialog.must_update = true;
+    };
 }
 
 
@@ -524,31 +535,26 @@ void animation_editor::process_gui_menu_bar() {
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void animation_editor::process_gui_new_dialog() {
-    static string pack;
-    static int type = 0;
-    static string custom_mob_cat;
-    static mob_type* mob_type_ptr = nullptr;
-    static string problem;
-    static string internal_name;
-    static string anim_path;
-    static bool must_update = true;
-    
     //Pack widgets.
-    must_update |= process_gui_new_dialog_pack_widgets(&pack);
-    
+    new_dialog.must_update |=
+        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+        
     //Global animation radio.
     ImGui::Spacer();
-    must_update |= ImGui::RadioButton("Global animation", &type, 0);
-    
+    new_dialog.must_update |=
+        ImGui::RadioButton("Global animation", &new_dialog.type, 0);
+        
     //Mob type animation radio.
     ImGui::SameLine();
-    must_update |= ImGui::RadioButton("Object type", &type, 1);
-    
+    new_dialog.must_update |=
+        ImGui::RadioButton("Object type", &new_dialog.type, 1);
+        
     ImGui::Spacer();
     
-    if(type == 0) {
+    if(new_dialog.type == 0) {
         //Internal name input.
-        must_update |= ImGui::InputText("Internal name", &internal_name);
+        new_dialog.must_update |=
+            ImGui::InputText("Internal name", &new_dialog.internal_name);
         set_tooltip(
             "Internal name of the new animation database.\n"
             "Remember to keep it simple, type in lowercase, "
@@ -560,84 +566,84 @@ void animation_editor::process_gui_new_dialog() {
         
     } else {
         //Mob type widgets.
-        must_update |=
-            process_gui_mob_type_widgets(&custom_mob_cat, &mob_type_ptr);
+        new_dialog.must_update |=
+            process_gui_mob_type_widgets(
+                &new_dialog.custom_mob_cat, &new_dialog.mob_type_ptr,
+                new_dialog.pack
+            );
             
     }
     
     //Check if everything's ok.
-    if(must_update) {
-        problem.clear();
-        if(type == 0) {
-            if(internal_name.empty()) {
-                problem = "You have to type an internal name first!";
+    if(new_dialog.must_update) {
+        new_dialog.problem.clear();
+        if(new_dialog.type == 0) {
+            if(new_dialog.internal_name.empty()) {
+                new_dialog.problem = "You have to type an internal name first!";
             } else {
                 content_manifest temp_man;
-                temp_man.internal_name = internal_name;
-                temp_man.pack = pack;
-                anim_path =
+                temp_man.internal_name = new_dialog.internal_name;
+                temp_man.pack = new_dialog.pack;
+                new_dialog.anim_path =
                     game.content.global_anim_dbs.manifest_to_path(temp_man);
-                if(file_exists(anim_path)) {
-                    problem =
+                if(file_exists(new_dialog.anim_path)) {
+                    new_dialog.problem =
                         "There is already a global animation database\n"
                         "with that internal name in that pack!";
                 }
             }
         } else {
-            if(!mob_type_ptr) {
-                problem = "You have to choose an object type first!";
+            if(!new_dialog.mob_type_ptr) {
+                new_dialog.problem = "You have to choose an object type first!";
             } else {
                 content_manifest temp_man;
                 temp_man.internal_name = FILE_NAMES::MOB_TYPE_ANIMATION;
-                temp_man.pack = pack;
-                anim_path =
+                temp_man.pack = new_dialog.pack;
+                new_dialog.anim_path =
                     game.content.mob_anim_dbs.manifest_to_path(
                         temp_man,
-                        mob_type_ptr->category->folder_name,
-                        mob_type_ptr->manifest->internal_name
+                        new_dialog.mob_type_ptr->category->folder_name,
+                        new_dialog.mob_type_ptr->manifest->internal_name
                     );
-                if(file_exists(anim_path)) {
-                    problem =
+                if(file_exists(new_dialog.anim_path)) {
+                    new_dialog.problem =
                         "There is already an animation database\n"
                         "file for that object type in that pack!";
                 }
             }
         }
-        must_update = false;
+        new_dialog.must_update = false;
     }
     
     //Create button.
     ImGui::Spacer();
     ImGui::SetupCentering(140);
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create animation database", ImVec2(200, 40))) {
         auto really_create = [ = ] () {
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
-            create_anim_db(anim_path);
-            pack.clear();
-            type = 0;
-            custom_mob_cat.clear();
-            mob_type_ptr = nullptr;
-            problem.clear();
-            internal_name.clear();
-            anim_path.clear();
-            must_update = true;
+            create_anim_db(new_dialog.anim_path);
         };
         
-        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+        if(
+            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.engine_developer
+        ) {
             open_base_content_warning_dialog(really_create);
         } else {
             really_create();
         }
     }
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::EndDisabled();
     }
     set_tooltip(
-        problem.empty() ? "Create the animation database!" : problem
+        new_dialog.problem.empty() ?
+        "Create the animation database!" :
+        new_dialog.problem
     );
 }
 
@@ -2098,7 +2104,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     ImGui::Spacer();
     if(ImGui::Button("Choose image...")) {
         open_bitmap_dialog(
-        [this] (const string& bmp) {
+        [this] (const string &bmp) {
             cur_sprite->set_bitmap(
                 bmp, cur_sprite->file_pos, cur_sprite->file_size
             );
@@ -2107,7 +2113,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             changes_mgr.mark_as_changed();
             set_status("Picked a spritesheet image successfully.");
         },
-            "."
+        "."
         );
     }
     set_tooltip("Choose which spritesheet to use from the game's content.");

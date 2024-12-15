@@ -84,11 +84,20 @@ void area_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void area_editor::open_new_dialog() {
+    new_dialog.must_update = true;
     open_dialog(
         "Create a new area",
         std::bind(&area_editor::process_gui_new_dialog, this)
     );
     dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = [this] () {
+        new_dialog.pack.clear();
+        new_dialog.internal_name.clear();
+        new_dialog.type = AREA_TYPE_SIMPLE;
+        new_dialog.problem.clear();
+        new_dialog.area_path.clear();
+        new_dialog.must_update = true;
+    };
 }
 
 
@@ -307,19 +316,14 @@ void area_editor::process_gui_load_dialog() {
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void area_editor::process_gui_new_dialog() {
-    static string pack;
-    static string internal_name;
-    static int type = AREA_TYPE_SIMPLE;
-    static string problem;
-    static string area_path;
-    static bool must_update = true;
-    
     //Pack widgets.
-    must_update |= process_gui_new_dialog_pack_widgets(&pack);
-    
+    new_dialog.must_update |=
+        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+        
     //Internal name input.
     ImGui::Spacer();
-    must_update |= ImGui::InputText("Internal name", &internal_name);
+    new_dialog.must_update |=
+        ImGui::InputText("Internal name", &new_dialog.internal_name);
     set_tooltip(
         "Internal name of the new area.\n"
         "Remember to keep it simple, type in lowercase, and use underscores!"
@@ -327,68 +331,65 @@ void area_editor::process_gui_new_dialog() {
     
     //Simple area radio.
     ImGui::Spacer();
-    must_update |=
-        ImGui::RadioButton("Simple area", &type, AREA_TYPE_SIMPLE);
+    new_dialog.must_update |=
+        ImGui::RadioButton("Simple area", &new_dialog.type, AREA_TYPE_SIMPLE);
     set_tooltip("Choose this to make your area a simple area.");
     
     //Mission area radio.
     ImGui::SameLine();
-    must_update |=
-        ImGui::RadioButton("Mission", &type, AREA_TYPE_MISSION);
+    new_dialog.must_update |=
+        ImGui::RadioButton("Mission", &new_dialog.type, AREA_TYPE_MISSION);
     set_tooltip("Choose this to make your area a mission area.");
     
     //Check if everything's ok.
-    if(must_update) {
-        problem.clear();
-        if(internal_name.empty()) {
-            problem = "You have to type an internal name first!";
+    if(new_dialog.must_update) {
+        new_dialog.problem.clear();
+        if(new_dialog.internal_name.empty()) {
+            new_dialog.problem = "You have to type an internal name first!";
         } else {
             content_manifest temp_man;
-            temp_man.pack = pack;
-            temp_man.internal_name = internal_name;
-            area_path =
+            temp_man.pack = new_dialog.pack;
+            temp_man.internal_name = new_dialog.internal_name;
+            new_dialog.area_path =
                 game.content.areas.manifest_to_path(
-                    temp_man, (AREA_TYPE) type
+                    temp_man, (AREA_TYPE) new_dialog.type
                 );
-            if(folder_exists(area_path)) {
-                problem =
+            if(folder_exists(new_dialog.area_path)) {
+                new_dialog.problem =
                     "There is already an area of that type with\n"
                     "that internal name in that pack!";
             }
         }
-        must_update = false;
+        new_dialog.must_update = false;
     }
     
     //Create button.
     ImGui::Spacer();
     ImGui::SetupCentering(100);
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create area", ImVec2(100, 40))) {
         auto really_create = [ = ] () {
-            create_area(area_path);
+            create_area(new_dialog.area_path);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.
-            pack.clear();
-            internal_name.clear();
-            type = AREA_TYPE_SIMPLE;
-            problem.clear();
-            area_path.clear();
-            must_update = true;
         };
         
-        if(pack == FOLDER_NAMES::BASE_PACK && !game.options.engine_developer) {
+        if(
+            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.engine_developer
+        ) {
             open_base_content_warning_dialog(really_create);
         } else {
             really_create();
         }
     }
-    if(!problem.empty()) {
+    if(!new_dialog.problem.empty()) {
         ImGui::EndDisabled();
     }
     set_tooltip(
-        problem.empty() ? "Create the area!" : problem
+        new_dialog.problem.empty() ? "Create the area!" : new_dialog.problem
     );
 }
 

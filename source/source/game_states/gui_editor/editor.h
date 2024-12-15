@@ -105,6 +105,25 @@ private:
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     
+    struct {
+    
+        //Selected pack.
+        string pack;
+        
+        //Internal name of the new GUI definition.
+        string internal_name;
+        
+        //Problem found, if any.
+        string problem;
+        
+        //Path to the new GUI definition.
+        string def_path;
+        
+        //Whether the dialog needs updating.
+        bool must_update = true;
+        
+    } new_dialog;
+    
     
     //--- Function declarations ---
     

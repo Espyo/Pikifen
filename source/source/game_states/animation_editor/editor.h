@@ -210,6 +210,35 @@ private:
     //Position of the quit widget.
     point quit_widget_pos;
     
+    //Info about the "new" dialog.
+    struct {
+    
+        //Selected pack.
+        string pack;
+        
+        //Selected animation database type.
+        int type = 0;
+        
+        //Selected custom mob category, when picking a mob type.
+        string custom_mob_cat;
+        
+        //Selected mob type, when picking a mob type.
+        mob_type* mob_type_ptr = nullptr;
+        
+        //Problem found, if any.
+        string problem;
+        
+        //Internal name of the new animation database.
+        string internal_name;
+        
+        //Path to the new animation database.
+        string anim_path;
+        
+        //Whether the dialog needs updating.
+        bool must_update = true;
+        
+    } new_dialog;
+    
     
     //--- Function declarations ---
     
@@ -251,7 +280,6 @@ private:
     );
     void update_cur_hitbox();
     void update_hitboxes();
-    void update_stats();
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );

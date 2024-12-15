@@ -576,6 +576,16 @@ void area_editor::delete_current_area() {
     string final_status_text;
     bool final_status_error = false;
     
+    //Start by deleting the user data, if any.
+    vector<string> non_important_files;
+    non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA);
+    non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
+    non_important_files.push_back(FILE_NAMES::AREA_REFERENCE_CONFIG);
+    wipe_folder(
+        game.cur_area_data->user_data_path,
+        non_important_files
+    );
+    
     if(!changes_mgr.exists_on_disk()) {
         //If the area doesn't exist, since it was never saved,
         //then there's nothing to delete.
@@ -585,17 +595,7 @@ void area_editor::delete_current_area() {
         go_to_area_select = true;
         
     } else {
-        //Start by deleting the user data folder.
-        vector<string> non_important_files;
-        non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA);
-        non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
-        non_important_files.push_back(FILE_NAMES::AREA_REFERENCE_CONFIG);
-        wipe_folder(
-            game.cur_area_data->user_data_path,
-            non_important_files
-        );
-        
-        //And now, the actual area data.
+        //Delete the actual area data.
         non_important_files.clear();
         non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA);
         non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
@@ -640,11 +640,14 @@ void area_editor::delete_current_area() {
         
     }
     
-    game.content.areas.manifests[game.cur_area_data->type].erase(
+    auto man_it =
         game.content.areas.manifests[game.cur_area_data->type].find(
             manifest.internal_name
-        )
-    );
+        );
+    if(man_it != game.content.areas.manifests[game.cur_area_data->type].end()) {
+        game.content.areas.manifests[game.cur_area_data->type].erase(man_it);
+    }
+    manifest.clear();
     
     if(go_to_area_select) {
         clear_current_area();
@@ -673,7 +676,6 @@ void area_editor::do_logic() {
     if(
         game.cur_area_data &&
         !manifest.internal_name.empty() &&
-        changes_mgr.exists_on_disk() &&
         game.options.area_editor_backup_interval > 0
     ) {
         backup_timer.tick(game.delta_t);
@@ -2530,7 +2532,7 @@ void area_editor::reload_cmd(float input_value) {
         reload_widget_pos,
         "reloading the current area", "reload",
     [this] () {
-        load_area_folder(manifest.path, false, false);
+        load_area_folder(string(manifest.path), false, false);
     },
     [this] () { return save_area(false); }
     );
@@ -3238,15 +3240,6 @@ void area_editor::save_backup() {
 
     //Restart the timer.
     backup_timer.start(game.options.area_editor_backup_interval);
-    
-    //First, check if the folder even exists.
-    //If not, chances are this is a new area.
-    //We should probably create a backup anyway, but if the area is
-    //just for testing, the backups are pointless.
-    //Plus, creating the backup will create the area's folder on the disk,
-    //which will basically mean the area exists, even though this might not be
-    //what the user wants, since they haven't saved proper yet.
-    if(!folder_exists(game.cur_area_data->user_data_path)) return;
     
     save_area(true);
 }
