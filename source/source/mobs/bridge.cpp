@@ -67,7 +67,7 @@ bool bridge::check_health() {
     mob_category* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
     mob_type* bridge_component_type =
-        custom_category->get_type("Bridge component");
+        custom_category->get_type("bridge_component");
     float chunk_width = total_length / total_chunks_needed;
     vector<mob*> new_mobs;
     
