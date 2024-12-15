@@ -254,6 +254,9 @@ enum PIKMIN_ANIM {
     //Arms stretched out sideways.
     PIKMIN_ANIM_ARMS_OUT,
     
+    //Pushing forward.
+    PIKMIN_ANIM_PUSHING,
+    
     //Climbing.
     PIKMIN_ANIM_CLIMBING,
     

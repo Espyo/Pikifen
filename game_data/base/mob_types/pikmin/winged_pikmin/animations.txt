@@ -426,6 +426,22 @@ animations{
 			}
 		}
 	}
+	pushing{
+		frames{
+			grabbing_01{
+				duration=0.0500
+			}
+			grabbing_02{
+				duration=0.0500
+			}
+			grabbing_01{
+				duration=0.0500
+			}
+			grabbing_03{
+				duration=0.0500
+			}
+		}
+	}
 	shaking{
 		frames{
 			idling_01{

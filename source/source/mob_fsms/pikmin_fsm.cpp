@@ -4519,7 +4519,7 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
         break;
     }
     case GROUP_TASK_PIKMIN_POSE_PUSHING: {
-        pik_ptr->set_animation(PIKMIN_ANIM_IDLING); //TODO
+        pik_ptr->set_animation(PIKMIN_ANIM_PUSHING);
         break;
     }
     case GROUP_TASK_PIKMIN_POSE_CARRYING: {

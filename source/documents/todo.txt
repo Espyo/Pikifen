@@ -141,7 +141,6 @@ Next tasks (roughly sorted most important first)
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
         New animations
-            Pushing (add the group task logic too)
             Dying? (like shrinking or something)
     Leader animations
         Improvements

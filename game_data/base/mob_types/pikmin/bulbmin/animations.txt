@@ -402,6 +402,34 @@ animations{
 			}
 		}
 	}
+	pushing{
+		frames{
+			idling_01{
+				duration=0.1200
+			}
+			walking_01{
+				duration=0.1200
+			}
+			walking_02{
+				duration=0.1200
+			}
+			walking_01{
+				duration=0.1200
+			}
+			idling_01{
+				duration=0.1200
+			}
+			walking_03{
+				duration=0.1200
+			}
+			walking_04{
+				duration=0.1200
+			}
+			walking_03{
+				duration=0.1200
+			}
+		}
+	}
 	shaking{
 		frames{
 			idling_01{
