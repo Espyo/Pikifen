@@ -1,0 +1,40 @@
+name = BulbminSpawner
+description = spawn bulbmin.
+
+area_editor_recommend_links_to = false
+can_block_paths = false
+casts_shadow = false
+custom_category_name = Spawners
+height = 8
+max_health = 1000
+pushable = false
+pushes = false
+radius = 16
+show_health = false
+target_type = none
+team = none
+
+spawns {
+    young {
+        object = bulbmin
+        relative = true
+        coordinates = -50 0 0
+        angle = 0
+        link_spawn_to_object = false
+        link_object_to_spawn = false
+    }
+}
+area_editor_properties {
+    IsAliveSection is_alive_section {
+        var = is_alive_section
+        type = text
+        def_value = X_Is_Alive
+        tooltip = where in this area's save data to check if this is alive.
+    }
+    IsAlive is_alive {
+        var = is_alive
+        type = bool
+        def_value = true
+        tooltip = what to set the save data to if it doesn't exist
+    }
+}

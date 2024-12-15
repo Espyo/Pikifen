@@ -1,0 +1,10 @@
+name = SaveData
+description = Save Data and a python script to create various mob spawners
+
+maker = Tenacious
+version = 1.0.0
+engine_version = 0.25.0
+tags = Engine
+dependencies = 
+conflicts = 
+notes = Editing this pack! Please read the manual's "Making" page for more information.

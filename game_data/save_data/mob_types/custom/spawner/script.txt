@@ -1,0 +1,21 @@
+first_state = idling
+
+script {
+    idling {
+        on_enter {
+            set_var is_alive true
+            check_for_save section_exists Bulbmin_Is_Alive
+            if $section_exists = true
+                print read
+                read_from_save is_alive Bulbmin_Is_Alive
+            end_if
+            if $is_alive = true
+                spawn young
+                print spawned
+                write_to_save false Bulbmin_Is_Alive
+            else
+                print dead
+            end_if
+        }
+    }
+}
