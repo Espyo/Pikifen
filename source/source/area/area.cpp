@@ -414,6 +414,7 @@ void area_data::clone(area_data &other) {
     other.mission.gold_req = mission.gold_req;
     other.mission.platinum_req = mission.platinum_req;
     
+    other.save_data = data_node(this->save_data);
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();
     other.problems.lone_edges.reserve(problems.lone_edges.size());

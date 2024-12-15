@@ -227,6 +227,12 @@ void content_manager::reload_packs() {
  */
 void content_manager::unload_current_area(CONTENT_LOAD_LEVEL level) {
     if(!game.cur_area_data) return;
+    if (level == CONTENT_LOAD_LEVEL_FULL){
+
+    string save_data_file_path = game.cur_area_data->user_data_path +
+            "/" + FILE_NAMES::AREA_SAVE_DATA;
+        game.cur_area_data->save_data.save_file(save_data_file_path);
+    }
     game.cur_area_data->clear();
     delete game.cur_area_data;
     game.cur_area_data = nullptr;

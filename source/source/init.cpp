@@ -1524,7 +1524,34 @@ void init_mob_actions() {
         mob_action_runners::turn_to_target,
         mob_action_loaders::turn_to_target
     );
+
+    reg_param("data", MOB_ACTION_PARAM_STRING, false, false);
+    reg_param("save section", MOB_ACTION_PARAM_STRING, false, false);
+    reg_action(
+        MOB_ACTION_WRITE_TO_SAVE,
+        "write_to_save",
+        mob_action_runners::write_to_save,
+        nullptr
+    );
     
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("save section", MOB_ACTION_PARAM_STRING, false, false);
+    reg_action(
+        MOB_ACTION_READ_FROM_SAVE,
+        "read_from_save",
+        mob_action_runners::read_from_save,
+        nullptr
+    );
+    
+
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("save section", MOB_ACTION_PARAM_STRING, false, false);
+    reg_action(
+        MOB_ACTION_CHECK_FOR_SAVE,
+        "check_for_save",
+        mob_action_runners::check_for_save,
+        nullptr
+    );
     
 #undef param
 #undef reg_action

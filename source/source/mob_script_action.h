@@ -273,6 +273,15 @@ enum MOB_ACTION {
     //Turn towards a target.
     MOB_ACTION_TURN_TO_TARGET,
     
+    //Write A value to Save Data
+    MOB_ACTION_WRITE_TO_SAVE,
+    
+    //Turn towards a target.
+    MOB_ACTION_READ_FROM_SAVE,
+    
+    //Turn towards a target.
+    MOB_ACTION_CHECK_FOR_SAVE,
+    
     //Total amount of mob actions.
     N_MOB_ACTIONS,
     
@@ -757,6 +766,10 @@ void throw_focus(mob_action_run_data &data);
 void turn_to_absolute(mob_action_run_data &data);
 void turn_to_relative(mob_action_run_data &data);
 void turn_to_target(mob_action_run_data &data);
+
+void write_to_save(mob_action_run_data &data);
+void read_from_save(mob_action_run_data &data);
+void check_for_save(mob_action_run_data &data);
 };
 
 

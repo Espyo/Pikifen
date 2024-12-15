@@ -257,6 +257,9 @@ struct area_data : public content {
 
     //Path to the user data folder for this area.
     string user_data_path;
+
+    //SaveDataNode for this area.
+    data_node save_data;
     
     
     //--- Function declarations ---
