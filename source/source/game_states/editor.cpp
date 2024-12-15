@@ -810,6 +810,24 @@ bool editor::input_popup(
 
 
 /**
+ * @brief Returns whether a given internal name is good or not.
+ *
+ * @param name The internal name to check.
+ * @return Whether it's good.
+ */
+bool editor::is_internal_name_good(const string &name) const {
+    for(size_t c = 0; c < name.size(); c++) {
+        char ch = name[c];
+        const bool is_lowercase = ch >= 'a' && ch <= 'z';
+        const bool is_digit = ch >= '0' && ch <= '9';
+        const bool is_underscore = ch == '_';
+        if(!is_lowercase && !is_digit && !is_underscore) return false;
+    }
+    return true;
+}
+
+
+/**
  * @brief Returns whether or not the pressed key corresponds to the specified
  * key combination. Used for keyboard shortcuts.
  *
@@ -1754,6 +1772,10 @@ void editor::process_gui_new_pack_dialog() {
     string problem;
     if(internal_name.empty()) {
         problem = "You have to type an internal name first!";
+    } else if(!is_internal_name_good(internal_name)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
     } else {
         for(const auto &p : game.content.packs.manifests_with_base) {
             if(internal_name == p) {

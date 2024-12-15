@@ -398,7 +398,7 @@ void gui_editor::process_gui_new_dialog() {
     //Pack widgets.
     new_dialog.must_update |=
         process_gui_new_dialog_pack_widgets(&new_dialog.pack);
-    
+        
     //GUI definition combo.
     vector<string> gui_files;
     for(const auto &g : game.content.gui_defs.manifests) {
@@ -407,13 +407,17 @@ void gui_editor::process_gui_new_dialog() {
     ImGui::Spacer();
     new_dialog.must_update |=
         ImGui::Combo("File", &new_dialog.internal_name, gui_files);
-    
+        
     //Check if everything's ok.
     if(new_dialog.must_update) {
         new_dialog.problem.clear();
         if(new_dialog.internal_name.empty()) {
             new_dialog.problem =
                 "You have to select a file!";
+        } else if(!is_internal_name_good(new_dialog.internal_name)) {
+            new_dialog.problem =
+                "The internal name should only have lowercase letters,\n"
+                "numbers, and underscores!";
         } else if(new_dialog.pack == FOLDER_NAMES::BASE_PACK) {
             new_dialog.problem =
                 "All the GUI definition files already live in the\n"

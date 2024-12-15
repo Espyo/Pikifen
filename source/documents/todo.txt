@@ -1,9 +1,8 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
     Packs
-        Internal names should be sanitized wherever the player can insert them
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check

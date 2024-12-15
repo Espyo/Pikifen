@@ -346,6 +346,10 @@ void area_editor::process_gui_new_dialog() {
         new_dialog.problem.clear();
         if(new_dialog.internal_name.empty()) {
             new_dialog.problem = "You have to type an internal name first!";
+        } else if(!is_internal_name_good(new_dialog.internal_name)) {
+            new_dialog.problem =
+                "The internal name should only have lowercase letters,\n"
+                "numbers, and underscores!";
         } else {
             content_manifest temp_man;
             temp_man.pack = new_dialog.pack;

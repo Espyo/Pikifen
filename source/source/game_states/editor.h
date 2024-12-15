@@ -537,22 +537,22 @@ protected:
     //Callback for when the item is really meant to be picked, in the base
     //content warning dialog.
     std::function<void()> base_content_warning_do_pick_callback = nullptr;
-
+    
     //Currently-chosen bitmap name in the bitmap dialog.
     string bitmap_dialog_cur_bmp_name;
     
     //Currently-chosen bitmap pointer in the bitmap dialog.
     ALLEGRO_BITMAP* bitmap_dialog_cur_bmp_ptr = nullptr;
-
+    
     //Name of the newly-chosen bitmap in the bitmap dialog.
     string bitmap_dialog_new_bmp_name;
-
+    
     //Callback for when the user chooses a bitmap in the bitmap dialog.
-    std::function<void(const string&)> bitmap_dialog_ok_callback = nullptr;
-
+    std::function<void(const string &)> bitmap_dialog_ok_callback = nullptr;
+    
     //Picker for the bitmap dialog.
     picker_info bitmap_dialog_picker = picker_info(this);
-
+    
     //Recommended folder in the bitmap dialog, if any. "." for graphics root.
     string bitmap_dialog_recommended_folder;
     
@@ -681,6 +681,7 @@ protected:
     bool input_popup(
         const char* label, const char* prompt, string* text
     );
+    bool is_internal_name_good(const string &name) const;
     bool list_popup(
         const char* label, const vector<string> &items, string* picked_item
     );
@@ -690,8 +691,8 @@ protected:
         const std::function<void()> &do_pick_callback
     );
     void open_bitmap_dialog(
-        std::function<void(const string&)> ok_callback,
-        const string& recommended_folder
+        std::function<void(const string &)> ok_callback,
+        const string &recommended_folder
     );
     void open_dialog(
         const string &title,
@@ -724,7 +725,7 @@ protected:
     );
     void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
-        string* custom_cat_name, mob_type** type, const string& pack_filter = ""
+        string* custom_cat_name, mob_type** type, const string &pack_filter = ""
     );
     bool process_gui_new_dialog_pack_widgets(string* pack);
     void process_gui_new_pack_dialog();
