@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -13,7 +13,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Editing a spritesheet in the animation editor, changing the spritesheet externally, then leaving and re-entering the editor, the spritesheet in memory will be the same
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin

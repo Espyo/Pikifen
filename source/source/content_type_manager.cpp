@@ -631,6 +631,9 @@ void global_anim_content_manager::path_to_manifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void global_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+    for(auto &a : list) {
+        a.second.destroy();
+    }
     list.clear();
 }
 
@@ -1241,6 +1244,11 @@ void mob_anim_content_manager::path_to_manifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void mob_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+    for(size_t t = 0; t < list.size(); t++) {
+        for(auto &a : list[t]) {
+            a.second.destroy();
+        }
+    }
     list.clear();
 }
 
