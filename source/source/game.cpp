@@ -331,6 +331,17 @@ void game_class::shutdown() {
     if(cur_state) {
         cur_state->unload();
     }
+    
+    content.unload_all(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_MISC,
+        CONTENT_TYPE_BITMAP,
+        CONTENT_TYPE_SOUND,
+        CONTENT_TYPE_SONG_TRACK,
+        CONTENT_TYPE_SONG,
+    }
+    );
+    
     unload_misc_resources();
     destroy_mob_categories();
     states.destroy();

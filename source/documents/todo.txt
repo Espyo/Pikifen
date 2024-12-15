@@ -3,9 +3,7 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Packs
-        When creating a new mob animation, it should only list mob types in that pack, otherwise it'll be creating new, empty mob types
         Internal names should be sanitized wherever the player can insert them
-        Area backups should be saved on a subfolder matching the pack
         When it's all done
             Organize the performance monitor start/end points
             Run a memory leak check
@@ -15,7 +13,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you close the game through the X on the window, the process will remain alive
     Editing a spritesheet in the animation editor, changing the spritesheet externally, then leaving and re-entering the editor, the spritesheet in memory will be the same
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
@@ -139,6 +136,7 @@ Next tasks (roughly sorted most important first)
         Helodity's tropical song
         Other people's songs
     Use a screenshot for the title screen
+        The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
     Pikmin animations
         Improvements
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
