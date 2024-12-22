@@ -1,4 +1,4 @@
-name = blowhog_wind
+name = Blowhog wind
 description = Wind blown in a circle outwards, caused when a Puffy Blowhog's wind blowing attack hits the floor.
 
 emission_interval = 0.1

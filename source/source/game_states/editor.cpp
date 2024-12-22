@@ -1727,12 +1727,15 @@ bool editor::process_gui_new_dialog_pack_widgets(string* pack) {
  * @brief Processes the dialog for creating a new pack.
  */
 void editor::process_gui_new_pack_dialog() {
-    static string internal_name;
-    static string name;
+    static string internal_name = "my_pack";
+    static string name = "My pack!";
     static string description;
     static string maker;
     
     //Internal name input.
+    if(!ImGui::IsAnyItemActive()) {
+        ImGui::SetKeyboardFocusHere();
+    }
     ImGui::InputText("Internal name", &internal_name);
     set_tooltip(
         "Internal name of the new pack.\n"

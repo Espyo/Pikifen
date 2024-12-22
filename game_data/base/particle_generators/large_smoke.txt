@@ -1,4 +1,4 @@
-name = large_smoke
+name = Large smoke
 description = Large variant of smoke particle
 
 emission_interval = 0.2

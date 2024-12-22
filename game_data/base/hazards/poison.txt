@@ -1,4 +1,4 @@
-name = poison
+name = Poison
 description = Poison gas that chokes a Pikmin's top, causing it to suffocate. Used, for instance, by a Munge Dweevil's gas explosion attack.
 
 color = 128 16 112

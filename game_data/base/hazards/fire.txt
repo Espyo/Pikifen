@@ -1,4 +1,4 @@
-name = fire
+name = Fire
 description = Fire, and really, anything that burns. Typically makes a Pikmin's top catch on fire. Used, for instance, by a Fiery Blowhog's fire breath attack.
 
 color = 255 0 0

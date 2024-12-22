@@ -1,4 +1,4 @@
-name = dust_explosion_large
+name = Dust explosion (large)
 description = A generic large explosion of dust. Used, for instance, when the Puffy Blowhog falls to the ground.
 
 emission_interval = 0

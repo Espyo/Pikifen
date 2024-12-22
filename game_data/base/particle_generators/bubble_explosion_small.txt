@@ -1,4 +1,4 @@
-name = bubble_explosion_small
+name = Bubble explosion (small)
 description = A generic small explosion of bubbles. Used, for instance, when the Cyclopod dies.
 
 emission_interval = 0

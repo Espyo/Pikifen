@@ -1,4 +1,4 @@
-name = spark_explosion
+name = Spark explosion
 description = An explosion of sparks. Used, for instance, when a bomb rock explodes.
 
 emission_interval = 0

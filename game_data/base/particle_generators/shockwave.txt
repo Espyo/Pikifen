@@ -1,4 +1,4 @@
-name = shockwave
+name = Shockwave
 description = A shockwave that quickly grows outward and disappears. Used, for instance, in explosions.
 
 emission_interval = 0

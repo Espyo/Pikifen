@@ -1,4 +1,4 @@
-name = smoke_explosion
+name = Smoke explosion
 description = A generic explosion of gray smoke. Used, for instance, when a bomb rock explodes.
 
 emission_interval = 0

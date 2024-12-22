@@ -1,11 +1,12 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Check for memory leaks
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If a Pikmin is called and stuff happens during the animation, it won't really know about it. At worst, this crashes (if you try dismissing right after) (thanks Helodity)
     https://gitlab.freedesktop.org/xorg/xserver/-/issues/1773
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin

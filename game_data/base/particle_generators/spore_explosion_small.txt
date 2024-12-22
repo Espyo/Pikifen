@@ -1,4 +1,4 @@
-name = spore_explosion_small
+name = Spore explosion (small)
 description = A small explosion of spores, emitted by a destroyed Spotcap.
 
 emission_interval = 0

@@ -850,7 +850,7 @@ private:
         string pack;
         
         //Internal name of the new area.
-        string internal_name;
+        string internal_name = "my_area";
         
         //Selected area type.
         int type = AREA_TYPE_SIMPLE;

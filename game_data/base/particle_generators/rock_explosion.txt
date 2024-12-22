@@ -1,4 +1,4 @@
-name = rock_explosion
+name = Rock explosion
 description = A generic explosion of rock particles. Used, for instance, when a rolling boulder breaks.
 
 emission_interval = 0

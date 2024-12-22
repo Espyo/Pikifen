@@ -92,7 +92,7 @@ void area_editor::open_new_dialog() {
     dialogs.back()->custom_size = point(400, 0);
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
-        new_dialog.internal_name.clear();
+        new_dialog.internal_name = "my_area";
         new_dialog.type = AREA_TYPE_SIMPLE;
         new_dialog.problem.clear();
         new_dialog.area_path.clear();
@@ -322,6 +322,9 @@ void area_editor::process_gui_new_dialog() {
         
     //Internal name input.
     ImGui::Spacer();
+    if(!ImGui::IsAnyItemActive()) {
+        ImGui::SetKeyboardFocusHere();
+    }
     new_dialog.must_update |=
         ImGui::InputText("Internal name", &new_dialog.internal_name);
     set_tooltip(

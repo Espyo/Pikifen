@@ -1,4 +1,4 @@
-name = purple_pikmin_pound
+name = Purple Pikmin pound
 description = A brief explosion of dust from a Purple Pikmin landing on top of an enemy.
 
 emission_interval = 0

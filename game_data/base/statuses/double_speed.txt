@@ -1,4 +1,4 @@
-name = double_speed
+name = Double speed
 description = Makes the affected object move at double the speed.
 
 affects_enemies = true

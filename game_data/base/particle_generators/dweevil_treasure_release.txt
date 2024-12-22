@@ -1,4 +1,4 @@
-name = dweevil_treasure_release
+name = Dweevil treasure release
 description = Some sparkles for when a Dweevil releases a treasure.
 
 emission_interval = 0

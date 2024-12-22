@@ -1,4 +1,4 @@
-name = bomb_rock_explosion
+name = Bomb rock explosion
 description = Damage applied to an enemy that eats a bomb rock. It causes a lot of damage.
 
 damage = 1000

@@ -1,4 +1,4 @@
-name = burned
+name = Burned
 description = Pikmin that are burning will start choking from the fire on their top, and will eventually suffocate and die. It can be saved by being whistled.
 
 affects_pikmin = true

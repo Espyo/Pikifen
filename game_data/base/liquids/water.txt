@@ -1,4 +1,4 @@
-name = water
+name = Water
 description = Everyday body of water.
 
 animation = water

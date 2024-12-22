@@ -1,4 +1,4 @@
-name = pellet_posy_1_petals
+name = Pellet Posy 1 petals
 description = A small burst of petals from a 1 pellet Pellet Posy.
 
 emission_interval = 0

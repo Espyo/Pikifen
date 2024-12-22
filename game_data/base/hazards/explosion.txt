@@ -1,4 +1,4 @@
-name = explosion
+name = Explosion
 description = Any sort of explosive force. Explosions are usually powerful enough to cause damage to even obstacles. Used, for instance, by bomb rock explosions.
 
 color = 255 128 0

@@ -1,4 +1,4 @@
-name = fire_geyser_smoke
+name = Fire geyser smoke
 description = Dark smoke shot from a fire geyser.
 
 emission_interval = 0.06

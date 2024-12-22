@@ -1,4 +1,4 @@
-name = water
+name = Water
 description = Any body of water on the floor. Pikmin that cannot swim will start struggling and eventually drown.
 
 color = 0 0 255

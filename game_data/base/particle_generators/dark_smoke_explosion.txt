@@ -1,4 +1,4 @@
-name = dark_smoke_explosion
+name = Dark smoke explosion
 description = A generic explosion of dark smoke. Used, for instance, when a bomb rock is ingested and blows up inside an enemy.
 
 emission_interval = 0

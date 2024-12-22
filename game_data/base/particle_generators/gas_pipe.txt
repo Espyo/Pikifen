@@ -1,4 +1,4 @@
-name = gas_pipe
+name = Gas pipe
 description = A continuous stream of poison gas in every direction, emitted by a gas pipe.
 
 emission_interval = 0.3

@@ -1,4 +1,4 @@
-name = dust_explosion_small
+name = Dust explosion (small)
 description = A generic small explosion of dust. Used, for instance, when a ceramic bridge's fragment pops into place.
 
 emission_interval = 0

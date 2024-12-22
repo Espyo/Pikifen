@@ -1,4 +1,4 @@
-name = flare
+name = Flare
 description = A large flare of light. Used, for instance, in explosions.
 
 emission_interval = 0

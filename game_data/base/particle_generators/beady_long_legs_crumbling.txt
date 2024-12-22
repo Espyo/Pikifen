@@ -1,4 +1,4 @@
-name = beady_long_legs_crumbling
+name = Beady Long Legs crumbling
 description = The flakes dropped by a crumbling Beady Long Legs.
 
 emission_interval = 0.05

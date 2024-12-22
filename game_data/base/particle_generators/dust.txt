@@ -1,4 +1,4 @@
-name = dust
+name = Dust
 description = Generic puffs of dust being lifted to the air in place. Used, for instance, by the trail left behind a rolling boulder.
 
 emission_interval = 0.06

@@ -1,4 +1,4 @@
-name = stunning_electricity
+name = Stunning electricity
 description = Small currents of electricity that aren't harmful, but paralize Pikmin. Used, for instance, by an Electric Water Dumple's zapping attack.
 
 color = 255 255 128

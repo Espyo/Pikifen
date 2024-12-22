@@ -1,4 +1,4 @@
-name = paper_bag_dust
+name = Paper bag dust
 description = Random particles of dust thrown to the air by a paper bag that's being crushed down.
 
 emission_interval = 0.08

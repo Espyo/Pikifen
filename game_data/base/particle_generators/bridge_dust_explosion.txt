@@ -1,4 +1,4 @@
-name = bridge_dust_explosion
+name = Bridge dust explosion
 description = An explosion of dust from a wood bridge's chunk being created.
 
 emission_interval = 0

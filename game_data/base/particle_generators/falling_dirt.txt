@@ -1,4 +1,4 @@
-name = falling_dirt
+name = Falling dirt
 description = Generic particles of dirt falling down. Used, for instance, by a lifting gate.
 
 emission_interval = 0.3

@@ -1,4 +1,4 @@
-name = shocked
+name = Shocked
 description = A Pikmin that has been shocked will be unable to move as the current surges through its body. It can be saved by being whistled.
 
 affects_pikmin = true

@@ -1,4 +1,4 @@
-name = triple_speed
+name = Triple speed
 description = Makes the affected object move at triple the speed.
 
 affects_enemies = true

@@ -229,7 +229,7 @@ private:
         string problem;
         
         //Internal name of the new animation database.
-        string internal_name;
+        string internal_name = "my_animation";
         
         //Path to the new animation database.
         string anim_path;

@@ -1,4 +1,4 @@
-name = electrical_wire_sparks
+name = Electrical wire sparks
 description = A series of small sparks emitted by an electrical wire that's about to start an arc of electricity.
 
 emission_interval = 0.1

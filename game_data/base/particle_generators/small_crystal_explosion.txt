@@ -1,4 +1,4 @@
-name = small_crystal_explosion
+name = Small crystal explosion
 description = A small explosion of crystal shards from a recently-destroyed small crystal.
 
 emission_interval = 0

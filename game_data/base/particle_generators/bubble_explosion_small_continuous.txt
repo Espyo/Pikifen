@@ -1,4 +1,4 @@
-name = bubble_explosion_small_continuous
+name = Bubble explosion (small, continuous)
 description = A generic small continuous explosion of bubbles. Used, for instance, when the Cyclopod is spinning.
 
 emission_interval = 0.1

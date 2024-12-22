@@ -1,4 +1,4 @@
-name = spicy
+name = Spicy
 description = A Pikmin that's spicy has been sprayed with ultra-spicy spray, and is able to move faster than normal, for a limited time.
 
 affects_pikmin = true

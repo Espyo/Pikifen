@@ -1,4 +1,4 @@
-name = geyser
+name = Geyser
 description = Particles emitted by an active geyser.
 
 emission_interval = 0.4

@@ -1,4 +1,4 @@
-name = spicy_sparkles
+name = Spicy sparkles
 description = Rare sparkles left behind by ultra-spicy Pikmin.
 
 emission_interval = 4

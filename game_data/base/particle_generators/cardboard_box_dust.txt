@@ -1,4 +1,4 @@
-name = cardboard_box_dust
+name = Cardboard box dust
 description = The dust spread to the air by a cardboard box that's being dragged.
 
 emission_interval = 0.06

@@ -1,4 +1,4 @@
-name = smoke
+name = Smoke
 description = Generic dark smoke. Used, for instance, when a Pikmin is burning up.
 
 emission_interval = 0.06

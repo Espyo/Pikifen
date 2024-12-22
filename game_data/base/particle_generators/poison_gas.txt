@@ -1,4 +1,4 @@
-name = poison_gas
+name = Poison gas
 description = Small bursts of poison gas, signifying a Pikmin has been poisoned and is suffocating.
 
 emission_interval = 0.06

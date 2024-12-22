@@ -1,4 +1,4 @@
-name = crushed
+name = Crushed
 description = Pikmin that are crushed will lie there for a bit before succumbing and dying.
 
 affects_pikmin = true

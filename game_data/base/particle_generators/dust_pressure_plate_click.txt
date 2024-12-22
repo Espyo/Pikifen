@@ -1,4 +1,4 @@
-name = dust_pressure_plate_click
+name = Dust (pressure plate click)
 description = A quick explosion of dust. Used, for instance, when a pressure plate is pressed down.
 
 emission_interval = 0

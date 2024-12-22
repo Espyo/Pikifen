@@ -1,4 +1,4 @@
-name = dweevil_with_treasure
+name = Dweevil with treasure
 description = Dweevils carrying treasure gain some resistance, since the treasure offers some natural protection.
 
 affects_enemies = true

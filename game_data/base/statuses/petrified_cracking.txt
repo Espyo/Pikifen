@@ -1,4 +1,4 @@
-name = petrified_cracking
+name = Petrified, cracking
 description = Makes the affected object start shaking, since its petrification is about to crack.
 
 affects_enemies = true

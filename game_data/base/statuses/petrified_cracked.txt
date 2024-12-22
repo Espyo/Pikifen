@@ -1,4 +1,4 @@
-name = petrified_cracked
+name = Petrified, cracked
 description = Makes the affected object emit some particles from having broken through its petrification, and instantly ends right away.
 
 affects_enemies = true

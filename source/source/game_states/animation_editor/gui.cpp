@@ -96,7 +96,7 @@ void animation_editor::open_new_dialog() {
         new_dialog.custom_mob_cat.clear();
         new_dialog.mob_type_ptr = nullptr;
         new_dialog.problem.clear();
-        new_dialog.internal_name.clear();
+        new_dialog.internal_name = "my_animation";
         new_dialog.anim_path.clear();
         new_dialog.must_update = true;
     };
@@ -553,6 +553,9 @@ void animation_editor::process_gui_new_dialog() {
     
     if(new_dialog.type == 0) {
         //Internal name input.
+        if(!ImGui::IsAnyItemActive()) {
+            ImGui::SetKeyboardFocusHere();
+        }
         new_dialog.must_update |=
             ImGui::InputText("Internal name", &new_dialog.internal_name);
         set_tooltip(
@@ -621,7 +624,7 @@ void animation_editor::process_gui_new_dialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(140);
+    ImGui::SetupCentering(200);
     if(!new_dialog.problem.empty()) {
         ImGui::BeginDisabled();
     }

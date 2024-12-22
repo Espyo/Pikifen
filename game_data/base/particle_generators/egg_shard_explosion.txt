@@ -1,4 +1,4 @@
-name = egg_shard_explosion
+name = Egg shard explosion
 description = An explosion of shards from a recently-broken egg's shell.
 
 emission_interval = 0

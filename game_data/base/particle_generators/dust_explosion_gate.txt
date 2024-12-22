@@ -1,4 +1,4 @@
-name = dust_explosion_gate
+name = Dust explosion (gate)
 description = A generic gate-sized explosion of dust. Used, for instance, when a lifted gate lands.
 
 emission_interval = 0

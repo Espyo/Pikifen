@@ -1,4 +1,4 @@
-name = electrocuted
+name = Electrocuted
 description = Pikmin that are electrocuted will stay there for a bit, flashing from the powerful electricity, and will shortly after die.
 
 affects_pikmin = true

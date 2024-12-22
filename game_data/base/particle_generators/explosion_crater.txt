@@ -1,4 +1,4 @@
-name = explosion_crater
+name = Explosion crater
 description = A crater left behind by an explosion. It fades away with time.
 
 emission_interval = 0

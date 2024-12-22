@@ -1,4 +1,4 @@
-name = large_rock_explosion
+name = Large rock explosion
 description = A large explosion of rock particles, used when a clog is destroyed.
 
 emission_interval = 0
