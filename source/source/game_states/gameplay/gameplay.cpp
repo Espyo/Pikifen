@@ -1215,6 +1215,7 @@ void gameplay_state::unload() {
     
     leader_movement.reset(); //TODO replace with a better solution.
     
+    game.sys_assets.anim_sparks.clear();
     unload_game_content();
     game.content.unload_current_area(CONTENT_LOAD_LEVEL_FULL);
     

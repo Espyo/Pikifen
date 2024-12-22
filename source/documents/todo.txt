@@ -2,13 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Packs
-        Test editing every single piece of content
-            In the base pack
-            New content in a new pack
-            Content replacing the vanilla one in a new pack
-        Run a memory leak check
-
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

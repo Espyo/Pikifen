@@ -1685,7 +1685,9 @@ void area_editor::process_gui_panel_gameplay() {
             map<string, string> spray_strs =
                 get_var_map(game.cur_area_data->spray_amounts);
             for(size_t s = 0; s < game.config.spray_order.size(); s++) {
-                int amount = s2i(spray_strs[game.config.spray_order[s]->name]);
+                string spray_internal_name =
+                    game.config.spray_order[s]->manifest->internal_name;
+                int amount = s2i(spray_strs[spray_internal_name]);
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
@@ -1694,7 +1696,7 @@ void area_editor::process_gui_panel_gameplay() {
                     )
                 ) {
                     register_change("area spray amounts change");
-                    spray_strs[game.config.spray_order[s]->manifest->internal_name] = i2s(amount);
+                    spray_strs[spray_internal_name] = i2s(amount);
                     game.cur_area_data->spray_amounts.clear();
                     for(auto const &v : spray_strs) {
                         game.cur_area_data->spray_amounts +=
