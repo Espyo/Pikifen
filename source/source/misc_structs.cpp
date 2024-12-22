@@ -142,16 +142,13 @@ const string NAMES[N_MAKER_TOOLS] = {
 void asset_file_names_t::load(data_node* file) {
     reader_setter grs(file->get_child_by_name("graphics"));
     
-    grs.set("area_name_font", bmp_area_name_font);
     grs.set("bright_circle", bmp_bright_circle);
     grs.set("bright_ring", bmp_bright_ring);
     grs.set("bubble_box", bmp_bubble_box);
     grs.set("checkbox_check", bmp_checkbox_check);
     grs.set("checkbox_no_check", bmp_checkbox_no_check);
     grs.set("player_input_icons", bmp_player_input_icons);
-    grs.set("counter_font", bmp_counter_font);
     grs.set("cursor", bmp_cursor);
-    grs.set("cursor_counter_font", bmp_cursor_counter_font);
     grs.set("editor_icons", bmp_editor_icons);
     grs.set("enemy_spirit", bmp_enemy_spirit);
     grs.set("focus_box", bmp_focus_box);
@@ -161,7 +158,6 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("idle_glow", bmp_idle_glow);
     grs.set("leader_silhouette_side", bmp_leader_silhouette_side);
     grs.set("leader_silhouette_top", bmp_leader_silhouette_top);
-    grs.set("main_font", bmp_main_font);
     grs.set("main_menu", bmp_main_menu);
     grs.set("medal_bronze", bmp_medal_bronze);
     grs.set("medal_gold", bmp_medal_gold);
@@ -186,7 +182,6 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("throw_invalid", bmp_throw_invalid);
     grs.set("throw_preview", bmp_throw_preview);
     grs.set("throw_preview_dashed", bmp_throw_preview_dashed);
-    grs.set("value_font", bmp_value_font);
     grs.set("wave_ring", bmp_wave_ring);
     
     reader_setter frs(file->get_child_by_name("fonts"));
@@ -194,7 +189,7 @@ void asset_file_names_t::load(data_node* file) {
     frs.set("area_name", fnt_area_name);
     frs.set("counter", fnt_counter);
     frs.set("cursor_counter", fnt_cursor_counter);
-    frs.set("slim_font", fnt_slim);
+    frs.set("slim", fnt_slim);
     frs.set("standard", fnt_standard);
     frs.set("value", fnt_value);
     
@@ -209,6 +204,10 @@ void asset_file_names_t::load(data_node* file) {
     srs.set("spray", sound_spray);
     srs.set("switch_pikmin", sound_switch_pikmin);
     srs.set("throw", sound_throw);
+    
+    reader_setter ars(file->get_child_by_name("animations"));
+    
+    ars.set("sparks", anim_sparks);
 }
 
 

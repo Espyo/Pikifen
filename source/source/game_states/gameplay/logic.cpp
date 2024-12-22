@@ -147,7 +147,7 @@ void gameplay_state::do_aesthetic_logic(float delta_t) {
     do_aesthetic_leader_logic(delta_t);
     
     //Specific animations.
-    game.sys_assets.spark_animation.tick(delta_t);
+    game.sys_assets.anim_sparks.tick(delta_t);
 }
 
 

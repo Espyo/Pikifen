@@ -1,0 +1,71 @@
+graphics {
+    bright_circle = bright_circle
+    bright_ring = bright_ring
+    bubble_box = bubble_box
+    button_box = button_box
+    checkbox_check = checkbox_check
+    checkbox_no_check = checkbox_no_check
+    cursor = cursor
+    editor_icons = editor_icons
+    enemy_spirit = enemy_spirit
+    focus_box = focus_box
+    frame_box = frame_box
+    hard_bubble = hud/hard_bubble
+    icon = icon
+    idle_glow = idle_glow
+    key_box = key_box
+    leader_silhouette_side = leader_silhouette_side
+    leader_silhouette_top = leader_silhouette_top
+    main_menu = main_menu
+    medal_bronze = medal_bronze
+    medal_gold = medal_gold
+    medal_none = medal_none
+    medal_platinum = medal_platinum
+    medal_silver = medal_silver
+    menu_icons = menu_icons
+    mission_clear = mission_clear
+    mission_fail = mission_fail
+    more = more
+    mouse_cursor = mouse_cursor
+    notification = notification
+    pikmin_spirit = pikmin_spirit
+    player_input_icons = player_input_icons
+    random = random
+    rock = rock
+    shadow = shadow
+    shadow_square = shadow_square
+    smack = smack
+    smoke = smoke
+    sparkle = sparkle
+    spotlight = spotlight
+    swarm_arrow = swarm_arrow
+    throw_invalid = throw_invalid
+    throw_preview = throw_preview
+    throw_preview_dashed = throw_preview_dashed
+    wave_ring = wave_ring
+}
+
+fonts {
+    area_name = area_name_font
+    counter = counter_font
+    cursor_counter = cursor_counter_font
+    slim = slim_font
+    standard = font
+    value = value_font
+}
+
+animations {
+    sparks = sparks
+}
+
+audio {
+    attack = attack
+    camera = camera
+    menu_activate = menu_activate
+    menu_back = menu_back
+    menu_select = menu_select
+    pluck = pluck
+    spray = spray
+    switch_pikmin = switch_pikmin
+    throw = throw
+}

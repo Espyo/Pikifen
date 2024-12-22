@@ -158,10 +158,7 @@ const string GAME_CONFIG = "config.txt";
 //Mob type animation file.
 const string MOB_TYPE_ANIMATION = "animations.txt";
 
-//System animations file.
-const string SYSTEM_ANIMS = "system_animations.txt";
-
-//System animation file names file.
+//System asset file names file.
 const string SYSTEM_ASSET_FILE_NAMES = "system_asset_file_names.txt";
 
 //Error log file.
@@ -336,11 +333,7 @@ namespace FILE_PATHS_FROM_PACK {
 const string GAME_CONFIG =
     FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::GAME_CONFIG;
     
-//System animations file.
-const string SYSTEM_ANIMS =
-    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_ANIMS;
-    
-//System animation file names file.
+//System asset file names file.
 const string SYSTEM_ASSET_FILE_NAMES =
     FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
     

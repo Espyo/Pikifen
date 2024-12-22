@@ -151,9 +151,6 @@ struct asset_file_names_t {
     
     //Graphics.
     
-    //Area name font.
-    string bmp_area_name_font = "area_name_font";
-    
     //Bright circle.
     string bmp_bright_circle = "bright_circle";
     
@@ -172,14 +169,8 @@ struct asset_file_names_t {
     //Checkbox without a checkmark.
     string bmp_checkbox_no_check = "checkbox_no_check";
     
-    //Counter font.
-    string bmp_counter_font = "counter_font";
-    
     //Leader cursor.
     string bmp_cursor = "cursor";
-    
-    //Cursor counter font.
-    string bmp_cursor_counter_font = "cursor_counter_font";
     
     //Editor icons.
     string bmp_editor_icons = "editor_icons";
@@ -210,9 +201,6 @@ struct asset_file_names_t {
     
     //Leader silhouette from the top.
     string bmp_leader_silhouette_top = "leader_silhouette_top";
-    
-    //Main font.
-    string bmp_main_font = "font";
     
     //Main menu background.
     string bmp_main_menu = "main_menu";
@@ -292,9 +280,6 @@ struct asset_file_names_t {
     //Dashed throw preview texture.
     string bmp_throw_preview_dashed = "throw_preview_dashed";
     
-    //Value font.
-    string bmp_value_font = "value_font";
-    
     //Wave ring.
     string bmp_wave_ring = "wave_ring";
     
@@ -346,6 +331,11 @@ struct asset_file_names_t {
     
     //Throwing.
     string sound_throw = "throw";
+
+    //Global animations.
+
+    //Leader damage spark.
+    string anim_sparks = "sparks";
     
     
     //--- Function declarations ---
@@ -835,10 +825,10 @@ struct system_asset_list {
     //Throwing.
     ALLEGRO_SAMPLE* sound_throw = nullptr;
     
-    //Animations.
+    //Global animations.
     
     //Leader damage spark.
-    animation_instance spark_animation;
+    animation_instance anim_sparks;
     
 };
 

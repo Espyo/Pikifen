@@ -993,43 +993,23 @@ string misc_config_content_manager::get_perf_mon_measurement_name() const {
  */
 void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     //Game config.
+    string config_file_internal_name =
+        remove_extension(FILE_NAMES::GAME_CONFIG);
     data_node game_config_file =
-        load_data_file(manifests[remove_extension(FILE_NAMES::GAME_CONFIG)].path);
+        load_data_file(manifests[config_file_internal_name].path);
     game.config.load(&game_config_file);
+    
     al_set_window_title(
         game.display,
         game.config.name.empty() ? "Pikifen" : game.config.name.c_str()
     );
     
-    //System animations.
-    data_node system_animations_file =
-        load_data_file(manifests[remove_extension(FILE_NAMES::SYSTEM_ANIMS)].path);
-    load_system_anim(
-        &system_animations_file, "leader_damage_sparks",
-        game.sys_assets.spark_animation
-    );
-    
     //System asset file names.
+    string sys_asset_fn_internal_name =
+        remove_extension(FILE_NAMES::SYSTEM_ASSET_FILE_NAMES);
     data_node system_asset_fn_file =
-        load_data_file(manifests[remove_extension(FILE_NAMES::SYSTEM_ASSET_FILE_NAMES)].path);
+        load_data_file(manifests[sys_asset_fn_internal_name].path);
     game.asset_file_names.load(&system_asset_fn_file);
-}
-
-
-/**
- * @brief Loads an animation from the system animations definition file.
- *
- * @param anim_def_file The animation definition file.
- * @param name Name of the animation property on this file.
- * @param anim The animation instance structure to fill.
- */
-void misc_config_content_manager::load_system_anim(
-    data_node* anim_def_file, const string &name,
-    animation_instance &anim
-) {
-    const string &anim_db_name =
-        anim_def_file->get_child_by_name(name)->value;
-    anim.init_to_first_anim(&game.content.global_anim_dbs.list[anim_db_name]);
 }
 
 

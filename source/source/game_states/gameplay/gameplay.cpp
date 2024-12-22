@@ -756,6 +756,21 @@ void gameplay_state::load() {
         }
     };
     
+    auto spark_anim_db_it =
+        game.content.global_anim_dbs.list.find(
+            game.asset_file_names.anim_sparks
+        );
+    if(spark_anim_db_it == game.content.global_anim_dbs.list.end()) {
+        game.errors.report(
+            "Unknown global animation \"" + game.asset_file_names.anim_sparks +
+            "\" when trying to load the leader damage sparks!"
+        );
+    } else {
+        game.sys_assets.anim_sparks.init_to_first_anim(
+            &spark_anim_db_it->second
+        );
+    }
+    
     //Load the area.
     if(
         !game.content.load_area_as_current(

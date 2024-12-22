@@ -363,15 +363,6 @@ public:
     ) const;
     void unload_all(CONTENT_LOAD_LEVEL level) override;
     
-    
-private:
-
-    //--- Function declarations ---
-    void load_system_anim(
-        data_node* anim_def_file, const string &name,
-        animation_instance &anim
-    );
-    
 };
 
 

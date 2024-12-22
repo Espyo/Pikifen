@@ -1,1 +1,0 @@
-leader_damage_sparks = sparks
