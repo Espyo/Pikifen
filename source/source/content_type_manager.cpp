@@ -181,9 +181,7 @@ bool area_content_manager::load_area(
     
     //Geometry.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
-        if(game.perf_mon) game.perf_mon->start_measurement("Area -- Geometry");
         area_ptr->load_geometry_from_data_node(&geometry_file, level);
-        if(game.perf_mon) game.perf_mon->finish_measurement();
     }
     
     return true;
@@ -1144,7 +1142,7 @@ string mob_anim_content_manager::get_name() const {
  * @return The name.
  */
 string mob_anim_content_manager::get_perf_mon_measurement_name() const {
-    return "Mob animation databases";
+    return "Object animation databases";
 }
 
 
@@ -1294,7 +1292,7 @@ string mob_type_content_manager::get_name() const {
  * @return The name.
  */
 string mob_type_content_manager::get_perf_mon_measurement_name() const {
-    return "Mob types";
+    return "";
 }
 
 

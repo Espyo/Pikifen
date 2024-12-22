@@ -1,20 +1,22 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
     Packs
-        When it's all done
-            Organize the performance monitor start/end points
-            Run a memory leak check
-            Test editing every single piece of content, both in the base pack, and in a new pack
-            Test the suggestion to play Tutorial Meadow
+        Test editing every single piece of content
+            In the base pack
+            New content in a new pack
+            Content replacing the vanilla one in a new pack
+        Run a memory leak check
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    https://gitlab.freedesktop.org/xorg/xserver/-/issues/1773
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
+    "dismissing when leaving water keeps the water rings" -- Helodity
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -140,6 +142,7 @@ Next tasks (roughly sorted most important first)
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
         New animations
+            Struggling to lift something
             Dying? (like shrinking or something)
     Leader animations
         Improvements
@@ -861,6 +864,9 @@ Misc things (so I don't forget)
         Also useful for stating that an obstacle was destroyed and stuff like that from Pikmin 4
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
+    Save centiseconds in the mission's record (thanks Helodity)
+    Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
+    The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The spray HUD icons should show a tiny bar with concoction progress
     The standby counter near the cursor should be disabled by default
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it

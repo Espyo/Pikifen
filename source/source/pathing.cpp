@@ -88,6 +88,8 @@ bool path_link::is_one_way() const {
  * @brief Clears all info.
  */
 void path_manager::clear() {
+    if(!game.cur_area_data) return;
+    
     obstructions.clear();
     
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {

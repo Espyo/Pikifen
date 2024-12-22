@@ -92,6 +92,9 @@ const string SIMPLE_AREAS = "simple";
 //Mission areas folder.
 const string MISSION_AREAS = "mission";
 
+//The tutorial area.
+const string TUTORIAL_AREA = "tutorial_meadow";
+
 //Global animations folder.
 const string GLOBAL_ANIMATIONS = "animations";
 

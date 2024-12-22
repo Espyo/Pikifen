@@ -757,10 +757,15 @@ void gameplay_state::load() {
     };
     
     //Load the area.
-    game.content.load_area_as_current(
-        path_of_area_to_load, nullptr,
-        CONTENT_LOAD_LEVEL_FULL, false
-    );
+    if(
+        !game.content.load_area_as_current(
+            path_of_area_to_load, nullptr,
+            CONTENT_LOAD_LEVEL_FULL, false
+        )
+    ) {
+        game.change_state(game.states.main_menu, true);
+        return;
+    }
     
     if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);
