@@ -12,6 +12,7 @@
 
 #include <map>
 
+#include "../other_menus/help_menu.h"
 #include "../../drawing.h"
 #include "../../gui.h"
 #include "../../mob_script.h"
@@ -28,7 +29,6 @@ extern const string CONFIRMATION_GUI_FILE_PATH;
 extern const float ENTRY_LOCKOUT_TIME;
 extern const float GO_HERE_CALC_INTERVAL;
 extern const string GUI_FILE_PATH;
-extern const string HELP_GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
 extern const ALLEGRO_COLOR RADAR_BG_COLOR;
 extern const float RADAR_DEF_ZOOM;
@@ -89,29 +89,6 @@ public:
 
     //--- Misc. declarations ---
 
-    //Categories of help page tidbits.
-    enum HELP_CATEGORY {
-
-        //Gameplay basics tidbits.
-        HELP_CATEGORY_GAMEPLAY1,
-
-        //Gameplay advanced tidbits.
-        HELP_CATEGORY_GAMEPLAY2,
-
-        //Control tidbits.
-        HELP_CATEGORY_CONTROLS,
-
-        //Player type tidbits.
-        HELP_CATEGORY_PIKMIN,
-
-        //Noteworthy object tidbits.
-        HELP_CATEGORY_OBJECTS,
-        
-        //Total amount of help page tidbit categories.
-        N_HELP_CATEGORIES
-
-    };
-
     //Types of spots for each Go Here drawn path segment.
     enum GO_HERE_SEGMENT_SPOT {
         
@@ -141,9 +118,6 @@ public:
     //GUI manager for the mission page.
     gui_manager mission_gui;
 
-    //GUI manager for the help page.
-    gui_manager help_gui;
-
     //GUI manager for the leaving confirmation page.
     gui_manager confirmation_gui;
 
@@ -171,37 +145,10 @@ public:
     
 private:
 
-    //--- Misc. declarations ---
-
-    /**
-     * @brief One of the help menu's tidbits.
-     */
-    struct tidbit {
-        
-        //--- Members ---
-
-        //Name.
-        string name;
-        
-        //Description.
-        string description;
-        
-        //Image.
-        ALLEGRO_BITMAP* image = nullptr;
-
-    };
-    
-
     //--- Members ---
 
     //Is it currently closing?
     bool closing = false;
-
-    //Help page category text GUI item.
-    text_gui_item* help_category_text = nullptr;
-
-    //Help page tidbit list.
-    list_gui_item* help_tidbit_list = nullptr;
 
     //Confirmation page explanation text.
     text_gui_item* confirmation_explanation_text = nullptr;
@@ -212,17 +159,14 @@ private:
     //Pikmin status list.
     list_gui_item* pikmin_list = nullptr;
 
-    //All tidbits in the help page.
-    map<HELP_CATEGORY, vector<tidbit> > tidbits;
-
-    //Currently shown help tidbit, if any.
-    tidbit* cur_tidbit = nullptr;
-
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
 
     //Pages available, in order.
     vector<PAUSE_MENU_PAGE> pages;
+
+    //Information about the current help menu, if any.
+    help_menu_t* help_menu = nullptr;
 
     //Z of the lowest sector.
     float lowest_sector_z = 0.0f;
@@ -338,21 +282,15 @@ private:
         const ALLEGRO_COLOR &color, float* texture_point
     );
     void draw_radar(const point &center, const point &size);
-    void draw_tidbit(
-        const ALLEGRO_FONT* const font, const point &where,
-        const point &max_size, const string &text
-    );
     void fill_mission_fail_list(list_gui_item* list);
     void fill_mission_grading_list(list_gui_item* list);
     string get_mission_goal_status();
     void init_confirmation_page();
     void init_radar_page();
-    void init_help_page();
     void init_main_pause_menu();
     void init_mission_page();
     void init_status_page();
     void pan_radar(point amount);
-    void populate_help_tidbits(const HELP_CATEGORY category);
     void radar_confirm();
     void start_closing(gui_manager* cur_gui);
     void start_leaving_gameplay();

@@ -35,9 +35,6 @@ const float GO_HERE_CALC_INTERVAL = 0.15f;
 //Name of the GUI information file.
 const string GUI_FILE_NAME = "pause_menu";
 
-//Name of the help page GUI information file.
-const string HELP_GUI_FILE_NAME = "pause_help";
-
 //Name of the mission page GUI information file.
 const string MISSION_GUI_FILE_NAME = "pause_mission";
 
@@ -102,7 +99,6 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     init_radar_page();
     init_status_page();
     init_mission_page();
-    init_help_page();
     init_confirmation_page();
     
     //Initialize some radar things.
@@ -183,22 +179,16 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
  * @brief Destroys the pause menu struct object.
  */
 pause_menu_t::~pause_menu_t() {
-    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
-        if(c == HELP_CATEGORY_PIKMIN) continue;
-        for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
-            if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.content.bitmaps.list.free(tidbits[(HELP_CATEGORY) c][t].image);
-            }
-        }
-    }
-    tidbits.clear();
-    
     gui.destroy();
     radar_gui.destroy();
     status_gui.destroy();
     mission_gui.destroy();
-    help_gui.destroy();
     confirmation_gui.destroy();
+    
+    if(help_menu) {
+        delete help_menu;
+        help_menu = nullptr;
+    }
     
     game.content.bitmaps.list.free(bmp_radar_cursor);
     game.content.bitmaps.list.free(bmp_radar_pikmin);
@@ -758,8 +748,10 @@ void pause_menu_t::draw() {
     radar_gui.draw();
     status_gui.draw();
     mission_gui.draw();
-    help_gui.draw();
     confirmation_gui.draw();
+    if(help_menu) {
+        help_menu->draw();
+    }
 }
 
 
@@ -1302,60 +1294,6 @@ void pause_menu_t::draw_radar(
 
 
 /**
- * @brief Draws some help page tidbit's text.
- *
- * @param font Font to use.
- * @param where Coordinates to draw the text on.
- * @param max_size Maximum width or height the text can occupy.
- * A value of zero in one of these coordinates makes it not have a
- * limit in that dimension.
- * @param text Text to draw.
- */
-void pause_menu_t::draw_tidbit(
-    const ALLEGRO_FONT* const font, const point &where,
-    const point &max_size, const string &text
-) {
-    //Get the tokens that make up the tidbit.
-    vector<string_token> tokens = tokenize_string(text);
-    if(tokens.empty()) return;
-    
-    int line_height = al_get_font_line_height(font);
-    
-    set_string_token_widths(tokens, font, game.sys_assets.fnt_slim, line_height, true);
-    
-    //Split long lines.
-    vector<vector<string_token> > tokens_per_line =
-        split_long_string_with_tokens(tokens, max_size.x);
-        
-    if(tokens_per_line.empty()) return;
-    
-    //Figure out if we need to scale things vertically.
-    //Control bind icons that are bitmaps will have their width unchanged,
-    //otherwise this would turn into a cat-and-mouse game of the Y scale
-    //shrinking causing a token width to shrink, which could cause the
-    //Y scale to grow, ad infinitum.
-    float y_scale = 1.0f;
-    if(tokens_per_line.size() * line_height > max_size.y) {
-        y_scale = max_size.y / (tokens_per_line.size() * (line_height + 4));
-    }
-    
-    //Draw!
-    for(size_t l = 0; l < tokens_per_line.size(); l++) {
-        draw_string_tokens(
-            tokens_per_line[l], game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
-            true,
-            point(
-                where.x,
-                where.y + l * (line_height + 4) * y_scale -
-                (tokens_per_line.size() * line_height * y_scale / 2.0f)
-            ),
-            ALLEGRO_ALIGN_CENTER, point(max_size.x, line_height * y_scale)
-        );
-    }
-}
-
-
-/**
  * @brief Fills the list of mission fail conditions.
  *
  * @param list List item to fill.
@@ -1537,8 +1475,10 @@ void pause_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     radar_gui.handle_event(ev);
     status_gui.handle_event(ev);
     mission_gui.handle_event(ev);
-    help_gui.handle_event(ev);
     confirmation_gui.handle_event(ev);
+    if(help_menu) {
+        help_menu->handle_event(ev);
+    }
     
     //Handle some radar logic.
     point radar_center;
@@ -1662,8 +1602,8 @@ void pause_menu_t::handle_player_action(const player_action &action) {
         radar_gui.handle_player_action(action);
         status_gui.handle_player_action(action);
         mission_gui.handle_player_action(action);
-        help_gui.handle_player_action(action);
         confirmation_gui.handle_player_action(action);
+        if(help_menu) help_menu->handle_player_action(action);
         
         switch(action.action_type_id) {
         case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
@@ -1778,221 +1718,14 @@ void pause_menu_t::init_confirmation_page() {
     confirmation_gui.add_item(options_reminder_text, "options_reminder");
     
     //Tooltip text.
-    text_gui_item* tooltip_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
-    tooltip_text->on_draw =
-        [this]
-    (const point & center, const point & size) {
-        draw_tidbit(
-            game.sys_assets.fnt_standard, center, size,
-            confirmation_gui.get_current_tooltip()
-        );
-    };
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
     confirmation_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
     confirmation_gui.set_selected_item(confirmation_gui.back_item, true);
     confirmation_gui.responsive = false;
     confirmation_gui.hide_items();
-}
-
-
-/**
- * @brief Initializes the help page.
- */
-void pause_menu_t::init_help_page() {
-    const vector<string> category_node_names {
-        "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
-    };
-    data_node* gui_file = &game.content.gui_defs.list[PAUSE_MENU::HELP_GUI_FILE_NAME];
-    
-    //Load the tidbits.
-    data_node* tidbits_node = gui_file->get_child_by_name("tidbits");
-    
-    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
-        if(category_node_names[c].empty()) continue;
-        data_node* category_node =
-            tidbits_node->get_child_by_name(category_node_names[c]);
-        size_t n_tidbits = category_node->get_nr_of_children();
-        vector<tidbit> &category_tidbits = tidbits[(HELP_CATEGORY) c];
-        category_tidbits.reserve(n_tidbits);
-        for(size_t t = 0; t < n_tidbits; t++) {
-            vector<string> parts =
-                split(category_node->get_child(t)->name, ";");
-            tidbit new_t;
-            new_t.name = parts.size() > 0 ? parts[0] : "";
-            new_t.description = parts.size() > 1 ? parts[1] : "";
-            new_t.image = parts.size() > 2 ? game.content.bitmaps.list.get(parts[2]) : nullptr;
-            category_tidbits.push_back(new_t);
-        }
-    }
-    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
-        tidbit new_t;
-        new_t.name = game.config.pikmin_order[p]->name;
-        new_t.description = game.config.pikmin_order[p]->description;
-        new_t.image = game.config.pikmin_order[p]->bmp_icon;
-        tidbits[HELP_CATEGORY_PIKMIN].push_back(new_t);
-    }
-    
-    //Menu items.
-    help_gui.register_coords("back",        12,  5, 20,  6);
-    help_gui.register_coords("gameplay1",   22, 15, 36,  6);
-    help_gui.register_coords("gameplay2",   22, 23, 36,  6);
-    help_gui.register_coords("controls",    22, 31, 36,  6);
-    help_gui.register_coords("pikmin",      22, 39, 36,  6);
-    help_gui.register_coords("objects",     22, 47, 36,  6);
-    help_gui.register_coords("manual",      22, 54, 36,  4);
-    help_gui.register_coords("category",    71,  5, 54,  6);
-    help_gui.register_coords("list",        69, 39, 50, 54);
-    help_gui.register_coords("list_scroll", 96, 39,  2, 54);
-    help_gui.register_coords("image",       16, 83, 28, 30);
-    help_gui.register_coords("tooltip",     65, 83, 66, 30);
-    help_gui.read_coords(gui_file->get_child_by_name("positions"));
-    
-    //Back button.
-    help_gui.back_item =
-        new button_gui_item(
-        "Back", game.sys_assets.fnt_standard
-    );
-    help_gui.back_item->on_activate =
-    [this] (const point &) {
-        help_gui.responsive = false;
-        help_gui.start_animation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        gui.responsive = true;
-        gui.start_animation(
-            GUI_MANAGER_ANIM_UP_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
-    help_gui.back_item->on_get_tooltip =
-    [] () { return "Return to the pause menu."; };
-    help_gui.add_item(help_gui.back_item, "back");
-    
-    //Gameplay basics button.
-    button_gui_item* gameplay1_button =
-        new button_gui_item("Gameplay basics", game.sys_assets.fnt_standard);
-    gameplay1_button->on_activate =
-    [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY1);
-    };
-    gameplay1_button->on_get_tooltip =
-    [] () {
-        return "Show help about basic gameplay features.";
-    };
-    help_gui.add_item(gameplay1_button, "gameplay1");
-    
-    //Gameplay advanced button.
-    button_gui_item* gameplay2_button =
-        new button_gui_item("Advanced gameplay", game.sys_assets.fnt_standard);
-    gameplay2_button->on_activate =
-    [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY2);
-    };
-    gameplay2_button->on_get_tooltip =
-    [] () {
-        return "Show advanced gameplay tips.";
-    };
-    help_gui.add_item(gameplay2_button, "gameplay2");
-    
-    //Controls button.
-    button_gui_item* controls_button =
-        new button_gui_item("Controls", game.sys_assets.fnt_standard);
-    controls_button->on_activate =
-    [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_CONTROLS);
-    };
-    controls_button->on_get_tooltip =
-    [] () {
-        return "Show game controls and certain actions you can perform.";
-    };
-    help_gui.add_item(controls_button, "controls");
-    
-    //Pikmin button.
-    button_gui_item* pikmin_button =
-        new button_gui_item("Pikmin types", game.sys_assets.fnt_standard);
-    pikmin_button->on_activate =
-    [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_PIKMIN);
-    };
-    pikmin_button->on_get_tooltip =
-    [] () {
-        return "Show a description of each Pikmin type.";
-    };
-    help_gui.add_item(pikmin_button, "pikmin");
-    
-    //Objects button.
-    button_gui_item* objects_button =
-        new button_gui_item("Objects", game.sys_assets.fnt_standard);
-    objects_button->on_activate =
-    [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_OBJECTS);
-    };
-    objects_button->on_get_tooltip =
-    [] () {
-        return "Show help about some noteworthy objects you'll find.";
-    };
-    help_gui.add_item(objects_button, "objects");
-    
-    //Manual text.
-    bullet_point_gui_item* manual_bullet =
-        new bullet_point_gui_item("More help...", game.sys_assets.fnt_standard);
-    manual_bullet->on_get_tooltip = [] () {
-        return
-            "For more help on other subjects, check out the "
-            "manual in the game's folder.";
-    };
-    help_gui.add_item(manual_bullet, "manual");
-    
-    //Category text.
-    help_category_text = new text_gui_item("", game.sys_assets.fnt_standard);
-    help_gui.add_item(help_category_text, "category");
-    
-    //Tidbit list box.
-    help_tidbit_list = new list_gui_item();
-    help_gui.add_item(help_tidbit_list, "list");
-    
-    //Tidbit list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = help_tidbit_list;
-    help_gui.add_item(list_scroll, "list_scroll");
-    
-    //Image item.
-    gui_item* image_item = new gui_item();
-    image_item->on_draw =
-    [this] (const point & center, const point & size) {
-        if(cur_tidbit == nullptr) return;
-        if(cur_tidbit->image == nullptr) return;
-        draw_bitmap_in_box(
-            cur_tidbit->image,
-            center, size, false
-        );
-    };
-    help_gui.add_item(image_item, "image");
-    
-    //Tooltip text.
-    text_gui_item* tooltip_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
-    tooltip_text->on_draw =
-        [this]
-    (const point & center, const point & size) {
-        draw_tidbit(
-            game.sys_assets.fnt_standard, center, size,
-            help_gui.get_current_tooltip()
-        );
-    };
-    help_gui.add_item(tooltip_text, "tooltip");
-    
-    //Finishing touches.
-    help_gui.set_selected_item(help_gui.back_item, true);
-    help_gui.responsive = false;
-    help_gui.hide_items();
-    help_gui.on_selection_changed =
-    [this] () {
-        cur_tidbit = nullptr;
-    };
 }
 
 
@@ -2135,11 +1868,24 @@ void pause_menu_t::init_main_pause_menu() {
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        help_gui.responsive = true;
-        help_gui.start_animation(
-            GUI_MANAGER_ANIM_UP_TO_CENTER,
+        help_menu = new help_menu_t();
+        help_menu->gui.responsive = true;
+        help_menu->gui.start_animation(
+            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
+        help_menu->back_callback = [this] () {
+            help_menu->gui.responsive = false;
+            help_menu->gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+            gui.responsive = true;
+            gui.start_animation(
+                GUI_MANAGER_ANIM_UP_TO_CENTER,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        };
     };
     help_button->on_get_tooltip =
     [] () { return "Some quick help and tips about how to play."; };
@@ -2775,65 +2521,6 @@ void pause_menu_t::pan_radar(point amount) {
 
 
 /**
- * @brief Populates the help page's list of tidbits.
- *
- * @param category Category of tidbits to use.
- */
-void pause_menu_t::populate_help_tidbits(const HELP_CATEGORY category) {
-    vector<tidbit> &tidbit_list = tidbits[category];
-    
-    switch(category) {
-    case HELP_CATEGORY_GAMEPLAY1: {
-        help_category_text->text = "Gameplay basics";
-        break;
-    } case HELP_CATEGORY_GAMEPLAY2: {
-        help_category_text->text = "Advanced gameplay";
-        break;
-    } case HELP_CATEGORY_CONTROLS: {
-        help_category_text->text = "Controls";
-        break;
-    } case HELP_CATEGORY_PIKMIN: {
-        help_category_text->text = "Pikmin";
-        break;
-    } case HELP_CATEGORY_OBJECTS: {
-        help_category_text->text = "Objects";
-        break;
-    } case N_HELP_CATEGORIES: {
-        break;
-    }
-    }
-    
-    help_tidbit_list->delete_all_children();
-    
-    for(size_t t = 0; t < tidbit_list.size(); t++) {
-        tidbit* t_ptr = &tidbit_list[t];
-        bullet_point_gui_item* tidbit_bullet =
-            new bullet_point_gui_item(
-            t_ptr->name,
-            game.sys_assets.fnt_standard
-        );
-        tidbit_bullet->center = point(0.50f, 0.045f + t * 0.10f);
-        tidbit_bullet->size = point(1.0f, 0.09f);
-        tidbit_bullet->on_get_tooltip = [this, t_ptr] () {
-            return t_ptr->description;
-        };
-        tidbit_bullet->on_selected = [this, t_ptr] () {
-            cur_tidbit = t_ptr;
-        };
-        tidbit_bullet->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
-        );
-        help_tidbit_list->add_child(tidbit_bullet);
-        help_gui.add_item(tidbit_bullet);
-    }
-    
-    help_category_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_HIGH
-    );
-}
-
-
-/**
  * @brief When the player confirms their action in the radar.
  */
 void pause_menu_t::radar_confirm() {
@@ -2953,8 +2640,16 @@ void pause_menu_t::tick(float delta_t) {
     radar_gui.tick(delta_t);
     status_gui.tick(delta_t);
     mission_gui.tick(delta_t);
-    help_gui.tick(delta_t);
     confirmation_gui.tick(delta_t);
+    
+    if(help_menu) {
+        if(!help_menu->to_delete) {
+            help_menu->tick(game.delta_t);
+        } else {
+            delete help_menu;
+            help_menu = nullptr;
+        }
+    }
     
     //Tick the background.
     const float bg_alpha_mult_speed =

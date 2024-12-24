@@ -275,6 +275,28 @@
         <li><code>sun</code>: Icon for the sun in the Sun Meter.</li>
       </ul>
     </ul>
+
+    <h3 id="help">Help menu</h3>
+
+    <p>The help menu, accessible from the main menu or the pause menu.</p>
+
+    <ul>
+      <li><b>Internal name:</b> <code>help</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>back</code>: Button to return to the pause menu.</li>
+        <li><code>gameplay1</code>: Gameplay basics category button.</li>
+        <li><code>gameplay2</code>: Advanced gameplay category button.</li>
+        <li><code>controls</code>: Controls category button.</li>
+        <li><code>pikmin</code>: Pikmin category button.</li>
+        <li><code>objects</code>: Objects category button.</li>
+        <li><code>category</code>: Name of the currently selected category.</li>
+        <li><code>list</code>: List of tidbits in the current category.</li>
+        <li><code>list_scroll</code>: Scrollbar for the list.</li>
+        <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
+      </ul>
+      <li><b>Tidbits:</b> Tidbits of information in the help menu are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the file in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
+    </ul>
     
     <h3 id="main-menu">Main menu</h3>
 
@@ -479,7 +501,7 @@
     
     <h3 id="pause-menu">Pause menu</h3>
 
-    <p>The menu that shows when the player pauses the game. This is only the system page, not the help page or the confirmation page.</p>
+    <p>The menu that shows when the player pauses the game. This is only the system page, not the mission page, confirmation page, etc.</p>
     
     <ul>
       <li><b>Internal name:</b> <code>pause_menu</code></li>
@@ -517,28 +539,6 @@
         <li><code>options_reminder</code>: Reminder that the confirmation question can be changed in the options menu.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
-    </ul>
-
-    <h3 id="pause-menu-help">Pause menu &ndash; help page</h3>
-
-    <p>The help page of the pause menu.</p>
-
-    <ul>
-      <li><b>Internal name:</b> <code>pause_help</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Button to return to the pause menu.</li>
-        <li><code>gameplay1</code>: Gameplay basics category button.</li>
-        <li><code>gameplay2</code>: Advanced gameplay category button.</li>
-        <li><code>controls</code>: Controls category button.</li>
-        <li><code>pikmin</code>: Pikmin category button.</li>
-        <li><code>objects</code>: Objects category button.</li>
-        <li><code>category</code>: Name of the currently selected category.</li>
-        <li><code>list</code>: List of tidbits in the current category.</li>
-        <li><code>list_scroll</code>: Scrollbar for the list.</li>
-        <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
-      </ul>
-      <li><b>Tidbits:</b> Tidbits of information in the help page are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the file in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
     </ul>
 
     <h3 id="pause-menu-mission">Pause menu &ndash; mission page</h3>
