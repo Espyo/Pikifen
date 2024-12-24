@@ -76,7 +76,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_LANDED); {
             efc.run(pikmin_fsm::land_after_pluck);
-            efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -585,7 +584,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("in_group_chasing");
+            efc.run(pikmin_fsm::finish_called_anim);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -2176,7 +2175,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik_ptr->consecutive_dud_hits = 0;
     pikmin_fsm::stand_still(m, info1, info2);
     
-    caller->add_to_group(pik_ptr);
+    pik_ptr->focus_on_mob(caller);
     
     pik_ptr->set_animation(PIKMIN_ANIM_CALLED);
     if(info2 == nullptr) {
@@ -2611,6 +2610,31 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(false, false, 0);
+}
+
+
+/**
+ * @brief When a Pikmin finished the animation for when it's called.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    mob* lea_ptr = pik_ptr->focused_mob;
+    
+    if(lea_ptr) {
+        if(lea_ptr->following_group) {
+            //If this leader is following another one,
+            //then the new Pikmin should be in the group of that top leader.
+            lea_ptr = lea_ptr->following_group;
+        }
+        lea_ptr->add_to_group(pik_ptr);
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING, info1, info2);
+    } else {
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IDLING, info1, info2);
+    }
 }
 
 
@@ -3216,14 +3240,19 @@ void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* lea_ptr = pik_ptr->focused_mob;
     
-    if(lea_ptr->following_group) {
-        //If this leader is following another one,
-        //then the new Pikmin should be in the group of that top leader.
-        lea_ptr = lea_ptr->following_group;
-    }
-    lea_ptr->add_to_group(pik_ptr);
-    
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+    
+    if(lea_ptr) {
+        if(lea_ptr->following_group) {
+            //If this leader is following another one,
+            //then the new Pikmin should be in the group of that top leader.
+            lea_ptr = lea_ptr->following_group;
+        }
+        lea_ptr->add_to_group(pik_ptr);
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING, info1, info2);
+    } else {
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IDLING, info1, info2);
+    }
 }
 
 

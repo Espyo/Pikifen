@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If a Pikmin is called and stuff happens during the animation, it won't really know about it. At worst, this crashes (if you try dismissing right after) (thanks Helodity)
     https://gitlab.freedesktop.org/xorg/xserver/-/issues/1773
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
@@ -17,7 +16,7 @@ Next tasks (roughly sorted most important first)
     Test -S-'s get_onion_info branch
     Check Helodity's particle editor
         Add a way to move the emitter with the mouse
-    https://github.com/Helodity/Pikifen/tree/throwing-improvements
+    https://github.com/Helodity/Pikifen/tree/throwing-improvements-port
     Find a way to manage the installed packs
         Allow pack thumbnails
             Only load the thumbnails when you enter the pack management screen, and don't use game.content.bitmaps, since they are not game content. Unload when the screen is exited
@@ -697,6 +696,7 @@ Misc things (so I don't forget)
         Animate the mission results screen. Basically, reveal one thing at a time
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
+            See how Allegro's ex_loading_thread.c does it
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
         Pitch the whistle by the swarm angle (or intensity)
         More music mixes
