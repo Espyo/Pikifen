@@ -27,6 +27,7 @@ void dark_main_menu_state::do_drawing() {
     );
     
     if(help_menu) help_menu->draw();
+    if(stats_menu) stats_menu->draw();
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -40,6 +41,7 @@ void dark_main_menu_state::do_logic() {
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
             if(help_menu) help_menu->handle_player_action(player_actions[a]);
+            if(stats_menu) stats_menu->handle_player_action(player_actions[a]);
         }
     }
     
@@ -49,6 +51,15 @@ void dark_main_menu_state::do_logic() {
         } else {
             delete help_menu;
             help_menu = nullptr;
+        }
+    }
+    
+    if(stats_menu) {
+        if(!stats_menu->to_delete) {
+            stats_menu->tick(game.delta_t);
+        } else {
+            delete stats_menu;
+            stats_menu = nullptr;
         }
     }
     
@@ -75,6 +86,7 @@ void dark_main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(help_menu) help_menu->handle_event(ev);
+    if(stats_menu) stats_menu->handle_event(ev);
 }
 
 
@@ -100,6 +112,7 @@ void dark_main_menu_state::load() {
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
+        CONTENT_TYPE_AREA,
     },
     CONTENT_LOAD_LEVEL_FULL
     );
@@ -110,12 +123,16 @@ void dark_main_menu_state::load() {
         help_menu = new help_menu_t();
         help_menu->back_callback = [this] () { leave(); };
         break;
+    } case DARK_MAIN_MENU_MENU_STATS: {
+        stats_menu = new stats_menu_t();
+        stats_menu->back_callback = [this] () { leave(); };
     }
     }
     menu_to_load = DARK_MAIN_MENU_MENU_HELP;
     
     //Finishing touches.
-    game.audio.set_current_song(OPTIONS_MENU::SONG_NAME);
+    game.audio.set_current_song(MAIN_MENU::SONG_NAME);
+    game.fade_mgr.start_fade(true, nullptr);
 }
 
 
@@ -131,10 +148,15 @@ void dark_main_menu_state::unload() {
         delete help_menu;
         help_menu = nullptr;
     }
+    if(stats_menu) {
+        delete stats_menu;
+        stats_menu = nullptr;
+    }
     
     //Game content.
     game.content.unload_all(
     vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
         CONTENT_TYPE_GUI,
     }
     );

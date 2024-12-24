@@ -16,6 +16,7 @@
 
 #include "game_state.h"
 #include "other_menus/help_menu.h"
+#include "other_menus/stats_menu.h"
 #include "../gui.h"
 #include "../options.h"
 #include "../misc_structs.h"
@@ -71,12 +72,6 @@ extern const string SONG_NAME;
 }
 
 
-namespace STATS_MENU {
-extern const string GUI_FILE_NAME;
-extern const string SONG_NAME;
-}
-
-
 //Pages of the main menu.
 enum MAIN_MENU_PAGE {
 
@@ -97,6 +92,9 @@ enum DARK_MAIN_MENU_MENU {
 
     //Help.
     DARK_MAIN_MENU_MENU_HELP,
+    
+    //Statistics.
+    DARK_MAIN_MENU_MENU_STATS,
     
 };
 
@@ -127,6 +125,9 @@ public:
     
     //Information about the current help menu, if any+.
     help_menu_t* help_menu = nullptr;
+    
+    //Information about the current statistics menu, if any+.
+    stats_menu_t* stats_menu = nullptr;
     
     
     //--- Function declarations ---
@@ -704,51 +705,5 @@ private:
     void init_gui_info_page();
     void init_gui_specs_page();
     void leave();
-    
-};
-
-
-/**
- * @brief Info about the statistics menu.
- */
-class stats_menu_state : public game_state {
-
-public:
-
-    //--- Function declarations ---
-    
-    void load() override;
-    void unload() override;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    void do_logic() override;
-    void do_drawing() override;
-    string get_name() const override;
-    
-private:
-
-    //--- Members ---
-    
-    //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
-    
-    //Statistics list item.
-    list_gui_item* stats_list = nullptr;
-    
-    //Runtime stat text item.
-    text_gui_item* runtime_value_text = nullptr;
-    
-    //GUI.
-    gui_manager gui;
-    
-    
-    //--- Function declarations ---
-    
-    void add_header(const string &label);
-    text_gui_item* add_stat(
-        const string &label, const string &value, const string &description
-    );
-    void leave();
-    void populate_stats_list();
-    void update_runtime_value_text();
     
 };

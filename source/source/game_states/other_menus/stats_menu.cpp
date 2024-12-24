@@ -5,29 +5,85 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Statistics menu state class and statistics menu state-related functions.
+ * Statistics menu structs and functions.
  */
 
-#include <algorithm>
+#include "stats_menu.h"
 
-#include "menus.h"
-
-#include "../drawing.h"
-#include "../functions.h"
-#include "../game.h"
-#include "../load.h"
-#include "../utils/allegro_utils.h"
-#include "../utils/string_utils.h"
+#include "../../game.h"
+#include "../../functions.h"
+#include "../../load.h"
+#include "../../utils/string_utils.h"
 
 
 namespace STATS_MENU {
 
-//Name of the GUI information file.
+//Name of the statistics menu GUI information file.
 const string GUI_FILE_NAME = "statistics_menu";
 
-//Name of the song to play in this state.
-const string SONG_NAME = "menus";
+}
 
+
+/**
+ * @brief Constructs a new statistics menu object.
+ */
+stats_menu_t::stats_menu_t() {
+    //Menu items.
+    gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("header",      50,  5, 50,  6);
+    gui.register_coords("list",        50, 51, 76, 82);
+    gui.register_coords("list_scroll", 91, 51,  2, 82);
+    gui.register_coords("tooltip",     50, 96, 96,  4);
+    gui.read_coords(
+        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+    );
+    
+    //Back button.
+    gui.back_item =
+        new button_gui_item("Back", game.sys_assets.fnt_standard);
+    gui.back_item->on_activate =
+    [this] (const point &) {
+        start_closing();
+        if(back_callback) back_callback();
+    };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Return to the main menu."; };
+    gui.add_item(gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "STATISTICS",
+        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    gui.add_item(header_text, "header");
+    
+    //Statistics list.
+    stats_list = new list_gui_item();
+    gui.add_item(stats_list, "list");
+    
+    //Statistics list scrollbar.
+    scroll_gui_item* list_scroll = new scroll_gui_item();
+    list_scroll->list_item = stats_list;
+    gui.add_item(list_scroll, "list_scroll");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
+    gui.add_item(tooltip_text, "tooltip");
+    
+    populate_stats_list();
+    
+    //Finishing touches.
+    gui.set_selected_item(gui.back_item, true);
+}
+
+
+/**
+ * @brief Destroys the statistics menu object.
+ */
+stats_menu_t::~stats_menu_t() {
+    gui.destroy();
 }
 
 
@@ -35,7 +91,7 @@ const string SONG_NAME = "menus";
  * @brief Adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */
-void stats_menu_state::add_header(const string &label) {
+void stats_menu_t::add_header(const string &label) {
     float list_bottom_y = stats_list->get_child_bottom();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
@@ -63,7 +119,7 @@ void stats_menu_state::add_header(const string &label) {
  * @param description Tooltip description.
  * @return The text GUI item for the value.
  */
-text_gui_item* stats_menu_state::add_stat(
+text_gui_item* stats_menu_t::add_stat(
     const string &label, const string &value, const string &description
 ) {
     float list_bottom_y = stats_list->get_child_bottom();
@@ -104,144 +160,34 @@ text_gui_item* stats_menu_state::add_stat(
 /**
  * @brief Draws the statistics menu.
  */
-void stats_menu_state::do_drawing() {
-    al_clear_to_color(COLOR_BLACK);
-    
-    draw_bitmap(
-        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
-        point(game.win_w, game.win_h), 0, map_gray(64)
-    );
-    
+void stats_menu_t::draw() {
     gui.draw();
-    
-    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 
 /**
- * @brief Ticks one frame's worth of logic.
- */
-void stats_menu_state::do_logic() {
-    vector<player_action> player_actions = game.controls.new_frame();
-    if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); a++) {
-            gui.handle_player_action(player_actions[a]);
-        }
-    }
-    
-    gui.tick(game.delta_t);
-    
-    update_runtime_value_text();
-    
-    game.fade_mgr.tick(game.delta_t);
-}
-
-
-/**
- * @brief Returns the name of this state.
+ * @brief Handles an Allegro event.
  *
- * @return The name.
+ * @param ev The event.
  */
-string stats_menu_state::get_name() const {
-    return "statistics menu";
+void stats_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_event(ev);
 }
 
-
 /**
- * @brief Handles Allegro events.
+ * @brief Handles a player action.
  *
- * @param ev Event to handle.
+ * @param action Data about the player action.
  */
-void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
-    
-    gui.handle_event(ev);
-}
-
-
-/**
- * @brief Leaves the statistics menu and goes to the main menu.
- */
-void stats_menu_state::leave() {
-    save_statistics();
-    game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu);
-    });
-}
-
-
-/**
- * @brief Loads the statistics menu into memory.
- */
-void stats_menu_state::load() {
-    //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
-    
-    game.content.reload_packs();
-    game.content.load_all(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_AREA,
-    },
-    CONTENT_LOAD_LEVEL_BASIC
-    );
-    
-    //Menu items.
-    gui.register_coords("back",        12,  5, 20,  6);
-    gui.register_coords("header",      50,  5, 50,  6);
-    gui.register_coords("list",        50, 51, 76, 82);
-    gui.register_coords("list_scroll", 91, 51,  2, 82);
-    gui.register_coords("tooltip",     50, 96, 96,  4);
-    gui.read_coords(
-        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
-    );
-    
-    //Back button.
-    gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_standard);
-    gui.back_item->on_activate =
-    [this] (const point &) {
-        leave();
-    };
-    gui.back_item->on_get_tooltip =
-    [] () { return "Return to the main menu."; };
-    gui.add_item(gui.back_item, "back");
-    
-    //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
-        "STATISTICS",
-        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    gui.add_item(header_text, "header");
-    
-    //Statistics list.
-    stats_list = new list_gui_item();
-    gui.add_item(stats_list, "list");
-    
-    //Statistics list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = stats_list;
-    gui.add_item(list_scroll, "list_scroll");
-    
-    //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
-    gui.add_item(tooltip_text, "tooltip");
-    
-    populate_stats_list();
-    
-    //Finishing touches.
-    game.audio.set_current_song(STATS_MENU::SONG_NAME);
-    game.fade_mgr.start_fade(true, nullptr);
-    gui.set_selected_item(gui.back_item, true);
-    
+void stats_menu_t::handle_player_action(const player_action &action) {
+    gui.handle_player_action(action);
 }
 
 
 /**
  * @brief Populates the stats menu with bullet points.
  */
-void stats_menu_state::populate_stats_list() {
+void stats_menu_t::populate_stats_list() {
     add_header(
         (game.config.name.empty() ? "Pikifen" : game.config.name) +
         " use"
@@ -387,28 +333,40 @@ void stats_menu_state::populate_stats_list() {
 
 
 /**
- * @brief Unloads the statistics menu from memory.
+ * @brief Starts the closing process.
  */
-void stats_menu_state::unload() {
+void stats_menu_t::start_closing() {
+    closing = true;
+    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+    save_statistics();
+}
 
-    //Resources.
-    game.content.bitmaps.list.free(bmp_menu_bg);
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ */
+void stats_menu_t::tick(float delta_t) {
+    update_runtime_value_text();
     
-    game.content.unload_all(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_AREA,
+    //Tick the GUI.
+    gui.tick(delta_t);
+    
+    //Tick the menu closing.
+    if(closing) {
+        closing_timer -= delta_t;
+        if(closing_timer <= 0.0f) {
+            to_delete = true;
+        }
     }
-    );
-    
-    //Menu items.
-    gui.destroy();
 }
 
 
 /**
  * @brief Updates the GUI text item for the runtime stat value.
  */
-void stats_menu_state::update_runtime_value_text() {
+void stats_menu_t::update_runtime_value_text() {
     runtime_value_text->text =
         time_to_str3(game.statistics.runtime, ":", ":", "");
 }

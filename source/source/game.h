@@ -77,9 +77,6 @@ struct game_state_list {
     //Options menu.
     options_menu_state* options_menu = nullptr;
     
-    //Statistics menu.
-    stats_menu_state* stats_menu = nullptr;
-    
     //Area results menu.
     results_state* results = nullptr;
     

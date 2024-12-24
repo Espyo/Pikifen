@@ -312,7 +312,7 @@ void help_menu_t::handle_player_action(const player_action &action) {
 
 
 /**
- * @brief Populates the help page's list of tidbits.
+ * @brief Populates the help menu's list of tidbits.
  *
  * @param category Category of tidbits to use.
  */

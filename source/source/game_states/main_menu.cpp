@@ -354,7 +354,9 @@ void main_menu_state::init_gui_main_page() {
     stats_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.stats_menu);
+            game.states.dark_main_menu->menu_to_load =
+                DARK_MAIN_MENU_MENU_STATS;
+            game.change_state(game.states.dark_main_menu);
         });
     };
     stats_button->on_get_tooltip =
