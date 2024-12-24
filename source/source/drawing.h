@@ -50,6 +50,9 @@ enum MENU_ICON {
     //Main menu make button.
     MENU_ICON_MAKE,
     
+    //Main menu help button.
+    MENU_ICON_HELP,
+    
     //Main menu options button.
     MENU_ICON_OPTIONS,
     

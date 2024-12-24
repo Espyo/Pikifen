@@ -196,8 +196,9 @@ void main_menu_state::init_gui_main_page() {
     
     bool play_icon_left = icon_left("play", "true");
     bool make_icon_left = icon_left("make", "false");
+    bool help_icon_left = icon_left("help", "true");
     bool options_icon_left = icon_left("options", "true");
-    bool stats_icon_left = icon_left("statistics", "false");
+    bool stats_icon_left = icon_left("statistics", "true");
     bool quit_icon_left = icon_left("quit", "false");
     
 #undef icon_left
@@ -205,8 +206,9 @@ void main_menu_state::init_gui_main_page() {
     //Menu items.
     main_gui.register_coords("play",    42, 58, 44, 12);
     main_gui.register_coords("make",    58, 72, 44, 12);
-    main_gui.register_coords("options", 29, 83, 34,  6);
-    main_gui.register_coords("stats",   71, 83, 34,  6);
+    main_gui.register_coords("help",    24, 83, 24,  6);
+    main_gui.register_coords("options", 50, 83, 24,  6);
+    main_gui.register_coords("stats",   76, 83, 24,  6);
     main_gui.register_coords("exit",    91, 91, 14,  6);
     main_gui.register_coords("tooltip", 50, 96, 96,  4);
     main_gui.read_coords(gui_file->get_child_by_name("positions"));
@@ -282,6 +284,31 @@ void main_menu_state::init_gui_main_page() {
     make_button->on_get_tooltip =
     [] () { return "Make your own content, like areas or animations."; };
     main_gui.add_item(make_button, "make");
+    
+    //Help button.
+    button_gui_item* help_button =
+        new button_gui_item("Help", game.sys_assets.fnt_area_name);
+    help_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_HELP, center, size, help_icon_left
+        );
+        draw_button(
+            center, size,
+            help_button->text, help_button->font,
+            help_button->color, help_button->selected,
+            help_button->get_juice_value()
+        );
+    };
+    help_button->on_activate =
+    [this] (const point &) {
+        game.fade_mgr.start_fade(false, [] () {
+            game.change_state(game.states.dark_main_menu);
+        });
+    };
+    help_button->on_get_tooltip =
+    [] () { return "Some quick help and tips about how to play."; };
+    main_gui.add_item(help_button, "help");
     
     //Options button.
     button_gui_item* options_button =
@@ -874,7 +901,6 @@ void main_menu_state::load() {
  * @brief Unloads the main menu from memory.
  */
 void main_menu_state::unload() {
-
     //Resources.
     game.content.bitmaps.list.free(bmp_menu_bg);
     bmp_menu_bg = nullptr;

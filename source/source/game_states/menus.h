@@ -15,6 +15,7 @@
 #include <allegro5/allegro.h>
 
 #include "game_state.h"
+#include "other_menus/help_menu.h"
 #include "../gui.h"
 #include "../options.h"
 #include "../misc_structs.h"
@@ -91,6 +92,15 @@ enum MAIN_MENU_PAGE {
 };
 
 
+//Specific menus of the "dark" main menu.
+enum DARK_MAIN_MENU_MENU {
+
+    //Help.
+    DARK_MAIN_MENU_MENU_HELP,
+    
+};
+
+
 //Pages of the options menu.
 enum OPTIONS_MENU_PAGE {
 
@@ -99,6 +109,47 @@ enum OPTIONS_MENU_PAGE {
     
     //Controls page.
     OPTIONS_MENU_PAGE_CONTROLS,
+    
+};
+
+
+/**
+ * @brief Info about the "dark", full-screen main menu.
+ */
+class dark_main_menu_state : public game_state {
+
+public:
+
+    //--- Members ---
+    
+    //What specific menu to load when it is created.
+    DARK_MAIN_MENU_MENU menu_to_load = DARK_MAIN_MENU_MENU_HELP;
+    
+    //Information about the current help menu, if any+.
+    help_menu_t* help_menu = nullptr;
+    
+    
+    //--- Function declarations ---
+    
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
+    
+    
+private:
+
+    //--- Members ---
+    
+    //Bitmap of the menu background.
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    
+    
+    //--- Function declarations ---
+    
+    void leave();
     
 };
 

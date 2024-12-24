@@ -749,9 +749,7 @@ void pause_menu_t::draw() {
     status_gui.draw();
     mission_gui.draw();
     confirmation_gui.draw();
-    if(help_menu) {
-        help_menu->draw();
-    }
+    if(help_menu) help_menu->draw();
 }
 
 
@@ -1476,9 +1474,7 @@ void pause_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     status_gui.handle_event(ev);
     mission_gui.handle_event(ev);
     confirmation_gui.handle_event(ev);
-    if(help_menu) {
-        help_menu->handle_event(ev);
-    }
+    if(help_menu) help_menu->handle_event(ev);
     
     //Handle some radar logic.
     point radar_center;

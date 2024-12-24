@@ -205,10 +205,6 @@ help_menu_t::help_menu_t() {
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item, true);
-    gui.start_animation(
-        GUI_MANAGER_ANIM_UP_TO_CENTER,
-        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-    );
     gui.on_selection_changed =
     [this] () {
         cur_tidbit = nullptr;
@@ -381,9 +377,6 @@ void help_menu_t::populate_tidbits(const HELP_CATEGORY category) {
 void help_menu_t::start_closing() {
     closing = true;
     closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-    gui.start_animation(
-        GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-    );
 }
 
 
