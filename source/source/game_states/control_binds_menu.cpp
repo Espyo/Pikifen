@@ -219,8 +219,9 @@ void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void control_binds_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.states.options_menu->page_to_load = OPTIONS_MENU_PAGE_CONTROLS;
-        game.change_state(game.states.options_menu);
+        game.states.dark_main_menu->menu_to_load =
+            DARK_MAIN_MENU_MENU_OPTIONS;
+        game.change_state(game.states.dark_main_menu);
     });
     save_options();
 }

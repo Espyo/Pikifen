@@ -27,6 +27,7 @@ void dark_main_menu_state::do_drawing() {
     );
     
     if(help_menu) help_menu->draw();
+    if(options_menu) options_menu->draw();
     if(stats_menu) stats_menu->draw();
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
@@ -40,8 +41,12 @@ void dark_main_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
-            if(help_menu) help_menu->handle_player_action(player_actions[a]);
-            if(stats_menu) stats_menu->handle_player_action(player_actions[a]);
+            if(help_menu)
+                help_menu->handle_player_action(player_actions[a]);
+            if(options_menu)
+                options_menu->handle_player_action(player_actions[a]);
+            if(stats_menu)
+                stats_menu->handle_player_action(player_actions[a]);
         }
     }
     
@@ -51,6 +56,15 @@ void dark_main_menu_state::do_logic() {
         } else {
             delete help_menu;
             help_menu = nullptr;
+        }
+    }
+    
+    if(options_menu) {
+        if(!options_menu->to_delete) {
+            options_menu->tick(game.delta_t);
+        } else {
+            delete options_menu;
+            options_menu = nullptr;
         }
     }
     
@@ -86,6 +100,7 @@ void dark_main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(help_menu) help_menu->handle_event(ev);
+    if(options_menu) options_menu->handle_event(ev);
     if(stats_menu) stats_menu->handle_event(ev);
 }
 
@@ -123,9 +138,14 @@ void dark_main_menu_state::load() {
         help_menu = new help_menu_t();
         help_menu->back_callback = [this] () { leave(); };
         break;
+    } case DARK_MAIN_MENU_MENU_OPTIONS: {
+        options_menu = new options_menu_t();
+        options_menu->back_callback = [this] () { leave(); };
+        break;
     } case DARK_MAIN_MENU_MENU_STATS: {
         stats_menu = new stats_menu_t();
         stats_menu->back_callback = [this] () { leave(); };
+        break;
     }
     }
     menu_to_load = DARK_MAIN_MENU_MENU_HELP;
@@ -147,6 +167,10 @@ void dark_main_menu_state::unload() {
     if(help_menu) {
         delete help_menu;
         help_menu = nullptr;
+    }
+    if(options_menu) {
+        delete options_menu;
+        options_menu = nullptr;
     }
     if(stats_menu) {
         delete stats_menu;

@@ -12,6 +12,7 @@
 
 #include "menus.h"
 
+#include "other_menus/options_menu.h"
 #include "../drawing.h"
 #include "../functions.h"
 #include "../game.h"
@@ -328,8 +329,9 @@ void main_menu_state::init_gui_main_page() {
     options_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.states.options_menu->page_to_load = OPTIONS_MENU_PAGE_TOP;
-            game.change_state(game.states.options_menu);
+            game.states.dark_main_menu->menu_to_load =
+                DARK_MAIN_MENU_MENU_OPTIONS;
+            game.change_state(game.states.dark_main_menu);
         });
     };
     options_button->on_get_tooltip =

@@ -5,20 +5,17 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Options menu state class and options menu state-related functions.
+ * Options menu structs and functions.
  */
 
 #include <algorithm>
 
-#include "menus.h"
+#include "options_menu.h"
 
-#include "../drawing.h"
-#include "../functions.h"
-#include "../game.h"
-#include "../load.h"
-#include "../options.h"
-#include "../utils/allegro_utils.h"
-#include "../utils/string_utils.h"
+#include "../../game.h"
+#include "../../functions.h"
+#include "../../load.h"
+#include "../../utils/string_utils.h"
 
 
 namespace OPTIONS_MENU {
@@ -48,10 +45,9 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
 
 
 /**
- * @brief Constructs a new options menu state object.
+ * @brief Constructs a new options menu object.
  */
-options_menu_state::options_menu_state() {
-
+options_menu_t::options_menu_t() {
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
@@ -93,83 +89,47 @@ options_menu_state::options_menu_state() {
             p++;
         }
     }
+    
+    //And now do the typical loading process.
+    init_gui_top_page();
+    init_gui_controls_page();
+    init_gui_graphics_page();
+    init_gui_audio_page();
+    init_gui_misc_page();
+}
+
+
+/**
+ * @brief Destroys the options menu object.
+ */
+options_menu_t::~options_menu_t() {
+    top_gui.destroy();
+    controls_gui.destroy();
+    graphics_gui.destroy();
+    audio_gui.destroy();
+    misc_gui.destroy();
 }
 
 
 /**
  * @brief Draws the options menu.
  */
-void options_menu_state::do_drawing() {
-    al_clear_to_color(COLOR_BLACK);
-    
-    draw_bitmap(
-        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
-        point(game.win_w, game.win_h), 0, map_gray(64)
-    );
-    
+void options_menu_t::draw() {
     top_gui.draw();
     controls_gui.draw();
     graphics_gui.draw();
     audio_gui.draw();
     misc_gui.draw();
-    
-    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 
 /**
- * @brief Ticks one frame's worth of logic.
- */
-void options_menu_state::do_logic() {
-    vector<player_action> player_actions = game.controls.new_frame();
-    if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); a++) {
-            top_gui.handle_player_action(player_actions[a]);
-            controls_gui.handle_player_action(player_actions[a]);
-            graphics_gui.handle_player_action(player_actions[a]);
-            audio_gui.handle_player_action(player_actions[a]);
-            misc_gui.handle_player_action(player_actions[a]);
-        }
-    }
-    
-    top_gui.tick(game.delta_t);
-    controls_gui.tick(game.delta_t);
-    graphics_gui.tick(game.delta_t);
-    audio_gui.tick(game.delta_t);
-    misc_gui.tick(game.delta_t);
-    
-    game.fade_mgr.tick(game.delta_t);
-}
-
-
-/**
- * @brief Returns the name of this state.
+ * @brief Handles an Allegro event.
  *
- * @return The name.
+ * @param ev The event.
  */
-string options_menu_state::get_name() const {
-    return "options menu";
-}
-
-
-/**
- * @brief Goes to the controls menu.
- */
-void options_menu_state::go_to_control_binds() {
-    game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.control_binds_menu);
-    });
-}
-
-
-/**
- * @brief Handles Allegro events.
- *
- * @param ev Event to handle.
- */
-void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
-    
+void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
+    if(closing) return;
     top_gui.handle_event(ev);
     controls_gui.handle_event(ev);
     graphics_gui.handle_event(ev);
@@ -177,11 +137,34 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     misc_gui.handle_event(ev);
 }
 
+/**
+ * @brief Goes to the controls menu.
+ */
+void options_menu_t::go_to_control_binds() {
+    game.fade_mgr.start_fade(false, [] () {
+        game.change_state(game.states.control_binds_menu);
+    });
+}
+
+
+/**
+ * @brief Handles a player action.
+ *
+ * @param action Data about the player action.
+ */
+void options_menu_t::handle_player_action(const player_action &action) {
+    top_gui.handle_player_action(action);
+    controls_gui.handle_player_action(action);
+    graphics_gui.handle_player_action(action);
+    audio_gui.handle_player_action(action);
+    misc_gui.handle_player_action(action);
+}
+
 
 /**
  * @brief Initializes the audio options menu GUI.
  */
-void options_menu_state::init_gui_audio_page() {
+void options_menu_t::init_gui_audio_page() {
     //Menu items.
     audio_gui.register_coords("back",               12,  5,   20,  6);
     audio_gui.register_coords("header",             50, 10,   50,  6);
@@ -329,7 +312,7 @@ void options_menu_state::init_gui_audio_page() {
 /**
  * @brief Initializes the controls options menu GUI.
  */
-void options_menu_state::init_gui_controls_page() {
+void options_menu_t::init_gui_controls_page() {
     //Menu items.
     controls_gui.register_coords("back",          12,  5,   20,  6);
     controls_gui.register_coords("header",        50, 10,   50,  6);
@@ -429,7 +412,7 @@ void options_menu_state::init_gui_controls_page() {
 /**
  * @brief Initializes the graphics options menu GUI.
  */
-void options_menu_state::init_gui_graphics_page() {
+void options_menu_t::init_gui_graphics_page() {
     //Menu items.
     graphics_gui.register_coords("back",            12,  5,   20,  6);
     graphics_gui.register_coords("header",          50, 10,   50,  6);
@@ -547,7 +530,7 @@ void options_menu_state::init_gui_graphics_page() {
 /**
  * @brief Initializes the misc. options menu GUI.
  */
-void options_menu_state::init_gui_misc_page() {
+void options_menu_t::init_gui_misc_page() {
     //Menu items.
     misc_gui.register_coords("back",                 12,  5,   20,  6);
     misc_gui.register_coords("header",               50, 10,   50,  6);
@@ -654,7 +637,7 @@ void options_menu_state::init_gui_misc_page() {
 /**
  * @brief Initializes the top-level menu GUI.
  */
-void options_menu_state::init_gui_top_page() {
+void options_menu_t::init_gui_top_page() {
     data_node* gui_file = &game.content.gui_defs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
@@ -686,7 +669,8 @@ void options_menu_state::init_gui_top_page() {
         new button_gui_item("Back", game.sys_assets.fnt_standard);
     top_gui.back_item->on_activate =
     [this] (const point &) {
-        leave();
+        start_closing();
+        if(back_callback) back_callback();
     };
     top_gui.back_item->on_get_tooltip =
     [] () { return "Return to the main menu."; };
@@ -851,72 +835,46 @@ void options_menu_state::init_gui_top_page() {
 
 
 /**
- * @brief Leaves the options menu and goes to the main menu.
+ * @brief Starts the closing process.
  */
-void options_menu_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu);
-    });
+void options_menu_t::start_closing() {
+    closing = true;
+    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     save_options();
 }
 
 
 /**
- * @brief Loads the options menu into memory.
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
  */
-void options_menu_state::load() {
-    //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
+void options_menu_t::tick(float delta_t) {
+    //Tick the GUIs.
+    top_gui.tick(game.delta_t);
+    controls_gui.tick(game.delta_t);
+    graphics_gui.tick(game.delta_t);
+    audio_gui.tick(game.delta_t);
+    misc_gui.tick(game.delta_t);
     
-    init_gui_top_page();
-    init_gui_controls_page();
-    init_gui_graphics_page();
-    init_gui_audio_page();
-    init_gui_misc_page();
-    
-    switch(page_to_load) {
-    case OPTIONS_MENU_PAGE_TOP: {
-        top_gui.responsive = true;
-        top_gui.show_items();
-        break;
-    } case OPTIONS_MENU_PAGE_CONTROLS: {
-        controls_gui.responsive = true;
-        controls_gui.show_items();
-        break;
+    //Tick the menu closing.
+    if(closing) {
+        closing_timer -= delta_t;
+        if(closing_timer <= 0.0f) {
+            to_delete = true;
+        }
     }
-    }
-    page_to_load = OPTIONS_MENU_PAGE_TOP;
-    
-    //Finishing touches.
-    game.audio.set_current_song(OPTIONS_MENU::SONG_NAME);
 }
 
 
 /**
  * @brief Triggers the restart warning at the bottom of the screen.
  */
-void options_menu_state::trigger_restart_warning() {
+void options_menu_t::trigger_restart_warning() {
     if(!warning_text->visible) {
         warning_text->visible = true;
         warning_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
-}
-
-
-/**
- * @brief Unloads the options menu from memory.
- */
-void options_menu_state::unload() {
-
-    //Resources.
-    game.content.bitmaps.list.free(bmp_menu_bg);
-    
-    //Menu items.
-    top_gui.destroy();
-    controls_gui.destroy();
-    graphics_gui.destroy();
-    audio_gui.destroy();
-    misc_gui.destroy();
 }

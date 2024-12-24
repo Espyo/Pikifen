@@ -521,7 +521,6 @@ void game_state_list::destroy() {
     delete gameplay;
     delete gui_ed;
     delete main_menu;
-    delete options_menu;
     delete results;
     
     animation_ed = nullptr;
@@ -531,7 +530,6 @@ void game_state_list::destroy() {
     gameplay = nullptr;
     gui_ed = nullptr;
     main_menu = nullptr;
-    options_menu = nullptr;
     results = nullptr;
 }
 
@@ -548,7 +546,6 @@ void game_state_list::init() {
     gameplay = new gameplay_state();
     gui_ed = new gui_editor();
     main_menu = new main_menu_state();
-    options_menu = new options_menu_state();
     results = new results_state();
 }
 
