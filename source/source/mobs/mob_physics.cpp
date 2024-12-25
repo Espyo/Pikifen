@@ -426,7 +426,7 @@ void mob::tick_horizontal_movement_physics(
             //Out of bounds. No movement.
             return;
         }
-        if (z + GEOMETRY::STEP_HEIGHT < new_center_sector->z) {
+        if(z + GEOMETRY::STEP_HEIGHT < new_center_sector->z) {
             //We can't walk onto this sector. Refuse the move.
             return;
         }

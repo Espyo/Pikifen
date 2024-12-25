@@ -172,7 +172,7 @@ void area_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
-    //Process the picker dialog, if any.
+    //Process any dialogs.
     process_dialogs();
 }
 
@@ -1931,7 +1931,7 @@ void area_editor::process_gui_panel_info() {
             if(can_preview_selected_song) {
                 preview_song = game.cur_area_data->song_name;
                 game.audio.set_current_song(preview_song);
-            } else if (can_stop_previewing) {
+            } else if(can_stop_previewing) {
                 game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
                 preview_song.clear();
             }

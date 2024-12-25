@@ -43,7 +43,7 @@ public:
 
     //--- Members ---
     
-    //Automatically load this animation file upon boot-up of the editor, if any.
+    //Automatically load this file upon boot-up of the editor, if any.
     string auto_load_file;
     
     

@@ -181,6 +181,8 @@ void animation_editor::close_options_dialog() {
 
 /**
  * @brief Creates a new, empty animation database.
+ *
+ * @param path Path to the requested animation database's file.
  */
 void animation_editor::create_anim_db(const string &path) {
     setup_for_new_anim_db_pre();
@@ -498,7 +500,7 @@ void animation_editor::load() {
 
 
 /**
- * @brief Loads the animation database for the current object.
+ * @brief Loads an animation database.
  *
  * @param path Path to the file.
  * @param should_update_history If true, this loading process should update

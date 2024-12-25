@@ -1082,7 +1082,7 @@ void gameplay_state::do_menu_logic() {
     
         //Make sure that speed changes don't affect the FPS calculation.
         double real_delta_t = game.delta_t;
-        if (game.maker_tools.change_speed) {
+        if(game.maker_tools.change_speed) {
             real_delta_t /= game.maker_tools.change_speed_mult;
         }
         
@@ -1613,7 +1613,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         
         dist d(m_ptr->pos, m2_ptr->pos);
         
-        if (d > m_ptr->interaction_span + m2_ptr->physical_span) {
+        if(d > m_ptr->interaction_span + m2_ptr->physical_span) {
             //The other mob is so far away that there is
             //no interaction possible.
             continue;

@@ -439,7 +439,7 @@ void error_manager::report(const string &s, const data_node* d) {
     string full_error = s;
     if(d) {
         full_error += " (" + d->file_path;
-        if (d->line_nr != 0) full_error += " line " + i2s(d->line_nr);
+        if(d->line_nr != 0) full_error += " line " + i2s(d->line_nr);
         full_error += ")";
     }
     

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * GUI editor event handler function.
+ * Particle editor event handler function.
  */
 
 #include "editor.h"
@@ -71,18 +71,18 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
         save_cmd(1.0f);
         
-    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
         particle_playback_toggle_cmd(1.0f);
-
-    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         clear_particles_cmd(1.0f);
-
-    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
         leader_silhouette_toggle_cmd(1.0f);
-
-    } else if (key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
         emission_outline_toggle_cmd(1.0f);
-
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
         
@@ -102,7 +102,6 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 void particle_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
         reset_cam(false);
-        
     }
 }
 
@@ -125,60 +124,7 @@ void particle_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    /*
-    bool tw_handled = false;
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
-        tw_handled =
-            cur_transformation_widget.handle_mouse_down(
-                game.mouse_cursor.w_pos,
-                &items[cur_item].center,
-                &items[cur_item].size,
-                nullptr,
-                1.0f / game.cam.zoom
-            );
-    }
-    
-    if(!tw_handled) {
-        vector<size_t> clicked_items;
-        for(size_t i = 0; i < items.size(); ++i) {
-            item* item_ptr = &items[i];
-            if(
-                is_point_in_rectangle(
-                    game.mouse_cursor.w_pos,
-                    item_ptr->center,
-                    item_ptr->size
-                )
-            ) {
-                clicked_items.push_back(i);
-            }
-        }
-        
-        if(clicked_items.empty()) {
-            cur_item = INVALID;
-            
-        } else {
-            size_t cur_item_idx = INVALID;
-            for(size_t i = 0; i < clicked_items.size(); ++i) {
-                if(cur_item == clicked_items[i]) {
-                    cur_item_idx = i;
-                    break;
-                }
-            }
-            
-            if(cur_item_idx == INVALID) {
-                cur_item_idx = 0;
-            } else {
-                cur_item_idx =
-                    sum_and_wrap(
-                        (int) cur_item_idx, 1,
-                        (int) clicked_items.size()
-                    );
-            }
-            cur_item = clicked_items[cur_item_idx];
-            must_focus_on_cur_item = true;
-        }
-    }
-    */
+
 }
 
 
@@ -188,25 +134,7 @@ void particle_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    /*
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
-        bool tw_handled =
-            cur_transformation_widget.handle_mouse_move(
-                snap_point(game.mouse_cursor.w_pos),
-                &items[cur_item].center,
-                &items[cur_item].size,
-                nullptr,
-                1.0f / game.cam.zoom,
-                false,
-                false,
-                0.10f,
-                is_alt_pressed
-            );
-        if(tw_handled) {
-            changes_mgr.mark_as_changed();
-        }
-    }
-    */
+
 }
 
 
@@ -216,7 +144,7 @@ void particle_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    cur_transformation_widget.handle_mouse_up();
+
 }
 
 

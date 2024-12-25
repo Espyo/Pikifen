@@ -623,7 +623,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         process_system_key_press(ev.keyboard.keycode);
     }
     
-    if (ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+    if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
         game.controls.release_all();
     }
     

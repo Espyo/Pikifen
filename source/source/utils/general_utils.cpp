@@ -315,3 +315,22 @@ string vector_tail_to_string(const vector<string> &v, size_t pos) {
 }
 
 
+
+
+
+
+
+template <>
+float keyframe_interpolator<float>::from_string(const string& s) {
+    return s2f(s);
+}
+
+template<>
+ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string& s) {
+    return s2c(s);
+}
+
+template<>
+point keyframe_interpolator<point>::from_string(const string& s) {
+    return s2p(s);
+}

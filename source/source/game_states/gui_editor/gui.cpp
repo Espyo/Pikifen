@@ -156,7 +156,7 @@ void gui_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
-    //Process the picker dialog, if any.
+    //Process any dialogs.
     process_dialogs();
 }
 

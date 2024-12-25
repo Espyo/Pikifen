@@ -569,7 +569,7 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
         for(size_t m2 : game.cur_area_data->mission.goal_mob_idxs) {
             if(m2 > m_idx) {
                 new_mrmi.insert(m2 - 1);
-            } else if (m2 != m_idx) {
+            } else if(m2 != m_idx) {
                 new_mrmi.insert(m2);
             }
         }

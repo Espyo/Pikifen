@@ -3334,7 +3334,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     mob_event* m2_pik_land_ev =
         m2_ptr->fsm.get_event(MOB_EV_THROWN_PIKMIN_LANDED);
         
-    if (m2_pik_land_ev && has_flag(m->flags, MOB_FLAG_WAS_THROWN)) {
+    if(m2_pik_land_ev && has_flag(m->flags, MOB_FLAG_WAS_THROWN)) {
         m2_pik_land_ev->run(m2_ptr, (void*)m);
     }
     
@@ -3771,7 +3771,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color.add(1, change_alpha(COLOR_WHITE,0));
+        pa.color.add(1, change_alpha(COLOR_WHITE, 0));
         pa.outwards_speed = keyframe_interpolator<float>(50);
         particle_generator pg(0, pa, 8);
         pg.emission.number_deviation = 1;
@@ -3791,7 +3791,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-         pa.color.set_keyframe_value(0, al_map_rgb(255, 224, 224));
+        pa.color.set_keyframe_value(0, al_map_rgb(255, 224, 224));
         pa.color.add(1, al_map_rgb(255, 224, 224));
         pa.outwards_speed = keyframe_interpolator<float>(50);
         pa.linear_speed.add(1, point(0, 300));
@@ -4469,7 +4469,7 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     
     pik_ptr->is_tool_primed_for_whistle = false;
     
-    if (
+    if(
         !pik_ptr->holding.empty() &&
         pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
     ) {

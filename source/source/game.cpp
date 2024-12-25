@@ -143,7 +143,7 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
             } else if(cur_state_name == states.particle_ed->get_name()) {
                 maker_tools.auto_start_mode = "particle_editor";
                 maker_tools.auto_start_option =
-                    states.gui_ed->get_opened_content_path();
+                    states.particle_ed->get_opened_content_path();
             } else if(cur_state_name == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
@@ -554,6 +554,7 @@ void game_state_list::init() {
     dark_main_menu = new dark_main_menu_state();
     gameplay = new gameplay_state();
     gui_ed = new gui_editor();
+    particle_ed = new particle_editor();
     main_menu = new main_menu_state();
     results = new results_state();
 }

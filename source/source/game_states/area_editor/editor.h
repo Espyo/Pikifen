@@ -112,7 +112,7 @@ public:
     
     //--- Members ---
     
-    //Load this area when the area editor loads.
+    //Automatically load this folder upon boot-up of the editor, if any.
     string auto_load_folder;
     
     //Area being edited when using the quick-play button.

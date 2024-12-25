@@ -287,7 +287,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             } else {
                 sub_state = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
                 quick_height_set_start_pos = game.mouse_cursor.s_pos;
-                for(const auto& s: selected_sectors) {
+                for(const auto &s : selected_sectors) {
                     quick_height_set_start_heights[s] = s->z;
                 }
                 set_status(
@@ -1826,7 +1826,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
             highlighted_path_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
                 
-            if (highlighted_path_stop == nullptr) {
+            if(highlighted_path_stop == nullptr) {
                 //Selecting the stop takes priority,
                 //so keep the link null if there's a stop.
                 get_path_link_under_point(
@@ -1854,7 +1854,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
         float offset = get_quick_height_set_offset();
         register_change("quick sector height set");
-        for(auto& s : selected_sectors) {
+        for(auto &s : selected_sectors) {
             s->z = quick_height_set_start_heights[s] + offset;
         }
         update_all_edge_offset_caches();

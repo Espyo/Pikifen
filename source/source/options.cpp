@@ -138,6 +138,9 @@ const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
 //Default value for the music volume.
 const float DEF_MUSIC_VOLUME = 1.0f;
 
+//Default value for the particle editor background texture.
+const char* DEF_PARTICLE_EDITOR_BG_TEXTURE = "";
+
 //Default value for whether to show player input icons on the HUD.
 const bool DEF_SHOW_HUD_INPUT_ICONS = true;
 
@@ -286,6 +289,7 @@ void options_t::load(data_node* file) {
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
     rs.set("music_volume", music_volume);
+    rs.set("particle_editor_bg_texture", particle_editor_bg_texture);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
@@ -656,6 +660,12 @@ void options_t::save(data_node* file) const {
         new data_node(
             "music_volume",
             f2s(music_volume)
+        )
+    );
+    file->add(
+        new data_node(
+            "particle_editor_bg_texture",
+            particle_editor_bg_texture
         )
     );
     file->add(

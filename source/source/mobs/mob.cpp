@@ -1371,7 +1371,7 @@ void mob::do_attack_effects(
         smack_p.color.set_keyframe_value(0, al_map_rgb(255, 160, 128));
         smack_p.color.add(0.5f, al_map_rgb(255, 160, 128));
         smack_p.color.add(1,    al_map_rgba(255, 160, 128, 0));
-
+        
         smack_p.size.add(0.5f, 64);
         smack_p.size.add(1,    0);
         game.states.gameplay->particles.add(smack_p);
@@ -1386,7 +1386,7 @@ void mob::do_attack_effects(
         ding_p.color.set_keyframe_value(0, al_map_rgb(192, 208, 224));
         ding_p.color.add(0.5f, al_map_rgb(192, 208, 224));
         ding_p.color.add(1,    al_map_rgba(192, 208, 224, 0));
-
+        
         ding_p.size.add(0.5f, 24);
         game.states.gameplay->particles.add(ding_p);
         
@@ -2051,7 +2051,7 @@ void mob::update_interaction_span() {
  */
 float mob::get_speed_multiplier() const {
     float move_speed_mult = 1.0f;
-    for (size_t s = 0; s < this->statuses.size(); s++) {
+    for(size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].to_delete) {
             move_speed_mult *= this->statuses[s].type->speed_multiplier;
         }

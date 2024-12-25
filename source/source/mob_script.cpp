@@ -142,7 +142,7 @@ mob_event::mob_event(
 #define r(name, number) \
     else if(n == (name)) type = (number)
     
-    const string& n = node->name;
+    const string &n = node->name;
     if(n == "on_enter") type =          MOB_EV_ON_ENTER;
     r("on_leave",                       MOB_EV_ON_LEAVE);
     r("on_tick",                        MOB_EV_ON_TICK);
@@ -580,7 +580,7 @@ void load_state(
 ) {
     size_t n_events = state_node->get_nr_of_children();
     size_t n_global_events = global_node->get_nr_of_children();
-    if (n_events + n_global_events == 0) return;
+    if(n_events + n_global_events == 0) return;
     
     //Read the events.
     vector<mob_event*> new_events;
@@ -639,7 +639,7 @@ void load_state(
             merged = true;
             break;
         }
-        if (!merged) {
+        if(!merged) {
             new_events.push_back(global_event);
             new_event_settings.push_back(global_settings);
         }

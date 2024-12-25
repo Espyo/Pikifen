@@ -100,6 +100,7 @@ extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
 extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
 extern const float DEF_MUSIC_VOLUME;
+extern const char* DEF_PARTICLE_EDITOR_BG_TEXTURE;
 extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
@@ -201,7 +202,7 @@ struct options_t {
     
     //Should the editors use a custom style, or the default?
     bool editor_use_custom_style = OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE;
-
+    
     //Is the player a developer of the engine?
     bool engine_developer = OPTIONS::DEF_ENGINE_DEVELOPER;
     
@@ -213,7 +214,7 @@ struct options_t {
     
     //Grid interval in the particle editor, in units.
     float particle_editor_grid_interval = OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
-
+    
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;
     
@@ -251,6 +252,9 @@ struct options_t {
     
     //Music volume (0 - 1).
     float music_volume = OPTIONS::DEF_MUSIC_VOLUME;
+    
+    //Background texture for the particle editor, if any.
+    string particle_editor_bg_texture = OPTIONS::DEF_PARTICLE_EDITOR_BG_TEXTURE;
     
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling = OPTIONS::DEF_SMOOTH_SCALING;

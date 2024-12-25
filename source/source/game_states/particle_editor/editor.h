@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the general GUI editor-related functions.
+ * Header for the general particle editor-related functions.
  */
 
 #pragma once
@@ -13,7 +13,6 @@
 #include <string>
 
 #include "../editor.h"
-#include "../../libs/imgui/imgui_impl_allegro5.h"
 
 
 namespace PARTICLE_EDITOR {
@@ -26,7 +25,7 @@ extern const float ZOOM_MIN_LEVEL;
 
 
 /**
- * @brief Info about the GUI editor.
+ * @brief Info about the particle editor.
  */
 class particle_editor : public editor {
 
@@ -48,68 +47,59 @@ public:
     string get_name() const override;
     void draw_canvas();
     string get_history_option_prefix() const override;
-    string get_opened_file_name() const;
+    string get_opened_content_path() const;
     
 private:
 
     //--- Members ---
     
-    //Currently loaded item.
+    //Currently loaded particle generator.
     particle_generator loaded_gen;
     
-    //Manager
-    particle_manager part_manager;
-
-    //File name of the file currently being edited.
-    string file_name;
+    //Particle manager.
+    particle_manager part_mgr;
     
     //Whether to use a background texture, if any.
     ALLEGRO_BITMAP* bg = nullptr;
-
+    
     //Picker info for the picker in the "load" dialog.
     picker_info load_dialog_picker;
     
     //Position of the load widget.
     point load_widget_pos;
     
-    //The list of items must focus on the currently selected item.
-    bool must_focus_on_cur_item = false;
-    
     //Small hack -- does the camera need recentering in process_gui()?
     bool must_recenter_cam = false;
-
-    //Is the particle generator currently active?
+    
+    //Is the particle generator currently generating?
     bool generator_running = false;
     
     //Is the leader silhouette visible?
     bool leader_silhouette_visible = false;
-
-    //Is the position offset visible?
+    
+    //Is the emission offset visible?
     bool emission_offset_visible = false;
-
-    //Selected color keyframe
+    
+    //Selected color keyframe.
     size_t selected_color_keyframe = 0;
-
-    //Selected color keyframe
+    
+    //Selected size keyframe.
     size_t selected_size_keyframe = 0;
-
-    //Selected color keyframe
+    
+    //Selected linear speed keyframe.
     size_t selected_linear_speed_keyframe = 0;
-
-    //Selected color keyframe
+    
+    //Selected orbital velocity keyframe.
     size_t selected_oribital_velocity_keyframe = 0;
-
-    //Selected color keyframe
+    
+    //Selected outward velocity keyframe.
     size_t selected_outward_velocity_keyframe = 0;
-
+    
     //Position of the reload widget.
     point reload_widget_pos;
     
     //Position of the quit widget.
     point quit_widget_pos;
-    
-    //The current transformation widget.
-    transformation_widget cur_transformation_widget;
     
     //Whether to use a background texture.
     bool use_bg = false;
@@ -118,17 +108,21 @@ private:
     
     void close_load_dialog();
     void close_options_dialog();
-    void load_particle_generator(
+    void create_particle_generator(const string &name);
+    string get_file_tooltip(const string &path) const;
+    void load_part_gen_file(
         const string &path, const bool should_update_history
     );
-    void create_particle_generator(const string& name);
     void open_load_dialog();
+    void open_new_dialog();
     void open_options_dialog();
-    void pick_file(
-        const string &name, const string &category, const bool is_new
+    void pick_part_gen_file(
+        const string &name, const string &top_cat, const string &sec_cat,
+        void* info, bool is_new
     );
-    void init_editor();
-    bool save_file();
+    void reload_part_gens();
+    void setup_for_new_part_gen();
+    bool save_part_gen();
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -150,7 +144,7 @@ private:
     void process_gui_load_dialog();
     void process_gui_menu_bar();
     void process_gui_options_dialog();
-    void process_gui_panel_item();
+    void process_gui_panel_generator();
     void process_gui_status_bar();
     void process_gui_toolbar();
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;

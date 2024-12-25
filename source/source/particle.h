@@ -167,11 +167,11 @@ struct particle {
     //Current coordinates.
     point pos;
     
-    //Where the particle generator was when this was emitted.
-    point origin;
-    
     //Current Z.
     float z = 0.0f;
+    
+    //Where the particle generator was when this was emitted.
+    point origin;
     
     //Current size, in diameter.
     keyframe_interpolator<float> size;

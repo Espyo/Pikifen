@@ -267,7 +267,7 @@ void area_editor::draw_canvas() {
                 }
             }
             
-            if (wall_shadows_opacity > 0.0f) {
+            if(wall_shadows_opacity > 0.0f) {
                 draw_sector_edge_offsets(
                     s_ptr, game.wall_offset_effect_buffer, wall_shadows_opacity
                 );

@@ -175,7 +175,7 @@ void animation_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
-    //Process the dialogs, if any.
+    //Process any dialogs.
     process_dialogs();
 }
 
