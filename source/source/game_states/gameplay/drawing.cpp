@@ -283,12 +283,12 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_SHRINK_T = 0.95f;
         const float t = big_msg_time / GAMEPLAY::BIG_MSG_READY_DUR;
         
-        keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        keyframe_interpolator<float> ki_y(game.win_h * (-0.2f));
         ki_y.add(TEXT_START_T, game.win_h * (-0.2f));
         ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
         ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
-        keyframe_interpolator ki_h(TEXT_INITIAL_HEIGHT);
+        keyframe_interpolator<float> ki_h(TEXT_INITIAL_HEIGHT);
         ki_h.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
         ki_h.add(1.0f, 0.0f, EASE_METHOD_IN);
         
@@ -312,10 +312,10 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_GROW_STOP_T = 0.10f;
         const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DUR;
         
-        keyframe_interpolator ki_h(0.0f);
+        keyframe_interpolator<float> ki_h(0.0f);
         ki_h.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
         ki_h.add(1.0f, 0.22f);
-        keyframe_interpolator ki_a(1.0f);
+        keyframe_interpolator<float> ki_a(1.0f);
         ki_a.add(TEXT_GROW_STOP_T, 1.0f);
         ki_a.add(1.0f, 0.0f);
         
@@ -345,12 +345,12 @@ void gameplay_state::draw_big_msg() {
             (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
             (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
             
-        keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        keyframe_interpolator<float> ki_y(game.win_h * (-0.2f));
         ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_METHOD_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_METHOD_OUT_ELASTIC);
-        keyframe_interpolator ki_h(TEXT_INITIAL_HEIGHT);
+        keyframe_interpolator<float> ki_h(TEXT_INITIAL_HEIGHT);
         ki_h.add(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
-        keyframe_interpolator ki_a(1.0f);
+        keyframe_interpolator<float> ki_a(1.0f);
         ki_a.add(TEXT_FADE_T, 1.0f);
         ki_a.add(1.0f, 0.0f);
         

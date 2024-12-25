@@ -140,6 +140,10 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
                 maker_tools.auto_start_mode = "gui_editor";
                 maker_tools.auto_start_option =
                     states.gui_ed->get_opened_content_path();
+            } else if(cur_state_name == states.particle_ed->get_name()) {
+                maker_tools.auto_start_mode = "particle_editor";
+                maker_tools.auto_start_option =
+                    states.gui_ed->get_opened_content_path();
             } else if(cur_state_name == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
@@ -474,7 +478,13 @@ int game_class::start() {
         states.gui_ed->auto_load_file =
             maker_tools.auto_start_option;
         change_state(states.gui_ed);
-        
+    } else if(
+        maker_tools.enabled &&
+        maker_tools.auto_start_mode == "particle_editor"
+    ) {
+        states.particle_ed->auto_load_file =
+            maker_tools.auto_start_option;
+        change_state(states.particle_ed);
     } else {
         change_state(states.main_menu);
     }
@@ -519,6 +529,7 @@ void game_state_list::destroy() {
     delete dark_main_menu;
     delete gameplay;
     delete gui_ed;
+    delete particle_ed;
     delete main_menu;
     delete results;
     
@@ -527,6 +538,7 @@ void game_state_list::destroy() {
     area_menu = nullptr;
     gameplay = nullptr;
     gui_ed = nullptr;
+    particle_ed = nullptr;
     main_menu = nullptr;
     results = nullptr;
 }

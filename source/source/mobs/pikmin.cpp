@@ -475,11 +475,12 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
  */
 void pikmin::start_throw_trail() {
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW
+        pos, z,
+        radius, 0.6, PARTICLE_PRIORITY_LOW,
+        change_alpha(type->main_color, 128)
     );
-    throw_p.size_grow_speed = -5;
-    throw_p.color = change_alpha(type->main_color, 128);
+    throw_p.size.add(1, 0);
+    throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
@@ -507,15 +508,17 @@ void pikmin::tick_class_specifics(float delta_t) {
         pikmin_fsm::notify_leader_release(this, nullptr, nullptr);
         
         particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
+            pos, LARGE_FLOAT,
             radius * 2, 2.0f
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;
-        par.speed.x = randomf(-20, 20);
-        par.speed.y = randomf(-70, -30);
         par.friction = 0.8;
-        par.gravity = -0.2;
-        par.color = pik_type->main_color;
+        point base_speed = point(randomf(-20, 20), randomf(-70, -30));
+        par.linear_speed = keyframe_interpolator<point>(base_speed);
+        par.linear_speed.add(1, point(point(base_speed.x, base_speed.y - 20)));
+        par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
+        par.color.add(0.1f, pik_type->main_color);
+        par.color.add(1, change_alpha(pik_type->main_color, 0));
         game.states.gameplay->particles.add(par);
         
         //Create a positional sound source instead of a mob sound source,

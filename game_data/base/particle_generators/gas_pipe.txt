@@ -1,26 +1,46 @@
 name = Gas pipe
-description = A continuous stream of poison gas in every direction, emitted by a gas pipe.
-
-emission_interval = 0.3
-number = 3
-number_deviation = 1
-base {
-    bitmap = smoke
-    duration = 1.5
-    friction = 1
-    gravity = 0
-    size_grow_speed = 80
-    size = 32
-    speed = 0 0
-    color = 128 16 112 192
+description=A continuous stream of poison gas in every direction, emitted by a gas pipe.
+emission{
+	number=3
+	number_deviation=0
+	interval=0.3000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=0.0000
+	min_radius=0.0000
+	arc=6.2832
 }
-duration_deviation = 0.5
-friction_deviation = 0
-gravity_deviation = 0
-size_deviation = 2
-pos_deviation = 0 0
-speed_deviation = 0 0
-angle = 0
-angle_deviation = 360
-total_speed = 80
-total_speed_deviation = 0
+base{
+	bitmap=smoke
+	rotation=0.0000
+	duration=1.5000
+	friction=1.0000
+	blend_type=0
+	color{
+		0.0000=128 16 112 0
+		0.1000=128 16 112 192
+		1.0000=128 16 112 0
+	}
+	size{
+		0.0000=32.0000
+		1.0000=162.0000
+	}
+	linear_speed{
+		0.0000=80.0000 0.0000
+		1.0000=80.0000 0.0000
+	}
+	outwards_speed{
+		0.0000=0.0000
+	}
+	orbital_speed{
+		0.0000=0.0000
+	}
+}
+rotation_deviation=0.0000
+duration_deviation=0.5000
+friction_deviation=0.0000
+size_deviation=2.0000
+orbital_speed_deviation=0.0000
+outwards_speed_deviation=0.0000
+angle_deviation=180.0000
+linear_speed_deviation=0.0000 0.0000

@@ -2195,17 +2195,23 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
+        m->pos, m->z + m->get_drawing_height(),
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
     p.friction = 1;
-    p.color = spray_type_ref.main_color;
+    p.color.set_keyframe_value(0, change_alpha(spray_type_ref.main_color, 0));
+    p.color.add(0.1f, spray_type_ref.main_color);
+    p.color.add(1, change_alpha(spray_type_ref.main_color, 0));
+
+    p.linear_speed = keyframe_interpolator<point>(
+        rotate_point(
+            point(spray_type_ref.distance_range * 0.8, 0), shoot_angle
+        )
+    );
     particle_generator pg(0, p, 32);
-    pg.angle = shoot_angle;
-    pg.angle_deviation = spray_type_ref.angle_range / 2.0f;
-    pg.total_speed = spray_type_ref.distance_range * 0.8;
-    pg.total_speed_deviation = spray_type_ref.distance_range * 0.4;
+    pg.linear_speed_angle_deviation = spray_type_ref.angle_range / 2.0f;
+    pg.linear_speed_deviation.x = spray_type_ref.distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
@@ -2514,11 +2520,12 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->pos, m->z,
+                m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = game.sys_assets.bmp_wave_ring;
-            p.size_grow_speed = m->radius * 4;
+            p.size.add(1, m->radius * 4);
+            p.color.add(1, change_alpha(COLOR_WHITE, 0));
             particle_generator pg(0.3, p, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;

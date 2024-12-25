@@ -2035,18 +2035,16 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     ((pikmin*) m)->start_throw_trail();
     
     particle par(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height() + 1.0,
+        m->pos, m->z + m->get_drawing_height() + 1.0,
         12, 0.5, PARTICLE_PRIORITY_MEDIUM
     );
-    par.bitmap = game.sys_assets.bmp_rock;
-    par.color = al_map_rgb(172, 164, 134);
-    par.gravity = 70.0f;
+    par.color.set_keyframe_value(0, al_map_rgb(172, 164, 134));
+    par.color.add(1, al_map_rgba(172, 164, 134, 0));
+    par.outwards_speed = keyframe_interpolator<float>(70);
+    par.linear_speed.add(1, point(0, 35));
     particle_generator pg(0, par, 12);
-    pg.number_deviation = 5;
-    pg.angle = 0;
-    pg.angle_deviation = TAU / 2;
-    pg.total_speed = 70;
-    pg.total_speed_deviation = 10;
+    pg.emission.number_deviation = 5;
+    pg.outwards_speed_deviation = 10;
     pg.duration_deviation = 0.3;
     pg.emit(game.states.gameplay->particles);
 }
@@ -3685,19 +3683,18 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     particle pa(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
+        m->pos, m->z + m->get_drawing_height(),
         4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = game.sys_assets.bmp_rock;
-    pa.color = al_map_rgb(160, 80, 32);
-    pa.gravity = 50;
+    pa.color.set_keyframe_value(0, al_map_rgb(160, 80, 32));
+    pa.color.add(1, al_map_rgba(160, 80, 32, 0));
+    pa.outwards_speed = keyframe_interpolator<float>(50);
+    pa.linear_speed.add(1, point(0, 50));
     particle_generator pg(0, pa, 8);
-    pg.number_deviation = 1;
+    pg.emission.number_deviation = 1;
     pg.size_deviation = 2;
-    pg.angle = 0;
-    pg.angle_deviation = TAU / 2;
-    pg.total_speed = 50;
-    pg.total_speed_deviation = 10;
+    pg.outwards_speed_deviation = 10;
     pg.duration_deviation = 0.25;
     pg.emit(game.states.gameplay->particles);
 }
@@ -3770,18 +3767,16 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a burst of particles to symbolize the maturation.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
+            m->pos, m->z + m->get_drawing_height(),
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color = COLOR_WHITE;
+        pa.color.add(1, change_alpha(COLOR_WHITE,0));
+        pa.outwards_speed = keyframe_interpolator<float>(50);
         particle_generator pg(0, pa, 8);
-        pg.number_deviation = 1;
+        pg.emission.number_deviation = 1;
         pg.size_deviation = 8;
-        pg.angle = 0;
-        pg.angle_deviation = TAU / 2;
-        pg.total_speed = 40;
-        pg.total_speed_deviation = 10;
+        pg.linear_speed_deviation.x = 10;
         pg.duration_deviation = 0.25;
         pg.emit(game.states.gameplay->particles);
         
@@ -3792,19 +3787,18 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a dribble of particles to symbolize the regression.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->get_drawing_height(),
+            m->pos, m->z + m->get_drawing_height(),
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color = al_map_rgb(255, 224, 224);
-        pa.gravity = 300;
+         pa.color.set_keyframe_value(0, al_map_rgb(255, 224, 224));
+        pa.color.add(1, al_map_rgb(255, 224, 224));
+        pa.outwards_speed = keyframe_interpolator<float>(50);
+        pa.linear_speed.add(1, point(0, 300));
         particle_generator pg(0, pa, 8);
-        pg.number_deviation = 1;
+        pg.emission.number_deviation = 1;
         pg.size_deviation = 8;
-        pg.angle = 0;
-        pg.angle_deviation = TAU / 2;
-        pg.total_speed = 50;
-        pg.total_speed_deviation = 10;
+        pg.outwards_speed_deviation = 10;
         pg.duration_deviation = 0.25;
         pg.emit(game.states.gameplay->particles);
     }
@@ -4323,11 +4317,12 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle par(
-                PARTICLE_TYPE_BITMAP, m->pos, m->z,
+                m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             par.bitmap = game.sys_assets.bmp_wave_ring;
-            par.size_grow_speed = m->radius * 4;
+            par.size.add(1, m->radius * 4);
+            par.color.add(1, change_alpha(COLOR_WHITE, 0));
             particle_generator pg(0.3, par, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;

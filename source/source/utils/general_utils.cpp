@@ -76,60 +76,6 @@ void enum_name_database::register_item(
 }
 
 
-
-/**
- * @brief Constructs a new keyframe interpolator object.
- *
- * @param initial_value Initial value of the thing being interpolated.
- * This gets used at t = 0.
- */
-keyframe_interpolator::keyframe_interpolator(float initial_value) {
-    keyframe_times.push_back(0.0f);
-    keyframe_values.push_back(initial_value);
-    keyframe_eases.push_back(EASE_METHOD_NONE);
-}
-
-
-/**
- * @brief Adds a new keyframe.
- *
- * @param t Time in which this keyframe takes place. Ranges from 0 to 1.
- * @param value Value of the thing to interpolate at the keyframe's moment.
- * @param ease Easing method, if any.
- */
-void keyframe_interpolator::add(
-    float t, float value, const EASING_METHOD ease
-) {
-    keyframe_times.push_back(t);
-    keyframe_values.push_back(value);
-    keyframe_eases.push_back(ease);
-}
-
-
-/**
- * @brief Returns the value at a given point in time.
- *
- * @param t Time.
- * @return The value.
- */
-float keyframe_interpolator::get(float t) {
-    if(t < 0.0f) return keyframe_values[0];
-    
-    for(size_t k = 1; k < keyframe_times.size(); k++) {
-        if(t <= keyframe_times[k]) {
-            float delta_t = keyframe_times[k] - keyframe_times[k - 1];
-            float relative_t = t - keyframe_times[k - 1];
-            float ratio = relative_t / delta_t;
-            ratio = ease(keyframe_eases[k], ratio);
-            float delta_v = keyframe_values[k] - keyframe_values[k - 1];
-            return delta_v * ratio + keyframe_values[k - 1];
-        }
-    }
-    
-    return keyframe_values.back();
-}
-
-
 /**
  * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.

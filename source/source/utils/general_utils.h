@@ -16,6 +16,9 @@
 
 #include "geometry_utils.h"
 #include "math_utils.h"
+#include "allegro_utils.h"
+#include "string_utils.h"
+#include "../libs/data_file.h"
 
 using std::string;
 using std::vector;
@@ -84,17 +87,133 @@ struct enum_name_database {
  * @brief A struct that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  */
+template<typename inter_t>
 struct keyframe_interpolator {
 
     public:
     
     //--- Function declarations ---
     
-    float get(float t);
+    explicit keyframe_interpolator(const inter_t initial_value) {
+        keyframe_times.push_back(0.0f);
+        keyframe_values.push_back(initial_value);
+        keyframe_eases.push_back(EASE_METHOD_NONE);
+    };
+
+    inter_t get(const float t) {
+        if (t < 0.0f) return keyframe_values[0];
+
+        if (t < keyframe_times[0]) {
+            return keyframe_values[0];
+        }
+
+        for (size_t k = 1; k < keyframe_times.size(); ++k) {
+            if (t <= keyframe_times[k]) {
+                float delta_t = std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);
+                float relative_t = t - keyframe_times[k - 1];
+                float ratio = relative_t / delta_t;
+                ratio = ease(keyframe_eases[k], ratio);
+                return interpolate(keyframe_values[k - 1], keyframe_values[k], ratio);
+            }
+        }
+
+        return keyframe_values.back();
+    }
     void add(
-        float t, float value, EASING_METHOD ease = EASE_METHOD_NONE
-    );
-    explicit keyframe_interpolator(float initial_value);
+        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
+        int* out_idx = nullptr
+    ) {
+        int new_idx = get_insertion_index(t);
+
+        if(out_idx)
+            *out_idx = new_idx;
+
+        keyframe_times.insert(keyframe_times.begin() + new_idx, t);
+        keyframe_values.insert(keyframe_values.begin() + new_idx, value);
+        keyframe_eases.insert(keyframe_eases.begin() + new_idx, ease);
+    }
+
+    void add_or_set(
+        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
+        int* out_idx = nullptr
+    ) {
+        for(size_t k = 0; k < keyframe_times.size(); ++k) {
+            if (keyframe_times[k] == t) {
+                if(out_idx)
+                    *out_idx = k;
+                set_keyframe_value(k, value);
+                return;
+            }
+        }
+
+        add(t, value, ease, out_idx);
+    }
+
+
+    void remove(int idx) {
+        keyframe_times.erase(keyframe_times.begin() + idx);
+        keyframe_values.erase(keyframe_values.begin() + idx);
+        keyframe_eases.erase(keyframe_eases.begin() + idx);
+    }
+
+    int keyframe_count() { return keyframe_times.size(); }
+
+    std::pair<float, inter_t> get_keyframe(int idx) {
+        return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
+    }
+
+    void set_keyframe_value(int idx, inter_t value) {
+        keyframe_values[idx] = value;
+    }
+
+    void set_keyframe_time(int idx, float time, int* out_new_idx = nullptr) {
+        int cur_idx = idx;
+
+        while (cur_idx > 0 && time < keyframe_times[cur_idx - 1]) {
+            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx - 1]);
+            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx - 1]);
+            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx - 1]);
+            cur_idx--;
+        }
+        while (cur_idx < (keyframe_count() - 1) && time > keyframe_times[cur_idx + 1]) {
+            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
+            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx + 1]);
+            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx + 1]);
+            cur_idx++;
+        }
+
+        if (out_new_idx)
+            *out_new_idx = cur_idx;
+
+        keyframe_times[cur_idx] = time;
+    }
+
+    void load_from_data_node(data_node* node) {
+        //There are no values to load, lets not even try.
+        if(node->get_nr_of_children() == 0)
+            return;
+
+        keyframe_times.clear();
+        keyframe_values.clear();
+        keyframe_eases.clear();
+
+        for (size_t c = 0; c < node->get_nr_of_children(); c++) {
+            data_node* c_node = node->get_child(c);
+            inter_t value;
+
+            if (std::is_same<inter_t, float>::value) {
+                value = s2f(c_node->value);
+            }
+            else if (std::is_same<inter_t, ALLEGRO_COLOR>::value) {
+                value = s2c(c_node->value);
+            }
+            else if (std::is_same<inter_t, point>::value) {
+                value = s2p(c_node->value);
+            }
+
+            add(s2f(c_node->name), value, EASE_METHOD_NONE);
+        }
+    }
     
     private:
     
@@ -104,11 +223,31 @@ struct keyframe_interpolator {
     vector<float> keyframe_times;
     
     //Keyframe values.
-    vector<float> keyframe_values;
+    vector<inter_t> keyframe_values;
     
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;
     
+        int get_insertion_index(float t) {
+        int idx = 0;
+
+        for (; idx < keyframe_times.size(); idx++) {
+            if (keyframe_times[idx] >= t)
+                break;
+        }
+        return idx;
+    }
+
+
+    float interpolate(float v1, float v2, float time) {
+        return v1 + (v2 - v1) * time;
+    }
+    ALLEGRO_COLOR interpolate(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2, float time) {
+        return interpolate_color(time, 0, 1, c1, c2);
+    }
+    point interpolate(point p1, point p2, float time) {
+        return interpolate_point(time, 0, 1, p1, p2);
+    }
 };
 
 

@@ -1,26 +1,44 @@
 name = Bubble explosion (small, continuous)
-description = A generic small continuous explosion of bubbles. Used, for instance, when the Cyclopod is spinning.
-
-emission_interval = 0.1
-number = 4
-number_deviation = 1
-base {
-    bitmap = bubble
-    duration = 1
-    friction = 2
-    gravity = 0
-    size_grow_speed = 0
-    size = 10
-    speed = 0 0
-    color = 255 255 255
+description=A generic small continuous explosion of bubbles. Used, for instance, when the Cyclopod is spinning.
+emission{
+	number=4
+	number_deviation=0
+	interval=0.1000
+	interval_deviation=0.0000
+	shape=1
+	max_offset=0.0000 0.0000
+	min_offset=0.0000 0.0000
 }
-duration_deviation = 0.3
-friction_deviation = 0.3
-gravity_deviation = 0
-size_deviation = 4
-pos_deviation = 0 0
-speed_deviation = 0 0
-angle = 0
-angle_deviation = 360
-total_speed = 200
-total_speed_deviation = 0
+base{
+	bitmap=bubble
+	rotation=0.0000
+	duration=1.0000
+	friction=2.0000
+	blend_type=0
+	color{
+		0.0000=255 255 255
+		0.9000=255 255 255
+		1.0000=255 255 255 0
+	}
+	size{
+		0.0000=10.0000
+	}
+	linear_speed{
+		0.0000=200.0000 0.0000
+		1.0000=200.0000 0.0000
+	}
+	outwards_speed{
+		0.0000=0.0000
+	}
+	orbital_speed{
+		0.0000=0.0000
+	}
+}
+rotation_deviation=0.0000
+duration_deviation=0.3000
+friction_deviation=0.3000
+size_deviation=4.0000
+orbital_speed_deviation=0.0000
+outwards_speed_deviation=0.0000
+angle_deviation=360.0000
+linear_speed_deviation=0.0000 0.0000

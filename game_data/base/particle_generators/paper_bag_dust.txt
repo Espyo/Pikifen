@@ -1,26 +1,43 @@
 name = Paper bag dust
-description = Random particles of dust thrown to the air by a paper bag that's being crushed down.
-
-emission_interval = 0.08
-number = 1
-number_deviation = 0
-base {
-    bitmap = smoke
-    duration = 0.75
-    friction = 1
-    gravity = 0
-    size_grow_speed = 100
-    size = 24
-    speed = 0 0
-    color = 240 220 220 255
+description=Random particles of dust thrown to the air by a paper bag that's being crushed down.
+emission{
+	number=1
+	number_deviation=0
+	interval=0.0800
+	interval_deviation=0.0000
+	shape=1
+	max_offset=41.0000 96.0000
+	min_offset=0.0000 0.0000
 }
-duration_deviation = 0.1
-friction_deviation = 0
-gravity_deviation = 0
-size_deviation = 2
-pos_deviation = 41 96
-speed_deviation = 0 0
-angle = 0
-angle_deviation = 180
-total_speed = 50
-total_speed_deviation = 10
+base{
+	bitmap=smoke
+	rotation=0.0000
+	duration=0.7500
+	friction=1.0000
+	blend_type=0
+	color{
+		0.0000=240 220 220
+		1.0000=240 220 220 0
+	}
+	size{
+		0.0000=32.0000
+	}
+	linear_speed{
+		0.0000=50.0000 0.0000
+		1.0000=50.0000 0.0000
+	}
+	outwards_speed{
+		0.0000=0.0000
+	}
+	orbital_speed{
+		0.0000=0.0000
+	}
+}
+rotation_deviation=0.0000
+duration_deviation=0.1000
+friction_deviation=0.0000
+size_deviation=2.0000
+orbital_speed_deviation=0.0000
+outwards_speed_deviation=0.0000
+angle_deviation=180.0000
+linear_speed_deviation=0.0000 0.0000

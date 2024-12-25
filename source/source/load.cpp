@@ -508,6 +508,7 @@ void load_options() {
     load_editor_history(game.states.animation_ed, rs);
     load_editor_history(game.states.area_ed, rs);
     load_editor_history(game.states.gui_ed, rs);
+    load_editor_history(game.states.particle_ed, rs);
     
     //Final setup.
     controls_manager_options controls_mgr_options;

@@ -883,6 +883,7 @@ void save_options() {
     save_editor_history(game.states.animation_ed, &file);
     save_editor_history(game.states.area_ed, &file);
     save_editor_history(game.states.gui_ed, &file);
+    save_editor_history(game.states.particle_ed, &file);
     
     //Finally, save.
     file.save_file(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);

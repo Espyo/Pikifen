@@ -107,6 +107,9 @@ const bool DEF_ENGINE_DEVELOPER = false;
 //Default value for the GUI editor grid interval.
 const float DEF_GUI_EDITOR_GRID_INTERVAL = 2.5f;
 
+//Default value for the area editor grid interval.
+const float DEF_PARTICLE_EDITOR_GRID_INTERVAL = 32.0f;
+
 //Default value for the GUI editor snap mode.
 const bool DEF_GUI_EDITOR_SNAP = true;
 

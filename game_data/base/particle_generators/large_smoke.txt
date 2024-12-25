@@ -1,26 +1,45 @@
 name = Large smoke
-description = Large variant of smoke particle
-
-emission_interval = 0.2
-number = 1
-number_deviation = 0
-base {
-    bitmap = smoke
-    duration = 2
-    friction = 1
-    gravity = 0
-    size_grow_speed = 30
-    size = 48
-    speed = 0 -50
-    color = 128 128 128 192
+description=Large variant of smoke particle
+emission{
+	number=1
+	number_deviation=0
+	interval=0.2000
+	interval_deviation=0.0000
+	shape=0
+	max_radius=30.0000
+	min_radius=0.0000
+	arc=6.2832
 }
-duration_deviation = 0.3
-friction_deviation = 0
-gravity_deviation = 0
-size_deviation = 10
-pos_deviation = 30 30
-speed_deviation = 20 20
-angle = 0
-angle_deviation = 0
-total_speed = 0
-total_speed_deviation = 0
+base{
+	bitmap=smoke
+	rotation=0.0000
+	duration=2.0000
+	friction=1.0000
+	blend_type=0
+	color{
+		0.0000=128 128 128 192
+		1.0000=128 128 128 0
+	}
+	size{
+		0.0000=48.0000
+		1.0000=108.0000
+	}
+	linear_speed{
+		0.0000=0.0000 -50.0000
+		1.0000=0.0000 -50.0000
+	}
+	outwards_speed{
+		0.0000=0.0000
+	}
+	orbital_speed{
+		0.0000=0.0000
+	}
+}
+rotation_deviation=0.0000
+duration_deviation=0.3000
+friction_deviation=0.0000
+size_deviation=10.0000
+orbital_speed_deviation=0.0000
+outwards_speed_deviation=0.0000
+angle_deviation=0.0000
+linear_speed_deviation=0.0000 0.0000

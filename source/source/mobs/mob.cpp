@@ -1363,22 +1363,31 @@ void mob::do_attack_effects(
     //Create the particle.
     if(!useless) {
         particle smack_p(
-            PARTICLE_TYPE_SMACK, particle_pos,
+            particle_pos,
             std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
-            64, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+            0, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
-        smack_p.color = al_map_rgb(255, 160, 128);
+        smack_p.color.set_keyframe_value(0, al_map_rgb(255, 160, 128));
+        smack_p.color.add(0.5f, al_map_rgb(255, 160, 128));
+        smack_p.color.add(1,    al_map_rgba(255, 160, 128, 0));
+
+        smack_p.size.add(0.5f, 64);
+        smack_p.size.add(1,    0);
         game.states.gameplay->particles.add(smack_p);
         
     } else {
         particle ding_p(
-            PARTICLE_TYPE_DING, particle_pos,
+            particle_pos,
             std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
-            24, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
+            0, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
-        ding_p.color = al_map_rgb(192, 208, 224);
+        ding_p.color.set_keyframe_value(0, al_map_rgb(192, 208, 224));
+        ding_p.color.add(0.5f, al_map_rgb(192, 208, 224));
+        ding_p.color.add(1,    al_map_rgba(192, 208, 224, 0));
+
+        ding_p.size.add(0.5f, 24);
         game.states.gameplay->particles.add(ding_p);
         
     }
@@ -3180,17 +3189,16 @@ void mob::start_dying() {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, pos, z + get_drawing_height() + 1,
+        pos, z + get_drawing_height() + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;
-    p.color = al_map_rgb(255, 192, 192);
+    p.color.set_keyframe_value(0, al_map_rgb(255, 192, 192));
+    p.color.add(1, al_map_rgba(255, 192, 192, 0));
+    p.outwards_speed = keyframe_interpolator<float>(100);
     particle_generator pg(0, p, 25);
-    pg.number_deviation = 5;
-    pg.angle = 0;
-    pg.angle_deviation = TAU / 2;
-    pg.total_speed = 100;
-    pg.total_speed_deviation = 40;
+    pg.emission.number_deviation = 5;
+    pg.outwards_speed_deviation = 40;
     pg.duration_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
@@ -3699,7 +3707,7 @@ void mob::tick_misc_logic(float delta_t) {
         particle_generators[g].tick(
             delta_t, game.states.gameplay->particles
         );
-        if(particle_generators[g].emission_interval == 0) {
+        if(particle_generators[g].emission.interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
             g++;

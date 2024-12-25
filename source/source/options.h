@@ -91,6 +91,7 @@ extern const bool DEF_EDITOR_SHOW_TOOLTIPS;
 extern const bool DEF_ENGINE_DEVELOPER;
 extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
 extern const bool DEF_GUI_EDITOR_SNAP;
+extern const float DEF_PARTICLE_EDITOR_GRID_INTERVAL;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
 extern const float DEF_JOYSTICK_MAX_DEADZONE;
 extern const LEAVING_CONFIRMATION_MODE DEF_LEAVING_CONFIRMATION_MODE;
@@ -210,6 +211,9 @@ struct options_t {
     //Snap to grid?
     bool gui_editor_snap = OPTIONS::DEF_GUI_EDITOR_SNAP;
     
+    //Grid interval in the particle editor, in units.
+    float particle_editor_grid_interval = OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
+
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;
     

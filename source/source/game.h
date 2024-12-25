@@ -23,6 +23,7 @@
 #include "game_states/area_editor/editor.h"
 #include "game_states/gameplay/gameplay.h"
 #include "game_states/gui_editor/editor.h"
+#include "game_states/particle_editor/editor.h"
 #include "game_states/menus.h"
 #include "game_states/results.h"
 #include "mob_script_action.h"
@@ -67,6 +68,9 @@ struct game_state_list {
     
     //GUI editor state.
     gui_editor* gui_ed = nullptr;
+
+    //GUI editor state.
+    particle_editor* particle_ed = nullptr;
     
     //Main menu.
     main_menu_state* main_menu = nullptr;

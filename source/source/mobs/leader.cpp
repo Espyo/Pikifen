@@ -152,10 +152,14 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         particle p;
         unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
-        p.color.r = WHISTLE::DOT_COLORS[color_idx][0] / 255.0f;
-        p.color.g = WHISTLE::DOT_COLORS[color_idx][1] / 255.0f;
-        p.color.b = WHISTLE::DOT_COLORS[color_idx][2] / 255.0f;
-        p.color.a = LEADER::SWARM_PARTICLE_ALPHA;
+        ALLEGRO_COLOR c = al_map_rgba(
+            WHISTLE::DOT_COLORS[color_idx][0],
+            WHISTLE::DOT_COLORS[color_idx][1],
+            WHISTLE::DOT_COLORS[color_idx][2],
+            LEADER::SWARM_PARTICLE_ALPHA * 255
+        );
+        p.color = keyframe_interpolator<ALLEGRO_COLOR>(c);
+        p.color.add(1, change_alpha(c,0));
         p.duration =
             randomf(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
@@ -166,7 +170,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
         p.pos.y += randomf(-this->radius * 0.5f, this->radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
-        p.size = LEADER::SWARM_PARTICLE_SIZE;
+        p.size.set_keyframe_value(0, LEADER::SWARM_PARTICLE_SIZE);
         float p_speed =
             game.states.gameplay->swarm_magnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
@@ -180,9 +184,8 @@ leader::leader(const point &pos, leader_type* type, float angle) :
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
+        p.linear_speed = keyframe_interpolator<point>(rotate_point(point(p_speed, 0.0f), p_angle));
         p.time = p.duration;
-        p.type = PARTICLE_TYPE_BITMAP;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
     };
@@ -549,10 +552,15 @@ void leader::dismiss() {
         particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
-        par.color.r = color_idx[0] / 255.0f;
-        par.color.g = color_idx[1] / 255.0f;
-        par.color.b = color_idx[2] / 255.0f;
-        par.color.a = LEADER::DISMISS_PARTICLE_ALPHA;
+        ALLEGRO_COLOR c = al_map_rgba(
+            color_idx[0],
+            color_idx[1],
+            color_idx[2],
+            LEADER::DISMISS_PARTICLE_ALPHA * 255
+        );
+
+        par.color.set_keyframe_value(0, c);
+        par.color.add(1, change_alpha(c,0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
             randomf(
@@ -562,16 +570,15 @@ void leader::dismiss() {
         par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
         par.pos = pos;
         par.priority = PARTICLE_PRIORITY_MEDIUM;
-        par.size = LEADER::DISMISS_PARTICLE_SIZE;
+        par.size.set_keyframe_value(0, LEADER::DISMISS_PARTICLE_SIZE);
         float par_speed =
             randomf(
                 LEADER::DISMISS_PARTICLE_MIN_SPEED,
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.speed = rotate_point(point(par_speed, 0.0f), par_angle);
+        par.linear_speed = keyframe_interpolator<point>(rotate_point(point(par_speed, 0.0f), par_angle));
         par.time = par.duration;
-        par.type = PARTICLE_TYPE_BITMAP;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);
     }
@@ -807,11 +814,12 @@ void leader::start_auto_throwing() {
  */
 void leader::start_throw_trail() {
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW
+        pos, z,
+        radius, 0.6, PARTICLE_PRIORITY_LOW,
+        change_alpha(type->main_color, 128)
     );
-    throw_p.size_grow_speed = -5;
-    throw_p.color = change_alpha(type->main_color, 128);
+    throw_p.size.add(1, 0);
+    throw_p.color.add(1, change_alpha(type->main_color, 0));
     particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
