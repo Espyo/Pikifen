@@ -23,9 +23,13 @@ using std::string;
 
 namespace OPTIONS_MENU {
 extern const string AUDIO_GUI_FILE_NAME;
+extern const float BIND_BUTTON_HEIGHT;
+extern const float BIND_BUTTON_PADDING;
+extern const string CONTROL_BINDS_GUI_FILE_NAME;
 extern const string CONTROLS_GUI_FILE_NAME;
 extern const string GRAPHICS_GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
+extern const float INPUT_CAPTURE_TIMEOUT_DURATION;
 extern const string MISC_GUI_FILE_NAME;
 extern const string SONG_NAME;
 extern const string TOP_GUI_FILE_NAME;
@@ -231,6 +235,9 @@ struct options_menu_t {
     //GUI for the controls options page.
     gui_manager controls_gui;
     
+    //GUI for the control binds options page.
+    gui_manager binds_gui;
+    
     //GUI for the graphics options page.
     gui_manager graphics_gui;
     
@@ -274,16 +281,48 @@ struct options_menu_t {
     //Restart warning text widget.
     text_gui_item* warning_text = nullptr;
     
+    //GUI for the "more..." options of an action type in the binds menu.
+    gui_manager binds_more_gui;
+    
+    //Control list GUI item.
+    list_gui_item* binds_list_box = nullptr;
+    
+    //Is it currently capturing bind input? 0: No. 1: Capturing. 2: Finishing.
+    unsigned char capturing_input = 0;
+    
+    //Time left before the input capturing times out.
+    float capturing_input_timeout = 0.0f;
+    
+    //Is it showing an action type's "more..." menu in the binds menu?
+    bool showing_binds_more = false;
+    
+    //List of binds per player action type.
+    vector<vector<control_bind> > binds_per_action_type;
+    
+    //Current player action type.
+    PLAYER_ACTION_TYPE cur_action_type = PLAYER_ACTION_TYPE_NONE;
+    
+    //Current global bind index we're working with.
+    size_t cur_bind_idx = 0;
+    
     
     //--- Function declarations ---
     
-    void go_to_control_binds();
     void init_gui_audio_page();
     void init_gui_controls_page();
+    void init_gui_control_binds_page();
     void init_gui_graphics_page();
     void init_gui_misc_page();
     void init_gui_top_page();
     void start_closing();
     void trigger_restart_warning();
+    void choose_input(
+        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
+    );
+    void delete_bind(
+        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
+    );
+    void populate_binds();
+    void restore_default_binds(const PLAYER_ACTION_TYPE action_type);
     
 };

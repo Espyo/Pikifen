@@ -59,9 +59,6 @@ struct game_state_list {
     //Area selection menu.
     area_menu_state* area_menu = nullptr;
     
-    //Controls menu.
-    control_binds_menu_state* control_binds_menu = nullptr;
-    
     //"Dark", full-screen main menu.
     dark_main_menu_state* dark_main_menu = nullptr;
     

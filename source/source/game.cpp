@@ -516,7 +516,6 @@ void game_state_list::destroy() {
     delete animation_ed;
     delete area_ed;
     delete area_menu;
-    delete control_binds_menu;
     delete dark_main_menu;
     delete gameplay;
     delete gui_ed;
@@ -526,7 +525,6 @@ void game_state_list::destroy() {
     animation_ed = nullptr;
     area_ed = nullptr;
     area_menu = nullptr;
-    control_binds_menu = nullptr;
     gameplay = nullptr;
     gui_ed = nullptr;
     main_menu = nullptr;
@@ -541,7 +539,6 @@ void game_state_list::init() {
     animation_ed = new animation_editor();
     area_ed = new area_editor();
     area_menu = new area_menu_state();
-    control_binds_menu = new control_binds_menu_state();
     dark_main_menu = new dark_main_menu_state();
     gameplay = new gameplay_state();
     gui_ed = new gui_editor();

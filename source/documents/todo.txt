@@ -119,6 +119,7 @@ Next tasks (roughly sorted most important first)
     Compose and add songs
         Start with a leitmotif?
         Title screen
+        Options menu
         Editors
         A couple of gameplay songs
             Something for DEV Lab
@@ -206,7 +207,7 @@ Next tasks (roughly sorted most important first)
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Update screenshots in the manual that still show off the Play area
-    Add the help menu to the main menu
+    Add the options and stats menu to the pause menu
     Remove the word "editor" in the buttons in the main menu. Like "Areas" instead of "Area editor"
     Cook up a better logo?
     Format the whole code with Astyle, once #563 is fixed

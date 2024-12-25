@@ -37,15 +37,6 @@ extern const string SPECS_GUI_FILE_NAME;
 }
 
 
-namespace CONTROL_BINDS_MENU {
-extern const float BIND_BUTTON_HEIGHT;
-extern const float BIND_BUTTON_PADDING;
-extern const float CAPTURE_TIMEOUT_DURATION;
-extern const string GUI_FILE_NAME;
-extern const string SONG_NAME;
-}
-
-
 namespace MAIN_MENU {
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
@@ -256,72 +247,6 @@ private:
     void init_gui_make_page();
     void init_gui_play_page();
     void init_gui_tutorial_page();
-    
-};
-
-
-/**
- * @brief Info about the controls menu.
- */
-class control_binds_menu_state : public game_state {
-
-public:
-
-    //--- Function declarations ---
-    
-    void load() override;
-    void unload() override;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    void do_logic() override;
-    void do_drawing() override;
-    string get_name() const override;
-    
-private:
-
-    //--- Members ---
-    
-    //Bitmap of the menu's background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
-    
-    //GUI.
-    gui_manager gui;
-    
-    //GUI for the "more..." options of an action type.
-    gui_manager more_gui;
-    
-    //Control list GUI item.
-    list_gui_item* list_box = nullptr;
-    
-    //Is it currently capturing input? 0: No. 1: Capturing. 2: Finishing.
-    unsigned char capturing_input = 0;
-    
-    //Time left before the input capturing times out.
-    float capturing_input_timeout = 0.0f;
-    
-    //Is it showing an action type's "more..." menu?
-    bool showing_more = false;
-    
-    //List of binds per player action type.
-    vector<vector<control_bind> > binds_per_action_type;
-    
-    //Current player action type.
-    PLAYER_ACTION_TYPE cur_action_type = PLAYER_ACTION_TYPE_NONE;
-    
-    //Current global bind index we're working with.
-    size_t cur_bind_idx = 0;
-    
-    
-    //--- Function declarations ---
-    
-    void choose_input(
-        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
-    );
-    void delete_bind(
-        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
-    );
-    void populate_binds();
-    void restore_defaults(const PLAYER_ACTION_TYPE action_type);
-    void leave();
     
 };
 
