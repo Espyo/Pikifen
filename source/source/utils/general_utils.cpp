@@ -77,6 +77,42 @@ void enum_name_database::register_item(
 
 
 /**
+ * @brief Reads a float value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template <>
+float keyframe_interpolator<float>::from_string(const string &s) {
+    return s2f(s);
+}
+
+
+/**
+ * @brief Reads a color value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template<>
+ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string &s) {
+    return s2c(s);
+}
+
+
+/**
+ * @brief Reads a point value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template<>
+point keyframe_interpolator<point>::from_string(const string &s) {
+    return s2p(s);
+}
+
+
+/**
  * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
  * All parameters are mandatory.
@@ -312,25 +348,4 @@ string vector_tail_to_string(const vector<string> &v, size_t pos) {
         result += " " + v[p];
     }
     return result;
-}
-
-
-
-
-
-
-
-template <>
-float keyframe_interpolator<float>::from_string(const string& s) {
-    return s2f(s);
-}
-
-template<>
-ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string& s) {
-    return s2c(s);
-}
-
-template<>
-point keyframe_interpolator<point>::from_string(const string& s) {
-    return s2p(s);
 }

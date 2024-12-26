@@ -315,8 +315,8 @@ void gui_editor::pick_gui_def_file(
     content_manifest* temp_manif = (content_manifest*) info;
     
     auto really_load = [ = ] () {
-        load_gui_def_file(temp_manif->path, true);
         close_top_dialog();
+        load_gui_def_file(temp_manif->path, true);
     };
     
     if(

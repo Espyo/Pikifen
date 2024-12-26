@@ -127,24 +127,24 @@ void particle_editor::draw_canvas() {
         switch (loaded_gen.emission.shape) {
         case(PARTICLE_EMISSION_SHAPE_CIRCLE):
         
-            if(loaded_gen.emission.circular_arc == TAU) {
+            if(loaded_gen.emission.circle_arc == TAU) {
                 al_draw_circle(
-                    0, 0, loaded_gen.emission.max_circular_radius,
+                    0, 0, loaded_gen.emission.circle_outer_dist,
                     al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
                 );
                 al_draw_circle(
-                    0, 0, loaded_gen.emission.min_circular_radius,
+                    0, 0, loaded_gen.emission.circle_inner_dist,
                     al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
                 );
             } else {
                 al_draw_arc(
-                    0, 0, loaded_gen.emission.max_circular_radius,
-                    -loaded_gen.emission.circular_arc / 2 + loaded_gen.emission.circular_arc_rotation, loaded_gen.emission.circular_arc,
+                    0, 0, loaded_gen.emission.circle_outer_dist,
+                    -loaded_gen.emission.circle_arc / 2 + loaded_gen.emission.circle_arc_rot, loaded_gen.emission.circle_arc,
                     al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
                 );
                 al_draw_arc(
-                    0, 0, loaded_gen.emission.min_circular_radius,
-                    -loaded_gen.emission.circular_arc / 2 + loaded_gen.emission.circular_arc_rotation, loaded_gen.emission.circular_arc,
+                    0, 0, loaded_gen.emission.circle_inner_dist,
+                    -loaded_gen.emission.circle_arc / 2 + loaded_gen.emission.circle_arc_rot, loaded_gen.emission.circle_arc,
                     al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
                 );
                 
@@ -152,13 +152,13 @@ void particle_editor::draw_canvas() {
             break;
         case(PARTICLE_EMISSION_SHAPE_RECTANGLE):
             al_draw_rectangle(
-                -loaded_gen.emission.max_rectangular_offset.x, -loaded_gen.emission.max_rectangular_offset.y,
-                loaded_gen.emission.max_rectangular_offset.x, loaded_gen.emission.max_rectangular_offset.y,
+                -loaded_gen.emission.rect_outer_dist.x, -loaded_gen.emission.rect_outer_dist.y,
+                loaded_gen.emission.rect_outer_dist.x, loaded_gen.emission.rect_outer_dist.y,
                 al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
             );
             al_draw_rectangle(
-                -loaded_gen.emission.min_rectangular_offset.x, -loaded_gen.emission.min_rectangular_offset.y,
-                loaded_gen.emission.min_rectangular_offset.x, loaded_gen.emission.min_rectangular_offset.y,
+                -loaded_gen.emission.rect_inner_dist.x, -loaded_gen.emission.rect_inner_dist.y,
+                loaded_gen.emission.rect_inner_dist.x, loaded_gen.emission.rect_inner_dist.y,
                 al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
             );
             break;

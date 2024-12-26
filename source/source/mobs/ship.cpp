@@ -208,7 +208,7 @@ void ship::draw_mob() {
 
 /**
 * @brief Heals a leader, causes particle effects, etc.
-* 
+*
 * @param l Leader to heal.
 */
 void ship::heal_leader(leader* l) const {
@@ -226,7 +226,7 @@ void ship::heal_leader(leader* l) const {
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;
     g.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-    g.emission.max_circular_radius = l->radius;
+    g.emission.circle_outer_dist = l->radius;
     g.emit(game.states.gameplay->particles);
 }
 

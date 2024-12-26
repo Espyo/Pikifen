@@ -86,21 +86,29 @@ struct enum_name_database {
 /**
  * @brief A struct that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
+ * Keyframe times go from 0 (beginning) to 1 (end).
  */
 template<typename inter_t>
 struct keyframe_interpolator {
 
     public:
     
-    //--- Function declarations ---
+    //--- Function definitions ---
     
-    explicit keyframe_interpolator(const inter_t initial_value = inter_t()) {
+    explicit keyframe_interpolator(const inter_t &initial_value = inter_t()) {
         keyframe_times.push_back(0.0f);
         keyframe_values.push_back(initial_value);
         keyframe_eases.push_back(EASE_METHOD_NONE);
     };
     
-    inter_t get(const float t) {
+    
+    /**
+     * @brief Returns the interpolated value at a given time.
+     *
+     * @param t The time.
+     * @return The value.
+     */
+    inter_t get(float t) {
         if(t < 0.0f) return keyframe_values[0];
         
         if(t < keyframe_times[0]) {
@@ -109,38 +117,64 @@ struct keyframe_interpolator {
         
         for(size_t k = 1; k < keyframe_times.size(); ++k) {
             if(t <= keyframe_times[k]) {
-                float delta_t = std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);
-                float relative_t = t - keyframe_times[k - 1];
-                float ratio = relative_t / delta_t;
+                float delta_t =
+                    std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);
+                float relative_t =
+                    t - keyframe_times[k - 1];
+                float ratio =
+                    relative_t / delta_t;
                 ratio = ease(keyframe_eases[k], ratio);
-                return interpolate(keyframe_values[k - 1], keyframe_values[k], ratio);
+                return
+                    interpolate(
+                        keyframe_values[k - 1], keyframe_values[k], ratio
+                    );
             }
         }
         
         return keyframe_values.back();
     }
+    
+    
+    /**
+     * @brief Adds a keyframe.
+     *
+     * @param t Time (0 to 1).
+     * @param value Value at that point.
+     * @param ease Easing method between it and the previous keyframe.
+     * @param out_idx If not nullptr, the index of the newly added keyframe
+     * is returned here.
+     */
     void add(
-        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
-        int* out_idx = nullptr
+        float t, const inter_t &value,
+        EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
-        int new_idx = get_insertion_index(t);
+        size_t new_idx = get_insertion_idx(t);
         
-        if(out_idx)
-            *out_idx = new_idx;
-            
+        if(out_idx) *out_idx = new_idx;
+        
         keyframe_times.insert(keyframe_times.begin() + new_idx, t);
         keyframe_values.insert(keyframe_values.begin() + new_idx, value);
         keyframe_eases.insert(keyframe_eases.begin() + new_idx, ease);
     }
     
+    
+    /**
+     * @brief Adds a keyframe, or sets the data of the keyframe at the
+     * specified time.
+     *
+     * @param t Time (0 to 1).
+     * @param value Value at that point.
+     * @param ease Easing method between it and the previous keyframe.
+     * @param out_idx If not nullptr, the index of the newly added keyframe
+     * is returned here.
+     */
     void add_or_set(
-        const float t, const inter_t value, EASING_METHOD ease = EASE_METHOD_NONE,
-        int* out_idx = nullptr
+        float t, const inter_t &value,
+        EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
         for(size_t k = 0; k < keyframe_times.size(); ++k) {
             if(keyframe_times[k] == t) {
-                if(out_idx)
-                    *out_idx = k;
+                if(out_idx) *out_idx = k;
                 set_keyframe_value(k, value);
                 return;
             }
@@ -150,53 +184,110 @@ struct keyframe_interpolator {
     }
     
     
-    void remove(int idx) {
+    /**
+     * @brief Removes a keyframe.
+     *
+     * @param idx Its index.
+     */
+    void remove(size_t idx) {
         keyframe_times.erase(keyframe_times.begin() + idx);
         keyframe_values.erase(keyframe_values.begin() + idx);
         keyframe_eases.erase(keyframe_eases.begin() + idx);
     }
     
-    size_t keyframe_count() { return keyframe_times.size(); }
     
-    std::pair<float, inter_t> get_keyframe(int idx) {
+    /**
+     * @brief Returns how many keyframes there are.
+     *
+     * @return The total.
+     */
+    size_t keyframe_count() {
+        return keyframe_times.size();
+    }
+    
+    
+    /**
+     * @brief Gets data about the keyframe at the specified index.
+     *
+     * @param idx The keyframe's index.
+     * @return A pair with the keyframe's time and value.
+     */
+    std::pair<float, inter_t> get_keyframe(size_t idx) {
         return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
     }
     
-    void set_keyframe_value(int idx, inter_t value) {
+    
+    /**
+     * @brief Sets the value of the keyframe at the specified index.
+     *
+     * @param idx They keyframe's index.
+     * @param value The new value.
+     */
+    void set_keyframe_value(int idx, const inter_t &value) {
         keyframe_values[idx] = value;
     }
     
-    void set_keyframe_time(size_t idx, float time, int* out_new_idx = nullptr) {
+    
+    /**
+     * @brief Sets the time of the keyframe at the specified index.
+     *
+     * @param idx The keyframe's index.
+     * @param time The new time.
+     * @param out_new_idx If not nullptr, the new index of the keyframe is
+     * returned here.
+     */
+    void set_keyframe_time(
+        size_t idx, float time, size_t* out_new_idx = nullptr
+    ) {
         size_t cur_idx = idx;
         
-        while (cur_idx > 0 && time < keyframe_times[cur_idx - 1]) {
+        while(
+            cur_idx > 0 &&
+            time < keyframe_times[cur_idx - 1]
+        ) {
             std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx - 1]);
             std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx - 1]);
             std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx - 1]);
             cur_idx--;
         }
-        while (cur_idx < (keyframe_count() - 1) && time > keyframe_times[cur_idx + 1]) {
+        while(
+            cur_idx < (keyframe_count() - 1) &&
+            time > keyframe_times[cur_idx + 1]
+        ) {
             std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
             std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx + 1]);
             std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx + 1]);
             cur_idx++;
         }
         
-        if(out_new_idx)
-            *out_new_idx = cur_idx;
-            
+        if(out_new_idx) *out_new_idx = cur_idx;
+        
         keyframe_times[cur_idx] = time;
     }
     
+    
+    /**
+     * @brief Reads a float, color, or point value from a string.
+     *
+     * @param s The string.
+     * @return The value.
+     */
     inter_t from_string(const string &s) {
         return inter_t{};
     }
     
+    
+    /**
+     * @brief Loads interpolator data from a data node.
+     *
+     * @param node The data node to load from.
+     */
     void load_from_data_node(data_node* node) {
-        //There are no values to load, lets not even try.
-        if(node->get_nr_of_children() == 0)
+        if(node->get_nr_of_children() == 0) {
+            //There are no values to load, let's not even try.
             return;
-            
+        }
+        
         keyframe_times.clear();
         keyframe_values.clear();
         keyframe_eases.clear();
@@ -207,6 +298,7 @@ struct keyframe_interpolator {
             add(s2f(c_node->name), value, EASE_METHOD_NONE);
         }
     }
+    
     
 private:
 
@@ -221,26 +313,70 @@ private:
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;
     
-    size_t get_insertion_index(float t) {
+    
+    //--- Function definitions ---
+    
+    /**
+     * @brief Returns the index at which a keyframe would be inserted to,
+     * given the specified time.
+     *
+     * @param t The time.
+     * @return The index.
+     */
+    size_t get_insertion_idx(float t) {
         size_t idx = 0;
-        
         for(; idx < keyframe_times.size(); idx++) {
-            if(keyframe_times[idx] >= t)
-                break;
+            if(keyframe_times[idx] >= t) break;
         }
         return idx;
     }
     
     
+    /**
+     * @brief Interpolates between two floats, and returns the value at the
+     * specified time.
+     *
+     * @param v1 First value.
+     * @param v2 Second value.
+     * @param time Time (0 to 1).
+     * @return The value.
+     */
     float interpolate(float v1, float v2, float time) {
         return v1 + (v2 - v1) * time;
     }
-    ALLEGRO_COLOR interpolate(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2, float time) {
-        return interpolate_color(time, 0, 1, c1, c2);
+    
+    
+    /**
+     * @brief Interpolates between two colors, and returns the color at the
+     * specified time.
+     *
+     * @param c1 First color.
+     * @param c2 Second color.
+     * @param time Time (0 to 1).
+     * @return The color.
+     */
+    ALLEGRO_COLOR interpolate(
+        const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2, float time
+    ) {
+        return interpolate_color(time, 0.0f, 1.0f, c1, c2);
     }
-    point interpolate(point p1, point p2, float time) {
-        return interpolate_point(time, 0, 1, p1, p2);
+    
+    
+    /**
+     * @brief Interpolates between two points, and returns the point at the
+     * specified time.
+     *
+     * @param c1 First point.
+     * @param c2 Second point.
+     * @param time Time (0 to 1).
+     * @return The point.
+     */
+    point interpolate(
+        const point &p1, const point &p2, float time
+    ) {
+        return interpolate_point(time, 0.0f, 1.0f, p1, p2);
     }
+    
 };
 
 

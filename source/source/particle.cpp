@@ -68,7 +68,7 @@ void particle::draw() {
     if(bitmap) {
         draw_bitmap(
             bitmap, pos, point(target_size, -1),
-            rotation, target_color
+            bmp_angle, target_color
         );
     } else {
         al_draw_filled_circle(
@@ -212,8 +212,8 @@ void particle_generator::emit(particle_manager &manager) {
             );
         new_p.time = new_p.duration;
         
-        new_p.rotation +=
-            randomf(-rotation_deviation, rotation_deviation);
+        new_p.bmp_angle +=
+            randomf(-bmp_angle_deviation, bmp_angle_deviation);
         new_p.friction +=
             randomf(-friction_deviation, friction_deviation);
             
@@ -301,13 +301,13 @@ void particle_generator::load_from_data_node(
     
     switch (shape_int) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE:
-        ers.set("max_radius", emission.max_circular_radius);
-        ers.set("min_radius", emission.min_circular_radius);
-        ers.set("arc", emission.circular_arc);
+        ers.set("max_radius", emission.circle_outer_dist);
+        ers.set("min_radius", emission.circle_inner_dist);
+        ers.set("arc", emission.circle_arc);
         break;
     case PARTICLE_EMISSION_SHAPE_RECTANGLE:
-        ers.set("max_offset", emission.max_rectangular_offset);
-        ers.set("min_offset", emission.min_rectangular_offset);
+        ers.set("max_offset", emission.rect_outer_dist);
+        ers.set("min_offset", emission.rect_inner_dist);
         break;
     }
     
@@ -318,13 +318,13 @@ void particle_generator::load_from_data_node(
     size_t blend_int = 0;
     
     prs.set("bitmap", base_particle.file, &bitmap_node);
-    prs.set("rotation", base_particle.rotation);
+    prs.set("rotation", base_particle.bmp_angle);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("blend_type", blend_int);
     
     base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend_int;
-    base_particle.rotation = deg_to_rad(base_particle.rotation);
+    base_particle.bmp_angle = deg_to_rad(base_particle.bmp_angle);
     
     base_particle.color.load_from_data_node(base_particle_node->get_child_by_name("color"));
     base_particle.size.load_from_data_node(base_particle_node->get_child_by_name("size"));
@@ -347,7 +347,7 @@ void particle_generator::load_from_data_node(
     base_particle.time = base_particle.duration;
     base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
     
-    grs.set("rotation_deviation", rotation_deviation);
+    grs.set("rotation_deviation", bmp_angle_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
     grs.set("size_deviation", size_deviation);
@@ -356,7 +356,7 @@ void particle_generator::load_from_data_node(
     grs.set("orbital_speed_deviation", orbital_speed_deviation);
     grs.set("outwards_speed_deviation", outwards_speed_deviation);
     
-    rotation_deviation = deg_to_rad(rotation_deviation);
+    bmp_angle_deviation = deg_to_rad(bmp_angle_deviation);
     linear_speed_angle_deviation = deg_to_rad(linear_speed_angle_deviation);
     
     id =
@@ -384,13 +384,13 @@ void particle_generator::save_to_data_node(
     
     switch (emission.shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE:
-        emission_particle_node->add(new data_node("max_radius", f2s(emission.max_circular_radius)));
-        emission_particle_node->add(new data_node("min_radius", f2s(emission.min_circular_radius)));
-        emission_particle_node->add(new data_node("arc", f2s(emission.circular_arc)));
+        emission_particle_node->add(new data_node("max_radius", f2s(emission.circle_outer_dist)));
+        emission_particle_node->add(new data_node("min_radius", f2s(emission.circle_inner_dist)));
+        emission_particle_node->add(new data_node("arc", f2s(emission.circle_arc)));
         break;
     case PARTICLE_EMISSION_SHAPE_RECTANGLE:
-        emission_particle_node->add(new data_node("max_offset", p2s(emission.max_rectangular_offset)));
-        emission_particle_node->add(new data_node("min_offset", p2s(emission.min_rectangular_offset)));
+        emission_particle_node->add(new data_node("max_offset", p2s(emission.rect_outer_dist)));
+        emission_particle_node->add(new data_node("min_offset", p2s(emission.rect_inner_dist)));
         break;
     }
     
@@ -398,7 +398,7 @@ void particle_generator::save_to_data_node(
     node->add(base_particle_node);
     
     base_particle_node->add(new data_node("bitmap", base_particle.file));
-    base_particle_node->add(new data_node("rotation", f2s(rad_to_deg(base_particle.rotation))));
+    base_particle_node->add(new data_node("rotation", f2s(rad_to_deg(base_particle.bmp_angle))));
     base_particle_node->add(new data_node("duration", f2s(base_particle.duration)));
     base_particle_node->add(new data_node("friction", f2s(base_particle.friction)));
     base_particle_node->add(new data_node("blend_type", i2s(base_particle.blend_type)));
@@ -443,7 +443,7 @@ void particle_generator::save_to_data_node(
         orb_speed_node->add(new data_node(f2s(keyframe.first), f2s(keyframe.second)));
     }
     
-    node->add(new data_node("rotation_deviation", f2s(rad_to_deg(rotation_deviation))));
+    node->add(new data_node("rotation_deviation", f2s(rad_to_deg(bmp_angle_deviation))));
     node->add(new data_node("duration_deviation", f2s(duration_deviation)));
     node->add(new data_node("friction_deviation", f2s(friction_deviation)));
     node->add(new data_node("size_deviation", f2s(size_deviation)));
@@ -725,12 +725,12 @@ point particle_emission_struct::get_emission_offset() {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
         //Created using
         //https://stackoverflow.com/questions/30564015/how-to-generate-random-points-in-a-circular-distribution
-        float r = min_circular_radius + (max_circular_radius - min_circular_radius) * sqrt(randomf(0, 1));
+        float r = circle_inner_dist + (circle_outer_dist - circle_inner_dist) * sqrt(randomf(0, 1));
         
         
         float theta = randomf(
-                          -circular_arc / 2 + circular_arc_rotation,
-                          circular_arc / 2 + circular_arc_rotation
+                          -circle_arc / 2 + circle_arc_rot,
+                          circle_arc / 2 + circle_arc_rot
                       );
                       
         return point(r * cos(theta), r * sin(theta));
@@ -740,8 +740,8 @@ point particle_emission_struct::get_emission_offset() {
         int xSign = (randomi(0, 1) * 2) - 1;
         int ySign = (randomi(0, 1) * 2) - 1;
         
-        float x = randomf(0, max_rectangular_offset.x);
-        float y = x < min_rectangular_offset.x ? randomf(min_rectangular_offset.y, max_rectangular_offset.y) : randomf(0, max_rectangular_offset.y);
+        float x = randomf(0, rect_outer_dist.x);
+        float y = x < rect_inner_dist.x ? randomf(rect_inner_dist.y, rect_outer_dist.y) : randomf(0, rect_outer_dist.y);
         
         return point(
                    x * xSign,

@@ -855,20 +855,40 @@ bool editor::key_check(
 }
 
 
-void editor::keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t selected_index) {
+/**
+ * @brief Draws a Dear ImGui-like visualizer for keyframes involving colors.
+ *
+ * @param interpolator Interpolator to get the information from.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ */
+void editor::keyframe_visualizer(
+    keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+    size_t sel_keyframe_idx
+) {
+    //Setup.
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
-    ImGui::RenderColorRectWithAlphaCheckerboard(draw_list, pos,
-            ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
-            ImColor(0.0f, 0.0f, 0.0f, 0.0f), 5, ImVec2(0.0f, 0.0f)
-                                               );
-    ALLEGRO_COLOR c_start = interpolator.get_keyframe(0).second;
+    
+    //Draw the classic alpha checkboard background.
+    ImGui::RenderColorRectWithAlphaCheckerboard(
+        draw_list, pos,
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
+        ImColor(0.0f, 0.0f, 0.0f, 0.0f), 5, ImVec2(0.0f, 0.0f)
+    );
+    
+    //Draw the rectangle of the color from the start to the first keyframe.
+    auto first_kf = interpolator.get_keyframe(0);
+    ALLEGRO_COLOR c_start = first_kf.second;
     draw_list->AddRectFilled(
-        ImVec2(pos.x, pos.y),
-        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * interpolator.get_keyframe(0).first, pos.y + 40),
+        pos,
+        ImVec2(
+            pos.x + (ImGui::GetColumnWidth() - 1) * first_kf.first,
+            pos.y + 40
+        ),
         ImColor(c_start.r, c_start.g, c_start.b, c_start.a)
     );
     
+    //Draw the rectangles of the colors between the keyframes.
     for(size_t t = 0; t < interpolator.keyframe_count() - 1; t++) {
         auto kf_1 = interpolator.get_keyframe(t);
         auto kf_2 = interpolator.get_keyframe(t + 1);
@@ -876,44 +896,74 @@ void editor::keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolat
         ALLEGRO_COLOR c2 = kf_2.second;
         
         draw_list->AddRectFilledMultiColor(
-            ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first, pos.y),
-            ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first, pos.y + 40),
+            ImVec2(
+                pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first,
+                pos.y
+            ),
+            ImVec2(
+                pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first,
+                pos.y + 40
+            ),
             ImColor(c1.r, c1.g, c1.b, c1.a), ImColor(c2.r, c2.g, c2.b, c2.a),
             ImColor(c2.r, c2.g, c2.b, c2.a), ImColor(c1.r, c1.g, c1.b, c1.a)
         );
     }
     
-    ALLEGRO_COLOR c_end = interpolator.get_keyframe(interpolator.keyframe_count() - 1).second;
+    //Draw the rectangle of the color from the final keyframe to the end.
+    auto last_kf = interpolator.get_keyframe(interpolator.keyframe_count() - 1);
+    ALLEGRO_COLOR c_end = last_kf.second;
     draw_list->AddRectFilled(
-        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1) * interpolator.get_keyframe(interpolator.keyframe_count() - 1).first, pos.y),
+        ImVec2(
+            pos.x + (ImGui::GetColumnWidth() - 1) * last_kf.first,
+            pos.y
+        ),
         ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
         ImColor(c_end.r, c_end.g, c_end.b, c_end.a)
     );
     
-    
+    //Draw the bars indicating the position of each keyframe.
     for(size_t c = 0; c < interpolator.keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
-        float lineX = time * (ImGui::GetColumnWidth() - 1);
-        ImColor col = c == selected_index ? ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) : ImGui::GetColorU32(ImGuiCol_PlotLines);
+        float line_x = time * (ImGui::GetColumnWidth() - 1);
+        ImColor col =
+            c == sel_keyframe_idx ?
+            ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) :
+            ImGui::GetColorU32(ImGuiCol_PlotLines);
         draw_list->AddRectFilled(
-            ImVec2(pos.x + lineX - 2, pos.y),
-            ImVec2(pos.x + lineX + 2, pos.y + 43),
+            ImVec2(pos.x + line_x - 2, pos.y),
+            ImVec2(pos.x + line_x + 2, pos.y + 43),
             col
         );
     }
-    ImGui::Dummy(ImVec2(0, 43));
+    
+    //Add a dummy to symbolize the space the visualizer took up.
+    ImGui::Dummy(ImVec2(ImGui::GetColumnWidth(), 43));
+    set_tooltip(
+        "This shows what the color looks like at any given point in the\n"
+        "timeline. The vertical bars are keyframes, and the colors blend\n"
+        "smoothly from one keyframe to the next.\n"
+        "If there is only one keyframe, then the color is the same throughout."
+    );
 }
 
-void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t selected_index) {
-    //The built in plot doesn't allow for dynamic spacing, so we need to do it manually.
+
+/**
+ * @brief Draws a Dear ImGui-like visualizer for keyframes involving floats.
+ *
+ * @param interpolator Interpolator to get the information from.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ */
+void editor::keyframe_visualizer(
+    keyframe_interpolator<float> &interpolator,
+    size_t sel_keyframe_idx
+) {
+    //The built in plot widget doesn't allow for dynamic spacing,
+    //so we need to make our own.
+    
+    //Setup.
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
     ImVec2 size = ImVec2((ImGui::GetColumnWidth() - 1), 40);
-    draw_list->AddRectFilled(
-        ImVec2(pos.x, pos.y),
-        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
-        ImGui::GetColorU32(ImGuiCol_FrameBg)
-    );
     
     float max_value = -FLT_MAX;
     float min_value = FLT_MAX;
@@ -923,13 +973,32 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
         min_value = std::min(interpolator.get_keyframe(t).second, min_value);
     }
     
-    auto kf_start = interpolator.get_keyframe(0);
+    //Draw the background.
+    draw_list->AddRectFilled(
+        ImVec2(pos.x, pos.y),
+        ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
+        ImGui::GetColorU32(ImGuiCol_FrameBg)
+    );
+    
+    //Draw the chart line from the start to the first keyframe.
+    auto first_kf = interpolator.get_keyframe(0);
     draw_list->AddLine(
-        ImVec2(pos.x, pos.y + interpolate_number(kf_start.second, min_value, max_value, size.y, 1)),
-        ImVec2(pos.x + size.x * kf_start.first, pos.y + interpolate_number(kf_start.second, min_value, max_value, size.y, 1)),
+        ImVec2(
+            pos.x,
+            pos.y + interpolate_number(
+                first_kf.second, min_value, max_value, size.y, 1
+            )
+        ),
+        ImVec2(
+            pos.x + size.x * first_kf.first,
+            pos.y + interpolate_number(
+                first_kf.second, min_value, max_value, size.y, 1
+            )
+        ),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
     );
     
+    //Draw the chart lines between the keyframes.
     for(size_t t = 0; t < interpolator.keyframe_count() - 1; t++) {
         auto kf_1 = interpolator.get_keyframe(t);
         auto kf_2 = interpolator.get_keyframe(t + 1);
@@ -937,36 +1006,78 @@ void editor::keyframe_visualizer(keyframe_interpolator<float> interpolator, size
         float f2 = kf_2.second;
         
         draw_list->AddLine(
-            ImVec2(pos.x + size.x * kf_1.first, pos.y + interpolate_number(f1, min_value, max_value, size.y, 1)),
-            ImVec2(pos.x + size.x * kf_2.first, pos.y + interpolate_number(f2, min_value, max_value, size.y, 1)),
+            ImVec2(
+                pos.x + size.x * kf_1.first,
+                pos.y + interpolate_number(
+                    f1, min_value, max_value, size.y, 1
+                )
+            ),
+            ImVec2(
+                pos.x + size.x * kf_2.first,
+                pos.y + interpolate_number(
+                    f2, min_value, max_value, size.y, 1
+                )
+            ),
             ImGui::GetColorU32(ImGuiCol_PlotLines)
         );
     }
     
-    float end_value = interpolator.get_keyframe(interpolator.keyframe_count() - 1).second;
+    //Draw the chart line from the final keyframe to the end.
+    auto last_kf = interpolator.get_keyframe(interpolator.keyframe_count() - 1);
     draw_list->AddLine(
-        ImVec2(pos.x + size.x * interpolator.get_keyframe(interpolator.keyframe_count() - 1).first, pos.y + interpolate_number(end_value, min_value, max_value, size.y, 1)),
-        ImVec2(pos.x + size.x, pos.y + interpolate_number(end_value, min_value, max_value, size.y, 1)),
+        ImVec2(
+            pos.x + size.x * last_kf.first,
+            pos.y + interpolate_number(
+                last_kf.second, min_value, max_value, size.y, 1
+            )
+        ),
+        ImVec2(
+            pos.x + size.x,
+            pos.y + interpolate_number(
+                last_kf.second, min_value, max_value, size.y, 1
+            )
+        ),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
     );
     
-    
+    //Draw the bars indicating the position of each keyframe.
     for(size_t c = 0; c < interpolator.keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
-        float lineX = time * (ImGui::GetColumnWidth() - 1);
-        ImColor col = c == selected_index ? ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) : ImGui::GetColorU32(ImGuiCol_PlotLines);
+        float line_x = time * (ImGui::GetColumnWidth() - 1);
+        ImColor col =
+            c == sel_keyframe_idx ?
+            ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) :
+            ImGui::GetColorU32(ImGuiCol_PlotLines);
         draw_list->AddRectFilled(
-            ImVec2(pos.x + lineX - 2, pos.y),
-            ImVec2(pos.x + lineX + 2, pos.y + 43),
+            ImVec2(pos.x + line_x - 2, pos.y),
+            ImVec2(pos.x + line_x + 2, pos.y + 43),
             col
         );
     }
-    ImGui::Dummy(ImVec2(0, 43));
+    
+    //Add a dummy to symbolize the space the visualizer took up.
+    ImGui::Dummy(ImVec2(ImGui::GetColumnWidth(), 43));
+    set_tooltip(
+        "This shows what the value looks like at any given point in the\n"
+        "timeline. The vertical bars are keyframes, and the values blend\n"
+        "smoothly from one keyframe to the next.\n"
+        "If there is only one keyframe, then the value is the same throughout."
+    );
 }
 
-void editor::keyframe_visualizer(keyframe_interpolator<point> interpolator, size_t selected_index) {
 
-    //Split the point into an X and Y visualizer
+/**
+ * @brief Draws a Dear ImGui-like visualizer pair for keyframes
+ * involving points.
+ *
+ * @param interpolator Interpolator to get the information from.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ */
+void editor::keyframe_visualizer(
+    keyframe_interpolator<point> &interpolator,
+    size_t sel_keyframe_idx
+) {
+    //Split the interpolator into two, one for each axis.
     keyframe_interpolator<float> x_inter(interpolator.get_keyframe(0).second.x);
     keyframe_interpolator<float> y_inter(interpolator.get_keyframe(0).second.y);
     
@@ -978,207 +1089,267 @@ void editor::keyframe_visualizer(keyframe_interpolator<point> interpolator, size
         x_inter.add(kf.first, kf.second.x);
         y_inter.add(kf.first, kf.second.y);
     }
-    keyframe_visualizer(x_inter, selected_index);
-    keyframe_visualizer(y_inter, selected_index);
+    
+    //Draw the two visualizers.
+    keyframe_visualizer(x_inter, sel_keyframe_idx);
+    keyframe_visualizer(y_inter, sel_keyframe_idx);
 }
 
+
+/**
+ * @brief Processes Dear ImGui widgets tha allow organizing keyframe
+ * interpolators.
+ *
+ * @tparam inter_t Type of the interpolator value.
+ * @param button_id Prefix for the Dear ImGui ID of the navigation buttons.
+ * @param interpolator Interpolator to get data from.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
 template <class inter_t>
-void editor::keyframe_navigation(const string &label, keyframe_interpolator<inter_t>* interpolator, size_t &selected_index) {
+bool editor::keyframe_organizer(
+    const string &button_id,
+    keyframe_interpolator<inter_t> &interpolator,
+    size_t &sel_keyframe_idx
+) {
+    bool result = false;
+    
+    //Current keyframe text.
     ImGui::Text(
-        "Current keyframe: %s / %lu",
-        i2s(selected_index + 1).c_str(),
-        interpolator->keyframe_count()
+        "Keyframe: %lu/%lu",
+        sel_keyframe_idx + 1,
+        interpolator.keyframe_count()
     );
     
-    //Previous color button.
+    //Previous keyframe button.
     ImGui::SameLine();
-    string prevLabel = label + "prevButton";
+    string prevLabel = button_id + "prevButton";
     if(
         ImGui::ImageButton(
             prevLabel.c_str(),
             editor_icons[EDITOR_ICON_PREVIOUS],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        if(selected_index == 0) {
-            selected_index = interpolator->keyframe_count() - 1;
+        if(sel_keyframe_idx == 0) {
+            sel_keyframe_idx = interpolator.keyframe_count() - 1;
         } else {
-            selected_index--;
+            sel_keyframe_idx--;
         }
     }
     set_tooltip(
-        "Previous keyframe."
+        "Select the previous keyframe."
     );
     
-    //Previous color button.
+    //Next keyframe button.
     ImGui::SameLine();
-    string nextLabel = label + "nextButton";
+    string nextLabel = button_id + "nextButton";
     if(
         ImGui::ImageButton(
             nextLabel.c_str(),
             editor_icons[EDITOR_ICON_NEXT],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        if(selected_index == interpolator->keyframe_count() - 1) {
-            selected_index = 0;
+        if(sel_keyframe_idx == interpolator.keyframe_count() - 1) {
+            sel_keyframe_idx = 0;
         } else {
-            selected_index++;
+            sel_keyframe_idx++;
         }
     }
     set_tooltip(
-        "Next keyframe."
+        "Select the next keyframe."
     );
     
-    //Add color button.
+    //Add keyframe button.
     ImGui::SameLine();
-    string addLabel = label + "addButton";
+    string addLabel = button_id + "addButton";
     if(
         ImGui::ImageButton(
             addLabel.c_str(),
             editor_icons[EDITOR_ICON_ADD],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        float t = interpolator->get_keyframe(selected_index).first;
-        inter_t c = interpolator->get_keyframe(selected_index).second;
-        interpolator->add(t, c);
-        selected_index++;
-        changes_mgr.mark_as_changed();
+        float t = interpolator.get_keyframe(sel_keyframe_idx).first;
+        inter_t v = interpolator.get_keyframe(sel_keyframe_idx).second;
+        interpolator.add(t, v);
+        sel_keyframe_idx++;
         set_status(
-            "Added keyframe #" + i2s(selected_index + 1) + "."
+            "Added keyframe #" + i2s(sel_keyframe_idx + 1) + "."
         );
+        result = true;
     }
     set_tooltip(
         "Add a new keyframe after the curret one, by copying "
         "data from the current one."
     );
     
-    if(interpolator->keyframe_count() > 1) {
-    
+    if(interpolator.keyframe_count() > 1) {
         //Delete frame button.
         ImGui::SameLine();
-        string removeButton = label + "removeButton";
+        string removeButton = button_id + "removeButton";
         if(
             ImGui::ImageButton(
                 removeButton.c_str(),
                 editor_icons[EDITOR_ICON_REMOVE],
-                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
-            size_t deleted_frame_idx = selected_index;
-            interpolator->remove(deleted_frame_idx);
-            if(selected_index == interpolator->keyframe_count())
-                selected_index--;
-            changes_mgr.mark_as_changed();
+            size_t deleted_frame_idx = sel_keyframe_idx;
+            interpolator.remove(deleted_frame_idx);
+            if(sel_keyframe_idx == interpolator.keyframe_count()) {
+                sel_keyframe_idx--;
+            }
             set_status(
                 "Deleted keyframe #" + i2s(deleted_frame_idx + 1) + "."
             );
+            result = true;
         }
         set_tooltip(
             "Delete the current keyframe."
         );
-        
     }
+    
+    return result;
 }
 
 
-void editor::keyframe_editor(
+/**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a color
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool editor::keyframe_editor(
     const string &label,
-    keyframe_interpolator<ALLEGRO_COLOR>* interpolator,
-    size_t &selected_index) {
+    keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+    size_t &sel_keyframe_idx
+) {
+    //Visualizer.
+    keyframe_visualizer(interpolator, sel_keyframe_idx);
     
-    keyframe_visualizer(*interpolator, selected_index);
-    keyframe_navigation(label, interpolator, selected_index);
+    //Organizer.
+    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    ALLEGRO_COLOR value = interpolator->get_keyframe(selected_index).second;
-    if(
-        ImGui::ColorEdit4(
-            label.c_str(), (float*)&value
-        )
-    ) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_value(selected_index, value);
+    //Time value.
+    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+        interpolator.set_keyframe_time(
+            sel_keyframe_idx, time, &sel_keyframe_idx
+        );
+        result = true;
     }
     set_tooltip(
-        "Keyframe value."
-    );
-    
-    float time = interpolator->get_keyframe(selected_index).first;
-    if(ImGui::SliderFloat("Time", &time, 0, 1)) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_time(selected_index, time, (int*)&selected_index);
-    }
-    set_tooltip(
-        "Keyframe time.",
+        "Time at which this keyframe occurs.\n"
+        "0 means the beginning, 1 means the end.",
         "", WIDGET_EXPLANATION_DRAG
     );
+    
+    //Color editor.
+    ALLEGRO_COLOR value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    if(ImGui::ColorEdit4(label.c_str(), (float*) &value)) {
+        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        result = true;
+    }
+    set_tooltip("What color to use at this keyframe.");
+    
+    return result;
 }
 
 
-void editor::keyframe_editor(
+/**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a float
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool editor::keyframe_editor(
     const string &label,
-    keyframe_interpolator<float>* interpolator,
-    size_t &selected_index) {
+    keyframe_interpolator<float> &interpolator,
+    size_t &sel_keyframe_idx
+) {
+    //Visualizer.
+    keyframe_visualizer(interpolator, sel_keyframe_idx);
     
-    keyframe_visualizer(*interpolator, selected_index);
-    keyframe_navigation(label, interpolator, selected_index);
+    //Organizer.
+    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    float value = interpolator->get_keyframe(selected_index).second;
-    if(
-        ImGui::DragFloat(
-            label.c_str(), &value
-        )
-    ) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_value(selected_index, value);
+    //Time value.
+    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+        interpolator.set_keyframe_time(
+            sel_keyframe_idx, time, &sel_keyframe_idx
+        );
+        result = true;
     }
     set_tooltip(
-        "Keyframe value."
-    );
-    
-    float time = interpolator->get_keyframe(selected_index).first;
-    if(ImGui::SliderFloat("Time", &time, 0, 1)) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_time(selected_index, time, (int*)&selected_index);
-    }
-    set_tooltip(
-        "Keyframe time.",
+        "Time at which this keyframe occurs.\n"
+        "0 means the beginning, 1 means the end.",
         "", WIDGET_EXPLANATION_DRAG
     );
+    
+    //Float value.
+    float value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    if(ImGui::DragFloat(label.c_str(), &value)) {
+        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        result = true;
+    }
+    set_tooltip("What value to use at this keyframe.");
+    
+    return result;
 }
 
 
-void editor::keyframe_editor(
+/**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a point
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool editor::keyframe_editor(
     const string &label,
-    keyframe_interpolator<point>* interpolator,
-    size_t &selected_index) {
+    keyframe_interpolator<point> &interpolator,
+    size_t &sel_keyframe_idx
+) {
+    //Visualizer.
+    keyframe_visualizer(interpolator, sel_keyframe_idx);
     
-    keyframe_visualizer(*interpolator, selected_index);
-    keyframe_navigation(label, interpolator, selected_index);
+    //Organizer.
+    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    point value = interpolator->get_keyframe(selected_index).second;
-    if(
-        ImGui::DragFloat2(
-            label.c_str(), (float*)&value
-        )
-    ) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_value(selected_index, value);
+    //Time value.
+    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+        interpolator.set_keyframe_time(
+            sel_keyframe_idx, time, &sel_keyframe_idx
+        );
+        result = true;
     }
     set_tooltip(
-        "Keyframe value."
-    );
-    
-    float time = interpolator->get_keyframe(selected_index).first;
-    if(ImGui::SliderFloat("Time", &time, 0, 1)) {
-        changes_mgr.mark_as_changed();
-        interpolator->set_keyframe_time(selected_index, time, (int*)&selected_index);
-    }
-    set_tooltip(
-        "Keyframe time.",
+        "Time at which this keyframe occurs.\n"
+        "0 means the beginning, 1 means the end.",
         "", WIDGET_EXPLANATION_DRAG
     );
+    
+    //Float values.
+    point value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    if(ImGui::DragFloat2(label.c_str(), (float*) &value)) {
+        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        result = true;
+    }
+    set_tooltip("What coordinates to use at this keyframe.");
+    
+    return result;
 }
 
 

@@ -2,10 +2,21 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Loading the area editor on an area that only has the folder, but not data.txt or geometry.txt crashes
+    The performance monitor isn't monitoring load times for particle generators, maybe others too
+    Check Helodity's particle editor
+        Add a way to move the emitter with the mouse
+        A pause/play button for emission, and a pause/play button for the passage of time
+        Adding a keyframe should go between the previous and the next, and use the interpolated value in the middle
+        Changing the bitmap while particles exist will result in a SIGSEGV
+        If a particle generator has a rectangular emission shape and inner == outer, particles will only spawn from the top and bottom, not sides
+        Update the manual's tutorial
     Check for memory leaks
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Editor histories only have some spacing before the "new" node if they have six entries
     https://gitlab.freedesktop.org/xorg/xserver/-/issues/1773
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
@@ -13,9 +24,9 @@ Next tasks (roughly sorted most important first)
     "dismissing when leaving water keeps the water rings" -- Helodity
 
     --- 0.26 ---
+    Add a "Play" or "Make" label in the corresponding main menu sub-menus
+    All editors should have a way to delete content, not just the area editor
     Test -S-'s get_onion_info branch
-    Check Helodity's particle editor
-        Add a way to move the emitter with the mouse
     https://github.com/Helodity/Pikifen/tree/throwing-improvements-port
     Find a way to manage the installed packs
         Allow pack thumbnails
@@ -384,7 +395,7 @@ Next tasks (roughly sorted most important first)
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
-                The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is NULL they just try something peaceful instead of crashing
+                The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is nullptr they just try something peaceful instead of crashing
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A player's leader needs to throw another's
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around

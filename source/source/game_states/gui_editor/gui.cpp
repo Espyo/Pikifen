@@ -37,7 +37,6 @@ void gui_editor::open_load_dialog() {
     }
     
     load_dialog_picker = picker_info(this);
-    load_dialog_picker.can_make_new = false;
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(

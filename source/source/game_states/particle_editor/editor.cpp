@@ -61,7 +61,7 @@ particle_editor::particle_editor() :
     );
     register_cmd(&particle_editor::load_cmd, "load");
     register_cmd(&particle_editor::quit_cmd, "quit");
-    register_cmd(&particle_editor::particle_playback_toggle_cmd, "play_animation");
+    register_cmd(&particle_editor::particle_playback_toggle_cmd, "toggle_playback");
     register_cmd(
         &particle_editor::leader_silhouette_toggle_cmd,
         "leader_silhouette_toggle"
@@ -241,7 +241,7 @@ void particle_editor::load() {
     part_mgr = particle_manager(game.options.max_particles);
     
     //Set the background.
-    if(!game.options.anim_editor_bg_texture.empty()) {
+    if(!game.options.particle_editor_bg_texture.empty()) {
         bg =
             load_bmp(
                 game.options.particle_editor_bg_texture,
@@ -297,7 +297,7 @@ void particle_editor::load_part_gen_file(
     changes_mgr.reset();
     
     if(should_update_history) {
-        update_history(manifest, "");
+        update_history(manifest, loaded_gen.name);
     }
     
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
@@ -335,8 +335,8 @@ void particle_editor::pick_part_gen_file(
     content_manifest* temp_manif = (content_manifest*) info;
     
     auto really_load = [ = ] () {
-        load_part_gen_file(temp_manif->path, true);
         close_top_dialog();
+        load_part_gen_file(temp_manif->path, true);
     };
     
     if(

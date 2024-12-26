@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="974.00012"
+   width="1039.0001"
    height="64.000122"
-   viewBox="0 0 974.00009 64.00012"
+   viewBox="0 0 1039.0001 64.00012"
    version="1.1"
    id="svg2115"
    inkscape:version="1.4 (e7c3feb, 2024-10-09)"
@@ -225,13 +225,13 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter18"
-       x="-0.011086975"
-       y="-0.013076897"
-       width="1.0221739"
-       height="1.0261538">
+       x="-0.17187796"
+       y="-0.17187796"
+       width="1.3437559"
+       height="1.3437559">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.28766982"
+         stdDeviation="0.28646325"
          id="feGaussianBlur18" />
     </filter>
     <filter
@@ -449,6 +449,29 @@
          transform="matrix(-1,0,0,1,419.00012,100)"
          style="display:inline" />
     </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask17-3">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g6"
+         id="use18-6"
+         transform="translate(322.99218,95.810498)" />
+    </mask>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter20"
+       x="-0.029891819"
+       y="-0.029255823"
+       width="1.0747295"
+       height="1.0658256">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.28646325"
+         id="feGaussianBlur20" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -457,11 +480,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3008212"
-     inkscape:cx="487.00006"
-     inkscape:cy="-17.681139"
+     inkscape:zoom="1.2194416"
+     inkscape:cx="519.50006"
+     inkscape:cy="-18.041044"
      inkscape:document-units="px"
-     inkscape:current-layer="g5"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -487,7 +510,7 @@
     <inkscape:grid
        type="xygrid"
        id="grid1945"
-       originx="3.7060545e-07"
+       originx="7.412109e-07"
        originy="0"
        spacingy="1"
        spacingx="0.99999997"
@@ -606,7 +629,7 @@
        id="rect15"
        width="64"
        height="64"
-       x="795"
+       x="859.99994"
        y="1120.0001"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -616,7 +639,7 @@
        id="rect16"
        width="64"
        height="64"
-       x="730.00006"
+       x="795"
        y="1120.0001"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -626,7 +649,7 @@
        id="rect17"
        width="64"
        height="64"
-       x="860.00012"
+       x="925.00006"
        y="1120.0001"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -636,7 +659,7 @@
        id="rect18"
        width="64"
        height="64"
-       x="925"
+       x="989.99994"
        y="1120"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -646,7 +669,7 @@
        id="rect19"
        width="64"
        height="64"
-       x="990.00012"
+       x="1055.0001"
        y="1120"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -657,6 +680,16 @@
        width="64"
        height="64"
        x="210"
+       y="1120.0001"
+       inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;overflow:visible;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;paint-order:fill markers stroke"
+       id="rect4"
+       width="64"
+       height="64"
+       x="730"
        y="1120.0001"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -676,7 +709,7 @@
       <path
          id="rect20"
          style="color:#000000;overflow:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:none;paint-order:fill markers stroke"
-         d="m 285.00007,1125 -6e-5,45 h -9.99996 v 5 h 10.00002 l 0,9 h 5 l -6e-5,-9 h 65.00006 v -5 h -65.00006 l 6e-5,-45 z"
+         d="m 285.00007,1125 -6e-5,45 h -9.99996 v 5 h 10.00002 v 9 h 5 l -6e-5,-9 h 65.00006 v -5 h -65.00006 l 6e-5,-45 z"
          sodipodi:nodetypes="ccccccccccccc" />
       <rect
          style="color:#000000;overflow:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:none;paint-order:fill markers stroke"
@@ -921,7 +954,7 @@
     </g>
     <g
        id="g28"
-       transform="translate(259.99997)"
+       transform="translate(324.99992)"
        mask="url(#mask43)"
        style="opacity:0.5;filter:url(#filter30)">
       <rect
@@ -1033,10 +1066,10 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        mask="url(#mask49)"
-       transform="translate(64.999947)" />
+       transform="translate(129.99989)" />
     <g
        id="g51"
-       transform="translate(62.999966)"
+       transform="translate(127.99991)"
        mask="url(#mask52)"
        style="opacity:0.5;filter:url(#filter52)">
       <rect
@@ -1059,7 +1092,7 @@
     </g>
     <g
        id="g55"
-       transform="translate(52.499967)"
+       transform="translate(117.49991)"
        mask="url(#mask55)"
        style="opacity:0.5;filter:url(#filter56)">
       <rect
@@ -1094,7 +1127,7 @@
        style="color:#000000;overflow:visible;opacity:0.5;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter58)"
        d="m 939.00006,1127 c -8.30997,0 -15,6.69 -15,15 v 20 c 0,8.31 6.69003,15 15,15 h 20 c 8.30997,0 15,-6.69 15,-15 v -20 c 0,-8.31 -6.69003,-15 -15,-15 z m -5,20 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z m 15,0 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z m 15,0 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z"
        mask="url(#mask57)"
-       transform="translate(64.999947)" />
+       transform="translate(129.99989)" />
     <g
        id="g5"
        style="font-variation-settings:normal;opacity:0.5;mix-blend-mode:normal;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter5);stop-color:#000000;stop-opacity:1"
@@ -1114,6 +1147,106 @@
          d="m 223,1136 v 2 h 36 v -2 z"
          id="path5"
          sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="g20"
+       style="font-variation-settings:normal;opacity:0.5;mix-blend-mode:normal;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter20);stop-color:#000000;stop-opacity:1">
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="path6"
+         cx="748"
+         cy="1136"
+         r="4" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle6"
+         cx="767"
+         cy="1145"
+         r="4" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle7"
+         cx="747"
+         cy="1165"
+         r="4" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle8"
+         cx="759"
+         cy="1165"
+         r="4" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle9"
+         cx="781"
+         cy="1159"
+         r="4" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle10"
+         cx="752"
+         cy="1147"
+         r="3" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle11"
+         cx="759"
+         cy="1141"
+         r="3" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle12"
+         cx="781"
+         cy="1137"
+         r="3" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle13"
+         cx="771"
+         cy="1155"
+         r="3" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle14"
+         cx="772"
+         cy="1172"
+         r="3" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle15"
+         cx="741"
+         cy="1151"
+         r="2" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle16"
+         cx="748"
+         cy="1154"
+         r="2" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle17"
+         cx="778"
+         cy="1149"
+         r="2" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle18"
+         cx="761"
+         cy="1155"
+         r="2" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle19"
+         cx="764"
+         cy="1130"
+         r="2" />
+      <circle
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter18);stop-color:#000000;stop-opacity:1"
+         id="circle20"
+         cx="757"
+         cy="1173"
+         r="2" />
     </g>
   </g>
 </svg>
