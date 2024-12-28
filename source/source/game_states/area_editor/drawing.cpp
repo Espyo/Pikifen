@@ -235,6 +235,14 @@ void area_editor::draw_canvas() {
             false
         );
     }
+    if(preview_mode) {
+        update_offset_effect_buffer(
+            game.cam.box[0], game.cam.box[1],
+            game.liquid_limit_effect_caches,
+            game.liquid_limit_effect_buffer,
+            true
+        );
+    }
     size_t n_sectors = game.cur_area_data->sectors.size();
     for(size_t s = 0; s < n_sectors; s++) {
         sector* s_ptr;

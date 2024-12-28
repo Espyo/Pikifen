@@ -60,6 +60,9 @@ const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 //Liquid surfaces wobble using this time scale.
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
 
+//Liquid surfaces wobble using this time scale.
+ALLEGRO_SHADER* LIQUID_SHADER = nullptr;
+
 //Loading screen subtext padding.
 const int LOADING_SCREEN_PADDING = 64;
 
@@ -322,6 +325,23 @@ void draw_liquid(
     float time
 ) {
 
+    if(!DRAWING::LIQUID_SHADER) {
+        //Create the shader
+        DRAWING::LIQUID_SHADER = al_create_shader(ALLEGRO_SHADER_GLSL);
+
+        const char *vsource = "game_data/ex_shader_vertex.glsl";
+        const char *psource = "game_data/ex_shader_pixel.glsl";
+        if (!al_attach_shader_source_file(DRAWING::LIQUID_SHADER, ALLEGRO_PIXEL_SHADER, psource)) {
+            crash("al_attach_shader_source_file failed:\n", al_get_shader_log(DRAWING::LIQUID_SHADER), 0);
+        }
+        if (!al_attach_shader_source_file(DRAWING::LIQUID_SHADER, ALLEGRO_VERTEX_SHADER, vsource)) {
+            crash("al_attach_shader_source_file failed:\n", al_get_shader_log(DRAWING::LIQUID_SHADER), 0);
+        }
+        al_build_shader(DRAWING::LIQUID_SHADER);
+    }
+    al_use_shader(DRAWING::LIQUID_SHADER);
+    al_set_shader_float("time", time);
+
     size_t n_vertexes = s_ptr->triangles.size() * 3;
     ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
     
@@ -334,10 +354,52 @@ void draw_liquid(
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
+    al_set_shader_float("alpha", liquid_opacity_mult);
     float brightness_mult = s_ptr->brightness / 255.0;
-    
-    //Layer 1 - Transparent wobbling ground texture.
+    ALLEGRO_COLOR target_tint = 
+        interpolate_color(l_ptr->main_color.a, 0, 1, s_ptr->texture_info.tint, l_ptr->main_color);
+
+    float tint_color[4] = {
+        target_tint.r * brightness_mult,
+        target_tint.g * brightness_mult,
+        target_tint.b * brightness_mult,
+        l_ptr->main_color.a
+    };
+
+    al_set_shader_float_vector("tex_tint", 4, &tint_color[0], 1);
+
     if(s_ptr->texture_info.bitmap) {
+        float bmpSize[2] = {
+            al_get_bitmap_width(s_ptr->texture_info.bitmap), 
+            al_get_bitmap_height(s_ptr->texture_info.bitmap)
+        };
+
+        int suitableEdges = 0;
+        float foamEdges[256][4];
+
+        for(size_t e = 0; e < s_ptr->edges.size(); e++)
+        {
+            //This sector has a liquid, so if it has a limit it's here.
+            sector* unaffected_sector = nullptr;
+            sector* affected_sector = nullptr;
+            if(!does_edge_have_liquid_limit(s_ptr->edges[e], &affected_sector, &unaffected_sector))
+                continue;
+            foamEdges[suitableEdges][0] = s_ptr->edges[e]->vertexes[0]->x;
+            foamEdges[suitableEdges][1] = s_ptr->edges[e]->vertexes[0]->y;
+            foamEdges[suitableEdges][2] = s_ptr->edges[e]->vertexes[1]->x;
+            foamEdges[suitableEdges][3] = s_ptr->edges[e]->vertexes[1]->y;
+            suitableEdges++;
+        }
+        for(size_t i = suitableEdges; i < 256; i++) {
+            foamEdges[i][0] = FLT_MAX;
+            foamEdges[i][1] = FLT_MAX;
+            foamEdges[i][2] = FLT_MAX;
+            foamEdges[i][3] = FLT_MAX;
+        }
+        al_set_shader_float_vector("foamEdges", 4, (float*)foamEdges[0], 256);
+
+        al_set_shader_float_vector("tex_size", 2, &bmpSize[0], 1);
+
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
@@ -347,15 +409,7 @@ void draw_liquid(
             1.0f / s_ptr->texture_info.scale.y,
             -s_ptr->texture_info.rot
         );
-        
-        float ground_wobble =
-            -sin(
-                time *
-                DRAWING::LIQUID_WOBBLE_TIME_SCALE
-            ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
-        float ground_texture_dy =
-            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.8;
-            
+
         for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -366,8 +420,8 @@ void draw_liquid(
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
             al_transform_coordinates(&tra, &vx, &vy);
-            av[v].u = vx + ground_wobble;
-            av[v].v = vy + ground_texture_dy;
+            av[v].u = vx;
+            av[v].v = vy;
             av[v].color =
                 al_map_rgba_f(
                     s_ptr->texture_info.tint.r * brightness_mult,
@@ -384,86 +438,7 @@ void draw_liquid(
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
-    
-    //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color =
-        al_map_rgba_f(
-            l_ptr->main_color.r * brightness_mult,
-            l_ptr->main_color.g * brightness_mult,
-            l_ptr->main_color.b * brightness_mult,
-            l_ptr->main_color.a * liquid_opacity_mult
-        );
-        
-    for(size_t v = 0; v < n_vertexes; v++) {
-    
-        const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-        vertex* v_ptr = t_ptr->points[v % 3];
-        float vx = v_ptr->x;
-        float vy = v_ptr->y;
-        
-        av[v].x = vx - where.x;
-        av[v].y = vy - where.y;
-        av[v].color = tint_color;
-        av[v].x *= scale;
-        av[v].y *= scale;
-    }
-    
-    al_draw_prim(
-        av, nullptr, nullptr,
-        0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-    );
-    
-    //Layers 3 and 4 - Water surface texture.
-    for(unsigned char l = 0; l < 2; l++) {
-    
-        sprite* anim_sprite = nullptr;
-        float layer_2_dy = 0;
-        float layer_speed[2];
-        layer_speed[0] = l_ptr->surface_speed[0];
-        layer_speed[1] = l_ptr->surface_speed[1];
-        float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
-        
-        l_ptr->anim.get_sprite_data(
-            &anim_sprite, nullptr, nullptr
-        );
-        if(anim_sprite && anim_sprite->bitmap) {
-            layer_2_dy =
-                (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;
-        }
-        
-        if(!anim_sprite) continue;
-        
-        for(size_t v = 0; v < n_vertexes; v++) {
-        
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
-            
-            av[v].x = vx - where.x;
-            av[v].y = vy - where.y;
-            av[v].u =
-                vx +
-                (time * layer_speed[l]);
-            av[v].v = vy + (layer_2_dy * l);
-            av[v].color =
-                al_map_rgba(
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    alpha * brightness_mult
-                );
-            av[v].x *= scale;
-            av[v].y *= scale;
-            av[v].u /= anim_sprite->scale.x;
-            av[v].v /= anim_sprite->scale.x;
-        }
-        
-        al_draw_prim(
-            av, nullptr, anim_sprite->bitmap,
-            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-        );
-    }
+    al_use_shader(NULL);
     
     delete[] av;
 }

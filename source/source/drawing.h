@@ -32,6 +32,7 @@ namespace DRAWING {
 extern const float DEF_HEALTH_WHEEL_RADIUS;
 extern const float LIQUID_WOBBLE_DELTA_X;
 extern const float LIQUID_WOBBLE_TIME_SCALE;
+extern ALLEGRO_SHADER* LIQUID_SHADER;
 extern const int LOADING_SCREEN_PADDING;
 extern const float LOADING_SCREEN_SUBTEXT_SCALE;
 extern const float LOADING_SCREEN_TEXT_HEIGHT;

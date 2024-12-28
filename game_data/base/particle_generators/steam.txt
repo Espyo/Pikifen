@@ -1,5 +1,6 @@
-name = Steam
+name=Steam
 description=A continuous stream of steam over a large surface. Used when the Armored Cannon Beetle is overheating.
+engine_version=0.25.0
 emission{
 	number=1
 	number_deviation=0

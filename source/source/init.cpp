@@ -592,7 +592,7 @@ void init_event_things(
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |
-        ALLEGRO_OPENGL
+        ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE
     );
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
