@@ -1,4 +1,4 @@
-name = White pikmin poison
+name = White Pikmin poison
 description=A continuous stream of poison particles, signifying an enemy's poison from having ingested a White Pikmin.
 emission{
 	number=1

@@ -1,3 +1,5 @@
+name=Pause menu
+description=GUI for the pause menu's top page.
 positions{
 	header=50.0000 5.0000 52.0000 6.0000
 	left_page=12.0000 5.0000 20.0000 6.0000

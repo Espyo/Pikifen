@@ -1,3 +1,5 @@
+name=Area menu -- info
+description=GUI for the area selection menu's area information table.
 positions{
 	info_name=36.0000 6.0000 68.0000 8.0000
 	subtitle=36.0000 16.0000 68.0000 8.0000

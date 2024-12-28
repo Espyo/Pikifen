@@ -1,3 +1,5 @@
+name=Main menu
+description=GUI for the main menu's top menu.
 positions{
 	play=42.0000 58.0000 44.0000 12.0000
 	make=58.0000 72.0000 44.0000 12.0000

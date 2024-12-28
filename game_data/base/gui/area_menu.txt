@@ -1,3 +1,5 @@
+name=Area menu
+description=GUI for the area selection menu's general structure.
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	header=40.0000 5.0000 32.0000 6.0000

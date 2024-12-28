@@ -1,3 +1,5 @@
+name=Onion menu
+description=GUI for the Onion menu.
 positions {
     instructions =     50  7 90 20
     cancel =           16 85 18 11

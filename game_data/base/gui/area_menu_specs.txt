@@ -1,3 +1,5 @@
+name=Area menu -- specs
+description=GUI for the area selection menu's mission specs table.
 positions{
 	specs_name=50.0000 5.0000 96.0000 6.0000
 	goal_header=50.0000 13.0000 96.0000 6.0000

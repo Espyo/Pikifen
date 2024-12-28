@@ -1,3 +1,5 @@
+name=Options menu -- top
+description=GUI for the top page of the options menu.
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	header=50.0000 10.0000 50.0000 6.0000

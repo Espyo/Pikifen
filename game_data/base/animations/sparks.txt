@@ -1,3 +1,5 @@
+name=Sparks
+description=Electric sparks on top of a leader that just got hurt.
 animations{
 	main{
 		frames{
