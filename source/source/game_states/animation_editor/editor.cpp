@@ -747,8 +747,8 @@ void animation_editor::pick_anim_db_file(
     content_manifest* temp_manif = (content_manifest*) info;
     string path = temp_manif->path;
     auto really_load = [ = ] () {
-        load_anim_db_file(path, true);
         close_top_dialog();
+        load_anim_db_file(path, true);
     };
     
     if(

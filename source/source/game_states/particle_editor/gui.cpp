@@ -12,6 +12,7 @@
 
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../libs/imgui/imgui_stdlib.h"
 #include "../../utils/allegro_utils.h"
 #include "../../utils/imgui_utils.h"
 #include "../../utils/string_utils.h"
@@ -26,19 +27,19 @@ void particle_editor::open_load_dialog() {
     
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
-    for(const auto &f : game.content.custom_particle_gen.manifests) {
+    for(const auto &g : game.content.custom_particle_gen.list) {
+        content_manifest* man = g.second.manifest;
         file_items.push_back(
             picker_item(
-                f.first,
-                "Pack: " + game.content.packs.list[f.second.pack].name, "",
-                (void*) &f.second,
-                get_file_tooltip(f.second.path)
+                g.second.name,
+                "Pack: " + game.content.packs.list[man->pack].name, "",
+                (void*) man,
+                get_file_tooltip(man->path)
             )
         );
     }
     
     load_dialog_picker = picker_info(this);
-    load_dialog_picker.can_make_new = false;
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
@@ -64,7 +65,20 @@ void particle_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void particle_editor::open_new_dialog() {
-    //TODO
+    new_dialog.must_update = true;
+    open_dialog(
+        "Create a new particle generator",
+        std::bind(&particle_editor::process_gui_new_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = [this] () {
+        new_dialog.pack.clear();
+        new_dialog.internal_name = "my_particle_generator";
+        new_dialog.problem.clear();
+        new_dialog.part_gen_path.clear();
+        new_dialog.must_update = true;
+    };
+    
 }
 
 
@@ -117,12 +131,6 @@ void particle_editor::process_gui() {
     canvas_br.x = br.x;
     canvas_br.y = br.y;
     ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
-    
-    //Small hack. Recenter the camera, if necessary.
-    if(must_recenter_cam) {
-        reset_cam(true);
-        must_recenter_cam = false;
-    }
     
     //Status bar.
     process_gui_status_bar();
@@ -199,9 +207,6 @@ void particle_editor::process_gui_load_dialog() {
     }
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //New node.
     ImGui::Spacer();
     if(saveable_tree_node("load", "New")) {
@@ -235,7 +240,7 @@ void particle_editor::process_gui_menu_bar() {
         if(ImGui::BeginMenu("Editor")) {
         
             //Load file item.
-            if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
                 load_cmd(1.0f);
             }
@@ -343,21 +348,15 @@ void particle_editor::process_gui_menu_bar() {
             
             //General help item.
             if(ImGui::MenuItem("Help...")) {
-                //TODO
                 string help_str =
-                    "This editor allows you to change where each item "
-                    "in a graphical user interface is, and how big it is. "
-                    "It works both for the gameplay HUD and any menu's items. "
-                    "In the canvas you can find the \"game window\", but in "
-                    "reality, it's just some square. This is because the "
-                    "coordinates you work in go from 0% to 100%, instead of "
-                    "using a real screen size, since the player can choose "
-                    "whatever screen size they want. In addition, for the sake "
-                    "of simplicity, the editor won't show what each GUI item "
-                    "looks like. So you will have to use your imagination to "
-                    "visualize how everything will really look in-game."
+                    "The particle editor allows you to change how each "
+                    "particle generator works. In-game, particle generators "
+                    "are responsible for generating particles, and each one "
+                    "emits particles differently. Each generator also has "
+                    "information about its particles' sizes, colors, movement, "
+                    "etc."
                     "\n\n"
-                    "If you need more help on how to use the GUI editor, "
+                    "If you need more help on how to use the particle editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
                 show_message_box(
@@ -375,6 +374,81 @@ void particle_editor::process_gui_menu_bar() {
         
         ImGui::EndMenuBar();
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void particle_editor::process_gui_new_dialog() {
+    //Pack widgets.
+    new_dialog.must_update |=
+        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+        
+    //Internal name input.
+    ImGui::Spacer();
+    ImGui::FocusOnInputText(new_dialog.needs_text_focus);
+    new_dialog.must_update |=
+        ImGui::InputText("Internal name", &new_dialog.internal_name);
+    set_tooltip(
+        "Internal name of the new particle generator.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Check if everything's ok.
+    if(new_dialog.must_update) {
+        new_dialog.problem.clear();
+        if(new_dialog.internal_name.empty()) {
+            new_dialog.problem = "You have to type an internal name first!";
+        } else if(!is_internal_name_good(new_dialog.internal_name)) {
+            new_dialog.problem =
+                "The internal name should only have lowercase letters,\n"
+                "numbers, and underscores!";
+        } else {
+            content_manifest temp_man;
+            temp_man.pack = new_dialog.pack;
+            temp_man.internal_name = new_dialog.internal_name;
+            new_dialog.part_gen_path =
+                game.content.custom_particle_gen.manifest_to_path(temp_man);
+            if(file_exists(new_dialog.part_gen_path)) {
+                new_dialog.problem =
+                    "There is already a particle generator with\n"
+                    "that internal name in that pack!";
+            }
+        }
+        new_dialog.must_update = false;
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(200);
+    if(!new_dialog.problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
+        auto really_create = [ = ] () {
+            create_part_gen(new_dialog.part_gen_path);
+            close_top_dialog();
+            close_top_dialog(); //Close the load dialog.
+        };
+        
+        if(
+            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.engine_developer
+        ) {
+            open_base_content_warning_dialog(really_create);
+        } else {
+            really_create();
+        }
+    }
+    if(!new_dialog.problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        new_dialog.problem.empty() ?
+        "Create the particle generator!" :
+        new_dialog.problem
+    );
 }
 
 
@@ -427,13 +501,11 @@ void particle_editor::process_gui_options_dialog() {
         
     }
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     process_gui_editor_style();
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Spacer();
     
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
@@ -443,7 +515,7 @@ void particle_editor::process_gui_options_dialog() {
             if(!use_bg) {
                 if(bg) {
                     al_destroy_bitmap(bg);
-                    bg = NULL;
+                    bg = nullptr;
                 }
                 game.options.particle_editor_bg_texture.clear();
             }
@@ -505,15 +577,27 @@ void particle_editor::process_gui_options_dialog() {
  * @brief Processes the particle generator panel for this frame.
  */
 void particle_editor::process_gui_panel_generator() {
-    //Play/pause button.
+    //Particle system text.
+    ImGui::Text("Particle system:");
+    
+    //Particle count text.
+    ImGui::Indent();
+    ImGui::Text(
+        "Particles: %lu / %lu",
+        part_mgr.get_count(), game.options.max_particles
+    );
+    
+    //Play/pause particle system button.
     if(
         ImGui::ImageButton(
-            "playButton",
-            generator_running ? editor_icons[EDITOR_ICON_STOP] : editor_icons[EDITOR_ICON_PLAY],
+            "playSystemButton",
+            mgr_running ?
+            editor_icons[EDITOR_ICON_STOP] :
+            editor_icons[EDITOR_ICON_PLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        particle_playback_toggle_cmd(1.0f);
+        part_mgr_playback_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Play or pause the particle system.",
@@ -533,424 +617,849 @@ void particle_editor::process_gui_panel_generator() {
         clear_particles_cmd(1.0f);
     }
     set_tooltip(
-        "Delete existing particles",
-        "Spacebar"
+        "Delete all existing particles."
+    );
+    ImGui::Unindent();
+    
+    //Particle generator text.
+    ImGui::Text("Generator:");
+    
+    //Play/pause particle generator button.
+    ImGui::Indent();
+    if(
+        ImGui::ImageButton(
+            "playGeneratorButton",
+            gen_running ?
+            editor_icons[EDITOR_ICON_STOP] :
+            editor_icons[EDITOR_ICON_PLAY],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        part_gen_playback_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        loaded_gen.emission.interval == 0.0f ?
+        "Emit particles now." :
+        "Play or pause the particle generator's emission.",
+        "Shift + Spacebar"
     );
     
+    //Particle generator angle value.
     ImGui::SameLine();
-    
-    ImGui::Text(
-        "Particle count: %lu / %lu",
-        part_mgr.get_count(), game.options.max_particles
+    ImGui::SetNextItemWidth(85);
+    ImGui::SliderAngle("Angle", &generator_angle_offset, 0.0f);
+    set_tooltip(
+        "Rotate the generator's facing angle in the editor by this much.\n"
+        "You can move the generator by just dragging the mouse in the canvas.",
+        "", WIDGET_EXPLANATION_DRAG
     );
+    ImGui::Unindent();
     
-    ImGui::Dummy(ImVec2(0, 4));
+    //Emission node.
+    ImGui::Spacer();
+    bool open_emission_node =
+        saveable_tree_node("generator", "Emission");
+    set_tooltip(
+        "Everything about how the particle generator emits new particles."
+    );
+    if(open_emission_node) {
     
-    if(saveable_tree_node("emission", "Emission")) {
-    
-        ImGui::Dummy(ImVec2(0, 4));
+        //Basics node.
+        bool open_basics_node =
+            saveable_tree_node("generatorEmission", "Basics");
+        set_tooltip("Edit basic information about emission here.");
+        if(open_basics_node) {
         
-        //Emission Interval value.
-        if(
-            ImGui::DragFloat(
-                "Emission Interval", &loaded_gen.emission.interval, 0.01f, 0.0f, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "How long between particle emissions, in seconds.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Indent();
-        //Interval Deviation value.
-        ImGui::SetNextItemWidth(75);
-        if(
-            ImGui::DragFloat(
-                "Interval deviation", &loaded_gen.emission.interval_deviation, 0.01f, 0.0f, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "The emission interval can vary by this amount.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-        ImGui::Dummy(ImVec2(0, 4));
-        
-        //Number value.
-        int number = (int)loaded_gen.emission.number;
-        if(
-            ImGui::DragInt(
-                "Number", &number, 1, 1, game.options.max_particles
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "How many particles are emitted per interval.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        loaded_gen.emission.number = number;
-        
-        ImGui::Indent();
-        
-        //Number Deviation value.
-        ImGui::SetNextItemWidth(75);
-        int number_dev = (int)loaded_gen.emission.number_deviation;
-        if(
-            ImGui::DragInt(
-                "Number deviation", &number_dev
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "The amount of particles emitted is changed by this amount.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        loaded_gen.emission.number_deviation = number_dev;
-        ImGui::Unindent();
-        ImGui::Dummy(ImVec2(0, 4));
-        
-        int shape = loaded_gen.emission.shape;
-        ImGui::RadioButton("Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE); ImGui::SameLine();
-        ImGui::RadioButton("Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE);
-        
-        loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
-        
-        switch (loaded_gen.emission.shape) {
-        case PARTICLE_EMISSION_SHAPE_CIRCLE:
-            ImGui::SetNextItemWidth(75);
-            if(
-                ImGui::DragFloat(
-                    "Min radius", &loaded_gen.emission.min_circular_radius, 0.1f, 0.0f, loaded_gen.emission.max_circular_radius
-                )
-            ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "A particle's position varies by at least this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
+            //Emit mode text.
+            ImGui::Text("Mode:");
             
-            //DragFloat doesnt clamp 0s right so clamp them manually
-            loaded_gen.emission.min_circular_radius = std::max(loaded_gen.emission.min_circular_radius, 0.0f);
+            //Emit once radio.
+            int emit_mode = loaded_gen.emission.interval == 0.0f ? 0 : 1;
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(75);
-            if(
-                ImGui::DragFloat(
-                    "Max radius", &loaded_gen.emission.max_circular_radius, 0.1f, loaded_gen.emission.min_circular_radius, FLT_MAX
-                )
-            ) {
-                changes_mgr.mark_as_changed();
+            if(ImGui::RadioButton("Once", &emit_mode, 0)) {
+                if(loaded_gen.emission.interval != 0.0f) {
+                    loaded_gen.emission.interval = 0.0f;
+                    loaded_gen.emission.interval_deviation = 0.0f;
+                }
             }
-            set_tooltip(
-                "A particle's position varies by at most this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Dummy(ImVec2(0, 4));
+            set_tooltip("The particles are created just once.");
             
-            //Emission arc value.
-            if(
-                ImGui::SliderAngle(
-                    "Arc", &loaded_gen.emission.circular_arc, 0
-                )
-            ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Maximum degrees around the center particles can emit.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Emission arc rotation value.
-            if(
-                ImGui::SliderAngle(
-                    "Arc rotation", &loaded_gen.emission.circular_arc_rotation
-                )
-            ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "Degress the emission arc is rotated by",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            break;
-        case PARTICLE_EMISSION_SHAPE_RECTANGLE:
-            float min_x = loaded_gen.emission.min_rectangular_offset.x;
-            float min_y = loaded_gen.emission.min_rectangular_offset.y;
-            float max_x = loaded_gen.emission.max_rectangular_offset.x;
-            float max_y = loaded_gen.emission.max_rectangular_offset.y;
-            ImGui::SetNextItemWidth(75);
-            if(
-                ImGui::DragFloat(
-                    "Min x", (float*)&min_x, 0.1f, 0.0f, max_x
-                )
-            ) {
-                changes_mgr.mark_as_changed();
-            }
+            //Emit continuously radio.
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(75);
-            if(
-                ImGui::DragFloat(
-                    "Min y", (float*)&min_y, 0.1f, 0.0f, max_y
-                )
-            ) {
-                changes_mgr.mark_as_changed();
+            if(ImGui::RadioButton("Interval", &emit_mode, 1)) {
+                if(loaded_gen.emission.interval == 0.0f) {
+                    loaded_gen.emission.interval = 0.01f;
+                    loaded_gen.emission.interval_deviation = 0.0f;
+                }
+            }
+            set_tooltip(
+                "The particles are constantly being created\n"
+                "over time, with a set interval."
+            );
+            
+            if(emit_mode == 1) {
+                //Emission interval value.
+                ImGui::Indent();
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##interval", &loaded_gen.emission.interval,
+                        0.01f, 0.01f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "How long between particle emissions, in seconds.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Emission interval deviation text.
+                ImGui::SameLine();
+                ImGui::Text(" +-");
+                
+                //Emission interval deviation value.
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(70);
+                if(
+                    ImGui::DragFloat(
+                        "##intervalDeviation",
+                        &loaded_gen.emission.interval_deviation,
+                        0.01f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "The emission interval varies randomly up or down "
+                    "by this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                ImGui::Unindent();
             }
             
-            ImGui::SetNextItemWidth(75);
+            //Emission number text.
+            ImGui::Spacer();
+            ImGui::Text("Number:");
+            
+            //Emission number value.
+            int number_int = (int) loaded_gen.emission.number;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(85);
             if(
-                ImGui::DragFloat(
-                    "Max x", (float*)&max_x, 0.1f, min_x, FLT_MAX
+                ImGui::DragInt(
+                    "##number", &number_int, 1, 1, game.options.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();
             }
+            set_tooltip(
+                "How many particles are created per emission.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            loaded_gen.emission.number = number_int;
+            
+            //Emission number deviation text.
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(75);
+            ImGui::Text(" +-");
+            
+            //Emission number deviation value.
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70);
+            int number_dev_int = (int) loaded_gen.emission.number_deviation;
             if(
-                ImGui::DragFloat(
-                    "Max y", (float*)&max_y, 0.1f, min_y, FLT_MAX
+                ImGui::DragInt(
+                    "##numberDeviation",
+                    &number_dev_int, 1, 0, game.options.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();
             }
-            //DragFloat doesnt clamp 0s right so clamp them manually
-            min_x = std::max(min_x, 0.0f);
-            min_y = std::max(min_y, 0.0f);
-            loaded_gen.emission.max_rectangular_offset = point(max_x, max_y);
-            loaded_gen.emission.min_rectangular_offset = point(min_x, min_y);
+            set_tooltip(
+                "The creation amount varies randomly up or down by this "
+                "amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            loaded_gen.emission.number_deviation = number_dev_int;
             
-            break;
+            ImGui::Unindent();
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Shape node.
+        ImGui::Spacer();
+        bool open_shape_node =
+            saveable_tree_node("generatorEmission", "Shape");
+        set_tooltip(
+            "If you want the particles to appear within a specific shape\n"
+            "around the generator, edit these properties."
+        );
+        if(open_shape_node) {
+        
+            //Circle emission shape radio.
+            int shape = loaded_gen.emission.shape;
+            ImGui::RadioButton(
+                "Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE
+            );
+            set_tooltip(
+                "Makes it so particles are created in a circle or \n"
+                "donut shape around the origin."
+            );
+            
+            //Rectangle emission shape radio.
+            ImGui::SameLine();
+            ImGui::RadioButton(
+                "Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE
+            );
+            set_tooltip(
+                "Makes it so particles are created in a rectangle or \n"
+                "square shape around the origin."
+            );
+            loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
+            
+            ImGui::Indent();
+            switch (loaded_gen.emission.shape) {
+            case PARTICLE_EMISSION_SHAPE_CIRCLE: {
+                //Circle emission inner distance value.
+                ImGui::SetNextItemWidth(75);
+                if(
+                    ImGui::DragFloat(
+                        "Inner distance",
+                        &loaded_gen.emission.circle_inner_dist,
+                        0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Minimum emission distance for particle creation.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Circle emission outer distance value.
+                ImGui::SetNextItemWidth(75);
+                if(
+                    ImGui::DragFloat(
+                        "Outer distance",
+                        &loaded_gen.emission.circle_outer_dist,
+                        0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Maximum emission distance for particle creation.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                loaded_gen.emission.circle_inner_dist =
+                    std::max(
+                        loaded_gen.emission.circle_inner_dist,
+                        0.0f
+                    );
+                loaded_gen.emission.circle_outer_dist =
+                    std::max(
+                        loaded_gen.emission.circle_inner_dist,
+                        loaded_gen.emission.circle_outer_dist
+                    );
+                    
+                //Circle emission arc value.
+                ImGui::SetNextItemWidth(150);
+                if(
+                    ImGui::SliderAngle(
+                        "Arc", &loaded_gen.emission.circle_arc, 0
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Arc of the circle for particle creation.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Circle emission arc rotation value.
+                ImGui::SetNextItemWidth(150);
+                if(
+                    ImGui::SliderAngle(
+                        "Arc rotation", &loaded_gen.emission.circle_arc_rot,
+                        0.0f
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Rotate the emission arc by these many degrees.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                break;
+                
+            } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
+                //Rectangle emission inner distance values.
+                ImGui::SetNextItemWidth(150);
+                if(
+                    ImGui::DragFloat2(
+                        "Inner distance",
+                        (float*) &loaded_gen.emission.rect_inner_dist,
+                        0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Minimum emission distance (X and Y) for particle "
+                    "creation.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Rectangle emission outer distance values.
+                ImGui::SetNextItemWidth(150);
+                if(
+                    ImGui::DragFloat2(
+                        "Outer distance",
+                        (float*) &loaded_gen.emission.rect_outer_dist,
+                        0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Maximum emission distance (X and Y) for particle "
+                    "creation.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                loaded_gen.emission.rect_inner_dist.x =
+                    std::max(
+                        loaded_gen.emission.rect_inner_dist.x,
+                        0.0f
+                    );
+                loaded_gen.emission.rect_inner_dist.y =
+                    std::max(
+                        loaded_gen.emission.rect_inner_dist.y,
+                        0.0f
+                    );
+                loaded_gen.emission.rect_outer_dist.x =
+                    std::max(
+                        loaded_gen.emission.rect_outer_dist.x,
+                        loaded_gen.emission.rect_inner_dist.x
+                    );
+                loaded_gen.emission.rect_outer_dist.y =
+                    std::max(
+                        loaded_gen.emission.rect_outer_dist.y,
+                        loaded_gen.emission.rect_inner_dist.y
+                    );
+                    
+                break;
+            }
+            }
+            ImGui::Unindent();
+            
+            ImGui::TreePop();
+            
         }
         
         ImGui::TreePop();
     }
     
-    if(saveable_tree_node("visuals", "Visuals")) {
+    //Particle appearance node.
+    ImGui::Spacer();
+    bool open_appearance_node =
+        saveable_tree_node("generator", "Particle appearance");
+    set_tooltip(
+        "Everything about how a particle looks."
+    );
+    if(open_appearance_node) {
     
-        ImGui::Dummy(ImVec2(0, 4));
-        
-        //Remove bitmap button.
-        if(
-            ImGui::ImageButton(
-                "removeBitmap",
-                editor_icons[EDITOR_ICON_REMOVE],
-                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            loaded_gen.base_particle.set_bitmap("");
-            changes_mgr.mark_as_changed();
-        }
+        //Image node.
+        bool open_image_node =
+            saveable_tree_node("generatorAppearance", "Image");
         set_tooltip(
-            "Remove the current bitmap"
+            "Edit information about the image (if any) to draw\n"
+            "on a particle here."
         );
+        if(open_image_node) {
         
-        //Choose image button.
-        ImGui::SameLine();
-        if(ImGui::Button("Choose image...")) {
-            open_bitmap_dialog(
-            [this] (const string &bmp) {
-                loaded_gen.base_particle.set_bitmap(bmp);
-                changes_mgr.mark_as_changed();
-                set_status("Picked a spritesheet image successfully.");
-            },
-            "."
-            );
-        }
-        set_tooltip("Choose which image to use from the game's content.");
-        
-        if(loaded_gen.base_particle.bitmap) {
-            //Angle value.
+            //Remove bitmap button.
             if(
-                ImGui::SliderAngle(
-                    "Rotation", &loaded_gen.base_particle.rotation
+                ImGui::ImageButton(
+                    "removeBitmap",
+                    editor_icons[EDITOR_ICON_REMOVE],
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
+                //We can't have living particles with destroyed bitmaps,
+                //so clear them all.
+                part_mgr.clear();
+                loaded_gen.base_particle.set_bitmap("");
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "The angle a particle is emitted at.",
-                "", WIDGET_EXPLANATION_DRAG
+                "Removes the particles' image.\n"
+                "This makes the particles be circles."
             );
             
-            ImGui::Indent();
-            //Angle deviation value.
-            ImGui::SetNextItemWidth(75);
+            //Choose image button.
+            ImGui::SameLine();
             if(
-                ImGui::SliderAngle(
-                    "Rotation deviation", &loaded_gen.rotation_deviation, 0
-                )
+                ImGui::Button("Choose image...", ImVec2(180, 30))
             ) {
-                changes_mgr.mark_as_changed();
+                open_bitmap_dialog(
+                [this] (const string &bmp) {
+                    //We can't have living particles with destroyed bitmaps,
+                    //so clear them all.
+                    part_mgr.clear();
+                    loaded_gen.base_particle.set_bitmap(bmp);
+                    changes_mgr.mark_as_changed();
+                    set_status("Picked an image successfully.");
+                },
+                "."
+                );
             }
-            set_tooltip(
-                "The angle a particle is emitted at can vary by this much.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
-        if(saveable_tree_node("particleColors", "Color")) {
-            int blend = loaded_gen.base_particle.blend_type;
-            ImGui::RadioButton("Normal", &blend, PARTICLE_BLEND_TYPE_NORMAL); ImGui::SameLine();
-            ImGui::RadioButton("Additive", &blend, PARTICLE_BLEND_TYPE_ADDITIVE);
+            set_tooltip("Choose which image to use from the game's content.");
             
-            loaded_gen.base_particle.blend_type = (PARTICLE_BLEND_TYPE)blend;
+            if(loaded_gen.base_particle.bitmap) {
             
-            //Color gradient visualizer
-            keyframe_editor("Color", &loaded_gen.base_particle.color, selected_color_keyframe);
+                //Image angle text.
+                ImGui::Spacer();
+                ImGui::Text("Angle:");
+                
+                //Image angle value.
+                ImGui::Indent();
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::SliderAngle(
+                        "##imgAngle", &loaded_gen.base_particle.bmp_angle, 0.0f
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Angle of the image.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Image angle deviation text.
+                ImGui::SameLine();
+                ImGui::Text(" +-");
+                
+                //Angle deviation value.
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(70);
+                if(
+                    ImGui::SliderAngle(
+                        "##imgAngleDev", &loaded_gen.bmp_angle_deviation, 0, 180
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "A particle's image angle varies randomly up or down\n"
+                    "by this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                ImGui::Unindent();
+            }
             
             ImGui::TreePop();
+            
         }
         
-        ImGui::Dummy(ImVec2(0, 12));
+        //Particle color node.
+        ImGui::Spacer();
+        bool open_color_node =
+            saveable_tree_node("generatorAppearance", "Color");
+        set_tooltip(
+            "Control the color a particle has and how it changes over time "
+            "here."
+        );
+        if(open_color_node) {
         
-        if(saveable_tree_node("particleSize", "Size")) {
-            keyframe_editor("Size", &loaded_gen.base_particle.size, selected_size_keyframe);
+            //Color keyframe editor.
+            if(
+                keyframe_editor(
+                    "Color", loaded_gen.base_particle.color,
+                    selected_color_keyframe
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            
+            //Blend mode text.
+            ImGui::Spacer();
+            ImGui::Text("Blend:");
+            
+            //Normal blending radio.
+            int blend_int = loaded_gen.base_particle.blend_type;
+            ImGui::SameLine();
+            ImGui::RadioButton(
+                "Normal", &blend_int, PARTICLE_BLEND_TYPE_NORMAL
+            );
+            set_tooltip(
+                "Particles appear on top of other particles like normal."
+            );
+            
+            //Additive blending radio.
+            ImGui::SameLine();
+            ImGui::RadioButton(
+                "Additive", &blend_int, PARTICLE_BLEND_TYPE_ADDITIVE
+            );
+            set_tooltip(
+                "Particle colors add onto the color of particles underneath\n"
+                "them. This makes it so the more particles there are,\n"
+                "the brighter the color gets."
+            );
+            loaded_gen.base_particle.blend_type =
+                (PARTICLE_BLEND_TYPE) blend_int;
+                
+            ImGui::TreePop();
+            
+        }
+        
+        //Particle size node.
+        ImGui::Spacer();
+        bool open_size_node =
+            saveable_tree_node("generatorAppearance", "Size");
+        set_tooltip(
+            "Control a particle's size and how it changes over time here."
+        );
+        if(open_size_node) {
+        
+            //Size keyframe editor.
+            if(
+                keyframe_editor(
+                    "Size", loaded_gen.base_particle.size,
+                    selected_size_keyframe
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
             loaded_gen.base_particle.size.set_keyframe_value(
                 selected_size_keyframe,
-                std::max(0.0f, loaded_gen.base_particle.size.get_keyframe(selected_size_keyframe).second)
+                std::max(
+                    0.0f,
+                    loaded_gen.base_particle.size.get_keyframe(
+                        selected_size_keyframe
+                    ).second
+                )
             );
             
             //Size deviation value.
-            ImGui::Indent();
-            ImGui::SetNextItemWidth(75);
+            ImGui::Spacer();
+            ImGui::SetNextItemWidth(70);
             if(
                 ImGui::DragFloat(
-                    "Size deviation", &loaded_gen.size_deviation, 0.5f, 0.0f, FLT_MAX
+                    "Size deviation", &loaded_gen.size_deviation,
+                    0.5f, 0.0f, FLT_MAX
                 )
             ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "A particle's size can vary by this amount.",
+                "A particle's size varies randomly up or down by this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            ImGui::Unindent();
+            
             ImGui::TreePop();
+            
         }
-        
-        ImGui::Dummy(ImVec2(0, 12));
-        //Duration value.
-        if(
-            ImGui::DragFloat(
-                "Duration", &loaded_gen.base_particle.duration, 0.01f, 0.01f, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "How long each particle persists, in seconds.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Indent();
-        //Duration deviation value.
-        ImGui::SetNextItemWidth(75);
-        if(
-            ImGui::DragFloat(
-                "Duration deviation", &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
-        set_tooltip(
-            "A particle's lifespan can vary by this amount of seconds.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
         
         ImGui::TreePop();
     }
     
-    if(saveable_tree_node("Motion", "Motion")) {
+    //Particle behavior node.
+    ImGui::Spacer();
+    bool open_behavior_node =
+        saveable_tree_node("generator", "Particle behavior");
+    set_tooltip(
+        "Everything about how a particle behaves."
+    );
+    if(open_behavior_node) {
     
-        ImGui::Dummy(ImVec2(0, 4));
+        //Duration node.
+        bool open_duration_node =
+            saveable_tree_node("generatorBehavior", "Duration");
+        set_tooltip(
+            "Control how long a particle lasts for here."
+        );
+        if(open_duration_node) {
         
-        if(saveable_tree_node("lSpeed", "Linear Speed")) {
-            keyframe_editor("Linear Speed", &loaded_gen.base_particle.linear_speed, selected_linear_speed_keyframe);
+            //Duration value.
+            ImGui::SetNextItemWidth(85);
+            if(
+                ImGui::DragFloat(
+                    "##particleDur", &loaded_gen.base_particle.duration,
+                    0.01f, 0.01f, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "How long each particle lives for, in seconds.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
             
-            ImGui::Indent();
-            //Angle deviation value.
+            //Duration deviation text.
+            ImGui::SameLine();
+            ImGui::Text(" +-");
+            
+            //Duration deviation value.
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70);
+            if(
+                ImGui::DragFloat(
+                    "##particleDurDev",
+                    &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's lifespan varies randomly up or down by this "
+                "amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Linear speed node.
+        ImGui::Spacer();
+        bool open_linear_speed_node =
+            saveable_tree_node("generatorBehavior", "Linear speed");
+        set_tooltip(
+            "Control a particle's linear (simple) X and Y speed here."
+        );
+        if(open_linear_speed_node) {
+        
+            //Linear speed keyframe editor.
+            if(
+                keyframe_editor(
+                    "Speed", loaded_gen.base_particle.linear_speed,
+                    selected_linear_speed_keyframe
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            
+            //Linear speed deviation value.
+            ImGui::Spacer();
             ImGui::SetNextItemWidth(150);
             if(
                 ImGui::DragFloat2(
-                    "Linear Speed deviation", (float*)&loaded_gen.linear_speed_deviation, 0.5f, 0.0f, FLT_MAX
+                    "Speed deviation",
+                    (float*) &loaded_gen.linear_speed_deviation,
+                    0.5f, 0.0f, FLT_MAX
                 )
             ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "The linear speed a particle is emitted with can vary by this much.",
+                "A particle's linear speed varies randomly up or down\n"
+                "by this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            ImGui::Unindent();
             
             //Angle deviation value.
+            ImGui::Spacer();
+            ImGui::SetNextItemWidth(75);
             if(
                 ImGui::SliderAngle(
-                    "Angle deviation", &loaded_gen.linear_speed_angle_deviation, 0, 180
+                    "Angle deviation",
+                    &loaded_gen.linear_speed_angle_deviation, 0, 180
                 )
             ) {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "A particle's lifespan can vary by this amount of seconds.",
+                "A particle's movement angle varies randomly up or down\n"
+                "by this amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             
             ImGui::TreePop();
+            
         }
-        ImGui::Dummy(ImVec2(0, 12));
         
-        if(saveable_tree_node("outSpeed", "Outwards Speed")) {
-            keyframe_editor("Outwards Speed", &loaded_gen.base_particle.outwards_speed, selected_outward_velocity_keyframe);
+        //Outwards speed node.
+        ImGui::Spacer();
+        bool open_outwards_speed_node =
+            saveable_tree_node("generatorBehavior", "Outwards speed");
+        set_tooltip(
+            "Control the speed at which a particle moves out from\n"
+            "the center here. Use negative values to make them move\n"
+            "towards the center instead."
+        );
+        if(open_outwards_speed_node) {
+        
+            //Outwards speed keyframe editor.
+            if(
+                keyframe_editor(
+                    "Speed", loaded_gen.base_particle.outwards_speed,
+                    selected_outward_velocity_keyframe
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            
             ImGui::TreePop();
         }
-        ImGui::Dummy(ImVec2(0, 12));
         
-        if(saveable_tree_node("orbSpeed", "Orbital Speed")) {
-            keyframe_editor("Orbital Speed", &loaded_gen.base_particle.orbital_speed, selected_oribital_velocity_keyframe);
+        //Orbital speed node.
+        ImGui::Spacer();
+        bool open_orbital_speed_node =
+            saveable_tree_node("generatorBehavior", "Orbital speed");
+        set_tooltip(
+            "Control the speed at which a particle orbits around the center "
+            "here."
+        );
+        if(open_orbital_speed_node) {
+        
+            //Orbital speed keyframe editor.
+            if(
+                keyframe_editor(
+                    "Speed", loaded_gen.base_particle.orbital_speed,
+                    selected_oribital_velocity_keyframe
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            
             ImGui::TreePop();
         }
-        ImGui::Dummy(ImVec2(0, 12));
         
-        //Friction value.
-        if(
-            ImGui::DragFloat(
-                "Friction", &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
-        }
+        //Friction node.
+        ImGui::Spacer();
+        bool open_friction_node =
+            saveable_tree_node("generatorBehavior", "Friction");
         set_tooltip(
-            "Slowing factor applied to particles.",
-            "", WIDGET_EXPLANATION_DRAG
+            "Control how a particle loses speed here."
         );
+        if(open_friction_node) {
         
-        //Friction deviation value.
-        ImGui::SetNextItemWidth(75);
-        if(
-            ImGui::DragFloat(
-                "Friction deviation", &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
-            )
-        ) {
-            changes_mgr.mark_as_changed();
+            //Friction value.
+            ImGui::SetNextItemWidth(85);
+            if(
+                ImGui::DragFloat(
+                    "##particleFriction",
+                    &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "Slowing factor applied to a particle.\n"
+                "Negative values make it speed up.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Friction deviation text.
+            ImGui::SameLine();
+            ImGui::Text(" +-");
+            
+            //Friction deviation value.
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70);
+            if(
+                ImGui::DragFloat(
+                    "##particleFrictionDev",
+                    &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's friction varies randomly up or down\n"
+                "by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            ImGui::TreePop();
+            
         }
-        set_tooltip(
-            "A particle's friciton can vary by this amount.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-        ImGui::Dummy(ImVec2(0, 4));
+        
         ImGui::TreePop();
+        
     }
+    
+    //Info node.
+    ImGui::Spacer();
+    bool open_info_node =
+        saveable_tree_node("generator", "Info");
+    set_tooltip(
+        "Optional information about the particle generator."
+    );
+    if(open_info_node) {
+    
+        //Name input.
+        if(
+            ImGui::InputText("Name", &loaded_gen.name)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Name of this particle generator. Optional."
+        );
+        
+        //Description input.
+        if(
+            ImGui::InputText("Description", &loaded_gen.description)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Description of this particle generator. Optional."
+        );
+        
+        //Version input.
+        if(
+            ImGui::InputText("Version", &loaded_gen.version)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Version of the file, preferably in the \"X.Y.Z\" format. "
+            "Optional."
+        );
+        
+        //Maker input.
+        if(
+            ImGui::InputText("Maker", &loaded_gen.maker)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Name (or nickname) of who made this file. "
+            "Optional."
+        );
+        
+        //Maker notes input.
+        if(
+            ImGui::InputText("Maker notes", &loaded_gen.maker_notes)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Extra notes or comments about the file for other makers to see. "
+            "Optional."
+        );
+        
+        //Notes input.
+        if(ImGui::InputText("Notes", &loaded_gen.notes)) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Extra notes or comments of any kind. "
+            "Optional."
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
 }
 
 
@@ -1035,7 +1544,24 @@ void particle_editor::process_gui_toolbar() {
         "Ctrl + S"
     );
     
+    //Toggle grid button.
     ImGui::SameLine(0, 16);
+    if(
+        ImGui::ImageButton(
+            "gridButton",
+            editor_icons[EDITOR_ICON_GRID],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        grid_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        "Toggle visibility of the grid.",
+        "Ctrl + G"
+    );
+    
+    //Leader silhouette button.
+    ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "silhouetteButton",
@@ -1047,21 +1573,22 @@ void particle_editor::process_gui_toolbar() {
     }
     set_tooltip(
         "Toggle visibility of a leader silhouette.",
-        "Ctrl + P" //TODO
+        "Ctrl + P"
     );
     
+    //Emission shape button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "particleOffsetButton",
+            "emissionShapeButton",
             editor_icons[EDITOR_ICON_MOB_RADIUS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        emission_outline_toggle_cmd(1.0f);
+        emission_shape_toggle_cmd(1.0f);
     }
     set_tooltip(
-        "Toggle visibility of the emission deviation.",
-        "Ctrl + R" //TODO
+        "Toggle visibility of the emission shape.",
+        "Ctrl + R"
     );
 }

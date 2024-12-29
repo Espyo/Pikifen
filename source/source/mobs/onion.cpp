@@ -173,7 +173,7 @@ void onion::generate() {
             pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
             pg.duration_deviation = 0.1f;
             pg.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-            pg.emission.max_circular_radius = 4;
+            pg.emission.circle_outer_dist = 4;
             pg.size_deviation = 4.0f;
             pg.outwards_speed_deviation = 10.0f;
             particle_generators.push_back(pg);

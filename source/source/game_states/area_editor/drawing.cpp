@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Area editor drawing function.
+ * Area editor drawing logic.
  */
 
 #include <algorithm>

@@ -1,3 +1,5 @@
+name=Water
+description=The surface of a body of water.
 animations{
 	main{
 		frames{

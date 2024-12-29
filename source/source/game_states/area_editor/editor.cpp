@@ -2039,8 +2039,8 @@ void area_editor::pick_area_folder(
     content_manifest* temp_manif = (content_manifest*) info;
     
     auto really_load = [ = ] () {
-        load_area_folder(temp_manif->path, false, true);
         close_top_dialog();
+        load_area_folder(temp_manif->path, false, true);
     };
     
     if(

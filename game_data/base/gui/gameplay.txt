@@ -1,3 +1,5 @@
+name=Gameplay
+description=GUI for regular gameplay. i.e. the game HUD.
 positions{
 	time=0.0000 0.0000 0.0000 0.0000
 	day_bubble=0.0000 0.0000 0.0000 0.0000

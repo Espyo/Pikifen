@@ -638,6 +638,12 @@ protected:
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
     
+    //Do we need to focus on the input popup's text widget?
+    bool needs_input_popup_text_focus = true;
+    
+    //Do we need to focus on the new pack's name text widget?
+    bool needs_new_pack_text_focus = true;
+    
     //Time left in the operation error red flash effect.
     timer op_error_flash_timer = timer(EDITOR::OP_ERROR_FLASH_DURATION);
     
@@ -738,32 +744,41 @@ protected:
     void process_gui_status_bar_text();
     void process_gui_unsaved_changes_dialog();
     void panel_title(const char* title);
-
-    void keyframe_visualizer(keyframe_interpolator<ALLEGRO_COLOR> interpolator, size_t selected_index);
-    void keyframe_visualizer(keyframe_interpolator<float> interpolator, size_t selected_index);
-    void keyframe_visualizer(keyframe_interpolator<point> interpolator, size_t selected_index);
+    
+    void keyframe_visualizer(
+        keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+        size_t sel_keyframe_idx
+    );
+    void keyframe_visualizer(
+        keyframe_interpolator<float> &interpolator,
+        size_t sel_keyframe_idx
+    );
+    void keyframe_visualizer(
+        keyframe_interpolator<point> &interpolator,
+        size_t sel_keyframe_idx
+    );
     template <class inter_t>
-    void keyframe_navigation(
-        const string& label, 
-        keyframe_interpolator<inter_t>* interpolator, 
-        size_t& selected_index
+    bool keyframe_organizer(
+        const string &button_id,
+        keyframe_interpolator<inter_t> &interpolator,
+        size_t &sel_keyframe_idx
     );
-    void keyframe_editor(
-        const string& label, 
-        keyframe_interpolator<float>* interpolator, 
-        size_t& selected_index
+    bool keyframe_editor(
+        const string &label,
+        keyframe_interpolator<float> &interpolator,
+        size_t &sel_keyframe_idx
     );
-    void keyframe_editor(
-        const string& label,
-        keyframe_interpolator<ALLEGRO_COLOR>* interpolator,
-        size_t& selected_index
+    bool keyframe_editor(
+        const string &label,
+        keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+        size_t &sel_keyframe_idx
     );
-    void keyframe_editor(
-        const string& label,
-        keyframe_interpolator<point>* interpolator,
-        size_t& selected_index
+    bool keyframe_editor(
+        const string &label,
+        keyframe_interpolator<point> &interpolator,
+        size_t &sel_keyframe_idx
     );
-
+    
     bool saveable_tree_node(const string &category, const string &label);
     void set_status(const string &text = "", bool error = false);
     void set_tooltip(

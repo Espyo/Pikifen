@@ -50,7 +50,7 @@ void particle_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         grid_interval_increase_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        reset_cam(false);
+        zoom_and_pos_reset_cmd(1.0f);
         
     }
 }
@@ -62,7 +62,10 @@ void particle_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
+        grid_toggle_cmd(1.0f);
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         load_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
@@ -72,7 +75,10 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         save_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
-        particle_playback_toggle_cmd(1.0f);
+        part_mgr_playback_toggle_cmd(1.0f);
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)) {
+        part_gen_playback_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         clear_particles_cmd(1.0f);
@@ -81,7 +87,7 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         leader_silhouette_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
-        emission_outline_toggle_cmd(1.0f);
+        emission_shape_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
@@ -100,9 +106,7 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        reset_cam(false);
-    }
+
 }
 
 
@@ -124,7 +128,7 @@ void particle_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-
+    generator_pos_offset = game.mouse_cursor.w_pos;
 }
 
 
@@ -134,7 +138,7 @@ void particle_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-
+    generator_pos_offset = game.mouse_cursor.w_pos;
 }
 
 
@@ -144,7 +148,7 @@ void particle_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void particle_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-
+    generator_pos_offset = point();
 }
 
 
@@ -156,7 +160,7 @@ void particle_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  */
 void particle_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
-        reset_cam(false);
+        zoom_and_pos_reset_cmd(1.0f);
     }
 }
 
@@ -202,7 +206,7 @@ void particle_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  */
 void particle_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
-        reset_cam(false);
+        zoom_and_pos_reset_cmd(1.0f);
     }
 }
 

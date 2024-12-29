@@ -1,3 +1,5 @@
+name=Electrocution
+description=A Pikmin being electrocuted.
 animations{
 	main{
 		frames{

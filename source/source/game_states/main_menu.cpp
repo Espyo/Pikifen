@@ -420,26 +420,26 @@ void main_menu_state::init_gui_make_page() {
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
     
-    bool anim_editor_icon_left = icon_left("animation_editor", "false");
+    bool anim_editor_icon_left = icon_left("animation_editor", "true");
     bool area_editor_icon_left = icon_left("area_editor", "false");
+    bool particle_editor_icon_left = icon_left("particle_editor", "true");
     bool gui_editor_icon_left = icon_left("gui_editor", "false");
-    bool particle_editor_icon_left = icon_left("particle_editor", "false");
     
 #undef icon_left
     
     //Menu items.
-    make_gui.register_coords("animation_editor", 26, 63,   46, 12);
-    make_gui.register_coords("area_editor",      74, 63,   46, 12);
-    make_gui.register_coords("gui_editor",       50, 84,   34,  7);
-    make_gui.register_coords("particle_editor",  50, 75,   34,  7);
-    make_gui.register_coords("back",              9, 91,   14,  6);
-    make_gui.register_coords("more",             91, 91,   14,  6);
-    make_gui.register_coords("tooltip",          50, 96,   96,  4);
+    make_gui.register_coords("animation_editor", 27.5, 63, 43, 12);
+    make_gui.register_coords("area_editor",      72.5, 63, 43, 12);
+    make_gui.register_coords("gui_editor",         69, 78, 34,  8);
+    make_gui.register_coords("particle_editor",    31, 78, 34,  8);
+    make_gui.register_coords("back",                9, 91, 14,  6);
+    make_gui.register_coords("more",               91, 91, 14,  6);
+    make_gui.register_coords("tooltip",            50, 96, 96,  4);
     make_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Animation editor button.
     button_gui_item* anim_ed_button =
-        new button_gui_item("Animation editor", game.sys_assets.fnt_area_name);
+        new button_gui_item("Animations", game.sys_assets.fnt_area_name);
     anim_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -464,7 +464,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Area editor button.
     button_gui_item* area_ed_button =
-        new button_gui_item("Area editor", game.sys_assets.fnt_area_name);
+        new button_gui_item("Areas", game.sys_assets.fnt_area_name);
     area_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -487,9 +487,34 @@ void main_menu_state::init_gui_make_page() {
     [] () { return "Make an area to play on."; };
     make_gui.add_item(area_ed_button, "area_editor");
     
+    //Particle editor button.
+    button_gui_item* part_ed_button =
+        new button_gui_item("Particles", game.sys_assets.fnt_area_name);
+    part_ed_button->on_draw =
+    [ = ](const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_PARTICLE_EDITOR, center, size, particle_editor_icon_left
+        );
+        draw_button(
+            center, size,
+            part_ed_button->text, part_ed_button->font,
+            part_ed_button->color, part_ed_button->selected,
+            part_ed_button->get_juice_value()
+        );
+    };
+    part_ed_button->on_activate =
+    [](const point &) {
+        game.fade_mgr.start_fade(false, []() {
+            game.change_state(game.states.particle_ed);
+        });
+    };
+    part_ed_button->on_get_tooltip =
+    []() { return "Make generators that create particles."; };
+    make_gui.add_item(part_ed_button, "particle_editor");
+    
     //GUI editor button.
     button_gui_item* gui_ed_button =
-        new button_gui_item("GUI editor", game.sys_assets.fnt_area_name);
+        new button_gui_item("GUI", game.sys_assets.fnt_area_name);
     gui_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -511,31 +536,6 @@ void main_menu_state::init_gui_make_page() {
     gui_ed_button->on_get_tooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
     make_gui.add_item(gui_ed_button, "gui_editor");
-    
-    //Particle editor button.
-    button_gui_item* part_ed_button =
-        new button_gui_item("Particle editor", game.sys_assets.fnt_area_name);
-    part_ed_button->on_draw =
-        [=](const point& center, const point& size) {
-        draw_menu_button_icon(
-            MENU_ICON_GUI_EDITOR, center, size, particle_editor_icon_left
-        );
-        draw_button(
-            center, size,
-            part_ed_button->text, part_ed_button->font,
-            part_ed_button->color, part_ed_button->selected,
-            part_ed_button->get_juice_value()
-        );
-        };
-    part_ed_button->on_activate =
-        [](const point&) {
-        game.fade_mgr.start_fade(false, []() {
-            game.change_state(game.states.particle_ed);
-            });
-        };
-    part_ed_button->on_get_tooltip =
-        []() { return "Create and modify particles."; };
-    make_gui.add_item(part_ed_button, "particle_editor");
     
     //Back button.
     make_gui.back_item =

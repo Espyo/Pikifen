@@ -1,3 +1,5 @@
+name=Pause menu -- exit confirmation
+description=GUI for the exit confirmation sub-menu of the pause menu.
 positions{
 	cancel=19.0000 83.0000 30.0000 10.0000
 	confirm=81.0000 83.0000 30.0000 10.0000

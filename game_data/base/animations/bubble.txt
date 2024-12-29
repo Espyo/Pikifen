@@ -1,3 +1,5 @@
+name=Bubble
+description=Bubble on top of a Pikmin that is choking.
 animations{
 	main{
 		frames{

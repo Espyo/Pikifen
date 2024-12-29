@@ -48,7 +48,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     pg.duration_deviation = 0.1f;
     pg.emission.interval_deviation = 0.05f;
     pg.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-    pg.emission.max_circular_radius = radius * 0.75f;
+    pg.emission.circle_outer_dist = radius * 0.75f;
     pg.size_deviation = 4.0f;
     particle_generators.push_back(pg);
     

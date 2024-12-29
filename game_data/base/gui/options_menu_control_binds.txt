@@ -1,3 +1,5 @@
+name=Options menu -- control binds
+description=GUI for the control binds page of the options menu
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	header=50.0000 5.0000 50.0000 6.0000

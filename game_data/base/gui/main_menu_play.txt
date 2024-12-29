@@ -1,3 +1,5 @@
+name=Main menu -- play
+description=GUI for the main menu's "play" sub-menu.
 positions{
 	simple=42.0000 60.0000 60.0000 12.5000
 	mission=44.0000 78.0000 60.0000 12.5000

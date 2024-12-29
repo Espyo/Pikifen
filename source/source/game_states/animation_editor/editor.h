@@ -237,6 +237,9 @@ private:
         //Whether the dialog needs updating.
         bool must_update = true;
         
+        //Whether we need to focus on the text input widget.
+        bool needs_text_focus = true;
+        
     } new_dialog;
     
     

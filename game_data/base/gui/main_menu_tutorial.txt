@@ -1,3 +1,5 @@
+name=Main menu -- tutorial
+description=GUI for the main menu's tutorial question sub-menu.
 positions{
 	question=50.0000 60.0000 60.0000 12.5000
 	no=26.0000 80.8750 40.0000 10.2500

@@ -75,6 +75,9 @@ enum MENU_ICON {
     //Main menu area editor button.
     MENU_ICON_AREA_EDITOR,
     
+    //Main menu particle editor button.
+    MENU_ICON_PARTICLE_EDITOR,
+    
     //Main menu GUI editor button.
     MENU_ICON_GUI_EDITOR,
     

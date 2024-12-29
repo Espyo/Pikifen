@@ -1058,6 +1058,107 @@ float get_point_sign(const point &p, const point &lp1, const point &lp2) {
 
 
 /**
+ * @brief Returns a random point inside of a rectangular ring, with uniform
+ * distribution.
+ *
+ * @param inner_dist Width and height of the inner rectangle of the ring.
+ * @param outer_dist Width and height of the outer rectangle of the ring.
+ * @return The point.
+ */
+point get_random_point_in_rectangular_ring(
+    const point &inner_dist, const point &outer_dist
+) {
+    float ring_thickness[2] {
+        outer_dist.x - inner_dist.x,
+        outer_dist.y - inner_dist.y
+    };
+    
+    //The idea is to split the ring into four rectangles, organized in a
+    //pinwheel pattern.
+    //In this pattern, the north and south rectangles have the exact same area,
+    //and the same is true for the west and east ones. We can simplify the
+    //process with this in mind.
+    point rect_sizes[2] = {
+        point(
+            ring_thickness[0],
+            outer_dist.y * 2.0f - ring_thickness[1]
+        ),
+        point(
+            outer_dist.x * 2.0f - ring_thickness[0],
+            ring_thickness[1]
+        )
+    };
+    float rect_areas[2] = {
+        rect_sizes[0].x* rect_sizes[0].y,
+        rect_sizes[1].x* rect_sizes[1].y
+    };
+    
+    //Pick one of the four rectangles (or in this case, one of the two axes),
+    //with weighted probability depending on the area.
+    size_t chosen_axis;
+    if(rect_areas[0] == 0.0f && rect_areas[1] == 0.0f) {
+        chosen_axis = randomi(0, 1);
+    } else {
+        chosen_axis = randomw(vector<float>(rect_areas, rect_areas + 2));
+    }
+    
+    point p_in_rectangle(
+        randomf(0.0f, rect_sizes[chosen_axis].x),
+        randomf(0.0f, rect_sizes[chosen_axis].y)
+    );
+    point final_p;
+    
+    if(chosen_axis == 0) {
+        //West or east rectangle. Let's assume the east rectangle.
+        final_p.x = inner_dist.x + p_in_rectangle.x,
+        final_p.y = -outer_dist.y + p_in_rectangle.y;
+    } else {
+        //North or south rectangle. Let's assume the south rectangle.
+        final_p.x = -inner_dist.x + p_in_rectangle.x;
+        final_p.y = inner_dist.y + p_in_rectangle.y;
+    }
+    
+    if(randomi(0, 1) == 0) {
+        //Return our point.
+        return final_p;
+    } else {
+        //Swap to the rectangle on the opposite side.
+        return point() - final_p;
+    }
+}
+
+
+/**
+ * @brief Returns a random point inside of a circular ring, with uniform
+ * distribution.
+ *
+ * @param inner_dist Radius of the inner circle of the ring.
+ * @param outer_dist Radius of the outer circle of the ring.
+ * @param arc Arc of the ring, or M_TAU for the whole ring.
+ * @param arc_rot Rotation of the arc.
+ * @return The point.
+ */
+point get_random_point_in_ring(
+    float inner_dist, float outer_dist,
+    float arc, float arc_rot
+) {
+    //https://stackoverflow.com/q/30564015
+    
+    float r =
+        inner_dist +
+        (outer_dist - inner_dist) * sqrt(randomf(0.0f, 1.0f));
+        
+    float theta =
+        randomf(
+            -arc / 2.0f + arc_rot,
+            arc / 2.0f + arc_rot
+        );
+        
+    return point(r * cos(theta), r * sin(theta));
+}
+
+
+/**
  * @brief Gets the bounding box coordinates of a rectangle that has undergone
  * translation, scale, and/or rotation transformations, and places it
  * in the specified point structs.

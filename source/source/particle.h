@@ -65,34 +65,39 @@ enum MOB_PARTICLE_GENERATOR_ID {
 };
 
 
-//Shapes for particles to render in
+//Shapes for particles to emit from.
 enum PARTICLE_EMISSION_SHAPE {
 
     //Circular emission area
     PARTICLE_EMISSION_SHAPE_CIRCLE,
     
     //Rectangular emission area
-    PARTICLE_EMISSION_SHAPE_RECTANGLE
+    PARTICLE_EMISSION_SHAPE_RECTANGLE,
+    
 };
 
 
+//Blending modes for particle colors.
 enum PARTICLE_BLEND_TYPE {
-    //Normal blending
+
+    //Normal blending.
     PARTICLE_BLEND_TYPE_NORMAL,
     
-    //Additive blending
-    PARTICLE_BLEND_TYPE_ADDITIVE
+    //Additive blending.
+    PARTICLE_BLEND_TYPE_ADDITIVE,
+    
 };
+
 
 /**
  * @brief A description of how a particle
- * generator should emit particles
+ * generator should emit particles.
  */
 struct particle_emission_struct {
 
     public:
     
-    //Shape to emit particles in
+    //Shape for particles to emit from.
     PARTICLE_EMISSION_SHAPE shape = PARTICLE_EMISSION_SHAPE_RECTANGLE;
     
     //Number of particles to spawn.
@@ -101,37 +106,38 @@ struct particle_emission_struct {
     //Maximum random deviation of amount.
     size_t number_deviation = 0;
     
-    //Interval at which to emit a new one. 0 means once only.
+    //Interval at which to emit a new one. 0 means they're emitted once only.
     float interval = 0.0f;
     
     //Maximum random deviation of interval.
     float interval_deviation = 0.0f;
     
-    //Maximum random deviation of position.
-    point max_rectangular_offset = point(0, 0);
+    //Maximum random deviation of position, for square shapes.
+    point rect_outer_dist = point(0, 0);
     
-    //Minimum random deviation of position.
-    point min_rectangular_offset = point(0, 0);
+    //Minimum random deviation of position, for square shapes.
+    point rect_inner_dist = point(0, 0);
     
-    //Max radius for circular emission
-    float max_circular_radius = 0;
+    //Maximum radius for circular emission.
+    float circle_outer_dist = 0;
     
-    //Min radius for circular emission
-    float min_circular_radius = 0;
+    //Minimum radius for circular emission.
+    float circle_inner_dist = 0;
     
-    //How many radians around the center particles can emit
-    float circular_arc = TAU;
+    //How many radians around the center particles can emit.
+    float circle_arc = TAU;
     
-    //How many radians the arc is rotated by
-    float circular_arc_rotation = 0;
+    //How many radians the arc is rotated by.
+    float circle_arc_rot = 0;
+    
     
     //--- Function declarations ---
     
     explicit particle_emission_struct(
         const float emission_interval = 0.0f, const size_t number = 1
     );
-    
     point get_emission_offset();
+    
 };
 
 
@@ -154,9 +160,9 @@ struct particle {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Angle the bitmap should be at.
-    float rotation = 0.0f;
+    float bmp_angle = 0.0f;
     
-    //Bitmap string
+    //The bitmap's internal name, or an empty string to use a circle.
     string file = "";
     
     //Current state.
@@ -188,13 +194,13 @@ struct particle {
     //Current color.
     keyframe_interpolator<ALLEGRO_COLOR> color;
     
-    //Friction
+    //Friction.
     float friction = 0.0f;
     
-    //How much the particles have been slowed since being created
+    //How much the particle has been slowed since being created.
     point total_friction_applied = point(0, 0);
     
-    //Blend type
+    //Blend type.
     PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
     
     //Other stuff.
@@ -213,13 +219,12 @@ struct particle {
             PARTICLE_PRIORITY_HIGH,
         const ALLEGRO_COLOR initial_color = COLOR_WHITE
     );
-    void tick(float delta_t);
     void draw();
-    
     void set_bitmap(
         const string &new_file_name,
         data_node* node = nullptr
     );
+    void tick(float delta_t);
     
 };
 
@@ -289,13 +294,13 @@ struct particle_generator : public content {
     //All particles created are based on this one.
     particle base_particle;
     
-    //How the generator should emit particles
+    //How the generator should emit particles.
     particle_emission_struct emission;
     
     //Follow the given mob's coordinates.
     mob* follow_mob = nullptr;
     
-    //Offset the follow mob coordinates by this.
+    //Offset the follow mob coordinates by this, relative to the mob angle.
     point follow_pos_offset;
     
     //Offset the follow mob Z by this.
@@ -305,7 +310,7 @@ struct particle_generator : public content {
     float* follow_angle = nullptr;
     
     //Maximum random deviation of the bitmap's rotation.
-    float rotation_deviation = 0.0f;
+    float bmp_angle_deviation = 0.0f;
     
     //Maximum random deviation of duration.
     float duration_deviation = 0.0f;
@@ -328,6 +333,7 @@ struct particle_generator : public content {
     //How many degress linear speed can be rotated by.
     float linear_speed_angle_deviation = 0.0f;
     
+    
     //--- Function declarations ---
     
     explicit particle_generator(
@@ -339,6 +345,7 @@ struct particle_generator : public content {
     void reset();
     void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
     void save_to_data_node(data_node* node);
+    
     
     private:
     

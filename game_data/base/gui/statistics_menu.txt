@@ -1,3 +1,5 @@
+name=Statistics menu
+description=GUI for the statistics menu.
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	header=50.0000 5.0000 50.0000 6.0000

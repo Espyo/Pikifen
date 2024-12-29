@@ -1,3 +1,5 @@
+name=Fire
+description=Fire on top of a Pikmin that's burning up.
 animations{
 	main{
 		frames{

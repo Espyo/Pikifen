@@ -1,4 +1,5 @@
-name
+name=Ink
+description=Ink on top of a Pikmin that's been inked.
 engine_version=0.25.0
 animations{
 	main{

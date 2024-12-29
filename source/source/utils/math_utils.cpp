@@ -230,6 +230,27 @@ int randomi(int minimum, int maximum) {
 
 
 /**
+ * @brief Performs a weighted random pick, and returns the index of the chosen
+ * item.
+ *
+ * @param weights A vector with the weight of each item.
+ * @return Index of the chosen item, or 0 on error.
+ */
+size_t randomw(const vector<float> &weights) {
+    float weight_sum = 0.0f;
+    for(size_t i = 0; i < weights.size(); i++) {
+        weight_sum += weights[i];
+    }
+    float r = randomf(0.0f, weight_sum);
+    for(size_t i = 0; i < weights.size(); i++) {
+        if(r < weights[i]) return i;
+        r -= weights[i];
+    }
+    return 0.0f;
+}
+
+
+/**
  * @brief Sums a number to another (even if negative), and then
  * wraps that number across a limit, applying a modulus operation.
  *
