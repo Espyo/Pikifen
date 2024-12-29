@@ -326,7 +326,7 @@ sectors{
 		z=0.0000
 		hazards=water
 		hazards_floor=true
-		texture=textures/test
+		texture=textures/dirt_soft
 		texture_rotate=1.0165
 	}
 	s{

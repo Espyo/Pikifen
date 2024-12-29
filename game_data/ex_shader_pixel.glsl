@@ -12,8 +12,8 @@ uniform vec4 foamEdges[MAX_FOAM_EDGES];
 uniform int edge_count;
 
 uniform vec2 tex_size;
-uniform vec4 tex_tint;
 uniform vec4 liq_tint;
+//Has the textures tint already applied.
 varying vec4 varying_color;
 
 //
@@ -215,9 +215,10 @@ void main()
    vec4 tmp = texture2D(al_tex, sample_texcoord);
 
    //Base tint
-   tmp.r *= tex_tint.r;
-   tmp.g *= tex_tint.g;
-   tmp.b *= tex_tint.b;
+   tmp.r *= varying_color.r;
+   tmp.g *= varying_color.g;
+   tmp.b *= varying_color.b;
+   tmp.a *= varying_color.a;
 
    //Liquid tint
    float liq_alpha = liq_tint.a + (nX / (effectScaleX * 7)) * 0.5;
