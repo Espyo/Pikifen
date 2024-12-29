@@ -13,6 +13,9 @@
 
 #include "drawing.h"
 
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
+
 #include "animation.h"
 #include "const.h"
 #include "functions.h"
@@ -27,10 +30,6 @@
 #include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
-#include <allegro5/allegro_opengl.h>
-#include <GL/glext.h>
-#include <GL/gl.h>
-
 
 namespace CONTROL_BIND_ICON {
 
@@ -355,6 +354,7 @@ void draw_liquid(
     }
     al_set_shader_float("fill_level", liquid_opacity_mult);
     float brightness_mult = s_ptr->brightness / 255.0;
+    al_set_shader_float("tex_brightness", brightness_mult);
 
     float liq_tint[4] = {
         l_ptr->main_color.r * brightness_mult,
@@ -365,8 +365,7 @@ void draw_liquid(
     al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
 
     int edgeCount = 0;
-    float foamEdges[256][4];
-
+    vector<edge*> edge_vec;
     /*
     We need to get a list of edges that the shader needs to check, 
     this can extend to other sectors whenever a liquid occupies more than one sector,
@@ -397,17 +396,32 @@ void draw_liquid(
                 }
                 continue;
             }
-
-            foamEdges[edgeCount][0] = sec_ptr->edges[e]->vertexes[0]->x;
-            foamEdges[edgeCount][1] = sec_ptr->edges[e]->vertexes[0]->y;
-            foamEdges[edgeCount][2] = sec_ptr->edges[e]->vertexes[1]->x;
-            foamEdges[edgeCount][3] = sec_ptr->edges[e]->vertexes[1]->y;
+            edge_vec.push_back(sec_ptr->edges[e]);
             edgeCount++;
         }
     }
 
+    float buffer_edges[edgeCount * 4];
+
+    for(size_t e = 0; e < edgeCount; e++) {
+        edge* edge = edge_vec[e];
+
+        buffer_edges[4 * e    ] = edge->vertexes[0]->x;
+        buffer_edges[4 * e + 1] = edge->vertexes[0]->y;
+        buffer_edges[4 * e + 2] = edge->vertexes[1]->x;
+        buffer_edges[4 * e + 3] = edge->vertexes[1]->y;
+    }
+
+    //Put the buffer onto the shader
+    GLuint ssbo;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(buffer_edges), buffer_edges, GL_STREAM_READ);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    
     al_set_shader_int("edge_count", edgeCount);
-    al_set_shader_float_vector("foamEdges", 4, (float*)foamEdges[0], 256);
     
     //Draw the sector now!
     unsigned char n_textures = 1;

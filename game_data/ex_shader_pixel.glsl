@@ -1,14 +1,20 @@
+#extension GL_ARB_shader_storage_buffer_object: enable
+
 #ifdef GL_ES
 precision mediump float;
 #endif
 
-#define MAX_FOAM_EDGES 256
+#define MAX_FOAM_EDGES 65535 * 4
 
 uniform sampler2D al_tex;
 uniform float time;
 
-//Formatted in (x1, y1, x2, y2)
-uniform vec4 foamEdges[MAX_FOAM_EDGES];
+readonly layout(std430, binding = 3) buffer foamLayout
+{
+   //Formatted in (x1, y1, x2, y2)
+   readonly float foamEdges[];
+};
+
 uniform int edge_count;
 
 uniform ivec2 tex_size;
@@ -18,6 +24,7 @@ varying vec4 varying_color;
 
 //
 uniform float fill_level;
+uniform float tex_brightness;
 
 uniform vec2 tex_translation;
 uniform vec2 tex_scale;
@@ -165,8 +172,8 @@ float getDistFromEdge(vec2 xy) {
    float minDist = 100000;
    for(int i = 0; i < MAX_FOAM_EDGES; i++) {
       if(i >= edge_count) return minDist;
-      vec2 v1 = foamEdges[i].xy;
-      vec2 v2 = foamEdges[i].zw;
+      vec2 v1 = vec2(foamEdges[4 * i], foamEdges[(4 * i) + 1]);
+      vec2 v2 = vec2(foamEdges[(4 * i) + 2], foamEdges[(4 * i) + 3]);
 
       //code from http://stackoverflow.com/a/3122532
       vec2 v1_to_p = xy - v1;
@@ -176,16 +183,16 @@ float getDistFromEdge(vec2 xy) {
 
       float v1_to_p_dot_v1_to_v2 = (v1_to_p.x * v1_to_v2.x) + (v1_to_p.y * v1_to_v2.y);
 
-      float r = max(0, min(1, v1_to_p_dot_v1_to_v2 / v1_to_v2_squared));
+      float r = max(0.0, min(1.0, v1_to_p_dot_v1_to_v2 / v1_to_v2_squared));
 
       vec2 closest_point = v1 + (v1_to_v2 * r);
 
       vec2 p_to_c = closest_point - xy;
 
-      float dist = sqrt(pow(p_to_c.x, 2) + pow(p_to_c.y, 2));
+      float dist = sqrt(pow(p_to_c.x, 2.0) + pow(p_to_c.y, 2.0));
 
       //Add a lowest possible value to prevent seams
-      minDist = max(1, min(minDist, dist));
+      minDist = max(1.0, min(minDist, dist));
    }
    return minDist;
 }
@@ -210,7 +217,7 @@ void main()
    vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
    //Convert from world coords to texture coords
    vec2 sample_texcoord =
-      vec2((varying_texcoord.x + pEffect.x) / (float)tex_size.x, (-varying_texcoord.y + pEffect.y) / (float)tex_size.y);
+      vec2((varying_texcoord.x + pEffect.x) / float(tex_size.x), (-varying_texcoord.y + pEffect.y) / float(tex_size.y));
 
    vec4 tmp = texture2D(al_tex, sample_texcoord);
 
@@ -229,16 +236,28 @@ void main()
    tmp.b *= 1 + (liq_tint.b - 1) * liq_alpha;
 
    //Random shines
-   float shineScale = max(0, (nX / effectScaleX) - 0.4);
+   float shineScale = nX / effectScaleX;
+   shineScale -= 0.4;
+   shineScale *= 2;
+   shineScale = clamp(shineScale, 0.0, 1.0);
+   shineScale *= tex_brightness;
 
-   tmp.r += shineScale * 2;
-   tmp.g += shineScale * 2;
-   tmp.b += shineScale * 2;
+   tmp.r += shineScale;
+   tmp.g += shineScale;
+   tmp.b += shineScale;
 
    //Edge foam
-   float edgeSize = 11 + (10 + sin(time) * 5) * perlin_noise(worldCoords, 0.04, step, 0.7);
-   edgeSize *= fill_level;
-   float edgeScale = min(0.6, max((edgeSize - getDistFromEdge(worldCoords)) / edgeSize - 0.1 , 0));
+   float maxDist = 25;
+   maxDist += sin(time + (worldCoords.x / 100)) * 3;
+   maxDist += ((2 * perlin_noise(worldCoords, 0.02, step, 0.2)) - 1) * 5;
+   maxDist = max(1.0, maxDist);
+   //edgeSize *= min(0.0, perlin_noise(worldCoords, 0.01, step, 0.3));
+   maxDist *= fill_level;
+   float edgeScale = maxDist - getDistFromEdge(worldCoords);
+   //Convert to 0-1
+   edgeScale /= maxDist;
+   edgeScale = clamp(edgeScale, 0.0, 0.8);
+   edgeScale *= 0.6;
 
    tmp.r += edgeScale;
    tmp.g += edgeScale;
