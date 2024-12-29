@@ -13,9 +13,6 @@
 
 #include "drawing.h"
 
-#include <epoxy/gl.h>
-#include <epoxy/glx.h>
-
 #include "animation.h"
 #include "const.h"
 #include "functions.h"
@@ -61,9 +58,6 @@ const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 
 //Liquid surfaces wobble using this time scale.
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
-
-//Liquid surfaces wobble using this time scale.
-ALLEGRO_SHADER* LIQUID_SHADER = nullptr;
 
 //Loading screen subtext padding.
 const int LOADING_SCREEN_PADDING = 64;
@@ -330,21 +324,8 @@ void draw_liquid(
     if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
 
-    if(!DRAWING::LIQUID_SHADER) {
-        //Create the shader
-        DRAWING::LIQUID_SHADER = al_create_shader(ALLEGRO_SHADER_GLSL);
-
-        const char *vsource = "game_data/ex_shader_vertex.glsl";
-        const char *psource = "game_data/ex_shader_pixel.glsl";
-        if (!al_attach_shader_source_file(DRAWING::LIQUID_SHADER, ALLEGRO_PIXEL_SHADER, psource)) {
-            crash("al_attach_shader_source_file failed:\n", al_get_shader_log(DRAWING::LIQUID_SHADER), 0);
-        }
-        if (!al_attach_shader_source_file(DRAWING::LIQUID_SHADER, ALLEGRO_VERTEX_SHADER, vsource)) {
-            crash("al_attach_shader_source_file failed:\n", al_get_shader_log(DRAWING::LIQUID_SHADER), 0);
-        }
-        al_build_shader(DRAWING::LIQUID_SHADER);
-    }
-    al_use_shader(DRAWING::LIQUID_SHADER);
+    ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
+    al_use_shader(liq_shader);
     al_set_shader_float("time", time);
 
     float liquid_opacity_mult = 1.0f;

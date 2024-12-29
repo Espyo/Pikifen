@@ -1,3 +1,52 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Shader related functions.
+ */
+
+#include "shaders.h"
+#include "functions.h"
+#include "game.h"
+
+shader_manager::shader_manager(){
+
+}
+
+ALLEGRO_SHADER* shader_manager::get_shader(SHADER_TYPE shader_type) {
+    assert(shader_type != N_SHADER_TYPES);
+
+    return compiled_shaders[(int)shader_type];
+}
+
+
+void shader_manager::compile_shaders() {
+
+//const char* def_vert_shader
+#pragma region Default Vertex Shader
+const char* def_vert_shader = R"(
+attribute vec4 al_pos;
+attribute vec4 al_color;
+attribute vec2 al_texcoord;
+uniform mat4 al_projview_matrix;
+varying vec4 varying_color;
+varying vec2 varying_texcoord;
+
+void main()
+{
+   varying_color = al_color;
+   varying_texcoord = al_texcoord;
+   gl_Position = al_projview_matrix * al_pos;
+}
+)";
+#pragma endregion
+
+//const char* liquid_pixel_shader
+#pragma region Liquid Fragment Shader
+char* liquid_pixel_shader = R"(
 #extension GL_ARB_shader_storage_buffer_object: enable
 
 #ifdef GL_ES
@@ -264,4 +313,16 @@ void main()
    tmp.b += edgeScale;
 
    gl_FragColor = tmp;
+}
+)";
+#pragma endregion
+
+
+//Create the shader
+compiled_shaders[SHADER_TYPE_LIQUID] = al_create_shader(ALLEGRO_SHADER_GLSL);
+//Asserts exist for shader writing
+assert(al_attach_shader_source(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_PIXEL_SHADER, liquid_pixel_shader));
+assert(al_attach_shader_source(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_VERTEX_SHADER, def_vert_shader));
+al_build_shader(compiled_shaders[SHADER_TYPE_LIQUID]);
+
 }

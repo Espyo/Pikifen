@@ -660,6 +660,7 @@ void init_event_things(
  */
 void init_misc() {
     game.mouse_cursor.init();
+    game.shaders.compile_shaders();
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
