@@ -30,15 +30,29 @@ vertexes{
 	v=320.0000 96.0000
 	v=160.0000 320.0000
 	v=32.0000 320.0000
+	v=-136.0000 -652.0000
+	v=-124.0000 -796.0000
+	v=84.0000 -776.0000
+	v=32.0000 -640.0000
+	v=-320.0000 -64.0000
+	v=-96.0000 -64.0000
+	v=-96.0000 320.0000
+	v=-832.0000 -1376.0000
+	v=1120.0000 -1440.0000
+	v=1152.0000 608.0000
+	v=-1024.0000 800.0000
+	v=-320.0000 -192.0000
+	v=-192.0000 -192.0000
+	v=-192.0000 -320.0000
 }
 edges{
 	e{
 		s=1 3
-		v=3 0
+		v=3 35
 	}
 	e{
-		s=1 3
-		v=0 18
+		s=1 14
+		v=44 18
 	}
 	e{
 		s=2 5
@@ -65,19 +79,19 @@ edges{
 		v=6 21
 	}
 	e{
-		s=-1 1
+		s=13 1
 		v=11 8
 	}
 	e{
-		s=-1 1
+		s=13 1
 		v=8 9
 	}
 	e{
-		s=-1 1
+		s=13 1
 		v=9 10
 	}
 	e{
-		s=-1 1
+		s=13 1
 		v=10 11
 	}
 	e{
@@ -97,15 +111,15 @@ edges{
 		v=17 15
 	}
 	e{
-		s=3 5
-		v=13 17
+		s=5 14
+		v=17 13
 	}
 	e{
 		s=2 4
 		v=14 16
 	}
 	e{
-		s=2 3
+		s=2 14
 		v=16 17
 	}
 	e{
@@ -113,8 +127,8 @@ edges{
 		v=18 14
 	}
 	e{
-		s=3 4
-		v=16 18
+		s=4 14
+		v=18 16
 	}
 	e{
 		s=1 5
@@ -181,12 +195,76 @@ edges{
 		v=29 28
 	}
 	e{
-		s=1 3
-		v=30 3
+		s=1 14
+		v=30 37
 	}
 	e{
-		s=10 3
+		s=10 14
 		v=13 30
+	}
+	e{
+		s=0 11
+		v=34 31
+	}
+	e{
+		s=0 11
+		v=31 32
+	}
+	e{
+		s=0 11
+		v=32 33
+	}
+	e{
+		s=0 11
+		v=33 34
+	}
+	e{
+		s=12 1
+		v=0 42
+	}
+	e{
+		s=1 3
+		v=37 3
+	}
+	e{
+		s=3 14
+		v=36 35
+	}
+	e{
+		s=3 14
+		v=37 36
+	}
+	e{
+		s=-1 13
+		v=41 38
+	}
+	e{
+		s=-1 13
+		v=38 39
+	}
+	e{
+		s=-1 13
+		v=39 40
+	}
+	e{
+		s=-1 13
+		v=40 41
+	}
+	e{
+		s=1 14
+		v=35 42
+	}
+	e{
+		s=12 1
+		v=44 0
+	}
+	e{
+		s=12 14
+		v=42 43
+	}
+	e{
+		s=12 14
+		v=43 44
 	}
 }
 sectors{
@@ -195,9 +273,11 @@ sectors{
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
+		texture_scale=0.7700 1.0000
+		texture_trans=24.0000 0.0000
 	}
 	s{
-		z=214.0000
+		z=132.0000
 		texture=textures/grass_dark
 	}
 	s{
@@ -212,6 +292,8 @@ sectors{
 		hazards=water
 		hazards_floor=true
 		texture=textures/test
+		texture_rotate=-0.2618
+		texture_tint=255 124 124
 	}
 	s{
 		z=0.0000
@@ -245,11 +327,37 @@ sectors{
 		hazards=water
 		hazards_floor=true
 		texture=textures/test
-		texture_rotate=1.3265
+		texture_rotate=1.0165
 	}
 	s{
 		z=0.0000
 		fade=true
+		hazards=water
+		hazards_floor=true
+		texture=textures/test
+	}
+	s{
+		z=0.0000
+		texture=textures/dirt
+	}
+	s{
+		z=0.0000
+		hazards=water
+		hazards_floor=true
+		texture=textures/test
+		texture_rotate=0.2155
+		texture_scale=1.8300 1.0000
+		texture_trans=14.0000 0.0000
+		texture_tint=0 251 51
+	}
+	s{
+		z=0.0000
+		hazards=water
+		hazards_floor=true
+		texture=textures/test
+	}
+	s{
+		z=0.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/test

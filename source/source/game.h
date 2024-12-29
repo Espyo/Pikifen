@@ -159,12 +159,6 @@ public:
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controller_numbers;
     
-    //Buffer with the liquid limit effect.
-    ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;
-    
-    //Info on every edge's liquid limit offset effect. Cache for performance.
-    vector<edge_offset_cache> liquid_limit_effect_caches;
-    
     //Loading screen subtext buffer.
     ALLEGRO_BITMAP* loading_subtext_bmp = nullptr;
     

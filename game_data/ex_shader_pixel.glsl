@@ -17,9 +17,11 @@ uniform vec4 liq_tint;
 varying vec4 varying_color;
 
 //
-uniform float alpha;
+uniform float fill_level;
 
-uniform mat4 tex_transform;
+uniform vec2 tex_translation;
+uniform vec2 tex_scale;
+uniform float tex_rotation;
 
 //World Position
 varying vec2 varying_texcoord;
@@ -136,8 +138,27 @@ float perlin_noise(vec2 xy, float noiseScale, vec2 step) {
    x += 0.03125 * color(xy * 32.0 * noiseScale - 8.0 * step);
    return x;
 }
+vec2 rotate(vec2 xy, float rotation) {
+   vec2 output = xy;
+   float c = cos(rotation);
+   float s = sin(rotation);
+   output.x = xy.x * c - xy.y * s;
+   output.y = xy.x * s + xy.y * c;
+   return output;
+}
+vec2 toWorldCoords(vec2 xy)
+{
 
-//Todo: replace with better algorithm
+   vec2 output = xy;
+   output += tex_translation;
+
+   output *= tex_scale;
+
+   output = rotate(output, tex_rotation);
+
+   return output;
+}
+
 float getDistFromEdge(vec2 xy) {
 
    //Arbitrarily large number my beloved.
@@ -147,46 +168,49 @@ float getDistFromEdge(vec2 xy) {
       vec2 v1 = foamEdges[i].xy;
       vec2 v2 = foamEdges[i].zw;
 
-      //Use Herons formula to find the area, then a=1/2bh to find H
-      vec2 a_to_b = vec2(v2.x - v1.x, v2.y - v1.y);
-      vec2 a_to_c = vec2(xy.x - v1.x, xy.y - v1.y);
-      vec2 b_to_c = vec2(xy.x - v2.x, xy.y - v2.y);
+      //code from http://stackoverflow.com/a/3122532
+      vec2 v1_to_p = xy - v1;
+      vec2 v1_to_v2 = v2 - v1;
 
-      float distA_B = sqrt(pow(a_to_b.x, 2) + pow(a_to_b.y, 2));
-      float distA_C = sqrt(pow(a_to_c.x, 2) + pow(a_to_c.y, 2));
-      float distB_C = sqrt(pow(b_to_c.x, 2) + pow(b_to_c.y, 2));
+      float v1_to_v2_squared = (v1_to_v2.x * v1_to_v2.x) + (v1_to_v2.y * v1_to_v2.y);
 
-      float semi_p = distA_B + distA_C + distB_C;
-      semi_p /= 2;
+      float v1_to_p_dot_v1_to_v2 = (v1_to_p.x * v1_to_v2.x) + (v1_to_p.y * v1_to_v2.y);
 
-      float area = sqrt(semi_p * (semi_p - distA_B) * (semi_p - distA_C) * (semi_p - distB_C));
+      float r = max(0, min(1, v1_to_p_dot_v1_to_v2 / v1_to_v2_squared));
 
-      float height = area * 2 / distA_B;
+      vec2 closest_point = v1 + (v1_to_v2 * r);
+
+      vec2 p_to_c = closest_point - xy;
+
+      float dist = sqrt(pow(p_to_c.x, 2) + pow(p_to_c.y, 2));
 
       //Add a lowest possible value to prevent seams
-      minDist = max(1, min(minDist, height));
+      minDist = max(1, min(minDist, dist));
    }
    return minDist;
 }
 
 void main()
 {
+   vec2 worldCoords = toWorldCoords(varying_texcoord);
+
    vec2 step = vec2(1.3, 1.7);
    float noiseScale = 0.01;
 
-   float nX = perlin_noise(varying_texcoord, noiseScale, step);
+   float nX = perlin_noise(worldCoords, noiseScale, step);
    float effectScaleX = 14;
    nX *= effectScaleX;
+   nX *= fill_level;
 
-   float nY = perlin_noise(varying_texcoord, noiseScale, step);
+   float nY = perlin_noise(worldCoords, noiseScale, step);
    float effectScaleY = 4;
    nY *= effectScaleY;
+   nY *= fill_level;
 
-   vec2 target_texcoord = vec2(varying_texcoord.x + nX, varying_texcoord.y + nY);
-
+   vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
    //Convert from world coords to texture coords
    vec2 sample_texcoord =
-      vec2(mod(target_texcoord.x, tex_size.x) / tex_size.x, mod(target_texcoord.y, tex_size.y) / tex_size.y);
+      vec2((varying_texcoord.x + pEffect.x) / tex_size.x, (-varying_texcoord.y + pEffect.y) / tex_size.y);
 
    vec4 tmp = texture2D(al_tex, sample_texcoord);
 
@@ -196,7 +220,8 @@ void main()
    tmp.b *= tex_tint.b;
 
    //Liquid tint
-   float liq_alpha = liq_tint.a + (nX / (effectScaleX * 7));
+   float liq_alpha = liq_tint.a + (nX / (effectScaleX * 7)) * 0.5;
+   liq_alpha *= fill_level;
 
    tmp.r *= 1 + (liq_tint.r - 1) * liq_alpha;
    tmp.g *= 1 + (liq_tint.g - 1) * liq_alpha;
@@ -210,8 +235,9 @@ void main()
    tmp.b += shineScale * 2;
 
    //Edge foam
-   float edgeSize = 11 + (10 + sin(time) * 5) * perlin_noise(varying_texcoord, 0.04, step);
-   float edgeScale = min(0.8, max((edgeSize - getDistFromEdge(target_texcoord)) / edgeSize - 0.1 , 0));
+   float edgeSize = 11 + (10 + sin(time) * 5) * perlin_noise(worldCoords, 0.04, step);
+   edgeSize *= fill_level;
+   float edgeScale = min(0.6, max((edgeSize - getDistFromEdge(worldCoords)) / edgeSize - 0.1 , 0));
 
    tmp.r += edgeScale;
    tmp.g += edgeScale;

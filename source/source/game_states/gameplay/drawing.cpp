@@ -1820,15 +1820,8 @@ void gameplay_state::draw_tree_shadows() {
  * @param bmp_output If not nullptr, draw the area onto this.
  */
 void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
-    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
     ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = nullptr;
     if(!bmp_output) {
-        update_offset_effect_buffer(
-            game.cam.box[0], game.cam.box[1],
-            game.liquid_limit_effect_caches,
-            game.liquid_limit_effect_buffer,
-            true
-        );
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
             game.wall_smoothing_effect_caches,
@@ -1843,22 +1836,11 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         );
         
     } else {
-        custom_liquid_limit_effect_buffer =
-            al_create_bitmap(
-                al_get_bitmap_width(bmp_output),
-                al_get_bitmap_height(bmp_output)
-            );
         custom_wall_offset_effect_buffer =
             al_create_bitmap(
                 al_get_bitmap_width(bmp_output),
                 al_get_bitmap_height(bmp_output)
             );
-        update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
-            game.liquid_limit_effect_caches,
-            custom_liquid_limit_effect_buffer,
-            true
-        );
         update_offset_effect_buffer(
             point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
             game.wall_smoothing_effect_caches,
@@ -2048,13 +2030,6 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             draw_sector_edge_offsets(
                 c_ptr->sector_ptr,
                 bmp_output ?
-                custom_liquid_limit_effect_buffer :
-                game.liquid_limit_effect_buffer,
-                liquid_opacity_mult
-            );
-            draw_sector_edge_offsets(
-                c_ptr->sector_ptr,
-                bmp_output ?
                 custom_wall_offset_effect_buffer :
                 game.wall_offset_effect_buffer,
                 1.0f
@@ -2097,7 +2072,6 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     }
     
     if(bmp_output) {
-        al_destroy_bitmap(custom_liquid_limit_effect_buffer);
         al_destroy_bitmap(custom_wall_offset_effect_buffer);
     }
 }

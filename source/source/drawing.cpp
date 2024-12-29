@@ -27,6 +27,9 @@
 #include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
+#include <allegro5/allegro_opengl.h>
+#include <GL/glext.h>
+#include <GL/gl.h>
 
 
 namespace CONTROL_BIND_ICON {
@@ -354,7 +357,7 @@ void draw_liquid(
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
-    al_set_shader_float("alpha", liquid_opacity_mult);
+    al_set_shader_float("fill_level", liquid_opacity_mult);
     float brightness_mult = s_ptr->brightness / 255.0;
 
     float tex_tint[4] = {
@@ -373,6 +376,7 @@ void draw_liquid(
     al_set_shader_float_vector("tex_tint", 4, &tex_tint[0], 1);
     al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
 
+    //Todo: add fade texture support
     if(s_ptr->texture_info.bitmap) {
         float bmpSize[2] = {
             al_get_bitmap_width(s_ptr->texture_info.bitmap), 
@@ -398,6 +402,7 @@ void draw_liquid(
         al_set_shader_int("edge_count", edgeCount);
         al_set_shader_float_vector("foamEdges", 4, (float*)foamEdges[0], 256);
 
+        //Needs to be a float due to rounding on shader side
         al_set_shader_float_vector("tex_size", 2, &bmpSize[0], 1);
 
         ALLEGRO_TRANSFORM tra;
@@ -409,6 +414,19 @@ void draw_liquid(
             1.0f / s_ptr->texture_info.scale.y,
             -s_ptr->texture_info.rot
         );
+
+        float textureOffset[2] = {
+            s_ptr->texture_info.translation.x, 
+            s_ptr->texture_info.translation.y
+        };
+        float textureScale[2] = {
+            s_ptr->texture_info.scale.x, 
+            s_ptr->texture_info.scale.y
+        };
+
+        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
+        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
+        al_set_shader_float("tex_rotation", s_ptr->texture_info.rot);
 
         for(size_t v = 0; v < n_vertexes; v++) {
         
@@ -432,7 +450,13 @@ void draw_liquid(
             av[v].x *= scale;
             av[v].y *= scale;
         }
-        
+        GLuint texture = al_get_opengl_texture(s_ptr->texture_info.bitmap);
+        if(texture != 0) {
+            glBindTexture(GL_TEXTURE_2D, texture);  
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        }
+
         al_draw_prim(
             av, nullptr, s_ptr->texture_info.bitmap,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST

@@ -703,7 +703,6 @@ void init_misc() {
     game.maker_tools.keys[18] = MAKER_TOOL_TYPE_COLLISION;
     game.maker_tools.keys[19] = MAKER_TOOL_TYPE_HUD;
     
-    game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
     game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
 }
 

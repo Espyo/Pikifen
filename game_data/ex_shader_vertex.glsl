@@ -10,5 +10,5 @@ void main()
 {
    varying_color = al_color;
    varying_texcoord = al_texcoord;
-   gl_Position = al_projview_matrix * al_pos;;
+   gl_Position = al_projview_matrix * al_pos;
 }
