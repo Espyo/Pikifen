@@ -116,13 +116,13 @@ bool ImGui::Combo(
             label, &current_item_idx, item_display_names,
             popup_max_height_in_items
         );
-    
+        
     if(current_item_idx == -1) {
         current_item->clear();
     } else {
         *current_item = item_internal_values[current_item_idx];
     }
-
+    
     return result;
 }
 
@@ -179,6 +179,13 @@ bool ImGui::DragTime2(
     *total_amount = part1 * 60 + part2;
     
     return result;
+}
+
+void ImGui::FocusOnInputText(bool &condition) {
+    if(!ImGui::IsAnyItemActive() && condition) {
+        ImGui::SetKeyboardFocusHere();
+        condition = false;
+    }
 }
 
 

@@ -300,7 +300,7 @@ struct particle_generator : public content {
     //Follow the given mob's coordinates.
     mob* follow_mob = nullptr;
     
-    //Offset the follow mob coordinates by this.
+    //Offset the follow mob coordinates by this, relative to the mob angle.
     point follow_pos_offset;
     
     //Offset the follow mob Z by this.

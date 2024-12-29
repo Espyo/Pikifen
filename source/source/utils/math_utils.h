@@ -17,16 +17,20 @@
 #include <math.h>
 #include <string>
 #include <stdint.h>
+#include <vector>
+
+using std::vector;
+
 
 constexpr float TAU = (float)M_PI * 2.0f;
 
 
 //Methods for easing numbers.
 enum EASING_METHOD {
-    
+
     //No easing. AKA linear interpolation.
     EASE_METHOD_NONE,
-
+    
     //Eased as it goes in, then gradually goes out normally.
     EASE_METHOD_IN,
     
@@ -77,5 +81,6 @@ float interpolate_number(
 );
 float randomf(float min, float max);
 int randomi(int min, int max);
+size_t randomw(const vector<float> &weights);
 int sum_and_wrap(int nr, int sum, int wrap_limit);
 float wrap_float(float nr, float minimum, float maximum);

@@ -12,6 +12,7 @@
 
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../libs/imgui/imgui_stdlib.h"
 #include "../../utils/allegro_utils.h"
 #include "../../utils/imgui_utils.h"
 #include "../../utils/string_utils.h"
@@ -64,7 +65,20 @@ void particle_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void particle_editor::open_new_dialog() {
-    //TODO
+    new_dialog.must_update = true;
+    open_dialog(
+        "Create a new particle generator",
+        std::bind(&particle_editor::process_gui_new_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->close_callback = [this] () {
+        new_dialog.pack.clear();
+        new_dialog.internal_name = "my_particle_generator";
+        new_dialog.problem.clear();
+        new_dialog.part_gen_path.clear();
+        new_dialog.must_update = true;
+    };
+    
 }
 
 
@@ -117,12 +131,6 @@ void particle_editor::process_gui() {
     canvas_br.x = br.x;
     canvas_br.y = br.y;
     ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
-    
-    //Small hack. Recenter the camera, if necessary.
-    if(must_recenter_cam) {
-        reset_cam(true);
-        must_recenter_cam = false;
-    }
     
     //Status bar.
     process_gui_status_bar();
@@ -232,7 +240,7 @@ void particle_editor::process_gui_menu_bar() {
         if(ImGui::BeginMenu("Editor")) {
         
             //Load file item.
-            if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
                 load_cmd(1.0f);
             }
@@ -370,6 +378,81 @@ void particle_editor::process_gui_menu_bar() {
 
 
 /**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void particle_editor::process_gui_new_dialog() {
+    //Pack widgets.
+    new_dialog.must_update |=
+        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+        
+    //Internal name input.
+    ImGui::Spacer();
+    ImGui::FocusOnInputText(new_dialog.needs_text_focus);
+    new_dialog.must_update |=
+        ImGui::InputText("Internal name", &new_dialog.internal_name);
+    set_tooltip(
+        "Internal name of the new particle generator.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Check if everything's ok.
+    if(new_dialog.must_update) {
+        new_dialog.problem.clear();
+        if(new_dialog.internal_name.empty()) {
+            new_dialog.problem = "You have to type an internal name first!";
+        } else if(!is_internal_name_good(new_dialog.internal_name)) {
+            new_dialog.problem =
+                "The internal name should only have lowercase letters,\n"
+                "numbers, and underscores!";
+        } else {
+            content_manifest temp_man;
+            temp_man.pack = new_dialog.pack;
+            temp_man.internal_name = new_dialog.internal_name;
+            new_dialog.part_gen_path =
+                game.content.custom_particle_gen.manifest_to_path(temp_man);
+            if(file_exists(new_dialog.part_gen_path)) {
+                new_dialog.problem =
+                    "There is already a particle generator with\n"
+                    "that internal name in that pack!";
+            }
+        }
+        new_dialog.must_update = false;
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(200);
+    if(!new_dialog.problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
+        auto really_create = [ = ] () {
+            create_part_gen(new_dialog.part_gen_path);
+            close_top_dialog();
+            close_top_dialog(); //Close the load dialog.
+        };
+        
+        if(
+            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.engine_developer
+        ) {
+            open_base_content_warning_dialog(really_create);
+        } else {
+            really_create();
+        }
+    }
+    if(!new_dialog.problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        new_dialog.problem.empty() ?
+        "Create the particle generator!" :
+        new_dialog.problem
+    );
+}
+
+
+/**
  * @brief Processes the options dialog for this frame.
  */
 void particle_editor::process_gui_options_dialog() {
@@ -494,23 +577,27 @@ void particle_editor::process_gui_options_dialog() {
  * @brief Processes the particle generator panel for this frame.
  */
 void particle_editor::process_gui_panel_generator() {
+    //Particle system text.
+    ImGui::Text("Particle system:");
+    
     //Particle count text.
+    ImGui::Indent();
     ImGui::Text(
-        "Particle count: %lu / %lu",
+        "Particles: %lu / %lu",
         part_mgr.get_count(), game.options.max_particles
     );
     
-    //Play/pause button.
+    //Play/pause particle system button.
     if(
         ImGui::ImageButton(
-            "playButton",
-            generator_running ?
+            "playSystemButton",
+            mgr_running ?
             editor_icons[EDITOR_ICON_STOP] :
             editor_icons[EDITOR_ICON_PLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        particle_playback_toggle_cmd(1.0f);
+        part_mgr_playback_toggle_cmd(1.0f);
     }
     set_tooltip(
         "Play or pause the particle system.",
@@ -532,6 +619,41 @@ void particle_editor::process_gui_panel_generator() {
     set_tooltip(
         "Delete all existing particles."
     );
+    ImGui::Unindent();
+    
+    //Particle generator text.
+    ImGui::Text("Generator:");
+    
+    //Play/pause particle generator button.
+    ImGui::Indent();
+    if(
+        ImGui::ImageButton(
+            "playGeneratorButton",
+            gen_running ?
+            editor_icons[EDITOR_ICON_STOP] :
+            editor_icons[EDITOR_ICON_PLAY],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        part_gen_playback_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        loaded_gen.emission.interval == 0.0f ?
+        "Emit particles now." :
+        "Play or pause the particle generator's emission.",
+        "Shift + Spacebar"
+    );
+    
+    //Particle generator angle value.
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(85);
+    ImGui::SliderAngle("Angle", &generator_angle_offset, 0.0f);
+    set_tooltip(
+        "Rotate the generator's facing angle in the editor by this much.\n"
+        "You can move the generator by just dragging the mouse in the canvas.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    ImGui::Unindent();
     
     //Emission node.
     ImGui::Spacer();
@@ -868,6 +990,9 @@ void particle_editor::process_gui_panel_generator() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
+                //We can't have living particles with destroyed bitmaps,
+                //so clear them all.
+                part_mgr.clear();
                 loaded_gen.base_particle.set_bitmap("");
                 changes_mgr.mark_as_changed();
             }
@@ -883,6 +1008,9 @@ void particle_editor::process_gui_panel_generator() {
             ) {
                 open_bitmap_dialog(
                 [this] (const string &bmp) {
+                    //We can't have living particles with destroyed bitmaps,
+                    //so clear them all.
+                    part_mgr.clear();
                     loaded_gen.base_particle.set_bitmap(bmp);
                     changes_mgr.mark_as_changed();
                     set_status("Picked an image successfully.");
@@ -1162,7 +1290,8 @@ void particle_editor::process_gui_panel_generator() {
             saveable_tree_node("generatorBehavior", "Outwards speed");
         set_tooltip(
             "Control the speed at which a particle moves out from\n"
-            "the center here."
+            "the center here. Use negative values to make them move\n"
+            "towards the center instead."
         );
         if(open_outwards_speed_node) {
         
@@ -1255,6 +1384,82 @@ void particle_editor::process_gui_panel_generator() {
         ImGui::TreePop();
         
     }
+    
+    //Info node.
+    ImGui::Spacer();
+    bool open_info_node =
+        saveable_tree_node("generator", "Info");
+    set_tooltip(
+        "Optional information about the particle generator."
+    );
+    if(open_info_node) {
+    
+        //Name input.
+        if(
+            ImGui::InputText("Name", &loaded_gen.name)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Name of this particle generator. Optional."
+        );
+        
+        //Description input.
+        if(
+            ImGui::InputText("Description", &loaded_gen.description)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Description of this particle generator. Optional."
+        );
+        
+        //Version input.
+        if(
+            ImGui::InputText("Version", &loaded_gen.version)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Version of the file, preferably in the \"X.Y.Z\" format. "
+            "Optional."
+        );
+        
+        //Maker input.
+        if(
+            ImGui::InputText("Maker", &loaded_gen.maker)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Name (or nickname) of who made this file. "
+            "Optional."
+        );
+        
+        //Maker notes input.
+        if(
+            ImGui::InputText("Maker notes", &loaded_gen.maker_notes)
+        ) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Extra notes or comments about the file for other makers to see. "
+            "Optional."
+        );
+        
+        //Notes input.
+        if(ImGui::InputText("Notes", &loaded_gen.notes)) {
+            changes_mgr.mark_as_changed();
+        }
+        set_tooltip(
+            "Extra notes or comments of any kind. "
+            "Optional."
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
 }
 
 
@@ -1339,7 +1544,24 @@ void particle_editor::process_gui_toolbar() {
         "Ctrl + S"
     );
     
+    //Toggle grid button.
     ImGui::SameLine(0, 16);
+    if(
+        ImGui::ImageButton(
+            "gridButton",
+            editor_icons[EDITOR_ICON_GRID],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        grid_toggle_cmd(1.0f);
+    }
+    set_tooltip(
+        "Toggle visibility of the grid.",
+        "Ctrl + G"
+    );
+    
+    //Leader silhouette button.
+    ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "silhouetteButton",
@@ -1354,18 +1576,19 @@ void particle_editor::process_gui_toolbar() {
         "Ctrl + P"
     );
     
+    //Emission shape button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "particleOffsetButton",
+            "emissionShapeButton",
             editor_icons[EDITOR_ICON_MOB_RADIUS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        emission_outline_toggle_cmd(1.0f);
+        emission_shape_toggle_cmd(1.0f);
     }
     set_tooltip(
-        "Toggle visibility of the emission deviation.",
+        "Toggle visibility of the emission shape.",
         "Ctrl + R"
     );
 }

@@ -248,7 +248,7 @@ void gui_editor::process_gui_menu_bar() {
         if(ImGui::BeginMenu("Editor")) {
         
             //Load file item.
-            if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
                 load_cmd(1.0f);
             }

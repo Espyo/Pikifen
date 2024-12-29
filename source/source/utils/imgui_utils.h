@@ -44,6 +44,7 @@ bool DragTime2(
     const string &format1 = "m", const string &format2 = "s",
     int limit1 = INT_MAX, int limit2 = 59
 );
+void FocusOnInputText(bool &condition);
 bool ImageButtonAndText(
     const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
     float button_padding, const string &text

@@ -383,7 +383,7 @@ void animation_editor::process_gui_menu_bar() {
         if(ImGui::BeginMenu("Editor")) {
         
             //Load file item.
-            if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
                 load_cmd(1.0f);
             }
@@ -553,9 +553,7 @@ void animation_editor::process_gui_new_dialog() {
     
     if(new_dialog.type == 0) {
         //Internal name input.
-        if(!ImGui::IsAnyItemActive()) {
-            ImGui::SetKeyboardFocusHere();
-        }
+        ImGui::FocusOnInputText(new_dialog.needs_text_focus);
         new_dialog.must_update |=
             ImGui::InputText("Internal name", &new_dialog.internal_name);
         set_tooltip(
@@ -1580,10 +1578,25 @@ void animation_editor::process_gui_panel_info() {
     //Panel title text.
     panel_title("INFO");
     
+    //Name input.
+    if(ImGui::InputText("Name", &db.name)) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "Name of this animation. Optional."
+    );
+    
+    //Description input.
+    if(ImGui::InputText("Description", &db.description)) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "Description of this animation. Optional."
+    );
+    
     //Version input.
-    string version = db.version;
-    if(ImGui::InputText("Version", &version)) {
-        db.version = version;
+    if(ImGui::InputText("Version", &db.version)) {
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Version of the file, preferably in the \"X.Y.Z\" format. "
@@ -1591,9 +1604,8 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Maker input.
-    string maker = db.maker;
-    if(ImGui::InputText("Maker", &maker)) {
-        db.maker = maker;
+    if(ImGui::InputText("Maker", &db.maker)) {
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Name (or nickname) of who made this file. "
@@ -1601,9 +1613,8 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Maker notes input.
-    string maker_notes = db.maker_notes;
-    if(ImGui::InputText("Maker notes", &maker_notes)) {
-        db.maker_notes = maker_notes;
+    if(ImGui::InputText("Maker notes", &db.maker_notes)) {
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Extra notes or comments about the file for other makers to see. "
@@ -1611,9 +1622,8 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Notes input.
-    string notes = db.notes;
-    if(ImGui::InputText("Notes", &notes)) {
-        db.notes = notes;
+    if(ImGui::InputText("Notes", &db.notes)) {
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Extra notes or comments of any kind. "

@@ -184,6 +184,13 @@ void get_miter_points(
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2
 );
+point get_random_point_in_rectangular_ring(
+    const point &inner_dist, const point &outer_dist
+);
+point get_random_point_in_ring(
+    float inner_dist, float outer_dist,
+    float arc, float arc_rot
+);
 void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, float angle,
     point* min_coords, point* max_coords

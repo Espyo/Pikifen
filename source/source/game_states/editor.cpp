@@ -777,14 +777,13 @@ bool editor::input_popup(
     const char* label, const char* prompt, string* text
 ) {
     bool ret = false;
+    needs_input_popup_text_focus = true;
     if(ImGui::BeginPopup(label)) {
         if(escape_was_pressed) {
             ImGui::CloseCurrentPopup();
         }
         ImGui::Text("%s", prompt);
-        if(!ImGui::IsAnyItemActive()) {
-            ImGui::SetKeyboardFocusHere();
-        }
+        ImGui::FocusOnInputText(needs_input_popup_text_focus);
         if(
             ImGui::InputText(
                 "##inputPopupText", text,
@@ -1171,9 +1170,14 @@ bool editor::keyframe_organizer(
             ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        float t = interpolator.get_keyframe(sel_keyframe_idx).first;
-        inter_t v = interpolator.get_keyframe(sel_keyframe_idx).second;
-        interpolator.add(t, v);
+        float prev_t = interpolator.get_keyframe(sel_keyframe_idx).first;
+        float next_t =
+            sel_keyframe_idx == interpolator.keyframe_count() - 1 ?
+            1.0f :
+            interpolator.get_keyframe(sel_keyframe_idx + 1).first;
+        float new_t = (prev_t + next_t) / 2.0f;
+        
+        interpolator.add(new_t, interpolator.get(new_t));
         sel_keyframe_idx++;
         set_status(
             "Added keyframe #" + i2s(sel_keyframe_idx + 1) + "."
@@ -1181,8 +1185,8 @@ bool editor::keyframe_organizer(
         result = true;
     }
     set_tooltip(
-        "Add a new keyframe after the curret one, by copying "
-        "data from the current one."
+        "Add a new keyframe after the currently selected one.\n"
+        "It will go between the current one and the one after."
     );
     
     if(interpolator.keyframe_count() > 1) {
@@ -1207,7 +1211,7 @@ bool editor::keyframe_organizer(
             result = true;
         }
         set_tooltip(
-            "Delete the current keyframe."
+            "Delete the currently selected keyframe."
         );
     }
     
@@ -1610,6 +1614,7 @@ void editor::open_message_dialog(
  * @brief Opens a dialog where the user can create a new pack.
  */
 void editor::open_new_pack_dialog() {
+    needs_new_pack_text_focus = true;
     open_dialog(
         "Create a new pack",
         std::bind(&editor::process_gui_new_pack_dialog, this)
@@ -2231,9 +2236,7 @@ void editor::process_gui_new_pack_dialog() {
     static string maker;
     
     //Internal name input.
-    if(!ImGui::IsAnyItemActive()) {
-        ImGui::SetKeyboardFocusHere();
-    }
+    ImGui::FocusOnInputText(needs_new_pack_text_focus);
     ImGui::InputText("Internal name", &internal_name);
     set_tooltip(
         "Internal name of the new pack.\n"
@@ -3329,10 +3332,7 @@ void editor::picker_info::process() {
         "Search filter or new item name" :
         "Search filter";
         
-    if(!ImGui::IsAnyItemActive() && needs_filter_box_focus) {
-        ImGui::SetKeyboardFocusHere();
-        needs_filter_box_focus = false;
-    }
+    ImGui::FocusOnInputText(needs_filter_box_focus);
     if(
         ImGui::InputTextWithHint(
             "##filter", filter_widget_hint.c_str(), &filter,

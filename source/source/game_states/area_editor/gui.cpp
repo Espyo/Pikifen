@@ -322,9 +322,7 @@ void area_editor::process_gui_new_dialog() {
         
     //Internal name input.
     ImGui::Spacer();
-    if(!ImGui::IsAnyItemActive()) {
-        ImGui::SetKeyboardFocusHere();
-    }
+    ImGui::FocusOnInputText(new_dialog.needs_text_focus);
     new_dialog.must_update |=
         ImGui::InputText("Internal name", &new_dialog.internal_name);
     set_tooltip(
@@ -411,7 +409,7 @@ void area_editor::process_gui_menu_bar() {
         if(ImGui::BeginMenu("Editor")) {
         
             //Load or create area item.
-            if(ImGui::MenuItem("Load or create area...", "Ctrl+L")) {
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
                 load_widget_pos = get_last_widget_pos();
                 load_cmd(1.0f);
             }

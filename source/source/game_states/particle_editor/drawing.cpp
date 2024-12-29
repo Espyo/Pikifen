@@ -21,21 +21,10 @@
  * @brief Handles the drawing part of the main loop of the particle editor.
  */
 void particle_editor::do_drawing() {
-    //Render what is needed for the (Dear ImGui) GUI.
-    //This will also render the canvas in due time.
-    ImGui::Render();
+    //The canvas drawing is handled by Dear ImGui elsewhere.
     
-    //Actually draw the GUI + canvas on-screen.
     al_clear_to_color(COLOR_BLACK);
-    ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-    
     draw_op_error_cursor();
-    
-    //And the fade manager atop it all.
-    game.fade_mgr.draw();
-    
-    //Finally, swap buffers.
-    al_flip_display();
 }
 
 
@@ -95,87 +84,6 @@ void particle_editor::draw_canvas() {
     
     al_use_transform(&game.world_to_screen_transform);
     
-    //Grid.
-    draw_grid(
-        game.options.particle_editor_grid_interval,
-        al_map_rgba(64, 64, 64, 84),
-        al_map_rgba(64, 64, 64, 40)
-    );
-    
-    //Center grid line.
-    point cam_top_left_corner(0, 0);
-    point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &cam_top_left_corner.x, &cam_top_left_corner.y
-    );
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
-    );
-    
-    al_draw_line(
-        0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
-    );
-    al_draw_line(
-        cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
-    );
-    
-    if(emission_offset_visible) {
-        switch (loaded_gen.emission.shape) {
-        case(PARTICLE_EMISSION_SHAPE_CIRCLE):
-        
-            if(loaded_gen.emission.circle_arc == TAU) {
-                al_draw_circle(
-                    0, 0, loaded_gen.emission.circle_outer_dist,
-                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
-                );
-                al_draw_circle(
-                    0, 0, loaded_gen.emission.circle_inner_dist,
-                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
-                );
-            } else {
-                al_draw_arc(
-                    0, 0, loaded_gen.emission.circle_outer_dist,
-                    -loaded_gen.emission.circle_arc / 2 + loaded_gen.emission.circle_arc_rot, loaded_gen.emission.circle_arc,
-                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
-                );
-                al_draw_arc(
-                    0, 0, loaded_gen.emission.circle_inner_dist,
-                    -loaded_gen.emission.circle_arc / 2 + loaded_gen.emission.circle_arc_rot, loaded_gen.emission.circle_arc,
-                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
-                );
-                
-            }
-            break;
-        case(PARTICLE_EMISSION_SHAPE_RECTANGLE):
-            al_draw_rectangle(
-                -loaded_gen.emission.rect_outer_dist.x, -loaded_gen.emission.rect_outer_dist.y,
-                loaded_gen.emission.rect_outer_dist.x, loaded_gen.emission.rect_outer_dist.y,
-                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
-            );
-            al_draw_rectangle(
-                -loaded_gen.emission.rect_inner_dist.x, -loaded_gen.emission.rect_inner_dist.y,
-                loaded_gen.emission.rect_inner_dist.x, loaded_gen.emission.rect_inner_dist.y,
-                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
-            );
-            break;
-        }
-    }
-    
-    //Leader silhouette.
-    if(leader_silhouette_visible) {
-        float x_offset = 32;
-        
-        draw_bitmap(
-            game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
-            point(-1, game.config.standard_leader_radius * 2.0f),
-            0, al_map_rgba(240, 240, 240, 160)
-        );
-    }
-    
     //Particles.
     vector<world_component> components;
     components.reserve(part_mgr.get_count());
@@ -199,6 +107,98 @@ void particle_editor::draw_canvas() {
         if(c_ptr->particle_ptr) {
             c_ptr->particle_ptr->draw();
         }
+    }
+    
+    //Grid.
+    if(grid_visible) {
+        point cam_top_left_corner(0, 0);
+        point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
+        al_transform_coordinates(
+            &game.screen_to_world_transform,
+            &cam_top_left_corner.x, &cam_top_left_corner.y
+        );
+        al_transform_coordinates(
+            &game.screen_to_world_transform,
+            &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+        );
+        
+        al_draw_line(
+            0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
+            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+        );
+        al_draw_line(
+            cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
+            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+        );
+    }
+    
+    //Emission shapes.
+    if(emission_shape_visible) {
+        switch (loaded_gen.emission.shape) {
+        case PARTICLE_EMISSION_SHAPE_CIRCLE: {
+    
+            if(loaded_gen.emission.circle_arc == TAU) {
+                al_draw_circle(
+                    generator_pos_offset.x, generator_pos_offset.y,
+                    loaded_gen.emission.circle_outer_dist,
+                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                );
+                al_draw_circle(
+                    generator_pos_offset.x, generator_pos_offset.y,
+                    loaded_gen.emission.circle_inner_dist,
+                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                );
+            } else {
+                al_draw_arc(
+                    generator_pos_offset.x, generator_pos_offset.y,
+                    loaded_gen.emission.circle_outer_dist,
+                    -loaded_gen.emission.circle_arc / 2.0f +
+                    loaded_gen.emission.circle_arc_rot +
+                    generator_angle_offset,
+                    loaded_gen.emission.circle_arc,
+                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                );
+                al_draw_arc(
+                    generator_pos_offset.x, generator_pos_offset.y,
+                    loaded_gen.emission.circle_inner_dist,
+                    -loaded_gen.emission.circle_arc / 2.0f +
+                    loaded_gen.emission.circle_arc_rot +
+                    generator_angle_offset,
+                    loaded_gen.emission.circle_arc,
+                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                );
+            }
+            break;
+            
+        } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
+    
+            draw_rotated_rectangle(
+                generator_pos_offset,
+                loaded_gen.emission.rect_outer_dist * 2.0f,
+                generator_angle_offset,
+                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+            );
+            draw_rotated_rectangle(
+                generator_pos_offset,
+                loaded_gen.emission.rect_inner_dist * 2.0f,
+                generator_angle_offset,
+                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+            );
+            break;
+            
+        }
+        }
+    }
+    
+    //Leader silhouette.
+    if(leader_silhouette_visible) {
+        float x_offset = 32.0f;
+        
+        draw_bitmap(
+            game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+            point(-1, game.config.standard_leader_radius * 2.0f),
+            0, al_map_rgba(240, 240, 240, 160)
+        );
     }
     
     //Finish up.

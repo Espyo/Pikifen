@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * GUI editor drawing function.
+ * GUI editor drawing logic.
  */
 
 #include "editor.h"

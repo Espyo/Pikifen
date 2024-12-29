@@ -14,185 +14,103 @@
 <body onload="setup('Particle generators', ['Making content'], ['making.html']);">
   <div id="page-content">
     
-    <p>This page will guide you on how to make a particle generator for <i>Pikifen</i>. These are pieces of <a href="making.html#content">content</a> so you should know how content works in the engine in general before starting. A particle generator is a set of information about how the engine should throw particles into the game world. Particles are small images that don't interact with the environment, like rocks flying around, clouds of gas floating by, or even the trail left behind by thrown Pikmin and leaders. Then, in-game, enemies, or obstacles, or what have you can call one of these generators in order to generate particles.</p>
-
-    <h2 id="intro">Introduction</h2>
+    <p>This page will guide you on how to make a particle generator for <i>Pikifen</i>.</p>
     
-    <p>A generator can tell the engine to generate one single particle, or multiple ones, and instantly or over any amount of time. For instance, if an enemy wants to spit a puff of gas, it should generate 10 or so clouds of gas, all at once, and that's the end of it. But if an obstacle wants to continuously spit out thick smoke, it would generate gray clouds over time; it would likely spit a bunch of them every half second or so, to keep a constant stream. So the logic depends on what you want to use the generator for.</p>
+    <h2 id="key-concepts">Key concepts</h2>
 
-    <p>Particles are static images, but they can move, change size, and change opacity over time, and can also be tinted with a certain color. Each generator can only emit one type of particle, but their properties (size, position, etc.) are randomly decided every time one is created, according to the generator's settings. This decision is based on the deviation properties. For instance, when a particle of size 32 is created, if the size deviation property is set to 3, that means the particle can spawn with 3 fewer pixels in size, 3 more pixels in size, or anything in between. 0, for any deviation property, means no deviation, naturally.</p>
+    <dl>
+      <dt><b>Particle generators are pieces of <a href="making.html#content">content</a>.</b></dt>
+      <dd>You should know how content works in the engine in general before starting. The folders that have a list of all particle generators can be found in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/particle_generators</code>.</dd>
+      <dt><b>Particle generators contain information on how particles are generated.</b></dt>
+      <dd>Each one holds all the necessary information about how the engine should spawn and move particles in the game world. Then, in-game, enemies or obstacles or what have you can call one of these generators in order to generate particles.</dd>
+      <dt><b>Particles are small moving images that don't interact with the environment.</b></dt>
+      <dd>For example, rocks flying around, clouds of gas floating by, or even the trail left behind by thrown Pikmin and leaders.</dd>
+      <dt><b>Use the particle editor to help you create particle generators.</b></dt>
+      <dd>The particle editor, accessible from the main menu, can help you create particle generators, as well as see how they emit particles and what they look like in real time.</dd>
+      <dt><b>Generators can emit any number of particles, and do so only once or over any amount of time.</b></dt>
+      <dd>For instance, if an enemy wants to spit a puff of gas, it should generate 10 or so clouds of gas, all at once, and that's the end of it. But if an obstacle wants to continuously spit out thick smoke, it would generate gray clouds over time; it would likely spit a bunch of them every half second or so, to keep a constant stream.</dd>
+      <dt><b>Particles have a limited timespan, and can move, change size, and change color.</b></dt>
+      <dd>The generator sets the lifetime of each particle it creates, as well as their initial position, movement methods, and how their sizes and colors change over the course of their life.</dd>
+      <dt><b>Each generator only emits one type of particle, but their starting properties can be randomized.</b></dt>
+      <dd>Some of the generator's properties make it so that every single particle that is generated can have its position, size, and more get deviated randomly. For instance, when a particle of size 32 is created, if the size deviation property is set to 3, that means the particle can spawn with 3 fewer pixels in size, 3 more pixels in size, or anything in between. 0 for any deviation property means no deviation, naturally.</dd>
+    </dl>
 
-    <p>The folders that have a list of all particle generators are <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/particle_generators</code>. These contain all custom-made particle generators but do not contain particle generators hardcoded inside the engine's logic itself, for internal use. Each one per <a href="making.html#data-file">data file</a> in the folders is a generator, with the file's name representing the generator's <a href="making.html#content">internal name</a>.</p>
+    <h2 id="using">Using the particle editor</h2>
 
-    <h2 id="base">Base particle</h2>
+    <dl>
+      <dt><b>The left-hand side is your canvas.</b></dt>
+      <dd>It shows you what the particles look like as they're being emitted.</dd>
+      <dt><b>The right-hand side contains panels for you to edit properties with.</b><dt>
+      <dd>This is how you change the particle generator's properties. As you change them, the emissions in the canvas update in real time, though particles that have already been created may keep some of their old properties.</dd>
+      <dt><b>The bottom-left is the status bar. It can help if you get stuck.</b></dt>
+      <dd>The status bar will let you know what just happened, whether an operation finished successfully, or something went wrong. If you're confused, check it out.</dd>
+      <dt><b>In the canvas, use the left mouse button to move the generator.</b></dt>
+      <dd>If you want to know what the particles look like as the generator moves, just drag your mouse around the canvas. This can be helpful to preview how the particles would look on a moving object in-game, for instance.</dd>
+      <dt><b>Use the right mouse button to pan, and the mouse wheel to zoom.</b></dt>
+      <dd>In the canvas, the right mouse button and mouse wheel control your view. Clicking and double-clicking the mouse wheel will also reset your zoom level and camera position, respectively.</dd>
+      <dt><b>The topmost part of the control panel controls the particle previews in the canvas.</b></dt>
+      <dd>Use these widgets to pause or unpause the particle system, delete all particles (handy if you've accidentally made the particles linger around for ages!), pause or unpause the particle generator (if it's continuous), make it emit some particles (if it's single-emission), or rotate its facing angle.</dd>
+      <dt><b>The bottommost part of the control panel has some common content properties.</b></dt>
+      <dd>Use this to give the particle generator a proper name, describe it, and more.</dd>
+    </dl>
+
+    <h2 id="emission">Emission properties</h2>
+
+    <dl>
+      <dt><b>Use the mode properties to choose whether the particle generator emits once, or emits continuously.</b></dt>
+      <dd>If you choose to make it emit continuously, you can also specify the interval between emissions, as well as a random deviation of the interval.</dd>
+      <dt><b>"Number" controls how many particles spawn per emission.</b></dt>
+      <dd>Every time the particle emitter emits particles, it'll create these many. This number also has a random deviation.</dd>
+      <dt><b>A circle emission shape makes particles appear in a circle or ring area around the center.</b></dt>
+      <dd>To make them appear in a ring area, set "Inner distance" to the radius of the inner circle of the ring. Use "Outer distance" to control the outer circle. Particles will only appear inside this ring, making it useful for something like a large foot stomp that raises dust around its edges. If the inner distance is 0, the shape is effectively a circle instead. You can turn the visibility of the emission shape on in the toolbar to get a better understanding.</dd>
+      <dt><b>A rectangular emission shape works the same way, but with a rectangle or rectangular ring.</b></dt>
+      <dd>The "Inner distance" property controls the inner rectangle of the rectangular ring, and the "Outer distance" the outer rectangle. As before, you can turn on the visibility of the emission shape to better understand what's going on.</dd>
+    </dl>
+
+    <h2 id="particle-appearance">Particle appearance</h2>
+
+    <dl>
+      <dt><b>Use these widgets to set the particle's image, or make it a circle.</b></dt>
+      <dd>The image you choose must be one of the images in the game's content. If you instead remove the image, the particles will be flat circles.</dd>
+      <dt><b>You can rotate the image, and even make it random.</b></dt>
+      <dd>If the image you chose doesn't align properly with what you want the particles to do, just rotate it with the "Angle" property. You can also make it so each particle randomly deviates from this rotation.</dd>
+      <dt><b>Particles can have a single color, if you want. This also controls their opacity.</b></dt>
+      <dd>To make it so the particles only have one color, remove all keyframes in the "Color" property until only one remains. The keyframe's time does not matter. Then, simply set the color to tint the particle image with, and set the opacity in the alpha component.</dd>
+      <dt><b>Particles can have their color change over their lifespan.</b></dt>
+      <dd>To make the color change, you make use of multiple keyframes. The color it has when it spawns is controlled by the color information on the first keyframe. You can then add a new keyframe for later on, to indicate that by this or that point, you want the color to be this or that. As the particles grows older in-game, its color will smoothly transition from one keyframe to the next. You can add as many keyframes as you want. A time of 0 means the moment it's born, a time of 0.5 means halfway through its lifespan, a time of 1 is when it gets deleted, etc.</dd>
+      <dt><b>Normal blending works like normal, but additive blending makes particles lighter than what's behind them.</b></dt>
+      <dd>When a normal particle is drawn on-screen, it just shows its image on top of whatever is behind it, be it other particles or just the game world. But when a particle with additive blending is drawn, it <i>adds</i> its color to the color behind. Meaning the brighter the color behind, the brighter the overall picture will get in that zone. Use this to make it so areas that have a large concentration of additive particles glow bright.</dd>
+      <dt><b>Just like the color, a particle can have a fixed size, or have it change over time.</b></dt>
+      <dd>This logic works with keyframes, in the exact same way as colors. You can have different keyframes for sizing than those for color.</dd>
+      <dt><b>Each particle's individual size can also be deviated randomly.</b></dt>
+      <dd>To do this, edit the "Size deviation" property. This will be applied to its size throughout all its life, meaning that if a given particle has a size deviation of +10, and the generator dictates particles start at a size of 50 and grow to a size of 100, this particular particle will start at a size of 60 and grow to size 110.</dd>
+    </dl>
     
-    <p>As stated before, each generator can only generate one type of particle. The <code>base</code> block inside a generator's data in the data file specifies what the particle looks like. Its size, speed, etc. can all be deviated randomly when it spawns, and that is all controlled by the generator.</p>
+    <h2 id="particle-behavior">Particle behavior</h2>
 
-    <p>The base particle has the following properties:</p>
+    <dl>
+      <dt><b>Each particle has a limited lifespan, controlled by the "Duration" property.</b></dt>
+      <dd>This time is dictated in seconds. Each individual particle can also have a deviation on this time.</dd>
+      <dt><b>"Linear speed" makes a particle constantly want to move in the specified direction.</b></dt>
+      <dd>Use this to make the particle move in a specific direction, with a specific speed. With the use of keyframes, which work like the particle color keyframes, you can make the direction and speed change. All particles will be affected equally by this.</dd>
+      <dt><b>Linear speed can have random deviation, both on the X and Y components as well as on the angle.</b></dt>
+      <dd>Use the "Speed deviation" and "Angle deviation" properties to make each individual particle apply the specified X and Y speed, or angle shift, throughout its entire life.</dd>
+      <dt><b>"Outwards speed" makes a particle constantly want to move away from the generator's center.</b></dt>
+      <dd>Just like linear speed, this can be 0, constant, or change with keyframes. This can be combined with linear speed, since both forces take effect during the particle's whole life. Using negative values makes the particles want to move to the generator's center instead.</dd>
+      <dt><b>"Orbital speed" makes a particle constantly want to rotate around the generator's center.</b></dt>
+      <dd>Just like linear speed and outwards speed, this can be 0, constant, or change with keyframes. This is also combined with linear speed and outwards speed. Negative values make the particles rotate in the opposite direction.</dd>
+      <dt><b>Friction slows particles down over time.</b></dt>
+      <dd>The higher a particle's friction, the more it will slow down with time. This won't make the particle start moving backwards if it's already at 0 speed. This property can also be randomly deviated.</dd>
+    </dl>
 
-    <table class="props-t props-t-o">
-      <tr>
-        <td>bitmap</td>
-        <td>Image to use, on the </code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders. If empty, the particle won't use an image, but will use a colored, solid circle instead.</td>
-        <td>Internal name</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>duration</td>
-        <td>How long the particle lives for, in seconds. The closer it is to dying, the more transparent it becomes. This means that it fades with time on its own.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>friction</td>
-        <td>When a particle moves, it can slow down over time. The friction controls this. This property specifies the ratio of how much is lost by each second. 0 means no speed loss.</td>
-        <td>Number</td>
-        <td>1</td>
-      </tr>
-      <tr>
-        <td>gravity</td>
-        <td>If set to something other than 0, the created particle is pulled downward each time more over time, like the effects of gravity. This isn't "down" in the game world, this is "down" on the screen, meaning the particles are pulled south, really. Negative values can make the particle rise up each time more. Don't use this to simulate actual gravity on particles, since having a subtle pull to a direction looks good, but a harsh pull southwards may make no sense.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>size_grow_speed</td>
-        <td>Over time, its size increases by this much. This is measured in pixels per second. 0 means no change, and negative numbers make it shrink.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>size</td>
-        <td>Starting size, in pixels. The particle must be square, and this specifies its width or height.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>speed</td>
-        <td>Speed at which it moves horizontally and vertically, in pixels per second. Format: <code>speed = &lt;x&gt; &lt;y&gt;</code>. Naturally, 0 means it stays in place.</td>
-        <td>Coordinates</td>
-        <td>0 0</td>
-      </tr>
-      <tr>
-        <td>color</td>
-        <td>Starting color.</td>
-        <td>Color</td>
-        <td>255 255 255</td>
-      </tr>
-    </table>
-
-    <h2 id="generator">Generator properties</h2>
-    
-    <p>In the data file, you can specify the following properties to make it generate particles.</p>
-
-    <ul>
-      <li>All of the <a href="making.html#content-props">common content properties</a>.</li>
-    </ul>
-
-    <table class="props-t props-t-o">
-      <tr>
-        <td>emission_interval</td>
-        <td>A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>interval_deviation</td>
-        <td>The time between every every emission is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>number</td>
-        <td>Number of particles to spawn. Every bunch of particles generated contains X of them.</td>
-        <td>Number</td>
-        <td>1</td>
-      </tr>
-      <tr>
-        <td>number_deviation</td>
-        <td>The number of particles to spawn in each bunch is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>duration_deviation</td>
-        <td>The total duration of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>friction_deviation</td>
-        <td>The friction of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>gravity_deviation</td>
-        <td>The gravity of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>size_deviation</td>
-        <td>The size of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>pos_deviation</td>
-        <td>The X and Y coordinates of any created particle is deviated randomly by this amount.</td>
-        <td>Coordinates</td>
-        <td>0 0</td>
-      </tr>
-    </table>
-
-    <p>On top of this, there are two ways to control the direction a particle goes to when created:</p>
+    <h2 id="tips">Tips</h2>
     
     <ul>
-      <li>By the X/Y speeds of the particle, and their random variations.</li>
-      <li>By the angle at which the generator launches it, the launch speed, and their random variations.</li>
+      <li>Remember to save periodically. Although rare, it is possible for the editor to crash, or for you to quit accidentally, causing you to lose unsaved progress. Plus if you make a mistake, you can always go back that way.</li>
+      <li>The more particles are generated, the higher the performance impact. Try to keep the number of particles created by a particle generator low.</li>
+      <li>Use the options (in the menu bar) to customize the editor to your liking.</li>
+      <li>Although most of the work is done in the editor, you are free to edit the <a href="making.html#data-file">data file</a> manually if you need to fine-tune some numbers. Be careful, though!</li>
     </ul>
-
-    <p>To use one of the methods, give the corresponding set of properties a non-zero value, and leave the other set of properties as 0, including deviations. (Alternatively, you can just omit the properties entirely.)</p>
-
-    <table class="props-t props-t-o">
-      <tr>
-        <td>speed_deviation</td>
-        <td>The X and Y speed of any created particle is deviated randomly by this amount.</td>
-        <td>Coordinates</td>
-        <td>0 0</td>
-      </tr>
-      <tr>
-        <td>angle</td>
-        <td><a href="glossary.html#absolute-angle">Absolute angle</a> to launch the particle at.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>angle_deviation</td>
-        <td>The launch angle of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>total_speed</td>
-        <td>Particles launched with a given angle have this much speed.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
-        <td>total_speed_deviation</td>
-        <td>The launch speed of any created particle is deviated randomly by this amount.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-    </table>
-
-    <h2 id="examples">Examples</h2>
-    
-    <p>For smoke emitted by a fire, the friction can be set to 1, so the particles slow down the more they go, and they can be told to grow in size over time, just like real smoke. For movement, they can be told to go up with a speed of something like -50. The X and Y speed can then be deviated by a bit for variety, but the launch angle and launch speed properties must be set to 0.</p>
-
-    <p>For a bunch of clouds of gas emitted in a circle, the friction can again be set to 1, and the size growth can also be positive. However, if we deviate their X and Y speed randomly to obtain a spread, the reach will be that of a square (or rectangle), which wouldn't look very natural. Instead, we leave the X/Y speeds at 0, and set the launch angle to something (0 will work), and set the angle deviation to 360 (a full circle). We must also set the launch speed to something positive, so they actually move. The launch speed can be deviated slightly for variety.</p>
     
   </div>
 </body>

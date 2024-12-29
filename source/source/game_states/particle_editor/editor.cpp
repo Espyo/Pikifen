@@ -59,16 +59,24 @@ particle_editor::particle_editor() :
     register_cmd(
         &particle_editor::grid_interval_increase_cmd, "grid_interval_increase"
     );
+    register_cmd(&particle_editor::grid_toggle_cmd, "grid_toggle");
     register_cmd(&particle_editor::load_cmd, "load");
     register_cmd(&particle_editor::quit_cmd, "quit");
-    register_cmd(&particle_editor::particle_playback_toggle_cmd, "toggle_playback");
+    register_cmd(
+        &particle_editor::part_mgr_playback_toggle_cmd, "part_mgr_toggle"
+    );
+    register_cmd(
+        &particle_editor::part_gen_playback_toggle_cmd, "part_gen_toggle"
+    );
     register_cmd(
         &particle_editor::leader_silhouette_toggle_cmd,
         "leader_silhouette_toggle"
     );
     register_cmd(&particle_editor::reload_cmd, "reload");
     register_cmd(&particle_editor::save_cmd, "save");
-    register_cmd(&particle_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset");
+    register_cmd(
+        &particle_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
+    );
     register_cmd(&particle_editor::zoom_in_cmd, "zoom_in");
     register_cmd(&particle_editor::zoom_out_cmd, "zoom_out");
     
@@ -102,33 +110,40 @@ void particle_editor::close_options_dialog() {
 /**
  * @brief Creates a new, empty particle generator.
  *
- * @param requested_name Name of the requested generator.
+ * @param part_gen_path Path to the new particle generator.
  */
-void particle_editor::create_particle_generator(
-    const string &requested_name
+void particle_editor::create_part_gen(
+    const string &part_gen_path
 ) {
-    particle_generator new_gen = particle_generator();
+    //Setup.
+    setup_for_new_part_gen_pre();
+    changes_mgr.mark_as_non_existent();
     
-    //Set up some default parameters
-    new_gen.name = replace_all(requested_name, " ", "_");
-    new_gen.base_particle.duration = 1;
-    new_gen.base_particle.set_bitmap("");
-    new_gen.base_particle.size = keyframe_interpolator<float>(32);
-    new_gen.base_particle.color = keyframe_interpolator<ALLEGRO_COLOR>(map_alpha(255));
-    new_gen.base_particle.color.add(1, map_alpha(0));
+    //Create a particle generator with some defaults.
+    loaded_gen = particle_generator();
+    game.content.custom_particle_gen.path_to_manifest(
+        part_gen_path, &manifest
+    );
+    loaded_gen.manifest = &manifest;
+    loaded_gen.base_particle.duration = 1.0f;
+    loaded_gen.base_particle.set_bitmap("");
+    loaded_gen.base_particle.size =
+        keyframe_interpolator<float>(32);
+    loaded_gen.base_particle.color =
+        keyframe_interpolator<ALLEGRO_COLOR>(map_alpha(255));
+    loaded_gen.base_particle.color.add(1, map_alpha(0));
     
-    new_gen.emission.interval = 0.5f;
-    new_gen.emission.number = 1;
-    new_gen.base_particle.outwards_speed = keyframe_interpolator<float>(32);
-    
-    loaded_gen = new_gen;
-    
-    save_options(); //Save the history in the options.
-    save_part_gen(); //Write the file to disk
-    setup_for_new_part_gen();
-    
+    loaded_gen.emission.interval = 0.5f;
+    loaded_gen.emission.number = 1;
+    loaded_gen.base_particle.outwards_speed =
+        keyframe_interpolator<float>(32);
+        
+    //Finish up.
+    setup_for_new_part_gen_post();
+    update_history(manifest, "");
     set_status(
-        "Created particle \"" + requested_name + "\" successfully."
+        "Created particle generator \"" + manifest.internal_name +
+        "\" successfully."
     );
 }
 
@@ -141,11 +156,15 @@ void particle_editor::do_logic() {
     
     process_gui();
     
-    if(generator_running) {
-        loaded_gen.tick(game.delta_t, part_mgr);
-        //If the particles are meant to be a burst, turn them off.
-        if(loaded_gen.emission.interval == 0) {
-            generator_running = false;
+    if(mgr_running) {
+        if(gen_running) {
+            loaded_gen.follow_pos_offset =
+                rotate_point(generator_pos_offset, -generator_angle_offset);
+            loaded_gen.tick(game.delta_t, part_mgr);
+            //If the particles are meant to emit once, turn them off.
+            if(loaded_gen.emission.interval == 0) {
+                gen_running = false;
+            }
         }
         part_mgr.tick_all(game.delta_t);
     }
@@ -234,8 +253,6 @@ void particle_editor::load() {
     );
     
     //Misc. setup.
-    must_recenter_cam = true;
-    
     game.audio.set_current_song(PARTICLE_EDITOR::SONG_NAME, false);
     
     part_mgr = particle_manager(game.options.max_particles);
@@ -272,7 +289,7 @@ void particle_editor::load_part_gen_file(
     const string &path, const bool should_update_history
 ) {
     //Setup.
-    setup_for_new_part_gen();
+    setup_for_new_part_gen_pre();
     changes_mgr.mark_as_non_existent();
     
     //Load.
@@ -294,6 +311,7 @@ void particle_editor::load_part_gen_file(
     loaded_gen.load_from_data_node(&file, CONTENT_LOAD_LEVEL_FULL);
     
     //Finish up.
+    setup_for_new_part_gen_post();
     changes_mgr.reset();
     
     if(should_update_history) {
@@ -421,6 +439,20 @@ void particle_editor::grid_interval_increase_cmd(float input_value) {
 
 
 /**
+ * @brief Code to run for the grid toggle command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void particle_editor::grid_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
+    grid_visible = !grid_visible;
+    string state_str = (grid_visible ? "Enabled" : "Disabled");
+    set_status(state_str + " grid visibility.");
+}
+
+
+/**
  * @brief Code to run for the load command.
  *
  * @param input_value Value of the player input for the command.
@@ -485,13 +517,26 @@ void particle_editor::save_cmd(float input_value) {
 
 /**
  * @brief Sets up the editor for a new particle generator,
- * be it from an existing file or from scratch.
+ * be it from an existing file or from scratch, after the actual creation/load
+ * takes place.
  */
-void particle_editor::setup_for_new_part_gen() {
+void particle_editor::setup_for_new_part_gen_post() {
+    loaded_gen.follow_angle = &generator_angle_offset;
+}
+
+
+/**
+ * @brief Sets up the editor for a new particle generator,
+ * be it from an existing file or from scratch, before the actual creation/load
+ * takes place.
+ */
+void particle_editor::setup_for_new_part_gen_pre() {
     part_mgr.clear();
     changes_mgr.reset();
     
-    generator_running = true;
+    mgr_running = true;
+    gen_running = true;
+    generator_angle_offset = 0.0f;
     selected_color_keyframe = 0;
     selected_size_keyframe = 0;
     selected_linear_speed_keyframe = 0;
@@ -511,7 +556,11 @@ void particle_editor::setup_for_new_part_gen() {
 void particle_editor::zoom_and_pos_reset_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    reset_cam(false);
+    if(game.cam.target_zoom == 1.0f) {
+        game.cam.target_pos = point();
+    } else {
+        game.cam.target_zoom = 1.0f;
+    }
 }
 
 
@@ -577,41 +626,60 @@ void particle_editor::clear_particles_cmd(float input_value) {
 
 
 /**
- * @brief Code to run for the emission offset toggle command.
+ * @brief Code to run for the emission shape toggle command.
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::emission_outline_toggle_cmd(float input_value) {
+void particle_editor::emission_shape_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    emission_offset_visible = !emission_offset_visible;
-    string state_str = (emission_offset_visible ? "Enabled" : "Disabled");
-    set_status(state_str + " emission offset visibility.");
+    emission_shape_visible = !emission_shape_visible;
+    string state_str = (emission_shape_visible ? "Enabled" : "Disabled");
+    set_status(state_str + " emission shape visibility.");
 }
 
 
 /**
- * @brief Code to run for the particle playback toggle command.
+ * @brief Code to run for the particle generator playback toggle command.
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::particle_playback_toggle_cmd(float input_value) {
+void particle_editor::part_gen_playback_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    generator_running = !generator_running;
-    string state_str = (generator_running ? "Enabled" : "Disabled");
-    set_status(state_str + " particle playback.");
+    gen_running = !gen_running;
+    string state_str = (gen_running ? "Enabled" : "Disabled");
+    set_status(state_str + " particle generator playback.");
 }
 
 
 /**
- * @brief Resets the camera.
+ * @brief Code to run for the particle manager playback toggle command.
  *
- * @param instantaneous Whether the camera moves to its spot instantaneously
- * or not.
+ * @param input_value Value of the player input for the command.
  */
-void particle_editor::reset_cam(const bool instantaneous) {
-    center_camera(point(-300.0f, -300.0f), point(300.0f, 300.0f), instantaneous);
+void particle_editor::part_mgr_playback_toggle_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
+    mgr_running = !mgr_running;
+    string state_str = (mgr_running ? "Enabled" : "Disabled");
+    set_status(state_str + " particle system playback.");
+}
+
+
+/**
+ * @brief Resets the camera's X and Y coordinates.
+ */
+void particle_editor::reset_cam_xy() {
+    game.cam.target_pos = point();
+}
+
+
+/**
+ * @brief Resets the camera's zoom.
+ */
+void particle_editor::reset_cam_zoom() {
+    zoom_with_cursor(1.0f);
 }
 
 

@@ -638,6 +638,12 @@ protected:
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
     
+    //Do we need to focus on the input popup's text widget?
+    bool needs_input_popup_text_focus = true;
+    
+    //Do we need to focus on the new pack's name text widget?
+    bool needs_new_pack_text_focus = true;
+    
     //Time left in the operation error red flash effect.
     timer op_error_flash_timer = timer(EDITOR::OP_ERROR_FLASH_DURATION);
     
