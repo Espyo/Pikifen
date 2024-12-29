@@ -6,12 +6,12 @@ emission{
 	interval=0.0250
 	interval_deviation=0.0000
 	shape=1
-	max_offset=0.0000 3.0000
-	min_offset=0.0000 0.0000
+	rect_outer_dist=0.0000 3.0000
+	rect_inner_dist=0.0000 0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=0.4000
 	friction=0.0000
 	blend_type=1
@@ -35,7 +35,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=360.0000
+bitmap_angle_deviation=360.0000
 duration_deviation=0.1000
 friction_deviation=1.0000
 size_deviation=2.0000

@@ -1,17 +1,18 @@
 name=Bridge dust explosion
 description=An explosion of dust from a wood bridge's chunk being created.
+engine_version=0.25.0
 emission{
 	number=20
-	number_deviation=0
+	number_deviation=1
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=1
-	max_offset=30.0000 96.0000
-	min_offset=0.0000 0.0000
+	rect_outer_dist=30.0000 96.0000
+	rect_inner_dist=0.0000 0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=0.7500
 	friction=1.2000
 	blend_type=0
@@ -20,7 +21,8 @@ base{
 		1.0000=238 204 170 0
 	}
 	size{
-		0.0000=70.0000
+		0.0000=0.0000
+		0.2060=70.0000
 		1.0000=100.0000
 	}
 	linear_speed{
@@ -34,7 +36,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=360.0000
+bitmap_angle_deviation=180.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=2.0000

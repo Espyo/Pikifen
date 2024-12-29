@@ -1,18 +1,20 @@
-name = Pellet Posy 1 petals
+name=Pellet Posy 1 petals
 description=A small burst of petals from a 1 pellet Pellet Posy.
+engine_version=0.25.0
 emission{
 	number=12
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=0
-	max_radius=20.0000
-	min_radius=0.0000
-	arc=3.1416
+	circle_outer_dist=20.0000
+	circle_inner_dist=14.8000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=pellet_posy_petal
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=2.0000
 	friction=0.7000
 	blend_type=0
@@ -33,7 +35,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=30.0000
+bitmap_angle_deviation=30.0000
 duration_deviation=0.3000
 friction_deviation=0.2000
 size_deviation=2.0000

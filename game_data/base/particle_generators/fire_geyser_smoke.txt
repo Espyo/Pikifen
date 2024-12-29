@@ -1,44 +1,43 @@
-name = Fire geyser smoke
-description = Dark smoke shot from a fire geyser.
-
-emission_interval = 0.06
-number = 1
-number_deviation = 0
-base {
-    bitmap = smoke
-    duration = 1
-    friction = 1
-    gravity = -100
-    size_grow_speed = 40
-    size = 0
-    speed = 0 -50
-    color = 64 32 32 255
+name=Fire geyser smoke
+description=Dark smoke shot from a fire geyser.
+engine_version=0.25.0
+emission{
+	number=1
+	number_deviation=0
+	interval=0.0600
+	interval_deviation=0.0000
+	shape=0
+	circle_outer_dist=3.0000
+	circle_inner_dist=0.0000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=1.0000
 	friction=1.0000
 	blend_type=0
 	color{
-		0.0000=64 32 32
-		1.0000=64 32 32 0
+		0.0000=104 61 43
+		1.0000=44 48 32 0
 	}
 	size{
-		0.0000=32.0000
+		0.0000=0.0000
+		1.0000=40.0000
 	}
 	linear_speed{
-		0.0000=0.0000 0.0000
-		1.0000=0.0000 -100.0000
+		0.0000=0.0000 -50.0000
+		1.0000=0.0000 -150.0000
 	}
 	outwards_speed{
-		0.0000=20.0000
+		0.0000=0.0000
 	}
 	orbital_speed{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=0.0000
+bitmap_angle_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=2.0000

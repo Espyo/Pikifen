@@ -6,13 +6,13 @@ emission{
 	interval=0.0600
 	interval_deviation=0.0000
 	shape=0
-	max_radius=2.0000
-	min_radius=0.0000
-	arc=6.2832
+	circle_outer_dist=2.0000
+	circle_inner_dist=0.0000
+	circle_arc=6.2832
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=1.5000
 	friction=0.0000
 	blend_type=0
@@ -35,7 +35,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=360.0000
+bitmap_angle_deviation=360.0000
 duration_deviation=0.5000
 friction_deviation=0.0000
 size_deviation=2.0000

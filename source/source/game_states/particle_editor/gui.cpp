@@ -601,7 +601,7 @@ void particle_editor::process_gui_panel_generator() {
     }
     set_tooltip(
         "Play or pause the particle system.",
-        "Spacebar"
+        "Shift + Spacebar"
     );
     
     ImGui::SameLine();
@@ -641,7 +641,7 @@ void particle_editor::process_gui_panel_generator() {
         loaded_gen.emission.interval == 0.0f ?
         "Emit particles now." :
         "Play or pause the particle generator's emission.",
-        "Shift + Spacebar"
+        "Spacebar"
     );
     
     //Particle generator angle value.

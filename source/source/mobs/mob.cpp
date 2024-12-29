@@ -3055,12 +3055,14 @@ void mob::set_radius(float radius) {
  */
 void mob::set_rectangular_dim(const point &rectangular_dim) {
     this->rectangular_dim = rectangular_dim;
-    physical_span =
-        calculate_mob_physical_span(
-            radius,
-            type->anim_db->hitbox_span,
-            rectangular_dim
-        );
+    if(type->anim_db) {
+        physical_span =
+            calculate_mob_physical_span(
+                radius,
+                type->anim_db->hitbox_span,
+                rectangular_dim
+            );
+    }
     update_interaction_span();
 }
 

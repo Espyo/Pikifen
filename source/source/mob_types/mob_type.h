@@ -279,7 +279,7 @@ public:
     //- Visuals -
     
     //Database with all its animation data.
-    animation_database* anim_db;
+    animation_database* anim_db = nullptr;
     
     //A color that represents this mob.
     ALLEGRO_COLOR main_color = al_map_rgb(128, 128, 128);

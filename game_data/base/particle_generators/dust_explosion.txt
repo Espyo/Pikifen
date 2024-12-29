@@ -1,17 +1,20 @@
-name = Dust explosion
+name=Dust explosion
 description=A generic mid-sized explosion of dust. Used, for instance, when a Beady Long Legs stomps its foot.
+engine_version=0.25.0
 emission{
 	number=8
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
-	shape=1
-	max_offset=0.0000 0.0000
-	min_offset=0.0000 0.0000
+	shape=0
+	circle_outer_dist=30.1000
+	circle_inner_dist=23.9000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=0.7500
 	friction=1.2000
 	blend_type=0
@@ -20,21 +23,21 @@ base{
 		1.0000=238 204 170 0
 	}
 	size{
-		0.0000=32.0000
+		0.0000=0.0000
+		0.2390=32.0000
 		1.0000=62.0000
 	}
 	linear_speed{
-		0.0000=120.0000 0.0000
-		1.0000=120.0000 0.0000
+		1.0000=0.0000 0.0000
 	}
 	outwards_speed{
-		0.0000=0.0000
+		0.0000=120.0000
 	}
 	orbital_speed{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=0.0000
+bitmap_angle_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=2.0000

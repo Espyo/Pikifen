@@ -1,26 +1,28 @@
-name = Bramble gate explosion
-description = A bramble gate blowing in a dust of debris after being completely destroyed.
+name=Bramble gate explosion
+description=A bramble gate blowing in a dust of debris after being completely destroyed.
+engine_version=0.25.0
 emission{
 	number=30
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=1
-	max_offset=20.0000 96.0000
-	min_offset=0.0000 0.0000
+	rect_outer_dist=20.0000 96.0000
+	rect_inner_dist=0.0000 0.0000
 }
 base{
 	bitmap=rock
-	rotation=0.0000
-	duration=1.0000
+	bitmap_angle=0.0000
+	duration=1.5000
 	friction=3.0000
 	blend_type=0
 	color{
-		0.0000=172 164 134
-		1.0000=172 164 134 1
+		0.5920=172 164 134
+		1.0000=172 164 134 0
 	}
 	size{
-		0.0000=17.0000
+		0.0000=0.0000
+		0.1850=17.0000
 	}
 	linear_speed{
 		0.0000=0.0000 0.0000
@@ -33,7 +35,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=360.0000
+bitmap_angle_deviation=180.0000
 duration_deviation=0.2500
 friction_deviation=0.0000
 size_deviation=6.0000
