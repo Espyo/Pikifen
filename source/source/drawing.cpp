@@ -365,22 +365,47 @@ void draw_liquid(
     al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
 
     int edgeCount = 0;
-        float foamEdges[256][4];
+    float foamEdges[256][4];
 
-    for(size_t e = 0; e < s_ptr->edges.size(); e++)
-    {
-        //This sector has a liquid, so if it has a limit it's here.
-        sector* unaffected_sector = nullptr;
-        sector* affected_sector = nullptr;
-        if(!does_edge_have_liquid_limit(s_ptr->edges[e], &affected_sector, &unaffected_sector))
-            continue;
-            
-        foamEdges[edgeCount][0] = s_ptr->edges[e]->vertexes[0]->x;
-        foamEdges[edgeCount][1] = s_ptr->edges[e]->vertexes[0]->y;
-        foamEdges[edgeCount][2] = s_ptr->edges[e]->vertexes[1]->x;
-        foamEdges[edgeCount][3] = s_ptr->edges[e]->vertexes[1]->y;
-        edgeCount++;
+    /*
+    We need to get a list of edges that the shader needs to check, 
+    this can extend to other sectors whenever a liquid occupies more than one sector,
+    so we need to loop through all of the connected sectors.
+    */
+    //Todo: surely this can be faster
+    //look at s_ptr->get_neighbor_sectors_conditionally
+    vector<sector*> s_to_check = {s_ptr};
+    for(size_t s = 0; s < s_to_check.size(); s++) {
+        sector* sec_ptr = s_to_check[s];
+
+        for(size_t e = 0; e < sec_ptr->edges.size(); e++)
+        {
+            //This sector has a liquid, so if it has a limit it's here.
+            sector* unaffected_sector = nullptr;
+            sector* affected_sector = nullptr;
+            if(!does_edge_have_liquid_limit(sec_ptr->edges[e], &affected_sector, &unaffected_sector)) {
+                sector* other_ptr = sec_ptr->edges[e]->get_other_sector(sec_ptr);
+
+                if(other_ptr) {
+                    for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
+                        if(other_ptr->hazards[h]->associated_liquid) {
+                            if(std::find(s_to_check.begin(), s_to_check.end(), other_ptr) == s_to_check.end()) {
+                                s_to_check.push_back(other_ptr);
+                            }
+                        }
+                    }
+                }
+                continue;
+            }
+
+            foamEdges[edgeCount][0] = sec_ptr->edges[e]->vertexes[0]->x;
+            foamEdges[edgeCount][1] = sec_ptr->edges[e]->vertexes[0]->y;
+            foamEdges[edgeCount][2] = sec_ptr->edges[e]->vertexes[1]->x;
+            foamEdges[edgeCount][3] = sec_ptr->edges[e]->vertexes[1]->y;
+            edgeCount++;
+        }
     }
+
     al_set_shader_int("edge_count", edgeCount);
     al_set_shader_float_vector("foamEdges", 4, (float*)foamEdges[0], 256);
     
@@ -510,12 +535,11 @@ void draw_liquid(
             texture_sector[t]->texture_info.bitmap :
             texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
 
-        //Needs to be a float due to rounding on shader side
-        float bmpSize[2] = {
+        int bmpSize[2] = {
             al_get_bitmap_width(tex), 
             al_get_bitmap_height(tex)
         };
-        al_set_shader_float_vector("tex_size", 2, &bmpSize[0], 1);
+        al_set_shader_int_vector("tex_size", 2, &bmpSize[0], 1);
 
         al_draw_prim(
             av, nullptr, tex,

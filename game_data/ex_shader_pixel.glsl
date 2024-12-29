@@ -11,7 +11,7 @@ uniform float time;
 uniform vec4 foamEdges[MAX_FOAM_EDGES];
 uniform int edge_count;
 
-uniform vec2 tex_size;
+uniform ivec2 tex_size;
 uniform vec4 liq_tint;
 //Has the textures tint already applied.
 varying vec4 varying_color;
@@ -127,15 +127,15 @@ float cnoise(vec3 P)
 }
 
 // demo code:
-float color(vec2 xy) { return cnoise(vec3(1.5*xy, 0.3*time)); }
+float color(vec2 xy, float timeScale) { return cnoise(vec3(1.5*xy, timeScale*time)); }
 
-float perlin_noise(vec2 xy, float noiseScale, vec2 step) {
+float perlin_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
    float x = 0;
-   x += 0.5 * color(xy * 2.0 * noiseScale - step);
-   x += 0.25 * color(xy * 4.0 * noiseScale - 2.0 * step);
-   x += 0.125 * color(xy * 8.0 * noiseScale - 4.0 * step);
-   x += 0.0625 * color(xy * 16.0 * noiseScale - 6.0 * step);
-   x += 0.03125 * color(xy * 32.0 * noiseScale - 8.0 * step);
+   x += 0.5 * color(xy * 2.0 * noiseScale - step, timeScale);
+   x += 0.25 * color(xy * 4.0 * noiseScale - 2.0 * step, timeScale);
+   x += 0.125 * color(xy * 8.0 * noiseScale - 4.0 * step, timeScale);
+   x += 0.0625 * color(xy * 16.0 * noiseScale - 6.0 * step, timeScale);
+   x += 0.03125 * color(xy * 32.0 * noiseScale - 8.0 * step, timeScale);
    return x;
 }
 vec2 rotate(vec2 xy, float rotation) {
@@ -197,12 +197,12 @@ void main()
    vec2 step = vec2(1.3, 1.7);
    float noiseScale = 0.01;
 
-   float nX = perlin_noise(worldCoords, noiseScale, step);
+   float nX = perlin_noise(worldCoords, noiseScale, step, 0.3);
    float effectScaleX = 14;
    nX *= effectScaleX;
    nX *= fill_level;
 
-   float nY = perlin_noise(worldCoords, noiseScale, step);
+   float nY = perlin_noise(worldCoords, noiseScale, step, 0.3);
    float effectScaleY = 4;
    nY *= effectScaleY;
    nY *= fill_level;
@@ -210,7 +210,7 @@ void main()
    vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
    //Convert from world coords to texture coords
    vec2 sample_texcoord =
-      vec2((varying_texcoord.x + pEffect.x) / tex_size.x, (-varying_texcoord.y + pEffect.y) / tex_size.y);
+      vec2((varying_texcoord.x + pEffect.x) / (float)tex_size.x, (-varying_texcoord.y + pEffect.y) / (float)tex_size.y);
 
    vec4 tmp = texture2D(al_tex, sample_texcoord);
 
@@ -236,7 +236,7 @@ void main()
    tmp.b += shineScale * 2;
 
    //Edge foam
-   float edgeSize = 11 + (10 + sin(time) * 5) * perlin_noise(worldCoords, 0.04, step);
+   float edgeSize = 11 + (10 + sin(time) * 5) * perlin_noise(worldCoords, 0.04, step, 0.7);
    edgeSize *= fill_level;
    float edgeScale = min(0.6, max((edgeSize - getDistFromEdge(worldCoords)) / edgeSize - 0.1 , 0));
 
