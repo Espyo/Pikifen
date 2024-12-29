@@ -356,17 +356,22 @@ void draw_liquid(
     }
     al_set_shader_float("alpha", liquid_opacity_mult);
     float brightness_mult = s_ptr->brightness / 255.0;
-    ALLEGRO_COLOR target_tint = 
-        interpolate_color(l_ptr->main_color.a, 0, 1, s_ptr->texture_info.tint, l_ptr->main_color);
 
-    float tint_color[4] = {
-        target_tint.r * brightness_mult,
-        target_tint.g * brightness_mult,
-        target_tint.b * brightness_mult,
+    float tex_tint[4] = {
+        s_ptr->texture_info.tint.r * brightness_mult,
+        s_ptr->texture_info.tint.g * brightness_mult,
+        s_ptr->texture_info.tint.b * brightness_mult,
+        s_ptr->texture_info.tint.a
+    };
+    float liq_tint[4] = {
+        l_ptr->main_color.r * brightness_mult,
+        l_ptr->main_color.g * brightness_mult,
+        l_ptr->main_color.b * brightness_mult,
         l_ptr->main_color.a
     };
 
-    al_set_shader_float_vector("tex_tint", 4, &tint_color[0], 1);
+    al_set_shader_float_vector("tex_tint", 4, &tex_tint[0], 1);
+    al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
 
     if(s_ptr->texture_info.bitmap) {
         float bmpSize[2] = {
@@ -374,7 +379,7 @@ void draw_liquid(
             al_get_bitmap_height(s_ptr->texture_info.bitmap)
         };
 
-        int suitableEdges = 0;
+        int edgeCount = 0;
         float foamEdges[256][4];
 
         for(size_t e = 0; e < s_ptr->edges.size(); e++)
@@ -384,18 +389,13 @@ void draw_liquid(
             sector* affected_sector = nullptr;
             if(!does_edge_have_liquid_limit(s_ptr->edges[e], &affected_sector, &unaffected_sector))
                 continue;
-            foamEdges[suitableEdges][0] = s_ptr->edges[e]->vertexes[0]->x;
-            foamEdges[suitableEdges][1] = s_ptr->edges[e]->vertexes[0]->y;
-            foamEdges[suitableEdges][2] = s_ptr->edges[e]->vertexes[1]->x;
-            foamEdges[suitableEdges][3] = s_ptr->edges[e]->vertexes[1]->y;
-            suitableEdges++;
+            foamEdges[edgeCount][0] = s_ptr->edges[e]->vertexes[0]->x;
+            foamEdges[edgeCount][1] = s_ptr->edges[e]->vertexes[0]->y;
+            foamEdges[edgeCount][2] = s_ptr->edges[e]->vertexes[1]->x;
+            foamEdges[edgeCount][3] = s_ptr->edges[e]->vertexes[1]->y;
+            edgeCount++;
         }
-        for(size_t i = suitableEdges; i < 256; i++) {
-            foamEdges[i][0] = FLT_MAX;
-            foamEdges[i][1] = FLT_MAX;
-            foamEdges[i][2] = FLT_MAX;
-            foamEdges[i][3] = FLT_MAX;
-        }
+        al_set_shader_int("edge_count", edgeCount);
         al_set_shader_float_vector("foamEdges", 4, (float*)foamEdges[0], 256);
 
         al_set_shader_float_vector("tex_size", 2, &bmpSize[0], 1);
