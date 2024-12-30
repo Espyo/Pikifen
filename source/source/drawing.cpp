@@ -326,16 +326,12 @@ void draw_liquid(
 
     ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
     al_use_shader(liq_shader);
-    al_set_shader_float("time", time);
-
     float liquid_opacity_mult = 1.0f;
     if(s_ptr->draining_liquid) {
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
-    al_set_shader_float("fill_level", liquid_opacity_mult);
     float brightness_mult = s_ptr->brightness / 255.0;
-    al_set_shader_float("tex_brightness", brightness_mult);
 
     float liq_tint[4] = {
         l_ptr->main_color.r * brightness_mult,
@@ -343,49 +339,44 @@ void draw_liquid(
         l_ptr->main_color.b * brightness_mult,
         l_ptr->main_color.a
     };
-    al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
-
-    int edgeCount = 0;
-    vector<edge*> edge_vec;
+    
     /*
-    We need to get a list of edges that the shader needs to check, 
-    this can extend to other sectors whenever a liquid occupies more than one sector,
-    so we need to loop through all of the connected sectors.
+        We need to get a list of edges that the shader needs to check, 
+        this can extend to other sectors whenever a liquid occupies more than one sector,
+        so we need to loop through all of the connected sectors.
     */
-    //Todo: surely this can be faster
-    //look at s_ptr->get_neighbor_sectors_conditionally
-    vector<sector*> s_to_check = {s_ptr};
-    for(size_t s = 0; s < s_to_check.size(); s++) {
-        sector* sec_ptr = s_to_check[s];
+    vector<sector*> checked_s {s_ptr};
+    vector<edge*> border_edges;
 
-        for(size_t e = 0; e < sec_ptr->edges.size(); e++)
-        {
-            //This sector has a liquid, so if it has a limit it's here.
-            sector* unaffected_sector = nullptr;
-            sector* affected_sector = nullptr;
-            if(!does_edge_have_liquid_limit(sec_ptr->edges[e], &affected_sector, &unaffected_sector)) {
-                sector* other_ptr = sec_ptr->edges[e]->get_other_sector(sec_ptr);
+    for(size_t s = 0; s < checked_s.size(); s++) {
+        sector* s2_ptr = checked_s[s];
+        for(size_t e = 0; e < s2_ptr->edges.size(); e++) {
+            edge* e_ptr = s2_ptr->edges[e];
+            sector* u_s = nullptr;
+            sector* a_s = nullptr;
+            if(does_edge_have_liquid_limit(e_ptr, &u_s, &a_s)) {
+                border_edges.push_back(e_ptr);
+            }
 
-                if(other_ptr) {
-                    for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
-                        if(other_ptr->hazards[h]->associated_liquid) {
-                            if(std::find(s_to_check.begin(), s_to_check.end(), other_ptr) == s_to_check.end()) {
-                                s_to_check.push_back(other_ptr);
-                            }
+            sector* other_ptr = e_ptr->get_other_sector(s2_ptr);
+            if(other_ptr) {
+                for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
+                    if(other_ptr->hazards[h]->associated_liquid) {
+                        if(std::find(checked_s.begin(), checked_s.end(), other_ptr) == checked_s.end()) {
+                            checked_s.push_back(other_ptr);
                         }
                     }
                 }
-                continue;
             }
-            edge_vec.push_back(sec_ptr->edges[e]);
-            edgeCount++;
         }
     }
+
+    uint edgeCount = border_edges.size();
 
     float buffer_edges[edgeCount * 4];
 
     for(size_t e = 0; e < edgeCount; e++) {
-        edge* edge = edge_vec[e];
+        edge* edge = border_edges[e];
 
         buffer_edges[4 * e    ] = edge->vertexes[0]->x;
         buffer_edges[4 * e + 1] = edge->vertexes[0]->y;
@@ -401,8 +392,11 @@ void draw_liquid(
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-    
+    al_set_shader_float("time", time);
+    al_set_shader_float("fill_level", liquid_opacity_mult);
+    al_set_shader_float("tex_brightness", brightness_mult);
     al_set_shader_int("edge_count", edgeCount);
+    al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
     
     //Draw the sector now!
     unsigned char n_textures = 1;
@@ -463,10 +457,6 @@ void draw_liquid(
             texture_info_to_use->scale.x, 
             texture_info_to_use->scale.y
         };
-
-        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
-        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
-        al_set_shader_float("tex_rotation", texture_info_to_use->rot);
 
         for(size_t v = 0; v < n_vertexes; v++) {
         
@@ -534,6 +524,9 @@ void draw_liquid(
             al_get_bitmap_width(tex), 
             al_get_bitmap_height(tex)
         };
+        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
+        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
+        al_set_shader_float("tex_rotation", texture_info_to_use->rot);
         al_set_shader_int_vector("tex_size", 2, &bmpSize[0], 1);
 
         al_draw_prim(
