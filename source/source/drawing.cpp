@@ -333,6 +333,10 @@ void draw_liquid(
     }
     float brightness_mult = s_ptr->brightness / 255.0;
 
+    float distortion_scale[2] = {
+        l_ptr->distortion_scale.x, 
+        l_ptr->distortion_scale.y
+    };
     float liq_tint[4] = {
         l_ptr->body_color.r,
         l_ptr->body_color.g,
@@ -407,13 +411,13 @@ void draw_liquid(
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-    al_set_shader_float("time", time);
+    al_set_shader_float("time", time * l_ptr->anim_speed);
     al_set_shader_float("fill_level", liquid_opacity_mult);
     al_set_shader_float("tex_brightness", brightness_mult);
-    al_set_shader_float("shine_threshold", l_ptr->shine_threshold);
+    al_set_shader_float("shine_threshold", l_ptr->shine_percentage);
     al_set_shader_float("foam_size", l_ptr->max_foam_distance);
     al_set_shader_int("edge_count", edgeCount);
-    al_set_shader_float_vector("effect_scale", 2, &l_ptr->effect_scale[0], 1);
+    al_set_shader_float_vector("effect_scale", 2, &distortion_scale[0], 1);
     al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
     al_set_shader_float_vector("shine_tint", 4, &shine_tint[0], 1);
     al_set_shader_float_vector("foam_tint", 4, &foam_color[0], 1);

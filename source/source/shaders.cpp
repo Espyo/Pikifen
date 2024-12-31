@@ -89,108 +89,112 @@ uniform float tex_rotation;
 varying vec2 varying_texcoord;
 
 //
-// GLSL textureless classic 3D noise "cnoise",
-// with an RSL-style periodic variant "pnoise".
-// Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2024-11-07
-//
-// Many thanks to Ian McEwan of Ashima Arts for the
-// ideas for permutation and gradient selection.
-//
-// Copyright (c) 2011 Stefan Gustavson. All rights reserved.
-// Distributed under the MIT license. See LICENSE file.
-// https://github.com/stegu/webgl-noise
-//
+// Description : Array and textureless GLSL 2D/3D/4D simplex 
+//               noise functions.
+//      Author : Ian McEwan, Ashima Arts.
+//  Maintainer : stegu
+//     Lastmod : 20201014 (stegu)
+//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+//               Distributed under the MIT License. See LICENSE file.
+//               https://github.com/ashima/webgl-noise
+//               https://github.com/stegu/webgl-noise
+// 
 
-vec3 mod289(vec3 x)
-{
-   return x - floor(x * (1.0 / 289.0)) * 289.0;
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
 }
 
-vec4 mod289(vec4 x)
-{
-   return x - floor(x * (1.0 / 289.0)) * 289.0;
+vec4 mod289(vec4 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
 }
 
-vec4 permute(vec4 x)
-{
-   return mod289(((x*34.0)+10.0)*x);
+vec4 permute(vec4 x) {
+     return mod289(((x*34.0)+10.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
 {
-   return 1.79284291400159 - 0.85373472095314 * r;
+  return 1.79284291400159 - 0.85373472095314 * r;
 }
 
-vec3 fade(vec3 t) {
-   return t*t*t*(t*(t*6.0-15.0)+10.0);
+float noise(vec3 v)
+  { 
+  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+
+// First corner
+  vec3 i  = floor(v + dot(v, C.yyy) );
+  vec3 x0 =   v - i + dot(i, C.xxx) ;
+
+// Other corners
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min( g.xyz, l.zxy );
+  vec3 i2 = max( g.xyz, l.zxy );
+
+  //   x0 = x0 - 0.0 + 0.0 * C.xxx;
+  //   x1 = x0 - i1  + 1.0 * C.xxx;
+  //   x2 = x0 - i2  + 2.0 * C.xxx;
+  //   x3 = x0 - 1.0 + 3.0 * C.xxx;
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+  vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+
+// Permutations
+  i = mod289(i); 
+  vec4 p = permute( permute( permute( 
+             i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+           + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+
+// Gradients: 7x7 points over a square, mapped onto an octahedron.
+// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+  float n_ = 0.142857142857; // 1.0/7.0
+  vec3  ns = n_ * D.wyz - D.xzx;
+
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+
+  vec4 x = x_ *ns.x + ns.yyyy;
+  vec4 y = y_ *ns.x + ns.yyyy;
+  vec4 h = 1.0 - abs(x) - abs(y);
+
+  vec4 b0 = vec4( x.xy, y.xy );
+  vec4 b1 = vec4( x.zw, y.zw );
+
+  //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
+  //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+
+  vec3 p0 = vec3(a0.xy,h.x);
+  vec3 p1 = vec3(a0.zw,h.y);
+  vec3 p2 = vec3(a1.xy,h.z);
+  vec3 p3 = vec3(a1.zw,h.w);
+
+//Normalise gradients
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x;
+  p1 *= norm.y;
+  p2 *= norm.z;
+  p3 *= norm.w;
+
+// Mix final noise value
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+                                dot(p2,x2), dot(p3,x3) ) );
 }
 
-// Classic Perlin noise
-float cnoise(vec3 P)
-{
-   vec3 Pi0 = floor(P); // Integer part for indexing
-   vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
-   Pi0 = mod289(Pi0);
-   Pi1 = mod289(Pi1);
-   vec3 Pf0 = fract(P); // Fractional part for interpolation
-   vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
-   vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
-   vec4 iy = vec4(Pi0.yy, Pi1.yy);
-   vec4 iz0 = Pi0.zzzz;
-   vec4 iz1 = Pi1.zzzz;
+float color(vec2 xy, float timeScale) { return noise(vec3(1.5*xy, timeScale*time)); }
 
-   vec4 ixy = permute(permute(ix) + iy);
-   vec4 ixy0 = permute(ixy + iz0);
-   vec4 ixy1 = permute(ixy + iz1);
-
-   vec4 gx0 = ixy0 * (1.0 / 7.0);
-   vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
-   gx0 = fract(gx0);
-   vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
-   vec4 sz0 = step(gz0, vec4(0.0));
-   gx0 -= sz0 * (step(0.0, gx0) - 0.5);
-   gy0 -= sz0 * (step(0.0, gy0) - 0.5);
-
-   vec4 gx1 = ixy1 * (1.0 / 7.0);
-   vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
-   gx1 = fract(gx1);
-   vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
-   vec4 sz1 = step(gz1, vec4(0.0));
-   gx1 -= sz1 * (step(0.0, gx1) - 0.5);
-   gy1 -= sz1 * (step(0.0, gy1) - 0.5);
-
-   vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
-   vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
-   vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
-   vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
-   vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
-   vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
-   vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
-   vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
-
-   vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
-   vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
-
-   float n000 = norm0.x * dot(g000, Pf0);
-   float n010 = norm0.y * dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-   float n100 = norm0.z * dot(g100, vec3(Pf1.x, Pf0.yz));
-   float n110 = norm0.w * dot(g110, vec3(Pf1.xy, Pf0.z));
-   float n001 = norm1.x * dot(g001, vec3(Pf0.xy, Pf1.z));
-   float n011 = norm1.y * dot(g011, vec3(Pf0.x, Pf1.yz));
-   float n101 = norm1.z * dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-   float n111 = norm1.w * dot(g111, Pf1);
-
-   vec3 fade_xyz = fade(Pf0);
-   vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
-   vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-   float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
-   return 2.2 * n_xyz;
-}
-
-float color(vec2 xy, float timeScale) { return cnoise(vec3(1.5*xy, timeScale*time)); }
-
-float perlin_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
+float simplex_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
    float x = 0;
    x += 0.5 * color(xy * 2.0 * noiseScale - step, timeScale);
    x += 0.25 * color(xy * 4.0 * noiseScale - 2.0 * step, timeScale);
@@ -257,16 +261,16 @@ void main()
    vec2 step = vec2(1.3, 1.7);
    float noiseScale = 0.01;
    
-   //Calculate perlin noise effects.
-   float nX = perlin_noise(worldCoords, noiseScale, step, 0.3);
+   //Calculate simplex noise effects.
+   float nX = simplex_noise(worldCoords, noiseScale, step, 0.3);
    nX *= effect_scale.x;
    nX *= fill_level;
-   float nY = perlin_noise(worldCoords, noiseScale, step, 0.3);
+   float nY = simplex_noise(worldCoords, noiseScale, step, 0.3);
    nY *= effect_scale.y;
    nY *= fill_level;
    vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
    
-   //Convert from world coords to texture coords with the perlin noise effect applied.
+   //Convert from world coords to texture coords with the simplex noise effect applied.
    vec2 sample_texcoord =
       vec2(
          (varying_texcoord.x + pEffect.x) / float(tex_size.x), 
@@ -281,23 +285,24 @@ void main()
    tmp.a *= varying_color.a;
 
    //Liquid tint
-   float liq_alpha = liq_tint.a; + (nX / (effect_scale.x * 7)) * 0.5;
+   float liq_alpha = liq_tint.a * tex_brightness;
    liq_alpha *= fill_level;
 
-   //Normal blending here, since less light will be passing through the "deeper" the liquid is
-   tmp.r *= 1 + (liq_tint.r - 1) * liq_alpha;
-   tmp.g *= 1 + (liq_tint.g - 1) * liq_alpha;
-   tmp.b *= 1 + (liq_tint.b - 1) * liq_alpha;
+   //And add it to the final output!
+   tmp.r = tmp.r + (liq_tint.r - tmp.r) * liq_alpha;
+   tmp.g = tmp.g + (liq_tint.g - tmp.g) * liq_alpha;
+   tmp.b = tmp.b + (liq_tint.b - tmp.b) * liq_alpha;
 
 
 
    // -- Random shines --
-   //Set our scale between 0 - 1
-   float shineScale = nX / effect_scale.x;
+   //Get the average of each effect.
+   float shineScale = (nX / effect_scale.x) + (nY / effect_scale.y);
+   shineScale /= 2;
 
    //Anything below `shine_threshold` will be below 0, resulting in it not showing.
    //This puts our scale from 0 - (1 - `shine_threshold`)
-   shineScale -= shine_threshold;
+   shineScale -= (1 - shine_threshold);
 
    //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
    //Multiply by the reciprocal to bring it back to 0 - 1;
@@ -305,17 +310,16 @@ void main()
    shineScale *= (1 / max(0.1, 1 - shine_threshold));
 
    //Since we havent actually restricted negative values yet, do that now.
-   shineScale = clamp(shineScale, 0.0, 1.0);
+   shineScale = max(shineScale, 0.0);
 
    //Multiply by alpha and brightness after, since we want these to apply no matter what.
    shineScale *= tex_brightness;
    shineScale *= shine_tint.a;
 
    //Add the shine!
-   //Use additive blending here, since we want the tint to approach white.
-   tmp.r += shineScale * shine_tint.r;
-   tmp.g += shineScale * shine_tint.g;
-   tmp.b += shineScale * shine_tint.b;
+   tmp.r = tmp.r + (shine_tint.r - tmp.r) * shineScale;
+   tmp.g = tmp.g + (shine_tint.g - tmp.g) * shineScale;
+   tmp.b = tmp.b + (shine_tint.b - tmp.b) * shineScale;
 
 
 
@@ -326,11 +330,8 @@ void main()
    //These parameters aren't super intuitive, so they aren't exposed to the liquid proper.
    float effectScale = maxDist / 25;
 
-   //First of all, add a slight deviation based on a sine wave. This will break up the ebb and flow of the perlin noise.
-   maxDist += sin(time + (worldCoords.x / 100)) * 3 * effectScale;
-
-   //Next, add a perlin noise effect to introduce an uneven fade.
-   maxDist += ((2 * perlin_noise(worldCoords, 0.02, step, 0.2)) - 1) * 7 * effectScale;
+   //Next, add a simplex noise effect to introduce an uneven fade.
+   maxDist += ((2 * simplex_noise(worldCoords, 0.02, step, 0.2)) - 1) * 7 * effectScale;
 
    //Prevent foam from entirely disappearing...
    maxDist = max(1.0, maxDist);
@@ -343,16 +344,16 @@ void main()
    edgeScale /= maxDist;
 
    //This ensures there's no negatives, and also adds a small flattening as it approaches 1
-   edgeScale = clamp(edgeScale, 0.0, 0.6);
+   edgeScale = clamp(edgeScale, 0.0, 1.0);
 
    //Add the alpha and brightness.
    edgeScale *= foam_tint.a;
    edgeScale *= tex_brightness;
 
    //And add it to the full thing!
-   tmp.r += edgeScale * foam_tint.r;
-   tmp.g += edgeScale * foam_tint.g;
-   tmp.b += edgeScale * foam_tint.b;
+   tmp.r = tmp.r + (foam_tint.r - tmp.r) * edgeScale;
+   tmp.g = tmp.g + (foam_tint.g - tmp.g) * edgeScale;
+   tmp.b = tmp.b + (foam_tint.b - tmp.b) * edgeScale;
 
    gl_FragColor = tmp;
 }

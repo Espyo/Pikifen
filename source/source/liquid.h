@@ -38,23 +38,28 @@ struct liquid : public content {
     //--- Members ---
     
     //Color the body of liquid is.
-    ALLEGRO_COLOR body_color = COLOR_EMPTY;
+    ALLEGRO_COLOR body_color = COLOR_BLACK;
 
-    //Color the body of liquid is.
+    //Color the foam of liquid is.
     ALLEGRO_COLOR foam_color = COLOR_WHITE;
 
-    //Color the body of liquid is.
+    //Color the shine of liquid is.
     ALLEGRO_COLOR shine_color = COLOR_WHITE;
     
     //Color used for this liquid in the radar.
     ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
     //Speed at which to scroll each layer of the surface.
-    float effect_scale[2] = { 14.0f, 3.0f };
+    point distortion_scale = point(14.0f, 4.0f);
 
-    float shine_threshold = 0.6f;
+    //How much of the liquid is covered in shines.
+    float shine_percentage = 0.5f;
 
+    //How far the foam can extend from the shore.
     float max_foam_distance = 25;
+
+    //How fast the water animates.
+    float anim_speed = 1;
     
     //--- Function declarations ---
     

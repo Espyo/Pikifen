@@ -38,7 +38,7 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     rs.set("max_foam_distance", max_foam_distance);
     rs.set("shine_color", shine_color);
     rs.set("radar_color", radar_color);
-    rs.set("shine_threshold", shine_threshold);
-    rs.set("distortion_scale_x", effect_scale[0]);
-    rs.set("distortion_scale_y", effect_scale[1]);
+    rs.set("shine_percentage", shine_percentage);
+    rs.set("distortion_scale", distortion_scale);
+    rs.set("animation_speed", anim_speed);
 }
