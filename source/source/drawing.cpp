@@ -339,7 +339,7 @@ void draw_liquid(
         l_ptr->main_color.b * brightness_mult,
         l_ptr->main_color.a
     };
-    
+
     /*
         We need to get a list of edges that the shader needs to check, 
         this can extend to other sectors whenever a liquid occupies more than one sector,

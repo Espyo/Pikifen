@@ -2006,8 +2006,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         
         if(c_ptr->sector_ptr) {
         
-            draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
-            
+            bool has_liquid = false;
             for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); h++) {
                 if(c_ptr->sector_ptr->hazards[h]->associated_liquid) {
                     draw_liquid(
@@ -2017,8 +2016,12 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                         1.0f,
                         area_time_passed
                     );
+                    has_liquid = true;
                     break;
                 }
+            }
+            if(!has_liquid) {
+                draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
             }
             draw_sector_edge_offsets(
                 c_ptr->sector_ptr,

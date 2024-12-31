@@ -323,6 +323,7 @@ sectors{
 		texture_rotate=1.3265
 	}
 	s{
+		is_bottomless_pit=true
 		z=0.0000
 		hazards=water
 		hazards_floor=true
