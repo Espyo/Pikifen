@@ -44,6 +44,7 @@ vertexes{
 	v=-320.0000 -192.0000
 	v=-192.0000 -192.0000
 	v=-192.0000 -320.0000
+	v=192.0000 -192.0000
 }
 edges{
 	e{
@@ -107,8 +108,8 @@ edges{
 		v=14 1
 	}
 	e{
-		s=2 5
-		v=17 15
+		s=5 15
+		v=15 17
 	}
 	e{
 		s=5 14
@@ -116,11 +117,11 @@ edges{
 	}
 	e{
 		s=2 4
-		v=14 16
+		v=14 45
 	}
 	e{
-		s=2 14
-		v=16 17
+		s=14 15
+		v=17 16
 	}
 	e{
 		s=1 4
@@ -266,6 +267,14 @@ edges{
 		s=12 14
 		v=43 44
 	}
+	e{
+		s=4 15
+		v=16 45
+	}
+	e{
+		s=2 15
+		v=45 15
+	}
 }
 sectors{
 	s{
@@ -362,6 +371,14 @@ sectors{
 		hazards=water
 		hazards_floor=true
 		texture=textures/test
+	}
+	s{
+		z=0.0000
+		brightness=89
+		hazards=water
+		hazards_floor=true
+		texture=textures/test
+		texture_tint=255 0 0
 	}
 }
 mobs{

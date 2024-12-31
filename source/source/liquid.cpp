@@ -32,22 +32,13 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     //Standard data.
     reader_setter rs(node);
     string animation_str;
-    data_node* animation_node = nullptr;
     
-    rs.set("animation", animation_str, &animation_node);
-    rs.set("color", main_color);
+    rs.set("body_color", body_color);
+    rs.set("foam_color", foam_color);
+    rs.set("max_foam_distance", max_foam_distance);
+    rs.set("shine_color", shine_color);
     rs.set("radar_color", radar_color);
-    rs.set("surface_1_speed", surface_speed[0]);
-    rs.set("surface_2_speed", surface_speed[1]);
-    rs.set("surface_alpha", surface_alpha);
-    
-    auto it = game.content.global_anim_dbs.list.find(animation_str);
-    if(it != game.content.global_anim_dbs.list.end()) {
-        anim.init_to_first_anim(&game.content.global_anim_dbs.list[animation_str]);
-    } else {
-        game.errors.report(
-            "Unknown animation \"" + animation_str + "\"!",
-            animation_node
-        );
-    }
+    rs.set("shine_threshold", shine_threshold);
+    rs.set("distortion_scale_x", effect_scale[0]);
+    rs.set("distortion_scale_y", effect_scale[1]);
 }

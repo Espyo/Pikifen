@@ -826,16 +826,6 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         */
         
         
-        /********************
-        *             ~ ~ ~ *
-        *   Liquids    ~ ~  *
-        *             ~ ~ ~ *
-        ********************/
-        for(auto &l : game.content.liquids.list) {
-            l.second->anim.tick(delta_t);
-        }
-        
-        
         /******************
         *             ___ *
         *   Mission   \ / *

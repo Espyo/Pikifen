@@ -66,15 +66,21 @@ readonly layout(std430, binding = 3) buffer foamLayout
 
 uniform int edge_count;
 
-uniform ivec2 tex_size;
+uniform vec2 effect_scale;
 uniform vec4 liq_tint;
-//Has the textures tint already applied.
+
+uniform vec4 shine_tint;
+uniform float shine_threshold;
+
+uniform vec4 foam_tint;
+uniform float foam_size;
+
 varying vec4 varying_color;
 
-//
 uniform float fill_level;
-uniform float tex_brightness;
 
+uniform ivec2 tex_size;
+uniform float tex_brightness;
 uniform vec2 tex_translation;
 uniform vec2 tex_scale;
 uniform float tex_rotation;
@@ -182,7 +188,6 @@ float cnoise(vec3 P)
    return 2.2 * n_xyz;
 }
 
-// demo code:
 float color(vec2 xy, float timeScale) { return cnoise(vec3(1.5*xy, timeScale*time)); }
 
 float perlin_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
@@ -204,7 +209,6 @@ vec2 rotate(vec2 xy, float rotation) {
 }
 vec2 toWorldCoords(vec2 xy)
 {
-
    vec2 output = xy;
    output += tex_translation;
 
@@ -248,69 +252,107 @@ float getDistFromEdge(vec2 xy) {
 
 void main()
 {
+   //Define some variables that'll be used throughout the shader
    vec2 worldCoords = toWorldCoords(varying_texcoord);
-
    vec2 step = vec2(1.3, 1.7);
    float noiseScale = 0.01;
-
+   
+   //Calculate perlin noise effects.
    float nX = perlin_noise(worldCoords, noiseScale, step, 0.3);
-   float effectScaleX = 14;
-   nX *= effectScaleX;
+   nX *= effect_scale.x;
    nX *= fill_level;
-
    float nY = perlin_noise(worldCoords, noiseScale, step, 0.3);
-   float effectScaleY = 4;
-   nY *= effectScaleY;
+   nY *= effect_scale.y;
    nY *= fill_level;
-
    vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
-   //Convert from world coords to texture coords
+   
+   //Convert from world coords to texture coords with the perlin noise effect applied.
    vec2 sample_texcoord =
-      vec2((varying_texcoord.x + pEffect.x) / float(tex_size.x), (-varying_texcoord.y + pEffect.y) / float(tex_size.y));
+      vec2(
+         (varying_texcoord.x + pEffect.x) / float(tex_size.x), 
+         (-varying_texcoord.y + pEffect.y) / float(tex_size.y)
+      );
 
+   //Get our base texture, and tint it to the sector's tint.
    vec4 tmp = texture2D(al_tex, sample_texcoord);
-
-   //Base tint
    tmp.r *= varying_color.r;
    tmp.g *= varying_color.g;
    tmp.b *= varying_color.b;
    tmp.a *= varying_color.a;
 
    //Liquid tint
-   float liq_alpha = liq_tint.a + (nX / (effectScaleX * 7)) * 0.5;
+   float liq_alpha = liq_tint.a; + (nX / (effect_scale.x * 7)) * 0.5;
    liq_alpha *= fill_level;
 
+   //Normal blending here, since less light will be passing through the "deeper" the liquid is
    tmp.r *= 1 + (liq_tint.r - 1) * liq_alpha;
    tmp.g *= 1 + (liq_tint.g - 1) * liq_alpha;
    tmp.b *= 1 + (liq_tint.b - 1) * liq_alpha;
 
-   //Random shines
-   float shineScale = nX / effectScaleX;
-   shineScale -= 0.4;
-   shineScale *= 2;
+
+
+   // -- Random shines --
+   //Set our scale between 0 - 1
+   float shineScale = nX / effect_scale.x;
+
+   //Anything below `shine_threshold` will be below 0, resulting in it not showing.
+   //This puts our scale from 0 - (1 - `shine_threshold`)
+   shineScale -= shine_threshold;
+
+   //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
+   //Multiply by the reciprocal to bring it back to 0 - 1;
+   //Add a min value of 0.1 to prevent divide by 0 errors.
+   shineScale *= (1 / max(0.1, 1 - shine_threshold));
+
+   //Since we havent actually restricted negative values yet, do that now.
    shineScale = clamp(shineScale, 0.0, 1.0);
+
+   //Multiply by alpha and brightness after, since we want these to apply no matter what.
    shineScale *= tex_brightness;
+   shineScale *= shine_tint.a;
 
-   tmp.r += shineScale;
-   tmp.g += shineScale;
-   tmp.b += shineScale;
+   //Add the shine!
+   //Use additive blending here, since we want the tint to approach white.
+   tmp.r += shineScale * shine_tint.r;
+   tmp.g += shineScale * shine_tint.g;
+   tmp.b += shineScale * shine_tint.b;
 
-   //Edge foam
-   float maxDist = 25;
-   maxDist += sin(time + (worldCoords.x / 100)) * 3;
-   maxDist += ((2 * perlin_noise(worldCoords, 0.02, step, 0.2)) - 1) * 5;
+
+
+   // -- Edge Foam -- 
+   float maxDist = foam_size;
+
+   //Apply some effects to make sure the foam isnt a straight line.
+   //These parameters aren't super intuitive, so they aren't exposed to the liquid proper.
+   float effectScale = maxDist / 25;
+
+   //First of all, add a slight deviation based on a sine wave. This will break up the ebb and flow of the perlin noise.
+   maxDist += sin(time + (worldCoords.x / 100)) * 3 * effectScale;
+
+   //Next, add a perlin noise effect to introduce an uneven fade.
+   maxDist += ((2 * perlin_noise(worldCoords, 0.02, step, 0.2)) - 1) * 7 * effectScale;
+
+   //Prevent foam from entirely disappearing...
    maxDist = max(1.0, maxDist);
-   //edgeSize *= min(0.0, perlin_noise(worldCoords, 0.01, step, 0.3));
-   maxDist *= fill_level;
-   float edgeScale = maxDist - getDistFromEdge(worldCoords);
-   //Convert to 0-1
-   edgeScale /= maxDist;
-   edgeScale = clamp(edgeScale, 0.0, 0.8);
-   edgeScale *= 0.6;
 
-   tmp.r += edgeScale;
-   tmp.g += edgeScale;
-   tmp.b += edgeScale;
+   //...unless we're draining the liquid.
+   maxDist *= fill_level;
+
+   //Now using this distance, get a 0-1 number for how far away it is.
+   float edgeScale = maxDist - getDistFromEdge(worldCoords);
+   edgeScale /= maxDist;
+
+   //This ensures there's no negatives, and also adds a small flattening as it approaches 1
+   edgeScale = clamp(edgeScale, 0.0, 0.6);
+
+   //Add the alpha and brightness.
+   edgeScale *= foam_tint.a;
+   edgeScale *= tex_brightness;
+
+   //And add it to the full thing!
+   tmp.r += edgeScale * foam_tint.r;
+   tmp.g += edgeScale * foam_tint.g;
+   tmp.b += edgeScale * foam_tint.b;
 
    gl_FragColor = tmp;
 }

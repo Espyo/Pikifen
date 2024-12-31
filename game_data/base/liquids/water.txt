@@ -1,9 +1,11 @@
 name = Water
 description = Everyday body of water.
 
-animation = water
-color = 0 0 64 96
+max_foam_distance = 15
+shine_threshold = 0.45
+body_color = 0 0 64 96
+foam_color = 255 255 255 196
+shine_color = 255 255 255 255
 radar_color = 32 64 180
-surface_1_speed = 10
-surface_2_speed = -13
-surface_alpha = 64
+distortion_scale_x = 14
+distortion_scale_y = 3
