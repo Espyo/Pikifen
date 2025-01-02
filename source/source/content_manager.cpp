@@ -117,7 +117,14 @@ void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_L
     //Now load the content.
     for(size_t t = 0; t < types.size(); t++) {
         content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        const string& perf_mon_name = mgr_ptr->get_perf_mon_measurement_name();
+        if(!perf_mon_name.empty() && game.perf_mon) {
+            game.perf_mon->start_measurement(perf_mon_name);
+        }
         mgr_ptr->load_all(level);
+        if(!perf_mon_name.empty() && game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         load_levels[types[t]] = level;
     }
     

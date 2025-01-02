@@ -20,7 +20,7 @@ logo{
 	pikmin_sway_min_speed=2.5
 	pikmin_size=3.5 3.5
 	pikmin_types{
-		O=flower_icon
+		O=white_flower_icon
 	}
 	map{
 		OOOOO....OOOOOO..OO....OO..OOOOOO..OOOOOO..OOOOOO..OOOO....OO

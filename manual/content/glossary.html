@@ -12,15 +12,20 @@
 </head>
 
 <body onload="setup('Glossary', undefined, undefined, false);">
-  <div id="content" class="highlight-target">
+  <div id="page-content" class="highlight-target">
     
     <p>A glossary of terms used in <i>Pikifen</i>, both for casual play, and for making content. This glossary will not include terms popular in the <i>Pikmin</i> franchise, since you can find more about those on <a href="https://www.pikminwiki.com">Pikipedia</a>, and will also not focus on terms used in the engine's code, even though most of them match what you'd read outside of the code.</p>
     
     <dl>
-      <dd><i><b>Navigation:</i></b> <a href="#.23">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a></dd>
+      <dd><i><b>Navigation:</b></i> <a href="#.23">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a></dd>
     </dl>
     
     <h2 id=".23">#</h2>
+
+    <dl id="9-slice">
+      <dt>9-slice</dt>
+      <dd>A texture typically applied on a <a href="#gui">GUI</a> item that has variable size, like a button. In-engine, a <a href="https://en.wikipedia.org/wiki/9-slice_scaling">9-slice texture</a> is split into three equal-sized rows and three equal-sized columns. The corners are then used for the item's corners as-is, but the edges and center are stretched to fit.</dd>
+    </dl>
     
     <h2 id="A">A</h2>
 
@@ -522,10 +527,6 @@
     <dl id="texture">
       <dt>Texture</dt>
       <dd>Textures are just <a href="#bitmap">bitmaps</a>, although the term is more commonly used when the image portrays terrain, and is meant to tile over and over, like dirt, grass, stone, etc.</dd>
-    </dl>
-    <dl id="texture-box">
-      <dt>Texture box</dt>
-      <dd>A texture typically applied on a <a href="#gui">GUI</a> item that has variable size, like a button. In-engine, a texture box is split into three equal-sized rows and three equal-sized columns. The corners are then used for the item's corners as-is, but the edges and center are stretched to fit.</dd>
     </dl>
     <dl id="top">
       <dt>Top</dt>

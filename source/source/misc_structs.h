@@ -160,7 +160,7 @@ struct asset_file_names_t {
     //Bubble box.
     string bmp_bubble_box = "bubble_box";
     
-    //Texture box for player input buttons.
+    //9-slice texture for player input buttons.
     string bmp_button_box = "button_box";
     
     //Checkbox with a checkmark.
@@ -181,7 +181,7 @@ struct asset_file_names_t {
     //GUI focus box.
     string bmp_focus_box = "focus_box";
     
-    //Texture box for GUI frames.
+    //9-slice texture for GUI frames.
     string bmp_frame_box = "frame_box";
     
     //A hard bubble.
@@ -193,7 +193,7 @@ struct asset_file_names_t {
     //Idle glow.
     string bmp_idle_glow = "idle_glow";
     
-    //Texture box for player input keys.
+    //9-slice texture for player input keys.
     string bmp_key_box = "key_box";
     
     //Leader silhouette from the side.
@@ -653,10 +653,10 @@ struct system_asset_list {
     //Bright ring.
     ALLEGRO_BITMAP* bmp_bright_ring = nullptr;
     
-    //Bubble box.
+    //Bubble 9-slice texture.
     ALLEGRO_BITMAP* bmp_bubble_box = nullptr;
     
-    //Box texture for player input buttons.
+    //9-slice texture for player input buttons.
     ALLEGRO_BITMAP* bmp_button_box = nullptr;
     
     //Checkbox with a checkmark.
@@ -671,10 +671,10 @@ struct system_asset_list {
     //Enemy spirit.
     ALLEGRO_BITMAP* bmp_enemy_spirit = nullptr;
     
-    //Focus box.
+    //9-slice texture for the focused GUI item.
     ALLEGRO_BITMAP* bmp_focus_box = nullptr;
     
-    //Texture box for GUI frames.
+    //9-slice texture for GUI frames.
     ALLEGRO_BITMAP* bmp_frame_box = nullptr;
     
     //A hard bubble.
@@ -686,7 +686,7 @@ struct system_asset_list {
     //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow = nullptr;
     
-    //Box texture for player input keys.
+    //9-slice texture for player input keys.
     ALLEGRO_BITMAP* bmp_key_box = nullptr;
     
     //Leader silhouette from the side.
