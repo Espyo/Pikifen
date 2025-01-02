@@ -1,5 +1,6 @@
-name = Egg shard explosion
+name=Egg shard explosion
 description=An explosion of shards from a recently-broken egg's shell.
+engine_version=0.25.0
 emission{
 	number=12
 	number_deviation=1
@@ -9,6 +10,7 @@ emission{
 	circle_outer_dist=24.0000
 	circle_inner_dist=0.0000
 	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=egg_shard
@@ -42,3 +44,4 @@ orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=0.0000
 linear_speed_deviation=50.0000 50.0000
+angles_are_absolute=true

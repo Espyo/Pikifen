@@ -253,7 +253,9 @@ void particle_generator::emit(particle_manager &manager) {
                 -linear_speed_angle_deviation,
                 linear_speed_angle_deviation
             );
-        if(follow_angle) angle_to_use += (*follow_angle);
+        if(follow_angle && !angles_are_absolute) {
+            angle_to_use += (*follow_angle);
+        }
         
         float v_dev_x =
             randomf(-linear_speed_deviation.x, linear_speed_deviation.x);
@@ -389,6 +391,7 @@ void particle_generator::load_from_data_node(
     grs.set("linear_speed_deviation", linear_speed_deviation);
     grs.set("orbital_speed_deviation", orbital_speed_deviation);
     grs.set("outwards_speed_deviation", outwards_speed_deviation);
+    grs.set("angles_are_absolute", angles_are_absolute);
     
     bmp_angle_deviation = deg_to_rad(bmp_angle_deviation);
     linear_speed_angle_deviation = deg_to_rad(linear_speed_angle_deviation);
@@ -561,6 +564,12 @@ void particle_generator::save_to_data_node(data_node* node) {
         new data_node(
             "linear_speed_deviation",
             p2s(linear_speed_deviation)
+        )
+    );
+    node->add(
+        new data_node(
+            "angles_are_absolute",
+            b2s(angles_are_absolute)
         )
     );
 }

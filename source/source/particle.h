@@ -333,6 +333,9 @@ struct particle_generator : public content {
     //How many degress linear speed can be rotated by.
     float linear_speed_angle_deviation = 0.0f;
     
+    //Are the directions and angles provided absolute, or relative (to a mob)?
+    bool angles_are_absolute = false;
+    
     
     //--- Function declarations ---
     
