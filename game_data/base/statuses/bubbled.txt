@@ -1,7 +1,7 @@
 name = Bubbled
 description = Pikmin that are bubbled will start choking with a bubble of water on their top, and will eventually drown and die. It can be saved by being whistled.
 
-affects_pikmin = true
+affects = pikmin
 color = 0 255 255
 health_change_ratio = -0.3
 maturity_change_amount = -1

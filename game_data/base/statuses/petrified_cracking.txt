@@ -1,7 +1,7 @@
 name = Petrified, cracking
 description = Makes the affected object start shaking, since its petrification is about to crack.
 
-affects_enemies = true
+affects = enemies
 anim_speed_multiplier = 0
 auto_remove_time = 2
 color = 128 0 255

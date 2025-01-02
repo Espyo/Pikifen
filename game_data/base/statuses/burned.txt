@@ -1,7 +1,7 @@
 name = Burned
 description = Pikmin that are burning will start choking from the fire on their top, and will eventually suffocate and die. It can be saved by being whistled.
 
-affects_pikmin = true
+affects = pikmin
 color = 255 0 0
 health_change_ratio = -0.3
 maturity_change_amount = -1

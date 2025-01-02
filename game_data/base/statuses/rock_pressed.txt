@@ -1,7 +1,7 @@
 name = Rock pressed
 description = Rock Pikmin that are pressed down to the ground have managed to resist being crushed, but will stay this way for a few seconds.
 
-affects_pikmin = true
+affects = pikmin
 animation_change = pressed
 auto_remove_time = 6
 color = 0 0 0

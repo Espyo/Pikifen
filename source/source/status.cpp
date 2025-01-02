@@ -59,14 +59,12 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     //Standard data.
     reader_setter rs(node);
     
-    bool affects_pikmin_bool = false;
-    bool affects_leaders_bool = false;
-    bool affects_enemies_bool = false;
-    bool affects_others_bool = false;
+    string affects_str;
     string reapply_rule_str;
     string sc_type_str;
     string particle_offset_str;
     string particle_gen_str;
+    data_node* affects_node = nullptr;
     data_node* reapply_rule_node = nullptr;
     data_node* sc_type_node = nullptr;
     data_node* particle_gen_node = nullptr;
@@ -74,10 +72,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     rs.set("color",                   color);
     rs.set("tint",                    tint);
     rs.set("glow",                    glow);
-    rs.set("affects_pikmin",          affects_pikmin_bool);
-    rs.set("affects_leaders",         affects_leaders_bool);
-    rs.set("affects_enemies",         affects_enemies_bool);
-    rs.set("affects_others",          affects_others_bool);
+    rs.set("affects",                 affects_str);
     rs.set("removable_with_whistle",  removable_with_whistle);
     rs.set("remove_on_hazard_leave",  remove_on_hazard_leave);
     rs.set("auto_remove_time",        auto_remove_time);
@@ -104,17 +99,22 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     rs.set("replacement_on_timeout",  replacement_on_timeout_str);
     
     affects = 0;
-    if(affects_pikmin_bool) {
-        enable_flag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
-    }
-    if(affects_leaders_bool) {
-        enable_flag(affects, STATUS_AFFECTS_FLAG_LEADERS);
-    }
-    if(affects_enemies_bool) {
-        enable_flag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
-    }
-    if(affects_others_bool) {
-        enable_flag(affects, STATUS_AFFECTS_FLAG_OTHERS);
+    vector<string> affects_str_parts = semicolon_list_to_vector(affects_str);
+    for(size_t a = 0; a < affects_str_parts.size(); a++) {
+        if(affects_str_parts[a] == "pikmin") {
+            enable_flag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
+        } else if(affects_str_parts[a] == "leaders") {
+            enable_flag(affects, STATUS_AFFECTS_FLAG_LEADERS);
+        } else if(affects_str_parts[a] == "enemies") {
+            enable_flag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
+        } else if(affects_str_parts[a] == "others") {
+            enable_flag(affects, STATUS_AFFECTS_FLAG_OTHERS);
+        } else {
+            game.errors.report(
+                "Unknown affect target \"" + affects_str_parts[a] + "\"!",
+                affects_node
+            );
+        }
     }
     
     if(reapply_rule_node) {

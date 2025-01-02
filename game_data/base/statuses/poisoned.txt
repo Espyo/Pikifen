@@ -1,7 +1,7 @@
 name = Poisoned
 description = Pikmin that are poisoned will start choking from the poison gas on their top, and will eventually suffocate and die. It can be saved by being whistled.
 
-affects_pikmin = true
+affects = pikmin
 color = 128 16 112
 health_change_ratio = -0.3
 maturity_change_amount = -1
