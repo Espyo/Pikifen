@@ -1,19 +1,19 @@
 name=Playful Yard
+subtitle
 description=In the forest, a few creatures found some large wooden object... While its origin is mysterious, it does give this otherwise drab place some playful life!
 tags=Standard; Forest
-maker=Espyo
-version=1.1.0
-engine_version=0.25.0
-subtitle
 difficulty=2
 bg_bmp=textures/grass_dark
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000
-song
 weather=normal
 day_time_start=420
 day_time_speed=70
+maker=Espyo
+version=1.1.0
+engine_version=0.25.0
+notes
 spray_amounts
 mission_goal=Collect treasures
 mission_goal_all_mobs=true
