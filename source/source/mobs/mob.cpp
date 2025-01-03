@@ -2169,7 +2169,6 @@ void mob::get_sprite_bitmap_effects(
             }
 
             dist closest_dist[2] = {dist(FLT_MAX), dist(FLT_MAX)};
-            point closest_point[2] = {point(), point()};
             for(size_t n = 0; n < 2; n++) {
                 for(size_t e = 0; e < fade_edges[n].size(); e++) {
                     point v1 = point(fade_edges[n][e]->vertexes[0]->x, fade_edges[n][e]->vertexes[0]->y);
@@ -2187,7 +2186,6 @@ void mob::get_sprite_bitmap_effects(
 
                     dist d = dist(closest_pos, pos);
                     closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
-                    closest_point[n] = closest_pos;
                 }
             }
             float total_brightness = texture_sector[1]->brightness * (closest_dist[0].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
