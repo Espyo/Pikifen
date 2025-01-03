@@ -592,7 +592,7 @@ void init_event_things(
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |
-        ALLEGRO_OPENGL
+        ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE
     );
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
@@ -660,6 +660,7 @@ void init_event_things(
  */
 void init_misc() {
     game.mouse_cursor.init();
+    game.shaders.compile_shaders();
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
@@ -703,7 +704,6 @@ void init_misc() {
     game.maker_tools.keys[18] = MAKER_TOOL_TYPE_COLLISION;
     game.maker_tools.keys[19] = MAKER_TOOL_TYPE_HUD;
     
-    game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
     game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
 }
 

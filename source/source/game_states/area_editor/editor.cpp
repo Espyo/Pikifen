@@ -681,10 +681,6 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    for(auto &l : game.content.liquids.list) {
-        l.second->anim.tick(game.delta_t);
-    }
-    
     selection_effect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.delta_t;
     
     editor::do_logic_post();
