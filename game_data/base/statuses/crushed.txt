@@ -1,7 +1,7 @@
 name = Crushed
 description = Pikmin that are crushed will lie there for a bit before succumbing and dying.
 
-affects_pikmin = true
+affects = pikmin
 color = 0 0 0
 speed_multiplier = 0
 state_change_type = custom

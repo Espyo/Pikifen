@@ -1,7 +1,7 @@
 name = Petrified, cracked
 description = Makes the affected object emit some particles from having broken through its petrification, and instantly ends right away.
 
-affects_enemies = true
+affects = enemies
 anim_speed_multiplier = 0
 auto_remove_time = 0.001
 color = 128 0 255

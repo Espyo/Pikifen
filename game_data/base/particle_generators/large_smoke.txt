@@ -1,23 +1,26 @@
-name = Large smoke
+name=Large smoke
 description=Large variant of smoke particle
+engine_version=0.25.0
 emission{
 	number=1
 	number_deviation=0
 	interval=0.2000
 	interval_deviation=0.0000
 	shape=0
-	max_radius=30.0000
-	min_radius=0.0000
-	arc=6.2832
+	circle_outer_dist=30.0000
+	circle_inner_dist=0.0000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=2.0000
 	friction=1.0000
 	blend_type=0
 	color{
-		0.0000=128 128 128 192
+		0.0000=128 128 128 0
+		0.2070=128 128 128 96
 		1.0000=128 128 128 0
 	}
 	size{
@@ -35,7 +38,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=0.0000
+bitmap_angle_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=10.0000
@@ -43,3 +46,4 @@ orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=0.0000
 linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=true

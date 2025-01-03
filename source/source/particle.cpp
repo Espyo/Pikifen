@@ -140,24 +140,24 @@ void particle::tick(const float delta_t) {
 void particle::set_bitmap(
     const string &new_file_name, data_node* node
 ) {
-    if(new_file_name != file && bitmap) {
-        game.content.bitmaps.list.free(file);
+    if(new_file_name != bmp_name && bitmap) {
+        game.content.bitmaps.list.free(bmp_name);
         bitmap = nullptr;
     }
     
     if(new_file_name.empty()) {
-        file.clear();
+        bmp_name.clear();
         return;
     }
     
-    if(new_file_name != file || !bitmap) {
+    if(new_file_name != bmp_name || !bitmap) {
         bitmap =
             game.content.bitmaps.list.get(
                 new_file_name, node, node != nullptr
             );
     }
     
-    file = new_file_name;
+    bmp_name = new_file_name;
 }
 
 
@@ -253,7 +253,9 @@ void particle_generator::emit(particle_manager &manager) {
                 -linear_speed_angle_deviation,
                 linear_speed_angle_deviation
             );
-        if(follow_angle) angle_to_use += (*follow_angle);
+        if(follow_angle && !angles_are_absolute) {
+            angle_to_use += (*follow_angle);
+        }
         
         float v_dev_x =
             randomf(-linear_speed_deviation.x, linear_speed_deviation.x);
@@ -324,14 +326,14 @@ void particle_generator::load_from_data_node(
     
     switch (shape_int) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        ers.set("max_radius", emission.circle_outer_dist);
-        ers.set("min_radius", emission.circle_inner_dist);
-        ers.set("arc", emission.circle_arc);
-        ers.set("arc_rotation", emission.circle_arc_rot);
+        ers.set("circle_outer_dist", emission.circle_outer_dist);
+        ers.set("circle_inner_dist", emission.circle_inner_dist);
+        ers.set("circle_arc", emission.circle_arc);
+        ers.set("circle_arc_rot", emission.circle_arc_rot);
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-        ers.set("max_offset", emission.rect_outer_dist);
-        ers.set("min_offset", emission.rect_inner_dist);
+        ers.set("rect_outer_dist", emission.rect_outer_dist);
+        ers.set("rect_inner_dist", emission.rect_inner_dist);
         break;
     }
     }
@@ -341,8 +343,8 @@ void particle_generator::load_from_data_node(
     data_node* bitmap_node = nullptr;
     size_t blend_int = 0;
     
-    prs.set("bitmap", base_particle.file, &bitmap_node);
-    prs.set("rotation", base_particle.bmp_angle);
+    prs.set("bitmap", base_particle.bmp_name, &bitmap_node);
+    prs.set("bitmap_angle", base_particle.bmp_angle);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("blend_type", blend_int);
@@ -370,18 +372,18 @@ void particle_generator::load_from_data_node(
         if(level >= CONTENT_LOAD_LEVEL_FULL) {
             base_particle.bitmap =
                 game.content.bitmaps.list.get(
-                    base_particle.file, bitmap_node
+                    base_particle.bmp_name, bitmap_node
                 );
         }
     } else {
-        base_particle.file = "";
+        base_particle.bmp_name = "";
         base_particle.bitmap = nullptr;
     }
     
     base_particle.time = base_particle.duration;
     base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
     
-    grs.set("rotation_deviation", bmp_angle_deviation);
+    grs.set("bitmap_angle_deviation", bmp_angle_deviation);
     grs.set("duration_deviation", duration_deviation);
     grs.set("friction_deviation", friction_deviation);
     grs.set("size_deviation", size_deviation);
@@ -389,6 +391,7 @@ void particle_generator::load_from_data_node(
     grs.set("linear_speed_deviation", linear_speed_deviation);
     grs.set("orbital_speed_deviation", orbital_speed_deviation);
     grs.set("outwards_speed_deviation", outwards_speed_deviation);
+    grs.set("angles_are_absolute", angles_are_absolute);
     
     bmp_angle_deviation = deg_to_rad(bmp_angle_deviation);
     linear_speed_angle_deviation = deg_to_rad(linear_speed_angle_deviation);
@@ -401,9 +404,12 @@ void particle_generator::load_from_data_node(
 }
 
 
-void particle_generator::save_to_data_node(
-    data_node* node
-) {
+/**
+ * @brief Saves particle generator data to a data node.
+ *
+ * @param node Node to save to.
+ */
+void particle_generator::save_to_data_node(data_node* node) {
     //Content metadata.
     save_metadata_to_data_node(node);
     
@@ -429,24 +435,24 @@ void particle_generator::save_to_data_node(
     switch (emission.shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
         emission_particle_node->add(
-            new data_node("max_radius", f2s(emission.circle_outer_dist))
+            new data_node("circle_outer_dist", f2s(emission.circle_outer_dist))
         );
         emission_particle_node->add(
-            new data_node("min_radius", f2s(emission.circle_inner_dist))
+            new data_node("circle_inner_dist", f2s(emission.circle_inner_dist))
         );
         emission_particle_node->add(
-            new data_node("arc", f2s(emission.circle_arc))
+            new data_node("circle_arc", f2s(emission.circle_arc))
         );
         emission_particle_node->add(
-            new data_node("arc_rotation", f2s(emission.circle_arc_rot))
+            new data_node("circle_arc_rot", f2s(emission.circle_arc_rot))
         );
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         emission_particle_node->add(
-            new data_node("max_offset", p2s(emission.rect_outer_dist))
+            new data_node("rect_outer_dist", p2s(emission.rect_outer_dist))
         );
         emission_particle_node->add(
-            new data_node("min_offset", p2s(emission.rect_inner_dist))
+            new data_node("rect_inner_dist", p2s(emission.rect_inner_dist))
         );
         break;
     }
@@ -456,10 +462,10 @@ void particle_generator::save_to_data_node(
     node->add(base_particle_node);
     
     base_particle_node->add(
-        new data_node("bitmap", base_particle.file)
+        new data_node("bitmap", base_particle.bmp_name)
     );
     base_particle_node->add(
-        new data_node("rotation", f2s(rad_to_deg(base_particle.bmp_angle)))
+        new data_node("bitmap_angle", f2s(rad_to_deg(base_particle.bmp_angle)))
     );
     base_particle_node->add(
         new data_node("duration", f2s(base_particle.duration))
@@ -522,7 +528,10 @@ void particle_generator::save_to_data_node(
     }
     
     node->add(
-        new data_node("rotation_deviation", f2s(rad_to_deg(bmp_angle_deviation)))
+        new data_node(
+            "bitmap_angle_deviation",
+            f2s(rad_to_deg(bmp_angle_deviation))
+        )
     );
     node->add(
         new data_node("duration_deviation", f2s(duration_deviation))
@@ -534,16 +543,34 @@ void particle_generator::save_to_data_node(
         new data_node("size_deviation", f2s(size_deviation))
     );
     node->add(
-        new data_node("orbital_speed_deviation", f2s(orbital_speed_deviation))
+        new data_node(
+            "orbital_speed_deviation",
+            f2s(orbital_speed_deviation)
+        )
     );
     node->add(
-        new data_node("outwards_speed_deviation", f2s(outwards_speed_deviation))
+        new data_node(
+            "outwards_speed_deviation",
+            f2s(outwards_speed_deviation)
+        )
     );
     node->add(
-        new data_node("angle_deviation", f2s(rad_to_deg(linear_speed_angle_deviation)))
+        new data_node(
+            "angle_deviation",
+            f2s(rad_to_deg(linear_speed_angle_deviation))
+        )
     );
     node->add(
-        new data_node("linear_speed_deviation", p2s(linear_speed_deviation))
+        new data_node(
+            "linear_speed_deviation",
+            p2s(linear_speed_deviation)
+        )
+    );
+    node->add(
+        new data_node(
+            "angles_are_absolute",
+            b2s(angles_are_absolute)
+        )
     );
 }
 

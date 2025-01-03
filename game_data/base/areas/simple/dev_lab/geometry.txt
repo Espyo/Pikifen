@@ -12739,7 +12739,6 @@ mobs{
 	bridge{
 		type=wood_bridge
 		p=1696.0000 -640.0000
-		vars=chunks=5;max_health=20.0000
 		links=154
 	}
 	custom{

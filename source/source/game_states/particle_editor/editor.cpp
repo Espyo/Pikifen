@@ -542,6 +542,7 @@ void particle_editor::setup_for_new_part_gen_pre() {
     selected_linear_speed_keyframe = 0;
     selected_oribital_velocity_keyframe = 0;
     selected_outward_velocity_keyframe = 0;
+    loaded_gen = particle_generator();
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);

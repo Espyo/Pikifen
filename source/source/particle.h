@@ -163,7 +163,7 @@ struct particle {
     float bmp_angle = 0.0f;
     
     //The bitmap's internal name, or an empty string to use a circle.
-    string file = "";
+    string bmp_name = "";
     
     //Current state.
     
@@ -333,6 +333,9 @@ struct particle_generator : public content {
     //How many degress linear speed can be rotated by.
     float linear_speed_angle_deviation = 0.0f;
     
+    //Are the directions and angles provided absolute, or relative (to a mob)?
+    bool angles_are_absolute = false;
+    
     
     //--- Function declarations ---
     
@@ -352,6 +355,6 @@ struct particle_generator : public content {
     //--- Members ---
     
     //Time left before the next emission.
-    float emission_timer;
+    float emission_timer = 0.0f;
     
 };

@@ -1,18 +1,20 @@
-name = Purple Pikmin pound
+name=Purple Pikmin pound
 description=A brief explosion of dust from a Purple Pikmin landing on top of an enemy.
+engine_version=0.25.0
 emission{
 	number=12
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=0
-	max_radius=0.0000
-	min_radius=0.0000
-	arc=6.2832
+	circle_outer_dist=20.9000
+	circle_inner_dist=17.0000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=0.5000
 	friction=1.8000
 	blend_type=0
@@ -25,17 +27,16 @@ base{
 		1.0000=36.0000
 	}
 	linear_speed{
-		0.0000=120.0000 0.0000
-		1.0000=120.0000 0.0000
+		0.0000=0.0000 0.0000
 	}
 	outwards_speed{
-		0.0000=0.0000
+		0.0000=120.0000
 	}
 	orbital_speed{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=0.0000
+bitmap_angle_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=2.0000

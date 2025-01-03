@@ -601,7 +601,7 @@ void particle_editor::process_gui_panel_generator() {
     }
     set_tooltip(
         "Play or pause the particle system.",
-        "Spacebar"
+        "Shift + Spacebar"
     );
     
     ImGui::SameLine();
@@ -641,7 +641,7 @@ void particle_editor::process_gui_panel_generator() {
         loaded_gen.emission.interval == 0.0f ?
         "Emit particles now." :
         "Play or pause the particle generator's emission.",
-        "Shift + Spacebar"
+        "Spacebar"
     );
     
     //Particle generator angle value.
@@ -1178,13 +1178,13 @@ void particle_editor::process_gui_panel_generator() {
     );
     if(open_behavior_node) {
     
-        //Duration node.
-        bool open_duration_node =
-            saveable_tree_node("generatorBehavior", "Duration");
+        //Basics node.
+        bool open_basics_node =
+            saveable_tree_node("generatorBehavior", "Basics");
         set_tooltip(
-            "Control how long a particle lasts for here."
+            "Control how long a particle lasts for, and more, here."
         );
-        if(open_duration_node) {
+        if(open_basics_node) {
         
             //Duration value.
             ImGui::SetNextItemWidth(85);
@@ -1220,6 +1220,22 @@ void particle_editor::process_gui_panel_generator() {
                 "A particle's lifespan varies randomly up or down by this "
                 "amount.",
                 "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Absolute angles checkbox.
+            ImGui::Spacer();
+            if(
+                ImGui::Checkbox(
+                    "Absolute angles", &loaded_gen.angles_are_absolute
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "If unchecked, the angles the particles move at are relative\n"
+                "to the angle of the object, if the particle generator\n"
+                "is attached to an object. If checked, the angles are\n"
+                "always the same no matter what."
             );
             
             ImGui::TreePop();

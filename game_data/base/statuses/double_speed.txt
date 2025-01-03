@@ -1,8 +1,6 @@
 name = Double speed
 description = Makes the affected object move at double the speed.
 
-affects_enemies = true
-affects_leaders = true
-affects_pikmin = true
+affects = enemies; leaders; pikmin; others
 color = 255 64 64
 speed_multiplier = 2

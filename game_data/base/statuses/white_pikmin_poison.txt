@@ -1,7 +1,7 @@
 name = White Pikmin poison
 description = Enemies that have swallowed White Pikmin will suffer from some poisonous effects as their health temporarily saps away. The more White Pikmin ingested, the longer it lasts for.
 
-affects_enemies = true
+affects = pikmin
 auto_remove_time = 4
 color = 128 16 112
 health_change = -200

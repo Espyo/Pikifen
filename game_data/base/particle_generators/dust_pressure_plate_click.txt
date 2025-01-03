@@ -1,17 +1,18 @@
-name = Dust (pressure plate click)
+name=Dust (pressure plate click)
 description=A quick explosion of dust. Used, for instance, when a pressure plate is pressed down.
+engine_version=0.25.0
 emission{
 	number=15
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=1
-	max_offset=0.0000 0.0000
-	min_offset=0.0000 0.0000
+	rect_outer_dist=40.0000 40.0000
+	rect_inner_dist=40.0000 40.0000
 }
 base{
 	bitmap=smoke
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=0.2000
 	friction=5.0000
 	blend_type=0
@@ -21,20 +22,19 @@ base{
 	}
 	size{
 		0.0000=3.0000
-		1.0000=15.0000
+		1.0000=50.0000
 	}
 	linear_speed{
-		0.0000=220.0000 0.0000
-		1.0000=220.0000 0.0000
+		1.0000=0.0000 0.0000
 	}
 	outwards_speed{
-		0.0000=0.0000
+		0.0000=220.0000
 	}
 	orbital_speed{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=0.0000
+bitmap_angle_deviation=0.0000
 duration_deviation=0.3000
 friction_deviation=0.0000
 size_deviation=0.0000

@@ -1,18 +1,20 @@
-name = Petrification crack
+name=Petrification crack
 description=A small explosion of rocks from when a petrified enemy manages to break free.
+engine_version=0.25.0
 emission{
 	number=16
 	number_deviation=0
 	interval=0.0000
 	interval_deviation=0.0000
 	shape=0
-	max_radius=32.0000
-	min_radius=0.0000
-	arc=6.2832
+	circle_outer_dist=32.0000
+	circle_inner_dist=0.0000
+	circle_arc=6.2832
+	circle_arc_rot=0.0000
 }
 base{
 	bitmap=rock
-	rotation=0.0000
+	bitmap_angle=0.0000
 	duration=1.0000
 	friction=3.0000
 	blend_type=0
@@ -34,7 +36,7 @@ base{
 		0.0000=0.0000
 	}
 }
-rotation_deviation=15.0000
+bitmap_angle_deviation=15.0000
 duration_deviation=0.2500
 friction_deviation=0.2000
 size_deviation=4.0000
@@ -42,3 +44,4 @@ orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=0.0000
 linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=true

@@ -74,10 +74,10 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
         save_cmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)) {
         part_mgr_playback_toggle_cmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
         part_gen_playback_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {

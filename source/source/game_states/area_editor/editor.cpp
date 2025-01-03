@@ -2081,6 +2081,12 @@ void area_editor::pick_texture(
         },
         FOLDER_NAMES::TEXTURES
         );
+    } else {
+        if(s_ptr->texture_info.file_name == name) return;
+        register_change("sector texture change");
+        update_texture_suggestions(name);
+        update_sector_texture(s_ptr, name);
+        homogenize_selected_sectors();
     }
 }
 
