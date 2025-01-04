@@ -100,7 +100,7 @@ script {
             stop
         }
         on_frame_signal {
-            hold_focused_mob nodule
+            hold_focused_mob nodule true
             send_message_to_focus be_carried
             set_var has_nodule true
         }

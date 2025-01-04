@@ -1025,6 +1025,7 @@ void init_mob_actions() {
     );
     
     reg_param("body part name", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("hold above", MOB_ACTION_PARAM_BOOL, false, true);
     reg_action(
         MOB_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
