@@ -1755,7 +1755,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("in_group_chasing_h");
+            efc.run(pikmin_fsm::finish_called_anim);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -2629,9 +2629,18 @@ void pikmin_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
             lea_ptr = lea_ptr->following_group;
         }
         lea_ptr->add_to_group(pik_ptr);
-        pik_ptr->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING, info1, info2);
+        pik_ptr->fsm.set_state(
+            pik_ptr->holding.empty() ?
+            PIKMIN_STATE_IN_GROUP_CHASING :
+            PIKMIN_STATE_IN_GROUP_CHASING_H,
+            info1, info2);
     } else {
-        pik_ptr->fsm.set_state(PIKMIN_STATE_IDLING, info1, info2);
+        pik_ptr->fsm.set_state(
+            pik_ptr->holding.empty() ?
+            PIKMIN_STATE_IDLING :
+            PIKMIN_STATE_IDLING_H,
+            info1, info2
+        );
     }
 }
 
@@ -3227,8 +3236,7 @@ void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief When a Pikmin being bounced back from an impact attack lands
- * on the ground.
+ * @brief When a Pikmin lands after being thrown from a pluck.
  *
  * @param m The mob.
  * @param info1 Pointer to the hitbox touch information structure.
