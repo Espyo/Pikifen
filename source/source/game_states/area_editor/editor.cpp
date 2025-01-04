@@ -572,9 +572,10 @@ void area_editor::create_mob_under_cursor() {
  * @brief Deletes the current area.
  */
 void area_editor::delete_current_area() {
-    bool go_to_area_select = false;
-    string final_status_text;
-    bool final_status_error = false;
+    string orig_internal_name = manifest.internal_name;
+    bool go_to_load_dialog = true;
+    bool success = false;
+    string message_box_text;
     
     //Start by deleting the user data, if any.
     vector<string> non_important_files;
@@ -587,74 +588,86 @@ void area_editor::delete_current_area() {
     );
     
     if(!changes_mgr.exists_on_disk()) {
-        //If the area doesn't exist, since it was never saved,
-        //then there's nothing to delete.
-        final_status_text =
-            "Deleted area \"" + manifest.internal_name +
-            "\" successfully.";
-        go_to_area_select = true;
+        //If the area doesn't exist on disk, since it was never
+        //saved, then there's nothing to delete.
+        success = true;
+        go_to_load_dialog = true;
         
     } else {
         //Delete the actual area data.
         non_important_files.clear();
         non_important_files.push_back(FILE_NAMES::AREA_MAIN_DATA);
         non_important_files.push_back(FILE_NAMES::AREA_GEOMETRY);
-        WIPE_FOLDER_RESULT result =
+        FS_DELETE_RESULT result =
             wipe_folder(
                 manifest.path,
                 non_important_files
             );
             
-        //Let's the inform the user of what happened.
         switch(result) {
-        case WIPE_FOLDER_RESULT_OK: {
-            final_status_text =
-                "Deleted area \"" + manifest.internal_name +
-                "\" successfully.";
-            go_to_area_select = true;
+        case FS_DELETE_RESULT_OK: {
+            success = true;
+            go_to_load_dialog = true;
             break;
-        } case WIPE_FOLDER_RESULT_NOT_FOUND: {
-            final_status_text =
-                "Area \"" + manifest.internal_name +
-                "\" deletion failed; folder not found!";
-            final_status_error = true;
-            go_to_area_select = false;
+        } case FS_DELETE_RESULT_NOT_FOUND: {
+            success = false;
+            message_box_text =
+                "Area \"" + orig_internal_name +
+                "\" deletion failed! The folder was not found!";
+            go_to_load_dialog = false;
             break;
-        } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
-            final_status_text =
-                "Deleted area \"" + manifest.internal_name +
-                "\", but folder still has user files!";
-            final_status_error = true;
-            go_to_area_select = false;
+        } case FS_DELETE_RESULT_HAS_IMPORTANT: {
+            success = true;
+            message_box_text =
+                "The area \"" + orig_internal_name + "\" was deleted "
+                "successfully, but the folder still has user files, which "
+                "have not been deleted.";
+            go_to_load_dialog = true;
             break;
-        } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
-            final_status_text =
-                "Area \"" + manifest.internal_name +
-                "\" deletion failed; error while deleting something! "
-                "(Permissions?)";
-            final_status_error = true;
-            go_to_area_select = false;
+        } case FS_DELETE_RESULT_DELETE_ERROR: {
+            success = false;
+            message_box_text =
+                "Area \"" + orig_internal_name +
+                "\" deletion failed! Something went wrong. Please make sure "
+                "there are enough permissions to delete the folder and "
+                "try again.";
+            go_to_load_dialog = false;
             break;
         }
         }
         
     }
     
-    auto man_it =
-        game.content.areas.manifests[game.cur_area_data->type].find(
-            manifest.internal_name
+    //This code will be run after everything is done, be it after the standard
+    //procedure, or after the user hits OK on the message box.
+    const auto finish_up = [ = ] () {
+        if(go_to_load_dialog) {
+            setup_for_new_area_pre();
+            open_load_dialog();
+        }
+    };
+    
+    //Update the status bar.
+    if(success) {
+        set_status(
+            "Deleted area \"" + orig_internal_name + "\" successfully."
         );
-    if(man_it != game.content.areas.manifests[game.cur_area_data->type].end()) {
-        game.content.areas.manifests[game.cur_area_data->type].erase(man_it);
-    }
-    manifest.clear();
-    
-    if(go_to_area_select) {
-        clear_current_area();
-        open_load_dialog();
+    } else {
+        set_status(
+            "Area \"" + orig_internal_name + "\" deletion failed!", true
+        );
     }
     
-    set_status(final_status_text, final_status_error);
+    //If there's something to tell the user, tell them.
+    if(message_box_text.empty()) {
+        finish_up();
+    } else {
+        open_message_dialog(
+            "Area deletion failed!",
+            message_box_text,
+            finish_up
+        );
+    }
 }
 
 
@@ -2185,7 +2198,7 @@ void area_editor::delete_area_cmd(float input_value) {
         "Delete area?",
         std::bind(&area_editor::process_gui_delete_area_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->custom_size = point(600, 0);
 }
 
 
@@ -3613,6 +3626,7 @@ void area_editor::setup_for_new_area_post() {
  */
 void area_editor::setup_for_new_area_pre() {
     clear_current_area();
+    manifest.clear();
     
     game.cam.zoom = 1.0f;
     game.cam.pos = point();

@@ -109,6 +109,41 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
 
 
 /**
+ * @brief Deletes a file on the disk.
+ * 
+ * @param path Path to the file.
+ * @return A status code.
+ */
+FS_DELETE_RESULT delete_file(const string& file_path) {
+    //Panic check to make sure nothing went wrong and it's an important file.
+    //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
+    engine_assert(
+        file_path.size() >= 4,
+        "Tried to delete the file \"" + file_path + "\"!"
+    );
+    
+    ALLEGRO_FS_ENTRY* file = al_create_fs_entry(file_path.c_str());
+    if(!file) {
+        return FS_DELETE_RESULT_NOT_FOUND;
+    }
+    
+    if(has_flag(al_get_fs_entry_mode(file), ALLEGRO_FILEMODE_ISDIR)) {
+        al_destroy_fs_entry(file);
+        return FS_DELETE_RESULT_NOT_FOUND;
+    }
+            
+    if(!al_remove_fs_entry(file)) {
+        al_destroy_fs_entry(file);
+        return FS_DELETE_RESULT_DELETE_ERROR;
+    }
+        
+    al_destroy_fs_entry(file);
+    
+    return FS_DELETE_RESULT_OK;
+}
+
+
+/**
  * @brief Returns whether a given file exists.
  *
  * @param path Path to the file.
@@ -680,7 +715,7 @@ int show_message_box(
  * @param non_important_files List of files that can be deleted.
  * @return An error code.
  */
-WIPE_FOLDER_RESULT wipe_folder(
+FS_DELETE_RESULT wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 ) {
     //Panic check to make sure nothing went wrong and it's an important folder.
@@ -693,7 +728,7 @@ WIPE_FOLDER_RESULT wipe_folder(
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_path.c_str());
     if(!folder || !al_open_directory(folder)) {
-        return WIPE_FOLDER_RESULT_NOT_FOUND;
+        return FS_DELETE_RESULT_NOT_FOUND;
     }
     
     bool has_important_files = false;
@@ -753,10 +788,10 @@ WIPE_FOLDER_RESULT wipe_folder(
     al_destroy_fs_entry(folder);
     
     if(non_important_file_delete_error || folder_delete_error) {
-        return WIPE_FOLDER_RESULT_DELETE_ERROR;
+        return FS_DELETE_RESULT_DELETE_ERROR;
     }
     if(has_important_files || has_folders) {
-        return WIPE_FOLDER_RESULT_HAS_IMPORTANT;
+        return FS_DELETE_RESULT_HAS_IMPORTANT;
     }
-    return WIPE_FOLDER_RESULT_OK;
+    return FS_DELETE_RESULT_OK;
 }

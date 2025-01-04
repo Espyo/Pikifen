@@ -98,6 +98,7 @@ animation_editor::animation_editor() :
         &animation_editor::leader_silhouette_toggle_cmd,
         "leader_silhouette_toggle"
     );
+    register_cmd(&animation_editor::delete_anim_db_cmd, "delete_anim_db");
     register_cmd(&animation_editor::load_cmd, "load");
     register_cmd(&animation_editor::mob_radius_toggle_cmd, "mob_radius_toggle");
     register_cmd(&animation_editor::play_animation_cmd, "play_animation");
@@ -196,6 +197,103 @@ void animation_editor::create_anim_db(const string &path) {
         "Created animation database \"" +
         manifest.internal_name + "\" successfully."
     );
+}
+
+
+/**
+ * @brief Code to run for the delete current animation database command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void animation_editor::delete_anim_db_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
+    open_dialog(
+        "Delete animation database?",
+        std::bind(&animation_editor::process_gui_delete_anim_db_dialog, this)
+    );
+    dialogs.back()->custom_size = point(600, 0);
+}
+
+
+/**
+ * @brief Deletes the current animation database.
+ */
+void animation_editor::delete_current_anim_db() {
+    string orig_internal_name = manifest.internal_name;
+    bool go_to_load_dialog = true;
+    bool success = false;
+    string message_box_text;
+    
+    if(!changes_mgr.exists_on_disk()) {
+        //If the database doesn't exist on disk, since it was never
+        //saved, then there's nothing to delete.
+        success = true;
+        go_to_load_dialog = true;
+        
+    } else {
+        //Delete the file.
+        FS_DELETE_RESULT result = delete_file(manifest.path);
+        
+        switch(result) {
+        case FS_DELETE_RESULT_OK:
+        case FS_DELETE_RESULT_HAS_IMPORTANT: {
+            success = true;
+            go_to_load_dialog = true;
+            break;
+        } case FS_DELETE_RESULT_NOT_FOUND: {
+            success = false;
+            message_box_text =
+                "Animation database \"" + orig_internal_name +
+                "\" deletion failed! The file was not found!";
+            go_to_load_dialog = false;
+            break;
+        } case FS_DELETE_RESULT_DELETE_ERROR: {
+            success = false;
+            message_box_text =
+                "Animation database \"" + orig_internal_name +
+                "\" deletion failed! Something went wrong. Please make sure "
+                "there are enough permissions to delete the file and "
+                "try again.";
+            go_to_load_dialog = false;
+            break;
+        }
+        }
+        
+    }
+    
+    //This code will be run after everything is done, be it after the standard
+    //procedure, or after the user hits OK on the message box.
+    const auto finish_up = [ = ] () {
+        if(go_to_load_dialog) {
+            setup_for_new_anim_db_pre();
+            open_load_dialog();
+        }
+    };
+    
+    //Update the status bar.
+    if(success) {
+        set_status(
+            "Deleted animation database \"" + orig_internal_name +
+            "\" successfully."
+        );
+    } else {
+        set_status(
+            "Animation database \"" + orig_internal_name +
+            "\" deletion failed!", true
+        );
+    }
+    
+    //If there's something to tell the user, tell them.
+    if(message_box_text.empty()) {
+        finish_up();
+    } else {
+        open_message_dialog(
+            "Animation database deletion failed!",
+            message_box_text,
+            finish_up
+        );
+    }
 }
 
 
@@ -1295,6 +1393,7 @@ void animation_editor::setup_for_new_anim_db_pre() {
     
     db.destroy();
     cur_anim_i.clear();
+    manifest.clear();
     anim_playing = false;
     cur_sprite = nullptr;
     cur_hitbox = nullptr;

@@ -190,6 +190,61 @@ void particle_editor::process_gui_control_panel() {
 
 
 /**
+ * @brief Processes the Dear ImGui particle generator deletion dialog
+ * for this frame.
+ */
+void particle_editor::process_gui_delete_part_gen_dialog() {
+    //Explanation text.
+    string explanation_str;
+    if(!changes_mgr.exists_on_disk()) {
+        explanation_str =
+            "You have never saved this particle generator to disk, so if you\n"
+            "delete, you will only lose your unsaved progress.";
+    } else {
+        explanation_str =
+            "If you delete, you will lose all unsaved progress, and the\n"
+            "particle generator's files on the disk will be gone FOREVER!";
+    }
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation_str.c_str()).x);
+    ImGui::Text("%s", explanation_str.c_str());
+    
+    //Final warning text.
+    string final_warning_str =
+        "Are you sure you want to delete the particle generator \"" +
+        manifest.internal_name + "\"?";
+    ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
+    ImGui::TextColored(
+        ImVec4(0.8, 0.6, 0.6, 1.0),
+        "%s", final_warning_str.c_str()
+    );
+    
+    //Cancel button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(100 + 100 + 30);
+    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
+        close_top_dialog();
+    }
+    
+    //Delete button.
+    ImGui::SameLine(0.0f, 30);
+    ImGui::PushStyleColor(
+        ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonHovered, ImVec4(0.5, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonActive, ImVec4(0.4, 0.1, 0.1, 1.0)
+    );
+    if(ImGui::Button("Delete", ImVec2(100, 40))) {
+        close_top_dialog();
+        delete_current_part_gen();
+    }
+    ImGui::PopStyleColor(3);
+}
+
+
+/**
  * @brief Processes the "load" dialog for this frame.
  */
 void particle_editor::process_gui_load_dialog() {
@@ -250,7 +305,7 @@ void particle_editor::process_gui_menu_bar() {
             );
             
             //Reload current file item.
-            if(ImGui::MenuItem("Reload current file")) {
+            if(ImGui::MenuItem("Reload current particle generator")) {
                 reload_widget_pos = get_last_widget_pos();
                 reload_cmd(1.0f);
             }
@@ -259,12 +314,20 @@ void particle_editor::process_gui_menu_bar() {
             );
             
             //Save file item.
-            if(ImGui::MenuItem("Save file", "Ctrl+S")) {
+            if(ImGui::MenuItem("Save current particle generator", "Ctrl+S")) {
                 save_cmd(1.0f);
             }
             set_tooltip(
                 "Save the particle generator into the file on disk.",
                 "Ctrl + S"
+            );
+            
+            //Delete current particle generator item.
+            if(ImGui::MenuItem("Delete current particle generator")) {
+                delete_part_gen_cmd(1.0f);
+            }
+            set_tooltip(
+                "Delete the current particle generator from the disk."
             );
             
             //Separator item.

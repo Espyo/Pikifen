@@ -35,20 +35,20 @@ enum FILE_DIALOG_RESULT {
 };
 
 
-//Possible results for a folder wipe operation.
-enum WIPE_FOLDER_RESULT {
+//Possible results for a filesystem deletion operation.
+enum FS_DELETE_RESULT {
 
-    //Wipe successful.
-    WIPE_FOLDER_RESULT_OK,
+    //Successful.
+    FS_DELETE_RESULT_OK,
     
-    //Folder not found.
-    WIPE_FOLDER_RESULT_NOT_FOUND,
+    //File or folder not found.
+    FS_DELETE_RESULT_NOT_FOUND,
     
     //Folder has important files inside, or has folders inside.
-    WIPE_FOLDER_RESULT_HAS_IMPORTANT,
+    FS_DELETE_RESULT_HAS_IMPORTANT,
     
     //An error occurred somewhere when deleting a file or folder.
-    WIPE_FOLDER_RESULT_DELETE_ERROR,
+    FS_DELETE_RESULT_DELETE_ERROR,
     
 };
 
@@ -67,6 +67,7 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l);
+FS_DELETE_RESULT delete_file(const string& file_path);
 string get_key_name(int keycode, bool condensed);
 void getline(ALLEGRO_FILE* file, string &line);
 bool file_exists(const string &path);
@@ -100,6 +101,6 @@ int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 );
-WIPE_FOLDER_RESULT wipe_folder(
+FS_DELETE_RESULT wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 );

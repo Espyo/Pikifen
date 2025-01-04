@@ -58,6 +58,7 @@ gui_editor::gui_editor() :
     register_cmd(
         &gui_editor::grid_interval_increase_cmd, "grid_interval_increase"
     );
+    register_cmd(&gui_editor::delete_gui_def_cmd, "delete_gui_def");
     register_cmd(&gui_editor::load_cmd, "load");
     register_cmd(&gui_editor::quit_cmd, "quit");
     register_cmd(&gui_editor::reload_cmd, "reload");
@@ -123,6 +124,112 @@ void gui_editor::create_gui_def(
         "Created GUI definition \"" +
         manifest.internal_name + "\" successfully."
     );
+}
+
+
+/**
+ * @brief Deletes the current GUI definition.
+ */
+void gui_editor::delete_current_gui_def() {
+    string orig_internal_name = manifest.internal_name;
+    bool go_to_load_dialog = true;
+    bool success = false;
+    string message_box_text;
+    
+    if(!changes_mgr.exists_on_disk()) {
+        //If the definition doesn't exist on disk, since it was never
+        //saved, then there's nothing to delete.
+        success = true;
+        go_to_load_dialog = true;
+        
+    } else {
+        //Delete the file.
+        FS_DELETE_RESULT result = delete_file(manifest.path);
+        
+        switch(result) {
+        case FS_DELETE_RESULT_OK:
+        case FS_DELETE_RESULT_HAS_IMPORTANT: {
+            success = true;
+            go_to_load_dialog = true;
+            break;
+        } case FS_DELETE_RESULT_NOT_FOUND: {
+            success = false;
+            message_box_text =
+                "GUI definition \"" + orig_internal_name +
+                "\" deletion failed! The file was not found!";
+            go_to_load_dialog = false;
+            break;
+        } case FS_DELETE_RESULT_DELETE_ERROR: {
+            success = false;
+            message_box_text =
+                "GUI definition \"" + orig_internal_name +
+                "\" deletion failed! Something went wrong. Please make sure "
+                "there are enough permissions to delete the file and "
+                "try again.";
+            go_to_load_dialog = false;
+            break;
+        }
+        }
+        
+    }
+    
+    //This code will be run after everything is done, be it after the standard
+    //procedure, or after the user hits OK on the message box.
+    const auto finish_up = [ = ] () {
+        if(go_to_load_dialog) {
+            setup_for_new_gui_def();
+            open_load_dialog();
+        }
+    };
+    
+    //Update the status bar.
+    if(success) {
+        set_status(
+            "Deleted GUI definition \"" + orig_internal_name +
+            "\" successfully."
+        );
+    } else {
+        set_status(
+            "GUI definition \"" + orig_internal_name +
+            "\" deletion failed!", true
+        );
+    }
+    
+    //If there's something to tell the user, tell them.
+    if(message_box_text.empty()) {
+        finish_up();
+    } else {
+        open_message_dialog(
+            "GUI definition deletion failed!",
+            message_box_text,
+            finish_up
+        );
+    }
+}
+
+
+/**
+ * @brief Code to run for the delete current GUI definition command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void gui_editor::delete_gui_def_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
+    if(manifest.pack == FOLDER_NAMES::BASE_PACK) {
+        open_message_dialog(
+            "Can't delete GUI definition!",
+            "This GUI definition is in the base pack, so it can't be deleted!",
+            nullptr
+        );
+        return;
+    }
+    
+    open_dialog(
+        "Delete GUI definition?",
+        std::bind(&gui_editor::process_gui_delete_gui_def_dialog, this)
+    );
+    dialogs.back()->custom_size = point(600, 0);
 }
 
 
@@ -585,6 +692,7 @@ bool gui_editor::save_gui_def() {
  * be it from an existing file or from scratch.
  */
 void gui_editor::setup_for_new_gui_def() {
+    manifest.clear();
     items.clear();
     cur_item = INVALID;
     

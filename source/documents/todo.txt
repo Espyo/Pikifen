@@ -2,24 +2,20 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Fire geyser smoke "rises" forward instead of up
-    The treasure a Dweevil carries on its back appears underneath it (at least it did for 2 Euro)
-    Bomb rocks shouldn't do their normal explosion particles if they explode inside a mob
-    Whistling a Pikmin that's picking up a bomb crashes
-    The Cyclopd doesn't think it's underwater when it spawns
-    The wood bridge mob's size is all wrong
-    Loading the area editor on an area that only has the folder, but not data.txt or geometry.txt crashes
-    The performance monitor isn't monitoring load times for particle generators, maybe others too
-    Check for memory leaks
-    Selecting a texture for a sector from the first dialog won't do anything
-    Fix all particle generators
     Add an "outward angle" option for particles
+    Check for memory leaks
+    Allow the player to change the camera zoom during intermissions
+    Change the main menu options icon to not be a gear, since it resembles Pikifen's logo (thanks Soprano)
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    The squad number in the HUD isn't disappearing if you enter an area with no leaders
+    Bomb rocks shouldn't do their normal explosion particles if they explode inside a mob
+    The Cyclopd doesn't think it's underwater when it spawns
+    The wood bridge mob's size is all wrong
+    Loading the area editor on an area that only has the folder, but not data.txt or geometry.txt crashes
     Editor histories only have some spacing before the "new" node if they have six entries
-    https://gitlab.freedesktop.org/xorg/xserver/-/issues/1773
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
@@ -28,9 +24,9 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Optimize the Fiery Blowhog's spritesheet, now that it uses particles
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
-    All editors should have a way to delete content, not just the area editor
     Test -S-'s get_onion_info branch
     https://github.com/Helodity/Pikifen/tree/throwing-improvements-port
+    https://github.com/Helodity/Pikifen/tree/shaders
     Find a way to manage the installed packs
         Allow pack thumbnails
             Only load the thumbnails when you enter the pack management screen, and don't use game.content.bitmaps, since they are not game content. Unload when the screen is exited
@@ -59,6 +55,7 @@ Next tasks (roughly sorted most important first)
                 Crushed
                 Seed landing
             Menus
+                https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
                 ? Menu item selected
                 ? Menu item activated
                 ? Menu backed out of
@@ -215,19 +212,20 @@ Next tasks (roughly sorted most important first)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
     Barely important format changes
-        Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
-        bud_icon.png and flower_icon.png should be white_bud_icon.png and white_flower_icon.png, to fit with the pink and purple buds and flowers
+        Organize all graphics and sound files into neat sub-folders
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
         Have a general editor tutorial, explaining the canvas, status bar, etc., and link to it in the corresponding editor tutorial pages
         Have an infobox with quick info about content, like its folder
+    Radar terrain colors should be in config.txt
     Add the options and stats menu to the pause menu
     Cook up a better logo?
     Test everything in the regression tests
     Test everything in DEV Lab
+    Test all Pikmin and leader states
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
             "astyle.cmd_options": [

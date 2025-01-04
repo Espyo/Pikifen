@@ -141,6 +141,7 @@ private:
     void close_load_dialog();
     void close_options_dialog();
     void create_part_gen(const string &part_gen_path);
+    void delete_current_part_gen();
     string get_file_tooltip(const string &path) const;
     void load_part_gen_file(
         const string &path, const bool should_update_history
@@ -162,6 +163,7 @@ private:
     void grid_interval_decrease_cmd(float input_value);
     void grid_interval_increase_cmd(float input_value);
     void grid_toggle_cmd(float input_value);
+    void delete_part_gen_cmd(float input_value);
     void load_cmd(float input_value);
     void quit_cmd(float input_value);
     void reload_cmd(float input_value);
@@ -176,6 +178,7 @@ private:
     void part_mgr_playback_toggle_cmd(float input_value);
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_delete_part_gen_dialog();
     void process_gui_load_dialog();
     void process_gui_menu_bar();
     void process_gui_new_dialog();

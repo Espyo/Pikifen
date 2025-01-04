@@ -707,7 +707,7 @@ protected:
     );
     void open_message_dialog(
         const string &title, const string &message,
-        const std::function<void()> &ok_callback
+        const std::function<void()> &ok_callback = nullptr
     );
     void open_new_pack_dialog();
     void open_picker_dialog(

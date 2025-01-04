@@ -130,6 +130,7 @@ private:
     void close_load_dialog();
     void close_options_dialog();
     void create_gui_def(const string &internal_name, const string &pack);
+    void delete_current_gui_def();
     void load_gui_def_file(const string &path, bool should_update_history);
     void open_load_dialog();
     void open_new_dialog();
@@ -146,6 +147,7 @@ private:
     string get_file_tooltip(const string &path) const;
     void grid_interval_decrease_cmd(float input_value);
     void grid_interval_increase_cmd(float input_value);
+    void delete_gui_def_cmd(float input_value);
     void load_cmd(float input_value);
     void quit_cmd(float input_value);
     void reload_cmd(float input_value);
@@ -157,6 +159,7 @@ private:
     void zoom_out_cmd(float input_value);
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_delete_gui_def_dialog();
     void process_gui_load_dialog();
     void process_gui_menu_bar();
     void process_gui_new_dialog();

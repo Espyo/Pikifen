@@ -250,6 +250,7 @@ private:
     void close_load_dialog();
     void close_options_dialog();
     void create_anim_db(const string &path);
+    void delete_current_anim_db();
     float get_cursor_timeline_time();
     string get_file_tooltip(const string &path) const;
     void handle_lmb_drag_in_timeline();
@@ -312,6 +313,7 @@ private:
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
+    void delete_anim_db_cmd(float input_value);
     void grid_toggle_cmd(float input_value);
     void hitboxes_toggle_cmd(float input_value);
     void leader_silhouette_toggle_cmd(float input_value);
@@ -327,6 +329,7 @@ private:
     void zoom_out_cmd(float input_value);
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_delete_anim_db_dialog();
     void process_gui_hitbox_hazards();
     void process_gui_load_dialog();
     void process_gui_new_dialog();

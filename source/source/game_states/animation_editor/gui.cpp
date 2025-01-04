@@ -226,6 +226,66 @@ void animation_editor::process_gui_control_panel() {
 
 
 /**
+ * @brief Processes the Dear ImGui animation database deletion dialog
+ * for this frame.
+ */
+void animation_editor::process_gui_delete_anim_db_dialog() {
+    //Explanation text.
+    string explanation_str;
+    if(!changes_mgr.exists_on_disk()) {
+        explanation_str =
+            "You have never saved this animation database to disk, so if you\n"
+            "delete, you will only lose your unsaved progress.";
+    } else {
+        explanation_str =
+            "If you delete, you will lose all unsaved progress, and the\n"
+            "animation database's files on the disk will be gone FOREVER!";
+    }
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation_str.c_str()).x);
+    ImGui::Text("%s", explanation_str.c_str());
+    
+    //Final warning text.
+    string final_warning_str =
+        "Are you sure you want to delete the animation database \"" +
+        (
+            loaded_mob_type ?
+            loaded_mob_type->manifest->internal_name :
+            manifest.internal_name
+        ) +
+        "\"?";
+    ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
+    ImGui::TextColored(
+        ImVec4(0.8, 0.6, 0.6, 1.0),
+        "%s", final_warning_str.c_str()
+    );
+    
+    //Cancel button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(100 + 100 + 30);
+    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
+        close_top_dialog();
+    }
+    
+    //Delete button.
+    ImGui::SameLine(0.0f, 30);
+    ImGui::PushStyleColor(
+        ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonHovered, ImVec4(0.5, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonActive, ImVec4(0.4, 0.1, 0.1, 1.0)
+    );
+    if(ImGui::Button("Delete", ImVec2(100, 40))) {
+        close_top_dialog();
+        delete_current_anim_db();
+    }
+    ImGui::PopStyleColor(3);
+}
+
+
+/**
  * @brief Processes the list of the current hitbox's hazards,
  * as well as the widgets necessary to control it, for this frame.
  */
@@ -393,7 +453,7 @@ void animation_editor::process_gui_menu_bar() {
             );
             
             //Reload current file item.
-            if(ImGui::MenuItem("Reload current file")) {
+            if(ImGui::MenuItem("Reload current animation database")) {
                 reload_widget_pos = get_last_widget_pos();
                 reload_cmd(1.0f);
             }
@@ -402,12 +462,20 @@ void animation_editor::process_gui_menu_bar() {
             );
             
             //Save current file item.
-            if(ImGui::MenuItem("Save current file", "Ctrl+S")) {
+            if(ImGui::MenuItem("Save current animation database", "Ctrl+S")) {
                 save_cmd(1.0f);
             }
             set_tooltip(
                 "Save the animation database into the file on disk.",
                 "Ctrl + S"
+            );
+            
+            //Delete current animation database item.
+            if(ImGui::MenuItem("Delete current animation database")) {
+                delete_anim_db_cmd(1.0f);
+            }
+            set_tooltip(
+                "Delete the current animation database from the disk."
             );
             
             //Separator item.
