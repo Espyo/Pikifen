@@ -12,9 +12,8 @@
 #include "functions.h"
 #include "game.h"
 
-shader_manager::shader_manager(){
+shader_manager::shader_manager(){}
 
-}
 
 ALLEGRO_SHADER* shader_manager::get_shader(SHADER_TYPE shader_type) {
     assert(shader_type != N_SHADER_TYPES);
@@ -28,12 +27,13 @@ void shader_manager::compile_shaders() {
 //const char* def_vert_shader
 #pragma region Default Vertex Shader
 const char* def_vert_shader = R"(
-attribute vec4 al_pos;
-attribute vec4 al_color;
-attribute vec2 al_texcoord;
+#version 430
+in vec4 al_pos;
+in vec4 al_color;
+in vec2 al_texcoord;
 uniform mat4 al_projview_matrix;
-varying vec4 varying_color;
-varying vec2 varying_texcoord;
+out vec4 varying_color;
+out vec2 varying_texcoord;
 
 void main()
 {
@@ -47,6 +47,7 @@ void main()
 //const char* liquid_pixel_shader
 #pragma region Liquid Fragment Shader
 char* liquid_pixel_shader = R"(
+#version 430
 #extension GL_ARB_shader_storage_buffer_object: enable
 
 #ifdef GL_ES
@@ -75,7 +76,7 @@ uniform float shine_threshold;
 uniform vec4 foam_tint;
 uniform float foam_size;
 
-varying vec4 varying_color;
+in vec4 varying_color;
 
 uniform float fill_level;
 
@@ -86,7 +87,9 @@ uniform vec2 tex_scale;
 uniform float tex_rotation;
 
 //World Position
-varying vec2 varying_texcoord;
+in vec2 varying_texcoord;
+
+out vec4 fragColor;
 
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
@@ -204,23 +207,23 @@ float simplex_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
    return x;
 }
 vec2 rotate(vec2 xy, float rotation) {
-   vec2 output = xy;
+   vec2 product = xy;
    float c = cos(rotation);
    float s = sin(rotation);
-   output.x = xy.x * c - xy.y * s;
-   output.y = xy.x * s + xy.y * c;
-   return output;
+   product.x = xy.x * c - xy.y * s;
+   product.y = xy.x * s + xy.y * c;
+   return product;
 }
 vec2 toWorldCoords(vec2 xy)
 {
-   vec2 output = xy;
-   output += tex_translation;
+   vec2 product = xy;
+   product += tex_translation;
 
-   output *= tex_scale;
+   product *= tex_scale;
 
-   output = rotate(output, tex_rotation);
+   product = rotate(product, tex_rotation);
 
-   return output;
+   return product;
 }
 
 float getDistFromEdge(vec2 xy) {
@@ -355,7 +358,7 @@ void main()
    tmp.g = tmp.g + (foam_tint.g - tmp.g) * edgeScale;
    tmp.b = tmp.b + (foam_tint.b - tmp.b) * edgeScale;
 
-   gl_FragColor = tmp;
+   fragColor = tmp;
 }
 )";
 #pragma endregion
@@ -363,9 +366,13 @@ void main()
 
 //Create the shader
 compiled_shaders[SHADER_TYPE_LIQUID] = al_create_shader(ALLEGRO_SHADER_GLSL);
-//Asserts exist for shader writing
-assert(al_attach_shader_source(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_PIXEL_SHADER, liquid_pixel_shader));
-assert(al_attach_shader_source(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_VERTEX_SHADER, def_vert_shader));
+try_attach_shader(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_PIXEL_SHADER, liquid_pixel_shader);
+try_attach_shader(compiled_shaders[SHADER_TYPE_LIQUID], ALLEGRO_VERTEX_SHADER, def_vert_shader);
 al_build_shader(compiled_shaders[SHADER_TYPE_LIQUID]);
 
+}
+
+
+void shader_manager::try_attach_shader(ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source) {
+   engine_assert(al_attach_shader_source(shader, type, source), al_get_shader_log(shader));
 }

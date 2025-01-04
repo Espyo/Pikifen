@@ -39,5 +39,8 @@ struct shader_manager {
     ALLEGRO_SHADER* get_shader(SHADER_TYPE shader_type);
     
     void compile_shaders();
+    private:
+
+    void try_attach_shader(ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source);
 
 };
