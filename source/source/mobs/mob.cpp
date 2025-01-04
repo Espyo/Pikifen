@@ -2148,9 +2148,55 @@ void mob::get_sprite_bitmap_effects(
     
     //Sector brightness tint.
     if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
-        info->tint_color.r *= (center_sector->brightness / 255.0);
-        info->tint_color.g *= (center_sector->brightness / 255.0);
-        info->tint_color.b *= (center_sector->brightness / 255.0);
+        sector* s_ptr = center_sector;
+        float brightness = center_sector->brightness / 255.0;
+        if(s_ptr->fade) {
+            sector* texture_sector[2] = {nullptr, nullptr};
+            s_ptr->get_texture_merge_sectors(
+                &texture_sector[0], &texture_sector[1]
+            );
+            vector<edge*> fade_edges[2];
+            size_t n_edges = s_ptr->edges.size();
+            for(size_t e = 0; e < n_edges; e++) {
+                edge* e_ptr = s_ptr->edges[e];
+                sector* o_sector = e_ptr->get_other_sector(s_ptr);
+                if(o_sector == texture_sector[0]) {
+                    fade_edges[0].push_back(e_ptr);
+                }
+                if(o_sector == texture_sector[1]) {
+                    fade_edges[1].push_back(e_ptr);
+                }
+            }
+
+            dist closest_dist[2] = {dist(FLT_MAX), dist(FLT_MAX)};
+            for(size_t n = 0; n < 2; n++) {
+                for(size_t e = 0; e < fade_edges[n].size(); e++) {
+                    point v1 = point(fade_edges[n][e]->vertexes[0]->x, fade_edges[n][e]->vertexes[0]->y);
+                    point v2 = point(fade_edges[n][e]->vertexes[1]->x, fade_edges[n][e]->vertexes[1]->y);
+                    float segment_ratio;
+                    point closest_pos = get_closest_point_in_line_seg(v1, v2, pos, &segment_ratio);
+                    if(segment_ratio < 0) {
+                        point v2_to_v1 = v2 - v1;
+                        closest_pos -= v2_to_v1 * abs(segment_ratio);
+                    }
+                    if(segment_ratio > 1) {
+                        point v2_to_v1 = v2 - v1;
+                        closest_pos -= v2_to_v1 * (segment_ratio - 1);
+                    }
+
+                    dist d = dist(closest_pos, pos);
+                    closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
+                }
+            }
+            float total_brightness = texture_sector[1]->brightness * (closest_dist[0].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
+            total_brightness += texture_sector[0]->brightness * (closest_dist[1].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
+            brightness = total_brightness / 255.0;
+        }
+
+
+        info->tint_color.r *= brightness;
+        info->tint_color.g *= brightness;
+        info->tint_color.b *= brightness;
     }
     
     //Height effect.
