@@ -351,12 +351,13 @@ void draw_liquid(
         l_ptr->shine_color.a
     };
 
-    /*
+    /* TODO: Uncomment when liquids use foam edges.
+
         We need to get a list of edges that the shader needs to check, 
         this can extend to other sectors whenever a liquid occupies more than one sector,
         so we need to loop through all of the connected sectors.
         This could likely be optimized, but this has no noticable impact on performance.
-    */
+        
     vector<sector*> checked_s {s_ptr};
     vector<edge*> border_edges;
 
@@ -404,6 +405,7 @@ void draw_liquid(
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+    */
     al_set_shader_float("time", time * l_ptr->anim_speed);
     al_set_shader_float("fill_level", liquid_opacity_mult);
     al_set_shader_float("tex_brightness", brightness_mult);
