@@ -224,6 +224,12 @@ void area_editor::draw_canvas() {
     if(wall_shadows_opacity > 0.0f) {
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
+            game.liquid_limit_effect_caches,
+            game.liquid_limit_effect_buffer,
+            true
+        );
+        update_offset_effect_buffer(
+            game.cam.box[0], game.cam.box[1],
             game.wall_smoothing_effect_caches,
             game.wall_offset_effect_buffer,
             true
@@ -257,17 +263,26 @@ void area_editor::draw_canvas() {
             game.options.area_editor_view_mode == VIEW_MODE_TEXTURES ||
             preview_mode
         ) {
-            draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
-            
             if(preview_mode) {
+                bool has_liquid = false;
                 for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
                     liquid* l_ptr = s_ptr->hazards[h]->associated_liquid;
                     if(!l_ptr) continue;
                     draw_liquid(s_ptr, l_ptr, point(), 1.0f, game.time_passed);
+                    has_liquid = true;
+                    break;
                 }
+                if(!has_liquid) {
+                    draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
+                }
+            } else {
+                draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             }
             
             if(wall_shadows_opacity > 0.0f) {
+                draw_sector_edge_offsets(
+                    s_ptr, game.liquid_limit_effect_buffer, 1.0f
+                );
                 draw_sector_edge_offsets(
                     s_ptr, game.wall_offset_effect_buffer, wall_shadows_opacity
                 );

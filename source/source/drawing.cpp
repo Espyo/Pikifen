@@ -28,7 +28,6 @@
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 
-
 namespace CONTROL_BIND_ICON {
 
 //Base rectangle outline color.
@@ -322,40 +321,160 @@ void draw_liquid(
     float time
 ) {
 
-    size_t n_vertexes = s_ptr->triangles.size() * 3;
-    ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
-    
-    for(size_t v = 0; v < n_vertexes; v++) {
-        av[v].z = 0;
-    }
-    
+    if(!s_ptr) return;
+    if(s_ptr->is_bottomless_pit) return;
+
+    ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
+    al_use_shader(liq_shader);
     float liquid_opacity_mult = 1.0f;
     if(s_ptr->draining_liquid) {
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     float brightness_mult = s_ptr->brightness / 255.0;
+
+    float distortion_scale[2] = {
+        l_ptr->distortion_scale.x, 
+        l_ptr->distortion_scale.y
+    };
+    float liq_tint[4] = {
+        l_ptr->body_color.r,
+        l_ptr->body_color.g,
+        l_ptr->body_color.b,
+        l_ptr->body_color.a
+    };
+
+    float shine_tint[4] = {
+        l_ptr->shine_color.r,
+        l_ptr->shine_color.g,
+        l_ptr->shine_color.b,
+        l_ptr->shine_color.a
+    };
+
+    /* TODO: Uncomment when liquids use foam edges.
+
+        We need to get a list of edges that the shader needs to check, 
+        this can extend to other sectors whenever a liquid occupies more than one sector,
+        so we need to loop through all of the connected sectors.
+        This could likely be optimized, but this has no noticable impact on performance.
+        
+    vector<sector*> checked_s {s_ptr};
+    vector<edge*> border_edges;
+
+    for(size_t s = 0; s < checked_s.size(); s++) {
+        sector* s2_ptr = checked_s[s];
+        for(size_t e = 0; e < s2_ptr->edges.size(); e++) {
+            edge* e_ptr = s2_ptr->edges[e];
+            sector* u_s = nullptr;
+            sector* a_s = nullptr;
+            if(does_edge_have_liquid_limit(e_ptr, &u_s, &a_s)) {
+                border_edges.push_back(e_ptr);
+            }
+
+            sector* other_ptr = e_ptr->get_other_sector(s2_ptr);
+            if(other_ptr) {
+                for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
+                    if(other_ptr->hazards[h]->associated_liquid) {
+                        if(std::find(checked_s.begin(), checked_s.end(), other_ptr) == checked_s.end()) {
+                            checked_s.push_back(other_ptr);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    uint edgeCount = border_edges.size();
+
+    float buffer_edges[edgeCount * 4];
+
+    for(size_t e = 0; e < edgeCount; e++) {
+        edge* edge = border_edges[e];
+
+        buffer_edges[4 * e    ] = edge->vertexes[0]->x;
+        buffer_edges[4 * e + 1] = edge->vertexes[0]->y;
+        buffer_edges[4 * e + 2] = edge->vertexes[1]->x;
+        buffer_edges[4 * e + 3] = edge->vertexes[1]->y;
+    }
+
+    //Put the buffer onto the shader
+    GLuint ssbo;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(buffer_edges), buffer_edges, GL_STREAM_READ);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    */
+    al_set_shader_float("time", time * l_ptr->anim_speed);
+    al_set_shader_float("fill_level", liquid_opacity_mult);
+    al_set_shader_float("tex_brightness", brightness_mult);
+    al_set_shader_float("shine_threshold", l_ptr->shine_percentage);
+    al_set_shader_int("edge_count", edgeCount);
+    al_set_shader_float_vector("effect_scale", 2, &distortion_scale[0], 1);
+    al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
+    al_set_shader_float_vector("shine_tint", 4, &shine_tint[0], 1);
     
-    //Layer 1 - Transparent wobbling ground texture.
-    if(s_ptr->texture_info.bitmap) {
+    //Draw the sector now!
+    unsigned char n_textures = 1;
+    sector* texture_sector[2] = {nullptr, nullptr};
+    if(s_ptr->fade) {
+        s_ptr->get_texture_merge_sectors(
+            &texture_sector[0], &texture_sector[1]
+        );
+        if(!texture_sector[0] && !texture_sector[1]) {
+            //Can't draw this sector.
+            return;
+        }
+        n_textures = 2;
+        
+    } else {
+        texture_sector[0] = s_ptr;
+        
+    }
+
+    for(unsigned char t = 0; t < n_textures; t++) {
+    
+        bool draw_sector_0 = true;
+        if(!texture_sector[0]) draw_sector_0 = false;
+        else if(texture_sector[0]->is_bottomless_pit) {
+            draw_sector_0 = false;
+        }
+        
+        if(n_textures == 2 && !draw_sector_0 && t == 0) {
+            //Allows fading into the void.
+            continue;
+        }
+        
+        if(!texture_sector[t] || texture_sector[t]->is_bottomless_pit) {
+            continue;
+        }
+        size_t n_vertexes = s_ptr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
+        
+        sector_texture_t* texture_info_to_use =
+            &texture_sector[t]->texture_info;
+
+        //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -s_ptr->texture_info.translation.x,
-            -s_ptr->texture_info.translation.y,
-            1.0f / s_ptr->texture_info.scale.x,
-            1.0f / s_ptr->texture_info.scale.y,
-            -s_ptr->texture_info.rot
+            -texture_info_to_use->translation.x,
+            -texture_info_to_use->translation.y,
+            1.0f / texture_info_to_use->scale.x,
+            1.0f / texture_info_to_use->scale.y,
+            -texture_info_to_use->rot
         );
         
-        float ground_wobble =
-            -sin(
-                time *
-                DRAWING::LIQUID_WOBBLE_TIME_SCALE
-            ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
-        float ground_texture_dy =
-            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.8;
-            
+        float textureOffset[2] = {
+            texture_info_to_use->translation.x, 
+            texture_info_to_use->translation.y
+        };
+        float textureScale[2] = {
+            texture_info_to_use->scale.x, 
+            texture_info_to_use->scale.y
+        };
+
         for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -363,109 +482,79 @@ void draw_liquid(
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
+            float alpha_mult = 1;
+            float brightness_mult = texture_sector[t]->brightness / 255.0;
+            
+            if(t == 1) {
+                if(!draw_sector_0) {
+                    alpha_mult = 0;
+                    for(
+                        size_t e = 0; e < texture_sector[1]->edges.size(); e++
+                    ) {
+                        if(
+                            texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
+                            texture_sector[1]->edges[e]->vertexes[1] == v_ptr
+                        ) {
+                            alpha_mult = 1;
+                        }
+                    }
+                } else {
+                    for(
+                        size_t e = 0; e < texture_sector[0]->edges.size(); e++
+                    ) {
+                        if(
+                            texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
+                            texture_sector[0]->edges[e]->vertexes[1] == v_ptr
+                        ) {
+                            alpha_mult = 0;
+                        }
+                    }
+                }
+            }
+            
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
-            al_transform_coordinates(&tra, &vx, &vy);
-            av[v].u = vx + ground_wobble;
-            av[v].v = vy + ground_texture_dy;
+            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            av[v].u = vx;
+            av[v].v = vy;
+            av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    s_ptr->texture_info.tint.r * brightness_mult,
-                    s_ptr->texture_info.tint.g * brightness_mult,
-                    s_ptr->texture_info.tint.b * brightness_mult,
-                    liquid_opacity_mult / 2
+                    texture_sector[t]->texture_info.tint.r * brightness_mult,
+                    texture_sector[t]->texture_info.tint.g * brightness_mult,
+                    texture_sector[t]->texture_info.tint.b * brightness_mult,
+                    texture_sector[t]->texture_info.tint.a * alpha_mult
                 );
-            av[v].x *= scale;
-            av[v].y *= scale;
         }
-        
-        al_draw_prim(
-            av, nullptr, s_ptr->texture_info.bitmap,
-            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-        );
-    }
-    
-    //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color =
-        al_map_rgba_f(
-            l_ptr->main_color.r * brightness_mult,
-            l_ptr->main_color.g * brightness_mult,
-            l_ptr->main_color.b * brightness_mult,
-            l_ptr->main_color.a * liquid_opacity_mult
-        );
-        
-    for(size_t v = 0; v < n_vertexes; v++) {
-    
-        const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-        vertex* v_ptr = t_ptr->points[v % 3];
-        float vx = v_ptr->x;
-        float vy = v_ptr->y;
-        
-        av[v].x = vx - where.x;
-        av[v].y = vy - where.y;
-        av[v].color = tint_color;
-        av[v].x *= scale;
-        av[v].y *= scale;
-    }
-    
-    al_draw_prim(
-        av, nullptr, nullptr,
-        0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-    );
-    
-    //Layers 3 and 4 - Water surface texture.
-    for(unsigned char l = 0; l < 2; l++) {
-    
-        sprite* anim_sprite = nullptr;
-        float layer_2_dy = 0;
-        float layer_speed[2];
-        layer_speed[0] = l_ptr->surface_speed[0];
-        layer_speed[1] = l_ptr->surface_speed[1];
-        float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
-        
-        l_ptr->anim.get_sprite_data(
-            &anim_sprite, nullptr, nullptr
-        );
-        if(anim_sprite && anim_sprite->bitmap) {
-            layer_2_dy =
-                (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;
-        }
-        
-        if(!anim_sprite) continue;
         
         for(size_t v = 0; v < n_vertexes; v++) {
-        
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
-            
-            av[v].x = vx - where.x;
-            av[v].y = vy - where.y;
-            av[v].u =
-                vx +
-                (time * layer_speed[l]);
-            av[v].v = vy + (layer_2_dy * l);
-            av[v].color =
-                al_map_rgba(
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    alpha * brightness_mult
-                );
             av[v].x *= scale;
             av[v].y *= scale;
-            av[v].u /= anim_sprite->scale.x;
-            av[v].v /= anim_sprite->scale.x;
         }
         
+        ALLEGRO_BITMAP* tex =
+            texture_sector[t] ?
+            texture_sector[t]->texture_info.bitmap :
+            texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
+
+        int bmpSize[2] = {
+            al_get_bitmap_width(tex), 
+            al_get_bitmap_height(tex)
+        };
+        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
+        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
+        al_set_shader_float("tex_rotation", texture_info_to_use->rot);
+        al_set_shader_int_vector("bmp_size", 2, &bmpSize[0], 1);
+
         al_draw_prim(
-            av, nullptr, anim_sprite->bitmap,
+            av, nullptr, tex,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
+        
+        delete[] av;
     }
-    
-    delete[] av;
+    al_use_shader(NULL);
+
 }
 
 

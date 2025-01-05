@@ -1820,8 +1820,8 @@ void gameplay_state::draw_tree_shadows() {
  * @param bmp_output If not nullptr, draw the area onto this.
  */
 void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
-    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
     ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = nullptr;
+    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
     if(!bmp_output) {
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
@@ -2024,8 +2024,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         
         if(c_ptr->sector_ptr) {
         
-            draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
-            
+            bool has_liquid = false;
             for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); h++) {
                 if(c_ptr->sector_ptr->hazards[h]->associated_liquid) {
                     draw_liquid(
@@ -2035,10 +2034,13 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                         1.0f,
                         area_time_passed
                     );
+                    has_liquid = true;
                     break;
                 }
             }
-            
+            if(!has_liquid) {
+                draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
+            }
             float liquid_opacity_mult = 1.0f;
             if(c_ptr->sector_ptr->draining_liquid) {
                 liquid_opacity_mult =
@@ -2097,7 +2099,6 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     }
     
     if(bmp_output) {
-        al_destroy_bitmap(custom_liquid_limit_effect_buffer);
         al_destroy_bitmap(custom_wall_offset_effect_buffer);
     }
 }

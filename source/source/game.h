@@ -29,6 +29,7 @@
 #include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"
+#include "shaders.h"
 
 
 namespace GAME {
@@ -137,6 +138,9 @@ public:
     
     //Error manager.
     error_manager errors;
+
+    //Shader manager
+    shader_manager shaders;
     
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;
@@ -158,10 +162,10 @@ public:
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controller_numbers;
-    
+
     //Buffer with the liquid limit effect.
     ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;
-    
+
     //Info on every edge's liquid limit offset effect. Cache for performance.
     vector<edge_offset_cache> liquid_limit_effect_caches;
     

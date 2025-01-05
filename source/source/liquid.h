@@ -37,21 +37,23 @@ struct liquid : public content {
 
     //--- Members ---
     
-    //Color that best represents this liquid.
-    ALLEGRO_COLOR main_color = COLOR_EMPTY;
+    //Color the body of liquid is.
+    ALLEGRO_COLOR body_color = COLOR_BLACK;
+
+    //Color the shine of liquid is.
+    ALLEGRO_COLOR shine_color = COLOR_WHITE;
     
     //Color used for this liquid in the radar.
     ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
-    //Animation instance of the surface animation.
-    animation_instance anim;
-    
     //Speed at which to scroll each layer of the surface.
-    float surface_speed[2] = { 10.0f, -13.0f };
-    
-    //Opacity of the surface.
-    unsigned char surface_alpha = 255;
-    
+    point distortion_scale = point(14.0f, 4.0f);
+
+    //How much of the liquid is covered in shines.
+    float shine_percentage = 0.5f;
+
+    //How fast the water animates.
+    float anim_speed = 1;
     
     //--- Function declarations ---
     
