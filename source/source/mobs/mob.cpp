@@ -2167,7 +2167,7 @@ void mob::get_sprite_bitmap_effects(
                     fade_edges[1].push_back(e_ptr);
                 }
             }
-
+            
             dist closest_dist[2] = {dist(FLT_MAX), dist(FLT_MAX)};
             for(size_t n = 0; n < 2; n++) {
                 for(size_t e = 0; e < fade_edges[n].size(); e++) {
@@ -2183,7 +2183,7 @@ void mob::get_sprite_bitmap_effects(
                         point v2_to_v1 = v2 - v1;
                         closest_pos -= v2_to_v1 * (segment_ratio - 1);
                     }
-
+                    
                     dist d = dist(closest_pos, pos);
                     closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
                 }
@@ -2192,8 +2192,8 @@ void mob::get_sprite_bitmap_effects(
             total_brightness += texture_sector[0]->brightness * (closest_dist[1].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
             brightness = total_brightness / 255.0;
         }
-
-
+        
+        
         info->tint_color.r *= brightness;
         info->tint_color.g *= brightness;
         info->tint_color.b *= brightness;
@@ -3101,14 +3101,12 @@ void mob::set_radius(float radius) {
  */
 void mob::set_rectangular_dim(const point &rectangular_dim) {
     this->rectangular_dim = rectangular_dim;
-    if(type->anim_db) {
-        physical_span =
-            calculate_mob_physical_span(
-                radius,
-                type->anim_db->hitbox_span,
-                rectangular_dim
-            );
-    }
+    physical_span =
+        calculate_mob_physical_span(
+            radius,
+            type->anim_db ? type->anim_db->hitbox_span : 0.0f,
+            rectangular_dim
+        );
     update_interaction_span();
 }
 
