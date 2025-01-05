@@ -212,6 +212,9 @@ enum PIKMIN_ANIM {
     //Carrying.
     PIKMIN_ANIM_CARRYING,
     
+    //Carrying, but struggling to lift.
+    PIKMIN_ANIM_CARRYING_STRUGGLE,
+    
     //Backflip celebration.
     PIKMIN_ANIM_BACKFLIP,
     

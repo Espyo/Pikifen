@@ -103,6 +103,48 @@ animations{
 			}
 		}
 	}
+	carrying_struggle{
+		frames{
+			grabbing{
+				duration=0.8000
+			}
+			grabbing_far{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			grabbing_far{
+				duration=0.0800
+			}
+		}
+	}
 	climbing{
 		frames{
 			climbing_01{
@@ -1339,6 +1381,33 @@ sprites{
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=-15.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-15.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	grabbing_far_shake{
+		file=red_pikmin
+		file_pos=163.0000 31.0000
+		file_size=42.0000 20.0000
+		offset=-4.5000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-16.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{

@@ -97,6 +97,9 @@ public:
     //Is it currently doing its shaking animation?
     bool in_shaking_animation = false;
     
+    //Is it currently in the carrying struggling animation?
+    bool in_carry_struggle_animation = false;
+    
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i = 0;
     

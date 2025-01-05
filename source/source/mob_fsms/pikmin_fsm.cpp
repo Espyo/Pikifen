@@ -890,6 +890,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stop_carrying);
             efc.run(pikmin_fsm::stand_still);
         }
+        efc.new_event(MOB_EV_ON_TICK); {
+            efc.run(pikmin_fsm::tick_carrying);
+        }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.change_state("called");
         }
@@ -3585,6 +3588,7 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         MOB_EV_CARRIER_ADDED, (void*) pik_ptr
     );
     
+    pik_ptr->in_carry_struggle_animation = false;
     pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
 }
 
@@ -4179,6 +4183,32 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->set_timer(
         randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
+}
+
+
+/**
+ * @brief When a Pikmin has to choose its carrying animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::tick_carrying(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    if(
+        pik_ptr->in_carry_struggle_animation &&
+        pik_ptr->carrying_mob->carry_info->is_moving
+    ) {
+        pik_ptr->in_carry_struggle_animation = false;
+        pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
+    } else if(
+        !pik_ptr->in_carry_struggle_animation &&
+        !pik_ptr->carrying_mob->carry_info->is_moving
+    ) {
+        pik_ptr->in_carry_struggle_animation = true;
+        pik_ptr->set_animation(PIKMIN_ANIM_CARRYING_STRUGGLE);
+    }
 }
 
 
