@@ -17,11 +17,18 @@
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
 
+
+//Types of shaders.
 enum SHADER_TYPE {
+
+    //Liquid sectors, like bodies of water.
     SHADER_TYPE_LIQUID,
     
+    //Total number of shader types.
     N_SHADER_TYPES
+    
 };
+
 
 /**
  * @brief Manages everything regarding shaders.
@@ -29,18 +36,23 @@ enum SHADER_TYPE {
 struct shader_manager {
 
     //--- Members ---
-    //Array of compiled shaders, 
-    ALLEGRO_SHADER* compiled_shaders[N_SHADER_TYPES];
-
-
-    //--- Function declarations ---
-
-    shader_manager();
-    ALLEGRO_SHADER* get_shader(SHADER_TYPE shader_type);
     
+    //Array of compiled shaders,
+    ALLEGRO_SHADER* compiled_shaders[N_SHADER_TYPES];
+    
+    
+    //--- Function declarations ---
+    
+    ALLEGRO_SHADER* get_shader(SHADER_TYPE shader_type);
     void compile_shaders();
+    
+    
     private:
-
-    void try_attach_shader(ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source);
-
+    
+    //--- Function declarations ---
+    
+    void try_attach_shader(
+        ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
+    );
+    
 };

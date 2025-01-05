@@ -85,39 +85,26 @@
         <td>0 0 0 0</td>
       </tr>
       <tr>
-        <td>foam_color</td>
-        <td>Color to use for this liquid's foam. In-game, the borders of the liquid will be tinted with this color.</td>
-        <td>Color</td>
-        <td>255 255 255 255</td>
-      </tr>
-      <tr>
         <td>shine_color</td>
-        <td>Color to use for this liquid's shine. In-game, occasional shines that appear in the liquid will be tinted this color.</td>
+        <td>Color to use for this liquid's shine (i.e. water caustics). In-game, occasional shines that appear in the liquid will be tinted this color.</td>
         <td>Color</td>
         <td>255 255 255 255</td>
       </tr>
       <tr>
-        <td>distortion_scale</td>
-        <td>Liquids bend the texture underneath them to create their effect. This value indicates the maximum units the liquid can
-        bend the texture.</td>
+        <td>distortion_amount</td>
+        <td>Liquids bend the texture underneath them to create their effect. This value indicates the maximum units the liquid can bend the texture by.</td>
         <td>Point</td>
         <td>14 4</td>
       </tr>
       <tr>
-        <td>shine_percentage</td>
-        <td>Amount of area that gets covered in shine. </td>
+        <td>shine_amount</td>
+        <td>Amount of the surface that gets covered in shine. This number is used in some internal calculations, and ranges from 0 to 1.</td>
         <td>Number</td>
         <td>0.6</td>
       </tr>
       <tr>
-        <td>max_foam_distance</td>
-        <td>How many units this liquid's foam wants to extend from the shore. The exact amount it extends will vary based on its animation.</td>
-        <td>Number</td>
-        <td>25</td>
-      </tr>
-      <tr>
         <td>animation_speed</td>
-        <td>Multiplier for how fast the water animates</td>
+        <td>Multiplier for how fast the water animates.</td>
         <td>Number</td>
         <td>1</td>
       </tr>

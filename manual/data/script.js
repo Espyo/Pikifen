@@ -2,55 +2,55 @@
  * @brief Creates the table of contents based on the h2 and beyond tags.
  * Then, it places it after the opening paragraphs.
  */
-function make_toc () {
+function make_toc() {
   var headings = [].slice.call(document.body.querySelectorAll('h2, h3, h4, h5, h6'));
-  
-  if(headings.length == 0) {
+
+  if (headings.length == 0) {
     return;
   }
-  
+
   var toc = document.createElement('div');
   toc.id = 'toc';
-  
+
   var toc_title = document.createElement('a');
   toc_title.textContent = "Index";
   toc.appendChild(toc_title);
-  
+
   headings[0].parentNode.insertBefore(toc, headings[0]);
-  
+
   var prev_level = -1;
   var cur_ul = document.createElement('ul');
   toc.appendChild(cur_ul);
-  
-  for(var h = 0; h < headings.length; h++) {
+
+  for (var h = 0; h < headings.length; h++) {
     var level = headings[h].tagName[1];
-    if(prev_level == -1) {
+    if (prev_level == -1) {
       prev_level = level;
     }
-    
-    if(level > prev_level) {
+
+    if (level > prev_level) {
       var new_ul = document.createElement('ul');
       cur_ul.appendChild(new_ul);
       cur_ul = new_ul;
-    } else if(level < prev_level) {
-      for(var l = 0; l < prev_level - level; l++) {
+    } else if (level < prev_level) {
+      for (var l = 0; l < prev_level - level; l++) {
         cur_ul = cur_ul.parentNode;
       }
     }
 
     var link = document.createElement('a');
-    if(headings[h].id != '') {
+    if (headings[h].id != '') {
       link.setAttribute('href', '#' + headings[h].id);
       link.textContent = headings[h].textContent;
     } else {
       link.textContent = '!!!!!!!!!!!!!ERROR: H WITH NO ID: ' + headings[h].textContent + '!!!!!!!!!!!!!';
     }
-    
+
     var li = document.createElement('li');
     li.appendChild(link);
-    
+
     cur_ul.appendChild(li);
-    
+
     prev_level = level;
   }
 }
@@ -79,11 +79,11 @@ function create_header(title, bc_names, bc_links) {
   var bc_span = document.getElementById('breadcrumbs');
   var br_result = '';
 
-  if(title != 'Home') {
+  if (title != 'Home') {
     br_result += '<a href="home.html" target="_parent">Home</a> &gt; ';
   }
-  if(bc_names !== undefined || bc_links !== undefined) {
-    for(var b = 0; b < bc_names.length; b++) {
+  if (bc_names !== undefined || bc_links !== undefined) {
+    for (var b = 0; b < bc_names.length; b++) {
       br_result += '<a href="' + bc_links[b] + '" target="_parent">' + bc_names[b] + '</a> &gt; ';
     }
   }
@@ -97,11 +97,11 @@ function create_header(title, bc_names, bc_links) {
  */
 function populate_prop_tables() {
   var tables = document.getElementsByClassName('props-t');
-  for(var table of tables) {
+  for (var table of tables) {
     var isMandatory = table.classList.contains('props-t-m');
 
     var trs = table.getElementsByTagName('tr');
-    for(var tr of trs) {
+    for (var tr of trs) {
 
       tr.classList.add('props');
 
@@ -110,7 +110,7 @@ function populate_prop_tables() {
       tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
 
       //TYpe.
-      switch(tds[2].innerHTML) {
+      switch (tds[2].innerHTML) {
         case "Text":
           tds[2].innerHTML = "<a href=\"making.html#data-file-text\">Text</a>";
           break;
@@ -119,6 +119,9 @@ function populate_prop_tables() {
           break;
         case "Boolean":
           tds[2].innerHTML = "<a href=\"making.html#data-file-boolean\">Boolean</a>";
+          break;
+        case "Point":
+          tds[2].innerHTML = "<a href=\"making.html#data-file-point\">Point</a>";
           break;
         case "Color":
           tds[2].innerHTML = "<a href=\"making.html#data-file-color\">Color</a>";
@@ -135,7 +138,7 @@ function populate_prop_tables() {
       }
 
       //Default value.
-      if(tds.length == 4) {
+      if (tds.length == 4) {
         tds[3].innerHTML = '<code>' + tds[3].innerHTML + '</code>';
       }
 
@@ -146,7 +149,7 @@ function populate_prop_tables() {
       '<th>Property</th>' +
       '<th>Description</th>' +
       '<th><a href="making.html#data-file">Type</a></th>';
-    if(!isMandatory) {
+    if (!isMandatory) {
       headerTr.innerHTML +=
         '<th>Default</th>';
     }
@@ -179,11 +182,11 @@ function set_title(title) {
  * @param {boolean} use_toc True to use table of contents.
  */
 function setup(title, bc_names, bc_links, use_toc) {
-  if(use_toc === undefined) use_toc = true;
+  if (use_toc === undefined) use_toc = true;
 
   set_title(title);
   create_header(title, bc_names, bc_links);
-  if(use_toc) make_toc();
+  if (use_toc) make_toc();
   populate_prop_tables();
 }
 
@@ -193,7 +196,7 @@ function setup(title, bc_names, bc_links, use_toc) {
  * header, so that the page header can be taken into account.
  * Solution by Ian Clark from https://stackoverflow.com/a/13067009
  */
-(function(document, history, location) {
+(function (document, history, location) {
   var HISTORY_SUPPORT = !!(history && history.pushState);
 
   var anchorScrolls = {
@@ -203,7 +206,7 @@ function setup(title, bc_names, bc_links, use_toc) {
     /**
      * Establish events, and fix initial scroll position if a hash is provided.
      */
-    init: function() {
+    init: function () {
       this.scrollToCurrent();
       window.addEventListener('hashchange', this.scrollToCurrent.bind(this));
       document.body.addEventListener('click', this.delegateAnchors.bind(this));
@@ -213,7 +216,7 @@ function setup(title, bc_names, bc_links, use_toc) {
      * Return the offset amount to deduct from the normal scroll position.
      * Modify as appropriate to allow for dynamic calculations
      */
-    getFixedOffset: function() {
+    getFixedOffset: function () {
       return this.OFFSET_HEIGHT_PX;
     },
 
@@ -223,22 +226,22 @@ function setup(title, bc_names, bc_links, use_toc) {
      * @param  {String} href
      * @return {Boolean} - Was the href an anchor.
      */
-    scrollIfAnchor: function(href, pushToHistory) {
+    scrollIfAnchor: function (href, pushToHistory) {
       var match, rect, anchorOffset;
 
-      if(!this.ANCHOR_REGEX.test(href)) {
+      if (!this.ANCHOR_REGEX.test(href)) {
         return false;
       }
 
       match = document.getElementById(href.slice(1));
 
-      if(match) {
+      if (match) {
         rect = match.getBoundingClientRect();
         anchorOffset = window.pageYOffset + rect.top - this.getFixedOffset();
         window.scrollTo(window.pageXOffset, anchorOffset);
 
         // Add the state to history as-per normal anchor links
-        if(HISTORY_SUPPORT && pushToHistory) {
+        if (HISTORY_SUPPORT && pushToHistory) {
           history.pushState({}, document.title, location.pathname + href);
         }
       }
@@ -249,17 +252,17 @@ function setup(title, bc_names, bc_links, use_toc) {
     /**
      * Attempt to scroll to the current location's hash.
      */
-    scrollToCurrent: function() {
+    scrollToCurrent: function () {
       this.scrollIfAnchor(window.location.hash);
     },
 
     /**
      * If the click event's target was an anchor, fix the scroll position.
      */
-    delegateAnchors: function(e) {
+    delegateAnchors: function (e) {
       var elem = e.target;
 
-      if(
+      if (
         elem.nodeName === 'A' &&
         this.scrollIfAnchor(elem.getAttribute('href'), true)
       ) {

@@ -69,7 +69,7 @@ struct game_state_list {
     
     //GUI editor state.
     gui_editor* gui_ed = nullptr;
-
+    
     //GUI editor state.
     particle_editor* particle_ed = nullptr;
     
@@ -138,8 +138,8 @@ public:
     
     //Error manager.
     error_manager errors;
-
-    //Shader manager
+    
+    //Shader manager.
     shader_manager shaders;
     
     //Manager for all full-screen fade-ins and fade-outs.
@@ -162,10 +162,10 @@ public:
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controller_numbers;
-
+    
     //Buffer with the liquid limit effect.
     ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;
-
+    
     //Info on every edge's liquid limit offset effect. Cache for performance.
     vector<edge_offset_cache> liquid_limit_effect_caches;
     

@@ -2855,7 +2855,7 @@ sectors{
 		texture_rotate=1.5010
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/stone_2
@@ -3001,14 +3001,14 @@ sectors{
 		texture=textures/grass_dark
 	}
 	s{
-		z=100.0000
+		z=92.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/stone
 		texture_tint=156 165 175
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_dark
@@ -3172,7 +3172,7 @@ mobs{
 	}
 	treasure{
 		type=2_euro
-		p=-432.0000 384.0000
+		p=-432.0000 400.0000
 	}
 	resource{
 		type=chocolate_square

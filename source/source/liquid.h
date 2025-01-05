@@ -39,19 +39,19 @@ struct liquid : public content {
     
     //Color the body of liquid is.
     ALLEGRO_COLOR body_color = COLOR_BLACK;
-
+    
     //Color the shine of liquid is.
     ALLEGRO_COLOR shine_color = COLOR_WHITE;
     
     //Color used for this liquid in the radar.
     ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
-    //Speed at which to scroll each layer of the surface.
-    point distortion_scale = point(14.0f, 4.0f);
-
-    //How much of the liquid is covered in shines.
-    float shine_percentage = 0.5f;
-
+    //Maximum displacement amount.
+    point distortion_amount = point(14.0f, 4.0f);
+    
+    //Noise threshold for how much of the liquid is covered in shines.
+    float shine_amount = 0.5f;
+    
     //How fast the water animates.
     float anim_speed = 1;
     

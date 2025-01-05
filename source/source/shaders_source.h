@@ -5,14 +5,16 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Shader related functions.
+ * Shader source code.
  */
 
 
 namespace SHADER_SOURCE_FILES {
-    //const char* def_vert_shader
-    #pragma region Default Vertex Shader
-    const char* DEFAULT_VERT_SHADER = R"(
+
+#pragma region Default Vertex Shader
+
+//Allegro default vertex shader.
+const char* DEFAULT_VERT_SHADER = R"(
     #version 430
     in vec4 al_pos;
     in vec4 al_color;
@@ -28,10 +30,11 @@ namespace SHADER_SOURCE_FILES {
     gl_Position = al_projview_matrix * al_pos;
     }
     )";
-    #pragma endregion
 
-    #pragma region Liquid Fragment Shader
-    char* LIQUID_FRAG_SHADER = R"(
+#pragma endregion
+#pragma region Liquid Fragment Shader
+
+const char* LIQUID_FRAG_SHADER = R"(
     #version 430
     #extension GL_ARB_shader_storage_buffer_object: enable
 
@@ -44,31 +47,31 @@ namespace SHADER_SOURCE_FILES {
     // 2^26, this can go to 8 million and still fit under OpenGl standards
     // But there should almost never be this many edges in a single puddle.
     // See https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object
-
     #define MAX_FOAM_EDGES 65535
-    readonly layout(std430, binding = 3) buffer foamLayout
+
+    readonly layout(std430, binding = 3) buffer foam_layout
     {
-    //Formatted in (x1, y1, x2, y2)
-    readonly float foamEdges[];
+    //Formatted as (x1, y1, x2, y2)
+    readonly float foam_edges[];
     };
 
     uniform int edge_count;
     uniform vec4 foam_tint;
     uniform float foam_size;
 
-    uniform vec2 effect_scale;
-    uniform vec4 liq_tint;
+    uniform vec2 distortion_amount;
+    uniform vec4 surface_color;
 
-    uniform vec4 shine_tint;
-    uniform float shine_threshold;
+    uniform vec4 shine_color;
+    uniform float shine_amount;
 
-    uniform float fill_level;
+    uniform float opacity;
 
     // Parameters about texture transformations and extra tints.
     uniform vec2 tex_translation;
     uniform vec2 tex_scale;
     uniform float tex_rotation;
-    uniform float tex_brightness;
+    uniform float brightness;
 
     uniform sampler2D al_tex;
     uniform ivec2 bmp_size;
@@ -220,8 +223,8 @@ namespace SHADER_SOURCE_FILES {
     float minDist = 100000;
     for(int i = 0; i < MAX_FOAM_EDGES; i++) {
         if(i >= edge_count) return minDist;
-        vec2 v1 = vec2(foamEdges[4 * i], foamEdges[(4 * i) + 1]);
-        vec2 v2 = vec2(foamEdges[(4 * i) + 2], foamEdges[(4 * i) + 3]);
+        vec2 v1 = vec2(foam_edges[4 * i], foam_edges[(4 * i) + 1]);
+        vec2 v2 = vec2(foam_edges[(4 * i) + 2], foam_edges[(4 * i) + 3]);
 
         //code from http://stackoverflow.com/a/3122532
         vec2 v1_to_p = xy - v1;
@@ -254,11 +257,11 @@ namespace SHADER_SOURCE_FILES {
     
     //Calculate simplex noise effects.
     float nX = simplex_noise(worldCoords, noiseScale, step, 0.3);
-    nX *= effect_scale.x;
-    nX *= fill_level;
+    nX *= distortion_amount.x;
+    nX *= opacity;
     float nY = simplex_noise(worldCoords, noiseScale, step, 0.3);
-    nY *= effect_scale.y;
-    nY *= fill_level;
+    nY *= distortion_amount.y;
+    nY *= opacity;
     vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
     
     //Convert from world coords to texture coords with the simplex noise effect applied.
@@ -276,40 +279,40 @@ namespace SHADER_SOURCE_FILES {
     tmp.a *= varying_color.a;
 
     //Liquid tint
-    float liq_alpha = liq_tint.a * tex_brightness;
-    liq_alpha *= fill_level;
+    float liq_alpha = surface_color.a * brightness;
+    liq_alpha *= opacity;
 
     //And add it to the final output!
-    tmp.r = tmp.r + (liq_tint.r - tmp.r) * liq_alpha;
-    tmp.g = tmp.g + (liq_tint.g - tmp.g) * liq_alpha;
-    tmp.b = tmp.b + (liq_tint.b - tmp.b) * liq_alpha;
+    tmp.r = tmp.r + (surface_color.r - tmp.r) * liq_alpha;
+    tmp.g = tmp.g + (surface_color.g - tmp.g) * liq_alpha;
+    tmp.b = tmp.b + (surface_color.b - tmp.b) * liq_alpha;
 
 
     // -- Random shines --
     //Get the average of each effect.
-    float shineScale = (nX / effect_scale.x) + (nY / effect_scale.y);
+    float shineScale = (nX / distortion_amount.x) + (nY / distortion_amount.y);
     shineScale /= 2;
 
-    //Anything below `shine_threshold` will be below 0, resulting in it not showing.
-    //This puts our scale from 0 - (1 - `shine_threshold`)
-    shineScale -= (1 - shine_threshold);
+    //Anything below `shine_amount` will be below 0, resulting in it not showing.
+    //This puts our scale from 0 - (1 - `shine_amount`)
+    shineScale -= (1 - shine_amount);
 
     //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
     //Multiply by the reciprocal to bring it back to 0 - 1;
     //Add a min value of 0.1 to prevent divide by 0 errors.
-    shineScale *= (1 / max(0.1, 1 - shine_threshold));
+    shineScale *= (1 / max(0.1, 1 - shine_amount));
 
     //Since we havent actually restricted negative values yet, do that now.
     shineScale = max(shineScale, 0.0);
 
     //Multiply by alpha and brightness after, since we want these to apply no matter what.
-    shineScale *= tex_brightness;
-    shineScale *= shine_tint.a;
+    shineScale *= brightness;
+    shineScale *= shine_color.a;
 
     //Add the shine!
-    tmp.r = tmp.r + (shine_tint.r - tmp.r) * shineScale;
-    tmp.g = tmp.g + (shine_tint.g - tmp.g) * shineScale;
-    tmp.b = tmp.b + (shine_tint.b - tmp.b) * shineScale;
+    tmp.r = tmp.r + (shine_color.r - tmp.r) * shineScale;
+    tmp.g = tmp.g + (shine_color.g - tmp.g) * shineScale;
+    tmp.b = tmp.b + (shine_color.b - tmp.b) * shineScale;
 
     // TODO: remove two lines when edge foam is shader side.
     fragColor = tmp;
@@ -331,7 +334,7 @@ namespace SHADER_SOURCE_FILES {
     maxDist = max(1.0, maxDist);
 
     //...unless we're draining the liquid.
-    maxDist *= fill_level;
+    maxDist *= opacity;
 
     //Now using this distance, get a 0-1 number for how far away it is.
     float edgeScale = maxDist - getDistFromEdge(worldCoords);
@@ -342,7 +345,7 @@ namespace SHADER_SOURCE_FILES {
 
     //Add the alpha and brightness.
     edgeScale *= foam_tint.a;
-    edgeScale *= tex_brightness;
+    edgeScale *= brightness;
 
     //And add it to the full thing!
     tmp.r = tmp.r + (foam_tint.r - tmp.r) * edgeScale;
@@ -352,6 +355,7 @@ namespace SHADER_SOURCE_FILES {
     fragColor = tmp;
     }
     )";
-    #pragma endregion
+
+#pragma endregion
 
 }

@@ -36,7 +36,7 @@ void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
     rs.set("body_color", body_color);
     rs.set("shine_color", shine_color);
     rs.set("radar_color", radar_color);
-    rs.set("shine_percentage", shine_percentage);
-    rs.set("distortion_scale", distortion_scale);
+    rs.set("shine_amount", shine_amount);
+    rs.set("distortion_amount", distortion_amount);
     rs.set("animation_speed", anim_speed);
 }

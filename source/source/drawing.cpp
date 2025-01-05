@@ -320,47 +320,46 @@ void draw_liquid(
     sector* s_ptr, liquid* l_ptr, const point &where, float scale,
     float time
 ) {
-
+    //Setup.
     if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
-
-    ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
-    al_use_shader(liq_shader);
+    
     float liquid_opacity_mult = 1.0f;
     if(s_ptr->draining_liquid) {
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     float brightness_mult = s_ptr->brightness / 255.0;
-
-    float distortion_scale[2] = {
-        l_ptr->distortion_scale.x, 
-        l_ptr->distortion_scale.y
+    
+    float distortion_amount[2] = {
+        l_ptr->distortion_amount.x,
+        l_ptr->distortion_amount.y
     };
-    float liq_tint[4] = {
+    float liquid_tint[4] = {
         l_ptr->body_color.r,
         l_ptr->body_color.g,
         l_ptr->body_color.b,
         l_ptr->body_color.a
     };
-
-    float shine_tint[4] = {
+    
+    float shine_color[4] = {
         l_ptr->shine_color.r,
         l_ptr->shine_color.g,
         l_ptr->shine_color.b,
         l_ptr->shine_color.a
     };
-
-    /* TODO: Uncomment when liquids use foam edges.
-
-        We need to get a list of edges that the shader needs to check, 
-        this can extend to other sectors whenever a liquid occupies more than one sector,
-        so we need to loop through all of the connected sectors.
-        This could likely be optimized, but this has no noticable impact on performance.
-        
+    
+    //TODO Uncomment when liquids use foam edges.
+    /*
+     * We need to get a list of edges that the shader needs to check,
+     * this can extend to other sectors whenever a liquid occupies more
+     * than one sector, so we need to loop through all of the connected sectors.
+     * This could likely be optimized, but this has no noticable impact
+     * on performance.
+    
     vector<sector*> checked_s {s_ptr};
     vector<edge*> border_edges;
-
+    
     for(size_t s = 0; s < checked_s.size(); s++) {
         sector* s2_ptr = checked_s[s];
         for(size_t e = 0; e < s2_ptr->edges.size(); e++) {
@@ -370,12 +369,16 @@ void draw_liquid(
             if(does_edge_have_liquid_limit(e_ptr, &u_s, &a_s)) {
                 border_edges.push_back(e_ptr);
             }
-
+    
             sector* other_ptr = e_ptr->get_other_sector(s2_ptr);
             if(other_ptr) {
                 for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
                     if(other_ptr->hazards[h]->associated_liquid) {
-                        if(std::find(checked_s.begin(), checked_s.end(), other_ptr) == checked_s.end()) {
+                        if(
+                            std::find(
+                                checked_s.begin(), checked_s.end(), other_ptr
+                            ) == checked_s.end()
+                        ) {
                             checked_s.push_back(other_ptr);
                         }
                     }
@@ -383,39 +386,44 @@ void draw_liquid(
             }
         }
     }
-
-    uint edgeCount = border_edges.size();
-
-    float buffer_edges[edgeCount * 4];
-
-    for(size_t e = 0; e < edgeCount; e++) {
+    
+    uint edge_count = border_edges.size();
+    
+    float buffer_edges[edge_count * 4];
+    
+    for(size_t e = 0; e < edge_count; e++) {
         edge* edge = border_edges[e];
-
+    
         buffer_edges[4 * e    ] = edge->vertexes[0]->x;
         buffer_edges[4 * e + 1] = edge->vertexes[0]->y;
         buffer_edges[4 * e + 2] = edge->vertexes[1]->x;
         buffer_edges[4 * e + 3] = edge->vertexes[1]->y;
     }
-
+    
     //Put the buffer onto the shader
     GLuint ssbo;
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(buffer_edges), buffer_edges, GL_STREAM_READ);
+    glBufferData(
+        GL_SHADER_STORAGE_BUFFER, sizeof(buffer_edges),
+        buffer_edges, GL_STREAM_READ
+    );
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
     */
-    al_set_shader_float("time", time * l_ptr->anim_speed);
-    al_set_shader_float("fill_level", liquid_opacity_mult);
-    al_set_shader_float("tex_brightness", brightness_mult);
-    al_set_shader_float("shine_threshold", l_ptr->shine_percentage);
-    al_set_shader_int("edge_count", edgeCount);
-    al_set_shader_float_vector("effect_scale", 2, &distortion_scale[0], 1);
-    al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
-    al_set_shader_float_vector("shine_tint", 4, &shine_tint[0], 1);
     
-    //Draw the sector now!
+    //Set up the shader.
+    ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
+    al_use_shader(liq_shader);
+    al_set_shader_float("time", time * l_ptr->anim_speed);
+    al_set_shader_float("opacity", liquid_opacity_mult);
+    al_set_shader_float("brightness", brightness_mult);
+    al_set_shader_float("shine_amount", l_ptr->shine_amount);
+    al_set_shader_float_vector("distortion_amount", 2, &distortion_amount[0], 1);
+    al_set_shader_float_vector("surface_color", 4, &liquid_tint[0], 1);
+    al_set_shader_float_vector("shine_color", 4, &shine_color[0], 1);
+    
+    //Draw the sector liquid now!
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {nullptr, nullptr};
     if(s_ptr->fade) {
@@ -423,18 +431,18 @@ void draw_liquid(
             &texture_sector[0], &texture_sector[1]
         );
         if(!texture_sector[0] && !texture_sector[1]) {
-            //Can't draw this sector.
-            return;
+            //Can't draw this sector's liquid.
+            n_textures = 0;
+        } else {
+            n_textures = 2;
         }
-        n_textures = 2;
         
     } else {
         texture_sector[0] = s_ptr;
         
     }
-
-    for(unsigned char t = 0; t < n_textures; t++) {
     
+    for(unsigned char t = 0; t < n_textures; t++) {
         bool draw_sector_0 = true;
         if(!texture_sector[0]) draw_sector_0 = false;
         else if(texture_sector[0]->is_bottomless_pit) {
@@ -454,7 +462,7 @@ void draw_liquid(
         
         sector_texture_t* texture_info_to_use =
             &texture_sector[t]->texture_info;
-
+            
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
@@ -466,15 +474,15 @@ void draw_liquid(
             -texture_info_to_use->rot
         );
         
-        float textureOffset[2] = {
-            texture_info_to_use->translation.x, 
+        float texture_offset[2] = {
+            texture_info_to_use->translation.x,
             texture_info_to_use->translation.y
         };
-        float textureScale[2] = {
-            texture_info_to_use->scale.x, 
+        float texture_scale[2] = {
+            texture_info_to_use->scale.x,
             texture_info_to_use->scale.y
         };
-
+        
         for(size_t v = 0; v < n_vertexes; v++) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -536,16 +544,16 @@ void draw_liquid(
             texture_sector[t] ?
             texture_sector[t]->texture_info.bitmap :
             texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
-
-        int bmpSize[2] = {
-            al_get_bitmap_width(tex), 
+            
+        int bmp_size[2] = {
+            al_get_bitmap_width(tex),
             al_get_bitmap_height(tex)
         };
-        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
-        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
+        al_set_shader_float_vector("tex_translation", 2, texture_offset, 1);
+        al_set_shader_float_vector("tex_scale", 2, texture_scale, 1);
         al_set_shader_float("tex_rotation", texture_info_to_use->rot);
-        al_set_shader_int_vector("bmp_size", 2, &bmpSize[0], 1);
-
+        al_set_shader_int_vector("bmp_size", 2, &bmp_size[0], 1);
+        
         al_draw_prim(
             av, nullptr, tex,
             0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
@@ -553,10 +561,11 @@ void draw_liquid(
         
         delete[] av;
     }
+    
+    //Finish up.
     al_use_shader(NULL);
-
+    
 }
-
 
 
 /**

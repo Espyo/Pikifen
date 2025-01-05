@@ -9814,7 +9814,7 @@ sectors{
 		texture_tint=235 235 235
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -9885,7 +9885,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -9923,7 +9923,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -10086,7 +10086,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -11072,7 +11072,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -11558,7 +11558,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -11599,14 +11599,14 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -12010,14 +12010,14 @@ sectors{
 		texture_tint=83 83 83
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=-100.0000
+		z=-108.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt

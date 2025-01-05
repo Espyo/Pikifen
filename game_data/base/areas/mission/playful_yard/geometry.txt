@@ -6572,7 +6572,7 @@ sectors{
 		texture=textures/grass_dark
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -6607,7 +6607,7 @@ sectors{
 		texture_tint=175 175 175
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_light
@@ -6674,7 +6674,7 @@ sectors{
 		texture=textures/grass_light
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -6685,7 +6685,7 @@ sectors{
 		texture=textures/wood_bark
 	}
 	s{
-		z=200.0000
+		z=192.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_light
@@ -6888,7 +6888,7 @@ sectors{
 		texture=textures/grass_light
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -6907,7 +6907,7 @@ sectors{
 		texture=textures/grass_light
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		brightness=160
 		hazards=water
 		hazards_floor=true
@@ -7207,7 +7207,7 @@ sectors{
 	}
 	s{
 		type=blocking
-		z=350.0000
+		z=342.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_dark
@@ -7221,7 +7221,7 @@ sectors{
 	}
 	s{
 		type=blocking
-		z=350.0000
+		z=342.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_dark
@@ -7289,7 +7289,7 @@ sectors{
 	}
 	s{
 		type=blocking
-		z=350.0000
+		z=342.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/grass_dark
@@ -7325,7 +7325,7 @@ sectors{
 		texture_tint=175 175 175
 	}
 	s{
-		z=200.0000
+		z=192.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/dirt
@@ -7438,7 +7438,7 @@ sectors{
 		texture_trans=327.6375 -358.8571
 	}
 	s{
-		z=200.0000
+		z=192.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/wood_plank

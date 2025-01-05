@@ -6390,7 +6390,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		brightness=208
 		hazards=water
 		hazards_floor=true
@@ -6853,7 +6853,7 @@ sectors{
 		texture=textures/tile_dirty
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		hazards=water
 		hazards_floor=true
 		texture=textures/tile_dirty
@@ -7641,7 +7641,7 @@ sectors{
 		texture_tint=140 157 177
 	}
 	s{
-		z=0.0000
+		z=-8.0000
 		brightness=208
 		hazards=water
 		hazards_floor=true
