@@ -381,6 +381,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EV_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
@@ -2203,12 +2209,12 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     p.color.set_keyframe_value(0, change_alpha(spray_type_ref.main_color, 0));
     p.color.add(0.1f, spray_type_ref.main_color);
     p.color.add(1, change_alpha(spray_type_ref.main_color, 0));
-
+    
     p.linear_speed = keyframe_interpolator<point>(
-        rotate_point(
-            point(spray_type_ref.distance_range * 0.8, 0), shoot_angle
-        )
-    );
+                         rotate_point(
+                             point(spray_type_ref.distance_range * 0.8, 0), shoot_angle
+                         )
+                     );
     particle_generator pg(0, p, 32);
     pg.linear_speed_angle_deviation = spray_type_ref.angle_range / 2.0f;
     pg.linear_speed_deviation.x = spray_type_ref.distance_range * 0.4;

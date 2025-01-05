@@ -236,7 +236,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             if(!is_down) return;
             
-            if(cur_leader_ptr) {
+            if(cur_leader_ptr && !cur_leader_ptr->group->members.empty()) {
                 cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
             }
             
