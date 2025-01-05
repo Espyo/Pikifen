@@ -606,6 +606,7 @@ hud_t::hud_t() :
     group_amount = new gui_item();
     group_amount->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
         size_t cur_amount = game.states.gameplay->get_amount_of_group_pikmin();
         
         if(cur_amount != group_count_nr) {

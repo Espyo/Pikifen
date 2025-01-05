@@ -1142,7 +1142,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
             data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
             data.call->parent_event == MOB_EV_LEFT_HAZARD
         ) {
-            *var = ((hazard*)data.custom_data_1)->name;
+            *var = ((hazard*)data.custom_data_1)->manifest->internal_name;
         }
         break;
         

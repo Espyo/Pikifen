@@ -10,9 +10,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The squad number in the HUD isn't disappearing if you enter an area with no leaders
     Bomb rocks shouldn't do their normal explosion particles if they explode inside a mob
-    The Cyclopd doesn't think it's underwater when it spawns
     The wood bridge mob's size is all wrong
     Loading the area editor on an area that only has the folder, but not data.txt or geometry.txt crashes
     Editor histories only have some spacing before the "new" node if they have six entries
