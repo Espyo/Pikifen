@@ -311,8 +311,13 @@ namespace SHADER_SOURCE_FILES {
     tmp.g = tmp.g + (shine_tint.g - tmp.g) * shineScale;
     tmp.b = tmp.b + (shine_tint.b - tmp.b) * shineScale;
 
+    // TODO: remove two lines when edge foam is shader side.
+    fragColor = tmp;
+    return;
 
     // -- Edge Foam -- 
+    
+
     float maxDist = foam_size;
 
     //Apply some effects to make sure the foam isnt a straight line.

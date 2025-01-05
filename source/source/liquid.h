@@ -40,9 +40,6 @@ struct liquid : public content {
     //Color the body of liquid is.
     ALLEGRO_COLOR body_color = COLOR_BLACK;
 
-    //Color the foam of liquid is.
-    ALLEGRO_COLOR foam_color = COLOR_WHITE;
-
     //Color the shine of liquid is.
     ALLEGRO_COLOR shine_color = COLOR_WHITE;
     
@@ -54,9 +51,6 @@ struct liquid : public content {
 
     //How much of the liquid is covered in shines.
     float shine_percentage = 0.5f;
-
-    //How far the foam can extend from the shore.
-    float max_foam_distance = 25;
 
     //How fast the water animates.
     float anim_speed = 1;

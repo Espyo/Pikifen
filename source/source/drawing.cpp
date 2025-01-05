@@ -351,13 +351,6 @@ void draw_liquid(
         l_ptr->shine_color.a
     };
 
-    float foam_color[4] = {
-        l_ptr->foam_color.r,
-        l_ptr->foam_color.g,
-        l_ptr->foam_color.b,
-        l_ptr->foam_color.a
-    };
-
     /*
         We need to get a list of edges that the shader needs to check, 
         this can extend to other sectors whenever a liquid occupies more than one sector,
@@ -415,12 +408,10 @@ void draw_liquid(
     al_set_shader_float("fill_level", liquid_opacity_mult);
     al_set_shader_float("tex_brightness", brightness_mult);
     al_set_shader_float("shine_threshold", l_ptr->shine_percentage);
-    al_set_shader_float("foam_size", l_ptr->max_foam_distance);
     al_set_shader_int("edge_count", edgeCount);
     al_set_shader_float_vector("effect_scale", 2, &distortion_scale[0], 1);
     al_set_shader_float_vector("liq_tint", 4, &liq_tint[0], 1);
     al_set_shader_float_vector("shine_tint", 4, &shine_tint[0], 1);
-    al_set_shader_float_vector("foam_tint", 4, &foam_color[0], 1);
     
     //Draw the sector now!
     unsigned char n_textures = 1;
