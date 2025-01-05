@@ -1969,6 +1969,11 @@ void editor::process_gui_history(
     
         if(!history.empty() && !history[0].first.empty()) {
         
+            size_t n_filled_entries = 0;
+            for(size_t h = 0; h < history.size(); h++) {
+                if(!history[h].first.empty()) n_filled_entries++;
+            }
+            
             for(size_t h = 0; h < history.size(); h++) {
                 string path = history[h].first;
                 if(path.empty()) continue;
@@ -1986,7 +1991,9 @@ void editor::process_gui_history(
                 if(tooltip_callback) {
                     set_tooltip(tooltip_callback(path));
                 }
-                ImGui::SetupButtonWrapping(button_size.x, h + 1, history.size());
+                ImGui::SetupButtonWrapping(
+                    button_size.x, h + 1, n_filled_entries
+                );
             }
             
         } else {

@@ -12,8 +12,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Bomb rocks shouldn't do their normal explosion particles if they explode inside a mob
     The wood bridge mob's size is all wrong
-    Loading the area editor on an area that only has the folder, but not data.txt or geometry.txt crashes
-    Editor histories only have some spacing before the "new" node if they have six entries
     Hitting Home in the animation editor isn't centering properly (at least not with Blue Pikmin it wasn't)
     If you're on an elevator platform, you won't be able to throw Winged Pikmin
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
