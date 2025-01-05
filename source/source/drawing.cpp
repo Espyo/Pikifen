@@ -551,7 +551,7 @@ void draw_liquid(
         al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
         al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
         al_set_shader_float("tex_rotation", texture_info_to_use->rot);
-        al_set_shader_int_vector("tex_size", 2, &bmpSize[0], 1);
+        al_set_shader_int_vector("bmp_size", 2, &bmpSize[0], 1);
 
         al_draw_prim(
             av, nullptr, tex,
