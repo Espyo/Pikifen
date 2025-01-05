@@ -269,7 +269,7 @@ namespace SHADER_SOURCE_FILES {
         );
 
     //Get our base texture, and tint it to the sector's tint.
-    vec4 tmp = texture2D(al_tex, sample_texcoord);
+    vec4 tmp = texture(al_tex, sample_texcoord);
     tmp.r *= varying_color.r;
     tmp.g *= varying_color.g;
     tmp.b *= varying_color.b;
