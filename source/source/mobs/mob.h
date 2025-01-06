@@ -419,7 +419,7 @@ public:
         float vertical_dist,
         bool above_holder, const HOLD_ROTATION_METHOD rotation_method
     );
-    void release(mob* m);
+    void release(mob* m, bool notify);
     bool can_hurt(mob* m) const;
     bool can_hunt(mob* m) const;
     mob_type::vulnerability_t get_hazard_vulnerability(
