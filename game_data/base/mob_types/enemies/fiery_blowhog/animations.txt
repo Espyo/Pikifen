@@ -35,7 +35,7 @@ animations{
 			attacking_04{
 				duration=0.1000
 			}
-			attacking_05{
+			attacking_03{
 				duration=0.1000
 			}
 			attacking_02{
@@ -47,12 +47,12 @@ animations{
 			attacking_04{
 				duration=0.1000
 			}
-			attacking_05{
-				duration=0.1000
-			}
-			attacking_06{
+			attacking_03{
 				duration=0.1000
 				signal=1
+			}
+			attacking_05{
+				duration=0.1000
 			}
 			idling{
 				duration=0.3000
@@ -179,9 +179,9 @@ animations{
 sprites{
 	attacking_01{
 		file=fiery_blowhog
-		file_pos=444.0000 59.0000
-		file_size=204.0000 58.0000
-		offset=67.5000 0.0000
+		file_pos=115.0000 122.0000
+		file_size=114.0000 60.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -219,9 +219,9 @@ sprites{
 	}
 	attacking_02{
 		file=fiery_blowhog
-		file_pos=0.0000 121.0000
-		file_size=298.0000 87.0000
-		offset=114.5000 0.0000
+		file_pos=0.0000 122.0000
+		file_size=114.0000 60.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -259,9 +259,9 @@ sprites{
 	}
 	attacking_03{
 		file=fiery_blowhog
-		file_pos=299.0000 122.0000
-		file_size=298.0000 90.0000
-		offset=114.5000 0.0000
+		file_pos=115.0000 122.0000
+		file_size=114.0000 60.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -299,9 +299,9 @@ sprites{
 	}
 	attacking_04{
 		file=fiery_blowhog
-		file_pos=0.0000 209.0000
-		file_size=298.0000 87.0000
-		offset=114.5000 0.0000
+		file_pos=230.0000 122.0000
+		file_size=114.0000 60.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -339,9 +339,9 @@ sprites{
 	}
 	attacking_05{
 		file=fiery_blowhog
-		file_pos=299.0000 213.0000
-		file_size=298.0000 84.0000
-		offset=114.5000 0.0000
+		file_pos=345.0000 122.0000
+		file_size=114.0000 60.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -355,7 +355,7 @@ sprites{
 				coords=100.0000 0.0000 -32.0000
 				height=130.0000
 				radius=30.0000
-				type=1
+				type=2
 				value=30.0000
 				hazards=fire
 			}
@@ -377,49 +377,9 @@ sprites{
 			}
 		}
 	}
-	attacking_06{
-		file=fiery_blowhog
-		file_pos=0.0000 297.0000
-		file_size=298.0000 58.0000
-		offset=114.5000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=70.0000
-				radius=35.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			fire1{
-				coords=180.0000 0.0000 -32.0000
-				height=130.0000
-				radius=18.0000
-				type=1
-				value=30.0000
-				hazards=fire
-			}
-			fire2{
-				coords=206.0000 0.0000 -32.0000
-				height=130.0000
-				radius=18.0000
-				type=1
-				value=30.0000
-				hazards=fire
-			}
-			fire3{
-				coords=232.0000 0.0000 -32.0000
-				height=130.0000
-				radius=18.0000
-				type=1
-				value=30.0000
-				hazards=fire
-			}
-		}
-	}
 	bucking_01{
 		file=fiery_blowhog
-		file_pos=299.0000 298.0000
+		file_pos=0.0000 183.0000
 		file_size=107.0000 58.0000
 		offset=19.0000 0.0000
 		hitboxes{
@@ -456,7 +416,7 @@ sprites{
 	}
 	bucking_02{
 		file=fiery_blowhog
-		file_pos=407.0000 298.0000
+		file_pos=108.0000 183.0000
 		file_size=95.0000 58.0000
 		offset=8.0000 0.0000
 		hitboxes{
@@ -493,7 +453,7 @@ sprites{
 	}
 	bucking_03{
 		file=fiery_blowhog
-		file_pos=503.0000 298.0000
+		file_pos=204.0000 183.0000
 		file_size=66.0000 58.0000
 		offset=-8.0000 0.0000
 		hitboxes{
@@ -530,7 +490,7 @@ sprites{
 	}
 	bucking_04{
 		file=fiery_blowhog
-		file_pos=0.0000 356.0000
+		file_pos=271.0000 183.0000
 		file_size=98.0000 58.0000
 		offset=15.0000 0.0000
 		hitboxes{
@@ -568,7 +528,7 @@ sprites{
 	}
 	bucking_05{
 		file=fiery_blowhog
-		file_pos=99.0000 356.0000
+		file_pos=370.0000 183.0000
 		file_size=98.0000 58.0000
 		offset=19.0000 0.0000
 		hitboxes{
@@ -606,7 +566,7 @@ sprites{
 	}
 	bucking_06{
 		file=fiery_blowhog
-		file_pos=99.0000 356.0000
+		file_pos=370.0000 183.0000
 		file_size=98.0000 58.0000
 		offset=15.0000 0.0000
 		hitboxes{
@@ -680,7 +640,7 @@ sprites{
 	}
 	dying_02{
 		file=fiery_blowhog
-		file_pos=299.0000 298.0000
+		file_pos=0.0000 183.0000
 		file_size=107.0000 58.0000
 		offset=19.0000 0.0000
 		hitboxes{
@@ -716,7 +676,7 @@ sprites{
 	}
 	dying_03{
 		file=fiery_blowhog
-		file_pos=407.0000 298.0000
+		file_pos=108.0000 183.0000
 		file_size=95.0000 58.0000
 		offset=8.0000 0.0000
 		hitboxes{
@@ -752,7 +712,7 @@ sprites{
 	}
 	dying_04{
 		file=fiery_blowhog
-		file_pos=198.0000 357.0000
+		file_pos=0.0000 242.0000
 		file_size=111.0000 61.0000
 		offset=21.0000 0.0000
 		hitboxes{
@@ -788,7 +748,7 @@ sprites{
 	}
 	dying_05{
 		file=fiery_blowhog
-		file_pos=310.0000 357.0000
+		file_pos=112.0000 242.0000
 		file_size=110.0000 64.0000
 		offset=20.5000 0.0000
 		hitboxes{
@@ -824,7 +784,7 @@ sprites{
 	}
 	dying_06{
 		file=fiery_blowhog
-		file_pos=421.0000 357.0000
+		file_pos=223.0000 242.0000
 		file_size=111.0000 65.0000
 		offset=21.5000 0.0000
 		hitboxes{
@@ -860,7 +820,7 @@ sprites{
 	}
 	dying_07{
 		file=fiery_blowhog
-		file_pos=533.0000 357.0000
+		file_pos=335.0000 242.0000
 		file_size=110.0000 58.0000
 		offset=20.5000 0.0000
 		hitboxes{

@@ -88,6 +88,7 @@ script {
             get_event_info signal frame_signal
             stop_sound $sound_id
             stop_sound $sound_id2
+            stop_particles
             if $signal = 0
                 play_sound exhaling sound_id
                 play_sound flamethrower sound_id2

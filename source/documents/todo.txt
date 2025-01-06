@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -14,7 +14,6 @@ Next tasks (roughly sorted most important first)
         This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
 
     --- 0.26 ---
-    Optimize the Fiery Blowhog's spritesheet, now that it uses particles
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
     Test -S-'s get_onion_info branch
     https://github.com/Helodity/Pikifen/tree/throwing-improvements-port
