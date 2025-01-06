@@ -147,11 +147,8 @@ animations{
 			grabbing_02{
 				duration=0.0500
 			}
-			grabbing_01{
-				duration=0.0500
-			}
-			grabbing_03{
-				duration=0.0500
+			mid_bend{
+				duration=0.1400
 			}
 			grabbing_far{
 				duration=0.0800

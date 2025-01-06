@@ -91,7 +91,10 @@ animations{
 	carrying_struggle{
 		frames{
 			grabbing{
-				duration=0.8000
+				duration=0.7000
+			}
+			mid_bend{
+				duration=0.1400
 			}
 			grabbing_far{
 				duration=0.0800
