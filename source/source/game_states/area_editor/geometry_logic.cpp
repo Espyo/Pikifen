@@ -1940,10 +1940,11 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
 void area_editor::merge_vertex(
     const vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
 ) {
+    vector<edge*> edges = v1->edges;
     //Find out what to do with every edge of the dragged vertex.
-    for(size_t e = 0; e < v1->edges.size(); e++) {
+    for(size_t e = 0; e < edges.size(); e++) {
     
-        edge* e_ptr = v1->edges[e];
+        edge* e_ptr = edges[e];
         vertex* other_vertex = e_ptr->get_other_vertex(v1);
         
         if(other_vertex == v2) {
