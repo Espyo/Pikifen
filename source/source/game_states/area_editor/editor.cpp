@@ -3937,6 +3937,22 @@ void area_editor::update_all_edge_offset_caches() {
         get_wall_shadow_length,
         get_wall_shadow_color
     );
+    game.liquid_limit_effect_caches.clear();
+    game.liquid_limit_effect_caches.insert(
+        game.liquid_limit_effect_caches.begin(),
+        game.cur_area_data->edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.liquid_limit_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data->vertexes.begin(),
+            game.cur_area_data->vertexes.end()
+        ),
+        does_edge_have_liquid_limit,
+        get_liquid_limit_length,
+        get_liquid_limit_color
+    );
 }
 
 

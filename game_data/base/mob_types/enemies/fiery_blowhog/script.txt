@@ -91,11 +91,13 @@ script {
             if $signal = 0
                 play_sound exhaling sound_id
                 play_sound flamethrower sound_id2
+                start_particles blowhog_fire 75 0 0
             end_if
         }
         on_leave {
             stop_sound $sound_id
             stop_sound $sound_id2
+            stop_particles
         }
         on_animation_end {
             set_state examining
