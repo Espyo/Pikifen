@@ -8,6 +8,8 @@
  * Control handling in the gameplay state.
  */
 
+#include <algorithm>
+
 #include "gameplay.h"
 
 #include "../../game.h"
@@ -20,8 +22,7 @@
  */
 void gameplay_state::handle_player_action(const player_action &action) {
 
-    if(!ready_for_input || !is_input_allowed) return;
-    if(cur_interlude != INTERLUDE_NONE) return;
+    if(should_ignore_player_action(action)) return;
     
     bool is_down = (action.value >= 0.5);
     
@@ -702,4 +703,39 @@ void gameplay_state::handle_player_action(const player_action &action) {
     }
     }
     
+}
+
+
+/**
+ * @brief Returns whether a given player action should be ignored, based
+ * on the state of the game.
+ *
+ * @param action Action to check.
+ * @return Whether it should be ignored.
+ */
+bool gameplay_state::should_ignore_player_action(const player_action &action) {
+    const vector<int> actions_allowed_during_interludes {
+        PLAYER_ACTION_TYPE_CHANGE_ZOOM,
+        PLAYER_ACTION_TYPE_CURSOR_DOWN,
+        PLAYER_ACTION_TYPE_CURSOR_LEFT,
+        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
+        PLAYER_ACTION_TYPE_CURSOR_UP,
+        PLAYER_ACTION_TYPE_ZOOM_IN,
+        PLAYER_ACTION_TYPE_ZOOM_OUT,
+    };
+    
+    if(!ready_for_input || !is_input_allowed) return true;
+    if(cur_interlude != INTERLUDE_NONE) {
+        if(
+            std::find(
+                actions_allowed_during_interludes.begin(),
+                actions_allowed_during_interludes.end(),
+                action.action_type_id
+            ) == actions_allowed_during_interludes.end()
+        ) {
+            return true;
+        }
+    }
+    
+    return false;
 }

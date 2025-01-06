@@ -512,6 +512,7 @@ private:
         mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, dist &d
     );
     void process_system_key_press(int keycode);
+    bool should_ignore_player_action(const player_action &action);
     void unload_game_content();
     void update_area_active_cells();
     void update_mob_is_active_flag();

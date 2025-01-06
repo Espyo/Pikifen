@@ -1,11 +1,9 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
     Check for memory leaks
-    Allow the player to change the camera zoom during intermissions
-    Change the main menu options icon to not be a gear, since it resembles Pikifen's logo (thanks Soprano)
 
 
 Next tasks (roughly sorted most important first)
