@@ -2879,12 +2879,11 @@ void mob::read_script_vars(const script_var_reader &svr) {
  * @brief Stop holding a mob.
  *
  * @param m Mob to release.
- * @param notify Whether to notify the released mob.
  */
-void mob::release(mob* m, bool notify) {
+void mob::release(mob* m) {
     for(size_t h = 0; h < holding.size(); h++) {
         if(holding[h] == m) {
-            if(notify) m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
+            m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
             holding.erase(holding.begin() + h);
             break;
         }
@@ -2907,7 +2906,7 @@ void mob::release(mob* m, bool notify) {
 void mob::release_chomped_pikmin() {
     for(size_t p = 0; p < chomping_mobs.size(); p++) {
         if(!chomping_mobs[p]) continue;
-        release(chomping_mobs[p], true);
+        release(chomping_mobs[p]);
     }
     chomping_mobs.clear();
 }
@@ -2920,7 +2919,7 @@ void mob::release_stored_mobs() {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(m_ptr->stored_inside_another == this) {
-            release(m_ptr, true);
+            release(m_ptr);
             m_ptr->stored_inside_another = nullptr;
             m_ptr->time_alive = 0.0f;
             float a = randomf(0, TAU);
@@ -3422,7 +3421,7 @@ void mob::swallow_chomped_pikmin(size_t nr) {
         if(!chomping_mobs[p]) continue;
         chomping_mobs[p]->set_health(false, false, 0.0f);
         chomping_mobs[p]->cause_spike_damage(this, true);
-        release(chomping_mobs[p], false);
+        release(chomping_mobs[p]);
         if(chomping_mobs[p]->type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikmin_eaten++;
         }

@@ -1632,7 +1632,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     enable_flag(holding_ptr->flags, MOB_FLAG_WAS_THROWN);
     holding_ptr->leave_group();
-    leader_ptr->release(holding_ptr, true);
+    leader_ptr->release(holding_ptr);
     
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
     sound_source_config_t throw_sound_config;
@@ -2017,7 +2017,7 @@ void leader_fsm::release(mob* m, void* info1, void* info2) {
     m->holding[0]->pos = m->pos;
     m->holding[0]->z = m->z;
     m->holding[0]->face(m->angle + TAU / 2.0f, nullptr, true);
-    m->release(m->holding[0], true);
+    m->release(m->holding[0]);
 }
 
 

@@ -51,7 +51,10 @@ script {
             remove_status bomb_rock_health_drain
         }
         on_released {
-            set_var will_be_swallowed false
+            get_mob_info h self health
+            if $h > 0
+                set_var will_be_swallowed false
+            end_if
             set_state primed
         }
     }

@@ -2246,7 +2246,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
     }
     
     if(data.m->focused_mob->holder.m == data.m) {
-        data.m->release(data.m->focused_mob, true);
+        data.m->release(data.m->focused_mob);
     }
     
     float max_height = s2f(data.args[3]);

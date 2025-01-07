@@ -205,7 +205,7 @@ sprites{
 				height=40.0000
 				radius=26.0000
 				type=1
-				value=1.0000
+				value=600.0000
 			}
 		}
 	}

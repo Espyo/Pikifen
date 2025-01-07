@@ -3670,7 +3670,7 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     } else {
         too_ptr->set_var("gentle_release", "false");
     }
-    pik_ptr->release(too_ptr, true);
+    pik_ptr->release(too_ptr);
     too_ptr->pos = m->pos;
     too_ptr->speed = point();
     too_ptr->push_amount = 0.0f;
@@ -4451,7 +4451,7 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
 void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
     if(!m->focused_mob) return;
     
-    m->focused_mob->release(m, false);
+    m->focused_mob->release(m);
     ((pikmin*) m)->latched = false;
 }
 

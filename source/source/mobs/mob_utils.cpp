@@ -1268,7 +1268,7 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
                 }
             }
             if(m2_ptr->stored_inside_another == m_ptr) {
-                m_ptr->release(m2_ptr, true);
+                m_ptr->release(m2_ptr);
                 m2_ptr->stored_inside_another = nullptr;
             }
             if(m2_ptr->carry_info) {
@@ -1286,11 +1286,11 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
         }
         
         if(m_ptr->holder.m) {
-            m_ptr->holder.m->release(m_ptr, true);
+            m_ptr->holder.m->release(m_ptr);
         }
         
         while(!m_ptr->holding.empty()) {
-            m_ptr->release(m_ptr->holding[0], true);
+            m_ptr->release(m_ptr->holding[0]);
         }
         
         m_ptr->set_can_block_paths(false);
