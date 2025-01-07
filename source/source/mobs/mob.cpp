@@ -2489,7 +2489,10 @@ bool mob::has_clear_line(const mob* target_mob) const {
         std::max(pos.x, target_mob->pos.x),
         std::max(pos.y, target_mob->pos.y)
     );
-    
+
+    const float self_max_z = z + height;
+    const float target_mob_max_z = target_mob->z + target_mob->height;
+
     //Check against other mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
@@ -2497,8 +2500,9 @@ bool mob::has_clear_line(const mob* target_mob) const {
         if(!m_ptr->type->pushes) continue;
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
+
         const float m_ptr_max_z = m_ptr->z + m_ptr->height;
-        if(m_ptr_max_z < z && m_ptr_max_z < target_mob->z) continue;
+        if(m_ptr_max_z < self_max_z || m_ptr_max_z < target_mob_max_z) continue;
         if(
             m_ptr->z > z + height &&
             m_ptr->z > target_mob->z + target_mob->height
@@ -2544,20 +2548,9 @@ bool mob::has_clear_line(const mob* target_mob) const {
     }
     
     //Check against walls.
-    //We can ignore walls that are below both mobs, so use the lowest of the
+    //We can ignore walls that are below or within stepping distance of both mobs, so use the lowest of the
     //two Zs as a cut-off point.
-    if(are_walls_between(pos, target_mob->pos, std::min(z, target_mob->z))) {
-        return false;
-    }
-    
-    //Check for when they're (not) standing on different mobs.
-    //This is a bit rudimentary, but for the sake of performance, it'll do.
-    if(
-        standing_on_mob != target_mob->standing_on_mob &&
-        fabs(z - target_mob->z) > GEOMETRY::STEP_HEIGHT
-    ) {
-        //This is likely a situation where the leader is on a bridge,
-        //and the Pikmin is (far) below it. Let's not let this happen.
+    if(are_walls_between(pos, target_mob->pos, std::min(z + height, target_mob->z + target_mob->height) + GEOMETRY::STEP_HEIGHT)) {
         return false;
     }
     

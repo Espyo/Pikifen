@@ -487,7 +487,7 @@ private:
     ALLEGRO_BITMAP* generate_fog_bitmap(
         float near_radius, float far_radius
     );
-    mob* get_closest_group_member(const subgroup_type* type);
+    mob* get_closest_group_member(const subgroup_type* type, bool* distant = nullptr);
     void handle_player_action(const player_action &action);
     void init_hud();
     bool is_mission_clear_met();

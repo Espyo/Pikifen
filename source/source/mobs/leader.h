@@ -141,6 +141,7 @@ public:
     
     leader(const point &pos, leader_type* type, float angle);
     bool check_throw_ok() const;
+    bool can_grab_group_member(mob* m) const;
     void dismiss();
     bool order_pikmin_to_onion(
         const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount
