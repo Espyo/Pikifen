@@ -9,8 +9,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     There's still some crash with the top bitmap in the anim editor? state = 1, sprite = arms_out_01 on winged pikmin, I think I hit reload
-    If you're on an elevator platform, you won't be able to throw Winged Pikmin
-        This is because the check if there's a clear line notices the leader is standing on a different mob from the Winged Pikmin
 
     --- 0.26 ---
     Add a "Play" or "Make" label in the corresponding main menu sub-menus

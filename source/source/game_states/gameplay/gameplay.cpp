@@ -532,10 +532,14 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
  * and more mature one.
  *
  * @param type Type to search for.
- * @param distant If not nullptr, returns whether any member is reachable.
- * @return The closest member, or nullptr if there is no member of that subgroup available
+ * @param distant If not nullptr, whether all members are unreachable is
+ * returned here.
+ * @return The closest member, or nullptr if there is no member
+ * of that subgroup available to grab.
  */
-mob* gameplay_state::get_closest_group_member(const subgroup_type* type, bool* distant) {
+mob* gameplay_state::get_closest_group_member(
+    const subgroup_type* type, bool* distant
+) {
     if(!cur_leader_ptr) return nullptr;
     
     mob* result = nullptr;
@@ -563,17 +567,17 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type, bool* d
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         bool can_grab = cur_leader_ptr->can_grab_group_member(member_ptr);
-
-        //Replacing a grabbable pikmin with a non grabbable pikmin, skip it
+        
         if(!can_grab && can_grab_closest[maturity]) {
+            //Skip if we'd replace a grabbable Pikmin with a non-grabbable one.
             continue;
         }
         
         dist d(cur_leader_ptr->pos, member_ptr->pos);
         
         if(
-            (can_grab && !can_grab_closest[maturity]) || 
-            !closest_ptrs[maturity] || 
+            (can_grab && !can_grab_closest[maturity]) ||
+            !closest_ptrs[maturity] ||
             d < closest_dists[maturity]
         ) {
             closest_dists[maturity] = d;
@@ -592,11 +596,9 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type, bool* d
         closest_dist = closest_dists[2 - m];
         break;
     }
-
-    if(distant) {
-        *distant = !result;
-    }
-
+    
+    if(distant) *distant = !result;
+    
     if(!result) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
@@ -1365,8 +1367,10 @@ void gameplay_state::update_closest_group_members() {
     
     if(cur_leader_ptr->group->cur_standby_type) {
         closest_group_member[BUBBLE_RELATION_CURRENT] =
-            get_closest_group_member(cur_leader_ptr->group->cur_standby_type, 
-            &closest_group_member_distant);
+            get_closest_group_member(
+                cur_leader_ptr->group->cur_standby_type,
+                &closest_group_member_distant
+            );
     }
     
     subgroup_type* next_type;

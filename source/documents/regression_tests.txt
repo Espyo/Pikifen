@@ -605,7 +605,7 @@ PHYSICS
 ###################################
 ###################################
 
-* With just a leader:
+With just a leader:
 1. Move
 2. Slide against walls
 3. Walk on edges
@@ -621,7 +621,7 @@ PHYSICS
 13. Be pushed by several mobs at once
 14. Try to squeeze between a crystal wall's crystal and its pillar (aim diagonally)
 
-* Get some Pikmin and:
+Get some Pikmin and:
 1. Hold a Pikmin and move around
 2. Throw a Pikmin against a wall, but to an edge it can reach, at a slide angle
 3. Throw a Pikmin against a wall, but to an edge it can reach, straight-on
@@ -634,6 +634,26 @@ PHYSICS
 10. Move whilst on top of a mob that is changing its height, with Pikmin in your group
 11. Get a non-Winged Pikmin to climb a climbing stick, and check their Z. It must go all the way to 250.
 11. Repeat, but with a Winged Pikmin.
+
+
+
+###################################
+###################################
+GAMEPLAY
+###################################
+###################################
+
+1. Hold a non-Blue Pikmin and drag it into water to see if it's released.
+2. Hold a Blue Pikmin in water, and swap to a different Pikmin while holding, to see if it's disallowed.
+3. Have a Pikmin far away, whistle it, hold a close Pikmin, and swap to that far Pikmin while holding, to see if it's disallowed.
+4. Have a Pikmin at the bottom of a ramp, underneath by more than 100 units, and try to grab it to see if it's allowed.
+5. Have a Pikmin at the top of a ramp, above by more than 100 units, and try to grab it to see if it's allowed.
+6. Have a Pikmin below a ledge (more than 50 units) while the leader is above the ledge, and try to grab to see if it's disallowed.
+7. Have a Pikmin above a ledge (more than 50 units) while the leader is above the ledge, and try to grab to see if it's disallowed.
+8. Have a leader and a Pikmin on a flat bridge and try to grab it to see if it's allowed.
+9. Have a leader and a Pikmin on a ramped bridge, both on different bridge segment mobs, and try to grab it to see if it's allowed.
+10. Have a leader above a bridge and a Pikmin below it, and try to grab it to see if it's disallowed.
+11. Have a Pikmin close to the leader, on the other side of a thin wall, and try to grab it to see if it's disallowed.
 
 
 
