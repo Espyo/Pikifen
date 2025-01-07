@@ -1643,7 +1643,7 @@ void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
  */
 void mob_action_runners::remove_status(mob_action_run_data &data) {
     for(size_t s = 0; s < data.m->statuses.size(); s++) {
-        if(data.m->statuses[s].type->name == data.args[0]) {
+        if(data.m->statuses[s].type->manifest->internal_name == data.args[0]) {
             data.m->statuses[s].to_delete = true;
         }
     }
