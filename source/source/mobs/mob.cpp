@@ -2188,11 +2188,31 @@ void mob::get_sprite_bitmap_effects(
                     closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
                 }
             }
-            float total_brightness = texture_sector[1]->brightness * (closest_dist[0].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
-            total_brightness += texture_sector[0]->brightness * (closest_dist[1].to_float() / (closest_dist[0].to_float() + closest_dist[1].to_float()));
+            float total_brightness = 0;
+            if(texture_sector[0]) {
+                total_brightness +=
+                    texture_sector[0]->brightness *
+                    (
+                        closest_dist[1].to_float() /
+                        (
+                            closest_dist[0].to_float() +
+                            closest_dist[1].to_float()
+                        )
+                    );
+            }
+            if(texture_sector[1]) {
+                total_brightness +=
+                    texture_sector[1]->brightness *
+                    (
+                        closest_dist[0].to_float() /
+                        (
+                            closest_dist[0].to_float() +
+                            closest_dist[1].to_float()
+                        )
+                    );
+            }
             brightness = total_brightness / 255.0;
         }
-        
         
         info->tint_color.r *= brightness;
         info->tint_color.g *= brightness;

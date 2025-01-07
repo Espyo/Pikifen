@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
     Test -S-'s get_onion_info branch
-    https://github.com/Helodity/Pikifen/tree/throwing-improvements-port
     Find a way to manage the installed packs
         Allow pack thumbnails
             Only load the thumbnails when you enter the pack management screen, and don't use game.content.bitmaps, since they are not game content. Unload when the screen is exited
