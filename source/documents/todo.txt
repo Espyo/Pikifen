@@ -3,12 +3,11 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
-    Check for memory leaks
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    There's still some crash with the top bitmap in the anim editor? state = 1, sprite = arms_out_01 on winged pikmin, I think I hit reload
+    
 
     --- 0.26 ---
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
@@ -22,6 +21,7 @@ Next tasks (roughly sorted most important first)
             It should also show and/or explain in some way how there's the base content
         When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
         There should be a button to open the packs folder
+        Check for memory leaks
     Update to Dear ImGui 1.91.6
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?

@@ -1359,10 +1359,7 @@ void animation_editor::setup_for_new_anim_db_post() {
     
     //Top bitmaps.
     for(unsigned char t = 0; t < N_MATURITIES; t++) {
-        if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
-            game.content.bitmaps.list.free(top_bmp[t]);
-            top_bmp[t] = nullptr;
-        }
+        if(top_bmp[t]) top_bmp[t] = nullptr;
     }
     
     if(
