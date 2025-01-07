@@ -1,0 +1,27 @@
+name = Snowstorm
+description = Snow blowing around with a white fog
+
+lighting {
+    0    = 32  32  64  192
+    300  = 32  32  48  192
+    360  = 64  64  64  160
+    420  = 128 128 128 96
+    480  = 128 128 128 64
+    1020 = 128 128 128 64
+    1080 = 128 128 128 96
+    1140 = 64  48  32  128
+    1200 = 48  32  32  192
+}
+sun_strength {
+    0    = 64
+    300  = 96
+    480  = 128
+    1020 = 128
+    1200 = 64
+}
+fog_color {
+   0  = 255 255 255 160
+}
+fog_near = 200
+fog_far = 1000
+//TODO: Add Snow!

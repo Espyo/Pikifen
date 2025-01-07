@@ -1,0 +1,31 @@
+name=Turbulent Tundra
+description=Brave the icy cold to get as many pikmin as possible
+tags=Standard; Snow
+maker=Helodity
+version=1.0.0
+engine_version=0.25.0
+subtitle=Grow pikmin!
+difficulty=3
+bg_bmp
+bg_color=0 0 0
+bg_dist=0.0000
+bg_zoom=0.0000
+song=frosty_breath
+weather=snowstorm
+day_time_start=480
+day_time_speed=72
+spray_amounts
+mission_goal=Survive
+mission_goal_amount=600
+mission_fail_conditions=162
+mission_fail_too_few_pik_amount=0
+mission_fail_leaders_kod=2
+mission_grading_mode=0
+mission_points_per_pikmin_born=1
+mission_points_per_pikmin_death=-1
+mission_point_hud_data=251
+mission_starting_points=12
+mission_bronze_req=50
+mission_silver_req=100
+mission_gold_req=150
+mission_platinum_req=200
