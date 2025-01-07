@@ -1929,9 +1929,11 @@ void area_editor::process_gui_panel_info() {
             if(can_preview_selected_song) {
                 preview_song = game.cur_area_data->song_name;
                 game.audio.set_current_song(preview_song);
+                previewing = true;
             } else if(can_stop_previewing) {
                 game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
                 preview_song.clear();
+                previewing = false;
             }
         }
         
