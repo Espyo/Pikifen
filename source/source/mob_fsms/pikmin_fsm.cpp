@@ -3229,11 +3229,6 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
-    if(m->script_timer.time_left > 0.0f) {
-        //We haven't actually landed yet. Never mind.
-        return;
-    }
-    
     m->fsm.set_state(PIKMIN_STATE_KNOCKED_DOWN);
 }
 
