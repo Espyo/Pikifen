@@ -2184,7 +2184,7 @@ void mob::get_sprite_bitmap_effects(
                         closest_pos -= v2_to_v1 * (segment_ratio - 1);
                     }
                     
-                    dist d = dist(closest_pos, pos);
+                    dist d(closest_pos, pos);
                     closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
                 }
             }
@@ -4006,26 +4006,13 @@ void mob::tick_script(float delta_t) {
             mob_event* for_ev = fsm.get_event(MOB_EV_FOCUS_OFF_REACH);
             
             if(far_reach != INVALID && for_ev) {
-                dist d(pos, focus->pos);
-                float face_diff =
-                    get_angle_smallest_dif(
-                        angle,
-                        get_angle(pos, focus->pos)
-                    );
-                    
-                mob_type::reach_t* r_ptr =
-                    &type->reaches[far_reach];
+                float angle_to_focus = get_angle(pos, focus->pos);
                 if(
-                    (
-                        d > r_ptr->radius_1 +
-                        (radius + focus->radius) ||
-                        face_diff > r_ptr->angle_1 / 2.0f
-                    ) && (
-                        d > r_ptr->radius_2 +
-                        (radius + focus->radius) ||
-                        face_diff > r_ptr->angle_2 / 2.0f
+                    !is_mob_in_reach(
+                        &type->reaches[far_reach],
+                        get_distance_between(focused_mob),
+                        get_angle_smallest_dif(angle, angle_to_focus)
                     )
-                    
                 ) {
                     for_ev->run(this);
                 }

@@ -1388,6 +1388,33 @@ mob_type::spawn_t* get_spawn_info_from_child_info(
 
 
 /**
+ * @brief Returns whether a given mob is in reach or out of reach of another,
+ * given the positional and reach data.
+ *
+ * @param reach_t_ptr Pointer to the reach information.
+ * @param dist_between Distance between the two mobs.
+ * @param angle_diff Angle difference between the two mobs.
+ * @return Whether it's in reach.
+ */
+bool is_mob_in_reach(
+    mob_type::reach_t* reach_t_ptr, const dist &dist_between, float angle_diff
+) {
+    bool in_reach =
+        (
+            dist_between <= reach_t_ptr->radius_1 &&
+            angle_diff <= reach_t_ptr->angle_1 / 2.0
+        );
+    if(in_reach) return true;
+    in_reach =
+        (
+            dist_between <= reach_t_ptr->radius_2 &&
+            angle_diff <= reach_t_ptr->angle_2 / 2.0
+        );
+    return in_reach;
+}
+
+
+/**
  * @brief Converts a string to the numeric representation of a mob target type.
  *
  * @param type_str Text representation of the target type.

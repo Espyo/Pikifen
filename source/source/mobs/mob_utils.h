@@ -755,5 +755,8 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
 mob_type::spawn_t* get_spawn_info_from_child_info(
     mob_type* type, const mob_type::child_t* child_info
 );
+bool is_mob_in_reach(
+    mob_type::reach_t* reach_t_ptr, const dist &dist_between, float angle_diff
+);
 MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str);
 MOB_TEAM string_to_team_nr(const string &team_str);

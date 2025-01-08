@@ -688,7 +688,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                     
                     s_ptr->liquid_drain_left = 0;
                     s_ptr->draining_liquid = false;
-
+                    
                     unordered_set<vertex*> sector_vertexes;
                     for(size_t e = 0; e < s_ptr->edges.size(); e++) {
                         sector_vertexes.insert(s_ptr->edges[e]->vertexes[0]);
@@ -1602,8 +1602,9 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m2_ptr->is_stored_inside_mob()) continue;
         
         dist d(m_ptr->pos, m2_ptr->pos);
+        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
         
-        if(d > m_ptr->interaction_span + m2_ptr->physical_span) {
+        if(d_between > m_ptr->interaction_span + m2_ptr->physical_span) {
             //The other mob is so far away that there is
             //no interaction possible.
             continue;
@@ -1630,7 +1631,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
             !m2_ptr->has_invisibility_status
         ) {
             process_mob_reaches(
-                m_ptr, m2_ptr, m, m2, d, pending_intermob_events
+                m_ptr, m2_ptr, m, m2, d_between, pending_intermob_events
             );
         }
         
@@ -1640,7 +1641,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         }
         
         process_mob_misc_interactions(
-            m_ptr, m2_ptr, m, m2, d, pending_intermob_events
+            m_ptr, m2_ptr, m, m2, d, d_between, pending_intermob_events
         );
         
         if(game.perf_mon) {
@@ -1694,11 +1695,13 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
  * @param m2_ptr Check against this mob.
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
- * @param d Distance between the two.
+ * @param d Distance between the two's centers.
+ * @param d_between Distance between the two.
  * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_misc_interactions(
-    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
+    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2,
+    const dist &d, const dist &d_between,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Find a carriable mob to grab.
@@ -1709,7 +1712,6 @@ void gameplay_state::process_mob_misc_interactions(
         m2_ptr->carry_info &&
         !m2_ptr->carry_info->is_full()
     ) {
-        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
         if(d_between <= task_range(m_ptr)) {
             pending_intermob_events.push_back(
                 pending_intermob_event(d_between, nco_event, m2_ptr)
@@ -1724,7 +1726,6 @@ void gameplay_state::process_mob_misc_interactions(
         nto_event &&
         typeid(*m2_ptr) == typeid(tool)
     ) {
-        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
         if(d_between <= task_range(m_ptr)) {
             tool* too_ptr = (tool*) m2_ptr;
             if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
@@ -1745,7 +1746,6 @@ void gameplay_state::process_mob_misc_interactions(
         m2_ptr->health > 0 &&
         typeid(*m2_ptr) == typeid(group_task)
     ) {
-        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
         if(d_between <= task_range(m_ptr)) {
             group_task* tas_ptr = (group_task*) m2_ptr;
             group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
@@ -1772,7 +1772,6 @@ void gameplay_state::process_mob_misc_interactions(
         m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE &&
         d <= game.config.idle_bump_range
     ) {
-        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
         pending_intermob_events.push_back(
             pending_intermob_event(d_between, touch_le_ev, m2_ptr)
         );
@@ -1788,11 +1787,11 @@ void gameplay_state::process_mob_misc_interactions(
  * @param m2_ptr Check against this mob.
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
- * @param d Distance between the two.
+ * @param d_between Distance between the two.
  * @param pending_intermob_events Vector of events to be processed.
  */
 void gameplay_state::process_mob_reaches(
-    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d,
+    mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d_between,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
     //Check reaches.
@@ -1803,30 +1802,14 @@ void gameplay_state::process_mob_reaches(
         
     if(!obir_ev && !opir_ev) return;
     
-    mob_type::reach_t* r_ptr =
-        &m_ptr->type->reaches[m_ptr->near_reach];
-        
-    dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
-    float face_diff =
+    mob_type::reach_t* r_ptr = &m_ptr->type->reaches[m_ptr->near_reach];
+    float angle_diff =
         get_angle_smallest_dif(
             m_ptr->angle,
             get_angle(m_ptr->pos, m2_ptr->pos)
         );
         
-    bool in_reach =
-        (
-            d_between <= r_ptr->radius_1 &&
-            face_diff <= r_ptr->angle_1 / 2.0
-        );
-    if(!in_reach) {
-        in_reach =
-            (
-                d_between <= r_ptr->radius_2 &&
-                face_diff <= r_ptr->angle_2 / 2.0
-            );
-    }
-    
-    if(in_reach) {
+    if(is_mob_in_reach(r_ptr, d_between, angle_diff)) {
         if(obir_ev) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
