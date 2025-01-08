@@ -965,6 +965,7 @@ void pause_menu_t::draw_radar(
     //Enemy icons.
     for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
         enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
+        if(e_ptr->parent) continue;
         
         draw_bitmap(
             bmp_radar_enemy, e_ptr->pos,
@@ -2548,6 +2549,7 @@ void pause_menu_t::radar_confirm() {
  * @param cur_gui The currently active GUI manager.
  */
 void pause_menu_t::start_closing(gui_manager* cur_gui) {
+    cur_gui->responsive = false;
     cur_gui->start_animation(
         GUI_MANAGER_ANIM_CENTER_TO_UP,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
