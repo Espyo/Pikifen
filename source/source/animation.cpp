@@ -1042,7 +1042,9 @@ bool animation_instance::tick(
     //goes over an entire frame, and lands 2 or more frames ahead.
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
-        cur_frame_idx = get_next_frame_idx(&reached_end);
+        bool reached_end_now = false;
+        cur_frame_idx = get_next_frame_idx(&reached_end_now);
+        reached_end |= reached_end_now;
         cur_frame = &cur_anim->frames[cur_frame_idx];
         if(cur_frame->signal != INVALID && signals) {
             signals->push_back(cur_frame->signal);
