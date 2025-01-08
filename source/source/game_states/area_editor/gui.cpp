@@ -2192,7 +2192,7 @@ void area_editor::process_gui_panel_info() {
         ALLEGRO_COLOR bg_color = game.cur_area_data->bg_color;
         if(
             ImGui::ColorEdit4(
-                "Color", (float*) &bg_color,
+                "Void color", (float*) &bg_color,
                 ImGuiColorEditFlags_NoInputs
             )
         ) {
@@ -4448,6 +4448,7 @@ void area_editor::process_gui_panel_path_stop() {
             PATH_STOP_FLAG_SCRIPT_ONLY
         )
     ) {
+        register_change("path stop property change");
         s_ptr->flags = flags_i;
     }
     set_tooltip(
@@ -4462,6 +4463,7 @@ void area_editor::process_gui_panel_path_stop() {
             PATH_STOP_FLAG_LIGHT_LOAD_ONLY
         )
     ) {
+        register_change("path stop property change");
         s_ptr->flags = flags_i;
     }
     set_tooltip(
@@ -4477,6 +4479,7 @@ void area_editor::process_gui_panel_path_stop() {
             PATH_STOP_FLAG_AIRBORNE_ONLY
         )
     ) {
+        register_change("path stop property change");
         s_ptr->flags = flags_i;
     }
     set_tooltip(
