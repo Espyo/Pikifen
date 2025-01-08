@@ -2440,6 +2440,10 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
     pik_ptr->stop_chasing();
     pik_ptr->stop_circling();
     
+    bool can_circle =
+        pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT &&
+        m->focused_mob->type->category->id == MOB_CATEGORY_ENEMIES;
+        
     switch(pik_ptr->pik_type->attack_method) {
     case PIKMIN_ATTACK_LATCH: {
         //This Pikmin latches on to things and/or smacks with its top.
@@ -2465,7 +2469,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             if(
                 randomf(0.0f, 1.0f) <=
                 PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
-                pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+                can_circle
             ) {
                 //Circle around the opponent a bit before smacking.
                 pik_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
@@ -2480,7 +2484,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             if(
                 randomf(0, 1) <=
                 PIKMIN::CIRCLE_OPPONENT_CHANCE_PRE_LATCH &&
-                pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+                can_circle
             ) {
                 //Circle around the opponent a bit before latching.
                 pik_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
@@ -2501,7 +2505,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
         if(
             randomf(0, 1) <=
             PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
-            pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+            can_circle
         ) {
             //Circle around the opponent a bit before lunging.
             pik_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);

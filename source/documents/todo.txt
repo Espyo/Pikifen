@@ -3,11 +3,17 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
+    As a player I don't know which side of a fragment bridge the Pikmin will deliver to
+    Status page numbers are hard to read
+    Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
+    When a mob is on a fade sector and moving towards the void, darken it if the area has no background, brighten it otherwise
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Two nectars touching each other will "bloop" constantly
+    Leader damage sparks and group move arrows keep animating while the game is paused
+    Some fader sectors are weirdly lighter, but only in the area editor, and without preview mode
 
     --- 0.26 ---
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
