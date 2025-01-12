@@ -27,11 +27,17 @@ struct pack_manager {
 
     //--- Members ---
     
-    //Manifests, sans the base pack.
+    //Manifests, sans the base pack, organized via the player's options.
     vector<string> manifests_sans_base;
     
-    //Manifests, with the base pack.
+    //Manifests, with the base pack, organized via the player's options.
     vector<string> manifests_with_base;
+
+    //Manifests, sans the base pack, not organized via the player's options.
+    vector<string> manifests_sans_base_raw;
+    
+    //Manifests, with the base pack, not organized via the player's options.
+    vector<string> manifests_with_base_raw;
     
     //List of loaded packs, with the base pack.
     map<string, pack> list;

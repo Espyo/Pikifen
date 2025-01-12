@@ -246,6 +246,8 @@ void options_t::load(data_node* file) {
     unsigned char editor_view_mode_c;
     unsigned char auto_throw_mode_c;
     unsigned char leaving_confirmation_mode_c;
+    string pack_load_order_str;
+    string packs_disabled_str;
     
     rs.set("ambiance_volume", ambiance_volume);
     rs.set("anim_editor_bg_texture", anim_editor_bg_texture);
@@ -289,7 +291,10 @@ void options_t::load(data_node* file) {
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
     rs.set("music_volume", music_volume);
+    rs.set("pack_order", pack_load_order_str);
+    rs.set("packs_disabled", packs_disabled_str);
     rs.set("particle_editor_bg_texture", particle_editor_bg_texture);
+    rs.set("particle_editor_grid_interval", particle_editor_grid_interval);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
@@ -351,6 +356,9 @@ void options_t::load(data_node* file) {
     editor_secondary_color.a = 1.0f;
     editor_text_color.a = 1.0f;
     editor_highlight_color.a = 1.0f;
+
+    pack_order = semicolon_list_to_vector(pack_load_order_str);
+    packs_disabled = semicolon_list_to_vector(packs_disabled_str);
 }
 
 
@@ -422,6 +430,15 @@ void options_t::save(data_node* file) const {
     if(!open_nodes_str.empty()) open_nodes_str.pop_back();
     
     //Other options.
+    string pack_load_order_str;
+    for(size_t p = 0; p < pack_order.size(); p++) {
+        pack_load_order_str += (p > 0 ? ";" : "") + pack_order[p];
+    }
+    string packs_disabled_str;
+    for(size_t p = 0; p < packs_disabled.size(); p++) {
+        packs_disabled_str += (p > 0 ? ";" : "") + packs_disabled[p];
+    }
+
     file->add(
         new data_node(
             "ambiance_volume",
@@ -660,6 +677,24 @@ void options_t::save(data_node* file) const {
         new data_node(
             "music_volume",
             f2s(music_volume)
+        )
+    );
+    file->add(
+        new data_node(
+            "pack_order",
+            pack_load_order_str
+        )
+    );
+    file->add(
+        new data_node(
+            "packs_disabled",
+            packs_disabled_str
+        )
+    );
+    file->add(
+        new data_node(
+            "particle_editor_grid_interval",
+            i2s(particle_editor_grid_interval)
         )
     );
     file->add(

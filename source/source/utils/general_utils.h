@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <string>
 #include <vector>
@@ -444,23 +445,121 @@ struct timer {
 };
 
 
-
 string get_current_time(bool file_name_friendly);
 string sanitize_file_name(const string &s);
 string standardize_path(const string &path);
 string vector_tail_to_string(const vector<string> &v, size_t pos);
 
 
+
+/**
+ * @brief Removes elements from a vector if they show up in the ban list.
+ * 
+ * @tparam t Type of contents of the vector and ban list.
+ * @param v Vector to filter.
+ * @param ban_list List of items that must be banned.
+ * @return The filtered vector.
+ */
+template<typename t>
+vector<t> filter_vector_with_ban_list(
+    const vector<t> &v, const vector<t> &ban_list
+) {
+    vector<t> result = v;
+    for(size_t i = 0; i < result.size();) {
+        if(
+            std::find(ban_list.begin(), ban_list.end(), result[i]) !=
+            ban_list.end()
+        ) {
+            result.erase(result.begin() + i);
+        } else {
+            i++;
+        }
+    }
+    return result;
+}
+
+
+/**
+ * @brief Sorts a vector, using the preference list to figure out which
+ * elements go before which. Elements not in the preference list will go
+ * to the end, in the same order as they are presented in the original
+ * vector.
+ * 
+ * @tparam t Type of contents of the vector.
+ * @param v Vector to sort.
+ * @param preference_list Preference list.
+ * @param equal If not nullptr, use this function to compare whether
+ * an item of t1 matches an item of t2.
+ * @param less If not nullptr, use this function to sort missing items with.
+ * @param unknowns If not nullptr, unknown preferences (i.e. items in 
+ * the preference list but not inside the vector) will be added here.
+ * @return The sorted vector.
+ */
+template<typename t>
+vector<t> sort_vector_with_preference_list(
+    const vector<t> &v, const vector<t> preference_list,
+    vector<t>* unknowns = nullptr
+) {
+    vector<t> result;
+    vector<t> missing_items;
+    result.reserve(v.size());
+    
+    //Sort the existing items.
+    for(size_t p = 0; p < preference_list.size(); p++) {
+        bool found_in_vector = false;
+        for(auto &i : v) {
+            if(i == preference_list[p]) {
+                found_in_vector = true;
+                result.push_back(i);
+                break;
+            }
+        }
+        if(!found_in_vector && unknowns) {
+            unknowns->push_back(preference_list[p]);
+        }
+    }
+
+    //Find the missing items.
+    for(auto &i : v) {
+        bool found_in_preferences = false;
+        for(auto &p : preference_list) {
+            if(i == p) {
+                found_in_preferences = true;
+                break;
+            }
+        }
+        if(!found_in_preferences) {
+            //Missing from the list? Add it to the "missing" pile.
+            missing_items.push_back(i);
+        }
+    }
+
+    //Sort and place the missing items.
+    if(!missing_items.empty()) {
+        std::sort(
+            missing_items.begin(),
+            missing_items.end()
+        );
+        result.insert(
+            result.end(),
+            missing_items.begin(),
+            missing_items.end()
+        );
+    }
+
+    return result;
+}
+
+
 /**
  * @brief Returns whether or not the two vectors contain the same items,
  * regardless of order.
  *
- * @tparam t The contents of the vector.
+ * @tparam t Type of contents of the vector.
  * @param v1 First vector.
  * @param v2 Second vector.
  * @return Whether they contain the same items.
  */
-
 template<typename t>
 bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
     if(v1.size() != v2.size()) {
@@ -482,8 +581,3 @@ bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
     
     return true;
 }
-
-
-#if defined(_WIN32)
-string strsignal(int signum);
-#endif //#if defined(_WIN32)

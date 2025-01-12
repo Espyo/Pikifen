@@ -89,6 +89,9 @@ enum MENU_ICON {
     //Options menu audio button.
     MENU_ICON_AUDIO,
     
+    //Options menu packs button.
+    MENU_ICON_PACKS,
+    
     //Options menu misc. button.
     MENU_ICON_OPTIONS_MISC,
 };

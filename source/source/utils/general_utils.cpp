@@ -296,43 +296,6 @@ string standardize_path(const string &path) {
 }
 
 
-#if defined(_WIN32)
-
-
-/**
- * @brief An implementation of strsignal from POSIX.
- *
- * @param signum Signal number.
- * @return The string.
- */
-string strsignal(int signum) {
-    switch(signum) {
-    case SIGINT: {
-        return "SIGINT";
-    } case SIGILL: {
-        return "SIGILL";
-    } case SIGFPE: {
-        return "SIGFPE";
-    } case SIGSEGV: {
-        return "SIGSEGV";
-    } case SIGTERM: {
-        return "SIGTERM";
-    } case SIGBREAK: {
-        return "SIGBREAK";
-    } case SIGABRT: {
-        return "SIGABRT";
-    } case SIGABRT_COMPAT: {
-        return "SIGABRT_COMPAT";
-    } default: {
-        return "Unknown";
-    }
-    }
-}
-
-
-#endif //if defined(_WIN32)
-
-
 /**
  * @brief Returns a string that's a join of the strings in the specified vector,
  * but only past a certain position. The strings are joined with a space

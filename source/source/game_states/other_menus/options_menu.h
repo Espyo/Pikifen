@@ -16,6 +16,7 @@
 
 #include "../../gui.h"
 #include "../../options.h"
+#include "packs_menu.h"
 
 using std::map;
 using std::string;
@@ -246,6 +247,9 @@ struct options_menu_t {
     
     //GUI for the misc. options page.
     gui_manager misc_gui;
+    
+    //Information about the current pack management menu, if any.
+    packs_menu_t* packs_menu = nullptr;
     
     //Auto-throw picker widget.
     options_menu_picker_gui_item<AUTO_THROW_MODE>* auto_throw_picker = nullptr;

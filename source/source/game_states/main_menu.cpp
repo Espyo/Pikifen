@@ -308,7 +308,11 @@ void main_menu_state::init_gui_main_page() {
         });
     };
     help_button->on_get_tooltip =
-    [] () { return "Some quick help and tips about how to play."; };
+    [] () {
+        return
+            "Quick help and tips about how to play. "
+            "You can also find this in the pause menu.";
+    };
     main_gui.add_item(help_button, "help");
     
     //Options button.

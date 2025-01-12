@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="1039.0001"
+   width="1104"
    height="64.000122"
-   viewBox="0 0 1039.0001 64.00012"
+   viewBox="0 0 1104 64.00012"
    version="1.1"
    id="svg2115"
    inkscape:version="1.4 (e7c3feb, 2024-10-09)"
@@ -86,13 +86,13 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter28"
-       x="-0.0093750021"
-       y="-0.01271187"
-       width="1.01875"
-       height="1.0254237">
+       x="-0.017215352"
+       y="-0.023342856"
+       width="1.0344307"
+       height="1.0466857">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.31250015"
+         stdDeviation="0.57384518"
          id="feGaussianBlur28" />
     </filter>
     <filter
@@ -373,13 +373,13 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter56"
-       x="-0.012599998"
-       y="-0.011454548"
-       width="1.0652"
-       height="1.0229091">
+       x="-0.034270793"
+       y="-0.031155278"
+       width="1.1085416"
+       height="1.0623106">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.26250005"
+         stdDeviation="0.71397514"
          id="feGaussianBlur56" />
     </filter>
     <mask
@@ -472,6 +472,19 @@
          stdDeviation="0.28646325"
          id="feGaussianBlur20" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter57"
+       x="-0.0002352"
+       y="-0.0002352"
+       width="1.0004704"
+       height="1.0004704">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.00588"
+         id="feGaussianBlur57" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -480,11 +493,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.2194416"
-     inkscape:cx="519.50006"
-     inkscape:cy="-18.041044"
+     inkscape:zoom="1.1476449"
+     inkscape:cx="552"
+     inkscape:cy="-18.298342"
      inkscape:document-units="px"
-     inkscape:current-layer="g39"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -510,7 +523,7 @@
     <inkscape:grid
        type="xygrid"
        id="grid1945"
-       originx="7.412109e-07"
+       originx="1.1118164e-06"
        originy="0"
        spacingy="1"
        spacingx="0.99999997"
@@ -669,7 +682,7 @@
        id="rect19"
        width="64"
        height="64"
-       x="1055.0001"
+       x="1055"
        y="1120"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
@@ -691,6 +704,16 @@
        height="64"
        x="730"
        y="1120.0001"
+       inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;overflow:visible;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;paint-order:fill markers stroke"
+       id="rect29"
+       width="64"
+       height="64"
+       x="1120"
+       y="1120"
        inkscape:export-filename="../../../Game_data/Graphics/Menu_icons.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
@@ -1082,7 +1105,7 @@
        style="color:#000000;overflow:visible;opacity:0.5;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter58)"
        d="m 939.00006,1127 c -8.30997,0 -15,6.69 -15,15 v 20 c 0,8.31 6.69003,15 15,15 h 20 c 8.30997,0 15,-6.69 15,-15 v -20 c 0,-8.31 -6.69003,-15 -15,-15 z m -5,20 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z m 15,0 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z m 15,0 a 5.0000005,5.0000005 0 0 1 5,5 5.0000005,5.0000005 0 0 1 -5,5 5.0000005,5.0000005 0 0 1 -5,-5 5.0000005,5.0000005 0 0 1 5,-5 z"
        mask="url(#mask57)"
-       transform="translate(129.99989)" />
+       transform="translate(194.99993)" />
     <g
        id="g5"
        style="font-variation-settings:normal;opacity:0.5;mix-blend-mode:normal;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;filter:url(#filter5);stop-color:#000000;stop-opacity:1"
@@ -1202,6 +1225,25 @@
          cx="757"
          cy="1173"
          r="2" />
+    </g>
+    <g
+       id="g35"
+       transform="translate(182.49992)"
+       mask="url(#mask55)"
+       style="opacity:0.5;mix-blend-mode:normal;filter:url(#filter57)">
+      <path
+         id="path41"
+         style="color:#000000;display:inline;overflow:visible;fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:7.99998;stroke-linecap:round;stroke-linejoin:round;paint-order:fill markers stroke"
+         d="m 892.50009,1124 -20,10 8.63867,8.6387 a 2.0002,2.0002 0 0 1 0.4668,-0.4278 l 19.40429,-9.7011 z m 20,0 -8.50977,8.5098 19.4043,9.7011 a 2.0002,2.0002 0 0 1 0.51172,0.3829 L 932.50009,1134 Z m -10,12.2363 -15.52735,7.7637 15.52735,7.7637 15.52734,-7.7637 z m -21.36133,9.125 -7.14844,7.1485 18.11524,9.0566 7.01757,-7.0176 -17.51757,-8.7597 a 2.0002,2.0002 0 0 1 -0.4668,-0.4278 z m 42.76758,0.045 a 2.0002,2.0002 0 0 1 -0.51172,0.3829 l -17.51758,8.7597 7.01758,7.0176 18.11523,-9.0566 z m -23.40625,13.4219 -6.58594,6.586 a 2.0002,2.0002 0 0 1 -2.30859,0.375 l -9.10547,-4.5528 V 1174 l 18,9 z m 4,0 V 1183 l 18,-9 v -12.7637 l -9.10547,4.5528 a 2.0002,2.0002 0 0 1 -2.30859,-0.375 z" />
+      <g
+         id="path42"
+         style="display:inline"
+         transform="translate(-182.49992)">
+        <path
+           style="fill:#c2c2c2;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;paint-order:fill markers stroke"
+           d="m 1085,1184 -10e-5,-30"
+           id="path56" />
+      </g>
     </g>
   </g>
 </svg>

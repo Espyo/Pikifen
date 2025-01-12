@@ -267,6 +267,8 @@ void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
  * @brief Clears all loaded manifests.
  */
 void pack_manager::clear_manifests() {
+    manifests_sans_base_raw.clear();
+    manifests_with_base_raw.clear();
     manifests_sans_base.clear();
     manifests_with_base.clear();
 }
@@ -276,11 +278,34 @@ void pack_manager::clear_manifests() {
  * @brief Fills in the manifests.
  */
 void pack_manager::fill_manifests() {
-    vector<string> folders = folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
+    //Raw manifests.
+    vector<string> raw_folders =
+        folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
     
-    for(size_t f = 0; f < folders.size(); f++) {
-        if(folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifests_sans_base.push_back(folders[f]);
+    for(size_t f = 0; f < raw_folders.size(); f++) {
+        if(raw_folders[f] != FOLDER_NAMES::BASE_PACK) {
+            manifests_sans_base_raw.push_back(raw_folders[f]);
+        }
+    }
+    
+    manifests_with_base_raw.push_back(FOLDER_NAMES::BASE_PACK);
+    manifests_with_base_raw.insert(
+        manifests_with_base_raw.end(),
+        manifests_sans_base_raw.begin(),
+        manifests_sans_base_raw.end()
+    );
+
+    //Organized manifests.
+    vector<string> organized_folders =
+        filter_vector_with_ban_list(raw_folders, game.options.packs_disabled);
+    organized_folders =
+        sort_vector_with_preference_list(
+            organized_folders, game.options.pack_order
+        );
+    
+    for(size_t f = 0; f < organized_folders.size(); f++) {
+        if(organized_folders[f] != FOLDER_NAMES::BASE_PACK) {
+            manifests_sans_base.push_back(organized_folders[f]);
         }
     }
     
@@ -296,18 +321,20 @@ void pack_manager::fill_manifests() {
 /**
  * @brief Loads all packs in the manifests, including the base pack.
  * This only loads their metadata, not their content!
+ * This also loads all packs, not just the ones organized via the
+ * player options.
  */
 void pack_manager::load_all() {
-    for(size_t p = 0; p < manifests_with_base.size(); p++) {
+    for(size_t p = 0; p < manifests_with_base_raw.size(); p++) {
         data_node pack_file =
             load_data_file(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                manifests_with_base[p] + "/" +
+                manifests_with_base_raw[p] + "/" +
                 FILE_NAMES::PACK_DATA
             );
             
         pack pack_data;
-        pack_data.name = manifests_with_base[p];
+        pack_data.name = manifests_with_base_raw[p];
         reader_setter rs(&pack_file);
         rs.set("name", pack_data.name);
         rs.set("description", pack_data.description);
@@ -319,7 +346,7 @@ void pack_manager::load_all() {
         rs.set("conflicts", pack_data.conflicts);
         rs.set("notes", pack_data.notes);
         
-        list[manifests_with_base[p]] = pack_data;
+        list[manifests_with_base_raw[p]] = pack_data;
     }
 }
 

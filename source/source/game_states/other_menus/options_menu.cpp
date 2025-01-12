@@ -122,6 +122,10 @@ options_menu_t::~options_menu_t() {
     graphics_gui.destroy();
     audio_gui.destroy();
     misc_gui.destroy();
+    if(packs_menu) {
+        delete packs_menu;
+        packs_menu = nullptr;
+    }
 }
 
 
@@ -192,6 +196,7 @@ void options_menu_t::draw() {
     graphics_gui.draw();
     audio_gui.draw();
     misc_gui.draw();
+    if(packs_menu) packs_menu->draw();
     
     if(capturing_input == 1) {
         al_draw_filled_rectangle(
@@ -221,8 +226,6 @@ void options_menu_t::draw() {
  */
 void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     if(closing) return;
-    
-    
     
     switch(capturing_input) {
     case 0: {
@@ -261,6 +264,7 @@ void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     graphics_gui.handle_event(ev);
     audio_gui.handle_event(ev);
     misc_gui.handle_event(ev);
+    if(packs_menu) packs_menu->handle_event(ev);
 }
 
 /**
@@ -276,6 +280,7 @@ void options_menu_t::handle_player_action(const player_action &action) {
     graphics_gui.handle_player_action(action);
     audio_gui.handle_player_action(action);
     misc_gui.handle_player_action(action);
+    if(packs_menu) packs_menu->handle_player_action(action);
 }
 
 
@@ -845,19 +850,21 @@ void options_menu_t::init_gui_top_page() {
     bool controls_icon_left = icon_left("controls", "true");
     bool graphics_icon_left = icon_left("graphics", "true");
     bool audio_icon_left = icon_left("audio", "true");
+    bool packs_icon_left = icon_left("packs", "true");
     bool misc_icon_left = icon_left("misc", "true");
     
 #undef icon_left
     
     //Menu items.
-    top_gui.register_coords("back",     12,  5,   20,  6);
-    top_gui.register_coords("header",   50, 10,   50,  6);
-    top_gui.register_coords("controls", 50, 27.5, 65, 10);
-    top_gui.register_coords("graphics", 50, 42.5, 65, 10);
-    top_gui.register_coords("audio",    50, 57.5, 65, 10);
-    top_gui.register_coords("misc",     50, 72.5, 60, 10);
-    top_gui.register_coords("advanced", 87, 86,   22,  8);
-    top_gui.register_coords("tooltip",  50, 96,   96,  4);
+    top_gui.register_coords("back",     12,  5, 20,  6);
+    top_gui.register_coords("header",   50, 10, 50,  6);
+    top_gui.register_coords("controls", 50, 25, 65, 10);
+    top_gui.register_coords("graphics", 50, 37, 65, 10);
+    top_gui.register_coords("audio",    50, 49, 65, 10);
+    top_gui.register_coords("packs",    50, 61, 65, 10);
+    top_gui.register_coords("misc",     50, 73, 60, 10);
+    top_gui.register_coords("advanced", 87, 86, 22,  8);
+    top_gui.register_coords("tooltip",  50, 96, 96,  4);
     top_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Back button.
@@ -975,6 +982,51 @@ void options_menu_t::init_gui_top_page() {
     audio_button->on_get_tooltip =
     [] () { return "Change options about the way the game sounds."; };
     top_gui.add_item(audio_button, "audio");
+    
+    //Packs options button.
+    button_gui_item* packs_button =
+        new button_gui_item("Packs", game.sys_assets.fnt_standard);
+    packs_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_menu_button_icon(
+            MENU_ICON_PACKS, center, size, packs_icon_left
+        );
+        draw_button(
+            center, size,
+            packs_button->text, packs_button->font,
+            packs_button->color, packs_button->selected,
+            packs_button->get_juice_value()
+        );
+    };
+    packs_button->on_activate =
+    [this] (const point &) {
+        top_gui.responsive = false;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        packs_menu = new packs_menu_t();
+        packs_menu->gui.responsive = true;
+        packs_menu->gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        packs_menu->back_callback = [ = ] () {
+            packs_menu->gui.responsive = false;
+            packs_menu->gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+            top_gui.responsive = true;
+            top_gui.start_animation(
+                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
+    };
+    packs_button->on_get_tooltip =
+    [] () { return "Manage any content packs you have installed."; };
+    top_gui.add_item(packs_button, "packs");
     
     //Misc. options button.
     button_gui_item* misc_button =
@@ -1427,6 +1479,15 @@ void options_menu_t::tick(float delta_t) {
     graphics_gui.tick(game.delta_t);
     audio_gui.tick(game.delta_t);
     misc_gui.tick(game.delta_t);
+    
+    if(packs_menu) {
+        if(!packs_menu->to_delete) {
+            packs_menu->tick(game.delta_t);
+        } else {
+            delete packs_menu;
+            packs_menu = nullptr;
+        }
+    }
     
     //Tick the menu closing.
     if(closing) {

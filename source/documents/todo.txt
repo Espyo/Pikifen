@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -205,6 +205,13 @@ Next tasks (roughly sorted most important first)
     Barely important format changes
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         Organize all graphics and sound files into neat sub-folders
+    Menu refactor
+        Add a gui.start_transition function so that we don't have to do the responsive = true/false thing when we call gui.start_animation
+        Some sort of sub-menus manager so we don't have to have half a dozen if(sub_gui) sub_gui.handle_player_action() and stuff like that
+        Organize the code folders, files, and structs
+            Move all menus to their own struct
+            Differentiate between menus as game states, and menus as GUIs
+    The radar should show where obstacles (blocks_path == true) are, and differentiate between dead and living enemies and leaders
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates

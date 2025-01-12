@@ -87,7 +87,7 @@ bullet_gui_item::bullet_gui_item(
  * @brief Default bullet GUI item draw code.
  */
 void bullet_gui_item::def_draw_code(
-    const point& center, const point& size
+    const point &center, const point &size
 ) {
     float item_x_start = center.x - size.x * 0.5;
     float text_x_offset =
@@ -152,7 +152,7 @@ button_gui_item::button_gui_item(
  * @brief Default button GUI item draw code.
  */
 void button_gui_item::def_draw_code(
-    const point& center, const point& size
+    const point &center, const point &size
 ) {
     draw_button(
         center, size, this->text, this->font, this->color, selected,
@@ -222,7 +222,7 @@ void check_gui_item::def_activate_code() {
 /**
  * @brief Default check GUI item draw code.
  */
-void check_gui_item::def_draw_code(const point& center, const point& size) {
+void check_gui_item::def_draw_code(const point &center, const point &size) {
     float juicy_grow_amount = get_juice_value();
     draw_text(
         this->text, this->font,
@@ -237,6 +237,8 @@ void check_gui_item::def_draw_code(const point& center, const point& size) {
         this->value ?
         game.sys_assets.bmp_checkbox_check :
         game.sys_assets.bmp_checkbox_no_check,
+        this->text.empty() ?
+        center :
         point((center.x + size.x * 0.5) - 40, center.y),
         point(32, -1)
     );
@@ -1268,7 +1270,7 @@ list_gui_item::list_gui_item() :
 /**
  * @brief Default list GUI item child selected code.
  */
-void list_gui_item::def_child_selected_code(const gui_item * child) {
+void list_gui_item::def_child_selected_code(const gui_item* child) {
     //Try to center the child.
     float child_bottom = get_child_bottom();
     if(child_bottom <= 1.0f && offset == 0.0f) {
@@ -1286,7 +1288,7 @@ void list_gui_item::def_child_selected_code(const gui_item * child) {
 /**
  * @brief Default list GUI item draw code.
  */
-void list_gui_item::def_draw_code(const point& center, const point& size) {
+void list_gui_item::def_draw_code(const point &center, const point &size) {
     draw_textured_box(
         center, size, game.sys_assets.bmp_frame_box,
         COLOR_TRANSPARENT_WHITE
@@ -1374,7 +1376,7 @@ void list_gui_item::def_draw_code(const point& center, const point& size) {
 /**
  * @brief Default list GUI item event code.
  */
-void list_gui_item::def_event_code(const ALLEGRO_EVENT & ev) {
+void list_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
@@ -1459,7 +1461,7 @@ picker_gui_item::picker_gui_item(
 /**
  * @brief Default picker GUI item activate code.
  */
-void picker_gui_item::def_activate_code(const point& cursor_pos) {
+void picker_gui_item::def_activate_code(const point &cursor_pos) {
     if(cursor_pos.x >= get_reference_center().x) {
         on_next();
     } else {
@@ -1471,7 +1473,7 @@ void picker_gui_item::def_activate_code(const point& cursor_pos) {
 /**
  * @brief Default picker GUI item draw code.
  */
-void picker_gui_item::def_draw_code(const point& center, const point& size) {
+void picker_gui_item::def_draw_code(const point &center, const point &size) {
     if(this->nr_options != 0 && selected) {
         point option_boxes_start(
             center.x - size.x / 2.0f + 20.0f,
@@ -1587,7 +1589,7 @@ bool picker_gui_item::def_menu_dir_code(size_t button_id) {
 /**
  * @brief Default picker GUI item mouse over code.
  */
-void picker_gui_item::def_mouse_over_code(const point & cursor_pos) {
+void picker_gui_item::def_mouse_over_code(const point  &cursor_pos) {
     arrow_highlight =
         cursor_pos.x >= get_reference_center().x ? 1 : 0;
 }
@@ -1613,7 +1615,7 @@ scroll_gui_item::scroll_gui_item() :
 /**
  * @brief Default scroll GUI item draw code.
  */
-void scroll_gui_item::def_draw_code(const point& center, const point& size) {
+void scroll_gui_item::def_draw_code(const point &center, const point &size) {
     float bar_y = 0.0f; //Top, in height ratio.
     float bar_h = 0.0f; //In height ratio.
     float list_bottom = list_item->get_child_bottom();
@@ -1648,7 +1650,7 @@ void scroll_gui_item::def_draw_code(const point& center, const point& size) {
 /**
  * @brief Default scroll GUI item event code.
  */
-void scroll_gui_item::def_event_code(const ALLEGRO_EVENT & ev) {
+void scroll_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.button == 1 &&
@@ -1700,7 +1702,7 @@ text_gui_item::text_gui_item(
 /**
  * @brief Default text GUI item draw code.
  */
-void text_gui_item::def_draw_code(const point& center, const point& size) {
+void text_gui_item::def_draw_code(const point &center, const point &size) {
     int text_x = center.x;
     switch(this->flags) {
     case ALLEGRO_ALIGN_LEFT: {
@@ -1781,7 +1783,7 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
 /**
  * @brief Default tooltip GUI item draw code.
  */
-void tooltip_gui_item::def_draw_code(const point& center, const point& size) {
+void tooltip_gui_item::def_draw_code(const point &center, const point &size) {
     string cur_text = this->gui->get_current_tooltip();
     if(cur_text != this->prev_text) {
         this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);

@@ -212,9 +212,6 @@ struct options_t {
     //Snap to grid?
     bool gui_editor_snap = OPTIONS::DEF_GUI_EDITOR_SNAP;
     
-    //Grid interval in the particle editor, in units.
-    float particle_editor_grid_interval = OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
-    
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;
     
@@ -252,9 +249,20 @@ struct options_t {
     
     //Music volume (0 - 1).
     float music_volume = OPTIONS::DEF_MUSIC_VOLUME;
+
+    //Preferred pack load order.
+    vector<string> pack_order;
+
+    //Disabled packs.
+    vector<string> packs_disabled;
+    
+    //Grid interval in the particle editor, in units.
+    float particle_editor_grid_interval =
+        OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
     
     //Background texture for the particle editor, if any.
-    string particle_editor_bg_texture = OPTIONS::DEF_PARTICLE_EDITOR_BG_TEXTURE;
+    string particle_editor_bg_texture =
+        OPTIONS::DEF_PARTICLE_EDITOR_BG_TEXTURE;
     
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling = OPTIONS::DEF_SMOOTH_SCALING;
