@@ -96,8 +96,8 @@ void results_state::add_stat(
         (STATS_OFFSET + STAT_HEIGHT / 2.0f) +
         ((STAT_HEIGHT + STAT_PADDING) * stat_idx);
         
-    bullet_point_gui_item* label_bullet =
-        new bullet_point_gui_item(
+    bullet_gui_item* label_bullet =
+        new bullet_gui_item(
         label, game.sys_assets.fnt_standard, color
     );
     label_bullet->center =

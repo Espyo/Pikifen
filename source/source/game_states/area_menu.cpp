@@ -57,8 +57,8 @@ void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
         (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
         ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
         
-    bullet_point_gui_item* bullet =
-        new bullet_point_gui_item(
+    bullet_gui_item* bullet =
+        new bullet_gui_item(
         text, game.sys_assets.fnt_standard, COLOR_WHITE
     );
     bullet->center = point(0.50f, bullet_center_y);

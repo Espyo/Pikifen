@@ -68,7 +68,7 @@ const float STANDARD_CONTENT_SIZE = 0.80f;
  * @param font Font for the button's text.
  * @param color Color of the button's text.
  */
-bullet_point_gui_item::bullet_point_gui_item(
+bullet_gui_item::bullet_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
 ) :
     gui_item(true),
@@ -78,41 +78,51 @@ bullet_point_gui_item::bullet_point_gui_item(
     
     on_draw =
     [this] (const point & center, const point & size) {
-        float item_x_start = center.x - size.x * 0.5;
-        float text_x_offset =
-            GUI::BULLET_RADIUS * 2 +
-            GUI::BULLET_PADDING * 2;
-        point text_space(
-            std::max(1.0f, size.x - text_x_offset),
-            size.y
-        );
-        
-        draw_bitmap(
-            game.sys_assets.bmp_hard_bubble,
-            point(
-                item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
-                center.y
-            ),
-            point(GUI::BULLET_RADIUS * 2, GUI::BULLET_RADIUS * 2),
-            0.0f, this->color
-        );
-        float juicy_grow_amount = get_juice_value();
-        draw_text(
-            this->text, this->font,
-            point(item_x_start + text_x_offset, center.y),
-            text_space * GUI::STANDARD_CONTENT_SIZE,
-            this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
-        );
-        if(selected) {
-            draw_textured_box(
-                center,
-                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-                game.sys_assets.bmp_focus_box
-            );
-        }
+        this->def_draw_code(center, size);
     };
+}
+
+
+/**
+ * @brief Default bullet GUI item draw code.
+ */
+void bullet_gui_item::def_draw_code(
+    const point& center, const point& size
+) {
+    float item_x_start = center.x - size.x * 0.5;
+    float text_x_offset =
+        GUI::BULLET_RADIUS * 2 +
+        GUI::BULLET_PADDING * 2;
+    point text_space(
+        std::max(1.0f, size.x - text_x_offset),
+        size.y
+    );
+    
+    draw_bitmap(
+        game.sys_assets.bmp_hard_bubble,
+        point(
+            item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
+            center.y
+        ),
+        point(GUI::BULLET_RADIUS * 2, GUI::BULLET_RADIUS * 2),
+        0.0f, this->color
+    );
+    float juicy_grow_amount = get_juice_value();
+    draw_text(
+        this->text, this->font,
+        point(item_x_start + text_x_offset, center.y),
+        text_space * GUI::STANDARD_CONTENT_SIZE,
+        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+    );
+    if(selected) {
+        draw_textured_box(
+            center,
+            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            game.sys_assets.bmp_focus_box
+        );
+    }
 }
 
 
@@ -133,24 +143,34 @@ button_gui_item::button_gui_item(
     
     on_draw =
     [this] (const point & center, const point & size) {
-        draw_button(
-            center, size, this->text, this->font, this->color, selected,
-            get_juice_value()
-        );
+        this->def_draw_code(center, size);
     };
+}
+
+
+/**
+ * @brief Default button GUI item draw code.
+ */
+void button_gui_item::def_draw_code(
+    const point& center, const point& size
+) {
+    draw_button(
+        center, size, this->text, this->font, this->color, selected,
+        get_juice_value()
+    );
 }
 
 
 /**
  * @brief Constructs a new check gui item object.
  *
- * @param value Pointer to the boolean that stores the current checkmark value.
+ * @param value Current value.
  * @param text Text to display on the checkbox.
  * @param font Font for the checkbox's text.
  * @param color Color of the checkbox's text.
  */
 check_gui_item::check_gui_item(
-    bool* value, const string &text, ALLEGRO_FONT* font,
+    bool value, const string &text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color
 ) :
     gui_item(true),
@@ -161,50 +181,85 @@ check_gui_item::check_gui_item(
     
     on_draw =
     [this] (const point & center, const point & size) {
-        float juicy_grow_amount = get_juice_value();
-        draw_text(
-            this->text, this->font,
-            point(center.x - size.x * 0.45, center.y),
-            point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
-            this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
-        );
-        
-        draw_bitmap(
-            (*this->value) ?
-            game.sys_assets.bmp_checkbox_check :
-            game.sys_assets.bmp_checkbox_no_check,
-            point((center.x + size.x * 0.5) - 40, center.y),
-            point(32, -1)
-        );
-        
-        ALLEGRO_COLOR box_tint =
-            selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
-            
-        draw_textured_box(
-            center, size, game.sys_assets.bmp_bubble_box, box_tint
-        );
-        
-        if(selected) {
-            draw_textured_box(
-                center,
-                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-                game.sys_assets.bmp_focus_box
-            );
-        }
+        this->def_draw_code(center, size);
     };
     
     on_activate =
     [this] (const point &) {
-        (*this->value) = !(*this->value);
-        this->start_juice_animation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
+        this->def_activate_code();
     };
 }
 
 
 /**
- * @brief Constructs a new gui item object.
+ * @brief Constructs a new check gui item object.
+ *
+ * @param value_ptr Pointer to the boolean that stores the current value.
+ * @param text Text to display on the checkbox.
+ * @param font Font for the checkbox's text.
+ * @param color Color of the checkbox's text.
+ */
+check_gui_item::check_gui_item(
+    bool* value_ptr, const string &text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR &color
+) :
+    check_gui_item(*value_ptr, text, font, color) {
+    
+    this->value_ptr = value_ptr;
+}
+
+
+/**
+ * @brief Default check GUI item activation code.
+ */
+void check_gui_item::def_activate_code() {
+    value = !value;
+    if(value_ptr) (*value_ptr) = !(*value_ptr);
+    start_juice_animation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
+}
+
+
+/**
+ * @brief Default check GUI item draw code.
+ */
+void check_gui_item::def_draw_code(const point& center, const point& size) {
+    float juicy_grow_amount = get_juice_value();
+    draw_text(
+        this->text, this->font,
+        point(center.x - size.x * 0.45, center.y),
+        point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
+        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+    );
+    
+    draw_bitmap(
+        this->value ?
+        game.sys_assets.bmp_checkbox_check :
+        game.sys_assets.bmp_checkbox_no_check,
+        point((center.x + size.x * 0.5) - 40, center.y),
+        point(32, -1)
+    );
+    
+    ALLEGRO_COLOR box_tint =
+        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_bubble_box, box_tint
+    );
+    
+    if(selected) {
+        draw_textured_box(
+            center,
+            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            game.sys_assets.bmp_focus_box
+        );
+    }
+}
+
+
+/**
+ * @brief Constructs a new GUI item object.
  *
  * @param selectable Can the item be selected by the player?
  */
@@ -1193,139 +1248,171 @@ list_gui_item::list_gui_item() :
     padding = 8.0f;
     on_draw =
     [this] (const point & center, const point & size) {
-        draw_textured_box(
-            center, size, game.sys_assets.bmp_frame_box,
-            COLOR_TRANSPARENT_WHITE
-        );
-        if(offset > 0.0f) {
-            //Shade effect at the top.
-            ALLEGRO_VERTEX vertexes[8];
-            for(size_t v = 0; v < 8; v++) {
-                vertexes[v].z = 0.0f;
-            }
-            float y1 = center.y - size.y / 2.0f;
-            float y2 = y1 + 20.0f;
-            ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
-            ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
-            vertexes[0].x = center.x - size.x * 0.49;
-            vertexes[0].y = y1;
-            vertexes[0].color = c_empty;
-            vertexes[1].x = center.x - size.x * 0.49;
-            vertexes[1].y = y2;
-            vertexes[1].color = c_empty;
-            vertexes[2].x = center.x - size.x * 0.47;
-            vertexes[2].y = y1;
-            vertexes[2].color = c_opaque;
-            vertexes[3].x = center.x - size.x * 0.47;
-            vertexes[3].y = y2;
-            vertexes[3].color = c_empty;
-            vertexes[4].x = center.x + size.x * 0.47;
-            vertexes[4].y = y1;
-            vertexes[4].color = c_opaque;
-            vertexes[5].x = center.x + size.x * 0.47;
-            vertexes[5].y = y2;
-            vertexes[5].color = c_empty;
-            vertexes[6].x = center.x + size.x * 0.49;
-            vertexes[6].y = y1;
-            vertexes[6].color = c_empty;
-            vertexes[7].x = center.x + size.x * 0.49;
-            vertexes[7].y = y2;
-            vertexes[7].color = c_empty;
-            al_draw_prim(
-                vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
-            );
-        }
-        float child_bottom = get_child_bottom();
-        if(child_bottom > 1.0f && offset < child_bottom - 1.0f) {
-            //Shade effect at the bottom.
-            ALLEGRO_VERTEX vertexes[8];
-            for(size_t v = 0; v < 8; v++) {
-                vertexes[v].z = 0.0f;
-            }
-            float y1 = center.y + size.y / 2.0f;
-            float y2 = y1 - 20.0f;
-            ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
-            ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
-            vertexes[0].x = center.x - size.x * 0.49;
-            vertexes[0].y = y1;
-            vertexes[0].color = c_empty;
-            vertexes[1].x = center.x - size.x * 0.49;
-            vertexes[1].y = y2;
-            vertexes[1].color = c_empty;
-            vertexes[2].x = center.x - size.x * 0.47;
-            vertexes[2].y = y1;
-            vertexes[2].color = c_opaque;
-            vertexes[3].x = center.x - size.x * 0.47;
-            vertexes[3].y = y2;
-            vertexes[3].color = c_empty;
-            vertexes[4].x = center.x + size.x * 0.47;
-            vertexes[4].y = y1;
-            vertexes[4].color = c_opaque;
-            vertexes[5].x = center.x + size.x * 0.47;
-            vertexes[5].y = y2;
-            vertexes[5].color = c_empty;
-            vertexes[6].x = center.x + size.x * 0.49;
-            vertexes[6].y = y1;
-            vertexes[6].color = c_empty;
-            vertexes[7].x = center.x + size.x * 0.49;
-            vertexes[7].y = y2;
-            vertexes[7].color = c_empty;
-            al_draw_prim(
-                vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
-            );
-        }
+        this->def_draw_code(center, size);
     };
     on_tick =
     [this] (float delta_t) {
-        float child_bottom = get_child_bottom();
-        if(child_bottom < 1.0f) {
-            target_offset = 0.0f;
-            offset = 0.0f;
-        } else {
-            target_offset = clamp(target_offset, 0.0f, child_bottom - 1.0f);
-            offset += (target_offset - offset) * (10.0f * delta_t);
-            offset = clamp(offset, 0.0f, child_bottom - 1.0f);
-            if(offset <= 0.01f) offset = 0.0f;
-            if(child_bottom > 1.0f) {
-                if(child_bottom - offset - 1.0f <= 0.01f) {
-                    offset = child_bottom - 1.0f;
-                }
-            }
-        }
+        this->def_tick_code(delta_t);
     };
     on_event =
     [this] (const ALLEGRO_EVENT & ev) {
-        if(
-            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-            is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
-            ev.mouse.dz != 0.0f
-        ) {
-            float child_bottom = get_child_bottom();
-            if(child_bottom <= 1.0f && offset == 0.0f) {
-                return;
-            }
-            target_offset =
-                clamp(
-                    target_offset + (-ev.mouse.dz) * 0.2f,
-                    0.0f,
-                    child_bottom - 1.0f
-                );
-        }
+        this->def_event_code(ev);
     };
     on_child_selected =
     [this] (const gui_item * child) {
-        //Try to center the child.
+        this->def_child_selected_code(child);
+    };
+}
+
+
+/**
+ * @brief Default list GUI item child selected code.
+ */
+void list_gui_item::def_child_selected_code(const gui_item * child) {
+    //Try to center the child.
+    float child_bottom = get_child_bottom();
+    if(child_bottom <= 1.0f && offset == 0.0f) {
+        return;
+    }
+    target_offset =
+        clamp(
+            child->center.y - 0.5f,
+            0.0f,
+            child_bottom - 1.0f
+        );
+}
+
+
+/**
+ * @brief Default list GUI item draw code.
+ */
+void list_gui_item::def_draw_code(const point& center, const point& size) {
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_frame_box,
+        COLOR_TRANSPARENT_WHITE
+    );
+    if(offset > 0.0f) {
+        //Shade effect at the top.
+        ALLEGRO_VERTEX vertexes[8];
+        for(size_t v = 0; v < 8; v++) {
+            vertexes[v].z = 0.0f;
+        }
+        float y1 = center.y - size.y / 2.0f;
+        float y2 = y1 + 20.0f;
+        ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
+        ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
+        vertexes[0].x = center.x - size.x * 0.49;
+        vertexes[0].y = y1;
+        vertexes[0].color = c_empty;
+        vertexes[1].x = center.x - size.x * 0.49;
+        vertexes[1].y = y2;
+        vertexes[1].color = c_empty;
+        vertexes[2].x = center.x - size.x * 0.47;
+        vertexes[2].y = y1;
+        vertexes[2].color = c_opaque;
+        vertexes[3].x = center.x - size.x * 0.47;
+        vertexes[3].y = y2;
+        vertexes[3].color = c_empty;
+        vertexes[4].x = center.x + size.x * 0.47;
+        vertexes[4].y = y1;
+        vertexes[4].color = c_opaque;
+        vertexes[5].x = center.x + size.x * 0.47;
+        vertexes[5].y = y2;
+        vertexes[5].color = c_empty;
+        vertexes[6].x = center.x + size.x * 0.49;
+        vertexes[6].y = y1;
+        vertexes[6].color = c_empty;
+        vertexes[7].x = center.x + size.x * 0.49;
+        vertexes[7].y = y2;
+        vertexes[7].color = c_empty;
+        al_draw_prim(
+            vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+        );
+    }
+    float child_bottom = get_child_bottom();
+    if(child_bottom > 1.0f && offset < child_bottom - 1.0f) {
+        //Shade effect at the bottom.
+        ALLEGRO_VERTEX vertexes[8];
+        for(size_t v = 0; v < 8; v++) {
+            vertexes[v].z = 0.0f;
+        }
+        float y1 = center.y + size.y / 2.0f;
+        float y2 = y1 - 20.0f;
+        ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
+        ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
+        vertexes[0].x = center.x - size.x * 0.49;
+        vertexes[0].y = y1;
+        vertexes[0].color = c_empty;
+        vertexes[1].x = center.x - size.x * 0.49;
+        vertexes[1].y = y2;
+        vertexes[1].color = c_empty;
+        vertexes[2].x = center.x - size.x * 0.47;
+        vertexes[2].y = y1;
+        vertexes[2].color = c_opaque;
+        vertexes[3].x = center.x - size.x * 0.47;
+        vertexes[3].y = y2;
+        vertexes[3].color = c_empty;
+        vertexes[4].x = center.x + size.x * 0.47;
+        vertexes[4].y = y1;
+        vertexes[4].color = c_opaque;
+        vertexes[5].x = center.x + size.x * 0.47;
+        vertexes[5].y = y2;
+        vertexes[5].color = c_empty;
+        vertexes[6].x = center.x + size.x * 0.49;
+        vertexes[6].y = y1;
+        vertexes[6].color = c_empty;
+        vertexes[7].x = center.x + size.x * 0.49;
+        vertexes[7].y = y2;
+        vertexes[7].color = c_empty;
+        al_draw_prim(
+            vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+        );
+    }
+}
+
+
+/**
+ * @brief Default list GUI item event code.
+ */
+void list_gui_item::def_event_code(const ALLEGRO_EVENT & ev) {
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
+        is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
+        ev.mouse.dz != 0.0f
+    ) {
         float child_bottom = get_child_bottom();
         if(child_bottom <= 1.0f && offset == 0.0f) {
             return;
         }
         target_offset =
             clamp(
-                child->center.y - 0.5f,
+                target_offset + (-ev.mouse.dz) * 0.2f,
                 0.0f,
                 child_bottom - 1.0f
             );
-    };
+    }
+}
+
+
+/**
+ * @brief Default list GUI item tick code.
+ */
+void list_gui_item::def_tick_code(float delta_t) {
+    float child_bottom = get_child_bottom();
+    if(child_bottom < 1.0f) {
+        target_offset = 0.0f;
+        offset = 0.0f;
+    } else {
+        target_offset = clamp(target_offset, 0.0f, child_bottom - 1.0f);
+        offset += (target_offset - offset) * (10.0f * delta_t);
+        offset = clamp(offset, 0.0f, child_bottom - 1.0f);
+        if(offset <= 0.01f) offset = 0.0f;
+        if(child_bottom > 1.0f) {
+            if(child_bottom - offset - 1.0f <= 0.01f) {
+                offset = child_bottom - 1.0f;
+            }
+        }
+    }
 }
 
 
@@ -1349,128 +1436,160 @@ picker_gui_item::picker_gui_item(
     
     on_draw =
     [this] (const point & center, const point & size) {
-        if(this->nr_options != 0 && selected) {
-            point option_boxes_start(
-                center.x - size.x / 2.0f + 20.0f,
-                center.y + size.y / 2.0f - 12.0f
-            );
-            float option_boxes_interval =
-                (size.x - 40.0f) / (this->nr_options - 0.5f);
-            for(size_t o = 0; o < this->nr_options; o++) {
-                float x1 = option_boxes_start.x + o * option_boxes_interval;
-                float y1 = option_boxes_start.y;
-                al_draw_filled_rectangle(
-                    x1, y1,
-                    x1 + option_boxes_interval * 0.5f, y1 + 4.0f,
-                    this->cur_option_idx == o ?
-                    al_map_rgba(255, 255, 255, 160) :
-                    al_map_rgba(255, 255, 255, 64)
-                );
-            }
-        }
-        
-        unsigned char real_arrow_highlight = 255;
-        if(
-            selected &&
-            manager &&
-            manager->was_last_input_mouse()
-        ) {
-            real_arrow_highlight = arrow_highlight;
-        }
-        ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
-        ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
-        point arrow_highlight_scale = point(1.4f, 1.4f);
-        point arrow_regular_scale = point(1.0f, 1.0f);
-        
-        point arrow_box(
-            size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE,
-            size.y * GUI::STANDARD_CONTENT_SIZE
-        );
-        draw_text(
-            "<",
-            game.sys_assets.fnt_standard,
-            point(center.x - size.x * 0.45, center.y),
-            arrow_box,
-            real_arrow_highlight == 0 ?
-            arrow_highlight_color :
-            arrow_regular_color,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            real_arrow_highlight == 0 ?
-            arrow_highlight_scale :
-            arrow_regular_scale
-        );
-        draw_text(
-            ">",
-            game.sys_assets.fnt_standard,
-            point(center.x + size.x * 0.45, center.y),
-            arrow_box,
-            real_arrow_highlight == 1 ?
-            arrow_highlight_color :
-            arrow_regular_color,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            real_arrow_highlight == 1 ?
-            arrow_highlight_scale :
-            arrow_regular_scale
-        );
-        
-        float juicy_grow_amount = this->get_juice_value();
-        
-        point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE);
-        draw_text(
-            this->base_text + this->option,
-            game.sys_assets.fnt_standard,
-            point(center.x - size.x * 0.40, center.y),
-            text_box,
-            COLOR_WHITE,
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
-        );
-        
-        ALLEGRO_COLOR box_tint =
-            selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
-            
-        draw_textured_box(
-            center, size, game.sys_assets.bmp_bubble_box, box_tint
-        );
-        
-        if(selected) {
-            draw_textured_box(
-                center,
-                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-                game.sys_assets.bmp_focus_box
-            );
-        }
+        this->def_draw_code(center, size);
     };
     
     on_activate =
     [this] (const point & cursor_pos) {
-        if(cursor_pos.x >= get_reference_center().x) {
-            on_next();
-        } else {
-            on_previous();
-        }
+        this->def_activate_code(cursor_pos);
     };
     
     on_menu_dir_button =
     [this] (size_t button_id) -> bool{
-        if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
-            on_next();
-            return true;
-        } else if(button_id == PLAYER_ACTION_TYPE_MENU_LEFT) {
-            on_previous();
-            return true;
-        }
-        return false;
+        return this->def_menu_dir_code(button_id);
     };
     
     on_mouse_over =
     [this] (const point & cursor_pos) {
-        arrow_highlight =
-            cursor_pos.x >= get_reference_center().x ? 1 : 0;
+        this->def_mouse_over_code(cursor_pos);
     };
+}
+
+
+/**
+ * @brief Default picker GUI item activate code.
+ */
+void picker_gui_item::def_activate_code(const point& cursor_pos) {
+    if(cursor_pos.x >= get_reference_center().x) {
+        on_next();
+    } else {
+        on_previous();
+    }
+}
+
+
+/**
+ * @brief Default picker GUI item draw code.
+ */
+void picker_gui_item::def_draw_code(const point& center, const point& size) {
+    if(this->nr_options != 0 && selected) {
+        point option_boxes_start(
+            center.x - size.x / 2.0f + 20.0f,
+            center.y + size.y / 2.0f - 12.0f
+        );
+        float option_boxes_interval =
+            (size.x - 40.0f) / (this->nr_options - 0.5f);
+        for(size_t o = 0; o < this->nr_options; o++) {
+            float x1 = option_boxes_start.x + o * option_boxes_interval;
+            float y1 = option_boxes_start.y;
+            al_draw_filled_rectangle(
+                x1, y1,
+                x1 + option_boxes_interval * 0.5f, y1 + 4.0f,
+                this->cur_option_idx == o ?
+                al_map_rgba(255, 255, 255, 160) :
+                al_map_rgba(255, 255, 255, 64)
+            );
+        }
+    }
+    
+    unsigned char real_arrow_highlight = 255;
+    if(
+        selected &&
+        manager &&
+        manager->was_last_input_mouse()
+    ) {
+        real_arrow_highlight = arrow_highlight;
+    }
+    ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
+    ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
+    point arrow_highlight_scale = point(1.4f, 1.4f);
+    point arrow_regular_scale = point(1.0f, 1.0f);
+    
+    point arrow_box(
+        size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE,
+        size.y * GUI::STANDARD_CONTENT_SIZE
+    );
+    draw_text(
+        "<",
+        game.sys_assets.fnt_standard,
+        point(center.x - size.x * 0.45, center.y),
+        arrow_box,
+        real_arrow_highlight == 0 ?
+        arrow_highlight_color :
+        arrow_regular_color,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        real_arrow_highlight == 0 ?
+        arrow_highlight_scale :
+        arrow_regular_scale
+    );
+    draw_text(
+        ">",
+        game.sys_assets.fnt_standard,
+        point(center.x + size.x * 0.45, center.y),
+        arrow_box,
+        real_arrow_highlight == 1 ?
+        arrow_highlight_color :
+        arrow_regular_color,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        real_arrow_highlight == 1 ?
+        arrow_highlight_scale :
+        arrow_regular_scale
+    );
+    
+    float juicy_grow_amount = this->get_juice_value();
+    
+    point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE);
+    draw_text(
+        this->base_text + this->option,
+        game.sys_assets.fnt_standard,
+        point(center.x - size.x * 0.40, center.y),
+        text_box,
+        COLOR_WHITE,
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+    );
+    
+    ALLEGRO_COLOR box_tint =
+        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_bubble_box, box_tint
+    );
+    
+    if(selected) {
+        draw_textured_box(
+            center,
+            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            game.sys_assets.bmp_focus_box
+        );
+    }
+}
+
+
+/**
+ * @brief Default picker GUI item menu dir code.
+ */
+bool picker_gui_item::def_menu_dir_code(size_t button_id) {
+    if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
+        on_next();
+        return true;
+    } else if(button_id == PLAYER_ACTION_TYPE_MENU_LEFT) {
+        on_previous();
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Default picker GUI item mouse over code.
+ */
+void picker_gui_item::def_mouse_over_code(const point & cursor_pos) {
+    arrow_highlight =
+        cursor_pos.x >= get_reference_center().x ? 1 : 0;
 }
 
 
@@ -1482,58 +1601,74 @@ scroll_gui_item::scroll_gui_item() :
     
     on_draw =
     [this] (const point & center, const point & size) {
-        float bar_y = 0.0f; //Top, in height ratio.
-        float bar_h = 0.0f; //In height ratio.
-        float list_bottom = list_item->get_child_bottom();
-        unsigned char alpha = 48;
-        if(list_bottom > 1.0f) {
-            float offset = std::min(list_item->offset, list_bottom - 1.0f);
-            bar_y = offset / list_bottom;
-            bar_h = 1.0f / list_bottom;
-            alpha = 128;
-        }
-        
-        draw_textured_box(
-            center, size, game.sys_assets.bmp_frame_box,
-            al_map_rgba(255, 255, 255, alpha)
-        );
-        
-        if(bar_h != 0.0f) {
-            draw_textured_box(
-                point(
-                    center.x,
-                    (center.y - size.y * 0.5) +
-                    (size.y * bar_y) +
-                    (size.y * bar_h * 0.5f)
-                ),
-                point(size.x, (size.y * bar_h)),
-                game.sys_assets.bmp_bubble_box
-            );
-        }
+        this->def_draw_code(center, size);
     };
     on_event =
     [this] (const ALLEGRO_EVENT & ev) {
-        if(
-            ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-            ev.mouse.button == 1 &&
-            is_mouse_on(point(ev.mouse.x, ev.mouse.y))
-        ) {
-            float list_bottom = list_item->get_child_bottom();
-            if(list_bottom <= 1.0f) {
-                return;
-            }
-            
-            point c = get_reference_center();
-            point s = get_reference_size();
-            float bar_h = (1.0f / list_bottom) * s.y;
-            float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
-            float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;
-            float click = (ev.mouse.y - y1) / (y2 - y1);
-            click = clamp(click, 0.0f, 1.0f);
-            
-            list_item->target_offset = click * (list_bottom - 1.0f);
-        }
+        this->def_event_code(ev);
     };
+}
+
+
+/**
+ * @brief Default scroll GUI item draw code.
+ */
+void scroll_gui_item::def_draw_code(const point& center, const point& size) {
+    float bar_y = 0.0f; //Top, in height ratio.
+    float bar_h = 0.0f; //In height ratio.
+    float list_bottom = list_item->get_child_bottom();
+    unsigned char alpha = 48;
+    if(list_bottom > 1.0f) {
+        float offset = std::min(list_item->offset, list_bottom - 1.0f);
+        bar_y = offset / list_bottom;
+        bar_h = 1.0f / list_bottom;
+        alpha = 128;
+    }
+    
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_frame_box,
+        al_map_rgba(255, 255, 255, alpha)
+    );
+    
+    if(bar_h != 0.0f) {
+        draw_textured_box(
+            point(
+                center.x,
+                (center.y - size.y * 0.5) +
+                (size.y * bar_y) +
+                (size.y * bar_h * 0.5f)
+            ),
+            point(size.x, (size.y * bar_h)),
+            game.sys_assets.bmp_bubble_box
+        );
+    }
+}
+
+
+/**
+ * @brief Default scroll GUI item event code.
+ */
+void scroll_gui_item::def_event_code(const ALLEGRO_EVENT & ev) {
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        ev.mouse.button == 1 &&
+        is_mouse_on(point(ev.mouse.x, ev.mouse.y))
+    ) {
+        float list_bottom = list_item->get_child_bottom();
+        if(list_bottom <= 1.0f) {
+            return;
+        }
+        
+        point c = get_reference_center();
+        point s = get_reference_size();
+        float bar_h = (1.0f / list_bottom) * s.y;
+        float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
+        float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;
+        float click = (ev.mouse.y - y1) / (y2 - y1);
+        click = clamp(click, 0.0f, 1.0f);
+        
+        list_item->target_offset = click * (list_bottom - 1.0f);
+    }
 }
 
 
@@ -1557,66 +1692,73 @@ text_gui_item::text_gui_item(
     
     on_draw =
     [this] (const point & center, const point & size) {
-    
-        int text_x = center.x;
-        switch(this->flags) {
-        case ALLEGRO_ALIGN_LEFT: {
-            text_x = center.x - size.x * 0.5;
-            break;
-        } case ALLEGRO_ALIGN_RIGHT: {
-            text_x = center.x + size.x * 0.5;
-            break;
-        }
-        }
-        
-        float juicy_grow_amount = get_juice_value();
-        int text_y = center.y;
-        
-        if(line_wrap) {
-        
-            text_y = center.y - size.y / 2.0f;
-            int line_height = al_get_font_line_height(this->font);
-            vector<string_token> tokens =
-                tokenize_string(this->text);
-            set_string_token_widths(
-                tokens, this->font, game.sys_assets.fnt_slim, line_height, false
-            );
-            vector<vector<string_token> > tokens_per_line =
-                split_long_string_with_tokens(tokens, size.x);
-                
-            for(size_t l = 0; l < tokens_per_line.size(); l++) {
-                draw_string_tokens(
-                    tokens_per_line[l], this->font, game.sys_assets.fnt_slim,
-                    false,
-                    point(
-                        text_x,
-                        text_y + l * line_height
-                    ),
-                    this->flags,
-                    point(size.x, line_height),
-                    point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
-                );
-            }
-            
-        } else {
-        
-            draw_text(
-                this->text, this->font, point(text_x, text_y), size,
-                this->color, this->flags, V_ALIGN_MODE_CENTER,
-                TEXT_SETTING_FLAG_CANT_GROW,
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
-            );
-            
-        }
-        
-        if(selected && show_selection_box) {
-            draw_textured_box(
-                center,
-                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-                game.sys_assets.bmp_focus_box
-            );
-        }
+        this->def_draw_code(center, size);
     };
+}
+
+
+/**
+ * @brief Default text GUI item draw code.
+ */
+void text_gui_item::def_draw_code(const point& center, const point& size) {
+    int text_x = center.x;
+    switch(this->flags) {
+    case ALLEGRO_ALIGN_LEFT: {
+        text_x = center.x - size.x * 0.5;
+        break;
+    } case ALLEGRO_ALIGN_RIGHT: {
+        text_x = center.x + size.x * 0.5;
+        break;
+    }
+    }
+    
+    float juicy_grow_amount = get_juice_value();
+    int text_y = center.y;
+    
+    if(line_wrap) {
+    
+        text_y = center.y - size.y / 2.0f;
+        int line_height = al_get_font_line_height(this->font);
+        vector<string_token> tokens =
+            tokenize_string(this->text);
+        set_string_token_widths(
+            tokens, this->font, game.sys_assets.fnt_slim, line_height, false
+        );
+        vector<vector<string_token> > tokens_per_line =
+            split_long_string_with_tokens(tokens, size.x);
+            
+        for(size_t l = 0; l < tokens_per_line.size(); l++) {
+            draw_string_tokens(
+                tokens_per_line[l], this->font, game.sys_assets.fnt_slim,
+                false,
+                point(
+                    text_x,
+                    text_y + l * line_height
+                ),
+                this->flags,
+                point(size.x, line_height),
+                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+            );
+        }
+        
+    } else {
+    
+        draw_text(
+            this->text, this->font, point(text_x, text_y), size,
+            this->color, this->flags, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW,
+            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+        );
+        
+    }
+    
+    if(selected && show_selection_box) {
+        draw_textured_box(
+            center,
+            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            game.sys_assets.bmp_focus_box
+        );
+    }
 }
 
 
@@ -1631,21 +1773,29 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
     
     on_draw =
     [this] (const point & center, const point & size) {
-        string cur_text = this->gui->get_current_tooltip();
-        if(cur_text != this->prev_text) {
-            this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);
-            this->prev_text = cur_text;
-        }
-        float juicy_grow_amount = get_juice_value();
-        draw_text(
-            cur_text,
-            game.sys_assets.fnt_standard,
-            center,
-            size,
-            COLOR_WHITE,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW,
-            point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount)
-        );
+        this->def_draw_code(center, size);
     };
+}
+
+
+/**
+ * @brief Default tooltip GUI item draw code.
+ */
+void tooltip_gui_item::def_draw_code(const point& center, const point& size) {
+    string cur_text = this->gui->get_current_tooltip();
+    if(cur_text != this->prev_text) {
+        this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);
+        this->prev_text = cur_text;
+    }
+    float juicy_grow_amount = get_juice_value();
+    draw_text(
+        cur_text,
+        game.sys_assets.fnt_standard,
+        center,
+        size,
+        COLOR_WHITE,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount)
+    );
 }

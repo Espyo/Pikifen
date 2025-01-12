@@ -869,7 +869,7 @@ void options_menu_t::init_gui_top_page() {
         if(back_callback) back_callback();
     };
     top_gui.back_item->on_get_tooltip =
-    [] () { return "Return to the main menu."; };
+    [] () { return "Return to the previous menu."; };
     top_gui.add_item(top_gui.back_item, "back");
     
     //Header text.
@@ -1009,8 +1009,8 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(misc_button, "misc");
     
     //Advanced bullet point.
-    bullet_point_gui_item* advanced_bullet =
-        new bullet_point_gui_item("Advanced...", game.sys_assets.fnt_standard);
+    bullet_gui_item* advanced_bullet =
+        new bullet_gui_item("Advanced...", game.sys_assets.fnt_standard);
     advanced_bullet->on_get_tooltip =
     [] () {
         return
@@ -1102,8 +1102,8 @@ void options_menu_t::populate_binds() {
         float cur_y = action_y + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
         
         //Action type name bullet.
-        bullet_point_gui_item* name_bullet =
-            new bullet_point_gui_item(action_type.name, game.sys_assets.fnt_standard);
+        bullet_gui_item* name_bullet =
+            new bullet_gui_item(action_type.name, game.sys_assets.fnt_standard);
         name_bullet->center =
             point(0.22f, cur_y);
         name_bullet->size =

@@ -224,7 +224,7 @@ public:
  * @brief A GUI item with fields ready to make it behave like a bullet
  * point in a list.
  */
-class bullet_point_gui_item : public gui_item {
+class bullet_gui_item : public gui_item {
 
 public:
 
@@ -242,10 +242,12 @@ public:
     
     //--- Function declarations ---
     
-    bullet_point_gui_item(
+    bullet_gui_item(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+
+    void def_draw_code(const point& center, const point& size);
     
 };
 
@@ -275,6 +277,8 @@ public:
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+
+    void def_draw_code(const point& center, const point& size);
     
 };
 
@@ -288,9 +292,13 @@ public:
 
     //--- Members ---
     
-    //Variable that controls the checkmark value.
-    bool* value = nullptr;
+    //Current value.
+    bool value = false;
     
+    //If not nullptr, the value is automatically adjusted to reflect this
+    //variable and vice-versa.
+    bool* value_ptr = nullptr;
+
     //Text to display on the button.
     string text;
     
@@ -303,10 +311,17 @@ public:
     
     //--- Function declarations ---
     
-    check_gui_item(
-        bool* value, const string &text, ALLEGRO_FONT* font,
+    explicit check_gui_item(
+        bool value, const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+    explicit check_gui_item(
+        bool* value_ptr, const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = COLOR_WHITE
+    );
+
+    void def_activate_code();
+    void def_draw_code(const point& center, const point& size);
     
 };
 
@@ -329,6 +344,11 @@ public:
     //--- Function declarations ---
     
     list_gui_item();
+
+    void def_child_selected_code(const gui_item* child);
+    void def_draw_code(const point& center, const point& size);
+    void def_event_code(const ALLEGRO_EVENT & ev);
+    void def_tick_code(float delta_t);
     
 };
 
@@ -368,6 +388,12 @@ public:
         const string &base_text, const string &option,
         size_t nr_options = 0, size_t cur_option_idx = INVALID
     );
+
+    void def_activate_code(const point& cursor_pos);
+    void def_draw_code(const point& center, const point& size);
+    bool def_menu_dir_code(size_t button_id);
+    void def_mouse_over_code(const point & cursor_pos);
+
     
 private:
 
@@ -395,6 +421,9 @@ public:
     //--- Function declarations ---
     
     scroll_gui_item();
+
+    void def_draw_code(const point& center, const point& size);
+    void def_event_code(const ALLEGRO_EVENT & ev);
     
 };
 
@@ -435,6 +464,8 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE,
         int flags = ALLEGRO_ALIGN_CENTER
     );
+
+    void def_draw_code(const point& center, const point& size);
     
 };
 
@@ -456,6 +487,9 @@ public:
     //--- Function declarations ---
     
     explicit tooltip_gui_item(gui_manager* gui);
+
+    void def_draw_code(const point& center, const point& size);
+
     
 private:
 

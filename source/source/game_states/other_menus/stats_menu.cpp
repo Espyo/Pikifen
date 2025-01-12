@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Statistics menu structs and functions.
+ * Statistics menu struct and functions.
  */
 
 #include "stats_menu.h"
@@ -47,7 +47,7 @@ stats_menu_t::stats_menu_t() {
         if(back_callback) back_callback();
     };
     gui.back_item->on_get_tooltip =
-    [] () { return "Return to the main menu."; };
+    [] () { return "Return to the previous menu."; };
     gui.add_item(gui.back_item, "back");
     
     //Header text.
@@ -130,8 +130,8 @@ text_gui_item* stats_menu_t::add_stat(
         list_bottom_y + (STAT_HEIGHT / 2.0f) +
         (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
-    bullet_point_gui_item* label_bullet =
-        new bullet_point_gui_item(
+    bullet_gui_item* label_bullet =
+        new bullet_gui_item(
         label, game.sys_assets.fnt_standard
     );
     label_bullet->center =

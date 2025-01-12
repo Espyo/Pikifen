@@ -155,8 +155,8 @@ help_menu_t::help_menu_t() {
     gui.add_item(objects_button, "objects");
     
     //Manual text.
-    bullet_point_gui_item* manual_bullet =
-        new bullet_point_gui_item("More help...", game.sys_assets.fnt_standard);
+    bullet_gui_item* manual_bullet =
+        new bullet_gui_item("More help...", game.sys_assets.fnt_standard);
     manual_bullet->on_get_tooltip = [] () {
         return
             "For more help on other subjects, check out the "
@@ -345,8 +345,8 @@ void help_menu_t::populate_tidbits(const HELP_CATEGORY category) {
     
     for(size_t t = 0; t < category_tidbits.size(); t++) {
         tidbit* t_ptr = &category_tidbits[t];
-        bullet_point_gui_item* tidbit_bullet =
-            new bullet_point_gui_item(
+        bullet_gui_item* tidbit_bullet =
+            new bullet_gui_item(
             t_ptr->name,
             game.sys_assets.fnt_standard
         );

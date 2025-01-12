@@ -560,8 +560,8 @@ void main_menu_state::init_gui_make_page() {
     make_gui.add_item(make_gui.back_item, "back");
     
     //More bullet point.
-    bullet_point_gui_item* more_bullet =
-        new bullet_point_gui_item("More...", game.sys_assets.fnt_standard);
+    bullet_gui_item* more_bullet =
+        new bullet_gui_item("More...", game.sys_assets.fnt_standard);
     more_bullet->on_get_tooltip =
     [] () {
         return

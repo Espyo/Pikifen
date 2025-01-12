@@ -20,7 +20,7 @@ using std::map;
 using std::string;
 
 
-namespace HELP_MENU {
+namespace STATS_MENU {
 extern const string GUI_FILE_PATH;
 }
 

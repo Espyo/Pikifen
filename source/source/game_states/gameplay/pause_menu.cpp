@@ -231,8 +231,8 @@ void pause_menu_t::add_bullet(
         (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
         ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
         
-    bullet_point_gui_item* bullet =
-        new bullet_point_gui_item(
+    bullet_gui_item* bullet =
+        new bullet_gui_item(
         text, game.sys_assets.fnt_standard, color
     );
     bullet->center = point(0.50f, bullet_center_y);
