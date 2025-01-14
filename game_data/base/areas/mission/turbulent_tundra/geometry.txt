@@ -6389,7 +6389,7 @@ path_stops{
 		links{
 			nr=1
 			nr=11
-			nr=68
+			nr=66
 		}
 	}
 	s{
@@ -6414,7 +6414,7 @@ path_stops{
 			nr=2
 			nr=12
 			nr=20
-			nr=66
+			nr=64
 			nr=46
 		}
 	}
@@ -6536,16 +6536,16 @@ path_stops{
 		links{
 			nr=3
 			nr=21
-			nr=82
-			nr=98
+			nr=79
+			nr=95
 		}
 	}
 	s{
 		pos=324.7827 -12.9096
 		links{
-			nr=54
+			nr=52
 			nr=20
-			nr=103
+			nr=100
 			nr=22
 		}
 	}
@@ -6554,7 +6554,7 @@ path_stops{
 		links{
 			nr=23
 			nr=26
-			nr=65
+			nr=63
 			nr=21
 		}
 	}
@@ -6571,7 +6571,7 @@ path_stops{
 		pos=-134.6915 258.4290
 		links{
 			nr=23
-			nr=86
+			nr=83
 		}
 	}
 	s{
@@ -6593,7 +6593,7 @@ path_stops{
 		links{
 			nr=26
 			nr=28
-			nr=88 1
+			nr=85 1
 		}
 	}
 	s{
@@ -6601,8 +6601,8 @@ path_stops{
 		links{
 			nr=27
 			nr=38
-			nr=87
-			nr=88
+			nr=84
+			nr=85
 		}
 	}
 	s{
@@ -6611,8 +6611,8 @@ path_stops{
 			nr=30
 			nr=38
 			nr=45
-			nr=77
-			nr=94
+			nr=75
+			nr=91
 		}
 	}
 	s{
@@ -6620,10 +6620,10 @@ path_stops{
 		links{
 			nr=29
 			nr=31
-			nr=61
-			nr=77
-			nr=85
-			nr=94
+			nr=59
+			nr=75
+			nr=82
+			nr=91
 		}
 	}
 	s{
@@ -6632,17 +6632,17 @@ path_stops{
 			nr=30
 			nr=32
 			nr=33
-			nr=84
-			nr=85
+			nr=81
+			nr=82
 		}
 	}
 	s{
 		pos=-552.5753 -400.5873
 		links{
 			nr=31
-			nr=63
-			nr=84
-			nr=99
+			nr=61
+			nr=81
+			nr=96
 		}
 	}
 	s{
@@ -6650,8 +6650,8 @@ path_stops{
 		links{
 			nr=31
 			nr=34
-			nr=91
-			nr=60
+			nr=88
+			nr=58
 		}
 	}
 	s{
@@ -6659,7 +6659,7 @@ path_stops{
 		links{
 			nr=33
 			nr=35
-			nr=60
+			nr=58
 		}
 	}
 	s{
@@ -6687,34 +6687,34 @@ path_stops{
 		links{
 			nr=28
 			nr=29
-			nr=76
-			nr=87
-			nr=105
+			nr=74
+			nr=84
+			nr=102
 		}
 	}
 	s{
 		pos=-57.5562 -458.6186
 		links{
 			nr=40
-			nr=63 1
-			nr=90
+			nr=61 1
+			nr=87
 		}
 	}
 	s{
 		pos=99.8426 -416.8051
 		links{
 			nr=39
-			nr=89 1
-			nr=104
+			nr=86 1
+			nr=101
 		}
 	}
 	s{
 		pos=-102.4683 -979.9957
 		links{
 			nr=42
-			nr=53
-			nr=80
-			nr=100
+			nr=51
+			nr=77
+			nr=97
 		}
 	}
 	s{
@@ -6722,30 +6722,30 @@ path_stops{
 		links{
 			nr=41
 			nr=43
-			nr=101
+			nr=98
 		}
 	}
 	s{
 		pos=-556.5255 -892.6102
 		links{
 			nr=42
-			nr=99
-			nr=100
+			nr=96
+			nr=97
 		}
 	}
 	s{
 		pos=272.9922 -257.1140
 		links{
-			nr=54 1
-			nr=104
+			nr=52 1
+			nr=101
 		}
 	}
 	s{
 		pos=-798.4172 679.4662
 		links{
 			nr=29
-			nr=62
-			nr=75 1
+			nr=60
+			nr=73 1
 		}
 	}
 	s{
@@ -6754,7 +6754,7 @@ path_stops{
 			nr=12
 			nr=47
 			nr=3
-			nr=98
+			nr=95
 		}
 	}
 	s{
@@ -6765,48 +6765,32 @@ path_stops{
 		}
 	}
 	s{
-		pos=624.4861 -912.8040
+		pos=639.5022 -905.9786
 		links{
 			nr=47
-			nr=49
+			nr=49 1
 		}
 	}
 	s{
-		pos=301.5195 -1164.9371
+		pos=343.8374 -1167.6672
 		links{
-			nr=48
-			nr=50
-		}
-	}
-	s{
-		pos=156.0104 -1411.5012
-		links{
-			nr=49
-			nr=78
-			nr=53 1
-		}
-	}
-	s{
-		pos=-236.1749 -1698.4614
-		links{
-			nr=78
-			nr=52 1
+			nr=48 1
+			nr=51
 		}
 	}
 	s{
 		pos=-323.1062 -1500.4581
 		links{
-			nr=79
-			nr=51 1
-			nr=101
+			nr=76
+			nr=98
 		}
 	}
 	s{
 		pos=33.8362 -1150.9384
 		links{
 			nr=41
-			nr=79
-			nr=50 1
+			nr=76
+			nr=49
 		}
 	}
 	s{
@@ -6819,44 +6803,44 @@ path_stops{
 	s{
 		pos=-1373.5222 789.3945
 		links{
-			nr=73
-			nr=96
+			nr=71
+			nr=93
 		}
 	}
 	s{
 		pos=-1504.8947 468.3270
 		links{
-			nr=81
-			nr=95 1
-			nr=96
+			nr=78
+			nr=92 1
+			nr=93
 		}
 	}
 	s{
 		pos=-1589.3879 172.7782
 		flags=2
 		links{
-			nr=58
-			nr=81
+			nr=56
+			nr=78
 		}
 	}
 	s{
 		pos=-1567.0641 32.5189
 		links{
+			nr=55
 			nr=57
-			nr=59
 		}
 	}
 	s{
 		pos=-1491.9120 -66.8211
 		links{
+			nr=56
 			nr=58
-			nr=60
 		}
 	}
 	s{
 		pos=-1391.3716 -165.7398
 		links{
-			nr=59
+			nr=57
 			nr=34
 			nr=33
 		}
@@ -6865,8 +6849,8 @@ path_stops{
 		pos=-992.7038 273.6353
 		links{
 			nr=30
+			nr=88
 			nr=91
-			nr=94
 		}
 	}
 	s{
@@ -6880,46 +6864,62 @@ path_stops{
 		links{
 			nr=32
 			nr=39 1
-			nr=84 1
-			nr=99
+			nr=81 1
+			nr=96
 		}
 	}
 	s{
 		pos=814.4052 133.0784
 		links{
-			nr=66
+			nr=64
 		}
 	}
 	s{
 		pos=490.4376 340.6763
 		links{
 			nr=22
-			nr=72 1
+			nr=70 1
 		}
 	}
 	s{
 		pos=933.4595 38.3881
 		links{
 			nr=3
-			nr=64
-			nr=67
+			nr=62
+			nr=65
 		}
 	}
 	s{
 		pos=1015.5775 142.3185
 		links{
-			nr=66
+			nr=64
 		}
 	}
 	s{
 		pos=1598.7771 467.2318
 		links{
 			nr=0
-			nr=69
+			nr=67
 		}
 	}
 	s{
 		pos=1334.1375 478.6871
+		flags=2
+		links{
+			nr=66
+			nr=68
+		}
+	}
+	s{
+		pos=1032.0000 468.8245
+		flags=2
+		links{
+			nr=67
+			nr=69
+		}
+	}
+	s{
+		pos=786.9620 428.0613
 		flags=2
 		links{
 			nr=68
@@ -6927,47 +6927,31 @@ path_stops{
 		}
 	}
 	s{
-		pos=1032.0000 468.8245
-		flags=2
-		links{
-			nr=69
-			nr=71
-		}
-	}
-	s{
-		pos=786.9620 428.0613
-		flags=2
-		links{
-			nr=70
-			nr=72
-		}
-	}
-	s{
 		pos=608.0000 400.0000
 		flags=2
 		links{
-			nr=71
-			nr=65 1
+			nr=69
+			nr=63 1
 		}
 	}
 	s{
 		pos=-1248.0000 920.0000
 		links{
-			nr=55
-			nr=74
+			nr=53
+			nr=72
 		}
 	}
 	s{
 		pos=-924.1868 1077.0952
 		links{
+			nr=71
 			nr=73
-			nr=75
 		}
 	}
 	s{
 		pos=-864.0000 888.0000
 		links{
-			nr=74
+			nr=72
 			nr=45 1
 		}
 	}
@@ -6982,59 +6966,52 @@ path_stops{
 		links{
 			nr=30
 			nr=29
-			nr=86
-			nr=85
+			nr=83
+			nr=82
 		}
 	}
 	s{
-		pos=-24.2151 -1579.5304
+		pos=-122.6078 -1405.2682
 		links{
 			nr=50
 			nr=51
 		}
 	}
 	s{
-		pos=-122.6078 -1405.2682
-		links{
-			nr=52
-			nr=53
-		}
-	}
-	s{
 		pos=-24.7713 -856.8625
 		links{
 			nr=41
-			nr=90
-			nr=102
+			nr=87
+			nr=99
 		}
 	}
 	s{
 		pos=-1569.2391 290.1563
 		links{
-			nr=56
-			nr=57
+			nr=54
+			nr=55
 		}
 	}
 	s{
 		pos=694.8817 -20.9080
 		links{
 			nr=20
-			nr=83 1
+			nr=80 1
 		}
 	}
 	s{
 		pos=631.2806 -4.5332
 		links{
-			nr=82 1
-			nr=103
+			nr=79 1
+			nr=100
 		}
 	}
 	s{
 		pos=-383.5659 -129.8477
 		flags=2
 		links{
-			nr=63 1
-			nr=85 1
+			nr=61 1
+			nr=82 1
 			nr=32
 			nr=31
 		}
@@ -7043,37 +7020,37 @@ path_stops{
 		pos=-501.3100 189.4428
 		flags=2
 		links{
-			nr=84 1
-			nr=86 1
+			nr=81 1
+			nr=83 1
 			nr=31
 			nr=30
-			nr=77
+			nr=75
 		}
 	}
 	s{
 		pos=-442.2927 301.9345
 		links{
-			nr=77
-			nr=85 1
+			nr=75
+			nr=82 1
 			nr=24
-			nr=105
+			nr=102
 		}
 	}
 	s{
 		pos=-251.3819 516.2562
 		flags=2
 		links{
-			nr=88 1
+			nr=85 1
 			nr=38
 			nr=28
-			nr=105
+			nr=102
 		}
 	}
 	s{
 		pos=-39.9652 607.6797
 		flags=2
 		links{
-			nr=87 1
+			nr=84 1
 			nr=27 1
 			nr=28
 		}
@@ -7089,37 +7066,37 @@ path_stops{
 		flags=2
 		links{
 			nr=39
-			nr=80
+			nr=77
 		}
 	}
 	s{
 		pos=-1000.8771 69.8477
 		links{
 			nr=33
-			nr=61
+			nr=59
 		}
 	}
 	s{
 		pos=-1236.0938 349.2493
 		flags=2
 		links{
-			nr=93
-			nr=95 1
+			nr=90
+			nr=92 1
 		}
 	}
 	s{
 		pos=-1124.0892 468.4689
 		links{
-			nr=92
-			nr=94
-			nr=97 1
+			nr=89
+			nr=91
+			nr=94 1
 		}
 	}
 	s{
 		pos=-1009.7014 475.8059
 		links{
-			nr=93
-			nr=61
+			nr=90
+			nr=59
 			nr=29
 			nr=30
 		}
@@ -7127,23 +7104,23 @@ path_stops{
 	s{
 		pos=-1316.8118 370.4308
 		links{
-			nr=56 1
-			nr=92 1
+			nr=54 1
+			nr=89 1
 		}
 	}
 	s{
 		pos=-1445.8356 597.6404
 		links{
-			nr=55
-			nr=56
-			nr=97
+			nr=53
+			nr=54
+			nr=94
 		}
 	}
 	s{
 		pos=-1276.0674 518.5926
 		links{
-			nr=96
-			nr=93 1
+			nr=93
+			nr=90 1
 		}
 	}
 	s{
@@ -7158,8 +7135,8 @@ path_stops{
 		links{
 			nr=32
 			nr=43
-			nr=63
-			nr=100
+			nr=61
+			nr=97
 		}
 	}
 	s{
@@ -7167,28 +7144,28 @@ path_stops{
 		links{
 			nr=41
 			nr=43
-			nr=99
-			nr=101
+			nr=96
+			nr=98
 		}
 	}
 	s{
 		pos=-425.5891 -1267.0327
 		links{
 			nr=42
-			nr=52
-			nr=100
+			nr=50
+			nr=97
 		}
 	}
 	s{
 		pos=48.1516 -923.8248
 		links{
-			nr=80
+			nr=77
 		}
 	}
 	s{
 		pos=333.5737 58.6118
 		links{
-			nr=83
+			nr=80
 			nr=21
 		}
 	}
@@ -7203,8 +7180,8 @@ path_stops{
 		pos=-416.7770 431.1897
 		links{
 			nr=38
-			nr=86
-			nr=87
+			nr=83
+			nr=84
 		}
 	}
 }
