@@ -14,9 +14,11 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 
+/*
+TODO: Add a OpenGL extension library when it'll compile on windows
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
-
+*/
 
 //Types of shaders.
 enum SHADER_TYPE {
