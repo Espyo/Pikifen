@@ -100,7 +100,7 @@ Alternatively, you can run the Windows executable under Wine. It works fairly we
 
 ## What's left
 
-To know what still needs to be done in the project, please check the [todo file](https://github.com/Espyo/Pikifen/blob/master/source/documents/todo.txt).
+To know what still needs to be done in the project, please check the included manual's History and roadmap page for a general overview, or the project's [todo file](https://github.com/Espyo/Pikifen/blob/master/source/documents/todo.txt) for details.
 
 ## Troubleshooting
 

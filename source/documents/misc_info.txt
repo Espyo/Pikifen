@@ -555,7 +555,7 @@ Procedure for every version release
             manual folder
             game_data folder
                 Sans testing areas
-            readme.txt file
+            readme.md file
             license.txt file
             manual.html file
         Zip the folder, not the content inside

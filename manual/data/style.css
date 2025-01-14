@@ -108,6 +108,47 @@ ul {
   margin: 0px;
 }
 
+.home-table {
+  width: 95%;
+  margin: auto;
+}
+
+.home-table td {
+  vertical-align: top;
+  width: 33%;
+}
+
+.home-cell-about {
+  background-color: #FFEEEE;
+}
+
+.home-cell-playing {
+  background-color: #FFFFEE;
+}
+
+.home-cell-making {
+  background-color: #EEEEFF;
+}
+
+.home-header {
+  font-size: 24pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.home-big-links {
+  font-size: 18pt;
+}
+
+.home-small-links {
+  column-count: 2;
+}
+
+.home-loose-links {
+  text-align: center;
+  width: 100%;
+}
+
 .fig-right {
   clear: right;
   float: right;

@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="setup('Content and packs');">
+  <div id="page-content">
+    
+    <h2 id="content">Content</h2>
+
+    <p>"Content" refers to the things that make up a game &ndash; Pikmin types, areas, sound effects, scripts, animations, game configurations, and so on. <i>Pikifen</i>, the program, is the engine that grabs content and turns it into something playable.</p>
+
+    <p><i>Pikifen</i> does come with some content for you to try right away (the "base" content), but the idea is that you create your own content, or download content made by somebody else to play for yourself! To learn how to make your own, see <a href="making.html">making content</a>. To learn how to install someone else's content, see <a href="#installing">below</a>.</p>
+
+    <p>Content is just made up of files and folders inside of your hard drive, particularly inside of <i>Pikifen</i>'s <code>game_data</code> folder, inside the various <a href="#packs">pack</a> subfolders. For instance, the regular cave ambiance weather condition in the base content is stored in <code>game_data/base/weather/cave_normal.txt</code>.</p>
+
+    <h2 id="packs">Packs</h2>
+
+    <p>Content is organized by type (areas, liquids, graphics, etc.). But before that, it is split into packs, which are typically organized as bundles with a specific experience in mind, like a pack with a new area plus all of the graphics and object types that come with it. Each pack is a folder inside of the <code>game_data</code> folder, along with the content inside. This means players can share each others' packs by just passing a single folder around! You can think of packs as game mods, if you want.</p>
+    
+    <p>The "base" pack comes with <i>Pikifen</i>, and it contains some stuff for players to play with, and for makers to build on top of. If you have any other packs besides this one, <i>Pikifen</i> will load them all one at a time, along with the content within them. It is also possible for one pack to replace the contents of another, like an "Easy Enemies" pack that replaces the standard Red Bulborb with a variant that only eats one Pikmin at a time. The order packs are loaded in the engine matters for this! You can learn the details <a href="making.html">here</a>, but for most purposes, you just need to know that if a pack is meant to replace another pack's content, it must be loaded after, not before.</p>
+
+    <p>Within the options menu in-game, you can find a menu to manage installed packs with. In it, you can disable installed packs, which is a handy alternative to simply deleting the folder. You can also adjust the order in which packs are loaded.</p>
+    
+    <h3 id="installing">Installing</h3>
+
+    <p>To download and install packs, you will first want to find some. The best place to do so is in <i>Pikifen</i>'s' <a href="https://discord.gg/qbhz4u3">Discord server</a>! The content you will find there will likely come in a pack format, and will likely be inside of a zip file. To install it, simply place the zip in your <i>Pikifen</i> folder's <code>game_data</code> folder, then right-click it and choose to extract (exact instructions depend on operative system). Make sure a folder for the pack is created right there, just as there is a folder for the base pack. If the content you have downloaded is not in a pack format, you can usually place it in the <code>game_data/base</code> folder so it becomes a part of the base pack, but this makes things more disorganized; see <a href="making.html">here</a> for details.</p>
+
+    <h2 id="see-also">See also</h2>
+
+    <ul>
+      <li><a href="faq.html">Frequently asked questions</a></li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>
