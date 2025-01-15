@@ -6,10 +6,10 @@ version=1.0.0
 engine_version=0.25.0
 subtitle=Grow pikmin!
 difficulty=3
-bg_bmp
+bg_bmp=textures/icy_snow
 bg_color=0 0 0
-bg_dist=0.0000
-bg_zoom=0.0000
+bg_dist=1.0000
+bg_zoom=0.9000
 song=frosty_breath
 weather=snowstorm
 day_time_start=480

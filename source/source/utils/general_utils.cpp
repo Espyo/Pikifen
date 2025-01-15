@@ -82,8 +82,8 @@ void enum_name_database::register_item(
  * @param s The string.
  * @return The value.
  */
-template <>
-float keyframe_interpolator<float>::from_string(const string &s) {
+template<>
+inline float keyframe_interpolator<float>::from_string(const string &s) {
     return s2f(s);
 }
 
@@ -95,7 +95,7 @@ float keyframe_interpolator<float>::from_string(const string &s) {
  * @return The value.
  */
 template<>
-ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string &s) {
+inline ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string &s) {
     return s2c(s);
 }
 
@@ -107,7 +107,7 @@ ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string &s)
  * @return The value.
  */
 template<>
-point keyframe_interpolator<point>::from_string(const string &s) {
+inline point keyframe_interpolator<point>::from_string(const string &s) {
     return s2p(s);
 }
 
