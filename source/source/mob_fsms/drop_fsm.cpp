@@ -155,7 +155,13 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         dro_ptr->doses_left--;
     } else {
         //This mob won't drink it. Just a bump.
-        if(m->fsm.cur_state->id != DROP_STATE_BUMPED) {
+        bool toucher_is_moving =
+            toucher->speed.x != 0 || toucher->speed.y != 0 ||
+            toucher->chase_info.state == CHASE_STATE_CHASING;
+        if(
+            m->fsm.cur_state->id != DROP_STATE_BUMPED &&
+            toucher_is_moving
+        ) {
             m->fsm.set_state(DROP_STATE_BUMPED, info1, info2);
         }
     }

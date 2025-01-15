@@ -34,7 +34,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
     bool report_errors = true
 );
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node = nullptr,
+    const string &path, data_node* node = nullptr,
     bool report_error = true, bool error_bmp_on_error = true,
     bool error_bmp_on_empty = true
 );

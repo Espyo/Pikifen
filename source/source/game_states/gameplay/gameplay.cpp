@@ -195,9 +195,9 @@ void gameplay_state::do_logic() {
     if(!paused) {
         game.statistics.gameplay_time += regular_delta_t;
         do_gameplay_logic(game.delta_t* delta_t_mult);
+        do_aesthetic_logic(game.delta_t* delta_t_mult);
     }
     do_menu_logic();
-    do_aesthetic_logic(game.delta_t* delta_t_mult);
 }
 
 

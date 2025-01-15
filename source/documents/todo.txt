@@ -11,8 +11,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Two nectars touching each other will "bloop" constantly
-    Leader damage sparks and group move arrows keep animating while the game is paused
     Some fader sectors are weirdly lighter, but only in the area editor, and without preview mode
 
     --- 0.26 ---

@@ -137,8 +137,7 @@ void gameplay_state::do_aesthetic_leader_logic(float delta_t) {
 
 
 /**
- * @brief Ticks the logic of aesthetic things. If the game is paused, these can
- * be frozen in place without any negative impact.
+ * @brief Ticks the logic of aesthetic things.
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
