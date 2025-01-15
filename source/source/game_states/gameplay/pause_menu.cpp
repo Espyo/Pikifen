@@ -275,10 +275,11 @@ void pause_menu_t::add_pikmin_status_line(
     const float working_width = x2 - x1;
     const float item_x_interval = working_width / 8.0f;
     const float first_x = x1 + item_x_interval / 2.0f;
-    const float item_width = item_x_interval - 0.01f;
+    const float item_width = item_x_interval - 0.02f;
     
     const float y1 = is_single ? 0.0f : list->get_child_bottom();
     const float item_height = is_single ? 1.0f : 0.17f;
+    const float number_item_height = is_single ? item_height : item_height * 0.60f;
     const float item_y_spacing = is_single ? 0.0f : 0.03f;
     const float item_y = y1 + item_height / 2.0f + item_y_spacing;
     
@@ -335,7 +336,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 1,
             item_y
         );
-    group_text_item->size = point(item_width, item_height);
+    group_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         group_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -343,7 +344,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(group_text == "0") {
-        group_text_item->color = change_alpha(group_text_item->color, 128);
+        group_text_item->color = change_alpha(group_text_item->color, 64);
     }
     list->add_child(group_text_item);
     status_gui.add_item(group_text_item);
@@ -358,7 +359,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 2,
             item_y
         );
-    idle_text_item->size = point(item_width, item_height);
+    idle_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         idle_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -366,7 +367,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(idle_text == "0") {
-        idle_text_item->color = change_alpha(idle_text_item->color, 128);
+        idle_text_item->color = change_alpha(idle_text_item->color, 64);
     }
     list->add_child(idle_text_item);
     status_gui.add_item(idle_text_item);
@@ -381,7 +382,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 3,
             item_y
         );
-    field_text_item->size = point(item_width, item_height);
+    field_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         field_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -389,7 +390,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(field_text == "0") {
-        field_text_item->color = change_alpha(field_text_item->color, 128);
+        field_text_item->color = change_alpha(field_text_item->color, 64);
     }
     list->add_child(field_text_item);
     status_gui.add_item(field_text_item);
@@ -404,7 +405,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 4,
             item_y
         );
-    onion_text_item->size = point(item_width, item_height);
+    onion_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         onion_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -412,7 +413,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(onion_text == "0") {
-        onion_text_item->color = change_alpha(onion_text_item->color, 128);
+        onion_text_item->color = change_alpha(onion_text_item->color, 64);
     }
     list->add_child(onion_text_item);
     status_gui.add_item(onion_text_item);
@@ -427,7 +428,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 5,
             item_y
         );
-    total_text_item->size = point(item_width, item_height);
+    total_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         total_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -435,10 +436,26 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(total_text == "0") {
-        total_text_item->color = change_alpha(total_text_item->color, 128);
+        total_text_item->color = change_alpha(total_text_item->color, 64);
     }
     list->add_child(total_text_item);
     status_gui.add_item(total_text_item);
+    
+    //Separator.
+    gui_item* separator_item = new gui_item();
+    separator_item->center =
+        point(first_x + item_x_interval * 5.5f, item_y);
+    separator_item->size = point(1.0f, item_height);
+    separator_item->on_draw =
+    [] (const point & center, const point & size) {
+        al_draw_line(
+            center.x, center.y - size.y / 2.0f,
+            center.x, center.y + size.y / 2.0f,
+            COLOR_TRANSPARENT_WHITE, 5.0f
+        );
+    };
+    list->add_child(separator_item);
+    status_gui.add_item(separator_item);
     
     //New Pikmin.
     text_gui_item* new_text_item =
@@ -450,7 +467,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 6,
             item_y
         );
-    new_text_item->size = point(item_width, item_height);
+    new_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         new_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -458,7 +475,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(new_text == "0") {
-        new_text_item->color = change_alpha(new_text_item->color, 128);
+        new_text_item->color = change_alpha(new_text_item->color, 64);
     }
     list->add_child(new_text_item);
     status_gui.add_item(new_text_item);
@@ -473,7 +490,7 @@ void pause_menu_t::add_pikmin_status_line(
             first_x + item_x_interval * 7,
             item_y
         );
-    lost_text_item->size = point(item_width, item_height);
+    lost_text_item->size = point(item_width, number_item_height);
     if(can_select) {
         lost_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -481,7 +498,7 @@ void pause_menu_t::add_pikmin_status_line(
         };
     }
     if(lost_text == "0") {
-        lost_text_item->color = change_alpha(lost_text_item->color, 128);
+        lost_text_item->color = change_alpha(lost_text_item->color, 64);
     }
     list->add_child(lost_text_item);
     status_gui.add_item(lost_text_item);
@@ -2339,10 +2356,10 @@ void pause_menu_t::init_status_page() {
     status_gui.register_coords("right_page_input", 97,     7,    4,    4);
     status_gui.register_coords("line",             50,    11,   96,    2);
     status_gui.register_coords("continue",         10,    16,   16,    4);
-    status_gui.register_coords("list_header",      50,    23,   88,    6);
+    status_gui.register_coords("list_header",      50,    23.5, 88,    7);
     status_gui.register_coords("list",             50,    56,   88,   56);
     status_gui.register_coords("list_scroll",      97,    56,    2,   56);
-    status_gui.register_coords("totals",           50,    89,   88,    6);
+    status_gui.register_coords("totals",           50,    89,   88,    8);
     status_gui.register_coords("instructions",     58.75, 16,   77.5,  4);
     status_gui.register_coords("tooltip",          50,    96,   96,    4);
     status_gui.read_coords(gui_file->get_child_by_name("positions"));

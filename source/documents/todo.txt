@@ -4,7 +4,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
     As a player I don't know which side of a fragment bridge the Pikmin will deliver to
-    Status page numbers are hard to read
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     When a mob is on a fade sector and moving towards the void, darken it if the area has no background, brighten it otherwise
 
