@@ -37,6 +37,18 @@ packs_menu_t::packs_menu_t() {
             game.options.pack_order
         );
     packs_disabled = game.options.packs_disabled;
+
+    //Get the thumbnails.
+    for(
+        size_t p = 0; p < game.content.packs.manifests_with_base_raw.size(); p++
+    ) {
+        string pack = game.content.packs.manifests_with_base_raw[p];
+        string thumb_path =
+            FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
+        ALLEGRO_BITMAP* thumb_bmp =
+            load_bmp(thumb_path, nullptr, true, false, false);
+        pack_thumbs[pack] = thumb_bmp;
+    }
     
     //Menu items.
     gui.register_coords("back",               12,    5, 20,  6);
@@ -334,6 +346,10 @@ packs_menu_t::packs_menu_t() {
  * @brief Destroys the pack management menu object.
  */
 packs_menu_t::~packs_menu_t() {
+    for(auto& t : pack_thumbs) {
+        al_destroy_bitmap(t.second);
+    }
+    pack_thumbs.clear();
     gui.destroy();
 }
 

@@ -72,7 +72,7 @@ struct packs_menu_t {
     //Working copy of the list of disabled packs. This is a list of internal
     //names and excludes the base pack.
     vector<string> packs_disabled;
-    
+
     //Pack list item.
     list_gui_item* packs_list = nullptr;
 

@@ -13,18 +13,11 @@ Next tasks (roughly sorted most important first)
     Some fader sectors are weirdly lighter, but only in the area editor, and without preview mode
 
     --- 0.26 ---
+    Buttons or something in some menus to open the manual, GitHub page, Discord server
+        https://stackoverflow.com/a/54334181
     Add a "Play" or "Make" label in the corresponding main menu sub-menus
     Test -S-'s get_onion_info branch
-    Find a way to manage the installed packs
-        Allow pack thumbnails
-            Only load the thumbnails when you enter the pack management screen, and don't use game.content.bitmaps, since they are not game content. Unload when the screen is exited
-        Players should be able to choose which ones are enabled or disabled, and their load order
-            The load order (bottom first vs. top first) should be explained
-            It should also show and/or explain in some way how there's the base content
-        When enabling, disabling, or re-ordering, a notification should appear saying how the game may need to be restarted
-        There should be a button to open the packs folder
-        Check for memory leaks
-    Update to Dear ImGui 1.91.6
+    Update to Dear ImGui 1.91.7
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
@@ -33,6 +26,7 @@ Next tasks (roughly sorted most important first)
         Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
         Add keyboard/gamepad navigation stuff?
         Switch from columns to tables
+    Check for memory leaks
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
