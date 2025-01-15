@@ -1,5 +1,5 @@
 name = Snowstorm
-description = Snow blowing around with a white fog
+description = Snow blowing around with a white fog.
 
 lighting {
     0    = 32  32  64  192

@@ -1,10 +1,10 @@
 name=Turbulent Tundra
-description=Brave the icy cold to get as many pikmin as possible
+description=Brave the icy cold to get as many Pikmin as possible.
 tags=Standard; Snow
 maker=Helodity
 version=1.0.0
 engine_version=0.25.0
-subtitle=Grow pikmin!
+subtitle=Grow Pikmin!
 difficulty=3
 bg_bmp=textures/icy_snow
 bg_color=0 0 0

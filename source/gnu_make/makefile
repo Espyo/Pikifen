@@ -7,7 +7,7 @@ CXX          := g++
 SRCS         := $(shell find source/source -name '*.cpp')
 OBJS         := $(SRCS:.cpp=.o)
 DEPS         := $(OBJS:.o=.d)
-ALLEGRO_PKGS := allegro-5 allegro_main-5 allegro_acodec-5 allegro_audio-5 allegro_color-5 allegro_dialog-5 allegro_font-5 allegro_image-5 allegro_primitives-5 allegro_ttf-5 epoxy
+ALLEGRO_PKGS := allegro-5 allegro_main-5 allegro_acodec-5 allegro_audio-5 allegro_color-5 allegro_dialog-5 allegro_font-5 allegro_image-5 allegro_primitives-5 allegro_ttf-5
 CXXFLAGS     := -std=c++0x -D_GLIBCXX_USE_CXX11_ABI=0 -MMD $(shell pkg-config --cflags $(ALLEGRO_PKGS))
 LDFLAGS      += -lm $(shell pkg-config --libs $(ALLEGRO_PKGS))
 DEBUGFLAGS   := -g -ggdb -Wall -Wno-unknown-pragmas -O0

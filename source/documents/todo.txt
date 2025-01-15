@@ -1,9 +1,9 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
-    As a player I don't know which side of a fragment bridge the Pikmin will deliver to
+    As a player I don't know which side of a fragment bridge the Pikmin will deliver to -- add rails to the bridge object's sprite
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     When a mob is on a fade sector and moving towards the void, darken it if the area has no background, brighten it otherwise
 
@@ -168,6 +168,7 @@ Next tasks (roughly sorted most important first)
         There should be some petal particle effects when a Pikmin loses their maturity
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         More across the board
+    Let players dismiss with no Pikmin for fun, but make it not as impactful
     Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
