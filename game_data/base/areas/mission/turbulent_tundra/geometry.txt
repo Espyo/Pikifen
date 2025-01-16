@@ -5822,7 +5822,7 @@ mobs{
 		p=1380.3153 -135.2727
 	}
 	custom{
-		type=ceramic_bridge_base_red
+		type=dummy
 		p=679.9245 -68.4025
 		angle=2.9557
 	}

@@ -3,19 +3,17 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
-    As a player I don't know which side of a fragment bridge the Pikmin will deliver to -- add rails to the bridge object's sprite
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
-    When a mob is on a fade sector and moving towards the void, darken it if the area has no background, brighten it otherwise
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Some fader sectors are weirdly lighter, but only in the area editor, and without preview mode
+    Bulbmin stems are drawn below them
+    Pikmin types aren't listed in the help menu from the main menu
 
     --- 0.26 ---
     Buttons or something in some menus to open the manual, GitHub page, Discord server
         https://stackoverflow.com/a/54334181
-    Add a "Play" or "Make" label in the corresponding main menu sub-menus
     Test -S-'s get_onion_info branch
     Update to Dear ImGui 1.91.7
         Implement shortcuts?

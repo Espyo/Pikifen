@@ -38,7 +38,7 @@ spawns {
     base {
         object = ceramic_bridge_base_red
         relative = true
-        coordinates = 0 0
+        coordinates = -1 0
         angle = 0
     }
 }

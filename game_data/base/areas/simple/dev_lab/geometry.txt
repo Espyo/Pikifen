@@ -12732,8 +12732,8 @@ mobs{
 		links=152
 	}
 	custom{
-		type=ceramic_bridge_base_red
-		p=1152.0000 -640.0000
+		type=dummy
+		p=1120.0000 -640.0000
 		vars=chunks=5
 	}
 	bridge{
@@ -13540,7 +13540,7 @@ mobs{
 		links=328
 	}
 	custom{
-		type=ceramic_bridge_base_red
+		type=dummy
 		p=-928.0000 2592.0000
 		angle=3.1416
 	}
