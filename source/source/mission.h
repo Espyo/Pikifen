@@ -172,11 +172,12 @@ struct mission_data {
     point goal_exit_center;
     
     //Mission exit region dimensions.
-    point goal_exit_size = point(
-        MISSION::EXIT_MIN_SIZE,
-        MISSION::EXIT_MIN_SIZE
-    );
-    
+    point goal_exit_size =
+        point(
+            MISSION::EXIT_MIN_SIZE,
+            MISSION::EXIT_MIN_SIZE
+        );
+        
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
     bitmask_8_t fail_conditions = 0;
     

@@ -23,6 +23,13 @@
 #include "string_utils.h"
 
 
+/**
+ * @brief Clears all items.
+ */
+void enum_name_database::clear() {
+    names.clear();
+}
+
 
 /**
  * @brief Returns the index number of an item, given its name.

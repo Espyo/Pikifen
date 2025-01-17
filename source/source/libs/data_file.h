@@ -91,6 +91,7 @@ public:
     data_node(const data_node &dn2);
     data_node &operator=(const data_node &dn2);
     ~data_node();
+    void clear();
     string get_value_or_default(const string &def) const;
     size_t get_nr_of_children() const;
     data_node* get_child(size_t number);

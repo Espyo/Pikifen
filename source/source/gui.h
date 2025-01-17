@@ -204,6 +204,7 @@ public:
     //--- Function declarations ---
     
     explicit gui_item(bool selectable = false);
+    virtual ~gui_item() = default;
     bool activate(const point &cursor_pos);
     void add_child(gui_item* item);
     void delete_all_children();
@@ -246,8 +247,8 @@ public:
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
-    void def_draw_code(const point& center, const point& size);
+    
+    void def_draw_code(const point &center, const point &size);
     
 };
 
@@ -277,8 +278,8 @@ public:
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
-    void def_draw_code(const point& center, const point& size);
+    
+    void def_draw_code(const point &center, const point &size);
     
 };
 
@@ -298,7 +299,7 @@ public:
     //If not nullptr, the value is automatically adjusted to reflect this
     //variable and vice-versa.
     bool* value_ptr = nullptr;
-
+    
     //Text to display on the button.
     string text;
     
@@ -319,9 +320,9 @@ public:
         bool* value_ptr, const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-
+    
     void def_activate_code();
-    void def_draw_code(const point& center, const point& size);
+    void def_draw_code(const point &center, const point &size);
     
 };
 
@@ -344,10 +345,10 @@ public:
     //--- Function declarations ---
     
     list_gui_item();
-
+    
     void def_child_selected_code(const gui_item* child);
-    void def_draw_code(const point& center, const point& size);
-    void def_event_code(const ALLEGRO_EVENT & ev);
+    void def_draw_code(const point &center, const point &size);
+    void def_event_code(const ALLEGRO_EVENT  &ev);
     void def_tick_code(float delta_t);
     
 };
@@ -388,12 +389,12 @@ public:
         const string &base_text, const string &option,
         size_t nr_options = 0, size_t cur_option_idx = INVALID
     );
-
-    void def_activate_code(const point& cursor_pos);
-    void def_draw_code(const point& center, const point& size);
+    
+    void def_activate_code(const point &cursor_pos);
+    void def_draw_code(const point &center, const point &size);
     bool def_menu_dir_code(size_t button_id);
-    void def_mouse_over_code(const point & cursor_pos);
-
+    void def_mouse_over_code(const point  &cursor_pos);
+    
     
 private:
 
@@ -421,9 +422,9 @@ public:
     //--- Function declarations ---
     
     scroll_gui_item();
-
-    void def_draw_code(const point& center, const point& size);
-    void def_event_code(const ALLEGRO_EVENT & ev);
+    
+    void def_draw_code(const point &center, const point &size);
+    void def_event_code(const ALLEGRO_EVENT  &ev);
     
 };
 
@@ -464,8 +465,8 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE,
         int flags = ALLEGRO_ALIGN_CENTER
     );
-
-    void def_draw_code(const point& center, const point& size);
+    
+    void def_draw_code(const point &center, const point &size);
     
 };
 
@@ -487,9 +488,9 @@ public:
     //--- Function declarations ---
     
     explicit tooltip_gui_item(gui_manager* gui);
-
-    void def_draw_code(const point& center, const point& size);
-
+    
+    void def_draw_code(const point &center, const point &size);
+    
     
 private:
 

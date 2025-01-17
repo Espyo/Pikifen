@@ -581,7 +581,7 @@ private:
     point move_mouse_start_pos;
     
     //Currently moving the selected vertexes, objects, etc.?
-    bool moving;
+    bool moving = false;
     
     //Path preview checkpoint that is currently being moved, or -1 for none.
     signed char moving_path_preview_checkpoint = -1;

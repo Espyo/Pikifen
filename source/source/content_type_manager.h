@@ -37,6 +37,7 @@ public:
 
     //--- Function declarations ---
     
+    virtual ~content_type_manager() = default;
     virtual void clear_manifests() = 0;
     virtual void fill_manifests() = 0;
     virtual string get_name() const = 0;

@@ -913,6 +913,7 @@ void area_menu_state::load() {
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
+        CONTENT_TYPE_GUI,
     },
     CONTENT_LOAD_LEVEL_BASIC
     );
@@ -983,6 +984,7 @@ void area_menu_state::unload() {
     
     game.content.unload_all(
     vector<CONTENT_TYPE> {
+        CONTENT_TYPE_GUI,
         CONTENT_TYPE_AREA,
     }
     );

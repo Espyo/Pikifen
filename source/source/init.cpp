@@ -87,6 +87,20 @@ void destroy_event_things(
 void destroy_misc() {
     al_destroy_bitmap(game.bmp_error);
     game.audio.destroy();
+    
+    game.sector_types.clear();
+    for(size_t g = 0; g < game.mission_goals.size(); g++) {
+        delete game.mission_goals[g];
+    }
+    game.mission_goals.clear();
+    for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
+        delete game.mission_fail_conds[c];
+    }
+    game.mission_fail_conds.clear();
+    for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
+        delete game.mission_score_criteria[c];
+    }
+    game.mission_score_criteria.clear();
 }
 
 

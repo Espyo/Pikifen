@@ -331,9 +331,9 @@ struct asset_file_names_t {
     
     //Throwing.
     string sound_throw = "throw";
-
+    
     //Global animations.
-
+    
     //Leader damage spark.
     string anim_sparks = "sparks";
     
@@ -1312,6 +1312,8 @@ class asset_manager {
 public:
 
     //--- Function definitions ---
+    
+    virtual ~asset_manager() = default;
     
     /**
      * @brief Returns the specified asset, by name.

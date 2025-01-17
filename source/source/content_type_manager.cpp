@@ -2209,6 +2209,9 @@ void status_type_content_manager::path_to_manifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void status_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+    for(auto s : list) {
+        delete s.second;
+    }
     list.clear();
 }
 

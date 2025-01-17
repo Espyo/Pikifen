@@ -87,13 +87,7 @@ data_node::data_node(const string &name, const string &value) :
  *
  */
 data_node::~data_node() {
-    for(size_t c = 0; c < children.size(); c++) {
-        delete children[c];
-    }
-    
-    for(size_t dc = 0; dc < dummy_children.size(); dc++) {
-        delete dummy_children[dc];
-    }
+    clear();
 }
 
 
@@ -106,6 +100,28 @@ data_node::~data_node() {
 size_t data_node::add(data_node* new_node) {
     children.push_back(new_node);
     return children.size() - 1;
+}
+
+
+/**
+ * @brief Clears the data inside a node.
+ */
+void data_node::clear() {
+    name.clear();
+    value.clear();
+    file_was_opened = false;
+    file_path.clear();
+    line_nr = 0;
+    
+    for(size_t c = 0; c < children.size(); c++) {
+        delete children[c];
+    }
+    children.clear();
+    
+    for(size_t dc = 0; dc < dummy_children.size(); dc++) {
+        delete dummy_children[dc];
+    }
+    dummy_children.clear();
 }
 
 
@@ -490,17 +506,17 @@ size_t data_node::load_node(
  */
 data_node &data_node::operator=(const data_node &dn2) {
     if(this != &dn2) {
+        clear();
+        
         name = dn2.name;
         value = dn2.value;
         file_was_opened = dn2.file_was_opened;
         file_path = dn2.file_path;
         line_nr = dn2.line_nr;
         
-        children.clear();
         for(size_t c = 0; c < dn2.children.size(); c++) {
             children.push_back(new data_node(*(dn2.children[c])));
         }
-        dummy_children.clear();
         for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
             dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
         }
