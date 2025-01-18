@@ -639,7 +639,9 @@ void load_state(
             merged = true;
             break;
         }
-        if(!merged) {
+        if(merged) {
+            delete global_event;
+        } else {
             new_events.push_back(global_event);
             new_event_settings.push_back(global_settings);
         }

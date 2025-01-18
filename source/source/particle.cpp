@@ -245,7 +245,7 @@ void particle_generator::emit(particle_manager &manager) {
         float s_dev = randomf(-size_deviation, size_deviation);
         for(size_t s = 0; s < new_p.size.keyframe_count(); s++) {
             auto kf = new_p.size.get_keyframe(s);
-            new_p.size.set_keyframe_value(s, kf.second + s_dev);
+            new_p.size.set_keyframe_value((int) s, kf.second + s_dev);
         }
         
         float angle_to_use =
@@ -269,21 +269,21 @@ void particle_generator::emit(particle_manager &manager) {
                 rotate_point(
                     result, angle_to_use
                 );
-            new_p.linear_speed.set_keyframe_value(s, result);
+            new_p.linear_speed.set_keyframe_value((int) s, result);
         }
         
         float out_dev =
             randomf(-outwards_speed_deviation, outwards_speed_deviation);
         for(size_t s = 0; s < new_p.outwards_speed.keyframe_count(); s++) {
             auto kf = new_p.outwards_speed.get_keyframe(s);
-            new_p.outwards_speed.set_keyframe_value(s, kf.second + out_dev);
+            new_p.outwards_speed.set_keyframe_value((int) s, kf.second + out_dev);
         }
         
         float orb_dev =
             randomf(-orbital_speed_deviation, orbital_speed_deviation);
         for(size_t s = 0; s < new_p.orbital_speed.keyframe_count(); s++) {
             auto kf = new_p.orbital_speed.get_keyframe(s);
-            new_p.orbital_speed.set_keyframe_value(s, kf.second + orb_dev);
+            new_p.orbital_speed.set_keyframe_value((int) s, kf.second + orb_dev);
         }
         
         manager.add(new_p);

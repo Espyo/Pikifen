@@ -1478,8 +1478,8 @@ void mob_type_content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL 
         if(!s) continue;
         game.content.sounds.list.free(s_ptr);
     }
+    unload_script(mt);
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        unload_script(mt);
         mt->unload_resources();
     }
 }

@@ -239,6 +239,7 @@ bool audio_manager::destroy_sound_playback(size_t playback_idx) {
         al_set_sample_instance_playing(instance, false);
         al_detach_sample_instance(instance);
         if(instance) al_destroy_sample_instance(instance);
+        playback_ptr->allegro_sample_instance = nullptr;
     }
     
     return true;
@@ -1107,6 +1108,7 @@ void audio_manager::tick(float delta_t) {
 void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     if(playback_idx >= playbacks.size()) return;
     sound_playback_t* playback_ptr = &playbacks[playback_idx];
+    if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
     playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
     float final_gain = playback_ptr->gain * playback_ptr->state_gain_mult;
@@ -1139,6 +1141,7 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
 void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     if(playback_idx >= playbacks.size()) return;
     sound_playback_t* playback_ptr = &playbacks[playback_idx];
+    if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
     sound_source_t* source_ptr = get_source(playback_ptr->source_id);
     if(!source_ptr || source_ptr->type != SOUND_TYPE_WORLD_POS) return;

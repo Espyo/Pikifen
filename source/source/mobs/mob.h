@@ -520,7 +520,7 @@ protected:
     //--- Members ---
     
     //Is it currently capable of blocking paths?
-    bool can_block_paths;
+    bool can_block_paths = false;
     
     
     //--- Function declarations ---

@@ -158,7 +158,7 @@ TRIANGULATION_ERROR get_polys(
     sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
 );
 bool get_polys_is_outer(
-    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*>& edges_left,
+    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*> &edges_left,
     bool doing_first_polygon
 );
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);

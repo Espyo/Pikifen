@@ -383,16 +383,13 @@ void polygon::cut_all_as_root() {
             polygon* inner_ptr = outer_ptr->children[i];
             
             //An inner polygon's children are outer polygons again.
-            //Now that we did the cut, we can add those back to the root list.
+            //Now that we made the cut, we can move those back to the root list.
             children.insert(
                 children.end(),
                 inner_ptr->children.begin(),
                 inner_ptr->children.end()
             );
-            
-            //Delete this outer's children, since they are now
-            //part of the outer.
-            outer_ptr->children.clear();
+            inner_ptr->children.clear();
         }
     }
 }
@@ -754,7 +751,7 @@ TRIANGULATION_ERROR get_polys(
  * @return Whether it is an outer polygon.
  */
 bool get_polys_is_outer(
-    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*>& edges_left,
+    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*> &edges_left,
     bool doing_first_polygon
 ) {
     if(doing_first_polygon) {
@@ -1189,7 +1186,6 @@ TRIANGULATION_ERROR triangulate_polygon(
 TRIANGULATION_ERROR triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, bool clear_lone_edges
 ) {
-
     //Root of the polygon tree.
     polygon root;
     

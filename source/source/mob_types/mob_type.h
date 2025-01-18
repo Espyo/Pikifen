@@ -515,10 +515,10 @@ public:
     
     //--- Function declarations ---
     
+    virtual ~mob_type_with_anim_groups() = default;
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, size_t base_anim_total
     ) const;
-    virtual ~mob_type_with_anim_groups() = default;
     
 };
 

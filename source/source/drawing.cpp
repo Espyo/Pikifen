@@ -491,7 +491,7 @@ void draw_liquid(
             float vy = v_ptr->y;
             
             float alpha_mult = 1;
-            float brightness_mult = texture_sector[t]->brightness / 255.0;
+            float ts_brightness_mult = texture_sector[t]->brightness / 255.0;
             
             if(t == 1) {
                 if(!draw_sector_0) {
@@ -528,9 +528,9 @@ void draw_liquid(
             av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    texture_sector[t]->texture_info.tint.r * brightness_mult,
-                    texture_sector[t]->texture_info.tint.g * brightness_mult,
-                    texture_sector[t]->texture_info.tint.b * brightness_mult,
+                    texture_sector[t]->texture_info.tint.r * ts_brightness_mult,
+                    texture_sector[t]->texture_info.tint.g * ts_brightness_mult,
+                    texture_sector[t]->texture_info.tint.b * ts_brightness_mult,
                     texture_sector[t]->texture_info.tint.a * alpha_mult
                 );
         }

@@ -10,17 +10,18 @@
  */
 
 #include <cstdlib>
+#include <signal.h>
 
 #include "os_utils.h"
 
 
 /**
  * @brief Opens the operative system's file explorer on the specified folder.
- * 
+ *
  * @param path Path of the folder to open.
  * @return Whether it succeeded.
  */
-bool open_file_explorer(const string& path) {
+bool open_file_explorer(const string &path) {
 #ifdef _WIN32
     string command = "explorer " + path;
 #elif __APPLE__
@@ -36,11 +37,11 @@ bool open_file_explorer(const string& path) {
 
 /**
  * @brief Opens the operative system's web browser on the specified URL.
- * 
+ *
  * @param url URL to open.
  * @return Whether it succeeded.
  */
-bool open_web_browser(const string& url) {
+bool open_web_browser(const string &url) {
 #ifdef _WIN32
     string command = "start " + url;
 #elif __APPLE__

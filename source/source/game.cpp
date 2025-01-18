@@ -346,6 +346,8 @@ void game_class::shutdown() {
     }
     );
     
+    delete dummy_mob_state;
+    
     unload_misc_resources();
     destroy_mob_categories();
     states.destroy();
