@@ -422,10 +422,7 @@ void particle_editor::process_gui_menu_bar() {
                     "If you need more help on how to use the particle editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
-                show_message_box(
-                    game.display, "Help", "Particle editor help",
-                    help_str.c_str(), nullptr, 0
-                );
+                open_help_dialog(help_str, "particle.html");
             }
             set_tooltip(
                 "Opens a general help message for this editor."

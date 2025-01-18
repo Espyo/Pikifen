@@ -55,6 +55,12 @@ constexpr int SMALLEST_WIN_WIDTH = 640;
 //Real-world centimeters per in-game-world pixel.
 constexpr float CM_PER_PIXEL = 0.05f;
 
+//Invite URL to the project Discord server's invite.
+const string DISCORD_SERVER_URL = "https://discord.gg/qbhz4u3";
+
+//URL to the project's GitHub page.
+const string GITHUB_PAGE_URL = "https://github.com/Espyo/Pikifen";
+
 
 //Folder names (not paths).
 namespace FOLDER_NAMES {

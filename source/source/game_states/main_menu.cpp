@@ -18,6 +18,7 @@
 #include "../game.h"
 #include "../load.h"
 #include "../utils/allegro_utils.h"
+#include "../utils/os_utils.h"
 #include "../utils/string_utils.h"
 
 
@@ -210,6 +211,8 @@ void main_menu_state::init_gui_main_page() {
     main_gui.register_coords("help",    24, 83, 24,  6);
     main_gui.register_coords("options", 50, 83, 24,  6);
     main_gui.register_coords("stats",   76, 83, 24,  6);
+    main_gui.register_coords("discord", 74, 91,  4,  5);
+    main_gui.register_coords("github",  80, 91,  4,  5);
     main_gui.register_coords("exit",    91, 91, 14,  6);
     main_gui.register_coords("tooltip", 50, 96, 96,  4);
     main_gui.read_coords(gui_file->get_child_by_name("positions"));
@@ -368,6 +371,52 @@ void main_menu_state::init_gui_main_page() {
     stats_button->on_get_tooltip =
     [] () { return "Check out some fun lifetime statistics."; };
     main_gui.add_item(stats_button, "stats");
+    
+    //Discord server button.
+    button_gui_item* discord_button =
+        new button_gui_item("", game.sys_assets.fnt_area_name);
+    discord_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_bitmap_in_box(
+            game.sys_assets.bmp_discord_icon, center, size * 0.8f, true
+        );
+        draw_button(
+            center, size,
+            discord_button->text, discord_button->font,
+            discord_button->color, discord_button->selected,
+            discord_button->get_juice_value()
+        );
+    };
+    discord_button->on_activate =
+    [] (const point &) {
+        open_web_browser(DISCORD_SERVER_URL);
+    };
+    discord_button->on_get_tooltip =
+    [] () { return "Open the project's Discord server!"; };
+    main_gui.add_item(discord_button, "discord");
+    
+    //GitHub page button.
+    button_gui_item* github_button =
+        new button_gui_item("", game.sys_assets.fnt_area_name);
+    github_button->on_draw =
+    [ = ] (const point & center, const point & size) {
+        draw_bitmap_in_box(
+            game.sys_assets.bmp_github_icon, center, size * 0.8f, true
+        );
+        draw_button(
+            center, size,
+            github_button->text, github_button->font,
+            github_button->color, github_button->selected,
+            github_button->get_juice_value()
+        );
+    };
+    github_button->on_activate =
+    [] (const point &) {
+        open_web_browser(GITHUB_PAGE_URL);
+    };
+    github_button->on_get_tooltip =
+    [] () { return "Open the project's GitHub (development) page!"; };
+    main_gui.add_item(github_button, "github");
     
     //Exit button.
     main_gui.back_item =
@@ -566,11 +615,15 @@ void main_menu_state::init_gui_make_page() {
     //More bullet point.
     bullet_gui_item* more_bullet =
         new bullet_gui_item("More...", game.sys_assets.fnt_standard);
+    more_bullet->on_activate =
+    [] (const point &) {
+        open_manual("making.html");
+    };
     more_bullet->on_get_tooltip =
     [] () {
         return
-            "For more help and more things that you can edit, "
-            "check out the manual in the game's folder.";
+            "Click to open the manual (in the game's folder) for "
+            "more info on content making.";
     };
     make_gui.add_item(more_bullet, "more");
     

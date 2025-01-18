@@ -629,6 +629,12 @@ protected:
     //Manifest for the current content.
     content_manifest manifest;
     
+    //Message text in the help dialog.
+    string help_dialog_message;
+    
+    //Page to open in the help dialog.
+    string help_dialog_page;
+    
     //Message text in the message dialog.
     string message_dialog_message;
     
@@ -705,6 +711,9 @@ protected:
         const string &title,
         const std::function<void()> &process_callback
     );
+    void open_help_dialog(
+        const string &message, const string& page
+    );
     void open_message_dialog(
         const string &title, const string &message,
         const std::function<void()> &ok_callback = nullptr
@@ -725,6 +734,7 @@ protected:
     void process_gui_base_content_warning_dialog();
     void process_gui_bitmap_dialog();
     void process_gui_editor_style();
+    void process_gui_help_dialog();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback,

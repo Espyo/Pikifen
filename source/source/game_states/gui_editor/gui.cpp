@@ -435,10 +435,7 @@ void gui_editor::process_gui_menu_bar() {
                     "If you need more help on how to use the GUI editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
-                show_message_box(
-                    game.display, "Help", "GUI editor help",
-                    help_str.c_str(), nullptr, 0
-                );
+                open_help_dialog(help_str, "gui.html");
             }
             set_tooltip(
                 "Opens a general help message for this editor."

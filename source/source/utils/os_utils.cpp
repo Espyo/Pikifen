@@ -34,6 +34,26 @@ bool open_file_explorer(const string& path) {
 }
 
 
+/**
+ * @brief Opens the operative system's web browser on the specified URL.
+ * 
+ * @param url URL to open.
+ * @return Whether it succeeded.
+ */
+bool open_web_browser(const string& url) {
+#ifdef _WIN32
+    string command = "start " + url;
+#elif __APPLE__
+    string command = "open " + url;
+#elif __linux__
+    string command = "xdg-open " + url;
+#else
+    return false;
+#endif
+    return std::system(command.c_str()) == 0;
+}
+
+
 #if defined(_WIN32)
 /**
  * @brief An implementation of strsignal from POSIX.

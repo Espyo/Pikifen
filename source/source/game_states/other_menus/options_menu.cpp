@@ -1063,11 +1063,15 @@ void options_menu_t::init_gui_top_page() {
     //Advanced bullet point.
     bullet_gui_item* advanced_bullet =
         new bullet_gui_item("Advanced...", game.sys_assets.fnt_standard);
+    advanced_bullet->on_activate =
+    [] (const point&) {
+        open_manual("options.html");
+    };
     advanced_bullet->on_get_tooltip =
     [] () {
         return
-            "For more advanced options, check out the "
-            "manual in the game's folder.";
+            "Click to open the manual (in the game's folder) for info "
+            "on advanced options.";
     };
     top_gui.add_item(advanced_bullet, "advanced");
     

@@ -33,6 +33,7 @@
 #include "utils/allegro_utils.h"
 #include "utils/backtrace.h"
 #include "utils/general_utils.h"
+#include "utils/os_utils.h"
 #include "utils/string_utils.h"
 
 
@@ -734,6 +735,40 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
     }
     
     return table;
+}
+
+
+/**
+ * @brief Returns the path to the program's current working directory.
+ * 
+ * @return The path, or an empty string on error.
+ */
+string get_working_directory_path() {
+    char buffer[1024];
+    char *cwd = getcwd(buffer, sizeof(buffer));
+    string result;
+    if(cwd) result = cwd;
+    return result;
+}
+
+
+/**
+ * @brief Opens the manual on the user's web browser in the specified page.
+ * 
+ * @param page Page to open, with the .html extension and any anchors.
+ * @return Whether it succeeded in opening the browser.
+ */
+bool open_manual(const string& page) {
+    //This function could have a page argument and an anchor argument,
+    //and it could have included the .html extension automatically, but doing
+    //it this way makes it so that the string, e.g. "page.html#anchor" is
+    //present directly in code. This way, if the link to "page.html" or
+    //"anchor" needs to be updated, a full-project text search will find
+    //instances of it inside the code just as it will in the HTML of pages.
+    string url =
+        "file://" + get_working_directory_path() +
+        "/manual/content/" + page;
+    return open_web_browser(url);
 }
 
 

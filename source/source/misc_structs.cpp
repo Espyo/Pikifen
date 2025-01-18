@@ -149,10 +149,12 @@ void asset_file_names_t::load(data_node* file) {
     grs.set("checkbox_no_check", bmp_checkbox_no_check);
     grs.set("player_input_icons", bmp_player_input_icons);
     grs.set("cursor", bmp_cursor);
+    grs.set("discord_icon", bmp_discord_icon);
     grs.set("editor_icons", bmp_editor_icons);
     grs.set("enemy_spirit", bmp_enemy_spirit);
     grs.set("focus_box", bmp_focus_box);
     grs.set("frame_box", bmp_frame_box);
+    grs.set("github_icon", bmp_github_icon);
     grs.set("hard_bubble", bmp_hard_bubble);
     grs.set("icon", bmp_icon);
     grs.set("idle_glow", bmp_idle_glow);

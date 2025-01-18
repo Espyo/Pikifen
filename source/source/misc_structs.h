@@ -172,6 +172,9 @@ struct asset_file_names_t {
     //Leader cursor.
     string bmp_cursor = "cursor";
     
+    //Discord icon.
+    string bmp_discord_icon = "discord_icon";
+    
     //Editor icons.
     string bmp_editor_icons = "editor_icons";
     
@@ -183,6 +186,9 @@ struct asset_file_names_t {
     
     //9-slice texture for GUI frames.
     string bmp_frame_box = "frame_box";
+    
+    //GitHub icon.
+    string bmp_github_icon = "github_icon";
     
     //A hard bubble.
     string bmp_hard_bubble = "hud/hard_bubble";
@@ -668,6 +674,9 @@ struct system_asset_list {
     //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor = nullptr;
     
+    //Discord icon.
+    ALLEGRO_BITMAP* bmp_discord_icon = nullptr;
+    
     //Enemy spirit.
     ALLEGRO_BITMAP* bmp_enemy_spirit = nullptr;
     
@@ -676,6 +685,9 @@ struct system_asset_list {
     
     //9-slice texture for GUI frames.
     ALLEGRO_BITMAP* bmp_frame_box = nullptr;
+    
+    //GitHub icon.
+    ALLEGRO_BITMAP* bmp_github_icon = nullptr;
     
     //A hard bubble.
     ALLEGRO_BITMAP* bmp_hard_bubble = nullptr;

@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -12,8 +12,6 @@ Next tasks (roughly sorted most important first)
     Pikmin types aren't listed in the help menu from the main menu
 
     --- 0.26 ---
-    Buttons or something in some menus to open the manual, GitHub page, Discord server
-        https://stackoverflow.com/a/54334181
     Test -S-'s get_onion_info branch
     Update to Dear ImGui 1.91.7
         Implement shortcuts?

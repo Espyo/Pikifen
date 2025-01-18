@@ -157,10 +157,13 @@ help_menu_t::help_menu_t() {
     //Manual text.
     bullet_gui_item* manual_bullet =
         new bullet_gui_item("More help...", game.sys_assets.fnt_standard);
+    manual_bullet->on_activate =
+    [] (const point&) {
+        open_manual("home.html");
+    };
     manual_bullet->on_get_tooltip = [] () {
         return
-            "For more help on other subjects, check out the "
-            "manual in the game's folder.";
+            "Click to open the manual (in the game's folder) for more help.";
     };
     gui.add_item(manual_bullet, "manual");
     

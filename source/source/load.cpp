@@ -377,12 +377,16 @@ void load_misc_graphics() {
         game.content.bitmaps.list.get(game.asset_file_names.bmp_checkbox_no_check);
     game.sys_assets.bmp_cursor =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_cursor);
+    game.sys_assets.bmp_discord_icon =
+        game.content.bitmaps.list.get(game.asset_file_names.bmp_discord_icon);
     game.sys_assets.bmp_enemy_spirit =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_enemy_spirit);
     game.sys_assets.bmp_focus_box =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_focus_box);
     game.sys_assets.bmp_frame_box =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_frame_box);
+    game.sys_assets.bmp_github_icon =
+        game.content.bitmaps.list.get(game.asset_file_names.bmp_github_icon);
     game.sys_assets.bmp_hard_bubble =
         game.content.bitmaps.list.get(game.asset_file_names.bmp_hard_bubble);
     game.sys_assets.bmp_idle_glow =
@@ -589,9 +593,11 @@ void unload_misc_resources() {
     game.content.bitmaps.list.free(game.sys_assets.bmp_checkbox_check);
     game.content.bitmaps.list.free(game.sys_assets.bmp_checkbox_no_check);
     game.content.bitmaps.list.free(game.sys_assets.bmp_cursor);
+    game.content.bitmaps.list.free(game.sys_assets.bmp_discord_icon);
     game.content.bitmaps.list.free(game.sys_assets.bmp_enemy_spirit);
     game.content.bitmaps.list.free(game.sys_assets.bmp_focus_box);
     game.content.bitmaps.list.free(game.sys_assets.bmp_frame_box);
+    game.content.bitmaps.list.free(game.sys_assets.bmp_github_icon);
     game.content.bitmaps.list.free(game.sys_assets.bmp_hard_bubble);
     game.content.bitmaps.list.free(game.sys_assets.bmp_icon);
     game.content.bitmaps.list.free(game.sys_assets.bmp_idle_glow);

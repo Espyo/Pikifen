@@ -1593,6 +1593,24 @@ void editor::open_dialog(
 
 
 /**
+ * @brief Opens a dialog with a simple message and an "open manual" button,
+ * designed for each editor's standard "help" information.
+ *
+ * @param message Text message.
+ * @param page Manual page explaining the editor and content type in
+ * more detail.
+ */
+void editor::open_help_dialog(
+    const string &message, const string& page
+) {
+    help_dialog_message = message;
+    help_dialog_page = page;
+    open_dialog("Help", std::bind(&editor::process_gui_help_dialog, this));
+    dialogs.back()->custom_size = point(400, 0);
+}
+
+
+/**
  * @brief Opens a dialog with a simple message and an ok button.
  *
  * @param title Message box title.
@@ -1761,6 +1779,12 @@ void editor::process_gui_base_content_warning_dialog() {
         base_content_warning_do_pick_callback();
         base_content_warning_do_pick_callback = nullptr;
         close_top_dialog();
+    }
+
+    //Open manual button.
+    ImGui::SetupCentering(70);
+    if(ImGui::Button("Open manual", ImVec2(70, 25))) {
+        open_manual("making.html#packs");
     }
 }
 
@@ -1947,6 +1971,33 @@ void editor::process_gui_editor_style() {
             "Color of highlights in the custom style."
         );
         ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the help dialog widgets.
+ */
+void editor::process_gui_help_dialog() {
+    //Text.
+    static int text_width = 0;
+    if(text_width != 0) {
+        ImGui::SetupCentering(text_width);
+    }
+    ImGui::TextWrapped("%s", help_dialog_message.c_str());
+    text_width = ImGui::GetItemRectSize().x;
+
+    //Open manual button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(200);
+    if(ImGui::Button("Open manual", ImVec2(100, 40))) {
+        open_manual(help_dialog_page);
+    }
+    
+    //Ok button.
+    ImGui::SameLine();
+    if(ImGui::Button("Ok", ImVec2(100, 40))) {
+        close_top_dialog();
     }
 }
 
@@ -2278,6 +2329,11 @@ void editor::process_gui_new_pack_dialog() {
             FILE_NAMES::PACK_DATA
         );
     ImGui::TextWrapped("%s", explanation.c_str());
+
+    //Open manual button.
+    if(ImGui::Button("Open manual")) {
+        open_manual("making.html#packs");
+    }
     
     //Check if everything's ok.
     string problem;
