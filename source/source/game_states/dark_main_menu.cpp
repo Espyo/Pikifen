@@ -135,8 +135,44 @@ void dark_main_menu_state::load() {
     //Load the intended concrete menu.
     switch(menu_to_load) {
     case DARK_MAIN_MENU_MENU_HELP: {
+        game.content.load_all(
+        vector<CONTENT_TYPE> {
+            CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+            CONTENT_TYPE_GLOBAL_ANIMATION,
+            CONTENT_TYPE_LIQUID,
+            CONTENT_TYPE_STATUS_TYPE,
+            CONTENT_TYPE_SPRAY_TYPE,
+            CONTENT_TYPE_HAZARD,
+            CONTENT_TYPE_WEATHER_CONDITION,
+            CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        },
+        CONTENT_LOAD_LEVEL_BASIC
+        );
+        game.content.load_all(
+        vector<CONTENT_TYPE> {
+            CONTENT_TYPE_MOB_ANIMATION,
+            CONTENT_TYPE_MOB_TYPE,
+        },
+        CONTENT_LOAD_LEVEL_FULL
+        );
         help_menu = new help_menu_t();
-        help_menu->back_callback = [this] () { leave(); };
+        help_menu->back_callback =
+        [this] () {
+            game.content.unload_all(
+            vector<CONTENT_TYPE> {
+                CONTENT_TYPE_MOB_ANIMATION,
+                CONTENT_TYPE_MOB_TYPE,
+                CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+                CONTENT_TYPE_HAZARD,
+                CONTENT_TYPE_SPRAY_TYPE,
+                CONTENT_TYPE_STATUS_TYPE,
+                CONTENT_TYPE_LIQUID,
+                CONTENT_TYPE_GLOBAL_ANIMATION,
+                CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+            }
+            );
+            leave();
+        };
         break;
     } case DARK_MAIN_MENU_MENU_OPTIONS: {
         options_menu = new options_menu_t();

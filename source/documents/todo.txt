@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,7 +9,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Bulbmin stems are drawn below them
-    Pikmin types aren't listed in the help menu from the main menu
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch

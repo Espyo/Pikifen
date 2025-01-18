@@ -339,6 +339,7 @@ packs_menu_t::packs_menu_t() {
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item, true);
+    change_info(-1);
 }
 
 
