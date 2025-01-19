@@ -14,8 +14,24 @@ target_type = pikmin_obstacle
 team = obstacle
 
 sounds {
+    rock_hit {
+        file = rock_hit
+        volume = 80
+        speed = 75
+        speed_deviation = 10
+        random_delay = 0.05
+    }
+    rock_breaking {
+        file = rock_breaking
+        speed = 110
+        volume = 50
+    }
     obstacle_cleared {
         file = obstacle_cleared
         type = world_global
+    }
+    drain {
+        file = drain
+        volume = 50
     }
 }

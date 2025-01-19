@@ -1,3 +1,5 @@
+name=animations
+engine_version=0.25.0
 animations{
 	destroyed{
 		frames{
@@ -17,8 +19,8 @@ animations{
 sprites{
 	destroyed{
 		file=clog
-		file_pos=0.0000 0.0000
-		file_size=0.0000 0.0000
+		file_pos=161.0000 0.0000
+		file_size=160.0000 160.0000
 		scale=0.8000 0.8000
 		hitboxes{
 			main{
@@ -27,8 +29,6 @@ sprites{
 				radius=80.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -43,8 +43,6 @@ sprites{
 				radius=80.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}

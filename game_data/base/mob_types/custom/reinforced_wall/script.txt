@@ -95,6 +95,7 @@ script {
             finish_dying
             start_particles reinforced_wall_explosion 0 0 129
             play_sound obstacle_cleared
+            play_sound rock_breaking
             set_tangible false
             set_shadow_visibility false
         }

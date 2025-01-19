@@ -41,6 +41,11 @@ spawns {
 }
 
 sounds {
+    rock_breaking {
+        file = rock_breaking
+        volume = 75
+        speed = 90
+    }
     obstacle_cleared {
         file = obstacle_cleared
         type = world_global

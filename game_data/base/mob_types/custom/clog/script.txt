@@ -1,21 +1,46 @@
 first_state = idling
 death_state = destroying
 
+init {
+    set_var in_water false
+}
+
 script {
     idling {
         on_enter {
             set_animation idling
         }
+        on_damage {
+            play_sound rock_hit
+        }
+        on_touch_hazard {
+            get_event_info h hazard
+            if $h = water
+                set_var in_water true
+            end_if
+        }
+        on_leave_hazard {
+            get_event_info h hazard
+            if $h = water
+                set_var in_water false
+            end_if
+        }
     }
     destroying {
         on_enter {
-            start_particles large_rock_explosion 0 0
+            set_shadow_visibility false
+            set_can_block_paths false
+            set_tangible false
+            set_height 1
             set_animation destroyed
+            start_particles large_rock_explosion 0 0 32
             play_sound obstacle_cleared
+            play_sound rock_breaking
+            if $in_water = true
+                start_particles drain 0 0 2
+                play_sound drain
+            end_if
             drain_liquid
-        }
-        on_animation_end {
-            delete
         }
     }
 }

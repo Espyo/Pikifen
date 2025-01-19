@@ -1246,6 +1246,9 @@ void particle_editor::process_gui_panel_generator() {
         );
         if(open_basics_node) {
         
+            //Duration text.
+            ImGui::Text("Duration:");
+            
             //Duration value.
             ImGui::SetNextItemWidth(85);
             if(

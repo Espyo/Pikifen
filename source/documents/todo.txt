@@ -8,7 +8,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Particles aren't being rendered because the keyframe interpolator's struct isn't accepting the overloads of from_string properly
+    Pressing Enter on the new particle dialog (maybe others) isn't hitting Ok
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -91,7 +91,7 @@ Next tasks (roughly sorted most important first)
                 x Thud (carriable rock landing, airborne enemy enemy lands)
                 x Ceramic clunk (ceramic bridge piece fitting)
                 x Sticks clacking (climbing stick growing)
-                Rocks crumbling (clog being destroyed)
+                x Rocks crumbling (clog being destroyed)
                 Crystal shattering
                 x Leaves rustling (vegetation)
                 Harmless ding (when Pikmin smack a reinforced wall)
