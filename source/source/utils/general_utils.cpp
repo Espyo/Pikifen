@@ -84,13 +84,26 @@ void enum_name_database::register_item(
 
 
 /**
+ * @brief Reads a generic value from a string.
+ *
+ * @tparam The generic type.
+ * @param s The string.
+ * @return The value.
+ */
+template<typename t>
+t from_string(const string &s) {
+    return t{};
+}
+
+
+/**
  * @brief Reads a float value from a string.
  *
  * @param s The string.
  * @return The value.
  */
 template<>
-inline float keyframe_interpolator<float>::from_string(const string &s) {
+float from_string<float>(const string &s) {
     return s2f(s);
 }
 
@@ -102,7 +115,7 @@ inline float keyframe_interpolator<float>::from_string(const string &s) {
  * @return The value.
  */
 template<>
-inline ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const string &s) {
+ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s) {
     return s2c(s);
 }
 
@@ -114,7 +127,7 @@ inline ALLEGRO_COLOR keyframe_interpolator<ALLEGRO_COLOR>::from_string(const str
  * @return The value.
  */
 template<>
-inline point keyframe_interpolator<point>::from_string(const string &s) {
+point from_string<point>(const string &s) {
     return s2p(s);
 }
 

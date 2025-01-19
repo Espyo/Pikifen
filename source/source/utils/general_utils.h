@@ -58,6 +58,16 @@ constexpr size_t INVALID = UINT32_MAX;
 constexpr float LARGE_FLOAT = 999999.0f;
 
 
+template<typename t>
+t from_string(const string &s);
+template<>
+float from_string<float>(const string &s);
+template<>
+ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s);
+template<>
+point from_string<point>(const string &s);
+
+
 
 /**
  * @brief Just a list of different elements in an enum and what their names are.
@@ -268,17 +278,6 @@ struct keyframe_interpolator {
     
     
     /**
-     * @brief Reads a float, color, or point value from a string.
-     *
-     * @param s The string.
-     * @return The value.
-     */
-    inter_t from_string(const string &s) {
-        return inter_t{};
-    }
-    
-    
-    /**
      * @brief Loads interpolator data from a data node.
      *
      * @param node The data node to load from.
@@ -295,7 +294,7 @@ struct keyframe_interpolator {
         
         for(size_t c = 0; c < node->get_nr_of_children(); c++) {
             data_node* c_node = node->get_child(c);
-            inter_t value = from_string(c_node->value);
+            inter_t value = from_string<inter_t>(c_node->value);
             add(s2f(c_node->name), value, EASE_METHOD_NONE);
         }
     }
