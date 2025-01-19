@@ -98,7 +98,7 @@ script {
             stop
         }
         on_frame_signal {
-            hold_focused_mob treasure true
+            hold_focused_mob treasure
             set_var has_treasure true
             receive_status dweevil_with_treasure
             get_mob_info treasure_hp_check self health

@@ -417,7 +417,7 @@ public:
         mob* m, size_t hitbox_idx,
         float offset_dist, float offset_angle,
         float vertical_dist,
-        bool above_holder, const HOLD_ROTATION_METHOD rotation_method
+        bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
     );
     void release(mob* m);
     bool can_hurt(mob* m) const;

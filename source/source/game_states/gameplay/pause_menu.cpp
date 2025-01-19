@@ -2459,7 +2459,7 @@ void pause_menu_t::init_status_page() {
             game.states.gameplay->get_amount_of_field_pikmin(pt_ptr);
         long in_onion =
             game.states.gameplay->get_amount_of_onion_pikmin(pt_ptr);
-        long total = on_field + in_onion;
+        long total = (long) on_field + in_onion;
         
         long new_piks = 0;
         auto new_it =

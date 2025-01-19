@@ -355,8 +355,8 @@ struct hold_t {
     //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
     float vertical_dist = 0.0f;
     
-    //Is the mob drawn above the holder?
-    bool above_holder = false;
+    //If true, force the mob to be drawn above the holder?
+    bool force_above_holder = false;
     
     //How should the held object rotate?
     HOLD_ROTATION_METHOD rotation_method = HOLD_ROTATION_METHOD_NEVER;

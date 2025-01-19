@@ -1982,16 +1982,11 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         //The mob proper.
         world_component c;
         c.mob_ptr = mob_ptr;
-        c.z = mob_ptr->z;
-        if(mob_ptr->holder.m) {
-            c.z = mob_ptr->holder.m->z;
-            if(mob_ptr->holder.above_holder) {
-                c.z += mob_ptr->holder.m->get_drawing_height() + 1;
-            }
+        c.z = mob_ptr->z + mob_ptr->get_drawing_height();
+        if(mob_ptr->holder.m && mob_ptr->holder.force_above_holder) {
+            c.z += mob_ptr->holder.m->get_drawing_height() + 1;
         }
-        c.z += mob_ptr->get_drawing_height();
         components.push_back(c);
-        
     }
     
     //Time to draw!

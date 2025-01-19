@@ -2594,14 +2594,14 @@ bool mob::has_clear_line(const mob* target_mob) const {
  * @param offset_angle Hitbox/body angle from which the mob will be held.
  * @param vertical_dist Ratio of distance from the hitbox/body's bottom.
  * 1 is the very top.
- * @param above_holder Is the mob meant to appear above the holder?
+ * @param force_above_holder If true, force the mob to be drawn above the holder.
  * @param rotation_method How should the held mob rotate?
  */
 void mob::hold(
     mob* m, size_t hitbox_idx,
     float offset_dist, float offset_angle,
     float vertical_dist,
-    bool above_holder, const HOLD_ROTATION_METHOD rotation_method
+    bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -2609,7 +2609,7 @@ void mob::hold(
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
     m->holder.vertical_dist = vertical_dist;
-    m->holder.above_holder = above_holder;
+    m->holder.force_above_holder = force_above_holder;
     m->holder.rotation_method = rotation_method;
     m->fsm.run_event(MOB_EV_HELD, (void*) this);
     

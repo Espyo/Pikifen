@@ -152,14 +152,15 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         particle p;
         unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
-        ALLEGRO_COLOR c = al_map_rgba(
-            WHISTLE::DOT_COLORS[color_idx][0],
-            WHISTLE::DOT_COLORS[color_idx][1],
-            WHISTLE::DOT_COLORS[color_idx][2],
-            LEADER::SWARM_PARTICLE_ALPHA * 255
-        );
+        ALLEGRO_COLOR c =
+            al_map_rgba(
+                WHISTLE::DOT_COLORS[color_idx][0],
+                WHISTLE::DOT_COLORS[color_idx][1],
+                WHISTLE::DOT_COLORS[color_idx][2],
+                LEADER::SWARM_PARTICLE_ALPHA * 255
+            );
         p.color = keyframe_interpolator<ALLEGRO_COLOR>(c);
-        p.color.add(1, change_alpha(c,0));
+        p.color.add(1, change_alpha(c, 0));
         p.duration =
             randomf(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
@@ -601,15 +602,16 @@ void leader::dismiss() {
         particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
-        ALLEGRO_COLOR c = al_map_rgba(
-            color_idx[0],
-            color_idx[1],
-            color_idx[2],
-            LEADER::DISMISS_PARTICLE_ALPHA * 255
-        );
-
+        ALLEGRO_COLOR c =
+            al_map_rgba(
+                color_idx[0],
+                color_idx[1],
+                color_idx[2],
+                LEADER::DISMISS_PARTICLE_ALPHA * 255
+            );
+            
         par.color.set_keyframe_value(0, c);
-        par.color.add(1, change_alpha(c,0));
+        par.color.add(1, change_alpha(c, 0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
             randomf(

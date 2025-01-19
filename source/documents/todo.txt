@@ -8,7 +8,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Bulbmin stems are drawn below them
+    Particles aren't being rendered because the keyframe interpolator's struct isn't accepting the overloads of from_string properly
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -83,7 +83,7 @@ Next tasks (roughly sorted most important first)
                 Onion/ship beam
                     Two sine-wave tracks, different frequencies, with tremolo
                 Onion/ship object entered
-                Onion/Candypop spitting
+                x Onion/Candypop spitting
                 Gate moving
             Others
                 Generic sparkles (Spiderworts regrowing, Pikmin flowering)

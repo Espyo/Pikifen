@@ -43,7 +43,7 @@ dist::dist(const point &p1, const point &p2) :
  * @param d Regular, non-squared distance.
  */
 dist::dist(float d) :
-    distance_squared((float) (d * d)),
+    distance_squared(d * d),
     normal_distance(d),
     has_normal_distance(true) {
     
