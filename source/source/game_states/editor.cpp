@@ -1601,7 +1601,7 @@ void editor::open_dialog(
  * more detail.
  */
 void editor::open_help_dialog(
-    const string &message, const string& page
+    const string &message, const string &page
 ) {
     help_dialog_message = message;
     help_dialog_page = page;
@@ -1780,7 +1780,7 @@ void editor::process_gui_base_content_warning_dialog() {
         base_content_warning_do_pick_callback = nullptr;
         close_top_dialog();
     }
-
+    
     //Open manual button.
     ImGui::SetupCentering(70);
     if(ImGui::Button("Open manual", ImVec2(70, 25))) {
@@ -1986,7 +1986,7 @@ void editor::process_gui_help_dialog() {
     }
     ImGui::TextWrapped("%s", help_dialog_message.c_str());
     text_width = ImGui::GetItemRectSize().x;
-
+    
     //Open manual button.
     ImGui::Spacer();
     ImGui::SetupCentering(200);
@@ -2043,7 +2043,7 @@ void editor::process_gui_history(
                     set_tooltip(tooltip_callback(path));
                 }
                 ImGui::SetupButtonWrapping(
-                    button_size.x, h + 1, n_filled_entries
+                    button_size.x, (int) (h + 1), (int) n_filled_entries
                 );
             }
             
@@ -2329,7 +2329,7 @@ void editor::process_gui_new_pack_dialog() {
             FILE_NAMES::PACK_DATA
         );
     ImGui::TextWrapped("%s", explanation.c_str());
-
+    
     //Open manual button.
     if(ImGui::Button("Open manual")) {
         open_manual("making.html#packs");
@@ -2511,7 +2511,7 @@ void editor::process_gui_unsaved_changes_dialog() {
     size_t nr_unsaved_changes = changes_mgr.get_unsaved_changes();
     string explanation1_str =
         "You have " +
-        amount_str(nr_unsaved_changes, "unsaved change") +
+        amount_str((int) nr_unsaved_changes, "unsaved change") +
         ", made in the last " +
         time_to_str3(
             changes_mgr.get_unsaved_time_delta(),
@@ -3561,7 +3561,7 @@ void editor::picker_info::process() {
                 }
                 
                 ImGui::SetupButtonWrapping(
-                    button_size.x, i + 1, final_items[tc][sc].size()
+                    button_size.x, (int) (i + 1), (int) final_items[tc][sc].size()
                 );
                 ImGui::PopID();
             }

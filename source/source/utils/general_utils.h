@@ -224,7 +224,7 @@ struct keyframe_interpolator {
      * @param idx They keyframe's index.
      * @param value The new value.
      */
-    void set_keyframe_value(int idx, const inter_t &value) {
+    void set_keyframe_value(size_t idx, const inter_t &value) {
         keyframe_values[idx] = value;
     }
     
@@ -454,7 +454,7 @@ string vector_tail_to_string(const vector<string> &v, size_t pos);
 
 /**
  * @brief Removes elements from a vector if they show up in the ban list.
- * 
+ *
  * @tparam t Type of contents of the vector and ban list.
  * @param v Vector to filter.
  * @param ban_list List of items that must be banned.
@@ -484,14 +484,14 @@ vector<t> filter_vector_with_ban_list(
  * elements go before which. Elements not in the preference list will go
  * to the end, in the same order as they are presented in the original
  * vector.
- * 
+ *
  * @tparam t Type of contents of the vector.
  * @param v Vector to sort.
  * @param preference_list Preference list.
  * @param equal If not nullptr, use this function to compare whether
  * an item of t1 matches an item of t2.
  * @param less If not nullptr, use this function to sort missing items with.
- * @param unknowns If not nullptr, unknown preferences (i.e. items in 
+ * @param unknowns If not nullptr, unknown preferences (i.e. items in
  * the preference list but not inside the vector) will be added here.
  * @return The sorted vector.
  */
@@ -518,7 +518,7 @@ vector<t> sort_vector_with_preference_list(
             unknowns->push_back(preference_list[p]);
         }
     }
-
+    
     //Find the missing items.
     for(auto &i : v) {
         bool found_in_preferences = false;
@@ -533,7 +533,7 @@ vector<t> sort_vector_with_preference_list(
             missing_items.push_back(i);
         }
     }
-
+    
     //Sort and place the missing items.
     if(!missing_items.empty()) {
         std::sort(
@@ -546,7 +546,7 @@ vector<t> sort_vector_with_preference_list(
             missing_items.end()
         );
     }
-
+    
     return result;
 }
 

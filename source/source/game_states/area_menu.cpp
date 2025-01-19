@@ -738,7 +738,7 @@ void area_menu_state::init_gui_main() {
         };
         random_button->on_activate =
         [this] (const point &) {
-            size_t area_idx = randomi(0, area_buttons.size() - 1);
+            size_t area_idx = randomi(0, (int) (area_buttons.size() - 1));
             area_buttons[area_idx]->on_activate(point());
         };
         random_button->on_get_tooltip =

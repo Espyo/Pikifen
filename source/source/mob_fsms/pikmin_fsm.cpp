@@ -3873,7 +3873,7 @@ void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     }
     
     if(boredom_anims.empty()) return;
-    size_t anim_idx = boredom_anims[randomi(0, boredom_anims.size() - 1)];
+    size_t anim_idx = boredom_anims[randomi(0, (int) (boredom_anims.size() - 1))];
     m->set_animation(anim_idx, START_ANIM_OPTION_NORMAL, false);
     pik_ptr->in_bored_animation = true;
 }

@@ -37,7 +37,7 @@ packs_menu_t::packs_menu_t() {
             game.options.pack_order
         );
     packs_disabled = game.options.packs_disabled;
-
+    
     //Get the thumbnails.
     for(
         size_t p = 0; p < game.content.packs.manifests_with_base_raw.size(); p++
@@ -128,7 +128,7 @@ packs_menu_t::packs_menu_t() {
         );
         bullet->center = point(0.37f, row_center_y);
         bullet->size = point(0.70f, ITEM_HEIGHT);
-        bullet->on_selected = [p, this] () { change_info(p); };
+        bullet->on_selected = [p, this] () { change_info((int) p); };
         packs_list->add_child(bullet);
         gui.add_item(bullet);
         pack_bullets.push_back(bullet);
@@ -155,7 +155,7 @@ packs_menu_t::packs_menu_t() {
             }
             trigger_restart_warning();
         };
-        check->on_selected = [p, this] () { change_info(p); };
+        check->on_selected = [p, this] () { change_info((int) p); };
         check->on_get_tooltip =
         [] () {
             return "Enable or disable this pack.";
@@ -186,7 +186,7 @@ packs_menu_t::packs_menu_t() {
                 trigger_restart_warning();
                 populate_packs_list();
             };
-            up_button->on_selected = [p, this] () { change_info(p); };
+            up_button->on_selected = [p, this] () { change_info((int) p); };
             up_button->on_get_tooltip =
             [] () {
                 return "Move up on the list (make it be loaded earlier).";
@@ -217,7 +217,7 @@ packs_menu_t::packs_menu_t() {
                 trigger_restart_warning();
                 populate_packs_list();
             };
-            down_button->on_selected = [p, this] () { change_info(p); };
+            down_button->on_selected = [p, this] () { change_info((int) p); };
             down_button->on_get_tooltip =
             [] () {
                 return "Move down on the list (make it be loaded later).";
@@ -347,7 +347,7 @@ packs_menu_t::packs_menu_t() {
  * @brief Destroys the pack management menu object.
  */
 packs_menu_t::~packs_menu_t() {
-    for(auto& t : pack_thumbs) {
+    for(auto &t : pack_thumbs) {
         al_destroy_bitmap(t.second);
     }
     pack_thumbs.clear();

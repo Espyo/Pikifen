@@ -43,7 +43,7 @@ dist::dist(const point &p1, const point &p2) :
  * @param d Regular, non-squared distance.
  */
 dist::dist(float d) :
-    distance_squared(d * d),
+    distance_squared((float) (d * d)),
     normal_distance(d),
     has_normal_distance(true) {
     
@@ -1146,7 +1146,7 @@ point get_random_point_in_ring(
     
     float r =
         inner_dist +
-        (outer_dist - inner_dist) * sqrt(randomf(0.0f, 1.0f));
+        (outer_dist - inner_dist) * (float) sqrt(randomf(0.0f, 1.0f));
         
     float theta =
         randomf(
@@ -1154,7 +1154,7 @@ point get_random_point_in_ring(
             arc / 2.0f + arc_rot
         );
         
-    return point(r * cos(theta), r * sin(theta));
+    return point(r * (float) cos(theta), r * (float) sin(theta));
 }
 
 
@@ -1980,13 +1980,13 @@ point s2p(const string &s, float* out_z) {
     vector<string> words = split(s);
     point p;
     if(words.size() >= 1) {
-        p.x = s2f(words[0]);
+        p.x = (float) s2f(words[0]);
     }
     if(words.size() >= 2) {
-        p.y = s2f(words[1]);
+        p.y = (float) s2f(words[1]);
     }
     if(out_z && words.size() >= 3) {
-        *out_z = s2f(words[2]);
+        *out_z = (float) s2f(words[2]);
     }
     return p;
 }
@@ -2063,8 +2063,8 @@ size_t select_next_item_directionally(
     const vector<point> &item_coordinates, size_t selected_item,
     float direction, const point &loop_region
 ) {
-    const float MIN_BLINDSPOT_ANGLE = TAU * 0.17;
-    const float MAX_BLINDSPOT_ANGLE = TAU * 0.33;
+    const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
+    const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
     float normalized_dir = normalize_angle(direction);
     const point &sel_coords = item_coordinates[selected_item];
@@ -2090,7 +2090,7 @@ size_t select_next_item_directionally(
         //We get the same result whether the Y is positive or negative,
         //so let's simplify things and make it positive.
         float rel_angle =
-            get_angle(point(i_coords.x, fabs(i_coords.y)));
+            get_angle(point(i_coords.x, (float) fabs(i_coords.y)));
         if(
             rel_angle >= MIN_BLINDSPOT_ANGLE &&
             rel_angle <= MAX_BLINDSPOT_ANGLE
@@ -2104,7 +2104,7 @@ size_t select_next_item_directionally(
         if(i_coords.x > 0.0f) {
             //If this item is in front of the selected one,
             //give it a score like normal.
-            float score = i_coords.x + fabs(i_coords.y);
+            float score = i_coords.x + (float) fabs(i_coords.y);
             if(score < best_score) {
                 best_score = score;
                 best_item = i;
@@ -2145,7 +2145,7 @@ size_t select_next_item_directionally(
                     }
                     
                     //Finally, figure out if this is the new best item.
-                    float score = i_coords.x + fabs(i_coords.y);
+                    float score = i_coords.x + (float) fabs(i_coords.y);
                     if(score < best_score) {
                         best_score = score;
                         best_item = i;

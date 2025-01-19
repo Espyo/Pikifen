@@ -106,7 +106,7 @@ bool ImGui::Combo(
     int current_item_idx = -1;
     for(size_t i = 0; i < item_internal_values.size(); i++) {
         if(item_internal_values[i] == *current_item) {
-            current_item_idx = i;
+            current_item_idx = (int) i;
             break;
         }
     }

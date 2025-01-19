@@ -246,7 +246,7 @@ size_t randomw(const vector<float> &weights) {
         if(r < weights[i]) return i;
         r -= weights[i];
     }
-    return 0.0f;
+    return 0;
 }
 
 

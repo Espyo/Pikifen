@@ -808,7 +808,7 @@ void particle_editor::process_gui_panel_generator() {
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragInt(
-                    "##number", &number_int, 1, 1, game.options.max_particles
+                    "##number", &number_int, 1, 1, (int) game.options.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();
@@ -830,7 +830,7 @@ void particle_editor::process_gui_panel_generator() {
             if(
                 ImGui::DragInt(
                     "##numberDeviation",
-                    &number_dev_int, 1, 0, game.options.max_particles
+                    &number_dev_int, 1, 0, (int) game.options.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();

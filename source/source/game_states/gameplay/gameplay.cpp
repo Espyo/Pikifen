@@ -477,7 +477,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += o_ptr->nest->pikmin_inside[t][m];
+                total += (long) o_ptr->nest->pikmin_inside[t][m];
             }
         }
     }
@@ -495,7 +495,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += s_ptr->nest->pikmin_inside[t][m];
+                total += (long) s_ptr->nest->pikmin_inside[t][m];
             }
         }
     }
@@ -515,7 +515,7 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
     long total = 0;
     
     //Check Pikmin in the field and inside converters.
-    total += get_amount_of_field_pikmin(filter);
+    total += (long) get_amount_of_field_pikmin(filter);
     
     //Check Pikmin inside Onions and ships.
     total += get_amount_of_onion_pikmin(filter);

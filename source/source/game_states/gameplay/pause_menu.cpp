@@ -718,8 +718,8 @@ void pause_menu_t::create_page_buttons(
             pages.begin(),
             std::find(pages.begin(), pages.end(), cur_page)
         );
-    size_t left_page_idx = sum_and_wrap(cur_page_idx, -1, pages.size());
-    size_t right_page_idx = sum_and_wrap(cur_page_idx, 1, pages.size());
+    size_t left_page_idx = sum_and_wrap((int) cur_page_idx, -1, (int) pages.size());
+    size_t right_page_idx = sum_and_wrap((int) cur_page_idx, 1, (int) pages.size());
     
     //Left page button.
     button_gui_item* left_page_button =
@@ -1642,11 +1642,11 @@ void pause_menu_t::handle_player_action(const player_action &action) {
                     );
                 size_t new_page_idx =
                     sum_and_wrap(
-                        cur_page_idx,
+                        (int) cur_page_idx,
                         action.action_type_id == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
                         -1 :
                         1,
-                        pages.size()
+                        (int) pages.size()
                     );
                 switch_page(
                     cur_gui,

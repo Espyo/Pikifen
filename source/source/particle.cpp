@@ -56,7 +56,7 @@ void particle::draw() {
     float final_size = size.get(t);
     
     bool used_custom_blend = false;
-    int old_op, old_source, old_dest;
+    int old_op = 0, old_source = 0, old_dest = 0;
     
     switch(blend_type) {
     case PARTICLE_BLEND_TYPE_ADDITIVE: {

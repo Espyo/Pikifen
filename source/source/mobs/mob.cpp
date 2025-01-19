@@ -2148,18 +2148,18 @@ void mob::get_sprite_bitmap_effects(
     
     //Sector brightness tint.
     if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
-        sector* s_ptr = center_sector;
+        sector* sector_ptr = center_sector;
         float brightness = center_sector->brightness / 255.0;
-        if(s_ptr->fade) {
+        if(sector_ptr->fade) {
             sector* texture_sector[2] = {nullptr, nullptr};
-            s_ptr->get_texture_merge_sectors(
+            sector_ptr->get_texture_merge_sectors(
                 &texture_sector[0], &texture_sector[1]
             );
             vector<edge*> fade_edges[2];
-            size_t n_edges = s_ptr->edges.size();
+            size_t n_edges = sector_ptr->edges.size();
             for(size_t e = 0; e < n_edges; e++) {
-                edge* e_ptr = s_ptr->edges[e];
-                sector* o_sector = e_ptr->get_other_sector(s_ptr);
+                edge* e_ptr = sector_ptr->edges[e];
+                sector* o_sector = e_ptr->get_other_sector(sector_ptr);
                 if(o_sector == texture_sector[0]) {
                     fade_edges[0].push_back(e_ptr);
                 }

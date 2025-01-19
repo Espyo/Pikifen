@@ -1029,7 +1029,7 @@ void area_editor::draw_canvas() {
         //Closest stop line.
         if(show_closest_stop) {
             path_stop* closest = nullptr;
-            float closest_dist;
+            float closest_dist = FLT_MAX;
             for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
                 path_stop* s_ptr = game.cur_area_data->path_stops[s];
                 float d =
