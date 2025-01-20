@@ -475,12 +475,6 @@ void load_misc_sounds() {
         game.content.sounds.list.get(game.asset_file_names.sound_menu_back);
     game.sys_assets.sound_menu_select =
         game.content.sounds.list.get(game.asset_file_names.sound_menu_select);
-    game.sys_assets.sound_pluck =
-        game.content.sounds.list.get(game.asset_file_names.sound_pluck);
-    game.sys_assets.sound_throw =
-        game.content.sounds.list.get(game.asset_file_names.sound_throw);
-    game.sys_assets.sound_spray =
-        game.content.sounds.list.get(game.asset_file_names.sound_spray);
     game.sys_assets.sound_switch_pikmin =
         game.content.sounds.list.get(game.asset_file_names.sound_switch_pikmin);
 }
@@ -645,7 +639,5 @@ void unload_misc_resources() {
     game.content.sounds.list.free(game.sys_assets.sound_menu_activate);
     game.content.sounds.list.free(game.sys_assets.sound_menu_back);
     game.content.sounds.list.free(game.sys_assets.sound_menu_select);
-    game.content.sounds.list.free(game.sys_assets.sound_spray);
     game.content.sounds.list.free(game.sys_assets.sound_switch_pikmin);
-    game.content.sounds.list.free(game.sys_assets.sound_throw);
 }

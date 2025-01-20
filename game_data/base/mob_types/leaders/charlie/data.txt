@@ -35,9 +35,19 @@ sounds {
         volume_deviation = 3
         speed_deviation = 30
     }
+    spray {
+        file = spray
+        speed_deviation = 5
+        speed = 130
+    }
     thump {
         file = thump
         volume = 45
+    }
+    throw {
+        file = throw
+        speed_deviation = 5
+        stack_mode = override
     }
 }
 

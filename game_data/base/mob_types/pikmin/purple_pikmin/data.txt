@@ -53,6 +53,9 @@ sounds {
     idle {
         file = pikmin_idle
     }
+    pluck_ground {
+        file = pluck
+    }
     plucked {
         file = pikmin_plucked
     }

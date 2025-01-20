@@ -1635,13 +1635,6 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->release(holding_ptr);
     
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
-    sound_source_config_t throw_sound_config;
-    throw_sound_config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
-    game.audio.create_mob_sound_source(
-        game.sys_assets.sound_throw,
-        leader_ptr,
-        throw_sound_config
-    );
     
     if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
         game.statistics.pikmin_thrown++;
@@ -2220,8 +2213,6 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.linear_speed_deviation.x = spray_type_ref.distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
-    
-    game.audio.create_mob_sound_source(game.sys_assets.sound_spray, m);
     
     game.states.gameplay->change_spray_count(spray_idx, -1);
     

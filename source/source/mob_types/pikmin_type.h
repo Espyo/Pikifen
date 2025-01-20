@@ -275,9 +275,6 @@ enum PIKMIN_ANIM {
 //Pikmin object sounds.
 enum PIKMIN_SOUND {
 
-    //Attack.
-    PIKMIN_SOUND_ATTACK,
-    
     //Called by a leader.
     PIKMIN_SOUND_CALLED,
     
@@ -298,9 +295,6 @@ enum PIKMIN_SOUND {
     
     //Becoming idle.
     PIKMIN_SOUND_IDLE,
-    
-    //Plucked.
-    PIKMIN_SOUND_PLUCKED,
     
     //Thrown by a leader.
     PIKMIN_SOUND_THROWN,

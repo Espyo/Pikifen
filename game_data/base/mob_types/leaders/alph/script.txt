@@ -1,0 +1,17 @@
+init {
+    set_var played_thump false
+}
+
+script {
+    knocked_back {
+        on_enter {
+            set_var played_thump false
+        }
+        on_land {
+            if $played_thump = false
+                play_sound thump
+                set_var played_thump true
+            end_if
+        }
+    }
+}

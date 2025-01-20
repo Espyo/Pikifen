@@ -326,17 +326,8 @@ struct asset_file_names_t {
     //Menu item selection.
     string sound_menu_select = "menu_select";
     
-    //Pluck sound effect.
-    string sound_pluck = "pluck";
-    
-    //Using a spray.
-    string sound_spray = "spray";
-    
     //Switching standby Pikmin type.
     string sound_switch_pikmin = "switch_pikmin";
-    
-    //Throwing.
-    string sound_throw = "throw";
     
     //Global animations.
     
@@ -825,17 +816,8 @@ struct system_asset_list {
     //Menu item selection.
     ALLEGRO_SAMPLE* sound_menu_select = nullptr;
     
-    //Pluck sound effect.
-    ALLEGRO_SAMPLE* sound_pluck = nullptr;
-    
-    //Using a spray.
-    ALLEGRO_SAMPLE* sound_spray = nullptr;
-    
     //Switching standby Pikmin type.
     ALLEGRO_SAMPLE* sound_switch_pikmin = nullptr;
-    
-    //Throwing.
-    ALLEGRO_SAMPLE* sound_throw = nullptr;
     
     //Global animations.
     

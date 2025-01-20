@@ -2023,18 +2023,12 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
     float throw_angle = get_angle(m->pos, m->focused_mob->pos);
     m->speed_z = PIKMIN::THROW_VER_SPEED;
     m->speed = angle_to_coordinates(throw_angle, PIKMIN::THROW_HOR_SPEED);
     m->face(throw_angle + TAU / 2.0f, nullptr, true);
     
     m->set_animation(PIKMIN_ANIM_PLUCKING_THROWN);
-    m->play_sound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_PLUCKED]);
-    game.audio.create_world_pos_sound_source(
-        game.sys_assets.sound_pluck,
-        m->pos
-    );
     ((pikmin*) m)->start_throw_trail();
     
     particle par(

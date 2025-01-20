@@ -22,7 +22,15 @@ animations{
 		}
 	}
 	attacking{
+		loop_frame=2
 		frames{
+			mid_bend{
+				duration=0.0100
+			}
+			lunging_hit{
+				duration=0.0100
+				sound=attack
+			}
 			lunging_hit{
 				duration=0.1000
 			}
@@ -437,7 +445,12 @@ animations{
 				duration=0.2000
 			}
 			idling_01{
-				duration=0.1000
+				duration=0.0500
+				sound=pluck_ground
+			}
+			idling_01{
+				duration=0.0500
+				sound=plucked
 			}
 		}
 	}

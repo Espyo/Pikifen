@@ -208,9 +208,7 @@ void pikmin_type::load_cat_properties(data_node* file) {
     }
     
     for(size_t s = 0; s < sounds.size(); s++) {
-        if(sounds[s].name == "attack") {
-            sound_data_idxs[PIKMIN_SOUND_ATTACK] = s;
-        } else if(sounds[s].name == "called") {
+        if(sounds[s].name == "called") {
             sound_data_idxs[PIKMIN_SOUND_CALLED] = s;
         } else if(sounds[s].name == "carrying") {
             sound_data_idxs[PIKMIN_SOUND_CARRYING] = s;
@@ -224,8 +222,6 @@ void pikmin_type::load_cat_properties(data_node* file) {
             sound_data_idxs[PIKMIN_SOUND_HELD] = s;
         } else if(sounds[s].name == "idle") {
             sound_data_idxs[PIKMIN_SOUND_IDLE] = s;
-        } else if(sounds[s].name == "plucked") {
-            sound_data_idxs[PIKMIN_SOUND_PLUCKED] = s;
         } else if(sounds[s].name == "thrown") {
             sound_data_idxs[PIKMIN_SOUND_THROWN] = s;
         }

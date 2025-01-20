@@ -31,6 +31,7 @@ animations{
 			}
 			attacking_01{
 				duration=0.0500
+				sound=attack
 			}
 			attacking_02{
 				duration=0.3000
@@ -461,7 +462,12 @@ animations{
 				duration=0.2000
 			}
 			idling_01{
-				duration=0.1000
+				duration=0.0500
+				sound=pluck_ground
+			}
+			idling_01{
+				duration=0.0500
+				sound=plucked
 			}
 		}
 	}

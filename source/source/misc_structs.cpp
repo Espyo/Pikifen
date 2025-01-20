@@ -202,10 +202,7 @@ void asset_file_names_t::load(data_node* file) {
     srs.set("menu_activate", sound_menu_activate);
     srs.set("menu_back", sound_menu_back);
     srs.set("menu_select", sound_menu_select);
-    srs.set("pluck", sound_pluck);
-    srs.set("spray", sound_spray);
     srs.set("switch_pikmin", sound_switch_pikmin);
-    srs.set("throw", sound_throw);
     
     reader_setter ars(file->get_child_by_name("animations"));
     
