@@ -4009,7 +4009,7 @@ void area_editor::process_gui_panel_mob() {
                 ImGui::PushStyleColor(
                     ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.05f, 1.0f)
                 );
-                ImGui::Text("Warning: no links from!");
+                ImGui::Text("Warning: no links from this mob!");
                 ImGui::PopStyleColor();
                 set_tooltip(
                     "Warning: you need to link this object to a different one\n"
@@ -4039,7 +4039,7 @@ void area_editor::process_gui_panel_mob() {
                 ImGui::PushStyleColor(
                     ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.05f, 1.0f)
                 );
-                ImGui::Text("Warning: no links to!");
+                ImGui::Text("Warning: no links to this mob!");
                 ImGui::PopStyleColor();
                 set_tooltip(
                     "Warning: you need to link a different object to this one\n"

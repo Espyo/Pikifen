@@ -41,19 +41,26 @@ void animation_editor::open_load_dialog() {
             )
         );
     }
-    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        if(c == MOB_CATEGORY_NONE) continue;
-        mob_category* cat = game.mob_categories.get((MOB_CATEGORY) c);
-        for(const auto &a : game.content.mob_anim_dbs.list[c]) {
-            mob_type* type = cat->get_type(a.first);
-            if(!type) continue;
+    for(size_t c = 0; c < custom_cat_types.size(); c++) {
+        for(size_t a = 0; a < custom_cat_types[c].size(); a++) {
+            mob_type* mt_ptr = custom_cat_types[c][a];
+            if(!mt_ptr) continue;
+            if(!mt_ptr->manifest) continue;
+            auto &cat_anim_dbs =
+                game.content.mob_anim_dbs.list[mt_ptr->category->id];
+            auto mt_cat_anim_it =
+                cat_anim_dbs.find(mt_ptr->manifest->internal_name);
+            if(mt_cat_anim_it == cat_anim_dbs.end()) continue;
+            
+            content_manifest* man_ptr =
+                mt_cat_anim_it->second.manifest;
             file_items.push_back(
                 picker_item(
-                    type->name,
-                    "Pack: " + game.content.packs.list[a.second.manifest->pack].name,
-                    cat->name + " objects",
-                    (void*) a.second.manifest,
-                    get_file_tooltip(a.second.manifest->path)
+                    mt_ptr->name,
+                    "Pack: " + game.content.packs.list[man_ptr->pack].name,
+                    mt_ptr->custom_category_name + " objects",
+                    (void*) man_ptr,
+                    get_file_tooltip(man_ptr->path)
                 )
             );
         }
